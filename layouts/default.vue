@@ -1,6 +1,12 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
+    <v-app-bar short><v-spacer /><lang-switcher /></v-app-bar>
+    <v-main>
+      <v-container>
+        <nuxt />
+      </v-container>
+    </v-main>
+    <!-- <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -58,12 +64,15 @@
     </v-navigation-drawer>
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
 <script>
+import LangSwitcher from '~/components/LangSwitcher.vue'
+
 export default {
+  components: { LangSwitcher },
   data() {
     return {
       clipped: false,

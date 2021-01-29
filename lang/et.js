@@ -1,0 +1,36 @@
+export default {
+  common: {
+    general: 'Üldinfo',
+    pictures: 'Pildid',
+  },
+  locality: {
+    locality: 'Lokaliteet',
+    country: 'Riik',
+    countryFormat: '{name} ({iso})',
+    latitude: 'Laiuskraad',
+    longitude: 'Pikkuskraad',
+    depth: 'Sügavus',
+  },
+  drillcore: {
+    id: 'ID',
+    name: 'Nimi',
+    boxes: 'Südamikukaste',
+    depository: 'Hoidla',
+    remarks: 'Lisainfo',
+    storage: 'Hoiukoht',
+    driller: 'Puurija',
+    year: 'Puurimise aasta',
+    metersInBox: 'Meetreid kastis',
+    boxNumbers: 'Kastinumbrid',
+    drillcoreBoxesTitle: 'Puursüdamiku kastid ({number})',
+  },
+  drillcoreBox: {
+    id: 'ID',
+    drillcore: 'Puursüdamik',
+    nr: 'Kast nr. {number}',
+    depthStart: 'Sügavuse algus (m)',
+    depthEnd: 'Sügavuse lõpp (m)',
+    stratigraphyTop: 'Ülemine stratigraafia',
+    stratigraphyBase: 'Alumine stratigraafia',
+  },
+}

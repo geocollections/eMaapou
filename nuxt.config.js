@@ -20,7 +20,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~plugins/translate.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -37,16 +37,42 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    'nuxt-i18n',
+    'nuxt-leaflet',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
+  // i18n module configuration
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        iso: 'et-US',
+        file: 'en.js',
+        name: 'ENG',
+      },
+      {
+        code: 'et',
+        iso: 'et-EE',
+        file: 'et.js',
+        name: 'EST',
+      },
+    ],
+    lazy: true,
+    langDir: 'lang/',
+    defaultLocale: 'et',
+    strategy: 'prefix_and_default',
+  },
+
+  leaflet: {},
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
