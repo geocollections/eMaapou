@@ -2,6 +2,13 @@
   <v-row>
     <v-col>
       <h1>{{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}</h1>
+      <nuxt-link :to="`/drillcore_box/${parseInt($route.params.id) - 1}`">
+        {{ $t('common.previous') }}
+      </nuxt-link>
+
+      <nuxt-link :to="`/drillcore_box/${parseInt($route.params.id) + 1}`">
+        {{ $t('common.next') }}
+      </nuxt-link>
       <v-card>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
