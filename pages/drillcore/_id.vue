@@ -7,11 +7,11 @@
         }}
       </h1>
       <v-card>
-        <v-card-text>
-          <v-container fluid class="pa-0">
-            <v-row>
-              <v-col cols="12" md="6" class="pt-0">
-                <v-card-title>{{ $t('common.general') }}</v-card-title>
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="6" class="pt-0">
+              <v-card-title>{{ $t('common.general') }}</v-card-title>
+              <v-card-text>
                 <v-simple-table class="">
                   <template #default>
                     <tbody>
@@ -33,6 +33,10 @@
                       <tr>
                         <td>{{ $t('drillcore.boxes') }}</td>
                         <td>{{ drillcore.boxes }}</td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('drillcore.boxNumbers') }}</td>
+                        <td>{{ drillcore.box_numbers }}</td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.depository') }}</td>
@@ -57,14 +61,7 @@
                         <td>{{ $t('drillcore.year') }}</td>
                         <td>{{ drillcore.year }}</td>
                       </tr>
-                      <tr>
-                        <td>{{ $t('drillcore.boxNumbers') }}</td>
-                        <td>{{ drillcore.box_numbers }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('drillcore.boxes') }}</td>
-                        <td>{{ drillcore.boxes }}</td>
-                      </tr>
+
                       <tr>
                         <td>{{ $t('drillcore.metersInBox') }}</td>
                         <td>{{ drillcore.number_meters }}</td>
@@ -72,15 +69,17 @@
                     </tbody>
                   </template>
                 </v-simple-table>
-                <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
-                <v-card-text>{{ drillcore.remarks }}</v-card-text>
-              </v-col>
-              <v-col cols="12" md="6" class="pt-0">
-                <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+              </v-card-text>
+              <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+              <v-card-text>{{ drillcore.remarks }}</v-card-text>
+            </v-col>
+            <v-col v-if="drillcore.locality_id" cols="12" md="6" class="pt-0">
+              <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+              <v-card-text>
                 <v-simple-table class="mb-2">
                   <template #default>
                     <tbody>
-                      <tr>
+                      <tr v-if="drillcore.locality__locality">
                         <td>{{ $t('locality.locality') }}</td>
                         <td>
                           {{
@@ -91,7 +90,7 @@
                           }}
                         </td>
                       </tr>
-                      <tr>
+                      <tr v-if="drillcore.locality__country__value">
                         <td>{{ $t('locality.country') }}</td>
                         <td>
                           {{
@@ -105,16 +104,16 @@
                           }}
                         </td>
                       </tr>
-                      <tr>
+                      <tr v-if="drillcore.locality__latitude">
                         <td>{{ $t('locality.latitude') }}</td>
                         <td>{{ drillcore.locality__latitude }}</td>
                       </tr>
 
-                      <tr>
+                      <tr v-if="drillcore.locality__longitude">
                         <td>{{ $t('locality.longitude') }}</td>
                         <td>{{ drillcore.locality__longitude }}</td>
                       </tr>
-                      <tr>
+                      <tr v-if="drillcore.locality__depth">
                         <td>{{ $t('locality.depth') }}</td>
                         <td>{{ drillcore.locality__depth }}</td>
                       </tr>
@@ -130,43 +129,24 @@
                   elevation="0"
                   height="500"
                 >
-                  <client-only>
-                    <l-map
-                      :zoom="13"
-                      :center="[
-                        drillcore.locality__latitude,
-                        drillcore.locality__longitude,
-                      ]"
-                    >
-                      <l-tile-layer
-                        url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-                      ></l-tile-layer>
-                      <l-marker
-                        :lat-lng="[
-                          drillcore.locality__latitude,
-                          drillcore.locality__longitude,
-                        ]"
-                      ></l-marker>
-                    </l-map>
-                    <template #placeholder>
-                      <div
-                        style="height: 500px; width: 100%"
-                        class="d-flex align-center justify-center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="primary"
-                          :size="100"
-                          :width="6"
-                        />
-                      </div>
-                    </template>
-                  </client-only>
+                  <leaflet-map
+                    :height="500"
+                    :center="{
+                      latitude: drillcore.locality__latitude,
+                      longitude: drillcore.locality__longitude,
+                    }"
+                    :markers="[
+                      {
+                        latitude: drillcore.locality__latitude,
+                        longitude: drillcore.locality__longitude,
+                      },
+                    ]"
+                  />
                 </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
+              </v-card-text>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card>
 
       <v-card class="mt-2">
@@ -194,10 +174,11 @@
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="8">
-                        <!-- TODO: Add placeholder -->
+                        <!-- TODO: Add placeholder, for case when box does not have a picture -->
                         <v-img
                           class="rounded-lg"
                           contain
+                          max-height="400"
                           :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
                           :src="`https://files.geocollections.info/medium/${box.drillcorebox_image__attachment__uuid_filename}`"
                         />
