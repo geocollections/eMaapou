@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <v-app-bar short><v-spacer /><lang-switcher /></v-app-bar>
+    <v-app-bar dense><v-spacer /><lang-switcher /></v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
