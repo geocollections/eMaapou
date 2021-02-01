@@ -67,4 +67,4 @@ workflows:
             - publish_docker_image
           filters:
             branches:
-              only: circleci-project-setup
+              only: master
