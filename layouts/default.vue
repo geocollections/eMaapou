@@ -1,6 +1,9 @@
 <template>
   <v-app dark>
-    <v-app-bar dense><v-spacer /><lang-switcher /></v-app-bar>
+    <v-app-bar dense
+      ><v-toolbar-title>{{ $t('common.title') }}</v-toolbar-title
+      ><v-spacer /><lang-switcher
+    /></v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
