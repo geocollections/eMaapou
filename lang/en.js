@@ -2,6 +2,7 @@ export default {
   common: {
     general: 'General info',
     pictures: 'Pictures',
+    valueNotSet: 'No value',
   },
 
   locality: {

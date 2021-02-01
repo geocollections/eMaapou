@@ -9,7 +9,12 @@
       <v-card>
         <v-container>
           <v-row>
-            <v-col cols="12" md="6" class="pt-0">
+            <v-col
+              cols="12"
+              md="6"
+              style="max-width: 100%"
+              class="pt-0 flex-grow-1 flex-shrink-0"
+            >
               <v-card-title>{{ $t('common.general') }}</v-card-title>
               <v-card-text>
                 <v-simple-table class="">
@@ -32,46 +37,71 @@
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.boxes') }}</td>
-                        <td>{{ drillcore.boxes }}</td>
+                        <td :class="getFieldClass(drillcore.boxes)">
+                          {{ checkIfSet(drillcore.boxes) }}
+                        </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.boxNumbers') }}</td>
-                        <td>{{ drillcore.box_numbers }}</td>
+                        <td :class="getFieldClass(drillcore.box_numbers)">
+                          {{ checkIfSet(drillcore.box_numbers) }}
+                        </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.depository') }}</td>
-                        <td>
+                        <td
+                          :class="
+                            getFieldClass(
+                              $translate({
+                                et: drillcore.depository__value,
+                                en: drillcore.depository__value_en,
+                              })
+                            )
+                          "
+                        >
                           {{
-                            $translate({
-                              et: drillcore.depository__value,
-                              en: drillcore.depository__value_en,
-                            })
+                            checkIfSet(
+                              $translate({
+                                et: drillcore.depository__value,
+                                en: drillcore.depository__value_en,
+                              })
+                            )
                           }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.storage') }}</td>
-                        <td>{{ drillcore.storage__location }}</td>
+                        <td :class="getFieldClass(drillcore.storage__location)">
+                          {{ checkIfSet(drillcore.storage__location) }}
+                        </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.driller') }}</td>
-                        <td>{{ drillcore.agent__agent }}</td>
+                        <td :class="getFieldClass(drillcore.agent__agent)">
+                          {{ checkIfSet(drillcore.agent__agent) }}
+                        </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.year') }}</td>
-                        <td>{{ drillcore.year }}</td>
+                        <td :class="getFieldClass(drillcore.year)">
+                          {{ checkIfSet(drillcore.year) }}
+                        </td>
                       </tr>
 
                       <tr>
                         <td>{{ $t('drillcore.metersInBox') }}</td>
-                        <td>{{ drillcore.number_meters }}</td>
+                        <td :class="getFieldClass(drillcore.number_meters)">
+                          {{ checkIfSet(drillcore.number_meters) }}
+                        </td>
                       </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
               </v-card-text>
-              <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
-              <v-card-text>{{ drillcore.remarks }}</v-card-text>
+              <div v-if="drillcore.remarks">
+                <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+                <v-card-text>{{ drillcore.remarks }}</v-card-text>
+              </div>
             </v-col>
             <v-col v-if="drillcore.locality_id" cols="12" md="6" class="pt-0">
               <v-card-title>{{ $t('locality.locality') }}</v-card-title>
@@ -79,7 +109,7 @@
                 <v-simple-table class="mb-2">
                   <template #default>
                     <tbody>
-                      <tr v-if="drillcore.locality__locality">
+                      <tr>
                         <td>{{ $t('locality.locality') }}</td>
                         <td>
                           {{
@@ -92,7 +122,16 @@
                       </tr>
                       <tr v-if="drillcore.locality__country__value">
                         <td>{{ $t('locality.country') }}</td>
-                        <td>
+                        <td
+                          :class="
+                            getFieldClass(
+                              $translate({
+                                et: drillcore.locality__country__value,
+                                en: drillcore.locality__country__value_en,
+                              })
+                            )
+                          "
+                        >
                           {{
                             $t('locality.countryFormat', {
                               name: $translate({
@@ -104,18 +143,28 @@
                           }}
                         </td>
                       </tr>
-                      <tr v-if="drillcore.locality__latitude">
+                      <tr>
                         <td>{{ $t('locality.latitude') }}</td>
-                        <td>{{ drillcore.locality__latitude }}</td>
+                        <td
+                          :class="getFieldClass(drillcore.locality__latitude)"
+                        >
+                          {{ drillcore.locality__latitude }}
+                        </td>
                       </tr>
 
-                      <tr v-if="drillcore.locality__longitude">
+                      <tr>
                         <td>{{ $t('locality.longitude') }}</td>
-                        <td>{{ drillcore.locality__longitude }}</td>
+                        <td
+                          :class="getFieldClass(drillcore.locality__longitude)"
+                        >
+                          {{ drillcore.locality__longitude }}
+                        </td>
                       </tr>
-                      <tr v-if="drillcore.locality__depth">
+                      <tr>
                         <td>{{ $t('locality.depth') }}</td>
-                        <td>{{ drillcore.locality__depth }}</td>
+                        <td :class="getFieldClass(drillcore.locality__depth)">
+                          {{ checkIfSet(drillcore.locality__depth) }}
+                        </td>
                       </tr>
                     </tbody>
                   </template>
@@ -189,22 +238,39 @@
                             <tbody>
                               <tr>
                                 <td>{{ $t('drillcoreBox.depthStart') }}</td>
-                                <td>{{ box.depth_start }}</td>
+                                <td :class="getFieldClass(box.depth_start)">
+                                  {{ checkIfSet(box.depth_start) }}
+                                </td>
                               </tr>
                               <tr>
                                 <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                                <td>{{ box.depth_end }}</td>
+                                <td :class="getFieldClass(box.depth_end)">
+                                  {{ checkIfSet(box.depth_end) }}
+                                </td>
                               </tr>
                               <tr>
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyTop') }}
                                 </td>
-                                <td>
+                                <td
+                                  :class="
+                                    getFieldClass(
+                                      $translate({
+                                        et: box.stratigraphy_top__stratigraphy,
+                                        en:
+                                          box.stratigraphy_top__stratigraphy_en,
+                                      })
+                                    )
+                                  "
+                                >
                                   {{
-                                    $translate({
-                                      et: box.stratigraphy_top__stratigraphy,
-                                      en: box.stratigraphy_top__stratigraphy_en,
-                                    })
+                                    checkIfSet(
+                                      $translate({
+                                        et: box.stratigraphy_top__stratigraphy,
+                                        en:
+                                          box.stratigraphy_top__stratigraphy_en,
+                                      })
+                                    )
                                   }}
                                 </td>
                               </tr>
@@ -212,13 +278,25 @@
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyBase') }}
                                 </td>
-                                <td>
+                                <td
+                                  :class="
+                                    getFieldClass(
+                                      $translate({
+                                        et: box.stratigraphy_base__stratigraphy,
+                                        en:
+                                          box.stratigraphy_base__stratigraphy_en,
+                                      })
+                                    )
+                                  "
+                                >
                                   {{
-                                    $translate({
-                                      et: box.stratigraphy_base__stratigraphy,
-                                      en:
-                                        box.stratigraphy_base__stratigraphy_en,
-                                    })
+                                    checkIfSet(
+                                      $translate({
+                                        et: box.stratigraphy_base__stratigraphy,
+                                        en:
+                                          box.stratigraphy_base__stratigraphy_en,
+                                      })
+                                    )
                                   }}
                                 </td>
                               </tr>
@@ -261,5 +339,22 @@ export default {
       }),
     }
   },
+  methods: {
+    checkIfSet(value) {
+      if (value === '' || value == null) return this.$t('common.valueNotSet')
+      else return value
+    },
+    getFieldClass(value) {
+      return {
+        noValue: value === '' || value == null,
+      }
+    },
+  },
 }
 </script>
+
+<style>
+.noValue {
+  color: lightgray;
+}
+</style>

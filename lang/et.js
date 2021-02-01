@@ -2,6 +2,7 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
+    valueNotSet: 'Väärtus puudub',
   },
   locality: {
     locality: 'Lokaliteet',
