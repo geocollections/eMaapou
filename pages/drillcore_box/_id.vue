@@ -13,10 +13,6 @@
                   <td>{{ drillcoreBox.id }}</td>
                 </tr>
                 <tr>
-                  <td>{{ $t('drillcoreBox.drillcore') }}</td>
-                  <td>{{ drillcoreBox.drillcore__drillcore }}</td>
-                </tr>
-                <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
                   <td>{{ drillcoreBox.depth_start }}</td>
                 </tr>
@@ -27,23 +23,31 @@
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
                   <td>
-                    {{
-                      $translate({
-                        et: drillcoreBox.stratigraphy_top__stratigraphy,
-                        en: drillcoreBox.stratigraphy_top__stratigraphy_en,
-                      })
-                    }}
+                    <a
+                      :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
+                    >
+                      {{
+                        $translate({
+                          et: drillcoreBox.stratigraphy_top__stratigraphy,
+                          en: drillcoreBox.stratigraphy_top__stratigraphy_en,
+                        })
+                      }}
+                    </a>
                   </td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
                   <td>
-                    {{
-                      $translate({
-                        et: drillcoreBox.stratigraphy_base__stratigraphy,
-                        en: drillcoreBox.stratigraphy_base__stratigraphy_en,
-                      })
-                    }}
+                    <a
+                      :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
+                    >
+                      {{
+                        $translate({
+                          et: drillcoreBox.stratigraphy_base__stratigraphy,
+                          en: drillcoreBox.stratigraphy_base__stratigraphy_en,
+                        })
+                      }}
+                    </a>
                   </td>
                 </tr>
                 <tr>
@@ -68,9 +72,31 @@
           <v-img
             contain
             class="ma-4 rounded-lg"
+            max-height="400"
             :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
             :src="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
           />
+          <div class="text-center">
+            <a
+              :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              >small</a
+            >
+            |
+            <a
+              :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              >medium</a
+            >
+            |
+            <a
+              :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              >large</a
+            >
+            |
+            <a
+              :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              >original</a
+            >
+          </div>
         </v-card-text>
       </v-card>
     </v-col>
