@@ -84,11 +84,11 @@ export default {
 }
 
 .flag-et {
-  background-image: url('/et.svg');
+  background-image: url('~assets/et.svg');
 }
 
 .flag-en {
-  background-image: url('/en.svg');
+  background-image: url('~assets/en.svg');
 }
 
 .flag-squared {
