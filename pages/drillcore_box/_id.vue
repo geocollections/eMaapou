@@ -2,17 +2,23 @@
   <v-row>
     <v-col>
       <h1>{{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}</h1>
-      <nuxt-link :to="`/drillcore_box/${parseInt($route.params.id) - 1}`">
+      <nuxt-link
+        class="text-link"
+        :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
+      >
         {{ $t('common.previous') }}
       </nuxt-link>
 
-      <nuxt-link :to="`/drillcore_box/${parseInt($route.params.id) + 1}`">
+      <nuxt-link
+        class="text-link"
+        :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
+      >
         {{ $t('common.next') }}
       </nuxt-link>
       <v-card>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
-          <v-simple-table>
+          <v-simple-table class="custom-table">
             <template #default>
               <tbody>
                 <tr>
@@ -31,6 +37,7 @@
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
                   <td>
                     <a
+                      class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
                     >
                       {{
@@ -46,6 +53,7 @@
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
                   <td>
                     <a
+                      class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
                     >
                       {{
@@ -60,12 +68,16 @@
                 <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
                   <td>
-                    <nuxt-link :to="`/drillcore/${drillcoreBox.drillcore__id}`">{{
-                      $translate({
-                        et: drillcoreBox.drillcore__drillcore,
-                        en: drillcoreBox.drillcore__drillcore_en,
-                      })
-                    }}</nuxt-link>
+                    <nuxt-link
+                      class="text-link"
+                      :to="`/drillcore/${drillcoreBox.drillcore__id}`"
+                      >{{
+                        $translate({
+                          et: drillcoreBox.drillcore__drillcore,
+                          en: drillcoreBox.drillcore__drillcore_en,
+                        })
+                      }}</nuxt-link
+                    >
                   </td>
                 </tr>
               </tbody>
@@ -85,21 +97,25 @@
           />
           <div class="text-center">
             <a
+              class="text-link"
               :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >small</a
             >
             |
             <a
+              class="text-link"
               :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >medium</a
             >
             |
             <a
+              class="text-link"
               :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >large</a
             >
             |
             <a
+              class="text-link"
               :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >original</a
             >

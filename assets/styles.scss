@@ -1,6 +1,6 @@
 @import '~vuetify/src/styles/styles.sass';
 
-a {
+.text-link {
     text-decoration: none;
     color: map-get($map: $deep-orange, $key: 'darken-2') !important;
 
@@ -8,5 +8,24 @@ a {
         text-decoration: underline;
         color: map-get($map: $deep-orange, $key: 'darken-4') !important;
     
+    }
+}
+
+.custom-table {
+    border: 1px solid map-get($map: $grey, $key: 'lighten-2');
+    tr {
+
+        &:hover {
+            background-color: map-get($map: $grey, $key: 'lighten-5') !important;;
+        }
+        td {
+            &:first-child {
+                background-color: map-get($map: $grey, $key: 'lighten-3') !important;
+                border-right: 1px solid map-get($map: $grey, $key: 'lighten-2');
+                font-weight: 700;
+                font-size: small !important;
+            }
+        }
+
     }
 }
