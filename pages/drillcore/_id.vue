@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <h1>
+      <h1 class="text-center my-3 page-title">
         {{
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         }}

@@ -1,7 +1,9 @@
 <template>
   <v-row>
     <v-col>
-      <h1>{{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}</h1>
+      <h1 class="text-center py-3 page-title">
+        {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
+      </h1>
       <nuxt-link
         class="text-link"
         :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
