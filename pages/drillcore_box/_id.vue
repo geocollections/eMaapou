@@ -32,14 +32,14 @@
                 <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
 
-                  <td v-if="isNull(drillcoreBox.depth_start)">
+                  <td v-if="isNull(drillcoreBox.depth_start)" class="no-value">
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>{{ drillcoreBox.depth_start }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                  <td v-if="isNull(drillcoreBox.depth_end)">
+                  <td v-if="isNull(drillcoreBox.depth_end)" class="no-value">
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>{{ drillcoreBox.depth_end }}</td>
@@ -47,7 +47,10 @@
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
 
-                  <td v-if="isNull(drillcoreBox.stratigraphy_top_id)">
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_top_id)"
+                    class="no-value"
+                  >
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
@@ -66,7 +69,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
-                  <td v-if="isNull(drillcoreBox.stratigraphy_base_id)">
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_base_id)"
+                    class="no-value"
+                  >
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
@@ -85,7 +91,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
-                  <td v-if="isNull(drillcoreBox.drillcore__id)">
+                  <td
+                    v-if="isNull(drillcoreBox.drillcore__id)"
+                    class="no-value"
+                  >
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
