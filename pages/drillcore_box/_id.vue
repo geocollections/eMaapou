@@ -35,14 +35,14 @@
                   <td v-if="isNull(drillcoreBox.depth_start)">
                     {{ $t('common.noValue') }}
                   </td>
-                  <td>{{ drillcoreBox.depth_start }}</td>
+                  <td v-else>{{ drillcoreBox.depth_start }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthEnd') }}</td>
                   <td v-if="isNull(drillcoreBox.depth_end)">
                     {{ $t('common.noValue') }}
                   </td>
-                  <td>{{ drillcoreBox.depth_end }}</td>
+                  <td v-else>{{ drillcoreBox.depth_end }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
@@ -92,13 +92,14 @@
                     <nuxt-link
                       class="text-link"
                       :to="`/drillcore/${drillcoreBox.drillcore__id}`"
-                      >{{
+                    >
+                      {{
                         $translate({
                           et: drillcoreBox.drillcore__drillcore,
                           en: drillcoreBox.drillcore__drillcore_en,
                         })
-                      }}</nuxt-link
-                    >
+                      }}
+                    </nuxt-link>
                   </td>
                 </tr>
               </tbody>
