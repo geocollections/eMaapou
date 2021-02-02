@@ -10,3 +10,22 @@
     
     }
 }
+
+.custom-table {
+    border: 1px solid map-get($map: $grey, $key: 'lighten-2');
+    tr {
+
+        &:hover {
+            background-color: map-get($map: $grey, $key: 'lighten-5') !important;;
+        }
+        td {
+            &:first-child {
+                background-color: map-get($map: $grey, $key: 'lighten-3') !important;
+                border-right: 1px solid map-get($map: $grey, $key: 'lighten-2');
+                font-weight: 700;
+                font-size: small !important;
+            }
+        }
+
+    }
+}

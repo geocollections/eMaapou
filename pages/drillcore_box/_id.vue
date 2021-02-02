@@ -18,7 +18,7 @@
       <v-card>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
-          <v-simple-table>
+          <v-simple-table class="custom-table">
             <template #default>
               <tbody>
                 <tr>
