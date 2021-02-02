@@ -3,6 +3,7 @@ export default {
     general: 'Üldinfo',
     pictures: 'Pildid',
     valueNotSet: 'Väärtus puudub',
+    noValue: 'Väärtus puudub',
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
     next: 'Järgmine',

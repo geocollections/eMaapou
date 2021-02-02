@@ -37,61 +37,94 @@
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.boxes') }}</td>
-                        <td :class="getFieldClass(drillcore.boxes)">
-                          {{ checkIfSet(drillcore.boxes) }}
+                        <td v-if="isNull(drillcore.boxes)" class="no-value">
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.boxes }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.boxNumbers') }}</td>
-                        <td :class="getFieldClass(drillcore.box_numbers)">
-                          {{ checkIfSet(drillcore.box_numbers) }}
+                        <td
+                          v-if="isEmpty(drillcore.box_numbers)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.box_numbers }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.depository') }}</td>
                         <td
-                          :class="
-                            getFieldClass(
+                          v-if="
+                            isEmpty(
                               $translate({
                                 et: drillcore.depository__value,
                                 en: drillcore.depository__value_en,
                               })
                             )
                           "
+                          class="no-value"
                         >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
                           {{
-                            checkIfSet(
-                              $translate({
-                                et: drillcore.depository__value,
-                                en: drillcore.depository__value_en,
-                              })
-                            )
+                            $translate({
+                              et: drillcore.depository__value,
+                              en: drillcore.depository__value_en,
+                            })
                           }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.storage') }}</td>
-                        <td :class="getFieldClass(drillcore.storage__location)">
-                          {{ checkIfSet(drillcore.storage__location) }}
+                        <td
+                          v-if="isEmpty(drillcore.storage__location)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.storage__location }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.driller') }}</td>
-                        <td :class="getFieldClass(drillcore.agent__agent)">
-                          {{ checkIfSet(drillcore.agent__agent) }}
+                        <td
+                          v-if="isEmpty(drillcore.agent__agent)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.agent__agent }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('drillcore.year') }}</td>
-                        <td :class="getFieldClass(drillcore.year)">
-                          {{ checkIfSet(drillcore.year) }}
+
+                        <td v-if="isEmpty(drillcore.year)" class="no-value">
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.year }}
                         </td>
                       </tr>
 
                       <tr>
                         <td>{{ $t('drillcore.metersInBox') }}</td>
-                        <td :class="getFieldClass(drillcore.number_meters)">
-                          {{ checkIfSet(drillcore.number_meters) }}
+                        <td
+                          v-if="isNull(drillcore.number_meters)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.number_meters }}
                         </td>
                       </tr>
                     </tbody>
@@ -128,15 +161,19 @@
                       <tr v-if="drillcore.locality__country__value">
                         <td>{{ $t('locality.country') }}</td>
                         <td
-                          :class="
-                            getFieldClass(
+                          v-if="
+                            isEmpty(
                               $translate({
                                 et: drillcore.locality__country__value,
                                 en: drillcore.locality__country__value_en,
                               })
                             )
                           "
+                          class="no-value"
                         >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
                           {{
                             $t('locality.countryFormat', {
                               name: $translate({
@@ -151,8 +188,12 @@
                       <tr>
                         <td>{{ $t('locality.latitude') }}</td>
                         <td
-                          :class="getFieldClass(drillcore.locality__latitude)"
+                          v-if="isNull(drillcore.locality__latitude)"
+                          class="no-value"
                         >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
                           {{ drillcore.locality__latitude }}
                         </td>
                       </tr>
@@ -160,15 +201,25 @@
                       <tr>
                         <td>{{ $t('locality.longitude') }}</td>
                         <td
-                          :class="getFieldClass(drillcore.locality__longitude)"
+                          v-if="isNull(drillcore.locality__longitude)"
+                          class="no-value"
                         >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
                           {{ drillcore.locality__longitude }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('locality.depth') }}</td>
-                        <td :class="getFieldClass(drillcore.locality__depth)">
-                          {{ checkIfSet(drillcore.locality__depth) }}
+                        <td
+                          v-if="isNull(drillcore.locality__depth)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.locality__depth }}
                         </td>
                       </tr>
                     </tbody>
@@ -218,6 +269,7 @@
               <v-hover v-slot="{ hover }">
                 <v-card
                   nuxt
+                  :ripple="false"
                   :href="`/drillcore_box/${box.id}`"
                   class="mx-4 my-2"
                   :elevation="hover ? 10 : 2"
@@ -243,66 +295,70 @@
                             <tbody>
                               <tr>
                                 <td>{{ $t('drillcoreBox.depthStart') }}</td>
-                                <td :class="getFieldClass(box.depth_start)">
-                                  {{ checkIfSet(box.depth_start) }}
+                                <td
+                                  v-if="isNull(box.depth_start)"
+                                  class="no-value"
+                                >
+                                  {{ $t('common.noValue') }}
+                                </td>
+                                <td v-else>
+                                  {{ box.depth_start }}
                                 </td>
                               </tr>
                               <tr>
                                 <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                                <td :class="getFieldClass(box.depth_end)">
-                                  {{ checkIfSet(box.depth_end) }}
+                                <td
+                                  v-if="isNull(box.depth_end)"
+                                  class="no-value"
+                                >
+                                  {{ $t('common.noValue') }}
+                                </td>
+                                <td v-else>
+                                  {{ box.depth_end }}
                                 </td>
                               </tr>
                               <tr>
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyTop') }}
                                 </td>
-                                <td
-                                  :class="
-                                    getFieldClass(
+                                <td v-if="isNull(box.stratigraphy_top_id)">
+                                  {{ $t('common.noValue') }}
+                                </td>
+                                <td v-else class="no-value">
+                                  <a
+                                    class="text-link"
+                                    :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_top_id}`"
+                                  >
+                                    {{
                                       $translate({
                                         et: box.stratigraphy_top__stratigraphy,
                                         en:
                                           box.stratigraphy_top__stratigraphy_en,
                                       })
-                                    )
-                                  "
-                                >
-                                  {{
-                                    checkIfSet(
-                                      $translate({
-                                        et: box.stratigraphy_top__stratigraphy,
-                                        en:
-                                          box.stratigraphy_top__stratigraphy_en,
-                                      })
-                                    )
-                                  }}
+                                    }}
+                                  </a>
                                 </td>
                               </tr>
                               <tr>
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyBase') }}
                                 </td>
-                                <td
-                                  :class="
-                                    getFieldClass(
+                                <td v-if="isNull(box.stratigraphy_base_id)">
+                                  {{ $t('common.noValue') }}
+                                </td>
+                                <td v-else class="no-value">
+                                  <a
+                                    class="text-link"
+                                    :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_base_id}`"
+                                  >
+                                    {{
                                       $translate({
                                         et: box.stratigraphy_base__stratigraphy,
                                         en:
                                           box.stratigraphy_base__stratigraphy_en,
                                       })
-                                    )
-                                  "
-                                >
-                                  {{
-                                    checkIfSet(
-                                      $translate({
-                                        et: box.stratigraphy_base__stratigraphy,
-                                        en:
-                                          box.stratigraphy_base__stratigraphy_en,
-                                      })
-                                    )
-                                  }}
+                                    }}
+                                  </a>
                                 </td>
                               </tr>
                             </tbody>
@@ -322,6 +378,8 @@
 </template>
 
 <script>
+import { isEmpty, isNull } from 'lodash'
+
 export default {
   async asyncData({ $axios, params }) {
     const drillcoreResponse = await $axios.$get(
@@ -345,21 +403,8 @@ export default {
     }
   },
   methods: {
-    checkIfSet(value) {
-      if (value === '' || value == null) return this.$t('common.valueNotSet')
-      else return value
-    },
-    getFieldClass(value) {
-      return {
-        noValue: value === '' || value == null,
-      }
-    },
+    isEmpty,
+    isNull,
   },
 }
 </script>
-
-<style>
-.noValue {
-  color: lightgray;
-}
-</style>
