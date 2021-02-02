@@ -4,19 +4,21 @@
       <h1 class="text-center py-3 page-title">
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
       </h1>
-      <nuxt-link
-        class="text-link"
-        :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
-      >
-        {{ $t('common.previous') }}
-      </nuxt-link>
+      <div class="d-flex justify-space-between">
+        <nuxt-link
+          class="text-link"
+          :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
+        >
+          {{ $t('common.previous') }}
+        </nuxt-link>
 
-      <nuxt-link
-        class="text-link"
-        :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
-      >
-        {{ $t('common.next') }}
-      </nuxt-link>
+        <nuxt-link
+          class="text-link"
+          :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
+        >
+          {{ $t('common.next') }}
+        </nuxt-link>
+      </div>
       <v-card>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
@@ -92,7 +94,7 @@
         <v-card-text>
           <v-img
             contain
-            class="ma-4 rounded-lg"
+            class="ma-4"
             max-height="400"
             :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
             :src="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
