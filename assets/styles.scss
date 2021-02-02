@@ -1,6 +1,6 @@
 @import '~vuetify/src/styles/styles.sass';
 
-a {
+.text-link {
     text-decoration: none;
     color: map-get($map: $deep-orange, $key: 'darken-2') !important;
 

@@ -112,12 +112,17 @@
                       <tr>
                         <td>{{ $t('locality.locality') }}</td>
                         <td>
-                          {{
-                            $translate({
-                              et: drillcore.locality__locality,
-                              en: drillcore.locality__locality_en,
-                            })
-                          }}
+                          <a
+                            class="text-link"
+                            :href="`https://geocollections.info/locality/${drillcore.locality_id}`"
+                          >
+                            {{
+                              $translate({
+                                et: drillcore.locality__locality,
+                                en: drillcore.locality__locality_en,
+                              })
+                            }}
+                          </a>
                         </td>
                       </tr>
                       <tr v-if="drillcore.locality__country__value">
