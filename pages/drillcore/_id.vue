@@ -13,7 +13,7 @@
               cols="12"
               md="6"
               style="max-width: 100%"
-              class="pt-0 flex-grow-1 flex-shrink-0"
+              class="pt-0 px-0 flex-grow-1 flex-shrink-0"
             >
               <v-card-title>{{ $t('common.general') }}</v-card-title>
               <v-card-text>
@@ -132,14 +132,21 @@
                 </v-simple-table>
               </v-card-text>
               <div v-if="drillcore.remarks">
-                <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+                <v-card-title class="pt-0">{{
+                  $t('drillcore.remarks')
+                }}</v-card-title>
                 <v-card-text>{{ drillcore.remarks }}</v-card-text>
               </div>
             </v-col>
-            <v-col v-if="drillcore.locality_id" cols="12" md="6" class="pt-0">
+            <v-col
+              v-if="drillcore.locality_id"
+              cols="12"
+              md="6"
+              class="pt-0 px-0"
+            >
               <v-card-title>{{ $t('locality.locality') }}</v-card-title>
               <v-card-text>
-                <v-simple-table class="mb-2 custom-table">
+                <v-simple-table class="mb-4 custom-table">
                   <template #default>
                     <tbody>
                       <tr>
@@ -284,7 +291,20 @@
                           max-height="400"
                           :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
                           :src="`https://files.geocollections.info/medium/${box.drillcorebox_image__attachment__uuid_filename}`"
-                        />
+                        >
+                          <template #placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
                       </v-col>
                       <v-col cols="12" sm="4">
                         <v-card-title class="px-0 pt-0">
