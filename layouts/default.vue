@@ -1,9 +1,11 @@
 <template>
   <v-app dark>
-    <v-app-bar dense
-      ><v-toolbar-title>{{ $t('common.title') }}</v-toolbar-title
-      ><v-spacer /><lang-switcher
-    /></v-app-bar>
+    <v-app-bar dense>
+      <v-app-bar-title class="title deep-orange--text text--darken-2">
+        {{ $t('common.title') }}
+      </v-app-bar-title>
+      <v-spacer /><lang-switcher />
+    </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
@@ -101,3 +103,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.title {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 15px !important;
+}
+</style>

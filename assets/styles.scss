@@ -1,0 +1,12 @@
+@import '~vuetify/src/styles/styles.sass';
+
+a {
+    text-decoration: none;
+    color: map-get($map: $deep-orange, $key: 'darken-2') !important;
+
+    &:hover {
+        text-decoration: underline;
+        color: map-get($map: $deep-orange, $key: 'darken-4') !important;
+    
+    }
+}
