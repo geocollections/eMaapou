@@ -1,20 +1,24 @@
 <template>
   <v-row>
     <v-col>
-      <h1>{{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}</h1>
-      <nuxt-link
-        class="text-link"
-        :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
-      >
-        {{ $t('common.previous') }}
-      </nuxt-link>
+      <h1 class="text-center py-3 page-title">
+        {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
+      </h1>
+      <div class="d-flex justify-space-between">
+        <nuxt-link
+          class="text-link"
+          :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
+        >
+          {{ $t('common.previous') }}
+        </nuxt-link>
 
-      <nuxt-link
-        class="text-link"
-        :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
-      >
-        {{ $t('common.next') }}
-      </nuxt-link>
+        <nuxt-link
+          class="text-link"
+          :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
+        >
+          {{ $t('common.next') }}
+        </nuxt-link>
+      </div>
       <v-card>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
@@ -27,15 +31,26 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
+
+                  <td v-if="isNull(drillcoreBox.depth_start)">
+                    {{ $t('common.noValue') }}
+                  </td>
                   <td>{{ drillcoreBox.depth_start }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthEnd') }}</td>
+                  <td v-if="isNull(drillcoreBox.depth_end)">
+                    {{ $t('common.noValue') }}
+                  </td>
                   <td>{{ drillcoreBox.depth_end }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
-                  <td>
+
+                  <td v-if="isNull(drillcoreBox.stratigraphy_top_id)">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
                     <a
                       class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
@@ -51,7 +66,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
-                  <td>
+                  <td v-if="isNull(drillcoreBox.stratigraphy_base_id)">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
                     <a
                       class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
@@ -67,7 +85,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
-                  <td>
+                  <td v-if="isNull(drillcoreBox.drillcore__id)">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
                     <nuxt-link
                       class="text-link"
                       :to="`/drillcore/${drillcoreBox.drillcore__id}`"
@@ -90,7 +111,7 @@
         <v-card-text>
           <v-img
             contain
-            class="ma-4 rounded-lg"
+            class="ma-4"
             max-height="400"
             :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
             :src="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
@@ -127,6 +148,8 @@
 </template>
 
 <script>
+import { isNull } from 'lodash'
+
 export default {
   async asyncData({ $axios, params }) {
     const drillcoreBoxResponse = await $axios.$get(
@@ -145,6 +168,9 @@ export default {
         en: this.drillcoreBox.drillcore__drillcore_en,
       })}`,
     }
+  },
+  methods: {
+    isNull,
   },
 }
 </script>

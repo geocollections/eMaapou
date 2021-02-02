@@ -3,6 +3,7 @@ export default {
     general: 'General info',
     pictures: 'Pictures',
     valueNotSet: 'No value',
+    noValue: 'No value',
     title: 'Geoscience collections of Estonia',
     previous: 'Previous',
     next: 'Next',

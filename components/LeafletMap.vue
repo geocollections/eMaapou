@@ -1,7 +1,12 @@
 <template>
   <client-only>
     <!-- TODO: Search for ways to replace scroll wheel zoom -->
-    <l-map ref="map" :zoom="13" :center="[center.latitude, center.longitude]">
+    <l-map
+      ref="map"
+      style="z-index: 0"
+      :zoom="13"
+      :center="[center.latitude, center.longitude]"
+    >
       <l-control-layers />
       <l-tile-layer
         v-for="layer in layers.base"
