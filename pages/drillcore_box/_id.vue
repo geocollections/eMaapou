@@ -31,15 +31,26 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
+
+                  <td v-if="isNull(drillcoreBox.depth_start)">
+                    {{ $t('common.noValue') }}
+                  </td>
                   <td>{{ drillcoreBox.depth_start }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthEnd') }}</td>
+                  <td v-if="isNull(drillcoreBox.depth_end)">
+                    {{ $t('common.noValue') }}
+                  </td>
                   <td>{{ drillcoreBox.depth_end }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
-                  <td>
+
+                  <td v-if="isNull(drillcoreBox.stratigraphy_top_id)">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
                     <a
                       class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
@@ -55,7 +66,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
-                  <td>
+                  <td v-if="isNull(drillcoreBox.stratigraphy_base_id)">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
                     <a
                       class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
@@ -71,7 +85,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
-                  <td>
+                  <td v-if="isNull(drillcoreBox.drillcore__id)">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
                     <nuxt-link
                       class="text-link"
                       :to="`/drillcore/${drillcoreBox.drillcore__id}`"
@@ -131,6 +148,8 @@
 </template>
 
 <script>
+import { isNull } from 'lodash'
+
 export default {
   async asyncData({ $axios, params }) {
     const drillcoreBoxResponse = await $axios.$get(
@@ -149,6 +168,9 @@ export default {
         en: this.drillcoreBox.drillcore__drillcore_en,
       })}`,
     }
+  },
+  methods: {
+    isNull,
   },
 }
 </script>
