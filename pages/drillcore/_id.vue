@@ -217,9 +217,6 @@
                   class="mx-4 my-2"
                   :elevation="hover ? 10 : 2"
                 >
-                  <v-card-title>
-                    {{ $t('drillcoreBox.nr', { number: box.number }) }}
-                  </v-card-title>
                   <v-card-text>
                     <v-row>
                       <v-col cols="12" sm="8">
@@ -233,6 +230,9 @@
                         />
                       </v-col>
                       <v-col cols="12" sm="4">
+                        <v-card-title>
+                          {{ $t('drillcoreBox.nr', { number: box.number }) }}
+                        </v-card-title>
                         <v-simple-table>
                           <template #default>
                             <tbody>
