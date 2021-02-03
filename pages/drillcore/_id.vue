@@ -6,7 +6,7 @@
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         }}
       </h1>
-      <v-card>
+      <v-card flat tile>
         <v-container>
           <v-row>
             <v-col

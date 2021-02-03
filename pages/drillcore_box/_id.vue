@@ -19,7 +19,7 @@
           {{ $t('common.next') }}
         </nuxt-link>
       </div>
-      <v-card>
+      <v-card flat tile>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
           <v-simple-table dense class="custom-table">
