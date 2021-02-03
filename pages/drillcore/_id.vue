@@ -341,10 +341,13 @@
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyTop') }}
                                 </td>
-                                <td v-if="isNull(box.stratigraphy_top_id)">
+                                <td
+                                  v-if="isNull(box.stratigraphy_top_id)"
+                                  class="no-value"
+                                >
                                   {{ $t('common.noValue') }}
                                 </td>
-                                <td v-else class="no-value">
+                                <td v-else>
                                   <a
                                     class="text-link"
                                     :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_top_id}`"
@@ -363,10 +366,13 @@
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyBase') }}
                                 </td>
-                                <td v-if="isNull(box.stratigraphy_base_id)">
+                                <td
+                                  v-if="isNull(box.stratigraphy_base_id)"
+                                  class="no-value"
+                                >
                                   {{ $t('common.noValue') }}
                                 </td>
-                                <td v-else class="no-value">
+                                <td v-else>
                                   <a
                                     class="text-link"
                                     :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_base_id}`"
