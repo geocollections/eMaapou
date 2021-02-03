@@ -299,7 +299,7 @@
                           <v-col cols="12" sm="8" align-self="center">
                             <!-- TODO: Add placeholder, for case when box does not have a picture -->
                             <v-img
-                              class="rounded-lg"
+                              class="rounded"
                               contain
                               max-height="400"
                               :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
