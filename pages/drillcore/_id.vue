@@ -17,7 +17,7 @@
             >
               <v-card-title>{{ $t('common.general') }}</v-card-title>
               <v-card-text>
-                <v-simple-table class="custom-table">
+                <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
                       <tr>
@@ -146,7 +146,7 @@
             >
               <v-card-title>{{ $t('locality.locality') }}</v-card-title>
               <v-card-text>
-                <v-simple-table class="mb-4 custom-table">
+                <v-simple-table dense class="mb-4 custom-table">
                   <template #default>
                     <tbody>
                       <tr>
@@ -282,8 +282,8 @@
                   :elevation="hover ? 10 : 2"
                 >
                   <v-card-text>
-                    <v-row align="center">
-                      <v-col cols="12" sm="8">
+                    <v-row align="start">
+                      <v-col cols="12" sm="8" align-self="center">
                         <!-- TODO: Add placeholder, for case when box does not have a picture -->
                         <v-img
                           class="rounded-lg"
@@ -310,7 +310,7 @@
                         <v-card-title class="px-0 pt-0">
                           {{ $t('drillcoreBox.nr', { number: box.number }) }}
                         </v-card-title>
-                        <v-simple-table class="custom-table">
+                        <v-simple-table dense class="custom-table">
                           <template #default>
                             <tbody>
                               <tr>
