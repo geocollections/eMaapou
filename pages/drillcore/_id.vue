@@ -15,8 +15,10 @@
               style="max-width: 100%"
               class="pt-0 px-0 flex-grow-1 flex-shrink-0"
             >
-              <v-card-title>{{ $t('common.general') }}</v-card-title>
-              <v-card-text>
+              <v-card-title class="pl-0">{{
+                $t('common.general')
+              }}</v-card-title>
+              <v-card-text class="pl-0">
                 <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
@@ -132,10 +134,10 @@
                 </v-simple-table>
               </v-card-text>
               <div v-if="drillcore.remarks">
-                <v-card-title class="pt-0">{{
+                <v-card-title class="pt-0 pl-0">{{
                   $t('drillcore.remarks')
                 }}</v-card-title>
-                <v-card-text>{{ drillcore.remarks }}</v-card-text>
+                <v-card-text class="pl-0">{{ drillcore.remarks }}</v-card-text>
               </div>
             </v-col>
             <v-col
@@ -145,7 +147,7 @@
               class="pt-0 px-0"
             >
               <v-card-title>{{ $t('locality.locality') }}</v-card-title>
-              <v-card-text>
+              <v-card-text class="pr-0">
                 <v-simple-table dense class="mb-4 custom-table">
                   <template #default>
                     <tbody>
