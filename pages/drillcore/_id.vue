@@ -262,20 +262,23 @@
       </v-card>
 
       <v-card class="mt-2">
-        <v-card-title>
-          {{ $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes }) }}
-        </v-card-title>
-        <v-container>
-          <v-row>
-            <v-col
-              v-for="box in boxes.results"
-              :key="box.id"
-              cols="12"
-              class="pa-0"
-            >
-              <v-hover v-slot="{ hover }">
-                <!-- Opens box as new tab -->
-                <!-- <v-card
+        <v-tabs color="deep-orange darken-2">
+          <v-tab>{{
+            $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes })
+          }}</v-tab>
+          <v-tab-item>
+            <v-container>
+              <v-row>
+                <v-col
+                  v-for="(box, i) in boxes.results"
+                  :key="box.id"
+                  cols="12"
+                  class="pa-0"
+                >
+                  <v-divider v-if="i !== 0" />
+                  <v-hover v-slot="{ hover }">
+                    <!-- Opens box as new tab -->
+                    <!-- <v-card
                   nuxt
                   :ripple="false"
                   target="_blank"
@@ -283,130 +286,137 @@
                   class="mx-4 my-2"
                   :elevation="hover ? 10 : 2"
                 > -->
-                <v-card
-                  :ripple="false"
-                  target="_blank"
-                  class="mx-4 my-2"
-                  :elevation="hover ? 10 : 2"
-                  @click="openDrillcoreBox(box.id)"
-                >
-                  <v-card-text>
-                    <v-row align="start">
-                      <v-col cols="12" sm="8" align-self="center">
-                        <!-- TODO: Add placeholder, for case when box does not have a picture -->
-                        <v-img
-                          class="rounded-lg"
-                          contain
-                          max-height="400"
-                          :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
-                          :src="`https://files.geocollections.info/medium/${box.drillcorebox_image__attachment__uuid_filename}`"
-                        >
-                          <template #placeholder>
-                            <v-row
-                              class="fill-height ma-0"
-                              align="center"
-                              justify="center"
+                    <v-card
+                      flat
+                      tile
+                      :ripple="false"
+                      target="_blank"
+                      :class="{ 'on-hover': hover }"
+                      @click="openDrillcoreBox(box.id)"
+                    >
+                      <v-card-text>
+                        <v-row align="start">
+                          <v-col cols="12" sm="8" align-self="center">
+                            <!-- TODO: Add placeholder, for case when box does not have a picture -->
+                            <v-img
+                              class="rounded-lg"
+                              contain
+                              max-height="400"
+                              :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
+                              :src="`https://files.geocollections.info/medium/${box.drillcorebox_image__attachment__uuid_filename}`"
                             >
-                              <v-progress-circular
-                                indeterminate
-                                color="grey lighten-5"
-                              ></v-progress-circular>
-                            </v-row>
-                          </template>
-                        </v-img>
-                      </v-col>
-                      <v-col cols="12" sm="4">
-                        <v-card-title class="px-0 pt-0">
-                          {{ $t('drillcoreBox.nr', { number: box.number }) }}
-                        </v-card-title>
-                        <v-simple-table dense class="custom-table">
-                          <template #default>
-                            <tbody>
-                              <tr>
-                                <td>{{ $t('drillcoreBox.depthStart') }}</td>
-                                <td
-                                  v-if="isNull(box.depth_start)"
-                                  class="no-value"
+                              <template #placeholder>
+                                <v-row
+                                  class="fill-height ma-0"
+                                  align="center"
+                                  justify="center"
                                 >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  {{ box.depth_start }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                                <td
-                                  v-if="isNull(box.depth_end)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  {{ box.depth_end }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  {{ $t('drillcoreBox.stratigraphyTop') }}
-                                </td>
-                                <td
-                                  v-if="isNull(box.stratigraphy_top_id)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  <a
-                                    class="text-link"
-                                    :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_top_id}`"
-                                  >
-                                    {{
-                                      $translate({
-                                        et: box.stratigraphy_top__stratigraphy,
-                                        en:
-                                          box.stratigraphy_top__stratigraphy_en,
-                                      })
-                                    }}
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  {{ $t('drillcoreBox.stratigraphyBase') }}
-                                </td>
-                                <td
-                                  v-if="isNull(box.stratigraphy_base_id)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  <a
-                                    class="text-link"
-                                    :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_base_id}`"
-                                  >
-                                    {{
-                                      $translate({
-                                        et: box.stratigraphy_base__stratigraphy,
-                                        en:
-                                          box.stratigraphy_base__stratigraphy_en,
-                                      })
-                                    }}
-                                  </a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </template>
-                        </v-simple-table>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
-              </v-hover>
-            </v-col>
-          </v-row>
-        </v-container>
+                                  <v-progress-circular
+                                    indeterminate
+                                    color="grey lighten-5"
+                                  ></v-progress-circular>
+                                </v-row>
+                              </template>
+                            </v-img>
+                          </v-col>
+                          <v-col cols="12" sm="4">
+                            <v-card-title class="px-0 pt-0">
+                              {{
+                                $t('drillcoreBox.nr', { number: box.number })
+                              }}
+                            </v-card-title>
+                            <v-simple-table dense class="custom-table">
+                              <template #default>
+                                <tbody>
+                                  <tr>
+                                    <td>{{ $t('drillcoreBox.depthStart') }}</td>
+                                    <td
+                                      v-if="isNull(box.depth_start)"
+                                      class="no-value"
+                                    >
+                                      {{ $t('common.noValue') }}
+                                    </td>
+                                    <td v-else>
+                                      {{ box.depth_start }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>{{ $t('drillcoreBox.depthEnd') }}</td>
+                                    <td
+                                      v-if="isNull(box.depth_end)"
+                                      class="no-value"
+                                    >
+                                      {{ $t('common.noValue') }}
+                                    </td>
+                                    <td v-else>
+                                      {{ box.depth_end }}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      {{ $t('drillcoreBox.stratigraphyTop') }}
+                                    </td>
+                                    <td
+                                      v-if="isNull(box.stratigraphy_top_id)"
+                                      class="no-value"
+                                    >
+                                      {{ $t('common.noValue') }}
+                                    </td>
+                                    <td v-else>
+                                      <a
+                                        class="text-link"
+                                        :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_top_id}`"
+                                      >
+                                        {{
+                                          $translate({
+                                            et:
+                                              box.stratigraphy_top__stratigraphy,
+                                            en:
+                                              box.stratigraphy_top__stratigraphy_en,
+                                          })
+                                        }}
+                                      </a>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      {{ $t('drillcoreBox.stratigraphyBase') }}
+                                    </td>
+                                    <td
+                                      v-if="isNull(box.stratigraphy_base_id)"
+                                      class="no-value"
+                                    >
+                                      {{ $t('common.noValue') }}
+                                    </td>
+                                    <td v-else>
+                                      <a
+                                        class="text-link"
+                                        :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_base_id}`"
+                                      >
+                                        {{
+                                          $translate({
+                                            et:
+                                              box.stratigraphy_base__stratigraphy,
+                                            en:
+                                              box.stratigraphy_base__stratigraphy_en,
+                                          })
+                                        }}
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+                          </v-col>
+                        </v-row>
+                      </v-card-text>
+                    </v-card>
+                  </v-hover>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-tab-item>
+        </v-tabs>
       </v-card>
     </v-col>
   </v-row>
