@@ -122,9 +122,8 @@
           <v-img
             contain
             class="ma-4"
-            max-height="400"
             :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-            :src="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+            :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
           />
           <div class="text-center">
             <a

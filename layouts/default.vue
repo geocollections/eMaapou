@@ -1,8 +1,12 @@
 <template>
   <v-app dark>
     <v-app-bar dense app>
-      <v-app-bar-title class="title deep-orange--text text--darken-2">
-        {{ $t('common.title') }}
+      <v-app-bar-title>
+        <a
+          href="https://geocollections.info"
+          class="title deep-orange--text text--darken-2"
+          >{{ $t('common.title') }}</a
+        >
       </v-app-bar-title>
       <v-spacer /><lang-switcher />
     </v-app-bar>
@@ -103,6 +107,7 @@ export default {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 15px !important;
+  text-decoration: none;
 }
 
 .footer-logo {
