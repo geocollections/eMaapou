@@ -63,7 +63,7 @@
         <v-card-text class="text-center">
           <i18n path="footer" tag="p">
             <a class="text-link">olle.hints@taltech.ee</a>
-            &#x1f16d;
+            <img src="~assets/logos/cc.png" alt="cc" height="15" />
           </i18n>
         </v-card-text>
       </v-card>
