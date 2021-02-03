@@ -274,12 +274,21 @@
               class="pa-0"
             >
               <v-hover v-slot="{ hover }">
-                <v-card
+                <!-- Opens box as new tab -->
+                <!-- <v-card
                   nuxt
                   :ripple="false"
+                  target="_blank"
                   :href="`/drillcore_box/${box.id}`"
                   class="mx-4 my-2"
                   :elevation="hover ? 10 : 2"
+                > -->
+                <v-card
+                  :ripple="false"
+                  target="_blank"
+                  class="mx-4 my-2"
+                  :elevation="hover ? 10 : 2"
+                  @click="openDrillcoreBox(box.id)"
                 >
                   <v-card-text>
                     <v-row align="start">
@@ -431,6 +440,13 @@ export default {
   methods: {
     isEmpty,
     isNull,
+    openDrillcoreBox(id) {
+      const routeData = this.$router.resolve({
+        name: `drillcore_box-id___${this.$i18n.locale}`,
+        params: { id },
+      })
+      window.open(routeData.href, '_blank', 'height=800, width=800')
+    },
   },
 }
 </script>
