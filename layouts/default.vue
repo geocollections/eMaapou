@@ -1,8 +1,12 @@
 <template>
   <v-app dark>
     <v-app-bar dense app>
-      <v-app-bar-title class="title deep-orange--text text--darken-2">
-        {{ $t('common.title') }}
+      <v-app-bar-title>
+        <a
+          href="https://geocollections.info"
+          class="title deep-orange--text text--darken-2"
+          >{{ $t('common.title') }}</a
+        >
       </v-app-bar-title>
       <v-spacer /><lang-switcher />
     </v-app-bar>
@@ -11,65 +15,59 @@
         <nuxt />
       </v-container>
     </v-main>
-    <!-- <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> mdi-repeat </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer> -->
+    <v-footer padless class="mt-4">
+      <v-card flat tile>
+        <v-card-text class="text-center">
+          <a href="https://geokogud.info" target="_blank" rel="noopener">
+            <img
+              src="~/assets/logos/sarv_logo.svg"
+              alt="KIK"
+              title="KIK"
+              class="footer-logo"
+            />
+          </a>
+          <a href="https://natarc.ut.ee" target="_blank" rel="noopener">
+            <img
+              src="~/assets/logos/NATARC_transparent.png"
+              alt="KIK"
+              title="KIK"
+              class="footer-logo"
+            />
+          </a>
+          <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
+            <img
+              src="~/assets/logos/logo_datacite_bw.png"
+              alt="KIK"
+              title="KIK"
+              class="footer-logo"
+            />
+          </a>
+          <a href="https://struktuurifondid.ee" target="_blank" rel="noopener">
+            <img
+              src="~/assets/logos/EL_mv.png"
+              alt="KIK"
+              title="KIK"
+              class="footer-logo"
+            />
+          </a>
+          <a href="https://kik.ee" target="_blank" rel="noopener">
+            <img
+              src="~/assets/logos/kik_bw.png"
+              alt="KIK"
+              title="KIK"
+              class="footer-logo"
+            />
+          </a>
+        </v-card-text>
+        <!-- TODO: Needs to be translated (translation is at geocollections.info) -->
+        <v-card-text class="text-center">
+          <i18n path="footer" tag="p">
+            <a class="text-link">olle.hints@taltech.ee</a>
+            <img src="~assets/logos/cc.png" alt="cc" height="15" />
+          </i18n>
+        </v-card-text>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
@@ -109,5 +107,12 @@ export default {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 15px !important;
+  text-decoration: none;
+}
+
+.footer-logo {
+  height: 60px;
+  width: auto;
+  padding: 0 10px;
 }
 </style>

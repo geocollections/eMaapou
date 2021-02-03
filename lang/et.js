@@ -33,9 +33,11 @@ export default {
     id: 'ID',
     drillcore: 'Puursüdamik',
     nr: 'Kast nr. {number}',
-    depthStart: 'Sügavuse algus (m)',
-    depthEnd: 'Sügavuse lõpp (m)',
-    stratigraphyTop: 'Ülemine stratigraafia',
-    stratigraphyBase: 'Alumine stratigraafia',
+    depthStart: 'Algus (m)',
+    depthEnd: 'Lõpp (m)',
+    stratigraphyTop: 'Strat. algus',
+    stratigraphyBase: 'Strat. lõpp',
   },
+  footer:
+    'Küsimustega andmebaasi või veebilehe kohta palun pöörduda: {0} | {1} 2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine mitteärilistel eesmärkidel kõigile vaba, eeldusel, et viidatakse allikale.',
 }

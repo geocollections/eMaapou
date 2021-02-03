@@ -22,7 +22,7 @@
       <v-card>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
-          <v-simple-table class="custom-table">
+          <v-simple-table dense class="custom-table">
             <template #default>
               <tbody>
                 <tr>
@@ -32,22 +32,25 @@
                 <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
 
-                  <td v-if="isNull(drillcoreBox.depth_start)">
+                  <td v-if="isNull(drillcoreBox.depth_start)" class="no-value">
                     {{ $t('common.noValue') }}
                   </td>
-                  <td>{{ drillcoreBox.depth_start }}</td>
+                  <td v-else>{{ drillcoreBox.depth_start }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                  <td v-if="isNull(drillcoreBox.depth_end)">
+                  <td v-if="isNull(drillcoreBox.depth_end)" class="no-value">
                     {{ $t('common.noValue') }}
                   </td>
-                  <td>{{ drillcoreBox.depth_end }}</td>
+                  <td v-else>{{ drillcoreBox.depth_end }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
 
-                  <td v-if="isNull(drillcoreBox.stratigraphy_top_id)">
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_top_id)"
+                    class="no-value"
+                  >
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
@@ -66,7 +69,10 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
-                  <td v-if="isNull(drillcoreBox.stratigraphy_base_id)">
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_base_id)"
+                    class="no-value"
+                  >
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
@@ -85,20 +91,24 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
-                  <td v-if="isNull(drillcoreBox.drillcore__id)">
+                  <td
+                    v-if="isNull(drillcoreBox.drillcore__id)"
+                    class="no-value"
+                  >
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
                     <nuxt-link
                       class="text-link"
                       :to="`/drillcore/${drillcoreBox.drillcore__id}`"
-                      >{{
+                    >
+                      {{
                         $translate({
                           et: drillcoreBox.drillcore__drillcore,
                           en: drillcoreBox.drillcore__drillcore_en,
                         })
-                      }}</nuxt-link
-                    >
+                      }}
+                    </nuxt-link>
                   </td>
                 </tr>
               </tbody>
@@ -112,9 +122,8 @@
           <v-img
             contain
             class="ma-4"
-            max-height="400"
             :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-            :src="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+            :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
           />
           <div class="text-center">
             <a

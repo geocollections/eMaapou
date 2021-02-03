@@ -13,11 +13,11 @@
               cols="12"
               md="6"
               style="max-width: 100%"
-              class="pt-0 flex-grow-1 flex-shrink-0"
+              class="pt-0 px-0 flex-grow-1 flex-shrink-0"
             >
               <v-card-title>{{ $t('common.general') }}</v-card-title>
               <v-card-text>
-                <v-simple-table class="custom-table">
+                <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
                       <tr>
@@ -132,14 +132,21 @@
                 </v-simple-table>
               </v-card-text>
               <div v-if="drillcore.remarks">
-                <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+                <v-card-title class="pt-0">{{
+                  $t('drillcore.remarks')
+                }}</v-card-title>
                 <v-card-text>{{ drillcore.remarks }}</v-card-text>
               </div>
             </v-col>
-            <v-col v-if="drillcore.locality_id" cols="12" md="6" class="pt-0">
+            <v-col
+              v-if="drillcore.locality_id"
+              cols="12"
+              md="6"
+              class="pt-0 px-0"
+            >
               <v-card-title>{{ $t('locality.locality') }}</v-card-title>
               <v-card-text>
-                <v-simple-table class="mb-2 custom-table">
+                <v-simple-table dense class="mb-4 custom-table">
                   <template #default>
                     <tbody>
                       <tr>
@@ -267,16 +274,25 @@
               class="pa-0"
             >
               <v-hover v-slot="{ hover }">
-                <v-card
+                <!-- Opens box as new tab -->
+                <!-- <v-card
                   nuxt
                   :ripple="false"
+                  target="_blank"
                   :href="`/drillcore_box/${box.id}`"
                   class="mx-4 my-2"
                   :elevation="hover ? 10 : 2"
+                > -->
+                <v-card
+                  :ripple="false"
+                  target="_blank"
+                  class="mx-4 my-2"
+                  :elevation="hover ? 10 : 2"
+                  @click="openDrillcoreBox(box.id)"
                 >
                   <v-card-text>
-                    <v-row align="center">
-                      <v-col cols="12" sm="8">
+                    <v-row align="start">
+                      <v-col cols="12" sm="8" align-self="center">
                         <!-- TODO: Add placeholder, for case when box does not have a picture -->
                         <v-img
                           class="rounded-lg"
@@ -284,13 +300,26 @@
                           max-height="400"
                           :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
                           :src="`https://files.geocollections.info/medium/${box.drillcorebox_image__attachment__uuid_filename}`"
-                        />
+                        >
+                          <template #placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
                       </v-col>
                       <v-col cols="12" sm="4">
                         <v-card-title class="px-0 pt-0">
                           {{ $t('drillcoreBox.nr', { number: box.number }) }}
                         </v-card-title>
-                        <v-simple-table class="custom-table">
+                        <v-simple-table dense class="custom-table">
                           <template #default>
                             <tbody>
                               <tr>
@@ -321,10 +350,13 @@
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyTop') }}
                                 </td>
-                                <td v-if="isNull(box.stratigraphy_top_id)">
+                                <td
+                                  v-if="isNull(box.stratigraphy_top_id)"
+                                  class="no-value"
+                                >
                                   {{ $t('common.noValue') }}
                                 </td>
-                                <td v-else class="no-value">
+                                <td v-else>
                                   <a
                                     class="text-link"
                                     :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_top_id}`"
@@ -343,10 +375,13 @@
                                 <td>
                                   {{ $t('drillcoreBox.stratigraphyBase') }}
                                 </td>
-                                <td v-if="isNull(box.stratigraphy_base_id)">
+                                <td
+                                  v-if="isNull(box.stratigraphy_base_id)"
+                                  class="no-value"
+                                >
                                   {{ $t('common.noValue') }}
                                 </td>
-                                <td v-else class="no-value">
+                                <td v-else>
                                   <a
                                     class="text-link"
                                     :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_base_id}`"
@@ -405,6 +440,13 @@ export default {
   methods: {
     isEmpty,
     isNull,
+    openDrillcoreBox(id) {
+      const routeData = this.$router.resolve({
+        name: `drillcore_box-id___${this.$i18n.locale}`,
+        params: { id },
+      })
+      window.open(routeData.href, '_blank', 'height=800, width=800')
+    },
   },
 }
 </script>
