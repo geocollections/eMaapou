@@ -1,39 +1,36 @@
 <template>
-  <div>
-    <v-menu transition="slide-y-transition" offset-y bottom right>
-      <template #activator="{ on, attrs }">
-        <v-btn
-          aria-label="select language"
-          class="ml-auto d-block"
-          icon
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          <span :class="classObject" />
-        </v-btn>
-      </template>
-      <v-list>
-        <v-list-item
-          v-for="(locale, i) in availableLocales"
-          :key="i"
-          :to="switchLocalePath(locale.code)"
-        >
-          <v-list-item-title class="d-flex">
-            <span
-              v-if="locale.code === 'et'"
-              class="flag flag-et flag-squared flag-circle mr-2 lang-button"
-            />
-            <span
-              v-if="locale.code === 'en'"
-              class="flag flag-en flag-squared flag-circle mr-2 lang-button"
-            />
-            <span class="align-self-center">{{ locale.name }}</span>
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-  </div>
+  <v-menu transition="slide-y-transition" offset-y bottom right>
+    <template #activator="{ on, attrs }">
+      <v-btn
+        aria-label="select language"
+        class="ml-auto d-block"
+        icon
+        v-bind="attrs"
+        v-on="on"
+      >
+        <span :class="classObject" />
+      </v-btn>
+    </template>
+    <v-list>
+      <v-list-item
+        v-for="(locale, i) in availableLocales"
+        :key="i"
+        :to="switchLocalePath(locale.code)"
+      >
+        <v-list-item-title class="d-flex">
+          <span
+            v-if="locale.code === 'et'"
+            class="flag flag-et flag-squared flag-circle mr-2 lang-button"
+          />
+          <span
+            v-if="locale.code === 'en'"
+            class="flag flag-en flag-squared flag-circle mr-2 lang-button"
+          />
+          <span class="align-self-center">{{ locale.name }}</span>
+        </v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
 </template>
 
 <script>
