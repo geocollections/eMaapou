@@ -90,12 +90,4 @@ export default {
 .flag-en {
   background-image: url('~assets/en.svg');
 }
-
-.flag-squared {
-  width: 1em;
-}
-
-.flag-circle {
-  border-radius: 100%;
-}
 </style>
