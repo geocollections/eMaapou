@@ -7,6 +7,16 @@ export default {
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
     next: 'Järgmine',
+    links: 'Lingid',
+  },
+  link: {
+    sarvAPI: 'Avalik API',
+    github: 'GitHub',
+    fossils: 'Fossiilid',
+    sarvDOI: 'Geoloogilised andmed (DOI)',
+    eurocore: 'EUROCORE puursüdamike portaal',
+    chitinozia: 'Baltoskandia kitiinikud',
+    turvas: 'Turbauuringute andmebaas',
   },
   locality: {
     locality: 'Lokaliteet',

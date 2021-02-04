@@ -7,8 +7,17 @@ export default {
     title: 'Geoscience collections of Estonia',
     previous: 'Previous',
     next: 'Next',
+    links: 'Links',
   },
-
+  link: {
+    sarvAPI: 'Public API',
+    github: 'GitHub',
+    fossils: 'Fossils',
+    sarvDOI: 'Research data (DOI)',
+    eurocore: 'EUROCORE data portal',
+    chitinozia: 'Baltic chitinozoans',
+    turvas: 'Peat studies database',
+  },
   locality: {
     locality: 'Locality',
     country: 'Country',

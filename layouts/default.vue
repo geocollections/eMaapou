@@ -8,7 +8,9 @@
           >{{ $t('common.title') }}</a
         >
       </v-app-bar-title>
-      <v-spacer /><lang-switcher />
+      <v-spacer />
+      <links />
+      <lang-switcher />
     </v-app-bar>
     <v-main>
       <v-container>
