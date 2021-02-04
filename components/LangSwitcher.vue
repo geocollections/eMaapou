@@ -3,7 +3,7 @@
     <template #activator="{ on, attrs }">
       <v-btn
         aria-label="select language"
-        class="ml-auto d-block"
+        class="ml-auto d-block lang-main"
         icon
         v-bind="attrs"
         v-on="on"
@@ -15,6 +15,8 @@
       <v-list-item
         v-for="(locale, i) in availableLocales"
         :key="i"
+        dense
+        class="header-menu-item"
         :to="switchLocalePath(locale.code)"
       >
         <v-list-item-title class="d-flex">
@@ -54,7 +56,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.lang-main {
+  height: 42px !important;
+  width: 42px !important;
+}
+
 .lang-buttons {
   /*text-align: right;*/
   /*position: absolute;*/
