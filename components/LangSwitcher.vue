@@ -3,7 +3,7 @@
     <template #activator="{ on, attrs }">
       <v-btn
         aria-label="select language"
-        class="ml-auto d-block lang-main"
+        class="ml-auto d-block lang-button"
         icon
         v-bind="attrs"
         v-on="on"
@@ -22,11 +22,11 @@
         <v-list-item-title class="d-flex">
           <span
             v-if="locale.code === 'et'"
-            class="flag flag-et flag-squared flag-circle mr-2 lang-button"
+            class="flag flag-et mr-2 lang-icon"
           />
           <span
             v-if="locale.code === 'en'"
-            class="flag flag-en flag-squared flag-circle mr-2 lang-button"
+            class="flag flag-en mr-2 lang-icon"
           />
           <span class="align-self-center">{{ locale.name }}</span>
         </v-list-item-title>
@@ -47,9 +47,7 @@ export default {
         flag: true,
         'flag-en': this.$i18n.locale === 'en',
         'flag-et': this.$i18n.locale === 'et',
-        'flag-squared': true,
-        'flag-circle': true,
-        'lang-button': true,
+        'lang-icon': true,
       }
     },
   },
@@ -57,18 +55,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.lang-main {
+.lang-button {
   height: 42px !important;
   width: 42px !important;
 }
 
-.lang-buttons {
-  /*text-align: right;*/
-  /*position: absolute;*/
-  right: 0;
-}
-
-.lang-button {
+.lang-icon {
   height: 28px;
   width: 28px !important;
 }
@@ -81,6 +73,10 @@ export default {
   background-size: cover;
   background-position: 50%;
   background-repeat: no-repeat;
+
+  width: 1em;
+
+  border-radius: 100%;
 }
 
 .flag:before {
