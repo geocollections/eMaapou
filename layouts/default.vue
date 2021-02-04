@@ -29,24 +29,24 @@
           <a href="https://natarc.ut.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/NATARC_transparent.png"
-              alt="KIK"
-              title="KIK"
+              alt="NATARC"
+              title="Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)"
               class="footer-logo"
             />
           </a>
           <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/logo_datacite_bw.png"
-              alt="KIK"
-              title="KIK"
+              alt="DataCite"
+              title="DataCite: leia üles, pöördu ja taaskasuta andmeid"
               class="footer-logo"
             />
           </a>
           <a href="https://struktuurifondid.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/EL_mv.png"
-              alt="KIK"
-              title="KIK"
+              alt="EL"
+              title="Euroopa Liit"
               class="footer-logo"
             />
           </a>
