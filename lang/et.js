@@ -38,6 +38,7 @@ export default {
     metersInBox: 'Meetreid kastis',
     boxNumbers: 'Kastinumbrid',
     drillcoreBoxesTitle: 'Puursüdamiku kastid ({number})',
+    localityDescription: 'Lokaliteedi kirjeldus',
   },
   drillcoreBox: {
     id: 'ID',

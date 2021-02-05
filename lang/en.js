@@ -38,6 +38,7 @@ export default {
     metersInBox: 'Meters in box',
     boxNumbers: 'Box numbers',
     drillcoreBoxesTitle: 'Drillcore boxes ({number})',
+    localityDescription: 'Locality description',
   },
   drillcoreBox: {
     id: 'ID',

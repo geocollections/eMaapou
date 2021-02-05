@@ -290,9 +290,7 @@
               })
             "
           >
-            {{
-              $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes })
-            }}
+            {{ $t('drillcore.localityDescription') }}
           </v-tab>
         </v-tabs>
         <nuxt-child />
