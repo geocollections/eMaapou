@@ -38,7 +38,8 @@ export default {
     metersInBox: 'Meetreid kastis',
     boxNumbers: 'Kastinumbrid',
     drillcoreBoxesTitle: 'Puursüdamiku kastid ({number})',
-    localityDescription: 'Lokaliteedi kirjeldus',
+    localityDescriptions: 'Lokaliteedi kirjeldused',
+    localityReferences: 'Lokaliteedi kirjandus',
   },
   drillcoreBox: {
     id: 'ID',
@@ -48,6 +49,11 @@ export default {
     depthEnd: 'Lõpp (m)',
     stratigraphyTop: 'Strat. algus',
     stratigraphyBase: 'Strat. lõpp',
+  },
+  localityReference: {
+    reference: 'Kirje',
+    remarks: 'Lisainfo',
+    pages: 'Leheküljed',
   },
   footer:
     'Küsimustega andmebaasi või veebilehe kohta palun pöörduda: {0} | {1} 2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine mitteärilistel eesmärkidel kõigile vaba, eeldusel, et viidatakse allikale.',

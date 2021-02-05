@@ -265,8 +265,9 @@
         </v-container>
       </v-card>
       <v-card class="mt-2">
-        <v-tabs color="deep-orange darken-2">
+        <v-tabs v-model="activeTab" color="deep-orange darken-2">
           <v-tab
+            :key="1"
             nuxt
             exact
             :to="
@@ -281,6 +282,7 @@
             }}
           </v-tab>
           <v-tab
+            :key="2"
             nuxt
             exact
             :to="
@@ -290,10 +292,57 @@
               })
             "
           >
-            {{ $t('drillcore.localityDescription') }}
+            {{ $t('drillcore.localityDescriptions') }}
           </v-tab>
+          <v-tab
+            :key="3"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id-locality_reference',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{ $t('drillcore.localityReferences') }}
+          </v-tab>
+          <v-tabs-items v-model="activeTab">
+            <v-tab-item
+              :key="1"
+              :value="
+                localePath({
+                  name: 'drillcore-id',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="2"
+              :value="
+                localePath({
+                  name: 'drillcore-id-locality_description',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="3"
+              :value="
+                localePath({
+                  name: 'drillcore-id-locality_reference',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+          </v-tabs-items>
         </v-tabs>
-        <nuxt-child keep-alive />
       </v-card>
     </v-col>
   </v-row>
@@ -310,6 +359,11 @@ export default {
 
     const drillcore = drillcoreResponse.results[0]
     return { drillcore }
+  },
+  data() {
+    return {
+      activeTab: 1,
+    }
   },
   head() {
     return {
