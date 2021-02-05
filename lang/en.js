@@ -37,9 +37,9 @@ export default {
     year: 'Drilling year',
     metersInBox: 'Meters in box',
     boxNumbers: 'Box numbers',
-    drillcoreBoxesTitle: 'Drillcore boxes ({number})',
-    localityDescriptions: 'Locality descriptions',
-    localityReferences: 'Locality references',
+    drillcoreBoxesTitle: 'Boxes',
+    localityDescriptions: 'Descriptions',
+    localityReferences: 'References',
   },
   drillcoreBox: {
     id: 'ID',
@@ -56,5 +56,5 @@ export default {
     pages: 'Pages',
   },
   footer:
-    'Questions and comments about the database and website can be addressed to: {0} | {1} 2008-2021. SARV: Geoscience collections and data repository If not indicated otherwise, content of the these pages may be used, reused and distributed for non-commercial purposes taken that original author and source are properly cited.',
+    '2008-2021. SARV: Geoscience collections and data repository<br /> If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
 }
