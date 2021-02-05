@@ -17,7 +17,8 @@
     "lodash": "^4.17.20",
     "nuxt": "^2.14.12",
     "nuxt-i18n": "^6.18.0",
-    "nuxt-leaflet": "0.0.25"
+    "nuxt-leaflet": "0.0.25",
+    "vue-infinite-loading": "^2.4.5"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
