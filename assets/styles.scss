@@ -1,5 +1,7 @@
 @import '~vuetify/src/styles/styles.sass';
 
+$font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+
 .text-link {
     text-decoration: none;
     color: map-get($map: $deep-orange, $key: 'darken-2') !important;
@@ -36,4 +38,31 @@
 
 .no-value {
     color: lightgray;
-  }
+}
+
+.on-hover {
+    background-color: map-get($map: $grey, $key: 'lighten-4') !important;
+}
+
+.header-text {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.header-menu-item {
+    
+    transition: all 0.35s;
+
+    &:hover {
+        background-color: map-get($map: $deep-orange, $key: 'darken-2');
+
+        div {
+            transition: all 0.35s;
+            color: white;
+        }
+    }
+
+    div {
+        font-weight: 400;
+    }
+}

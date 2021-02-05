@@ -6,7 +6,7 @@
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         }}
       </h1>
-      <v-card>
+      <v-card flat tile>
         <v-container>
           <v-row>
             <v-col
@@ -15,8 +15,10 @@
               style="max-width: 100%"
               class="pt-0 px-0 flex-grow-1 flex-shrink-0"
             >
-              <v-card-title>{{ $t('common.general') }}</v-card-title>
-              <v-card-text>
+              <v-card-title class="pl-md-0">{{
+                $t('common.general')
+              }}</v-card-title>
+              <v-card-text class="pl-md-0">
                 <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
@@ -132,10 +134,12 @@
                 </v-simple-table>
               </v-card-text>
               <div v-if="drillcore.remarks">
-                <v-card-title class="pt-0">{{
+                <v-card-title class="pt-0 pl-md-0">{{
                   $t('drillcore.remarks')
                 }}</v-card-title>
-                <v-card-text>{{ drillcore.remarks }}</v-card-text>
+                <v-card-text class="pl-md-0">{{
+                  drillcore.remarks
+                }}</v-card-text>
               </div>
             </v-col>
             <v-col
@@ -145,7 +149,7 @@
               class="pt-0 px-0"
             >
               <v-card-title>{{ $t('locality.locality') }}</v-card-title>
-              <v-card-text>
+              <v-card-text class="pr-md-0">
                 <v-simple-table dense class="mb-4 custom-table">
                   <template #default>
                     <tbody>
@@ -260,153 +264,85 @@
           </v-row>
         </v-container>
       </v-card>
-
       <v-card class="mt-2">
-        <v-card-title>
-          {{ $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes }) }}
-        </v-card-title>
-        <v-container>
-          <v-row>
-            <v-col
-              v-for="box in boxes.results"
-              :key="box.id"
-              cols="12"
-              class="pa-0"
+        <v-tabs v-model="activeTab" color="deep-orange darken-2">
+          <v-tab
+            :key="1"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{
+              $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes })
+            }}
+          </v-tab>
+          <v-tab
+            :key="2"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id-locality_description',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{ $t('drillcore.localityDescriptions') }}
+          </v-tab>
+          <v-tab
+            :key="3"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id-locality_reference',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{ $t('drillcore.localityReferences') }}
+          </v-tab>
+          <v-tabs-items v-model="activeTab">
+            <v-tab-item
+              :key="1"
+              :value="
+                localePath({
+                  name: 'drillcore-id',
+                  params: { id: $route.params.id },
+                })
+              "
             >
-              <v-hover v-slot="{ hover }">
-                <!-- Opens box as new tab -->
-                <!-- <v-card
-                  nuxt
-                  :ripple="false"
-                  target="_blank"
-                  :href="`/drillcore_box/${box.id}`"
-                  class="mx-4 my-2"
-                  :elevation="hover ? 10 : 2"
-                > -->
-                <v-card
-                  :ripple="false"
-                  target="_blank"
-                  class="mx-4 my-2"
-                  :elevation="hover ? 10 : 2"
-                  @click="openDrillcoreBox(box.id)"
-                >
-                  <v-card-text>
-                    <v-row align="start">
-                      <v-col cols="12" sm="8" align-self="center">
-                        <!-- TODO: Add placeholder, for case when box does not have a picture -->
-                        <v-img
-                          class="rounded-lg"
-                          contain
-                          max-height="400"
-                          :lazy-src="`https://files.geocollections.info/small/${box.drillcorebox_image__attachment__uuid_filename}`"
-                          :src="`https://files.geocollections.info/medium/${box.drillcorebox_image__attachment__uuid_filename}`"
-                        >
-                          <template #placeholder>
-                            <v-row
-                              class="fill-height ma-0"
-                              align="center"
-                              justify="center"
-                            >
-                              <v-progress-circular
-                                indeterminate
-                                color="grey lighten-5"
-                              ></v-progress-circular>
-                            </v-row>
-                          </template>
-                        </v-img>
-                      </v-col>
-                      <v-col cols="12" sm="4">
-                        <v-card-title class="px-0 pt-0">
-                          {{ $t('drillcoreBox.nr', { number: box.number }) }}
-                        </v-card-title>
-                        <v-simple-table dense class="custom-table">
-                          <template #default>
-                            <tbody>
-                              <tr>
-                                <td>{{ $t('drillcoreBox.depthStart') }}</td>
-                                <td
-                                  v-if="isNull(box.depth_start)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  {{ box.depth_start }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                                <td
-                                  v-if="isNull(box.depth_end)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  {{ box.depth_end }}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  {{ $t('drillcoreBox.stratigraphyTop') }}
-                                </td>
-                                <td
-                                  v-if="isNull(box.stratigraphy_top_id)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  <a
-                                    class="text-link"
-                                    :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_top_id}`"
-                                  >
-                                    {{
-                                      $translate({
-                                        et: box.stratigraphy_top__stratigraphy,
-                                        en:
-                                          box.stratigraphy_top__stratigraphy_en,
-                                      })
-                                    }}
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  {{ $t('drillcoreBox.stratigraphyBase') }}
-                                </td>
-                                <td
-                                  v-if="isNull(box.stratigraphy_base_id)"
-                                  class="no-value"
-                                >
-                                  {{ $t('common.noValue') }}
-                                </td>
-                                <td v-else>
-                                  <a
-                                    class="text-link"
-                                    :href="`https://geocollections.info/stratigraphy/${box.stratigraphy_base_id}`"
-                                  >
-                                    {{
-                                      $translate({
-                                        et: box.stratigraphy_base__stratigraphy,
-                                        en:
-                                          box.stratigraphy_base__stratigraphy_en,
-                                      })
-                                    }}
-                                  </a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </template>
-                        </v-simple-table>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                </v-card>
-              </v-hover>
-            </v-col>
-          </v-row>
-        </v-container>
+              <nuxt-child keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="2"
+              :value="
+                localePath({
+                  name: 'drillcore-id-locality_description',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="3"
+              :value="
+                localePath({
+                  name: 'drillcore-id-locality_reference',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+          </v-tabs-items>
+        </v-tabs>
       </v-card>
     </v-col>
   </v-row>
@@ -421,13 +357,13 @@ export default {
       `https://api.geocollections.info/drillcore/${params.id}`
     )
 
-    const boxResponse = await $axios.$get(
-      `https://api.geocollections.info/drillcore_box/?drillcore__id=${params.id}&distinct=true`
-    )
-
     const drillcore = drillcoreResponse.results[0]
-    const boxes = boxResponse
-    return { drillcore, boxes }
+    return { drillcore }
+  },
+  data() {
+    return {
+      activeTab: 1,
+    }
   },
   head() {
     return {
@@ -440,13 +376,6 @@ export default {
   methods: {
     isEmpty,
     isNull,
-    openDrillcoreBox(id) {
-      const routeData = this.$router.resolve({
-        name: `drillcore_box-id___${this.$i18n.locale}`,
-        params: { id },
-      })
-      window.open(routeData.href, '_blank', 'height=800, width=800')
-    },
   },
 }
 </script>

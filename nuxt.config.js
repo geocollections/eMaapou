@@ -20,7 +20,10 @@ export default {
   css: ['@/assets/styles'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~plugins/translate.js'],
+  plugins: [
+    '~plugins/translate.js',
+    { src: '~/plugins/infiniteLoading', ssr: false },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -51,13 +54,13 @@ export default {
         code: 'en',
         iso: 'et-US',
         file: 'en.js',
-        name: 'ENG',
+        name: 'English',
       },
       {
         code: 'et',
         iso: 'et-EE',
         file: 'et.js',
-        name: 'EST',
+        name: 'Eesti',
       },
     ],
     lazy: true,

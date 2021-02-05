@@ -7,8 +7,17 @@ export default {
     title: 'Geoscience collections of Estonia',
     previous: 'Previous',
     next: 'Next',
+    links: 'Links',
   },
-
+  link: {
+    sarvAPI: 'Public API',
+    github: 'GitHub',
+    fossils: 'Fossils',
+    sarvDOI: 'Research data (DOI)',
+    eurocore: 'EUROCORE data portal',
+    chitinozia: 'Baltic chitinozoans',
+    turvas: 'Peat studies database',
+  },
   locality: {
     locality: 'Locality',
     country: 'Country',
@@ -29,6 +38,8 @@ export default {
     metersInBox: 'Meters in box',
     boxNumbers: 'Box numbers',
     drillcoreBoxesTitle: 'Drillcore boxes ({number})',
+    localityDescriptions: 'Locality descriptions',
+    localityReferences: 'Locality references',
   },
   drillcoreBox: {
     id: 'ID',
@@ -38,6 +49,11 @@ export default {
     depthEnd: 'End (m)',
     stratigraphyTop: 'Strat. top',
     stratigraphyBase: 'Strat. base',
+  },
+  localityReference: {
+    reference: 'Reference',
+    remarks: 'Remarks',
+    pages: 'Pages',
   },
   footer:
     'Questions and comments about the database and website can be addressed to: {0} | {1} 2008-2021. SARV: Geoscience collections and data repository If not indicated otherwise, content of the these pages may be used, reused and distributed for non-commercial purposes taken that original author and source are properly cited.',

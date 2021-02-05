@@ -19,7 +19,7 @@
           {{ $t('common.next') }}
         </nuxt-link>
       </div>
-      <v-card>
+      <v-card flat tile>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
           <v-simple-table dense class="custom-table">
@@ -100,7 +100,12 @@
                   <td v-else>
                     <nuxt-link
                       class="text-link"
-                      :to="`/drillcore/${drillcoreBox.drillcore__id}`"
+                      :to="
+                        localePath({
+                          name: 'drillcore-id',
+                          params: { id: drillcoreBox.drillcore__id },
+                        })
+                      "
                     >
                       {{
                         $translate({

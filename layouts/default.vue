@@ -8,7 +8,9 @@
           >{{ $t('common.title') }}</a
         >
       </v-app-bar-title>
-      <v-spacer /><lang-switcher />
+      <v-spacer />
+      <links />
+      <lang-switcher />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -18,7 +20,7 @@
     <v-footer padless class="mt-4">
       <v-card flat tile>
         <v-card-text class="text-center">
-          <a href="https://geokogud.info" target="_blank" rel="noopener">
+          <a href="https://geocollections.info" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/sarv_logo.svg"
               alt="KIK"
@@ -29,24 +31,24 @@
           <a href="https://natarc.ut.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/NATARC_transparent.png"
-              alt="KIK"
-              title="KIK"
+              alt="NATARC"
+              title="Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)"
               class="footer-logo"
             />
           </a>
           <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/logo_datacite_bw.png"
-              alt="KIK"
-              title="KIK"
+              alt="DataCite"
+              title="DataCite: leia üles, pöördu ja taaskasuta andmeid"
               class="footer-logo"
             />
           </a>
           <a href="https://struktuurifondid.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/EL_mv.png"
-              alt="KIK"
-              title="KIK"
+              alt="EL"
+              title="Euroopa Liit"
               class="footer-logo"
             />
           </a>
