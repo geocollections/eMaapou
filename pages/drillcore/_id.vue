@@ -265,10 +265,10 @@
         </v-container>
       </v-card>
       <v-card class="mt-2">
-        <v-tabs v-model="active" color="deep-orange darken-2">
+        <v-tabs color="deep-orange darken-2">
           <v-tab
-            :key="1"
             nuxt
+            exact
             :to="
               localePath({
                 name: 'drillcore-id',
@@ -281,8 +281,8 @@
             }}
           </v-tab>
           <v-tab
-            :key="2"
             nuxt
+            exact
             :to="
               localePath({
                 name: 'drillcore-id-locality_description',
@@ -293,7 +293,7 @@
             {{ $t('drillcore.localityDescription') }}
           </v-tab>
         </v-tabs>
-        <nuxt-child />
+        <nuxt-child keep-alive />
       </v-card>
     </v-col>
   </v-row>
@@ -310,11 +310,6 @@ export default {
 
     const drillcore = drillcoreResponse.results[0]
     return { drillcore }
-  },
-  data() {
-    return {
-      active: 1,
-    }
   },
   head() {
     return {
