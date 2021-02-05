@@ -20,7 +20,7 @@
     <v-footer padless class="mt-4">
       <v-card flat tile>
         <v-card-text class="text-center">
-          <a href="https://geokogud.info" target="_blank" rel="noopener">
+          <a href="https://geocollections.info" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/sarv_logo.svg"
               alt="KIK"
