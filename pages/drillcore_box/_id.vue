@@ -98,7 +98,6 @@
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
-                    <!-- :to="`/drillcore/${drillcoreBox.drillcore__id}`" -->
                     <nuxt-link
                       class="text-link"
                       :to="
