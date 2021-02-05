@@ -98,9 +98,15 @@
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>
+                    <!-- :to="`/drillcore/${drillcoreBox.drillcore__id}`" -->
                     <nuxt-link
                       class="text-link"
-                      :to="`/drillcore/${drillcoreBox.drillcore__id}`"
+                      :to="
+                        localePath({
+                          name: 'drillcore-id',
+                          params: { id: drillcoreBox.drillcore__id },
+                        })
+                      "
                     >
                       {{
                         $translate({
