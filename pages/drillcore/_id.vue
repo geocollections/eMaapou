@@ -269,7 +269,26 @@
           <v-tab
             :key="1"
             nuxt
-            :to="localePath({ params: { id: $route.params.id } })"
+            :to="
+              localePath({
+                name: 'drillcore-id',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{
+              $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes })
+            }}
+          </v-tab>
+          <v-tab
+            :key="2"
+            nuxt
+            :to="
+              localePath({
+                name: 'drillcore-id-locality_description',
+                params: { id: $route.params.id },
+              })
+            "
           >
             {{
               $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes })
