@@ -80,7 +80,7 @@ export default {
             name: 'CartoDB',
             url:
               'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            visible: true,
+            visible: false,
             options: {
               attribution:
                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -126,7 +126,7 @@ export default {
             name: 'Estonian map',
             url:
               'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: false,
+            visible: true,
             options: {
               attribution:
                 "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
