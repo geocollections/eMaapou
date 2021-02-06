@@ -2,8 +2,8 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    valueNotSet: 'Väärtus puudub',
-    noValue: 'Väärtus puudub',
+    valueNotSet: ' - ',
+    noValue: ' - ',
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
     next: 'Järgmine',
@@ -12,16 +12,18 @@ export default {
   link: {
     sarvAPI: 'Avalik API',
     github: 'GitHub',
-    fossils: 'Fossiilid',
-    sarvDOI: 'Geoloogilised andmed (DOI)',
+    fossils: 'Baltoskandia fossiilid',
+    sarvDOI: 'SARV-DOI teadusandmete repositoorium',
     eurocore: 'EUROCORE puursüdamike portaal',
-    chitinozia: 'Baltoskandia kitiinikud',
+    chitinozoa: 'Kitiinikute andmebaas',
     turvas: 'Turbauuringute andmebaas',
+    geokirjandus: 'Eesti maapõue kirjandus',
+    geokogud: 'Geokogude portaal',
   },
   locality: {
     locality: 'Lokaliteet',
     country: 'Riik',
-    countryFormat: '{name} ({iso})',
+    countryFormat: '{name}',
     latitude: 'Laiuskraad',
     longitude: 'Pikkuskraad',
     depth: 'Sügavus',
@@ -37,9 +39,9 @@ export default {
     year: 'Puurimise aasta',
     metersInBox: 'Meetreid kastis',
     boxNumbers: 'Kastinumbrid',
-    drillcoreBoxesTitle: 'Puursüdamiku kastid ({number})',
-    localityDescriptions: 'Lokaliteedi kirjeldused',
-    localityReferences: 'Lokaliteedi kirjandus',
+    drillcoreBoxesTitle: 'Puursüdamikukastid',
+    localityDescriptions: 'Kirjeldused',
+    localityReferences: 'Kirjandus',
   },
   drillcoreBox: {
     id: 'ID',
@@ -56,5 +58,5 @@ export default {
     pages: 'Leheküljed',
   },
   footer:
-    'Küsimustega andmebaasi või veebilehe kohta palun pöörduda: {0} | {1} 2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine mitteärilistel eesmärkidel kõigile vaba, eeldusel, et viidatakse allikale.',
+    '2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium. Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine vaba, eeldusel, et viidatakse allikale.',
 }
