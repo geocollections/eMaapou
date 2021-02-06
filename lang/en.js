@@ -15,8 +15,10 @@ export default {
     fossils: 'Fossils',
     sarvDOI: 'Research data (DOI)',
     eurocore: 'EUROCORE data portal',
-    chitinozia: 'Baltic chitinozoans',
+    chitinozoa: 'Baltic chitinozoans',
     turvas: 'Peat studies database',
+    geokirjandus: 'Geological Literature',
+    geokogud: 'Geocollections portal',
   },
   locality: {
     locality: 'Locality',
@@ -56,5 +58,5 @@ export default {
     pages: 'Pages',
   },
   footer:
-    '2008-2021. SARV: Geoscience collections and data repository<br /> If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
+    '2008-2021. SARV: Geoscience collections and data repository. If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
 }
