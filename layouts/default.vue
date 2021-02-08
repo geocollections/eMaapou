@@ -38,7 +38,7 @@
           </a>
           <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
             <img
-              src="~/assets/logos/logo_datacite_bw.png"
+              src="@/assets/logos/logo_datacite_bw.png"
               alt="DataCite"
               title="DataCite: leia üles, pöördu ja taaskasuta andmeid"
               class="footer-logo"
