@@ -56,8 +56,8 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
-    depthBase: 'Algus (m)',
-    depthTop: 'Lõpp (m)',
+    depthBase: 'Süg. al. (m)',
+    depthTop: 'Süg. ül. (m)',
     rock: 'Kivi',
     description: 'Kirjeldus',
   },
