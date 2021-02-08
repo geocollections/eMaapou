@@ -50,11 +50,16 @@ export default {
     stratigraphyTop: 'Strat. top',
     stratigraphyBase: 'Strat. base',
   },
+  localityDescription: {
+    stratigraphy: 'Stratigraphy',
+  },
   localityReference: {
     reference: 'Reference',
     remarks: 'Remarks',
     pages: 'Pages',
+    referenceTitle: 'Pealkiri',
   },
+  // TODO: Take footer from geoloogia.info
   footer:
     'Questions and comments about the database and website can be addressed to: {0} | {1} 2008-2021. SARV: Geoscience collections and data repository If not indicated otherwise, content of the these pages may be used, reused and distributed for non-commercial purposes taken that original author and source are properly cited.',
 }
