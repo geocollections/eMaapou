@@ -27,6 +27,10 @@ export default {
     latitude: 'Latitude',
     longitude: 'Longitude',
     depth: 'Depth',
+    elevation: 'Elevation',
+    coordx: 'X',
+    coordy: 'Y',
+    epsg: 'EPSG',
   },
   drillcore: {
     id: 'ID',
@@ -52,11 +56,20 @@ export default {
     stratigraphyTop: 'Strat. top',
     stratigraphyBase: 'Strat. base',
   },
+  localityDescription: {
+    stratigraphy: 'Stratigraphy',
+    depthBase: 'Start (m)',
+    depthTop: 'End (m)',
+    rock: 'Rock',
+    description: 'Description',
+  },
   localityReference: {
     reference: 'Reference',
     remarks: 'Remarks',
     pages: 'Pages',
+    referenceTitle: 'Pealkiri',
   },
+  // TODO: Take footer from geoloogia.info
   footer:
     '2008-2021. SARV: Geoscience collections and data repository. If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
 }

@@ -27,6 +27,10 @@ export default {
     latitude: 'Laiuskraad',
     longitude: 'Pikkuskraad',
     depth: 'Sügavus',
+    elevation: 'Kõrgus',
+    coordx: 'X',
+    coordy: 'Y',
+    epsg: 'EPSG',
   },
   drillcore: {
     id: 'ID',
@@ -52,10 +56,18 @@ export default {
     stratigraphyTop: 'Strat. algus',
     stratigraphyBase: 'Strat. lõpp',
   },
+  localityDescription: {
+    stratigraphy: 'Stratigraafia',
+    depthBase: 'Algus (m)',
+    depthTop: 'Lõpp (m)',
+    rock: 'Kivi',
+    description: 'Kirjeldus',
+  },
   localityReference: {
     reference: 'Kirje',
     remarks: 'Lisainfo',
     pages: 'Leheküljed',
+    referenceTitle: 'Pealkiri',
   },
   footer:
     '2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium. Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine vaba, eeldusel, et viidatakse allikale.',

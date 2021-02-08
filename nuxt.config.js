@@ -45,7 +45,9 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'https://api.geocollections.info',
+  },
 
   // i18n module configuration
   i18n: {
@@ -90,7 +92,9 @@ export default {
       },
     },
   },
-
+  static: {
+    prefix: false,
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }
