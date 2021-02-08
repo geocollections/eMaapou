@@ -70,6 +70,10 @@ export default {
         return []
       },
     },
+    isEstonian: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -91,7 +95,7 @@ export default {
             name: 'OpenStreetMap',
             url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 
-            visible: false,
+            visible: !this.isEstonian,
             options: {
               attribution:
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -126,7 +130,7 @@ export default {
             name: 'Estonian map',
             url:
               'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: true,
+            visible: this.isEstonian,
             options: {
               attribution:
                 "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",

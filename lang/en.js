@@ -58,8 +58,8 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',
-    depthBase: 'Start (m)',
-    depthTop: 'End (m)',
+    depthBase: 'Depth base (m)',
+    depthTop: 'Depth top (m)',
     rock: 'Rock',
     description: 'Description',
   },
@@ -69,7 +69,7 @@ export default {
     pages: 'Pages',
     referenceTitle: 'Pealkiri',
   },
-  // TODO: Take footer from geoloogia.info
+  footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:
     '2008-2021. SARV: Geoscience collections and data repository. If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
 }

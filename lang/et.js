@@ -58,8 +58,8 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
-    depthBase: 'Algus (m)',
-    depthTop: 'Lõpp (m)',
+    depthBase: 'Süg. al. (m)',
+    depthTop: 'Süg. ül. (m)',
     rock: 'Kivi',
     description: 'Kirjeldus',
   },
@@ -69,6 +69,7 @@ export default {
     pages: 'Leheküljed',
     referenceTitle: 'Pealkiri',
   },
+  footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
     '2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium. Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine vaba, eeldusel, et viidatakse allikale.',
 }

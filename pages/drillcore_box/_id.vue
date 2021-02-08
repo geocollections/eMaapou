@@ -1,4 +1,6 @@
 <template>
+  <!-- TODO: Add diameter, remarks, stratigraphy_free, depth_other -->
+  <!-- TODO: Move id to table end -->
   <v-row>
     <v-col>
       <h1 class="text-center py-3 page-title">
