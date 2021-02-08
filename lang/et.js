@@ -2,7 +2,6 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    valueNotSet: ' - ',
     noValue: ' - ',
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
