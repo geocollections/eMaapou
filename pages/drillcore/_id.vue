@@ -291,13 +291,13 @@
                   "
                   id="map-wrap"
                   elevation="0"
-                  height="500"
+                  height="300"
                 >
                   <leaflet-map
                     :is-estonian="
                       drillcore.locality__country__value === 'Eesti'
                     "
-                    :height="500"
+                    :height="300"
                     :center="{
                       latitude: drillcore.locality__latitude,
                       longitude: drillcore.locality__longitude,
