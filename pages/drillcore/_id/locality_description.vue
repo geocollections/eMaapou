@@ -37,13 +37,17 @@ export default {
   data() {
     return {
       totalCount: 0,
-      options: { itemsPerPage: 25 },
+      options: {
+        itemsPerPage: 25,
+        sortBy: ['depth_top', 'depth_base'],
+        sortDesc: [false, true],
+      },
       footerProps: {
         'items-per-page-options': [10, 25, 50, 100],
       },
       headers: [
-        { text: this.$t('localityDescription.depthBase'), value: 'depth_base' },
         { text: this.$t('localityDescription.depthTop'), value: 'depth_top' },
+        { text: this.$t('localityDescription.depthBase'), value: 'depth_base' },
         {
           text: this.$t('localityDescription.rock'),
           value: 'rock',
