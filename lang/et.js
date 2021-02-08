@@ -2,7 +2,6 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    valueNotSet: ' - ',
     noValue: ' - ',
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
@@ -46,6 +45,7 @@ export default {
     drillcoreBoxesTitle: 'Puursüdamikukastid',
     localityDescriptions: 'Kirjeldused',
     localityReferences: 'Kirjandus',
+    attachments: 'Failid',
   },
   drillcoreBox: {
     id: 'ID',
@@ -68,6 +68,10 @@ export default {
     remarks: 'Lisainfo',
     pages: 'Leheküljed',
     referenceTitle: 'Pealkiri',
+  },
+  attachment: {
+    author: 'Autor',
+    description: 'Kirjeldus',
   },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:

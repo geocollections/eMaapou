@@ -358,6 +358,19 @@
           >
             {{ $t('drillcore.localityReferences') }}
           </v-tab>
+          <v-tab
+            :key="4"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id-attachments',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{ $t('drillcore.attachments') }}
+          </v-tab>
           <v-tabs-items v-model="activeTab">
             <v-tab-item
               :key="1"
@@ -391,6 +404,17 @@
               "
             >
               <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="4"
+              :value="
+                localePath({
+                  name: 'drillcore-id-attachments',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child keep-alive />
             </v-tab-item>
           </v-tabs-items>
         </v-tabs>

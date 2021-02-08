@@ -2,8 +2,7 @@ export default {
   common: {
     general: 'General info',
     pictures: 'Pictures',
-    valueNotSet: ' ',
-    noValue: ' ',
+    noValue: ' - ',
     title: 'Geoscience collections of Estonia',
     previous: 'Previous',
     next: 'Next',
@@ -46,6 +45,7 @@ export default {
     drillcoreBoxesTitle: 'Boxes',
     localityDescriptions: 'Descriptions',
     localityReferences: 'References',
+    attachments: 'Attachments',
   },
   drillcoreBox: {
     id: 'ID',
@@ -68,6 +68,10 @@ export default {
     remarks: 'Remarks',
     pages: 'Pages',
     referenceTitle: 'Pealkiri',
+  },
+  attachment: {
+    author: 'Author',
+    description: 'Description',
   },
   footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:
