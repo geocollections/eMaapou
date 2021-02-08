@@ -69,5 +69,5 @@ export default {
   },
   // TODO: Take footer from geoloogia.info
   footer:
-    'Questions and comments about the database and website can be addressed to: {0} | {1} 2008-2021. SARV: Geoscience collections and data repository If not indicated otherwise, content of the these pages may be used, reused and distributed for non-commercial purposes taken that original author and source are properly cited.',
+    'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',
 }

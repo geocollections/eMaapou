@@ -17,8 +17,8 @@
         <nuxt />
       </v-container>
     </v-main>
-    <v-footer padless class="mt-4">
-      <v-card flat tile>
+    <v-footer app padless absolute class="mt-4">
+      <v-card width="100%" flat tile>
         <v-card-text class="text-center">
           <a href="https://geocollections.info" target="_blank" rel="noopener">
             <img
@@ -61,11 +61,22 @@
             />
           </a>
         </v-card-text>
-        <!-- TODO: Needs to be translated (translation is at geocollections.info) -->
         <v-card-text class="text-center">
           <i18n path="footer" tag="p">
-            <a class="text-link">olle.hints@taltech.ee</a>
-            <img src="~assets/logos/cc.png" alt="cc" height="15" />
+            <a
+              href="https://creativecommons.org/licenses/by-sa/3.0/"
+              class="text-link"
+              >CC BY-SA</a
+            >
+            <a href="https://natarc.ut.ee/" class="text-link">NATARC</a>
+            <a href="https://geocollections.info/" class="text-link">SARV</a>
+            <a href="https://taltech.ee/geoloogia-instituut" class="text-link"
+              >TalTech</a
+            >
+            <a href="https://nuxtjs.org/" class="text-link">Nuxt.js</a>
+            <a href="https://github.com/geocollections/GRIS" class="text-link"
+              >GitHubis</a
+            >
           </i18n>
         </v-card-text>
       </v-card>

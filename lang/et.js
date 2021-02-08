@@ -68,5 +68,5 @@ export default {
     referenceTitle: 'Pealkiri',
   },
   footer:
-    'Küsimustega andmebaasi või veebilehe kohta palun pöörduda: {0} | {1} 2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine mitteärilistel eesmärkidel kõigile vaba, eeldusel, et viidatakse allikale.',
+    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
 }
