@@ -92,7 +92,9 @@ export default {
       },
     },
   },
-
+  static: {
+    prefix: false,
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }
