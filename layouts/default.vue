@@ -65,22 +65,7 @@
           </a> -->
         </v-card-text>
         <v-card-text class="text-center">
-          <i18n path="footer" tag="p">
-            <a
-              href="https://creativecommons.org/licenses/by-sa/3.0/"
-              class="text-link"
-              >CC BY-SA</a
-            >
-            <a href="https://natarc.ut.ee/" class="text-link">NATARC</a>
-            <a href="https://geocollections.info/" class="text-link">SARV</a>
-            <a href="https://taltech.ee/geoloogia-instituut" class="text-link"
-              >TalTech</a
-            >
-            <a href="https://nuxtjs.org/" class="text-link">Nuxt.js</a>
-            <a href="https://github.com/geocollections/GRIS" class="text-link"
-              >GitHub</a
-            >
-          </i18n>
+          {{ $t('footer') }}
         </v-card-text>
       </v-card>
     </v-footer>
