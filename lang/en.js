@@ -53,8 +53,12 @@ export default {
     nr: 'Box nr. {number}',
     depthStart: 'Start (m)',
     depthEnd: 'End (m)',
+    depthOther: 'Depth info',
+    stratigraphyBaseFree: 'Strat. base text',
+    stratigraphyTopFree: 'Strat. top text',
     stratigraphyTop: 'Strat. top',
     stratigraphyBase: 'Strat. base',
+    remarks: 'Remarks',
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',

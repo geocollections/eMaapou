@@ -23,10 +23,6 @@
                   <template #default>
                     <tbody>
                       <tr>
-                        <td>{{ $t('drillcore.id') }}</td>
-                        <td>{{ drillcore.id }}</td>
-                      </tr>
-                      <tr>
                         <td>{{ $t('drillcore.name') }}</td>
                         <td>
                           {{
@@ -128,6 +124,10 @@
                         <td v-else>
                           {{ drillcore.number_meters }}
                         </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('drillcore.id') }}</td>
+                        <td>{{ drillcore.id }}</td>
                       </tr>
                     </tbody>
                   </template>
