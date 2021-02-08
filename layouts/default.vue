@@ -78,7 +78,7 @@
             >
             <a href="https://nuxtjs.org/" class="text-link">Nuxt.js</a>
             <a href="https://github.com/geocollections/GRIS" class="text-link"
-              >GitHubis</a
+              >GitHub</a
             >
           </i18n>
         </v-card-text>
