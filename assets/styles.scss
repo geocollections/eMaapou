@@ -22,7 +22,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .text-link {
-  //text-decoration: none;
+  text-decoration: none;
   color: map-get($map: $deep-orange, $key: 'darken-2') !important;
   transition: color 200ms;
 

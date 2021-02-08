@@ -11,7 +11,7 @@
     @update:options="handleOptionsChange"
   >
     <template #item.reference="{ item }">
-      <a class="text-link" @click="openReference(item.reference)">{{
+      <a class="text-link underline" @click="openReference(item.reference)">{{
         item.reference__reference
       }}</a>
     </template>

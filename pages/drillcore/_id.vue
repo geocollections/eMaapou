@@ -157,7 +157,7 @@
                         <td>{{ $t('locality.locality') }}</td>
                         <td>
                           <a
-                            class="text-link"
+                            class="text-link underline"
                             :href="`https://geocollections.info/locality/${drillcore.locality_id}`"
                           >
                             {{

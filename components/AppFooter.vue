@@ -27,37 +27,15 @@
           </v-tooltip>
         </a>
       </v-card-text>
-      <v-card-text class="text-center">
-        <i18n path="footer" tag="p">
+      <v-card-text class="text-center mx-auto" style="max-width: 700px">
+        <i18n path="footer" tag="div">
           <a
-            href="https://creativecommons.org/licenses/by-sa/3.0/"
-            class="text-link underline text-decoration-none"
-            >CC BY-SA</a
-          >
-          <a
-            href="https://natarc.ut.ee/"
-            class="text-link underline text-decoration-none"
-            >NATARC</a
-          >
-          <a
-            href="https://geocollections.info/"
-            class="text-link underline text-decoration-none"
-            >SARV</a
-          >
-          <a
-            href="https://taltech.ee/geoloogia-instituut"
-            class="text-link underline text-decoration-none"
-            >TalTech</a
-          >
-          <a
-            href="https://nuxtjs.org/"
-            class="text-link underline text-decoration-none"
-            >Nuxt.js</a
-          >
-          <a
-            href="https://github.com/geocollections/GRIS"
-            class="text-link underline text-decoration-none"
-            >GitHub</a
+            v-for="(item, index) in textLinks"
+            :key="index"
+            :href="item.href"
+            class="text-link underline"
+            target="FooterLink"
+            >{{ item.text }}</a
           >
         </i18n>
       </v-card-text>
@@ -88,6 +66,32 @@ export default {
           src: require('~/assets/logos/EL_mv.png'),
           title: 'footerLinks.el',
           alt: 'footerLinks.el',
+        },
+      ],
+      textLinks: [
+        {
+          href: 'https://creativecommons.org/licenses/by-sa/3.0/',
+          text: 'CC BY-SA',
+        },
+        {
+          href: 'https://natarc.ut.ee/',
+          text: 'NATARC',
+        },
+        {
+          href: 'https://geocollections.info/',
+          text: 'SARV',
+        },
+        {
+          href: 'https://taltech.ee/geoloogia-instituut',
+          text: 'TalTech',
+        },
+        {
+          href: 'https://nuxtjs.org/',
+          text: 'Nuxt.js',
+        },
+        {
+          href: 'https://github.com/geocollections/GRIS',
+          text: 'GitHub',
         },
       ],
     }

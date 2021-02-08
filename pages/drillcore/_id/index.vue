@@ -93,7 +93,7 @@
                           </td>
                           <td v-else>
                             <a
-                              class="text-link"
+                              class="text-link underline"
                               :href="`https://geocollections.info/stratigraphy/${box.drillcore_box__stratigraphy_top}`"
                             >
                               {{
@@ -119,7 +119,7 @@
                           </td>
                           <td v-else>
                             <a
-                              class="text-link"
+                              class="text-link underline"
                               :href="`https://geocollections.info/stratigraphy/${box.drillcore_box__stratigraphy_base}`"
                             >
                               {{

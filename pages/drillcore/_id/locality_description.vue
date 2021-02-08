@@ -14,7 +14,7 @@
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <a class="text-link" @click="openStratigraphy(item.stratigraphy)">
+      <a class="text-link underline" @click="openStratigraphy(item.stratigraphy)">
         {{
           $translate({
             et: item.stratigraphy__stratigraphy,
