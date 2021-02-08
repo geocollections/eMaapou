@@ -46,7 +46,7 @@
           </a>
           <a href="https://struktuurifondid.ee" target="_blank" rel="noopener">
             <img
-              src="~/assets/logos/EL_mv.png"
+              :src="require('~/assets/logos/EL_mv.png')"
               alt="EL"
               title="Euroopa Liit"
               class="footer-logo"
