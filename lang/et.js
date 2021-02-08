@@ -75,7 +75,7 @@ export default {
   },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
-    '2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium. Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine vaba, eeldusel, et viidatakse allikale.',
+    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
   footerLinks: {
     kik: 'Keskkonnainvesteeringute Keskus',
     natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
