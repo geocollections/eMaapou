@@ -1,6 +1,5 @@
 <template>
-  <!-- TODO: Add diameter, remarks, stratigraphy_free, depth_other -->
-  <!-- TODO: Move id to table end -->
+  <!-- TODO: Add diameter -->
   <v-row>
     <v-col>
       <h1 class="text-center py-3 page-title">
@@ -28,10 +27,6 @@
             <template #default>
               <tbody>
                 <tr>
-                  <td>{{ $t('drillcoreBox.id') }}</td>
-                  <td>{{ drillcoreBox.id }}</td>
-                </tr>
-                <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
 
                   <td v-if="isNull(drillcoreBox.depth_start)" class="no-value">
@@ -45,6 +40,13 @@
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>{{ drillcoreBox.depth_end }}</td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.depthOther') }}</td>
+                  <td v-if="isNull(drillcoreBox.depth_other)" class="no-value">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.depth_other }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
@@ -70,6 +72,16 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>{{ $t('drillcoreBox.stratigraphyTopFree') }}</td>
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_top_free)"
+                    class="no-value"
+                  >
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.stratigraphy_top_free }}</td>
+                </tr>
+                <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
                   <td
                     v-if="isNull(drillcoreBox.stratigraphy_base_id)"
@@ -90,6 +102,16 @@
                       }}
                     </a>
                   </td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.stratigraphyBaseFree') }}</td>
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_base_free)"
+                    class="no-value"
+                  >
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.stratigraphy_base_free }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
@@ -117,6 +139,17 @@
                       }}
                     </nuxt-link>
                   </td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.remarks') }}</td>
+                  <td v-if="isNull(drillcoreBox.remarks)" class="no-value">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.remarks }}</td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.id') }}</td>
+                  <td>{{ drillcoreBox.id }}</td>
                 </tr>
               </tbody>
             </template>
