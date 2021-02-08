@@ -294,6 +294,9 @@
                   height="500"
                 >
                   <leaflet-map
+                    :is-estonian="
+                      drillcore.locality__country__value === 'Eesti'
+                    "
                     :height="500"
                     :center="{
                       latitude: drillcore.locality__latitude,
