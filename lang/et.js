@@ -53,8 +53,12 @@ export default {
     nr: 'Kast nr. {number}',
     depthStart: 'Algus (m)',
     depthEnd: 'Lõpp (m)',
+    depthOther: 'Sügavus info',
+    stratigraphyBaseFree: 'Strat. algus tekst',
+    stratigraphyTopFree: 'Strat. lõpp tekst',
     stratigraphyTop: 'Strat. algus',
     stratigraphyBase: 'Strat. lõpp',
+    remarks: 'Lisainfo',
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
