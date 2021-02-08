@@ -45,6 +45,7 @@ export default {
     drillcoreBoxesTitle: 'Boxes',
     localityDescriptions: 'Descriptions',
     localityReferences: 'References',
+    attachments: 'Attachments',
   },
   drillcoreBox: {
     id: 'ID',
@@ -67,6 +68,10 @@ export default {
     remarks: 'Remarks',
     pages: 'Pages',
     referenceTitle: 'Pealkiri',
+  },
+  attachment: {
+    author: 'Author',
+    description: 'Description',
   },
   footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:
