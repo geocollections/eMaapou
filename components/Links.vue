@@ -38,19 +38,15 @@ export default {
   data() {
     return {
       links: [
-        { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
-        {
-          name: 'link.github',
-          url: 'https://github.com/geocollections/geokogud2',
-        },
+        { name: 'link.geokogud', url: 'https://geocollections.info' },
+        { name: 'link.geokirjandus', url: 'https://geocollections.info' },
+        { name: 'link.sarvDOI', url: 'https://doi.geocollections.info/' },
         { name: 'link.fossils', url: 'https://fossiilid.info/' },
-        { name: 'link.sarvDOI', url: 'https://doi.geocollections.info' },
-        {
-          name: 'link.eurocore',
-          url: 'https://eurocore.rocks/',
-        },
-        { name: 'link.chitinozia', url: 'https://chitinozia.net/' },
-        { name: 'link.turvas', url: 'https://turvas.geokogud.info' },
+        { name: 'link.turvas', url: 'https://turba.geoloogia.info' },
+        { name: 'link.chitinozoa', url: 'https://chitinozoa.net/' },
+        { name: 'link.eurocore', url: 'https://eurocore.rocks/' },
+        { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
+        { name: 'link.github', url: 'https://github.com/geocollections/' },
       ],
     }
   },

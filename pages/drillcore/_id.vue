@@ -291,13 +291,13 @@
                   "
                   id="map-wrap"
                   elevation="0"
-                  height="500"
+                  height="300"
                 >
                   <leaflet-map
                     :is-estonian="
                       drillcore.locality__country__value === 'Eesti'
                     "
-                    :height="500"
+                    :height="300"
                     :center="{
                       latitude: drillcore.locality__latitude,
                       longitude: drillcore.locality__longitude,
@@ -358,6 +358,19 @@
           >
             {{ $t('drillcore.localityReferences') }}
           </v-tab>
+          <v-tab
+            :key="4"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id-attachments',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{ $t('drillcore.attachments') }}
+          </v-tab>
           <v-tabs-items v-model="activeTab">
             <v-tab-item
               :key="1"
@@ -391,6 +404,17 @@
               "
             >
               <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="4"
+              :value="
+                localePath({
+                  name: 'drillcore-id-attachments',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child keep-alive />
             </v-tab-item>
           </v-tabs-items>
         </v-tabs>
