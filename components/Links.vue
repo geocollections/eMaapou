@@ -41,7 +41,7 @@ export default {
         { name: 'link.geokogud', url: 'https://geocollections.info' },
         { name: 'link.geokirjandus', url: 'https://geocollections.info' },
         { name: 'link.sarvDOI', url: 'https://doi.geocollections.info/' },
-        { name: 'link.fossils', url: 'https://fossiilid.info/' },        
+        { name: 'link.fossils', url: 'https://fossiilid.info/' },
         { name: 'link.turvas', url: 'https://turba.geoloogia.info' },
         { name: 'link.chitinozoa', url: 'https://chitinozoa.net/' },
         { name: 'link.eurocore', url: 'https://eurocore.rocks/' },
