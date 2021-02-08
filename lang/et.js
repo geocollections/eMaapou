@@ -70,4 +70,9 @@ export default {
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
     'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
+  footerLinks: {
+    kik: 'Keskkonnainvesteeringute Keskus',
+    natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
+    el: 'Euroopa Liit',
+  },
 }
