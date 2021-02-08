@@ -17,8 +17,11 @@
         <nuxt />
       </v-container>
     </v-main>
-    <v-footer app padless absolute class="mt-4">
+    <v-footer padless class="mt-4">
       <v-card width="100%" flat tile>
+        <v-card-text class="text-center">
+          {{ $t('footerPreliminary') }}
+        </v-card-text>
         <v-card-text class="text-center">
           <a href="https://geocollections.info" target="_blank" rel="noopener">
             <img
@@ -36,14 +39,14 @@
               class="footer-logo"
             />
           </a>
-          <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
+          <!-- <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/logo_datacite_bw.png"
               alt="DataCite"
               title="DataCite: leia üles, pöördu ja taaskasuta andmeid"
               class="footer-logo"
             />
-          </a>
+          </a> -->
           <a href="https://struktuurifondid.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/EL_mv.png"
@@ -52,14 +55,14 @@
               class="footer-logo"
             />
           </a>
-          <a href="https://kik.ee" target="_blank" rel="noopener">
+          <!-- <a href="https://kik.ee" target="_blank" rel="noopener">
             <img
               src="~/assets/logos/kik_bw.png"
               alt="KIK"
               title="KIK"
               class="footer-logo"
             />
-          </a>
+          </a> -->
         </v-card-text>
         <v-card-text class="text-center">
           <i18n path="footer" tag="p">
