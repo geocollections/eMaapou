@@ -30,7 +30,7 @@
           </a>
           <a href="https://natarc.ut.ee" target="_blank" rel="noopener">
             <img
-              src="/NATARC_transparent.png"
+              src="/img/NATARC_transparent.png"
               alt="NATARC"
               title="Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)"
               class="footer-logo"
