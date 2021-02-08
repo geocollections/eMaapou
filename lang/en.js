@@ -75,7 +75,7 @@ export default {
   },
   footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:
-    '2008-2021. SARV: Geoscience collections and data repository. If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
+    'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',
   footerLinks: {
     kik: 'Environmental Investment Centre',
     natarc: 'Natural history archives and information network“ (NATARC)',
