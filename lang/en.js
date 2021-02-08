@@ -52,6 +52,10 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',
+    depthBase: 'Start (m)',
+    depthTop: 'End (m)',
+    rock: 'Rock',
+    description: 'Description',
   },
   localityReference: {
     reference: 'Reference',
