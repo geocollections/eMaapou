@@ -25,6 +25,10 @@ export default {
     latitude: 'Latitude',
     longitude: 'Longitude',
     depth: 'Depth',
+    elevation: 'Elevation',
+    coordx: 'X',
+    coordy: 'Y',
+    epsg: 'EPSG',
   },
   drillcore: {
     id: 'ID',

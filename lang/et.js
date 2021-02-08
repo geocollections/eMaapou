@@ -25,6 +25,10 @@ export default {
     latitude: 'Laiuskraad',
     longitude: 'Pikkuskraad',
     depth: 'Sügavus',
+    elevation: 'Kõrgus',
+    coordx: 'X',
+    coordy: 'Y',
+    epsg: 'EPSG',
   },
   drillcore: {
     id: 'ID',
