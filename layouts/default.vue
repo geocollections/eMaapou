@@ -30,7 +30,7 @@
           </a>
           <a href="https://natarc.ut.ee" target="_blank" rel="noopener">
             <img
-              :src="natarc"
+              src="/NATARC_transparent.png"
               alt="NATARC"
               title="Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)"
               class="footer-logo"
@@ -99,7 +99,6 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'Vuetify.js',
-      natarc: require('~/assets/logos/NATARC_transparent.png'),
     }
   },
 }
