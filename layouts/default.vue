@@ -30,7 +30,7 @@
           </a>
           <a href="https://natarc.ut.ee" target="_blank" rel="noopener">
             <img
-              src="/img/NATARC_transparent.png"
+              src="~/assets/logos/NATARC_transparent.png"
               alt="NATARC"
               title="Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)"
               class="footer-logo"
@@ -38,7 +38,7 @@
           </a>
           <a href="https://datacite.ut.ee" target="_blank" rel="noopener">
             <img
-              src="@/assets/logos/logo_datacite_bw.png"
+              src="~/assets/logos/logo_datacite_bw.png"
               alt="DataCite"
               title="DataCite: leia üles, pöördu ja taaskasuta andmeid"
               class="footer-logo"
@@ -46,7 +46,7 @@
           </a>
           <a href="https://struktuurifondid.ee" target="_blank" rel="noopener">
             <img
-              :src="require('~/assets/logos/EL_mv.png')"
+              src="~/assets/logos/EL_mv.png"
               alt="EL"
               title="Euroopa Liit"
               class="footer-logo"
