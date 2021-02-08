@@ -14,12 +14,14 @@
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
     <template #item.stratigraphy="{ item }">
-      {{
-        $translate({
-          et: item.stratigraphy__stratigraphy,
-          en: item.stratigraphy__stratigraphy_en,
-        })
-      }}
+      <a class="text-link" @click="openStratigraphy(item.stratigraphy)">
+        {{
+          $translate({
+            et: item.stratigraphy__stratigraphy,
+            en: item.stratigraphy__stratigraphy_en,
+          })
+        }}
+      </a>
     </template>
   </v-data-table>
 </template>
@@ -79,6 +81,13 @@ export default {
     this.totalCount = localityDescriptionResponse.count
   },
   methods: {
+    openStratigraphy(stratigraphy) {
+      window.open(
+        `https://geocollections.info/stratigraphy/${stratigraphy}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
     async handleOptionsChange(options) {
       let params
       if (isEmpty(options.sortBy)) {
