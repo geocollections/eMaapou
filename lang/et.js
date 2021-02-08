@@ -2,8 +2,8 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    valueNotSet: 'Väärtus puudub',
-    noValue: 'Väärtus puudub',
+    valueNotSet: ' - ',
+    noValue: ' - ',
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
     next: 'Järgmine',
@@ -12,16 +12,18 @@ export default {
   link: {
     sarvAPI: 'Avalik API',
     github: 'GitHub',
-    fossils: 'Fossiilid',
-    sarvDOI: 'Geoloogilised andmed (DOI)',
+    fossils: 'Baltoskandia fossiilid',
+    sarvDOI: 'SARV-DOI teadusandmete repositoorium',
     eurocore: 'EUROCORE puursüdamike portaal',
-    chitinozia: 'Baltoskandia kitiinikud',
+    chitinozoa: 'Kitiinikute andmebaas',
     turvas: 'Turbauuringute andmebaas',
+    geokirjandus: 'Eesti maapõue kirjandus',
+    geokogud: 'Geokogude portaal',
   },
   locality: {
     locality: 'Lokaliteet',
     country: 'Riik',
-    countryFormat: '{name} ({iso})',
+    countryFormat: '{name}',
     latitude: 'Laiuskraad',
     longitude: 'Pikkuskraad',
     depth: 'Sügavus',
@@ -41,9 +43,9 @@ export default {
     year: 'Puurimise aasta',
     metersInBox: 'Meetreid kastis',
     boxNumbers: 'Kastinumbrid',
-    drillcoreBoxesTitle: 'Puursüdamiku kastid ({number})',
-    localityDescriptions: 'Lokaliteedi kirjeldused',
-    localityReferences: 'Lokaliteedi kirjandus',
+    drillcoreBoxesTitle: 'Puursüdamikukastid',
+    localityDescriptions: 'Kirjeldused',
+    localityReferences: 'Kirjandus',
   },
   drillcoreBox: {
     id: 'ID',
@@ -69,5 +71,5 @@ export default {
   },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
-    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}-is.',
+    '2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium. Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine vaba, eeldusel, et viidatakse allikale.',
 }

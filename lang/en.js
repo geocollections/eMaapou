@@ -2,8 +2,8 @@ export default {
   common: {
     general: 'General info',
     pictures: 'Pictures',
-    valueNotSet: 'No value',
-    noValue: 'No value',
+    valueNotSet: ' ',
+    noValue: ' ',
     title: 'Geoscience collections of Estonia',
     previous: 'Previous',
     next: 'Next',
@@ -15,8 +15,10 @@ export default {
     fossils: 'Fossils',
     sarvDOI: 'Research data (DOI)',
     eurocore: 'EUROCORE data portal',
-    chitinozia: 'Baltic chitinozoans',
+    chitinozoa: 'Baltic chitinozoans',
     turvas: 'Peat studies database',
+    geokirjandus: 'Geological Literature',
+    geokogud: 'Geocollections portal',
   },
   locality: {
     locality: 'Locality',
@@ -41,9 +43,9 @@ export default {
     year: 'Drilling year',
     metersInBox: 'Meters in box',
     boxNumbers: 'Box numbers',
-    drillcoreBoxesTitle: 'Drillcore boxes ({number})',
-    localityDescriptions: 'Locality descriptions',
-    localityReferences: 'Locality references',
+    drillcoreBoxesTitle: 'Boxes',
+    localityDescriptions: 'Descriptions',
+    localityReferences: 'References',
   },
   drillcoreBox: {
     id: 'ID',
@@ -69,5 +71,5 @@ export default {
   },
   footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:
-    'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',
+    '2008-2021. SARV: Geoscience collections and data repository. If not indicated otherwise, content of the these pages may be used, reused and distributed taken that original author and source are properly cited.',
 }
