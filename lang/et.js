@@ -46,6 +46,7 @@ export default {
     localityDescriptions: 'Kirjeldused',
     localityReferences: 'Kirjandus',
     attachments: 'Failid',
+    samples: 'Proovid',
   },
   drillcoreBox: {
     id: 'ID',
@@ -76,6 +77,15 @@ export default {
   attachment: {
     author: 'Autor',
     description: 'Kirjeldus',
+  },
+  samples: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Sügavus',
+    depthInterval: 'Intervall',
+    stratigraphy: 'Stratigraafia',
+    collector: 'Koguja',
+    dateCollected: 'Kogumise aeg',
   },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
