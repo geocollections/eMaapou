@@ -11,7 +11,7 @@
     @update:options="handleOptionsChange"
   >
     <template #item.description="{ item }">
-      <a class="text-link" @click="openAttachment(item.attachment__filename)">{{
+      <a class="text-link" @click="openAttachment(item.id)">{{
         $translate({
           et: item.attachment__description,
           en: item.attachment__description_en,
@@ -58,7 +58,7 @@ export default {
   methods: {
     openAttachment(attachment) {
       window.open(
-        `https://files.geocollections.info/${attachment}`,
+        `https://geocollections.info/file/${attachment}`,
         '_blank',
         'height=800, width=800'
       )
