@@ -65,10 +65,11 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
-    depthBase: 'Süg. al. (m)',
-    depthTop: 'Süg. ül. (m)',
+    depthBase: 'Kuni (m)',
+    depthTop: 'Alates (m)',
     rock: 'Kivi',
     description: 'Kirjeldus',
+    author: 'Autor',
   },
   localityReference: {
     reference: 'Kirje',
@@ -93,7 +94,7 @@ export default {
     id: 'ID',
     sampleNumber: 'Proovi number',
     depth: 'Sügavus',
-    depthInterval: 'Sügavuse intervall',
+    depthInterval: 'Sügavus kuni',
     method: 'Metoodika',
     methodDetails: 'Metoodika detailid',
     analysedBy: 'Isik/Asutus',
