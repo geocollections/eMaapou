@@ -3,8 +3,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - gris',
-    title: 'gris',
+    titleTemplate: '%s | GRIS',
+    title: 'GRIS',
     htmlAttrs: {
       lang: 'en',
     },
