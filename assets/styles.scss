@@ -102,3 +102,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
     background: map-get($map: $grey, $key: 'lighten-4');
   }
 }
+
+.cursor-pointer:hover {
+  cursor: pointer;
+}
