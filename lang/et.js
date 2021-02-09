@@ -48,6 +48,7 @@ export default {
     attachments: 'Failid',
     samples: 'Proovid',
     analyses: 'Analüüsid',
+    specimens: 'Eksemplarid',
   },
   drillcoreBox: {
     id: 'ID',
@@ -97,6 +98,16 @@ export default {
     methodDetails: 'Metoodika detailid',
     analysedBy: 'Isik/Asutus',
     date: 'Date',
+  },
+  specimen: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Sügavus',
+    depthInterval: 'Sügavus intervall',
+    fossilGroup: 'Fossiili grupp',
+    kind: 'Tüüp',
+    stratigraphy: 'Stratigraafia',
+    taxon: 'Takson',
   },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:

@@ -48,6 +48,7 @@ export default {
     attachments: 'Attachments',
     samples: 'Samples',
     analyses: 'Analyses',
+    specimens: 'Specimens',
   },
   drillcoreBox: {
     id: 'ID',
@@ -97,6 +98,16 @@ export default {
     methodDetails: 'Method details',
     analysedBy: 'Person/Institution',
     date: 'Date',
+  },
+  specimen: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Depth',
+    depthInterval: 'Depth interval',
+    fossilGroup: 'Fossil group',
+    kind: 'Kind',
+    stratigraphy: 'Stratigraphy',
+    taxon: 'Taxon',
   },
   footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:

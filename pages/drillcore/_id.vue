@@ -390,6 +390,7 @@ export default {
           routeName: 'drillcore-id-analyses',
           title: 'drillcore.analyses',
         },
+        { routeName: 'drillcore-id-specimens', title: 'drillcore.specimens' },
       ],
     }
   },
