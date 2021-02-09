@@ -14,7 +14,10 @@
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <a class="text-link underline" @click="openStratigraphy(item.stratigraphy)">
+      <a
+        class="text-link underline"
+        @click="openStratigraphy(item.stratigraphy)"
+      >
         {{
           $translate({
             et: item.stratigraphy__stratigraphy,
@@ -63,22 +66,21 @@ export default {
           value: 'description',
         },
       ],
+      sortValues: {
+        rock: () => {
+          return this.$i18n.locale === 'et' ? 'rock__name' : 'rock__name_en'
+        },
+        stratigraphy: () => {
+          return this.$i18n.locale === 'et'
+            ? 'stratigraphy__stratigraphy'
+            : 'stratigraphy__stratigraphy_en'
+        },
+        description: () => 'description',
+        depth_top: () => 'depth_top',
+        depth_base: () => 'depth_base',
+      },
       localityDescriptions: [],
     }
-  },
-  async fetch() {
-    const localityDescriptionResponse = await this.$axios.$get(
-      'locality_description',
-      {
-        params: {
-          locality: this.locality,
-          paginate_by: this.options.itemsPerPage,
-          page: 1,
-        },
-      }
-    )
-    this.localityDescriptions = localityDescriptionResponse.results
-    this.totalCount = localityDescriptionResponse.count
   },
   methods: {
     openStratigraphy(stratigraphy) {
@@ -98,8 +100,8 @@ export default {
         }
       } else {
         const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `-${field}`
-          return field
+          if (options.sortDesc[i]) return `-${this.sortValues[field]()}`
+          return this.sortValues[field]()
         })
 
         params = {
