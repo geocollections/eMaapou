@@ -97,7 +97,7 @@ export default {
     },
     openTaxon(taxon) {
       window.open(
-        `https://geocollections.info/taxon/${taxon}`,
+        `https://fossiilid.info/${taxon}`,
         '_blank',
         'height=800, width=800'
       )
