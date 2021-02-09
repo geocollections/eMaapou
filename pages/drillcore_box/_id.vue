@@ -20,12 +20,93 @@
           {{ $t('common.next') }}
         </nuxt-link>
       </div>
+      <v-card class="my-2">
+        <v-card-text>
+          <v-hover v-slot="{ hover }">
+            <v-img
+              contain
+              class="ma-4 transition-swing cursor-pointer"
+              :class="{
+                'elevation-8': hover,
+                'elevation-4': !hover,
+              }"
+              :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              max-width="2000"
+              @click="
+                openImage(
+                  drillcoreBox.drillcorebox_image__attachment__uuid_filename
+                )
+              "
+            />
+          </v-hover>
+          <div class="text-center">
+            <a
+              class="text-link underline"
+              :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
+            >small</a
+            >
+            |
+            <a
+              class="text-link underline"
+              :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
+            >medium</a
+            >
+            |
+            <a
+              class="text-link underline"
+              :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
+            >large</a
+            >
+            |
+            <a
+              class="text-link underline"
+              :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
+            >original</a
+            >
+          </div>
+        </v-card-text>
+
+        <!-- Todo: Thumbnails here #22-->
+      </v-card>
       <v-card flat tile>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
           <v-simple-table dense class="custom-table">
             <template #default>
               <tbody>
+                <tr>
+                  <td>{{ $t('drillcoreBox.drillcore') }}</td>
+                  <td
+                    v-if="isNull(drillcoreBox.drillcore__id)"
+                    class="no-value"
+                  >
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>
+                    <nuxt-link
+                      class="text-link underline"
+                      :to="
+                        localePath({
+                          name: 'drillcore-id',
+                          params: { id: drillcoreBox.drillcore__id },
+                        })
+                      "
+                    >
+                      {{
+                        $translate({
+                          et: drillcoreBox.drillcore__drillcore,
+                          en: drillcoreBox.drillcore__drillcore_en,
+                        })
+                      }}
+                    </nuxt-link>
+                  </td>
+                </tr>
+
                 <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
 
@@ -59,8 +140,10 @@
                   </td>
                   <td v-else>
                     <a
-                      class="text-link"
-                      :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
+                      class="text-link underline"
+                      @click="
+                        openStratigraphy(drillcoreBox.stratigraphy_top_id)
+                      "
                     >
                       {{
                         $translate({
@@ -91,8 +174,10 @@
                   </td>
                   <td v-else>
                     <a
-                      class="text-link"
-                      :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
+                      class="text-link underline"
+                      @click="
+                        openStratigraphy(drillcoreBox.stratigraphy_base_id)
+                      "
                     >
                       {{
                         $translate({
@@ -114,33 +199,6 @@
                   <td v-else>{{ drillcoreBox.stratigraphy_base_free }}</td>
                 </tr>
                 <tr>
-                  <td>{{ $t('drillcoreBox.drillcore') }}</td>
-                  <td
-                    v-if="isNull(drillcoreBox.drillcore__id)"
-                    class="no-value"
-                  >
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
-                    <nuxt-link
-                      class="text-link"
-                      :to="
-                        localePath({
-                          name: 'drillcore-id',
-                          params: { id: drillcoreBox.drillcore__id },
-                        })
-                      "
-                    >
-                      {{
-                        $translate({
-                          et: drillcoreBox.drillcore__drillcore,
-                          en: drillcoreBox.drillcore__drillcore_en,
-                        })
-                      }}
-                    </nuxt-link>
-                  </td>
-                </tr>
-                <tr>
                   <td>{{ $t('drillcoreBox.remarks') }}</td>
                   <td v-if="isNull(drillcoreBox.remarks)" class="no-value">
                     {{ $t('common.noValue') }}
@@ -154,58 +212,6 @@
               </tbody>
             </template>
           </v-simple-table>
-        </v-card-text>
-      </v-card>
-      <v-card class="mt-2">
-        <v-card-title>{{ $t('common.pictures') }}</v-card-title>
-        <v-card-text>
-          <v-hover v-slot="{ hover }">
-            <v-img
-              contain
-              class="ma-4 transition-swing cursor-pointer"
-              :class="{
-                'elevation-8': hover,
-                'elevation-4': !hover,
-              }"
-              :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              max-width="2000"
-              @click="
-                openImage(
-                  drillcoreBox.drillcorebox_image__attachment__uuid_filename
-                )
-              "
-            />
-          </v-hover>
-          <div class="text-center">
-            <a
-              class="text-link"
-              :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >small</a
-            >
-            |
-            <a
-              class="text-link"
-              :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >medium</a
-            >
-            |
-            <a
-              class="text-link"
-              :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >large</a
-            >
-            |
-            <a
-              class="text-link"
-              :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >original</a
-            >
-          </div>
         </v-card-text>
       </v-card>
     </v-col>
@@ -228,7 +234,7 @@ export default {
     return {
       title: `${this.$t('drillcoreBox.nr', {
         number: this.drillcoreBox.number,
-      })} | ${this.$translate({
+      })} - ${this.$translate({
         et: this.drillcoreBox.drillcore__drillcore,
         en: this.drillcoreBox.drillcore__drillcore_en,
       })}`,
@@ -237,13 +243,20 @@ export default {
   methods: {
     isNull,
     openImage(filename, size = 'large') {
-      console.log(size)
       if (filename && size) {
         window.open(
           `https://files.geocollections.info/${size}/${filename}`,
           'ImageWindow'
         )
       }
+    },
+
+    openStratigraphy(id) {
+      window.open(
+        `https://geocollections.info/stratigraphy/${id}`,
+        '_blank',
+        'height=800, width=800'
+      )
     },
   },
 }
