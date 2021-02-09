@@ -11,7 +11,7 @@
     @update:options="handleOptionsChange"
   >
     <template #item.id="{ item }">
-      <a class="text-link underline" @click="openSpecimen(item.id)">
+      <a class="text-link" @click="openSpecimen(item.id)">
         {{ item.id }}
       </a>
     </template>
@@ -24,10 +24,7 @@
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <a
-        class="text-link underline"
-        @click="openStratigraphy(item.stratigraphy_id)"
-      >
+      <a class="text-link" @click="openStratigraphy(item.stratigraphy_id)">
         {{
           $translate({
             et: item.stratigraphy,
@@ -37,7 +34,7 @@
       </a>
     </template>
     <template #item.taxon="{ item }">
-      <a class="text-link underline" @click="openTaxon(item.taxon_id)">
+      <a class="text-link" @click="openTaxon(item.taxon_id)">
         {{ item.taxon }}
       </a>
     </template>

@@ -7,14 +7,14 @@
       </h1>
       <div class="d-flex justify-space-between">
         <nuxt-link
-          class="text-link underline"
+          class="text-link"
           :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
         >
           {{ $t('common.previous') }}
         </nuxt-link>
 
         <nuxt-link
-          class="text-link underline"
+          class="text-link"
           :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
         >
           {{ $t('common.next') }}
@@ -59,7 +59,7 @@
                   </td>
                   <td v-else>
                     <a
-                      class="text-link underline"
+                      class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
                     >
                       {{
@@ -91,7 +91,7 @@
                   </td>
                   <td v-else>
                     <a
-                      class="text-link underline"
+                      class="text-link"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
                     >
                       {{
@@ -123,7 +123,7 @@
                   </td>
                   <td v-else>
                     <nuxt-link
-                      class="text-link underline"
+                      class="text-link"
                       :to="
                         localePath({
                           name: 'drillcore-id',
@@ -167,25 +167,25 @@
           />
           <div class="text-center">
             <a
-              class="text-link underline"
+              class="text-link"
               :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >small</a
             >
             |
             <a
-              class="text-link underline"
+              class="text-link"
               :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >medium</a
             >
             |
             <a
-              class="text-link underline"
+              class="text-link"
               :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >large</a
             >
             |
             <a
-              class="text-link underline"
+              class="text-link"
               :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >original</a
             >
