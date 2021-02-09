@@ -1,0 +1,145 @@
+<template>
+  <v-data-table
+    dense
+    calculate-widths
+    multi-sort
+    :headers="headers"
+    :items="analyses"
+    :options.sync="options"
+    :server-items-length="totalCount"
+    :footer-props="footerProps"
+    @update:options="handleOptionsChange"
+  >
+    <template #item.id="{ item }">
+      <a class="text-link underline" @click="openAnalysis(item.id)">
+        {{ item.id }}
+      </a>
+    </template>
+    <template #item.sample_number="{ item }">
+      <a class="text-link underline" @click="openSample(item.sample_id)">
+        {{ item.sample_number }}
+      </a>
+    </template>
+    <template #item.method="{ item }">
+      {{
+        $translate({
+          et: item.analysis_method,
+          en: item.analysis_method_en,
+        })
+      }}
+    </template>
+    <template #item.method_details="{ item }">
+      {{
+        $translate({
+          et: item.method_details,
+          en: item.method_details_en,
+        })
+      }}
+    </template>
+    <template #item.date="{ item }">
+      {{
+        item.date
+          ? new Date(item.date).toLocaleString($i18n.locale, {
+              dateStyle: 'medium',
+            })
+          : null
+      }}
+    </template>
+  </v-data-table>
+</template>
+
+<script>
+import { isEmpty } from 'lodash'
+export default {
+  props: {
+    locality: {
+      type: Number,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      analyses: [],
+      totalCount: 0,
+      options: {
+        itemsPerPage: 25,
+        sortBy: [],
+        sortDesc: [],
+      },
+      footerProps: {
+        'items-per-page-options': [10, 25, 50, 100],
+      },
+      headers: [
+        { text: this.$t('analysis.id'), value: 'id' },
+        { text: this.$t('analysis.sampleNumber'), value: 'sample_number' },
+        { text: this.$t('analysis.depth'), value: 'depth' },
+        { text: this.$t('analysis.depthInterval'), value: 'depth_interval' },
+        { text: this.$t('analysis.method'), value: 'method' },
+        {
+          text: this.$t('analysis.methodDetails'),
+          value: 'method_details',
+        },
+        { text: this.$t('analysis.analysedBy'), value: 'agent' },
+        { text: this.$t('analysis.date'), value: 'date' },
+      ],
+      sortValues: {
+        id: () => 'id',
+        sample_number: () => 'sample_number',
+        depth: () => 'depth',
+        depth_interval: () => 'depth_interval',
+        method: () =>
+          this.$i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en',
+        method_details: () =>
+          this.$i18n.locale === 'et' ? 'method_details' : 'method_details_en',
+        agent: () => 'agent',
+        date: () => 'date',
+      },
+    }
+  },
+  methods: {
+    openAnalysis(analysis) {
+      window.open(
+        `https://geocollections.info/analysis/${analysis}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
+    openSample(sample) {
+      window.open(
+        `https://geocollections.info/sample/${sample}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
+    async handleOptionsChange(options) {
+      const start = (options.page - 1) * options.itemsPerPage
+
+      let params
+      if (isEmpty(options.sortBy)) {
+        params = {
+          q: `locality_id:${this.locality}`,
+          rows: options.itemsPerPage,
+          start,
+        }
+      } else {
+        const orderBy = options.sortBy.map((field, i) => {
+          if (options.sortDesc[i]) return `${this.sortValues[field]()} desc`
+          return `${this.sortValues[field]()} asc`
+        })
+
+        params = {
+          q: `locality_id:${this.locality}`,
+          rows: options.itemsPerPage,
+          start,
+          sort: orderBy.join(','),
+        }
+      }
+      const analysisResponse = await this.$axios.$get('solr/analysis', {
+        params,
+      })
+      this.analyses = analysisResponse.results
+      this.totalCount = analysisResponse.count
+    },
+  },
+}
+</script>
