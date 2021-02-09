@@ -31,6 +31,8 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .text-link {
+  @extend .underline;
+
   text-decoration: none;
   color: map-get($map: $deep-orange, $key: 'darken-2') !important;
   transition: color 200ms;
