@@ -1,6 +1,5 @@
 <template>
-  <!-- TODO: Add diameter, remarks, stratigraphy_free, depth_other -->
-  <!-- TODO: Move id to table end -->
+  <!-- TODO: Add diameter -->
   <v-row>
     <v-col>
       <h1 class="text-center py-3 page-title">
@@ -8,14 +7,14 @@
       </h1>
       <div class="d-flex justify-space-between">
         <nuxt-link
-          class="text-link"
+          class="text-link underline"
           :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
         >
           {{ $t('common.previous') }}
         </nuxt-link>
 
         <nuxt-link
-          class="text-link"
+          class="text-link underline"
           :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
         >
           {{ $t('common.next') }}
@@ -27,10 +26,6 @@
           <v-simple-table dense class="custom-table">
             <template #default>
               <tbody>
-                <tr>
-                  <td>{{ $t('drillcoreBox.id') }}</td>
-                  <td>{{ drillcoreBox.id }}</td>
-                </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.depthStart') }}</td>
 
@@ -47,6 +42,13 @@
                   <td v-else>{{ drillcoreBox.depth_end }}</td>
                 </tr>
                 <tr>
+                  <td>{{ $t('drillcoreBox.depthOther') }}</td>
+                  <td v-if="isNull(drillcoreBox.depth_other)" class="no-value">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.depth_other }}</td>
+                </tr>
+                <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
 
                   <td
@@ -57,7 +59,7 @@
                   </td>
                   <td v-else>
                     <a
-                      class="text-link"
+                      class="text-link underline"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_top_id}`"
                     >
                       {{
@@ -70,6 +72,16 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>{{ $t('drillcoreBox.stratigraphyTopFree') }}</td>
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_top_free)"
+                    class="no-value"
+                  >
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.stratigraphy_top_free }}</td>
+                </tr>
+                <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyBase') }}</td>
                   <td
                     v-if="isNull(drillcoreBox.stratigraphy_base_id)"
@@ -79,7 +91,7 @@
                   </td>
                   <td v-else>
                     <a
-                      class="text-link"
+                      class="text-link underline"
                       :href="`https://geocollections.info/stratigraphy/${drillcoreBox.stratigraphy_base_id}`"
                     >
                       {{
@@ -92,6 +104,16 @@
                   </td>
                 </tr>
                 <tr>
+                  <td>{{ $t('drillcoreBox.stratigraphyBaseFree') }}</td>
+                  <td
+                    v-if="isNull(drillcoreBox.stratigraphy_base_free)"
+                    class="no-value"
+                  >
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.stratigraphy_base_free }}</td>
+                </tr>
+                <tr>
                   <td>{{ $t('drillcoreBox.drillcore') }}</td>
                   <td
                     v-if="isNull(drillcoreBox.drillcore__id)"
@@ -101,7 +123,7 @@
                   </td>
                   <td v-else>
                     <nuxt-link
-                      class="text-link"
+                      class="text-link underline"
                       :to="
                         localePath({
                           name: 'drillcore-id',
@@ -117,6 +139,17 @@
                       }}
                     </nuxt-link>
                   </td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.remarks') }}</td>
+                  <td v-if="isNull(drillcoreBox.remarks)" class="no-value">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.remarks }}</td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.id') }}</td>
+                  <td>{{ drillcoreBox.id }}</td>
                 </tr>
               </tbody>
             </template>
@@ -134,25 +167,25 @@
           />
           <div class="text-center">
             <a
-              class="text-link"
+              class="text-link underline"
               :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >small</a
             >
             |
             <a
-              class="text-link"
+              class="text-link underline"
               :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >medium</a
             >
             |
             <a
-              class="text-link"
+              class="text-link underline"
               :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >large</a
             >
             |
             <a
-              class="text-link"
+              class="text-link underline"
               :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               >original</a
             >

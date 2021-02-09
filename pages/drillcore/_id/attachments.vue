@@ -4,16 +4,23 @@
     calculate-widths
     multi-sort
     :headers="headers"
-    :items="localityReferences"
+    :items="attachments"
     :options.sync="options"
     :server-items-length="totalCount"
     :footer-props="footerProps"
     @update:options="handleOptionsChange"
   >
-    <template #item.reference="{ item }">
-      <a class="text-link underline" @click="openReference(item.reference)">{{
-        item.reference__reference
-      }}</a>
+    <template #item.description="{ item }">
+      <a
+        class="text-link underline"
+        @click="openAttachment(item.attachment__filename)"
+        >{{
+          $translate({
+            et: item.attachment__description,
+            en: item.attachment__description_en,
+          })
+        }}</a
+      >
     </template>
   </v-data-table>
 </template>
@@ -22,41 +29,34 @@
 import { isEmpty } from 'lodash'
 
 export default {
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
+      attachments: [],
       totalCount: 0,
       options: { itemsPerPage: 25 },
       footerProps: {
         'items-per-page-options': [10, 25, 50, 100],
       },
       headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
+        { text: this.$t('attachment.description'), value: 'description' },
         {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
+          text: this.$t('attachment.author'),
+          value: 'attachment__author__agent',
         },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
       ],
       sortValues: {
-        reference: () => 'reference__reference',
-        reference__title: () => 'reference__title',
-        pages: () => 'pages',
-        remarks: () => 'remarks',
+        description: () =>
+          this.$i18n.locale === 'et'
+            ? 'attachment__description'
+            : 'attachment__description_en',
+        attachment__author__agent: () => 'attachment__author_agent',
       },
-      localityReferences: [],
     }
   },
   methods: {
-    openReference(reference) {
+    openAttachment(attachment) {
       window.open(
-        `https://geoloogia.info/reference/${reference}`,
+        `https://files.geocollections.info/${attachment}`,
         '_blank',
         'height=800, width=800'
       )
@@ -65,7 +65,7 @@ export default {
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          locality: this.locality,
+          drillcore: this.$route.params.id,
           paginate_by: options.itemsPerPage,
           page: options.page,
         }
@@ -76,18 +76,17 @@ export default {
         })
 
         params = {
-          locality: this.locality,
+          drillcore: this.$route.params.id,
           paginate_by: options.itemsPerPage,
           page: options.page,
           order_by: orderBy.join(','),
         }
       }
-      const localityReferenceResponse = await this.$axios.$get(
-        'locality_reference',
-        { params }
-      )
-      this.localityReferences = localityReferenceResponse.results
-      this.totalCount = localityReferenceResponse.count
+      const attachmentResponse = await this.$axios.$get('attachment_link', {
+        params,
+      })
+      this.attachments = attachmentResponse.results
+      this.totalCount = attachmentResponse.count
     },
   },
 }

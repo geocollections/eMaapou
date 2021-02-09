@@ -94,7 +94,10 @@ jobs:
 workflows:
   build:
     jobs:
-      - build_docker_image
+      - build_docker_image:
+          filters:
+            branches:
+              only: [master, development]
       - publish_docker_image:
           requires:
             - build_docker_image

@@ -8,8 +8,10 @@ updates:
     time: '00:00'
   open-pull-requests-limit: 10
   reviewers:
+    - enmust
     - erik dzotsenidze
   assignees:
+    - enmust
     - erik dzotsenidze
   commit-message:
     prefix: fix

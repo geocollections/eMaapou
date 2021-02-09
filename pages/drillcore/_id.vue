@@ -23,10 +23,6 @@
                   <template #default>
                     <tbody>
                       <tr>
-                        <td>{{ $t('drillcore.id') }}</td>
-                        <td>{{ drillcore.id }}</td>
-                      </tr>
-                      <tr>
                         <td>{{ $t('drillcore.name') }}</td>
                         <td>
                           {{
@@ -129,6 +125,10 @@
                           {{ drillcore.number_meters }}
                         </td>
                       </tr>
+                      <tr>
+                        <td>{{ $t('drillcore.id') }}</td>
+                        <td>{{ drillcore.id }}</td>
+                      </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
@@ -157,7 +157,7 @@
                         <td>{{ $t('locality.locality') }}</td>
                         <td>
                           <a
-                            class="text-link"
+                            class="text-link underline"
                             :href="`https://geocollections.info/locality/${drillcore.locality_id}`"
                           >
                             {{
@@ -358,6 +358,19 @@
           >
             {{ $t('drillcore.localityReferences') }}
           </v-tab>
+          <v-tab
+            :key="4"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: 'drillcore-id-attachments',
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            {{ $t('drillcore.attachments') }}
+          </v-tab>
           <v-tabs-items v-model="activeTab">
             <v-tab-item
               :key="1"
@@ -391,6 +404,17 @@
               "
             >
               <nuxt-child :locality="drillcore.locality_id" keep-alive />
+            </v-tab-item>
+            <v-tab-item
+              :key="4"
+              :value="
+                localePath({
+                  name: 'drillcore-id-attachments',
+                  params: { id: $route.params.id },
+                })
+              "
+            >
+              <nuxt-child keep-alive />
             </v-tab-item>
           </v-tabs-items>
         </v-tabs>

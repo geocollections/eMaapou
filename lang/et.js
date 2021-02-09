@@ -2,7 +2,6 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    valueNotSet: ' - ',
     noValue: ' - ',
     title: 'Eesti Geokogude Portaal',
     previous: 'Eelmine',
@@ -46,6 +45,7 @@ export default {
     drillcoreBoxesTitle: 'Puursüdamikukastid',
     localityDescriptions: 'Kirjeldused',
     localityReferences: 'Kirjandus',
+    attachments: 'Failid',
   },
   drillcoreBox: {
     id: 'ID',
@@ -53,8 +53,12 @@ export default {
     nr: 'Kast nr. {number}',
     depthStart: 'Algus (m)',
     depthEnd: 'Lõpp (m)',
+    depthOther: 'Sügavus info',
+    stratigraphyBaseFree: 'Strat. algus tekst',
+    stratigraphyTopFree: 'Strat. lõpp tekst',
     stratigraphyTop: 'Strat. algus',
     stratigraphyBase: 'Strat. lõpp',
+    remarks: 'Lisainfo',
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
@@ -69,7 +73,16 @@ export default {
     pages: 'Leheküljed',
     referenceTitle: 'Pealkiri',
   },
+  attachment: {
+    author: 'Autor',
+    description: 'Kirjeldus',
+  },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
-    '2008-2021. SARV: Eesti geokogude infosüsteem ja andmerepositoorium. Kui pole märgitud teisiti, siis on siin leiduvate materjalide kasutamine ja levitamine vaba, eeldusel, et viidatakse allikale.',
+    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
+  footerLinks: {
+    kik: 'Keskkonnainvesteeringute Keskus',
+    natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
+    el: 'Euroopa Liit',
+  },
 }
