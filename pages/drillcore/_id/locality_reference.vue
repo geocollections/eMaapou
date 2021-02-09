@@ -44,6 +44,12 @@ export default {
         { text: this.$t('localityReference.pages'), value: 'pages' },
         { text: this.$t('localityReference.remarks'), value: 'remarks' },
       ],
+      sortValues: {
+        reference: () => 'reference__reference',
+        reference__title: () => 'reference__title',
+        pages: () => 'pages',
+        remarks: () => 'remarks',
+      },
       localityReferences: [],
     }
   },
@@ -79,8 +85,8 @@ export default {
         }
       } else {
         const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `-${field}`
-          return field
+          if (options.sortDesc[i]) return `-${this.sortValues[field]()}`
+          return this.sortValues[field]()
         })
 
         params = {
