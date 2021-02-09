@@ -316,108 +316,35 @@
         </v-container>
       </v-card>
       <v-card class="mt-2">
-        <v-tabs v-model="activeTab" color="deep-orange darken-2">
+        <v-tabs v-model="activeTab" color="deep-orange darken-2" show-arrows>
           <v-tab
-            :key="1"
+            v-for="(item, index) in tabs"
+            :key="index"
             nuxt
             exact
             :to="
               localePath({
-                name: 'drillcore-id',
+                name: item.routeName,
                 params: { id: $route.params.id },
               })
             "
+            >{{ $t(item.title) }}</v-tab
           >
-            {{
-              $t('drillcore.drillcoreBoxesTitle', { number: drillcore.boxes })
-            }}
-          </v-tab>
-          <v-tab
-            :key="2"
-            nuxt
-            exact
-            :to="
-              localePath({
-                name: 'drillcore-id-locality_description',
-                params: { id: $route.params.id },
-              })
-            "
-          >
-            {{ $t('drillcore.localityDescriptions') }}
-          </v-tab>
-          <v-tab
-            :key="3"
-            nuxt
-            exact
-            :to="
-              localePath({
-                name: 'drillcore-id-locality_reference',
-                params: { id: $route.params.id },
-              })
-            "
-          >
-            {{ $t('drillcore.localityReferences') }}
-          </v-tab>
-          <v-tab
-            :key="4"
-            nuxt
-            exact
-            :to="
-              localePath({
-                name: 'drillcore-id-attachments',
-                params: { id: $route.params.id },
-              })
-            "
-          >
-            {{ $t('drillcore.attachments') }}
-          </v-tab>
-          <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
-            <v-tab-item
-              :key="1"
-              :value="
-                localePath({
-                  name: 'drillcore-id',
-                  params: { id: $route.params.id },
-                })
-              "
-            >
-              <nuxt-child keep-alive />
-            </v-tab-item>
-            <v-tab-item
-              :key="2"
-              :value="
-                localePath({
-                  name: 'drillcore-id-locality_description',
-                  params: { id: $route.params.id },
-                })
-              "
-            >
-              <nuxt-child :locality="drillcore.locality_id" keep-alive />
-            </v-tab-item>
-            <v-tab-item
-              :key="3"
-              :value="
-                localePath({
-                  name: 'drillcore-id-locality_reference',
-                  params: { id: $route.params.id },
-                })
-              "
-            >
-              <nuxt-child :locality="drillcore.locality_id" keep-alive />
-            </v-tab-item>
-            <v-tab-item
-              :key="4"
-              :value="
-                localePath({
-                  name: 'drillcore-id-attachments',
-                  params: { id: $route.params.id },
-                })
-              "
-            >
-              <nuxt-child keep-alive />
-            </v-tab-item>
-          </v-tabs-items>
         </v-tabs>
+        <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
+          <v-tab-item
+            v-for="(item, index) in tabs"
+            :key="index"
+            :value="
+              localePath({
+                name: item.routeName,
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            <nuxt-child keep-alive :locality="drillcore.locality_id" />
+          </v-tab-item>
+        </v-tabs-items>
       </v-card>
     </v-col>
   </v-row>
@@ -438,6 +365,32 @@ export default {
   data() {
     return {
       activeTab: 1,
+      tabs: [
+        {
+          routeName: 'drillcore-id',
+          title: 'drillcore.drillcoreBoxesTitle',
+        },
+        {
+          routeName: 'drillcore-id-locality_description',
+          title: 'drillcore.localityDescriptions',
+        },
+        {
+          routeName: 'drillcore-id-locality_reference',
+          title: 'drillcore.localityReferences',
+        },
+        {
+          routeName: 'drillcore-id-attachments',
+          title: 'drillcore.attachments',
+        },
+        {
+          routeName: 'drillcore-id-samples',
+          title: 'drillcore.samples',
+        },
+        {
+          routeName: 'drillcore-id-analyses',
+          title: 'drillcore.analyses',
+        },
+      ],
     }
   },
   head() {
