@@ -2,6 +2,15 @@
 
 $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
+// Usage: @include transition(color 1s, background-color 1s, border-color 1s);
+@mixin transition($x...){
+  -webkit-transition: $x;
+  -moz-transition: $x;
+  -ms-transition: $x;
+  -o-transition: $x;
+  transition: $x;
+}
+
 .underline {
   display: inline-block;
 
@@ -81,5 +90,13 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
   div {
     font-weight: 400;
+  }
+}
+
+.drillcore-box__card {
+  @include transition(background-color 200ms ease);
+
+  &:hover {
+    background: map-get($map: $grey, $key: 'lighten-4');
   }
 }
