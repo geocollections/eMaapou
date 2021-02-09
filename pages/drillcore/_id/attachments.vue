@@ -11,12 +11,16 @@
     @update:options="handleOptionsChange"
   >
     <template #item.description="{ item }">
-      <a class="text-link underline" @click="openAttachment(item.attachment__filename)">{{
-        $translate({
-          et: item.attachment__description,
-          en: item.attachment__description_en,
-        })
-      }}</a>
+      <a
+        class="text-link underline"
+        @click="openAttachment(item.attachment__filename)"
+        >{{
+          $translate({
+            et: item.attachment__description,
+            en: item.attachment__description_en,
+          })
+        }}</a
+      >
     </template>
   </v-data-table>
 </template>
@@ -40,6 +44,13 @@ export default {
           value: 'attachment__author__agent',
         },
       ],
+      sortValues: {
+        description: () =>
+          this.$i18n.locale === 'et'
+            ? 'attachment__description'
+            : 'attachment__description_en',
+        attachment__author__agent: () => 'attachment__author_agent',
+      },
     }
   },
   methods: {
@@ -60,8 +71,8 @@ export default {
         }
       } else {
         const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `-${field}`
-          return field
+          if (options.sortDesc[i]) return `-${this.sortValues[field]()}`
+          return this.sortValues[field]()
         })
 
         params = {
