@@ -371,7 +371,7 @@
           >
             {{ $t('drillcore.attachments') }}
           </v-tab>
-          <v-tabs-items v-model="activeTab">
+          <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
             <v-tab-item
               :key="1"
               :value="
@@ -451,6 +451,9 @@ export default {
   methods: {
     isEmpty,
     isNull,
+    handleSwipeBetweenTabs(pathAsString) {
+      this.$router.push(pathAsString)
+    },
   },
 }
 </script>
