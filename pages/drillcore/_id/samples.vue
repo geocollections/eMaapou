@@ -1,0 +1,121 @@
+<template>
+  <v-data-table
+    dense
+    calculate-widths
+    multi-sort
+    :headers="headers"
+    :items="samples"
+    :options.sync="options"
+    :server-items-length="totalCount"
+    :footer-props="footerProps"
+    @update:options="handleOptionsChange"
+  >
+    <template #item.id="{ item }">
+      <a class="text-link underline" @click="openSample(item.id)">
+        {{ item.id }}
+      </a>
+    </template>
+    <template #item.stratigraphy="{ item }">
+      <a
+        class="text-link underline"
+        @click="openStratigraphy(item.stratigraphy_id)"
+      >
+        {{
+          $translate({
+            et: item.stratigraphy,
+            en: item.stratigraphy_en,
+          })
+        }}
+      </a>
+    </template>
+  </v-data-table>
+</template>
+
+<script>
+import { isEmpty } from 'lodash'
+
+export default {
+  props: {
+    locality: {
+      type: Number,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      samples: [],
+      totalCount: 0,
+      options: {
+        itemsPerPage: 25,
+        sortBy: [],
+        sortDesc: [],
+      },
+      footerProps: {
+        'items-per-page-options': [10, 25, 50, 100],
+      },
+      headers: [
+        { text: this.$t('samples.id'), value: 'id' },
+        { text: this.$t('samples.number'), value: 'number' },
+        { text: this.$t('samples.depth'), value: 'depth' },
+        { text: this.$t('samples.depthInterval'), value: 'depth_interval' },
+        { text: this.$t('samples.stratigraphy'), value: 'stratigraphy' },
+        { text: this.$t('samples.collector'), value: 'collector' },
+        { text: this.$t('samples.dateCollected'), value: 'date_collected' },
+      ],
+      sortValues: {
+        id: () => 'id',
+        number: () => 'number',
+        depth: () => 'depth',
+        depth_interval: () => 'depth_interval',
+        stratigraphy: () =>
+          this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
+        collector: () => 'collector',
+        date_collected: () => 'date_collected',
+      },
+    }
+  },
+  methods: {
+    openStratigraphy(stratigraphy) {
+      window.open(
+        `https://geocollections.info/stratigraphy/${stratigraphy}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
+    openSample(sample) {
+      window.open(
+        `https://geocollections.info/sample/${sample}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
+    async handleOptionsChange(options) {
+      const start = (options.page - 1) * options.itemsPerPage
+
+      let params
+      if (isEmpty(options.sortBy)) {
+        params = {
+          q: `locality_id:${this.locality}`,
+          rows: options.itemsPerPage,
+          start,
+        }
+      } else {
+        const orderBy = options.sortBy.map((field, i) => {
+          if (options.sortDesc[i]) return `${this.sortValues[field]()} desc`
+          return `${this.sortValues[field]()} asc`
+        })
+
+        params = {
+          q: `locality_id:${this.locality}`,
+          rows: options.itemsPerPage,
+          start,
+          sort: orderBy.join(','),
+        }
+      }
+      const sampleResponse = await this.$axios.$get('solr/sample', { params })
+      this.samples = sampleResponse.results
+      this.totalCount = sampleResponse.count
+    },
+  },
+}
+</script>
