@@ -11,16 +11,12 @@
     @update:options="handleOptionsChange"
   >
     <template #item.description="{ item }">
-      <a
-        class="text-link underline"
-        @click="openAttachment(item.attachment__filename)"
-        >{{
-          $translate({
-            et: item.attachment__description,
-            en: item.attachment__description_en,
-          })
-        }}</a
-      >
+      <a class="text-link" @click="openAttachment(item.attachment__filename)">{{
+        $translate({
+          et: item.attachment__description,
+          en: item.attachment__description_en,
+        })
+      }}</a>
     </template>
   </v-data-table>
 </template>

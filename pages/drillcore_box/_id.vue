@@ -7,14 +7,14 @@
       </h1>
       <div class="d-flex justify-space-between">
         <nuxt-link
-          class="text-link underline"
+          class="text-link"
           :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
         >
           {{ $t('common.previous') }}
         </nuxt-link>
 
         <nuxt-link
-          class="text-link underline"
+          class="text-link"
           :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
         >
           {{ $t('common.next') }}

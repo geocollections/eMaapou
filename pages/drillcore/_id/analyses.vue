@@ -11,12 +11,12 @@
     @update:options="handleOptionsChange"
   >
     <template #item.id="{ item }">
-      <a class="text-link underline" @click="openAnalysis(item.id)">
+      <a class="text-link" @click="openAnalysis(item.id)">
         {{ item.id }}
       </a>
     </template>
     <template #item.sample_number="{ item }">
-      <a class="text-link underline" @click="openSample(item.sample_id)">
+      <a class="text-link" @click="openSample(item.sample_id)">
         {{ item.sample_number }}
       </a>
     </template>

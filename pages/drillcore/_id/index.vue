@@ -86,7 +86,7 @@
                           </td>
                           <td v-else>
                             <a
-                              class="text-link underline"
+                              class="text-link"
                               @click.stop="
                                 openStratigraphy(
                                   box.drillcore_box__stratigraphy_top
@@ -116,7 +116,7 @@
                           </td>
                           <td v-else>
                             <a
-                              class="text-link underline"
+                              class="text-link"
                               @click.stop="
                                 openStratigraphy(
                                   box.drillcore_box__stratigraphy_base

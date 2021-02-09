@@ -11,15 +11,12 @@
     @update:options="handleOptionsChange"
   >
     <template #item.id="{ item }">
-      <a class="text-link underline" @click="openSample(item.id)">
+      <a class="text-link" @click="openSample(item.id)">
         {{ item.id }}
       </a>
     </template>
     <template #item.stratigraphy="{ item }">
-      <a
-        class="text-link underline"
-        @click="openStratigraphy(item.stratigraphy_id)"
-      >
+      <a class="text-link" @click="openStratigraphy(item.stratigraphy_id)">
         {{
           $translate({
             et: item.stratigraphy,
