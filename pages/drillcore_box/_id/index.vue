@@ -79,9 +79,6 @@ export default {
       },
     }
   },
-  created() {
-    console.log("tere")
-  },
   methods: {
     openStratigraphy(stratigraphy) {
       window.open(
@@ -125,7 +122,6 @@ export default {
       const sampleResponse = await this.$axios.$get('solr/sample', { params })
       this.samples = sampleResponse.results
       this.totalCount = sampleResponse.count
-      this.$emit('test', 'tere')
     },
   },
 }
