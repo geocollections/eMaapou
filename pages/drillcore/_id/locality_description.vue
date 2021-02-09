@@ -23,6 +23,24 @@
         }}
       </a>
     </template>
+    <template #item.author="{ item }">
+      <a
+        v-if="item.reference"
+        :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
+        @click="openReference(item.reference)"
+      >
+        {{ item.reference__reference }}
+      </a>
+      <div
+        v-else-if="item.agent__agent"
+        :class="{ 'is-preferred': !item.is_preferred }"
+      >
+        {{ item.agent__agent }}
+      </div>
+      <div v-else :class="{ 'is-preferred': !item.is_preferred }">
+        {{ item.author_free }}
+      </div>
+    </template>
   </v-data-table>
 </template>
 
@@ -61,6 +79,11 @@ export default {
         {
           text: this.$t('localityDescription.description'),
           value: 'description',
+        },
+        {
+          text: this.$t('localityDescription.author'),
+          value: 'author',
+          sortable: false,
         },
       ],
       sortValues: {

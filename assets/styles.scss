@@ -11,6 +11,10 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   transition: $x;
 }
 
+.is-preferred {
+  color: gray
+}
+
 .underline {
   display: inline-block;
 
