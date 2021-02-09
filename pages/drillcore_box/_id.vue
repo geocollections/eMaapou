@@ -159,34 +159,50 @@
       <v-card class="mt-2">
         <v-card-title>{{ $t('common.pictures') }}</v-card-title>
         <v-card-text>
-          <v-img
-            contain
-            class="ma-4"
-            :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-            :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-          />
+          <v-hover v-slot="{ hover }">
+            <v-img
+              contain
+              class="ma-4 transition-swing cursor-pointer"
+              :class="{
+                'elevation-8': hover,
+                'elevation-4': !hover,
+              }"
+              :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              max-width="2000"
+              @click="
+                openImage(
+                  drillcoreBox.drillcorebox_image__attachment__uuid_filename
+                )
+              "
+            />
+          </v-hover>
           <div class="text-center">
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
               >small</a
             >
             |
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
               >medium</a
             >
             |
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
               >large</a
             >
             |
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+              target="ImageWindow"
               >original</a
             >
           </div>
@@ -220,6 +236,15 @@ export default {
   },
   methods: {
     isNull,
+    openImage(filename, size = 'large') {
+      console.log(size)
+      if (filename && size) {
+        window.open(
+          `https://files.geocollections.info/${size}/${filename}`,
+          'ImageWindow'
+        )
+      }
+    },
   },
 }
 </script>
