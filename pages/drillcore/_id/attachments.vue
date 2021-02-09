@@ -29,6 +29,12 @@
 import { isEmpty } from 'lodash'
 
 export default {
+  props: {
+    locality: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
       attachments: [],
@@ -49,7 +55,7 @@ export default {
           this.$i18n.locale === 'et'
             ? 'attachment__description'
             : 'attachment__description_en',
-        attachment__author__agent: () => 'attachment__author_agent',
+        attachment__author__agent: () => 'attachment__author__agent',
       },
     }
   },
@@ -65,7 +71,7 @@ export default {
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          drillcore: this.$route.params.id,
+          or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
           paginate_by: options.itemsPerPage,
           page: options.page,
         }
@@ -76,7 +82,7 @@ export default {
         })
 
         params = {
-          drillcore: this.$route.params.id,
+          or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
           paginate_by: options.itemsPerPage,
           page: options.page,
           order_by: orderBy.join(','),
