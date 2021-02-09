@@ -44,22 +44,14 @@ export default {
         { text: this.$t('localityReference.pages'), value: 'pages' },
         { text: this.$t('localityReference.remarks'), value: 'remarks' },
       ],
+      sortValues: {
+        reference: () => 'reference__reference',
+        reference__title: () => 'reference__title',
+        pages: () => 'pages',
+        remarks: () => 'remarks',
+      },
       localityReferences: [],
     }
-  },
-  async fetch() {
-    const localityReferenceResponse = await this.$axios.$get(
-      'locality_reference',
-      {
-        params: {
-          locality: this.locality,
-          paginate_by: this.options.itemsPerPage,
-          page: 1,
-        },
-      }
-    )
-    this.localityReferences = localityReferenceResponse.results
-    this.totalCount = localityReferenceResponse.count
   },
   methods: {
     openReference(reference) {
@@ -79,8 +71,8 @@ export default {
         }
       } else {
         const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `-${field}`
-          return field
+          if (options.sortDesc[i]) return `-${this.sortValues[field]()}`
+          return this.sortValues[field]()
         })
 
         params = {
