@@ -45,28 +45,28 @@
               class="text-link underline"
               :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               target="ImageWindow"
-            >small</a
+              >small</a
             >
             |
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               target="ImageWindow"
-            >medium</a
+              >medium</a
             >
             |
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               target="ImageWindow"
-            >large</a
+              >large</a
             >
             |
             <a
               class="text-link underline"
               :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
               target="ImageWindow"
-            >original</a
+              >original</a
             >
           </div>
         </v-card-text>
@@ -214,6 +214,43 @@
           </v-simple-table>
         </v-card-text>
       </v-card>
+
+      <v-card class="mt-2">
+        <v-tabs v-model="activeTab" color="deep-orange darken-2" show-arrows>
+          <v-tab
+            v-for="(item, index) in tabs"
+            :key="index"
+            nuxt
+            exact
+            :to="
+              localePath({
+                name: item.routeName,
+                params: { id: $route.params.id },
+              })
+            "
+            >{{ $t(item.title) }}</v-tab
+          >
+        </v-tabs>
+        <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
+          <v-tab-item
+            v-for="(item, index) in tabs"
+            :key="index"
+            :value="
+              localePath({
+                name: item.routeName,
+                params: { id: $route.params.id },
+              })
+            "
+          >
+            <nuxt-child
+              :locality="drillcoreBox.drillcore__locality"
+              :depth-start="drillcoreBox.depth_start"
+              :depth-end="drillcoreBox.depth_end"
+              keep-alive
+            />
+          </v-tab-item>
+        </v-tabs-items>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -229,6 +266,25 @@ export default {
 
     const drillcoreBox = drillcoreBoxResponse.results[0]
     return { drillcoreBox }
+  },
+  data() {
+    return {
+      activeTab: 0,
+      tabs: [
+        {
+          routeName: 'drillcore_box-id',
+          title: 'drillcore.samples',
+        },
+        {
+          routeName: 'drillcore_box-id-analyses',
+          title: 'drillcore.analyses',
+        },
+        {
+          routeName: 'drillcore_box-id-specimens',
+          title: 'drillcore.specimens',
+        },
+      ],
+    }
   },
   head() {
     return {
@@ -257,6 +313,10 @@ export default {
         '_blank',
         'height=800, width=800'
       )
+    },
+
+    handleSwipeBetweenTabs(pathAsString) {
+      this.$router.push(pathAsString)
     },
   },
 }
