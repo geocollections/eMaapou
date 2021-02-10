@@ -8,6 +8,7 @@
     :options.sync="options"
     :server-items-length="totalCount"
     :footer-props="footerProps"
+    mobile-breakpoint="0"
     @update:options="handleOptionsChange"
   >
     <template #item.id="{ item }">
