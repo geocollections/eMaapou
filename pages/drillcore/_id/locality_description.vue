@@ -113,6 +113,7 @@ export default {
         description: () => 'description',
         depth_top: () => 'depth_top',
         depth_base: () => 'depth_base',
+        author: () => 'reference__reference,agent__agent,author_free',
       },
       localityDescriptions: [],
     }
