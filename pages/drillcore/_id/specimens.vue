@@ -11,6 +11,18 @@
     mobile-breakpoint="0"
     @update:options="handleOptionsChange"
   >
+    <template #top>
+      <v-text-field
+        v-model="textSearch"
+        class="ma-4"
+        append-icon="mdi-magnify"
+        :label="$t('common.search')"
+        single-line
+        hide-details
+        clearable
+        @input="handleTextSearch"
+      ></v-text-field>
+    </template>
     <template #item.id="{ item }">
       <a class="text-link" @click="openSpecimen(item.id)">
         {{ item.id }}
@@ -43,7 +55,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, debounce } from 'lodash'
 
 export default {
   props: {
@@ -54,9 +66,11 @@ export default {
   },
   data() {
     return {
+      textSearch: '',
       specimens: [],
       totalCount: 0,
       options: {
+        page: 1,
         itemsPerPage: 25,
         sortBy: [],
         sortDesc: [],
@@ -109,7 +123,8 @@ export default {
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          q: `locality_id:${this.locality}`,
+          q: isEmpty(this.textSearch) ? '*' : `*${this.textSearch}*`,
+          fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
         }
@@ -120,7 +135,8 @@ export default {
         })
 
         params = {
-          q: `locality_id:${this.locality}`,
+          q: isEmpty(this.textSearch) ? '*' : `*${this.textSearch}*`,
+          fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
           sort: orderBy.join(','),
@@ -132,6 +148,11 @@ export default {
       this.specimens = specimenResponse.results
       this.totalCount = specimenResponse.count
     },
+
+    handleTextSearch: debounce(function () {
+      if (this.options.page !== 1) this.options.page = 1
+      else this.handleOptionsChange(this.options)
+    }, 500),
   },
 }
 </script>
