@@ -316,7 +316,12 @@
         </v-container>
       </v-card>
       <v-card class="mt-2">
-        <v-tabs v-model="activeTab" color="deep-orange darken-2" show-arrows>
+        <v-tabs
+          v-model="activeTab"
+          background-color="grey lighten-3"
+          color="deep-orange darken-2"
+          show-arrows
+        >
           <v-tab
             v-for="(item, index) in tabs"
             :key="index"
