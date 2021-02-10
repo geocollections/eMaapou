@@ -342,7 +342,11 @@
               })
             "
           >
-            <nuxt-child keep-alive :locality="drillcore.locality_id" />
+            <nuxt-child
+              :key="index"
+              keep-alive
+              :locality="drillcore.locality_id"
+            />
           </v-tab-item>
         </v-tabs-items>
       </v-card>
