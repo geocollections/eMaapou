@@ -8,16 +8,26 @@
       <div class="d-flex justify-space-between">
         <nuxt-link
           class="text-link"
-          :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
+          :to="
+            localePath({
+              name: 'drillcore_box-id',
+              params: { id: parseInt($route.params.id) - 1 },
+            })
+          "
         >
           {{ $t('common.previous') }}
         </nuxt-link>
 
         <nuxt-link
           class="text-link"
-          :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
+          :to="
+            localePath({
+              name: 'drillcore_box-id',
+              params: { id: parseInt($route.params.id) + 1 },
+            })
+          "
         >
-          {{ $t('common.next') }}
+          {{ $t('common.previous') }}
         </nuxt-link>
       </div>
       <v-card class="my-2">
