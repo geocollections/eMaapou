@@ -243,6 +243,7 @@
             "
           >
             <nuxt-child
+              :key="index"
               :locality="drillcoreBox.drillcore__locality"
               :depth-start="drillcoreBox.depth_start"
               :depth-end="drillcoreBox.depth_end"
