@@ -7,6 +7,7 @@ export default {
     previous: 'Eelmine',
     next: 'Järgmine',
     links: 'Lingid',
+    search: 'Otsing',
   },
   link: {
     sarvAPI: 'Avalik API',

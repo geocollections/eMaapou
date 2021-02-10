@@ -11,6 +11,18 @@
     mobile-breakpoint="0"
     @update:options="handleOptionsChange"
   >
+    <template #top>
+      <v-text-field
+        v-model="textSearch"
+        class="ma-4"
+        append-icon="mdi-magnify"
+        :label="$t('common.search')"
+        single-line
+        hide-details
+        clearable
+        @input="handleTextSearch"
+      ></v-text-field>
+    </template>
     <template #item.rock="{ item }">
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
@@ -46,7 +58,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, debounce } from 'lodash'
 
 export default {
   props: {
@@ -57,8 +69,10 @@ export default {
   },
   data() {
     return {
+      textSearch: '',
       totalCount: 0,
       options: {
+        page: 1,
         itemsPerPage: 25,
         sortBy: ['depth_top', 'depth_base'],
         sortDesc: [false, true],
@@ -112,9 +126,16 @@ export default {
       )
     },
     async handleOptionsChange(options) {
-      let params
+      let params, multiSearch
+      if (!isEmpty(this.textSearch))
+        multiSearch = `value:${this.textSearch};fields:${Object.values(
+          this.sortValues
+        )
+          .map((field) => field())
+          .join()};lookuptype:icontains`
       if (isEmpty(options.sortBy)) {
         params = {
+          multi_search: multiSearch,
           locality: this.locality,
           paginate_by: options.itemsPerPage,
           page: options.page,
@@ -126,6 +147,7 @@ export default {
         })
 
         params = {
+          multi_search: multiSearch,
           locality: this.locality,
           paginate_by: options.itemsPerPage,
           page: options.page,
@@ -139,6 +161,11 @@ export default {
       this.localityDescriptions = localityDescriptionResponse.results
       this.totalCount = localityDescriptionResponse.count
     },
+
+    handleTextSearch: debounce(function () {
+      if (this.options.page !== 1) this.options.page = 1
+      else this.handleOptionsChange(this.options)
+    }, 500),
   },
 }
 </script>

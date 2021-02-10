@@ -7,6 +7,7 @@ export default {
     previous: 'Previous',
     next: 'Next',
     links: 'Links',
+    search: 'Search',
   },
   link: {
     sarvAPI: 'Public API',
