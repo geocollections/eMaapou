@@ -7,12 +7,20 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="openSample(item.id)">
+      <a
+        class="text-link"
+        @click="openGeoDetail({ table: 'sample', id: item.id })"
+      >
         {{ item.id }}
       </a>
     </template>
     <template #item.stratigraphy="{ item }">
-      <a class="text-link" @click="openStratigraphy(item.stratigraphy_id)">
+      <a
+        class="text-link"
+        @click="
+          openGeoDetail({ table: 'stratigraphy', id: item.stratigraphy_id })
+        "
+      >
         {{
           $translate({
             et: item.stratigraphy,
@@ -21,15 +29,20 @@
         }}
       </a>
     </template>
+    <template #item.date_collected="{ item }">
+      {{ item.date_collected ? new Date(item.date_collected).toISOString().split('T')[0] : null }}
+    </template>
   </table-wrapper>
 </template>
 
 <script>
 import { isEmpty } from 'lodash'
+import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
+  mixins: [global],
   props: {
     locality: {
       type: Number,
@@ -68,27 +81,13 @@ export default {
     }
   },
   methods: {
-    openStratigraphy(stratigraphy) {
-      window.open(
-        `https://geocollections.info/stratigraphy/${stratigraphy}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
-    openSample(sample) {
-      window.open(
-        `https://geocollections.info/sample/${sample}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
     async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
+          q: isEmpty(options.search) ? '*' : `${options.search}`,
           fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
@@ -100,7 +99,7 @@ export default {
         })
 
         params = {
-          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
+          q: isEmpty(options.search) ? '*' : `${options.search}`,
           fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,

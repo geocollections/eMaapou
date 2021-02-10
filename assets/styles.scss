@@ -107,3 +107,9 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 .cursor-pointer:hover {
   cursor: pointer;
 }
+
+th {
+  &.sortable {
+    white-space: nowrap;
+  }
+}

@@ -7,22 +7,28 @@
     @update="handleUpdate"
   >
     <template #item.description="{ item }">
-      <a class="text-link" @click="openAttachment(item.id)">{{
-        $translate({
-          et: item.attachment__description,
-          en: item.attachment__description_en,
-        })
-      }}</a>
+      <a
+        class="text-link"
+        @click="openGeoDetail({ table: 'attachment', id: item.id })"
+        >{{
+          $translate({
+            et: item.attachment__description,
+            en: item.attachment__description_en,
+          })
+        }}</a
+      >
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import { isEmpty } from 'lodash'
+import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
+  mixins: [global],
   props: {
     locality: {
       type: Number,
@@ -54,13 +60,6 @@ export default {
     }
   },
   methods: {
-    openAttachment(attachment) {
-      window.open(
-        `https://geocollections.info/file/${attachment}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
     async handleUpdate(options) {
       let params, multiSearch
       if (!isEmpty(options.search))

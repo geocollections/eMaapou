@@ -10,7 +10,6 @@
           class="text-link"
           :to="
             localePath({
-              name: 'drillcore_box-id',
               params: { id: parseInt($route.params.id) - 1 },
             })
           "
@@ -22,7 +21,6 @@
           class="text-link"
           :to="
             localePath({
-              name: 'drillcore_box-id',
               params: { id: parseInt($route.params.id) + 1 },
             })
           "
@@ -152,7 +150,10 @@
                     <a
                       class="text-link underline"
                       @click="
-                        openStratigraphy(drillcoreBox.stratigraphy_top_id)
+                        openGeoDetail({
+                          table: 'stratigraphy',
+                          id: drillcoreBox.stratigraphy_top_id,
+                        })
                       "
                     >
                       {{
@@ -186,7 +187,10 @@
                     <a
                       class="text-link underline"
                       @click="
-                        openStratigraphy(drillcoreBox.stratigraphy_base_id)
+                        openGeoDetail({
+                          table: 'stratigraphy',
+                          id: drillcoreBox.stratigraphy_base_id,
+                        })
                       "
                     >
                       {{
@@ -234,14 +238,16 @@
 
 <script>
 import { isNull } from 'lodash'
+import global from '@/mixins/global'
 
 export default {
+  mixins: [global],
   async asyncData({ $axios, params }) {
     const drillcoreBoxResponse = await $axios.$get(
       `https://api.geocollections.info/drillcore_box/${params.id}`
     )
 
-    const drillcoreBox = drillcoreBoxResponse.results[0]
+    const drillcoreBox = drillcoreBoxResponse?.results?.[0]
     return {
       drillcoreBox,
       tabs: [
@@ -294,13 +300,6 @@ export default {
           'ImageWindow'
         )
       }
-    },
-    openStratigraphy(id) {
-      window.open(
-        `https://geocollections.info/stratigraphy/${id}`,
-        '_blank',
-        'height=800, width=800'
-      )
     },
   },
 }
