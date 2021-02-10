@@ -2,9 +2,11 @@
   <div>
     <v-tabs
       v-model="activeTab"
+      class="tabs"
       background-color="grey lighten-3"
       color="deep-orange darken-2"
       show-arrows
+      active-class="active"
     >
       <v-tab
         v-for="(item, index) in items"
@@ -58,3 +60,14 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.tabs {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.active {
+  font-weight: bold;
+}
+</style>
