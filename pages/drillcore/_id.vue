@@ -316,44 +316,7 @@
         </v-container>
       </v-card>
       <v-card class="mt-2">
-        <v-tabs
-          v-model="activeTab"
-          background-color="grey lighten-3"
-          color="deep-orange darken-2"
-          show-arrows
-        >
-          <v-tab
-            v-for="(item, index) in tabs"
-            :key="index"
-            nuxt
-            exact
-            :to="
-              localePath({
-                name: item.routeName,
-                params: { id: $route.params.id },
-              })
-            "
-            >{{ $t(item.title) }}</v-tab
-          >
-        </v-tabs>
-        <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
-          <v-tab-item
-            v-for="(item, index) in tabs"
-            :key="index"
-            :value="
-              localePath({
-                name: item.routeName,
-                params: { id: $route.params.id },
-              })
-            "
-          >
-            <nuxt-child
-              :key="index"
-              keep-alive
-              :locality="drillcore.locality_id"
-            />
-          </v-tab-item>
-        </v-tabs-items>
+        <tabs :items="tabs" />
       </v-card>
     </v-col>
   </v-row>
@@ -361,45 +324,69 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
+import Tabs from '~/components/Tabs.vue'
 
 export default {
+  components: { Tabs },
   async asyncData({ $axios, params }) {
     const drillcoreResponse = await $axios.$get(
       `https://api.geocollections.info/drillcore/${params.id}`
     )
 
     const drillcore = drillcoreResponse.results[0]
-    return { drillcore }
-  },
-  data() {
+
     return {
-      activeTab: 1,
+      drillcore,
       tabs: [
         {
           routeName: 'drillcore-id',
           title: 'drillcore.drillcoreBoxesTitle',
+          props: {
+            locality: drillcore.locality_id,
+          },
         },
         {
           routeName: 'drillcore-id-locality_description',
           title: 'drillcore.localityDescriptions',
+          props: {
+            locality: drillcore.locality_id,
+          },
         },
         {
           routeName: 'drillcore-id-locality_reference',
           title: 'drillcore.localityReferences',
+          props: {
+            locality: drillcore.locality_id,
+          },
         },
         {
           routeName: 'drillcore-id-attachments',
           title: 'drillcore.attachments',
+          props: {
+            locality: drillcore.locality_id,
+          },
         },
         {
           routeName: 'drillcore-id-samples',
           title: 'drillcore.samples',
+          props: {
+            locality: drillcore.locality_id,
+          },
         },
         {
           routeName: 'drillcore-id-analyses',
           title: 'drillcore.analyses',
+          props: {
+            locality: drillcore.locality_id,
+          },
         },
-        { routeName: 'drillcore-id-specimens', title: 'drillcore.specimens' },
+        {
+          routeName: 'drillcore-id-specimens',
+          title: 'drillcore.specimens',
+          props: {
+            locality: drillcore.locality_id,
+          },
+        },
       ],
     }
   },

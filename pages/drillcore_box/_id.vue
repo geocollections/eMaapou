@@ -216,46 +216,7 @@
       </v-card>
 
       <v-card class="mt-2">
-        <v-tabs
-          v-model="activeTab"
-          background-color="grey lighten-3"
-          color="deep-orange darken-2"
-          show-arrows
-        >
-          <v-tab
-            v-for="(item, index) in tabs"
-            :key="index"
-            nuxt
-            exact
-            :to="
-              localePath({
-                name: item.routeName,
-                params: { id: $route.params.id },
-              })
-            "
-            >{{ $t(item.title) }}</v-tab
-          >
-        </v-tabs>
-        <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
-          <v-tab-item
-            v-for="(item, index) in tabs"
-            :key="index"
-            :value="
-              localePath({
-                name: item.routeName,
-                params: { id: $route.params.id },
-              })
-            "
-          >
-            <nuxt-child
-              :key="index"
-              :locality="drillcoreBox.drillcore__locality"
-              :depth-start="drillcoreBox.depth_start"
-              :depth-end="drillcoreBox.depth_end"
-              keep-alive
-            />
-          </v-tab-item>
-        </v-tabs-items>
+        <tabs :items="tabs" />
       </v-card>
     </v-col>
   </v-row>
@@ -271,23 +232,35 @@ export default {
     )
 
     const drillcoreBox = drillcoreBoxResponse.results[0]
-    return { drillcoreBox }
-  },
-  data() {
     return {
-      activeTab: 0,
+      drillcoreBox,
       tabs: [
         {
           routeName: 'drillcore_box-id',
           title: 'drillcore.samples',
+          props: {
+            locality: drillcoreBox.drillcore__locality,
+            depthStart: drillcoreBox.depth_start,
+            depthEnd: drillcoreBox.depth_end,
+          },
         },
         {
           routeName: 'drillcore_box-id-analyses',
           title: 'drillcore.analyses',
+          props: {
+            locality: drillcoreBox.drillcore__locality,
+            depthStart: drillcoreBox.depth_start,
+            depthEnd: drillcoreBox.depth_end,
+          },
         },
         {
           routeName: 'drillcore_box-id-specimens',
           title: 'drillcore.specimens',
+          props: {
+            locality: drillcoreBox.drillcore__locality,
+            depthStart: drillcoreBox.depth_start,
+            depthEnd: drillcoreBox.depth_end,
+          },
         },
       ],
     }
@@ -312,17 +285,12 @@ export default {
         )
       }
     },
-
     openStratigraphy(id) {
       window.open(
         `https://geocollections.info/stratigraphy/${id}`,
         '_blank',
         'height=800, width=800'
       )
-    },
-
-    handleSwipeBetweenTabs(pathAsString) {
-      this.$router.push(pathAsString)
     },
   },
 }
