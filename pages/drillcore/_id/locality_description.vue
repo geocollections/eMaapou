@@ -125,6 +125,13 @@ export default {
         'height=800, width=800'
       )
     },
+    openReference(reference) {
+      window.open(
+        `https://geoloogia.info/reference/${reference}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
     async handleOptionsChange(options) {
       let params, multiSearch
       if (!isEmpty(this.textSearch))
