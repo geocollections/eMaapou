@@ -215,7 +215,7 @@
         </v-card-text>
       </v-card>
 
-      <v-card class="mt-2">
+      <v-card class="mt-2 pb-2">
         <tabs :items="tabs" />
       </v-card>
     </v-col>
