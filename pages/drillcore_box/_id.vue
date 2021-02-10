@@ -8,14 +8,22 @@
       <div class="d-flex justify-space-between">
         <nuxt-link
           class="text-link"
-          :to="`/drillcore_box/${parseInt($route.params.id) - 1}`"
+          :to="
+            localePath({
+              params: { id: parseInt($route.params.id) - 1 },
+            })
+          "
         >
           {{ $t('common.previous') }}
         </nuxt-link>
 
         <nuxt-link
           class="text-link"
-          :to="`/drillcore_box/${parseInt($route.params.id) + 1}`"
+          :to="
+            localePath({
+              params: { id: parseInt($route.params.id) + 1 },
+            })
+          "
         >
           {{ $t('common.next') }}
         </nuxt-link>
@@ -239,7 +247,7 @@ export default {
       `https://api.geocollections.info/drillcore_box/${params.id}`
     )
 
-    const drillcoreBox = drillcoreBoxResponse.results[0]
+    const drillcoreBox = drillcoreBoxResponse?.results?.[0]
     return {
       drillcoreBox,
       tabs: [
