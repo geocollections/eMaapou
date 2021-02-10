@@ -10,7 +10,10 @@
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <a class="text-link" @click="openStratigraphy(item.stratigraphy)">
+      <a
+        class="text-link"
+        @click="openGeoDetail({ table: 'stratigraphy', id: item.stratigraphy })"
+      >
         {{
           $translate({
             et: item.stratigraphy__stratigraphy,
@@ -23,7 +26,7 @@
       <a
         v-if="item.reference"
         :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
-        @click="openReference(item.reference)"
+        @click="openGeoDetail({ table: 'reference', id: item.reference })"
       >
         {{ item.reference__reference }}
       </a>
@@ -42,10 +45,12 @@
 
 <script>
 import { isEmpty } from 'lodash'
+import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
+  mixins: [global],
   props: {
     locality: {
       type: Number,
@@ -100,20 +105,6 @@ export default {
     }
   },
   methods: {
-    openStratigraphy(stratigraphy) {
-      window.open(
-        `https://geocollections.info/stratigraphy/${stratigraphy}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
-    openReference(reference) {
-      window.open(
-        `https://geoloogia.info/reference/${reference}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
     async handleUpdate(options) {
       let params, multiSearch
       if (!isEmpty(options.search))

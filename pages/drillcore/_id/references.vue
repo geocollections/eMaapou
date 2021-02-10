@@ -7,19 +7,25 @@
     @update="handleUpdate"
   >
     <template #item.reference="{ item }">
-      <a class="text-link" @click="openReference(item.reference)">{{
-        item.reference__reference
-      }}</a>
+      <a
+        class="text-link"
+        @click="
+          openGeoDetail({ table: 'reference', id: item.reference__reference })
+        "
+        >{{ item.reference__reference }}</a
+      >
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import { isEmpty } from 'lodash'
+import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
+  mixins: [global],
   props: {
     locality: {
       type: Number,
@@ -52,13 +58,6 @@ export default {
     }
   },
   methods: {
-    openReference(reference) {
-      window.open(
-        `https://geoloogia.info/reference/${reference}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
     async handleUpdate(options) {
       let params, multiSearch
       if (!isEmpty(options.search))

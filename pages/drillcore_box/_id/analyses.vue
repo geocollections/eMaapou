@@ -7,12 +7,18 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="openAnalysis(item.id)">
+      <a
+        class="text-link"
+        @click="openGeoDetail({ table: 'analysis', id: item.id })"
+      >
         {{ item.id }}
       </a>
     </template>
     <template #item.sample_number="{ item }">
-      <a class="text-link" @click="openSample(item.sample_id)">
+      <a
+        class="text-link"
+        @click="openGeoDetail({ table: 'sample', id: item.sample_id })"
+      >
         {{ item.sample_number }}
       </a>
     </template>
@@ -46,9 +52,11 @@
 
 <script>
 import { isEmpty } from 'lodash'
+import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 export default {
   components: { TableWrapper },
+  mixins: [global],
   props: {
     locality: {
       type: Number,
@@ -101,20 +109,6 @@ export default {
     }
   },
   methods: {
-    openAnalysis(analysis) {
-      window.open(
-        `https://geocollections.info/analysis/${analysis}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
-    openSample(sample) {
-      window.open(
-        `https://geocollections.info/sample/${sample}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
     async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 
