@@ -39,13 +39,7 @@
       }}
     </template>
     <template #item.date="{ item }">
-      {{
-        item.date
-          ? new Date(item.date).toLocaleString($i18n.locale, {
-              dateStyle: 'medium',
-            })
-          : null
-      }}
+      {{ item.date ? new Date(item.date).toISOString().split('T')[0] : null }}
     </template>
   </table-wrapper>
 </template>
