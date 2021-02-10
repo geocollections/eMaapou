@@ -1,28 +1,11 @@
 <template>
-  <v-data-table
-    dense
-    calculate-widths
-    multi-sort
-    :headers="headers"
+  <table-wrapper
     :items="attachments"
-    :options.sync="options"
-    :server-items-length="totalCount"
-    :footer-props="footerProps"
-    mobile-breakpoint="0"
-    @update:options="handleOptionsChange"
+    :headers="headers"
+    :count="count"
+    :init-options="options"
+    @update="handleUpdate"
   >
-    <template #top>
-      <v-text-field
-        v-model="textSearch"
-        class="ma-4"
-        append-icon="mdi-magnify"
-        :label="$t('common.search')"
-        single-line
-        hide-details
-        clearable
-        @input="handleTextSearch"
-      ></v-text-field>
-    </template>
     <template #item.description="{ item }">
       <a class="text-link" @click="openAttachment(item.id)">{{
         $translate({
@@ -31,13 +14,15 @@
         })
       }}</a>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
-import { isEmpty, debounce } from 'lodash'
+import { isEmpty } from 'lodash'
+import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
+  components: { TableWrapper },
   props: {
     locality: {
       type: Number,
@@ -46,15 +31,11 @@ export default {
   },
   data() {
     return {
-      textSearch: '',
       attachments: [],
-      totalCount: 0,
+      count: 0,
       options: {
         page: 1,
         itemsPerPage: 25,
-      },
-      footerProps: {
-        'items-per-page-options': [10, 25, 50, 100],
       },
       headers: [
         { text: this.$t('attachment.description'), value: 'description' },
@@ -80,10 +61,10 @@ export default {
         'height=800, width=800'
       )
     },
-    async handleOptionsChange(options) {
+    async handleUpdate(options) {
       let params, multiSearch
-      if (!isEmpty(this.textSearch))
-        multiSearch = `value:${this.textSearch};fields:${Object.values(
+      if (!isEmpty(options.search))
+        multiSearch = `value:${options.search};fields:${Object.values(
           this.sortValues
         )
           .map((field) => field())
@@ -113,13 +94,8 @@ export default {
         params,
       })
       this.attachments = attachmentResponse.results
-      this.totalCount = attachmentResponse.count
+      this.count = attachmentResponse.count
     },
-
-    handleTextSearch: debounce(function () {
-      if (this.options.page !== 1) this.options.page = 1
-      else this.handleOptionsChange(this.options)
-    }, 500),
   },
 }
 </script>

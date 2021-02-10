@@ -1,28 +1,11 @@
 <template>
-  <v-data-table
-    dense
-    calculate-widths
-    multi-sort
-    :headers="headers"
+  <table-wrapper
     :items="specimens"
-    :options.sync="options"
-    :server-items-length="totalCount"
-    :footer-props="footerProps"
-    mobile-breakpoint="0"
-    @update:options="handleOptionsChange"
+    :headers="headers"
+    :count="count"
+    :init-options="options"
+    @update="handleUpdate"
   >
-    <template #top>
-      <v-text-field
-        v-model="textSearch"
-        class="ma-4"
-        append-icon="mdi-magnify"
-        :label="$t('common.search')"
-        single-line
-        hide-details
-        clearable
-        @input="handleTextSearch"
-      ></v-text-field>
-    </template>
     <template #item.id="{ item }">
       <a class="text-link" @click="openSpecimen(item.id)">
         {{ item.id }}
@@ -51,13 +34,15 @@
         {{ item.taxon }}
       </a>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
-import { isEmpty, debounce } from 'lodash'
+import { isEmpty } from 'lodash'
+import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
+  components: { TableWrapper },
   props: {
     locality: {
       type: Number,
@@ -66,18 +51,15 @@ export default {
   },
   data() {
     return {
-      textSearch: '',
       specimens: [],
-      totalCount: 0,
+      count: 0,
       options: {
         page: 1,
         itemsPerPage: 25,
         sortBy: [],
         sortDesc: [],
       },
-      footerProps: {
-        'items-per-page-options': [10, 25, 50, 100],
-      },
+
       headers: [
         { text: this.$t('specimen.id'), value: 'id' },
         { text: this.$t('specimen.number'), value: 'specimen_number' },
@@ -117,13 +99,13 @@ export default {
         'height=800, width=800'
       )
     },
-    async handleOptionsChange(options) {
+    async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          q: isEmpty(this.textSearch) ? '*' : `*${this.textSearch}*`,
+          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
           fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
@@ -135,7 +117,7 @@ export default {
         })
 
         params = {
-          q: isEmpty(this.textSearch) ? '*' : `*${this.textSearch}*`,
+          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
           fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
@@ -146,13 +128,8 @@ export default {
         params,
       })
       this.specimens = specimenResponse.results
-      this.totalCount = specimenResponse.count
+      this.count = specimenResponse.count
     },
-
-    handleTextSearch: debounce(function () {
-      if (this.options.page !== 1) this.options.page = 1
-      else this.handleOptionsChange(this.options)
-    }, 500),
   },
 }
 </script>

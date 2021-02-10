@@ -346,14 +346,14 @@ export default {
           },
         },
         {
-          routeName: 'drillcore-id-locality_description',
+          routeName: 'drillcore-id-descriptions',
           title: 'drillcore.localityDescriptions',
           props: {
             locality: drillcore.locality_id,
           },
         },
         {
-          routeName: 'drillcore-id-locality_reference',
+          routeName: 'drillcore-id-references',
           title: 'drillcore.localityReferences',
           props: {
             locality: drillcore.locality_id,

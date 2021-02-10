@@ -1,28 +1,11 @@
 <template>
-  <v-data-table
-    dense
-    calculate-widths
-    multi-sort
+  <table-wrapper
+    :items="descriptions"
     :headers="headers"
-    :items="localityDescriptions"
-    :options.sync="options"
-    :server-items-length="totalCount"
-    :footer-props="footerProps"
-    mobile-breakpoint="0"
-    @update:options="handleOptionsChange"
+    :count="count"
+    :init-options="options"
+    @update="handleUpdate"
   >
-    <template #top>
-      <v-text-field
-        v-model="textSearch"
-        class="ma-4"
-        append-icon="mdi-magnify"
-        :label="$t('common.search')"
-        single-line
-        hide-details
-        clearable
-        @input="handleTextSearch"
-      ></v-text-field>
-    </template>
     <template #item.rock="{ item }">
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
@@ -54,13 +37,15 @@
         {{ item.author_free }}
       </div>
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
-import { isEmpty, debounce } from 'lodash'
+import { isEmpty } from 'lodash'
+import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
+  components: { TableWrapper },
   props: {
     locality: {
       type: Number,
@@ -69,16 +54,13 @@ export default {
   },
   data() {
     return {
-      textSearch: '',
-      totalCount: 0,
+      descriptions: [],
+      count: 0,
       options: {
         page: 1,
         itemsPerPage: 25,
         sortBy: ['depth_top', 'depth_base'],
         sortDesc: [false, true],
-      },
-      footerProps: {
-        'items-per-page-options': [10, 25, 50, 100],
       },
       headers: [
         { text: this.$t('localityDescription.depthTop'), value: 'depth_top' },
@@ -115,7 +97,6 @@ export default {
         depth_base: () => 'depth_base',
         author: () => 'reference__reference,agent__agent,author_free',
       },
-      localityDescriptions: [],
     }
   },
   methods: {
@@ -133,10 +114,10 @@ export default {
         'height=800, width=800'
       )
     },
-    async handleOptionsChange(options) {
+    async handleUpdate(options) {
       let params, multiSearch
-      if (!isEmpty(this.textSearch))
-        multiSearch = `value:${this.textSearch};fields:${Object.values(
+      if (!isEmpty(options.search))
+        multiSearch = `value:${options.search};fields:${Object.values(
           this.sortValues
         )
           .map((field) => field())
@@ -162,18 +143,13 @@ export default {
           order_by: orderBy.join(','),
         }
       }
-      const localityDescriptionResponse = await this.$axios.$get(
+      const descriptionResponse = await this.$axios.$get(
         'locality_description',
         { params }
       )
-      this.localityDescriptions = localityDescriptionResponse.results
-      this.totalCount = localityDescriptionResponse.count
+      this.descriptions = descriptionResponse.results
+      this.count = descriptionResponse.count
     },
-
-    handleTextSearch: debounce(function () {
-      if (this.options.page !== 1) this.options.page = 1
-      else this.handleOptionsChange(this.options)
-    }, 500),
   },
 }
 </script>

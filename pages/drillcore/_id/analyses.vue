@@ -1,28 +1,11 @@
 <template>
-  <v-data-table
-    dense
-    calculate-widths
-    multi-sort
+  <table-wrapper
     :headers="headers"
     :items="analyses"
-    :options.sync="options"
-    :server-items-length="totalCount"
-    :footer-props="footerProps"
-    mobile-breakpoint="0"
-    @update:options="handleOptionsChange"
+    :init-options="options"
+    :count="count"
+    @update="handleUpdate"
   >
-    <template #top>
-      <v-text-field
-        v-model="textSearch"
-        class="ma-4"
-        append-icon="mdi-magnify"
-        :label="$t('common.search')"
-        single-line
-        hide-details
-        clearable
-        @input="handleTextSearch"
-      ></v-text-field>
-    </template>
     <template #item.id="{ item }">
       <a class="text-link" @click="openAnalysis(item.id)">
         {{ item.id }}
@@ -58,12 +41,14 @@
           : null
       }}
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
-import { isEmpty, debounce } from 'lodash'
+import { isEmpty } from 'lodash'
+import TableWrapper from '~/components/TableWrapper.vue'
 export default {
+  components: { TableWrapper },
   props: {
     locality: {
       type: Number,
@@ -72,17 +57,13 @@ export default {
   },
   data() {
     return {
-      textSearch: '',
       analyses: [],
-      totalCount: 0,
+      count: 0,
       options: {
         page: 1,
         itemsPerPage: 25,
         sortBy: [],
         sortDesc: [],
-      },
-      footerProps: {
-        'items-per-page-options': [10, 25, 50, 100],
       },
       headers: [
         { text: this.$t('analysis.id'), value: 'id' },
@@ -126,13 +107,13 @@ export default {
         'height=800, width=800'
       )
     },
-    async handleOptionsChange(options) {
+    async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          q: isEmpty(this.textSearch) ? '*' : `*${this.textSearch}*`,
+          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
           fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
@@ -144,7 +125,7 @@ export default {
         })
 
         params = {
-          q: isEmpty(this.textSearch) ? '*' : `*${this.textSearch}*`,
+          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
           fq: `locality_id:${this.locality}`,
           rows: options.itemsPerPage,
           start,
@@ -155,13 +136,8 @@ export default {
         params,
       })
       this.analyses = analysisResponse.results
-      this.totalCount = analysisResponse.count
+      this.count = analysisResponse.count
     },
-
-    handleTextSearch: debounce(function () {
-      if (this.options.page !== 1) this.options.page = 1
-      else this.handleOptionsChange(this.options)
-    }, 500),
   },
 }
 </script>
