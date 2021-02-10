@@ -3,32 +3,25 @@
     <v-row>
       <v-col v-for="(box, i) in boxes" :key="box.id" cols="12" class="pa-0">
         <v-divider v-if="i !== 0" />
-        <v-hover v-slot="{ hover }" name="asd">
-          <!-- Opens box as new tab -->
-          <!-- <v-card
-                  nuxt
-                  :ripple="false"
-                  target="_blank"
-                  :href="`/drillcore_box/${box.id}`"
-                  class="mx-4 my-2"
-                  :elevation="hover ? 10 : 2"
-                > -->
+        <v-hover v-slot="{ hover }">
           <v-card
             flat
             tile
             :ripple="false"
-            target="_blank"
-            :class="{ 'on-hover': hover }"
             @click="openDrillcoreBox(box.drillcore_box)"
           >
-            <v-card-text>
+            <v-card-text class="drillcore-box__card">
               <v-row align="start">
                 <v-col cols="12" sm="8" align-self="center">
                   <!-- TODO: Add placeholder, for case when box does not have a picture -->
                   <v-img
-                    class="rounded"
+                    class="rounded mx-auto transition-swing"
+                    :class="{
+                      'elevation-8': hover,
+                      'elevation-4': !hover,
+                    }"
                     contain
-                    max-height="400"
+                    max-width="1000"
                     :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
                     :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"
                   >
@@ -93,8 +86,13 @@
                           </td>
                           <td v-else>
                             <a
-                              class="text-link underline"
-                              :href="`https://geocollections.info/stratigraphy/${box.drillcore_box__stratigraphy_top}`"
+                              class="text-link"
+                              @click.stop="
+                                openGeoDetail({
+                                  table: 'stratigraphy',
+                                  id: box.drillcore_box__stratigraphy_top,
+                                })
+                              "
                             >
                               {{
                                 $translate({
@@ -119,8 +117,13 @@
                           </td>
                           <td v-else>
                             <a
-                              class="text-link underline"
-                              :href="`https://geocollections.info/stratigraphy/${box.drillcore_box__stratigraphy_base}`"
+                              class="text-link"
+                              @click.stop="
+                                openGeoDetail({
+                                  table: 'stratigraphy',
+                                  id: box.drillcore_box__stratigraphy_base,
+                                })
+                              "
                             >
                               {{
                                 $translate({
@@ -151,7 +154,9 @@
 
 <script>
 import { isNull } from 'lodash'
+import global from '@/mixins/global'
 export default {
+  mixins: [global],
   data() {
     return {
       page: 1,

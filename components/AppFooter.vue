@@ -33,7 +33,7 @@
             v-for="(item, index) in textLinks"
             :key="index"
             :href="item.href"
-            class="text-link underline"
+            class="text-link"
             target="FooterLink"
             >{{ item.text }}</a
           >

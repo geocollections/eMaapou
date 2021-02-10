@@ -7,6 +7,7 @@ export default {
     previous: 'Previous',
     next: 'Next',
     links: 'Links',
+    search: 'Search',
   },
   link: {
     sarvAPI: 'Public API',
@@ -46,6 +47,9 @@ export default {
     localityDescriptions: 'Descriptions',
     localityReferences: 'References',
     attachments: 'Attachments',
+    samples: 'Samples',
+    analyses: 'Analyses',
+    specimens: 'Specimens',
   },
   drillcoreBox: {
     id: 'ID',
@@ -62,10 +66,11 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',
-    depthBase: 'Depth base (m)',
-    depthTop: 'Depth top (m)',
+    depthBase: 'To (m)',
+    depthTop: 'From (m)',
     rock: 'Rock',
     description: 'Description',
+    author: 'Author',
   },
   localityReference: {
     reference: 'Reference',
@@ -76,6 +81,35 @@ export default {
   attachment: {
     author: 'Author',
     description: 'Description',
+  },
+  samples: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Depth',
+    depthInterval: 'Depth interval',
+    stratigraphy: 'Stratigraphy',
+    collector: 'Collector',
+    dateCollected: 'Date collected',
+  },
+  analysis: {
+    id: 'ID',
+    sampleNumber: 'Sample number',
+    depth: 'Depth',
+    depthInterval: 'Depth interval',
+    method: 'Method',
+    methodDetails: 'Method details',
+    analysedBy: 'Person/Institution',
+    date: 'Date',
+  },
+  specimen: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Depth',
+    depthInterval: 'Depth to',
+    fossilGroup: 'Fossil group',
+    kind: 'Type',
+    stratigraphy: 'Stratigraphy',
+    taxon: 'Taxon',
   },
   footerPreliminary: '2021 GRIS: Geology portal (preview version).',
   footer:

@@ -1,27 +1,31 @@
 <template>
-  <v-data-table
-    dense
-    calculate-widths
-    multi-sort
+  <table-wrapper
+    :items="references"
     :headers="headers"
-    :items="localityReferences"
-    :options.sync="options"
-    :server-items-length="totalCount"
-    :footer-props="footerProps"
-    @update:options="handleOptionsChange"
+    :count="count"
+    :init-options="options"
+    @update="handleUpdate"
   >
     <template #item.reference="{ item }">
-      <a class="text-link underline" @click="openReference(item.reference)">{{
-        item.reference__reference
-      }}</a>
+      <a
+        class="text-link"
+        @click="
+          openGeoDetail({ table: 'reference', id: item.reference__reference })
+        "
+        >{{ item.reference__reference }}</a
+      >
     </template>
-  </v-data-table>
+  </table-wrapper>
 </template>
 
 <script>
 import { isEmpty } from 'lodash'
+import global from '@/mixins/global'
+import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
+  components: { TableWrapper },
+  mixins: [global],
   props: {
     locality: {
       type: Number,
@@ -30,10 +34,11 @@ export default {
   },
   data() {
     return {
-      totalCount: 0,
-      options: { itemsPerPage: 25 },
-      footerProps: {
-        'items-per-page-options': [10, 25, 50, 100],
+      references: [],
+      count: 0,
+      options: {
+        page: 1,
+        itemsPerPage: 25,
       },
       headers: [
         { text: this.$t('localityReference.reference'), value: 'reference' },
@@ -50,21 +55,20 @@ export default {
         pages: () => 'pages',
         remarks: () => 'remarks',
       },
-      localityReferences: [],
     }
   },
   methods: {
-    openReference(reference) {
-      window.open(
-        `https://geoloogia.info/reference/${reference}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
-    async handleOptionsChange(options) {
-      let params
+    async handleUpdate(options) {
+      let params, multiSearch
+      if (!isEmpty(options.search))
+        multiSearch = `value:${options.search};fields:${Object.values(
+          this.sortValues
+        )
+          .map((field) => field())
+          .join()};lookuptype:icontains`
       if (isEmpty(options.sortBy)) {
         params = {
+          multi_search: multiSearch,
           locality: this.locality,
           paginate_by: options.itemsPerPage,
           page: options.page,
@@ -76,18 +80,18 @@ export default {
         })
 
         params = {
+          multi_search: multiSearch,
           locality: this.locality,
           paginate_by: options.itemsPerPage,
           page: options.page,
           order_by: orderBy.join(','),
         }
       }
-      const localityReferenceResponse = await this.$axios.$get(
-        'locality_reference',
-        { params }
-      )
-      this.localityReferences = localityReferenceResponse.results
-      this.totalCount = localityReferenceResponse.count
+      const referenceResponse = await this.$axios.$get('locality_reference', {
+        params,
+      })
+      this.references = referenceResponse.results
+      this.count = referenceResponse.count
     },
   },
 }

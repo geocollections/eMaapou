@@ -7,6 +7,7 @@ export default {
     previous: 'Eelmine',
     next: 'Järgmine',
     links: 'Lingid',
+    search: 'Otsing',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -46,6 +47,9 @@ export default {
     localityDescriptions: 'Kirjeldused',
     localityReferences: 'Kirjandus',
     attachments: 'Failid',
+    samples: 'Proovid',
+    analyses: 'Analüüsid',
+    specimens: 'Eksemplarid',
   },
   drillcoreBox: {
     id: 'ID',
@@ -62,10 +66,11 @@ export default {
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
-    depthBase: 'Süg. al. (m)',
-    depthTop: 'Süg. ül. (m)',
+    depthBase: 'Kuni (m)',
+    depthTop: 'Alates (m)',
     rock: 'Kivi',
     description: 'Kirjeldus',
+    author: 'Autor',
   },
   localityReference: {
     reference: 'Kirje',
@@ -76,6 +81,35 @@ export default {
   attachment: {
     author: 'Autor',
     description: 'Kirjeldus',
+  },
+  samples: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Sügavus',
+    depthInterval: 'Sügavuse intervall',
+    stratigraphy: 'Stratigraafia',
+    collector: 'Koguja',
+    dateCollected: 'Kogumise aeg',
+  },
+  analysis: {
+    id: 'ID',
+    sampleNumber: 'Proovi number',
+    depth: 'Sügavus',
+    depthInterval: 'Sügavus kuni',
+    method: 'Metoodika',
+    methodDetails: 'Metoodika detailid',
+    analysedBy: 'Isik/Asutus',
+    date: 'Date',
+  },
+  specimen: {
+    id: 'ID',
+    number: 'Number',
+    depth: 'Sügavus',
+    depthInterval: 'Sügavus intervall',
+    fossilGroup: 'Fossiili grupp',
+    kind: 'Tüüp',
+    stratigraphy: 'Stratigraafia',
+    taxon: 'Takson',
   },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
