@@ -108,7 +108,7 @@ export default {
       let params
       if (isEmpty(options.sortBy)) {
         params = {
-          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
+          q: isEmpty(options.search) ? '*' : `${options.search}`,
           fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           rows: options.itemsPerPage,
           start,
@@ -120,7 +120,7 @@ export default {
         })
 
         params = {
-          q: isEmpty(options.search) ? '*' : `*${options.search}*`,
+          q: isEmpty(options.search) ? '*' : `${options.search}`,
           fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           rows: options.itemsPerPage,
           start,
