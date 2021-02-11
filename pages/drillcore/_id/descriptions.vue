@@ -9,6 +9,13 @@
     <template #item.rock="{ item }">
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
+    <template #item.thickness="{ item }">
+      {{
+        !item.depth_base || !item.depth_top
+          ? null
+          : round(item.depth_base - item.depth_top, 3)
+      }}
+    </template>
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
@@ -44,7 +51,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
@@ -70,6 +77,13 @@ export default {
       headers: [
         { text: this.$t('localityDescription.depthTop'), value: 'depth_top' },
         { text: this.$t('localityDescription.depthBase'), value: 'depth_base' },
+        {
+          text: this.$t('localityDescription.thickness'),
+          value: 'thickness',
+          sortable: false,
+          class: 'static-cell-header',
+          cellClass: 'static-cell',
+        },
         {
           text: this.$t('localityDescription.rock'),
           value: 'rock',
@@ -106,6 +120,7 @@ export default {
     }
   },
   methods: {
+    round,
     async handleUpdate(options) {
       let params, multiSearch
       if (!isEmpty(options.search))

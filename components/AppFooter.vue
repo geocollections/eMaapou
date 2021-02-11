@@ -52,8 +52,8 @@ export default {
         {
           href: 'https://geocollections.info',
           src: require('~/assets/logos/sarv_logo.svg'),
-          title: 'footerLinks.kik',
-          alt: 'footerLinks.kik',
+          title: 'footerLinks.sarv',
+          alt: 'footerLinks.sarv',
         },
         {
           href: 'https://natarc.ut.ee',
@@ -91,7 +91,7 @@ export default {
         },
         {
           href: 'https://github.com/geocollections/GRIS',
-          text: 'GitHub',
+          text: 'GitHubis',
         },
       ],
     }
@@ -108,7 +108,7 @@ export default {
 }
 
 .footer-logo {
-  height: 60px;
+  height: 50px;
   width: auto;
   /*padding: 0 10px;*/
 }

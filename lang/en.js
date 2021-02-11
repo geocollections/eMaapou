@@ -32,8 +32,8 @@ export default {
     longitude: 'Longitude',
     depth: 'Depth',
     elevation: 'Elevation',
-    coordx: 'X',
-    coordy: 'Y',
+    coordx: 'X (m)',
+    coordy: 'Y (m)',
     epsg: 'EPSG',
   },
   drillcore: {
@@ -75,6 +75,7 @@ export default {
     stratigraphy: 'Stratigraphy',
     depthBase: 'To (m)',
     depthTop: 'From (m)',
+    thickness: 'Thickness (m)',
     rock: 'Rock',
     description: 'Description',
     author: 'Author',
@@ -126,11 +127,11 @@ export default {
     error: '',
     retry: 'Retry',
   },
-  footerPreliminary: '2021 GRIS: Geology portal (preview version).',
+  footerPreliminary: '2021 | GRIS: GeoResources Information System',
   footer:
     'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',
   footerLinks: {
-    kik: 'Environmental Investment Centre',
+    sarv: 'Geoscience Database SARV',
     natarc: 'Natural history archives and information network“ (NATARC)',
     el: 'European Union',
   },

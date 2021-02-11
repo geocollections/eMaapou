@@ -79,13 +79,13 @@ export default {
         { text: this.$t('analysis.sampleNumber'), value: 'sample_number' },
         { text: this.$t('analysis.depth'), value: 'depth' },
         { text: this.$t('analysis.depthInterval'), value: 'depth_interval' },
-        {
-          text: this.$t('analysis.thickness'),
-          value: 'thickness',
-          sortable: false,
-          class: 'static-cell-header',
-          cellClass: 'static-cell',
-        },
+        // {
+        //   text: this.$t('analysis.thickness'),
+        //   value: 'thickness',
+        //   sortable: false,
+        //   class: 'static-cell-header',
+        //   cellClass: 'static-cell',
+        // },
         { text: this.$t('analysis.method'), value: 'method' },
         {
           text: this.$t('analysis.methodDetails'),
