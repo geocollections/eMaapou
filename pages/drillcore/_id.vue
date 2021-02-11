@@ -324,10 +324,11 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
+import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 
 export default {
-  components: { Tabs },
+  components: { Tabs, LeafletMap },
   async asyncData({ $axios, params, route }) {
     const drillcoreResponse = await $axios.$get(
       `https://api.geocollections.info/drillcore/${params.id}`

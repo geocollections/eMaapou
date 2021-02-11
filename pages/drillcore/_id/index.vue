@@ -14,30 +14,38 @@
               <v-row align="start">
                 <v-col cols="12" sm="8" align-self="center">
                   <!-- TODO: Add placeholder, for case when box does not have a picture -->
-                  <v-img
-                    class="rounded mx-auto transition-swing"
-                    :class="{
-                      'elevation-8': hover,
-                      'elevation-4': !hover,
-                    }"
-                    contain
-                    max-width="1000"
-                    :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
-                    :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"
-                  >
-                    <template #placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
+                  <client-only>
+                    <v-img
+                      class="rounded mx-auto transition-swing"
+                      :class="{
+                        'elevation-8': hover,
+                        'elevation-4': !hover,
+                      }"
+                      contain
+                      max-width="1000"
+                      eager
+                      :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
+                      :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"
+                    >
+                      <template #placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+
+                    <!-- Todo: Placeholder for the server -->
+                    <template #placeholde>
+                      <div>Image</div>
                     </template>
-                  </v-img>
+                  </client-only>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <v-card-title class="px-0 pt-0">
