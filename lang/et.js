@@ -8,6 +8,10 @@ export default {
     next: 'Järgmine',
     links: 'Lingid',
     search: 'Otsing',
+    small: 'Väike',
+    medium: 'Keskmine',
+    large: 'Suur',
+    original: 'Originaal',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -64,6 +68,8 @@ export default {
     stratigraphyBase: 'Strat. lõpp',
     remarks: 'Lisainfo',
     diameter: 'Diameeter',
+    author: 'Pildi autor',
+    date: 'Pildi kuupäev',
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
