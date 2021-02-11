@@ -78,6 +78,7 @@ export default {
           text: this.$t('localityDescription.stratigraphy'),
           value: 'stratigraphy',
         },
+        // TODO: #81 Use Vuetify Data Table expanded item to display description
         {
           text: this.$t('localityDescription.description'),
           value: 'description',

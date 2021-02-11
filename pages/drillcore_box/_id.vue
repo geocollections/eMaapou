@@ -320,10 +320,11 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 export default {
   components: { BoxImageLoader },
   mixins: [global],
-  async asyncData({ $axios, params, route }) {
-    const drillcoreBoxResponse = await $axios.$get(
-      `https://api.geocollections.info/drillcore_box/${params.id}`
-    )
+  async asyncData({ $axios, params, route, error }) {
+    try {
+      const drillcoreBoxResponse = await $axios.$get(
+        `https://api.geocollections.info/drillcore_box/${params.id}`
+      )
 
     const drillcoreBox = drillcoreBoxResponse?.results?.[0]
     const drillcoreBoxes = drillcoreBoxResponse?.results
@@ -359,8 +360,13 @@ export default {
             depthStart: drillcoreBox?.depth_start,
             depthEnd: drillcoreBox?.depth_end,
           },
-        },
-      ],
+        ],
+      }
+    } catch (err) {
+      error({
+        message: `Cannot find drillcore box ${route.params.id}`,
+        path: route.path,
+      })
     }
   },
   data() {

@@ -234,42 +234,6 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>{{ $t('locality.coordx') }}</td>
-                        <td
-                          v-if="isNull(drillcore.locality__coordx)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ drillcore.locality__coordx }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordy') }}</td>
-                        <td
-                          v-if="isNull(drillcore.locality__coordy)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ drillcore.locality__coordy }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.epsg') }}</td>
-                        <td
-                          v-if="isNull(drillcore.locality__epsg)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ drillcore.locality__epsg }}
-                        </td>
-                      </tr>
-                      <tr>
                         <td>{{ $t('locality.depth') }}</td>
                         <td
                           v-if="isNull(drillcore.locality__depth)"
@@ -306,6 +270,10 @@
                       {
                         latitude: drillcore.locality__latitude,
                         longitude: drillcore.locality__longitude,
+                        text: $translate({
+                          et: drillcore.drillcore,
+                          en: drillcore.drillcore_en,
+                        }),
                       },
                     ]"
                   />
@@ -329,67 +297,74 @@ import Tabs from '~/components/Tabs.vue'
 
 export default {
   components: { Tabs, LeafletMap },
-  async asyncData({ $axios, params, route }) {
-    const drillcoreResponse = await $axios.$get(
-      `https://api.geocollections.info/drillcore/${params.id}`
-    )
+  async asyncData({ $axios, params, route, error }) {
+    try {
+      const drillcoreResponse = await $axios.$get(
+        `https://api.geocollections.info/drillcore/${params.id}`
+      )
 
-    const drillcore = drillcoreResponse.results[0]
+      const drillcore = drillcoreResponse.results[0]
 
-    return {
-      drillcore,
-      initActiveTab: route.path,
-      tabs: [
-        {
-          routeName: 'drillcore-id',
-          title: 'drillcore.drillcoreBoxesTitle',
-          props: {
-            locality: drillcore.locality_id,
+      return {
+        drillcore,
+        initActiveTab: route.path,
+        tabs: [
+          {
+            routeName: 'drillcore-id',
+            title: 'drillcore.drillcoreBoxesTitle',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-        {
-          routeName: 'drillcore-id-descriptions',
-          title: 'drillcore.localityDescriptions',
-          props: {
-            locality: drillcore.locality_id,
+          {
+            routeName: 'drillcore-id-descriptions',
+            title: 'drillcore.localityDescriptions',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-        {
-          routeName: 'drillcore-id-references',
-          title: 'drillcore.localityReferences',
-          props: {
-            locality: drillcore.locality_id,
+          {
+            routeName: 'drillcore-id-references',
+            title: 'drillcore.localityReferences',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-        {
-          routeName: 'drillcore-id-attachments',
-          title: 'drillcore.attachments',
-          props: {
-            locality: drillcore.locality_id,
+          {
+            routeName: 'drillcore-id-attachments',
+            title: 'drillcore.attachments',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-        {
-          routeName: 'drillcore-id-samples',
-          title: 'drillcore.samples',
-          props: {
-            locality: drillcore.locality_id,
+          {
+            routeName: 'drillcore-id-samples',
+            title: 'drillcore.samples',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-        {
-          routeName: 'drillcore-id-analyses',
-          title: 'drillcore.analyses',
-          props: {
-            locality: drillcore.locality_id,
+          {
+            routeName: 'drillcore-id-analyses',
+            title: 'drillcore.analyses',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-        {
-          routeName: 'drillcore-id-specimens',
-          title: 'drillcore.specimens',
-          props: {
-            locality: drillcore.locality_id,
+          {
+            routeName: 'drillcore-id-specimens',
+            title: 'drillcore.specimens',
+            props: {
+              locality: drillcore.locality_id,
+            },
           },
-        },
-      ],
+        ],
+      }
+    } catch (err) {
+      error({
+        message: `Could not find drillcore ${route.params.id}`,
+        path: route.path,
+      })
     }
   },
   head() {
