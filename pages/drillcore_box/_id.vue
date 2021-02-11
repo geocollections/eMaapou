@@ -329,39 +329,39 @@ export default {
         `https://api.geocollections.info/drillcore_box/${params.id}`
       )
 
-      const drillcoreBox = drillcoreBoxResponse?.results?.[0]
-      const drillcoreBoxes = drillcoreBoxResponse?.results
+      const results = drillcoreBoxResponse.results
+      const drillcoreBox = results[0]
       return {
         drillcoreBox,
-        drillcoreBoxes,
-        activeBox: drillcoreBoxes?.[0],
+        drillcoreBoxes: results,
+        activeBox: drillcoreBox,
         initActiveTab: route.path,
         tabs: [
           {
             routeName: 'drillcore_box-id',
             title: 'drillcore.samples',
             props: {
-              locality: drillcoreBox?.drillcore__locality,
-              depthStart: drillcoreBox?.depth_start,
-              depthEnd: drillcoreBox?.depth_end,
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
             },
           },
           {
             routeName: 'drillcore_box-id-analyses',
             title: 'drillcore.analyses',
             props: {
-              locality: drillcoreBox?.drillcore__locality,
-              depthStart: drillcoreBox?.depth_start,
-              depthEnd: drillcoreBox?.depth_end,
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
             },
           },
           {
             routeName: 'drillcore_box-id-specimens',
             title: 'drillcore.specimens',
             props: {
-              locality: drillcoreBox?.drillcore__locality,
-              depthStart: drillcoreBox?.depth_start,
-              depthEnd: drillcoreBox?.depth_end,
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
             },
           },
         ],
@@ -381,10 +381,10 @@ export default {
   head() {
     return {
       title: `${this.$t('drillcoreBox.nr', {
-        number: this.drillcoreBox?.number,
+        number: this.drillcoreBox.number,
       })} - ${this.$translate({
-        et: this.drillcoreBox?.drillcore__drillcore,
-        en: this.drillcoreBox?.drillcore__drillcore_en,
+        et: this.drillcoreBox.drillcore__drillcore,
+        en: this.drillcoreBox.drillcore__drillcore_en,
       })}`,
     }
   },
