@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: Add diameter -->
   <v-row>
     <v-col>
       <h1 class="text-center py-3 page-title">
@@ -144,6 +143,13 @@
                     {{ $t('common.noValue') }}
                   </td>
                   <td v-else>{{ drillcoreBox.depth_other }}</td>
+                </tr>
+                <tr>
+                  <td>{{ $t('drillcoreBox.diameter') }}</td>
+                  <td v-if="isNull(drillcoreBox.diameter)" class="no-value">
+                    {{ $t('common.noValue') }}
+                  </td>
+                  <td v-else>{{ drillcoreBox.diameter }}</td>
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>

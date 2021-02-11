@@ -63,6 +63,7 @@ export default {
     stratigraphyTop: 'Strat. algus',
     stratigraphyBase: 'Strat. lõpp',
     remarks: 'Lisainfo',
+    diameter: 'Diameeter',
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
