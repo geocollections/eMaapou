@@ -30,7 +30,11 @@
       </a>
     </template>
     <template #item.date_collected="{ item }">
-      {{ item.date_collected ? new Date(item.date_collected).toISOString().split('T')[0] : null }}
+      {{
+        item.date_collected
+          ? new Date(item.date_collected).toISOString().split('T')[0]
+          : null
+      }}
     </template>
   </table-wrapper>
 </template>

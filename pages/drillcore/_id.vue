@@ -316,7 +316,7 @@
         </v-container>
       </v-card>
       <v-card class="mt-2 pb-2">
-        <tabs :items="tabs" />
+        <tabs :items="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
@@ -324,11 +324,12 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
+import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 
 export default {
-  components: { Tabs },
-  async asyncData({ $axios, params }) {
+  components: { Tabs, LeafletMap },
+  async asyncData({ $axios, params, route }) {
     const drillcoreResponse = await $axios.$get(
       `https://api.geocollections.info/drillcore/${params.id}`
     )
@@ -337,6 +338,7 @@ export default {
 
     return {
       drillcore,
+      initActiveTab: route.path,
       tabs: [
         {
           routeName: 'drillcore-id',

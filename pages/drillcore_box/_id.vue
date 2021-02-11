@@ -31,22 +31,30 @@
       <v-card class="my-2">
         <v-card-text>
           <v-hover v-slot="{ hover }">
-            <v-img
-              contain
-              class="ma-4 transition-swing cursor-pointer"
-              :class="{
-                'elevation-8': hover,
-                'elevation-4': !hover,
-              }"
-              :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              max-width="2000"
-              @click="
-                openImage(
-                  drillcoreBox.drillcorebox_image__attachment__uuid_filename
-                )
-              "
-            />
+            <!-- TODO: Add placeholder, for case when box does not have a picture -->
+            <client-only>
+              <v-img
+                contain
+                class="ma-4 transition-swing cursor-pointer"
+                :class="{
+                  'elevation-8': hover,
+                  'elevation-4': !hover,
+                }"
+                :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+                :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+                max-width="2000"
+                @click="
+                  openImage(
+                    drillcoreBox.drillcorebox_image__attachment__uuid_filename
+                  )
+                "
+              />
+
+              <!-- Todo: Placeholder for the server -->
+              <template #placeholde>
+                <div>Image</div>
+              </template>
+            </client-only>
           </v-hover>
           <div class="text-center">
             <a
@@ -230,7 +238,7 @@
       </v-card>
 
       <v-card class="mt-2 pb-2">
-        <tabs :items="tabs" />
+        <tabs :items="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
@@ -242,7 +250,7 @@ import global from '@/mixins/global'
 
 export default {
   mixins: [global],
-  async asyncData({ $axios, params }) {
+  async asyncData({ $axios, params, route }) {
     const drillcoreBoxResponse = await $axios.$get(
       `https://api.geocollections.info/drillcore_box/${params.id}`
     )
@@ -250,6 +258,7 @@ export default {
     const drillcoreBox = drillcoreBoxResponse?.results?.[0]
     return {
       drillcoreBox,
+      initActiveTab: route.path,
       tabs: [
         {
           routeName: 'drillcore_box-id',

@@ -14,30 +14,38 @@
               <v-row align="start">
                 <v-col cols="12" sm="8" align-self="center">
                   <!-- TODO: Add placeholder, for case when box does not have a picture -->
-                  <v-img
-                    class="rounded mx-auto transition-swing"
-                    :class="{
-                      'elevation-8': hover,
-                      'elevation-4': !hover,
-                    }"
-                    contain
-                    max-width="1000"
-                    :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
-                    :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"
-                  >
-                    <template #placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
+                  <client-only>
+                    <v-img
+                      class="rounded mx-auto transition-swing"
+                      :class="{
+                        'elevation-8': hover,
+                        'elevation-4': !hover,
+                      }"
+                      contain
+                      max-width="1000"
+                      eager
+                      :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
+                      :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"
+                    >
+                      <template #placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+
+                    <!-- Todo: Placeholder for the server -->
+                    <template #placeholde>
+                      <div>Image</div>
                     </template>
-                  </v-img>
+                  </client-only>
                 </v-col>
                 <v-col cols="12" sm="4">
                   <v-card-title class="px-0 pt-0">
@@ -88,10 +96,9 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                openGeoDetail({
-                                  table: 'stratigraphy',
-                                  id: box.drillcore_box__stratigraphy_top,
-                                })
+                                openStratigraphy(
+                                  box.drillcore_box__stratigraphy_top
+                                )
                               "
                             >
                               {{
@@ -119,10 +126,9 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                openGeoDetail({
-                                  table: 'stratigraphy',
-                                  id: box.drillcore_box__stratigraphy_base,
-                                })
+                                openStratigraphy(
+                                  box.drillcore_box__stratigraphy_base
+                                )
                               "
                             >
                               {{
@@ -146,7 +152,21 @@
         </v-hover>
       </v-col>
       <v-col>
-        <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+        <infinite-loading @infinite="infiniteHandler">
+          <template #spinner>
+            <v-progress-circular color="deep-orange darken-2" indeterminate />
+          </template>
+          <template #no-more>{{ $t('infinite.noMore') }}</template>
+          <template #error="{ trigger }">
+            <div>
+              {{ $t('infinite.error') }}
+            </div>
+            <br />
+            <v-btn outlined color="deep-orange darken-2" @click="trigger">
+              {{ $t('infinite.retry') }}
+            </v-btn>
+          </template>
+        </infinite-loading>
       </v-col>
     </v-row>
   </v-container>
@@ -154,9 +174,7 @@
 
 <script>
 import { isNull } from 'lodash'
-import global from '@/mixins/global'
 export default {
-  mixins: [global],
   data() {
     return {
       page: 1,
@@ -172,22 +190,34 @@ export default {
       })
       window.open(routeData.href, '_blank', 'height=800, width=800')
     },
+    openStratigraphy(id) {
+      window.open(
+        `https://geocollections.info/stratigraphy/${id}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
     infiniteHandler($state) {
       const paginateBy = 5
       const url = `https://api.geocollections.info/attachment_link/?order_by=drillcore_box__depth_start,drillcore_box&drillcore_box__drillcore=${this.$route.params.id}&page=${this.page}&paginate_by=${paginateBy}&distinct=true&fields=id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end`
-      this.$axios.$get(url).then((res) => {
-        if (!res.page) {
-          this.boxes.push(...res.results)
-          $state.loaded()
-          $state.complete()
-        } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
-          this.page += 1
-          this.boxes.push(...res.results)
-          $state.loaded()
-        } else {
-          $state.complete()
-        }
-      })
+      this.$axios
+        .$get(url)
+        .then((res) => {
+          if (!res.page) {
+            this.boxes.push(...res.results)
+            $state.loaded()
+            $state.complete()
+          } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
+            this.page += 1
+            this.boxes.push(...res.results)
+            $state.loaded()
+          } else {
+            $state.complete()
+          }
+        })
+        .catch(() => {
+          $state.error()
+        })
     },
   },
 }
