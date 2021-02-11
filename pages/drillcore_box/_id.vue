@@ -113,7 +113,10 @@
         </v-card-text>
 
         <!-- Todo: Thumbnails here #22-->
-        <v-card-text class="pt-0" v-if="drillcoreBoxes && drillcoreBoxes.length > 1">
+        <v-card-text
+          v-if="drillcoreBoxes && drillcoreBoxes.length > 1"
+          class="pt-0"
+        >
           <div class="d-flex ma-2 align-center" style="overflow-x: auto">
             <div
               v-for="(item, index) in drillcoreBoxes"
@@ -326,39 +329,40 @@ export default {
         `https://api.geocollections.info/drillcore_box/${params.id}`
       )
 
-    const drillcoreBox = drillcoreBoxResponse?.results?.[0]
-    const drillcoreBoxes = drillcoreBoxResponse?.results
-    return {
-      drillcoreBox,
-      drillcoreBoxes,
-      activeBox: drillcoreBoxes?.[0],
-      initActiveTab: route.path,
-      tabs: [
-        {
-          routeName: 'drillcore_box-id',
-          title: 'drillcore.samples',
-          props: {
-            locality: drillcoreBox?.drillcore__locality,
-            depthStart: drillcoreBox?.depth_start,
-            depthEnd: drillcoreBox?.depth_end,
+      const drillcoreBox = drillcoreBoxResponse?.results?.[0]
+      const drillcoreBoxes = drillcoreBoxResponse?.results
+      return {
+        drillcoreBox,
+        drillcoreBoxes,
+        activeBox: drillcoreBoxes?.[0],
+        initActiveTab: route.path,
+        tabs: [
+          {
+            routeName: 'drillcore_box-id',
+            title: 'drillcore.samples',
+            props: {
+              locality: drillcoreBox?.drillcore__locality,
+              depthStart: drillcoreBox?.depth_start,
+              depthEnd: drillcoreBox?.depth_end,
+            },
           },
-        },
-        {
-          routeName: 'drillcore_box-id-analyses',
-          title: 'drillcore.analyses',
-          props: {
-            locality: drillcoreBox?.drillcore__locality,
-            depthStart: drillcoreBox?.depth_start,
-            depthEnd: drillcoreBox?.depth_end,
+          {
+            routeName: 'drillcore_box-id-analyses',
+            title: 'drillcore.analyses',
+            props: {
+              locality: drillcoreBox?.drillcore__locality,
+              depthStart: drillcoreBox?.depth_start,
+              depthEnd: drillcoreBox?.depth_end,
+            },
           },
-        },
-        {
-          routeName: 'drillcore_box-id-specimens',
-          title: 'drillcore.specimens',
-          props: {
-            locality: drillcoreBox?.drillcore__locality,
-            depthStart: drillcoreBox?.depth_start,
-            depthEnd: drillcoreBox?.depth_end,
+          {
+            routeName: 'drillcore_box-id-specimens',
+            title: 'drillcore.specimens',
+            props: {
+              locality: drillcoreBox?.drillcore__locality,
+              depthStart: drillcoreBox?.depth_start,
+              depthEnd: drillcoreBox?.depth_end,
+            },
           },
         ],
       }
