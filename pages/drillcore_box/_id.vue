@@ -42,14 +42,10 @@
                   'elevation-8': hover,
                   'elevation-4': !hover,
                 }"
-                :lazy-src="`https://files.geocollections.info/small/${activeBox.attachment__uuid_filename}`"
-                :src="`https://files.geocollections.info/large/${activeBox.attachment__uuid_filename}`"
+                :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
+                :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
                 max-width="2000"
-                @click="
-                  openImage(
-                    activeBox.attachment__uuid_filename
-                  )
-                "
+                @click="openImage(activeImage.attachment__uuid_filename)"
               >
                 <template #placeholder>
                   <v-row
@@ -71,26 +67,34 @@
             class="d-flex justify-center flex-column justify-md-space-between flex-md-row mx-8"
           >
             <div class="text-center text-md-left">
-              <div v-if="activeBox.attachment__author__agent">
+              <div
+                v-if="
+                  activeImage.attachment__author__agent ||
+                  activeImage.attachment__author_free
+                "
+              >
                 <span class="font-weight-bold"
                   >{{ $t('drillcoreBox.author') }}:
                 </span>
-                <span>{{ activeBox.attachment__author__agent }}</span>
+                <span v-if="activeImage.attachment__author__agent">{{
+                  activeImage.attachment__author__agent
+                }}</span>
+                <span v-else>{{ activeImage.attachment__author_free }}</span>
               </div>
               <div
                 v-if="
-                  activeBox.attachment__date_created ||
-                  activeBox.attachment__date_created_free
+                  activeImage.attachment__date_created ||
+                  activeImage.attachment__date_created_free
                 "
               >
                 <span class="font-weight-bold"
                   >{{ $t('drillcoreBox.date') }}:
                 </span>
-                <span v-if="activeBox.attachment__date_created">{{
-                  activeBox.attachment__date_created
+                <span v-if="activeImage.attachment__date_created">{{
+                  activeImage.attachment__date_created
                 }}</span>
                 <span v-else>{{
-                  activeBox.attachment__date_created_free
+                  activeImage.attachment__date_created_free
                 }}</span>
               </div>
             </div>
@@ -101,7 +105,7 @@
                   class="text-link underline"
                   :href="`https://files.geocollections.info/${
                     item === 'original' ? '' : `${item}/`
-                  }${activeBox.attachment__uuid_filename}`"
+                  }${activeImage.attachment__uuid_filename}`"
                   target="ImageWindow"
                 >
                   {{ $t(`common.${item}`) }}
@@ -114,12 +118,12 @@
 
         <!-- Todo: Thumbnails here #22-->
         <v-card-text
-          v-if="drillcoreBoxes && drillcoreBoxes.length > 1"
+          v-if="drillcoreBoxImages && drillcoreBoxImages.length > 1"
           class="pt-0"
         >
           <div class="d-flex ma-2 align-center" style="overflow-x: auto">
             <div
-              v-for="(item, index) in drillcoreBoxes"
+              v-for="(item, index) in drillcoreBoxImages"
               :key="index"
               class="ma-2"
             >
@@ -133,7 +137,7 @@
                     'elevation-2': !hover,
                   }"
                   class="grey lighten-2 rounded transition-swing cursor-pointer"
-                  @click="activeBox = drillcoreBoxes[index]"
+                  @click="activeImage = drillcoreBoxImages[index]"
                 >
                   <template #placeholder>
                     <v-row
@@ -328,13 +332,17 @@ export default {
       const drillcoreBoxResponse = await $axios.$get(
         `https://api.geocollections.info/drillcore_box/${params.id}`
       )
+      const attachmentLinkResponse = await $axios.$get(
+        `https://api.geocollections.info/attachment_link/?drillcore_box=${params.id}&order_by=-attachment__is_preferred&fields=attachment__author__agent,attachment__author_free,attachment__date_created,attachment__date_created_free,attachment__uuid_filename,attachment__is_preferred`
+      )
 
-      const results = drillcoreBoxResponse.results
-      const drillcoreBox = results[0]
+      const drillcoreBoxImages = attachmentLinkResponse.results
+      const drillcoreBox = drillcoreBoxResponse.results[0]
+      const activeImage = drillcoreBoxImages[0]
       return {
         drillcoreBox,
-        drillcoreBoxes: results,
-        activeBox: drillcoreBox,
+        drillcoreBoxImages,
+        activeImage,
         initActiveTab: route.path,
         tabs: [
           {

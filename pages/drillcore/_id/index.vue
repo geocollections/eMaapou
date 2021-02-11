@@ -194,7 +194,7 @@ export default {
     },
     infiniteHandler($state) {
       const paginateBy = 5
-      const url = `https://api.geocollections.info/attachment_link/?order_by=drillcore_box__depth_start,drillcore_box&drillcore_box__drillcore=${this.$route.params.id}&page=${this.page}&paginate_by=${paginateBy}&distinct=true&fields=id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,attachment__is_preferred`
+      const url = `https://api.geocollections.info/attachment_link/?order_by=drillcore_box__depth_start,drillcore_box&drillcore_box__drillcore=${this.$route.params.id}&attachment__is_preferred=true&page=${this.page}&paginate_by=${paginateBy}&distinct=true&fields=id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,attachment__is_preferred`
       this.$axios
         .$get(url)
         .then((res) => {
