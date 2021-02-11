@@ -22,7 +22,10 @@
         >{{ $t(item.title) }}</v-tab
       >
     </v-tabs>
-    <v-tabs-items v-model="activeTab" @change="handleSwipeBetweenTabs">
+    <v-tabs-items
+      v-model="activeTab"
+      touchless
+    >
       <v-tab-item
         v-for="(item, index) in items"
         :key="index"
@@ -56,11 +59,6 @@ export default {
     return {
       activeTab: this.initActiveTab,
     }
-  },
-  methods: {
-    handleSwipeBetweenTabs(pathAsString) {
-      this.$router.push(pathAsString)
-    },
   },
 }
 </script>
