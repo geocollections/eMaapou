@@ -63,6 +63,7 @@ export default {
     stratigraphyTop: 'Strat. top',
     stratigraphyBase: 'Strat. base',
     remarks: 'Remarks',
+    diameter: 'Diameter',
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',
