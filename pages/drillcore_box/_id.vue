@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="drillcoreBox">
     <v-col>
       <h1 class="text-center py-3 page-title">
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
@@ -24,14 +24,17 @@
             })
           "
         >
-          {{ $t('common.previous') }}
+          {{ $t('common.next') }}
         </nuxt-link>
       </div>
       <v-card class="my-2">
         <v-card-text>
-          <v-hover v-slot="{ hover }">
-            <!-- TODO: Add placeholder, for case when box does not have a picture -->
-            <client-only>
+          <client-only>
+            <template #placeholder>
+              <box-image-loader height="400" />
+            </template>
+            <v-hover v-slot="{ hover }">
+              <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
               <v-img
                 contain
                 class="ma-4 transition-swing cursor-pointer"
@@ -39,54 +42,113 @@
                   'elevation-8': hover,
                   'elevation-4': !hover,
                 }"
-                :lazy-src="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-                :src="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
+                :lazy-src="`https://files.geocollections.info/small/${activeBox.drillcorebox_image__attachment__uuid_filename}`"
+                :src="`https://files.geocollections.info/large/${activeBox.drillcorebox_image__attachment__uuid_filename}`"
                 max-width="2000"
                 @click="
                   openImage(
-                    drillcoreBox.drillcorebox_image__attachment__uuid_filename
+                    activeBox.drillcorebox_image__attachment__uuid_filename
                   )
                 "
-              />
+              >
+                <template #placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-hover>
+          </client-only>
 
-              <!-- Todo: Placeholder for the server -->
-              <template #placeholde>
-                <div>Image</div>
-              </template>
-            </client-only>
-          </v-hover>
-          <div class="text-center">
-            <a
-              class="text-link underline"
-              :href="`https://files.geocollections.info/small/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >small</a
-            >
-            |
-            <a
-              class="text-link underline"
-              :href="`https://files.geocollections.info/medium/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >medium</a
-            >
-            |
-            <a
-              class="text-link underline"
-              :href="`https://files.geocollections.info/large/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >large</a
-            >
-            |
-            <a
-              class="text-link underline"
-              :href="`https://files.geocollections.info/${drillcoreBox.drillcorebox_image__attachment__uuid_filename}`"
-              target="ImageWindow"
-              >original</a
-            >
+          <div
+            class="d-flex justify-center flex-column justify-md-space-between flex-md-row mx-8"
+          >
+            <div class="text-center text-md-left">
+              <div>
+                <span class="font-weight-bold"
+                  >{{ $t('drillcoreBox.author') }}:
+                </span>
+                <span>{{ activeBox.attachment__author__agent }}</span>
+              </div>
+              <div
+                v-if="
+                  activeBox.attachment__date_created ||
+                  activeBox.attachment__date_created_free
+                "
+              >
+                <span class="font-weight-bold"
+                  >{{ $t('drillcoreBox.date') }}:
+                </span>
+                <span v-if="activeBox.attachment__date_created">{{
+                  activeBox.attachment__date_created
+                }}</span>
+                <span v-else>{{
+                  activeBox.attachment__date_created_free
+                }}</span>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <span v-for="(item, index) in imageSizes" :key="index">
+                <a
+                  class="text-link underline"
+                  :href="`https://files.geocollections.info/${
+                    item === 'original' ? '' : `${item}/`
+                  }${activeBox.drillcorebox_image__attachment__uuid_filename}`"
+                  target="ImageWindow"
+                >
+                  {{ $t(`common.${item}`) }}
+                </a>
+                <span v-if="index < imageSizes.length - 1">| </span>
+              </span>
+            </div>
           </div>
         </v-card-text>
 
         <!-- Todo: Thumbnails here #22-->
+        <v-card-text class="pt-0" v-if="drillcoreBoxes && drillcoreBoxes.length > 1">
+          <div class="d-flex ma-2 align-center" style="overflow-x: auto">
+            <div
+              v-for="(item, index) in drillcoreBoxes"
+              :key="index"
+              class="ma-2"
+            >
+              <v-hover v-slot="{ hover }">
+                <v-img
+                  :src="`https://files.geocollections.info/small/${item.drillcorebox_image__attachment__uuid_filename}`"
+                  :lazy-src="`https://files.geocollections.info/small/${item.drillcorebox_image__attachment__uuid_filename}`"
+                  max-width="200"
+                  :class="{
+                    'elevation-4': hover,
+                    'elevation-2': !hover,
+                  }"
+                  class="grey lighten-2 rounded transition-swing cursor-pointer"
+                  @click="activeBox = drillcoreBoxes[index]"
+                >
+                  <template #placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-hover>
+            </div>
+          </div>
+        </v-card-text>
       </v-card>
       <v-card flat tile>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
@@ -253,8 +315,10 @@
 <script>
 import { isNull } from 'lodash'
 import global from '@/mixins/global'
+import BoxImageLoader from '@/components/BoxImageLoader'
 
 export default {
+  components: { BoxImageLoader },
   mixins: [global],
   async asyncData({ $axios, params, route, error }) {
     try {
@@ -262,37 +326,39 @@ export default {
         `https://api.geocollections.info/drillcore_box/${params.id}`
       )
 
-      const drillcoreBox = drillcoreBoxResponse?.results?.[0]
-      return {
-        drillcoreBox,
-        initActiveTab: route.path,
-        tabs: [
-          {
-            routeName: 'drillcore_box-id',
-            title: 'drillcore.samples',
-            props: {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            },
+    const drillcoreBox = drillcoreBoxResponse?.results?.[0]
+    const drillcoreBoxes = drillcoreBoxResponse?.results
+    return {
+      drillcoreBox,
+      drillcoreBoxes,
+      activeBox: drillcoreBoxes?.[0],
+      initActiveTab: route.path,
+      tabs: [
+        {
+          routeName: 'drillcore_box-id',
+          title: 'drillcore.samples',
+          props: {
+            locality: drillcoreBox?.drillcore__locality,
+            depthStart: drillcoreBox?.depth_start,
+            depthEnd: drillcoreBox?.depth_end,
           },
-          {
-            routeName: 'drillcore_box-id-analyses',
-            title: 'drillcore.analyses',
-            props: {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            },
+        },
+        {
+          routeName: 'drillcore_box-id-analyses',
+          title: 'drillcore.analyses',
+          props: {
+            locality: drillcoreBox?.drillcore__locality,
+            depthStart: drillcoreBox?.depth_start,
+            depthEnd: drillcoreBox?.depth_end,
           },
-          {
-            routeName: 'drillcore_box-id-specimens',
-            title: 'drillcore.specimens',
-            props: {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            },
+        },
+        {
+          routeName: 'drillcore_box-id-specimens',
+          title: 'drillcore.specimens',
+          props: {
+            locality: drillcoreBox?.drillcore__locality,
+            depthStart: drillcoreBox?.depth_start,
+            depthEnd: drillcoreBox?.depth_end,
           },
         ],
       }
@@ -303,13 +369,18 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      imageSizes: ['small', 'medium', 'large', 'original'],
+    }
+  },
   head() {
     return {
       title: `${this.$t('drillcoreBox.nr', {
-        number: this.drillcoreBox.number,
+        number: this.drillcoreBox?.number,
       })} - ${this.$translate({
-        et: this.drillcoreBox.drillcore__drillcore,
-        en: this.drillcoreBox.drillcore__drillcore_en,
+        et: this.drillcoreBox?.drillcore__drillcore,
+        en: this.drillcoreBox?.drillcore__drillcore_en,
       })}`,
     }
   },

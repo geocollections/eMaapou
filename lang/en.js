@@ -8,6 +8,10 @@ export default {
     next: 'Next',
     links: 'Links',
     search: 'Search',
+    small: 'Small',
+    medium: 'Medium',
+    large: 'Large',
+    original: 'Original',
   },
   link: {
     sarvAPI: 'Public API',
@@ -64,6 +68,8 @@ export default {
     stratigraphyBase: 'Strat. base',
     remarks: 'Remarks',
     diameter: 'Diameter',
+    author: 'Image author',
+    date: 'Image date',
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',
