@@ -256,44 +256,51 @@ import global from '@/mixins/global'
 
 export default {
   mixins: [global],
-  async asyncData({ $axios, params, route }) {
-    const drillcoreBoxResponse = await $axios.$get(
-      `https://api.geocollections.info/drillcore_box/${params.id}`
-    )
+  async asyncData({ $axios, params, route, error }) {
+    try {
+      const drillcoreBoxResponse = await $axios.$get(
+        `https://api.geocollections.info/drillcore_box/${params.id}`
+      )
 
-    const drillcoreBox = drillcoreBoxResponse?.results?.[0]
-    return {
-      drillcoreBox,
-      initActiveTab: route.path,
-      tabs: [
-        {
-          routeName: 'drillcore_box-id',
-          title: 'drillcore.samples',
-          props: {
-            locality: drillcoreBox.drillcore__locality,
-            depthStart: drillcoreBox.depth_start,
-            depthEnd: drillcoreBox.depth_end,
+      const drillcoreBox = drillcoreBoxResponse?.results?.[0]
+      return {
+        drillcoreBox,
+        initActiveTab: route.path,
+        tabs: [
+          {
+            routeName: 'drillcore_box-id',
+            title: 'drillcore.samples',
+            props: {
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
+            },
           },
-        },
-        {
-          routeName: 'drillcore_box-id-analyses',
-          title: 'drillcore.analyses',
-          props: {
-            locality: drillcoreBox.drillcore__locality,
-            depthStart: drillcoreBox.depth_start,
-            depthEnd: drillcoreBox.depth_end,
+          {
+            routeName: 'drillcore_box-id-analyses',
+            title: 'drillcore.analyses',
+            props: {
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
+            },
           },
-        },
-        {
-          routeName: 'drillcore_box-id-specimens',
-          title: 'drillcore.specimens',
-          props: {
-            locality: drillcoreBox.drillcore__locality,
-            depthStart: drillcoreBox.depth_start,
-            depthEnd: drillcoreBox.depth_end,
+          {
+            routeName: 'drillcore_box-id-specimens',
+            title: 'drillcore.specimens',
+            props: {
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
+            },
           },
-        },
-      ],
+        ],
+      }
+    } catch (err) {
+      error({
+        message: `Cannot find drillcore box ${route.params.id}`,
+        path: route.path,
+      })
     }
   },
   head() {
