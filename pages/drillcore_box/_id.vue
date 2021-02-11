@@ -230,7 +230,7 @@
       </v-card>
 
       <v-card class="mt-2 pb-2">
-        <tabs :items="tabs" />
+        <tabs :items="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
@@ -242,7 +242,7 @@ import global from '@/mixins/global'
 
 export default {
   mixins: [global],
-  async asyncData({ $axios, params }) {
+  async asyncData({ $axios, params, route }) {
     const drillcoreBoxResponse = await $axios.$get(
       `https://api.geocollections.info/drillcore_box/${params.id}`
     )
@@ -250,6 +250,7 @@ export default {
     const drillcoreBox = drillcoreBoxResponse?.results?.[0]
     return {
       drillcoreBox,
+      initActiveTab: route.path,
       tabs: [
         {
           routeName: 'drillcore_box-id',

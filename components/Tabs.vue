@@ -47,10 +47,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    initActiveTab: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
-      activeTab: null,
+      activeTab: this.initActiveTab,
     }
   },
   methods: {
