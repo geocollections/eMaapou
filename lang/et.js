@@ -97,6 +97,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     collector: 'Koguja',
     dateCollected: 'Kogumise aeg',
+    thickness: 'Paksus',
   },
   analysis: {
     id: 'ID',
