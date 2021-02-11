@@ -234,42 +234,6 @@
                         </td>
                       </tr>
                       <tr>
-                        <td>{{ $t('locality.coordx') }}</td>
-                        <td
-                          v-if="isNull(drillcore.locality__coordx)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ drillcore.locality__coordx }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordy') }}</td>
-                        <td
-                          v-if="isNull(drillcore.locality__coordy)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ drillcore.locality__coordy }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.epsg') }}</td>
-                        <td
-                          v-if="isNull(drillcore.locality__epsg)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ drillcore.locality__epsg }}
-                        </td>
-                      </tr>
-                      <tr>
                         <td>{{ $t('locality.depth') }}</td>
                         <td
                           v-if="isNull(drillcore.locality__depth)"
