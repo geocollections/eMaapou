@@ -31,7 +31,9 @@
         :key="`marker-${idx}`"
         :lat-lng="[marker.latitude, marker.longitude]"
         :radius="4"
-      />
+      >
+        <l-popup>{{ marker.text }}</l-popup>
+      </l-circle-marker>
     </l-map>
     <template #placeholder>
       <div
