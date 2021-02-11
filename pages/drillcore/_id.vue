@@ -270,6 +270,10 @@
                       {
                         latitude: drillcore.locality__latitude,
                         longitude: drillcore.locality__longitude,
+                        text: $translate({
+                          et: drillcore.drillcore,
+                          en: drillcore.drillcore_en,
+                        }),
                       },
                     ]"
                   />
