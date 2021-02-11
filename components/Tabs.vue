@@ -22,10 +22,7 @@
         >{{ $t(item.title) }}</v-tab
       >
     </v-tabs>
-    <v-tabs-items
-      v-model="activeTab"
-      touchless
-    >
+    <v-tabs-items v-model="activeTab" touchless>
       <v-tab-item
         v-for="(item, index) in items"
         :key="index"

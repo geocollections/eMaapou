@@ -29,9 +29,12 @@
       </div>
       <v-card class="my-2">
         <v-card-text>
-          <v-hover v-slot="{ hover }">
-            <!-- TODO: Add placeholder, for case when box does not have a picture -->
-            <client-only>
+          <client-only>
+            <template #placeholder>
+              <box-image-loader height="400" />
+            </template>
+            <v-hover v-slot="{ hover }">
+              <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
               <v-img
                 contain
                 class="ma-4 transition-swing cursor-pointer"
@@ -47,14 +50,23 @@
                     drillcoreBox.drillcorebox_image__attachment__uuid_filename
                   )
                 "
-              />
+              >
+                <template #placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-hover>
+          </client-only>
 
-              <!-- Todo: Placeholder for the server -->
-              <template #placeholde>
-                <div>Image</div>
-              </template>
-            </client-only>
-          </v-hover>
           <div class="text-center">
             <a
               class="text-link underline"
@@ -253,8 +265,10 @@
 <script>
 import { isNull } from 'lodash'
 import global from '@/mixins/global'
+import BoxImageLoader from '@/components/BoxImageLoader'
 
 export default {
+  components: { BoxImageLoader },
   mixins: [global],
   async asyncData({ $axios, params, route }) {
     const drillcoreBoxResponse = await $axios.$get(

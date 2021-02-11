@@ -13,7 +13,7 @@
             <v-card-text class="drillcore-box__card">
               <v-row align="start">
                 <v-col cols="12" sm="8" align-self="center">
-                  <!-- TODO: Add placeholder, for case when box does not have a picture -->
+                  <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
                   <client-only>
                     <v-img
                       class="rounded mx-auto transition-swing"
@@ -40,11 +40,6 @@
                         </v-row>
                       </template>
                     </v-img>
-
-                    <!-- Todo: Placeholder for the server -->
-                    <template #placeholde>
-                      <div>Image</div>
-                    </template>
                   </client-only>
                 </v-col>
                 <v-col cols="12" sm="4">
@@ -199,7 +194,7 @@ export default {
     },
     infiniteHandler($state) {
       const paginateBy = 5
-      const url = `https://api.geocollections.info/attachment_link/?order_by=drillcore_box__depth_start,drillcore_box&drillcore_box__drillcore=${this.$route.params.id}&attachment__is_preferred=true&page=${this.page}&paginate_by=${paginateBy}&distinct=true&fields=id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end`
+      const url = `https://api.geocollections.info/attachment_link/?order_by=drillcore_box__depth_start,drillcore_box&drillcore_box__drillcore=${this.$route.params.id}&page=${this.page}&paginate_by=${paginateBy}&distinct=true&fields=id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end`
       this.$axios
         .$get(url)
         .then((res) => {
