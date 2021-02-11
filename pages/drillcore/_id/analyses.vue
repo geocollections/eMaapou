@@ -22,6 +22,13 @@
         {{ item.sample_number }}
       </a>
     </template>
+    <template #item.thickness="{ item }">
+      {{
+        !item.depth_interval || !item.depth
+          ? null
+          : round(item.depth_interval - item.depth, 3)
+      }}
+    </template>
     <template #item.method="{ item }">
       {{
         $translate({
@@ -45,7 +52,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 export default {
@@ -72,6 +79,13 @@ export default {
         { text: this.$t('analysis.sampleNumber'), value: 'sample_number' },
         { text: this.$t('analysis.depth'), value: 'depth' },
         { text: this.$t('analysis.depthInterval'), value: 'depth_interval' },
+        {
+          text: this.$t('analysis.thickness'),
+          value: 'thickness',
+          sortable: false,
+          class: 'static-cell-header',
+          cellClass: 'static-cell',
+        },
         { text: this.$t('analysis.method'), value: 'method' },
         {
           text: this.$t('analysis.methodDetails'),
@@ -95,6 +109,7 @@ export default {
     }
   },
   methods: {
+    round,
     async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 

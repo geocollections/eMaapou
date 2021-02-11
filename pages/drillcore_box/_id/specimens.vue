@@ -22,6 +22,13 @@
         })
       }}
     </template>
+    <template #item.thickness="{ item }">
+      {{
+        !item.depth_interval || !item.depth
+          ? null
+          : round(item.depth_interval - item.depth, 3)
+      }}
+    </template>
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
@@ -46,7 +53,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
@@ -82,6 +89,13 @@ export default {
         { text: this.$t('specimen.number'), value: 'specimen_number' },
         { text: this.$t('specimen.depth'), value: 'depth' },
         { text: this.$t('specimen.depthInterval'), value: 'depth_interval' },
+        {
+          text: this.$t('specimen.thickness'),
+          value: 'thickness',
+          sortable: false,
+          class: 'static-cell-header',
+          cellClass: 'static-cell',
+        },
         { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
         { text: this.$t('specimen.kind'), value: 'kind' },
         { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
@@ -102,6 +116,7 @@ export default {
     }
   },
   methods: {
+    round,
     async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 
