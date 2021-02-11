@@ -111,6 +111,11 @@ export default {
     stratigraphy: 'Stratigraafia',
     taxon: 'Takson',
   },
+  infinite: {
+    noMore: '',
+    error: '',
+    retry: 'Proovi uuesti',
+  },
   footerPreliminary: '2021 GRIS: Geoloogia portaal (testversioon).',
   footer:
     'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
