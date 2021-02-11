@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <!-- TODO: Search for ways to replace scroll wheel zoom -->
+    <!-- TODO: #77 Search for ways to replace default zoom on map -->
     <l-map
       ref="map"
       style="z-index: 0"

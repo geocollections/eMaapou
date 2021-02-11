@@ -13,7 +13,7 @@
             <v-card-text class="drillcore-box__card">
               <v-row align="start">
                 <v-col cols="12" sm="8" align-self="center">
-                  <!-- TODO: Add placeholder, for case when box does not have a picture -->
+                  <!-- TODO: #74 Add placeholder, for case when box does not have a picture -->
                   <client-only>
                     <v-img
                       class="rounded mx-auto transition-swing"
@@ -40,11 +40,6 @@
                         </v-row>
                       </template>
                     </v-img>
-
-                    <!-- Todo: Placeholder for the server -->
-                    <template #placeholde>
-                      <div>Image</div>
-                    </template>
                   </client-only>
                 </v-col>
                 <v-col cols="12" sm="4">
