@@ -29,6 +29,13 @@
         }}
       </a>
     </template>
+    <template #item.thickness="{ item }">
+      {{
+        !item.depth_interval || !item.depth
+          ? null
+          : round(item.depth_interval - item.depth, 3)
+      }}
+    </template>
     <template #item.date_collected="{ item }">
       {{
         item.date_collected
@@ -40,7 +47,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, round } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
@@ -76,6 +83,13 @@ export default {
         { text: this.$t('samples.number'), value: 'number' },
         { text: this.$t('samples.depth'), value: 'depth' },
         { text: this.$t('samples.depthInterval'), value: 'depth_interval' },
+        {
+          text: this.$t('samples.thickness'),
+          value: 'thickness',
+          sortable: false,
+          class: 'static-cell-header',
+          cellClass: 'static-cell',
+        },
         { text: this.$t('samples.stratigraphy'), value: 'stratigraphy' },
         { text: this.$t('samples.collector'), value: 'collector' },
         { text: this.$t('samples.dateCollected'), value: 'date_collected' },
@@ -93,6 +107,7 @@ export default {
     }
   },
   methods: {
+    round,
     async handleUpdate(options) {
       const start = (options.page - 1) * options.itemsPerPage
 

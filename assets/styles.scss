@@ -113,3 +113,12 @@ th {
     white-space: nowrap;
   }
 }
+
+
+.static-cell-header {
+  background-color: map-get($map: $grey, $key: 'lighten-4');
+}
+
+.static-cell {
+  color: map-get($map: $grey, $key: 'darken-1');
+}
