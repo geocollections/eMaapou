@@ -283,8 +283,8 @@
           </v-row>
         </v-container>
       </v-card>
-      <v-card class="mt-2 pb-2">
-        <tabs :items="tabs" :init-active-tab="initActiveTab" />
+      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
@@ -305,60 +305,98 @@ export default {
       )
       const drillcore = drillcoreResponse.results[0]
 
+      const tabs = [
+        {
+          routeName: 'drillcore-id',
+          title: 'drillcore.drillcoreBoxesTitle',
+          count: drillcore?.boxes,
+          props: {},
+        },
+        {
+          id: 'locality_description',
+          routeName: 'drillcore-id-descriptions',
+          title: 'drillcore.localityDescriptions',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'locality_reference',
+          routeName: 'drillcore-id-references',
+          title: 'drillcore.localityReferences',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'attachment_link',
+          routeName: 'drillcore-id-attachments',
+          title: 'drillcore.attachments',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'sample',
+          isSolr: true,
+          routeName: 'drillcore-id-samples',
+          title: 'drillcore.samples',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'analysis',
+          isSolr: true,
+          routeName: 'drillcore-id-analyses',
+          title: 'drillcore.analyses',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'specimen',
+          isSolr: true,
+          routeName: 'drillcore-id-specimens',
+          title: 'drillcore.specimens',
+          count: 0,
+          props: {},
+        },
+      ]
+
+      if (drillcore?.locality_id) {
+        const solrParams = {
+          fq: `locality_id:${drillcore.locality_id}`,
+          rows: 0,
+          fl: 'id',
+        }
+        const apiParams = {
+          locality: drillcore.locality_id,
+          page: 1,
+          paginate_by: 1,
+          fields: 'id',
+        }
+
+        const forLoop = async () => {
+          const filteredTabs = tabs.filter((item) => !!item.id)
+          for (const item of filteredTabs) {
+            let countResponse
+            if (item?.isSolr)
+              countResponse = await $axios.$get(`solr/${item.id}`, {
+                params: solrParams,
+              })
+            else
+              countResponse = await $axios.$get(`/${item.id}`, {
+                params: apiParams,
+              })
+            item.count = countResponse?.count ?? 0
+            item.props = {
+              locality: drillcore.locality_id,
+            }
+          }
+        }
+        await forLoop()
+      }
+
       return {
         drillcore,
         initActiveTab: route.path,
-        tabs: [
-          {
-            routeName: 'drillcore-id',
-            title: 'drillcore.drillcoreBoxesTitle',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-          {
-            routeName: 'drillcore-id-descriptions',
-            title: 'drillcore.localityDescriptions',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-          {
-            routeName: 'drillcore-id-references',
-            title: 'drillcore.localityReferences',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-          {
-            routeName: 'drillcore-id-attachments',
-            title: 'drillcore.attachments',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-          {
-            routeName: 'drillcore-id-samples',
-            title: 'drillcore.samples',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-          {
-            routeName: 'drillcore-id-analyses',
-            title: 'drillcore.analyses',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-          {
-            routeName: 'drillcore-id-specimens',
-            title: 'drillcore.specimens',
-            props: {
-              locality: drillcore.locality_id,
-            },
-          },
-        ],
+        tabs,
       }
     } catch (err) {
       error({
@@ -374,6 +412,11 @@ export default {
         en: this.drillcore.drillcore_en,
       }),
     }
+  },
+  computed: {
+    filteredTabs() {
+      return this.tabs.filter((item) => item.count > 0)
+    },
   },
   methods: {
     isEmpty,
