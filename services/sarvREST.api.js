@@ -6,32 +6,29 @@ export default ($axios) => ({
       return { items: [], count: 0 }
     }
 
-    let params, multiSearch
+    let multiSearch
     if (!isEmpty(options.search))
       multiSearch = `value:${options.search};fields:${Object.values(
-        options.sortValues
+        options.queryFields
       )
         .map((field) => field())
         .join()};lookuptype:icontains`
 
-    if (isEmpty(options.sortBy)) {
-      params = {
-        ...options.defaultParams,
-        multi_search: multiSearch,
-        paginate_by: options.itemsPerPage,
-        page: options.page,
-      }
-    } else {
+    let params = {
+      ...options.defaultParams,
+      multi_search: multiSearch,
+      paginate_by: options.itemsPerPage,
+      page: options.page,
+    }
+
+    if (!isEmpty(options.sortBy)) {
       const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `-${options.sortValues[field]()}`
-        return options.sortValues[field]()
+        if (options.sortDesc[i]) return `-${options.queryFields[field]()}`
+        return options.queryFields[field]()
       })
 
       params = {
-        ...options.defaultParams,
-        multi_search: multiSearch,
-        paginate_by: options.itemsPerPage,
-        page: options.page,
+        ...params,
         order_by: orderBy.join(','),
       }
     }

@@ -103,7 +103,7 @@ export default {
           sortable: false,
         },
       ],
-      sortValues: {
+      queryFields: {
         rock: () => {
           return this.$i18n.locale === 'et' ? 'rock__name' : 'rock__name_en'
         },
@@ -130,7 +130,7 @@ export default {
           defaultParams: {
             locality: this.locality,
           },
-          sortValues: this.sortValues,
+          queryFields: this.queryFields,
         }
       )
       this.descriptions = descriptionResponse.items

@@ -94,7 +94,7 @@ export default {
         { text: this.$t('analysis.analysedBy'), value: 'agent' },
         { text: this.$t('analysis.date'), value: 'date' },
       ],
-      sortValues: {
+      queryFields: {
         id: () => 'id',
         sample_number: () => 'sample_number',
         depth: () => 'depth',
@@ -119,7 +119,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality}`,
           },
-          sortValues: this.sortValues,
+          queryFields: this.queryFields,
         }
       )
 

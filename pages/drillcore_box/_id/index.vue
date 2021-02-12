@@ -94,7 +94,7 @@ export default {
         { text: this.$t('samples.collector'), value: 'collector' },
         { text: this.$t('samples.dateCollected'), value: 'date_collected' },
       ],
-      sortValues: {
+      queryFields: {
         id: () => 'id',
         number: () => 'number',
         depth: () => 'depth',
@@ -117,7 +117,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           },
-          sortValues: this.sortValues,
+          queryFields: this.queryFields,
         }
       )
 

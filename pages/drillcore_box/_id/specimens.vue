@@ -101,7 +101,7 @@ export default {
         { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
         { text: this.$t('specimen.taxon'), value: 'taxon' },
       ],
-      sortValues: {
+      queryFields: {
         id: () => 'id',
         specimen_number: () => 'specimen_number',
         depth: () => 'depth',
@@ -126,7 +126,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           },
-          sortValues: this.sortValues,
+          queryFields: this.queryFields,
         }
       )
       this.specimens = specimenResponse.items

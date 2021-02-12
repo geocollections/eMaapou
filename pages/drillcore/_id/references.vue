@@ -49,7 +49,7 @@ export default {
         { text: this.$t('localityReference.pages'), value: 'pages' },
         { text: this.$t('localityReference.remarks'), value: 'remarks' },
       ],
-      sortValues: {
+      queryFields: {
         reference: () => 'reference__reference',
         reference__title: () => 'reference__title',
         pages: () => 'pages',
@@ -67,7 +67,7 @@ export default {
           defaultParams: {
             locality: this.locality,
           },
-          sortValues: this.sortValues,
+          queryFields: this.queryFields,
         }
       )
       this.references = referenceResponse.items

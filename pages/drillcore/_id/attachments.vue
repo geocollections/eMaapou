@@ -50,7 +50,7 @@ export default {
           value: 'attachment__author__agent',
         },
       ],
-      sortValues: {
+      queryFields: {
         description: () =>
           this.$i18n.locale === 'et'
             ? 'attachment__description'
@@ -70,7 +70,7 @@ export default {
             locality: this.locality,
             or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
           },
-          sortValues: this.sortValues,
+          queryFields: this.queryFields,
         }
       )
       this.attachments = attachmentResponse.items

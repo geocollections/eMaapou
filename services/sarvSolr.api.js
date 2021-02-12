@@ -1,35 +1,31 @@
 import { isEmpty } from 'lodash'
 
 export default ($axios) => ({
-  async getResourceList(resource, options) {
+  async getResourceList(
+    resource,
+    { defaultParams, queryFields, search, ...options }
+  ) {
     if (options.isValid) {
       return {
         items: [],
         count: 0,
       }
     }
+    let params = {
+      ...defaultParams,
+      q: isEmpty(search) ? '*' : `${search}`,
+      start: (options.page - 1) * options.itemsPerPage,
+      rows: options.itemsPerPage,
+    }
 
-    const start = (options.page - 1) * options.itemsPerPage
-
-    let params
-    if (isEmpty(options.sortBy)) {
-      params = {
-        ...options.defaultParams,
-        q: isEmpty(options.search) ? '*' : `${options.search}`,
-        rows: options.itemsPerPage,
-        start,
-      }
-    } else {
+    if (!isEmpty(options.sortBy)) {
       const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `${options.sortValues[field]()} desc`
-        return `${options.sortValues[field]()} asc`
+        if (options.sortDesc[i]) return `${queryFields[field]()} desc`
+        return `${queryFields[field]()} asc`
       })
 
       params = {
-        ...options.defaultParams,
-        q: isEmpty(options.search) ? '*' : `${options.search}`,
-        rows: options.itemsPerPage,
-        start,
+        ...params,
         sort: orderBy.join(','),
       }
     }
