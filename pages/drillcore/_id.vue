@@ -377,13 +377,15 @@ export default {
           for (const item of filteredTabs) {
             let countResponse
             if (item?.isSolr)
-              countResponse = await $axios.$get(`solr/${item.id}`, {
-                params: solrParams,
-              })
+              countResponse = await app.$services.sarvSolr.getResourceCount(
+                item.id,
+                solrParams
+              )
             else
-              countResponse = await $axios.$get(`/${item.id}`, {
-                params: apiParams,
-              })
+              countResponse = await app.$services.sarvREST.getResourceCount(
+                item.id,
+                apiParams
+              )
             item.count = countResponse?.count ?? 0
             item.props = {
               locality: drillcore.locality_id,

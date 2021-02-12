@@ -11,10 +11,7 @@
         class="text-link"
         @click="openGeoDetail({ table: 'attachment', id: item.id })"
         >{{
-          $translate({
-            et: item.attachment__description,
-            en: item.attachment__description_en,
-          })
+          item
         }}</a
       >
     </template>
