@@ -361,9 +361,7 @@ export default {
 
       if (drillcore?.locality_id) {
         const solrParams = { fq: `locality_id:${drillcore.locality_id}` }
-        const apiParams = {
-          or_search: `locality:${drillcore.locality_id}`,
-        }
+        const apiParams = { locality: drillcore.locality_id }
         // Hack: fix count in API!!!
         const apiAttachmentLinkParams = {
           or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
