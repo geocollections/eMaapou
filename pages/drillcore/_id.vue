@@ -360,16 +360,9 @@ export default {
       ]
 
       if (drillcore?.locality_id) {
-        const solrParams = {
-          fq: `locality_id:${drillcore.locality_id}`,
-          rows: 0,
-          fl: 'id',
-        }
+        const solrParams = { fq: `locality_id:${drillcore.locality_id}` }
         const apiParams = {
           or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
-          page: 1,
-          paginate_by: 1,
-          fields: 'id',
         }
 
         const forLoop = async () => {
