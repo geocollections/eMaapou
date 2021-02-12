@@ -311,8 +311,8 @@
         </v-card-text>
       </v-card>
 
-      <v-card v-if="!areAllTabsEmpty" class="mt-2 pb-2">
-        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
@@ -370,7 +370,6 @@ export default {
         drillcoreBox?.depth_end
       ) {
         const params = {
-          q: '*:*',
           fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
           rows: 0,
           fl: 'id',
@@ -380,7 +379,7 @@ export default {
             const countResponse = await $axios.$get(`solr/${item.id}`, {
               params,
             })
-            item.count = countResponse.count ?? 0
+            item.count = countResponse?.count ?? 0
             item.props = {
               locality: drillcoreBox.drillcore__locality,
               depthStart: drillcoreBox.depth_start,
@@ -421,8 +420,8 @@ export default {
     }
   },
   computed: {
-    areAllTabsEmpty() {
-      return this.tabs.filter((item) => item.count > 0).length === 0
+    filteredTabs() {
+      return this.tabs.filter((item) => item.count > 0)
     },
   },
   methods: {
