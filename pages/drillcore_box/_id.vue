@@ -377,9 +377,10 @@ export default {
         }
         const forLoop = async () => {
           for (const item of tabs) {
-            const countResponse = await $axios.$get(`solr/${item.id}`, {
-              params,
-            })
+            const countResponse = await app.$services.sarvSolr.getResourceCount(
+              item.id,
+              params
+            )
             item.count = countResponse?.count ?? 0
             item.props = {
               locality: drillcoreBox.drillcore__locality,
