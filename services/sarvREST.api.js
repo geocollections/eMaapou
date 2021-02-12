@@ -6,21 +6,22 @@ export default ($axios) => ({
     return response.data
   },
 
-  async getResourceList(resource, options) {
+  async getResourceList(
+    resource,
+    { defaultParams, queryFields, search, ...options }
+  ) {
     if (options.isValid) {
       return { items: [], count: 0 }
     }
 
     let multiSearch
     if (!isEmpty(options.search))
-      multiSearch = `value:${options.search};fields:${Object.values(
-        options.queryFields
-      )
+      multiSearch = `value:${search};fields:${Object.values(queryFields)
         .map((field) => field())
         .join()};lookuptype:icontains`
 
     let params = {
-      ...options.defaultParams,
+      ...defaultParams,
       multi_search: multiSearch,
       paginate_by: options.itemsPerPage,
       page: options.page,
@@ -28,8 +29,8 @@ export default ($axios) => ({
 
     if (!isEmpty(options.sortBy)) {
       const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `-${options.queryFields[field]()}`
-        return options.queryFields[field]()
+        if (options.sortDesc[i]) return `-${queryFields[field]()}`
+        return queryFields[field]()
       })
 
       params = {
