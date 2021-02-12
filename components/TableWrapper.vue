@@ -11,7 +11,7 @@
     mobile-breakpoint="0"
     @update:options="handleChange"
   >
-    <template #top>
+    <template #top="{ pagination, updateOptions }">
       <v-text-field
         v-model="search"
         class="ma-4"
@@ -22,6 +22,13 @@
         clearable
         @input="handleSearch"
       ></v-text-field>
+      <v-data-footer
+        style="border: none"
+        :pagination="pagination"
+        :options="options"
+        :items-per-page-options="footerProps['items-per-page-options']"
+        @update:options="updateOptions"
+      />
     </template>
     <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
       <slot :name="slotName" v-bind="context" />
@@ -57,7 +64,7 @@ export default {
       search: '',
       options: this.initOptions,
       footerProps: {
-        'items-per-page-options': [5, 25, 50, 100],
+        'items-per-page-options': [10, 25, 50, 100],
       },
     }
   },
