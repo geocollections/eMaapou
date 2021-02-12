@@ -297,12 +297,12 @@ import Tabs from '~/components/Tabs.vue'
 
 export default {
   components: { Tabs, LeafletMap },
-  async asyncData({ $axios, params, route, error }) {
+  async asyncData({ params, route, error, app }) {
     try {
-      const drillcoreResponse = await $axios.$get(
-        `https://api.geocollections.info/drillcore/${params.id}`
+      const drillcoreResponse = await app.$services.sarvREST.getResource(
+        'drillcore',
+        params.id
       )
-
       const drillcore = drillcoreResponse.results[0]
 
       return {

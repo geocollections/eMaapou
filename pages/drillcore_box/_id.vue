@@ -327,10 +327,11 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 export default {
   components: { BoxImageLoader },
   mixins: [global],
-  async asyncData({ $axios, params, route, error }) {
+  async asyncData({ $axios, params, route, error, app }) {
     try {
-      const drillcoreBoxResponse = await $axios.$get(
-        `https://api.geocollections.info/drillcore_box/${params.id}`
+      const drillcoreBoxResponse = await app.$services.sarvREST.getResource(
+        'drillcore_box',
+        params.id
       )
       const attachmentLinkResponse = await $axios.$get(
         `https://api.geocollections.info/attachment_link/?drillcore_box=${params.id}&order_by=-attachment__is_preferred&fields=attachment__author__agent,attachment__author_free,attachment__date_created,attachment__date_created_free,attachment__uuid_filename,attachment__is_preferred`
