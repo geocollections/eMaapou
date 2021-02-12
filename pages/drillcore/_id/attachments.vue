@@ -9,9 +9,12 @@
     <template #item.description="{ item }">
       <a
         class="text-link"
-        @click="openGeoDetail({ table: 'attachment', id: item.id })"
+        @click="openGeoDetail({ table: 'attachment', id: item.attachment })"
         >{{
-          item
+          $translate({
+            et: item.attachment__description,
+            en: item.attachment__description_en,
+          })
         }}</a
       >
     </template>
