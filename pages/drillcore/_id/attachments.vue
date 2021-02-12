@@ -67,7 +67,6 @@ export default {
           ...options,
           isValid: isNil(this.locality),
           defaultParams: {
-            locality: this.locality,
             or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
           },
           queryFields: this.queryFields,

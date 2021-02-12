@@ -366,7 +366,7 @@ export default {
           fl: 'id',
         }
         const apiParams = {
-          locality: drillcore.locality_id,
+          or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
           page: 1,
           paginate_by: 1,
           fields: 'id',
