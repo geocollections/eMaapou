@@ -284,7 +284,7 @@
         </v-container>
       </v-card>
       <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
@@ -360,16 +360,11 @@ export default {
       ]
 
       if (drillcore?.locality_id) {
-        const solrParams = {
-          fq: `locality_id:${drillcore.locality_id}`,
-          rows: 0,
-          fl: 'id',
-        }
-        const apiParams = {
+        const solrParams = { fq: `locality_id:${drillcore.locality_id}` }
+        const apiParams = { locality: drillcore.locality_id }
+        // Hack: fix count in API!!!
+        const apiAttachmentLinkParams = {
           or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
-          page: 1,
-          paginate_by: 1,
-          fields: 'id',
         }
 
         const forLoop = async () => {
@@ -384,7 +379,9 @@ export default {
             else
               countResponse = await app.$services.sarvREST.getResourceCount(
                 item.id,
-                apiParams
+                item.id === 'attachment_link'
+                  ? apiAttachmentLinkParams
+                  : apiParams
               )
             item.count = countResponse?.count ?? 0
             item.props = {

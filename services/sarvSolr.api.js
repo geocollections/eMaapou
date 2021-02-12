@@ -39,7 +39,7 @@ export default ($axios) => ({
 
   async getResourceCount(resource, countParams) {
     const response = await $axios.$get(`solr/${resource}`, {
-      params: countParams,
+      params: { ...countParams, rows: 0 },
     })
     return {
       count: response.count,
