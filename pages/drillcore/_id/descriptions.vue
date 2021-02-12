@@ -122,45 +122,18 @@ export default {
   methods: {
     round,
     async handleUpdate(options) {
-      if (isNil(this.locality)) {
-        this.descriptions = []
-        this.count = 0
-        return
-      }
-
-      let params, multiSearch
-      if (!isEmpty(options.search))
-        multiSearch = `value:${options.search};fields:${Object.values(
-          this.sortValues
-        )
-          .map((field) => field())
-          .join()};lookuptype:icontains`
-      if (isEmpty(options.sortBy)) {
-        params = {
-          multi_search: multiSearch,
-          locality: this.locality,
-          paginate_by: options.itemsPerPage,
-          page: options.page,
-        }
-      } else {
-        const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `-${this.sortValues[field]()}`
-          return this.sortValues[field]()
-        })
-
-        params = {
-          multi_search: multiSearch,
-          locality: this.locality,
-          paginate_by: options.itemsPerPage,
-          page: options.page,
-          order_by: orderBy.join(','),
-        }
-      }
-      const descriptionResponse = await this.$axios.$get(
+      const descriptionResponse = await this.$services.sarvREST.getResourceList(
         'locality_description',
-        { params }
+        {
+          ...options,
+          isValid: isNil(this.locality),
+          defaultParams: {
+            locality: this.locality,
+          },
+          sortValues: this.sortValues,
+        }
       )
-      this.descriptions = descriptionResponse.results
+      this.descriptions = descriptionResponse.items
       this.count = descriptionResponse.count
     },
   },

@@ -23,6 +23,7 @@ export default {
   plugins: [
     '~plugins/translate.js',
     { src: '~/plugins/infiniteLoading', ssr: false },
+    '~plugins/services.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

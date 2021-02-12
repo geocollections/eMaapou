@@ -61,44 +61,19 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
-      if (isNil(this.locality)) {
-        this.attachments = []
-        this.count = 0
-        return
-      }
-
-      let params, multiSearch
-      if (!isEmpty(options.search))
-        multiSearch = `value:${options.search};fields:${Object.values(
-          this.sortValues
-        )
-          .map((field) => field())
-          .join()};lookuptype:icontains`
-      if (isEmpty(options.sortBy)) {
-        params = {
-          multi_search: multiSearch,
-          or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
-          paginate_by: options.itemsPerPage,
-          page: options.page,
+      const attachmentResponse = await this.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          ...options,
+          isValid: isNil(this.locality),
+          defaultParams: {
+            locality: this.locality,
+            or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
+          },
+          sortValues: this.sortValues,
         }
-      } else {
-        const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `-${this.sortValues[field]()}`
-          return this.sortValues[field]()
-        })
-
-        params = {
-          multi_search: multiSearch,
-          or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
-          paginate_by: options.itemsPerPage,
-          page: options.page,
-          order_by: orderBy.join(','),
-        }
-      }
-      const attachmentResponse = await this.$axios.$get('attachment_link', {
-        params,
-      })
-      this.attachments = attachmentResponse.results
+      )
+      this.attachments = attachmentResponse.items
       this.count = attachmentResponse.count
     },
   },

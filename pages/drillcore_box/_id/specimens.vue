@@ -118,40 +118,18 @@ export default {
   methods: {
     round,
     async handleUpdate(options) {
-      if (isNil(this.locality)) {
-        this.specimens = []
-        this.count = 0
-        return
-      }
-
-      const start = (options.page - 1) * options.itemsPerPage
-
-      let params
-      if (isEmpty(options.sortBy)) {
-        params = {
-          q: isEmpty(options.search) ? '*' : `${options.search}`,
-          fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
-          rows: options.itemsPerPage,
-          start,
+      const specimenResponse = await this.$services.sarvSolr.getResourceList(
+        'specimen',
+        {
+          ...options,
+          isValid: isNil(this.locality),
+          defaultParams: {
+            fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
+          },
+          sortValues: this.sortValues,
         }
-      } else {
-        const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `${this.sortValues[field]()} desc`
-          return `${this.sortValues[field]()} asc`
-        })
-
-        params = {
-          q: isEmpty(options.search) ? '*' : `${options.search}`,
-          fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
-          rows: options.itemsPerPage,
-          start,
-          sort: orderBy.join(','),
-        }
-      }
-      const specimenResponse = await this.$axios.$get('solr/specimen', {
-        params,
-      })
-      this.specimens = specimenResponse.results
+      )
+      this.specimens = specimenResponse.items
       this.count = specimenResponse.count
     },
   },

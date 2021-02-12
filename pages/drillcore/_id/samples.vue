@@ -101,38 +101,18 @@ export default {
   methods: {
     round,
     async handleUpdate(options) {
-      if (isNil(this.locality)) {
-        this.samples = []
-        this.count = 0
-        return
-      }
-
-      const start = (options.page - 1) * options.itemsPerPage
-
-      let params
-      if (isEmpty(options.sortBy)) {
-        params = {
-          q: isEmpty(options.search) ? '*' : `${options.search}`,
-          fq: `locality_id:${this.locality}`,
-          rows: options.itemsPerPage,
-          start,
+      const sampleResponse = await this.$services.sarvSolr.getResourceList(
+        'sample',
+        {
+          ...options,
+          isValid: isNil(this.locality),
+          defaultParams: {
+            fq: `locality_id:${this.locality}`,
+          },
+          sortValues: this.sortValues,
         }
-      } else {
-        const orderBy = options.sortBy.map((field, i) => {
-          if (options.sortDesc[i]) return `${this.sortValues[field]()} desc`
-          return `${this.sortValues[field]()} asc`
-        })
-
-        params = {
-          q: isEmpty(options.search) ? '*' : `${options.search}`,
-          fq: `locality_id:${this.locality}`,
-          rows: options.itemsPerPage,
-          start,
-          sort: orderBy.join(','),
-        }
-      }
-      const sampleResponse = await this.$axios.$get('solr/sample', { params })
-      this.samples = sampleResponse.results
+      )
+      this.samples = sampleResponse.items
       this.count = sampleResponse.count
     },
   },
