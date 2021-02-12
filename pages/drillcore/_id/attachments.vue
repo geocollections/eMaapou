@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { isEmpty, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 

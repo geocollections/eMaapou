@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { isEmpty, round, isNil } from 'lodash'
+import { round, isNil } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
