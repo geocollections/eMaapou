@@ -1,6 +1,11 @@
 import { isEmpty } from 'lodash'
 
 export default ($axios) => ({
+  async getResource(resource, id) {
+    const response = await $axios.get(`${resource}/${id}`)
+    return response.data
+  },
+
   async getResourceList(resource, options) {
     if (options.isValid) {
       return { items: [], count: 0 }
