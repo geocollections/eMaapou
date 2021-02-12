@@ -222,7 +222,6 @@
                 </tr>
                 <tr>
                   <td>{{ $t('drillcoreBox.stratigraphyTop') }}</td>
-
                   <td
                     v-if="isNull(drillcoreBox.stratigraphy_top_id)"
                     class="no-value"
@@ -312,67 +311,92 @@
         </v-card-text>
       </v-card>
 
-      <v-card class="mt-2 pb-2">
-        <tabs :items="tabs" :init-active-tab="initActiveTab" />
+      <v-card v-if="!areAllTabsEmpty" class="mt-2 pb-2">
+        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import { isNull } from 'lodash'
+import { isNull, isNil } from 'lodash'
 import global from '@/mixins/global'
 import BoxImageLoader from '@/components/BoxImageLoader'
+import Tabs from '@/components/Tabs'
 
 export default {
-  components: { BoxImageLoader },
+  components: { Tabs, BoxImageLoader },
   mixins: [global],
   async asyncData({ $axios, params, route, error }) {
     try {
       const drillcoreBoxResponse = await $axios.$get(
         `https://api.geocollections.info/drillcore_box/${params.id}`
       )
+      const drillcoreBox = drillcoreBoxResponse.results[0]
+
       const attachmentLinkResponse = await $axios.$get(
         `https://api.geocollections.info/attachment_link/?drillcore_box=${params.id}&order_by=-attachment__is_preferred&fields=attachment__author__agent,attachment__author_free,attachment__date_created,attachment__date_created_free,attachment__uuid_filename,attachment__is_preferred`
       )
-
       const drillcoreBoxImages = attachmentLinkResponse.results
-      const drillcoreBox = drillcoreBoxResponse.results[0]
       const activeImage = drillcoreBoxImages[0]
+
+      const tabs = [
+        {
+          id: 'sample',
+          routeName: 'drillcore_box-id',
+          title: 'drillcore.samples',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'analysis',
+          routeName: 'drillcore_box-id-analyses',
+          title: 'drillcore.analyses',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'specimen',
+          routeName: 'drillcore_box-id-specimens',
+          title: 'drillcore.specimens',
+          count: 0,
+          props: {},
+        },
+      ]
+
+      if (
+        drillcoreBox?.drillcore__locality &&
+        drillcoreBox?.depth_start &&
+        drillcoreBox?.depth_end
+      ) {
+        const params = {
+          q: '*:*',
+          fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
+          rows: 0,
+          fl: 'id',
+        }
+        const forLoop = async () => {
+          for (const item of tabs) {
+            const countResponse = await $axios.$get(`solr/${item.id}`, {
+              params,
+            })
+            item.count = countResponse.count ?? 0
+            item.props = {
+              locality: drillcoreBox.drillcore__locality,
+              depthStart: drillcoreBox.depth_start,
+              depthEnd: drillcoreBox.depth_end,
+            }
+          }
+        }
+        await forLoop()
+      }
+
       return {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
         initActiveTab: route.path,
-        tabs: [
-          {
-            routeName: 'drillcore_box-id',
-            title: 'drillcore.samples',
-            props: {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            },
-          },
-          {
-            routeName: 'drillcore_box-id-analyses',
-            title: 'drillcore.analyses',
-            props: {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            },
-          },
-          {
-            routeName: 'drillcore_box-id-specimens',
-            title: 'drillcore.specimens',
-            props: {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            },
-          },
-        ],
+        tabs,
       }
     } catch (err) {
       error({
@@ -396,8 +420,14 @@ export default {
       })}`,
     }
   },
+  computed: {
+    areAllTabsEmpty() {
+      return this.tabs.filter((item) => item.count > 0).length === 0
+    },
+  },
   methods: {
     isNull,
+    isNil,
     openImage(filename, size = 'large') {
       if (filename && size) {
         window.open(
