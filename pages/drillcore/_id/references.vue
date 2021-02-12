@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
@@ -59,6 +59,12 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
+      if (isNil(this.locality)) {
+        this.references = []
+        this.count = 0
+        return
+      }
+
       let params, multiSearch
       if (!isEmpty(options.search))
         multiSearch = `value:${options.search};fields:${Object.values(

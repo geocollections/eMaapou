@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { isEmpty, round } from 'lodash'
+import { isEmpty, round, isNil } from 'lodash'
 import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
@@ -108,6 +108,12 @@ export default {
   methods: {
     round,
     async handleUpdate(options) {
+      if (isNil(this.locality)) {
+        this.specimens = []
+        this.count = 0
+        return
+      }
+
       const start = (options.page - 1) * options.itemsPerPage
 
       let params
