@@ -33,11 +33,6 @@
         @update:options="updateOptions"
       />
     </template>
-    <template #item.data-table-expand="{ expand, isExpanded }">
-      <v-btn icon :class="{ active: isExpanded }" @click="expand(!isExpanded)">
-        <v-icon>mdi-chevron-down</v-icon>
-      </v-btn>
-    </template>
     <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
       <slot :name="slotName" v-bind="context" />
     </template>
