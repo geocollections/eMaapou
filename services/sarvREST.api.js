@@ -50,7 +50,7 @@ export default ($axios) => ({
       ...getSortByParams(tableOptions, queryFields),
     }
 
-    const response = await $axios.$get(resource, { params })
+    const response = await $axios.$get(`${resource}/`, { params })
 
     return {
       page: response.page,
@@ -60,7 +60,7 @@ export default ($axios) => ({
   },
 
   async getResourceCount(resource, countParams) {
-    const response = await $axios.$get(resource, {
+    const response = await $axios.$get(`${resource}/`, {
       params: { ...countParams, page: 1, paginate_by: 1, fields: 'id' },
     })
     return {

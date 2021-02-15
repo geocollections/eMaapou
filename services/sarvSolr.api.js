@@ -43,7 +43,7 @@ export default ($axios) => ({
       ...getSortByParams(tableOptions, queryFields),
     }
 
-    const response = await $axios.$get(`solr/${resource}`, { params })
+    const response = await $axios.$get(`solr/${resource}/`, { params })
 
     return {
       items: response.results,
@@ -52,7 +52,7 @@ export default ($axios) => ({
   },
 
   async getResourceCount(resource, countParams) {
-    const response = await $axios.$get(`solr/${resource}`, {
+    const response = await $axios.$get(`solr/${resource}/`, {
       params: { ...countParams, rows: 0 },
     })
     return {
