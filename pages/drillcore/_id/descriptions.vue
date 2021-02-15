@@ -1,11 +1,15 @@
 <template>
-  <table-wrapper
+  <expandable-table-wrapper
     :items="descriptions"
     :headers="headers"
     :count="count"
     :init-options="options"
+    :expand-header-text="$t('localityDescription.description')"
     @update="handleUpdate"
   >
+    <template #expanded-item="{ headers, item }">
+      <td class="py-2" :colspan="headers.length">{{ item.description }}</td>
+    </template>
     <template #item.rock="{ item }">
       {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
     </template>
@@ -47,16 +51,16 @@
         {{ item.author_free }}
       </div>
     </template>
-  </table-wrapper>
+  </expandable-table-wrapper>
 </template>
 
 <script>
 import { round, isNil } from 'lodash'
 import global from '@/mixins/global'
-import TableWrapper from '~/components/TableWrapper.vue'
+import ExpandableTableWrapper from '~/components/ExpandableTableWrapper.vue'
 
 export default {
-  components: { TableWrapper },
+  components: { ExpandableTableWrapper },
   mixins: [global],
   props: {
     locality: {
@@ -91,11 +95,6 @@ export default {
         {
           text: this.$t('localityDescription.stratigraphy'),
           value: 'stratigraphy',
-        },
-        // TODO: #81 Use Vuetify Data Table expanded item to display description
-        {
-          text: this.$t('localityDescription.description'),
-          value: 'description',
         },
         {
           text: this.$t('localityDescription.author'),
