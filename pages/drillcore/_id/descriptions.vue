@@ -5,18 +5,9 @@
     :count="count"
     :init-options="options"
     :expand-header-text="$t('localityDescription.description')"
+    expand-field="description"
     @update="handleUpdate"
   >
-    <template #item.data-table-expand="{ expand, isExpanded, item }">
-      <v-btn
-        v-if="item.description"
-        icon
-        :class="{ active: isExpanded }"
-        @click="expand(!isExpanded)"
-      >
-        <v-icon>mdi-chevron-down</v-icon>
-      </v-btn>
-    </template>
     <template #expanded-item="{ headers, item }">
       <td class="py-2" :colspan="headers.length">{{ item.description }}</td>
     </template>
