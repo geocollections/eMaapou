@@ -236,7 +236,6 @@ export default {
     },
     infiniteHandler($state) {
       const paginateBy = 5
-      console.log('inf')
       this.$services.sarvREST
         .getResourceList('attachment_link', {
           defaultParams: {
@@ -272,7 +271,6 @@ export default {
         })
     },
     handleSearch: debounce(function () {
-      console.log('search')
       this.boxes = []
       if (this.page !== 1) this.page = 1
       else {
