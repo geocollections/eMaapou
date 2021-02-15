@@ -95,11 +95,15 @@ export default {
   },
   methods: {
     handleChange(options) {
-      this.$emit('update', { ...options, search: this.search })
+      this.$emit('update', { tableOptions: options, search: this.search })
     },
     handleSearch: debounce(function () {
       if (this.options.page !== 1) this.options.page = 1
-      else this.$emit('update', { ...this.options, search: this.search })
+      else
+        this.$emit('update', {
+          tableOptions: this.options,
+          search: this.search,
+        })
     }, 500),
   },
 }
