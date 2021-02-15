@@ -4,6 +4,8 @@
     <l-map
       ref="map"
       style="z-index: 0"
+      gesture-handling
+      :options="mapOptions"
       :zoom="13"
       :center="[center.latitude, center.longitude]"
     >
@@ -163,7 +165,10 @@ export default {
   },
   computed: {
     mapOptions() {
-      return { scrollWheelZoom: this.$vuetify.breakpoint.mdAndUp }
+      return {
+        // scrollWheelZoom: this.$vuetify.breakpoint.mdAndUp,
+        gestureHandling: true,
+      }
     },
   },
 }
