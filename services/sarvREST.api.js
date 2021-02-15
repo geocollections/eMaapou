@@ -5,7 +5,7 @@ export default ($axios) => ({
     const response = await $axios.get(`${resource}/${id}`)
     return response.data
   },
-
+  // ISSUE: getResourceList depends on Vuetify Data Table options
   async getResourceList(
     resource,
     { defaultParams, queryFields, search, ...options }
