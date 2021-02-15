@@ -42,6 +42,7 @@ Icon.Default.mergeOptions({
 const LeafletPlugin = {
   install(Vue, options) {
     // Expose Leaflet
+    // eslint-disable-next-line no-undef
     Vue.prototype.$L = L
   },
 }
