@@ -127,6 +127,11 @@ export default {
     error: '',
     retry: 'Retry',
   },
+  gestureHandling: {
+    touch: 'Use two fingers to move the map',
+    scroll: 'Use ctrl + scroll to zoom the map',
+    scrollMac: 'Use \u2318 + scroll to zoom the map',
+  },
   footerPreliminary: '2021 | GRIS: GeoResources Information System',
   footer:
     'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',

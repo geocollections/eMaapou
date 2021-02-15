@@ -4,8 +4,7 @@
     <l-map
       ref="map"
       style="z-index: 0"
-      gesture-handling
-      :options="mapOptions"
+      :options="options"
       :zoom="13"
       :center="[center.latitude, center.longitude]"
     >
@@ -81,6 +80,16 @@ export default {
   },
   data() {
     return {
+      options: {
+        gestureHandling: true,
+        gestureHandlingOptions: {
+          text: {
+            touch: this.$t('gestureHandling.touch'),
+            scroll: this.$t('gestureHandling.scroll'),
+            scrollMac: this.$t('gestureHandling.scrollMac'),
+          },
+        },
+      },
       layers: {
         base: [
           {
@@ -162,14 +171,6 @@ export default {
         ],
       },
     }
-  },
-  computed: {
-    mapOptions() {
-      return {
-        // scrollWheelZoom: this.$vuetify.breakpoint.mdAndUp,
-        gestureHandling: true,
-      }
-    },
   },
 }
 </script>

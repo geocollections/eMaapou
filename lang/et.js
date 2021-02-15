@@ -127,6 +127,11 @@ export default {
     error: '',
     retry: 'Proovi uuesti',
   },
+  gestureHandling: {
+    touch: 'Kasuta kahte näppu kaardi liigutamiseks',
+    scroll: 'Kasuta ctrl + scroll kaardi suumimiseks',
+    scrollMac: 'Kasuta \u2318 + scroll kaardi suumimiseks',
+  },
   footerPreliminary: '2021 | GRIS: GeoRessursside InfoSüsteem',
   footer:
     'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
