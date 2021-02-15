@@ -24,6 +24,7 @@ export default {
     '~plugins/translate.js',
     { src: '~/plugins/infiniteLoading', ssr: false },
     '~plugins/services.js',
+    { src: '~plugins/leaflet.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -42,7 +43,6 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     'nuxt-i18n',
-    'nuxt-leaflet',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -71,8 +71,6 @@ export default {
     defaultLocale: 'et',
     strategy: 'prefix_and_default',
   },
-
-  leaflet: {},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
