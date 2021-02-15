@@ -1,6 +1,5 @@
 <template>
   <client-only>
-    <!-- TODO: #77 Search for ways to replace default zoom on map -->
     <l-map
       ref="map"
       style="z-index: 0"
