@@ -53,6 +53,7 @@ export default ($axios) => ({
     const response = await $axios.$get(resource, { params })
 
     return {
+      page: response.page,
       items: response.results,
       count: response.count,
     }

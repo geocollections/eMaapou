@@ -1,6 +1,21 @@
 <template>
   <v-container>
     <v-row>
+      <v-col>
+        <!-- HACK: Should make infinite loader wrapper -->
+        <v-text-field
+          v-model="search"
+          class="ma-4"
+          append-icon="mdi-magnify"
+          :label="$t('common.search')"
+          single-line
+          hide-details
+          clearable
+          @input="handleSearch"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col v-for="(box, i) in boxes" :key="box.id" cols="12" class="pa-0">
         <v-divider v-if="i !== 0" />
         <v-hover v-slot="{ hover }">
@@ -171,33 +186,36 @@
         </v-hover>
       </v-col>
       <v-col>
-        <infinite-loading @infinite="infiniteHandler">
-          <template #spinner>
-            <v-progress-circular color="deep-orange darken-2" indeterminate />
-          </template>
-          <template #no-more>{{ $t('infinite.noMore') }}</template>
-          <template #error="{ trigger }">
-            <div>
-              {{ $t('infinite.error') }}
-            </div>
-            <br />
-            <v-btn outlined color="deep-orange darken-2" @click="trigger">
-              {{ $t('infinite.retry') }}
-            </v-btn>
-          </template>
-        </infinite-loading>
+        <client-only>
+          <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
+            <template #spinner>
+              <v-progress-circular color="deep-orange darken-2" indeterminate />
+            </template>
+            <template #no-more>{{ $t('infinite.noMore') }}</template>
+            <template #error="{ trigger }">
+              <div>
+                {{ $t('infinite.error') }}
+              </div>
+              <br />
+              <v-btn outlined color="deep-orange darken-2" @click="trigger">
+                {{ $t('infinite.retry') }}
+              </v-btn>
+            </template>
+          </infinite-loading>
+        </client-only>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { isNull } from 'lodash'
+import { isNull, debounce } from 'lodash'
 export default {
   data() {
     return {
       page: 1,
       boxes: [],
+      search: '',
     }
   },
   methods: {
@@ -218,17 +236,32 @@ export default {
     },
     infiniteHandler($state) {
       const paginateBy = 5
-      const url = `https://api.geocollections.info/attachment_link/?order_by=drillcore_box__depth_start,drillcore_box&drillcore_box__drillcore=${this.$route.params.id}&attachment__is_preferred=true&page=${this.page}&paginate_by=${paginateBy}&distinct=true&fields=id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred`
-      this.$axios
-        .$get(url)
+      console.log('inf')
+      this.$services.sarvREST
+        .getResourceList('attachment_link', {
+          defaultParams: {
+            order_by: 'drillcore_box__depth_start,drillcore_box',
+            drillcore_box__drillcore: this.$route.params.id,
+            attachment__is_preferred: true,
+            page: this.page,
+            paginate_by: paginateBy,
+            distinct: true,
+            fields:
+              'id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred',
+          },
+          search: this.search,
+          queryFields: {
+            drillcore_box__number: () => 'drillcore_box__number',
+          },
+        })
         .then((res) => {
           if (!res.page) {
-            this.boxes.push(...res.results)
+            this.boxes.push(...res.items)
             $state.loaded()
             $state.complete()
           } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
             this.page += 1
-            this.boxes.push(...res.results)
+            this.boxes.push(...res.items)
             $state.loaded()
           } else {
             $state.complete()
@@ -238,6 +271,18 @@ export default {
           $state.error()
         })
     },
+    handleSearch: debounce(function () {
+      console.log('search')
+      this.boxes = []
+      if (this.page !== 1) this.page = 1
+      else {
+        this.$refs.infiniteLoading.status = 1
+        this.$refs.infiniteLoading.$emit(
+          'infinite',
+          this.$refs.infiniteLoading.stateChanger
+        )
+      }
+    }, 500),
   },
 }
 </script>
