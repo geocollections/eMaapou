@@ -25,8 +25,8 @@ const getSortByParams = (options, queryFields) => {
 }
 
 export default ($axios) => ({
-  async getResource(resource, id) {
-    const response = await $axios.get(`${resource}/${id}`)
+  async getResource(resource, id, options = {}) {
+    const response = await $axios.get(`${resource}/${id}`, options)
     return response.data
   },
   async getResourceList(
