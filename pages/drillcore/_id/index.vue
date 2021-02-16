@@ -23,7 +23,9 @@
             flat
             tile
             :ripple="false"
-            @click="openDrillcoreBox(box.drillcore_box)"
+            @click="
+              $openNuxtWindow('drillcore_box-id', { id: box.drillcore_box })
+            "
           >
             <v-card-text class="drillcore-box__card">
               <v-row align="start">
@@ -222,14 +224,6 @@ export default {
   },
   methods: {
     isNull,
-    // TODO: Make a general plugin function to open nuxt pages in new window
-    openDrillcoreBox(id) {
-      const routeData = this.$router.resolve({
-        name: `drillcore_box-id___${this.$i18n.locale}`,
-        params: { id },
-      })
-      window.open(routeData.href, '_blank', 'height=800, width=800')
-    },
     infiniteHandler($state) {
       const paginateBy = 5
       this.$services.sarvREST

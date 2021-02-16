@@ -13,6 +13,14 @@ export default ({ app }, inject) => {
     }
   }
 
+  const openNuxtWindow = (route, params = null) => {
+    const routeData = app.router.resolve({
+      name: `${route}___${app.i18n.locale}`,
+      params,
+    })
+    window.open(routeData.href, '_blank', 'height=800, width=800')
+  }
+
   const openImage = (filename, size = 'large') => {
     if (filename && size) {
       if (size === 'original') {
@@ -30,6 +38,7 @@ export default ({ app }, inject) => {
   }
 
   inject('openWindow', openWindow)
+  inject('openNuxtWindow', openNuxtWindow)
   inject('openImage', openImage)
   inject('openGeoDetail', openGeoDetail)
 }
