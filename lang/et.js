@@ -46,6 +46,14 @@ export default {
     stratigraphyBase: 'Strat. lõpp',
     remarks: 'Lisainfo',
     map: 'Kaart',
+    synonyms: 'Sünonüümid',
+  },
+
+  localitySynonym: {
+    synonym: 'Sünonüüm',
+    pages: 'Leheküljed',
+    reference: 'Viide',
+    remarks: 'Lisainfo',
   },
   drillcore: {
     id: 'ID',

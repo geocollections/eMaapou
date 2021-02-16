@@ -46,6 +46,13 @@ export default {
     stratigraphyBase: 'Strat. base',
     remarks: 'Remarks',
     map: 'Map',
+    synonyms: 'Synonyms',
+  },
+  localitySynonym: {
+    synonym: 'Synonym',
+    pages: 'Pages',
+    reference: 'Reference',
+    remarks: 'Remarks',
   },
   drillcore: {
     id: 'ID',

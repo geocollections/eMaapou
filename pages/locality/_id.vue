@@ -307,6 +307,9 @@
           </v-row>
         </v-container>
       </v-card>
+      <v-card class="mt-2 pb-2">
+        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -314,7 +317,7 @@
 <script>
 import { isNil } from 'lodash'
 export default {
-  async asyncData({ params, route, app }) {
+  async asyncData({ params, route, app, error }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(
         'locality',
@@ -328,8 +331,22 @@ export default {
       )
       const locality = localityResponse.results[0]
 
-      return { locality }
-    } catch (error) {
+      return {
+        locality,
+        tabs: [
+          {
+            id: 'synonyms',
+            routeName: 'locality-id-synonyms',
+            title: 'locality.synonyms',
+            props: {
+              locality: route.params.id,
+            },
+          },
+        ],
+        initActiveTab: route.path,
+      }
+    } catch (err) {
+      console.log(err)
       error({
         message: `Could not find locality ${params.id}`,
         path: route.path,
