@@ -18,7 +18,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import TableWrapper from '~/components/TableWrapper.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },

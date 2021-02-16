@@ -57,7 +57,7 @@
 
 <script>
 import { round, isNil } from 'lodash'
-import ExpandableTableWrapper from '~/components/ExpandableTableWrapper.vue'
+import ExpandableTableWrapper from '~/components/tables/ExpandableTableWrapper.vue'
 
 export default {
   components: { ExpandableTableWrapper },
