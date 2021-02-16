@@ -336,8 +336,24 @@ export default {
         tabs: [
           {
             id: 'synonyms',
-            routeName: 'locality-id-synonyms',
+            routeName: 'locality-id',
             title: 'locality.synonyms',
+            props: {
+              locality: route.params.id,
+            },
+          },
+          {
+            id: 'specimens',
+            routeName: 'locality-id-specimens',
+            title: 'locality.specimens',
+            props: {
+              locality: route.params.id,
+            },
+          },
+          {
+            id: 'references',
+            routeName: 'locality-id-references',
+            title: 'locality.references',
             props: {
               locality: route.params.id,
             },
@@ -346,7 +362,6 @@ export default {
         initActiveTab: route.path,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find locality ${params.id}`,
         path: route.path,

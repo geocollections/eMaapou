@@ -47,6 +47,8 @@ export default {
     remarks: 'Lisainfo',
     map: 'Kaart',
     synonyms: 'Sünonüümid',
+    specimens: 'Eksemplarid',
+    references: 'Kirjandus',
   },
 
   localitySynonym: {

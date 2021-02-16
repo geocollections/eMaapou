@@ -47,6 +47,8 @@ export default {
     remarks: 'Remarks',
     map: 'Map',
     synonyms: 'Synonyms',
+    specimens: 'Specimens',
+    references: 'References',
   },
   localitySynonym: {
     synonym: 'Synonym',
