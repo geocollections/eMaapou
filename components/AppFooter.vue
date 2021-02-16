@@ -91,7 +91,7 @@ export default {
         },
         {
           href: 'https://github.com/geocollections/GRIS',
-          text: 'GitHubis',
+          text: 'GitHub',
         },
       ],
     }
