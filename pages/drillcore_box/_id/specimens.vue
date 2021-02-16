@@ -7,10 +7,7 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a
-        class="text-link"
-        @click="openGeoDetail({ table: 'specimen', id: item.id })"
-      >
+      <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
         {{ item.id }}
       </a>
     </template>
@@ -32,9 +29,7 @@
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
-        @click="
-          openGeoDetail({ table: 'stratigraphy', id: item.stratigraphy_id })
-        "
+        @click="$openGeoDetail('stratigraphy', item.stratigraphy_id)"
       >
         {{
           $translate({
@@ -45,7 +40,10 @@
       </a>
     </template>
     <template #item.taxon="{ item }">
-      <a class="text-link" @click="openTaxon(item.taxon_id)">
+      <a
+        class="text-link"
+        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
+      >
         {{ item.taxon }}
       </a>
     </template>
@@ -54,12 +52,10 @@
 
 <script>
 import { round, isNil } from 'lodash'
-import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
-  mixins: [global],
   props: {
     locality: {
       type: Number,

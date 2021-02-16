@@ -216,7 +216,9 @@
                           <a
                             class="text-link"
                             @click.stop="
-                              openStratigraphy(locality.stratigraphy_top_id)
+                              $openWindow(
+                                `https://geocollections.info/stratigraphy/${locality.stratigraphy_top_id}`
+                              )
                             "
                           >
                             {{
@@ -242,7 +244,9 @@
                           <a
                             class="text-link"
                             @click.stop="
-                              openStratigraphy(locality.stratigraphy_base_id)
+                              $openWindow(
+                                `https://geocollections.info/stratigraphy/${locality.stratigraphy_base_id}`
+                              )
                             "
                           >
                             {{
@@ -334,13 +338,6 @@ export default {
   },
   methods: {
     isNil,
-    openStratigraphy(id) {
-      window.open(
-        `https://geocollections.info/stratigraphy/${id}`,
-        '_blank',
-        'height=800, width=800'
-      )
-    },
   },
 }
 </script>

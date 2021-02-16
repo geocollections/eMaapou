@@ -9,9 +9,7 @@
     <template #item.reference="{ item }">
       <a
         class="text-link"
-        @click="
-          openGeoDetail({ table: 'reference', id: item.reference__reference })
-        "
+        @click="$openGeoDetail('reference', item.reference)"
         >{{ item.reference__reference }}</a
       >
     </template>
@@ -20,12 +18,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
-  mixins: [global],
   props: {
     locality: {
       type: Number,

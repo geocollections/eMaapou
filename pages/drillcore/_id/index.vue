@@ -106,7 +106,8 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                openStratigraphy(
+                                $openGeoDetail(
+                                  'stratigraphy',
                                   box.drillcore_box__stratigraphy_top
                                 )
                               "
@@ -136,7 +137,8 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                openStratigraphy(
+                                $openGeoDetail(
+                                  'stratigraphy',
                                   box.drillcore_box__stratigraphy_base
                                 )
                               "
@@ -220,19 +222,13 @@ export default {
   },
   methods: {
     isNull,
+    // TODO: Make a general plugin function to open nuxt pages in new window
     openDrillcoreBox(id) {
       const routeData = this.$router.resolve({
         name: `drillcore_box-id___${this.$i18n.locale}`,
         params: { id },
       })
       window.open(routeData.href, '_blank', 'height=800, width=800')
-    },
-    openStratigraphy(id) {
-      window.open(
-        `https://geocollections.info/stratigraphy/${id}`,
-        '_blank',
-        'height=800, width=800'
-      )
     },
     infiniteHandler($state) {
       const paginateBy = 5

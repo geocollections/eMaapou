@@ -45,7 +45,7 @@
                 :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
                 :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
                 max-width="2000"
-                @click="openImage(activeImage.attachment__uuid_filename)"
+                @click="$openImage(activeImage.attachment__uuid_filename)"
               >
                 <template #placeholder>
                   <v-row
@@ -100,15 +100,14 @@
             </div>
 
             <div class="text-center">
-              <span v-for="(item, index) in imageSizes" :key="index">
+              <span v-for="(size, index) in imageSizes" :key="index">
                 <a
                   class="text-link underline"
-                  :href="`https://files.geocollections.info/${
-                    item === 'original' ? '' : `${item}/`
-                  }${activeImage.attachment__uuid_filename}`"
-                  target="ImageWindow"
+                  @click="
+                    $openImage(activeImage.attachment__uuid_filename, size)
+                  "
                 >
-                  {{ $t(`common.${item}`) }}
+                  {{ $t(`common.${size}`) }}
                 </a>
                 <span v-if="index < imageSizes.length - 1">| </span>
               </span>
@@ -232,10 +231,10 @@
                     <a
                       class="text-link underline"
                       @click="
-                        openGeoDetail({
-                          table: 'stratigraphy',
-                          id: drillcoreBox.stratigraphy_top_id,
-                        })
+                        $openGeoDetail(
+                          'stratigraphy',
+                          drillcoreBox.stratigraphy_top_id
+                        )
                       "
                     >
                       {{
@@ -269,10 +268,10 @@
                     <a
                       class="text-link underline"
                       @click="
-                        openGeoDetail({
-                          table: 'stratigraphy',
-                          id: drillcoreBox.stratigraphy_base_id,
-                        })
+                        $openGeoDetail(
+                          'stratigraphy',
+                          drillcoreBox.stratigraphy_base_id
+                        )
                       "
                     >
                       {{
@@ -320,13 +319,11 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import global from '@/mixins/global'
 import BoxImageLoader from '@/components/BoxImageLoader'
 import Tabs from '@/components/Tabs'
 
 export default {
   components: { Tabs, BoxImageLoader },
-  mixins: [global],
   async asyncData({ $axios, params, route, error, app }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(
@@ -427,14 +424,6 @@ export default {
   methods: {
     isNull,
     isNil,
-    openImage(filename, size = 'large') {
-      if (filename && size) {
-        window.open(
-          `https://files.geocollections.info/${size}/${filename}`,
-          'ImageWindow'
-        )
-      }
-    },
   },
 }
 </script>

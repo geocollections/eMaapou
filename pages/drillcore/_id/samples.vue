@@ -7,19 +7,14 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a
-        class="text-link"
-        @click="openGeoDetail({ table: 'sample', id: item.id })"
-      >
+      <a class="text-link" @click="$openGeoDetail('sample', item.id)">
         {{ item.id }}
       </a>
     </template>
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
-        @click="
-          openGeoDetail({ table: 'stratigraphy', id: item.stratigraphy_id })
-        "
+        @click="$openGeoDetail('stratigraphy', item.stratigraphy_id)"
       >
         {{
           $translate({
@@ -48,12 +43,10 @@
 
 <script>
 import { round, isNil } from 'lodash'
-import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
-  mixins: [global],
   props: {
     locality: {
       type: Number,

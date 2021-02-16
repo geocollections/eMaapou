@@ -24,7 +24,7 @@
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
-        @click="openGeoDetail({ table: 'stratigraphy', id: item.stratigraphy })"
+        @click="$openGeoDetail('stratigraphy', item.stratigraphy)"
       >
         {{
           $translate({
@@ -38,7 +38,7 @@
       <a
         v-if="item.reference"
         :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
-        @click="openGeoDetail({ table: 'reference', id: item.reference })"
+        @click="$openGeoDetail('reference', item.reference)"
       >
         {{ item.reference__reference }}
       </a>
@@ -57,12 +57,10 @@
 
 <script>
 import { round, isNil } from 'lodash'
-import global from '@/mixins/global'
 import ExpandableTableWrapper from '~/components/ExpandableTableWrapper.vue'
 
 export default {
   components: { ExpandableTableWrapper },
-  mixins: [global],
   props: {
     locality: {
       type: Number,

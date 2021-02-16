@@ -7,18 +7,12 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a
-        class="text-link"
-        @click="openGeoDetail({ table: 'analysis', id: item.id })"
-      >
+      <a class="text-link" @click="$openGeoDetail('analysis', item.id)">
         {{ item.id }}
       </a>
     </template>
     <template #item.sample_number="{ item }">
-      <a
-        class="text-link"
-        @click="openGeoDetail({ table: 'sample', id: item.sample_id })"
-      >
+      <a class="text-link" @click="$openGeoDetail('sample', item.sample_id)">
         {{ item.sample_number }}
       </a>
     </template>
@@ -53,11 +47,9 @@
 
 <script>
 import { round, isNil } from 'lodash'
-import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 export default {
   components: { TableWrapper },
-  mixins: [global],
   props: {
     locality: {
       type: Number,

@@ -9,7 +9,7 @@
     <template #item.description="{ item }">
       <a
         class="text-link"
-        @click="openGeoDetail({ table: 'attachment', id: item.attachment })"
+        @click="$openGeoDetail('attachment', item.attachment)"
         >{{
           $translate({
             et: item.attachment__description,
@@ -23,12 +23,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import global from '@/mixins/global'
 import TableWrapper from '~/components/TableWrapper.vue'
 
 export default {
   components: { TableWrapper },
-  mixins: [global],
   props: {
     locality: {
       type: Number,

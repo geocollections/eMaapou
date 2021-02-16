@@ -25,6 +25,7 @@ export default {
     { src: '~/plugins/infiniteLoading', ssr: false },
     '~plugins/services.js',
     { src: '~plugins/leaflet.js', mode: 'client' },
+    '~plugins/openWindow.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
