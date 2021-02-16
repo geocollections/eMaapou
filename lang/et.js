@@ -49,6 +49,9 @@ export default {
     synonyms: 'Sünonüümid',
     specimens: 'Eksemplarid',
     references: 'Kirjandus',
+    attachments: 'Failid',
+    samples: 'Proovid',
+    stratotypes: 'Stratotüübid',
   },
 
   localitySynonym: {
@@ -142,6 +145,14 @@ export default {
     stratigraphy: 'Stratigraafia',
     taxon: 'Takson',
     thickness: 'Paksus',
+  },
+  stratotype: {
+    stratigraphy: 'Stratigraafia',
+    type: 'Tüüp',
+    depthTop: 'Alates (m)',
+    depthBase: 'Kuni (m)',
+    reference: 'Viide',
+    remarks: 'Lisainfo',
   },
   infinite: {
     noMore: '',

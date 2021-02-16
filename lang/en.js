@@ -49,6 +49,9 @@ export default {
     synonyms: 'Synonyms',
     specimens: 'Specimens',
     references: 'References',
+    attachments: 'Attachments',
+    samples: 'Samples',
+    stratotypes: 'Stratotypes',
   },
   localitySynonym: {
     synonym: 'Synonym',
@@ -119,6 +122,14 @@ export default {
     collector: 'Collector',
     dateCollected: 'Date collected',
     thickness: 'Thickness',
+  },
+  stratotype: {
+    stratigraphy: 'Stratigraphy',
+    type: 'Type',
+    depthTop: 'From (m)',
+    depthBase: 'To (m)',
+    reference: 'Reference',
+    remarks: 'Remarks',
   },
   analysis: {
     id: 'ID',

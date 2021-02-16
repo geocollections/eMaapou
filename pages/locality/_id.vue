@@ -358,6 +358,30 @@ export default {
               locality: route.params.id,
             },
           },
+          {
+            id: 'attachments',
+            routeName: 'locality-id-attachments',
+            title: 'locality.attachments',
+            props: {
+              locality: route.params.id,
+            },
+          },
+          {
+            id: 'samples',
+            routeName: 'locality-id-samples',
+            title: 'locality.samples',
+            props: {
+              locality: route.params.id,
+            },
+          },
+          {
+            id: 'stratotypes',
+            routeName: 'locality-id-stratotypes',
+            title: 'locality.stratotypes',
+            props: {
+              locality: route.params.id,
+            },
+          },
         ],
         initActiveTab: route.path,
       }
