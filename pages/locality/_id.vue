@@ -155,6 +155,48 @@
                         </td>
                       </tr>
                       <tr>
+                        <td>{{ $t('locality.coordinateSystem') }}</td>
+                        <td
+                          v-if="isNil(locality.coord_system)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td>
+                          {{ locality.coord_system }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('locality.coordinateX') }}</td>
+                        <td v-if="isNil(locality.coordx)" class="no-value">
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td>
+                          {{ locality.coordx }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('locality.coordinateY') }}</td>
+                        <td v-if="isNil(locality.coordy)" class="no-value">
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td>
+                          {{ locality.coordy }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('locality.coordinatePrecision') }}</td>
+                        <td
+                          v-if="isNil(locality.coord_det_precision__value)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td>
+                          {{ locality.coord_det_precision__value }}
+                        </td>
+                      </tr>
+                      <tr>
                         <td>{{ $t('locality.coordinateMethod') }}</td>
                         <td
                           v-if="
@@ -285,7 +327,7 @@
                 <v-card id="map-wrap" elevation="0" height="300">
                   <leaflet-map
                     :is-estonian="locality.country__value === 'Eesti'"
-                    :height="300"
+                    :height="400"
                     :center="{
                       latitude: locality.latitude,
                       longitude: locality.longitude,

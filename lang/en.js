@@ -52,6 +52,10 @@ export default {
     attachments: 'Attachments',
     samples: 'Samples',
     stratotypes: 'Stratotypes',
+    coordinateSystem: 'Coordinate system',
+    coordinateX: 'X',
+    coordinateY: 'Y',
+    coordinatePrecision: 'Coordinate precision',
   },
   localitySynonym: {
     synonym: 'Synonym',

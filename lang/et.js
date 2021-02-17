@@ -52,6 +52,10 @@ export default {
     attachments: 'Failid',
     samples: 'Proovid',
     stratotypes: 'Stratotüübid',
+    coordinateSystem: 'Kordinaatsüsteem',
+    coordinateX: 'X',
+    coordinateY: 'Y',
+    coordinatePrecision: 'Koordinaatide täpsus',
   },
 
   localitySynonym: {
