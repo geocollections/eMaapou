@@ -1,4 +1,10 @@
 const EDIT_URL = 'https://edit.geocollections.info'
+const DEPOSIT_URL =
+  'https://xgis.maaamet.ee/xGIS/bronx/maardlad/showdata.aspx?registrikaart='
+const EELIS_URL = 'http://register.keskkonnainfo.ee/envreg/main?reg_kood='
+const TURBA_URL = 'https://turba.geoloogia.info'
+const EGF_URL = 'https://fond.egt.ee/fond/egf/'
+const GEOLOGY_URL = 'https://geoloogia.info'
 
 export default ({ app }, inject) => {
   const openWindow = (url) => {
@@ -49,6 +55,53 @@ export default ({ app }, inject) => {
     }
   }
 
+  const openDeposit = (id) => {
+    if (id) {
+      window.open(
+        `${DEPOSIT_URL}${id}`,
+        'DepositWindow',
+        'height=800, width=800'
+      )
+    }
+  }
+
+  const openEelis = (id) => {
+    if (id) {
+      window.open(`${EELIS_URL}${id}`, 'EelisWindow', 'height=800, width=800')
+    }
+  }
+
+  const openEgf = (id) => {
+    if (id) {
+      window.open(`${EGF_URL}${id}`, 'EgfWindow', 'height=800, width=800')
+    }
+  }
+
+  const openTurba = (table, id, openNewWindow = true) => {
+    if (table && id) {
+      window.open(
+        `${TURBA_URL}/${table}/${id}`,
+        openNewWindow ? 'TurbaWindow' : '_parent',
+        'height=800, width=800'
+      )
+    }
+  }
+
+  const openGeology = (table, id) => {
+    if (table && id) {
+      window.open(
+        `${GEOLOGY_URL}/${table}/${id}`,
+        'GeologyWindow',
+        'height=800, width=800'
+      )
+    }
+  }
+
+  inject('openGeology', openGeology)
+  inject('openTurba', openTurba)
+  inject('openEgf', openEgf)
+  inject('openEelis', openEelis)
+  inject('openDeposit', openDeposit)
   inject('openEdit', openEdit)
   inject('openWindow', openWindow)
   inject('openNuxtWindow', openNuxtWindow)
