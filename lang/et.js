@@ -12,6 +12,7 @@ export default {
     medium: 'Keskmine',
     large: 'Suur',
     original: 'Originaal',
+    linkToEdit: 'Muuda kirjet',
   },
   link: {
     sarvAPI: 'Avalik API',

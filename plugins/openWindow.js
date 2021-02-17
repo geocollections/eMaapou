@@ -1,3 +1,5 @@
+const EDIT_URL = 'https://edit.geocollections.info'
+
 export default ({ app }, inject) => {
   const openWindow = (url) => {
     window.open(url, '_blank', 'height=800, width=800')
@@ -37,6 +39,17 @@ export default ({ app }, inject) => {
     }
   }
 
+  const openEdit = (table, id) => {
+    if (table && id) {
+      window.open(
+        `${EDIT_URL}/${table}/${id}`,
+        'EditWindow',
+        'height=800, width=800'
+      )
+    }
+  }
+
+  inject('openEdit', openEdit)
   inject('openWindow', openWindow)
   inject('openNuxtWindow', openNuxtWindow)
   inject('openImage', openImage)
