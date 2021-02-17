@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:lts-alpine
 
 # create destination directory
 RUN mkdir -p /usr/src/gris
