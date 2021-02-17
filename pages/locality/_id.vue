@@ -211,7 +211,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{
                             $translate({
                               et: locality.coord_det_method__value,
@@ -240,7 +240,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.remarks_location }}
                         </td>
                       </tr>
