@@ -157,7 +157,7 @@
                       <tr>
                         <td>{{ $t('locality.coordinateSystem') }}</td>
                         <td
-                          v-if="isNil(locality.coord_system)"
+                          v-if="isEmpty(locality.coord_system)"
                           class="no-value"
                         >
                           {{ $t('common.noValue') }}
@@ -357,7 +357,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import { isNil, isEmpty } from 'lodash'
 export default {
   async asyncData({ params, route, app, error }) {
     try {
@@ -462,6 +462,7 @@ export default {
   },
   methods: {
     isNil,
+    isEmpty,
   },
 }
 </script>
