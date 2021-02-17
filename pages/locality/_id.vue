@@ -46,7 +46,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{
                             $translate({
                               et: locality.type__value,
@@ -70,7 +70,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{
                             $translate({
                               et: locality.country__value,
@@ -94,7 +94,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{
                             $translate({
                               et: locality.vald__vald,
@@ -118,7 +118,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{
                             $translate({
                               et: locality.asustusyksus__asustusyksus,
@@ -132,7 +132,7 @@
                         <td v-if="isNil(locality.elevation)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.elevation }}
                         </td>
                       </tr>
@@ -141,7 +141,7 @@
                         <td v-if="isNil(locality.latitude)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.latitude }}
                         </td>
                       </tr>
@@ -150,7 +150,7 @@
                         <td v-if="isNil(locality.longitude)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.longitude }}
                         </td>
                       </tr>
@@ -162,7 +162,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.coord_system }}
                         </td>
                       </tr>
@@ -171,7 +171,7 @@
                         <td v-if="isNil(locality.coordx)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.coordx }}
                         </td>
                       </tr>
@@ -180,7 +180,7 @@
                         <td v-if="isNil(locality.coordy)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.coordy }}
                         </td>
                       </tr>
@@ -192,7 +192,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.coord_det_precision__value }}
                         </td>
                       </tr>
@@ -228,7 +228,7 @@
                         >
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.coord_det_agent__agent }}
                         </td>
                       </tr>
@@ -305,7 +305,7 @@
                         <td v-if="isNil(locality.remarks)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
-                        <td>
+                        <td v-else>
                           {{ locality.remarks }}
                         </td>
                       </tr>
