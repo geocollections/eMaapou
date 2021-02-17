@@ -56,6 +56,7 @@ export default {
     coordinateX: 'X',
     coordinateY: 'Y',
     coordinatePrecision: 'Koordinaatide täpsus',
+    descriptions: 'Kirjeldused ({number})',
   },
 
   localitySynonym: {

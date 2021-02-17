@@ -56,6 +56,7 @@ export default {
     coordinateX: 'X',
     coordinateY: 'Y',
     coordinatePrecision: 'Coordinate precision',
+    descriptions: 'Descriptions ({number})',
   },
   localitySynonym: {
     synonym: 'Synonym',

@@ -396,6 +396,13 @@ export default {
           props: {},
         },
         {
+          id: 'locality_description',
+          routeName: 'locality-id-descriptions',
+          title: 'locality.descriptions',
+          count: 0,
+          props: {},
+        },
+        {
           id: 'attachment_link',
           routeName: 'locality-id-attachments',
           title: 'locality.attachments',
