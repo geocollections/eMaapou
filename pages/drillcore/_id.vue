@@ -160,7 +160,12 @@
                         <td>
                           <a
                             class="text-link"
-                            :href="`https://geocollections.info/locality/${drillcore.locality_id}`"
+                            :href="
+                              localePath({
+                                name: 'locality-id',
+                                params: { id: drillcore.locality_id },
+                              })
+                            "
                           >
                             {{
                               $translate({
