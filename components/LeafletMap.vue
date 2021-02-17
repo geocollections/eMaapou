@@ -87,6 +87,7 @@ export default {
             scroll: this.$t('gestureHandling.scroll'),
             scrollMac: this.$t('gestureHandling.scrollMac'),
           },
+          duration: 1000,
         },
       },
       layers: {
