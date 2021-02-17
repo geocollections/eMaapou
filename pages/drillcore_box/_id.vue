@@ -324,6 +324,7 @@ import Tabs from '@/components/Tabs'
 
 export default {
   components: { Tabs, BoxImageLoader },
+  layout: 'detail',
   async asyncData({ $axios, params, route, error, app }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(
