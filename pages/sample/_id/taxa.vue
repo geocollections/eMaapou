@@ -49,7 +49,10 @@ export default {
           value: 'name',
         },
         { text: this.$t('taxon.frequency'), value: 'frequency' },
-        { text: this.$t('taxon.agent_identified'), value: 'agent_identified__agent' },
+        {
+          text: this.$t('taxon.agent_identified'),
+          value: 'agent_identified__agent',
+        },
         { text: this.$t('taxon.date_identified'), value: 'date_identified' },
         { text: this.$t('taxon.extra'), value: 'extra' },
         { text: this.$t('taxon.remarks'), value: 'remarks' },

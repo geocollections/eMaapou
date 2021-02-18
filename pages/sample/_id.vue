@@ -20,128 +20,162 @@
                 <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
-                      <tr>
-                        <td>{{ $t('sample.number') }}</td>
-                        <td>
-                          {{ sampleTitle }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('sample.locality') }}</td>
-                        <td v-if="isNil(sample.locality)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            :href="
-                              localePath({
-                                name: 'locality-id',
-                                params: { id: sample.locality_id },
-                              })
-                            "
-                          >
-                            {{
-                              $translate({
-                                et: sample.locality__locality,
-                                en: sample.locality__locality_en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr v-if="isNil(sample.locality)">
-                        <td>{{ $t('sample.boxNumbers') }}</td>
-                        <td
-                          v-if="isNil(sample.locality__latitude)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ sample.locality__latitude }}
-                        </td>
-                      </tr>
-                      <tr v-if="isNil(sample.locality)">
-                        <td>{{ $t('sample.boxNumbers') }}</td>
-                        <td
-                          v-if="isNil(sample.locality__longitude)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ sample.locality__longitude }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('sample.depth') }}</td>
-                        <td v-if="isNil(sample.depth)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ sample.depth }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('sample.depth_interval') }}</td>
-                        <td
-                          v-if="isNil(sample.depth_interval)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ sample.depth_interval }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('sample.stratigraphy') }}</td>
-                        <td v-if="isNil(sample.stratigraphy)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="
-                              $openGeoDetail(
-                                'stratigraphy',
-                                sample.stratigraphy
-                              )
-                            "
-                          >
-                            {{
-                              $translate({
-                                et: sample.stratigraphy__stratigraphy,
-                                en: sample.stratigraphy__stratigraphy_en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('sample.date_collected') }}</td>
-                        <td
-                          v-if="isNil(sample.date_collected)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ sample.date_collected }}
-                        </td>
-                      </tr>
+                      <data-row
+                        :title="$t('sample.number')"
+                        :value="sample.number"
+                      />
+                      <data-row
+                        :title="$t('sample.numberAdditional')"
+                        :value="sample.number_additional"
+                      />
+                      <data-row
+                        :title="$t('sample.numberField')"
+                        :value="sample.number_field"
+                      />
+                      <link-data-row
+                        :title="$t('sample.locality')"
+                        :value="
+                          $translate({
+                            et: sample.locality__locality,
+                            en: sample.locality__locality_en,
+                          })
+                        "
+                        nuxt
+                        :href="
+                          localePath({
+                            name: 'locality-id',
+                            params: { id: sample.locality_id },
+                          })
+                        "
+                      />
+                      <data-row
+                        v-if="isNil(sample.locality)"
+                        :title="$t('sample.latitude')"
+                        :value="sample.locality__latitude"
+                      />
+                      <data-row
+                        v-if="isNil(sample.locality)"
+                        :title="$t('sample.longitude')"
+                        :value="sample.locality__longitude"
+                      />
+                      <data-row
+                        :title="$t('sample.depth')"
+                        :value="sample.depth"
+                      />
+                      <data-row
+                        :title="$t('sample.depthInterval')"
+                        :value="sample.depth_interval"
+                      />
+                      <link-data-row
+                        :title="$t('sample.stratigraphy')"
+                        :value="
+                          $translate({
+                            et: sample.stratigraphy__stratigraphy,
+                            en: sample.stratigraphy__stratigraphy_en,
+                          })
+                        "
+                        @link-click="
+                          $openGeoDetail('stratigraphy', sample.stratigraphy)
+                        "
+                      />
+                      <link-data-row
+                        :title="$t('sample.lithostratigraphy')"
+                        :value="
+                          $translate({
+                            et: sample.lithostratigraphy__stratigraphy,
+                            en: sample.lithostratigraphy__stratigraphy_en,
+                          })
+                        "
+                        @link-click="
+                          $openGeoDetail(
+                            'stratigraphy',
+                            sample.lithostratigraphy
+                          )
+                        "
+                      />
+                      <data-row
+                        :title="$t('sample.stratigraphyFree')"
+                        :value="sample.stratigraphy_free"
+                      />
+                      <data-row
+                        :title="$t('sample.stratigraphyBed')"
+                        :value="sample.stratigraphy_bed"
+                      />
+                      <data-row
+                        :title="$t('sample.dateCollected')"
+                        :value="
+                          sample.date_collected || sample.date_collected_free
+                        "
+                      />
+                      <data-row
+                        :title="$t('sample.agentCollected')"
+                        :value="
+                          sample.agent_collected__agent ||
+                          sample.agent_collected_txt
+                        "
+                      />
+                      <data-row
+                        :title="$t('sample.mass')"
+                        :value="sample.mass"
+                      />
+                      <data-row
+                        :title="$t('sample.samplePurpose')"
+                        :value="
+                          $translate({
+                            et: sample.sample_purpose__value,
+                            en: sample.sample_purpose__value_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('sample.rock')"
+                        :value="
+                          $translate({
+                            et: sample.rock,
+                            en: sample.rock_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('sample.classificationRock')"
+                        :value="
+                          $translate({
+                            et: sample.classification_rock__name,
+                            en: sample.classification_rock__name_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('sample.palaeontology')"
+                        :value="sample.palaeontology"
+                      />
+                      <data-row
+                        :title="$t('sample.fossils')"
+                        :value="sample.fossils"
+                      />
+                      <data-row
+                        :title="$t('sample.remarks')"
+                        :value="sample.remarks"
+                      />
+                      <data-row
+                        :title="$t('sample.owner')"
+                        :value="sample.owner__agent"
+                      />
+                      <data-row
+                        :title="$t('sample.database')"
+                        :value="
+                          $translate({
+                            et: sample.database__name,
+                            en: sample.database__name_en,
+                          })
+                        "
+                      />
                     </tbody>
                   </template>
                 </v-simple-table>
               </v-card-text>
             </v-col>
-            <v-col
-              v-if="sample.locality_id"
-              cols="12"
-              md="6"
-              class="pt-0 px-0"
-            >
+            <v-col v-if="sample.locality_id" cols="12" md="6" class="pt-0 px-0">
               <v-card-title class="pr-md-0 pl-md-4 px-0">{{
                 $t('locality.locality')
               }}</v-card-title>
@@ -170,6 +204,10 @@
                           </a>
                         </td>
                       </tr>
+                      <data-row
+                        :title="$t('sample.localityFree')"
+                        :value="sample.locality_free"
+                      />
                       <tr v-if="sample.locality__country__value">
                         <td>{{ $t('locality.country') }}</td>
                         <td
@@ -250,18 +288,13 @@
                   </template>
                 </v-simple-table>
                 <v-card
-                  v-if="
-                    sample.locality__latitude &&
-                    sample.locality__longitude
-                  "
+                  v-if="sample.locality__latitude && sample.locality__longitude"
                   id="map-wrap"
                   elevation="0"
                   height="300"
                 >
                   <leaflet-map
-                    :is-estonian="
-                      sample.locality__country__value === 'Eesti'
-                    "
+                    :is-estonian="sample.locality__country__value === 'Eesti'"
                     :height="300"
                     :center="{
                       latitude: sample.locality__latitude,
@@ -293,10 +326,12 @@
 
 <script>
 import { isNil } from 'lodash'
+import DataRow from '@/components/DataRow'
+import LinkDataRow from '@/components/LinkDataRow'
 import Tabs from '~/components/Tabs.vue'
 
 export default {
-  components: { Tabs },
+  components: { LinkDataRow, DataRow, Tabs },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
