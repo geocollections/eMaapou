@@ -137,7 +137,12 @@
                 </v-simple-table>
               </v-card-text>
             </v-col>
-            <v-col v-if="(site.latitude && site.longitude) || site.locality_id" cols="12" md="6" class="pt-0 px-0">
+            <v-col
+              v-if="(site.latitude && site.longitude) || site.locality_id"
+              cols="12"
+              md="6"
+              class="pt-0 px-0"
+            >
               <v-card-title class="pr-md-0 pl-md-4 px-0">{{
                 $t('site.locality')
               }}</v-card-title>
