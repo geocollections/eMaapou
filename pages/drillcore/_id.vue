@@ -428,9 +428,6 @@ export default {
   methods: {
     isEmpty,
     isNull,
-    handleSwipeBetweenTabs(pathAsString) {
-      this.$router.push(pathAsString)
-    },
   },
 }
 </script>

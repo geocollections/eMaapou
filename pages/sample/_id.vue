@@ -2,7 +2,7 @@
   <v-row>
     <v-col>
       <h1 class="text-center my-3 page-title">
-        {{ $translate({ et: site.name, en: site.name_en }) }}
+        {{ sampleTitle }}
       </h1>
       <v-card flat tile>
         <v-container>
@@ -21,130 +21,137 @@
                   <template #default>
                     <tbody>
                       <tr>
-                        <td>{{ $t('site.name') }}</td>
+                        <td>{{ $t('sample.number') }}</td>
                         <td>
-                          {{
-                            $translate({
-                              et: site.name,
-                              en: site.name_en,
-                            })
-                          }}
+                          {{ sampleTitle }}
                         </td>
                       </tr>
                       <tr>
-                        <td>{{ $t('site.area') }}</td>
-                        <td v-if="isNil(site.area)" class="no-value">
+                        <td>{{ $t('sample.locality') }}</td>
+                        <td v-if="isNil(sample.locality)" class="no-value">
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
                           <a
-                            v-if="site.area__area_type === 2"
                             class="text-link"
-                            @click="$openTurba('turbaala', site.area)"
+                            :href="
+                              localePath({
+                                name: 'locality-id',
+                                params: { id: sample.locality_id },
+                              })
+                            "
                           >
                             {{
                               $translate({
-                                et: site.area__name,
-                                en: site.area__name_en,
+                                et: sample.locality__locality,
+                                en: sample.locality__locality_en,
                               })
                             }}
-                            <v-icon small color="deep-orange darken-2"
-                              >mdi-open-in-new</v-icon
-                            >
                           </a>
-                          <div v-else>
+                        </td>
+                      </tr>
+                      <tr v-if="isNil(sample.locality)">
+                        <td>{{ $t('drillcore.boxNumbers') }}</td>
+                        <td
+                          v-if="isNil(sample.locality__latitude)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ sample.locality__latitude }}
+                        </td>
+                      </tr>
+                      <tr v-if="isNil(sample.locality)">
+                        <td>{{ $t('drillcore.boxNumbers') }}</td>
+                        <td
+                          v-if="isNil(sample.locality__longitude)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ sample.locality__longitude }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('sample.depth') }}</td>
+                        <td v-if="isNil(sample.depth)" class="no-value">
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ sample.depth }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('sample.depth_interval') }}</td>
+                        <td
+                          v-if="isNil(sample.depth_interval)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ sample.depth_interval }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('sample.stratigraphy') }}</td>
+                        <td v-if="isNil(sample.stratigraphy)" class="no-value">
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          <a
+                            class="text-link"
+                            @click="
+                              $openGeoDetail(
+                                'stratigraphy',
+                                sample.stratigraphy
+                              )
+                            "
+                          >
                             {{
                               $translate({
-                                et: site.area__name,
-                                en: site.area__name_en,
+                                et: sample.stratigraphy__stratigraphy,
+                                en: sample.stratigraphy__stratigraphy_en,
                               })
                             }}
-                          </div>
-                        </td>
-                      </tr>
-                      <tr v-if="site.area__area_type === 2">
-                        <td>{{ $t('site.areaText1') }}</td>
-                        <td v-if="isNil(site.area__text1)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <span v-for="(item, index) in planArray" :key="index">
-                            <a
-                              class="text-link"
-                              :download="item.trim()"
-                              @click="$openTurba('plaanid', item.trim(), false)"
-                            >
-                              {{ item }}
-                              <v-icon small color="deep-orange darken-2"
-                                >mdi-file-download-outline</v-icon
-                              >
-                            </a>
-                            <span
-                              v-if="index !== planArray.length - 1"
-                              class="mr-1"
-                              >|</span
-                            >
-                          </span>
+                          </a>
                         </td>
                       </tr>
                       <tr>
-                        <td>{{ $t('site.coordx') }}</td>
-                        <td v-if="isNil(site.coordx)" class="no-value">
+                        <td>{{ $t('sample.date_collected') }}</td>
+                        <td
+                          v-if="isNil(sample.date_collected)"
+                          class="no-value"
+                        >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ site.coordx }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.coordy') }}</td>
-                        <td v-if="isNil(site.coordy)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.coordy }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.elevation') }}</td>
-                        <td v-if="isNil(site.elevation)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.elevation }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.depth') }}</td>
-                        <td v-if="isNil(site.depth)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.depth }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.description') }}</td>
-                        <td v-if="isNil(site.description)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.description }}
+                          {{ sample.date_collected }}
                         </td>
                       </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
               </v-card-text>
+              <div v-if="drillcore.remarks">
+                <v-card-title class="pt-0 pl-md-0 pr-md-4 px-0">{{
+                  $t('drillcore.remarks')
+                }}</v-card-title>
+                <v-card-text class="pl-md-0 pr-md-4 px-0">{{
+                  drillcore.remarks
+                }}</v-card-text>
+              </div>
             </v-col>
             <v-col
-              v-if="(site.latitude && site.longitude) || site.locality_id"
+              v-if="drillcore.locality_id"
               cols="12"
               md="6"
               class="pt-0 px-0"
             >
               <v-card-title class="pr-md-0 pl-md-4 px-0">{{
-                $t('site.locality')
+                $t('locality.locality')
               }}</v-card-title>
               <v-card-text class="pr-md-0 pl-md-4 px-0">
                 <v-simple-table dense class="mb-4 custom-table">
@@ -158,27 +165,27 @@
                             :href="
                               localePath({
                                 name: 'locality-id',
-                                params: { id: site.locality_id },
+                                params: { id: drillcore.locality_id },
                               })
                             "
                           >
                             {{
                               $translate({
-                                et: site.locality__locality,
-                                en: site.locality__locality_en,
+                                et: drillcore.locality__locality,
+                                en: drillcore.locality__locality_en,
                               })
                             }}
                           </a>
                         </td>
                       </tr>
-                      <tr v-if="site.locality__country">
+                      <tr v-if="drillcore.locality__country__value">
                         <td>{{ $t('locality.country') }}</td>
                         <td
                           v-if="
                             isNil(
                               $translate({
-                                et: site.locality__country__value,
-                                en: site.locality__country__value_en,
+                                et: drillcore.locality__country__value,
+                                en: drillcore.locality__country__value_en,
                               })
                             )
                           "
@@ -190,86 +197,91 @@
                           {{
                             $t('locality.countryFormat', {
                               name: $translate({
-                                et: site.locality__country__value,
-                                en: site.locality__country__value_en,
+                                et: drillcore.locality__country__value,
+                                en: drillcore.locality__country__value_en,
                               }),
-                              iso: site.locality__country__iso_code,
+                              iso: drillcore.locality__country__iso_code,
                             })
                           }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('locality.latitude') }}</td>
-                        <td v-if="isNil(site.latitude)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.latitude }}
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>{{ $t('locality.longitude') }}</td>
-                        <td v-if="isNil(site.longitude)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.longitude }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.elevation') }}</td>
-                        <td v-if="isNil(site.elevation)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.elevation }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.elevationAccuracy') }}</td>
                         <td
-                          v-if="isNil(site.elevation_accuracy)"
+                          v-if="isNil(drillcore.locality__latitude)"
                           class="no-value"
                         >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ site.elevation_accuracy }}
+                          {{ drillcore.locality__latitude }}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>{{ $t('locality.longitude') }}</td>
+                        <td
+                          v-if="isNil(drillcore.locality__longitude)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.locality__longitude }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>{{ $t('locality.elevation') }}</td>
+                        <td
+                          v-if="isNil(drillcore.locality__elevation)"
+                          class="no-value"
+                        >
+                          {{ $t('common.noValue') }}
+                        </td>
+                        <td v-else>
+                          {{ drillcore.locality__elevation }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('locality.depth') }}</td>
-                        <td v-if="isNil(site.locality__depth)" class="no-value">
+                        <td
+                          v-if="isNil(drillcore.locality__depth)"
+                          class="no-value"
+                        >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ site.locality__depth }}
+                          {{ drillcore.locality__depth }}
                         </td>
                       </tr>
                     </tbody>
                   </template>
                 </v-simple-table>
                 <v-card
-                  v-if="site.latitude && site.longitude"
+                  v-if="
+                    drillcore.locality__latitude &&
+                    drillcore.locality__longitude
+                  "
                   id="map-wrap"
                   elevation="0"
                   height="300"
                 >
                   <leaflet-map
-                    :is-estonian="site.locality__country__value === 'Eesti'"
+                    :is-estonian="
+                      drillcore.locality__country__value === 'Eesti'
+                    "
                     :height="300"
                     :center="{
-                      latitude: site.latitude,
-                      longitude: site.longitude,
+                      latitude: drillcore.locality__latitude,
+                      longitude: drillcore.locality__longitude,
                     }"
                     :markers="[
                       {
-                        latitude: site.latitude,
-                        longitude: site.longitude,
+                        latitude: drillcore.locality__latitude,
+                        longitude: drillcore.locality__longitude,
                         text: $translate({
-                          et: site.name,
-                          en: site.name_en,
+                          et: drillcore.drillcore,
+                          en: drillcore.drillcore_en,
                         }),
                       },
                     ]"
@@ -289,55 +301,61 @@
 
 <script>
 import { isNil } from 'lodash'
-import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 
 export default {
-  components: { Tabs, LeafletMap },
+  components: { Tabs },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
-        'site',
+        'sample',
         params.id
       )
-      const site = detailViewResponse.results[0]
+      const sample = detailViewResponse.results[0]
 
       const tabs = [
         {
-          id: 'attachment_link',
-          routeName: 'site-id',
-          title: 'site.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
+          id: 'analysis',
           isSolr: true,
-          routeName: 'site-id-samples',
-          title: 'site.samples',
+          routeName: 'sample-id',
+          title: 'sample.analyses',
           count: 0,
           props: {},
         },
         {
-          id: 'locality_description',
-          routeName: 'site-id-descriptions',
-          title: 'site.localityDescriptions',
+          id: 'preparation',
+          routeName: 'sample-id-preparations',
+          title: 'sample.preparations',
           count: 0,
           props: {},
         },
         {
-          id: 'locality_reference',
-          routeName: 'site-id-references',
-          title: 'site.localityReferences',
+          id: 'taxon_list',
+          routeName: 'sample-id-taxa',
+          title: 'sample.taxa',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'attachment_link',
+          routeName: 'sample-id-attachments',
+          title: 'sample.attachments',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'sample_reference',
+          routeName: 'sample-id-references',
+          title: 'sample.references',
           count: 0,
           props: {},
         },
       ]
 
-      if (site?.id) {
-        const solrParams = { fq: `site_id:${site.id}` }
-        const apiParams = { site: site.id }
+      if (sample?.id) {
+        const solrParams = { fq: `sample_id:${sample.id}` }
+        const apiParams = { sample: sample.id }
 
         const forLoop = async () => {
           const filteredTabs = tabs.filter((item) => !!item.id)
@@ -355,7 +373,7 @@ export default {
               )
             item.count = countResponse?.count ?? 0
             item.props = {
-              site: site.id,
+              sample: sample.id,
             }
           }
         }
@@ -363,35 +381,37 @@ export default {
       }
 
       return {
-        site,
+        sample,
         initActiveTab: route.path,
         tabs,
       }
     } catch (err) {
       error({
-        message: `Could not find site ${route.params.id}`,
+        message: `Could not find sample ${route.params.id}`,
         path: route.path,
       })
     }
   },
   head() {
     return {
-      title: this.$translate({
-        et: this.site.name,
-        en: this.site.name_en,
-      }),
+      title:
+        this.sample.number ||
+        this.sample.number_additional ||
+        this.sample.number_field ||
+        this.sample.id,
     }
   },
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },
-    planArray() {
-      if (this.site.area__text1) {
-        if (this.site.area__text1.includes(',')) {
-          return this.site.area__text1.split(',')
-        } else return [this.site.area__text1]
-      } else return []
+    sampleTitle() {
+      return (
+        this.sample.number ||
+        this.sample.number_additional ||
+        this.sample.number_field ||
+        this.sample.id
+      )
     },
   },
   methods: {
