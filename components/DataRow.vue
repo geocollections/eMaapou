@@ -5,7 +5,9 @@
       {{ $t('common.noValue') }}
     </td>
     <td v-else>
-      {{ value }}
+      <slot name="value">
+        {{ value }}
+      </slot>
     </td>
   </tr>
 </template>
@@ -17,7 +19,11 @@ export default {
   name: 'DataRow',
   props: {
     title: { type: String, default: null },
-    value: { type: [String, Number], default: null, required: true },
+    value: {
+      type: [String, Number, Boolean],
+      default: '',
+      required: false,
+    },
   },
   computed: {
     isInvalid() {
