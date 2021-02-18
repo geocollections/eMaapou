@@ -6,7 +6,7 @@
       </h1>
       <v-card class="my-2" flat tile>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
-        <v-card-text>
+        <v-card-text class="px-0">
           <v-simple-table dense class="custom-table">
             <template #default>
               <tbody>
