@@ -22,39 +22,18 @@
                     <tbody>
                       <tr>
                         <td>{{ $t('analysis.method') }}</td>
-                        <td
-                          v-if="
-                            isEmpty(
-                              $translate({
-                                et: analysis.analysis_method__analysis_method,
-                                en: analysis.analysis_method__method_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{
+                        <data-cell
+                          :value="
                             $translate({
                               et: analysis.analysis_method__analysis_method,
                               en: analysis.analysis_method__method_en,
                             })
-                          }}
-                        </td>
+                          "
+                        />
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.analysedBy') }}</td>
-                        <td
-                          v-if="isEmpty(analysis.agent__agent)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ analysis.agent__agent }}
-                        </td>
+                        <data-cell :value="analysis.agent__agent" />
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.sampleNumber') }}</td>
@@ -75,12 +54,7 @@
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.remarks') }}</td>
-                        <td v-if="isEmpty(analysis.remarks)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ analysis.remarks }}
-                        </td>
+                        <data-cell :value="analysis.remarks" />
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.reference') }}</td>
@@ -103,31 +77,14 @@
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.dataset') }}</td>
-                        <td
-                          v-if="
-                            isEmpty(
-                              $translate({
-                                et: analysis.dataset__name,
-                                en: analysis.dataset__name__en,
-                              })
-                            )
+                        <data-cell
+                          :value="
+                            $translate({
+                              et: analysis.dataset__name,
+                              en: analysis.dataset__name__en,
+                            })
                           "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="$openGeoDetail('dataset', analysis.dataset)"
-                            >{{
-                              $translate({
-                                et: analysis.dataset__name,
-                                en: analysis.dataset__name__en,
-                              })
-                            }}
-                          </a>
-                        </td>
+                        />
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.locality') }}</td>
@@ -163,15 +120,7 @@
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.depth') }}</td>
-                        <td
-                          v-if="isNil(analysis.sample__depth)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ analysis.sample__depth }}
-                        </td>
+                        <data-cell :value="analysis.sample__depth" />
                       </tr>
                       <tr>
                         <td>{{ $t('analysis.stratigraphy') }}</td>
@@ -259,7 +208,9 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
+import DataCell from '~/components/DataCell.vue'
 export default {
+  components: { DataCell },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
