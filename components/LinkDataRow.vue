@@ -1,22 +1,27 @@
 <template>
-  <td v-if="isValid" class="no-value">
-    {{ $t('common.noValue') }}
-  </td>
-  <td v-else>
-    {{ value }}
-  </td>
+  <tr>
+    <td>{{ title }}</td>
+    <td v-if="isInvalid" class="no-value">
+      {{ $t('common.noValue') }}
+    </td>
+    <td v-else>
+      <a class="text-link" @click="$emit('link-click')">{{ value }} </a>
+    </td>
+  </tr>
 </template>
 
 <script>
 import { isNil, isEmpty } from 'lodash'
 
 export default {
-  name: 'DataCell',
+  name: 'LinkDataRow',
   props: {
+    title: { type: String, default: null },
     value: { type: [String, Number], default: null, required: true },
   },
+
   computed: {
-    isValid() {
+    isInvalid() {
       if (typeof this.value === 'string') {
         return isEmpty(this.value)
       }

@@ -20,180 +20,96 @@
                 <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
-                      <tr>
-                        <td>{{ $t('analysis.method') }}</td>
-                        <data-cell
-                          :value="
-                            $translate({
-                              et: analysis.analysis_method__analysis_method,
-                              en: analysis.analysis_method__method_en,
-                            })
-                          "
-                        />
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.analysedBy') }}</td>
-                        <data-cell :value="analysis.agent__agent" />
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.sampleNumber') }}</td>
-                        <td
-                          v-if="isEmpty(analysis.sample__number)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="$openGeoDetail('sample', analysis.sample)"
-                          >
-                            {{ analysis.sample }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.remarks') }}</td>
-                        <data-cell :value="analysis.remarks" />
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.reference') }}</td>
-                        <td
-                          v-if="isEmpty(analysis.reference__reference)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="
-                              $openGeoDetail('reference', analysis.reference)
-                            "
-                          >
-                            {{ analysis.reference__reference }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.dataset') }}</td>
-                        <data-cell
-                          :value="
-                            $translate({
-                              et: analysis.dataset__name,
-                              en: analysis.dataset__name__en,
-                            })
-                          "
-                        />
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.locality') }}</td>
-                        <td
-                          v-if="
-                            isEmpty(
-                              $translate({
-                                et: analysis.sample__locality__locality,
-                                en: analysis.sample__locality__locality__en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="
-                              $openNuxtWindow('locality-id', {
-                                id: analysis.sample__locality_id,
-                              })
-                            "
-                            >{{
-                              $translate({
-                                et: analysis.sample__locality__locality,
-                                en: analysis.sample__locality__locality__en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.depth') }}</td>
-                        <data-cell :value="analysis.sample__depth" />
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.stratigraphy') }}</td>
-                        <td
-                          v-if="
-                            isEmpty(
-                              $translate({
-                                et: analysis.sample__stratigraphy__stratigraphy,
-                                en:
-                                  analysis.sample__stratigraphy__stratigraphy__en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="
-                              $openGeoDetail(
-                                'stratigraphy',
-                                analysis.sample__stratigraphy_id
-                              )
-                            "
-                            >{{
-                              $translate({
-                                et: analysis.sample__stratigraphy__stratigraphy,
-                                en:
-                                  analysis.sample__stratigraphy__stratigraphy__en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('analysis.lithostratigraphy') }}</td>
-                        <td
-                          v-if="
-                            isEmpty(
-                              $translate({
-                                et:
-                                  analysis.sample__lithostratigraphy__stratigraphy,
-                                en:
-                                  analysis.sample__lithostratigraphy__stratigraphy__en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click="
-                              $openGeoDetail(
-                                'stratigraphy',
-                                analysis.sample__lithostratigraphy_id
-                              )
-                            "
-                            >{{
-                              $translate({
-                                et:
-                                  analysis.sample__lithostratigraphy__stratigraphy,
-                                en:
-                                  analysis.sample__lithostratigraphy__stratigraphy__en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
+                      <data-row
+                        :title="$t('analysis.method')"
+                        :value="
+                          $translate({
+                            et: analysis.analysis_method__analysis_method,
+                            en: analysis.analysis_method__method_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('analysis.analysedBy')"
+                        :value="analysis.agent__agent"
+                      />
+
+                      <link-data-row
+                        :title="$t('analysis.sampleNumber')"
+                        :value="analysis.sample__number"
+                        @link-click="$openGeoDetail('sample', analysis.sample)"
+                      />
+
+                      <data-row
+                        :title="$t('analysis.remarks')"
+                        :value="analysis.remarks"
+                      />
+                      <link-data-row
+                        :title="$t('analysis.reference')"
+                        :value="analysis.reference__reference"
+                        @link-click="
+                          $openGeoDetail('reference', analysis.reference)
+                        "
+                      />
+                      <data-row
+                        :title="$t('analysis.dataset')"
+                        :value="
+                          $translate({
+                            et: analysis.dataset__name,
+                            en: analysis.dataset__name__en,
+                          })
+                        "
+                      />
+                      <link-data-row
+                        :title="$t('analysis.locality')"
+                        :value="
+                          $translate({
+                            et: analysis.sample__locality__locality,
+                            en: analysis.sample__locality__locality__en,
+                          })
+                        "
+                        @link-click="
+                          $openNuxtWindow('locality-id', {
+                            id: analysis.sample__locality_id,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('analysis.depth')"
+                        :value="analysis.sample__depth"
+                      />
+                      <link-data-row
+                        :title="$t('analysis.stratigraphy')"
+                        :value="
+                          $translate({
+                            et: analysis.sample__stratigraphy__stratigraphy,
+                            en: analysis.sample__stratigraphy__stratigraphy__en,
+                          })
+                        "
+                        @link-click="
+                          $openGeoDetail(
+                            'stratigraphy',
+                            analysis.sample__stratigraphy_id
+                          )
+                        "
+                      />
+                      <link-data-row
+                        :title="$t('analysis.lithostratigraphy')"
+                        :value="
+                          $translate({
+                            et:
+                              analysis.sample__lithostratigraphy__stratigraphy,
+                            en:
+                              analysis.sample__lithostratigraphy__stratigraphy__en,
+                          })
+                        "
+                        @link-click="
+                          $openGeoDetail(
+                            'stratigraphy',
+                            analysis.sample__lithostratigraphy_id
+                          )
+                        "
+                      />
                     </tbody>
                   </template>
                 </v-simple-table>
@@ -208,9 +124,10 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import DataCell from '~/components/DataCell.vue'
+import DataRow from '~/components/DataRow.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
 export default {
-  components: { DataCell },
+  components: { DataRow, LinkDataRow },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
