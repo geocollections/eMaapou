@@ -374,21 +374,6 @@ export default {
       const locality = localityResponse.results[0]
       const tabs = [
         {
-          id: 'locality_synonym',
-          routeName: 'locality-id',
-          title: 'locality.synonyms',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          routeName: 'locality-id-specimens',
-          title: 'locality.specimens',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
           id: 'locality_reference',
           routeName: 'locality-id-references',
           title: 'locality.references',
@@ -414,6 +399,21 @@ export default {
           routeName: 'locality-id-samples',
           title: 'locality.samples',
           isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'specimen',
+          routeName: 'locality-id-specimens',
+          title: 'locality.specimens',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'locality_synonym',
+          routeName: 'locality-id',
+          title: 'locality.synonyms',
           count: 0,
           props: {},
         },
