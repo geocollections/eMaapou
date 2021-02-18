@@ -5,8 +5,15 @@
       {{ $t('common.noValue') }}
     </td>
     <td v-else>
-      <a v-if="href" class="text-link" :href="href"> {{ value }} </a>
-      <a v-else class="text-link" @click="$emit('link-click')">{{ value }} </a>
+      <nuxt-link v-if="nuxt" class="text-link underline" :to="href">{{
+        value
+      }}</nuxt-link>
+      <div v-else>
+        <a v-if="href" class="text-link" :href="href"> {{ value }} </a>
+        <a v-else class="text-link" @click="$emit('link-click')"
+          >{{ value }}
+        </a>
+      </div>
     </td>
   </tr>
 </template>
@@ -17,6 +24,7 @@ import { isNil, isEmpty } from 'lodash'
 export default {
   name: 'LinkDataRow',
   props: {
+    nuxt: { type: Boolean, default: false },
     title: { type: String, default: null },
     value: { type: [String, Number], default: null, required: true },
     href: { type: String, default: null },
