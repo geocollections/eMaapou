@@ -396,9 +396,6 @@ export default {
   },
   methods: {
     isNil,
-    handleSwipeBetweenTabs(pathAsString) {
-      this.$router.push(pathAsString)
-    },
   },
 }
 </script>
