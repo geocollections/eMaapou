@@ -5,7 +5,8 @@
       {{ $t('common.noValue') }}
     </td>
     <td v-else>
-      <a class="text-link" @click="$emit('link-click')">{{ value }} </a>
+      <a v-if="href" class="text-link" :href="href"> {{ value }} </a>
+      <a v-else class="text-link" @click="$emit('link-click')">{{ value }} </a>
     </td>
   </tr>
 </template>
@@ -18,6 +19,7 @@ export default {
   props: {
     title: { type: String, default: null },
     value: { type: [String, Number], default: null, required: true },
+    href: { type: String, default: null },
   },
 
   computed: {
