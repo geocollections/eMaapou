@@ -28,7 +28,7 @@ import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   components: { TableWrapper },
   props: {
-    locality: {
+    sample: {
       type: Number,
       default: null,
     },
@@ -63,9 +63,9 @@ export default {
         'attachment_link',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
-            or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
+            sample: this.sample,
           },
           queryFields: this.queryFields,
         }

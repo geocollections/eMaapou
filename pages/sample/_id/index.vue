@@ -51,7 +51,7 @@ import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   components: { TableWrapper },
   props: {
-    locality: {
+    sample: {
       type: Number,
       default: null,
     },
@@ -107,9 +107,9 @@ export default {
         'analysis',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
-            fq: `locality_id:${this.locality}`,
+            fq: `sample_id:${this.sample}`,
           },
           queryFields: this.queryFields,
         }

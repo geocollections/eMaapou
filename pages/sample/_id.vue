@@ -51,7 +51,7 @@
                         </td>
                       </tr>
                       <tr v-if="isNil(sample.locality)">
-                        <td>{{ $t('drillcore.boxNumbers') }}</td>
+                        <td>{{ $t('sample.boxNumbers') }}</td>
                         <td
                           v-if="isNil(sample.locality__latitude)"
                           class="no-value"
@@ -63,7 +63,7 @@
                         </td>
                       </tr>
                       <tr v-if="isNil(sample.locality)">
-                        <td>{{ $t('drillcore.boxNumbers') }}</td>
+                        <td>{{ $t('sample.boxNumbers') }}</td>
                         <td
                           v-if="isNil(sample.locality__longitude)"
                           class="no-value"
@@ -135,17 +135,9 @@
                   </template>
                 </v-simple-table>
               </v-card-text>
-              <div v-if="drillcore.remarks">
-                <v-card-title class="pt-0 pl-md-0 pr-md-4 px-0">{{
-                  $t('drillcore.remarks')
-                }}</v-card-title>
-                <v-card-text class="pl-md-0 pr-md-4 px-0">{{
-                  drillcore.remarks
-                }}</v-card-text>
-              </div>
             </v-col>
             <v-col
-              v-if="drillcore.locality_id"
+              v-if="sample.locality_id"
               cols="12"
               md="6"
               class="pt-0 px-0"
@@ -165,27 +157,27 @@
                             :href="
                               localePath({
                                 name: 'locality-id',
-                                params: { id: drillcore.locality_id },
+                                params: { id: sample.locality_id },
                               })
                             "
                           >
                             {{
                               $translate({
-                                et: drillcore.locality__locality,
-                                en: drillcore.locality__locality_en,
+                                et: sample.locality__locality,
+                                en: sample.locality__locality_en,
                               })
                             }}
                           </a>
                         </td>
                       </tr>
-                      <tr v-if="drillcore.locality__country__value">
+                      <tr v-if="sample.locality__country__value">
                         <td>{{ $t('locality.country') }}</td>
                         <td
                           v-if="
                             isNil(
                               $translate({
-                                et: drillcore.locality__country__value,
-                                en: drillcore.locality__country__value_en,
+                                et: sample.locality__country__value,
+                                en: sample.locality__country__value_en,
                               })
                             )
                           "
@@ -197,10 +189,10 @@
                           {{
                             $t('locality.countryFormat', {
                               name: $translate({
-                                et: drillcore.locality__country__value,
-                                en: drillcore.locality__country__value_en,
+                                et: sample.locality__country__value,
+                                en: sample.locality__country__value_en,
                               }),
-                              iso: drillcore.locality__country__iso_code,
+                              iso: sample.locality__country__iso_code,
                             })
                           }}
                         </td>
@@ -208,50 +200,50 @@
                       <tr>
                         <td>{{ $t('locality.latitude') }}</td>
                         <td
-                          v-if="isNil(drillcore.locality__latitude)"
+                          v-if="isNil(sample.locality__latitude)"
                           class="no-value"
                         >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ drillcore.locality__latitude }}
+                          {{ sample.locality__latitude }}
                         </td>
                       </tr>
 
                       <tr>
                         <td>{{ $t('locality.longitude') }}</td>
                         <td
-                          v-if="isNil(drillcore.locality__longitude)"
+                          v-if="isNil(sample.locality__longitude)"
                           class="no-value"
                         >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ drillcore.locality__longitude }}
+                          {{ sample.locality__longitude }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('locality.elevation') }}</td>
                         <td
-                          v-if="isNil(drillcore.locality__elevation)"
+                          v-if="isNil(sample.locality__elevation)"
                           class="no-value"
                         >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ drillcore.locality__elevation }}
+                          {{ sample.locality__elevation }}
                         </td>
                       </tr>
                       <tr>
                         <td>{{ $t('locality.depth') }}</td>
                         <td
-                          v-if="isNil(drillcore.locality__depth)"
+                          v-if="isNil(sample.locality__depth)"
                           class="no-value"
                         >
                           {{ $t('common.noValue') }}
                         </td>
                         <td v-else>
-                          {{ drillcore.locality__depth }}
+                          {{ sample.locality__depth }}
                         </td>
                       </tr>
                     </tbody>
@@ -259,8 +251,8 @@
                 </v-simple-table>
                 <v-card
                   v-if="
-                    drillcore.locality__latitude &&
-                    drillcore.locality__longitude
+                    sample.locality__latitude &&
+                    sample.locality__longitude
                   "
                   id="map-wrap"
                   elevation="0"
@@ -268,20 +260,20 @@
                 >
                   <leaflet-map
                     :is-estonian="
-                      drillcore.locality__country__value === 'Eesti'
+                      sample.locality__country__value === 'Eesti'
                     "
                     :height="300"
                     :center="{
-                      latitude: drillcore.locality__latitude,
-                      longitude: drillcore.locality__longitude,
+                      latitude: sample.locality__latitude,
+                      longitude: sample.locality__longitude,
                     }"
                     :markers="[
                       {
-                        latitude: drillcore.locality__latitude,
-                        longitude: drillcore.locality__longitude,
+                        latitude: sample.locality__latitude,
+                        longitude: sample.locality__longitude,
                         text: $translate({
-                          et: drillcore.drillcore,
-                          en: drillcore.drillcore_en,
+                          et: sample.drillcore,
+                          en: sample.drillcore_en,
                         }),
                       },
                     ]"
@@ -347,7 +339,7 @@ export default {
         {
           id: 'sample_reference',
           routeName: 'sample-id-references',
-          title: 'sample.references',
+          title: 'sample.sampleReferences',
           count: 0,
           props: {},
         },

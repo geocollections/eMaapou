@@ -23,7 +23,7 @@ import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   components: { TableWrapper },
   props: {
-    locality: {
+    sample: {
       type: Number,
       default: null,
     },
@@ -37,13 +37,13 @@ export default {
         itemsPerPage: 25,
       },
       headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
+        { text: this.$t('sampleReference.reference'), value: 'reference' },
         {
-          text: this.$t('localityReference.referenceTitle'),
+          text: this.$t('sampleReference.referenceTitle'),
           value: 'reference__title',
         },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
+        { text: this.$t('sampleReference.pages'), value: 'pages' },
+        { text: this.$t('sampleReference.remarks'), value: 'remarks' },
       ],
       queryFields: {
         reference: () => 'reference__reference',
@@ -56,12 +56,12 @@ export default {
   methods: {
     async handleUpdate(options) {
       const referenceResponse = await this.$services.sarvREST.getResourceList(
-        'locality_reference',
+        'sample_reference',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
-            locality: this.locality,
+            sample: this.sample,
           },
           queryFields: this.queryFields,
         }

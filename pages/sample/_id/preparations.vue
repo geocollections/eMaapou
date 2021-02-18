@@ -6,12 +6,13 @@
     :init-options="options"
     @update="handleUpdate"
   >
-    <template #item.reference="{ item }">
+    <template #item.taxon="{ item }">
       <a
         class="text-link"
-        @click="$openGeoDetail('reference', item.reference)"
-        >{{ item.reference__reference }}</a
+        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
       >
+        {{ item.taxon__taxon }}
+      </a>
     </template>
   </table-wrapper>
 </template>
@@ -23,7 +24,7 @@ import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   components: { TableWrapper },
   props: {
-    locality: {
+    sample: {
       type: Number,
       default: null,
     },
@@ -37,18 +38,21 @@ export default {
         itemsPerPage: 25,
       },
       headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
         {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
+          text: this.$t('preparation.preparation_number'),
+          value: 'preparation_number',
         },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
+        {
+          text: this.$t('preparation.taxon'),
+          value: 'taxon',
+        },
+        { text: this.$t('preparation.storage'), value: 'storage__location' },
+        { text: this.$t('preparation.remarks'), value: 'remarks' },
       ],
       queryFields: {
-        reference: () => 'reference__reference',
-        reference__title: () => 'reference__title',
-        pages: () => 'pages',
+        preparation_number: () => 'preparation_number',
+        taxon: () => 'taxon__taxon',
+        storage: () => 'storage__location',
         remarks: () => 'remarks',
       },
     }
@@ -56,12 +60,12 @@ export default {
   methods: {
     async handleUpdate(options) {
       const referenceResponse = await this.$services.sarvREST.getResourceList(
-        'locality_reference',
+        'preparation',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
-            locality: this.locality,
+            sample: this.sample,
           },
           queryFields: this.queryFields,
         }

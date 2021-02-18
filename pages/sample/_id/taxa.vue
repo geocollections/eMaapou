@@ -6,12 +6,18 @@
     :init-options="options"
     @update="handleUpdate"
   >
-    <template #item.reference="{ item }">
+    <template #item.taxon="{ item }">
       <a
         class="text-link"
-        @click="$openGeoDetail('reference', item.reference)"
-        >{{ item.reference__reference }}</a
+        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
       >
+        {{ item.taxon__taxon }}
+      </a>
+    </template>
+
+    <template #item.extra="{ item }">
+      <v-icon v-if="item.extra">mdi-plus</v-icon>
+      <v-icon v-else>mdi-minus</v-icon>
     </template>
   </table-wrapper>
 </template>
@@ -23,7 +29,7 @@ import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   components: { TableWrapper },
   props: {
-    locality: {
+    sample: {
       type: Number,
       default: null,
     },
@@ -37,18 +43,24 @@ export default {
         itemsPerPage: 25,
       },
       headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
+        { text: this.$t('taxon.taxon'), value: 'taxon' },
         {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
+          text: this.$t('taxon.name'),
+          value: 'name',
         },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
+        { text: this.$t('taxon.frequency'), value: 'frequency' },
+        { text: this.$t('taxon.agent_identified'), value: 'agent_identified__agent' },
+        { text: this.$t('taxon.date_identified'), value: 'date_identified' },
+        { text: this.$t('taxon.extra'), value: 'extra' },
+        { text: this.$t('taxon.remarks'), value: 'remarks' },
       ],
       queryFields: {
-        reference: () => 'reference__reference',
-        reference__title: () => 'reference__title',
-        pages: () => 'pages',
+        taxon: () => 'taxon__taxon',
+        name: () => 'name',
+        frequency: () => 'frequency',
+        agent_identified: () => 'agent_identified__agent,agent_identified_txt',
+        date_identified: () => 'date_identified,date_identified_free',
+        extra: () => 'extra',
         remarks: () => 'remarks',
       },
     }
@@ -56,12 +68,12 @@ export default {
   methods: {
     async handleUpdate(options) {
       const referenceResponse = await this.$services.sarvREST.getResourceList(
-        'locality_reference',
+        'taxon_list',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
-            locality: this.locality,
+            sample: this.sample,
           },
           queryFields: this.queryFields,
         }
