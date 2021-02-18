@@ -271,13 +271,12 @@ export default {
     handleSearch: debounce(function () {
       this.boxes = []
       if (this.page !== 1) this.page = 1
-      else {
-        this.$refs.infiniteLoading.status = 1
-        this.$refs.infiniteLoading.$emit(
-          'infinite',
-          this.$refs.infiniteLoading.stateChanger
-        )
-      }
+
+      this.$refs.infiniteLoading.status = 1
+      this.$refs.infiniteLoading.$emit(
+        'infinite',
+        this.$refs.infiniteLoading.stateChanger
+      )
     }, 500),
   },
 }
