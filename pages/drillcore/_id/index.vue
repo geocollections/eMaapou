@@ -240,7 +240,15 @@ export default {
           },
           search: this.search,
           queryFields: {
-            drillcore_box__number: () => 'drillcore_box__number',
+            boxNumber: () => 'drillcore_box__number',
+            stratigraphyTop: () =>
+              this.$i18n.locale === 'et'
+                ? 'drillcore_box__stratigraphy_top__stratigraphy'
+                : 'drillcore_box__stratigraphy_top__stratigraphy_en',
+            stratigraphyBase: () =>
+              this.$i18n.locale === 'et'
+                ? 'drillcore_box__stratigraphy_base__stratigraphy'
+                : 'drillcore_box__stratigraphy_base__stratigraphy_en',
           },
         })
         .then((res) => {
