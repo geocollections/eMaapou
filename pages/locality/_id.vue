@@ -300,6 +300,27 @@
                           </a>
                         </td>
                       </tr>
+                      <tr v-if="drillcore">
+                        <td>{{ $t('locality.drillcore') }}</td>
+                        <td>
+                          <a
+                            class="text-link"
+                            :href="
+                              localePath({
+                                name: 'drillcore-id',
+                                params: { id: drillcore.id },
+                              })
+                            "
+                          >
+                            {{
+                              $translate({
+                                et: drillcore.drillcore,
+                                en: drillcore.drillcore_en,
+                              })
+                            }}
+                          </a>
+                        </td>
+                      </tr>
                       <tr>
                         <td>{{ $t('locality.remarks') }}</td>
                         <td v-if="isNil(locality.remarks)" class="no-value">
@@ -375,7 +396,7 @@ export default {
       const tabs = [
         {
           id: 'locality_reference',
-          routeName: 'locality-id-references',
+          routeName: 'locality-id',
           title: 'locality.references',
           count: 0,
           props: {},
@@ -412,7 +433,7 @@ export default {
         },
         {
           id: 'locality_synonym',
-          routeName: 'locality-id',
+          routeName: 'locality-id-synonyms',
           title: 'locality.synonyms',
           count: 0,
           props: {},
@@ -455,9 +476,20 @@ export default {
         }
       }
       await forLoop()
+
+      const drillcoreResponse = await app.$services.sarvREST.getResourceList(
+        'drillcore',
+        {
+          defaultParams: {
+            locality: locality.id,
+          },
+        }
+      )
+
       return {
         locality,
         tabs,
+        drillcore: drillcoreResponse.items ? drillcoreResponse.items[0] : null,
         initActiveTab: route.path,
       }
     } catch (err) {

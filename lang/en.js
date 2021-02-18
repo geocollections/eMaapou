@@ -58,6 +58,7 @@ export default {
     coordinateY: 'Y',
     coordinatePrecision: 'Coordinate precision',
     descriptions: 'Descriptions ({number})',
+    drillcore: 'Drillcore',
   },
   localitySynonym: {
     synonym: 'Synonym',

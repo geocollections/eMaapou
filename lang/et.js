@@ -58,6 +58,7 @@ export default {
     coordinateY: 'Y',
     coordinatePrecision: 'Koordinaatide täpsus',
     descriptions: 'Kirjeldused ({number})',
+    drillcore: 'Puursüdamik',
   },
 
   localitySynonym: {

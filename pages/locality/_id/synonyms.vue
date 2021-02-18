@@ -1,25 +1,17 @@
 <template>
   <table-wrapper
-    :items="references"
+    :items="synonyms"
     :headers="headers"
     :count="count"
     :init-options="options"
     @update="handleUpdate"
   >
-    <template #item.reference="{ item }">
-      <a
-        class="text-link"
-        @click="$openGeoDetail('reference', item.reference)"
-        >{{ item.reference__reference }}</a
-      >
-    </template>
   </table-wrapper>
 </template>
 
 <script>
 import { isNil } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
-
 export default {
   components: { TableWrapper },
   props: {
@@ -30,33 +22,33 @@ export default {
   },
   data() {
     return {
-      references: [],
+      synonyms: [],
       count: 0,
       options: {
         page: 1,
         itemsPerPage: 25,
       },
       headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
+        { text: this.$t('localitySynonym.synonym'), value: 'synonym' },
+        { text: this.$t('localitySynonym.pages'), value: 'pages' },
         {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
+          text: this.$t('localitySynonym.reference'),
+          value: 'reference__reference',
         },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
+        { text: this.$t('localitySynonym.remarks'), value: 'remarks' },
       ],
       queryFields: {
-        reference: () => 'reference__reference',
-        reference__title: () => 'reference__title',
+        synonym: () => 'synonym',
         pages: () => 'pages',
+        reference__reference: () => 'reference__reference',
         remarks: () => 'remarks',
       },
     }
   },
   methods: {
     async handleUpdate(options) {
-      const referenceResponse = await this.$services.sarvREST.getResourceList(
-        'locality_reference',
+      const synonymResponse = await this.$services.sarvREST.getResourceList(
+        'locality_synonym',
         {
           ...options,
           isValid: isNil(this.locality),
@@ -66,8 +58,8 @@ export default {
           queryFields: this.queryFields,
         }
       )
-      this.references = referenceResponse.items
-      this.count = referenceResponse.count
+      this.synonyms = synonymResponse.items
+      this.count = synonymResponse.count
     },
   },
 }
