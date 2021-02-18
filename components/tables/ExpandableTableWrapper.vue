@@ -75,10 +75,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    expandHeaderText: {
-      type: String,
-      default: '',
-    },
     expandField: {
       type: String,
       default: null,
@@ -88,14 +84,7 @@ export default {
     return {
       search: '',
       expanded: [],
-      headersLocal: [
-        ...this.headers,
-        {
-          text: this.expandHeaderText,
-          value: 'data-table-expand',
-          align: 'center',
-        },
-      ],
+      headersLocal: [...this.headers],
       options: this.initOptions,
       footerProps: {
         'items-per-page-options': [10, 25, 50, 100],

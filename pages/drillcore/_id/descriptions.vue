@@ -4,7 +4,6 @@
     :headers="headers"
     :count="count"
     :init-options="options"
-    :expand-header-text="$t('localityDescription.description')"
     expand-field="description"
     @update="handleUpdate"
   >
@@ -94,6 +93,11 @@ export default {
         {
           text: this.$t('localityDescription.stratigraphy'),
           value: 'stratigraphy',
+        },
+        {
+          text: this.$t('localityDescription.description'),
+          value: 'data-table-expand',
+          align: 'center',
         },
         {
           text: this.$t('localityDescription.author'),

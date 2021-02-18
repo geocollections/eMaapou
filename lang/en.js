@@ -59,6 +59,7 @@ export default {
     coordinatePrecision: 'Coordinate precision',
     descriptions: 'Descriptions ({number})',
     drillcore: 'Drillcore',
+    drillcoreBoxes: 'Boxes ({number})',
   },
   localitySynonym: {
     synonym: 'Synonym',
