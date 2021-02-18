@@ -111,10 +111,6 @@ export default {
       },
     }
   },
-  created() {
-    console.log('specimens')
-    console.log(this.locality)
-  },
   methods: {
     round,
     async handleUpdate(options) {

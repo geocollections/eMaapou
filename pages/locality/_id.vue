@@ -393,6 +393,20 @@ export default {
         }
       )
       const locality = localityResponse.results[0]
+
+      const drillcoreResponse = await app.$services.sarvREST.getResourceList(
+        'drillcore',
+        {
+          defaultParams: {
+            locality: locality.id,
+          },
+        }
+      )
+
+      const drillcore = drillcoreResponse.items
+        ? drillcoreResponse.items[0]
+        : null
+
       const tabs = [
         {
           id: 'locality_reference',
@@ -446,6 +460,17 @@ export default {
           props: {},
         },
       ]
+
+      if (drillcore) {
+        tabs.splice(3, 0, {
+          routeName: 'locality-id-drillcore_boxes',
+          title: 'locality.drillcoreBoxes',
+          count: drillcore.boxes,
+          props: { drillcore: drillcore.id },
+        })
+        tabs.join()
+      }
+
       const solrParams = { fq: `locality_id:${params.id}` }
       const apiParams = { locality_id: locality.id }
       // Hack: fix count in API!!!
@@ -462,34 +487,26 @@ export default {
               item.id,
               solrParams
             )
-          else
+          else {
             countResponse = await app.$services.sarvREST.getResourceCount(
               item.id,
               item.id === 'attachment_link'
                 ? apiAttachmentLinkParams
                 : apiParams
             )
+          }
           item.count = countResponse?.count ?? 0
           item.props = {
+            ...item.props,
             locality: locality.id,
           }
         }
       }
       await forLoop()
-
-      const drillcoreResponse = await app.$services.sarvREST.getResourceList(
-        'drillcore',
-        {
-          defaultParams: {
-            locality: locality.id,
-          },
-        }
-      )
-
       return {
         locality,
         tabs,
-        drillcore: drillcoreResponse.items ? drillcoreResponse.items[0] : null,
+        drillcore,
         initActiveTab: route.path,
       }
     } catch (err) {

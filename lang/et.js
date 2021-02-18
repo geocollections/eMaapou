@@ -59,6 +59,7 @@ export default {
     coordinatePrecision: 'Koordinaatide täpsus',
     descriptions: 'Kirjeldused ({number})',
     drillcore: 'Puursüdamik',
+    drillcoreBoxes: 'Kastid ({number})',
   },
 
   localitySynonym: {
@@ -141,6 +142,13 @@ export default {
     analysedBy: 'Isik/asutus',
     date: 'Aeg',
     thickness: 'Paksus',
+    title: 'Analüüs ID: {id}',
+    remarks: 'Lisainfo',
+    reference: 'Viide',
+    dataset: 'Andmekogu',
+    locality: 'Lokaliteet',
+    stratigraphy: 'Stratigraafia',
+    lithostratigraphy: 'Litostratigraafia',
   },
   specimen: {
     id: 'ID',

@@ -59,6 +59,7 @@ export default {
     coordinatePrecision: 'Coordinate precision',
     descriptions: 'Descriptions ({number})',
     drillcore: 'Drillcore',
+    drillcoreBoxes: 'Boxes ({number})',
   },
   localitySynonym: {
     synonym: 'Synonym',
@@ -148,6 +149,13 @@ export default {
     analysedBy: 'Person/Institution',
     date: 'Date',
     thickness: 'Thickness',
+    title: 'Analysis ID: {id}',
+    remarks: 'Remarks',
+    reference: 'Reference',
+    dataset: 'Dataset',
+    locality: 'Locality',
+    stratigraphy: 'Stratigraphy',
+    lithostratigraphy: 'Lithostratigraphy',
   },
   specimen: {
     id: 'ID',

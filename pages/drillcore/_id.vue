@@ -318,7 +318,7 @@ export default {
           routeName: 'drillcore-id',
           title: 'drillcore.drillcoreBoxesTitle',
           count: drillcore?.boxes,
-          props: {},
+          props: { drillcore: drillcore.id },
         },
         {
           id: 'locality_description',
