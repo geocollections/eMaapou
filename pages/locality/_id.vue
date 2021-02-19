@@ -20,316 +20,144 @@
                 <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
-                      <tr>
-                        <td>{{ $t('locality.name') }}</td>
-                        <td>
-                          {{
-                            $translate({
-                              et: locality.locality,
-                              en: locality.locality_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.type') }}</td>
-                        <td
-                          v-if="
-                            isNil(
-                              $translate({
-                                et: locality.type__value,
-                                en: locality.type__value_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{
-                            $translate({
-                              et: locality.type__value,
-                              en: locality.type__value_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.country') }}</td>
-                        <td
-                          v-if="
-                            isNil(
-                              $translate({
-                                et: locality.country__value,
-                                en: locality.country__value_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{
-                            $translate({
-                              et: locality.country__value,
-                              en: locality.country__value_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.parish') }}</td>
-                        <td
-                          v-if="
-                            isNil(
-                              $translate({
-                                et: locality.vald__vald,
-                                en: locality.vald__vald_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{
-                            $translate({
-                              et: locality.vald__vald,
-                              en: locality.vald__vald_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.settlement') }}</td>
-                        <td
-                          v-if="
-                            isNil(
-                              $translate({
-                                et: locality.asustusyksus__asustusyksus,
-                                en: locality.asustusyksus__asustusyksus_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{
-                            $translate({
-                              et: locality.asustusyksus__asustusyksus,
-                              en: locality.asustusyksus__asustusyksus_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.elevation') }}</td>
-                        <td v-if="isNil(locality.elevation)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.elevation }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.latitude') }}</td>
-                        <td v-if="isNil(locality.latitude)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.latitude }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.longitude') }}</td>
-                        <td v-if="isNil(locality.longitude)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.longitude }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordinateSystem') }}</td>
-                        <td
-                          v-if="isEmpty(locality.coord_system)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.coord_system }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordinateX') }}</td>
-                        <td v-if="isNil(locality.coordx)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.coordx }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordinateY') }}</td>
-                        <td v-if="isNil(locality.coordy)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.coordy }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordinatePrecision') }}</td>
-                        <td
-                          v-if="isNil(locality.coord_det_precision__value)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.coord_det_precision__value }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordinateMethod') }}</td>
-                        <td
-                          v-if="
-                            isNil(
-                              $translate({
-                                et: locality.coord_det_method__value,
-                                en: locality.coord_det_method__value_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{
-                            $translate({
-                              et: locality.coord_det_method__value,
-                              en: locality.coord_det_method__value_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.coordinateAgent') }}</td>
-                        <td
-                          v-if="isNil(locality.coord_det_agent__agent)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.coord_det_agent__agent }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.locationRemarks') }}</td>
-                        <td
-                          v-if="isNil(locality.remarks_location)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.remarks_location }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {{ $t('locality.stratigraphyTop') }}
-                        </td>
-                        <td
-                          v-if="isNil(locality.stratigraphy_top_id)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click.stop="
-                              $openWindow(
-                                `https://geocollections.info/stratigraphy/${locality.stratigraphy_top_id}`
-                              )
-                            "
-                          >
-                            {{
-                              $translate({
-                                et: locality.stratigraphy_top__stratigraphy,
-                                en: locality.stratigraphy_top__stratigraphy_en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          {{ $t('locality.stratigraphyBase') }}
-                        </td>
-                        <td
-                          v-if="isNil(locality.stratigraphy_base_id)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          <a
-                            class="text-link"
-                            @click.stop="
-                              $openWindow(
-                                `https://geocollections.info/stratigraphy/${locality.stratigraphy_base_id}`
-                              )
-                            "
-                          >
-                            {{
-                              $translate({
-                                et: locality.stratigraphy_base__stratigraphy,
-                                en: locality.stratigraphy_base__stratigraphy_en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr v-if="drillcore">
-                        <td>{{ $t('locality.drillcore') }}</td>
-                        <td>
-                          <a
-                            class="text-link"
-                            :href="
-                              localePath({
-                                name: 'drillcore-id',
-                                params: { id: drillcore.id },
-                              })
-                            "
-                          >
-                            {{
-                              $translate({
-                                et: drillcore.drillcore,
-                                en: drillcore.drillcore_en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.remarks') }}</td>
-                        <td v-if="isNil(locality.remarks)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ locality.remarks }}
-                        </td>
-                      </tr>
+                      <data-row
+                        :title="$t('locality.name')"
+                        :value="
+                          $translate({
+                            et: locality.locality,
+                            en: locality.locality_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.type')"
+                        :value="
+                          $translate({
+                            et: locality.type__value,
+                            en: locality.type__value_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.country')"
+                        :value="
+                          $translate({
+                            et: locality.country__value,
+                            en: locality.country__value_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.parish')"
+                        :value="
+                          $translate({
+                            et: locality.vald__vald,
+                            en: locality.vald__vald_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.settlement')"
+                        :value="
+                          $translate({
+                            et: locality.asustusyksus__asustusyksus,
+                            en: locality.asustusyksus__asustusyksus_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.elevation')"
+                        :value="locality.elevation"
+                      />
+                      <data-row
+                        :title="$t('locality.latitude')"
+                        :value="locality.latitude"
+                      />
+                      <data-row
+                        :title="$t('locality.longitude')"
+                        :value="locality.longitude"
+                      />
+                      <data-row
+                        :title="$t('locality.coordinateSystem')"
+                        :value="locality.coord_system"
+                      />
+                      <data-row
+                        :title="$t('locality.coordinateX')"
+                        :value="locality.coordx"
+                      />
+                      <data-row
+                        :title="$t('locality.coordinateY')"
+                        :value="locality.coordy"
+                      />
+                      <data-row
+                        :title="$t('locality.coordinatePrecision')"
+                        :value="locality.coord_det_precision__value"
+                      />
+                      <data-row
+                        :title="$t('locality.coordinateMethod')"
+                        :value="
+                          $translate({
+                            et: locality.coord_det_method__value,
+                            en: locality.coord_det_method__value_en,
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.coordinateAgent')"
+                        :value="locality.coord_det_agent__agent"
+                      />
+                      <data-row
+                        :title="$t('locality.locationRemarks')"
+                        :value="locality.remarks_location"
+                      />
+                      <link-data-row
+                        :title="$t('locality.stratigraphyTop')"
+                        :value="
+                          $translate({
+                            et: locality.stratigraphy_top__stratigraphy,
+                            en: locality.stratigraphy_top__stratigraphy_en,
+                          })
+                        "
+                        @link-click="
+                          $openWindow(
+                            `https://geocollections.info/stratigraphy/${locality.stratigraphy_top_id}`
+                          )
+                        "
+                      />
+                      <link-data-row
+                        :title="$t('locality.stratigraphyBase')"
+                        :value="
+                          $translate({
+                            et: locality.stratigraphy_base__stratigraphy,
+                            en: locality.stratigraphy_base__stratigraphy_en,
+                          })
+                        "
+                        @link-click="
+                          $openWindow(
+                            `https://geocollections.info/stratigraphy/${locality.stratigraphy_base_id}`
+                          )
+                        "
+                      />
+                      <link-data-row
+                        nuxt
+                        :title="$t('locality.drillcore')"
+                        :value="
+                          $translate({
+                            et: drillcore.drillcore,
+                            en: drillcore.drillcore_en,
+                          })
+                        "
+                        :href="
+                          localePath({
+                            name: 'drillcore-id',
+                            params: { id: drillcore.id },
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.remarks')"
+                        :value="locality.remarks"
+                      />
                     </tbody>
                   </template>
                 </v-simple-table>
@@ -379,7 +207,11 @@
 
 <script>
 import { isNil, isEmpty } from 'lodash'
+import LinkDataRow from '~/components/LinkDataRow'
+import DataRow from '~/components/DataRow.vue'
+
 export default {
+  components: { DataRow, LinkDataRow },
   async asyncData({ params, route, app, error }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(
