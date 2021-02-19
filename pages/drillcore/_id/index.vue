@@ -70,116 +70,56 @@
                   <v-simple-table dense class="custom-table">
                     <template #default>
                       <tbody>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.depthStart') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box__depth_start)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box__depth_start }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box__depth_end)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box__depth_end }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {{ $t('drillcoreBox.stratigraphyTop') }}
-                          </td>
-                          <td
-                            v-if="isNull(box.drillcore_box__stratigraphy_top)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            <a
-                              class="text-link"
-                              @click.stop="
-                                $openGeoDetail(
-                                  'stratigraphy',
-                                  box.drillcore_box__stratigraphy_top
-                                )
-                              "
-                            >
-                              {{
-                                $translate({
-                                  et:
-                                    box.drillcore_box__stratigraphy_top__stratigraphy,
-                                  en:
-                                    box.drillcore_box__stratigraphy_top__stratigraphy_en,
-                                })
-                              }}
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {{ $t('drillcoreBox.stratigraphyBase') }}
-                          </td>
-                          <td
-                            v-if="isNull(box.drillcore_box__stratigraphy_base)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            <a
-                              class="text-link"
-                              @click.stop="
-                                $openGeoDetail(
-                                  'stratigraphy',
-                                  box.drillcore_box__stratigraphy_base
-                                )
-                              "
-                            >
-                              {{
-                                $translate({
-                                  et:
-                                    box.drillcore_box__stratigraphy_base__stratigraphy,
-                                  en:
-                                    box.drillcore_box__stratigraphy_base__stratigraphy_en,
-                                })
-                              }}
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.depthOther') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box__depth_other)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box__depth_other }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.remarks') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box__remarks)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box__remarks }}
-                          </td>
-                        </tr>
+                        <data-row
+                          :title="$t('drillcoreBox.depthStart')"
+                          :value="box.drillcore_box__depth_start"
+                        />
+                        <data-row
+                          :title="$t('drillcoreBox.depthEnd')"
+                          :value="box.drillcore_box__depth_end"
+                        />
+                        <link-data-row
+                          :title="$t('drillcoreBox.stratigraphyTop')"
+                          :value="
+                            $translate({
+                              et:
+                                box.drillcore_box__stratigraphy_top__stratigraphy,
+                              en:
+                                box.drillcore_box__stratigraphy_top__stratigraphy_en,
+                            })
+                          "
+                          @link-click="
+                            $openGeoDetail(
+                              'stratigraphy',
+                              box.drillcore_box__stratigraphy_top
+                            )
+                          "
+                        />
+                        <link-data-row
+                          :title="$t('drillcoreBox.stratigraphyBase')"
+                          :value="
+                            $translate({
+                              et:
+                                box.drillcore_box__stratigraphy_base__stratigraphy,
+                              en:
+                                box.drillcore_box__stratigraphy_base__stratigraphy_en,
+                            })
+                          "
+                          @link-click="
+                            $openGeoDetail(
+                              'stratigraphy',
+                              box.drillcore_box__stratigraphy_base
+                            )
+                          "
+                        />
+                        <data-row
+                          :title="$t('drillcoreBox.depthOther')"
+                          :value="box.drillcore_box__depth_other"
+                        />
+                        <data-row
+                          :title="$t('drillcoreBox.remarks')"
+                          :value="box.drillcore_box__remarks"
+                        />
                       </tbody>
                     </template>
                   </v-simple-table>
@@ -214,7 +154,10 @@
 
 <script>
 import { isNull, debounce } from 'lodash'
+import DataRow from '~/components/DataRow.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
 export default {
+  components: { DataRow, LinkDataRow },
   props: {
     drillcore: {
       type: Number,
