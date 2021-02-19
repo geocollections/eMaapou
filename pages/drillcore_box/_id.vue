@@ -102,7 +102,7 @@
             <div class="text-center">
               <span v-for="(size, index) in imageSizes" :key="index">
                 <a
-                  class="text-link underline"
+                  class="text-link"
                   @click="
                     $openImage(activeImage.attachment__uuid_filename, size)
                   "

@@ -1,7 +1,7 @@
 <template>
   <data-row :title="title" :value="value">
     <template #value>
-      <nuxt-link v-if="nuxt" class="text-link underline" :to="href">{{
+      <nuxt-link v-if="nuxt" class="text-link" :to="href">{{
         value
       }}</nuxt-link>
       <div v-else>
@@ -18,7 +18,7 @@
   <!--      {{ $t('common.noValue') }}-->
   <!--    </td>-->
   <!--    <td v-else>-->
-  <!--      <nuxt-link v-if="nuxt" class="text-link underline" :to="href">{{-->
+  <!--      <nuxt-link v-if="nuxt" class="text-link" :to="href">{{-->
   <!--        value-->
   <!--      }}</nuxt-link>-->
   <!--      <div v-else>-->
