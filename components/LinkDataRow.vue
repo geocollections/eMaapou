@@ -12,23 +12,6 @@
       </div>
     </template>
   </data-row>
-  <!--  <tr>-->
-  <!--    <td>{{ title }}</td>-->
-  <!--    <td v-if="isInvalid" class="no-value">-->
-  <!--      {{ $t('common.noValue') }}-->
-  <!--    </td>-->
-  <!--    <td v-else>-->
-  <!--      <nuxt-link v-if="nuxt" class="text-link" :to="href">{{-->
-  <!--        value-->
-  <!--      }}</nuxt-link>-->
-  <!--      <div v-else>-->
-  <!--        <a v-if="href" class="text-link" :href="href"> {{ value }} </a>-->
-  <!--        <a v-else class="text-link" @click="$emit('link-click')"-->
-  <!--          >{{ value }}-->
-  <!--        </a>-->
-  <!--      </div>-->
-  <!--    </td>-->
-  <!--  </tr>-->
 </template>
 
 <script>
