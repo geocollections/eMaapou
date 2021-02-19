@@ -14,7 +14,7 @@ executors:
       IMAGE_NAME: geocollections/gris
       IMAGE_NAME_DEV: geocollections/gris-dev
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: circleci/node:lts-stretch
 
 jobs:
   build_docker_image:
