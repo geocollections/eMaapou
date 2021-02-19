@@ -240,7 +240,7 @@ export default {
           props: {},
         },
       ]
-
+      // FIXME: If check seems unneccessary
       if (area?.id) {
         const solrParams = { fq: `area_id:${area.id}` }
         const apiParams = { area: area.id }
