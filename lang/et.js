@@ -154,6 +154,14 @@ export default {
     locality: 'Lokaliteet',
     stratigraphy: 'Stratigraafia',
     lithostratigraphy: 'Litostratigraafia',
+    results: 'Tulemused ({number})',
+    attachments: 'Fails ({number})',
+  },
+  analysisResult: {
+    parameter: 'Parameeter',
+    value: 'Väärtus',
+    valueText: 'Tekst',
+    valueError: 'Viga',
   },
   specimen: {
     id: 'ID',

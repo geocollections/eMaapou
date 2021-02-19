@@ -118,6 +118,9 @@
           </v-row>
         </v-container>
       </v-card>
+      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -126,8 +129,9 @@
 import { isEmpty, isNil } from 'lodash'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
+import Tabs from '~/components/Tabs'
 export default {
-  components: { DataRow, LinkDataRow },
+  components: { DataRow, LinkDataRow, Tabs },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
@@ -143,13 +147,66 @@ export default {
       )
       const analysis = analysisResponse.results[0]
 
-      return { analysis }
+      const tabs = [
+        {
+          id: 'analysis_results',
+          isSolr: true,
+          routeName: 'analysis-id',
+          title: 'analysis.results',
+          count: 0,
+          props: { analysis: analysis.id },
+        },
+        {
+          id: 'attachment_link',
+          routeName: 'analysis-id-attachments',
+          title: 'analysis.attachments',
+          count: 0,
+          props: { analysis: analysis.id },
+        },
+      ]
+
+      const solrParams = { fq: `analysis_id:${analysis.id}` }
+      const apiParams = { analysis: analysis.id }
+
+      const forLoop = async () => {
+        const filteredTabs = tabs.filter((item) => !!item.id)
+        for (const item of filteredTabs) {
+          let countResponse
+          if (item?.isSolr)
+            countResponse = await app.$services.sarvSolr.getResourceCount(
+              item.id,
+              solrParams
+            )
+          else
+            countResponse = await app.$services.sarvREST.getResourceCount(
+              item.id,
+              apiParams
+            )
+          item.count = countResponse?.count ?? 0
+          item.props = {
+            analysis: analysis.id,
+          }
+        }
+      }
+      await forLoop()
+
+      return { analysis, tabs, initActiveTab: route.path }
     } catch (err) {
       error({
         message: `Could not find analysis ${route.params.id}`,
         path: route.path,
       })
     }
+  },
+  head() {
+    return {
+      title: this.$t('analysis.title', { id: this.analysis.id }),
+    }
+  },
+  computed: {
+    filteredTabs() {
+      return this.tabs.filter((item) => item.count > 0)
+    },
   },
   methods: {
     isEmpty,

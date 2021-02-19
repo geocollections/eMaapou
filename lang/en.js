@@ -154,6 +154,14 @@ export default {
     locality: 'Locality',
     stratigraphy: 'Stratigraphy',
     lithostratigraphy: 'Lithostratigraphy',
+    results: 'Results ({number})',
+    attachments: 'Attachments ({number})',
+  },
+  analysisResult: {
+    parameter: 'Parameter',
+    value: 'Value',
+    valueText: 'Text',
+    valueError: 'Error',
   },
   specimen: {
     id: 'ID',
