@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
 // eslint-disable-next-line no-unused-vars
 import { GestureHandling } from 'leaflet-gesture-handling'
+import LControlFullscreen from 'vue2-leaflet-fullscreen'
 
 // Build icon assets.
 import { Icon } from 'leaflet'
@@ -30,6 +31,7 @@ Vue.component('LRectangle', Vue2Leaflet.LRectangle)
 Vue.component('LTileLayer', Vue2Leaflet.LTileLayer)
 Vue.component('LTooltip', Vue2Leaflet.LTooltip)
 Vue.component('LLwmsTileLayer', Vue2Leaflet.LWMSTileLayer)
+Vue.component('LControlFullscreen', LControlFullscreen)
 
 delete Icon.Default.prototype._getIconUrl
 

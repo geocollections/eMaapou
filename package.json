@@ -20,7 +20,8 @@
     "nuxt": "^2.14.12",
     "nuxt-i18n": "^6.20.0",
     "vue-infinite-loading": "^2.4.5",
-    "vue2-leaflet": "^2.6.0"
+    "vue2-leaflet": "^2.6.0",
+    "vue2-leaflet-fullscreen": "^1.0.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",

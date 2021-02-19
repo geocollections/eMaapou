@@ -8,6 +8,7 @@
       :center="[center.latitude, center.longitude]"
     >
       <l-control-layers />
+      <l-control-fullscreen position="topleft" />
       <l-tile-layer
         v-for="layer in layers.base"
         :key="layer.id"
