@@ -30,7 +30,7 @@ Vue.component('LPopup', Vue2Leaflet.LPopup)
 Vue.component('LRectangle', Vue2Leaflet.LRectangle)
 Vue.component('LTileLayer', Vue2Leaflet.LTileLayer)
 Vue.component('LTooltip', Vue2Leaflet.LTooltip)
-Vue.component('LLwmsTileLayer', Vue2Leaflet.LWMSTileLayer)
+Vue.component('LWmsTileLayer', Vue2Leaflet.LWMSTileLayer)
 Vue.component('LControlFullscreen', LControlFullscreen)
 
 delete Icon.Default.prototype._getIconUrl
