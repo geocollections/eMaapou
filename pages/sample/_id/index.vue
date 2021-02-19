@@ -1,5 +1,5 @@
 <template>
-  <analysis-table :search-field="{ key: 'locality_id', value: sample }" />
+  <analysis-table :search-field="{ key: 'sample_id', value: sample }" />
 </template>
 
 <script>
