@@ -348,6 +348,14 @@ export default {
       })
     }
   },
+  head() {
+    return {
+      title: this.$translate({
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      }),
+    }
+  },
   methods: {
     isNil,
     isEmpty,
