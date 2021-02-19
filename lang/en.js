@@ -281,6 +281,7 @@ export default {
   },
   table: {
     itemsPerPage: 'Rows per page:',
+    noData: 'No data found',
   },
   footerPreliminary: '2021 | GRIS: GeoResources Information System',
   footer:

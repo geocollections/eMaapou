@@ -281,6 +281,7 @@ export default {
   },
   table: {
     itemsPerPage: 'Ridade arv:',
+    noData: 'Andmeid ei leitud',
   },
   footerPreliminary: '2021 | GRIS: GeoRessursside InfoSüsteem',
   footer:

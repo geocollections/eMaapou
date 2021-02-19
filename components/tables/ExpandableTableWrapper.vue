@@ -14,6 +14,7 @@
     mobile-breakpoint="0"
     @update:options="handleChange"
   >
+    <template #no-data>{{ $t('table.noData') }}</template>
     <template #top="{ pagination, updateOptions }">
       <v-container>
         <v-row>
