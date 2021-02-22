@@ -53,6 +53,7 @@ export default {
           text: this.$t('attachment.file'),
           value: 'file',
           width: '120px',
+          sortable: false,
         },
         { text: this.$t('attachment.description'), value: 'description' },
         {
