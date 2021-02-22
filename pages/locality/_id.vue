@@ -139,6 +139,7 @@
                         "
                       />
                       <link-data-row
+                        v-if="drillcore"
                         nuxt
                         :title="$t('locality.drillcore')"
                         :value="
