@@ -1,6 +1,6 @@
 <template>
   <div class="py-2 d-flex justify-center">
-    <image-cell v-if="isImage && src" :src="src" />
+    <image-cell v-if="isImage && src" :src="src" @click="$emit('click')" />
     <v-icon
       v-else-if="isImage"
       color="deep-orange darken-2"
