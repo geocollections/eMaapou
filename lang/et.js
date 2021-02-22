@@ -174,6 +174,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     taxon: 'Takson',
     thickness: 'Paksus',
+    image: 'Pilt',
   },
   stratotype: {
     stratigraphy: 'Stratigraafia',

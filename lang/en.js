@@ -174,6 +174,7 @@ export default {
     stratigraphy: 'Stratigraphy',
     taxon: 'Taxon',
     thickness: 'Thickness',
+    image: 'Image',
   },
   stratotype: {
     stratigraphy: 'Stratigraphy',
