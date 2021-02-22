@@ -6,6 +6,13 @@
     :init-options="options"
     @update="handleUpdate"
   >
+    <template #item.file="{ item }">
+      <attachment-cell
+        :src="`https://files.geocollections.info/small/${item.attachment__filename}`"
+        :type="item.attachment__attachment_format__value"
+        @click="$openGeoDetail('attachment', item.attachment)"
+      />
+    </template>
     <template #item.description="{ item }">
       <a
         class="text-link"
@@ -24,9 +31,10 @@
 <script>
 import { isNil } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import AttachmentCell from '~/components/AttachmentCell.vue'
 
 export default {
-  components: { TableWrapper },
+  components: { TableWrapper, AttachmentCell },
   props: {
     locality: {
       type: Number,
@@ -42,6 +50,11 @@ export default {
         itemsPerPage: 25,
       },
       headers: [
+        {
+          text: this.$t('attachment.file'),
+          value: 'file',
+          width: '120px',
+        },
         { text: this.$t('attachment.description'), value: 'description' },
         {
           text: this.$t('attachment.author'),

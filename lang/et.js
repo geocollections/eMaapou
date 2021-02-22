@@ -126,6 +126,7 @@ export default {
   attachment: {
     author: 'Autor',
     description: 'Kirjeldus',
+    file: 'Fail',
   },
   samples: {
     id: 'ID',

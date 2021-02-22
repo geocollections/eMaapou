@@ -126,6 +126,7 @@ export default {
   attachment: {
     author: 'Author',
     description: 'Description',
+    file: 'File',
   },
   samples: {
     id: 'ID',
