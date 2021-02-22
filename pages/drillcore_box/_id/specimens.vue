@@ -47,6 +47,12 @@
         {{ item.taxon }}
       </a>
     </template>
+    <template #item.image="{ item }">
+      <image-cell
+        :src="item.image_preview_url"
+        @click="$openGeoDetail('specimen', item.id)"
+      />
+    </template>
   </table-wrapper>
 </template>
 
@@ -96,6 +102,7 @@ export default {
         { text: this.$t('specimen.kind'), value: 'kind' },
         { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
         { text: this.$t('specimen.taxon'), value: 'taxon' },
+        { text: this.$t('specimen.image'), value: 'image' },
       ],
       queryFields: {
         id: () => 'id',
