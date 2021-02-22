@@ -1,13 +1,6 @@
 <template>
   <div class="py-2 d-flex justify-center">
-    <v-img
-      v-if="isImage && src"
-      height="100px"
-      width="100px"
-      contain
-      :src="src"
-      @click="$emit('click')"
-    />
+    <image-cell v-if="isImage && src" :src="src" />
     <v-icon
       v-else-if="isImage"
       color="deep-orange darken-2"
@@ -31,8 +24,10 @@
 </template>
 
 <script>
+import ImageCell from './ImageCell.vue'
 export default {
   name: 'AttachmentCell',
+  components: { ImageCell },
   props: {
     src: {
       type: String,
