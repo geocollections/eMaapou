@@ -8,6 +8,7 @@
       :center="[center.latitude, center.longitude]"
     >
       <l-control-layers />
+      <l-control-fullscreen position="topleft" />
       <l-tile-layer
         v-for="layer in layers.base"
         :key="layer.id"
@@ -18,12 +19,23 @@
         :options="layer.options"
       />
       <l-tile-layer
-        v-for="layer in layers.overlay"
+        v-for="layer in tileOverlays"
         :key="layer.id"
         layer-type="overlay"
         :visible="layer.visible"
         :name="layer.name"
         :url="layer.url"
+        :options="layer.options"
+      />
+      <l-wms-tile-layer
+        v-for="layer in wmsOverlays"
+        :key="layer.id"
+        layer-type="overlay"
+        :visible="layer.visible"
+        :name="layer.name"
+        :base-url="layer.url"
+        :layers="layer.layers"
+        :transparent="layer.transparent"
         :options="layer.options"
       />
       <l-circle-marker
@@ -168,9 +180,36 @@ export default {
               zIndex: 2,
             },
           },
+          {
+            id: 'est-bed-overlay',
+            isWMS: true,
+            name: 'Estonian bedrock',
+            url: 'https://gis.geocollections.info/geoserver/wms',
+            layers: 'geocollections:bedrock400k',
+            visible: false,
+            transparent: true,
+            options: {
+              attribution:
+                "Estonian maps: <a  href='https://ttu.ee/geoloogia-instituut'>Department of Geology</a>",
+              format: 'image/png',
+              tiled: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 2,
+            },
+          },
         ],
       },
     }
+  },
+  computed: {
+    tileOverlays() {
+      return this.layers.overlay.filter((item) => !item.isWMS)
+    },
+
+    wmsOverlays() {
+      return this.layers.overlay.filter((item) => item.isWMS)
+    },
   },
 }
 </script>
