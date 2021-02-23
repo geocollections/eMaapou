@@ -42,7 +42,9 @@
     </template>
     <template #item.image="{ item }">
       <image-cell
+        v-if="item.image_preview_url"
         :src="item.image_preview_url"
+        class="ma-2"
         @click="$openGeoDetail('specimen', item.id)"
       />
     </template>
@@ -72,7 +74,6 @@ export default {
         sortBy: [],
         sortDesc: [],
       },
-
       headers: [
         { text: this.$t('specimen.id'), value: 'id' },
         { text: this.$t('specimen.number'), value: 'specimen_number' },
