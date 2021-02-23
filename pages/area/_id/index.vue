@@ -48,11 +48,11 @@ export default {
       },
       headers: [
         { text: this.$t('site.id'), value: 'id' },
-        { text: this.$t('site.site'), value: 'name' },
-        { text: this.$t('site.x'), value: 'x' },
-        { text: this.$t('site.y'), value: 'y' },
+        { text: this.$t('site.name'), value: 'name' },
+        { text: this.$t('site.coordx'), value: 'x' },
+        { text: this.$t('site.coordy'), value: 'y' },
         {
-          text: this.$t('site.z'),
+          text: this.$t('site.elevation'),
           value: 'z',
         },
         { text: this.$t('site.depth'), value: 'depth' },

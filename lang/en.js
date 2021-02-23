@@ -186,6 +186,7 @@ export default {
   },
   area: {
     id: 'ID',
+    name: 'Name',
     areaType: 'Area type',
     maakond: 'Country',
     areaHa: 'Area (ha)',
