@@ -19,13 +19,6 @@
         })
       }}
     </template>
-    <template #item.thickness="{ item }">
-      {{
-        !item.depth_interval || !item.depth
-          ? null
-          : round(item.depth_interval - item.depth, 3)
-      }}
-    </template>
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
@@ -91,13 +84,6 @@ export default {
         { text: this.$t('specimen.number'), value: 'specimen_number' },
         { text: this.$t('specimen.depth'), value: 'depth' },
         { text: this.$t('specimen.depthInterval'), value: 'depth_interval' },
-        {
-          text: this.$t('specimen.thickness'),
-          value: 'thickness',
-          sortable: false,
-          class: 'static-cell-header',
-          cellClass: 'static-cell',
-        },
         { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
         { text: this.$t('specimen.kind'), value: 'kind' },
         { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
