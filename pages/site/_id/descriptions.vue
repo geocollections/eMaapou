@@ -8,6 +8,7 @@
     expand-field="description"
     @update="handleUpdate"
   >
+    <!-- eslint-disable-next-line vue/no-template-shadow -->
     <template #expanded-item="{ headers, item }">
       <td class="py-2" :colspan="headers.length">{{ item.description }}</td>
     </template>

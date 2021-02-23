@@ -114,6 +114,7 @@
                   >
                     {{ $t('common.noValue') }}
                   </td>
+                  <!-- eslint-disable vue/no-v-html -->
                   <td
                     v-else
                     v-html="
@@ -123,6 +124,7 @@
                       })
                     "
                   />
+                  <!-- eslint-enable -->
                 </tr>
                 <tr>
                   <td>{{ $t('area.egf') }}</td>
