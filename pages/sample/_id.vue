@@ -328,10 +328,10 @@
 import { isNil } from 'lodash'
 import DataRow from '@/components/DataRow'
 import LinkDataRow from '@/components/LinkDataRow'
-import Tabs from '~/components/Tabs.vue'
-
+import Tabs from '@/components/Tabs'
+import LeafletMap from '@/components/LeafletMap'
 export default {
-  components: { LinkDataRow, DataRow, Tabs },
+  components: { LinkDataRow, DataRow, Tabs, LeafletMap },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
