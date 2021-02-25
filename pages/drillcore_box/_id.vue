@@ -4,29 +4,7 @@
       <h1 class="text-center py-3 page-title">
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
       </h1>
-      <div class="d-flex justify-space-between">
-        <nuxt-link
-          class="text-link"
-          :to="
-            localePath({
-              params: { id: parseInt($route.params.id) - 1 },
-            })
-          "
-        >
-          {{ $t('common.previous') }}
-        </nuxt-link>
-
-        <nuxt-link
-          class="text-link"
-          :to="
-            localePath({
-              params: { id: parseInt($route.params.id) + 1 },
-            })
-          "
-        >
-          {{ $t('common.next') }}
-        </nuxt-link>
-      </div>
+      <prev-next-nav />
       <v-card class="my-2">
         <v-card-text>
           <client-only>
@@ -259,9 +237,10 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 import Tabs from '@/components/Tabs'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
+import PrevNextNav from '~/components/PrevNextNav.vue'
 
 export default {
-  components: { Tabs, BoxImageLoader, DataRow, LinkDataRow },
+  components: { Tabs, BoxImageLoader, DataRow, LinkDataRow, PrevNextNav },
   layout: 'detail',
   async asyncData({ $axios, params, route, error, app }) {
     try {
