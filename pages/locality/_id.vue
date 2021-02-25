@@ -174,10 +174,10 @@
                 $t('locality.map')
               }}</v-card-title>
               <v-card-text class="pr-md-0 pl-md-4 px-0">
-                <v-card id="map-wrap" elevation="0" height="300">
+                <v-card id="map-wrap" elevation="0" height="600">
                   <leaflet-map
                     :is-estonian="locality.country__value === 'Eesti'"
-                    :height="400"
+                    :height="600"
                     :center="{
                       latitude: locality.latitude,
                       longitude: locality.longitude,
