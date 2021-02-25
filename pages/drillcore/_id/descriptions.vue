@@ -4,7 +4,6 @@
     :headers="headers"
     :count="count"
     :init-options="options"
-    expand-field="description"
     @update="handleUpdate"
   >
     <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -56,7 +55,7 @@
 </template>
 
 <script>
-import { round, isNil } from 'lodash'
+import { round, isNil, isEmpty } from 'lodash'
 import ExpandableTableWrapper from '~/components/tables/ExpandableTableWrapper.vue'
 
 export default {
@@ -136,7 +135,9 @@ export default {
           queryFields: this.queryFields,
         }
       )
-      this.descriptions = descriptionResponse.items
+      this.descriptions = descriptionResponse.items.map((item) => {
+        return { ...item, canExpand: !isEmpty(item.description) }
+      })
       this.count = descriptionResponse.count
     },
   },

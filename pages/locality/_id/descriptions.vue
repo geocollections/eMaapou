@@ -4,8 +4,6 @@
     :headers="headers"
     :count="count"
     :init-options="options"
-    :expand-header-text="$t('localityDescription.description')"
-    expand-field="description"
     @update="handleUpdate"
   >
     <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -57,7 +55,7 @@
 </template>
 
 <script>
-import { round, isNil } from 'lodash'
+import { round, isNil, isEmpty } from 'lodash'
 import ExpandableTableWrapper from '~/components/tables/ExpandableTableWrapper.vue'
 
 export default {
@@ -97,6 +95,11 @@ export default {
           value: 'stratigraphy',
         },
         {
+          text: this.$t('localityDescription.description'),
+          value: 'data-table-expand',
+          align: 'center',
+        },
+        {
           text: this.$t('localityDescription.author'),
           value: 'author',
           sortable: false,
@@ -132,7 +135,9 @@ export default {
           queryFields: this.queryFields,
         }
       )
-      this.descriptions = descriptionResponse.items
+      this.descriptions = descriptionResponse.items.map((item) => {
+        return { ...item, canExpand: !isEmpty(item.description) }
+      })
       this.count = descriptionResponse.count
     },
   },
