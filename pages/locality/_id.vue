@@ -209,10 +209,12 @@
 <script>
 import { isNil, isEmpty } from 'lodash'
 import LinkDataRow from '~/components/LinkDataRow'
-import DataRow from '~/components/DataRow.vue'
+import DataRow from '~/components/DataRow'
+import LeafletMap from '~/components/LeafletMap'
+import Tabs from '~/components/Tabs'
 
 export default {
-  components: { DataRow, LinkDataRow },
+  components: { DataRow, LinkDataRow, LeafletMap, Tabs },
   async asyncData({ params, route, app, error }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(
