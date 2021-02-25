@@ -53,10 +53,10 @@
 
 <script>
 import { round, isNil } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
-
+import TableWrapper from '@/components/tables/TableWrapper.vue'
+import ImageCell from '@/components/ImageCell'
 export default {
-  components: { TableWrapper },
+  components: { TableWrapper, ImageCell },
   props: {
     locality: {
       type: Number,

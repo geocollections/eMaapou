@@ -30,10 +30,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
-
+import TableWrapper from '@/components/tables/TableWrapper.vue'
+import AttachmentCell from '@/components/AttachmentCell'
 export default {
-  components: { TableWrapper },
+  components: { TableWrapper, AttachmentCell },
   props: {
     locality: {
       type: Number,
