@@ -6,7 +6,7 @@
     show-expand
     :single-expand="singleExpand"
     :expanded.sync="expanded"
-    :headers="headersLocal"
+    :headers="headers"
     :items="items"
     :options.sync="options"
     :server-items-length="count"
@@ -44,7 +44,7 @@
     </template>
     <template #item.data-table-expand="{ expand, isExpanded, item }">
       <v-btn
-        v-if="item[expandField]"
+        v-if="item.canExpand"
         icon
         :class="{ active: isExpanded }"
         @click="expand(!isExpanded)"
@@ -59,60 +59,21 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import tableMixin from '~/mixins/tableMixin'
 
 export default {
   name: 'ExpandableTableWrapper',
+  mixins: [tableMixin],
   props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    headers: {
-      type: Array,
-      default: () => [],
-    },
-    initOptions: {
-      type: Object,
-      default: () => {},
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
     singleExpand: {
       type: Boolean,
       default: false,
     },
-    expandField: {
-      type: String,
-      default: null,
-    },
   },
   data() {
     return {
-      search: '',
       expanded: [],
-      headersLocal: [...this.headers],
-      options: this.initOptions,
-      footerProps: {
-        'items-per-page-options': [10, 25, 50, 100],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
     }
-  },
-  methods: {
-    handleChange(options) {
-      this.$emit('update', { tableOptions: options, search: this.search })
-    },
-    handleSearch: debounce(function () {
-      if (this.options.page !== 1) this.options.page = 1
-      else
-        this.$emit('update', {
-          tableOptions: this.options,
-          search: this.search,
-        })
-    }, 500),
   },
 }
 </script>
