@@ -10,128 +10,61 @@
           <v-simple-table dense class="custom-table">
             <template #default>
               <tbody>
-                <tr>
-                  <td>{{ $t('area.name') }}</td>
-                  <td>
-                    {{ $translate({ et: area.name, en: area.name_en }) }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.areaType') }}</td>
-                  <td
-                    v-if="
-                      isNil(
-                        $translate({
-                          et: area.area_type__name,
-                          en: area.area_type__name_en,
-                        })
-                      )
-                    "
-                    class="no-value"
-                  >
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
-                    <a
-                      v-if="area.area_type === 2"
-                      class="text-link"
-                      @click="$openTurba('turbaala', area.id)"
-                    >
-                      {{
-                        $translate({
-                          et: area.area_type__name,
-                          en: area.area_type__name_en,
-                        })
-                      }}
-                      <v-icon small color="deep-orange darken-2"
-                        >mdi-open-in-new</v-icon
-                      >
-                    </a>
-                    <div v-else>
-                      {{
-                        $translate({
-                          et: area.area_type__name,
-                          en: area.area_type__name_en,
-                        })
-                      }}
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.maakond') }}</td>
-                  <td
-                    v-if="
-                      isNil(
-                        $translate({
-                          et: area.maakond__maakond,
-                          en: area.maakond__maakond_en,
-                        })
-                      )
-                    "
-                    class="no-value"
-                  >
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
-                    {{
-                      $translate({
-                        et: area.maakond__maakond,
-                        en: area.maakond__maakond_en,
-                      })
-                    }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.areaHa') }}</td>
-                  <td v-if="isNil(area.area_ha)" class="no-value">
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
-                    {{ area.area_ha }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.depositAreaHa') }}</td>
-                  <td v-if="isNil(area.deposit_area_ha)" class="no-value">
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
-                    {{ area.deposit_area_ha }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.description') }}</td>
-                  <td
-                    v-if="
-                      isNil(
+                <data-row
+                  :title="$t('area.name')"
+                  :value="$translate({ et: area.name, en: area.name_en })"
+                />
+                <link-data-row
+                  v-if="area.area_type === 2"
+                  :title="$t('area.areaType')"
+                  :value="
+                    $translate({
+                      et: area.area_type__name,
+                      en: area.area_type__name_en,
+                    })
+                  "
+                  @link-click="$openTurba('turbaala', area.id)"
+                />
+                <data-row
+                  v-else
+                  :title="$t('area.name')"
+                  :value="
+                    $translate({
+                      et: area.area_type__name,
+                      en: area.area_type__name_en,
+                    })
+                  "
+                />
+                <data-row
+                  :title="$t('area.maakond')"
+                  :value="
+                    $translate({
+                      et: area.maakond__maakond,
+                      en: area.maakond__maakond_en,
+                    })
+                  "
+                />
+                <data-row :title="$t('area.areaHa')" :value="area.area_ha" />
+                <data-row
+                  :title="$t('area.depositAreaHa')"
+                  :value="area.deposit_area_ha"
+                />
+                <data-row :title="$t('area.description')">
+                  <template #value>
+                    <!-- eslint-disable vue/no-v-html -->
+                    <div
+                      v-html="
                         $translate({
                           et: area.description,
                           en: area.description_en,
                         })
-                      )
-                    "
-                    class="no-value"
-                  >
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <!-- eslint-disable vue/no-v-html -->
-                  <td
-                    v-else
-                    v-html="
-                      $translate({
-                        et: area.description,
-                        en: area.description_en,
-                      })
-                    "
-                  />
-                  <!-- eslint-enable -->
-                </tr>
-                <tr>
-                  <td>{{ $t('area.egf') }}</td>
-                  <td v-if="isNil(area.egf)" class="no-value">
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
+                      "
+                    />
+                    <!-- eslint-enable -->
+                  </template>
+                </data-row>
+                <data-row :title="$t('area.egf')">
+                  <template #value>
                     <span v-for="(item, index) in egfArray" :key="index">
                       <a class="text-link" @click="$openEgf(item)">
                         {{ item }}
@@ -140,27 +73,18 @@
                         >|</span
                       >
                     </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.maardla') }}</td>
-
-                  <td v-if="isNil(area.maardla)" class="no-value">
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
-                    <a class="text-link" @click="$openDeposit(area.maardla)">
-                      {{ $t('area.maardlaLink') }} ({{ area.maardla }})
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>{{ $t('area.eelis') }}</td>
-                  <td v-if="isNil(area.eelis)" class="no-value">
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
+                  </template>
+                </data-row>
+                <link-data-row
+                  :title="$t('area.maardla')"
+                  @link-click="$openEelis(item)"
+                >
+                  <template #value>
+                    {{ $t('area.maardlaLink') }} ({{ area.maardla }})
+                  </template>
+                </link-data-row>
+                <data-row :title="$t('area.eelis')">
+                  <template #value>
                     <span v-for="(item, index) in eelisArray" :key="index">
                       <a class="text-link" @click="$openEelis(item)">
                         {{ item }}
@@ -169,14 +93,15 @@
                         >|</span
                       >
                     </span>
-                  </td>
-                </tr>
-                <tr v-if="area.area_type === 2">
-                  <td>{{ $t('area.text1') }}</td>
-                  <td v-if="isNil(area.text1)" class="no-value">
-                    {{ $t('common.noValue') }}
-                  </td>
-                  <td v-else>
+                  </template>
+                </data-row>
+
+                <data-row
+                  v-if="area.area_type === 2"
+                  :title="$t('area.text1')"
+                  :value="planArray"
+                >
+                  <template #value>
                     <span v-for="(item, index) in planArray" :key="index">
                       <a
                         class="text-link"
@@ -192,12 +117,10 @@
                         >|</span
                       >
                     </span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>{{ $t('area.id') }}</td>
-                  <td>{{ area.id }}</td>
-                </tr>
+                  </template>
+                </data-row>
+
+                <data-row :title="$t('area.id')" :value="area.id" />
               </tbody>
             </template>
           </v-simple-table>
@@ -213,9 +136,11 @@
 <script>
 import { isNil } from 'lodash'
 import Tabs from '~/components/Tabs.vue'
+import DataRow from '~/components/DataRow.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
 
 export default {
-  components: { Tabs },
+  components: { Tabs, DataRow, LinkDataRow },
   layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {

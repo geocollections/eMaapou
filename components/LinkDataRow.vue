@@ -5,9 +5,14 @@
         value
       }}</nuxt-link>
       <div v-else>
-        <a v-if="href" class="text-link" :href="href"> {{ value }} </a>
-        <a v-else class="text-link" @click="$emit('link-click')"
-          >{{ value }}
+        <a v-if="href" class="text-link" :href="href">
+          <slot name="value">
+            {{ value }}
+          </slot>
+        </a>
+        <a v-else class="text-link" @click="$emit('link-click')">
+          {{ value }}
+          <v-icon small color="deep-orange darken-2">mdi-open-in-new</v-icon>
         </a>
       </div>
     </template>
