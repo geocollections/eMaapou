@@ -15,17 +15,6 @@
     <template #top="{ pagination, updateOptions }">
       <v-container>
         <v-row>
-          <v-col cols="12" sm="4" class="py-0">
-            <v-text-field
-              v-model="search"
-              color="deep-orange darken-2"
-              append-icon="mdi-magnify"
-              :label="$t('common.search')"
-              hide-details
-              clearable
-              @input="handleSearch"
-            ></v-text-field>
-          </v-col>
           <v-col class="pa-0">
             <v-data-footer
               style="border: none"
@@ -51,5 +40,18 @@ import tableMixin from '~/mixins/tableMixin'
 export default {
   name: 'TableWrapper',
   mixins: [tableMixin],
+  props: {
+    externalSearch: {
+      type: String,
+      default: '',
+    },
+  },
+  watch: {
+    externalSearch: {
+      handler(newValue) {
+        this.options.page = 1
+      },
+    },
+  },
 }
 </script>

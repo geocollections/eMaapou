@@ -1,4 +1,5 @@
 export default {
+  title: 'Geoloogia ja Ressursside InfoSüsteem',
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
@@ -85,6 +86,7 @@ export default {
     samples: 'Proovid ({number})',
     analyses: 'Analüüsid ({number})',
     specimens: 'Eksemplarid ({number})',
+    depth: 'Sügavus',
   },
   drillcoreBox: {
     id: 'ID',

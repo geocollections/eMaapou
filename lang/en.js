@@ -1,4 +1,5 @@
 export default {
+  title: 'Geology and Resource InfoSystem',
   common: {
     general: 'General info',
     pictures: 'Pictures',
@@ -85,6 +86,7 @@ export default {
     samples: 'Samples ({number})',
     analyses: 'Analyses ({number})',
     specimens: 'Specimens ({number})',
+    depth: 'Depth',
   },
   drillcoreBox: {
     id: 'ID',
