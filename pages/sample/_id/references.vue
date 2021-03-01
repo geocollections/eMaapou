@@ -7,11 +7,9 @@
     @update="handleUpdate"
   >
     <template #item.reference="{ item }">
-      <a
-        class="text-link"
-        @click="$openGeoDetail('reference', item.reference)"
-        >{{ item.reference__reference }}</a
-      >
+      <a class="text-link" @click="$openGeology('reference', item.reference)">{{
+        item.reference__reference
+      }}</a>
     </template>
   </table-wrapper>
 </template>

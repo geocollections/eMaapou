@@ -30,7 +30,7 @@
     <template #item.reference="{ item }">
       <a
         class="text-link"
-        @click="$openGeoDetail('reference', item.reference__id)"
+        @click="$openGeology('reference', item.reference__id)"
         >{{ item.reference__reference }}</a
       >
     </template>

@@ -52,7 +52,7 @@
                         :title="$t('analysis.reference')"
                         :value="analysis.reference__reference"
                         @link-click="
-                          $openGeoDetail('reference', analysis.reference)
+                          $openGeology('reference', analysis.reference)
                         "
                       />
                       <data-row
