@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-tabs
+      ref="tabs"
       v-model="activeTab"
       class="tabs"
       background-color="grey lighten-3"

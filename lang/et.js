@@ -1,5 +1,10 @@
 export default {
   title: 'Geoloogia ja Ressursside InfoSüsteem',
+  landing: {
+    drillcores: 'Puursüdamikud ({number})',
+    localities: 'Lokaliteedid ({number})',
+    sites: 'Proovipunktid ({number})',
+  },
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
@@ -208,6 +213,7 @@ export default {
     samples: 'Proovid ({number})',
     localityDescriptions: 'Kirjeldused ({number})',
     localityReferences: 'Kirjandus ({number})',
+    project: 'Projekt',
   },
   sample: {
     id: 'ID',

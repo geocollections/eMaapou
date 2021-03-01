@@ -1,5 +1,10 @@
 export default {
   title: 'Geology and Resource InfoSystem',
+  landing: {
+    drillcores: 'Drillcores ({number})',
+    localities: 'Localities ({number})',
+    sites: 'Sites ({number})',
+  },
   common: {
     general: 'General info',
     pictures: 'Pictures',
@@ -208,6 +213,7 @@ export default {
     samples: 'Samples ({number})',
     localityDescriptions: 'Descriptions ({number})',
     localityReferences: 'References ({number})',
+    project: 'Project',
   },
   sample: {
     id: 'ID',

@@ -23,25 +23,7 @@
     <v-row justify="center">
       <v-col>
         <v-card>
-          <external-search-table-wrapper
-            :external-search="search"
-            :items="items"
-            :headers="headers"
-            :count="count"
-            :init-options="options"
-            @update="handleUpdate"
-          >
-            <template #item.drillcore="{ item }">
-              <nuxt-link
-                class="text-link"
-                :to="
-                  localePath({ name: 'drillcore-id', params: { id: item.id } })
-                "
-              >
-                {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
-              </nuxt-link>
-            </template>
-          </external-search-table-wrapper>
+          <tabs ref="tabs" :tabs="tabs" :init-active-tab="initActiveTab" />
         </v-card>
       </v-col>
     </v-row>
@@ -49,41 +31,85 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
-import ExternalSearchTableWrapper from '~/components/tables/ExternalSearchTableWrapper.vue'
+import { debounce, isEmpty } from 'lodash'
+import Tabs from '@/components/Tabs'
+import { mapActions } from 'vuex'
 
 export default {
-  components: { ExternalSearchTableWrapper },
+  components: { Tabs },
+  async asyncData({ params, route, error, app }) {
+    try {
+      const tabs = [
+        {
+          id: 'drillcore',
+          routeName: 'index',
+          title: 'landing.drillcores',
+          count: 1,
+          props: {},
+          // HACK: right now there is no way to get the tab queryFields, so they are copied here.
+          // Probably should move queryFields and other data into stores.
+          queryFields: {
+            drillcore: app.i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
+            depth: 'depth',
+            boxes: 'boxes',
+            box_numbers: 'box_numbers',
+            storage__location: 'storage__location',
+            year: 'year',
+            remarks: 'remarks',
+          },
+        },
+        {
+          id: 'locality',
+          routeName: 'index-localities',
+          title: 'landing.localities',
+          count: 1,
+          props: {},
+          queryFields: {
+            locality: app.i18n.locale === 'et' ? 'locality' : 'locality_en',
+            country:
+              app.i18n.locale === 'et' ? 'country__value' : 'country__value_en',
+          },
+        },
+        {
+          id: 'site',
+          routeName: 'index-sites',
+          title: 'landing.sites',
+          count: 1,
+          props: {},
+          queryFields: {
+            id: 'id',
+            name: 'name',
+            project:
+              app.i18n.locale === 'et' ? 'project__name' : 'project__name_en',
+          },
+        },
+      ]
+
+      const forLoop = async () => {
+        const filteredTabs = tabs.filter((item) => !!item.id)
+        for (const item of filteredTabs) {
+          let countResponse
+          if (item?.isSolr)
+            countResponse = await app.$services.sarvSolr.getResourceCount(
+              item.id,
+              {}
+            )
+          else
+            countResponse = await app.$services.sarvREST.getResourceCount(
+              item.id,
+              {}
+            )
+          item.count = countResponse?.count ?? 0
+        }
+      }
+      await forLoop()
+
+      return { tabs, initActiveTab: route.path }
+    } catch (err) {}
+  },
   data() {
     return {
       search: '',
-      items: [],
-      count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
-      headers: [
-        { text: this.$t('drillcore.name'), value: 'drillcore' },
-        { text: this.$t('drillcore.depth'), value: 'depth' },
-        { text: this.$t('drillcore.boxes'), value: 'boxes' },
-        { text: this.$t('drillcore.boxNumbers'), value: 'box_numbers' },
-        { text: this.$t('drillcore.storage'), value: 'storage__location' },
-        { text: this.$t('drillcore.year'), value: 'year' },
-        { text: this.$t('drillcore.remarks'), value: 'remarks' },
-      ],
-      queryFields: {
-        drillcore: () =>
-          this.$i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
-        depth: () => 'depth',
-        boxes: () => 'boxes',
-        box_numbers: () => 'box_numbers',
-        storage__location: () => 'storage__location',
-        year: () => 'year',
-        remarks: () => 'remarks',
-      },
     }
   },
   head() {
@@ -92,21 +118,37 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
-      const drillcoreResponse = await this.$services.sarvREST.getResourceList(
-        'drillcore',
-        {
-          ...options,
-          search: this.search,
-          queryFields: this.queryFields,
+    ...mapActions('landing', ['updateSearch']),
+    handleSearch: debounce(async function () {
+      const forLoop = async () => {
+        const filteredTabs = this.tabs.filter((item) => !!item.id)
+        for (const item of filteredTabs) {
+          let countResponse
+          if (item?.isSolr)
+            countResponse = await this.$services.sarvSolr.getResourceCount(
+              item.id,
+              {}
+            )
+          else
+            countResponse = await this.$services.sarvREST.getResourceCount(
+              item.id,
+              !isEmpty(this.search) || this.search !== null
+                ? {
+                    multi_search: `value:${this.search};fields:${Object.values(
+                      item.queryFields
+                    )
+                      .map((field) => field)
+                      .join()};lookuptype:icontains`,
+                  }
+                : {}
+            )
+          item.count = countResponse?.count ?? 0
         }
-      )
-      this.options = options
-      this.items = drillcoreResponse.items
-      this.count = drillcoreResponse.count
-    },
-    handleSearch: debounce(function () {
-      this.handleUpdate(this.options)
+      }
+      await forLoop()
+
+      this.$refs.tabs.$refs.tabs.callSlider()
+      this.updateSearch(this.search)
     }, 500),
   },
 }
