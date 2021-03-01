@@ -130,16 +130,6 @@ export default {
     description: 'Kirjeldus',
     file: 'Fail',
   },
-  samples: {
-    id: 'ID',
-    number: 'Nr',
-    depth: 'Sügavus',
-    depthInterval: 'Süg. kuni',
-    stratigraphy: 'Stratigraafia',
-    collector: 'Koguja',
-    dateCollected: 'Kogumise aeg',
-    thickness: 'Paksus',
-  },
   analysis: {
     id: 'ID',
     sampleNumber: 'Proovi nr',

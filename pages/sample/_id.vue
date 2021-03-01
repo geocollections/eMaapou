@@ -433,12 +433,12 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
     sampleTitle() {
-      return (
+      return `${this.$t('sample.number')}: ${
         this.sample.number ||
         this.sample.number_additional ||
         this.sample.number_field ||
         this.sample.id
-      )
+      }`
     },
   },
   methods: {

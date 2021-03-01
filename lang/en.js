@@ -130,16 +130,6 @@ export default {
     description: 'Description',
     file: 'File',
   },
-  samples: {
-    id: 'ID',
-    number: 'Number',
-    depth: 'Depth',
-    depthInterval: 'Depth to',
-    stratigraphy: 'Stratigraphy',
-    collector: 'Collector',
-    dateCollected: 'Date collected',
-    thickness: 'Thickness',
-  },
   analysis: {
     id: 'ID',
     sampleNumber: 'Sample number',
