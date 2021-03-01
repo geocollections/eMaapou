@@ -7,7 +7,10 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="$openGeoDetail('sample', item.id)">
+      <a
+        class="text-link"
+        @click="$openNuxtWindow('sample-id', { id: item.id })"
+      >
         {{ item.id }}
       </a>
     </template>

@@ -37,7 +37,11 @@
                       <link-data-row
                         :title="$t('analysis.sampleNumber')"
                         :value="analysis.sample__number"
-                        @link-click="$openGeoDetail('sample', analysis.sample)"
+                        @link-click="
+                          $openNuxtWindow('sample-id', {
+                            id: analysis.sample__number,
+                          })
+                        "
                       />
 
                       <data-row

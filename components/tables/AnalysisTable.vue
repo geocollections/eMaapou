@@ -15,7 +15,10 @@
       </a>
     </template>
     <template #item.sample_number="{ item }">
-      <a class="text-link" @click="$openGeoDetail('sample', item.sample_id)">
+      <a
+        class="text-link"
+        @click="$openNuxtWindow('sample-id', { id: item.sample_id })"
+      >
         {{ item.sample_number }}
       </a>
     </template>
