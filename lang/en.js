@@ -214,6 +214,8 @@ export default {
     localityDescriptions: 'Descriptions ({number})',
     localityReferences: 'References ({number})',
     project: 'Project',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
   },
   sample: {
     id: 'ID',

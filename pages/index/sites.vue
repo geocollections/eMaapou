@@ -15,11 +15,6 @@
         {{ item.id }}
       </nuxt-link>
     </template>
-    <template #item.project="{ item }">
-      <!-- <a class="text-link" @click="$openGeoDetail('project', item.project)"> -->
-      {{ $translate({ et: item.project__name, en: item.project__name_en }) }}
-      <!-- </a> -->
-    </template>
   </external-search-table-wrapper>
 </template>
 
@@ -41,10 +36,11 @@ export default {
       headers: [
         { text: this.$t('site.id'), value: 'id' },
         { text: this.$t('site.name'), value: 'name' },
-        { text: this.$t('site.project'), value: 'project' },
+        { text: this.$t('site.latitude'), value: 'latitude' },
+        { text: this.$t('site.longitude'), value: 'longitude' },
       ],
       queryFields: {
-        id: () => 'id',
+        id: () => 'id_numeric',
         name: () => 'name',
         project: () =>
           this.$i18n.locale === 'et' ? 'project__name' : 'project__name_en',
@@ -63,7 +59,7 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
-      const siteResponse = await this.$services.sarvREST.getResourceList(
+      const siteResponse = await this.$services.sarvSolr.getResourceList(
         'site',
         {
           ...options,

@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
-      const drillcoreResponse = await this.$services.sarvREST.getResourceList(
+      const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
         'drillcore',
         {
           ...options,

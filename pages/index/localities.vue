@@ -16,7 +16,7 @@
       </nuxt-link>
     </template>
     <template #item.country="{ item }">
-      {{ $translate({ et: item.country__value, en: item.country__value_en }) }}
+      {{ $translate({ et: item.country, en: item.country_en }) }}
     </template>
   </external-search-table-wrapper>
 </template>
@@ -40,12 +40,13 @@ export default {
       headers: [
         { text: this.$t('locality.name'), value: 'locality' },
         { text: this.$t('locality.country'), value: 'country' },
+        { text: this.$t('locality.latitude'), value: 'latitude' },
+        { text: this.$t('locality.longitude'), value: 'longitude' },
       ],
       queryFields: {
         locality: () =>
           this.$i18n.locale === 'et' ? 'locality' : 'locality_en',
-        country: () =>
-          this.$i18n.locale === 'et' ? 'country__value' : 'country__value_en',
+        country: () => (this.$i18n.locale === 'et' ? 'country' : 'country_en'),
       },
     }
   },
@@ -61,7 +62,7 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
-      const localityResponse = await this.$services.sarvREST.getResourceList(
+      const localityResponse = await this.$services.sarvSolr.getResourceList(
         'locality',
         {
           ...options,

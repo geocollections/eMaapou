@@ -214,6 +214,8 @@ export default {
     localityDescriptions: 'Kirjeldused ({number})',
     localityReferences: 'Kirjandus ({number})',
     project: 'Projekt',
+    latitude: 'Lat',
+    longitude: 'Long',
   },
   sample: {
     id: 'ID',
