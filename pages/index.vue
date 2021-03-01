@@ -5,10 +5,12 @@
         <h1 class="text-center">{{ $t('title') }}</h1>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
+    <v-row justify="center">
+      <v-col sm="7" md="5">
         <v-text-field
           v-model="search"
+          dense
+          outlined
           color="deep-orange darken-2"
           append-icon="mdi-magnify"
           :label="$t('common.search')"
@@ -18,27 +20,29 @@
         ></v-text-field>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row justify="center">
       <v-col>
-        <external-search-table-wrapper
-          :external-search="search"
-          :items="items"
-          :headers="headers"
-          :count="count"
-          :init-options="options"
-          @update="handleUpdate"
-        >
-          <template #item.drillcore="{ item }">
-            <nuxt-link
-              class="text-link"
-              :to="
-                localePath({ name: 'drillcore-id', params: { id: item.id } })
-              "
-            >
-              {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
-            </nuxt-link>
-          </template>
-        </external-search-table-wrapper>
+        <v-card>
+          <external-search-table-wrapper
+            :external-search="search"
+            :items="items"
+            :headers="headers"
+            :count="count"
+            :init-options="options"
+            @update="handleUpdate"
+          >
+            <template #item.drillcore="{ item }">
+              <nuxt-link
+                class="text-link"
+                :to="
+                  localePath({ name: 'drillcore-id', params: { id: item.id } })
+                "
+              >
+                {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
+              </nuxt-link>
+            </template>
+          </external-search-table-wrapper>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
