@@ -44,61 +44,32 @@ export default {
           id: 'drillcore',
           routeName: 'index',
           title: 'landing.drillcores',
-          count: 1,
+          count: 0,
           props: {},
-          // HACK: right now there is no way to get the tab queryFields, so they are copied here.
-          // Probably should move queryFields and other data into stores.
-          queryFields: {
-            drillcore: app.i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
-            depth: 'depth',
-            boxes: 'boxes',
-            box_numbers: 'box_numbers',
-            storage__location: 'storage__location',
-            year: 'year',
-            remarks: 'remarks',
-          },
         },
         {
           id: 'locality',
           routeName: 'index-localities',
           title: 'landing.localities',
-          count: 1,
+          count: 0,
           props: {},
-          queryFields: {
-            locality: app.i18n.locale === 'et' ? 'locality' : 'locality_en',
-            country:
-              app.i18n.locale === 'et' ? 'country__value' : 'country__value_en',
-          },
         },
         {
           id: 'site',
           routeName: 'index-sites',
           title: 'landing.sites',
-          count: 1,
+          count: 0,
           props: {},
-          queryFields: {
-            id: 'id',
-            name: 'name',
-            project:
-              app.i18n.locale === 'et' ? 'project__name' : 'project__name_en',
-          },
         },
       ]
 
       const forLoop = async () => {
         const filteredTabs = tabs.filter((item) => !!item.id)
         for (const item of filteredTabs) {
-          let countResponse
-          if (item?.isSolr)
-            countResponse = await app.$services.sarvSolr.getResourceCount(
-              item.id,
-              {}
-            )
-          else
-            countResponse = await app.$services.sarvREST.getResourceCount(
-              item.id,
-              {}
-            )
+          const countResponse = await app.$services.sarvSolr.getResourceCount(
+            item.id,
+            {}
+          )
           item.count = countResponse?.count ?? 0
         }
       }
@@ -123,25 +94,11 @@ export default {
       const forLoop = async () => {
         const filteredTabs = this.tabs.filter((item) => !!item.id)
         for (const item of filteredTabs) {
-          let countResponse
-          if (item?.isSolr)
-            countResponse = await this.$services.sarvSolr.getResourceCount(
-              item.id,
-              {}
-            )
-          else
-            countResponse = await this.$services.sarvREST.getResourceCount(
-              item.id,
-              !isEmpty(this.search) || this.search !== null
-                ? {
-                    multi_search: `value:${this.search};fields:${Object.values(
-                      item.queryFields
-                    )
-                      .map((field) => field)
-                      .join()};lookuptype:icontains`,
-                  }
-                : {}
-            )
+          const countResponse = await this.$services.sarvSolr.getResourceCount(
+            item.id,
+            { q: isEmpty(this.search) ? '*' : `${this.search}` }
+          )
+
           item.count = countResponse?.count ?? 0
         }
       }
