@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
-    :items="headers"
-    :headers="samples"
+    :headers="headers"
+    :items="samples"
     :init-options="options"
     :count="count"
     @update="handleUpdate"
