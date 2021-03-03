@@ -3,7 +3,8 @@ export default {
   landing: {
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
-    sites: 'Proovipunktid ({number})',
+    sites: 'Uuringupunktid ({number})',
+    samples: 'Proovid ({number})',
   },
   common: {
     general: 'Üldinfo',
@@ -194,7 +195,7 @@ export default {
     eelis: 'Looduskaitse (viide registrisse)',
     text1: 'Turbaala plaan',
     maardlaLink: 'Maardla info Maa-ameti geoportaalis',
-    sites: 'Proovipunktid ({number})',
+    sites: 'Uuringupunktid ({number})',
     localityReferences: 'Kirjandus ({number})',
   },
   site: {

@@ -6,107 +6,13 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col sm="7" md="5">
-        <v-text-field
-          v-model="search"
-          dense
-          outlined
-          color="deep-orange darken-2"
-          append-icon="mdi-magnify"
-          :label="$t('common.search')"
-          hide-details
-          clearable
-          @input="handleSearch"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row justify="center">
       <v-col>
-        <v-card>
-          <tabs ref="tabs" :tabs="tabs" :init-active-tab="initActiveTab" />
-        </v-card>
+        <nuxt-link :to="localePath({ name: 'search' })"> Search</nuxt-link>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { debounce, isEmpty } from 'lodash'
-import Tabs from '@/components/Tabs'
-import { mapActions } from 'vuex'
-
-export default {
-  components: { Tabs },
-  async asyncData({ params, route, error, app }) {
-    try {
-      const tabs = [
-        {
-          id: 'drillcore',
-          routeName: 'index',
-          title: 'landing.drillcores',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality',
-          routeName: 'index-localities',
-          title: 'landing.localities',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'site',
-          routeName: 'index-sites',
-          title: 'landing.sites',
-          count: 0,
-          props: {},
-        },
-      ]
-
-      const forLoop = async () => {
-        const filteredTabs = tabs.filter((item) => !!item.id)
-        for (const item of filteredTabs) {
-          const countResponse = await app.$services.sarvSolr.getResourceCount(
-            item.id,
-            {}
-          )
-          item.count = countResponse?.count ?? 0
-        }
-      }
-      await forLoop()
-
-      return { tabs, initActiveTab: route.path }
-    } catch (err) {}
-  },
-  data() {
-    return {
-      search: '',
-    }
-  },
-  head() {
-    return {
-      title: this.$t('title'),
-    }
-  },
-  methods: {
-    ...mapActions('landing', ['updateSearch']),
-    handleSearch: debounce(async function () {
-      const forLoop = async () => {
-        const filteredTabs = this.tabs.filter((item) => !!item.id)
-        for (const item of filteredTabs) {
-          const countResponse = await this.$services.sarvSolr.getResourceCount(
-            item.id,
-            { q: isEmpty(this.search) ? '*' : `${this.search}` }
-          )
-
-          item.count = countResponse?.count ?? 0
-        }
-      }
-      await forLoop()
-
-      this.$refs.tabs.$refs.tabs.callSlider()
-      this.updateSearch(this.search)
-    }, 500),
-  },
-}
+export default {}
 </script>

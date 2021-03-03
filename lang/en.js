@@ -4,6 +4,7 @@ export default {
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
+    samples: 'Samples ({number})',
   },
   common: {
     general: 'General info',
