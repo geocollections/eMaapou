@@ -72,6 +72,22 @@ export default {
           count: 0,
           props: {},
         },
+        {
+          id: 'analysis',
+          routeName: 'search-analyses',
+          title: 'landing.analyses',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'preparation',
+          routeName: 'search-preparations',
+          title: 'landing.preparations',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
       ]
       return {
         initActiveTab: route.path,

@@ -5,6 +5,7 @@
     multi-sort
     :headers="headers"
     :items="items"
+    item-key="_version"
     :options.sync="options"
     :server-items-length="count"
     :footer-props="footerProps"
