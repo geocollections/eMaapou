@@ -1,5 +1,11 @@
 export default {
   title: 'Geology and Resource InfoSystem',
+  landing: {
+    drillcores: 'Drillcores ({number})',
+    localities: 'Localities ({number})',
+    sites: 'Sites ({number})',
+    samples: 'Samples ({number})',
+  },
   common: {
     general: 'General info',
     pictures: 'Pictures',
@@ -130,16 +136,6 @@ export default {
     description: 'Description',
     file: 'File',
   },
-  samples: {
-    id: 'ID',
-    number: 'Number',
-    depth: 'Depth',
-    depthInterval: 'Depth to',
-    stratigraphy: 'Stratigraphy',
-    collector: 'Collector',
-    dateCollected: 'Date collected',
-    thickness: 'Thickness',
-  },
   analysis: {
     id: 'ID',
     sampleNumber: 'Sample number',
@@ -218,6 +214,9 @@ export default {
     samples: 'Samples ({number})',
     localityDescriptions: 'Descriptions ({number})',
     localityReferences: 'References ({number})',
+    project: 'Project',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
   },
   sample: {
     id: 'ID',

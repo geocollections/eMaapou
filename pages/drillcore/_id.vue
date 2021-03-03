@@ -201,7 +201,7 @@ export default {
         {
           routeName: 'drillcore-id',
           title: 'drillcore.drillcoreBoxesTitle',
-          count: drillcore?.boxes,
+          count: drillcore?.boxes || 0,
           props: { drillcore: drillcore.id },
         },
         {
@@ -251,43 +251,33 @@ export default {
         },
       ]
 
-      if (drillcore?.locality_id) {
-        const solrParams = { fq: `locality_id:${drillcore.locality_id}` }
-        const apiParams = { locality: drillcore.locality_id }
-        // Hack: fix count in API!!!
-        const apiAttachmentLinkParams = {
-          or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
-        }
-
-        const forLoop = async () => {
-          const filteredTabs = tabs.filter((item) => !!item.id)
-          for (const item of filteredTabs) {
-            let countResponse
-            if (item?.isSolr)
-              countResponse = await app.$services.sarvSolr.getResourceCount(
-                item.id,
-                solrParams
-              )
-            else
-              countResponse = await app.$services.sarvREST.getResourceCount(
-                item.id,
-                item.id === 'attachment_link'
-                  ? apiAttachmentLinkParams
-                  : apiParams
-              )
-            item.count = countResponse?.count ?? 0
-            item.props = {
-              locality: drillcore.locality_id,
-            }
-          }
-        }
-        await forLoop()
-      }
-
       return {
         drillcore,
         initActiveTab: route.path,
-        tabs,
+        tabs: drillcore?.locality_id
+          ? (
+              await Promise.all(
+                tabs.map(
+                  async (tab) =>
+                    await app.$populateCount(tab, {
+                      solr: {
+                        default: { fq: `locality_id:${drillcore.locality_id}` },
+                      },
+                      api: {
+                        default: { locality: drillcore.locality_id },
+                        attachment__link: {
+                          or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
+                        },
+                      },
+                    })
+                )
+              )
+            ).map((tab) =>
+              app.$populateProps(tab, {
+                locality: drillcore.locality_id,
+              })
+            )
+          : tabs,
       }
     } catch (err) {
       error({

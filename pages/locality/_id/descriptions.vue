@@ -37,7 +37,7 @@
       <a
         v-if="item.reference"
         :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
-        @click="$openGeoDetail('reference', item.reference)"
+        @click="$openGeology('reference', item.reference)"
       >
         {{ item.reference__reference }}
       </a>

@@ -335,37 +335,18 @@ export default {
         },
       ]
 
-      if (site?.id) {
-        const solrParams = { fq: `site_id:${site.id}` }
-        const apiParams = { site: site.id }
-
-        const forLoop = async () => {
-          const filteredTabs = tabs.filter((item) => !!item.id)
-          for (const item of filteredTabs) {
-            let countResponse
-            if (item?.isSolr)
-              countResponse = await app.$services.sarvSolr.getResourceCount(
-                item.id,
-                solrParams
-              )
-            else
-              countResponse = await app.$services.sarvREST.getResourceCount(
-                item.id,
-                apiParams
-              )
-            item.count = countResponse?.count ?? 0
-            item.props = {
-              site: site.id,
-            }
-          }
-        }
-        await forLoop()
-      }
-
       return {
         site,
         initActiveTab: route.path,
-        tabs,
+        tabs: await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$populateCount(tab, {
+                solr: { default: { fq: `site_id:${site.id}` } },
+                api: { default: { site: site.id } },
+              })
+          )
+        ),
       }
     } catch (err) {
       error({

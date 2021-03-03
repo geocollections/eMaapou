@@ -37,7 +37,11 @@
                       <link-data-row
                         :title="$t('analysis.sampleNumber')"
                         :value="analysis.sample__number"
-                        @link-click="$openGeoDetail('sample', analysis.sample)"
+                        @link-click="
+                          $openNuxtWindow('sample-id', {
+                            id: analysis.sample__number,
+                          })
+                        "
                       />
 
                       <data-row
@@ -48,7 +52,7 @@
                         :title="$t('analysis.reference')"
                         :value="analysis.reference__reference"
                         @link-click="
-                          $openGeoDetail('reference', analysis.reference)
+                          $openGeology('reference', analysis.reference)
                         "
                       />
                       <data-row
@@ -190,7 +194,29 @@ export default {
       }
       await forLoop()
 
-      return { analysis, tabs, initActiveTab: route.path }
+      return {
+        analysis,
+        tabs: (
+          await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await app.$populateCount(tab, {
+                  solr: {
+                    default: { fq: `analysis_id:${analysis.id}` },
+                  },
+                  api: {
+                    default: { analysis: analysis.id },
+                  },
+                })
+            )
+          )
+        ).map((tab) =>
+          app.$populateProps(tab, {
+            analysis: analysis.id,
+          })
+        ),
+        initActiveTab: route.path,
+      }
     } catch (err) {
       error({
         message: `Could not find analysis ${route.params.id}`,

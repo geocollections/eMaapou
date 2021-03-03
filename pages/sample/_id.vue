@@ -348,69 +348,49 @@ export default {
           routeName: 'sample-id',
           title: 'sample.analyses',
           count: 0,
-          props: {},
+          props: { sample: sample.id },
         },
         {
           id: 'preparation',
           routeName: 'sample-id-preparations',
           title: 'sample.preparations',
           count: 0,
-          props: {},
+          props: { sample: sample.id },
         },
         {
           id: 'taxon_list',
           routeName: 'sample-id-taxa',
           title: 'sample.taxa',
           count: 0,
-          props: {},
+          props: { sample: sample.id },
         },
         {
           id: 'attachment_link',
           routeName: 'sample-id-attachments',
           title: 'sample.attachments',
           count: 0,
-          props: {},
+          props: { sample: sample.id },
         },
         {
           id: 'sample_reference',
           routeName: 'sample-id-references',
           title: 'sample.sampleReferences',
           count: 0,
-          props: {},
+          props: { sample: sample.id },
         },
       ]
-
-      if (sample?.id) {
-        const solrParams = { fq: `sample_id:${sample.id}` }
-        const apiParams = { sample: sample.id }
-
-        const forLoop = async () => {
-          const filteredTabs = tabs.filter((item) => !!item.id)
-          for (const item of filteredTabs) {
-            let countResponse
-            if (item?.isSolr)
-              countResponse = await app.$services.sarvSolr.getResourceCount(
-                item.id,
-                solrParams
-              )
-            else
-              countResponse = await app.$services.sarvREST.getResourceCount(
-                item.id,
-                apiParams
-              )
-            item.count = countResponse?.count ?? 0
-            item.props = {
-              sample: sample.id,
-            }
-          }
-        }
-        await forLoop()
-      }
-
       return {
         sample,
         initActiveTab: route.path,
-        tabs,
+        tabs: await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$populateCount(tab, {
+                solr: { default: { fq: `sample_id:${sample.id}` } },
+                api: { default: { sample: sample.id } },
+              })
+          )
+        ),
       }
     } catch (err) {
       error({
@@ -433,12 +413,12 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
     sampleTitle() {
-      return (
+      return `${this.$t('sample.number')}: ${
         this.sample.number ||
         this.sample.number_additional ||
         this.sample.number_field ||
         this.sample.id
-      )
+      }`
     },
   },
   methods: {

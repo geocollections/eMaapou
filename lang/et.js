@@ -1,5 +1,11 @@
 export default {
   title: 'Geoloogia ja Ressursside InfoSüsteem',
+  landing: {
+    drillcores: 'Puursüdamikud ({number})',
+    localities: 'Lokaliteedid ({number})',
+    sites: 'Uuringupunktid ({number})',
+    samples: 'Proovid ({number})',
+  },
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
@@ -130,16 +136,6 @@ export default {
     description: 'Kirjeldus',
     file: 'Fail',
   },
-  samples: {
-    id: 'ID',
-    number: 'Nr',
-    depth: 'Sügavus',
-    depthInterval: 'Süg. kuni',
-    stratigraphy: 'Stratigraafia',
-    collector: 'Koguja',
-    dateCollected: 'Kogumise aeg',
-    thickness: 'Paksus',
-  },
   analysis: {
     id: 'ID',
     sampleNumber: 'Proovi nr',
@@ -158,7 +154,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     lithostratigraphy: 'Litostratigraafia',
     results: 'Tulemused ({number})',
-    attachments: 'Fails ({number})',
+    attachments: 'Failid ({number})',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -199,7 +195,7 @@ export default {
     eelis: 'Looduskaitse (viide registrisse)',
     text1: 'Turbaala plaan',
     maardlaLink: 'Maardla info Maa-ameti geoportaalis',
-    sites: 'Proovipunktid ({number})',
+    sites: 'Uuringupunktid ({number})',
     localityReferences: 'Kirjandus ({number})',
   },
   site: {
@@ -218,6 +214,9 @@ export default {
     samples: 'Proovid ({number})',
     localityDescriptions: 'Kirjeldused ({number})',
     localityReferences: 'Kirjandus ({number})',
+    project: 'Projekt',
+    latitude: 'Lat',
+    longitude: 'Long',
   },
   sample: {
     id: 'ID',
