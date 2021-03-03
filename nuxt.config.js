@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+// import axios from 'axios'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -46,6 +48,15 @@ export default {
     'nuxt-i18n',
     '@nuxtjs/sitemap',
   ],
+
+  sitemap: {
+    // routes() {
+    //   return axios.get('/sitemap/gris')
+    // },
+    path: '/sitemap.xml',
+    gzip: true,
+    generate: false,
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
