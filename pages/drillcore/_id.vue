@@ -201,7 +201,7 @@ export default {
         {
           routeName: 'drillcore-id',
           title: 'drillcore.drillcoreBoxesTitle',
-          count: drillcore?.boxes,
+          count: drillcore?.boxes || 0,
           props: { drillcore: drillcore.id },
         },
         {
