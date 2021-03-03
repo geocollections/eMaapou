@@ -260,57 +260,64 @@ export default {
         {
           id: 'sample',
           routeName: 'drillcore_box-id',
+          isSolr: true,
           title: 'drillcore.samples',
           count: 0,
-          props: {},
+          props: {
+            locality: drillcoreBox.drillcore__locality,
+            depthStart: drillcoreBox.depth_start,
+            depthEnd: drillcoreBox.depth_end,
+          },
         },
         {
           id: 'analysis',
           routeName: 'drillcore_box-id-analyses',
           title: 'drillcore.analyses',
+          isSolr: true,
           count: 0,
-          props: {},
+          props: {
+            locality: drillcoreBox.drillcore__locality,
+            depthStart: drillcoreBox.depth_start,
+            depthEnd: drillcoreBox.depth_end,
+          },
         },
         {
           id: 'specimen',
           routeName: 'drillcore_box-id-specimens',
           title: 'drillcore.specimens',
+          isSolr: true,
           count: 0,
-          props: {},
+          props: {
+            locality: drillcoreBox.drillcore__locality,
+            depthStart: drillcoreBox.depth_start,
+            depthEnd: drillcoreBox.depth_end,
+          },
         },
       ]
-
-      if (
-        drillcoreBox?.drillcore__locality &&
-        drillcoreBox?.depth_start &&
-        drillcoreBox?.depth_end
-      ) {
-        const params = {
-          fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
-        }
-        const forLoop = async () => {
-          for (const item of tabs) {
-            const countResponse = await app.$services.sarvSolr.getResourceCount(
-              item.id,
-              params
-            )
-            item.count = countResponse?.count ?? 0
-            item.props = {
-              locality: drillcoreBox.drillcore__locality,
-              depthStart: drillcoreBox.depth_start,
-              depthEnd: drillcoreBox.depth_end,
-            }
-          }
-        }
-        await forLoop()
-      }
 
       return {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
         initActiveTab: route.path,
-        tabs,
+        tabs:
+          !isNil(drillcoreBox?.drillcore__locality) &&
+          !isNil(drillcoreBox?.depth_start) &&
+          !isNil(drillcoreBox?.depth_end)
+            ? await Promise.all(
+                tabs.map(
+                  async (tab) =>
+                    await app.$populateCount(tab, {
+                      solr: {
+                        default: {
+                          fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
+                        },
+                      },
+                      api: {},
+                    })
+                )
+              )
+            : tabs,
       }
     } catch (err) {
       error({

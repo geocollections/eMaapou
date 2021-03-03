@@ -198,7 +198,25 @@ export default {
       return {
         area,
         initActiveTab: route.path,
-        tabs,
+        tabs: (
+          await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await app.$populateCount(tab, {
+                  solr: {
+                    default: { fq: `area_id:${area.id}` },
+                  },
+                  api: {
+                    default: { area: area.id },
+                  },
+                })
+            )
+          )
+        ).map((tab) =>
+          app.$populateProps(tab, {
+            area: area.id,
+          })
+        ),
       }
     } catch (err) {
       error({

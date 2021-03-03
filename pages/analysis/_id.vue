@@ -194,7 +194,29 @@ export default {
       }
       await forLoop()
 
-      return { analysis, tabs, initActiveTab: route.path }
+      return {
+        analysis,
+        tabs: (
+          await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await app.$populateCount(tab, {
+                  solr: {
+                    default: { fq: `analysis_id:${analysis.id}` },
+                  },
+                  api: {
+                    default: { analysis: analysis.id },
+                  },
+                })
+            )
+          )
+        ).map((tab) =>
+          app.$populateProps(tab, {
+            analysis: analysis.id,
+          })
+        ),
+        initActiveTab: route.path,
+      }
     } catch (err) {
       error({
         message: `Could not find analysis ${route.params.id}`,

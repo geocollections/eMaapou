@@ -306,41 +306,21 @@ export default {
         tabs.join()
       }
 
-      const solrParams = { fq: `locality_id:${params.id}` }
-      const apiParams = { locality_id: locality.id }
-      // Hack: fix count in API!!!
-      const apiAttachmentLinkParams = {
-        locality: locality.id,
-      }
-
-      const forLoop = async () => {
-        const filteredTabs = tabs.filter((item) => !!item.id)
-        for (const item of filteredTabs) {
-          let countResponse
-          if (item?.isSolr)
-            countResponse = await app.$services.sarvSolr.getResourceCount(
-              item.id,
-              solrParams
-            )
-          else {
-            countResponse = await app.$services.sarvREST.getResourceCount(
-              item.id,
-              item.id === 'attachment_link'
-                ? apiAttachmentLinkParams
-                : apiParams
-            )
-          }
-          item.count = countResponse?.count ?? 0
-          item.props = {
-            ...item.props,
-            locality: locality.id,
-          }
-        }
-      }
-      await forLoop()
       return {
         locality,
-        tabs,
+        tabs: await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$populateCount(tab, {
+                solr: {
+                  default: {
+                    fq: `locality_id:${params.id}`,
+                  },
+                },
+                api: { default: { locality_id: locality.id } },
+              })
+          )
+        ),
         drillcore,
         initActiveTab: route.path,
       }
