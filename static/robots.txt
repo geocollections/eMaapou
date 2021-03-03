@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://gris.geocollections.info/sitemap.xml
+Sitemap: https://ema.geoloogia.info/sitemap.xml
