@@ -196,6 +196,7 @@ export default {
         params.id
       )
       const drillcore = drillcoreResponse.results[0]
+      console.log(drillcore.id)
 
       const tabs = [
         {
@@ -274,6 +275,7 @@ export default {
               )
             ).map((tab) =>
               app.$populateProps(tab, {
+                ...tab.props,
                 locality: drillcore.locality_id,
               })
             )

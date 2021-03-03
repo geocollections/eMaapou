@@ -90,7 +90,7 @@ export default {
           text: 'Nuxt.js',
         },
         {
-          href: 'https://github.com/geocollections/GRIS',
+          href: 'https://github.com/geocollections/EMA',
           text: 'GitHub',
         },
       ],

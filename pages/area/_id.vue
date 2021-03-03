@@ -214,6 +214,7 @@ export default {
           )
         ).map((tab) =>
           app.$populateProps(tab, {
+            ...tab.props,
             area: area.id,
           })
         ),
