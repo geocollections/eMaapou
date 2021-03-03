@@ -5,8 +5,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s | GRIS',
-    title: 'GRIS',
+    titleTemplate: '%s | EMA',
+    title: 'EMA',
     htmlAttrs: {
       lang: 'en',
     },
@@ -52,7 +52,7 @@ export default {
 
   sitemap: {
     // routes() {
-    //   return axios.get('/sitemap/gris')
+    //   return axios.get('/sitemap/ema')
     // },
     path: '/sitemap.xml',
     gzip: true,
