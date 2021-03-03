@@ -154,7 +154,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     lithostratigraphy: 'Litostratigraafia',
     results: 'Tulemused ({number})',
-    attachments: 'Fails ({number})',
+    attachments: 'Failid ({number})',
   },
   analysisResult: {
     parameter: 'Parameeter',
