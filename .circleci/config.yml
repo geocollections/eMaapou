@@ -11,8 +11,8 @@ parameters:
 executors:
   docker-publisher:
     environment:
-      IMAGE_NAME: geocollections/gris
-      IMAGE_NAME_DEV: geocollections/gris-dev
+      IMAGE_NAME: geocollections/ema
+      IMAGE_NAME_DEV: geocollections/ema-dev
     docker:
       - image: circleci/node:lts-stretch
 
@@ -82,14 +82,14 @@ jobs:
     steps:
       - run:
           name: Run Docker image
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/gris/script && . run_docker_image.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/ema/script && . run_docker_image.sh"
 
   run_docker_image_dev:
     executor: docker-publisher
     steps:
       - run:
           name: Run Docker image
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/gris-dev/script && . run_docker_image.sh"
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/ema-dev/script && . run_docker_image.sh"
 
 workflows:
   build:
