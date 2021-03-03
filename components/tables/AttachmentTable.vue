@@ -1,0 +1,100 @@
+<template>
+  <table-wrapper
+    :items="attachments"
+    :headers="headers"
+    :count="count"
+    :init-options="options"
+    @update="handleUpdate"
+  >
+    <template #item.file="{ item }">
+      <attachment-cell
+        :src="`https://files.geocollections.info/small/${item.attachment__filename}`"
+        :type="item.attachment__attachment_format__value"
+        @click="$openGeoDetail('attachment', item.attachment)"
+      />
+    </template>
+    <template #item.description="{ item }">
+      <a
+        class="text-link"
+        @click="$openGeoDetail('attachment', item.attachment)"
+        >{{
+          $translate({
+            et: item.attachment__description,
+            en: item.attachment__description_en,
+          })
+        }}</a
+      >
+    </template>
+  </table-wrapper>
+</template>
+
+<script>
+import { isNil } from 'lodash'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
+import AttachmentCell from '~/components/AttachmentCell.vue'
+
+export default {
+  name: 'AttachmentTable',
+  components: { TableWrapper, AttachmentCell },
+  props: {
+    searchField: {
+      type: Object,
+      default: null,
+      validator: (obj) => {
+        return (
+          typeof obj === 'object' &&
+          obj.key !== undefined &&
+          obj.value !== undefined
+        )
+      },
+    },
+  },
+  data() {
+    return {
+      attachments: [],
+      count: 0,
+      options: {
+        page: 1,
+        itemsPerPage: 25,
+      },
+      headers: [
+        {
+          text: this.$t('attachment.file'),
+          value: 'file',
+          width: '120px',
+          sortable: false,
+        },
+        { text: this.$t('attachment.description'), value: 'description' },
+        {
+          text: this.$t('attachment.author'),
+          value: 'attachment__author__agent',
+        },
+      ],
+      queryFields: {
+        description: () =>
+          this.$i18n.locale === 'et'
+            ? 'attachment__description'
+            : 'attachment__description_en',
+        attachment__author__agent: () => 'attachment__author__agent',
+      },
+    }
+  },
+  methods: {
+    async handleUpdate(options) {
+      const attachmentResponse = await this.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          ...options,
+          isValid: isNil(this.searchField.value),
+          defaultParams: {
+            [this.searchField.key]: this.searchField.value,
+          },
+          queryFields: this.queryFields,
+        }
+      )
+      this.attachments = attachmentResponse.items
+      this.count = attachmentResponse.count
+    },
+  },
+}
+</script>
