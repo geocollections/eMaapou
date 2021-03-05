@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
   landing: {
-    searchTitle: 'Search e·Maapõu database',
+    searchTitle: 'Quick search from e·Maapõu database',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -34,6 +34,7 @@ export default {
     samples: 'Samples',
     analysis: 'Analysis',
     analyses: 'Analyses',
+    about: 'About',
   },
   link: {
     sarvAPI: 'Public API',
@@ -378,5 +379,9 @@ export default {
   },
   search: {
     pageTitle: 'Search',
+  },
+  about: {
+    pageTitle: 'About',
+    title: 'About e·Maapõu portal',
   },
 }

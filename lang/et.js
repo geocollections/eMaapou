@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
   landing: {
-    searchTitle: 'Otsi e·Maapõuest',
+    searchTitle: 'Kiirotsing e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -34,6 +34,7 @@ export default {
     samples: 'Proovid',
     analysis: 'Analüüs',
     analyses: 'Analüüsid',
+    about: 'Tutvustus',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -378,5 +379,9 @@ export default {
   },
   search: {
     pageTitle: 'Otsing',
+  },
+  about: {
+    pageTitle: 'About',
+    title: 'e·Maapõu portaali tutvustus',
   },
 }

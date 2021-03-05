@@ -31,6 +31,9 @@
 
     <template #extension>
       <v-tabs align-with-title>
+        <v-tab nuxt exact :to="localePath({ name: 'about' })">{{
+          $t('common.about')
+        }}</v-tab>
         <v-tab nuxt exact :to="localePath({ name: 'search' })">{{
           $t('common.search')
         }}</v-tab>
