@@ -27,9 +27,13 @@ export default {
     original: 'Originaal',
     linkToEdit: 'Muuda kirjet',
     drillcore: 'Puursüdamik',
+    drillcores: 'Puursüdamikud',
     locality: 'Lokaliteet',
+    localities: 'Lokaliteedid',
     sample: 'Proov',
+    samples: 'Proovid',
     analysis: 'Analüüs',
+    analyses: 'Analüüsid',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -321,7 +325,7 @@ export default {
     el: 'Euroopa Liit',
   },
   geocollections: {
-    title: 'Geokogude portaal',
+    title: 'Geokogud',
     description: 'Eesti geokogude portaal',
   },
   kirjandus: {
@@ -330,48 +334,47 @@ export default {
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Geoloogiafond',
+    description: 'Aruannete arhiiv (Geoloogiateenistus)',
   },
   fossiilid: {
-    title: 'Fossiilide portaal',
-    description: 'Fossiilide portaal',
+    title: 'Fossiilid',
+    description: 'Baltoskandia fossiilide portaal',
   },
   kivid: {
     title: 'Mineraalid ja kivimid',
-    description: 'Mineraalid ja kivimid',
+    description: 'Mineraalide ja kivimite portaal',
   },
   stratigraphy: {
-    title: 'Stratigraafia ja geoloogiline ajaskaala',
-    description: 'Stratigraafia ja geoloogiline ajaskaala',
+    title: 'Stratigraafia',
+    description: 'Eesti Stratigraafia Komisjon',
   },
   maardlad: {
-    title: 'Maardlate rakendus',
-    description:
-      'Keskkonnaregistri maardlate nimistus eksisteeriv ruumiandmestik',
+    title: 'Maardlate nimistu',
+    description: 'Keskkonnaregistri rakendus (Maa-amet)',
   },
   turba: {
-    title: 'Turba',
+    title: 'TURBA',
     description: 'Eesti turbauuringute andmebaas',
   },
   doi: {
-    title: 'DOI',
-    description: 'Geoteaduste andmehoidla',
+    title: 'SARV-DOI',
+    description: 'Eesti geoteaduslike andmete repositoorium',
   },
   geocase: {
     title: 'GeoCASe võrgustik',
     description: 'Euroopa geokogude portaal',
   },
   natarc: {
-    title: 'NATARC taristu',
-    description: 'Loodusteaduslikud arhiivid ja andmevõrgustik',
+    title: 'NATARC',
+    description: 'Teadustaristu',
   },
   elurikkus: {
     title: 'eElurikkus',
     description: 'eElurikkus koondab ühte portaali Eesti looduse andmed',
   },
-  placeholder: {
-    title: 'Pealkiri',
-    description: 'Kirjeldus',
+  eurocore: {
+    title: 'EUROCORE',
+    description: 'Euroopa puursüdamike andmebaas',
   },
   search: {
     pageTitle: 'Otsing',

@@ -27,9 +27,13 @@ export default {
     original: 'Original',
     linkToEdit: 'Edit record',
     drillcore: 'Drillcore',
+    drillcores: 'Drillcores',
     locality: 'Locality',
+    localities: 'Localities',
     sample: 'Sample',
+    samples: 'Samples',
     analysis: 'Analysis',
+    analyses: 'Analyses',
   },
   link: {
     sarvAPI: 'Public API',
@@ -321,15 +325,15 @@ export default {
     el: 'European Union',
   },
   geocollections: {
-    title: ' Geocollections of Estonia',
-    description: 'Geoscience collections of Estonia',
+    title: ' Geocollections',
+    description: 'Geoscience Collections Portal',
   },
   kirjandus: {
-    title: 'Geoscience Literature Database',
-    description: 'Estonian geoscience literature database',
+    title: 'Geoscience Literature',
+    description: 'Estonian Geoscience Literature Database',
   },
   fond: {
-    title: 'Geological Reports',
+    title: 'Geoloogiafond',
     description: 'Geological Reports',
   },
   fossiilid: {
@@ -342,35 +346,35 @@ export default {
   },
   stratigraphy: {
     title: 'Stratigraphy and time scale',
-    description: 'Stratigraphy and time scale',
+    description: 'Estonian Commission on Stratigraphy',
   },
   maardlad: {
-    title: 'Mineral Resources of Estonia',
-    description: 'Euroopa geokogude portaal',
+    title: 'Mineral Deposits',
+    description: 'Environmental Register',
   },
   turba: {
-    title: 'Turba',
-    description: 'Estonian peat database',
+    title: 'TURBA',
+    description: 'Estonian Peat Database',
   },
   doi: {
-    title: 'DOI',
-    description: 'Geoscience data repository',
+    title: 'SARV-DOI',
+    description: 'Geoscience Data Repository',
   },
   geocase: {
-    title: 'GeoCASe Network',
-    description: 'The earth science collections portal',
+    title: 'GeoCASe',
+    description: 'The Earth Science Collections Network',
   },
   natarc: {
-    title: 'NATARC Research Infrastructure',
-    description: 'Natural history archives and information network',
+    title: 'NATARC',
+    description: 'Research Infrastructure',
   },
   elurikkus: {
     title: 'eElurikkus: Estonian Biodiversity Database',
     description: 'eBiodiversity is a portal for the taxa found in Estonia',
   },
-  placeholder: {
-    title: 'title',
-    description: 'description',
+  eurocore: {
+    title: 'EUROCORE',
+    description: 'European Drillcore Database for MSc Training',
   },
   search: {
     pageTitle: 'Search',

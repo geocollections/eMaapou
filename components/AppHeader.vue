@@ -25,7 +25,7 @@
 
     <v-spacer />
 
-    <app-header-search v-if="isNotSearchPath" class="d-none d-sm-flex" />
+    <app-header-search class="d-none d-sm-flex" />
     <links />
     <lang-switcher />
 

@@ -12,7 +12,7 @@
         :src="background"
         class="white--text align-end"
         gradient="to bottom, rgba(0,0,0,.2), rgba(0,0,0,.6)"
-        height="300px"
+        height="200px"
         content-class="my-auto"
       >
         <v-card-title
