@@ -2,9 +2,6 @@
   <v-footer padless class="mt-4 footer">
     <v-card width="100%" flat tile>
       <v-card-text class="text-center">
-        {{ $t('footerPreliminary') }}
-      </v-card-text>
-      <v-card-text class="text-center">
         <a
           v-for="(item, index) in imageLinks"
           :key="index"
@@ -27,6 +24,9 @@
           </v-tooltip>
         </a>
       </v-card-text>
+      <!--      <v-card-text class="text-center">
+        {{ $t('footerPreliminary') }}
+      </v-card-text>-->
       <v-card-text class="text-center mx-auto" style="max-width: 700px">
         <i18n path="footer" tag="div">
           <a

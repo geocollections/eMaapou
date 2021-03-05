@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
   landing: {
-    searchTitle: 'Otsi e·Maapõuest',
+    searchTitle: 'Kiirotsing e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -27,9 +27,13 @@ export default {
     original: 'Originaal',
     linkToEdit: 'Muuda kirjet',
     drillcore: 'Puursüdamik',
+    drillcores: 'Puursüdamikud',
     locality: 'Lokaliteet',
+    localities: 'Lokaliteedid',
     sample: 'Proov',
+    samples: 'Proovid',
     analysis: 'Analüüs',
+    analyses: 'Analüüsid',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -321,16 +325,16 @@ export default {
     el: 'Euroopa Liit',
   },
   geocollections: {
-    title: 'Geokogud',
-    description: 'Eesti geokogude portaal',
+    title: 'Geokogude portaal',
+    description: 'Eesti geooloogilised kollektsioonid',
   },
   kirjandus: {
     title: 'Geokirjandus',
     description: 'Eesti maapõue kirjanduse andmebaas',
   },
-  ema: {
-    title: 'EMA',
-    description: 'Eesti Maapõue Andmebaas',
+  fond: {
+    title: 'Geoloogiafond',
+    description: 'Geoloogiliste aruannete arhiiv',
   },
   geocase: {
     title: 'GeoCASe',
@@ -340,9 +344,13 @@ export default {
     title: 'Turba',
     description: 'Eesti turbauuringute andmebaas',
   },
-  placeholder: {
-    title: 'Pealkiri',
-    description: 'Kirjeldus',
+  fossiilid: {
+    title: 'Fossiilid.info',
+    description: 'Baltoskandia fossiilide andmebaas',
+  },
+  kivid: {
+    title: 'Kivid.info',
+    description: 'Kivimite ja mineraalide portaal',
   },
   search: {
     pageTitle: 'Otsing',

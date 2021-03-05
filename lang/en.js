@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
   landing: {
-    searchTitle: 'Search e·Maapõu database',
+    searchTitle: 'Quick search from e·Maapõu database',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -27,9 +27,13 @@ export default {
     original: 'Original',
     linkToEdit: 'Edit record',
     drillcore: 'Drillcore',
+    drillcores: 'Drillcores',
     locality: 'Locality',
+    localities: 'Localities',
     sample: 'Sample',
+    samples: 'Samples',
     analysis: 'Analysis',
+    analyses: 'Analyses',
   },
   link: {
     sarvAPI: 'Public API',
@@ -328,9 +332,9 @@ export default {
     title: 'Geological Literature',
     description: 'Estonian geoscience literature database',
   },
-  ema: {
-    title: 'EMA',
-    description: 'Eesti Maapõue Andmebaas',
+  fond: {
+    title: 'Geoloogiafond',
+    description: 'Archive of Geological Reports',
   },
   geocase: {
     title: 'GeoCASe',
@@ -340,9 +344,13 @@ export default {
     title: 'Turba',
     description: 'Estonian peat database',
   },
-  placeholder: {
-    title: 'title',
-    description: 'description',
+  fossiilid: {
+    title: 'Fossiilid.info',
+    description: 'Baltoscandian fossils',
+  },
+  kivid: {
+    title: 'Kivid.info',
+    description: 'Rock and minerals',
   },
   search: {
     pageTitle: 'Search',

@@ -5,7 +5,7 @@
     shrink-on-scroll
     prominent
     hide-on-scroll
-    src="https://picsum.photos/1920/1080?random"
+    src="https://files.geocollections.info/large/7b/74/7b744efb-e4e4-456a-aa69-7b572507b5bd.jpg"
     dark
   >
     <template #img="{ props }">
@@ -17,7 +17,7 @@
 
     <v-app-bar-title class="app-title">
       <nuxt-link :to="localePath({ path: '/' })" class="title-link">
-        <span class="header-text title text-none text-nowrap">{{
+        <span class="header-text text-none text-nowrap emaapou">{{
           $t('common.home')
         }}</span>
       </nuxt-link>
@@ -35,16 +35,16 @@
           $t('common.search')
         }}</v-tab>
         <v-tab nuxt exact :to="localePath({ name: 'drillcore' })">{{
-          $t('common.drillcore')
+          $t('common.drillcores')
         }}</v-tab>
         <v-tab nuxt exact :to="localePath({ name: 'locality' })">{{
-          $t('common.locality')
+          $t('common.localities')
         }}</v-tab>
         <v-tab nuxt exact :to="localePath({ name: 'sample' })">{{
-          $t('common.sample')
+          $t('common.samples')
         }}</v-tab>
         <v-tab nuxt exact :to="localePath({ name: 'analysis' })">{{
-          $t('common.analysis')
+          $t('common.analyses')
         }}</v-tab>
       </v-tabs>
     </template>
