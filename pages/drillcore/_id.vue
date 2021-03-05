@@ -40,7 +40,7 @@
                         :value="drillcore.box_numbers"
                       />
                       <data-row
-                        :title="$t('drillcore.depository')"
+                        :title="$t('drillcore.repository')"
                         :value="
                           $translate({
                             et: drillcore.depository__value,

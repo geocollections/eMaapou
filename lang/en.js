@@ -78,7 +78,7 @@ export default {
     id: 'ID',
     name: 'Name',
     boxes: 'Boxes',
-    depository: 'Depository',
+    repository: 'Repository',
     remarks: 'Remarks',
     storage: 'Storage',
     driller: 'Driller',

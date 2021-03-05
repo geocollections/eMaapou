@@ -78,7 +78,7 @@ export default {
     id: 'ID',
     name: 'Nimi',
     boxes: 'Südamikukaste',
-    depository: 'Hoidla',
+    repository: 'Hoidla',
     remarks: 'Lisainfo',
     storage: 'Hoiukoht',
     driller: 'Puurija',
