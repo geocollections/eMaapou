@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
@@ -27,7 +27,15 @@ const getSortByParams = (options, queryFields) => {
 export default ($axios) => ({
   async getResourceList(
     resource,
-    { defaultParams, queryFields, search, tableOptions, isValid, ...options }
+    {
+      defaultParams,
+      queryFields,
+      search,
+      tableOptions,
+      isValid,
+      searchFilters = {},
+      ...options
+    }
   ) {
     if (isValid) {
       return {
@@ -35,10 +43,10 @@ export default ($axios) => ({
         count: 0,
       }
     }
-
     const params = {
       ...defaultParams,
-      q: isEmpty(search) ? '*' : `${search}`,
+      ...buildQueryParameter(search),
+      ...buildFilterQueryParameter(searchFilters),
       ...getPaginationParams(tableOptions),
       ...getSortByParams(tableOptions, queryFields),
     }
@@ -50,7 +58,6 @@ export default ($axios) => ({
       count: response.count,
     }
   },
-
   async getResourceCount(resource, countParams) {
     const response = await $axios.$get(`solr/${resource}/`, {
       params: { ...countParams, rows: 0 },
@@ -60,3 +67,95 @@ export default ($axios) => ({
     }
   },
 })
+
+const buildQueryParameter = (search) => {
+  return {
+    q: isEmpty(search) ? '*' : `${encodeURIComponent(search)}*`,
+  }
+}
+
+const buildFilterQueryParameter = (filters) => {
+  const filterQueryStr = Object.entries(filters)
+    .filter(([_, v]) => {
+      if (v.type === 'range' && isNil(v.value[0]) && isNil(v.value[1]))
+        return false
+      if (v.type === 'text' && (!v.value || v.value.trim().length <= 0))
+        return false
+      if (v.type === 'select' && (v.value === null || v.value.length < 1))
+        return false
+      return v.value !== null
+    })
+    .reduce((prev, [k, v]) => {
+      const filterQueryParam = v.fields.reduce((prev, curr, idx) => {
+        function buildEncodedParameterStr(searchParameter, fieldId) {
+          function buildTextParameter(encodedValue, fieldId) {
+            const textArray = encodedValue.split(' ')
+
+            const paramArray = textArray.map((str) => {
+              return `*${str.trim()}*`
+            })
+
+            return `${fieldId}:(${paramArray.join(' AND ')})`
+            // switch (searchParameter.lookUpType) {
+            //   case "contains":
+            //     return `${fieldId}:*${encodedValue}*`;
+            //   case "equals":
+            //     return `${fieldId}:"${encodedValue}"`;
+            //   case "startsWith":
+            //     return `${fieldId}:${encodedValue}*`;
+            //   case "endsWith":
+            //     return `${fieldId}:*${encodedValue}`;
+            //   case "notContains":
+            //     return `-${fieldId}:*${encodedValue}*`;
+            //   default:
+            //     return `${fieldId}:${encodedValue}`;
+            // }
+          }
+
+          switch (searchParameter.type) {
+            case 'range': {
+              // const encodedValue = searchParameter.value.map((el) => {
+              //   return encodeURIComponent(el)
+              // })
+
+              const start = isNil(searchParameter.value[0])
+                ? '*'
+                : searchParameter.value[0]
+              const end = isNil(searchParameter.value[1])
+                ? '*'
+                : searchParameter.value[1]
+              return `${fieldId}:[${start} TO ${end}]`
+            }
+            case 'checkbox': {
+              const encodedValue = encodeURIComponent(searchParameter.value)
+              return `${fieldId}:${encodedValue}`
+            }
+            case 'select': {
+              return `${fieldId}:(${encodeURIComponent(
+                searchParameter.value.join(' ')
+              )})`
+            }
+            case 'raw': {
+              return `${fieldId}:${encodeURIComponent(searchParameter.value)}`
+            }
+            case 'text': {
+              return encodeURIComponent(
+                buildTextParameter(searchParameter.value, fieldId)
+              )
+            }
+            default:
+              return null
+          }
+        }
+
+        if (idx === 0)
+          return `${prev}${buildEncodedParameterStr(v, curr) ?? ''}`
+        else return `${prev} OR ${buildEncodedParameterStr(v, curr) ?? ''}`
+      }, '')
+
+      if (filterQueryParam === null) return `${prev}`
+      if (prev.length > 0) return `${prev} AND ${filterQueryParam}`
+      return `${prev}${filterQueryParam}`
+    }, '')
+  return { fq: isEmpty(filterQueryStr) ? null : filterQueryStr }
+}
