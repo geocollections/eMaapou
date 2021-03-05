@@ -10,6 +10,7 @@ export default {
     analyses: 'Analüüsid ({number})',
     preparations: 'Preparaadid ({number})',
     visit_site: 'Vaata',
+    title: 'Tere tulemast!',
   },
   common: {
     general: 'Üldinfo',
@@ -25,6 +26,10 @@ export default {
     large: 'Suur',
     original: 'Originaal',
     linkToEdit: 'Muuda kirjet',
+    drillcore: 'Puursüdamik',
+    locality: 'Lokaliteet',
+    sample: 'Proov',
+    analysis: 'Analüüs',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -38,6 +43,7 @@ export default {
     geokogud: 'Geokogude portaal',
   },
   locality: {
+    pageTitle: 'Lokaliteetide otsing',
     id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
@@ -81,6 +87,7 @@ export default {
     remarks: 'Lisainfo',
   },
   drillcore: {
+    pageTitle: 'Puursüdamike otsing',
     id: 'ID',
     name: 'Nimi',
     boxes: 'Südamikukaste',
@@ -144,6 +151,7 @@ export default {
     file: 'Fail',
   },
   analysis: {
+    pageTitle: 'Analüüside otsing',
     id: 'ID',
     sampleNumber: 'Proovi nr',
     depth: 'Sügavus',
@@ -228,6 +236,7 @@ export default {
     longitude: 'Long',
   },
   sample: {
+    pageTitle: 'Proovide otsing',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -363,5 +372,8 @@ export default {
   placeholder: {
     title: 'Pealkiri',
     description: 'Kirjeldus',
+  },
+  search: {
+    pageTitle: 'Otsing',
   },
 }

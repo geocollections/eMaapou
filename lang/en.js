@@ -10,12 +10,13 @@ export default {
     analyses: 'Analyses ({number})',
     preparations: 'Preparations ({number})',
     visit_site: 'View',
+    title: 'Welcome!',
   },
   common: {
     general: 'General info',
     pictures: 'Pictures',
     noValue: '',
-    home: 'Home',
+    home: 'e·Maapõu',
     previous: 'Previous',
     next: 'Next',
     links: 'Links',
@@ -25,6 +26,10 @@ export default {
     large: 'Large',
     original: 'Original',
     linkToEdit: 'Edit record',
+    drillcore: 'Drillcore',
+    locality: 'Locality',
+    sample: 'Sample',
+    analysis: 'Analysis',
   },
   link: {
     sarvAPI: 'Public API',
@@ -38,6 +43,7 @@ export default {
     geokogud: 'Geocollections portal',
   },
   locality: {
+    pageTitle: 'Localities search',
     id: 'ID',
     locality: 'Locality',
     country: 'Country',
@@ -81,6 +87,7 @@ export default {
     remarks: 'Remarks',
   },
   drillcore: {
+    pageTitle: 'Drillcores search',
     id: 'ID',
     name: 'Name',
     boxes: 'Boxes',
@@ -144,6 +151,7 @@ export default {
     file: 'File',
   },
   analysis: {
+    pageTitle: 'Analysis search',
     id: 'ID',
     sampleNumber: 'Sample number',
     depth: 'Depth',
@@ -228,6 +236,7 @@ export default {
     longitude: 'Longitude',
   },
   sample: {
+    pageTitle: 'Samples search',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -362,5 +371,8 @@ export default {
   placeholder: {
     title: 'title',
     description: 'description',
+  },
+  search: {
+    pageTitle: 'Search',
   },
 }
