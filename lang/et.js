@@ -9,6 +9,7 @@ export default {
     samples: 'Proovid ({number})',
     analyses: 'Analüüsid ({number})',
     preparations: 'Preparaadid ({number})',
+    visit_site: 'Külastage lehte',
   },
   common: {
     general: 'Üldinfo',
@@ -309,5 +310,29 @@ export default {
     sarv: 'Geoloogia infosüsteem SARV',
     natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
     el: 'Euroopa Liit',
+  },
+  geocollections: {
+    title: 'Geokogud',
+    description: 'Eesti geokogude portaal',
+  },
+  kirjandus: {
+    title: 'Geokirjandus',
+    description: 'Eesti maapõue kirjanduse andmebaas',
+  },
+  ema: {
+    title: 'EMA',
+    description: 'Eesti Maapõue Andmebaas',
+  },
+  geocase: {
+    title: 'GeoCASe',
+    description: 'Euroopa geokogude portaal',
+  },
+  turba: {
+    title: 'Turba',
+    description: 'Eesti turbauuringute andmebaas',
+  },
+  placeholder: {
+    title: 'Pealkiri',
+    description: 'Kirjeldus',
   },
 }
