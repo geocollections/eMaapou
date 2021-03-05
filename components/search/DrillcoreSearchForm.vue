@@ -34,7 +34,7 @@ import TextSearchField from './TextSearchField.vue'
 import RangeSearchField from './RangeSearchField.vue'
 
 export default {
-  name: 'DrillcoreDrawer',
+  name: 'DrillcoreSearchForm',
   components: { TextSearchField, RangeSearchField, GlobalSearch },
   computed: {
     ...mapState(['isDrawerOpen']),
