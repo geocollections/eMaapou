@@ -9,7 +9,7 @@ export default {
     samples: 'Proovid ({number})',
     analyses: 'Analüüsid ({number})',
     preparations: 'Preparaadid ({number})',
-    visit_site: 'Külastage lehte',
+    visit_site: 'Vaata',
     title: 'Tere tulemast!',
   },
   common: {
@@ -321,24 +321,53 @@ export default {
     el: 'Euroopa Liit',
   },
   geocollections: {
-    title: 'Geokogud',
+    title: 'Geokogude portaal',
     description: 'Eesti geokogude portaal',
   },
   kirjandus: {
-    title: 'Geokirjandus',
+    title: 'Geoloogiline kirjandus',
     description: 'Eesti maapõue kirjanduse andmebaas',
   },
-  ema: {
-    title: 'EMA',
-    description: 'Eesti Maapõue Andmebaas',
+  fond: {
+    title: 'Geoloogiafond',
+    description: 'Geoloogiafond',
   },
-  geocase: {
-    title: 'GeoCASe',
-    description: 'Euroopa geokogude portaal',
+  fossiilid: {
+    title: 'Fossiilide portaal',
+    description: 'Fossiilide portaal',
+  },
+  kivid: {
+    title: 'Mineraalid ja kivimid',
+    description: 'Mineraalid ja kivimid',
+  },
+  stratigraphy: {
+    title: 'Stratigraafia ja geoloogiline ajaskaala',
+    description: 'Stratigraafia ja geoloogiline ajaskaala',
+  },
+  maardlad: {
+    title: 'Maardlate rakendus',
+    description:
+      'Keskkonnaregistri maardlate nimistus eksisteeriv ruumiandmestik',
   },
   turba: {
     title: 'Turba',
     description: 'Eesti turbauuringute andmebaas',
+  },
+  doi: {
+    title: 'DOI',
+    description: 'Geoteaduste andmehoidla',
+  },
+  geocase: {
+    title: 'GeoCASe võrgustik',
+    description: 'Euroopa geokogude portaal',
+  },
+  natarc: {
+    title: 'NATARC taristu',
+    description: 'Loodusteaduslikud arhiivid ja andmevõrgustik',
+  },
+  elurikkus: {
+    title: 'eElurikkus',
+    description: 'eElurikkus koondab ühte portaali Eesti looduse andmed',
   },
   placeholder: {
     title: 'Pealkiri',

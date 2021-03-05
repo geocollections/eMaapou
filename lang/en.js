@@ -9,7 +9,7 @@ export default {
     samples: 'Samples ({number})',
     analyses: 'Analyses ({number})',
     preparations: 'Preparations ({number})',
-    visit_site: 'Visit site',
+    visit_site: 'View',
     title: 'Welcome!',
   },
   common: {
@@ -321,24 +321,52 @@ export default {
     el: 'European Union',
   },
   geocollections: {
-    title: 'Geocollections',
+    title: ' Geocollections of Estonia',
     description: 'Geoscience collections of Estonia',
   },
   kirjandus: {
-    title: 'Geological Literature',
+    title: 'Geoscience Literature Database',
     description: 'Estonian geoscience literature database',
   },
-  ema: {
-    title: 'EMA',
-    description: 'Eesti Maapõue Andmebaas',
+  fond: {
+    title: 'Geological Reports',
+    description: 'Geological Reports',
   },
-  geocase: {
-    title: 'GeoCASe',
-    description: 'The earth science collections portal',
+  fossiilid: {
+    title: 'Baltoscandian Fossils',
+    description: 'Baltoscandian Fossils',
+  },
+  kivid: {
+    title: 'Minerals and Rocks',
+    description: 'Minerals and Rocks',
+  },
+  stratigraphy: {
+    title: 'Stratigraphy and time scale',
+    description: 'Stratigraphy and time scale',
+  },
+  maardlad: {
+    title: 'Mineral Resources of Estonia',
+    description: 'Euroopa geokogude portaal',
   },
   turba: {
     title: 'Turba',
     description: 'Estonian peat database',
+  },
+  doi: {
+    title: 'DOI',
+    description: 'Geoscience data repository',
+  },
+  geocase: {
+    title: 'GeoCASe Network',
+    description: 'The earth science collections portal',
+  },
+  natarc: {
+    title: 'NATARC Research Infrastructure',
+    description: 'Natural history archives and information network',
+  },
+  elurikkus: {
+    title: 'eElurikkus: Estonian Biodiversity Database',
+    description: 'eBiodiversity is a portal for the taxa found in Estonia',
   },
   placeholder: {
     title: 'title',
