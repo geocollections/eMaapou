@@ -23,7 +23,7 @@
         <v-card-actions class="justify-center mb-2">
           <v-btn
             outlined
-            class="rounded-br-lg rounded-tl-lg"
+            class="rounded-tr-lg rounded-bl-lg"
             small
             :href="link"
             target="_blank"
