@@ -2,14 +2,14 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
   landing: {
-    searchTitle: 'Kiirotsing e·Maapõuest',
+    searchTitle: 'Otsi e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
     samples: 'Proovid ({number})',
     analyses: 'Analüüsid ({number})',
     preparations: 'Preparaadid ({number})',
-    visit_site: 'Külastage lehte',
+    visit_site: 'Vaata',
     title: 'Tere tulemast!',
   },
   common: {
@@ -27,13 +27,9 @@ export default {
     original: 'Originaal',
     linkToEdit: 'Muuda kirjet',
     drillcore: 'Puursüdamik',
-    drillcores: 'Puursüdamikud',
     locality: 'Lokaliteet',
-    localities: 'Lokaliteedid',
     sample: 'Proov',
-    samples: 'Proovid',
     analysis: 'Analüüs',
-    analyses: 'Analüüsid',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -326,31 +322,56 @@ export default {
   },
   geocollections: {
     title: 'Geokogude portaal',
-    description: 'Eesti geooloogilised kollektsioonid',
+    description: 'Eesti geokogude portaal',
   },
   kirjandus: {
-    title: 'Geokirjandus',
+    title: 'Geoloogiline kirjandus',
     description: 'Eesti maapõue kirjanduse andmebaas',
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Geoloogiliste aruannete arhiiv',
+    description: 'Geoloogiafond',
   },
-  geocase: {
-    title: 'GeoCASe',
-    description: 'Euroopa geokogude portaal',
+  fossiilid: {
+    title: 'Fossiilide portaal',
+    description: 'Fossiilide portaal',
+  },
+  kivid: {
+    title: 'Mineraalid ja kivimid',
+    description: 'Mineraalid ja kivimid',
+  },
+  stratigraphy: {
+    title: 'Stratigraafia ja geoloogiline ajaskaala',
+    description: 'Stratigraafia ja geoloogiline ajaskaala',
+  },
+  maardlad: {
+    title: 'Maardlate rakendus',
+    description:
+      'Keskkonnaregistri maardlate nimistus eksisteeriv ruumiandmestik',
   },
   turba: {
     title: 'Turba',
     description: 'Eesti turbauuringute andmebaas',
   },
-  fossiilid: {
-    title: 'Fossiilid.info',
-    description: 'Baltoskandia fossiilide andmebaas',
+  doi: {
+    title: 'DOI',
+    description: 'Geoteaduste andmehoidla',
   },
-  kivid: {
-    title: 'Kivid.info',
-    description: 'Kivimite ja mineraalide portaal',
+  geocase: {
+    title: 'GeoCASe võrgustik',
+    description: 'Euroopa geokogude portaal',
+  },
+  natarc: {
+    title: 'NATARC taristu',
+    description: 'Loodusteaduslikud arhiivid ja andmevõrgustik',
+  },
+  elurikkus: {
+    title: 'eElurikkus',
+    description: 'eElurikkus koondab ühte portaali Eesti looduse andmed',
+  },
+  placeholder: {
+    title: 'Pealkiri',
+    description: 'Kirjeldus',
   },
   search: {
     pageTitle: 'Otsing',
