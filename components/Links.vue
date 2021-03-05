@@ -3,7 +3,7 @@
     <template #activator="{ on, attrs }">
       <v-btn
         aria-label="links to external sites"
-        class="ml-auto d-block mr-3"
+        class="d-block mx-3"
         text
         v-bind="attrs"
         v-on="on"

@@ -45,6 +45,16 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   }
 }
 
+.title-link {
+  text-decoration: none;
+  color: #fff !important;
+  @include transition(color 200ms ease);
+
+  &:hover {
+    color: map-get($map: $grey, $key: 'lighten-2') !important;
+  }
+}
+
 .custom-table {
   border: 1px solid map-get($map: $grey, $key: 'lighten-2');
   tr {
