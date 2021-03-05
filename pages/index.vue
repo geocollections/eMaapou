@@ -138,5 +138,10 @@ export default {
       },
     }
   },
+  head() {
+    return {
+      title: this.$t('landing.title'),
+    }
+  },
 }
 </script>
