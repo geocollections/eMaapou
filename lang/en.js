@@ -9,6 +9,7 @@ export default {
     samples: 'Samples ({number})',
     analyses: 'Analyses ({number})',
     preparations: 'Preparations ({number})',
+    visit_site: 'Visit site',
   },
   common: {
     general: 'General info',
@@ -309,5 +310,29 @@ export default {
     sarv: 'Geoscience Database SARV',
     natarc: 'Natural history archives and information network“ (NATARC)',
     el: 'European Union',
+  },
+  geocollections: {
+    title: 'Geocollections',
+    description: 'Geoscience collections of Estonia',
+  },
+  kirjandus: {
+    title: 'Geological Literature',
+    description: 'Estonian geoscience literature database',
+  },
+  ema: {
+    title: 'EMA',
+    description: 'Eesti Maapõue Andmebaas',
+  },
+  geocase: {
+    title: 'GeoCASe',
+    description: 'The earth science collections portal',
+  },
+  turba: {
+    title: 'Turba',
+    description: 'Estonian peat database',
+  },
+  placeholder: {
+    title: 'title',
+    description: 'description',
   },
 }
