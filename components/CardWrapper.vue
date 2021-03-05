@@ -3,18 +3,21 @@
     <v-card
       dark
       shaped
-      ripple
       :class="{ 'on-hover': hover }"
-      :elevation="hover ? 6 : 2"
+      :elevation="hover ? 12 : 2"
+      :href="link"
+      target="_blank"
     >
       <v-img
         :src="background"
         class="white--text align-end"
         gradient="to bottom, rgba(0,0,0,.2), rgba(0,0,0,.6)"
-        height="200px"
+        height="300px"
+        content-class="my-auto"
       >
         <v-card-title
-          class="justify-center text-no-wrap text-shadow font-weight-bold text-uppercase"
+          style="word-break: keep-all"
+          class="justify-center text-center text-shadow font-weight-bold text-uppercase"
           >{{ $t(title) }}</v-card-title
         >
         <v-card-text class="text-body-1 text-center text-shadow">{{
@@ -71,5 +74,9 @@ export default {
 
 .v-card:not(.on-hover) {
   opacity: 0.9;
+}
+
+.v-card.on-hover {
+  cursor: pointer;
 }
 </style>
