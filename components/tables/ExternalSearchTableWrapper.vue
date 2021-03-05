@@ -5,7 +5,7 @@
     multi-sort
     :headers="headers"
     :items="items"
-    :options.sync="options"
+    :options="initOptions"
     :server-items-length="count"
     :footer-props="footerProps"
     mobile-breakpoint="0"
@@ -19,7 +19,7 @@
             <v-data-footer
               style="border: none"
               :pagination="pagination"
-              :options="options"
+              :options="initOptions"
               :items-per-page-options="footerProps['items-per-page-options']"
               :items-per-page-text="footerProps['items-per-page-text']"
               @update:options="updateOptions"
