@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-center">{{ $t('title') }}</h1>
+        <h1 class="text-center">{{ $t('landing.searchTitle') }}</h1>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -41,14 +41,6 @@ export default {
     try {
       const tabs = [
         {
-          id: 'drillcore',
-          routeName: 'search',
-          title: 'landing.drillcores',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
           id: 'locality',
           routeName: 'search-localities',
           title: 'landing.localities',
@@ -60,6 +52,14 @@ export default {
           id: 'site',
           routeName: 'search-sites',
           title: 'landing.sites',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'drillcore',
+          routeName: 'search',
+          title: 'landing.drillcores',
           isSolr: true,
           count: 0,
           props: {},

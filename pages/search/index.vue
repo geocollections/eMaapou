@@ -15,6 +15,14 @@
         {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
       </nuxt-link>
     </template>
+    <template #item.id="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
+      >
+        {{ item.id }}
+      </nuxt-link>
+    </template>
   </external-search-table-wrapper>
 </template>
 
@@ -34,13 +42,14 @@ export default {
         sortDesc: [],
       },
       headers: [
+        { text: this.$t('drillcore.id'), value: 'id' },
         { text: this.$t('drillcore.name'), value: 'drillcore' },
         { text: this.$t('drillcore.depth'), value: 'depth' },
         { text: this.$t('drillcore.boxes'), value: 'boxes' },
         { text: this.$t('drillcore.boxNumbers'), value: 'box_numbers' },
         { text: this.$t('drillcore.storage'), value: 'storage__location' },
         { text: this.$t('drillcore.year'), value: 'year' },
-        { text: this.$t('drillcore.remarks'), value: 'remarks' },
+        { text: this.$t('drillcore.acronym'), value: 'acronym' },
       ],
       queryFields: {
         drillcore: () =>

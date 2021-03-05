@@ -4,7 +4,7 @@
       ref="map"
       style="z-index: 0"
       :options="options"
-      :zoom="13"
+      :zoom="11"
       :center="[center.latitude, center.longitude]"
     >
       <l-control-layers />
@@ -43,6 +43,7 @@
         :key="`marker-${idx}`"
         :lat-lng="[marker.latitude, marker.longitude]"
         :radius="4"
+        color="red"
       >
         <l-popup>{{ marker.text }}</l-popup>
       </l-circle-marker>
@@ -186,7 +187,7 @@ export default {
             name: 'Estonian bedrock',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'geocollections:bedrock400k',
-            visible: false,
+            visible: true,
             transparent: true,
             options: {
               attribution:

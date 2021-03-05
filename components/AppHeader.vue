@@ -1,12 +1,12 @@
 <template>
   <v-app-bar dense app>
-    <v-app-bar-title>
-      <a
-        href="https://geocollections.info"
-        class="title deep-orange--text text--darken-2"
-        >{{ $t('common.title') }}</a
-      >
-    </v-app-bar-title>
+    <nuxt-link :to="'/' + $i18n.locale">
+      <span class="header-text title">{{ $t('common.home') }}</span>
+    </nuxt-link>
+    &nbsp;|&nbsp;
+    <nuxt-link :to="'/' + $i18n.locale + '/search'">
+      <span class="header-text title">{{ $t('common.search') }}</span>
+    </nuxt-link>
     <v-spacer />
     <links />
     <lang-switcher />

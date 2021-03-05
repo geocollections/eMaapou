@@ -3,6 +3,7 @@
     <v-row justify="center" align="center">
       <v-col>
         <h1 class="text-center">{{ $t('title') }}</h1>
+        <h2 class="text-center">{{ $t('subtitle') }}</h2>
       </v-col>
     </v-row>
     <v-row justify="center">

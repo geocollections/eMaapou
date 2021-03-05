@@ -1,6 +1,8 @@
 export default {
-  title: 'Eesti Maapõue Andmebaas',
+  title: 'e·Maapõu',
+  subtitle: 'Eesti geoloogia infoportaal',
   landing: {
+    searchTitle: 'Otsi e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -11,8 +13,8 @@ export default {
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    noValue: '-',
-    title: 'Eesti Geokogude Portaal',
+    noValue: '',
+    home: 'e·Maapõu',
     previous: 'Eelmine',
     next: 'Järgmine',
     links: 'Lingid',
@@ -35,6 +37,7 @@ export default {
     geokogud: 'Geokogude portaal',
   },
   locality: {
+    id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
     countryFormat: '{name}',
@@ -95,6 +98,7 @@ export default {
     analyses: 'Analüüsid ({number})',
     specimens: 'Eksemplarid ({number})',
     depth: 'Sügavus',
+    acronym: 'Omanik',
   },
   drillcoreBox: {
     id: 'ID',
@@ -230,11 +234,11 @@ export default {
     coordx: 'X (L-EST, m)',
     coordy: 'Y (L-EST, m)',
     elevation: 'Z (m)',
-    depth: 'Depth / thickness (m)',
+    depth: 'Süg. (m)',
     description: 'Description',
     elevationAccuracy: 'Elevation accuracy',
-    locality: 'Location',
-    number: 'Nr',
+    locality: 'Leiukoht',
+    number: 'Proov nr',
     depthInterval: 'Süg. kuni',
     stratigraphy: 'Stratigraafia',
     collector: 'Koguja',
@@ -275,6 +279,7 @@ export default {
     remarks: 'Lisainfo',
   },
   taxon: {
+    id: 'ID',
     taxon: 'Takson',
     name: 'Takson, txt',
     frequency: 'Arvukus',
@@ -297,9 +302,9 @@ export default {
     itemsPerPage: 'Ridade arv:',
     noData: 'Andmeid ei leitud',
   },
-  footerPreliminary: '2021 | EMA: Eesti Maapõue Andmebaas',
+  footerPreliminary: '2021 | e·Maapõu',
   footer:
-    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
+    'Siin leiduvad materjalid on kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4} raamistikku ning kättesaadav {5}.',
   footerLinks: {
     sarv: 'Geoloogia infosüsteem SARV',
     natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',

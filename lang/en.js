@@ -1,6 +1,8 @@
 export default {
-  title: 'Geology and Resource InfoSystem',
+  title: 'e·Maapõu',
+  subtitle: 'Opening up geological data in Estonia',
   landing: {
+    searchTitle: 'Search e·Maapõu database',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -11,8 +13,8 @@ export default {
   common: {
     general: 'General info',
     pictures: 'Pictures',
-    noValue: ' - ',
-    title: 'Geoscience collections of Estonia',
+    noValue: '',
+    home: 'Home',
     previous: 'Previous',
     next: 'Next',
     links: 'Links',
@@ -35,6 +37,7 @@ export default {
     geokogud: 'Geocollections portal',
   },
   locality: {
+    id: 'ID',
     locality: 'Locality',
     country: 'Country',
     countryFormat: '{name} ({iso})',
@@ -95,6 +98,7 @@ export default {
     analyses: 'Analyses ({number})',
     specimens: 'Specimens ({number})',
     depth: 'Depth',
+    acronym: 'Owner',
   },
   drillcoreBox: {
     id: 'ID',
@@ -233,8 +237,8 @@ export default {
     depth: 'Depth / thickness (m)',
     description: 'Description',
     elevationAccuracy: 'Elevation accuracy',
-    locality: 'Location',
-    number: 'Number',
+    locality: 'Locality',
+    number: 'Sample No.',
     depthInterval: 'Depth to',
     stratigraphy: 'Stratigraphy',
     collector: 'Collector',
@@ -275,6 +279,7 @@ export default {
     remarks: 'Remarks',
   },
   taxon: {
+    id: 'ID',
     taxon: 'Taxon',
     name: 'Taxon, txt',
     frequency: 'Abundande',
@@ -297,7 +302,7 @@ export default {
     itemsPerPage: 'Rows per page:',
     noData: 'No data found',
   },
-  footerPreliminary: '2021 | EMA: Eesti Maapõue Andmebaas',
+  footerPreliminary: '2021 | e·Maapõu',
   footer:
     'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',
   footerLinks: {
