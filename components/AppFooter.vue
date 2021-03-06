@@ -1,6 +1,6 @@
 <template>
   <v-footer padless class="mt-4">
-    <v-card width="100%" flat tile class="indigo lighten-4">
+    <v-card width="100%" flat tile class="amber darken-1">
       <v-card-text class="text-center">
         <a
           v-for="(item, index) in imageLinks"
@@ -51,22 +51,40 @@ export default {
       imageLinks: [
         {
           href: 'https://geocollections.info',
-          src: require('~/assets/logos/sarv_logo.svg'),
+          src: require('~/assets/logos/sarv_logo1b.svg'),
           title: 'footerLinks.sarv',
           alt: 'footerLinks.sarv',
         },
         {
           href: 'https://natarc.ut.ee',
-          src: require('~/assets/logos/NATARC_transparent.png'),
+          src: require('~/assets/logos/natarclogovalge1.png'),
           title: 'footerLinks.natarc',
           alt: 'footerLinks.natarc',
         },
         {
+          href: 'https://taltech.ee/geoloogia-instituut',
+          src: require('~/assets/logos/tutaltech2.png'),
+          title: 'footerLinks.ttu',
+          alt: 'footerLinks.ttu',
+        },
+        {
+          href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
+          src: require('~/assets/logos/TY_logo_ring_jooneta_valge.png'),
+          title: 'footerLinks.tu',
+          alt: 'footerLinks.tu',
+        },
+        {
+          href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
+          src: require('~/assets/logos/ELM_logo_white1.png'),
+          title: 'footerLinks.elm',
+          alt: 'footerLinks.elm',
+        },
+        /* {
           href: 'https://struktuurifondid.ee',
           src: require('~/assets/logos/EL_mv.png'),
           title: 'footerLinks.el',
           alt: 'footerLinks.el',
-        },
+        }, */
       ],
       textLinks: [
         {

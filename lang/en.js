@@ -323,6 +323,9 @@ export default {
   footerLinks: {
     sarv: 'Geoscience Database SARV',
     natarc: 'Natural history archives and information network“ (NATARC)',
+    ttu: 'Tallinn University of Technology',
+    tu: 'University of Tartu',
+    elm: 'Estonian Museum of Natural History',
     el: 'European Union',
   },
   geocollections: {
@@ -382,6 +385,6 @@ export default {
   },
   about: {
     pageTitle: 'About',
-    title: 'About e·Maapõu portal',
+    title: 'What is e·Maapõu?',
   },
 }

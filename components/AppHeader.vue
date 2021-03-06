@@ -5,7 +5,7 @@
     shrink-on-scroll
     prominent
     hide-on-scroll
-    src="https://files.geocollections.info/large/7b/74/7b744efb-e4e4-456a-aa69-7b572507b5bd.jpg"
+    :src="require(`~/assets/header/header1a.jpg`)"
     dark
   >
     <template #img="{ props }">

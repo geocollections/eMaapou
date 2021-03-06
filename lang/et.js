@@ -323,7 +323,10 @@ export default {
   footerLinks: {
     sarv: 'Geoloogia infosüsteem SARV',
     natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
-    el: 'Euroopa Liit',
+    ttu: 'Tallinna Tehnikaülikool',
+    tu: 'Tartu Ülikool',
+    elm: 'Eesti Loodusmuuseum',
+    el: 'Euroopa Liidu struktuuritoetused',
   },
   geocollections: {
     title: 'Geokogud',
@@ -382,6 +385,6 @@ export default {
   },
   about: {
     pageTitle: 'About',
-    title: 'e·Maapõu portaali tutvustus',
+    title: 'Mis on e·Maapõu?',
   },
 }
