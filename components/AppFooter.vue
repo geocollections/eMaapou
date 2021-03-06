@@ -125,6 +125,19 @@ export default {
     0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12) !important;
 }
 
+.v-card__text {
+  font-size: 0.8em;
+  font-weight: 300;
+  color: white !important;
+}
+
+.v-card__text a:visited,
+.v-card__text a:link,
+.v-card__text a:active {
+  color: white !important;
+  font-weight: 600;
+}
+
 .footer-logo {
   height: 50px;
   width: auto;

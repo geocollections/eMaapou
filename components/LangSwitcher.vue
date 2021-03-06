@@ -56,19 +56,19 @@ export default {
 
 <style scoped lang="scss">
 .lang-button {
-  height: 42px !important;
-  width: 42px !important;
+  height: 30px !important;
+  width: 30px !important;
 }
 
 .lang-icon {
-  height: 28px;
-  width: 28px !important;
+  height: 20px;
+  width: 20px !important;
 }
 
 .flag {
   position: relative;
   display: inline-block;
-  width: 1.33333333em;
+  width: 1em;
   line-height: 1em;
   background-size: cover;
   background-position: 50%;

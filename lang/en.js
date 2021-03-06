@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
   landing: {
-    searchTitle: 'Quick search from e·Maapõu database',
+    searchTitle: 'Quick search',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -319,7 +319,7 @@ export default {
   },
   footerPreliminary: '2021 | e·Maapõu',
   footer:
-    'All materials in the portal are for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3}. Built using {4}, available on {5}.',
+    'All materials in the portal are mostly for free usage according to {0} licence, unless indicated otherwise. Portal is part of {1} national research infrastructure and geoscience data platform {2}, hosted by {3} cloud. Built using {4}, source code available on {5}.',
   footerLinks: {
     sarv: 'Geoscience Database SARV',
     natarc: 'Natural history archives and information network“ (NATARC)',
@@ -335,6 +335,10 @@ export default {
   kirjandus: {
     title: 'Geoscience Literature',
     description: 'Estonian Geoscience Literature Database',
+  },
+  gmre: {
+    title: 'Geology of Estonia',
+    description: 'Book',
   },
   fond: {
     title: 'Geoloogiafond',
@@ -379,6 +383,10 @@ export default {
   eurocore: {
     title: 'EUROCORE',
     description: 'European Drillcore Database for MSc Training',
+  },
+  sarv: {
+    title: 'SARV-WB',
+    description: 'SARV Workbench',
   },
   search: {
     pageTitle: 'Search',

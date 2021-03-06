@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
   landing: {
-    searchTitle: 'Kiirotsing e·Maapõuest',
+    searchTitle: 'Kiirotsing',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -319,7 +319,7 @@ export default {
   },
   footerPreliminary: '2021 | e·Maapõu',
   footer:
-    'Siin leiduvad materjalid on kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4} raamistikku ning kättesaadav {5}.',
+    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3} pilv. Tarkvara on loodud kasutades {4} raamistikku ning kättesaadav {5} keskkonnas.',
   footerLinks: {
     sarv: 'Geoloogia infosüsteem SARV',
     natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
@@ -335,6 +335,10 @@ export default {
   kirjandus: {
     title: 'Geoloogiline kirjandus',
     description: 'Eesti maapõue kirjanduse andmebaas',
+  },
+  gmre: {
+    title: 'Eesti Geoloogia',
+    description: 'Raamat',
   },
   fond: {
     title: 'Geoloogiafond',
@@ -379,6 +383,10 @@ export default {
   eurocore: {
     title: 'EUROCORE',
     description: 'Euroopa puursüdamike andmebaas',
+  },
+  sarv: {
+    title: 'SARV-WB',
+    description: 'SARV töölaud',
   },
   search: {
     pageTitle: 'Otsing',

@@ -79,4 +79,8 @@ export default {
 .v-card.on-hover {
   cursor: pointer;
 }
+
+.v-card__title {
+  text-shadow: black 0 0 6px;
+}
 </style>
