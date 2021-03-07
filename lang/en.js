@@ -10,7 +10,7 @@ export default {
     analyses: 'Analyses ({number})',
     preparations: 'Preparations ({number})',
     visit_site: 'View',
-    title: 'Welcome!',
+    title: 'Geological data and e-services',
   },
   common: {
     general: 'General info',
@@ -372,14 +372,6 @@ export default {
     title: 'GeoCASe',
     description: 'The Earth Science Collections Network',
   },
-  natarc: {
-    title: 'NATARC',
-    description: 'Research Infrastructure',
-  },
-  elurikkus: {
-    title: 'eElurikkus: Estonian Biodiversity Database',
-    description: 'eBiodiversity is a portal for the taxa found in Estonia',
-  },
   eurocore: {
     title: 'EUROCORE',
     description: 'European Drillcore Database for MSc Training',
@@ -387,6 +379,10 @@ export default {
   sarv: {
     title: 'SARV-WB',
     description: 'SARV Workbench',
+  },
+  ema: {
+    title: 'e·Maapõu',
+    description: 'Quick search from the Geoscience Data Platform SARV',
   },
   search: {
     pageTitle: 'Search',

@@ -10,7 +10,7 @@ export default {
     analyses: 'Analüüsid ({number})',
     preparations: 'Preparaadid ({number})',
     visit_site: 'Vaata',
-    title: 'Tere tulemast!',
+    title: 'Geoloogilised andmed ja e-teenused',
   },
   common: {
     general: 'Üldinfo',
@@ -342,7 +342,7 @@ export default {
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Aruannete arhiiv (Geoloogiateenistus)',
+    description: 'Geoloogiliste aruannete digiarhiiv',
   },
   fossiilid: {
     title: 'Fossiilid',
@@ -357,8 +357,8 @@ export default {
     description: 'Eesti Stratigraafia Komisjon',
   },
   maardlad: {
-    title: 'Maardlate nimistu',
-    description: 'Keskkonnaregistri rakendus (Maa-amet)',
+    title: 'Maa-amet',
+    description: 'Geoloogilised kaardid ja maardlate register',
   },
   turba: {
     title: 'TURBA',
@@ -372,14 +372,6 @@ export default {
     title: 'GeoCASe võrgustik',
     description: 'Euroopa geokogude portaal',
   },
-  natarc: {
-    title: 'NATARC',
-    description: 'Teadustaristu',
-  },
-  elurikkus: {
-    title: 'eElurikkus',
-    description: 'eElurikkus koondab ühte portaali Eesti looduse andmed',
-  },
   eurocore: {
     title: 'EUROCORE',
     description: 'Euroopa puursüdamike andmebaas',
@@ -387,6 +379,10 @@ export default {
   sarv: {
     title: 'SARV-WB',
     description: 'SARV töölaud',
+  },
+  ema: {
+    title: 'e·Maapõu',
+    description: 'Päring geoloogia infosüsteemist SARV',
   },
   search: {
     pageTitle: 'Otsing',

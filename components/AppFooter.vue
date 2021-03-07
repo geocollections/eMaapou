@@ -1,6 +1,6 @@
 <template>
   <v-footer padless class="mt-4">
-    <v-card width="100%" flat tile class="amber darken-1">
+    <v-card width="100%" flat tile class="hall">
       <v-card-text class="text-center">
         <a
           v-for="(item, index) in imageLinks"
@@ -126,8 +126,8 @@ export default {
 }
 
 .v-card__text {
-  font-size: 0.8em;
-  font-weight: 300;
+  font-size: 0.7em;
+  font-weight: 400;
   color: white !important;
 }
 
@@ -142,5 +142,10 @@ export default {
   height: 50px;
   width: auto;
   /*padding: 0 10px;*/
+}
+
+.hall {
+  background-color: #5c6598 !important;
+  border-color: #5c6598 !important;
 }
 </style>
