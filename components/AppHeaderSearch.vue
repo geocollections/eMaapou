@@ -27,7 +27,7 @@ export default {
 
     handleSearch() {
       this.$router.push(
-        this.localePath({ name: 'search', query: { filter: this.search } })
+        this.localePath({ name: 'search', query: { q: this.search } })
       )
     },
   },
