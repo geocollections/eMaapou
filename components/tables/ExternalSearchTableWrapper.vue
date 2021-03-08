@@ -13,7 +13,7 @@
   >
     <template #no-data>{{ $t('table.noData') }}</template>
     <template #top="{ pagination, updateOptions }">
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-col class="pa-0">
             <v-data-footer
