@@ -78,7 +78,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('drillcore', ['searchDrillcores', 'setOptions']),
+    ...mapActions('drillcore', ['searchDrillcores']),
 
     async handleUpdate(options) {
       await this.searchDrillcores(options.tableOptions)

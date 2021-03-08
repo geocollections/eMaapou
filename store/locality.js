@@ -33,7 +33,7 @@ const getDefaultState = () => {
           fields: ['country', 'country_en'],
         },
       },
-      allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
+      allIds: ['name', 'country'],
     },
   }
 }
@@ -75,17 +75,11 @@ export const actions = {
     // TODO: move these functions somewhere where they are not created every time the action is called
     // TODO: Check is these are even used
     const queryFields = {
-      drillcore: () =>
-        this.$i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
-      depth: () => 'depth',
-      boxes: () => 'boxes',
-      box_numbers: () => 'box_numbers',
-      storage__location: () => 'storage__location',
-      year: () => 'year',
-      remarks: () => 'remarks',
+      locality: () => (this.$i18n.locale === 'et' ? 'locality' : 'locality_en'),
+      country: () => (this.$i18n.locale === 'et' ? 'country' : 'country_en'),
     }
 
-    const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
+    const localityResponse = await this.$services.sarvSolr.getResourceList(
       'locality',
       {
         tableOptions: options,
@@ -94,7 +88,7 @@ export const actions = {
         searchFilters: state.search.byIds,
       }
     )
-    commit('SET_ITEMS', drillcoreResponse.items)
-    commit('SET_COUNT', drillcoreResponse.count)
+    commit('SET_ITEMS', localityResponse.items)
+    commit('SET_COUNT', localityResponse.count)
   },
 }
