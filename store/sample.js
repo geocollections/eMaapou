@@ -21,31 +21,30 @@ const getDefaultState = () => {
     ],
     search: {
       byIds: {
-        name: {
+        number: {
           value: '',
           type: 'text',
           lookUpType: 'contains',
-          label: 'site.name',
-          fields: ['name'],
+          label: 'sample.number',
+          fields: ['number'],
         },
-        latitude: {
+        stratigraphy: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'sample.stratigraphy',
+          fields: ['stratigraphy', 'stratigraphy_en'],
+        },
+        depth: {
           type: 'range',
           lookUpType: 'range',
-          value: [-90, 90],
-          label: 'site.latitude',
-          placeholders: ['coorinates.min', 'coorinates.max'],
-          fields: ['latitude'],
-        },
-        longitude: {
-          type: 'range',
-          lookUpType: 'range',
-          value: [-180, 180],
-          label: 'site.longitude',
-          placeholders: ['coorinates.min', 'coorinates.max'],
-          fields: ['longitude'],
+          value: [-20, 5000],
+          label: 'sample.depth',
+          placeholders: ['depth.min', 'depth.max'],
+          fields: ['depth'],
         },
       },
-      allIds: ['name'],
+      allIds: ['number', 'stratigraphy'],
     },
   }
 }
