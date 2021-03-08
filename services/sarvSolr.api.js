@@ -36,9 +36,19 @@ export default ($axios) => ({
       }
     }
 
+    // Query special case #145 https://github.com/geocollections/EMA/issues/145
+    let handledSearch = search
+    if (
+      handledSearch.includes('-') &&
+      !handledSearch.includes(' ') &&
+      !handledSearch.startsWith('"') &&
+      !handledSearch.endsWith('"')
+    )
+      handledSearch = `"${handledSearch}"`
+
     const params = {
       ...defaultParams,
-      q: isEmpty(search) ? '*' : `${search}`,
+      q: isEmpty(handledSearch) ? '*' : `${handledSearch}`,
       ...getPaginationParams(tableOptions),
       ...getSortByParams(tableOptions, queryFields),
     }
