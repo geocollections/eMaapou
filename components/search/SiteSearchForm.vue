@@ -41,7 +41,6 @@ export default {
     RangeSearchField,
   },
   computed: {
-    ...mapState(['isDrawerOpen']),
     ...mapState('site', ['search']),
     ...mapFields('site', {
       name: 'search.byIds.name.value',

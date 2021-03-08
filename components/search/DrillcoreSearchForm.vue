@@ -48,7 +48,6 @@ export default {
     SearchButton,
   },
   computed: {
-    ...mapState(['isDrawerOpen']),
     ...mapState('drillcore', ['search']),
     ...mapFields('drillcore', {
       name: 'search.byIds.name.value',

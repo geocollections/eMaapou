@@ -32,7 +32,6 @@ export default {
     SearchButton,
   },
   computed: {
-    ...mapState(['isDrawerOpen']),
     ...mapState('locality', ['search']),
     ...mapFields('locality', {
       name: 'search.byIds.name.value',
