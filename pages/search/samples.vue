@@ -1,7 +1,8 @@
 <template>
   <external-search-table-wrapper
-    :items="samples"
-    :headers="headers"
+    :external-search="search"
+    :items="items"
+    :headers="translatedHeaders"
     :count="count"
     :init-options="options"
     @update="handleUpdate"
@@ -56,45 +57,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { round } from 'lodash'
+import { mapState, mapActions } from 'vuex'
 import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
+
 export default {
   components: { ExternalSearchTableWrapper },
-  data() {
-    return {
-      samples: [],
-      count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
-      headers: [
-        { text: this.$t('sample.id'), value: 'id' },
-        { text: this.$t('sample.number'), value: 'number' },
-        { text: this.$t('sample.locality'), value: 'locality' },
-        { text: this.$t('sample.depth'), value: 'depth' },
-        { text: this.$t('sample.depthInterval'), value: 'depth_interval' },
-        { text: this.$t('sample.stratigraphy'), value: 'stratigraphy' },
-        { text: this.$t('sample.collector'), value: 'collector' },
-        { text: this.$t('sample.dateCollected'), value: 'date_collected' },
-      ],
-      queryFields: {
-        id: () => 'id',
-        number: () => 'number',
-        depth: () => 'depth',
-        depth_interval: () => 'depth_interval',
-        stratigraphy: () =>
-          this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-        collector: () => 'collector',
-        date_collected: () => 'date_collected',
-      },
-    }
-  },
   computed: {
     ...mapState('landing', ['search']),
+    ...mapState('sample', ['options', 'items', 'count', 'headers']),
+    translatedHeaders() {
+      return this.headers.map((header) => {
+        return {
+          ...header,
+          text: this.$t(header.text),
+        }
+      })
+    },
   },
   created() {
     this.$store.subscribe((mutation, _) => {
@@ -104,20 +82,9 @@ export default {
     })
   },
   methods: {
-    round,
+    ...mapActions('sample', ['searchSamples']),
     async handleUpdate(options) {
-      const sampleResponse = await this.$services.sarvSolr.getResourceList(
-        'sample',
-        {
-          ...options,
-          defaultParams: {},
-          queryFields: this.queryFields,
-        }
-      )
-
-      this.options = options
-      this.samples = sampleResponse.items
-      this.count = sampleResponse.count
+      await this.searchSamples(options.tableOptions)
     },
   },
 }

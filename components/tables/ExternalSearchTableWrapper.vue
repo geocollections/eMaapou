@@ -5,22 +5,24 @@
     multi-sort
     :headers="headers"
     :items="items"
+    :options="initOptions"
     item-key="_version"
-    :options.sync="options"
     :server-items-length="count"
     :footer-props="footerProps"
     mobile-breakpoint="0"
     @update:options="handleChange"
   >
-    <template #no-data>{{ $t('table.noData') }}</template>
+    <template #no-data>
+      {{ $t('table.noData') }}
+    </template>
     <template #top="{ pagination, updateOptions }">
-      <v-container>
+      <v-container fluid>
         <v-row>
           <v-col class="pa-0">
             <v-data-footer
               style="border: none"
               :pagination="pagination"
-              :options="options"
+              :options="initOptions"
               :items-per-page-options="footerProps['items-per-page-options']"
               :items-per-page-text="footerProps['items-per-page-text']"
               @update:options="updateOptions"

@@ -1,8 +1,10 @@
 <template>
-  <v-container>
+  <v-container fluid class="pa-0">
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-center">{{ $t('landing.searchTitle') }}</h1>
+        <h1 class="text-center">
+          {{ $t('landing.searchTitle') }}
+        </h1>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -17,7 +19,7 @@
           hide-details
           clearable
           @input="handleSearch"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -37,9 +39,18 @@ import { mapActions } from 'vuex'
 
 export default {
   components: { Tabs },
+  // layout: 'search',
   async asyncData({ params, route, error, app }) {
     try {
       const tabs = [
+        {
+          id: 'drillcore',
+          routeName: 'search-drillcore',
+          title: 'landing.drillcores',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
         {
           id: 'locality',
           routeName: 'search-localities',

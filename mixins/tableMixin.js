@@ -34,12 +34,10 @@ export default {
       this.$emit('update', { tableOptions: options, search: this.search })
     },
     handleSearch: debounce(function () {
-      if (this.options.page !== 1) this.options.page = 1
-      else
-        this.$emit('update', {
-          tableOptions: this.options,
-          search: this.search,
-        })
+      this.$emit('update', {
+        tableOptions: { ...this.options, page: 1 },
+        search: this.search,
+      })
     }, 500),
   },
 }

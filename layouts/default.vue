@@ -2,7 +2,7 @@
   <v-app dark>
     <v-main>
       <app-header />
-      <v-container>
+      <v-container fluid>
         <nuxt />
         <scroll-top-fab class="fab-container ma-3" />
       </v-container>

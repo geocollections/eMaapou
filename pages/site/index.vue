@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <h1 class="text-center">Drillcore</h1>
+        <h1 class="text-center">Sites</h1>
       </v-col>
     </v-row>
     <v-row>
@@ -24,25 +24,24 @@
     <v-row>
       <v-col cols="3">
         <v-card class="pa-3">
-          <drillcore-search-form />
+          <site-search-form />
         </v-card>
       </v-col>
       <v-col cols="9">
         <external-search-table-wrapper
+          :external-search="search"
           :items="items"
           :headers="translatedHeaders"
           :count="count"
           :init-options="options"
           @update="handleUpdate"
         >
-          <template #item.drillcore="{ item }">
+          <template #item.id="{ item }">
             <nuxt-link
               class="text-link"
-              :to="
-                localePath({ name: 'drillcore-id', params: { id: item.id } })
-              "
+              :to="localePath({ name: 'site-id', params: { id: item.id } })"
             >
-              {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
+              {{ item.id }}
             </nuxt-link>
           </template>
         </external-search-table-wrapper>
@@ -54,13 +53,13 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
-import DrillcoreSearchForm from '@/components/search/DrillcoreSearchForm'
+import SiteSearchForm from '@/components/search/SiteSearchForm'
 
 export default {
-  components: { ExternalSearchTableWrapper, DrillcoreSearchForm },
+  components: { ExternalSearchTableWrapper, SiteSearchForm },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('drillcore', ['options', 'items', 'count', 'headers']),
+    ...mapState('site', ['options', 'items', 'count', 'headers']),
     translatedHeaders() {
       return this.headers.map((header) => {
         return {
@@ -78,10 +77,9 @@ export default {
     })
   },
   methods: {
-    ...mapActions('drillcore', ['searchDrillcores']),
-
+    ...mapActions('site', ['searchSites']),
     async handleUpdate(options) {
-      await this.searchDrillcores(options.tableOptions)
+      await this.searchSites(options.tableOptions)
     },
   },
 }
