@@ -2,19 +2,25 @@
   <div>
     <h1 class="text-center my-3">{{ $t('about.title') }}</h1>
     <v-card v-if="page" width="100%" flat tile class="roundedBorder aboutpage">
-      <div v-if="$i18n.locale === 'et'" v-html="page.content_et"></div>
-      <div v-if="$i18n.locale === 'en'" v-html="page.content_en"></div>
+      <div
+        v-html="$translate({ et: page.content_et, en: page.content_en })"
+      ></div>
     </v-card>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData(context) {
-    const data = await context.$axios.$get(
-      `https://api.geocollections.info/page/78`
-    )
-    return { page: data.results[0] }
+  async asyncData({ route, error, app }) {
+    try {
+      const data = await app.$services.sarvREST.getResource('page', 78)
+      return { page: data.results[0] }
+    } catch (err) {
+      error({
+        message: `Could not find about page`,
+        path: route.path,
+      })
+    }
   },
   head() {
     return {
@@ -29,5 +35,11 @@ export default {
   padding: 20px;
   border-top: solid 1px #6a76ab;
   border-bottom: solid 1px #6a76ab;
+}
+
+.aboutpage > div {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: justify;
 }
 </style>
