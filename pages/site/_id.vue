@@ -338,14 +338,21 @@ export default {
       return {
         site,
         initActiveTab: route.path,
-        tabs: await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$populateCount(tab, {
-                solr: { default: { fq: `site_id:${site.id}` } },
-                api: { default: { site: site.id } },
-              })
+        tabs: (
+          await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await app.$populateCount(tab, {
+                  solr: { default: { fq: `site_id:${site.id}` } },
+                  api: { default: { site: site.id } },
+                })
+            )
           )
+        ).map((tab) =>
+          app.$populateProps(tab, {
+            ...tab.props,
+            site: site.id,
+          })
         ),
       }
     } catch (err) {
