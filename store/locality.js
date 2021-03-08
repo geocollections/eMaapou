@@ -1,39 +1,44 @@
 import { getField, updateField } from 'vuex-map-fields'
-export const state = () => ({
-  items: [],
-  count: 0,
-  options: {
-    page: 1,
-    itemsPerPage: 25,
-    sortBy: [],
-    sortDesc: [],
-  },
-  headers: [
-    { text: 'locality.name', value: 'locality' },
-    { text: 'locality.country', value: 'country' },
-    { text: 'locality.latitude', value: 'latitude' },
-    { text: 'locality.longitude', value: 'longitude' },
-  ],
-  search: {
-    byIds: {
-      name: {
-        value: '',
-        type: 'text',
-        lookUpType: 'contains',
-        label: 'locality.name',
-        fields: ['locality', 'locality_en'],
-      },
-      country: {
-        value: '',
-        type: 'text',
-        lookUpType: 'contains',
-        label: 'locality.country',
-        fields: ['country', 'country_en'],
-      },
+
+const getDefaultState = () => {
+  return {
+    items: [],
+    count: 0,
+    options: {
+      page: 1,
+      itemsPerPage: 25,
+      sortBy: [],
+      sortDesc: [],
     },
-    allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
-  },
-})
+    headers: [
+      { text: 'locality.name', value: 'locality' },
+      { text: 'locality.country', value: 'country' },
+      { text: 'locality.latitude', value: 'latitude' },
+      { text: 'locality.longitude', value: 'longitude' },
+    ],
+    search: {
+      byIds: {
+        name: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'locality.name',
+          fields: ['locality', 'locality_en'],
+        },
+        country: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'locality.country',
+          fields: ['country', 'country_en'],
+        },
+      },
+      allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
+    },
+  }
+}
+
+export const state = () => getDefaultState()
 
 export const getters = {
   getField,
@@ -50,9 +55,18 @@ export const mutations = {
   SET_OPTIONS(state, options) {
     state.options = options
   },
+  RESET_SEARCH(state) {
+    const defaultState = getDefaultState()
+
+    state.search = defaultState.search
+    state.options = { ...state.options, page: defaultState.options.page }
+  },
 }
 
 export const actions = {
+  resetLocalitySearch({ commit }) {
+    commit('RESET_SEARCH')
+  },
   async searchLocalities(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }

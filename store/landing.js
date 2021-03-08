@@ -12,10 +12,16 @@ export const mutations = {
   updateSearch(state, search) {
     state.search = search
   },
+  RESET_SEARCH(state) {
+    state.search = ''
+  },
 }
 
 export const actions = {
   updateSearch({ commit }, search) {
     commit('updateSearch', search)
+  },
+  resetSearch({ commit }) {
+    commit('RESET_SEARCH')
   },
 }

@@ -3,7 +3,7 @@
 $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
 // Usage: @include transition(color 1s, background-color 1s, border-color 1s);
-@mixin transition($x...){
+@mixin transition($x...) {
   -webkit-transition: $x;
   -moz-transition: $x;
   -ms-transition: $x;
@@ -12,7 +12,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .is-preferred {
-  color: gray
+  color: gray;
 }
 
 .underline {
@@ -114,11 +114,14 @@ th {
   }
 }
 
-
 .static-cell-header {
   background-color: map-get($map: $grey, $key: 'lighten-4');
 }
 
 .static-cell {
   color: map-get($map: $grey, $key: 'darken-1');
+}
+
+.reset-search {
+  border-radius: 4px !important;
 }

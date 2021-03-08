@@ -1,7 +1,10 @@
 <template>
   <v-form>
     <global-search />
-    <v-btn @click="handleSearch"> Search </v-btn>
+    <div class="text-right">
+      <reset-search-button @click="handleReset" />
+      <search-button @click="handleSearch" />
+    </div>
     <text-search-field v-model="name" :label="$t(search.byIds.name.label)" />
     <text-search-field
       v-model="repository"
@@ -32,10 +35,18 @@ import { mapFields } from 'vuex-map-fields'
 import GlobalSearch from './GlobalSearch.vue'
 import TextSearchField from './TextSearchField.vue'
 import RangeSearchField from './RangeSearchField.vue'
+import ResetSearchButton from './ResetSearchButton.vue'
+import SearchButton from './SearchButton.vue'
 
 export default {
   name: 'DrillcoreSearchForm',
-  components: { TextSearchField, RangeSearchField, GlobalSearch },
+  components: {
+    TextSearchField,
+    RangeSearchField,
+    GlobalSearch,
+    ResetSearchButton,
+    SearchButton,
+  },
   computed: {
     ...mapState(['isDrawerOpen']),
     ...mapState('drillcore', ['search']),
@@ -48,7 +59,13 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('drillcore', ['searchDrillcores']),
+    ...mapActions('drillcore', ['searchDrillcores', 'resetDrillcoreSearch']),
+    ...mapActions('landing', ['resetSearch']),
+    handleReset(e) {
+      this.resetSearch()
+      this.resetDrillcoreSearch()
+      this.searchDrillcores()
+    },
     handleSearch(e) {
       this.searchDrillcores()
     },

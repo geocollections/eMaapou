@@ -20,6 +20,7 @@ export default {
     large: 'Suur',
     original: 'Originaal',
     linkToEdit: 'Muuda kirjet',
+    searchCommand: 'Otsi',
   },
   link: {
     sarvAPI: 'Avalik API',

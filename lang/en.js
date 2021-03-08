@@ -20,6 +20,7 @@ export default {
     large: 'Large',
     original: 'Original',
     linkToEdit: 'Edit record',
+    searchCommand: 'Search',
   },
   link: {
     sarvAPI: 'Public API',

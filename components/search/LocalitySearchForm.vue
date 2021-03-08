@@ -1,7 +1,10 @@
 <template>
   <v-form>
     <global-search />
-    <v-btn @click="handleSearch"> Search </v-btn>
+    <div class="text-right">
+      <reset-search-button @click="handleReset" />
+      <search-button @click="handleSearch" />
+    </div>
     <text-search-field v-model="name" :label="$t(search.byIds.name.label)" />
 
     <text-search-field
@@ -17,10 +20,17 @@ import { mapFields } from 'vuex-map-fields'
 
 import GlobalSearch from './GlobalSearch.vue'
 import TextSearchField from './TextSearchField.vue'
+import ResetSearchButton from './ResetSearchButton.vue'
+import SearchButton from './SearchButton.vue'
 
 export default {
   name: 'LocalitySearchForm',
-  components: { TextSearchField, GlobalSearch },
+  components: {
+    TextSearchField,
+    GlobalSearch,
+    ResetSearchButton,
+    SearchButton,
+  },
   computed: {
     ...mapState(['isDrawerOpen']),
     ...mapState('locality', ['search']),
@@ -30,8 +40,14 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('locality', ['searchLocalities']),
+    ...mapActions('locality', ['searchLocalities', 'resetLocalitySearch']),
+    ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {
+      this.searchLocalities()
+    },
+    handleReset(e) {
+      this.resetSearch()
+      this.resetLocalitySearch()
       this.searchLocalities()
     },
   },
