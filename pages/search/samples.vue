@@ -15,6 +15,14 @@
         {{ item.id }}
       </a>
     </template>
+    <template #item.number="{ item }">
+      <a
+        class="text-link"
+        @click="$openNuxtWindow('sample-id', { id: item.id })"
+      >
+        {{ item.number }}
+      </a>
+    </template>
     <template #item.stratigraphy="{ item }">
       <a
         class="text-link"
@@ -34,6 +42,16 @@
           ? new Date(item.date_collected).toISOString().split('T')[0]
           : null
       }}
+    </template>
+    <template #item.locality="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality_id } })
+        "
+      >
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
+      </nuxt-link>
     </template>
   </external-search-table-wrapper>
 </template>

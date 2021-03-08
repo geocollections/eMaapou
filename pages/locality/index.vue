@@ -30,7 +30,7 @@
       <v-col cols="9">
         <external-search-table-wrapper
           :items="items"
-          :headers="headers"
+          :headers="translatedHeaders"
           :count="count"
           :init-options="options"
           @update="handleUpdate"

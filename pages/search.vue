@@ -2,7 +2,9 @@
   <v-container fluid class="pa-0">
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-center">{{ $t('title') }}</h1>
+        <h1 class="text-center">
+          {{ $t('landing.searchTitle') }}
+        </h1>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -17,7 +19,7 @@
           hide-details
           clearable
           @input="handleSearch"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -66,9 +68,33 @@ export default {
           props: {},
         },
         {
+          id: 'drillcore',
+          routeName: 'search',
+          title: 'landing.drillcores',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
           id: 'sample',
           routeName: 'search-samples',
           title: 'landing.samples',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'analysis',
+          routeName: 'search-analyses',
+          title: 'landing.analyses',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'preparation',
+          routeName: 'search-preparations',
+          title: 'landing.preparations',
           isSolr: true,
           count: 0,
           props: {},
@@ -89,7 +115,7 @@ export default {
   },
   head() {
     return {
-      title: this.$t('title'),
+      title: this.$t('search.pageTitle'),
     }
   },
   methods: {

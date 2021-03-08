@@ -1,16 +1,22 @@
 export default {
-  title: 'Geoloogia ja Ressursside InfoSüsteem',
+  title: 'e·Maapõu',
+  subtitle: 'Eesti geoloogia infoportaal',
   landing: {
+    searchTitle: 'Kiirotsing',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
     samples: 'Proovid ({number})',
+    analyses: 'Analüüsid ({number})',
+    preparations: 'Preparaadid ({number})',
+    visit_site: 'Vaata',
+    title: 'Geoloogilised andmed ja e-teenused',
   },
   common: {
     general: 'Üldinfo',
     pictures: 'Pildid',
-    noValue: '-',
-    title: 'Eesti Geokogude Portaal',
+    noValue: '',
+    home: 'e·Maapõu',
     previous: 'Eelmine',
     next: 'Järgmine',
     links: 'Lingid',
@@ -21,6 +27,15 @@ export default {
     original: 'Originaal',
     linkToEdit: 'Muuda kirjet',
     searchCommand: 'Otsi',
+    drillcore: 'Puursüdamik',
+    drillcores: 'Puursüdamikud',
+    locality: 'Lokaliteet',
+    localities: 'Lokaliteedid',
+    sample: 'Proov',
+    samples: 'Proovid',
+    analysis: 'Analüüs',
+    analyses: 'Analüüsid',
+    about: 'Tutvustus',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -34,6 +49,8 @@ export default {
     geokogud: 'Geokogude portaal',
   },
   locality: {
+    pageTitle: 'Lokaliteetide otsing',
+    id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
     countryFormat: '{name}',
@@ -76,6 +93,7 @@ export default {
     remarks: 'Lisainfo',
   },
   drillcore: {
+    pageTitle: 'Puursüdamike otsing',
     id: 'ID',
     name: 'Nimi',
     boxes: 'Südamikukaste',
@@ -94,6 +112,7 @@ export default {
     analyses: 'Analüüsid ({number})',
     specimens: 'Eksemplarid ({number})',
     depth: 'Sügavus',
+    acronym: 'Omanik',
   },
   drillcoreBox: {
     id: 'ID',
@@ -138,6 +157,7 @@ export default {
     file: 'Fail',
   },
   analysis: {
+    pageTitle: 'Analüüside otsing',
     id: 'ID',
     sampleNumber: 'Proovi nr',
     depth: 'Sügavus',
@@ -153,9 +173,11 @@ export default {
     dataset: 'Andmekogu',
     locality: 'Lokaliteet',
     stratigraphy: 'Stratigraafia',
+    stratigraphyAndLithostratigraphy: 'Stratigraafia | Litostratigraafia',
+    lab: 'Lab',
     lithostratigraphy: 'Litostratigraafia',
     results: 'Tulemused ({number})',
-    attachments: 'Fails ({number})',
+    attachments: 'Failid ({number})',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -220,6 +242,7 @@ export default {
     longitude: 'Long',
   },
   sample: {
+    pageTitle: 'Proovide otsing',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -227,11 +250,11 @@ export default {
     coordx: 'X (L-EST, m)',
     coordy: 'Y (L-EST, m)',
     elevation: 'Z (m)',
-    depth: 'Depth / thickness (m)',
+    depth: 'Süg. (m)',
     description: 'Description',
     elevationAccuracy: 'Elevation accuracy',
-    locality: 'Location',
-    number: 'Nr',
+    locality: 'Leiukoht',
+    number: 'Proov nr',
     depthInterval: 'Süg. kuni',
     stratigraphy: 'Stratigraafia',
     collector: 'Koguja',
@@ -260,12 +283,19 @@ export default {
     sampleReferences: 'Kirjandus ({number})',
   },
   preparation: {
+    id: 'ID',
     preparation_number: 'Prep. number',
+    locality: 'Lokaliteet',
+    depth: 'Sügavus',
+    stratigraphy: 'Stratigraafia | Litostratigraafia',
+    agent: 'Coll.',
+    mass: 'Kaal',
     taxon: 'Fossiil rühm',
     storage: 'Hoiukoht',
     remarks: 'Lisainfo',
   },
   taxon: {
+    id: 'ID',
     taxon: 'Takson',
     name: 'Takson, txt',
     frequency: 'Arvukus',
@@ -288,12 +318,78 @@ export default {
     itemsPerPage: 'Ridade arv:',
     noData: 'Andmeid ei leitud',
   },
-  footerPreliminary: '2021 | GRIS: GeoRessursside InfoSüsteem',
+  footerPreliminary: '2021 | e·Maapõu',
   footer:
-    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3}. Tarkvara on loodud kasutades {4}, raamistikku ning kättesaadav {5}.',
+    'Siin leiduvad materjalid on enamasti kasutamiseks {0} litsentsi alusel, kui pole näidatud teisiti. Portaal on osaks {1} teadustaristust ning infosüsteemist {2}, majutab {3} pilv. Tarkvara on loodud kasutades {4} raamistikku ning kättesaadav {5} keskkonnas.',
   footerLinks: {
     sarv: 'Geoloogia infosüsteem SARV',
     natarc: 'Loodusteaduslikud arhiivid ja infovõrgustik (NATARC)',
-    el: 'Euroopa Liit',
+    ttu: 'Tallinna Tehnikaülikool',
+    tu: 'Tartu Ülikool',
+    elm: 'Eesti Loodusmuuseum',
+    el: 'Euroopa Liidu struktuuritoetused',
+  },
+  geocollections: {
+    title: 'Geokogud',
+    description: 'Eesti geokogude portaal',
+  },
+  kirjandus: {
+    title: 'Geoloogiline kirjandus',
+    description: 'Eesti maapõue kirjanduse andmebaas',
+  },
+  gmre: {
+    title: 'Eesti Geoloogia',
+    description: 'Raamat',
+  },
+  fond: {
+    title: 'Geoloogiafond',
+    description: 'Geoloogiliste aruannete digiarhiiv',
+  },
+  fossiilid: {
+    title: 'Fossiilid',
+    description: 'Baltoskandia fossiilide portaal',
+  },
+  kivid: {
+    title: 'Mineraalid ja kivimid',
+    description: 'Mineraalide ja kivimite portaal',
+  },
+  stratigraphy: {
+    title: 'Stratigraafia',
+    description: 'Eesti Stratigraafia Komisjon',
+  },
+  maardlad: {
+    title: 'Maa-amet',
+    description: 'Geoloogilised kaardid ja maardlate register',
+  },
+  turba: {
+    title: 'TURBA',
+    description: 'Eesti turbauuringute andmebaas',
+  },
+  doi: {
+    title: 'SARV-DOI',
+    description: 'Eesti geoteaduslike andmete repositoorium',
+  },
+  geocase: {
+    title: 'GeoCASe võrgustik',
+    description: 'Euroopa geokogude portaal',
+  },
+  eurocore: {
+    title: 'EUROCORE',
+    description: 'Euroopa puursüdamike andmebaas',
+  },
+  sarv: {
+    title: 'SARV-WB',
+    description: 'SARV töölaud',
+  },
+  ema: {
+    title: 'e·Maapõu',
+    description: 'Päring geoloogia infosüsteemist SARV',
+  },
+  search: {
+    pageTitle: 'Otsing',
+  },
+  about: {
+    pageTitle: 'About',
+    title: 'Mis on e·Maapõu?',
   },
 }

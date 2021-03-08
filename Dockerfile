@@ -1,15 +1,15 @@
 FROM node:lts-alpine
 
 # create destination directory
-RUN mkdir -p /usr/src/gris
-WORKDIR /usr/src/gris
+RUN mkdir -p /usr/src/ema
+WORKDIR /usr/src/ema
 
 # update and install dependency
 RUN apk update && apk upgrade
 RUN apk add git
 
 # copy the app, note .dockerignore
-COPY . /usr/src/gris/
+COPY . /usr/src/ema/
 RUN npm install
 
 # build necessary, even if no static files are needed,

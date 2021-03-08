@@ -6,12 +6,15 @@
     :headers="headers"
     :items="items"
     :options="initOptions"
+    item-key="_version"
     :server-items-length="count"
     :footer-props="footerProps"
     mobile-breakpoint="0"
     @update:options="handleChange"
   >
-    <template #no-data>{{ $t('table.noData') }}</template>
+    <template #no-data>
+      {{ $t('table.noData') }}
+    </template>
     <template #top="{ pagination, updateOptions }">
       <v-container fluid>
         <v-row>

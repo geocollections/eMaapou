@@ -7,6 +7,14 @@
     :init-options="options"
     @update="handleUpdate"
   >
+    <template #item.id="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'locality-id', params: { id: item.id } })"
+      >
+        {{ item.id }}
+      </nuxt-link>
+    </template>
     <template #item.locality="{ item }">
       <nuxt-link
         class="text-link"

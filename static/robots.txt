@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://ema.geoloogia.info/sitemap.xml

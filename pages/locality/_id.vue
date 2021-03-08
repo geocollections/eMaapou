@@ -308,18 +308,25 @@ export default {
 
       return {
         locality,
-        tabs: await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$populateCount(tab, {
-                solr: {
-                  default: {
-                    fq: `locality_id:${params.id}`,
+        tabs: (
+          await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await app.$populateCount(tab, {
+                  solr: {
+                    default: {
+                      fq: `locality_id:${params.id}`,
+                    },
                   },
-                },
-                api: { default: { locality_id: locality.id } },
-              })
+                  api: { default: { locality_id: locality.id } },
+                })
+            )
           )
+        ).map((tab) =>
+          app.$populateProps(tab, {
+            ...tab.props,
+            locality: locality.id,
+          })
         ),
         drillcore,
         initActiveTab: route.path,
