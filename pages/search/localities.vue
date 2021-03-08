@@ -2,7 +2,7 @@
   <external-search-table-wrapper
     :external-search="search"
     :items="items"
-    :headers="headers"
+    :headers="translatedHeaders"
     :count="count"
     :init-options="options"
     @update="handleUpdate"
@@ -22,36 +22,23 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
 export default {
   components: { ExternalSearchTableWrapper },
-  data() {
-    return {
-      items: [],
-      count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
-      headers: [
-        { text: this.$t('locality.name'), value: 'locality' },
-        { text: this.$t('locality.country'), value: 'country' },
-        { text: this.$t('locality.latitude'), value: 'latitude' },
-        { text: this.$t('locality.longitude'), value: 'longitude' },
-      ],
-      queryFields: {
-        locality: () =>
-          this.$i18n.locale === 'et' ? 'locality' : 'locality_en',
-        country: () => (this.$i18n.locale === 'et' ? 'country' : 'country_en'),
-      },
-    }
-  },
   computed: {
     ...mapState('landing', ['search']),
+    ...mapState('locality', ['options', 'items', 'count', 'headers']),
+    // TODO: This functions is reused alot. Make it a plugin.
+    translatedHeaders() {
+      return this.headers.map((header) => {
+        return {
+          ...header,
+          text: this.$t(header.text),
+        }
+      })
+    },
   },
   created() {
     this.$store.subscribe((mutation, _) => {
@@ -61,18 +48,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions('locality', ['searchLocalities']),
     async handleUpdate(options) {
-      const localityResponse = await this.$services.sarvSolr.getResourceList(
-        'locality',
-        {
-          ...options,
-          search: this.search,
-          queryFields: this.queryFields,
-        }
-      )
-      this.options = options
-      this.items = localityResponse.items
-      this.count = localityResponse.count
+      await this.searchLocalities(options.tableOptions)
     },
   },
 }
