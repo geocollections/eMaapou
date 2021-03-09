@@ -2,7 +2,7 @@
   <external-search-table-wrapper
     :external-search="search"
     :items="items"
-    :headers="headers"
+    :headers="translatedHeaders"
     :count="count"
     :init-options="options"
     @update="handleUpdate"
@@ -77,49 +77,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
 export default {
   components: { ExternalSearchTableWrapper },
-  data() {
-    return {
-      items: [],
-      count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
-      headers: [
-        { text: this.$t('analysis.id'), value: 'id' },
-        {
-          text: this.$t('analysis.sampleNumber'),
-          value: 'sample_number',
-        },
-        { text: this.$t('analysis.locality'), value: 'locality' },
-        { text: this.$t('analysis.depth'), value: 'depth' },
-        { text: this.$t('analysis.stratigraphy'), value: 'stratigraphy' },
-        { text: this.$t('analysis.method'), value: 'analysis_method' },
-        { text: this.$t('analysis.lab'), value: 'lab' },
-      ],
-      queryFields: {
-        id: () => 'id',
-        sample_number: () => 'sample_number',
-        locality: () =>
-          this.$i18n.locale === 'et' ? 'locality' : 'locality_en',
-        depth: () => 'depth',
-        stratigraphy: () =>
-          this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-        analysis_method: () =>
-          this.$i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en',
-        lab: () => 'lab',
-      },
-    }
-  },
   computed: {
     ...mapState('landing', ['search']),
+    ...mapState('analysis', ['options', 'items', 'count', 'headers']),
+    translatedHeaders() {
+      return this.headers.map((header) => {
+        return {
+          ...header,
+          text: this.$t(header.text),
+        }
+      })
+    },
   },
   created() {
     this.$store.subscribe((mutation, _) => {
@@ -129,18 +102,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions('analysis', ['searchAnalyses']),
     async handleUpdate(options) {
-      const localityResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          ...options,
-          search: this.search,
-          queryFields: this.queryFields,
-        }
-      )
-      this.options = options
-      this.items = localityResponse.items
-      this.count = localityResponse.count
+      await this.searchAnalyses(options.tableOptions)
     },
   },
 }
