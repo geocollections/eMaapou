@@ -60,7 +60,7 @@ export default ($axios) => ({
   },
   async getResourceCount(resource, countParams) {
     const response = await $axios.$get(`solr/${resource}/`, {
-      params: { ...countParams, rows: 0 },
+      params: { ...buildQueryParameter(countParams.q ?? null), rows: 0 },
     })
     return {
       count: response.count,
@@ -69,17 +69,18 @@ export default ($axios) => ({
 })
 
 const buildQueryParameter = (search) => {
+  let s = search
   if (
     !isEmpty(search) &&
     search.includes('-') &&
-    !search.includes(' ') &&
+    !search.includes(' -') &&
     !search.startsWith('"') &&
     !search.endsWith('"')
-  )
-    search = `"${search}"`
-
+  ) {
+    s = `"${search}"`
+  }
   return {
-    q: isEmpty(search) ? '*' : `${encodeURIComponent(search)}*`,
+    q: isEmpty(s) ? '*' : `${encodeURIComponent(s)}*`,
   }
 }
 

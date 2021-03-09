@@ -67,6 +67,30 @@ export const actions = {
   resetLocalitySearch({ commit }) {
     commit('RESET_SEARCH')
   },
+  async quickSearchLocalities(
+    { commit, rootState, state },
+    options = { ...state.options, page: 1 }
+  ) {
+    commit('SET_OPTIONS', options)
+    // TODO: move these functions somewhere where they are not created every time the action is called
+    // TODO: Check is these are even used
+    const queryFields = {
+      locality: () => (this.$i18n.locale === 'et' ? 'locality' : 'locality_en'),
+      country: () => (this.$i18n.locale === 'et' ? 'country' : 'country_en'),
+    }
+
+    const localityResponse = await this.$services.sarvSolr.getResourceList(
+      'locality',
+      {
+        tableOptions: options,
+        search: rootState.landing.search,
+        queryFields,
+        searchFilters: {},
+      }
+    )
+    commit('SET_ITEMS', localityResponse.items)
+    commit('SET_COUNT', localityResponse.count)
+  },
   async searchLocalities(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }

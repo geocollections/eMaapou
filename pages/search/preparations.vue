@@ -96,8 +96,11 @@ export default {
   },
   created() {
     this.$store.subscribe((mutation, _) => {
-      if (mutation.type === 'landing/updateSearch') {
-        this.handleUpdate({ ...this.options, search: mutation.payload })
+      if (
+        mutation.type === 'landing/updateField' &&
+        mutation.payload.path === 'search'
+      ) {
+        this.handleUpdate({ ...this.options, search: mutation.payload.value })
       }
     })
   },

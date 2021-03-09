@@ -76,6 +76,29 @@ export const actions = {
   resetSiteSearch({ commit }) {
     commit('RESET_SEARCH')
   },
+  async quickSearchSites(
+    { commit, rootState, state },
+    options = { ...state.options, page: 1 }
+  ) {
+    commit('SET_OPTIONS', options)
+    // TODO: move these functions somewhere where they are not created every time the action is called
+    // TODO: Check is these are even used
+    const queryFields = {
+      id: () => 'id_numeric',
+      name: () => 'name',
+      project: () =>
+        this.$i18n.locale === 'et' ? 'project__name' : 'project__name_en',
+    }
+
+    const siteResponse = await this.$services.sarvSolr.getResourceList('site', {
+      tableOptions: options,
+      search: rootState.landing.search,
+      queryFields,
+      searchFilters: {},
+    })
+    commit('SET_ITEMS', siteResponse.items)
+    commit('SET_COUNT', siteResponse.count)
+  },
   async searchSites(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }

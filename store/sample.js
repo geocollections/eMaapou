@@ -78,6 +78,36 @@ export const actions = {
   resetSampleSearch({ commit }) {
     commit('RESET_SEARCH')
   },
+  async quickSearchSamples(
+    { commit, rootState, state },
+    options = { ...state.options, page: 1 }
+  ) {
+    commit('SET_OPTIONS', options)
+    // TODO: move these functions somewhere where they are not created every time the action is called
+    // TODO: Check is these are even used
+    const queryFields = {
+      id: () => 'id',
+      number: () => 'number',
+      depth: () => 'depth',
+      depth_interval: () => 'depth_interval',
+      stratigraphy: () =>
+        this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
+      collector: () => 'collector',
+      date_collected: () => 'date_collected',
+    }
+
+    const sampleResponse = await this.$services.sarvSolr.getResourceList(
+      'sample',
+      {
+        tableOptions: options,
+        search: rootState.landing.search,
+        queryFields,
+        searchFilters: {},
+      }
+    )
+    commit('SET_ITEMS', sampleResponse.items)
+    commit('SET_COUNT', sampleResponse.count)
+  },
   async searchSamples(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }

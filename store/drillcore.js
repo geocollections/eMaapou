@@ -92,6 +92,35 @@ export const actions = {
   resetDrillcoreSearch({ commit }) {
     commit('RESET_SEARCH')
   },
+  async quickSearchDrillcores(
+    { commit, rootState, state },
+    options = { ...state.options, page: 1 }
+  ) {
+    commit('SET_OPTIONS', options)
+    // TODO: move these functions somewhere where they are not created every time the action is called
+    const queryFields = {
+      drillcore: () =>
+        this.$i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
+      depth: () => 'depth',
+      boxes: () => 'boxes',
+      box_numbers: () => 'box_numbers',
+      storage__location: () => 'storage__location',
+      year: () => 'year',
+      remarks: () => 'remarks',
+    }
+
+    const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
+      'drillcore',
+      {
+        tableOptions: options,
+        search: rootState.landing.search,
+        queryFields,
+        searchFilters: {},
+      }
+    )
+    commit('SET_ITEMS', drillcoreResponse.items)
+    commit('SET_COUNT', drillcoreResponse.count)
+  },
   async searchDrillcores(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
