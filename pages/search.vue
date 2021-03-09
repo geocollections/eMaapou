@@ -91,8 +91,12 @@ export default {
       ]
       return {
         initActiveTab: route.path,
-        tabs: await Promise.all(
-          tabs.map(async (tab) => await app.$populateCount(tab))
+        tabs: orderBy(
+          await Promise.all(
+            tabs.map(async (tab) => await app.$populateCount(tab))
+          ),
+          ['count'],
+          ['desc']
         ),
       }
     } catch (err) {}
