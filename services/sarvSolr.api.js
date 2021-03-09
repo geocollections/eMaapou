@@ -58,9 +58,14 @@ export default ($axios) => ({
       count: response.count,
     }
   },
+
   async getResourceCount(resource, countParams) {
     const response = await $axios.$get(`solr/${resource}/`, {
-      params: { ...buildQueryParameter(countParams.q ?? null), rows: 0 },
+      params: {
+        ...buildQueryParameter(countParams.q ?? null),
+        rows: 0,
+        ...countParams,
+      },
     })
     return {
       count: response.count,
@@ -164,5 +169,5 @@ const buildFilterQueryParameter = (filters) => {
       if (prev.length > 0) return `${prev} AND ${filterQueryParam}`
       return `${prev}${filterQueryParam}`
     }, '')
-  return { fq: isEmpty(filterQueryStr) ? null : filterQueryStr }
+  return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
 }
