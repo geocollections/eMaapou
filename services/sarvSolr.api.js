@@ -136,7 +136,7 @@ const buildFilterQueryParameter = (filters) => {
               const end = isNil(searchParameter.value[1])
                 ? '*'
                 : searchParameter.value[1]
-              return `${fieldId}:[${start} TO ${end}]`
+              return `(${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *]))`
             }
             case 'checkbox': {
               const encodedValue = encodeURIComponent(searchParameter.value)
