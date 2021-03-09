@@ -24,20 +24,18 @@
     </v-row>
     <v-row justify="center">
       <v-col>
-        <v-card>
-          <tabs ref="tabs" :tabs="tabs" :init-active-tab="initActiveTab" />
-        </v-card>
+        <button-tabs ref="tabs" :tabs="tabs" :init-active-tab="initActiveTab" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { debounce, isEmpty } from 'lodash'
-import Tabs from '@/components/Tabs'
+import { debounce, isEmpty, orderBy } from 'lodash'
+import ButtonTabs from '@/components/ButtonTabs'
 import { mapFields } from 'vuex-map-fields'
 export default {
-  components: { Tabs },
+  components: { ButtonTabs },
   // layout: 'search',
   async asyncData({ params, route, error, app }) {
     try {
@@ -109,20 +107,20 @@ export default {
   },
   methods: {
     handleSearch: debounce(async function () {
-      const forLoop = async () => {
-        const filteredTabs = this.tabs.filter((item) => !!item.id)
-        for (const item of filteredTabs) {
-          const countResponse = await this.$services.sarvSolr.getResourceCount(
-            item.id,
-            { q: isEmpty(this.search) ? '*' : `${this.search}` }
+      this.tabs = orderBy(
+        await Promise.all(
+          this.tabs.map(
+            async (tab) =>
+              await this.$populateCount(tab, {
+                solr: {
+                  default: { q: isEmpty(this.search) ? '*' : `${this.search}` },
+                },
+              })
           )
-
-          item.count = countResponse?.count ?? 0
-        }
-      }
-      await forLoop()
-
-      this.$refs.tabs.$refs.tabs.callSlider()
+        ),
+        ['count'],
+        ['desc']
+      )
     }, 500),
   },
 }
