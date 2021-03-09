@@ -44,14 +44,6 @@ export default {
     try {
       const tabs = [
         {
-          id: 'drillcore',
-          routeName: 'search-drillcore',
-          title: 'landing.drillcores',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
           id: 'locality',
           routeName: 'search-localities',
           title: 'landing.localities',
