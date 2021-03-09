@@ -1,70 +1,41 @@
 <template>
-  <external-search-table-wrapper
-    :external-search="search"
-    :items="items"
-    :headers="headers"
-    :count="count"
-    :init-options="options"
-    @update="handleUpdate"
-  >
-    <template #item.drillcore="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
-      >
-        {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
-      </nuxt-link>
-    </template>
-    <template #item.id="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
-      >
-        {{ item.id }}
-      </nuxt-link>
-    </template>
-  </external-search-table-wrapper>
+  <div>
+    <external-search-table-wrapper
+      :external-search="search"
+      :items="items"
+      :headers="translatedHeaders"
+      :count="count"
+      :init-options="options"
+      @update="handleUpdate"
+    >
+      <template #item.drillcore="{ item }">
+        <nuxt-link
+          class="text-link"
+          :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
+        >
+          {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
+        </nuxt-link>
+      </template>
+    </external-search-table-wrapper>
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
 export default {
   components: { ExternalSearchTableWrapper },
-  data() {
-    return {
-      items: [],
-      count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
-      headers: [
-        { text: this.$t('drillcore.id'), value: 'id' },
-        { text: this.$t('drillcore.name'), value: 'drillcore' },
-        { text: this.$t('drillcore.depth'), value: 'depth' },
-        { text: this.$t('drillcore.boxes'), value: 'boxes' },
-        { text: this.$t('drillcore.boxNumbers'), value: 'box_numbers' },
-        { text: this.$t('drillcore.storage'), value: 'storage__location' },
-        { text: this.$t('drillcore.year'), value: 'year' },
-        { text: this.$t('drillcore.acronym'), value: 'acronym' },
-      ],
-      queryFields: {
-        drillcore: () =>
-          this.$i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
-        depth: () => 'depth',
-        boxes: () => 'boxes',
-        box_numbers: () => 'box_numbers',
-        storage__location: () => 'storage__location',
-        year: () => 'year',
-        remarks: () => 'remarks',
-      },
-    }
-  },
   computed: {
     ...mapState('landing', ['search']),
+    ...mapState('drillcore', ['options', 'items', 'count', 'headers']),
+    translatedHeaders() {
+      return this.headers.map((header) => {
+        return {
+          ...header,
+          text: this.$t(header.text),
+        }
+      })
+    },
   },
   created() {
     this.$store.subscribe((mutation, _) => {
@@ -74,18 +45,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions('drillcore', ['searchDrillcores']),
     async handleUpdate(options) {
-      const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
-        'drillcore',
-        {
-          ...options,
-          search: this.search,
-          queryFields: this.queryFields,
-        }
-      )
-      this.options = options
-      this.items = drillcoreResponse.items
-      this.count = drillcoreResponse.count
+      await this.searchDrillcores(options.tableOptions)
     },
   },
 }
