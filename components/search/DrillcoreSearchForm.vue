@@ -22,7 +22,7 @@
     <range-search-field
       v-model="boxes"
       :min="0"
-      :max="100"
+      :max="150"
       :label="$t(search.byIds.boxes.label)"
     />
   </v-form>
