@@ -261,11 +261,13 @@ export default {
                   async (tab) =>
                     await app.$populateCount(tab, {
                       solr: {
-                        default: { fq: `locality_id:${drillcore.locality_id}` },
+                        default: {
+                          fq: `locality_id :${drillcore.locality_id}`,
+                        },
                       },
                       api: {
                         default: { locality: drillcore.locality_id },
-                        attachment__link: {
+                        attachment_link: {
                           or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
                         },
                       },
