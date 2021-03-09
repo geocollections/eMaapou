@@ -35,8 +35,7 @@
 <script>
 import { debounce, isEmpty } from 'lodash'
 import Tabs from '@/components/Tabs'
-import { mapActions } from 'vuex'
-
+import { mapFields } from 'vuex-map-fields'
 export default {
   components: { Tabs },
   // layout: 'search',
@@ -100,18 +99,15 @@ export default {
       }
     } catch (err) {}
   },
-  data() {
-    return {
-      search: '',
-    }
-  },
   head() {
     return {
       title: this.$t('search.pageTitle'),
     }
   },
+  computed: {
+    ...mapFields('landing', ['search']),
+  },
   methods: {
-    ...mapActions('landing', ['updateSearch']),
     handleSearch: debounce(async function () {
       const forLoop = async () => {
         const filteredTabs = this.tabs.filter((item) => !!item.id)
@@ -127,7 +123,6 @@ export default {
       await forLoop()
 
       this.$refs.tabs.$refs.tabs.callSlider()
-      this.updateSearch(this.search)
     }, 500),
   },
 }
