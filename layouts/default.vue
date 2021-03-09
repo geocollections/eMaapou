@@ -2,7 +2,7 @@
   <v-app dark>
     <v-main>
       <app-header />
-      <v-container fluid>
+      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <nuxt />
         <link-to-edit-fab v-if="isDetail" />
         <scroll-top-fab class="fab-container ma-3" />
