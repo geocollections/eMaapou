@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <external-search-table-wrapper
-      :external-search="search"
-      :items="items"
-      :headers="translatedHeaders"
-      :count="count"
-      :init-options="options"
-      @update="handleUpdate"
-    >
-      <template #item.drillcore="{ item }">
-        <nuxt-link
-          class="text-link"
-          :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
-        >
-          {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
-        </nuxt-link>
-      </template>
-    </external-search-table-wrapper>
-  </div>
+  <external-search-table-wrapper
+    :external-search="search"
+    :items="items"
+    :headers="translatedHeaders"
+    :count="count"
+    :init-options="options"
+    @update="handleUpdate"
+  >
+    <template #item.drillcore="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
+      >
+        {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
+      </nuxt-link>
+    </template>
+  </external-search-table-wrapper>
 </template>
 
 <script>
