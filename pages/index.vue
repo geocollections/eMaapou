@@ -192,7 +192,7 @@ export default {
           lg: 3,
         },
         allIds: [
-          // 'ema',
+          'ema',
           // 'localities',
           // 'drillcores',
           // 'samples',
