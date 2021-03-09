@@ -332,7 +332,6 @@ import Tabs from '@/components/Tabs'
 import LeafletMap from '@/components/LeafletMap'
 export default {
   components: { LinkDataRow, DataRow, Tabs, LeafletMap },
-  layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(

@@ -141,7 +141,6 @@ import LinkDataRow from '~/components/LinkDataRow.vue'
 
 export default {
   components: { Tabs, DataRow, LinkDataRow },
-  layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(

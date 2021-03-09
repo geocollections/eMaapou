@@ -241,7 +241,6 @@ import PrevNextNav from '~/components/PrevNextNav.vue'
 
 export default {
   components: { Tabs, BoxImageLoader, DataRow, LinkDataRow, PrevNextNav },
-  layout: 'detail',
   async asyncData({ $axios, params, route, error, app }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(

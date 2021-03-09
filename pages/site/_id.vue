@@ -294,7 +294,6 @@ import Tabs from '~/components/Tabs.vue'
 
 export default {
   components: { Tabs, LeafletMap },
-  layout: 'detail',
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
