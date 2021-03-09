@@ -80,7 +80,7 @@ const buildQueryParameter = (search) => {
     s = `"${search}"`
   }
   return {
-    q: isEmpty(s) ? '*' : `${encodeURIComponent(s)}*`,
+    q: isEmpty(s) ? '*' : `${s}`,
   }
 }
 
