@@ -102,24 +102,21 @@ const buildFilterQueryParameter = (filters) => {
             const textArray = encodedValue.split(' ')
 
             const paramArray = textArray.map((str) => {
-              return `*${str.trim()}*`
+              switch (searchParameter.lookUpType) {
+                case 'contains':
+                  return `*${encodedValue}*`
+                case 'equals':
+                  return `"${encodedValue}"`
+                case 'startsWith':
+                  return `${encodedValue}*`
+                case 'endsWith':
+                  return `*${encodedValue}`
+                default:
+                  return `${fieldId}:${encodedValue}`
+              }
             })
 
             return `${fieldId}:(${paramArray.join(' AND ')})`
-            // switch (searchParameter.lookUpType) {
-            //   case "contains":
-            //     return `${fieldId}:*${encodedValue}*`;
-            //   case "equals":
-            //     return `${fieldId}:"${encodedValue}"`;
-            //   case "startsWith":
-            //     return `${fieldId}:${encodedValue}*`;
-            //   case "endsWith":
-            //     return `${fieldId}:*${encodedValue}`;
-            //   case "notContains":
-            //     return `-${fieldId}:*${encodedValue}*`;
-            //   default:
-            //     return `${fieldId}:${encodedValue}`;
-            // }
           }
 
           switch (searchParameter.type) {
