@@ -41,13 +41,7 @@
 import tableMixin from '~/mixins/tableMixin'
 
 export default {
-  name: 'TableWrapper',
+  name: 'ExternalSearchTableWrapper',
   mixins: [tableMixin],
-  props: {
-    externalSearch: {
-      type: String,
-      default: '',
-    },
-  },
 }
 </script>

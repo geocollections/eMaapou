@@ -1,6 +1,5 @@
 <template>
   <external-search-table-wrapper
-    :external-search="search"
     :items="items"
     :headers="translatedHeaders"
     :count="count"
