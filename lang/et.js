@@ -392,4 +392,8 @@ export default {
     pageTitle: 'About',
     title: 'Mis on e·Maapõu?',
   },
+  map: {
+    estonian_geoportal: 'Maa-ameti kaart',
+    google_maps: 'Google Maps',
+  },
 }
