@@ -70,13 +70,6 @@ export default {
       })
     },
   },
-  created() {
-    this.$store.subscribe((mutation, _) => {
-      if (mutation.type === 'landing/updateSearch') {
-        this.handleUpdate({ ...this.options, search: mutation.payload })
-      }
-    })
-  },
   methods: {
     ...mapActions('drillcore', ['searchDrillcores']),
 

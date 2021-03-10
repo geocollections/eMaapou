@@ -94,15 +94,12 @@ export default {
       })
     },
   },
-  created() {
-    this.$store.subscribe((mutation, _) => {
-      if (
-        mutation.type === 'landing/updateField' &&
-        mutation.payload.path === 'search'
-      ) {
-        this.handleUpdate({ ...this.options, search: mutation.payload.value })
-      }
-    })
+  watch: {
+    search: {
+      handler(value) {
+        this.handleUpdate({ ...this.options, search: value })
+      },
+    },
   },
   methods: {
     ...mapActions('analysis', ['quickSearchAnalyses']),

@@ -49,12 +49,5 @@ export default {
       default: '',
     },
   },
-  watch: {
-    externalSearch: {
-      handler(newValue) {
-        this.options.page = 1
-      },
-    },
-  },
 }
 </script>
