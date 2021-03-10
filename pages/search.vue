@@ -37,7 +37,7 @@ import { mapFields } from 'vuex-map-fields'
 export default {
   components: { ButtonTabs },
   // layout: 'search',
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, store }) {
     try {
       const tabs = [
         {
@@ -89,11 +89,23 @@ export default {
           props: {},
         },
       ]
+
       return {
         initActiveTab: route.path,
         tabs: orderBy(
           await Promise.all(
-            tabs.map(async (tab) => await app.$hydrateCount(tab))
+            tabs.map(
+              async (tab) =>
+                await app.$hydrateCount(tab, {
+                  solr: {
+                    default: {
+                      q: isEmpty(store.state.landing.search)
+                        ? '*'
+                        : `${store.state.landing.search}`,
+                    },
+                  },
+                })
+            )
           ),
           ['count'],
           ['desc']
