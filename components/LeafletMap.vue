@@ -7,6 +7,9 @@
         :options="options"
         :zoom="11"
         :center="[center.latitude, center.longitude]"
+        @baselayerchange="handleBaseLayerChange"
+        @overlayadd="handleOverlayAdd"
+        @overlayremove="handleOverlayRemove"
       >
         <l-control-layers />
         <l-control-fullscreen position="topleft" />
@@ -48,29 +51,17 @@
         >
           <l-popup>{{ marker.text }}</l-popup>
         </l-circle-marker>
+
+        <map-legend
+          :active-base-layer="activeBaseLayer"
+          :active-overlays="activeOverlays"
+        />
       </l-map>
-      <div class="text-right">
-        <span class="google-map">
-          <a
-            :href="`https://www.google.com/maps/?q=${center.latitude},${center.longitude}`"
-            :title="`https://www.google.com/maps/?q=${center.latitude},${center.longitude}`"
-            target="_blank"
-            >Google Maps</a
-          >
-        </span>
-        <span> | </span>
-        <span class="xgis2">
-          <a
-            :href="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
-              center.latitude,
-              center.longitude
-            )}&moot=20000&tooltip=test`"
-            title="Estonian Geoportal"
-            target="_blank"
-            >Estonian Geoportal</a
-          >
-        </span>
-      </div>
+      <map-links
+        :latitude="center.latitude"
+        :longitude="center.longitude"
+        :tooltip="markers[0].text"
+      />
     </div>
     <template #placeholder>
       <div
@@ -89,8 +80,11 @@
 </template>
 
 <script>
+import MapLegend from '~/components/map/MapLegend'
+import MapLinks from '~/components/map/MapLinks'
 export default {
   name: 'LeafletMap',
+  components: { MapLinks, MapLegend },
   props: {
     height: {
       type: Number,
@@ -127,6 +121,8 @@ export default {
           duration: 1000,
         },
       },
+      activeBaseLayer: this.isEstonian ? 'Estonian map' : 'OpenStreetMap',
+      activeOverlays: [],
       layers: {
         base: [
           {
@@ -237,53 +233,18 @@ export default {
     },
   },
   methods: {
-    geoToLest(north, east) {
-      const LAT = north * (Math.PI / 180)
-      const LON = east * (Math.PI / 180)
-      const a = 6378137.0
-      let F = 298.257222100883
-      const RF = F
-      F = 1 / F
-      const B0 = (57.0 + 31.0 / 60.0 + 3.194148 / 3600.0) * (Math.PI / 180)
-      const L0 = 24.0 * (Math.PI / 180)
-      const FN = 6375000.0
-      const FE = 500000.0
-      const B1 = (59.0 + 20.0 / 60.0) * (Math.PI / 180)
-      const B2 = 58.0 * (Math.PI / 180)
-      // let xx = north - FN;
-      // let yy = east - FE;
-      const f1 = 1 / RF
-      const er = 2.0 * f1 - f1 * f1
-      let e = Math.sqrt(er)
-      const t1 = Math.sqrt(
-        ((1.0 - Math.sin(B1)) / (1.0 + Math.sin(B1))) *
-          Math.pow((1.0 + e * Math.sin(B1)) / (1.0 - e * Math.sin(B1)), e)
-      )
-      const t2 = Math.sqrt(
-        ((1.0 - Math.sin(B2)) / (1.0 + Math.sin(B2))) *
-          Math.pow((1.0 + e * Math.sin(B2)) / (1.0 - e * Math.sin(B2)), e)
-      )
-      const t0 = Math.sqrt(
-        ((1.0 - Math.sin(B0)) / (1.0 + Math.sin(B0))) *
-          Math.pow((1.0 + e * Math.sin(B0)) / (1.0 - e * Math.sin(B0)), e)
-      )
-      const t = Math.sqrt(
-        ((1.0 - Math.sin(LAT)) / (1.0 + Math.sin(LAT))) *
-          Math.pow((1.0 + e * Math.sin(LAT)) / (1.0 - e * Math.sin(LAT)), e)
-      )
-      const m1 =
-        Math.cos(B1) / Math.pow(1.0 - er * Math.sin(B1) * Math.sin(B1), 0.5)
-      const m2 =
-        Math.cos(B2) / Math.pow(1.0 - er * Math.sin(B2) * Math.sin(B2), 0.5)
-      let n = (Math.log(m1) - Math.log(m2)) / (Math.log(t1) - Math.log(t2))
-      const FF = m1 / (n * Math.pow(t1, n))
-      const p0 = a * FF * Math.pow(t0, n)
-      const FII = n * (LON - L0)
-      const p = a * FF * Math.pow(t, n)
-      n = p0 - p * Math.cos(FII) + FN
-      e = p * Math.sin(FII) + FE
+    handleBaseLayerChange(event) {
+      this.activeBaseLayer = event.name
+    },
 
-      return [n, e]
+    handleOverlayAdd(event) {
+      if (!this.activeOverlays.includes(event.name))
+        this.activeOverlays.push(event.name)
+    },
+
+    handleOverlayRemove(event) {
+      const index = this.activeOverlays.indexOf(event.name)
+      if (index > -1) this.activeOverlays.splice(index, 1)
     },
   },
 }
