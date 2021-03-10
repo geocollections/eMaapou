@@ -28,7 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <external-search-table-wrapper
+        <table-wrapper
+          :show-search="false"
           :items="items"
           :headers="translatedHeaders"
           :count="count"
@@ -43,7 +44,7 @@
               {{ item.id }}
             </nuxt-link>
           </template>
-        </external-search-table-wrapper>
+        </table-wrapper>
       </v-col>
     </v-row>
   </v-container>
@@ -51,11 +52,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
+import TableWrapper from '@/components/tables/TableWrapper'
 import SiteSearchForm from '@/components/search/SiteSearchForm'
 
 export default {
-  components: { ExternalSearchTableWrapper, SiteSearchForm },
+  components: { TableWrapper, SiteSearchForm },
   computed: {
     ...mapState('landing', ['search']),
     ...mapState('site', ['options', 'items', 'count', 'headers']),

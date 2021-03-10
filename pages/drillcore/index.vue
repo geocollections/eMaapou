@@ -28,7 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <external-search-table-wrapper
+        <table-wrapper
+          :show-search="false"
           :items="items"
           :headers="translatedHeaders"
           :count="count"
@@ -45,7 +46,7 @@
               {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
             </nuxt-link>
           </template>
-        </external-search-table-wrapper>
+        </table-wrapper>
       </v-col>
     </v-row>
   </v-container>
@@ -53,11 +54,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
+import TableWrapper from '@/components/tables/TableWrapper'
 import DrillcoreSearchForm from '@/components/search/DrillcoreSearchForm'
 
 export default {
-  components: { ExternalSearchTableWrapper, DrillcoreSearchForm },
+  components: { TableWrapper, DrillcoreSearchForm },
   computed: {
     ...mapState('landing', ['search']),
     ...mapState('drillcore', ['options', 'items', 'count', 'headers']),

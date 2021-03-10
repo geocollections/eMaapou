@@ -1,5 +1,6 @@
 <template>
-  <external-search-table-wrapper
+  <table-wrapper
+    :show-search="false"
     :items="items"
     :headers="translatedHeaders"
     :count="count"
@@ -14,14 +15,14 @@
         {{ item.id }}
       </nuxt-link>
     </template>
-  </external-search-table-wrapper>
+  </table-wrapper>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
+import TableWrapper from '@/components/tables/TableWrapper'
 export default {
-  components: { ExternalSearchTableWrapper },
+  components: { TableWrapper },
   computed: {
     ...mapState('landing', ['search']),
     ...mapState('site', ['options', 'items', 'count', 'headers']),

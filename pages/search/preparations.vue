@@ -1,6 +1,6 @@
 <template>
-  <external-search-table-wrapper
-    :external-search="search"
+  <table-wrapper
+    :show-search="false"
     :items="items"
     :headers="headers"
     :count="count"
@@ -44,15 +44,15 @@
         {{ $translate({ et: item.stratigraphy, en: item.stratigraphy_en }) }}
       </a>
     </template>
-  </external-search-table-wrapper>
+  </table-wrapper>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 
-import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
+import TableWrapper from '@/components/tables/TableWrapper'
 export default {
-  components: { ExternalSearchTableWrapper },
+  components: { TableWrapper },
   data() {
     return {
       items: [],

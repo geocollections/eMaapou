@@ -5,17 +5,18 @@
     multi-sort
     :headers="headers"
     :items="items"
-    :options.sync="options"
+    :options="showSearch ? options : initOptions"
+    item-key="_version"
     :server-items-length="count"
     :footer-props="footerProps"
     mobile-breakpoint="0"
     @update:options="handleChange"
   >
     <template #no-data>{{ $t('table.noData') }}</template>
-    <template #top="{ pagination, updateOptions }">
+    <template #top="{ pagination }">
       <v-container fluid>
         <v-row>
-          <v-col cols="12" sm="4" class="py-0">
+          <v-col v-if="showSearch" cols="12" sm="4" class="py-0">
             <v-text-field
               v-model="search"
               color="deep-orange darken-2"
@@ -30,10 +31,10 @@
             <v-data-footer
               style="border: none"
               :pagination="pagination"
-              :options="options"
+              :options="showSearch ? options : initOptions"
               :items-per-page-options="footerProps['items-per-page-options']"
               :items-per-page-text="footerProps['items-per-page-text']"
-              @update:options="updateOptions"
+              @update:options="handleChange"
             />
           </v-col>
         </v-row>

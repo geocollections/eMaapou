@@ -28,7 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <external-search-table-wrapper
+        <table-wrapper
+          :show-search="false"
           :items="items"
           :headers="translatedHeaders"
           :count="count"
@@ -63,7 +64,7 @@
                 : null
             }}
           </template>
-        </external-search-table-wrapper>
+        </table-wrapper>
       </v-col>
     </v-row>
   </v-container>
@@ -71,11 +72,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import ExternalSearchTableWrapper from '@/components/tables/ExternalSearchTableWrapper'
+import TableWrapper from '@/components/tables/TableWrapper'
 import SampleSearchForm from '@/components/search/SampleSearchForm'
 
 export default {
-  components: { ExternalSearchTableWrapper, SampleSearchForm },
+  components: { TableWrapper, SampleSearchForm },
   computed: {
     ...mapState('landing', ['search']),
     ...mapState('sample', ['options', 'items', 'count', 'headers']),
