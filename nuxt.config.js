@@ -33,7 +33,7 @@ export default {
     '~plugins/services.js',
     { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.js',
-    '~plugins/populateTabs.js',
+    '~plugins/hydrateTabs.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

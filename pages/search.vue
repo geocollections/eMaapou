@@ -93,7 +93,7 @@ export default {
         initActiveTab: route.path,
         tabs: orderBy(
           await Promise.all(
-            tabs.map(async (tab) => await app.$populateCount(tab))
+            tabs.map(async (tab) => await app.$hydrateCount(tab))
           ),
           ['count'],
           ['desc']
@@ -115,7 +115,7 @@ export default {
         await Promise.all(
           this.tabs.map(
             async (tab) =>
-              await this.$populateCount(tab, {
+              await this.$hydrateCount(tab, {
                 solr: {
                   default: { q: isEmpty(this.search) ? '*' : `${this.search}` },
                 },

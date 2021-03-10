@@ -312,7 +312,7 @@ export default {
           await Promise.all(
             tabs.map(
               async (tab) =>
-                await app.$populateCount(tab, {
+                await app.$hydrateCount(tab, {
                   solr: {
                     default: {
                       fq: `locality_id:${params.id}`,

@@ -1,5 +1,5 @@
 export default ({ app }, inject) => {
-  const populateCount = async (tab, params = {}) => {
+  const hydrateCount = async (tab, params = {}) => {
     if (!tab.id) return tab
 
     if (tab.isSolr) {
@@ -21,6 +21,6 @@ export default ({ app }, inject) => {
     return { ...tab, props }
   }
 
-  inject('populateCount', populateCount)
+  inject('hydrateCount', hydrateCount)
   inject('populateProps', populateProps)
 }

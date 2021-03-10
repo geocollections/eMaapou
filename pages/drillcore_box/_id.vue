@@ -306,7 +306,7 @@ export default {
             ? await Promise.all(
                 tabs.map(
                   async (tab) =>
-                    await app.$populateCount(tab, {
+                    await app.$hydrateCount(tab, {
                       solr: {
                         default: {
                           fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
