@@ -1,9 +1,9 @@
 <template>
-  <v-form>
+  <v-form @submit.prevent="handleSearch">
     <global-search />
     <div class="text-right">
       <reset-search-button @click="handleReset" />
-      <search-button @click="handleSearch" />
+      <search-button />
     </div>
     <text-search-field
       v-model="number"
