@@ -22,6 +22,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    externalOptions: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -35,13 +39,13 @@ export default {
   },
   methods: {
     handleChange(options) {
-      if (this.showSearch) {
+      if (!this.externalOptions) {
         this.options = options
       }
       this.$emit('update', { tableOptions: options, search: this.search })
     },
     handleSearch: debounce(function () {
-      if (this.showSearch) {
+      if (!this.externalOptions) {
         this.options = { ...this.options, page: 1 }
       }
       this.$emit('update', {

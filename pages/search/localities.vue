@@ -1,6 +1,7 @@
 <template>
   <table-wrapper
     :show-search="false"
+    external-options
     :items="items"
     :headers="translatedHeaders"
     :count="count"

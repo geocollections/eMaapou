@@ -5,7 +5,7 @@
     multi-sort
     :headers="headers"
     :items="items"
-    :options="showSearch ? options : initOptions"
+    :options="externalOptions ? initOptions : options"
     item-key="_version"
     :server-items-length="count"
     :footer-props="footerProps"
@@ -31,7 +31,7 @@
             <v-data-footer
               style="border: none"
               :pagination="pagination"
-              :options="showSearch ? options : initOptions"
+              :options="externalOptions ? initOptions : options"
               :items-per-page-options="footerProps['items-per-page-options']"
               :items-per-page-text="footerProps['items-per-page-text']"
               @update:options="handleChange"

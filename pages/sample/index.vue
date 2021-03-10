@@ -29,6 +29,7 @@
       </v-col>
       <v-col cols="9">
         <table-wrapper
+          external-options
           :show-search="false"
           :items="items"
           :headers="translatedHeaders"
