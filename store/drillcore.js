@@ -52,7 +52,7 @@ const getDefaultState = () => {
         boxes: {
           type: 'range',
           lookUpType: 'range',
-          value: [null, null],
+          value: [0, 150],
           label: 'drillcore.boxes',
           placeholders: ['boxes.min', 'boxes.max'],
           fields: ['boxes'],
