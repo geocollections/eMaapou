@@ -392,4 +392,8 @@ export default {
     pageTitle: 'About',
     title: 'What is e·Maapõu?',
   },
+  map: {
+    estonian_geoportal: 'Estonian Geoportal',
+    google_maps: 'Google Maps',
+  },
 }
