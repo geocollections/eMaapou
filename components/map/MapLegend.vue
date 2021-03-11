@@ -1,5 +1,5 @@
 <template>
-  <v-card class="map-legend rounded">
+  <v-card class="map-legend rounded" :style="{ maxHeight: `${maxHeight}px` }">
     <v-card v-if="estBase" flat>
       <v-card-title class="font-weight-bold py-1 text-body-1"
         >Estonian map</v-card-title
@@ -32,6 +32,11 @@ export default {
       required: false,
       default: () => [],
     },
+    height: {
+      type: Number,
+      required: false,
+      default: 150,
+    },
   },
   computed: {
     estBase() {
@@ -39,6 +44,9 @@ export default {
     },
     estHyb() {
       return this.activeOverlays.includes('Estonian hybrid') ? 'est-hyb' : false
+    },
+    maxHeight() {
+      return this.height / 3
     },
   },
 }
@@ -49,9 +57,8 @@ export default {
   position: absolute;
   bottom: 26px;
   right: 10px;
-  z-index: 1001;
+  z-index: 999;
   background: rgba(255, 255, 255, 0.7);
-  max-height: 150px;
   opacity: 0.8;
   overflow-y: auto;
 }
