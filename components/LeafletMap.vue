@@ -5,7 +5,7 @@
         ref="map"
         style="z-index: 0"
         :options="options"
-        :zoom="11"
+        :zoom="mapZoom"
         :center="[center.latitude, center.longitude]"
         @baselayerchange="handleBaseLayerChange"
         @overlayadd="handleOverlayAdd"
@@ -13,6 +13,11 @@
       >
         <l-control-layers />
         <l-control-fullscreen position="topleft" />
+        <l-control-scale
+          position="bottomleft"
+          :metric="true"
+          :imperial="false"
+        />
         <l-tile-layer
           v-for="layer in layers.base"
           :key="layer.id"
@@ -46,15 +51,17 @@
           v-for="(marker, idx) in markers"
           :key="`marker-${idx}`"
           :lat-lng="[marker.latitude, marker.longitude]"
-          :radius="4"
+          :radius="5"
+          :weight="2"
           color="red"
         >
-          <l-popup>{{ marker.text }}</l-popup>
+          <l-tooltip :options="tooltipOptions">{{ marker.text }}</l-tooltip>
         </l-circle-marker>
 
         <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
+          :height="height"
         />
       </l-map>
       <map-links
@@ -120,6 +127,11 @@ export default {
           },
           duration: 1000,
         },
+      },
+      tooltipOptions: {
+        permanent: this.markers.length === 1,
+        direction: 'top',
+        offset: [1, -7],
       },
       activeBaseLayer: this.isEstonian ? 'Estonian map' : 'OpenStreetMap',
       activeOverlays: [],
@@ -207,7 +219,7 @@ export default {
             name: 'Estonian bedrock',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'geocollections:bedrock400k',
-            visible: true,
+            visible: this.isEstonian,
             transparent: true,
             options: {
               attribution:
@@ -224,12 +236,32 @@ export default {
     }
   },
   computed: {
+    computedTileOverlays() {
+      return this.layers.overlay.map((item) => {
+        if (item.id === 'est-bed-overlay')
+          return { ...item, visible: this.isEstonianBedrockVisibleAtAStart }
+        else return item
+      })
+    },
+
+    isEstonianBedrockVisibleAtAStart() {
+      return (
+        this.isEstonian &&
+        (this.$route.name.includes('drillcore-') ||
+          this.$route.name.includes('locality-'))
+      )
+    },
+
+    mapZoom() {
+      return this.isEstonianBedrockVisibleAtAStart ? 9 : 11
+    },
+
     tileOverlays() {
-      return this.layers.overlay.filter((item) => !item.isWMS)
+      return this.computedTileOverlays.filter((item) => !item.isWMS)
     },
 
     wmsOverlays() {
-      return this.layers.overlay.filter((item) => item.isWMS)
+      return this.computedTileOverlays.filter((item) => item.isWMS)
     },
   },
   methods: {
