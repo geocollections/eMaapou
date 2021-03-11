@@ -3,7 +3,7 @@
     :show-search="false"
     external-options
     :items="items"
-    :headers="headers"
+    :headers="translatedHeaders"
     :count="count"
     :init-options="options"
     @update="handleUpdate"
@@ -49,51 +49,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import TableWrapper from '@/components/tables/TableWrapper'
 export default {
   components: { TableWrapper },
-  data() {
-    return {
-      items: [],
-      count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
-      headers: [
-        { text: this.$t('preparation.id'), value: 'id' },
-        {
-          text: this.$t('preparation.preparation_number'),
-          value: 'preparation_number',
-        },
-        { text: this.$t('preparation.locality'), value: 'locality' },
-        { text: this.$t('preparation.depth'), value: 'depth' },
-        {
-          text: this.$t('preparation.stratigraphyAndLithostratigraphy'),
-          value: 'stratigraphy',
-        },
-        { text: this.$t('preparation.agent'), value: 'agent' },
-        { text: this.$t('preparation.mass'), value: 'mass' },
-      ],
-      queryFields: {
-        id: () => 'id',
-        preparation_number: () => 'preparation_number',
-        locality: () =>
-          this.$i18n.locale === 'et' ? 'locality' : 'locality_en',
-        depth: () => 'depth',
-        stratigraphy: () =>
-          this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-        agent: () => 'agent',
-        mass: () => 'mass',
-      },
-    }
-  },
   computed: {
     ...mapState('landing', ['search']),
+    ...mapState('preparation', ['options', 'items', 'count', 'headers']),
+    translatedHeaders() {
+      return this.headers.map((header) => {
+        return {
+          ...header,
+          text: this.$t(header.text),
+        }
+      })
+    },
   },
   watch: {
     search: {
@@ -103,18 +74,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions('preparation', ['quickSearchPreparations']),
     async handleUpdate(options) {
-      const localityResponse = await this.$services.sarvSolr.getResourceList(
-        'preparation',
-        {
-          ...options,
-          search: this.search,
-          queryFields: this.queryFields,
-        }
-      )
-      this.options = options
-      this.items = localityResponse.items
-      this.count = localityResponse.count
+      await this.quickSearchPreparations(options.tableOptions)
     },
   },
 }
