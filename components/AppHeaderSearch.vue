@@ -16,6 +16,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { isEmpty } from 'lodash'
 
 export default {
   name: 'AppHeaderSearch',
@@ -29,9 +30,10 @@ export default {
       const routeName = this.$route.name.includes('search')
         ? this.$route.name.split('__')[0]
         : 'search'
-      this.$router.push(
-        this.localePath({ name: routeName, query: { q: this.search } })
-      )
+      const query = isEmpty(this.search)
+        ? { ...this.$route.query }
+        : { ...this.$route.query, q: this.search }
+      this.$router.push(this.localePath({ name: routeName, query }))
     },
   },
 }

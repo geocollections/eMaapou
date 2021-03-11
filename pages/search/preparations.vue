@@ -73,7 +73,7 @@ export default {
         { text: this.$t('preparation.locality'), value: 'locality' },
         { text: this.$t('preparation.depth'), value: 'depth' },
         {
-          text: this.$t('preparation.stratigraphyAndLithostratigraphy'),
+          text: this.$t('preparation.stratigraphy'),
           value: 'stratigraphy',
         },
         { text: this.$t('preparation.agent'), value: 'agent' },

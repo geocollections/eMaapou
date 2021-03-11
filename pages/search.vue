@@ -24,14 +24,19 @@
     </v-row>
     <v-row justify="center">
       <v-col>
-        <button-tabs ref="tabs" :tabs="tabs" :init-active-tab="initActiveTab" />
+        {{ computedTabs }}
+        <button-tabs ref="tabs" :tabs="computedTabs" />
+
+        <v-card>
+          <nuxt-child />
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { debounce, isEmpty, orderBy } from 'lodash'
+import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
 import ButtonTabs from '@/components/ButtonTabs'
 import { mapFields } from 'vuex-map-fields'
 export default {
@@ -83,6 +88,7 @@ export default {
         {
           id: 'preparation',
           routeName: 'search-preparations',
+          path: '/localities',
           title: 'landing.preparations',
           isSolr: true,
           count: 0,
@@ -91,24 +97,19 @@ export default {
       ]
 
       return {
-        initActiveTab: route.path,
-        tabs: orderBy(
-          await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateCount(tab, {
-                  solr: {
-                    default: {
-                      q: isEmpty(store.state.landing.search)
-                        ? '*'
-                        : `${store.state.landing.search}`,
-                    },
+        tabs: await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$hydrateCount(tab, {
+                solr: {
+                  default: {
+                    q: isEmpty(store.state.landing.search)
+                      ? '*'
+                      : `${store.state.landing.search}`,
                   },
-                })
-            )
-          ),
-          ['count'],
-          ['desc']
+                },
+              })
+          )
         ),
       }
     } catch (err) {}
@@ -120,24 +121,54 @@ export default {
   },
   computed: {
     ...mapFields('landing', ['search']),
+    computedTabs() {
+      // Filtering out empty tabs but still showing active tab whether it is empty or not
+      const filteredTabs = this.tabs.filter(
+        (item) =>
+          item.count > 0 ||
+          this.$route.name.includes(
+            item.id === 'drillcore' ? `${item.routeName}__` : item.routeName
+          )
+      )
+      return orderBy(filteredTabs, ['count'], ['desc'])
+    },
+  },
+  watch: {
+    '$route.query'(newVal, oldVal) {
+      if (!isEqual(newVal, oldVal)) {
+        this.handleSearch()
+      }
+    },
+  },
+  created() {
+    if (this.$route.query) {
+      // Todo: Should deconstruct query params
+      if (!isEmpty(this.$route.query.q)) this.search = this.$route.query.q
+      this.handleSearch()
+    }
   },
   methods: {
     handleSearch: debounce(async function () {
-      this.tabs = orderBy(
-        await Promise.all(
-          this.tabs.map(
-            async (tab) =>
-              await this.$hydrateCount(tab, {
-                solr: {
-                  default: { q: isEmpty(this.search) ? '*' : `${this.search}` },
-                },
-              })
-          )
-        ),
-        ['count'],
-        ['desc']
+      this.tabs = await Promise.all(
+        this.tabs.map(
+          async (tab) =>
+            await this.$hydrateCount(tab, {
+              solr: {
+                default: { q: isEmpty(this.search) ? '*' : `${this.search}` },
+              },
+            })
+        )
       )
+      // this.updateRouteQuery()
     }, 500),
+
+    updateRouteQuery() {
+      const routeName = this.$route.name.includes('search')
+        ? this.$route.name.split('__')[0]
+        : 'search'
+      const query = isEmpty(this.search) ? {} : { q: this.search }
+      this.$router.push(this.localePath({ name: routeName, query }))
+    },
   },
 }
 </script>
