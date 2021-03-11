@@ -22,12 +22,12 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card class="pa-3">
           <drillcore-search-form />
         </v-card>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="12" md="9">
         <table-wrapper
           external-options
           :show-search="false"
