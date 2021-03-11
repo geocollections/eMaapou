@@ -36,8 +36,8 @@ export default {
     samples: 'Proovid',
     analysis: 'Analüüs',
     analyses: 'Analüüsid',
+    sites: 'Vaatluspunktid',
     about: 'Tutvustus',
-
     searchAlt: 'Otsinguks sisesta üks või mitu märksõna, nt Eesti ... ',
   },
   link: {
@@ -225,6 +225,7 @@ export default {
     localityReferences: 'Kirjandus ({number})',
   },
   site: {
+    pageTitle: 'Vaatluspunktide otsing',
     id: 'ID',
     name: 'Nimi',
     area: 'Ala',

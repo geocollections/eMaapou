@@ -24,44 +24,23 @@ const getDefaultState = () => {
     ],
     search: {
       byIds: {
-        name: {
+        id: {
           value: '',
           type: 'text',
           lookUpType: 'contains',
-          label: 'drillcore.name',
-          fields: ['drillcore', 'drillcore_en'],
+          label: 'analysis.id',
+          fields: ['id'],
         },
-        country: {
-          value: '',
-          type: 'text',
-          lookUpType: 'contains',
-          label: 'locality.country',
-          fields: ['country', 'country_en'],
-        },
-        repository: {
-          value: '',
-          type: 'text',
-          lookUpType: 'contains',
-          label: 'drillcore.repository',
-          fields: ['core_repository', 'core_repository_en'],
-        },
-        storage: {
-          value: '',
-          type: 'text',
-          lookUpType: 'contains',
-          label: 'drillcore.storage',
-          fields: ['location'],
-        },
-        boxes: {
+        depth: {
+          value: [-20, 5000],
           type: 'range',
           lookUpType: 'range',
-          value: [0, 150],
-          label: 'drillcore.boxes',
-          placeholders: ['boxes.min', 'boxes.max'],
-          fields: ['boxes'],
+          label: 'analysis.depth',
+          placeholders: ['depth.min', 'depth.max'],
+          fields: ['depth'],
         },
       },
-      allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
+      allIds: ['id', 'depth'],
     },
   }
 }
@@ -92,7 +71,7 @@ export const mutations = {
 }
 
 export const actions = {
-  resetDrillcoreSearch({ commit }) {
+  resetAnalysisSearch({ commit }) {
     commit('RESET_SEARCH')
   },
   async quickSearchAnalyses(

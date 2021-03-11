@@ -36,6 +36,7 @@ export default {
     samples: 'Samples',
     analysis: 'Analysis',
     analyses: 'Analyses',
+    sites: 'Sites',
     about: 'About',
     searchAlt: 'Enter one or more keywords, ex. Estonia ...',
   },
@@ -224,6 +225,7 @@ export default {
     localityReferences: 'References ({number})',
   },
   site: {
+    pageTitle: 'Site search',
     id: 'ID',
     name: 'Name',
     area: 'Area',
