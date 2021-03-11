@@ -19,7 +19,7 @@ const getDefaultState = () => {
       { text: 'preparation.locality', value: 'locality' },
       { text: 'preparation.depth', value: 'depth' },
       {
-        text: 'preparation.stratigraphyAndLithostratigraphy',
+        text: 'preparation.stratigraphy',
         value: 'stratigraphy',
       },
       { text: 'preparation.agent', value: 'agent' },
