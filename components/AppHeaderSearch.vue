@@ -26,8 +26,11 @@ export default {
     ...mapActions('landing', ['updateSearch']),
 
     handleSearch() {
+      const routeName = this.$route.name.includes('search')
+        ? this.$route.name.split('__')[0]
+        : 'search'
       this.$router.push(
-        this.localePath({ name: 'search', query: { q: this.search } })
+        this.localePath({ name: routeName, query: { q: this.search } })
       )
     },
   },
