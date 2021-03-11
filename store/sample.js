@@ -13,6 +13,7 @@ const getDefaultState = () => {
     headers: [
       { text: 'sample.id', value: 'id' },
       { text: 'sample.number', value: 'number' },
+      { text: 'sample.locality', value: 'locality' },
       { text: 'sample.depth', value: 'depth' },
       { text: 'sample.depthInterval', value: 'depth_interval' },
       { text: 'sample.stratigraphy', value: 'stratigraphy' },

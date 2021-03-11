@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
   landing: {
-    searchTitle: 'Quick search',
+    searchTitle: 'Find quickly from e·Maapõu',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -11,7 +11,7 @@ export default {
     preparations: 'Preparations ({number})',
     visit_site: 'View',
     title: 'Geological data and e-services',
-    otherPages: 'Other webservices',
+    otherPages: 'Geological data in other e-services',
   },
   common: {
     general: 'General info',
