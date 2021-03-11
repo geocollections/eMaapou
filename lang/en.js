@@ -11,6 +11,7 @@ export default {
     preparations: 'Preparations ({number})',
     visit_site: 'View',
     title: 'Geological data and e-services',
+    otherPages: 'Other webservices',
   },
   common: {
     general: 'General info',
@@ -36,6 +37,7 @@ export default {
     analysis: 'Analysis',
     analyses: 'Analyses',
     about: 'About',
+    searchAlt: 'Enter one or more keywords, ex. Estonia ...',
   },
   link: {
     sarvAPI: 'Public API',

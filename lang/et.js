@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
   landing: {
-    searchTitle: 'Kiirotsing',
+    searchTitle: 'Leia kiirelt e-Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -11,6 +11,7 @@ export default {
     preparations: 'Preparaadid ({number})',
     visit_site: 'Vaata',
     title: 'Geoloogilised andmed ja e-teenused',
+    otherPages: 'Maapõue info teistes e-teenuses',
   },
   common: {
     general: 'Üldinfo',
@@ -36,6 +37,8 @@ export default {
     analysis: 'Analüüs',
     analyses: 'Analüüsid',
     about: 'Tutvustus',
+
+    searchAlt: 'Otsinguks sisesta üks või mitu märksõna, nt Eesti ... ',
   },
   link: {
     sarvAPI: 'Avalik API',

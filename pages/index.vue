@@ -1,24 +1,60 @@
 <template>
-  <v-row class="my-6" justify="center" align="center">
-    <v-col
-      v-for="(item, index) in cards.allIds"
-      :key="index"
-      class="pa-2"
-      cols="12"
-      :sm="cards[item].sm || 6"
-      :md="cards[item].md || 6"
-    >
-      <card-wrapper
-        :title="cards[item].title"
-        :description="cards[item].description"
-        :link="cards[item].href"
-        :background="cards[item].background"
-      />
-    </v-col>
-  </v-row>
+  <div>
+    <v-row justify="center" align="center">
+      <v-col>
+        <h1 class="text-center">
+          {{ $t('landing.searchTitle') }}
+        </h1>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col sm="7" md="5">
+        <v-text-field
+          v-model="search"
+          dense
+          outlined
+          single-line
+          :autofocus="true"
+          color="deep-orange darken-2"
+          append-icon="mdi-magnify"
+          :label="$t('common.searchAlt')"
+          hide-details
+          clearable
+          @click:append="handleSearch"
+          @keyup.enter="handleSearch"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row justify="center" align="center">
+      <v-col>
+        <h2 class="text-center grey--text text--darken-1">
+          {{ $t('landing.otherPages') }}
+        </h2>
+      </v-col>
+    </v-row>
+    <v-row class="my-6" justify="center" align="center">
+      <v-col
+        v-for="(item, index) in cards.allIds"
+        :key="index"
+        class="pa-2"
+        cols="12"
+        :sm="cards[item].sm || 6"
+        :md="cards[item].md || 6"
+      >
+        <card-wrapper
+          :title="cards[item].title"
+          :description="cards[item].description"
+          :link="cards[item].href"
+          :background="cards[item].background"
+        />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
+import { isEmpty } from 'lodash'
 import CardWrapper from '~/components/CardWrapper'
 export default {
   components: { CardWrapper },
@@ -192,7 +228,7 @@ export default {
           lg: 3,
         },
         allIds: [
-          'ema',
+          // 'ema',
           // 'localities',
           // 'drillcores',
           // 'samples',
@@ -218,6 +254,20 @@ export default {
     return {
       title: this.$t('landing.title'),
     }
+  },
+  computed: {
+    ...mapFields('landing', ['search']),
+  },
+  methods: {
+    handleSearch() {
+      const routeName = this.$route.name.includes('search')
+        ? this.$route.name.split('__')[0]
+        : 'search'
+      const query = isEmpty(this.search)
+        ? { ...this.$route.query }
+        : { ...this.$route.query, q: this.search }
+      this.$router.push(this.localePath({ name: routeName, query }))
+    },
   },
 }
 </script>

@@ -13,9 +13,11 @@
           v-model="search"
           dense
           outlined
+          single-line
+          :autofocus="true"
           color="deep-orange darken-2"
           append-icon="mdi-magnify"
-          :label="$t('common.search')"
+          :label="$t('common.searchAlt')"
           hide-details
           clearable
           @input="handleSearch"
