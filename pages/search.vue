@@ -24,7 +24,6 @@
     </v-row>
     <v-row justify="center">
       <v-col>
-        {{ computedTabs }}
         <button-tabs ref="tabs" :tabs="computedTabs" />
 
         <v-card>
