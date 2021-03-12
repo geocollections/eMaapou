@@ -143,8 +143,8 @@ export default {
   },
   created() {
     if (this.$route.query) {
-      // Todo: Should deconstruct query params
-      if (!isEmpty(this.$route.query.q)) this.search = this.$route.query.q
+      // Todo: Should deconstruct query params (page?, paginate? sort?)
+      if (!isEmpty(this.$route.query?.q)) this.search = this.$route.query.q
       this.handleSearch()
     }
   },
