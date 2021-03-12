@@ -1,4 +1,5 @@
-# ema
+# e-Maapõu
+Web application to provide access of geological data, and link to other resources and e-services in Estonia.
 
 ## Build Setup
 
