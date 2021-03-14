@@ -11,6 +11,7 @@ const getDefaultState = () => {
       sortDesc: [],
     },
     headers: [
+      { text: 'drillcore.id', value: 'id' },
       { text: 'drillcore.name', value: 'drillcore' },
       { text: 'drillcore.depth', value: 'depth' },
       { text: 'drillcore.boxes', value: 'boxes' },

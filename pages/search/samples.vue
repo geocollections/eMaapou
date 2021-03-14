@@ -9,20 +9,20 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openNuxtWindow('sample-id', { id: item.id })"
+        :to="localePath({ name: 'sample-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.number="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openNuxtWindow('sample-id', { id: item.id })"
+        :to="localePath({ name: 'sample-id', params: { id: item.id } })"
       >
         {{ item.number }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.stratigraphy="{ item }">
       <a

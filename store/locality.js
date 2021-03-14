@@ -11,6 +11,7 @@ const getDefaultState = () => {
       sortDesc: [],
     },
     headers: [
+      { text: 'locality.id', value: 'id' },
       { text: 'locality.name', value: 'locality' },
       { text: 'locality.country', value: 'country' },
       { text: 'locality.latitude', value: 'latitude' },
