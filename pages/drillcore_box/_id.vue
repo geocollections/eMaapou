@@ -2,6 +2,12 @@
   <v-row>
     <v-col>
       <h1 class="text-center py-3 page-title">
+        {{
+          $translate({
+            et: drillcoreBox.drillcore__drillcore,
+            en: drillcoreBox.drillcore__drillcore_en,
+          })
+        }},
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
       </h1>
       <prev-next-nav />

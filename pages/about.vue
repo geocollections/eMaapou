@@ -33,13 +33,13 @@ export default {
 <style scoped>
 .aboutpage {
   padding: 20px;
-  border-top: solid 1px #6a76ab;
-  border-bottom: solid 1px #6a76ab;
+  /* border-top: solid 1px #6a76ab;
+  border-bottom: solid 1px #6a76ab; */
 }
 
 .aboutpage > div {
-  max-width: 700px;
+  max-width: 800px;
   margin: 0 auto;
-  text-align: justify;
+  text-align: left;
 }
 </style>
