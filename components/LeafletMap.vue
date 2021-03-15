@@ -58,11 +58,11 @@
           <l-tooltip :options="tooltipOptions">{{ marker.text }}</l-tooltip>
         </l-circle-marker>
 
-        <map-legend
+        <!-- <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
           :height="height"
-        />
+        />-->
       </l-map>
       <map-links
         :latitude="center.latitude"
@@ -87,11 +87,11 @@
 </template>
 
 <script>
-import MapLegend from '~/components/map/MapLegend'
+// import MapLegend from '~/components/map/MapLegend'
 import MapLinks from '~/components/map/MapLinks'
 export default {
   name: 'LeafletMap',
-  components: { MapLinks, MapLegend },
+  components: { MapLinks },
   props: {
     height: {
       type: Number,

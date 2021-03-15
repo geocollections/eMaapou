@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
   landing: {
-    searchTitle: 'Quick search',
+    searchTitle: 'Find quickly from e·Maapõu',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -11,7 +11,7 @@ export default {
     preparations: 'Preparations ({number})',
     visit_site: 'View',
     title: 'Geological data and e-services',
-    otherPages: 'Other webservices',
+    otherPages: 'Geological data in other e-services',
   },
   common: {
     general: 'General info',
@@ -120,7 +120,7 @@ export default {
   drillcoreBox: {
     id: 'ID',
     drillcore: 'Drillcore',
-    nr: 'Box nr. {number}',
+    nr: 'Box {number}',
     depthStart: 'Start (m)',
     depthEnd: 'End (m)',
     depthOther: 'Depth info',
@@ -347,7 +347,7 @@ export default {
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Geological Reports',
+    description: 'Geological Survey Report Archive',
   },
   fossiilid: {
     title: 'Baltoscandian Fossils',
@@ -362,8 +362,8 @@ export default {
     description: 'Estonian Commission on Stratigraphy',
   },
   maardlad: {
-    title: 'Mineral Deposits',
-    description: 'Environmental Register',
+    title: 'Land Board Data',
+    description: 'Maps and Registry of Mineral Deposits',
   },
   turba: {
     title: 'TURBA',

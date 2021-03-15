@@ -2,9 +2,7 @@
   <div>
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-center">
-          {{ $t('landing.searchTitle') }}
-        </h1>
+        <h1 class="text-center my-3">{{ $t('landing.searchTitle') }}:</h1>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -28,7 +26,7 @@
     <v-row justify="center" align="center">
       <v-col>
         <h2 class="text-center grey--text text--darken-1">
-          {{ $t('landing.otherPages') }}
+          {{ $t('landing.otherPages') }}:
         </h2>
       </v-col>
     </v-row>
@@ -73,7 +71,7 @@ export default {
         kirjandus: {
           title: 'kirjandus.title',
           description: 'kirjandus.description',
-          href: 'https://geoloogia.info',
+          href: 'https://kirjandus.geoloogia.info',
           background: require('~/assets/frontpage/geokirjandus.jpg'),
           sm: 6,
           md: 4,

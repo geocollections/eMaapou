@@ -11,13 +11,16 @@ const getDefaultState = () => {
       sortDesc: [],
     },
     headers: [
+      { text: 'drillcore.id', value: 'id' },
       { text: 'drillcore.name', value: 'drillcore' },
       { text: 'drillcore.depth', value: 'depth' },
       { text: 'drillcore.boxes', value: 'boxes' },
       { text: 'drillcore.boxNumbers', value: 'box_numbers' },
-      { text: 'drillcore.storage', value: 'location' },
       { text: 'drillcore.year', value: 'year' },
-      { text: 'drillcore.remarks', value: 'remarks' },
+      { text: 'drillcore.storage', value: 'core_repository' },
+      { text: 'drillcore.acronym', value: 'acronym' },
+
+      // { text: 'drillcore.remarks', value: 'remarks' },
     ],
     search: {
       byIds: {

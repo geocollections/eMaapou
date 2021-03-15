@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0">
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-center">
+        <h1 class="text-center my-3">
           {{ $t('landing.searchTitle') }}
         </h1>
       </v-col>

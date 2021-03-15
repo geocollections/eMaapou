@@ -7,20 +7,20 @@
     @update="handleUpdate"
   >
     <template #item.id="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openNuxtWindow('analysis-id', { id: item.id })"
+        :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.sample_number="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openNuxtWindow('sample-id', { id: item.sample_id })"
+        :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
         {{ item.sample_number }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.thickness="{ item }">
       {{

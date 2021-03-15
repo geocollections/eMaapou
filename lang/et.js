@@ -2,7 +2,7 @@ export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
   landing: {
-    searchTitle: 'Leia kiirelt e-Maapõuest',
+    searchTitle: 'Leia kiirelt e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -11,7 +11,7 @@ export default {
     preparations: 'Preparaadid ({number})',
     visit_site: 'Vaata',
     title: 'Geoloogilised andmed ja e-teenused',
-    otherPages: 'Maapõue info teistes e-teenuses',
+    otherPages: 'Geoloogilised andmed teistes e-teenustes',
   },
   common: {
     general: 'Üldinfo',
@@ -120,7 +120,7 @@ export default {
   drillcoreBox: {
     id: 'ID',
     drillcore: 'Puursüdamik',
-    nr: 'Kast nr {number}',
+    nr: 'kast {number}',
     depthStart: 'Algus (m)',
     depthEnd: 'Lõpp (m)',
     depthOther: 'Muud sügavused',
@@ -347,7 +347,7 @@ export default {
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Geoloogiliste aruannete digiarhiiv',
+    description: 'Aruannete digiarhiiv Geoloogiateenistuses',
   },
   fossiilid: {
     title: 'Fossiilid',
