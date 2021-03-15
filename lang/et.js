@@ -120,7 +120,7 @@ export default {
   drillcoreBox: {
     id: 'ID',
     drillcore: 'Puursüdamik',
-    nr: 'Kast nr {number}',
+    nr: 'kast {number}',
     depthStart: 'Algus (m)',
     depthEnd: 'Lõpp (m)',
     depthOther: 'Muud sügavused',
@@ -347,7 +347,7 @@ export default {
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Geoloogiliste aruannete digiarhiiv',
+    description: 'Aruannete digiarhiiv Geoloogiateenistuses',
   },
   fossiilid: {
     title: 'Fossiilid',
