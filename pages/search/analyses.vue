@@ -12,7 +12,9 @@
 <script>
 import { mapState } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
+import { debounce } from 'lodash'
 import { ANALYSIS } from '~/constants'
+
 export default {
   components: { AnalysisTable },
   data() {
@@ -27,9 +29,9 @@ export default {
   },
   watch: {
     search: {
-      handler(value) {
+      handler: debounce(function (value) {
         this.handleUpdate({ tableOptions: { ...this.options }, search: value })
-      },
+      }, 500),
     },
   },
   methods: {

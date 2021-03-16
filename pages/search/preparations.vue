@@ -11,6 +11,7 @@
 <script>
 import { mapState } from 'vuex'
 import PreparationTable from '@/components/tables/PreparationTable'
+import { debounce } from 'lodash'
 import { PREPARATION } from '~/constants'
 
 export default {
@@ -27,9 +28,9 @@ export default {
   },
   watch: {
     search: {
-      handler(value) {
+      handler: debounce(function (value) {
         this.handleUpdate({ tableOptions: { ...this.options }, search: value })
-      },
+      }, 500),
     },
   },
   methods: {

@@ -10,8 +10,10 @@
 
 <script>
 import { mapState } from 'vuex'
+import { debounce } from 'lodash'
 import SampleTable from '~/components/tables/SampleTable.vue'
 import { SAMPLE } from '~/constants'
+
 export default {
   components: { SampleTable },
   data() {
@@ -26,9 +28,9 @@ export default {
   },
   watch: {
     search: {
-      handler(value) {
+      handler: debounce(function (value) {
         this.handleUpdate({ tableOptions: { ...this.options }, search: value })
-      },
+      }, 500),
     },
   },
   methods: {
