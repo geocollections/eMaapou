@@ -34,6 +34,7 @@ export default {
     { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.js',
     '~plugins/hydrateTabs.js',
+    '~plugins/getQueryFields.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

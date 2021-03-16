@@ -5,13 +5,13 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="id" :label="$t(search.byIds.id.label)" />
+    <text-search-field v-model="id" :label="$t(filters.byIds.id.label)" />
     <!-- TODO: Get min and max dynamically -->
     <range-search-field
       v-model="depth"
       :min="-20"
       :max="5000"
-      :label="$t(search.byIds.depth.label)"
+      :label="$t(filters.byIds.depth.label)"
     />
   </v-form>
 </template>
@@ -36,18 +36,18 @@ export default {
     SearchButton,
   },
   computed: {
-    ...mapState('analysis', ['search']),
+    ...mapState('analysis', ['filters']),
     ...mapFields('analysis', {
-      id: 'search.byIds.id.value',
-      depth: 'search.byIds.depth.value',
+      id: 'filters.byIds.id.value',
+      depth: 'filters.byIds.depth.value',
     }),
   },
   methods: {
-    ...mapActions('analysis', ['searchAnalyses', 'resetAnalysisSearch']),
+    ...mapActions('analysis', ['searchAnalyses', 'resetAnalysisFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {
       this.resetSearch()
-      this.resetAnalysisSearch()
+      this.resetAnalysisFilters()
       this.searchAnalyses()
     },
     handleSearch(e) {

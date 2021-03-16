@@ -20,6 +20,11 @@ import ScrollTopFab from '~/components/ScrollTopFab.vue'
 
 export default {
   components: { AppHeader, AppFooter, ScrollTopFab, LinkToEditFab },
+  data() {
+    return {
+      includeList: ['AnalysisSearch'],
+    }
+  },
   computed: {
     isDetail() {
       const detailViewRouteNames = [

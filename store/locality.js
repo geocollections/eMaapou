@@ -1,23 +1,12 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { LOCALITY } from '~/constants'
 
 const getDefaultState = () => {
   return {
     items: [],
     count: 0,
-    options: {
-      page: 1,
-      itemsPerPage: 25,
-      sortBy: [],
-      sortDesc: [],
-    },
-    headers: [
-      { text: 'locality.id', value: 'id' },
-      { text: 'locality.name', value: 'locality' },
-      { text: 'locality.country', value: 'country' },
-      { text: 'locality.latitude', value: 'latitude' },
-      { text: 'locality.longitude', value: 'longitude' },
-    ],
-    search: {
+    options: LOCALITY.options,
+    filters: {
       byIds: {
         name: {
           value: '',
@@ -56,36 +45,30 @@ export const mutations = {
   SET_OPTIONS(state, options) {
     state.options = options
   },
-  RESET_SEARCH(state) {
+  RESET_FILTERS(state) {
     const defaultState = getDefaultState()
 
-    state.search = defaultState.search
+    state.filters = defaultState.filters
     state.options = { ...state.options, page: defaultState.options.page }
   },
 }
 
 export const actions = {
-  resetLocalitySearch({ commit }) {
-    commit('RESET_SEARCH')
+  resetLocalityFilters({ commit }) {
+    commit('RESET_FILTERS')
   },
   async quickSearchLocalities(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      locality: () => (this.$i18n.locale === 'et' ? 'locality' : 'locality_en'),
-      country: () => (this.$i18n.locale === 'et' ? 'country' : 'country_en'),
-    }
 
     const localityResponse = await this.$services.sarvSolr.getResourceList(
       'locality',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
+        queryFields: this.$getQueryFields(LOCALITY.queryFields),
         searchFilters: {},
       }
     )
@@ -97,20 +80,14 @@ export const actions = {
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      locality: () => (this.$i18n.locale === 'et' ? 'locality' : 'locality_en'),
-      country: () => (this.$i18n.locale === 'et' ? 'country' : 'country_en'),
-    }
 
     const localityResponse = await this.$services.sarvSolr.getResourceList(
       'locality',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
-        searchFilters: state.search.byIds,
+        queryFields: this.$getQueryFields(LOCALITY.queryFields),
+        searchFilters: state.filters.byIds,
       }
     )
     commit('SET_ITEMS', localityResponse.items)

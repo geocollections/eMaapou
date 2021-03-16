@@ -1,28 +1,12 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { DRILLCORE } from '~/constants'
 
 const getDefaultState = () => {
   return {
     items: [],
     count: 0,
-    options: {
-      page: 1,
-      itemsPerPage: 25,
-      sortBy: [],
-      sortDesc: [],
-    },
-    headers: [
-      { text: 'drillcore.id', value: 'id' },
-      { text: 'drillcore.name', value: 'drillcore' },
-      { text: 'drillcore.depth', value: 'depth' },
-      { text: 'drillcore.boxes', value: 'boxes' },
-      { text: 'drillcore.boxNumbers', value: 'box_numbers' },
-      { text: 'drillcore.year', value: 'year' },
-      { text: 'drillcore.storage', value: 'core_repository' },
-      { text: 'drillcore.acronym', value: 'acronym' },
-
-      // { text: 'drillcore.remarks', value: 'remarks' },
-    ],
-    search: {
+    options: DRILLCORE.options,
+    filters: {
       byIds: {
         name: {
           value: '',
@@ -83,41 +67,30 @@ export const mutations = {
   SET_OPTIONS(state, options) {
     state.options = options
   },
-  RESET_SEARCH(state) {
+  RESET_FILTERS(state) {
     const defaultState = getDefaultState()
 
-    state.search = defaultState.search
+    state.filters = defaultState.filters
     state.options = { ...state.options, page: defaultState.options.page }
   },
 }
 
 export const actions = {
-  resetDrillcoreSearch({ commit }) {
-    commit('RESET_SEARCH')
+  resetDrillcoreFilters({ commit }) {
+    commit('RESET_FILTERS')
   },
   async quickSearchDrillcores(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    const queryFields = {
-      drillcore: () =>
-        this.$i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
-      depth: () => 'depth',
-      boxes: () => 'boxes',
-      box_numbers: () => 'box_numbers',
-      storage__location: () => 'storage__location',
-      year: () => 'year',
-      remarks: () => 'remarks',
-    }
 
     const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
       'drillcore',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
+        queryFields: this.$getQueryFields(DRILLCORE.queryFields),
         searchFilters: {},
       }
     )
@@ -129,25 +102,14 @@ export const actions = {
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    const queryFields = {
-      drillcore: () =>
-        this.$i18n.locale === 'et' ? 'drillcore' : 'drillcore_en',
-      depth: () => 'depth',
-      boxes: () => 'boxes',
-      box_numbers: () => 'box_numbers',
-      storage__location: () => 'storage__location',
-      year: () => 'year',
-      remarks: () => 'remarks',
-    }
 
     const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
       'drillcore',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
-        searchFilters: state.search.byIds,
+        queryFields: this.$getQueryFields(DRILLCORE.queryFields),
+        searchFilters: state.filters.byIds,
       }
     )
     commit('SET_ITEMS', drillcoreResponse.items)

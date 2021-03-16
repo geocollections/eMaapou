@@ -1,19 +1,18 @@
 <template>
-  <table-wrapper
+  <stratotype-table
     :items="synonyms"
-    :headers="headers"
     :count="count"
-    :init-options="options"
+    :options="options"
     @update="handleUpdate"
-  >
-  </table-wrapper>
+  />
 </template>
 
 <script>
 import { isNil } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import StratotypeTable from '~/components/tables/StratotypeTable.vue'
+import { SYNONYM } from '~/constants'
 export default {
-  components: { TableWrapper },
+  components: { StratotypeTable },
   props: {
     locality: {
       type: Number,
@@ -24,25 +23,7 @@ export default {
     return {
       synonyms: [],
       count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-      },
-      headers: [
-        { text: this.$t('localitySynonym.synonym'), value: 'synonym' },
-        { text: this.$t('localitySynonym.pages'), value: 'pages' },
-        {
-          text: this.$t('localitySynonym.reference'),
-          value: 'reference__reference',
-        },
-        { text: this.$t('localitySynonym.remarks'), value: 'remarks' },
-      ],
-      queryFields: {
-        synonym: () => 'synonym',
-        pages: () => 'pages',
-        reference__reference: () => 'reference__reference',
-        remarks: () => 'remarks',
-      },
+      options: SYNONYM.options,
     }
   },
   methods: {
@@ -55,7 +36,7 @@ export default {
           defaultParams: {
             locality: this.locality,
           },
-          queryFields: this.queryFields,
+          queryFields: this.$getQueryFields(SYNONYM.queryFields),
         }
       )
       this.synonyms = synonymResponse.items

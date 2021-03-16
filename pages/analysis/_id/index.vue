@@ -1,19 +1,18 @@
 <template>
-  <table-wrapper
-    :headers="headers"
-    :items="analyses"
-    :init-options="options"
+  <analysis-result-table
+    :items="attachments"
     :count="count"
+    :options="options"
     @update="handleUpdate"
-  >
-  </table-wrapper>
+  />
 </template>
 
 <script>
 import { round, isNil } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { ANALYSIS_RESULT } from '~/constants'
+import AnalysisResultTable from '~/components/tables/AnalysisResultTable.vue'
 export default {
-  components: { TableWrapper },
+  components: { AnalysisResultTable },
   props: {
     analysis: {
       type: Number,
@@ -22,32 +21,15 @@ export default {
   },
   data() {
     return {
-      analyses: [],
+      analysisResults: [],
       count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: ['value'],
-        sortDesc: [true],
-      },
-      headers: [
-        { text: this.$t('analysisResult.parameter'), value: 'parameter' },
-        { text: this.$t('analysisResult.value'), value: 'value' },
-        { text: this.$t('analysisResult.valueText'), value: 'value_txt' },
-        { text: this.$t('analysisResult.valueError'), value: 'value_error' },
-      ],
-      queryFields: {
-        parameter: () => 'parameter',
-        value: () => 'value',
-        value_txt: () => 'value_txt',
-        value_error: () => 'value_error',
-      },
+      options: ANALYSIS_RESULT.options,
     }
   },
   methods: {
     round,
     async handleUpdate(options) {
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
+      const analysisResultResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
           ...options,
@@ -55,12 +37,12 @@ export default {
           defaultParams: {
             fq: `analysis_id:${this.analysis}`,
           },
-          queryFields: this.queryFields,
+          queryFields: this.$getQueryFields(ANALYSIS_RESULT.queryFields),
         }
       )
 
-      this.analyses = analysisResponse.items
-      this.count = analysisResponse.count
+      this.analysisResults = analysisResultResponse.items
+      this.count = analysisResultResponse.count
     },
   },
 }

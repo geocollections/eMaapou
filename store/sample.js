@@ -1,26 +1,12 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { SAMPLE } from '~/constants'
 
 const getDefaultState = () => {
   return {
     items: [],
     count: 0,
-    options: {
-      page: 1,
-      itemsPerPage: 25,
-      sortBy: [],
-      sortDesc: [],
-    },
-    headers: [
-      { text: 'sample.id', value: 'id' },
-      { text: 'sample.number', value: 'number' },
-      { text: 'sample.locality', value: 'locality' },
-      { text: 'sample.depth', value: 'depth' },
-      { text: 'sample.depthInterval', value: 'depth_interval' },
-      { text: 'sample.stratigraphy', value: 'stratigraphy' },
-      { text: 'sample.collector', value: 'collector' },
-      { text: 'sample.dateCollected', value: 'date_collected' },
-    ],
-    search: {
+    options: SAMPLE.options,
+    filters: {
       byIds: {
         number: {
           value: '',
@@ -67,42 +53,30 @@ export const mutations = {
   SET_OPTIONS(state, options) {
     state.options = options
   },
-  RESET_SEARCH(state) {
+  RESET_FILTERS(state) {
     const defaultState = getDefaultState()
 
-    state.search = defaultState.search
+    state.filters = defaultState.filters
     state.options = { ...state.options, page: defaultState.options.page }
   },
 }
 
 export const actions = {
-  resetSampleSearch({ commit }) {
-    commit('RESET_SEARCH')
+  resetSampleFilters({ commit }) {
+    commit('RESET_FILTERS')
   },
   async quickSearchSamples(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      id: () => 'id',
-      number: () => 'number',
-      depth: () => 'depth',
-      depth_interval: () => 'depth_interval',
-      stratigraphy: () =>
-        this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-      collector: () => 'collector',
-      date_collected: () => 'date_collected',
-    }
 
     const sampleResponse = await this.$services.sarvSolr.getResourceList(
       'sample',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
+        queryFields: this.$getQueryFields(SAMPLE.queryFields),
         searchFilters: {},
       }
     )
@@ -114,26 +88,14 @@ export const actions = {
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      id: () => 'id',
-      number: () => 'number',
-      depth: () => 'depth',
-      depth_interval: () => 'depth_interval',
-      stratigraphy: () =>
-        this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-      collector: () => 'collector',
-      date_collected: () => 'date_collected',
-    }
 
     const sampleResponse = await this.$services.sarvSolr.getResourceList(
       'sample',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
-        searchFilters: state.search.byIds,
+        queryFields: this.$getQueryFields(SAMPLE.queryFields),
+        searchFilters: state.filters.byIds,
       }
     )
     commit('SET_ITEMS', sampleResponse.items)

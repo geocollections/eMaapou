@@ -1,52 +1,49 @@
 <template>
-  <table-wrapper
+  <site-table
     :show-search="false"
-    external-options
     :items="items"
-    :headers="translatedHeaders"
     :count="count"
-    :init-options="options"
+    :options="options"
     @update="handleUpdate"
-  >
-    <template #item.id="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'site-id', params: { id: item.id } })"
-      >
-        {{ item.id }}
-      </nuxt-link>
-    </template>
-  </table-wrapper>
+  />
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import TableWrapper from '@/components/tables/TableWrapper'
+import { mapState } from 'vuex'
+import { SITE } from '~/constants'
+import SiteTable from '~/components/tables/SiteTable.vue'
 export default {
-  components: { TableWrapper },
+  components: { SiteTable },
+  data() {
+    return {
+      options: SITE.options,
+      items: [],
+      count: 0,
+    }
+  },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('site', ['options', 'items', 'count', 'headers']),
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        }
-      })
-    },
   },
   watch: {
     search: {
       handler(value) {
-        this.handleUpdate({ ...this.options, search: value })
+        this.handleUpdate({ tableOptions: { ...this.options }, search: value })
       },
     },
   },
   methods: {
-    ...mapActions('site', ['quickSearchSites']),
     async handleUpdate(options) {
-      await this.quickSearchSites(options.tableOptions)
+      const sampleResponse = await this.$services.sarvSolr.getResourceList(
+        'site',
+        {
+          tableOptions: options.tableOptions,
+          search: this.search,
+          queryFields: this.$getQueryFields(SITE.queryFields),
+          searchFilters: {},
+        }
+      )
+      this.items = sampleResponse.items
+      this.count = sampleResponse.count
     },
   },
 }

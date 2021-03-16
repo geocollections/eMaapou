@@ -28,26 +28,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
-        <table-wrapper
-          external-options
+        <drillcore-table
           :show-search="false"
           :items="items"
-          :headers="translatedHeaders"
           :count="count"
-          :init-options="options"
+          :options="options"
           @update="handleUpdate"
-        >
-          <template #item.drillcore="{ item }">
-            <nuxt-link
-              class="text-link"
-              :to="
-                localePath({ name: 'drillcore-id', params: { id: item.id } })
-              "
-            >
-              {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
-            </nuxt-link>
-          </template>
-        </table-wrapper>
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -55,11 +42,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import TableWrapper from '@/components/tables/TableWrapper'
 import DrillcoreSearchForm from '@/components/search/DrillcoreSearchForm'
+import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 
 export default {
-  components: { TableWrapper, DrillcoreSearchForm },
+  components: { DrillcoreSearchForm, DrillcoreTable },
   head() {
     return {
       title: this.$t('drillcore.pageTitle'),
@@ -67,19 +54,10 @@ export default {
   },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('drillcore', ['options', 'items', 'count', 'headers']),
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        }
-      })
-    },
+    ...mapState('drillcore', ['options', 'items', 'count']),
   },
   methods: {
     ...mapActions('drillcore', ['searchDrillcores']),
-
     async handleUpdate(options) {
       await this.searchDrillcores(options.tableOptions)
     },

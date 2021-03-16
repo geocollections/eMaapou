@@ -1,10 +1,11 @@
 <template>
   <table-wrapper
+    v-bind="{ showSearch, externalOptions }"
     :headers="headers"
-    :items="analyses"
+    :items="items"
     :init-options="options"
     :count="count"
-    @update="handleUpdate"
+    v-on="$listeners"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -55,34 +56,40 @@
 </template>
 
 <script>
-import { round, isNil } from 'lodash'
+import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   name: 'AnalysisTable',
   components: { TableWrapper },
   props: {
-    searchField: {
-      type: Object,
-      default: null,
-      validator: (obj) => {
-        return (
-          typeof obj === 'object' &&
-          obj.key !== undefined &&
-          obj.value !== undefined
-        )
-      },
+    showSearch: {
+      type: Boolean,
+      default: true,
     },
-  },
-  data() {
-    return {
-      analyses: [],
-      count: 0,
-      options: {
+    externalOptions: {
+      type: Boolean,
+      default: false,
+    },
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+    options: {
+      type: Object,
+      default: () => ({
         page: 1,
         itemsPerPage: 25,
         sortBy: [],
         sortDesc: [],
-      },
+      }),
+    },
+  },
+  data() {
+    return {
       headers: [
         { text: this.$t('analysis.id'), value: 'id' },
         { text: this.$t('analysis.sampleNumber'), value: 'sample_number' },
@@ -97,38 +104,10 @@ export default {
         { text: this.$t('analysis.analysedBy'), value: 'agent' },
         { text: this.$t('analysis.date'), value: 'date' },
       ],
-      queryFields: {
-        id: () => 'id',
-        sample_number: () => 'sample_number',
-        depth: () => 'depth',
-        depth_interval: () => 'depth_interval',
-        method: () =>
-          this.$i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en',
-        method_details: () =>
-          this.$i18n.locale === 'et' ? 'method_details' : 'method_details_en',
-        agent: () => 'agent',
-        date: () => 'date',
-      },
     }
   },
   methods: {
     round,
-    async handleUpdate(options) {
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          ...options,
-          isValid: isNil(this.searchField.value),
-          defaultParams: {
-            fq: `${this.searchField.key}:${this.searchField.value}`,
-          },
-          queryFields: this.queryFields,
-        }
-      )
-
-      this.analyses = analysisResponse.items
-      this.count = analysisResponse.count
-    },
   },
 }
 </script>

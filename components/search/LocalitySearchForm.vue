@@ -5,11 +5,11 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="name" :label="$t(search.byIds.name.label)" />
+    <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
 
     <text-search-field
       v-model="country"
-      :label="$t(search.byIds.country.label)"
+      :label="$t(filters.byIds.country.label)"
     />
   </v-form>
 </template>
@@ -32,21 +32,21 @@ export default {
     SearchButton,
   },
   computed: {
-    ...mapState('locality', ['search']),
+    ...mapState('locality', ['filters']),
     ...mapFields('locality', {
-      name: 'search.byIds.name.value',
-      country: 'search.byIds.country.value',
+      name: 'filters.byIds.name.value',
+      country: 'filters.byIds.country.value',
     }),
   },
   methods: {
-    ...mapActions('locality', ['searchLocalities', 'resetLocalitySearch']),
+    ...mapActions('locality', ['searchLocalities', 'resetLocalityFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {
       this.searchLocalities()
     },
     handleReset(e) {
       this.resetSearch()
-      this.resetLocalitySearch()
+      this.resetLocalityFilters()
       this.searchLocalities()
     },
   },

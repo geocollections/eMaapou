@@ -28,27 +28,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
-        <table-wrapper
-          external-options
+        <locality-table
           :show-search="false"
           :items="items"
-          :headers="translatedHeaders"
           :count="count"
-          :init-options="options"
+          :options="options"
           @update="handleUpdate"
-        >
-          <template #item.locality="{ item }">
-            <nuxt-link
-              class="text-link"
-              :to="localePath({ name: 'locality-id', params: { id: item.id } })"
-            >
-              {{ $translate({ et: item.locality, en: item.locality_en }) }}
-            </nuxt-link>
-          </template>
-          <template #item.country="{ item }">
-            {{ $translate({ et: item.country, en: item.country_en }) }}
-          </template>
-        </table-wrapper>
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -56,11 +42,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import TableWrapper from '@/components/tables/TableWrapper'
 import LocalitySearchForm from '@/components/search/LocalitySearchForm'
+import LocalityTable from '~/components/tables/LocalityTable.vue'
 
 export default {
-  components: { TableWrapper, LocalitySearchForm },
+  components: { LocalityTable, LocalitySearchForm },
   head() {
     return {
       title: this.$t('locality.pageTitle'),
@@ -68,19 +54,10 @@ export default {
   },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('locality', ['options', 'items', 'count', 'headers']),
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        }
-      })
-    },
+    ...mapState('locality', ['options', 'items', 'count']),
   },
   methods: {
     ...mapActions('locality', ['searchLocalities']),
-
     async handleUpdate(options) {
       await this.searchLocalities(options.tableOptions)
     },

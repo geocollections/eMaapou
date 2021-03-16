@@ -109,15 +109,15 @@ const buildFilterQueryParameter = (filters) => {
             const paramArray = textArray.map((str) => {
               switch (searchParameter.lookUpType) {
                 case 'contains':
-                  return `*${encodedValue}*`
+                  return `*${str}*`
                 case 'equals':
-                  return `"${encodedValue}"`
+                  return `"${str}"`
                 case 'startsWith':
-                  return `${encodedValue}*`
+                  return `${str}*`
                 case 'endsWith':
-                  return `*${encodedValue}`
+                  return `*${str}`
                 default:
-                  return `${fieldId}:${encodedValue}`
+                  return `${fieldId}:${str}`
               }
             })
 
@@ -136,7 +136,7 @@ const buildFilterQueryParameter = (filters) => {
               const end = isNil(searchParameter.value[1])
                 ? '*'
                 : searchParameter.value[1]
-              return `(${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *]))`
+              return `${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *])`
             }
             case 'checkbox': {
               const encodedValue = encodeURIComponent(searchParameter.value)
@@ -152,7 +152,7 @@ const buildFilterQueryParameter = (filters) => {
             }
             case 'text': {
               return encodeURIComponent(
-                buildTextParameter(searchParameter.value, fieldId)
+                `${buildTextParameter(searchParameter.value, fieldId)}`
               )
             }
             default:
@@ -166,8 +166,8 @@ const buildFilterQueryParameter = (filters) => {
       }, '')
 
       if (filterQueryParam === null) return `${prev}`
-      if (prev.length > 0) return `${prev} AND ${filterQueryParam}`
-      return `${prev}${filterQueryParam}`
+      if (prev.length > 0) return `${prev} AND (${filterQueryParam})`
+      return `${prev}(${filterQueryParam})`
     }, '')
   return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
 }

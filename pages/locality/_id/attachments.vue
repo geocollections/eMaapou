@@ -1,16 +1,44 @@
 <template>
   <attachment-table
-    :search-field="{ key: 'or_search', value: computedValue }"
+    :items="attachments"
+    :count="count"
+    :options="options"
+    @update="handleUpdate"
   />
 </template>
 
 <script>
 import AttachmentTable from '@/components/tables/AttachmentTable'
+
+import { ATTACHMENT } from '~/constants'
 export default {
   components: { AttachmentTable },
-  computed: {
-    computedValue() {
-      return `locality:${this.$route.params.id}`
+  data() {
+    return {
+      attachments: [],
+      count: 0,
+      options: {
+        page: 1,
+        itemsPerPage: 25,
+        sortBy: [],
+        sortDesc: [],
+      },
+    }
+  },
+  methods: {
+    async handleUpdate(options) {
+      const attachmentResponse = await this.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          ...options,
+          defaultParams: {
+            locality: `${this.$route.params.id}`,
+          },
+          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
+        }
+      )
+      this.attachments = attachmentResponse.items
+      this.count = attachmentResponse.count
     },
   },
 }

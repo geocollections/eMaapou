@@ -1,10 +1,11 @@
 <template>
   <table-wrapper
+    v-bind="{ showSearch, externalOptions }"
     :headers="headers"
-    :items="samples"
+    :items="items"
     :init-options="options"
     :count="count"
-    @update="handleUpdate"
+    v-on="$listeners"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -42,39 +43,55 @@
           : null
       }}
     </template>
+    <template #item.locality="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality_id } })
+        "
+      >
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
+      </nuxt-link>
+    </template>
   </table-wrapper>
 </template>
 
 <script>
-import { round, isNil } from 'lodash'
+import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 
 export default {
   name: 'SampleTable',
   components: { TableWrapper },
   props: {
-    searchField: {
-      type: Object,
-      default: null,
-      validator: (obj) => {
-        return (
-          typeof obj === 'object' &&
-          obj.key !== undefined &&
-          obj.value !== undefined
-        )
-      },
+    showSearch: {
+      type: Boolean,
+      default: true,
     },
-  },
-  data() {
-    return {
-      samples: [],
-      count: 0,
-      options: {
+    externalOptions: {
+      type: Boolean,
+      default: false,
+    },
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+    options: {
+      type: Object,
+      default: () => ({
         page: 1,
         itemsPerPage: 25,
         sortBy: [],
         sortDesc: [],
-      },
+      }),
+    },
+  },
+  data() {
+    return {
       headers: [
         { text: this.$t('sample.id'), value: 'id' },
         { text: this.$t('sample.number'), value: 'number' },
@@ -84,35 +101,10 @@ export default {
         { text: this.$t('sample.collector'), value: 'collector' },
         { text: this.$t('sample.dateCollected'), value: 'date_collected' },
       ],
-      queryFields: {
-        id: () => 'id',
-        number: () => 'number',
-        depth: () => 'depth',
-        depth_interval: () => 'depth_interval',
-        stratigraphy: () =>
-          this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-        collector: () => 'collector',
-        date_collected: () => 'date_collected',
-      },
     }
   },
   methods: {
     round,
-    async handleUpdate(options) {
-      const sampleResponse = await this.$services.sarvSolr.getResourceList(
-        'sample',
-        {
-          ...options,
-          isValid: isNil(this.searchField.value),
-          defaultParams: {
-            fq: `${this.searchField.key}:${this.searchField.value}`,
-          },
-          queryFields: this.queryFields,
-        }
-      )
-      this.samples = sampleResponse.items
-      this.count = sampleResponse.count
-    },
   },
 }
 </script>

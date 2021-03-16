@@ -14,8 +14,8 @@ const getSortByParams = (options, queryFields) => {
   if (options?.sortBy && options?.sortDesc) {
     if (!isEmpty(options.sortBy)) {
       const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `-${queryFields[field]()}`
-        return queryFields[field]()
+        if (options.sortDesc[i]) return `-${queryFields[field]}`
+        return queryFields[field]
       })
 
       return { order_by: orderBy.join(',') }
@@ -40,7 +40,7 @@ export default ($axios) => ({
     let multiSearch
     if (!isEmpty(search))
       multiSearch = `value:${search};fields:${Object.values(queryFields)
-        .map((field) => field())
+        .map((field) => field)
         .join()};lookuptype:icontains`
 
     const params = {
