@@ -11,42 +11,82 @@
       <v-card flat tile>
         <v-row>
           <v-col cols="12" md="6">
-            <v-card-text>
+            <v-card-text class="text-center">
               <client-only>
                 <template #placeholder>
                   <box-image-loader height="400" />
                 </template>
-                <v-hover v-slot="{ hover }">
-                  <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
-                  <v-img
-                    class="my-4 transition-swing cursor-pointer rounded"
-                    :class="{
-                      'elevation-8': hover,
-                      'elevation-4': !hover,
-                    }"
-                    :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"
-                    :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
-                    max-width="1000"
-                    @click="$openImage(file.uuid_filename)"
+
+                <!-- Image -->
+                <template v-if="isImage">
+                  <v-hover v-slot="{ hover }">
+                    <v-img
+                      class="my-4 transition-swing cursor-pointer rounded mx-auto"
+                      height="706"
+                      width="200"
+                      :class="{
+                        'elevation-8': hover,
+                        'elevation-4': !hover,
+                      }"
+                      :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"
+                      :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
+                      max-width="1000"
+                      @click="$openImage(file.uuid_filename)"
+                    >
+                      <template #placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                  </v-hover>
+                </template>
+
+                <!-- Audio -->
+                <audio v-else-if="isAudio" controls>
+                  <source
+                    :src="`https://files.geocollections.info/${file.uuid_filename}`"
+                  />
+                  Your browser does not support the audio element.
+                  <v-icon>mdi-file-music-outline</v-icon>
+                </audio>
+
+                <!-- Video -->
+                <video v-else-if="isVideo" controls>
+                  <source
+                    :src="`https://files.geocollections.info/${file.uuid_filename}`"
+                  />
+                  Your browser does not support the video element.
+                  <v-icon>mdi-file-video-outline</v-icon>
+                </video>
+
+                <!-- File -->
+                <div
+                  v-else
+                  class="file-download rounded deep-orange--text"
+                  @click="
+                    $openWindow(
+                      `https://files.geocollections.info/${file.uuid_filename}`
+                    )
+                  "
+                >
+                  <v-icon large color="deep-orange darken-2"
+                    >mdi-file-download-outline</v-icon
                   >
-                    <template #placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-hover>
+                  {{ $t('file.download') }}
+                </div>
               </client-only>
 
               <div
                 class="d-flex justify-center flex-column justify-md-space-between flex-md-row"
+                :class="{ 'mt-4': !isImage }"
               >
                 <div class="text-center text-md-left">
                   <div v-if="file.author__agent || file.author_free">
@@ -76,6 +116,12 @@
                       @click="$openImage(file.uuid_filename, size)"
                     >
                       {{ $t(`common.${size}`) }}
+                      <v-icon
+                        v-if="size === 'original'"
+                        small
+                        color="deep-orange darken-2"
+                        >mdi-file-download-outline</v-icon
+                      >
                     </a>
                     <span v-if="index < imageSizes.length - 1">| </span>
                   </span>
@@ -165,6 +211,23 @@
                       "
                     />
                     <data-row
+                      :title="$t('file.imageNumber')"
+                      :value="file.image_number"
+                    />
+                    <data-row
+                      :title="$t('file.imagesetNumber')"
+                      :value="file.imageset__imageset_number"
+                    />
+                    <data-row
+                      :title="$t('file.type')"
+                      :value="
+                        $translate({
+                          et: file.type__value,
+                          en: file.type__value_en,
+                        })
+                      "
+                    />
+                    <data-row
                       :title="$t('file.format')"
                       :value="file.attachment_format__value"
                     />
@@ -176,10 +239,53 @@
                       :title="$t('file.date')"
                       :value="file.date_created || file.date_created_free"
                     />
+                    <data-row
+                      :title="$t('file.keywords')"
+                      :value="attachmentKeywords"
+                    >
+                      <template #value>
+                        <ul
+                          v-for="(item, index) in attachmentKeywords"
+                          :key="index"
+                        >
+                          <li>{{ item.keyword__keyword }}</li>
+                        </ul>
+                      </template>
+                    </data-row>
                     <link-data-row
                       :title="$t('file.filename')"
                       :value="file.uuid_filename"
                       @link-click="$openImage(file.uuid_filename)"
+                    />
+                    <data-row
+                      :title="$t('file.imagePlace')"
+                      :value="file.image_place"
+                    />
+                    <link-data-row
+                      :title="$t('file.locality')"
+                      :value="
+                        $translate({
+                          et: file.locality__locality,
+                          en: file.locality__locality_en,
+                        })
+                      "
+                      @link-click="$openGeoDetail('locality', file.locality)"
+                    />
+                    <data-row
+                      :title="$t('file.imageLatitude')"
+                      :value="file.image_latitude"
+                    />
+                    <data-row
+                      :title="$t('file.imageLongitude')"
+                      :value="file.image_longitude"
+                    />
+                    <data-row
+                      :title="$t('file.personDigitised')"
+                      :value="file.agent_digitised__agent"
+                    />
+                    <data-row
+                      :title="$t('file.dateDigitised')"
+                      :value="file.date_digitised || file.date_digitised_free"
                     />
                     <data-row
                       :title="$t('file.imageSize')"
@@ -219,6 +325,30 @@
                   </tbody>
                 </template>
               </v-simple-table>
+
+              <v-card v-if="showMap" id="map-wrap" elevation="0" height="300">
+                <v-card-title class="pl-0">{{
+                  $t('locality.map')
+                }}</v-card-title>
+                <leaflet-map
+                  :is-estonian="mapIsEstonian"
+                  :height="300"
+                  :center="{
+                    latitude: mapLatitude,
+                    longitude: mapLongitude,
+                  }"
+                  :markers="[
+                    {
+                      latitude: mapLatitude,
+                      longitude: mapLongitude,
+                      text: $translate({
+                        et: mapLocality,
+                        en: mapLocalityEn,
+                      }),
+                    },
+                  ]"
+                />
+              </v-card>
             </v-card-text>
           </v-col>
         </v-row>
@@ -237,9 +367,10 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 import Tabs from '@/components/Tabs'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
+import LeafletMap from '~/components/LeafletMap'
 
 export default {
-  components: { Tabs, BoxImageLoader, DataRow, LinkDataRow },
+  components: { LeafletMap, Tabs, BoxImageLoader, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
@@ -274,6 +405,16 @@ export default {
         specimenIdentificationGeology =
           specimenIdentificationGeologyResponse.items
       }
+      const attachmentKeywordsResponse = await app.$services.sarvREST.getResourceList(
+        'attachment_keyword',
+        {
+          isValid: isNil(file.id),
+          defaultParams: {
+            attachment: file.id,
+          },
+        }
+      )
+      const attachmentKeywords = attachmentKeywordsResponse.items
 
       const tabs = [
         {
@@ -418,6 +559,7 @@ export default {
         file,
         specimenIdentification,
         specimenIdentificationGeology,
+        attachmentKeywords,
         initActiveTab: route.path,
         tabs: (
           await Promise.all(
@@ -450,11 +592,6 @@ export default {
         message: `Cannot find file ${route.params.id}`,
         path: route.path,
       })
-    }
-  },
-  data() {
-    return {
-      imageSizes: ['small', 'medium', 'large', 'original'],
     }
   },
   head() {
@@ -494,6 +631,65 @@ export default {
         return `${this.file.image_width} × ${this.file.image_height} px`
       } else return null
     },
+
+    isImage() {
+      return this.file.attachment_format__value.includes('image')
+    },
+
+    isAudio() {
+      return this.file.attachment_format__value.includes('audio')
+    },
+
+    isVideo() {
+      return this.file.attachment_format__value.includes('video')
+    },
+
+    imageSizes() {
+      let sizes = ['small', 'medium', 'large', 'original']
+      if (!this.isImage) sizes = ['original']
+      return sizes
+    },
+
+    showMap() {
+      return (
+        (this.file.locality__latitude && this.file.locality__longitude) ||
+        (this.file.image_latitude && this.file.image_longitude) ||
+        (this.file.specimen__locality__latitude &&
+          this.file.specimen__locality__longitude)
+      )
+    },
+
+    mapIsEstonian() {
+      return (
+        this.file.locality__country__value === 'Eesti' ||
+        this.file.specimen__locality__country__value === 'Eesti'
+      )
+    },
+
+    mapLatitude() {
+      return (
+        this.file.locality__latitude || this.file.specimen__locality__latitude
+      )
+    },
+
+    mapLongitude() {
+      return (
+        this.file.locality__longitude || this.file.specimen__locality__longitude
+      )
+    },
+
+    mapLocality() {
+      return (
+        this.file.locality__locality || this.file.specimen__locality__locality
+      )
+    },
+
+    mapLocalityEn() {
+      return (
+        this.file.locality__locality_en ||
+        this.file.specimen__locality__locality_en
+      )
+    },
   },
   methods: {
     isNull,
@@ -501,3 +697,25 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+video {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.file-download {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-style: dashed;
+  background-color: #eee;
+  border-color: #5c6598;
+  transition: opacity 200ms ease;
+}
+
+.file-download:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+</style>

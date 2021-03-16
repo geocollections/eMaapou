@@ -47,6 +47,7 @@ export default ({ app }, inject) => {
 
   const openEdit = (table, id) => {
     if (table && id) {
+      if (table === 'file') table = 'attachment'
       window.open(
         `${EDIT_URL}/${table}/${id}`,
         'EditWindow',
