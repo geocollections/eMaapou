@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr v-if="value">
     <td>{{ title }}</td>
     <td v-if="isInvalid" class="no-value">
       {{ $t('common.noValue') }}
