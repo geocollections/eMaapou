@@ -16,12 +16,12 @@
       </nuxt-link>
     </template>
     <template #item.sample_number="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openNuxtWindow('sample-id', { id: item.sample_id })"
+        :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
         {{ item.sample_number }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.thickness="{ item }">
       {{

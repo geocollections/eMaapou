@@ -5,8 +5,8 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s | e·Maapõu',
-    title: 'e·Maapõu',
+    titleTemplate: '%s | e-Maapõu',
+    title: 'e-Maapõu',
     htmlAttrs: {
       lang: 'en',
     },
@@ -17,7 +17,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'e·Maapõu is web portal for geoscience data from Estonia. It provides direct saerch capabilities to information system SARV and links to other relevant data sources',
+          'e-Maapõu is web portal for geoscience data from Estonia. It provides direct saerch capabilities to information system SARV and links to other relevant data sources',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

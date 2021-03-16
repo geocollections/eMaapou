@@ -120,7 +120,7 @@ export default {
   drillcoreBox: {
     id: 'ID',
     drillcore: 'Drillcore',
-    nr: 'Box nr. {number}',
+    nr: 'Box {number}',
     depthStart: 'Start (m)',
     depthEnd: 'End (m)',
     depthOther: 'Depth info',
@@ -347,7 +347,7 @@ export default {
   },
   fond: {
     title: 'Geoloogiafond',
-    description: 'Geological Reports',
+    description: 'Geological Survey Report Archive',
   },
   fossiilid: {
     title: 'Baltoscandian Fossils',
@@ -362,8 +362,8 @@ export default {
     description: 'Estonian Commission on Stratigraphy',
   },
   maardlad: {
-    title: 'Mineral Deposits',
-    description: 'Environmental Register',
+    title: 'Land Board Data',
+    description: 'Maps and Registry of Mineral Deposits',
   },
   turba: {
     title: 'TURBA',
