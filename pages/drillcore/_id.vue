@@ -102,6 +102,7 @@
                             en: drillcore.locality__locality_en,
                           })
                         "
+                        nuxt
                         :href="
                           localePath({
                             name: 'locality-id',
