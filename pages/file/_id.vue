@@ -22,8 +22,6 @@
                   <v-hover v-slot="{ hover }">
                     <v-img
                       class="my-4 transition-swing cursor-pointer rounded mx-auto"
-                      height="706"
-                      width="200"
                       :class="{
                         'elevation-8': hover,
                         'elevation-4': !hover,
