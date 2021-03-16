@@ -28,23 +28,13 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <table-wrapper
+        <site-table
           :show-search="false"
           :items="items"
-          :headers="translatedHeaders"
           :count="count"
-          :init-options="options"
+          :options="options"
           @update="handleUpdate"
-        >
-          <template #item.id="{ item }">
-            <nuxt-link
-              class="text-link"
-              :to="localePath({ name: 'site-id', params: { id: item.id } })"
-            >
-              {{ item.id }}
-            </nuxt-link>
-          </template>
-        </table-wrapper>
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -52,11 +42,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import TableWrapper from '@/components/tables/TableWrapper'
 import SiteSearchForm from '@/components/search/SiteSearchForm'
+import SiteTable from '~/components/tables/SiteTable.vue'
 
 export default {
-  components: { TableWrapper, SiteSearchForm },
+  components: { SiteSearchForm, SiteTable },
   head() {
     return {
       title: this.$t('site.pageTitle'),
@@ -64,7 +54,7 @@ export default {
   },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('site', ['options', 'items', 'count', 'headers']),
+    ...mapState('site', ['options', 'items', 'count']),
     translatedHeaders() {
       return this.headers.map((header) => {
         return {

@@ -1,10 +1,11 @@
 <template>
   <table-wrapper
+    v-bind="{ showSearch, externalOptions }"
     :headers="headers"
-    :items="specimens"
+    :items="items"
     :init-options="options"
     :count="count"
-    @update="handleUpdate"
+    v-on="$listeners"
   >
     <template #item.id="{ item }">
       <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
@@ -52,36 +53,41 @@
 </template>
 
 <script>
-import { round, isNil } from 'lodash'
+import { round } from 'lodash'
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
 export default {
   name: 'SpecimenTable',
   components: { TableWrapper, ImageCell },
   props: {
-    searchField: {
-      type: Object,
-      default: null,
-      validator: (obj) => {
-        return (
-          typeof obj === 'object' &&
-          obj.key !== undefined &&
-          obj.value !== undefined
-        )
-      },
+    showSearch: {
+      type: Boolean,
+      default: true,
     },
-  },
-  data() {
-    return {
-      specimens: [],
-      count: 0,
-      options: {
+    externalOptions: {
+      type: Boolean,
+      default: false,
+    },
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+    options: {
+      type: Object,
+      default: () => ({
         page: 1,
         itemsPerPage: 25,
         sortBy: [],
         sortDesc: [],
-      },
-
+      }),
+    },
+  },
+  data() {
+    return {
       headers: [
         { text: this.$t('specimen.id'), value: 'id' },
         { text: this.$t('specimen.number'), value: 'specimen_number' },
@@ -91,40 +97,12 @@ export default {
         { text: this.$t('specimen.kind'), value: 'kind' },
         { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
         { text: this.$t('specimen.taxon'), value: 'taxon' },
-        { text: this.$t('specimen.image'), value: 'image' },
+        { text: this.$t('specimen.image'), value: 'image', sortable: false },
       ],
-      queryFields: {
-        id: () => 'id',
-        specimen_number: () => 'specimen_number',
-        depth: () => 'depth',
-        depth_interval: () => 'depth_interval',
-        fossilgroup: () => 'fossilgroup',
-        kind: () =>
-          this.$i18n.locale === 'et' ? 'specimen_kind' : 'specimen_kind_en',
-        stratigraphy: () =>
-          this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-        taxon: () => 'taxon',
-      },
     }
   },
   methods: {
     round,
-    async handleUpdate(options) {
-      const specimenResponse = await this.$services.sarvSolr.getResourceList(
-        'specimen',
-        {
-          ...options,
-          isValid: isNil(this.searchField.value),
-          defaultParams: {
-            fq: `${this.searchField.key}:${this.searchField.value}`,
-          },
-          queryFields: this.queryFields,
-        }
-      )
-
-      this.specimens = specimenResponse.items
-      this.count = specimenResponse.count
-    },
   },
 }
 </script>

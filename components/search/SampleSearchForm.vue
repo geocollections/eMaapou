@@ -7,18 +7,18 @@
     </div>
     <text-search-field
       v-model="number"
-      :label="$t(search.byIds.number.label)"
+      :label="$t(filters.byIds.number.label)"
     />
 
     <text-search-field
       v-model="stratigraphy"
-      :label="$t(search.byIds.stratigraphy.label)"
+      :label="$t(filters.byIds.stratigraphy.label)"
     />
     <range-search-field
       v-model="depth"
       :min="-20"
       :max="5000"
-      :label="$t(search.byIds.depth.label)"
+      :label="$t(filters.byIds.depth.label)"
     />
   </v-form>
 </template>
@@ -43,22 +43,22 @@ export default {
     RangeSearchField,
   },
   computed: {
-    ...mapState('sample', ['search']),
+    ...mapState('sample', ['filters']),
     ...mapFields('sample', {
-      number: 'search.byIds.number.value',
-      stratigraphy: 'search.byIds.stratigraphy.value',
-      depth: 'search.byIds.depth.value',
+      number: 'filters.byIds.number.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      depth: 'filters.byIds.depth.value',
     }),
   },
   methods: {
-    ...mapActions('sample', ['searchSamples', 'resetSampleSearch']),
+    ...mapActions('sample', ['searchSamples', 'resetSampleFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {
       this.searchSamples()
     },
     handleReset(e) {
       this.resetSearch()
-      this.resetSampleSearch()
+      this.resetSampleFilters()
       this.searchSamples()
     },
   },

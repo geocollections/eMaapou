@@ -156,6 +156,8 @@
 import { isNull, debounce } from 'lodash'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
+import { DRILLCORE_BOX } from '~/constants'
+
 export default {
   components: { DataRow, LinkDataRow },
   props: {
@@ -188,17 +190,7 @@ export default {
               'id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred',
           },
           search: this.search,
-          queryFields: {
-            boxNumber: () => 'drillcore_box__number',
-            stratigraphyTop: () =>
-              this.$i18n.locale === 'et'
-                ? 'drillcore_box__stratigraphy_top__stratigraphy'
-                : 'drillcore_box__stratigraphy_top__stratigraphy_en',
-            stratigraphyBase: () =>
-              this.$i18n.locale === 'et'
-                ? 'drillcore_box__stratigraphy_base__stratigraphy'
-                : 'drillcore_box__stratigraphy_base__stratigraphy_en',
-          },
+          queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
         })
         .then((res) => {
           if (!res.page) {

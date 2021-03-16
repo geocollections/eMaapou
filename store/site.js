@@ -1,22 +1,11 @@
 import { getField, updateField } from 'vuex-map-fields'
-
+import { SITE } from '~/constants'
 const getDefaultState = () => {
   return {
     items: [],
     count: 0,
-    options: {
-      page: 1,
-      itemsPerPage: 25,
-      sortBy: ['id'],
-      sortDesc: [true],
-    },
-    headers: [
-      { text: 'site.id', value: 'id' },
-      { text: 'site.name', value: 'name' },
-      { text: 'site.latitude', value: 'latitude' },
-      { text: 'site.longitude', value: 'longitude' },
-    ],
-    search: {
+    options: SITE.options,
+    filters: {
       byIds: {
         name: {
           value: '',
@@ -64,36 +53,28 @@ export const mutations = {
   SET_OPTIONS(state, options) {
     state.options = options
   },
-  RESET_SEARCH(state) {
+  RESET_FILTERS(state) {
     const defaultState = getDefaultState()
 
-    state.search = defaultState.search
+    state.filters = defaultState.filters
     state.options = { ...state.options, page: defaultState.options.page }
   },
 }
 
 export const actions = {
-  resetSiteSearch({ commit }) {
-    commit('RESET_SEARCH')
+  resetSiteFilters({ commit }) {
+    commit('RESET_FILTERS')
   },
   async quickSearchSites(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      id: () => 'id_numeric',
-      name: () => 'name',
-      project: () =>
-        this.$i18n.locale === 'et' ? 'project__name' : 'project__name_en',
-    }
 
     const siteResponse = await this.$services.sarvSolr.getResourceList('site', {
       tableOptions: options,
       search: rootState.landing.search,
-      queryFields,
+      queryFields: this.$getQueryFields(SITE.queryFields),
       searchFilters: {},
     })
     commit('SET_ITEMS', siteResponse.items)
@@ -104,20 +85,11 @@ export const actions = {
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      id: () => 'id_numeric',
-      name: () => 'name',
-      project: () =>
-        this.$i18n.locale === 'et' ? 'project__name' : 'project__name_en',
-    }
-
     const siteResponse = await this.$services.sarvSolr.getResourceList('site', {
       tableOptions: options,
       search: rootState.landing.search,
-      queryFields,
-      searchFilters: state.search.byIds,
+      queryFields: this.$getQueryFields(SITE.queryFields),
+      searchFilters: state.filters.byIds,
     })
     commit('SET_ITEMS', siteResponse.items)
     commit('SET_COUNT', siteResponse.count)

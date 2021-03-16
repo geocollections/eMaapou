@@ -1,28 +1,19 @@
 <template>
-  <table-wrapper
-    :items="references"
+  <preparation-table
+    :items="preparations"
     :headers="headers"
     :count="count"
-    :init-options="options"
+    :options="options"
     @update="handleUpdate"
-  >
-    <template #item.taxon="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
-      >
-        {{ item.taxon__taxon }}
-      </a>
-    </template>
-  </table-wrapper>
+  />
 </template>
 
 <script>
 import { isNil } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
-
+import PreparationTable from '~/components/tables/PreparationTable.vue'
+import { PREPARATION } from '~/constants'
 export default {
-  components: { TableWrapper },
+  components: { PreparationTable },
   props: {
     sample: {
       type: Number,
@@ -31,35 +22,19 @@ export default {
   },
   data() {
     return {
-      references: [],
+      preparations: [],
       count: 0,
       options: {
         page: 1,
         itemsPerPage: 25,
-      },
-      headers: [
-        {
-          text: this.$t('preparation.preparation_number'),
-          value: 'preparation_number',
-        },
-        {
-          text: this.$t('preparation.taxon'),
-          value: 'taxon',
-        },
-        { text: this.$t('preparation.storage'), value: 'storage__location' },
-        { text: this.$t('preparation.remarks'), value: 'remarks' },
-      ],
-      queryFields: {
-        preparation_number: () => 'preparation_number',
-        taxon: () => 'taxon__taxon',
-        storage: () => 'storage__location',
-        remarks: () => 'remarks',
+        sortBy: [],
+        sortDesc: [],
       },
     }
   },
   methods: {
     async handleUpdate(options) {
-      const referenceResponse = await this.$services.sarvREST.getResourceList(
+      const preparationResponse = await this.$services.sarvREST.getResourceList(
         'preparation',
         {
           ...options,
@@ -67,11 +42,11 @@ export default {
           defaultParams: {
             sample: this.sample,
           },
-          queryFields: this.queryFields,
+          queryFields: this.$getQueryFields(PREPARATION.queryFields),
         }
       )
-      this.references = referenceResponse.items
-      this.count = referenceResponse.count
+      this.preparations = preparationResponse.items
+      this.count = preparationResponse.count
     },
   },
 }

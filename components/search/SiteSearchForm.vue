@@ -5,18 +5,18 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="name" :label="$t(search.byIds.name.label)" />
+    <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
     <range-search-field
       v-model="latitude"
       :min="-90"
       :max="90"
-      :label="$t(search.byIds.latitude.label)"
+      :label="$t(filters.byIds.latitude.label)"
     />
     <range-search-field
       v-model="longitude"
       :min="-180"
       :max="180"
-      :label="$t(search.byIds.longitude.label)"
+      :label="$t(filters.byIds.longitude.label)"
     />
   </v-form>
 </template>
@@ -41,22 +41,22 @@ export default {
     RangeSearchField,
   },
   computed: {
-    ...mapState('site', ['search']),
+    ...mapState('site', ['filters']),
     ...mapFields('site', {
-      name: 'search.byIds.name.value',
-      latitude: 'search.byIds.latitude.value',
-      longitude: 'search.byIds.longitude.value',
+      name: 'filters.byIds.name.value',
+      latitude: 'filters.byIds.latitude.value',
+      longitude: 'filters.byIds.longitude.value',
     }),
   },
   methods: {
-    ...mapActions('site', ['searchSites', 'resetSiteSearch']),
+    ...mapActions('site', ['searchSites', 'resetSiteFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {
       this.searchSites()
     },
     handleReset(e) {
       this.resetSearch()
-      this.resetSiteSearch()
+      this.resetSiteFilters()
       this.searchSites()
     },
   },

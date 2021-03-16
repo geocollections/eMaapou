@@ -1,91 +1,49 @@
 <template>
-  <table-wrapper
+  <sample-table
     :show-search="false"
-    external-options
     :items="items"
-    :headers="translatedHeaders"
     :count="count"
-    :init-options="options"
+    :options="options"
     @update="handleUpdate"
-  >
-    <template #item.id="{ item }">
-      <a
-        class="text-link"
-        @click="$openNuxtWindow('sample-id', { id: item.id })"
-      >
-        {{ item.id }}
-      </a>
-    </template>
-    <template #item.number="{ item }">
-      <a
-        class="text-link"
-        @click="$openNuxtWindow('sample-id', { id: item.id })"
-      >
-        {{ item.number }}
-      </a>
-    </template>
-    <template #item.stratigraphy="{ item }">
-      <a
-        class="text-link"
-        @click="$openGeoDetail('stratigraphy', item.stratigraphy_id)"
-      >
-        {{
-          $translate({
-            et: item.stratigraphy,
-            en: item.stratigraphy_en,
-          })
-        }}
-      </a>
-    </template>
-    <template #item.date_collected="{ item }">
-      {{
-        item.date_collected
-          ? new Date(item.date_collected).toISOString().split('T')[0]
-          : null
-      }}
-    </template>
-    <template #item.locality="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="
-          localePath({ name: 'locality-id', params: { id: item.locality_id } })
-        "
-      >
-        {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-    </template>
-  </table-wrapper>
+  />
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import TableWrapper from '@/components/tables/TableWrapper'
-
+import { mapState } from 'vuex'
+import SampleTable from '~/components/tables/SampleTable.vue'
+import { SAMPLE } from '~/constants'
 export default {
-  components: { TableWrapper },
+  components: { SampleTable },
+  data() {
+    return {
+      options: SAMPLE.options,
+      items: [],
+      count: 0,
+    }
+  },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('sample', ['options', 'items', 'count', 'headers']),
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        }
-      })
-    },
   },
   watch: {
     search: {
       handler(value) {
-        this.handleUpdate({ ...this.options, search: value })
+        this.handleUpdate({ tableOptions: { ...this.options }, search: value })
       },
     },
   },
   methods: {
-    ...mapActions('sample', ['quickSearchSamples']),
     async handleUpdate(options) {
-      await this.quickSearchSamples(options.tableOptions)
+      const sampleResponse = await this.$services.sarvSolr.getResourceList(
+        'sample',
+        {
+          tableOptions: options.tableOptions,
+          search: this.search,
+          queryFields: this.$getQueryFields(SAMPLE.queryFields),
+          searchFilters: {},
+        }
+      )
+      this.items = sampleResponse.items
+      this.count = sampleResponse.count
     },
   },
 }

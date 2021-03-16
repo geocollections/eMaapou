@@ -5,25 +5,25 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="name" :label="$t(search.byIds.name.label)" />
+    <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
     <text-search-field
       v-model="repository"
-      :label="$t(search.byIds.repository.label)"
+      :label="$t(filters.byIds.repository.label)"
     />
     <text-search-field
       v-model="country"
-      :label="$t(search.byIds.country.label)"
+      :label="$t(filters.byIds.country.label)"
     />
     <text-search-field
       v-model="storage"
-      :label="$t(search.byIds.storage.label)"
+      :label="$t(filters.byIds.storage.label)"
     />
     <!-- TODO: Get min and max dynamically -->
     <range-search-field
       v-model="boxes"
       :min="0"
       :max="150"
-      :label="$t(search.byIds.boxes.label)"
+      :label="$t(filters.byIds.boxes.label)"
     />
   </v-form>
 </template>
@@ -48,21 +48,21 @@ export default {
     SearchButton,
   },
   computed: {
-    ...mapState('drillcore', ['search']),
+    ...mapState('drillcore', ['filters']),
     ...mapFields('drillcore', {
-      name: 'search.byIds.name.value',
-      repository: 'search.byIds.repository.value',
-      country: 'search.byIds.country.value',
-      boxes: 'search.byIds.boxes.value',
-      storage: 'search.byIds.storage.value',
+      name: 'filters.byIds.name.value',
+      repository: 'filters.byIds.repository.value',
+      country: 'filters.byIds.country.value',
+      boxes: 'filters.byIds.boxes.value',
+      storage: 'filters.byIds.storage.value',
     }),
   },
   methods: {
-    ...mapActions('drillcore', ['searchDrillcores', 'resetDrillcoreSearch']),
+    ...mapActions('drillcore', ['searchDrillcores', 'resetDrillcoreFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {
       this.resetSearch()
-      this.resetDrillcoreSearch()
+      this.resetDrillcoreFilters()
       this.searchDrillcores()
     },
     handleSearch(e) {

@@ -28,24 +28,13 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
-        <table-wrapper
-          external-options
+        <analysis-table
           :show-search="false"
           :items="items"
-          :headers="translatedHeaders"
           :count="count"
-          :init-options="options"
+          :options="options"
           @update="handleUpdate"
-        >
-          <template #item.id="{ item }">
-            <nuxt-link
-              class="text-link"
-              :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
-            >
-              {{ item.id }}
-            </nuxt-link>
-          </template>
-        </table-wrapper>
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -53,11 +42,12 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import TableWrapper from '@/components/tables/TableWrapper'
+import AnalysisTable from '@/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/AnalysisSearchForm'
 
 export default {
-  components: { AnalysisSearchForm, TableWrapper },
+  name: 'AnalysisSearch',
+  components: { AnalysisSearchForm, AnalysisTable },
   head() {
     return {
       title: this.$t('analysis.pageTitle'),
@@ -65,19 +55,10 @@ export default {
   },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('analysis', ['options', 'items', 'count', 'headers']),
-    translatedHeaders() {
-      return this.headers.map((header) => {
-        return {
-          ...header,
-          text: this.$t(header.text),
-        }
-      })
-    },
+    ...mapState('analysis', ['items', 'count', 'options']),
   },
   methods: {
     ...mapActions('analysis', ['searchAnalyses']),
-
     async handleUpdate(options) {
       await this.searchAnalyses(options.tableOptions)
     },

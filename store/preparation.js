@@ -1,31 +1,12 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { PREPARATION } from '~/constants'
 
 const getDefaultState = () => {
   return {
     items: [],
     count: 0,
-    options: {
-      page: 1,
-      itemsPerPage: 25,
-      sortBy: [],
-      sortDesc: [],
-    },
-    headers: [
-      { text: 'preparation.id', value: 'id' },
-      {
-        text: 'preparation.preparation_number',
-        value: 'preparation_number',
-      },
-      { text: 'preparation.locality', value: 'locality' },
-      { text: 'preparation.depth', value: 'depth' },
-      {
-        text: 'preparation.stratigraphy',
-        value: 'stratigraphy',
-      },
-      { text: 'preparation.agent', value: 'agent' },
-      { text: 'preparation.mass', value: 'mass' },
-    ],
-    search: {
+    options: PREPARATION.options,
+    filters: {
       // TODO
       byIds: {
         number: {
@@ -73,42 +54,30 @@ export const mutations = {
   SET_OPTIONS(state, options) {
     state.options = options
   },
-  RESET_SEARCH(state) {
+  RESET_FILTERS(state) {
     const defaultState = getDefaultState()
 
-    state.search = defaultState.search
+    state.filters = defaultState.filters
     state.options = { ...state.options, page: defaultState.options.page }
   },
 }
 
 export const actions = {
-  resetSampleSearch({ commit }) {
-    commit('RESET_SEARCH')
+  resetPreparationFilters({ commit }) {
+    commit('RESET_FILTERS')
   },
   async quickSearchPreparations(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      id: () => 'id',
-      preparation_number: () => 'preparation_number',
-      locality: () => (this.$i18n.locale === 'et' ? 'locality' : 'locality_en'),
-      depth: () => 'depth',
-      stratigraphy: () =>
-        this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-      agent: () => 'agent',
-      mass: () => 'mass',
-    }
 
     const preparationResponse = await this.$services.sarvSolr.getResourceList(
       'preparation',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
+        queryFields: this.$getQueryFields(PREPARATION.queryFields),
         searchFilters: {},
       }
     )
@@ -120,26 +89,14 @@ export const actions = {
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
-    // TODO: move these functions somewhere where they are not created every time the action is called
-    // TODO: Check is these are even used
-    const queryFields = {
-      id: () => 'id',
-      preparation_number: () => 'preparation_number',
-      locality: () => (this.$i18n.locale === 'et' ? 'locality' : 'locality_en'),
-      depth: () => 'depth',
-      stratigraphy: () =>
-        this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
-      agent: () => 'agent',
-      mass: () => 'mass',
-    }
 
     const preparationResponse = await this.$services.sarvSolr.getResourceList(
       'preparation',
       {
         tableOptions: options,
         search: rootState.landing.search,
-        queryFields,
-        searchFilters: state.search.byIds,
+        queryFields: this.$getQueryFields(PREPARATION.queryFields),
+        searchFilters: state.filters.byIds,
       }
     )
     commit('SET_ITEMS', preparationResponse.items)

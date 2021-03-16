@@ -1,25 +1,18 @@
 <template>
-  <table-wrapper
+  <locality-reference-table
     :items="references"
-    :headers="headers"
     :count="count"
-    :init-options="options"
+    :options="options"
     @update="handleUpdate"
-  >
-    <template #item.reference="{ item }">
-      <a class="text-link" @click="$openGeology('reference', item.reference)">{{
-        item.reference__reference
-      }}</a>
-    </template>
-  </table-wrapper>
+  />
 </template>
 
 <script>
 import { isNil } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
-
+import LocalityReferenceTable from '~/components/tables/LocalityReferenceTable.vue'
+import { LOCALITY_REFERENCE } from '~/constants'
 export default {
-  components: { TableWrapper },
+  components: { LocalityReferenceTable },
   props: {
     area: {
       type: Number,
@@ -30,25 +23,7 @@ export default {
     return {
       references: [],
       count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-      },
-      headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
-        {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
-        },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
-      ],
-      queryFields: {
-        reference: () => 'reference__reference',
-        reference__title: () => 'reference__title',
-        pages: () => 'pages',
-        remarks: () => 'remarks',
-      },
+      options: LOCALITY_REFERENCE.options,
     }
   },
   methods: {
@@ -61,7 +36,7 @@ export default {
           defaultParams: {
             area: this.area,
           },
-          queryFields: this.queryFields,
+          queryFields: this.$getQueryFields(LOCALITY_REFERENCE.queryFields),
         }
       )
       this.references = referenceResponse.items
