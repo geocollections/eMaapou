@@ -4,7 +4,7 @@
       <nuxt-link v-if="nuxt" class="text-link" :to="href">{{
         value
       }}</nuxt-link>
-      <div v-else>
+      <span v-else>
         <a v-if="href" class="text-link" :href="href">
           <slot name="value">
             {{ value }}
@@ -14,7 +14,8 @@
           {{ value }}
           <v-icon small color="deep-orange darken-2">mdi-open-in-new</v-icon>
         </a>
-      </div>
+      </span>
+      <span v-if="suffix">{{ suffix }}</span>
     </template>
   </data-row>
 </template>
@@ -30,6 +31,7 @@ export default {
     title: { type: String, default: null },
     value: { type: [String, Number], default: null, required: false },
     href: { type: String, default: null },
+    suffix: { type: String, default: null },
   },
 }
 </script>
