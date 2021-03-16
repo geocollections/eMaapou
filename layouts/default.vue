@@ -35,6 +35,7 @@ export default {
         'locality-id',
         'sample-id',
         'site-id',
+        'file-id',
       ]
       return detailViewRouteNames.some((route) =>
         this.getRouteBaseName().startsWith(route)
