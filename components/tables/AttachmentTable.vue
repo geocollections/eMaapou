@@ -11,20 +11,23 @@
       <attachment-cell
         :src="`https://files.geocollections.info/small/${item.attachment__filename}`"
         :type="item.attachment__attachment_format__value"
-        @click="$openGeoDetail('attachment', item.attachment)"
+        @click="
+          $router.push(localePath({ name: 'file-id', params: { id: item.id } }))
+        "
       />
     </template>
     <template #item.description="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openGeoDetail('attachment', item.attachment)"
-        >{{
+        :to="localePath({ name: 'file-id', params: { id: item.id } })"
+      >
+        {{
           $translate({
             et: item.attachment__description,
             en: item.attachment__description_en,
           })
-        }}</a
-      >
+        }}
+      </nuxt-link>
     </template>
   </table-wrapper>
 </template>
