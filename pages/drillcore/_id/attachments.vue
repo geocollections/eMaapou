@@ -3,6 +3,7 @@
     :items="attachments"
     :count="count"
     :options="options"
+    id-field="attachment"
     @update="handleUpdate"
   />
 </template>
