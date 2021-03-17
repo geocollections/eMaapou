@@ -8,19 +8,25 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="$openNuxtWindow('site-id', { id: item.id })">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'site-id', params: { id: item.id } })"
+      >
         {{ item.id }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.name="{ item }">
-      <a class="text-link" @click="$openNuxtWindow('site-id', { id: item.id })">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'site-id', params: { id: item.id } })"
+      >
         {{
           $translate({
             et: item.name,
             en: item.name_en,
           })
         }}
-      </a>
+      </nuxt-link>
     </template>
   </table-wrapper>
 </template>
