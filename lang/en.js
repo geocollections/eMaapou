@@ -116,6 +116,7 @@ export default {
     specimens: 'Specimens ({number})',
     depth: 'Depth',
     acronym: 'Owner',
+    drillcore: 'Drillcore',
   },
   drillcoreBox: {
     id: 'ID',
@@ -181,6 +182,7 @@ export default {
     lithostratigraphy: 'Lithostratigraphy',
     results: 'Results ({number})',
     attachments: 'Attachments ({number})',
+    analysis: 'Sample no.',
   },
   analysisResult: {
     parameter: 'Parameter',
@@ -199,6 +201,7 @@ export default {
     taxon: 'Taxon',
     thickness: 'Thickness',
     image: 'Image',
+    specimen: 'Specimen',
   },
   stratotype: {
     stratigraphy: 'Stratigraphy',
@@ -244,6 +247,7 @@ export default {
     project: 'Project',
     latitude: 'Latitude',
     longitude: 'Longitude',
+    site: 'Site',
   },
   sample: {
     pageTitle: 'Samples search',
@@ -285,6 +289,7 @@ export default {
     preparations: 'Preparations ({number})',
     taxa: 'Taxa ({number})',
     sampleReferences: 'References ({number})',
+    sample: 'Sample',
   },
   preparation: {
     id: 'ID',
@@ -297,6 +302,7 @@ export default {
     taxon: 'Fossil group',
     storage: 'Storage',
     remarks: 'Remarks',
+    preparation: 'Preparation',
   },
   taxon: {
     id: 'ID',
@@ -372,6 +378,7 @@ export default {
   doi: {
     title: 'SARV-DOI',
     description: 'Geoscience Data Repository',
+    doi: 'DOI',
   },
   geocase: {
     title: 'GeoCASe',
@@ -438,5 +445,48 @@ export default {
       'This website uses cookies in order to deliver the best possible web experience. By continuing to visit this website you agree to our use of cookies.',
     readMoreButton: 'Read our terms of use',
     acceptAndClose: 'Accept and close the notification',
+  },
+  related: {
+    collection: 'Related collections',
+    specimen: 'Related specimens',
+    sample: 'Related samples',
+    sample_series: 'Related sample series',
+    analysis: 'Related analyses',
+    dataset: 'Related datasets',
+    doi: 'Related DOIs',
+    locality: 'Related localities',
+    drillcore: 'Related drillcores',
+    drillcore_box: 'Related drillcore boxes',
+    preparation: 'Related preparations',
+    reference: 'Related references',
+    project: 'Related projects',
+    site: 'Related sites',
+    storage: 'Related storages',
+    locality_description: 'Related locality descriptions',
+    taxon: 'Related taxa',
+  },
+  collection: {
+    collection: 'Collection',
+  },
+  sample_series: {
+    sample_series: 'Sample series',
+  },
+  drillcore_box: {
+    drillcore_box: 'Drillcore box',
+  },
+  dataset: {
+    dataset: 'Dataset',
+  },
+  reference: {
+    reference: 'Reference',
+  },
+  storage: {
+    storage: 'Storage',
+  },
+  project: {
+    project: 'Project',
+  },
+  locality_description: {
+    locality_description: 'Locality description',
   },
 }

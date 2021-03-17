@@ -116,6 +116,7 @@ export default {
     specimens: 'Eksemplarid ({number})',
     depth: 'Sügavus',
     acronym: 'Omanik',
+    drillcore: 'Puursüdamik',
   },
   drillcoreBox: {
     id: 'ID',
@@ -181,6 +182,7 @@ export default {
     lithostratigraphy: 'Litostratigraafia',
     results: 'Tulemused ({number})',
     attachments: 'Failid ({number})',
+    analysis: 'Proovi nr.',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -199,6 +201,7 @@ export default {
     taxon: 'Takson',
     thickness: 'Paksus',
     image: 'Pilt',
+    specimen: 'Eksemplar',
   },
   stratotype: {
     stratigraphy: 'Stratigraafia',
@@ -244,6 +247,7 @@ export default {
     project: 'Projekt',
     latitude: 'Lat',
     longitude: 'Long',
+    site: 'Vaatluspunkt',
   },
   sample: {
     pageTitle: 'Proovide otsing',
@@ -285,6 +289,7 @@ export default {
     preparations: 'Preparaadid ({number})',
     taxa: 'Taksonid ({number})',
     sampleReferences: 'Kirjandus ({number})',
+    sample: 'Proov',
   },
   preparation: {
     id: 'ID',
@@ -297,6 +302,7 @@ export default {
     taxon: 'Fossiil rühm',
     storage: 'Hoiukoht',
     remarks: 'Lisainfo',
+    preparation: 'Preparaat',
   },
   taxon: {
     id: 'ID',
@@ -372,6 +378,7 @@ export default {
   doi: {
     title: 'SARV-DOI',
     description: 'Eesti geoteaduslike andmete repositoorium',
+    doi: 'DOI',
   },
   geocase: {
     title: 'GeoCASe võrgustik',
@@ -438,5 +445,48 @@ export default {
       'See veebileht kasutab küpsiseid. Veebilehe kasutamist jätkates nõustute küpsiste kasutamisega.',
     readMoreButton: 'Lugege meie kasutustingimusi',
     acceptAndClose: 'Nõustu ning sulge teade',
+  },
+  related: {
+    collection: 'Seotud kollektsioonid',
+    specimen: 'Seotud eksemplarid',
+    sample: 'Seotud proovid',
+    sample_series: 'Seotud prooviseeriad',
+    analysis: 'Seotud analüüsid',
+    dataset: 'Seotud andmekogud',
+    doi: 'Seotud DOId',
+    locality: 'Seotud lokaliteedid',
+    drillcore: 'Seotud puursüdamikud',
+    drillcore_box: 'Seotud puursüdamiku kastid',
+    preparation: 'Seotud preparaadid',
+    reference: 'Seotud kirjandus',
+    project: 'Seotud projektid',
+    site: 'Seotud vaatluspunktid',
+    storage: 'Seotud hoiukohad',
+    locality_description: 'Seotud asukoha kirjeldused',
+    taxon: 'Seotud taksonid',
+  },
+  collection: {
+    collection: 'Kollektsioon',
+  },
+  sample_series: {
+    sample_series: 'Prooviseeria',
+  },
+  drillcore_box: {
+    drillcore_box: 'Puursüdamiku kast',
+  },
+  dataset: {
+    dataset: 'Andmekogu',
+  },
+  reference: {
+    reference: 'Kirjandus',
+  },
+  storage: {
+    storage: 'Hoiukoht',
+  },
+  project: {
+    project: 'Projekt',
+  },
+  locality_description: {
+    locality_description: 'Asukoha kirjeldus',
   },
 }
