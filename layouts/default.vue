@@ -8,6 +8,9 @@
         <scroll-top-fab class="fab-container ma-3" />
       </v-container>
     </v-main>
+
+    <cookie-policy />
+
     <app-footer />
   </v-app>
 </template>
@@ -17,9 +20,16 @@ import AppFooter from '@/components/AppFooter'
 import AppHeader from '@/components/AppHeader'
 import LinkToEditFab from '@/components/LinkToEditFab'
 import ScrollTopFab from '~/components/ScrollTopFab.vue'
+import CookiePolicy from '~/components/CookiePolicy'
 
 export default {
-  components: { AppHeader, AppFooter, ScrollTopFab, LinkToEditFab },
+  components: {
+    CookiePolicy,
+    AppHeader,
+    AppFooter,
+    ScrollTopFab,
+    LinkToEditFab,
+  },
   data() {
     return {
       includeList: ['AnalysisSearch'],

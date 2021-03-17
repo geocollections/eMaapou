@@ -35,6 +35,8 @@ export default {
     '~plugins/openWindow.js',
     '~plugins/hydrateTabs.js',
     '~plugins/getQueryFields.js',
+    { src: '~plugins/gtag.js', mode: 'client' },
+    { src: '~plugins/vuexPersist.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -90,6 +92,13 @@ export default {
     langDir: 'lang/',
     defaultLocale: 'et',
     strategy: 'prefix_and_default',
+    detectBrowserLanguage: {
+      alwaysRedirect: true,
+      fallbackLocale: 'et',
+    },
+    vuex: {
+      syncLocale: true,
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
