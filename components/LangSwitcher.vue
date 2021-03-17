@@ -17,7 +17,7 @@
         :key="i"
         dense
         class="header-menu-item"
-        :to="switchLocalePath(locale.code)"
+        @click.prevent.stop="$i18n.setLocale(locale.code)"
       >
         <v-list-item-title class="d-flex">
           <span
