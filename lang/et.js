@@ -433,4 +433,10 @@ export default {
     type: 'Tüüp',
     download: 'Lae alla',
   },
+  cookiePolicy: {
+    introduction:
+      'See veebileht kasutab küpsiseid. Veebilehe kasutamist jätkates nõustute küpsiste kasutamisega.',
+    readMoreButton: 'Lugege meie kasutustingimusi',
+    acceptAndClose: 'Nõustu ning sulge teade',
+  },
 }
