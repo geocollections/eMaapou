@@ -28,13 +28,12 @@
     <app-header-search class="d-none d-sm-flex" />
     <links />
     <lang-switcher />
-
     <template #extension>
-      <v-tabs align-with-title>
+      <v-tabs :value="tabValue" align-with-title optional>
         <v-tab nuxt exact :to="localePath({ name: 'about' })">{{
           $t('common.about')
         }}</v-tab>
-        <v-tab nuxt exact :to="localePath({ name: 'search' })">{{
+        <v-tab nuxt :to="localePath({ name: 'search' })">{{
           $t('common.search')
         }}</v-tab>
         <v-tab nuxt exact :to="localePath({ name: 'drillcore' })">{{
@@ -64,6 +63,14 @@ export default {
   computed: {
     isNotSearchPath() {
       return !this.$route.path.startsWith('/search')
+    },
+    tabValue() {
+      // https://github.com/vuetifyjs/vuetify/issues/12265
+      const path = this.$route.path
+      const full = this.$route.fullPath
+      return path[path.length - 1] !== '/'
+        ? `${path}/${full.substring(path.length)}`
+        : `${full}/`
     },
   },
 }
