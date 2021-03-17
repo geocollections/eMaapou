@@ -3,7 +3,7 @@
     <transition-group name="flip-list">
       <v-chip
         v-for="(item, index) in tabs"
-        :key="index"
+        :key="`button-tab-${index}`"
         class="mx-2 mb-3"
         :disabled="item.count === 0"
         nuxt
