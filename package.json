@@ -20,6 +20,7 @@
     "lodash": "^4.17.21",
     "nuxt": "^2.15.2",
     "nuxt-i18n": "^6.20.4",
+    "vue-gtag": "^1.11.0",
     "vue-infinite-loading": "^2.4.5",
     "vue2-leaflet": "^2.6.0",
     "vue2-leaflet-fullscreen": "^1.0.0",
