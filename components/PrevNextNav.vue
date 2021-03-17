@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-space-between">
+  <div class="d-flex justify-space-between px-4">
     <nuxt-link
       class="text-link"
       :to="
@@ -31,7 +31,7 @@ export default {
     arrowKeys: {
       type: Boolean,
       required: false,
-      default: false,
+      default: true,
     },
     listOfIds: {
       type: Array,

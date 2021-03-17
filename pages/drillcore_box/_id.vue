@@ -11,7 +11,7 @@
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
       </h1>
       <prev-next-nav />
-      <v-card class="my-2">
+      <v-card class="my-2 mx-4">
         <v-card-text>
           <client-only>
             <template #placeholder>
@@ -100,7 +100,6 @@
           </div>
         </v-card-text>
 
-        <!-- Todo: Thumbnails here #22-->
         <v-card-text
           v-if="drillcoreBoxImages && drillcoreBoxImages.length > 1"
           class="pt-0"

@@ -4,18 +4,12 @@
       <h1 class="text-center my-3 page-title">
         {{ $translate({ et: locality.locality, en: locality.locality_en }) }}
       </h1>
+      <prev-next-nav />
       <v-card flat tile>
         <v-row no-gutters>
-          <v-col
-            cols="12"
-            md="6"
-            style="max-width: 100%"
-            class="pt-0 px-0 flex-grow-1 flex-shrink-0"
-          >
-            <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-              $t('common.general')
-            }}</v-card-title>
-            <v-card-text class="pl-md-0 pr-md-4 px-0">
+          <v-col cols="12" md="6">
+            <v-card-title>{{ $t('common.general') }}</v-card-title>
+            <v-card-text>
               <v-simple-table dense class="custom-table">
                 <template #default>
                   <tbody>
@@ -167,12 +161,9 @@
             v-if="locality.latitude && locality.longitude"
             cols="12"
             md="6"
-            class="pt-0 px-0"
           >
-            <v-card-title class="pr-md-0 pl-md-4 px-0">{{
-              $t('locality.map')
-            }}</v-card-title>
-            <v-card-text class="pr-md-0 pl-md-4 px-0">
+            <v-card-title>{{ $t('locality.map') }}</v-card-title>
+            <v-card-text>
               <v-card id="map-wrap" elevation="0" height="600">
                 <leaflet-map
                   :is-estonian="locality.country__value === 'Eesti'"
@@ -197,7 +188,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-card class="mt-2 pb-2">
+      <v-card class="mt-6 mx-4 mb-4">
         <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
@@ -210,9 +201,10 @@ import LinkDataRow from '~/components/LinkDataRow'
 import DataRow from '~/components/DataRow'
 import LeafletMap from '~/components/LeafletMap'
 import Tabs from '~/components/Tabs'
+import PrevNextNav from '~/components/PrevNextNav'
 
 export default {
-  components: { DataRow, LinkDataRow, LeafletMap, Tabs },
+  components: { PrevNextNav, DataRow, LinkDataRow, LeafletMap, Tabs },
   async asyncData({ params, route, app, error }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(

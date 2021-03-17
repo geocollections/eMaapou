@@ -4,18 +4,12 @@
       <h1 class="text-center my-3 page-title">
         {{ $t('analysis.title', { id: analysis.id }) }}
       </h1>
+      <prev-next-nav />
       <v-card flat tile>
-        <v-row no-gutters>
-          <v-col
-            cols="12"
-            md="6"
-            style="max-width: 100%"
-            class="pt-0 px-0 flex-grow-1 flex-shrink-0"
-          >
-            <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-              $t('common.general')
-            }}</v-card-title>
-            <v-card-text class="pl-md-0 pr-md-4 px-0">
+        <v-row no-gutters justify="center">
+          <v-col cols="12" md="9" lg="7" xl="6">
+            <v-card-title>{{ $t('common.general') }}</v-card-title>
+            <v-card-text>
               <v-simple-table dense class="custom-table">
                 <template #default>
                   <tbody>
@@ -119,8 +113,12 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
-        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+      <v-card v-if="filteredTabs.length > 0" flat tile class="mt-6 mx-4 mb-4">
+        <v-row no-gutters justify="center" class="px-4">
+          <v-col cols="12" md="9" lg="7" xl="6" class="elevation-2 rounded">
+            <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+          </v-col>
+        </v-row>
       </v-card>
     </v-col>
   </v-row>
@@ -131,8 +129,9 @@ import { isEmpty, isNil } from 'lodash'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Tabs from '~/components/Tabs'
+import PrevNextNav from '~/components/PrevNextNav'
 export default {
-  components: { DataRow, LinkDataRow, Tabs },
+  components: { PrevNextNav, DataRow, LinkDataRow, Tabs },
   async asyncData({ params, route, error, app }) {
     try {
       const analysisResponse = await app.$services.sarvREST.getResource(

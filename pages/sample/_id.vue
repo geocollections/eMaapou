@@ -4,18 +4,12 @@
       <h1 class="text-center my-3 page-title">
         {{ sampleTitle }}
       </h1>
+      <prev-next-nav />
       <v-card flat tile>
         <v-row no-gutters>
-          <v-col
-            cols="12"
-            md="6"
-            style="max-width: 100%"
-            class="pt-0 px-0 flex-grow-1 flex-shrink-0"
-          >
-            <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-              $t('common.general')
-            }}</v-card-title>
-            <v-card-text class="pl-md-0 pr-md-4 px-0">
+          <v-col cols="12" md="6">
+            <v-card-title>{{ $t('common.general') }}</v-card-title>
+            <v-card-text>
               <v-simple-table dense class="custom-table">
                 <template #default>
                   <tbody>
@@ -168,11 +162,9 @@
               </v-simple-table>
             </v-card-text>
           </v-col>
-          <v-col v-if="sample.locality_id" cols="12" md="6" class="pt-0 px-0">
-            <v-card-title class="pr-md-0 pl-md-4 px-0">{{
-              $t('locality.locality')
-            }}</v-card-title>
-            <v-card-text class="pr-md-0 pl-md-4 px-0">
+          <v-col v-if="sample.locality_id" cols="12" md="6">
+            <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+            <v-card-text>
               <v-simple-table dense class="mb-4 custom-table">
                 <template #default>
                   <tbody>
@@ -306,7 +298,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
@@ -319,8 +311,9 @@ import DataRow from '@/components/DataRow'
 import LinkDataRow from '@/components/LinkDataRow'
 import Tabs from '@/components/Tabs'
 import LeafletMap from '@/components/LeafletMap'
+import PrevNextNav from '~/components/PrevNextNav'
 export default {
-  components: { LinkDataRow, DataRow, Tabs, LeafletMap },
+  components: { PrevNextNav, LinkDataRow, DataRow, Tabs, LeafletMap },
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(

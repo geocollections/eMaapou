@@ -8,8 +8,10 @@
         {{ $t('file.idTitle') }}: {{ file.id }}
       </h2>
 
+      <prev-next-nav />
+
       <v-card flat tile>
-        <v-row>
+        <v-row no-gutters>
           <v-col cols="12" md="6">
             <v-card-text class="text-center">
               <client-only>
@@ -360,7 +362,7 @@
         </v-row>
       </v-card>
 
-      <v-card v-if="filteredTabs.length > 0" flat class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" flat class="mt-2 mx-4">
         <v-row>
           <v-col
             v-for="(item, index) in filteredTabs"
@@ -446,9 +448,10 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/LeafletMap'
+import PrevNextNav from '~/components/PrevNextNav'
 
 export default {
-  components: { LeafletMap, BoxImageLoader, DataRow, LinkDataRow },
+  components: { PrevNextNav, LeafletMap, BoxImageLoader, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(

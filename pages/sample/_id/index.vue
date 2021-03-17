@@ -37,7 +37,7 @@ export default {
         'analysis',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
             fq: `sample_id:${this.sample}`,
           },

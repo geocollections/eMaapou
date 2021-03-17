@@ -6,18 +6,12 @@
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         }}
       </h1>
+      <prev-next-nav />
       <v-card flat tile>
         <v-row no-gutters>
-          <v-col
-            cols="12"
-            md="6"
-            style="max-width: 100%"
-            class="pt-0 px-0 flex-grow-1 flex-shrink-0"
-          >
-            <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-              $t('common.general')
-            }}</v-card-title>
-            <v-card-text class="pl-md-0 pr-md-4 px-0">
+          <v-col cols="12" md="6">
+            <v-card-title>{{ $t('common.general') }}</v-card-title>
+            <v-card-text>
               <v-simple-table dense class="custom-table">
                 <template #default>
                   <tbody>
@@ -72,24 +66,13 @@
               </v-simple-table>
             </v-card-text>
             <div v-if="drillcore.remarks">
-              <v-card-title class="pt-0 pl-md-0 pr-md-4 px-0">{{
-                $t('drillcore.remarks')
-              }}</v-card-title>
-              <v-card-text class="pl-md-0 pr-md-4 px-0">{{
-                drillcore.remarks
-              }}</v-card-text>
+              <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+              <v-card-text>{{ drillcore.remarks }}</v-card-text>
             </div>
           </v-col>
-          <v-col
-            v-if="drillcore.locality_id"
-            cols="12"
-            md="6"
-            class="pt-0 px-0"
-          >
-            <v-card-title class="pr-md-0 pl-md-4 px-0">{{
-              $t('locality.locality')
-            }}</v-card-title>
-            <v-card-text class="pr-md-0 pl-md-4 px-0">
+          <v-col v-if="drillcore.locality_id" cols="12" md="6">
+            <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+            <v-card-text>
               <v-simple-table dense class="mb-4 custom-table">
                 <template #default>
                   <tbody>
@@ -168,7 +151,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
@@ -181,9 +164,10 @@ import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
+import PrevNextNav from '~/components/PrevNextNav'
 
 export default {
-  components: { Tabs, LeafletMap, DataRow, LinkDataRow },
+  components: { PrevNextNav, Tabs, LeafletMap, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app }) {
     try {
       const drillcoreResponse = await app.$services.sarvREST.getResource(
