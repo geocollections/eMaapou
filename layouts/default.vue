@@ -3,7 +3,7 @@
     <v-main>
       <app-header />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-        <nuxt />
+        <nuxt keep-alive :keep-alive-props="{ include: ['QuickSearch'] }" />
         <link-to-edit-fab v-if="isDetail" />
         <scroll-top-fab class="fab-container ma-3" />
       </v-container>

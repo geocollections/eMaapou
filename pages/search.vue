@@ -29,7 +29,7 @@
         <button-tabs ref="tabs" :tabs="computedTabs" />
 
         <v-card>
-          <nuxt-child />
+          <nuxt-child keep-alive />
         </v-card>
       </v-col>
     </v-row>
@@ -41,6 +41,7 @@ import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
 import ButtonTabs from '@/components/ButtonTabs'
 import { mapFields } from 'vuex-map-fields'
 export default {
+  name: 'QuickSearch',
   components: { ButtonTabs },
   // layout: 'search',
   async asyncData({ params, route, error, app, store }) {
