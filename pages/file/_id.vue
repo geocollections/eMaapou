@@ -20,30 +20,38 @@
                 <!-- Image -->
                 <template v-if="isImage">
                   <v-hover v-slot="{ hover }">
-                    <v-img
-                      class="my-4 transition-swing cursor-pointer rounded mx-auto"
+                    <img
+                      :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
+                      class="my-4 transition-swing cursor-pointer rounded"
                       :class="{
                         'elevation-8': hover,
                         'elevation-4': !hover,
                       }"
-                      :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"
-                      :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
-                      max-width="1000"
+                      width="100%"
+                      style="max-width: 1000px; max-height: 800px"
+                      :alt="fileTitle"
                       @click="$openImage(file.uuid_filename)"
-                    >
-                      <template #placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img>
+                    />
+                    <!--<v-img-->
+                    <!--  contain-->
+                    <!--  class="my-4 transition-swing cursor-pointer rounded mx-auto"-->
+                    <!--  :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"-->
+                    <!--  :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"-->
+                    <!--  max-width="1000"-->
+                    <!--  max-height="700"-->
+                    <!--  @click="$openImage(file.uuid_filename)"-->
+                    <!--  <template #placeholder>-->
+                    <!--    <v-row-->
+                    <!--      class="fill-height ma-0"-->
+                    <!--      align="center"-->
+                    <!--      justify="center"-->
+                    <!--      <v-progress-circular-->
+                    <!--        indeterminate-->
+                    <!--        color="grey lighten-5"-->
+                    <!--      ></v-progress-circular>-->
+                    <!--    </v-row>-->
+                    <!--  </template>-->
+                    <!--</v-img>-->
                   </v-hover>
                 </template>
 
