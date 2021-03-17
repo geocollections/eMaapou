@@ -6,7 +6,7 @@ orbs:
 parameters:
   package-version:
     type: string
-    default: "1.0.3"
+    default: "1.0.4"
 
 executors:
   docker-publisher:
