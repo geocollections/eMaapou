@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:lts
 
 # create destination directory
 RUN mkdir -p /usr/src/ema
