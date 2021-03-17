@@ -20,30 +20,38 @@
                 <!-- Image -->
                 <template v-if="isImage">
                   <v-hover v-slot="{ hover }">
-                    <v-img
-                      class="my-4 transition-swing cursor-pointer rounded mx-auto"
+                    <img
+                      :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
+                      class="my-4 transition-swing cursor-pointer rounded"
                       :class="{
                         'elevation-8': hover,
                         'elevation-4': !hover,
                       }"
-                      :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"
-                      :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
-                      max-width="1000"
+                      width="100%"
+                      style="max-width: 1000px; max-height: 800px"
+                      :alt="fileTitle"
                       @click="$openImage(file.uuid_filename)"
-                    >
-                      <template #placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img>
+                    />
+                    <!--<v-img-->
+                    <!--  contain-->
+                    <!--  class="my-4 transition-swing cursor-pointer rounded mx-auto"-->
+                    <!--  :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"-->
+                    <!--  :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"-->
+                    <!--  max-width="1000"-->
+                    <!--  max-height="800"-->
+                    <!--  @click="$openImage(file.uuid_filename)"-->
+                    <!--  <template #placeholder>-->
+                    <!--    <v-row-->
+                    <!--      class="fill-height ma-0"-->
+                    <!--      align="center"-->
+                    <!--      justify="center"-->
+                    <!--      <v-progress-circular-->
+                    <!--        indeterminate-->
+                    <!--        color="grey lighten-5"-->
+                    <!--      ></v-progress-circular>-->
+                    <!--    </v-row>-->
+                    <!--  </template>-->
+                    <!--</v-img>-->
                   </v-hover>
                 </template>
 
@@ -352,8 +360,81 @@
         </v-row>
       </v-card>
 
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+      <v-card v-if="filteredTabs.length > 0" flat class="mt-2 pb-2">
+        <v-row>
+          <v-col
+            v-for="(item, index) in filteredTabs"
+            :key="index"
+            cols="12"
+            md="6"
+          >
+            <v-card>
+              <v-card-title>{{ $t(item.title) }}</v-card-title>
+
+              <v-card-text>
+                <v-simple-table>
+                  <template #default>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t(`${item.id}.${item.id}`) }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(row, key) in item.items" :key="key">
+                        <td>
+                          <template v-if="item.isLink">
+                            <nuxt-link
+                              v-if="item.isNuxtLink"
+                              class="text-link"
+                              :to="
+                                localePath({
+                                  name: `${item.id}-id`,
+                                  params: { id: row[item.id] },
+                                })
+                              "
+                              >{{ row[item.id] }}</nuxt-link
+                            >
+                            <a
+                              v-else-if="item.isGeoLink"
+                              class="text-link"
+                              @click="$openGeoDetail(item.id, row[item.id])"
+                              >{{ row[item.id] }}
+                              <v-icon small color="deep-orange darken-2"
+                                >mdi-open-in-new</v-icon
+                              >
+                            </a>
+                            <a
+                              v-else
+                              class="text-link"
+                              @click="
+                                $openWindow(
+                                  `${item.href}${
+                                    item.id === 'doi'
+                                      ? row.doi__identifier
+                                      : row[item.id]
+                                  }`
+                                )
+                              "
+                              >{{ row[item.id] }}
+                              <v-icon small color="deep-orange darken-2"
+                                >mdi-open-in-new</v-icon
+                              ></a
+                            >
+                          </template>
+                          <template v-else>
+                            {{ row[item.id] }}
+                          </template>
+                        </td>
+                        <td>{{ buildData(item.id, row) }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-card>
     </v-col>
   </v-row>
@@ -362,13 +443,12 @@
 <script>
 import { isNull, isNil } from 'lodash'
 import BoxImageLoader from '@/components/BoxImageLoader'
-import Tabs from '@/components/Tabs'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/LeafletMap'
 
 export default {
-  components: { LeafletMap, Tabs, BoxImageLoader, DataRow, LinkDataRow },
+  components: { LeafletMap, BoxImageLoader, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
@@ -417,173 +497,178 @@ export default {
       const tabs = [
         {
           id: 'collection',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'file.collection',
+          fields: 'collection,collection__name,collection__name_en',
+          title: 'related.collection',
           count: 0,
-          props: {},
+          items: [],
+          isLink: false,
         },
         {
           id: 'specimen',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'specimen,specimen__coll__number,specimen__specimen_id',
+          title: 'related.specimen',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isGeoLink: true,
         },
         {
           id: 'sample',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'sample,sample__number',
+          title: 'related.sample',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'sample_series',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'sample_series,sample_series__name',
+          title: 'related.sample_series',
           count: 0,
-          props: {},
+          items: [],
+          isLink: false,
         },
         {
           id: 'analysis',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'analysis,analysis__sample__number',
+          title: 'related.analysis',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'dataset',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'dataset,dataset__name,dataset__name_en',
+          title: 'related.dataset',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isGeoLink: true,
         },
         {
           id: 'doi',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'doi,doi__identifier',
+          title: 'related.doi',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          href: 'https://doi.geocollections.info/',
         },
         {
           id: 'locality',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'locality,locality__locality,locality__locality_en',
+          title: 'related.locality',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'drillcore',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'drillcore,drillcore__drillcore,drillcore__drillcore_en',
+          title: 'related.drillcore',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'drillcore_box',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'drillcore_box,drillcore_box__number',
+          title: 'related.drillcore_box',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'preparation',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'preparation,preparation__preparation_number',
+          title: 'related.preparation',
           count: 0,
-          props: {},
+          items: [],
+          isLink: false,
         },
         {
           id: 'reference',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'reference,reference__reference',
+          title: 'related.reference',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          href: 'https://kirjandus.geoloogia.info/reference/',
         },
         {
-          id: 'location',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          id: 'storage',
+          fields: 'storage,storage__location',
+          title: 'related.storage',
           count: 0,
-          props: {},
+          items: [],
+          isLink: false,
         },
         {
           id: 'project',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'project,project__name,project__name_en',
+          title: 'related.project',
           count: 0,
-          props: {},
+          items: [],
+          isLink: false,
         },
         {
           id: 'site',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'site,site__name,site__name_en',
+          title: 'related.site',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'locality_description',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'locality_description,locality_description__description',
+          title: 'related.locality_description',
           count: 0,
-          props: {},
+          items: [],
+          isLink: false,
         },
         {
           id: 'taxon',
-          routeName: 'drillcore_box-id',
-          isSolr: false,
-          title: 'drillcore.samples',
+          fields: 'taxon,taxon__taxon',
+          title: 'related.taxon',
           count: 0,
-          props: {},
+          items: [],
+          isLink: true,
+          href: 'https://fossiilid.info/',
         },
       ]
+
+      const forLoop = async () => {
+        for (const tab of tabs) {
+          const response = await app.$services.sarvREST.getResourceList(
+            'attachment_link',
+            {
+              isValid: isNil(file.id),
+              defaultParams: {
+                [`${tab.id}__isnull`]: false,
+                attachment: file.id,
+                fields: tab.fields,
+              },
+            }
+          )
+          tab.count = response.count || 0
+          tab.items = response.items || []
+        }
+      }
+      await forLoop()
 
       return {
         file,
         specimenIdentification,
         specimenIdentificationGeology,
         attachmentKeywords,
-        initActiveTab: route.path,
-        tabs: (
-          await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateCount(tab, {
-                  solr: {
-                    default: {
-                      fq: `attachment_id:${file.id}`,
-                    },
-                  },
-                  api: {
-                    default: { attachment: file.id },
-                    attachment_link: {
-                      attachment: file.id,
-                    },
-                  },
-                })
-            )
-          )
-        ).map((tab) =>
-          app.$populateProps(tab, {
-            ...tab.props,
-            attachment: file.id,
-          })
-        ),
+        tabs,
       }
     } catch (err) {
       error({
@@ -603,7 +688,7 @@ export default {
     },
 
     fileTitle() {
-      switch (this.file.specimen_image_attachment) {
+      switch (this?.file?.specimen_image_attachment) {
         case 1:
           return `${this.$t('file.specimenTitle')}: ${
             this.file?.specimen__coll__number
@@ -618,8 +703,8 @@ export default {
           }`
         default:
           return `${this.$t('file.fileTitle')}: ${this.$translate({
-            et: this.file.description,
-            en: this.file.description_en,
+            et: this?.file?.description,
+            en: this?.file?.description_en,
           })}`
       }
     },
@@ -666,32 +751,57 @@ export default {
 
     mapLatitude() {
       return (
-        this.file.locality__latitude || this.file.specimen__locality__latitude
+        this.file.locality__latitude ||
+        this.file.specimen__locality__latitude ||
+        this.file.image_latitude
       )
     },
 
     mapLongitude() {
       return (
-        this.file.locality__longitude || this.file.specimen__locality__longitude
+        this.file.locality__longitude ||
+        this.file.specimen__locality__longitude ||
+        this.file.image_longitude
       )
     },
 
     mapLocality() {
       return (
-        this.file.locality__locality || this.file.specimen__locality__locality
+        this.file.locality__locality ||
+        this.file.specimen__locality__locality ||
+        this.file.image_place ||
+        this.file.description
       )
     },
 
     mapLocalityEn() {
       return (
         this.file.locality__locality_en ||
-        this.file.specimen__locality__locality_en
+        this.file.specimen__locality__locality_en ||
+        this.file.image_place ||
+        this.file.description_en
       )
     },
   },
   methods: {
     isNull,
     isNil,
+    buildData(type, data) {
+      const listOfIds = Object.keys(data)
+      listOfIds.splice(listOfIds.indexOf(type), 1)
+
+      if (listOfIds.length === 1) return data[listOfIds[0]]
+      else if (listOfIds.length === 2) {
+        if (type === 'specimen')
+          return `${data[listOfIds[0]].split(' ')[0]} ${data[listOfIds[1]]}`
+        else {
+          return this.$translate({
+            et: data[listOfIds[0]],
+            en: data[listOfIds[1]],
+          })
+        }
+      }
+    },
   },
 }
 </script>

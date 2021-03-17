@@ -21,7 +21,7 @@
               <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
               <v-img
                 contain
-                class="ma-4 transition-swing cursor-pointer"
+                class="ma-4 transition-swing cursor-pointer rounded"
                 :class="{
                   'elevation-8': hover,
                   'elevation-4': !hover,
@@ -29,6 +29,7 @@
                 :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
                 :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
                 max-width="2000"
+                max-height="1000"
                 @click="$openImage(activeImage.attachment__uuid_filename)"
               >
                 <template #placeholder>

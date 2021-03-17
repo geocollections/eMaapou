@@ -19,7 +19,7 @@
     <template #item.description="{ item }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item.id } })"
+        :to="localePath({ name: 'file-id', params: { id: item[idField] } })"
       >
         {{
           $translate({
@@ -64,6 +64,11 @@ export default {
         sortBy: [],
         sortDesc: [],
       }),
+    },
+    idField: {
+      type: String,
+      required: false,
+      default: 'id',
     },
   },
   data() {
