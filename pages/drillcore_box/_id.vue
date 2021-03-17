@@ -115,6 +115,7 @@
                   :src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
                   :lazy-src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
                   max-width="200"
+                  max-height="200"
                   :class="{
                     'elevation-4': hover,
                     'elevation-2': !hover,
