@@ -17,7 +17,7 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'e-Maapõu is web portal for geoscience data from Estonia. It provides direct saerch capabilities to information system SARV and links to other relevant data sources',
+          'e-Maapõu is web portal for geoscience data from Estonia. It provides direct search capabilities to information system SARV and links to other relevant data sources',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
