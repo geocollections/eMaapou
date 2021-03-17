@@ -5,122 +5,119 @@
         {{ $t('analysis.title', { id: analysis.id }) }}
       </h1>
       <v-card flat tile>
-        <v-container>
-          <v-row>
-            <v-col
-              cols="12"
-              md="6"
-              style="max-width: 100%"
-              class="pt-0 px-0 flex-grow-1 flex-shrink-0"
-            >
-              <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-                $t('common.general')
-              }}</v-card-title>
-              <v-card-text class="pl-md-0 pr-md-4 px-0">
-                <v-simple-table dense class="custom-table">
-                  <template #default>
-                    <tbody>
-                      <data-row
-                        :title="$t('analysis.method')"
-                        :value="
-                          $translate({
-                            et: analysis.analysis_method__analysis_method,
-                            en: analysis.analysis_method__method_en,
-                          })
-                        "
-                      />
-                      <data-row
-                        :title="$t('analysis.analysedBy')"
-                        :value="analysis.agent__agent"
-                      />
+        <v-row no-gutters>
+          <v-col
+            cols="12"
+            md="6"
+            style="max-width: 100%"
+            class="pt-0 px-0 flex-grow-1 flex-shrink-0"
+          >
+            <v-card-title class="pl-md-0 pr-md-4 px-0">{{
+              $t('common.general')
+            }}</v-card-title>
+            <v-card-text class="pl-md-0 pr-md-4 px-0">
+              <v-simple-table dense class="custom-table">
+                <template #default>
+                  <tbody>
+                    <data-row
+                      :title="$t('analysis.method')"
+                      :value="
+                        $translate({
+                          et: analysis.analysis_method__analysis_method,
+                          en: analysis.analysis_method__method_en,
+                        })
+                      "
+                    />
+                    <data-row
+                      :title="$t('analysis.analysedBy')"
+                      :value="analysis.agent__agent"
+                    />
 
-                      <link-data-row
-                        :title="$t('analysis.sampleNumber')"
-                        :value="analysis.sample__number"
-                        @link-click="
-                          $openNuxtWindow('sample-id', {
-                            id: analysis.sample__number,
-                          })
-                        "
-                      />
+                    <link-data-row
+                      :title="$t('analysis.sampleNumber')"
+                      :value="analysis.sample__number"
+                      @link-click="
+                        $openNuxtWindow('sample-id', {
+                          id: analysis.sample__number,
+                        })
+                      "
+                    />
 
-                      <data-row
-                        :title="$t('analysis.remarks')"
-                        :value="analysis.remarks"
-                      />
-                      <link-data-row
-                        :title="$t('analysis.reference')"
-                        :value="analysis.reference__reference"
-                        @link-click="
-                          $openGeology('reference', analysis.reference)
-                        "
-                      />
-                      <data-row
-                        :title="$t('analysis.dataset')"
-                        :value="
-                          $translate({
-                            et: analysis.dataset__name,
-                            en: analysis.dataset__name__en,
-                          })
-                        "
-                      />
-                      <link-data-row
-                        :title="$t('analysis.locality')"
-                        :value="
-                          $translate({
-                            et: analysis.sample__locality__locality,
-                            en: analysis.sample__locality__locality__en,
-                          })
-                        "
-                        @link-click="
-                          $openNuxtWindow('locality-id', {
-                            id: analysis.sample__locality_id,
-                          })
-                        "
-                      />
-                      <data-row
-                        :title="$t('analysis.depth')"
-                        :value="analysis.sample__depth"
-                      />
-                      <link-data-row
-                        :title="$t('analysis.stratigraphy')"
-                        :value="
-                          $translate({
-                            et: analysis.sample__stratigraphy__stratigraphy,
-                            en: analysis.sample__stratigraphy__stratigraphy__en,
-                          })
-                        "
-                        @link-click="
-                          $openGeoDetail(
-                            'stratigraphy',
-                            analysis.sample__stratigraphy_id
-                          )
-                        "
-                      />
-                      <link-data-row
-                        :title="$t('analysis.lithostratigraphy')"
-                        :value="
-                          $translate({
-                            et:
-                              analysis.sample__lithostratigraphy__stratigraphy,
-                            en:
-                              analysis.sample__lithostratigraphy__stratigraphy__en,
-                          })
-                        "
-                        @link-click="
-                          $openGeoDetail(
-                            'stratigraphy',
-                            analysis.sample__lithostratigraphy_id
-                          )
-                        "
-                      />
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </v-card-text>
-            </v-col>
-          </v-row>
-        </v-container>
+                    <data-row
+                      :title="$t('analysis.remarks')"
+                      :value="analysis.remarks"
+                    />
+                    <link-data-row
+                      :title="$t('analysis.reference')"
+                      :value="analysis.reference__reference"
+                      @link-click="
+                        $openGeology('reference', analysis.reference)
+                      "
+                    />
+                    <data-row
+                      :title="$t('analysis.dataset')"
+                      :value="
+                        $translate({
+                          et: analysis.dataset__name,
+                          en: analysis.dataset__name__en,
+                        })
+                      "
+                    />
+                    <link-data-row
+                      :title="$t('analysis.locality')"
+                      :value="
+                        $translate({
+                          et: analysis.sample__locality__locality,
+                          en: analysis.sample__locality__locality__en,
+                        })
+                      "
+                      @link-click="
+                        $openNuxtWindow('locality-id', {
+                          id: analysis.sample__locality_id,
+                        })
+                      "
+                    />
+                    <data-row
+                      :title="$t('analysis.depth')"
+                      :value="analysis.sample__depth"
+                    />
+                    <link-data-row
+                      :title="$t('analysis.stratigraphy')"
+                      :value="
+                        $translate({
+                          et: analysis.sample__stratigraphy__stratigraphy,
+                          en: analysis.sample__stratigraphy__stratigraphy__en,
+                        })
+                      "
+                      @link-click="
+                        $openGeoDetail(
+                          'stratigraphy',
+                          analysis.sample__stratigraphy_id
+                        )
+                      "
+                    />
+                    <link-data-row
+                      :title="$t('analysis.lithostratigraphy')"
+                      :value="
+                        $translate({
+                          et: analysis.sample__lithostratigraphy__stratigraphy,
+                          en:
+                            analysis.sample__lithostratigraphy__stratigraphy__en,
+                        })
+                      "
+                      @link-click="
+                        $openGeoDetail(
+                          'stratigraphy',
+                          analysis.sample__lithostratigraphy_id
+                        )
+                      "
+                    />
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
+          </v-col>
+        </v-row>
       </v-card>
       <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
         <tabs :tabs="tabs" :init-active-tab="initActiveTab" />

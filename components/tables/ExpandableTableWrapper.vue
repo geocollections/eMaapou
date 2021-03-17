@@ -16,31 +16,29 @@
   >
     <template #no-data>{{ $t('table.noData') }}</template>
     <template #top="{ pagination, updateOptions }">
-      <v-container fluid>
-        <v-row>
-          <v-col cols="12" sm="4" class="py-0">
-            <v-text-field
-              v-model="search"
-              color="deep-orange darken-2"
-              append-icon="mdi-magnify"
-              :label="$t('common.search')"
-              hide-details
-              clearable
-              @input="handleSearch"
-            ></v-text-field>
-          </v-col>
-          <v-col class="pa-0">
-            <v-data-footer
-              style="border: none"
-              :pagination="pagination"
-              :options="options"
-              :items-per-page-options="footerProps['items-per-page-options']"
-              :items-per-page-text="footerProps['items-per-page-text']"
-              @update:options="updateOptions"
-            />
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-row no-gutters>
+        <v-col cols="12" sm="4" class="py-0 px-3">
+          <v-text-field
+            v-model="search"
+            color="deep-orange darken-2"
+            append-icon="mdi-magnify"
+            :label="$t('common.search')"
+            hide-details
+            clearable
+            @input="handleSearch"
+          ></v-text-field>
+        </v-col>
+        <v-col class="pa-0">
+          <v-data-footer
+            style="border: none"
+            :pagination="pagination"
+            :options="options"
+            :items-per-page-options="footerProps['items-per-page-options']"
+            :items-per-page-text="footerProps['items-per-page-text']"
+            @update:options="updateOptions"
+          />
+        </v-col>
+      </v-row>
     </template>
     <template #item.data-table-expand="{ expand, isExpanded, item }">
       <v-btn

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div class="px-3">
     <v-row>
       <v-col>
         <!-- HACK: Should make infinite loader wrapper -->
@@ -149,7 +149,7 @@
         </client-only>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>

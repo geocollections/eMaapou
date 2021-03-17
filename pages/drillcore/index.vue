@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div>
     <v-row>
       <v-col>
         <h1 class="text-center">{{ $t('common.drillcores') }}</h1>
@@ -37,7 +37,7 @@
         />
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>

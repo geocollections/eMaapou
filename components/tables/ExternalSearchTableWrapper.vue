@@ -16,20 +16,18 @@
       {{ $t('table.noData') }}
     </template>
     <template #top="{ pagination, updateOptions }">
-      <v-container fluid>
-        <v-row>
-          <v-col class="pa-0">
-            <v-data-footer
-              style="border: none"
-              :pagination="pagination"
-              :options="initOptions"
-              :items-per-page-options="footerProps['items-per-page-options']"
-              :items-per-page-text="footerProps['items-per-page-text']"
-              @update:options="updateOptions"
-            />
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-row no-gutters>
+        <v-col class="pa-0">
+          <v-data-footer
+            style="border: none"
+            :pagination="pagination"
+            :options="initOptions"
+            :items-per-page-options="footerProps['items-per-page-options']"
+            :items-per-page-text="footerProps['items-per-page-text']"
+            @update:options="updateOptions"
+          />
+        </v-col>
+      </v-row>
     </template>
     <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
       <slot :name="slotName" v-bind="context" />

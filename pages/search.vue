@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0">
+  <div>
     <v-row justify="center" align="center">
       <v-col>
         <h1 class="text-center my-3">
@@ -33,7 +33,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
