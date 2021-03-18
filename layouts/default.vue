@@ -4,8 +4,9 @@
       <app-header />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <nuxt keep-alive :keep-alive-props="{ include: ['QuickSearch'] }" />
+        <back-fab v-if="isDetail" />
         <link-to-edit-fab v-if="isDetail" />
-        <scroll-top-fab class="fab-container ma-3" />
+        <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
       </v-container>
       <client-only>
         <cookie-policy />
@@ -22,6 +23,7 @@ import AppHeader from '@/components/AppHeader'
 import LinkToEditFab from '@/components/LinkToEditFab'
 import ScrollTopFab from '~/components/ScrollTopFab.vue'
 import CookiePolicy from '~/components/CookiePolicy'
+import BackFab from '~/components/BackFab.vue'
 
 export default {
   components: {
@@ -30,6 +32,7 @@ export default {
     AppFooter,
     ScrollTopFab,
     LinkToEditFab,
+    BackFab,
   },
   data() {
     return {
@@ -60,6 +63,9 @@ export default {
 .fab-container {
   z-index: 1500;
   position: fixed;
+}
+
+.fab-bottom-right {
   bottom: 0;
   right: 0;
 }
