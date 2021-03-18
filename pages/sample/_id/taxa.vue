@@ -9,7 +9,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import { TAXON } from '~/constants'
+import { TAXON_LIST } from '~/constants'
 import TaxonListTable from '~/components/tables/TaxonListTable'
 
 export default {
@@ -24,7 +24,7 @@ export default {
     return {
       taxa: [],
       count: 0,
-      options: TAXON.options,
+      options: TAXON_LIST.options,
     }
   },
   methods: {
@@ -37,7 +37,7 @@ export default {
           defaultParams: {
             sample: this.sample,
           },
-          queryFields: this.$getQueryFields(TAXON.queryFields),
+          queryFields: this.$getQueryFields(TAXON_LIST.queryFields),
         }
       )
       this.taxa = taxonResponse.items

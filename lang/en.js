@@ -488,7 +488,15 @@ export default {
     dataset: 'Dataset',
   },
   reference: {
+    id: 'ID',
     reference: 'Reference',
+    author: 'Author',
+    year: 'Year',
+    title: 'Title',
+    journalBook: 'Journal / Book',
+    pages: 'Pages',
+    doi: 'DOI',
+    remarks: 'Remarks',
   },
   storage: {
     storage: 'Storage',

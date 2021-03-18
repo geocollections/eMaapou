@@ -488,7 +488,15 @@ export default {
     dataset: 'Andmekogu',
   },
   reference: {
+    id: 'ID',
     reference: 'Kirjandus',
+    author: 'Autor',
+    year: 'Aasta',
+    title: 'Pealkiri',
+    journalBook: 'Ajakiri / Raamat',
+    pages: 'Leheküljed',
+    doi: 'DOI',
+    remarks: 'Lisainfo',
   },
   storage: {
     storage: 'Hoiukoht',

@@ -232,7 +232,7 @@ export const DESCRIPTION = {
   },
 }
 
-export const TAXON = {
+export const TAXON_LIST = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -248,6 +248,22 @@ export const TAXON = {
     date_identified: (locale) => 'date_identified,date_identified_free',
     extra: (locale) => 'extra',
     remarks: (locale) => 'remarks',
+  },
+}
+
+export const TAXON = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    fossil_group: (locale) => 'fossil_group',
+    taxon: (locale) => 'taxon',
+    author_year: (locale) => 'author_year',
+    parent_taxon: (locale) => 'parent_taxon',
   },
 }
 
@@ -345,13 +361,14 @@ export const REFERENCE = {
     sortDesc: [],
   },
   queryFields: {
-    taxon: (locale) => 'taxon__taxon',
-    name: (locale) => 'name',
-    frequency: (locale) => 'frequency',
-    agent_identified: (locale) =>
-      'agent_identified__agent,agent_identified_txt',
-    date_identified: (locale) => 'date_identified,date_identified_free',
-    extra: (locale) => 'extra',
+    id: (locale) => 'id',
+    reference: (locale) => 'reference',
+    author: (locale) => 'author',
+    year: (locale) => 'year',
+    title: (locale) => 'title',
+    journal: (locale) => 'journal__journal_name,book',
+    pages: (locale) => 'pages',
+    doi: (locale) => 'doi',
     remarks: (locale) => 'remarks',
   },
 }
