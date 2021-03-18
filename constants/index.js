@@ -167,9 +167,10 @@ export const DRILLCORE = {
     depth: (locale) => 'depth',
     boxes: (locale) => 'boxes',
     box_numbers: (locale) => 'box_numbers',
-    storage__location: (locale) => 'storage__location',
+    core_repository: (locale) =>
+      locale === 'et' ? 'core_repository' : 'core_repository_en',
     year: (locale) => 'year',
-    remarks: (locale) => 'remarks',
+    acronym: (locale) => 'acronym',
   },
 }
 
