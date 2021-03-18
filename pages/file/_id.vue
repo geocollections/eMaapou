@@ -29,7 +29,6 @@
                         'elevation-8': hover,
                         'elevation-4': !hover,
                       }"
-                      width="100%"
                       style="max-width: 1000px; max-height: 800px"
                       :alt="fileTitle"
                       @click="$openImage(file.uuid_filename)"
