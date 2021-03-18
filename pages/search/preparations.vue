@@ -1,6 +1,7 @@
 <template>
   <preparation-table
     :show-search="false"
+    external-options
     :items="items"
     :count="count"
     :options="options"
@@ -29,6 +30,7 @@ export default {
   watch: {
     search: {
       handler: debounce(function (value) {
+        this.options.page = 1
         this.handleUpdate({ tableOptions: { ...this.options }, search: value })
       }, 500),
     },
@@ -44,6 +46,7 @@ export default {
           searchFilters: {},
         }
       )
+      this.options = options.tableOptions
       this.items = preparationResponse.items
       this.count = preparationResponse.count
     },
