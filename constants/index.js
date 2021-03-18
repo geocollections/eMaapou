@@ -113,7 +113,7 @@ export const SITE = {
   },
   queryFields: {
     id: (locale) => 'id',
-    name: (locale) => (locale === 'et' ? 'name' : 'name_en'),
+    name: (locale) => 'name',
     x: (locale) => 'x',
     y: (locale) => 'y',
     z: (locale) => 'z',
