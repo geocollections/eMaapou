@@ -323,14 +323,12 @@ export const DOI = {
     sortDesc: [],
   },
   queryFields: {
-    taxon: (locale) => 'taxon__taxon',
-    name: (locale) => 'name',
-    frequency: (locale) => 'frequency',
-    agent_identified: (locale) =>
-      'agent_identified__agent,agent_identified_txt',
-    date_identified: (locale) => 'date_identified,date_identified_free',
-    extra: (locale) => 'extra',
-    remarks: (locale) => 'remarks',
+    identifier: (locale) => 'identifier',
+    creators: (locale) => 'creators',
+    reference_year: (locale) => 'reference_year',
+    title: (locale) => 'title',
+    resource: (locale) => 'resource',
+    datacite_created: (locale) => 'datacite_created',
   },
 }
 

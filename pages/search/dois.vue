@@ -1,5 +1,5 @@
 <template>
-  <rock-table
+  <doi-table
     :show-search="false"
     external-options
     :items="items"
@@ -12,14 +12,14 @@
 <script>
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
-import { ROCK } from '~/constants'
-import RockTable from '~/components/tables/RockTable'
+import { DOI } from '~/constants'
+import DoiTable from '~/components/tables/DoiTable'
 
 export default {
-  components: { RockTable },
+  components: { DoiTable },
   data() {
     return {
-      options: ROCK.options,
+      options: DOI.options,
       items: [],
       count: 0,
     }
@@ -36,17 +36,14 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'rock',
-        {
-          tableOptions: options.tableOptions,
-          search: this.search,
-          queryFields: this.$getQueryFields(ROCK.queryFields),
-          searchFilters: {},
-        }
-      )
-      this.items = analysisResponse.items
-      this.count = analysisResponse.count
+      const response = await this.$services.sarvSolr.getResourceList('doi', {
+        tableOptions: options.tableOptions,
+        search: this.search,
+        queryFields: this.$getQueryFields(DOI.queryFields),
+        searchFilters: {},
+      })
+      this.items = response.items
+      this.count = response.count
     },
   },
 }

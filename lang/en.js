@@ -397,6 +397,12 @@ export default {
     description: 'Estonian Peat Database',
   },
   doi: {
+    identifier: 'DOI',
+    creators: 'Creators',
+    reference_year: 'Year',
+    table_title: 'Title',
+    resource: 'Type',
+    datacite_created: 'DataCite registration',
     title: 'SARV-DOI',
     description: 'Geoscience Data Repository',
     doi: 'DOI',

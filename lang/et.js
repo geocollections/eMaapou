@@ -397,6 +397,12 @@ export default {
     description: 'Eesti turbauuringute andmebaas',
   },
   doi: {
+    identifier: 'DOI',
+    creators: 'Autor',
+    reference_year: 'Aasta',
+    table_title: 'Pealkiri',
+    resource: 'Tüüp',
+    datacite_created: 'DataCite registreerimine',
     title: 'SARV-DOI',
     description: 'Eesti geoteaduslike andmete repositoorium',
     doi: 'DOI',
