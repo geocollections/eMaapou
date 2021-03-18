@@ -1,7 +1,6 @@
 <template>
   <preparation-table
     :items="preparations"
-    :headers="headers"
     :count="count"
     :options="options"
     @update="handleUpdate"

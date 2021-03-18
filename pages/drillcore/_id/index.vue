@@ -40,6 +40,7 @@
                       }"
                       contain
                       max-width="1000"
+                      max-height="800"
                       eager
                       :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
                       :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"

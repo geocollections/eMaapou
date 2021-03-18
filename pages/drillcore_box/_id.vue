@@ -11,7 +11,7 @@
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
       </h1>
       <prev-next-nav />
-      <v-card class="my-2">
+      <v-card class="my-2 mx-4">
         <v-card-text>
           <client-only>
             <template #placeholder>
@@ -21,7 +21,7 @@
               <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
               <v-img
                 contain
-                class="ma-4 transition-swing cursor-pointer"
+                class="ma-4 transition-swing cursor-pointer rounded"
                 :class="{
                   'elevation-8': hover,
                   'elevation-4': !hover,
@@ -29,6 +29,7 @@
                 :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
                 :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
                 max-width="2000"
+                max-height="1000"
                 @click="$openImage(activeImage.attachment__uuid_filename)"
               >
                 <template #placeholder>
@@ -99,7 +100,6 @@
           </div>
         </v-card-text>
 
-        <!-- Todo: Thumbnails here #22-->
         <v-card-text
           v-if="drillcoreBoxImages && drillcoreBoxImages.length > 1"
           class="pt-0"
@@ -115,6 +115,7 @@
                   :src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
                   :lazy-src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
                   max-width="200"
+                  max-height="200"
                   :class="{
                     'elevation-4': hover,
                     'elevation-2': !hover,
