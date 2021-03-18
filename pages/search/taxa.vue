@@ -5,7 +5,6 @@
     :items="items"
     :count="count"
     :options="options"
-    use-solr-fields
     @update="handleUpdate"
   />
 </template>

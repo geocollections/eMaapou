@@ -320,6 +320,9 @@ export default {
     date_identified: 'Det. date',
     extra: 'Extra',
     remarks: 'Remarks',
+    fossilGroup: 'Fossil group',
+    authorYear: 'Author',
+    parentTaxon: 'Parent taxon',
   },
   infinite: {
     noMore: '',

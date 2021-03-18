@@ -10,28 +10,15 @@
     <template #item.taxon="{ item }">
       <a
         class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.id}`)"
+        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
       >
-        {{ item.taxon }}
+        {{ item.taxon__taxon }}
       </a>
     </template>
 
-    <template #item.fossil_group="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.fossil_group_id}`)"
-      >
-        {{ item.fossil_group }}
-      </a>
-    </template>
-
-    <template #item.parent_taxon="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.parent_taxon_id}`)"
-      >
-        {{ item.parent_taxon }}
-      </a>
+    <template #item.extra="{ item }">
+      <v-icon v-if="item.extra">mdi-plus</v-icon>
+      <v-icon v-else>mdi-minus</v-icon>
     </template>
   </table-wrapper>
 </template>
@@ -40,7 +27,7 @@
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
-  name: 'TaxonTable',
+  name: 'TaxonListTable',
   components: { TableWrapper },
   props: {
     showSearch: {
@@ -72,17 +59,19 @@ export default {
   data() {
     return {
       headers: [
-        { text: this.$t('taxon.id'), value: 'id' },
-        {
-          text: this.$t('taxon.fossilGroup'),
-          value: 'fossil_group',
-        },
         { text: this.$t('taxon.taxon'), value: 'taxon' },
         {
-          text: this.$t('taxon.authorYear'),
-          value: 'author_year',
+          text: this.$t('taxon.name'),
+          value: 'name',
         },
-        { text: this.$t('taxon.parentTaxon'), value: 'parent_taxon' },
+        { text: this.$t('taxon.frequency'), value: 'frequency' },
+        {
+          text: this.$t('taxon.agent_identified'),
+          value: 'agent_identified__agent',
+        },
+        { text: this.$t('taxon.date_identified'), value: 'date_identified' },
+        { text: this.$t('taxon.extra'), value: 'extra' },
+        { text: this.$t('taxon.remarks'), value: 'remarks' },
       ],
     }
   },

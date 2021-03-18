@@ -320,6 +320,9 @@ export default {
     date_identified: 'Det. aeg',
     extra: 'Ekstra',
     remarks: 'Lisainfo',
+    fossilGroup: 'Fossiili grupp',
+    authorYear: 'Autor',
+    parentTaxon: 'Kuulub: takson',
   },
   infinite: {
     noMore: '',

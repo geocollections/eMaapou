@@ -1,5 +1,5 @@
 <template>
-  <taxon-table
+  <taxon-list-table
     :items="taxa"
     :count="count"
     :options="options"
@@ -10,10 +10,10 @@
 <script>
 import { isNil } from 'lodash'
 import { TAXON } from '~/constants'
-import TaxonTable from '~/components/tables/TaxonTable.vue'
+import TaxonListTable from '~/components/tables/TaxonListTable'
 
 export default {
-  components: { TaxonTable },
+  components: { TaxonListTable },
   props: {
     sample: {
       type: Number,
