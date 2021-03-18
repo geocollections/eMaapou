@@ -4,3 +4,22 @@
 // $font-size-root: 20px;
 
 $body-font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+
+//
+// @import '~vuetify/src/styles/styles.sass';
+// $material-light: (
+//   icons: (
+//     active:
+//       map-get(
+//         $map: $deep-orange,
+//         $key: 'darken-2',
+//       ),
+//   ),
+// );
+
+// HACK: This is done do change tab overflow arrow colors. It also overrides other active icon colors, so it might change some icons inadvertently.
+$material-light: (
+  icons: (
+    active: #e64a19,
+  ),
+);

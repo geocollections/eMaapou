@@ -6,8 +6,10 @@
       class="tabs"
       background-color="grey lighten-3"
       color="deep-orange darken-2"
-      show-arrows
+      :show-arrows="$vuetify.breakpoint.smAndUp"
       active-class="active"
+      :vertical="$vuetify.breakpoint.xsOnly"
+      grow
     >
       <v-tab
         v-for="(item, index) in tabs"
@@ -60,6 +62,13 @@ export default {
       activeTab: this.initActiveTab,
     }
   },
+  created() {
+    // if (document.getElementsByClassName('v-slide-group__prev')) {
+    //   document
+    //     .getElementsByClassName('v-slide-group__prev')[0]
+    //     .firstElementChild.classList.remove('theme--light')
+    // }
+  },
 }
 </script>
 
@@ -71,5 +80,13 @@ export default {
 
 .active {
   font-weight: bold;
+
+  div {
+    .v-slide-group__prev {
+      .v-icon {
+        color: red;
+      }
+    }
+  }
 }
 </style>

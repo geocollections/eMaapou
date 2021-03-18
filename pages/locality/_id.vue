@@ -189,7 +189,7 @@
         </v-row>
       </v-card>
       <v-card class="mt-6 mx-4 mb-4">
-        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>

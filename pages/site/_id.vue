@@ -282,7 +282,7 @@
         </v-container>
       </v-card>
       <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
-        <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
   </v-row>

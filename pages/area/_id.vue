@@ -143,7 +143,7 @@
       <v-card v-if="filteredTabs.length > 0" flat tile class="mt-6 mx-4 mb-4">
         <v-row no-gutters justify="center" class="px-4">
           <v-col cols="12" md="9" lg="7" xl="6" class="elevation-2 rounded">
-            <tabs :tabs="tabs" :init-active-tab="initActiveTab" />
+            <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
           </v-col>
         </v-row>
       </v-card>
