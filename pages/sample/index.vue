@@ -30,6 +30,7 @@
       <v-col cols="12" md="9">
         <sample-table
           :show-search="false"
+          external-options
           :items="items"
           :count="count"
           :options="options"

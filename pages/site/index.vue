@@ -30,6 +30,7 @@
       <v-col cols="9">
         <site-table
           :show-search="false"
+          external-options
           :items="items"
           :count="count"
           :options="options"
