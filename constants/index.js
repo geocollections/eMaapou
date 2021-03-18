@@ -279,3 +279,79 @@ export const DRILLCORE_BOX = {
         : 'drillcore_box__stratigraphy_base__stratigraphy_en',
   },
 }
+
+export const ROCK = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    taxon: (locale) => 'taxon__taxon',
+    name: (locale) => 'name',
+    frequency: (locale) => 'frequency',
+    agent_identified: (locale) =>
+      'agent_identified__agent,agent_identified_txt',
+    date_identified: (locale) => 'date_identified,date_identified_free',
+    extra: (locale) => 'extra',
+    remarks: (locale) => 'remarks',
+  },
+}
+
+export const DOI = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    taxon: (locale) => 'taxon__taxon',
+    name: (locale) => 'name',
+    frequency: (locale) => 'frequency',
+    agent_identified: (locale) =>
+      'agent_identified__agent,agent_identified_txt',
+    date_identified: (locale) => 'date_identified,date_identified_free',
+    extra: (locale) => 'extra',
+    remarks: (locale) => 'remarks',
+  },
+}
+
+export const DATASET = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    taxon: (locale) => 'taxon__taxon',
+    name: (locale) => 'name',
+    frequency: (locale) => 'frequency',
+    agent_identified: (locale) =>
+      'agent_identified__agent,agent_identified_txt',
+    date_identified: (locale) => 'date_identified,date_identified_free',
+    extra: (locale) => 'extra',
+    remarks: (locale) => 'remarks',
+  },
+}
+
+export const REFERENCE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    taxon: (locale) => 'taxon__taxon',
+    name: (locale) => 'name',
+    frequency: (locale) => 'frequency',
+    agent_identified: (locale) =>
+      'agent_identified__agent,agent_identified_txt',
+    date_identified: (locale) => 'date_identified,date_identified_free',
+    extra: (locale) => 'extra',
+    remarks: (locale) => 'remarks',
+  },
+}

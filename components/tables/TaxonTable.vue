@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch, externalOptions }"
-    :headers="headers"
+    :headers="computedHeaders"
     :items="items"
     :init-options="options"
     :count="count"
@@ -10,9 +10,13 @@
     <template #item.taxon="{ item }">
       <a
         class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
+        @click="
+          $openWindow(
+            `https://fossiilid.info/${useSolrFields ? item.id : item.taxon}`
+          )
+        "
       >
-        {{ item.taxon__taxon }}
+        {{ useSolrFields ? item.taxon : item.taxon__taxon }}
       </a>
     </template>
 
@@ -55,6 +59,11 @@ export default {
         sortDesc: [],
       }),
     },
+    useSolrFields: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
@@ -74,6 +83,16 @@ export default {
         { text: this.$t('taxon.remarks'), value: 'remarks' },
       ],
     }
+  },
+  computed: {
+    computedHeaders() {
+      if (this.useSolrFields)
+        return this.headers.map((item) => {
+          if (item.value === 'name') item.value = 'common_names'
+          return item
+        })
+      else return this.headers
+    },
   },
   methods: {
     round,
