@@ -7,7 +7,9 @@
         <link-to-edit-fab v-if="isDetail" />
         <scroll-top-fab class="fab-container ma-3" />
       </v-container>
-      <cookie-policy />
+      <client-only>
+        <cookie-policy />
+      </client-only>
     </v-main>
 
     <app-footer />
