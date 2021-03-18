@@ -152,6 +152,14 @@ export default {
           count: 0,
           props: {},
         },
+        {
+          id: 'stratigraphy',
+          routeName: 'search-stratigraphy',
+          title: 'landing.stratigraphy',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
       ]
 
       return {

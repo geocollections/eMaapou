@@ -372,3 +372,25 @@ export const REFERENCE = {
     remarks: (locale) => 'remarks',
   },
 }
+
+export const STRATIGRAPHY = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    stratigraphy: (locale) => 'stratigraphy,stratigraphy_en',
+    index_main: (locale) => 'index_main',
+    index_additional: (locale) => 'index_additional',
+    stratigraphy_type: (locale) => 'stratigraphy_type,stratigraphy_type_en',
+    stratigraphy_rank: (locale) => 'stratigraphy_rank,stratigraphy_rank_en',
+    stratigraphy_scope: (locale) => 'stratigraphy_scope,stratigraphy_scope_en',
+    age_stratigraphy: (locale) => 'age_stratigraphy,age_stratigraphy_en',
+    age: (locale) => 'age_base,age_top',
+    parent_stratigraphy: (locale) =>
+      'parent_stratigraphy,parent_stratigraphy_en',
+  },
+}
