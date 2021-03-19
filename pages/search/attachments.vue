@@ -1,5 +1,5 @@
 <template>
-  <rock-table
+  <attachment-solr-table
     :show-search="false"
     external-options
     :items="items"
@@ -12,14 +12,14 @@
 <script>
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
-import { ROCK } from '~/constants'
-import RockTable from '~/components/tables/RockTable'
+import { ATTACHMENT } from '~/constants'
+import AttachmentSolrTable from '~/components/tables/AttachmentSolrTable'
 
 export default {
-  components: { RockTable },
+  components: { AttachmentSolrTable },
   data() {
     return {
-      options: ROCK.options,
+      options: ATTACHMENT.options,
       items: [],
       count: 0,
     }
@@ -37,18 +37,18 @@ export default {
   },
   methods: {
     async handleUpdate(options) {
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'rock',
+      const response = await this.$services.sarvSolr.getResourceList(
+        'attachment',
         {
           tableOptions: options.tableOptions,
           search: this.search,
-          queryFields: this.$getQueryFields(ROCK.queryFields),
+          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
           searchFilters: {},
         }
       )
-      this.options = analysisResponse.options
-      this.items = analysisResponse.items
-      this.count = analysisResponse.count
+      this.options = response.options
+      this.items = response.items
+      this.count = response.count
     },
   },
 }

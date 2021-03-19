@@ -27,11 +27,13 @@ export const ATTACHMENT = {
     sortDesc: [],
   },
   queryFields: {
-    description: (locale) =>
-      locale === 'et'
-        ? 'attachment__description'
-        : 'attachment__description_en',
-    attachment__author__agent: (locale) => 'attachment__author__agent',
+    id: (locale) => 'id',
+    format: (locale) => 'format_value',
+    image_number: (locale) => 'image_number',
+    author: (locale) => 'author',
+    date: (locale) => 'date',
+    reference: (locale) => 'reference',
+    type: (locale) => 'type',
   },
 }
 
