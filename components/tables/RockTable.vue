@@ -8,57 +8,45 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
+      <a
+        class="text-link"
+        @click="$openWindow(`https://kivid.info/${item.id}`)"
+      >
         {{ item.id }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
-    <template #item.kind="{ item }">
-      {{
-        $translate({
-          et: item.specimen_kind,
-          en: item.specimen_kind_en,
-        })
-      }}
+
+    <template #item.formula="{ item }">
+      <div v-if="item.formula_html" v-html="item.formula_html" />
+      <div v-else>{{ item.formula }}</div>
     </template>
-    <template #item.stratigraphy="{ item }">
+
+    <template #item.in_estonia="{ item }">
+      <v-icon v-if="item.in_estonia" color="green" small>mdi-check-bold</v-icon>
+      <v-icon v-else color="red" small>mdi-close-thick</v-icon>
+    </template>
+
+    <template #item.mindat_id="{ item }">
       <a
+        v-if="item.mindat_id"
         class="text-link"
-        @click="$openGeoDetail('stratigraphy', item.stratigraphy_id)"
+        @click="
+          $openWindow(`https://www.mindat.org/min-${item.mindat_id}.html`)
+        "
       >
-        {{
-          $translate({
-            et: item.stratigraphy,
-            en: item.stratigraphy_en,
-          })
-        }}
+        {{ item.mindat_id }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
-    </template>
-    <template #item.taxon="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
-      >
-        {{ item.taxon }}
-      </a>
-    </template>
-    <template #item.image="{ item }">
-      <image-cell
-        v-if="item.image_preview_url"
-        :src="item.image_preview_url"
-        class="ma-2"
-        @click="$openGeoDetail('specimen', item.id)"
-      />
     </template>
   </table-wrapper>
 </template>
 
 <script>
-import { round } from 'lodash'
 import TableWrapper from '@/components/tables/TableWrapper.vue'
-import ImageCell from '@/components/ImageCell'
 export default {
   name: 'RockTable',
-  components: { TableWrapper, ImageCell },
+  components: { TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
@@ -89,20 +77,14 @@ export default {
   data() {
     return {
       headers: [
-        { text: this.$t('specimen.id'), value: 'id' },
-        { text: this.$t('specimen.number'), value: 'specimen_number' },
-        { text: this.$t('specimen.depth'), value: 'depth' },
-        { text: this.$t('specimen.depthInterval'), value: 'depth_interval' },
-        { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
-        { text: this.$t('specimen.kind'), value: 'kind' },
-        { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
-        { text: this.$t('specimen.taxon'), value: 'taxon' },
-        { text: this.$t('specimen.image'), value: 'image', sortable: false },
+        { text: this.$t('rock.id'), value: 'id' },
+        { text: this.$t('rock.name'), value: 'name' },
+        { text: this.$t('rock.name_en'), value: 'name_en' },
+        { text: this.$t('rock.formula'), value: 'formula' },
+        { text: this.$t('rock.in_estonia'), value: 'in_estonia' },
+        { text: this.$t('rock.mindat'), value: 'mindat_id' },
       ],
     }
-  },
-  methods: {
-    round,
   },
 }
 </script>

@@ -12,7 +12,7 @@ export default {
     specimens: 'Eksemplarid ({number})',
     references: 'Kirjandus ({number})',
     taxa: 'Taksonoomika ({number})',
-    rocks: 'Kivimid ({number})',
+    rocks: 'Mineraalid / Kivimid ({number})',
     dois: 'DOId ({number})',
     datasets: 'Andmekogud ({number})',
     attachment: 'Failid ({number})',
@@ -527,5 +527,13 @@ export default {
   },
   locality_description: {
     locality_description: 'Asukoha kirjeldus',
+  },
+  rock: {
+    id: 'ID',
+    name: 'Nimi',
+    name_en: 'Nimi EN',
+    formula: 'Valem',
+    in_estonia: 'Eestis?',
+    mindat: 'Mindat',
   },
 }

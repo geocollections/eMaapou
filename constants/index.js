@@ -304,14 +304,12 @@ export const ROCK = {
     sortDesc: [],
   },
   queryFields: {
-    taxon: (locale) => 'taxon__taxon',
+    id: (locale) => 'id',
     name: (locale) => 'name',
-    frequency: (locale) => 'frequency',
-    agent_identified: (locale) =>
-      'agent_identified__agent,agent_identified_txt',
-    date_identified: (locale) => 'date_identified,date_identified_free',
-    extra: (locale) => 'extra',
-    remarks: (locale) => 'remarks',
+    name_en: (locale) => 'name_en',
+    formula: (locale) => 'formula,formula_html',
+    in_estonia: (locale) => 'in_estonia',
+    mindat_id: (locale) => 'mindat_id',
   },
 }
 

@@ -12,7 +12,7 @@ export default {
     specimens: 'Specimens ({number})',
     references: 'References ({number})',
     taxa: 'Taxa ({number})',
-    rocks: 'Rocks ({number})',
+    rocks: 'Minerals / Rocks ({number})',
     dois: 'DOIs ({number})',
     datasets: 'Datasets ({number})',
     attachment: 'Attachments ({number})',
@@ -527,5 +527,13 @@ export default {
   },
   locality_description: {
     locality_description: 'Locality description',
+  },
+  rock: {
+    id: 'ID',
+    name: 'Name',
+    name_en: 'Name EN',
+    formula: 'Formula',
+    in_estonia: 'In Estonia?',
+    mindat: 'Mindat',
   },
 }
