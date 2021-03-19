@@ -25,8 +25,11 @@
     </template>
     <template #item.stratigraphy="{ item }">
       <a
+        v-if="item.stratigraphy_id"
         class="text-link"
-        @click="$openGeoDetail('stratigraphy', item.stratigraphy_id)"
+        @click="
+          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
+        "
       >
         {{
           $translate({
@@ -34,6 +37,7 @@
             en: item.stratigraphy_en,
           })
         }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
     <template #item.date_collected="{ item }">
