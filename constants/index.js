@@ -340,14 +340,10 @@ export const DATASET = {
     sortDesc: [],
   },
   queryFields: {
-    taxon: (locale) => 'taxon__taxon',
-    name: (locale) => 'name',
-    frequency: (locale) => 'frequency',
-    agent_identified: (locale) =>
-      'agent_identified__agent,agent_identified_txt',
-    date_identified: (locale) => 'date_identified,date_identified_free',
-    extra: (locale) => 'extra',
-    remarks: (locale) => 'remarks',
+    id: (locale) => 'id',
+    name: (locale) => 'name,name_en',
+    date: (locale) => 'date,date_txt',
+    database_acronym: (locale) => 'database_acronym',
   },
 }
 

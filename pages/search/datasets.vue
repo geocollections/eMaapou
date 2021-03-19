@@ -1,5 +1,5 @@
 <template>
-  <rock-table
+  <dataset-table
     :show-search="false"
     external-options
     :items="items"
@@ -12,14 +12,14 @@
 <script>
 import { mapState } from 'vuex'
 import { debounce } from 'lodash'
-import { ROCK } from '~/constants'
-import RockTable from '~/components/tables/RockTable'
+import { DATASET } from '~/constants'
+import DatasetTable from '~/components/tables/DatasetTable'
 
 export default {
-  components: { RockTable },
+  components: { DatasetTable },
   data() {
     return {
-      options: ROCK.options,
+      options: DATASET.options,
       items: [],
       count: 0,
     }
@@ -37,11 +37,11 @@ export default {
   methods: {
     async handleUpdate(options) {
       const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'rock',
+        'dataset',
         {
           tableOptions: options.tableOptions,
           search: this.search,
-          queryFields: this.$getQueryFields(ROCK.queryFields),
+          queryFields: this.$getQueryFields(DATASET.queryFields),
           searchFilters: {},
         }
       )

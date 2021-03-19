@@ -502,6 +502,10 @@ export default {
     drillcore_box: 'Puursüdamiku kast',
   },
   dataset: {
+    id: 'ID',
+    name: 'Nimi',
+    date: 'Kuupäev',
+    database: 'Andmebaas',
     dataset: 'Andmekogu',
   },
   reference: {

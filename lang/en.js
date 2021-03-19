@@ -502,6 +502,10 @@ export default {
     drillcore_box: 'Drillcore box',
   },
   dataset: {
+    id: 'ID',
+    name: 'Name',
+    date: 'Date',
+    database: 'Database',
     dataset: 'Dataset',
   },
   reference: {
