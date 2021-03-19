@@ -2,7 +2,6 @@
   <v-app-bar
     app
     color="#6A76AB"
-    shrink-on-scroll
     prominent
     hide-on-scroll
     :src="require(`~/assets/header/header1a.jpg`)"
