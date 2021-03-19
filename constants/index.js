@@ -233,7 +233,7 @@ export const DESCRIPTION = {
   },
 }
 
-export const TAXON = {
+export const TAXON_LIST = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -249,6 +249,22 @@ export const TAXON = {
     date_identified: (locale) => 'date_identified,date_identified_free',
     extra: (locale) => 'extra',
     remarks: (locale) => 'remarks',
+  },
+}
+
+export const TAXON = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    fossil_group: (locale) => 'fossil_group',
+    taxon: (locale) => 'taxon',
+    author_year: (locale) => 'author_year',
+    parent_taxon: (locale) => 'parent_taxon',
   },
 }
 
@@ -278,5 +294,96 @@ export const DRILLCORE_BOX = {
       locale === 'et'
         ? 'drillcore_box__stratigraphy_base__stratigraphy'
         : 'drillcore_box__stratigraphy_base__stratigraphy_en',
+  },
+}
+
+export const ROCK = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    name: (locale) => 'name',
+    name_en: (locale) => 'name_en',
+    formula: (locale) => 'formula,formula_html',
+    in_estonia: (locale) => 'in_estonia',
+    mindat_id: (locale) => 'mindat_id',
+  },
+}
+
+export const DOI = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    identifier: (locale) => 'identifier',
+    creators: (locale) => 'creators',
+    reference_year: (locale) => 'reference_year',
+    title: (locale) => 'title',
+    resource: (locale) => 'resource',
+    datacite_created: (locale) => 'datacite_created',
+  },
+}
+
+export const DATASET = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    name: (locale) => 'name,name_en',
+    date: (locale) => 'date,date_txt',
+    database_acronym: (locale) => 'database_acronym',
+  },
+}
+
+export const REFERENCE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    reference: (locale) => 'reference',
+    author: (locale) => 'author',
+    year: (locale) => 'year',
+    title: (locale) => 'title',
+    journal: (locale) => 'journal__journal_name,book',
+    pages: (locale) => 'pages',
+    doi: (locale) => 'doi',
+    remarks: (locale) => 'remarks',
+  },
+}
+
+export const STRATIGRAPHY = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    stratigraphy: (locale) => 'stratigraphy,stratigraphy_en',
+    index_main: (locale) => 'index_main',
+    index_additional: (locale) => 'index_additional',
+    stratigraphy_type: (locale) => 'stratigraphy_type,stratigraphy_type_en',
+    stratigraphy_rank: (locale) => 'stratigraphy_rank,stratigraphy_rank_en',
+    stratigraphy_scope: (locale) => 'stratigraphy_scope,stratigraphy_scope_en',
+    age_stratigraphy: (locale) => 'age_stratigraphy,age_stratigraphy_en',
+    age: (locale) => 'age_base,age_top',
+    parent_stratigraphy: (locale) =>
+      'parent_stratigraphy,parent_stratigraphy_en',
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <analysis-table
+  <taxon-table
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,15 +10,15 @@
 
 <script>
 import { mapState } from 'vuex'
-import AnalysisTable from '@/components/tables/AnalysisTable'
 import { debounce } from 'lodash'
-import { ANALYSIS } from '~/constants'
+import { TAXON } from '~/constants'
+import TaxonTable from '~/components/tables/TaxonTable'
 
 export default {
-  components: { AnalysisTable },
+  components: { TaxonTable },
   data() {
     return {
-      options: ANALYSIS.options,
+      options: TAXON.options,
       items: [],
       count: 0,
     }
@@ -29,7 +29,6 @@ export default {
   watch: {
     search: {
       handler: debounce(function (value) {
-        this.options.page = 1
         this.handleUpdate({ tableOptions: { ...this.options }, search: value })
       }, 500),
     },
@@ -37,15 +36,14 @@ export default {
   methods: {
     async handleUpdate(options) {
       const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis',
+        'taxon',
         {
           tableOptions: options.tableOptions,
           search: this.search,
-          queryFields: this.$getQueryFields(ANALYSIS.queryFields),
+          queryFields: this.$getQueryFields(TAXON.queryFields),
           searchFilters: {},
         }
       )
-      this.options = options.tableOptions
       this.items = analysisResponse.items
       this.count = analysisResponse.count
     },
