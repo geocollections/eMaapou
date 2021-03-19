@@ -336,6 +336,11 @@ export default {
       }),
     }
   },
+  computed: {
+    filteredTabs() {
+      return this.tabs.filter((item) => item.count > 0)
+    },
+  },
   methods: {
     isNil,
     isEmpty,
