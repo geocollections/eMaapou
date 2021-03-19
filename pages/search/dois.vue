@@ -1,6 +1,7 @@
 <template>
   <doi-table
     :show-search="false"
+    external-options
     :items="items"
     :count="count"
     :options="options"
@@ -29,6 +30,7 @@ export default {
   watch: {
     search: {
       handler: debounce(function (value) {
+        this.options.page = 1
         this.handleUpdate({ tableOptions: { ...this.options }, search: value })
       }, 500),
     },
@@ -41,6 +43,7 @@ export default {
         queryFields: this.$getQueryFields(DOI.queryFields),
         searchFilters: {},
       })
+      this.options = options.tableOptions
       this.items = response.items
       this.count = response.count
     },
