@@ -1,7 +1,6 @@
 <template>
   <doi-table
     :show-search="false"
-    external-options
     :items="items"
     :count="count"
     :options="options"
