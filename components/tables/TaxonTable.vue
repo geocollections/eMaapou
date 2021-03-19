@@ -13,25 +13,32 @@
         @click="$openWindow(`https://fossiilid.info/${item.id}`)"
       >
         {{ item.taxon }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
 
     <template #item.fossil_group="{ item }">
       <a
+        v-if="item.fossil_group_id"
         class="text-link"
         @click="$openWindow(`https://fossiilid.info/${item.fossil_group_id}`)"
       >
         {{ item.fossil_group }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
+      <div v-else>{{ item.fossil_group }}</div>
     </template>
 
     <template #item.parent_taxon="{ item }">
       <a
+        v-if="item.parent_id"
         class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.parent_taxon_id}`)"
+        @click="$openWindow(`https://fossiilid.info/${item.parent_id}`)"
       >
         {{ item.parent_taxon }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
+      <div v-else>{{ item.parent_taxon }}</div>
     </template>
   </table-wrapper>
 </template>

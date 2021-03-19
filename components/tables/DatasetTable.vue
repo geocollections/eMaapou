@@ -10,12 +10,14 @@
     <template #item.id="{ item }">
       <a class="text-link" @click="$openGeoDetail('dataset', item.id)">
         {{ item.id }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
 
     <template #item.name="{ item }">
       <a class="text-link" @click="$openGeoDetail('dataset', item.id)">
         {{ $translate({ et: item.name, en: item.name_en }) }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
 
@@ -41,6 +43,7 @@
         "
       >
         {{ item.database_acronym }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
       <div v-else>{{ item.database_acronym }}</div>
     </template>

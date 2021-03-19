@@ -10,6 +10,7 @@
     <template #item.reference="{ item }">
       <a class="text-link" @click="$openGeology('reference', item.id)">
         {{ item.reference }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
 
@@ -18,6 +19,17 @@
         {{ item.journal__journal_name }}
       </div>
       <div v-else-if="item.book">{{ item.book }}</div>
+    </template>
+
+    <template #item.doi="{ item }">
+      <a
+        v-if="item.doi"
+        class="text-link"
+        @click="$openWindow(`https://doi.org/${item.doi}`)"
+      >
+        {{ item.doi }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
+      </a>
     </template>
   </table-wrapper>
 </template>

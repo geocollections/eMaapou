@@ -15,6 +15,7 @@
         "
       >
         {{ item.identifier }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
 

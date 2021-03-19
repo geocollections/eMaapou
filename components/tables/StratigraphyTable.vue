@@ -18,6 +18,7 @@
             en: item.stratigraphy_en,
           })
         }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
 
@@ -94,6 +95,7 @@
             en: item.parent_stratigraphy_en,
           })
         }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
   </table-wrapper>

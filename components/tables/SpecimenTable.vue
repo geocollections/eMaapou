@@ -10,6 +10,7 @@
     <template #item.id="{ item }">
       <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
         {{ item.id }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
     <template #item.kind="{ item }">
@@ -22,8 +23,11 @@
     </template>
     <template #item.stratigraphy="{ item }">
       <a
+        v-if="item.stratigraphy_id"
         class="text-link"
-        @click="$openGeoDetail('stratigraphy', item.stratigraphy_id)"
+        @click="
+          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
+        "
       >
         {{
           $translate({
@@ -31,14 +35,17 @@
             en: item.stratigraphy_en,
           })
         }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
     <template #item.taxon="{ item }">
       <a
+        v-if="item.taxon_id"
         class="text-link"
         @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
     <template #item.image="{ item }">
