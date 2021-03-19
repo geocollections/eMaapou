@@ -14,8 +14,13 @@ const getSortByParams = (options, queryFields) => {
   if (options?.sortBy && options?.sortDesc) {
     if (!isEmpty(options.sortBy)) {
       const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `${queryFields[field]} desc`
-        return `${queryFields[field]} asc`
+        // Support for multivalue fields #219
+        return queryFields[field]
+          .split(',')
+          .map((item) => (options.sortDesc[i] ? `${item} desc` : `${item} asc`))
+          .join()
+        // if (options.sortDesc[i]) return `${queryFields[field]} desc`
+        // return `${queryFields[field]} asc`
       })
 
       return { sort: orderBy.join(',') }
