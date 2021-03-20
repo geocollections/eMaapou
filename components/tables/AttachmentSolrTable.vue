@@ -8,12 +8,18 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="$openGeoDetail('file', item.attachment_id)">
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: 'file-id',
+            params: { id: item.attachment_id },
+          })
+        "
+      >
         {{ item.attachment_id }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      </nuxt-link>
     </template>
-
     <template #item.date="{ item }">
       <div v-if="item.date_created">
         {{ new Date(item.date_created).toISOString().split('T')[0] }}
@@ -41,7 +47,11 @@
         v-if="item.uuid_filename"
         :src="`https://files.geocollections.info/medium/${item.uuid_filename}`"
         class="ma-2"
-        @click="$openImage(item.uuid_filename)"
+        @click="
+          $router.push(
+            localePath({ name: 'file-id', params: { id: item.attachment_id } })
+          )
+        "
       />
     </template>
   </table-wrapper>
@@ -50,6 +60,7 @@
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
+// import AttachmentCell from '~/components/AttachmentCell'
 export default {
   name: 'AttachmentSolrTable',
   components: { TableWrapper, ImageCell },

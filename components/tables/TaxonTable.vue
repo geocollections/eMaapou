@@ -80,16 +80,16 @@ export default {
     return {
       headers: [
         { text: this.$t('taxon.id'), value: 'id' },
-        {
-          text: this.$t('taxon.fossilGroup'),
-          value: 'fossil_group',
-        },
         { text: this.$t('taxon.taxon'), value: 'taxon' },
         {
           text: this.$t('taxon.authorYear'),
           value: 'author_year',
         },
         { text: this.$t('taxon.parentTaxon'), value: 'parent_taxon' },
+        {
+          text: this.$t('taxon.fossilGroup'),
+          value: 'fossil_group',
+        },
       ],
     }
   },

@@ -21,39 +21,13 @@
 
                 <!-- Image -->
                 <template v-if="isImage">
-                  <v-hover v-slot="{ hover }">
-                    <img
-                      :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"
-                      class="my-4 transition-swing cursor-pointer rounded"
-                      :class="{
-                        'elevation-8': hover,
-                        'elevation-4': !hover,
-                      }"
-                      style="max-width: 1000px; max-height: 800px"
-                      :alt="fileTitle"
-                      @click="$openImage(file.uuid_filename)"
-                    />
-                    <!--<v-img-->
-                    <!--  contain-->
-                    <!--  class="my-4 transition-swing cursor-pointer rounded mx-auto"-->
-                    <!--  :lazy-src="`https://files.geocollections.info/small/${file.uuid_filename}`"-->
-                    <!--  :src="`https://files.geocollections.info/medium/${file.uuid_filename}`"-->
-                    <!--  max-width="1000"-->
-                    <!--  max-height="800"-->
-                    <!--  @click="$openImage(file.uuid_filename)"-->
-                    <!--  <template #placeholder>-->
-                    <!--    <v-row-->
-                    <!--      class="fill-height ma-0"-->
-                    <!--      align="center"-->
-                    <!--      justify="center"-->
-                    <!--      <v-progress-circular-->
-                    <!--        indeterminate-->
-                    <!--        color="grey lighten-5"-->
-                    <!--      ></v-progress-circular>-->
-                    <!--    </v-row>-->
-                    <!--  </template>-->
-                    <!--</v-img>-->
-                  </v-hover>
+                  <v-img
+                    contain
+                    :lazy-src="`https://files.geocollections.info/small/${file.filename}`"
+                    max-height="700"
+                    max-width="1000"
+                    :src="`https://files.geocollections.info/medium/${file.filename}`"
+                  ></v-img>
                 </template>
 
                 <!-- Audio -->
@@ -138,7 +112,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-card-title>{{ $t('common.general') }}</v-card-title>
+            <!-- <v-card-title>{{ $t('common.general') }}</v-card-title>-->
             <v-card-text>
               <v-simple-table dense class="custom-table">
                 <template #default>
@@ -694,7 +668,7 @@ export default {
         case 1:
           return `${this.$t('file.specimenTitle')}: ${
             this.file?.specimen__coll__number
-          }-${this.file?.specimen__specimen_id?.split('-')?.[0]} (ID: ${
+          }-${this.file?.specimen__specimen_id?.split('-')?.[1]} (ID: ${
             this.file.specimen
           })`
         case 2:
