@@ -46,7 +46,7 @@ export default {
           searchFilters: {},
         }
       )
-      this.options = response.options
+      this.options = options.tableOptions
       this.items = response.items
       this.count = response.count
     },
