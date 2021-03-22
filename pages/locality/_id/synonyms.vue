@@ -1,5 +1,5 @@
 <template>
-  <stratotype-table
+  <synonym-table
     :items="synonyms"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import StratotypeTable from '~/components/tables/StratotypeTable.vue'
+import SynonymTable from '~/components/tables/SynonymTable.vue'
 import { SYNONYM } from '~/constants'
 export default {
-  components: { StratotypeTable },
+  components: { SynonymTable },
   props: {
     locality: {
       type: Number,
