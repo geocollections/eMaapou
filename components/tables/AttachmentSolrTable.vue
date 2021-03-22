@@ -86,7 +86,7 @@ export default {
         { text: this.$t('attachment.id'), value: 'id' },
         { text: this.$t('attachment.format'), value: 'format_value' },
         { text: this.$t('attachment.image_number'), value: 'image_number' },
-        { text: this.$t('attachment.author'), value: 'author_id' },
+        { text: this.$t('attachment.author'), value: 'agent' },
         { text: this.$t('attachment.date'), value: 'date' },
         { text: this.$t('attachment.reference'), value: 'reference' },
         { text: this.$t('attachment.type'), value: 'type' },
