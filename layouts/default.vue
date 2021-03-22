@@ -6,6 +6,7 @@
         <nuxt />
         <back-fab v-if="isDetail" />
         <link-to-edit-fab v-if="isDetail" />
+        <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
       </v-container>
       <client-only>

@@ -3,16 +3,17 @@
     <v-tooltip left>
       <template #activator="{ on }">
         <v-btn
-          fixed
+          absolute
           right
           fab
+          small
           dark
           :style="style"
           color="deep-orange darken-2"
           v-on="on"
           @click="$openEdit(table, $route.params.id)"
         >
-          <v-icon large>mdi-square-edit-outline</v-icon>
+          <v-icon>mdi-square-edit-outline</v-icon>
         </v-btn>
       </template>
       <span>{{ $t('common.linkToEdit') }}</span>
@@ -36,7 +37,7 @@ export default {
   },
   computed: {
     style() {
-      return `top: ${this.$vuetify.application.top + 16}px; z-index: 4;`
+      return ` z-index: 4;`
     },
 
     table() {
