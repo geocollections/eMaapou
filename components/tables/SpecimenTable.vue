@@ -13,6 +13,22 @@
         <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
+    <template #item.specimen_number="{ item }">
+      <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
+        {{ item.specimen_number }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
+      </a>
+    </template>
+    <template #item.locality="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality_id } })
+        "
+      >
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
+      </nuxt-link>
+    </template>
     <template #item.kind="{ item }">
       {{
         $translate({
@@ -38,6 +54,25 @@
         <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
+    <template #item.lithostratigraphy="{ item }">
+      <a
+        v-if="item.lithostratigraphy_id"
+        class="text-link"
+        @click="
+          $openWindow(
+            `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
+          )
+        "
+      >
+        {{
+          $translate({
+            et: item.lithostratigraphy,
+            en: item.lithostratigraphy_en,
+          })
+        }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
+      </a>
+    </template>
     <template #item.taxon="{ item }">
       <a
         v-if="item.taxon_id"
@@ -45,6 +80,21 @@
         @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
+        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
+      </a>
+    </template>
+    <template #item.rock="{ item }">
+      <a
+        v-if="item.rock_id"
+        class="text-link"
+        @click="$openWindow(`https://kivid.info/${item.rock_id}`)"
+      >
+        {{
+          $translate({
+            et: item.rock,
+            en: item.rock_en,
+          })
+        }}
         <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
     </template>
@@ -98,12 +148,18 @@ export default {
       headers: [
         { text: this.$t('specimen.id'), value: 'id' },
         { text: this.$t('specimen.number'), value: 'specimen_number' },
+        { text: this.$t('specimen.locality'), value: 'locality' },
         { text: this.$t('specimen.depth'), value: 'depth' },
         { text: this.$t('specimen.depthInterval'), value: 'depth_interval' },
         { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
-        { text: this.$t('specimen.kind'), value: 'kind' },
-        { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
+        {
+          text: this.$t('sample.lithostratigraphy'),
+          value: 'lithostratigraphy',
+        },
+        // { text: this.$t('specimen.kind'), value: 'kind' },
+        // { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
         { text: this.$t('specimen.taxon'), value: 'taxon' },
+        { text: this.$t('specimen.rock'), value: 'rock' },
         { text: this.$t('specimen.image'), value: 'image', sortable: false },
       ],
     }

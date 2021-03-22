@@ -156,13 +156,13 @@ export default {
           value: 'stratigraphy_scope',
         },
         {
-          text: this.$t('stratigraphy.age_stratigraphy'),
-          value: 'age_stratigraphy',
+          text: this.$t('stratigraphy.parent_stratigraphy'),
+          value: 'parent_stratigraphy',
         },
         { text: this.$t('stratigraphy.age'), value: 'age' },
         {
-          text: this.$t('stratigraphy.parent_stratigraphy'),
-          value: 'parent_stratigraphy',
+          text: this.$t('stratigraphy.age_stratigraphy'),
+          value: 'age_stratigraphy',
         },
       ],
     }
