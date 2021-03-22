@@ -23,12 +23,7 @@ export default {
     return {
       attachments: [],
       count: 0,
-      options: {
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      },
+      options: ATTACHMENT.options,
     }
   },
   methods: {
@@ -37,7 +32,7 @@ export default {
         'attachment_link',
         {
           ...options,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.sample),
           defaultParams: {
             sample: `${this.sample}`,
           },
