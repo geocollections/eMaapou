@@ -3,7 +3,6 @@
     <v-main>
       <app-header />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-        <nuxt />
         <back-fab v-if="isDetail" />
         <link-to-edit-fab v-if="isDetail" />
         <nuxt />
