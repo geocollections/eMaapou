@@ -10,6 +10,7 @@
     <template #item.identifier="{ item }">
       <a
         class="text-link"
+        style="white-space: nowrap"
         @click="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "

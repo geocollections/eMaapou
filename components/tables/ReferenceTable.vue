@@ -8,7 +8,11 @@
     v-on="$listeners"
   >
     <template #item.reference="{ item }">
-      <a class="text-link" @click="$openGeology('reference', item.id)">
+      <a
+        class="text-link"
+        style="white-space: nowrap"
+        @click="$openGeology('reference', item.id)"
+      >
         {{ item.reference }}
         <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
       </a>
@@ -25,6 +29,7 @@
       <a
         v-if="item.doi"
         class="text-link"
+        style="white-space: nowrap"
         @click="$openWindow(`https://doi.org/${item.doi}`)"
       >
         {{ item.doi }}
