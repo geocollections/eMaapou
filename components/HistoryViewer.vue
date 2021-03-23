@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-row align-center">
-    <v-subheader class="pr-0">History:</v-subheader>
+    <v-subheader class="pr-0">{{ `${$t('common.history')}:` }}</v-subheader>
     <v-breadcrumbs :items="history" divider="/">
       <template #item="{ item }">
         <v-breadcrumbs-item

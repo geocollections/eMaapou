@@ -47,6 +47,7 @@ export default {
     sites: 'Vaatluspunktid',
     about: 'Tutvustus',
     searchAlt: 'Otsinguks sisesta üks või mitu märksõna, nt Eesti ... ',
+    history: 'Ajalugu',
   },
   link: {
     sarvAPI: 'Avalik API',

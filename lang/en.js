@@ -47,6 +47,7 @@ export default {
     sites: 'Sites',
     about: 'About',
     searchAlt: 'Enter one or more keywords, ex. Estonia ...',
+    history: 'History',
   },
   link: {
     sarvAPI: 'Public API',
