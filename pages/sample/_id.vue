@@ -402,6 +402,15 @@ export default {
       }`
     },
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.sampleTitle,
+        en: this.sampleTitle,
+      },
+      to: this.localePath(this.$route),
+    })
+  },
   methods: {
     isNil,
   },

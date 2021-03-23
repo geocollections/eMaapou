@@ -341,6 +341,15 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      },
+      to: this.localePath(this.$route),
+    })
+  },
   methods: {
     isNil,
     isEmpty,

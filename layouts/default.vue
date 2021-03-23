@@ -3,8 +3,8 @@
     <v-main>
       <app-header />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-        <back-fab v-if="isDetail" />
         <link-to-edit-fab v-if="isDetail" />
+        <history-viewer />
         <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
       </v-container>
@@ -23,7 +23,7 @@ import AppHeader from '@/components/AppHeader'
 import LinkToEditFab from '@/components/LinkToEditFab'
 import ScrollTopFab from '~/components/ScrollTopFab.vue'
 import CookiePolicy from '~/components/CookiePolicy'
-import BackFab from '~/components/BackFab.vue'
+import HistoryViewer from '~/components/HistoryViewer.vue'
 
 export default {
   components: {
@@ -32,7 +32,7 @@ export default {
     AppFooter,
     ScrollTopFab,
     LinkToEditFab,
-    BackFab,
+    HistoryViewer,
   },
   data() {
     return {
