@@ -5,7 +5,7 @@
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <link-to-edit-fab v-if="isDetail" />
         <client-only>
-          <history-viewer />
+          <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
         </client-only>
         <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
