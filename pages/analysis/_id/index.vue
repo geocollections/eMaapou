@@ -1,6 +1,6 @@
 <template>
   <analysis-result-table
-    :items="attachments"
+    :items="analysisResults"
     :count="count"
     :options="options"
     @update="handleUpdate"
