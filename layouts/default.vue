@@ -4,7 +4,9 @@
       <app-header />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <link-to-edit-fab v-if="isDetail" />
-        <history-viewer />
+        <client-only>
+          <history-viewer />
+        </client-only>
         <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
       </v-container>
