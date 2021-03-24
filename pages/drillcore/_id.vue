@@ -284,7 +284,7 @@ export default {
   created() {
     this.$pushHistory({
       text: { et: this.drillcore.drillcore, en: this.drillcore.drillcore_en },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

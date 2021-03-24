@@ -284,7 +284,7 @@ export default {
   created() {
     this.$pushHistory({
       text: { et: this.area.name, en: this.area.name_en },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

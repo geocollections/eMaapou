@@ -61,10 +61,10 @@ export default {
   created() {
     this.$pushHistory({
       text: {
-        et: this.$t('common.analyses'),
-        en: this.$t('common.analyses'),
+        et: 'Analüüsid',
+        en: 'Analyses',
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

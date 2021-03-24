@@ -408,7 +408,7 @@ export default {
         et: this.sampleTitle,
         en: this.sampleTitle,
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

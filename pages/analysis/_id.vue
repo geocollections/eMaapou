@@ -233,10 +233,10 @@ export default {
   created() {
     this.$pushHistory({
       text: {
-        et: this.$t('analysis.title', { id: this.analysis.id }),
-        en: this.$t('analysis.title', { id: this.analysis.id }),
+        et: `Analüüs: ${this.analysis.id}`,
+        en: `Analysis: ${this.analysis.id}`,
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

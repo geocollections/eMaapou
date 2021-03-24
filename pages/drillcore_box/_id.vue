@@ -358,7 +358,7 @@ export default {
         et: this.drillcoreBox.drillcore__drillcore,
         en: this.drillcoreBox.drillcore__drillcore_en,
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

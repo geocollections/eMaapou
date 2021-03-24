@@ -347,7 +347,7 @@ export default {
         et: this.locality.locality,
         en: this.locality.locality_en,
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

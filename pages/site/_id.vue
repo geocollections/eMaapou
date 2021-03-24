@@ -383,6 +383,15 @@ export default {
       } else return []
     },
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.site.name,
+        en: this.site.name_en,
+      },
+      to: this.$route.path,
+    })
+  },
   methods: {
     isNil,
   },

@@ -214,10 +214,10 @@ export default {
     }
     this.$pushHistory({
       text: {
-        et: this.$t('common.quickSearch'),
-        en: this.$t('common.quickSearch'),
+        et: 'Kiirpäring',
+        en: 'Quick search',
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {

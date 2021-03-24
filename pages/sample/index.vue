@@ -60,10 +60,10 @@ export default {
   created() {
     this.$pushHistory({
       text: {
-        et: this.$t('common.samples'),
-        en: this.$t('common.samples'),
+        et: 'Proovid',
+        en: 'Samples',
       },
-      to: this.localePath(this.$route),
+      to: this.$route.path,
     })
   },
   methods: {
