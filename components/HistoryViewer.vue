@@ -45,7 +45,6 @@ export default {
   methods: {
     handleClick(item) {
       this.$router.push({ path: item.to })
-      this.$removeHistory(item.index)
     },
   },
 }

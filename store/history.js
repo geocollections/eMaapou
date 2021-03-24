@@ -8,7 +8,10 @@ export const state = () => {
 
 export const mutations = {
   PUSH_HISTORY(state, historyObject) {
-    if (state.history[0]?.to === historyObject.to) return
+    // Remove duplicates from history
+    state.history.forEach((h, i) => {
+      if (h.to === historyObject.to) state.history.splice(i, 1)
+    })
 
     if (state.history.length >= HISTORY_SIZE) state.history.pop()
 
