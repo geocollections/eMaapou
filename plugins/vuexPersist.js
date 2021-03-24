@@ -6,6 +6,9 @@ const vuexOptions = {
     settings: {
       cookiePolicy: state.settings.cookiePolicy,
     },
+    history: {
+      ...state.history,
+    },
     i18n: { locale: state.i18n.locale },
   }),
 }
