@@ -355,8 +355,12 @@ export default {
   created() {
     this.$pushHistory({
       text: {
-        et: this.drillcoreBox.drillcore__drillcore,
-        en: this.drillcoreBox.drillcore__drillcore_en,
+        et: `${
+          this.drillcoreBox.drillcore__drillcore
+        } ${this.$t('drillcoreBox.nr', { number: this.drillcoreBox.number })}`,
+        en: `${
+          this.drillcoreBox.drillcore__drillcore_en
+        } ${this.$t('drillcoreBox.nr', { number: this.drillcoreBox.number })}`,
       },
       to: this.$route.path,
     })
