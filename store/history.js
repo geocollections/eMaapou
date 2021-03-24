@@ -22,6 +22,9 @@ export const mutations = {
   SET_HISTORY(state, history) {
     state.history = history
   },
+  REMOVE_HISTORY(state, index) {
+    state.history.splice(index, 1)
+  },
 }
 
 export const actions = {
@@ -30,5 +33,8 @@ export const actions = {
   },
   setHistory({ commit }, history) {
     commit('SET_HISTORY', history)
+  },
+  removeHistory({ commit }, index) {
+    commit('REMOVE_HISTORY', index)
   },
 }

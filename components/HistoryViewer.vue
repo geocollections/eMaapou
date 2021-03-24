@@ -1,15 +1,12 @@
 <template>
   <div v-if="history.length > 0" class="d-flex flex-row align-center">
     <v-subheader class="pr-0">{{ `${$t('common.history')}:` }}</v-subheader>
-    <v-breadcrumbs :items="history" divider="/">
+    <v-breadcrumbs :items="historyWithIndices" divider="/">
       <template #item="{ item }">
-        <v-breadcrumbs-item
-          nuxt
-          active-class=""
-          :to="item.to"
-          :disabled="item.disabled"
-        >
-          {{ $translate({ et: item.text.et, en: item.text.en }) }}
+        <v-breadcrumbs-item active-class="" @click.native="handleClick(item)">
+          <div class="text-link">
+            {{ $translate({ et: item.text.et, en: item.text.en }) }}
+          </div>
         </v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>
@@ -23,6 +20,11 @@ export default {
   name: 'HistoryViewer',
   computed: {
     ...mapState('history', ['history']),
+    historyWithIndices() {
+      return this.history.map((h, i) => {
+        return { ...h, index: i }
+      })
+    },
   },
   watch: {
     '$i18n.locale': {
@@ -38,6 +40,12 @@ export default {
           this.$setHistory(localizedHistory)
         }
       },
+    },
+  },
+  methods: {
+    handleClick(item) {
+      this.$router.push({ path: item.to })
+      this.$removeHistory(item.index)
     },
   },
 }

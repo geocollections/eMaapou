@@ -7,6 +7,11 @@ export default ({ app, store }, inject) => {
     store.dispatch('history/setHistory', history)
   }
 
+  const removeHistory = (index) => {
+    store.dispatch('history/removeHistory', index)
+  }
+
   inject('pushHistory', pushHistory)
   inject('setHistory', setHistory)
+  inject('removeHistory', removeHistory)
 }
