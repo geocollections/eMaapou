@@ -48,6 +48,7 @@ export default {
     about: 'About',
     searchAlt: 'Enter one or more keywords, ex. Estonia ...',
     history: 'History',
+    quickSearch: 'Quick search',
   },
   link: {
     sarvAPI: 'Public API',

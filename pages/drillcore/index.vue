@@ -57,6 +57,15 @@ export default {
     ...mapState('landing', ['search']),
     ...mapState('drillcore', ['options', 'items', 'count']),
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.$t('common.drillcores'),
+        en: this.$t('common.drillcores'),
+      },
+      to: this.localePath(this.$route),
+    })
+  },
   methods: {
     ...mapActions('drillcore', ['searchDrillcores']),
     async handleUpdate(options) {

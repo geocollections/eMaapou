@@ -57,6 +57,15 @@ export default {
     ...mapState('landing', ['search']),
     ...mapState('sample', ['options', 'items', 'count']),
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.$t('common.samples'),
+        en: this.$t('common.samples'),
+      },
+      to: this.localePath(this.$route),
+    })
+  },
   methods: {
     ...mapActions('sample', ['searchSamples']),
     async handleUpdate(options) {

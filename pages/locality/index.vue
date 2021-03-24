@@ -57,6 +57,15 @@ export default {
     ...mapState('landing', ['search']),
     ...mapState('locality', ['options', 'items', 'count']),
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.$t('common.localities'),
+        en: this.$t('common.localities'),
+      },
+      to: this.localePath(this.$route),
+    })
+  },
   methods: {
     ...mapActions('locality', ['searchLocalities']),
     async handleUpdate(options) {

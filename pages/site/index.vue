@@ -65,6 +65,15 @@ export default {
       })
     },
   },
+  created() {
+    this.$pushHistory({
+      text: {
+        et: this.$t('common.sites'),
+        en: this.$t('common.sites'),
+      },
+      to: this.localePath(this.$route),
+    })
+  },
   methods: {
     ...mapActions('site', ['searchSites']),
     async handleUpdate(options) {

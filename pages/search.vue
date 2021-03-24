@@ -212,6 +212,13 @@ export default {
       if (!isEmpty(this.$route.query?.q)) this.search = this.$route.query.q
       this.handleSearch()
     }
+    this.$pushHistory({
+      text: {
+        et: this.$t('common.quickSearch'),
+        en: this.$t('common.quickSearch'),
+      },
+      to: this.localePath(this.$route),
+    })
   },
   methods: {
     handleSearch: debounce(async function () {
