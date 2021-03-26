@@ -8,14 +8,10 @@
     v-on="$listeners"
   >
     <template #item.reference="{ item }">
-      <a
-        class="text-link"
-        style="white-space: nowrap"
-        @click="$openGeology('reference', item.id)"
-      >
-        {{ item.reference }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="item.reference"
+        @click.native="$openGeology('reference', item.id)"
+      />
     </template>
 
     <template #item.journal="{ item }">
@@ -26,24 +22,21 @@
     </template>
 
     <template #item.doi="{ item }">
-      <a
+      <outer-link
         v-if="item.doi"
-        class="text-link"
-        style="white-space: nowrap"
-        @click="$openWindow(`https://doi.org/${item.doi}`)"
-      >
-        {{ item.doi }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        :value="item.doi"
+        @click.native="$openWindow(`https://doi.org/${item.doi}`)"
+      />
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'ReferenceTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

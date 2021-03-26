@@ -34,40 +34,35 @@
       </nuxt-link>
     </template>
     <template #item.stratigraphy="{ item }">
-      <a
+      <outer-link
         v-if="item.stratigraphy_id"
-        class="text-link"
-        @click="
-          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
-        "
-      >
-        {{
+        :value="
           $translate({
             et: item.stratigraphy,
             en: item.stratigraphy_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="
+          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
+        "
+      />
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <a
+      <outer-link
         v-if="item.lithostratigraphy_id"
-        class="text-link"
-        @click="
-          $openWindow(
-            `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
-          )
-        "
-      >
-        {{
+        class="font-italic"
+        :value="
           $translate({
             et: item.lithostratigraphy,
             en: item.lithostratigraphy_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="
+          $openWindow(
+            `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
+          )
+        "
+      />
     </template>
     <template #item.date_collected="{ item }">
       {{
@@ -82,10 +77,11 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 
 export default {
   name: 'SampleTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

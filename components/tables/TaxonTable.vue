@@ -8,36 +8,29 @@
     v-on="$listeners"
   >
     <template #item.taxon="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.id}`)"
-      >
-        {{ item.taxon }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="item.taxon"
+        @click.native="$openWindow(`https://fossiilid.info/${item.id}`)"
+      />
     </template>
 
     <template #item.fossil_group="{ item }">
-      <a
+      <outer-link
         v-if="item.fossil_group_id"
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.fossil_group_id}`)"
-      >
-        {{ item.fossil_group }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        :value="item.fossil_group"
+        @click.native="
+          $openWindow(`https://fossiilid.info/${item.fossil_group_id}`)
+        "
+      />
       <div v-else>{{ item.fossil_group }}</div>
     </template>
 
     <template #item.parent_taxon="{ item }">
-      <a
+      <outer-link
         v-if="item.parent_id"
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.parent_id}`)"
-      >
-        {{ item.parent_taxon }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        :value="item.parent_taxon"
+        @click.native="$openWindow(`https://fossiilid.info/${item.parent_id}`)"
+      />
       <div v-else>{{ item.parent_taxon }}</div>
     </template>
   </table-wrapper>
@@ -46,9 +39,10 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'TaxonTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

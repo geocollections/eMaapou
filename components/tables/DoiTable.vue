@@ -8,16 +8,12 @@
     v-on="$listeners"
   >
     <template #item.identifier="{ item }">
-      <a
-        class="text-link"
-        style="white-space: nowrap"
-        @click="
+      <outer-link
+        :value="item.identifier"
+        @click.native="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "
-      >
-        {{ item.identifier }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      />
     </template>
 
     <template #item.datacite_created="{ item }">
@@ -40,9 +36,10 @@
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'DoiTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

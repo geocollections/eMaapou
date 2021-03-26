@@ -8,13 +8,10 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://kivid.info/${item.id}`)"
-      >
-        {{ item.id }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="item.id"
+        @click.native="$openWindow(`https://kivid.info/${item.id}`)"
+      />
     </template>
 
     <template #item.formula="{ item }">
@@ -28,25 +25,23 @@
     </template>
 
     <template #item.mindat_id="{ item }">
-      <a
+      <outer-link
         v-if="item.mindat_id"
-        class="text-link"
-        @click="
+        :value="item.mindat_id"
+        @click.native="
           $openWindow(`https://www.mindat.org/min-${item.mindat_id}.html`)
         "
-      >
-        {{ item.mindat_id }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      />
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'RockTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

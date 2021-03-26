@@ -8,16 +8,16 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
-        {{ item.id }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="item.id"
+        @click.native="$openGeoDetail('specimen', item.id)"
+      />
     </template>
     <template #item.specimen_number="{ item }">
-      <a class="text-link" @click="$openGeoDetail('specimen', item.id)">
-        {{ item.specimen_number }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="item.specimen_number"
+        @click.native="$openGeoDetail('specimen', item.id)"
+      />
     </template>
     <template #item.locality="{ item }">
       <nuxt-link
@@ -38,65 +38,54 @@
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <a
+      <outer-link
         v-if="item.stratigraphy_id"
-        class="text-link"
-        @click="
-          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
-        "
-      >
-        {{
+        :value="
           $translate({
             et: item.stratigraphy,
             en: item.stratigraphy_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="
+          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
+        "
+      />
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <a
+      <outer-link
         v-if="item.lithostratigraphy_id"
-        class="text-link"
-        @click="
-          $openWindow(
-            `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
-          )
-        "
-      >
-        {{
+        class="font-italic"
+        :value="
           $translate({
             et: item.lithostratigraphy,
             en: item.lithostratigraphy_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="
+          $openWindow(
+            `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
+          )
+        "
+      />
     </template>
     <template #item.taxon="{ item }">
-      <a
+      <outer-link
         v-if="item.taxon_id"
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
-      >
-        {{ item.taxon }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        :value="item.taxon"
+        @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
+      />
     </template>
     <template #item.rock="{ item }">
-      <a
+      <outer-link
         v-if="item.rock_id"
-        class="text-link"
-        @click="$openWindow(`https://kivid.info/${item.rock_id}`)"
-      >
-        {{
+        :value="
           $translate({
             et: item.rock,
             en: item.rock_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="$openWindow(`https://kivid.info/${item.rock_id}`)"
+      />
     </template>
     <template #item.image="{ item }">
       <image-cell
@@ -113,9 +102,10 @@
 import { round } from 'lodash'
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'SpecimenTable',
-  components: { TableWrapper, ImageCell },
+  components: { OuterLink, TableWrapper, ImageCell },
   props: {
     showSearch: {
       type: Boolean,

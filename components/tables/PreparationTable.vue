@@ -38,41 +38,36 @@
     <!-- Todo: Add lithostratigraphy -->
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
-        <a
+        <outer-link
           v-if="item.stratigraphy_id"
-          class="text-link"
-          @click="
-            $openWindow(
-              `http://stratigraafia.info/term/${item.stratigraphy_id}`
-            )
-          "
-        >
-          {{
+          :value="
             $translate({
               et: item.stratigraphy,
               en: item.stratigraphy_en,
             })
-          }}
-          <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-        </a>
-        <span v-if="item.lithostratigraphy_id"> | </span>
-        <a
-          v-if="item.lithostratigraphy_id"
-          class="text-link font-italic"
-          @click="
+          "
+          @click.native="
             $openWindow(
-              `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
+              `http://stratigraafia.info/term/${item.stratigraphy_id}`
             )
           "
-        >
-          {{
+        />
+        <span v-if="item.lithostratigraphy_id"> | </span>
+        <outer-link
+          v-if="item.lithostratigraphy_id"
+          class="font-italic"
+          :value="
             $translate({
               et: item.lithostratigraphy,
               en: item.lithostratigraphy_en,
             })
-          }}
-          <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-        </a>
+          "
+          @click.native="
+            $openWindow(
+              `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
+            )
+          "
+        />
       </span>
     </template>
   </table-wrapper>
@@ -81,9 +76,10 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'PreparationTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

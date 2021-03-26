@@ -8,18 +8,15 @@
     v-on="$listeners"
   >
     <template #item.stratigraphy="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`http://stratigraafia.info/term/${item.id}`)"
-      >
-        {{
+      <outer-link
+        :value="
           $translate({
             et: item.stratigraphy,
             en: item.stratigraphy_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="$openWindow(`http://stratigraafia.info/term/${item.id}`)"
+      />
     </template>
 
     <template #item.index_main="{ item }">
@@ -85,27 +82,27 @@
     </template>
 
     <template #item.parent_stratigraphy="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`http://stratigraafia.info/term/${item.parent_id}`)"
-      >
-        {{
+      <outer-link
+        :value="
           $translate({
             et: item.parent_stratigraphy,
             en: item.parent_stratigraphy_en,
           })
-        }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+        "
+        @click.native="
+          $openWindow(`http://stratigraafia.info/term/${item.parent_id}`)
+        "
+      />
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'StratigraphyTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

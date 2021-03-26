@@ -8,17 +8,17 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <a class="text-link" @click="$openGeoDetail('dataset', item.id)">
-        {{ item.id }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="item.id"
+        @click.native="$openGeoDetail('dataset', item.id)"
+      />
     </template>
 
     <template #item.name="{ item }">
-      <a class="text-link" @click="$openGeoDetail('dataset', item.id)">
-        {{ $translate({ et: item.name, en: item.name_en }) }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      <outer-link
+        :value="$translate({ et: item.name, en: item.name_en })"
+        @click.native="$openGeoDetail('dataset', item.id)"
+      />
     </template>
 
     <template #item.date="{ item }">
@@ -29,22 +29,19 @@
     </template>
 
     <template #item.database_acronym="{ item }">
-      <a
+      <outer-link
         v-if="
           item.database_acronym === 'GIT' ||
           item.database_acronym === 'TUG' ||
           item.database_acronym === 'ELM'
         "
-        class="text-link"
-        @click="
+        :value="item.database_acronym"
+        @click.native="
           $openWindow(
             `https://geocollections.info/${item.database_acronym.toLowerCase()}`
           )
         "
-      >
-        {{ item.database_acronym }}
-        <v-icon color="deep-orange darken-2" small>mdi-open-in-new</v-icon>
-      </a>
+      />
       <div v-else>{{ item.database_acronym }}</div>
     </template>
   </table-wrapper>
@@ -52,9 +49,10 @@
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
+import OuterLink from '~/components/OuterLink'
 export default {
   name: 'DatasetTable',
-  components: { TableWrapper },
+  components: { OuterLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
