@@ -6,7 +6,7 @@
         <nuxt-link class="text-link" :to="localePath({ path: item.to })">
           {{ $t(item.text, { id: item.id }) }}
         </nuxt-link>
-        <span v-if="index !== history.length - 1" class="divider mx-3">
+        <span v-if="index !== history.length - 1" class="divider mx-1">
           {{ divider }}
         </span>
       </span>
@@ -23,7 +23,7 @@ export default {
     divider: {
       type: String,
       required: false,
-      default: '<',
+      default: '←',
     },
   },
   computed: {
@@ -52,11 +52,12 @@ export default {
 }
 
 .text-link {
-  font-size: 14px;
+  font-size: 0.8em;
 }
 
 .divider {
   color: rgba(0, 0, 0, 0.38);
   font-size: 14px;
+  vertical-align: top;
 }
 </style>
