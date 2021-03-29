@@ -34,10 +34,10 @@ export default {
     { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.js',
     '~plugins/hydrateTabs.js',
-    '~plugins/history.js',
     '~plugins/getQueryFields.js',
     { src: '~plugins/gtag.js', mode: 'client' },
     { src: '~plugins/vuexPersist.js', mode: 'client' },
+    { src: '~plugins/afterEach.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

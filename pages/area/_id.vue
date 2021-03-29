@@ -281,12 +281,6 @@ export default {
       } else return []
     },
   },
-  created() {
-    this.$pushHistory({
-      text: { et: this.area.name, en: this.area.name_en },
-      to: this.$route.path,
-    })
-  },
   methods: {
     isNil,
   },

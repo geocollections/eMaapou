@@ -352,19 +352,6 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
   },
-  created() {
-    this.$pushHistory({
-      text: {
-        et: `${
-          this.drillcoreBox.drillcore__drillcore
-        } ${this.$t('drillcoreBox.nr', { number: this.drillcoreBox.number })}`,
-        en: `${
-          this.drillcoreBox.drillcore__drillcore_en
-        } ${this.$t('drillcoreBox.nr', { number: this.drillcoreBox.number })}`,
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     isNull,
     isNil,

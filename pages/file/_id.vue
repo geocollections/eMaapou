@@ -759,15 +759,6 @@ export default {
       )
     },
   },
-  created() {
-    this.$pushHistory({
-      text: {
-        et: this.fileTitle,
-        en: this.fileTitle,
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     isNull,
     isNil,

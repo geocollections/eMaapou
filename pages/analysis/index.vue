@@ -58,15 +58,6 @@ export default {
     ...mapState('landing', ['search']),
     ...mapState('analysis', ['items', 'count', 'options']),
   },
-  created() {
-    this.$pushHistory({
-      text: {
-        et: 'Analüüsid',
-        en: 'Analyses',
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     ...mapActions('analysis', ['searchAnalyses']),
     async handleUpdate(options) {

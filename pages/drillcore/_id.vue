@@ -281,12 +281,6 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
   },
-  created() {
-    this.$pushHistory({
-      text: { et: this.drillcore.drillcore, en: this.drillcore.drillcore_en },
-      to: this.$route.path,
-    })
-  },
   methods: {
     isEmpty,
     isNull,

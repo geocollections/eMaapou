@@ -65,16 +65,6 @@ export default {
       })
     },
   },
-  created() {
-    // HACK: #233 Hard-coded translations. The translations should come from i18n files, but that does not work properly because of lazy loading.
-    this.$pushHistory({
-      text: {
-        et: 'Uuringupunktid',
-        en: 'Sites',
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     ...mapActions('site', ['searchSites']),
     async handleUpdate(options) {

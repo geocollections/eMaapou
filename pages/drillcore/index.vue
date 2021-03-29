@@ -57,15 +57,6 @@ export default {
     ...mapState('landing', ['search']),
     ...mapState('drillcore', ['options', 'items', 'count']),
   },
-  created() {
-    this.$pushHistory({
-      text: {
-        et: 'Puursüdamikud',
-        en: 'Drillcores',
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     ...mapActions('drillcore', ['searchDrillcores']),
     async handleUpdate(options) {

@@ -17,16 +17,10 @@ export const mutations = {
 
     if (state.history.length > 0) {
       const lastObject = state.history.shift()
-      state.history.unshift({ ...lastObject, disabled: false })
+      state.history.unshift(lastObject)
     }
 
-    state.history.unshift({ ...historyObject, disabled: true })
-  },
-  SET_HISTORY(state, history) {
-    state.history = history
-  },
-  REMOVE_HISTORY(state, index) {
-    state.history.splice(index, 1)
+    state.history.unshift(historyObject)
   },
 }
 
@@ -34,10 +28,10 @@ export const actions = {
   pushHistory({ commit }, historyObject) {
     commit('PUSH_HISTORY', historyObject)
   },
-  setHistory({ commit }, history) {
-    commit('SET_HISTORY', history)
-  },
-  removeHistory({ commit }, index) {
-    commit('REMOVE_HISTORY', index)
+}
+
+export const getters = {
+  getLastHistoryEntry(state) {
+    return state.history?.[0]
   },
 }

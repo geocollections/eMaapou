@@ -212,13 +212,6 @@ export default {
       if (!isEmpty(this.$route.query?.q)) this.search = this.$route.query.q
       this.handleSearch()
     }
-    this.$pushHistory({
-      text: {
-        et: 'Kiirpäring',
-        en: 'Quick search',
-      },
-      to: this.$route.path,
-    })
   },
   methods: {
     handleSearch: debounce(async function () {

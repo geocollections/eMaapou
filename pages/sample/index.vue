@@ -57,15 +57,6 @@ export default {
     ...mapState('landing', ['search']),
     ...mapState('sample', ['options', 'items', 'count']),
   },
-  created() {
-    this.$pushHistory({
-      text: {
-        et: 'Proovid',
-        en: 'Samples',
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     ...mapActions('sample', ['searchSamples']),
     async handleUpdate(options) {

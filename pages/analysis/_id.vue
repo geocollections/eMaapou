@@ -230,15 +230,6 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
   },
-  created() {
-    this.$pushHistory({
-      text: {
-        et: `Analüüs: ${this.analysis.id}`,
-        en: `Analysis: ${this.analysis.id}`,
-      },
-      to: this.$route.path,
-    })
-  },
   methods: {
     isEmpty,
     isNil,
