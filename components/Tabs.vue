@@ -37,6 +37,7 @@
             params: { id: $route.params.id },
           })
         "
+        :height="$vuetify.breakpoint.xsOnly ? 38 : 'unset'"
       >
         <nuxt-child :key="index" keep-alive v-bind="item.props" />
       </v-tab-item>
@@ -86,6 +87,15 @@ export default {
       .v-icon {
         color: red;
       }
+    }
+  }
+}
+
+.v-tabs--vertical {
+  .v-tabs-bar {
+    .v-tab {
+      height: 38px;
+      font-size: 0.8125rem;
     }
   }
 }
