@@ -28,12 +28,13 @@ export const ATTACHMENT = {
   },
   queryFields: {
     id: (locale) => 'id',
-    format: (locale) => 'format_value',
+    format_value: (locale) => 'format_value',
     image_number: (locale) => 'image_number',
     agent: (locale) => 'agent',
-    date: (locale) => 'date',
+    date: (locale) => 'date_created,date_created_free',
     reference: (locale) => 'reference',
     type: (locale) => 'type',
+    image: (locale) => 'uuid_filename',
   },
 }
 
@@ -47,10 +48,13 @@ export const SAMPLE = {
   queryFields: {
     id: (locale) => 'id',
     number: (locale) => 'number',
+    locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
     stratigraphy: (locale) =>
       locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
+    lithostratigraphy: (locale) =>
+      locale === 'et' ? 'lithostratigraphy' : 'lithostratigraphy_en',
     collector: (locale) => 'collector',
     date_collected: (locale) => 'date_collected',
   },
@@ -66,13 +70,18 @@ export const SPECIMEN = {
   queryFields: {
     id: (locale) => 'id',
     specimen_number: (locale) => 'specimen_number',
+    locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
     fossilgroup: (locale) => 'fossilgroup',
     kind: (locale) => (locale === 'et' ? 'specimen_kind' : 'specimen_kind_en'),
     stratigraphy: (locale) =>
       locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
+    lithostratigraphy: (locale) =>
+      locale === 'et' ? 'lithostratigraphy' : 'lithostratigraphy_en',
     taxon: (locale) => 'taxon',
+    rock: (locale) => (locale === 'et' ? 'rock' : 'rock_en'),
+    image: (locale) => 'image',
   },
 }
 
@@ -134,9 +143,11 @@ export const PREPARATION = {
     id: (locale) => 'id',
     preparation_number: (locale) => 'preparation_number',
     locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
-    depth: (locale) => 'depth',
+    depth: (locale) => 'depth,depth_interval',
     stratigraphy: (locale) =>
-      locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
+      locale === 'et'
+        ? 'stratigraphy,lithostratigraphy'
+        : 'stratigraphy_en,lithostratigraphy_en',
     agent: (locale) => 'agent',
     mass: (locale) => 'mass',
   },
@@ -342,7 +353,7 @@ export const DATASET = {
   },
   queryFields: {
     id: (locale) => 'id',
-    name: (locale) => 'name,name_en',
+    name: (locale) => (locale === 'et' ? 'name' : 'name_en'),
     date: (locale) => 'date,date_txt',
     database_acronym: (locale) => 'database_acronym',
   },
@@ -377,15 +388,20 @@ export const STRATIGRAPHY = {
   },
   queryFields: {
     id: (locale) => 'id',
-    stratigraphy: (locale) => 'stratigraphy,stratigraphy_en',
+    stratigraphy: (locale) =>
+      locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
     index_main: (locale) => 'index_main',
     index_additional: (locale) => 'index_additional',
-    stratigraphy_type: (locale) => 'stratigraphy_type,stratigraphy_type_en',
-    stratigraphy_rank: (locale) => 'stratigraphy_rank,stratigraphy_rank_en',
-    stratigraphy_scope: (locale) => 'stratigraphy_scope,stratigraphy_scope_en',
-    age_stratigraphy: (locale) => 'age_stratigraphy,age_stratigraphy_en',
-    age: (locale) => 'age_base,age_top',
+    stratigraphy_type: (locale) =>
+      locale === 'et' ? 'stratigraphy_type' : 'stratigraphy_type_en',
+    stratigraphy_rank: (locale) =>
+      locale === 'et' ? 'stratigraphy_rank' : 'stratigraphy_rank_en',
+    stratigraphy_scope: (locale) =>
+      locale === 'et' ? 'stratigraphy_scope' : 'stratigraphy_scope_en',
     parent_stratigraphy: (locale) =>
-      'parent_stratigraphy,parent_stratigraphy_en',
+      locale === 'et' ? 'parent_stratigraphy' : 'parent_stratigraphy_en',
+    age_stratigraphy: (locale) =>
+      locale === 'et' ? 'age_stratigraphy' : 'age_stratigraphy_en',
+    age: (locale) => 'age_base,age_top',
   },
 }

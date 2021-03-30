@@ -21,6 +21,7 @@
     </template>
     <template #item.locality="{ item }">
       <nuxt-link
+        v-if="item.locality_id"
         class="text-link"
         :to="
           localePath({ name: 'locality-id', params: { id: item.locality_id } })
@@ -28,6 +29,9 @@
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
+      <div v-else>
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
+      </div>
     </template>
     <template #item.kind="{ item }">
       {{
@@ -150,7 +154,7 @@ export default {
         // { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
         { text: this.$t('specimen.taxon'), value: 'taxon' },
         { text: this.$t('specimen.rock'), value: 'rock' },
-        { text: this.$t('specimen.image'), value: 'image', sortable: false },
+        { text: this.$t('specimen.image'), value: 'image' },
       ],
     }
   },
