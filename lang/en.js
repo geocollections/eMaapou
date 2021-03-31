@@ -335,6 +335,10 @@ export default {
     date_prepared: 'Date prepared',
     owner: 'Owner',
     location: 'Location',
+    attachments: 'Attachments ({number})',
+    analyses: 'Analyses ({number})',
+    specimens: 'Specimens ({number})',
+    taxa: 'Taxa ({number})',
   },
   taxon: {
     id: 'ID',

@@ -335,6 +335,10 @@ export default {
     date_prepared: 'Prep. kuupäev',
     owner: 'Omanik',
     location: 'Hoiukoht',
+    attachments: 'Failid ({number})',
+    analyses: 'Analüüsid ({number})',
+    specimens: 'Eksemplarid ({number})',
+    taxa: 'Taksonid ({number})',
   },
   taxon: {
     id: 'ID',

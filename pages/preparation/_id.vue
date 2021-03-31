@@ -149,24 +149,8 @@ export default {
         {
           id: 'taxon_list',
           isSolr: false,
-          routeName: 'preparation-id-taxon_list',
-          title: 'preparation.samples',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'preparation-id-analyses',
-          title: 'preparation.analyses',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          isSolr: true,
-          routeName: 'preparation-id-specimens',
-          title: 'preparation.specimens',
+          routeName: 'preparation-id-taxa',
+          title: 'preparation.taxa',
           count: 0,
           props: {},
         },
@@ -188,7 +172,7 @@ export default {
         ).map((tab) =>
           app.$populateProps(tab, {
             ...tab.props,
-            site: preparation.id,
+            preparation: preparation.id,
           })
         ),
       }
