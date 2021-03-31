@@ -336,8 +336,6 @@ export default {
     owner: 'Owner',
     location: 'Location',
     attachments: 'Attachments ({number})',
-    analyses: 'Analyses ({number})',
-    specimens: 'Specimens ({number})',
     taxa: 'Taxa ({number})',
   },
   taxon: {
