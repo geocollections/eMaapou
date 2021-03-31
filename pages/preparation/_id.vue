@@ -27,7 +27,12 @@
                       />
                       <link-data-row
                         :title="$t('preparation.sample')"
-                        :value="preparation.sample__number"
+                        :value="
+                          preparation.sample__number ||
+                          preparation.sample__number_additional ||
+                          preparation.sample__number_field ||
+                          preparation.sample_id
+                        "
                         nuxt
                         :href="
                           localePath({
@@ -60,38 +65,47 @@
                           )
                         "
                       />
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('preparation.preparation_number') }}</td>
-                        <td>{{ preparation.preparation_number }}</td>
-                      </tr>
+                      <data-row
+                        :title="$t('preparation.agent')"
+                        :value="
+                          preparation.agent__agent || preparation.agent_txt
+                        "
+                      />
+                      <data-row
+                        :title="$t('preparation.identification_agent')"
+                        :value="preparation.identification_agent__agent"
+                      />
+                      <data-row
+                        :title="$t('preparation.date_prepared')"
+                        :value="
+                          preparation.date_prepared ||
+                          preparation.date_prepared_txt
+                        "
+                      />
+                      <data-row
+                        :title="$t('preparation.identification_date')"
+                        :value="preparation.identification_date"
+                      />
+                      <data-row
+                        :title="$t('preparation.identification_remarks')"
+                        :value="preparation.identification_remarks"
+                      />
+                      <data-row
+                        :title="$t('preparation.location')"
+                        :value="preparation.location"
+                      />
+                      <data-row
+                        :title="$t('preparation.storage')"
+                        :value="preparation.storage__location"
+                      />
+                      <data-row
+                        :title="$t('preparation.owner')"
+                        :value="preparation.owner__agent"
+                      />
+                      <data-row
+                        :title="$t('preparation.remarks')"
+                        :value="preparation.remarks"
+                      />
                     </tbody>
                   </template>
                 </v-simple-table>
