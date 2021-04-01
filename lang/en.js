@@ -98,6 +98,8 @@ export default {
     descriptions: 'Descriptions ({number})',
     drillcore: 'Drillcore',
     drillcoreBoxes: 'Boxes ({number})',
+    date: 'Date',
+    author: 'Author',
   },
   localitySynonym: {
     synonym: 'Synonym',
