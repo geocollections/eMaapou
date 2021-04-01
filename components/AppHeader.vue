@@ -26,7 +26,8 @@
 
     <app-header-search class="d-none d-sm-flex" />
     <links />
-    <lang-switcher />
+    <lang-switcher v-if="false" />
+    <lang-switcher-fast />
     <template #extension>
       <v-tabs :value="tabValue" align-with-title optional>
         <v-tab nuxt exact :to="localePath({ name: 'about' })">{{
@@ -56,9 +57,10 @@
 import Links from '@/components/Links'
 import LangSwitcher from '@/components/LangSwitcher'
 import AppHeaderSearch from '~/components/AppHeaderSearch'
+import LangSwitcherFast from '~/components/LangSwitcherFast'
 export default {
   name: 'AppHeader',
-  components: { AppHeaderSearch, LangSwitcher, Links },
+  components: { LangSwitcherFast, AppHeaderSearch, LangSwitcher, Links },
   computed: {
     isNotSearchPath() {
       return !this.$route.path.startsWith('/search')
