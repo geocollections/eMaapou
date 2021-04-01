@@ -98,6 +98,8 @@ export default {
     descriptions: 'Kirjeldused ({number})',
     drillcore: 'Puursüdamik',
     drillcoreBoxes: 'Kastid ({number})',
+    date: 'Kuupäev',
+    author: 'Autor',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',
