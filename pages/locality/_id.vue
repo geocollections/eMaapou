@@ -213,7 +213,14 @@
                   }"
                   class="grey lighten-2 rounded transition-swing cursor-pointer"
                   v-on="on"
-                  @click="$openImage(item.uuid_filename)"
+                  @click="
+                    $router.push(
+                      localePath({
+                        name: 'file-id',
+                        params: { id: item.attachment_id },
+                      })
+                    )
+                  "
                 >
                   <template #placeholder>
                     <v-row
