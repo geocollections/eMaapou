@@ -213,7 +213,14 @@
                   }"
                   class="grey lighten-2 rounded transition-swing cursor-pointer"
                   v-on="on"
-                  @click="$openImage(item.uuid_filename)"
+                  @click="
+                    $router.push(
+                      localePath({
+                        name: 'file-id',
+                        params: { id: item.attachment_id },
+                      })
+                    )
+                  "
                 >
                   <template #placeholder>
                     <v-row
@@ -303,8 +310,8 @@ export default {
         'attachment',
         {
           defaultParams: {
-            fq: `locality_id:${locality.id}`,
-            sort: 'stars asc,id desc',
+            fq: `locality_id:${locality.id} AND locality_type:[3 TO 5]`,
+            sort: 'date_created desc,date_created_free desc,stars desc,id desc',
           },
         }
       )
