@@ -29,7 +29,13 @@
     <lang-switcher v-if="false" />
     <lang-switcher-fast />
     <template #extension>
-      <v-tabs :value="tabValue" align-with-title optional>
+      <v-tabs
+        :value="tabValue"
+        align-with-title
+        optional
+        show-arrows
+        center-active
+      >
         <v-tab nuxt exact :to="localePath({ name: 'about' })">{{
           $t('common.about')
         }}</v-tab>
