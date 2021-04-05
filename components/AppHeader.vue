@@ -3,7 +3,8 @@
     app
     color="#6A76AB"
     :prominent="!isDetail"
-    hide-on-scroll
+    :hide-on-scroll="!isDetail"
+    :dense="isDetail"
     :src="require(`~/assets/header/header1a.jpg`)"
     dark
   >
@@ -22,7 +23,11 @@
               <span
                 v-bind="attrs"
                 class="header-text text-none text-nowrap"
-                :class="{ emaapou: !isDetail, 'emaapou-detail mr-4': isDetail }"
+                :class="{
+                  emaapou: !isDetail,
+                  'emaapou-detail': isDetail,
+                  'mr-4': $vuetify.breakpoint.smAndUp,
+                }"
                 v-on="on"
                 >{{ $t('common.home') }}</span
               >
@@ -43,6 +48,7 @@
             'd-none d-lg-flex': item.name !== 'about' && item.name !== 'search',
             'd-none d-md-flex': item.name === 'about' || item.name === 'search',
           }"
+          style="color: rgba(255, 255, 255, 0.6)"
           :exact="item.name !== 'search'"
           :to="localePath({ name: item.name })"
           >{{ $t(`common.${item.lang}`) }}</v-btn
@@ -78,16 +84,16 @@
     <v-tooltip bottom>
       <template #activator="{ on }">
         <v-app-bar-nav-icon
-          v-if="isDetail"
           small
           class="d-flex d-lg-none ml-1"
+          :class="{ 'd-none': !isDetail }"
           aria-label="Open navigation drawer"
           style="height: 32px; width: 32px"
           v-on="on"
           @click.stop="$emit('toggle:navigationDrawer')"
         />
       </template>
-      <span>{{ $t('header.showMenu') }}</span>
+      <span>{{ $t('landing.showMenu') }}</span>
     </v-tooltip>
   </v-app-bar>
 </template>
