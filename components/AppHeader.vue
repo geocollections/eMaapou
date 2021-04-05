@@ -2,7 +2,7 @@
   <v-app-bar
     app
     color="#6A76AB"
-    prominent
+    :prominent="!isDetail"
     hide-on-scroll
     :src="require(`~/assets/header/header1a.jpg`)"
     dark
@@ -14,42 +14,81 @@
       ></v-img>
     </template>
 
-    <v-app-bar-title class="app-title">
-      <nuxt-link :to="localePath({ path: '/' })" class="title-link">
-        <span class="header-text text-none text-nowrap emaapou">{{
-          $t('common.home')
-        }}</span>
-      </nuxt-link>
-    </v-app-bar-title>
+    <v-toolbar-items>
+      <v-app-bar-title class="app-title align-self-center">
+        <nuxt-link :to="localePath({ path: '/' })" class="title-link">
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <span
+                v-bind="attrs"
+                class="header-text text-none text-nowrap"
+                :class="{ emaapou: !isDetail, 'emaapou-detail mr-4': isDetail }"
+                v-on="on"
+                >{{ $t('common.home') }}</span
+              >
+            </template>
+
+            <span>{{ $t('landing.goToFrontpage') }}</span>
+          </v-tooltip>
+        </nuxt-link>
+      </v-app-bar-title>
+
+      <template v-if="isDetail">
+        <v-btn
+          v-for="(item, index) in tabs"
+          :key="index"
+          nuxt
+          text
+          :class="{
+            'd-none d-lg-flex': item.name !== 'about' && item.name !== 'search',
+            'd-none d-md-flex': item.name === 'about' || item.name === 'search',
+          }"
+          :exact="item.name !== 'search'"
+          :to="localePath({ name: item.name })"
+          >{{ $t(`common.${item.lang}`) }}</v-btn
+        >
+      </template>
+    </v-toolbar-items>
 
     <v-spacer />
 
     <app-header-search class="d-none d-sm-flex" />
     <links />
     <lang-switcher v-if="false" />
-    <lang-switcher-fast />
-    <template #extension>
-      <v-tabs :value="tabValue" align-with-title optional>
-        <v-tab nuxt exact :to="localePath({ name: 'about' })">{{
-          $t('common.about')
-        }}</v-tab>
-        <v-tab nuxt :to="localePath({ name: 'search' })">{{
-          $t('common.search')
-        }}</v-tab>
-        <v-tab nuxt exact :to="localePath({ name: 'drillcore' })">{{
-          $t('common.drillcores')
-        }}</v-tab>
-        <v-tab nuxt exact :to="localePath({ name: 'locality' })">{{
-          $t('common.localities')
-        }}</v-tab>
-        <v-tab nuxt exact :to="localePath({ name: 'sample' })">{{
-          $t('common.samples')
-        }}</v-tab>
-        <v-tab nuxt exact :to="localePath({ name: 'analysis' })">{{
-          $t('common.analyses')
-        }}</v-tab>
+    <lang-switcher-fast :is-detail="isDetail" />
+    <template v-if="!isDetail" #extension>
+      <v-tabs
+        :value="tabValue"
+        align-with-title
+        optional
+        show-arrows
+        center-active
+      >
+        <v-tab
+          v-for="(item, index) in tabs"
+          :key="index"
+          nuxt
+          :exact="item.name !== 'search'"
+          :to="localePath({ name: item.name })"
+          >{{ $t(`common.${item.lang}`) }}</v-tab
+        >
       </v-tabs>
     </template>
+
+    <v-tooltip bottom>
+      <template #activator="{ on }">
+        <v-app-bar-nav-icon
+          v-if="isDetail"
+          small
+          class="d-flex d-lg-none ml-1"
+          aria-label="Open navigation drawer"
+          style="height: 32px; width: 32px"
+          v-on="on"
+          @click.stop="$emit('toggle:navigationDrawer')"
+        />
+      </template>
+      <span>{{ $t('header.showMenu') }}</span>
+    </v-tooltip>
   </v-app-bar>
 </template>
 
@@ -61,6 +100,43 @@ import LangSwitcherFast from '~/components/LangSwitcherFast'
 export default {
   name: 'AppHeader',
   components: { LangSwitcherFast, AppHeaderSearch, LangSwitcher, Links },
+  props: {
+    isDetail: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      tabs: [
+        {
+          name: 'about',
+          lang: 'about',
+        },
+        {
+          name: 'search',
+          lang: 'search',
+        },
+        {
+          name: 'drillcore',
+          lang: 'drillcores',
+        },
+        {
+          name: 'locality',
+          lang: 'localities',
+        },
+        {
+          name: 'sample',
+          lang: 'samples',
+        },
+        {
+          name: 'analysis',
+          lang: 'analyses',
+        },
+      ],
+    }
+  },
   computed: {
     isNotSearchPath() {
       return !this.$route.path.startsWith('/search')
