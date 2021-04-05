@@ -22,6 +22,17 @@ const getDefaultState = () => {
           label: 'sample.stratigraphy',
           fields: ['stratigraphy', 'stratigraphy_en'],
         },
+        hierarchy: {
+          value: '',
+          type: 'text',
+          lookUpType: 'startsWith',
+          label: 'sample.hierarchy',
+          fields: [
+            'stratigraphy_hierarchy',
+            'age_hierarchy',
+            'lithostratigraphy_hierarchy',
+          ],
+        },
         depth: {
           type: 'range',
           lookUpType: 'range',
@@ -31,7 +42,7 @@ const getDefaultState = () => {
           fields: ['depth'],
         },
       },
-      allIds: ['number', 'stratigraphy'],
+      allIds: ['number', 'stratigraphy', 'hierarchy'],
     },
   }
 }

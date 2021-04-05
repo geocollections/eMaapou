@@ -14,6 +14,18 @@
       v-model="stratigraphy"
       :label="$t(filters.byIds.stratigraphy.label)"
     />
+
+    <autocomplete-search-field
+      v-model="hierarchy"
+      :items="autocomplete.stratigraphy"
+      :loading="autocomplete.loaders.stratigraphy"
+      :label="$t(filters.byIds.hierarchy.label)"
+      :item-text="stratigraphyLabel"
+      item-value="hierarchy_string"
+      no-filter
+      @search:items="autocompleteStratigraphySearch"
+    />
+
     <range-search-field
       v-model="depth"
       :min="-20"
@@ -32,21 +44,36 @@ import TextSearchField from './TextSearchField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
 import RangeSearchField from './RangeSearchField'
+import AutocompleteSearchField from '~/components/search/AutocompleteSearchField'
+import autocompleteMixin from '~/mixins/autocompleteMixin'
 
 export default {
   name: 'SampleSearchForm',
   components: {
+    AutocompleteSearchField,
     TextSearchField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
     RangeSearchField,
   },
+  mixins: [autocompleteMixin],
+  data() {
+    return {
+      autocomplete: {
+        stratigraphy: [],
+        loaders: {
+          stratigraphy: false,
+        },
+      },
+    }
+  },
   computed: {
     ...mapState('sample', ['filters']),
     ...mapFields('sample', {
       number: 'filters.byIds.number.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
+      hierarchy: 'filters.byIds.hierarchy.value',
       depth: 'filters.byIds.depth.value',
     }),
   },
