@@ -74,6 +74,21 @@
         >
       </v-tabs>
     </template>
+
+    <v-tooltip bottom>
+      <template #activator="{ on }">
+        <v-app-bar-nav-icon
+          v-if="isDetail"
+          small
+          class="d-flex d-lg-none ml-1"
+          aria-label="Open navigation drawer"
+          style="height: 32px; width: 32px"
+          v-on="on"
+          @click.stop="$emit('toggle:navigationDrawer')"
+        />
+      </template>
+      <span>{{ $t('header.showMenu') }}</span>
+    </v-tooltip>
   </v-app-bar>
 </template>
 

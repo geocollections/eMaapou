@@ -1,7 +1,14 @@
 <template>
   <v-app dark>
     <v-main>
-      <app-header :is-detail="isDetail" />
+      <app-header
+        :is-detail="isDetail"
+        @toggle:navigationDrawer="drawer = !drawer"
+      />
+      <navigation-drawer
+        :drawer="drawer"
+        @update:navigationDrawer="drawer = $event"
+      />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <link-to-edit-fab v-if="isDetail" />
         <client-only>
@@ -26,9 +33,11 @@ import LinkToEditFab from '@/components/LinkToEditFab'
 import ScrollTopFab from '~/components/ScrollTopFab.vue'
 import CookiePolicy from '~/components/CookiePolicy'
 import HistoryViewer from '~/components/HistoryViewer.vue'
+import NavigationDrawer from '~/components/NavigationDrawer'
 
 export default {
   components: {
+    NavigationDrawer,
     CookiePolicy,
     AppHeader,
     AppFooter,
@@ -39,6 +48,7 @@ export default {
   data() {
     return {
       includeList: ['AnalysisSearch'],
+      drawer: false,
     }
   },
   computed: {

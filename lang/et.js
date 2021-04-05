@@ -21,6 +21,8 @@ export default {
     title: 'Geoloogilised andmed ja e-teenused',
     otherPages: 'Geoloogilised andmed teistes e-teenustes',
     goToFrontpage: 'Mine pealehele',
+    showMenu: 'Näita menüüd',
+    routes: 'Navigatsioon',
   },
   common: {
     general: 'Üldinfo',
