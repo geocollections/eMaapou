@@ -6,6 +6,7 @@
           v-bind="attrs"
           icon
           small
+          :class="{ 'custom-small': isDetail }"
           v-on="on"
           @click="$i18n.setLocale($i18n.locale === 'et' ? 'en' : 'et')"
         >
@@ -14,6 +15,7 @@
             :class="{
               'flag-et': $i18n.locale === 'en',
               'flag-en': $i18n.locale === 'et',
+              'lang-icon-detail': isDetail,
             }"
           />
         </v-btn>
@@ -29,6 +31,13 @@
 <script>
 export default {
   name: 'LangSwitcherFast',
+  props: {
+    isDetail: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
 }
 </script>
 
@@ -41,6 +50,11 @@ export default {
 .lang-icon {
   height: 20px;
   width: 20px !important;
+}
+
+.lang-icon-detail {
+  height: 24px;
+  width: 24px !important;
 }
 
 .flag {
@@ -66,5 +80,10 @@ export default {
 
 .flag-en {
   background-image: url('~assets/en.svg');
+}
+
+.custom-small {
+  height: 32px;
+  width: 32px;
 }
 </style>
