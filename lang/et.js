@@ -318,6 +318,7 @@ export default {
     taxa: 'Taksonid ({number})',
     sampleReferences: 'Kirjandus ({number})',
     sample: 'Proov',
+    hierarchy: 'Hierarhia',
   },
   preparation: {
     id: 'ID',
