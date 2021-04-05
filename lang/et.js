@@ -437,6 +437,8 @@ export default {
     stratotypes: 'Stratotüübid ({number})',
     synonyms: 'Sünonüümid ({number})',
     lithostratigraphy: 'Litostratigraafia ({number})',
+    specimens: 'Eksemplarid ({number})',
+    samples: 'Proovid ({number})',
   },
   stratigraphyReference: {
     reference: 'Viide',

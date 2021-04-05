@@ -437,6 +437,8 @@ export default {
     stratotypes: 'Stratotypes ({number})',
     synonyms: 'Synonyms ({number})',
     lithostratigraphy: 'Lithostratigraphy ({number})',
+    specimens: 'Specimens ({number})',
+    samples: 'Samples ({number})',
   },
   stratigraphyReference: {
     reference: 'Reference',

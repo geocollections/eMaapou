@@ -196,6 +196,22 @@ export default {
           count: 0,
           props: { stratigraphy: stratigraphy.id },
         },
+        {
+          id: 'specimen',
+          routeName: 'stratigraphy-id-specimens',
+          title: 'stratigraphy.specimens',
+          isSolr: true,
+          count: 0,
+          props: { stratigraphy: stratigraphy.id },
+        },
+        {
+          id: 'sample',
+          routeName: 'stratigraphy-id-samples',
+          title: 'stratigraphy.samples',
+          isSolr: true,
+          count: 0,
+          props: { stratigraphy: stratigraphy.id },
+        },
       ]
 
       return {
@@ -219,6 +235,11 @@ export default {
                     age_chronostratigraphy_id: stratigraphy.id,
                   },
                 },
+                solr: {
+                  default: {
+                    fq: `stratigraphy_id:${stratigraphy.id}`,
+                  },
+                },
                 fields: tab.fields ?? 'id',
               })
           )
@@ -226,7 +247,7 @@ export default {
       }
     } catch (err) {
       error({
-        message: `Could not find drillcore ${route.params.id}`,
+        message: `Could not find stratigraphy ${route.params.id}`,
         path: route.path,
       })
     }
