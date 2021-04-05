@@ -303,7 +303,7 @@ export default {
         'attachment',
         {
           defaultParams: {
-            fq: `locality_id:${locality.id}`,
+            fq: `locality_id:${locality.id} AND locality_type:[3 TO 5]`,
             sort: 'stars asc,id desc',
           },
         }
