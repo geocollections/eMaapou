@@ -100,6 +100,20 @@ export const LOCALITY_REFERENCE = {
   },
 }
 
+export const STRATIGRAPHY_REFERENCE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    reference: (locale) => 'reference__reference',
+    pages: (locale) => 'pages',
+    remarks: (locale) => 'remarks',
+  },
+}
+
 export const SAMPLE_REFERENCE = {
   options: {
     page: 1,
@@ -205,6 +219,8 @@ export const STRATOTYPE = {
     remarks: (locale) => 'remarks',
     depth_top: (locale) => 'depth_top',
     depth_base: (locale) => 'depth_base',
+    locality: (locale) =>
+      locale === 'et' ? 'locality__locality' : 'locality__locality_en',
   },
 }
 
@@ -218,6 +234,21 @@ export const SYNONYM = {
   queryFields: {
     synonym: (locale) => 'synonym',
     pages: (locale) => 'pages',
+    reference__reference: (locale) => 'reference__reference',
+    remarks: (locale) => 'remarks',
+  },
+}
+export const STRATIGRAPHY_SYNONYM = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    synonym: (locale) => 'synonym',
+    language: (locale) =>
+      locale === 'et' ? 'language__value' : 'language__value_en',
     reference__reference: (locale) => 'reference__reference',
     remarks: (locale) => 'remarks',
   },

@@ -11,7 +11,8 @@ export default ({ app }, inject) => {
     } else {
       const res = await app.$services.sarvREST.getResourceCount(
         tab.id,
-        params.api?.[tab.id] ?? params.api?.default ?? {}
+        params.api?.[tab.id] ?? params.api?.default ?? {},
+        params.fields ?? null
       )
       return { ...tab, count: res?.count ?? 0 }
     }

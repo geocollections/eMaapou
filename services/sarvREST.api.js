@@ -59,9 +59,9 @@ export default ($axios) => ({
     }
   },
 
-  async getResourceCount(resource, countParams) {
+  async getResourceCount(resource, countParams, fields = 'id') {
     const response = await $axios.$get(`${resource}/`, {
-      params: { ...countParams, page: 1, paginate_by: 1, fields: 'id' },
+      params: { ...countParams, page: 1, paginate_by: 1, fields },
     })
     return {
       count: response.count,
