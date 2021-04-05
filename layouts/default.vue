@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <v-main>
-      <app-header />
+      <app-header :is-detail="isDetail" />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <link-to-edit-fab v-if="isDetail" />
         <client-only>

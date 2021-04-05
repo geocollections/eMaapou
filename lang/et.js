@@ -20,6 +20,7 @@ export default {
     visit_site: 'Vaata',
     title: 'Geoloogilised andmed ja e-teenused',
     otherPages: 'Geoloogilised andmed teistes e-teenustes',
+    goToFrontpage: 'Mine pealehele',
   },
   common: {
     general: 'Üldinfo',

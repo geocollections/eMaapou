@@ -20,6 +20,7 @@ export default {
     visit_site: 'View',
     title: 'Geological data and e-services',
     otherPages: 'Geological data in other e-services',
+    goToFrontpage: 'Go to frontpage',
   },
   common: {
     general: 'General info',

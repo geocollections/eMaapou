@@ -2,7 +2,7 @@
   <v-app-bar
     app
     color="#6A76AB"
-    prominent
+    :prominent="!isDetail"
     hide-on-scroll
     :src="require(`~/assets/header/header1a.jpg`)"
     dark
@@ -16,9 +16,19 @@
 
     <v-app-bar-title class="app-title">
       <nuxt-link :to="localePath({ path: '/' })" class="title-link">
-        <span class="header-text text-none text-nowrap emaapou">{{
-          $t('common.home')
-        }}</span>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <span
+              v-bind="attrs"
+              class="header-text text-none text-nowrap"
+              :class="{ emaapou: !isDetail, 'emaapou-detail': isDetail }"
+              v-on="on"
+              >{{ $t('common.home') }}</span
+            >
+          </template>
+
+          <span>{{ $t('landing.goToFrontpage') }}</span>
+        </v-tooltip>
       </nuxt-link>
     </v-app-bar-title>
 
@@ -27,8 +37,8 @@
     <app-header-search class="d-none d-sm-flex" />
     <links />
     <lang-switcher v-if="false" />
-    <lang-switcher-fast />
-    <template #extension>
+    <lang-switcher-fast :is-detail="isDetail" />
+    <template v-if="!isDetail" #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
@@ -67,6 +77,13 @@ import LangSwitcherFast from '~/components/LangSwitcherFast'
 export default {
   name: 'AppHeader',
   components: { LangSwitcherFast, AppHeaderSearch, LangSwitcher, Links },
+  props: {
+    isDetail: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   computed: {
     isNotSearchPath() {
       return !this.$route.path.startsWith('/search')
