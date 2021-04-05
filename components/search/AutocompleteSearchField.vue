@@ -2,6 +2,7 @@
   <v-autocomplete
     v-bind="$attrs"
     hide-details
+    hide-no-data
     autocomplete="off"
     :search-input.sync="search"
     cache-items
