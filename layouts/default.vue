@@ -12,7 +12,7 @@
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <link-to-edit-fab v-if="isDetail" />
         <client-only>
-          <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
+          <history-viewer v-if="$vuetify.breakpoint.smAndUp" class="mr-16" />
         </client-only>
         <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
