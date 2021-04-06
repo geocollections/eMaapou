@@ -103,6 +103,8 @@ export default {
     drillcoreBoxes: 'Boxes ({number})',
     date: 'Date',
     author: 'Author',
+    stratigraphy: 'Stratigraphy',
+    reference: 'Reference',
   },
   localitySynonym: {
     synonym: 'Synonym',
