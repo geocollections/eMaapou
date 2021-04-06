@@ -5,7 +5,6 @@
     hide-no-data
     autocomplete="off"
     :search-input.sync="search"
-    cache-items
     clearable
     v-on="$listeners"
     @change="resetSearchInput"
