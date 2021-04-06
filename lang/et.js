@@ -104,6 +104,8 @@ export default {
     drillcoreBoxes: 'Kastid ({number})',
     date: 'Kuupäev',
     author: 'Autor',
+    stratigraphy: 'Stratigraafia',
+    reference: 'Kirjandus',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',

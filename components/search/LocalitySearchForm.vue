@@ -11,6 +11,16 @@
       v-model="country"
       :label="$t(filters.byIds.country.label)"
     />
+
+    <text-search-field
+      v-model="stratigraphy"
+      :label="$t(filters.byIds.stratigraphy.label)"
+    />
+
+    <text-search-field
+      v-model="reference"
+      :label="$t(filters.byIds.reference.label)"
+    />
   </v-form>
 </template>
 
@@ -36,6 +46,8 @@ export default {
     ...mapFields('locality', {
       name: 'filters.byIds.name.value',
       country: 'filters.byIds.country.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      reference: 'filters.byIds.reference.value',
     }),
   },
   methods: {
