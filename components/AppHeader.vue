@@ -85,8 +85,7 @@
       <template #activator="{ on }">
         <v-app-bar-nav-icon
           small
-          class="d-flex d-lg-none ml-1"
-          :class="{ 'd-none': !isDetail }"
+          :class="{ 'd-none': !isDetail, 'd-flex d-lg-none ml-1': isDetail }"
           aria-label="Open navigation drawer"
           style="height: 32px; width: 32px"
           v-on="on"

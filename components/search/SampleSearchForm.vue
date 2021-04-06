@@ -11,6 +11,11 @@
     />
 
     <text-search-field
+      v-model="locality"
+      :label="$t(filters.byIds.locality.label)"
+    />
+
+    <text-search-field
       v-model="stratigraphy"
       :label="$t(filters.byIds.stratigraphy.label)"
     />
@@ -26,12 +31,26 @@
       @search:items="autocompleteStratigraphySearch"
     />
 
+    <text-search-field
+      v-model="collector"
+      :label="$t(filters.byIds.collector.label)"
+    />
+
     <range-search-field
       v-model="depth"
       :min="-20"
       :max="5000"
       :label="$t(filters.byIds.depth.label)"
     />
+
+    <text-search-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
+
+    <!--    <range-search-field-->
+    <!--      v-model="mass"-->
+    <!--      :min="0"-->
+    <!--      :max="1000000"-->
+    <!--      :label="$t(filters.byIds.mass.label)"-->
+    <!--    />-->
   </v-form>
 </template>
 
@@ -72,9 +91,12 @@ export default {
     ...mapState('sample', ['filters']),
     ...mapFields('sample', {
       number: 'filters.byIds.number.value',
+      locality: 'filters.byIds.locality.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       depth: 'filters.byIds.depth.value',
+      collector: 'filters.byIds.collector.value',
+      mass: 'filters.byIds.mass.value',
     }),
   },
   methods: {
