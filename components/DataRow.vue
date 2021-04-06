@@ -1,10 +1,7 @@
 <template>
-  <tr v-if="value">
+  <tr v-if="value || hasValueSlot">
     <td>{{ title }}</td>
-    <td v-if="isInvalid" class="no-value">
-      {{ $t('common.noValue') }}
-    </td>
-    <td v-else>
+    <td>
       <slot name="value">
         {{ value }}
       </slot>
@@ -28,6 +25,9 @@ export default {
   computed: {
     isInvalid() {
       return isNil(this.value)
+    },
+    hasValueSlot() {
+      return this.$slots.value
     },
   },
 }
