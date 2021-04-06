@@ -32,6 +32,7 @@ export default {
       search: '',
       options: this.initOptions,
       footerProps: {
+        showFirstLastPage: true,
         'items-per-page-options': [10, 25, 50, 100],
         'items-per-page-text': this.$t('table.itemsPerPage'),
       },

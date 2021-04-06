@@ -31,6 +31,7 @@
             style="border: none"
             :pagination="pagination"
             :options="externalOptions ? initOptions : options"
+            :show-first-last-page="footerProps.showFirstLastPage"
             :items-per-page-options="footerProps['items-per-page-options']"
             :items-per-page-text="footerProps['items-per-page-text']"
             @update:options="handleChange"
