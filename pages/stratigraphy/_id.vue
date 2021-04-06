@@ -144,6 +144,30 @@
       <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
+      <v-card
+        v-if="
+          $translate({
+            et: stratigraphy.description,
+            en: stratigraphy.description_en,
+          })
+        "
+        flat
+        tile
+      >
+        <v-row no-gutters>
+          <v-col cols="12">
+            <v-card-title>{{ $t('common.description') }}</v-card-title>
+            <v-card-text
+              v-html="
+                $translate({
+                  et: stratigraphy.description,
+                  en: stratigraphy.description_en,
+                })
+              "
+            />
+          </v-col>
+        </v-row>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -162,7 +186,13 @@ export default {
     try {
       const stratigraphyResponse = await app.$services.sarvREST.getResource(
         'stratigraphy',
-        params.id
+        params.id,
+        {
+          params: {
+            fields:
+              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year',
+          },
+        }
       )
       const stratigraphy = stratigraphyResponse.results[0]
 

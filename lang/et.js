@@ -52,6 +52,7 @@ export default {
     searchAlt: 'Otsinguks sisesta üks või mitu märksõna, nt Eesti ... ',
     history: 'Ajalugu',
     quickSearch: 'Kiirpäring',
+    description: 'Kirjeldus',
   },
   link: {
     sarvAPI: 'Avalik API',
