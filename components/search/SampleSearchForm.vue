@@ -31,12 +31,26 @@
       @search:items="autocompleteStratigraphySearch"
     />
 
+    <text-search-field
+      v-model="collector"
+      :label="$t(filters.byIds.collector.label)"
+    />
+
     <range-search-field
       v-model="depth"
       :min="-20"
       :max="5000"
       :label="$t(filters.byIds.depth.label)"
     />
+
+    <text-search-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
+
+    <!--    <range-search-field-->
+    <!--      v-model="mass"-->
+    <!--      :min="0"-->
+    <!--      :max="1000000"-->
+    <!--      :label="$t(filters.byIds.mass.label)"-->
+    <!--    />-->
   </v-form>
 </template>
 
@@ -81,6 +95,8 @@ export default {
       stratigraphy: 'filters.byIds.stratigraphy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       depth: 'filters.byIds.depth.value',
+      collector: 'filters.byIds.collector.value',
+      mass: 'filters.byIds.mass.value',
     }),
   },
   methods: {
