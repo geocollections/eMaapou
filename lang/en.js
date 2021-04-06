@@ -320,6 +320,7 @@ export default {
     taxa: 'Taxa ({number})',
     sampleReferences: 'References ({number})',
     sample: 'Sample',
+    hierarchy: 'Hierarchy',
   },
   preparation: {
     id: 'ID',
