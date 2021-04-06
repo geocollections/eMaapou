@@ -131,7 +131,7 @@
                     </data-row>
                     <data-row :title="$t('stratigraphy.indexAlt')">
                       <template #value>
-                        <div v-html="stratigraphy.index_main_html" />
+                        <div v-html="stratigraphy.index_additional_html" />
                       </template>
                     </data-row>
                   </tbody>
