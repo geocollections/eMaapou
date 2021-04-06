@@ -436,11 +436,12 @@ export default {
     index: 'Indeks',
     indexAlt: 'Alt. indeks',
     references: 'Kirjandus ({number})',
-    stratotypes: 'Stratotüübid ({number})',
+    stratotypes: 'Stratotüübid',
     synonyms: 'Sünonüümid ({number})',
     lithostratigraphy: 'Litostratigraafia ({number})',
     specimens: 'Eksemplarid ({number})',
     samples: 'Proovid ({number})',
+    subUnits: 'Alamüksused ({number})',
   },
   stratigraphyReference: {
     reference: 'Viide',

@@ -1,6 +1,6 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch, externalOptions }"
+    v-bind="{ showSearch, externalOptions, onlyTable }"
     :headers="headers"
     :items="items"
     :init-options="options"
@@ -50,6 +50,10 @@ export default {
       default: true,
     },
     externalOptions: {
+      type: Boolean,
+      default: false,
+    },
+    onlyTable: {
       type: Boolean,
       default: false,
     },

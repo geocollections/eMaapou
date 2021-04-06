@@ -436,11 +436,12 @@ export default {
     index: 'Index',
     indexAlt: 'Alt. index',
     references: 'References ({number})',
-    stratotypes: 'Stratotypes ({number})',
+    stratotypes: 'Stratotypes',
     synonyms: 'Synonyms ({number})',
     lithostratigraphy: 'Lithostratigraphy ({number})',
     specimens: 'Specimens ({number})',
     samples: 'Samples ({number})',
+    subUnits: 'Sub units ({number})',
   },
   stratigraphyReference: {
     reference: 'Reference',

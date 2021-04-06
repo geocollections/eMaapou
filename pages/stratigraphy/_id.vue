@@ -139,6 +139,21 @@
               </v-simple-table>
             </v-card-text>
           </v-col>
+          <v-col cols="12" md="6">
+            <v-card-title>{{ $t('stratigraphy.stratotypes') }}</v-card-title>
+            <v-card-text>
+              <stratigraphy-stratotype-table
+                only-table
+                :items="stratotypes"
+                :count="stratotypeCount"
+                :options="options"
+                class="mb-2"
+              />
+              <v-card id="map-wrap" elevation="0" height="300">
+                <leaflet-map :height="300" :markers="stratigraphyMarkers" />
+              </v-card>
+            </v-card-text>
+          </v-col>
         </v-row>
       </v-card>
       <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
@@ -173,15 +188,24 @@
 </template>
 
 <script>
-import { isEmpty, isNull } from 'lodash'
-// import LeafletMap from '@/components/LeafletMap'
+import { isEmpty, isNull, isNil } from 'lodash'
+import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import PrevNextNav from '~/components/PrevNextNav'
+import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable'
+import { STRATOTYPE } from '~/constants'
 
 export default {
-  components: { PrevNextNav, Tabs, LinkDataRow, DataRow },
+  components: {
+    PrevNextNav,
+    Tabs,
+    LinkDataRow,
+    DataRow,
+    StratigraphyStratotypeTable,
+    LeafletMap,
+  },
   async asyncData({ params, route, error, app }) {
     try {
       const stratigraphyResponse = await app.$services.sarvREST.getResource(
@@ -199,6 +223,7 @@ export default {
       const tabs = [
         {
           id: 'stratigraphy_reference',
+          table: 'stratigraphy_reference',
           routeName: 'stratigraphy-id',
           title: 'stratigraphy.references',
           count: 0,
@@ -206,28 +231,32 @@ export default {
           fields: 'reference_id',
         },
         {
-          id: 'stratigraphy_stratotype',
-          routeName: 'stratigraphy-id-stratotypes',
-          title: 'stratigraphy.stratotypes',
-          count: 0,
-          props: { stratigraphy: stratigraphy.id },
-        },
-        {
           id: 'stratigraphy_synonym',
+          table: 'stratigraphy_synonym',
           routeName: 'stratigraphy-id-synonyms',
           title: 'stratigraphy.synonyms',
           count: 0,
           props: { stratigraphy: stratigraphy.id },
         },
         {
-          id: 'stratigraphy',
+          id: 'lithostratigraphy',
+          table: 'stratigraphy',
           routeName: 'stratigraphy-id-lithostratigraphy',
           title: 'stratigraphy.lithostratigraphy',
           count: 0,
           props: { stratigraphy: stratigraphy.id },
         },
         {
+          id: 'subunits',
+          table: 'stratigraphy',
+          routeName: 'stratigraphy-id-subunits',
+          title: 'stratigraphy.subUnits',
+          count: 0,
+          props: { stratigraphy: stratigraphy.id },
+        },
+        {
           id: 'specimen',
+          table: 'specimen',
           routeName: 'stratigraphy-id-specimens',
           title: 'stratigraphy.specimens',
           isSolr: true,
@@ -236,6 +265,7 @@ export default {
         },
         {
           id: 'sample',
+          table: 'sample',
           routeName: 'stratigraphy-id-samples',
           title: 'stratigraphy.samples',
           isSolr: true,
@@ -244,8 +274,24 @@ export default {
         },
       ]
 
+      const stratotypeResponse = await app.$services.sarvREST.getResourceList(
+        'stratigraphy_stratotype',
+        {
+          ...STRATOTYPE.options,
+          isValid: isNil(stratigraphy.id),
+          defaultParams: {
+            stratigraphy__id: stratigraphy.id,
+          },
+          queryFields: app.$getQueryFields(STRATOTYPE.queryFields),
+        }
+      )
+      const stratotypes = stratotypeResponse.items
+      const stratotypeCount = stratotypeResponse.count
+
       return {
         stratigraphy,
+        stratotypes,
+        stratotypeCount,
         initActiveTab: route.path,
         tabs: await Promise.all(
           tabs.map(
@@ -261,8 +307,11 @@ export default {
                   stratigraphy_synonym: {
                     stratigraphy__id: stratigraphy.id,
                   },
-                  stratigraphy: {
+                  lithostratigraphy: {
                     age_chronostratigraphy_id: stratigraphy.id,
+                  },
+                  subunits: {
+                    parent_id: stratigraphy.id,
                   },
                 },
                 solr: {
@@ -282,6 +331,13 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      stratotypes: [],
+      count: 0,
+      options: STRATOTYPE.options,
+    }
+  },
   head() {
     return {
       title: this.$translate({
@@ -293,6 +349,21 @@ export default {
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+    stratigraphyMarkers() {
+      return this.stratotypes.map((stratotype) => {
+        return {
+          latitude: stratotype.locality__latitude,
+          longitude: stratotype.locality__longitude,
+          text: `${this.$translate({
+            et: stratotype.locality__locality,
+            en: stratotype.locality__locality_en,
+          })} (${this.$translate({
+            et: stratotype.stratotype_type__value,
+            en: stratotype.stratotype_type__value_en,
+          })})`,
+        }
+      })
     },
   },
   methods: {

@@ -10,10 +10,11 @@
     :server-items-length="count"
     :footer-props="footerProps"
     mobile-breakpoint="0"
+    :hide-default-footer="onlyTable"
     @update:options="handleChange"
   >
     <template #no-data>{{ $t('table.noData') }}</template>
-    <template #top="{ pagination }">
+    <template v-if="!onlyTable" #top="{ pagination }">
       <v-row no-gutters>
         <v-col v-if="showSearch" cols="12" sm="4" class="py-0 px-3">
           <v-text-field
@@ -50,5 +51,11 @@ import tableMixin from '~/mixins/tableMixin'
 export default {
   name: 'TableWrapper',
   mixins: [tableMixin],
+  props: {
+    onlyTable: {
+      type: Boolean,
+      default: false,
+    },
+  },
 }
 </script>

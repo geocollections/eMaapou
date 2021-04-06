@@ -64,11 +64,7 @@
           :height="height"
         />-->
       </l-map>
-      <map-links
-        :latitude="center.latitude"
-        :longitude="center.longitude"
-        :tooltip="markers[0].text"
-      />
+      <map-links :latitude="center.latitude" :longitude="center.longitude" />
     </div>
     <template #placeholder>
       <div
@@ -263,6 +259,21 @@ export default {
     wmsOverlays() {
       return this.computedTileOverlays.filter((item) => item.isWMS)
     },
+    latLngMarkers() {
+      return [
+        this.markers.map((marker) => marker.latitude),
+        this.markers.map((marker) => marker.longitude),
+      ]
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.map.mapObject.fitBounds(
+        this.markers.map((m) => {
+          return [m.latitude, m.longitude]
+        })
+      )
+    })
   },
   methods: {
     handleBaseLayerChange(event) {

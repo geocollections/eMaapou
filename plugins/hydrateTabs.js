@@ -4,13 +4,13 @@ export default ({ app }, inject) => {
 
     if (tab.isSolr) {
       const res = await app.$services.sarvSolr.getResourceCount(
-        tab.id,
+        tab.table ?? tab.id,
         params.solr?.[tab.id] ?? params.solr?.default ?? {}
       )
       return { ...tab, count: res?.count ?? 0 }
     } else {
       const res = await app.$services.sarvREST.getResourceCount(
-        tab.id,
+        tab.table ?? tab.id,
         params.api?.[tab.id] ?? params.api?.default ?? {},
         params.fields ?? null
       )
