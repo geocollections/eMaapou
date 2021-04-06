@@ -1,5 +1,5 @@
 <template>
-  <data-row :title="title" :value="value">
+  <data-row v-if="value" :title="title">
     <template #value>
       <nuxt-link v-if="nuxt" class="text-link" :to="href">{{
         value
