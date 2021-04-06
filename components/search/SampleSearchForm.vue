@@ -11,6 +11,11 @@
     />
 
     <text-search-field
+      v-model="locality"
+      :label="$t(filters.byIds.locality.label)"
+    />
+
+    <text-search-field
       v-model="stratigraphy"
       :label="$t(filters.byIds.stratigraphy.label)"
     />
@@ -72,6 +77,7 @@ export default {
     ...mapState('sample', ['filters']),
     ...mapFields('sample', {
       number: 'filters.byIds.number.value',
+      locality: 'filters.byIds.locality.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       depth: 'filters.byIds.depth.value',

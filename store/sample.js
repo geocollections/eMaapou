@@ -15,6 +15,13 @@ const getDefaultState = () => {
           label: 'sample.number',
           fields: ['number'],
         },
+        locality: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'sample.locality',
+          fields: ['locality', 'locality_en'],
+        },
         stratigraphy: {
           value: '',
           type: 'text',
