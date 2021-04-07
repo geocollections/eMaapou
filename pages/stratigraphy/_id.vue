@@ -30,7 +30,7 @@
                       :href="
                         localePath({
                           name: 'stratigraphy-id',
-                          params: { id: stratigraphy.parent__id },
+                          params: { id: stratigraphy.parent_id },
                         })
                       "
                     />
@@ -113,8 +113,7 @@
                         localePath({
                           name: 'stratigraphy-id',
                           params: {
-                            id:
-                              stratigraphy.age_chronostratigraphy__stratigraphy_id,
+                            id: stratigraphy.age_chronostratigraphy_id,
                           },
                         })
                       "
