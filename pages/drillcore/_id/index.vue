@@ -177,38 +177,42 @@ export default {
   methods: {
     isNull,
     infiniteHandler($state) {
-      const paginateBy = 5
-      this.$services.sarvREST
-        .getResourceList('attachment_link', {
-          defaultParams: {
-            order_by: 'drillcore_box__depth_start,drillcore_box',
-            drillcore_box__drillcore: this.drillcore,
-            attachment__is_preferred: true,
-            page: this.page,
-            paginate_by: paginateBy,
-            distinct: true,
-            fields:
-              'id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred',
-          },
-          search: this.search,
-          queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
-        })
-        .then((res) => {
-          if (!res.page) {
-            this.boxes.push(...res.items)
-            $state.loaded()
-            $state.complete()
-          } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
-            this.page += 1
-            this.boxes.push(...res.items)
-            $state.loaded()
-          } else {
-            $state.complete()
-          }
-        })
-        .catch(() => {
-          $state.error()
-        })
+      if (this.drillcore) {
+        const paginateBy = 5
+        this.$services.sarvREST
+          .getResourceList('attachment_link', {
+            defaultParams: {
+              order_by: 'drillcore_box__depth_start,drillcore_box',
+              drillcore_box__drillcore: this.drillcore,
+              attachment__is_preferred: true,
+              page: this.page,
+              paginate_by: paginateBy,
+              distinct: true,
+              fields:
+                'id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred',
+            },
+            search: this.search,
+            queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
+          })
+          .then((res) => {
+            if (!res.page) {
+              this.boxes.push(...res.items)
+              $state.loaded()
+              $state.complete()
+            } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
+              this.page += 1
+              this.boxes.push(...res.items)
+              $state.loaded()
+            } else {
+              $state.complete()
+            }
+          })
+          .catch(() => {
+            $state.error()
+          })
+      } else {
+        $state.error()
+      }
     },
     handleSearch: debounce(function () {
       this.boxes = []
