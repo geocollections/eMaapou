@@ -10,8 +10,8 @@
         }},
         {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
       </h1>
-      <prev-next-nav />
-      <v-card class="my-2 mx-4">
+      <prev-next-nav :ids="ids" />
+      <v-card v-if="activeImage" class="my-2 mx-4">
         <v-card-text>
           <client-only>
             <template #placeholder>
@@ -256,13 +256,14 @@ export default {
         'drillcore_box',
         params.id
       )
+      const ids = drillcoreBoxResponse?.ids
       const drillcoreBox = drillcoreBoxResponse.results[0]
 
       const attachmentLinkResponse = await $axios.$get(
         `https://api.geocollections.info/attachment_link/?drillcore_box=${params.id}&order_by=-attachment__is_preferred&fields=attachment__author__agent,attachment__author_free,attachment__date_created,attachment__date_created_free,attachment__uuid_filename,attachment__is_preferred`
       )
       const drillcoreBoxImages = attachmentLinkResponse.results
-      const activeImage = drillcoreBoxImages[0]
+      const activeImage = drillcoreBoxImages?.[0]
 
       const tabs = [
         {
@@ -307,6 +308,7 @@ export default {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
+        ids,
         initActiveTab: route.path,
         tabs:
           !isNil(drillcoreBox?.drillcore__locality) &&
@@ -328,6 +330,7 @@ export default {
             : tabs,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Cannot find drillcore box ${route.params.id}`,
         path: route.path,

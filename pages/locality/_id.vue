@@ -4,7 +4,7 @@
       <h1 class="text-center my-3 page-title">
         {{ $translate({ et: locality.locality, en: locality.locality_en }) }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -295,6 +295,7 @@ export default {
           },
         }
       )
+      const ids = localityResponse?.ids
       const locality = localityResponse.results[0]
 
       const drillcoreResponse = await app.$services.sarvREST.getResourceList(
@@ -388,6 +389,7 @@ export default {
 
       return {
         locality,
+        ids,
         tabs: (
           await Promise.all(
             tabs.map(

@@ -4,7 +4,7 @@
       <h1 class="text-center my-3 page-title">
         {{ $t('analysis.title', { id: analysis.id }) }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile>
         <v-row no-gutters justify="center">
           <v-col cols="12" md="9" lg="7" xl="6">
@@ -150,6 +150,7 @@ export default {
           },
         }
       )
+      const ids = analysisResponse?.ids
       const analysis = analysisResponse.results[0]
 
       const tabs = [
@@ -197,6 +198,7 @@ export default {
 
       return {
         analysis,
+        ids,
         tabs: (
           await Promise.all(
             tabs.map(
