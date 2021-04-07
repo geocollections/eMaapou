@@ -4,7 +4,7 @@
       <h1 class="text-center my-3 page-title">
         {{ $translate({ et: site.name, en: site.name_en }) }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile class="my-2">
         <v-container>
           <v-row>
@@ -302,6 +302,7 @@ export default {
         'site',
         params.id
       )
+      const ids = detailViewResponse?.ids
       const site = detailViewResponse.results[0]
 
       const tabs = [
@@ -338,6 +339,7 @@ export default {
 
       return {
         site,
+        ids,
         initActiveTab: route.path,
         tabs: (
           await Promise.all(

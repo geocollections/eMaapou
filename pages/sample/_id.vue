@@ -4,7 +4,7 @@
       <h1 class="text-center my-3 page-title">
         {{ sampleTitle }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -324,6 +324,7 @@ export default {
         'sample',
         params.id
       )
+      const ids = detailViewResponse?.ids
       const sample = detailViewResponse.results[0]
 
       const tabs = [
@@ -366,6 +367,7 @@ export default {
       ]
       return {
         sample,
+        ids,
         initActiveTab: route.path,
         tabs: await Promise.all(
           tabs.map(

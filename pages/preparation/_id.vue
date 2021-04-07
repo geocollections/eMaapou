@@ -4,7 +4,7 @@
       <h1 class="text-center my-3 page-title">
         {{ preparation.preparation_number }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile class="my-2">
         <v-container>
           <v-row>
@@ -136,6 +136,7 @@ export default {
         'preparation',
         params.id
       )
+      const ids = detailViewResponse?.ids
       const preparation = detailViewResponse.results[0]
 
       const tabs = [
@@ -158,6 +159,7 @@ export default {
 
       return {
         preparation,
+        ids,
         initActiveTab: route.path,
         tabs: (
           await Promise.all(

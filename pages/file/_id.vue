@@ -8,7 +8,7 @@
         {{ $t('file.idTitle') }}: {{ file.id }}
       </h2>
 
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
 
       <v-card flat tile>
         <v-row no-gutters>
@@ -431,6 +431,7 @@ export default {
         'attachment',
         params.id
       )
+      const ids = fileResponse?.ids
       const file = fileResponse.results[0]
       let specimenIdentification
       let specimenIdentificationGeology
@@ -645,6 +646,7 @@ export default {
         specimenIdentificationGeology,
         attachmentKeywords,
         tabs,
+        ids,
       }
     } catch (err) {
       error({
