@@ -139,7 +139,7 @@
               </v-simple-table>
             </v-card-text>
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col v-if="stratotypeCount > 0" cols="12" md="6">
             <v-card-title>{{ $t('stratigraphy.stratotypes') }}</v-card-title>
             <v-card-text>
               <stratigraphy-stratotype-table
@@ -333,8 +333,6 @@ export default {
   },
   data() {
     return {
-      stratotypes: [],
-      count: 0,
       options: STRATOTYPE.options,
     }
   },
@@ -351,7 +349,7 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
     stratigraphyMarkers() {
-      return this.stratotypes.map((stratotype) => {
+      return this.stratotypes?.map((stratotype) => {
         return {
           latitude: stratotype.locality__latitude,
           longitude: stratotype.locality__longitude,
