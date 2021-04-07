@@ -8,9 +8,11 @@
     v-on="$listeners"
   >
     <template #item.locality="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openGeoDetail('locality', item.locality__id)"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality__id } })
+        "
       >
         {{
           $translate({
@@ -18,7 +20,7 @@
             en: item.locality__locality_en,
           })
         }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.type="{ item }">
       {{
@@ -29,21 +31,22 @@
       }}
     </template>
     <template #item.reference="{ item }">
-      <a
+      <outer-link
         class="text-link"
-        @click="$openGeology('reference', item.reference__id)"
-        >{{ item.reference__reference }}</a
-      >
+        :value="item.reference__reference"
+        @click.native="$openGeology('reference', item.reference__id)"
+      ></outer-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import { round } from 'lodash'
+import OuterLink from '../OuterLink.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   name: 'StratigraphyStratotypeTable',
-  components: { TableWrapper },
+  components: { TableWrapper, OuterLink },
   props: {
     showSearch: {
       type: Boolean,
