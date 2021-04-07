@@ -3,15 +3,19 @@
     <v-card
       dark
       shaped
+      class="transition-swing"
       :class="{ 'on-hover': hover }"
       :elevation="hover ? 12 : 2"
       :href="link"
-      target="_blank"
+      :target="innerLink ? '_self' : '_blank'"
     >
       <v-img
         :src="background"
-        class="white--text align-end"
-        gradient="to bottom, rgba(0,0,0,.2), rgba(0,0,0,.6)"
+        class="white--text align-end transition-swing"
+        :class="{ grayscale: grayscale }"
+        :gradient="`to bottom, rgba(0,0,0,.2), rgba(0,0,0,${
+          grayscale ? '.8' : '.6'
+        })`"
         height="200px"
         content-class="my-auto"
       >
@@ -63,6 +67,8 @@ export default {
       required: false,
       default: 'https://picsum.photos/700/300',
     },
+    innerLink: Boolean,
+    grayscale: Boolean,
   },
 }
 </script>
@@ -81,6 +87,19 @@ export default {
 }
 
 .v-card__title {
+  text-shadow: black 0 0 6px;
+}
+
+.grayscale {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.grayscale:hover {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+.text-shadow {
   text-shadow: black 0 0 6px;
 }
 </style>

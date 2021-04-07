@@ -23,16 +23,9 @@
         ></v-text-field>
       </v-col>
     </v-row>
-    <v-row justify="center" align="center">
-      <v-col>
-        <h2 class="text-center grey--text text--darken-1">
-          {{ $t('landing.otherPages') }}:
-        </h2>
-      </v-col>
-    </v-row>
     <v-row class="my-6" justify="center" align="center">
       <v-col
-        v-for="(item, index) in cards.allIds"
+        v-for="(item, index) in cards.innerIds"
         :key="index"
         class="pa-2"
         cols="12"
@@ -44,6 +37,32 @@
           :description="cards[item].description"
           :link="cards[item].href"
           :background="cards[item].background"
+          :inner-link="cards[item].innerLink"
+        />
+      </v-col>
+    </v-row>
+    <v-row justify="center" align="center">
+      <v-col>
+        <h2 class="text-center grey--text text--darken-1">
+          {{ $t('landing.otherPages') }}:
+        </h2>
+      </v-col>
+    </v-row>
+    <v-row class="my-6" justify="center" align="center">
+      <v-col
+        v-for="(item, index) in cards.outerIds"
+        :key="index"
+        class="pa-2"
+        cols="12"
+        :sm="cards[item].sm || 6"
+        :md="cards[item].md || 6"
+      >
+        <card-wrapper
+          :title="cards[item].title"
+          :description="cards[item].description"
+          :link="cards[item].href"
+          :background="cards[item].background"
+          grayscale
         />
       </v-col>
     </v-row>
@@ -193,7 +212,8 @@ export default {
           title: 'Drillcores',
           description: 'Drillcores',
           href: 'https://geoloogia.info/drillcore',
-          background: require('~/assets/frontpage/sarv-wb.jpg'),
+          background: require('~/assets/frontpage/geoloogiafond.jpg'),
+          innerLink: true,
           sm: 4,
           md: 3,
           lg: 3,
@@ -202,7 +222,8 @@ export default {
           title: 'Localities',
           description: 'Localities',
           href: 'https://geoloogia.info/drillcore',
-          background: require('~/assets/frontpage/sarv-wb.jpg'),
+          background: require('~/assets/frontpage/geoloogiafond.jpg'),
+          innerLink: true,
           sm: 4,
           md: 3,
           lg: 3,
@@ -211,7 +232,8 @@ export default {
           title: 'Samples',
           description: 'Samples',
           href: 'https://geoloogia.info/drillcore',
-          background: require('~/assets/frontpage/sarv-wb.jpg'),
+          background: require('~/assets/frontpage/geoloogiafond.jpg'),
+          innerLink: true,
           sm: 4,
           md: 3,
           lg: 3,
@@ -220,17 +242,15 @@ export default {
           title: 'Analyses',
           description: 'Analyses',
           href: 'https://geoloogia.info/drillcore',
-          background: require('~/assets/frontpage/sarv-wb.jpg'),
+          background: require('~/assets/frontpage/geoloogiafond.jpg'),
+          innerLink: true,
           sm: 4,
           md: 3,
           lg: 3,
         },
-        allIds: [
+        innerIds: ['drillcores', 'localities', 'samples', 'analyses'],
+        outerIds: [
           // 'ema',
-          // 'localities',
-          // 'drillcores',
-          // 'samples',
-          // 'analyses',
           'geocollections',
           'kirjandus',
           'gmre',
