@@ -150,7 +150,11 @@
                 class="mb-2"
               />
               <v-card id="map-wrap" elevation="0" height="300">
-                <leaflet-map :height="300" :markers="stratigraphyMarkers" />
+                <leaflet-map
+                  is-estonian
+                  :height="300"
+                  :markers="stratigraphyMarkers"
+                />
               </v-card>
             </v-card-text>
           </v-col>

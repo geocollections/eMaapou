@@ -241,10 +241,12 @@ export default {
     },
 
     isEstonianBedrockVisibleAtAStart() {
+      // HACK: Should probably be a prop
       return (
         this.isEstonian &&
         (this.$route.name.includes('drillcore-') ||
-          this.$route.name.includes('locality-'))
+          this.$route.name.includes('locality-') ||
+          this.$route.name.includes('stratigraphy-'))
       )
     },
 
