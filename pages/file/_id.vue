@@ -120,12 +120,24 @@
                     <link-data-row
                       :title="$t('file.collectionNr')"
                       :value="file.specimen__coll__number"
-                      @link-click="$openGeoDetail('specimen', file.specimen)"
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'specimen-id',
+                          params: { id: file.specimen },
+                        })
+                      "
                     />
                     <link-data-row
                       :title="$t('file.specimenNr')"
                       :value="file.specimen__specimen_id"
-                      @link-click="$openGeoDetail('specimen', file.specimen)"
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'specimen-id',
+                          params: { id: file.specimen },
+                        })
+                      "
                     />
                     <template v-for="(item, index) in specimenIdentification">
                       <link-data-row
@@ -159,8 +171,12 @@
                           en: file.specimen__locality__locality_en,
                         })
                       "
-                      @link-click="
-                        $openGeoDetail('locality', file.specimen__locality)
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'locality-id',
+                          params: { id: file.specimen__locality },
+                        })
                       "
                     />
                     <link-data-row
@@ -171,11 +187,12 @@
                           en: file.specimen__stratigraphy__stratigraphy_en,
                         })
                       "
-                      @link-click="
-                        $openGeoDetail(
-                          'stratigraphy',
-                          file.specimen__stratigraphy
-                        )
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: { id: file.specimen__stratigraphy },
+                        })
                       "
                     />
                     <data-row
@@ -250,7 +267,13 @@
                           en: file.locality__locality_en,
                         })
                       "
-                      @link-click="$openGeoDetail('locality', file.locality)"
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'locality-id',
+                          params: { id: file.locality },
+                        })
+                      "
                     />
                     <data-row
                       :title="$t('file.imageLatitude')"

@@ -89,11 +89,14 @@
                                 box.drillcore_box__stratigraphy_top__stratigraphy_en,
                             })
                           "
-                          @link-click="
-                            $openGeoDetail(
-                              'stratigraphy',
-                              box.drillcore_box__stratigraphy_top
-                            )
+                          nuxt
+                          :href="
+                            localePath({
+                              name: 'stratigraphy-id',
+                              params: {
+                                id: box.drillcore_box__stratigraphy_top,
+                              },
+                            })
                           "
                         />
                         <link-data-row
@@ -106,11 +109,14 @@
                                 box.drillcore_box__stratigraphy_base__stratigraphy_en,
                             })
                           "
-                          @link-click="
-                            $openGeoDetail(
-                              'stratigraphy',
-                              box.drillcore_box__stratigraphy_base
-                            )
+                          nuxt
+                          :href="
+                            localePath({
+                              name: 'stratigraphy-id',
+                              params: {
+                                id: box.drillcore_box__stratigraphy_base,
+                              },
+                            })
                           "
                         />
                         <data-row

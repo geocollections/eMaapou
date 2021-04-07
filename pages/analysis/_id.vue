@@ -30,9 +30,11 @@
                     <link-data-row
                       :title="$t('analysis.sampleNumber')"
                       :value="analysis.sample__number"
-                      @link-click="
-                        $openNuxtWindow('sample-id', {
-                          id: analysis.sample__number,
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'sample-id',
+                          params: { id: analysis.sample__number },
                         })
                       "
                     />
@@ -65,9 +67,11 @@
                           en: analysis.sample__locality__locality__en,
                         })
                       "
-                      @link-click="
-                        $openNuxtWindow('locality-id', {
-                          id: analysis.sample__locality_id,
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'locality-id',
+                          params: { id: analysis.sample__locality_id },
                         })
                       "
                     />
@@ -83,11 +87,12 @@
                           en: analysis.sample__stratigraphy__stratigraphy__en,
                         })
                       "
-                      @link-click="
-                        $openGeoDetail(
-                          'stratigraphy',
-                          analysis.sample__stratigraphy_id
-                        )
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: { id: analysis.sample__stratigraphy_id },
+                        })
                       "
                     />
                     <link-data-row
@@ -99,11 +104,12 @@
                             analysis.sample__lithostratigraphy__stratigraphy__en,
                         })
                       "
-                      @link-click="
-                        $openGeoDetail(
-                          'stratigraphy',
-                          analysis.sample__lithostratigraphy_id
-                        )
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: { id: analysis.sample__lithostratigraphy_id },
+                        })
                       "
                     />
                   </tbody>

@@ -8,9 +8,14 @@
     v-on="$listeners"
   >
     <template #item.stratigraphy="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openGeoDetail('stratigraphy', item.stratigraphy__id)"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.stratigraphy__id },
+          })
+        "
       >
         {{
           $translate({
@@ -18,7 +23,7 @@
             en: item.stratigraphy__stratigraphy_en,
           })
         }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.type="{ item }">
       {{

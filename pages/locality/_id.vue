@@ -111,10 +111,12 @@
                           en: locality.stratigraphy_top__stratigraphy_en,
                         })
                       "
-                      @link-click="
-                        $openWindow(
-                          `https://geocollections.info/stratigraphy/${locality.stratigraphy_top_id}`
-                        )
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: { id: locality.stratigraphy_top_id },
+                        })
                       "
                     />
                     <link-data-row
@@ -125,10 +127,12 @@
                           en: locality.stratigraphy_base__stratigraphy_en,
                         })
                       "
-                      @link-click="
-                        $openWindow(
-                          `https://geocollections.info/stratigraphy/${locality.stratigraphy_base_id}`
-                        )
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: { id: locality.stratigraphy_base_id },
+                        })
                       "
                     />
                     <link-data-row

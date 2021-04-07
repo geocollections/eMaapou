@@ -187,11 +187,12 @@
                       en: drillcoreBox.stratigraphy_top__stratigraphy_en,
                     })
                   "
-                  @link-click="
-                    $openGeoDetail(
-                      'stratigraphy',
-                      drillcoreBox.stratigraphy_top_id
-                    )
+                  nuxt
+                  :href="
+                    localePath({
+                      name: 'stratigraphy-id',
+                      params: { id: drillcoreBox.stratigraphy_top_id },
+                    })
                   "
                 />
                 <data-row
@@ -206,11 +207,12 @@
                       en: drillcoreBox.stratigraphy_base__stratigraphy_en,
                     })
                   "
-                  @link-click="
-                    $openGeoDetail(
-                      'stratigraphy',
-                      drillcoreBox.stratigraphy_base_id
-                    )
+                  nuxt
+                  :href="
+                    localePath({
+                      name: 'stratigraphy-id',
+                      params: { id: drillcoreBox.stratigraphy_base_id },
+                    })
                   "
                 />
                 <data-row

@@ -21,9 +21,14 @@
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <a
+      <nuxt-link
         class="text-link"
-        @click="$openGeoDetail('stratigraphy', item.stratigraphy)"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.stratigraphy },
+          })
+        "
       >
         {{
           $translate({
@@ -31,7 +36,7 @@
             en: item.stratigraphy__stratigraphy_en,
           })
         }}
-      </a>
+      </nuxt-link>
     </template>
     <template #item.author="{ item }">
       <a

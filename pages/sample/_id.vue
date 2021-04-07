@@ -83,8 +83,12 @@
                           en: sample.lithostratigraphy__stratigraphy_en,
                         })
                       "
-                      @link-click="
-                        $openGeoDetail('stratigraphy', sample.lithostratigraphy)
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: { id: sample.lithostratigraphy },
+                        })
                       "
                     />
                     <data-row
