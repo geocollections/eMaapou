@@ -8,15 +8,22 @@
     v-on="$listeners"
   >
     <template #item.stratigraphy="{ item }">
-      <outer-link
-        :value="
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.id },
+          })
+        "
+      >
+        {{
           $translate({
             et: item.stratigraphy,
             en: item.stratigraphy_en,
           })
-        "
-        @click.native="$openWindow(`http://stratigraafia.info/term/${item.id}`)"
-      />
+        }}
+      </nuxt-link>
     </template>
 
     <template #item.index_main="{ item }">
@@ -82,27 +89,31 @@
     </template>
 
     <template #item.parent_stratigraphy="{ item }">
-      <outer-link
-        :value="
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.parent_id },
+          })
+        "
+      >
+        {{
           $translate({
             et: item.parent_stratigraphy,
             en: item.parent_stratigraphy_en,
           })
-        "
-        @click.native="
-          $openWindow(`http://stratigraafia.info/term/${item.parent_id}`)
-        "
-      />
+        }}
+      </nuxt-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
-import OuterLink from '~/components/OuterLink'
 export default {
   name: 'StratigraphyTable',
-  components: { OuterLink, TableWrapper },
+  components: { TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

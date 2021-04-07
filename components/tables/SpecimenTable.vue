@@ -42,35 +42,40 @@
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <outer-link
-        v-if="item.stratigraphy_id"
-        :value="
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.stratigraphy_id },
+          })
+        "
+      >
+        {{
           $translate({
             et: item.stratigraphy,
             en: item.stratigraphy_en,
           })
-        "
-        @click.native="
-          $openWindow(`http://stratigraafia.info/term/${item.stratigraphy_id}`)
-        "
-      />
+        }}
+      </nuxt-link>
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <outer-link
-        v-if="item.lithostratigraphy_id"
-        class="font-italic"
-        :value="
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.lithostratigraphy_id },
+          })
+        "
+      >
+        {{
           $translate({
             et: item.lithostratigraphy,
             en: item.lithostratigraphy_en,
           })
-        "
-        @click.native="
-          $openWindow(
-            `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
-          )
-        "
-      />
+        }}
+      </nuxt-link>
     </template>
     <template #item.taxon="{ item }">
       <outer-link
