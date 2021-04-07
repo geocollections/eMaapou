@@ -1,12 +1,10 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center pt-3 page-title">
+      <h1 class="text-center my-3 page-title">
         {{ fileTitle }}
       </h1>
-      <h2 class="text-center pb-3 page-title">
-        {{ $t('file.idTitle') }}: {{ file.id }}
-      </h2>
+      <h3 class="text-center pb-3">{{ $t('file.idTitle') }}: {{ file.id }}</h3>
 
       <prev-next-nav :ids="ids" />
 

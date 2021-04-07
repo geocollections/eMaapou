@@ -52,7 +52,7 @@ export default {
     sites: 'Vaatluspunktid',
     about: 'Tutvustus',
     searchAlt: 'Otsinguks sisesta üks või mitu märksõna, nt Eesti ... ',
-    history: 'Ajalugu',
+    history: 'Hiljuti vaadatud',
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',
   },
@@ -387,6 +387,22 @@ export default {
     tu: 'Tartu Ülikool',
     elm: 'Eesti Loodusmuuseum',
     el: 'Euroopa Liidu struktuuritoetused',
+  },
+  frontDrillcores: {
+    title: 'Puursüdamikud',
+    description: 'Puursüdamike kataloog',
+  },
+  frontLocalities: {
+    title: 'Lokaliteedid',
+    description: 'Paljandid, puuraugud jt leiukohad',
+  },
+  frontSamples: {
+    title: 'Proovid',
+    description: 'Kivimi-, sette- jm proovide kataloog',
+  },
+  frontAnalyses: {
+    title: 'Analüüsid',
+    description: 'Maapõue analüütiline andmestik',
   },
   geocollections: {
     title: 'Geokogud',
