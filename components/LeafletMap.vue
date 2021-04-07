@@ -273,6 +273,7 @@ export default {
           return [m.latitude, m.longitude]
         })
       )
+      this.$refs.map.setZoom(this.mapZoom)
     })
   },
   methods: {
