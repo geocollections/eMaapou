@@ -38,36 +38,38 @@
     <!-- Todo: Add lithostratigraphy -->
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
-        <outer-link
+        <external-link
           v-if="item.stratigraphy_id"
-          :value="
-            $translate({
-              et: item.stratigraphy,
-              en: item.stratigraphy_en,
-            })
-          "
           @click.native="
             $openWindow(
               `http://stratigraafia.info/term/${item.stratigraphy_id}`
             )
           "
-        />
+        >
+          {{
+            $translate({
+              et: item.stratigraphy,
+              en: item.stratigraphy_en,
+            })
+          }}
+        </external-link>
         <span v-if="item.lithostratigraphy_id"> | </span>
-        <outer-link
+        <external-link
           v-if="item.lithostratigraphy_id"
           class="font-italic"
-          :value="
-            $translate({
-              et: item.lithostratigraphy,
-              en: item.lithostratigraphy_en,
-            })
-          "
           @click.native="
             $openWindow(
               `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
             )
           "
-        />
+        >
+          {{
+            $translate({
+              et: item.lithostratigraphy,
+              en: item.lithostratigraphy_en,
+            })
+          }}
+        </external-link>
       </span>
     </template>
   </table-wrapper>
@@ -76,10 +78,10 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'PreparationTable',
-  components: { OuterLink, TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

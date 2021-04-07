@@ -8,10 +8,12 @@
     v-on="$listeners"
   >
     <template #item.reference="{ item }">
-      <outer-link
-        :value="item.reference"
+      <external-link
+        v-if="item.id"
         @click.native="$openGeology('reference', item.id)"
-      />
+      >
+        {{ item.reference }}
+      </external-link>
     </template>
 
     <template #item.journal="{ item }">
@@ -22,21 +24,22 @@
     </template>
 
     <template #item.doi="{ item }">
-      <outer-link
+      <external-link
         v-if="item.doi"
-        :value="item.doi"
         @click.native="$openWindow(`https://doi.org/${item.doi}`)"
-      />
+      >
+        {{ item.doi }}
+      </external-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'ReferenceTable',
-  components: { OuterLink, TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

@@ -28,11 +28,12 @@
     </template>
 
     <template #item.reference="{ item }">
-      <outer-link
+      <external-link
         v-if="item.reference_id"
-        :value="item.reference"
         @click.native="$openGeology('reference', item.reference_id)"
-      />
+      >
+        {{ item.reference }}
+      </external-link>
     </template>
 
     <template #item.type="{ item }">
@@ -57,11 +58,11 @@
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 // import AttachmentCell from '~/components/AttachmentCell'
 export default {
   name: 'AttachmentSolrTable',
-  components: { OuterLink, TableWrapper, ImageCell },
+  components: { ExternalLink, TableWrapper, ImageCell },
   props: {
     showSearch: {
       type: Boolean,

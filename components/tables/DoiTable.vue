@@ -8,12 +8,13 @@
     v-on="$listeners"
   >
     <template #item.identifier="{ item }">
-      <outer-link
-        :value="item.identifier"
+      <external-link
+        v-if="item.identifier"
         @click.native="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "
-      />
+        >{{ item.identifier }}</external-link
+      >
     </template>
 
     <template #item.datacite_created="{ item }">
@@ -36,10 +37,10 @@
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'DoiTable',
-  components: { OuterLink, TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

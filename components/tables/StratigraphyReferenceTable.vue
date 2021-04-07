@@ -8,22 +8,23 @@
     v-on="$listeners"
   >
     <template #item.reference="{ item }">
-      <outer-link
-        class="text-link"
-        :value="item.reference__reference"
+      <external-link
+        v-if="item.reference__id"
         @click.native="$openGeology('reference', item.reference__id)"
-      ></outer-link>
+      >
+        {{ item.reference__reference }}
+      </external-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import { round } from 'lodash'
-import OuterLink from '../OuterLink.vue'
+import ExternalLink from '../ExternalLink.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   name: 'StratigraphyReferenceTable',
-  components: { TableWrapper, OuterLink },
+  components: { TableWrapper, ExternalLink },
   props: {
     showSearch: {
       type: Boolean,

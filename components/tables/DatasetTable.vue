@@ -8,17 +8,21 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <outer-link
-        :value="item.id"
+      <external-link
+        v-if="item.id"
         @click.native="$openGeoDetail('dataset', item.id)"
-      />
+      >
+        {{ item.id }}
+      </external-link>
     </template>
 
     <template #item.name="{ item }">
-      <outer-link
-        :value="$translate({ et: item.name, en: item.name_en })"
+      <external-link
+        v-if="$translate({ et: item.name, en: item.name_en })"
         @click.native="$openGeoDetail('dataset', item.id)"
-      />
+      >
+        {{ $translate({ et: item.name, en: item.name_en }) }}
+      </external-link>
     </template>
 
     <template #item.date="{ item }">
@@ -29,19 +33,19 @@
     </template>
 
     <template #item.database_acronym="{ item }">
-      <outer-link
+      <external-link
         v-if="
           item.database_acronym === 'GIT' ||
           item.database_acronym === 'TUG' ||
           item.database_acronym === 'ELM'
         "
-        :value="item.database_acronym"
         @click.native="
           $openWindow(
             `https://geocollections.info/${item.database_acronym.toLowerCase()}`
           )
         "
-      />
+        >{{ item.database_acronym }}</external-link
+      >
       <div v-else>{{ item.database_acronym }}</div>
     </template>
   </table-wrapper>
@@ -49,10 +53,10 @@
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'DatasetTable',
-  components: { OuterLink, TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

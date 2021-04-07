@@ -10,7 +10,9 @@
             {{ value }}
           </slot>
         </a>
-        <outer-link v-else :value="value" @click.native="$emit('link-click')" />
+        <external-link v-else @click.native="$emit('link-click')">
+          {{ value }}
+        </external-link>
       </span>
       <span v-if="suffix">{{ suffix }}</span>
     </template>
@@ -19,11 +21,11 @@
 
 <script>
 import DataRow from '@/components/DataRow'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 
 export default {
   name: 'LinkDataRow',
-  components: { OuterLink, DataRow },
+  components: { ExternalLink, DataRow },
   props: {
     nuxt: { type: Boolean, default: false },
     title: { type: String, default: null },

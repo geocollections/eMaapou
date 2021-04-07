@@ -8,29 +8,33 @@
     v-on="$listeners"
   >
     <template #item.taxon="{ item }">
-      <outer-link
-        :value="item.taxon"
+      <external-link
+        v-if="item.id"
         @click.native="$openWindow(`https://fossiilid.info/${item.id}`)"
-      />
+      >
+        {{ item.taxon }}
+      </external-link>
     </template>
 
     <template #item.fossil_group="{ item }">
-      <outer-link
+      <external-link
         v-if="item.fossil_group_id"
-        :value="item.fossil_group"
         @click.native="
           $openWindow(`https://fossiilid.info/${item.fossil_group_id}`)
         "
-      />
+      >
+        {{ item.fossil_group }}
+      </external-link>
       <div v-else>{{ item.fossil_group }}</div>
     </template>
 
     <template #item.parent_taxon="{ item }">
-      <outer-link
+      <external-link
         v-if="item.parent_id"
-        :value="item.parent_taxon"
         @click.native="$openWindow(`https://fossiilid.info/${item.parent_id}`)"
-      />
+      >
+        {{ item.parent_taxon }}
+      </external-link>
       <div v-else>{{ item.parent_taxon }}</div>
     </template>
   </table-wrapper>
@@ -39,10 +43,10 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
-import OuterLink from '~/components/OuterLink'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'TaxonTable',
-  components: { OuterLink, TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
