@@ -73,7 +73,11 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .page-title {
-  font-weight: normal;
+  /* font-weight: normal; */
+  background-color: #5c659821;
+  font-weight: bold;
+  border-top: solid #5c659887;
+  border-bottom: solid #5c659887;
 }
 
 .no-value {
