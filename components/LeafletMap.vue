@@ -125,7 +125,7 @@ export default {
         },
       },
       tooltipOptions: {
-        permanent: this.markers.length === 1,
+        permanent: this.markers.length <= 5,
         direction: 'top',
         offset: [1, -7],
       },
