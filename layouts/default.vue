@@ -62,6 +62,7 @@ export default {
         'sample-id',
         'site-id',
         'file-id',
+        'stratigraphy-id',
       ]
       return detailViewRouteNames.some((route) =>
         this.getRouteBaseName().startsWith(route)
