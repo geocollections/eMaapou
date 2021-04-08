@@ -6,6 +6,9 @@
     autocomplete="off"
     :search-input.sync="search"
     clearable
+    cache-items
+    :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
+    :return-object="!$attrs['item-value']"
     v-on="$listeners"
     @change="resetSearchInput"
   />

@@ -95,6 +95,11 @@ const buildFilterQueryParameter = (filters) => {
         return false
       if (v.type === 'select' && (v.value === null || v.value.length < 1))
         return false
+      if (
+        v.type === 'object' &&
+        (typeof v.value !== 'object' || !v.value?.[v.searchField])
+      )
+        return false
       return v.value !== null
     })
     .reduce((prev, [k, v]) => {
@@ -150,6 +155,14 @@ const buildFilterQueryParameter = (filters) => {
             case 'text': {
               return encodeURIComponent(
                 `${buildTextParameter(searchParameter.value, fieldId)}`
+              )
+            }
+            case 'object': {
+              return encodeURIComponent(
+                `${buildTextParameter(
+                  searchParameter.value[searchParameter.searchField],
+                  fieldId
+                )}`
               )
             }
             default:
