@@ -39,6 +39,7 @@ export default {
           queryFields: this.$getQueryFields(STRATIGRAPHY_SYNONYM.queryFields),
         }
       )
+      this.options = tableState.options
       this.synonyms = synonymResponse.items
       this.count = synonymResponse.count
     },

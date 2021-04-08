@@ -1,7 +1,6 @@
 <template>
   <dataset-table
     :show-search="false"
-    external-options
     :items="items"
     :count="count"
     :options="options"
@@ -47,6 +46,7 @@ export default {
           searchFilters: {},
         }
       )
+      this.options = tableState.options
       this.items = analysisResponse.items
       this.count = analysisResponse.count
     },

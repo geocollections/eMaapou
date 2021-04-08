@@ -30,7 +30,6 @@
       <v-col cols="9">
         <site-table
           :show-search="false"
-          external-options
           :items="items"
           :count="count"
           :options="options"
@@ -69,6 +68,7 @@ export default {
     ...mapActions('site', ['searchSites']),
     async handleUpdate(tableState) {
       await this.searchSites(tableState.options)
+      this.options = tableState.options
     },
   },
 }

@@ -262,7 +262,7 @@ export const STRATIGRAPHY_SYNONYM = {
 export const DESCRIPTION = {
   options: {
     page: 1,
-    itemsPerPage: 25,
+    itemsPerPage: 2,
     sortBy: ['depth_top', 'depth_base'],
     sortDesc: [false, true],
   },

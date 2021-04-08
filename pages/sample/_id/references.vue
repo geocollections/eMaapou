@@ -39,6 +39,7 @@ export default {
           queryFields: this.$getQueryFields(SAMPLE_REFERENCE.queryFields),
         }
       )
+      this.options = tableState.options
       this.references = referenceResponse.items
       this.count = referenceResponse.count
     },

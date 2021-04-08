@@ -52,6 +52,7 @@ export default {
           queryFields: this.$getQueryFields(ANALYSIS.queryFields),
         }
       )
+      this.options = tableState.options
       this.analyses = analysisResponse.items
       this.count = analysisResponse.count
     },

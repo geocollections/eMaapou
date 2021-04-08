@@ -1,7 +1,6 @@
 <template>
   <doi-table
     :show-search="false"
-    external-options
     :items="items"
     :count="count"
     :options="options"
@@ -43,6 +42,7 @@ export default {
         queryFields: this.$getQueryFields(DOI.queryFields),
         searchFilters: {},
       })
+      this.options = tableState.options
       this.items = response.items
       this.count = response.count
     },

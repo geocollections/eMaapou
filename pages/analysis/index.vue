@@ -30,7 +30,6 @@
       <v-col cols="12" md="9">
         <analysis-table
           :show-search="false"
-          external-options
           :items="items"
           :count="count"
           :options="options"
@@ -62,6 +61,7 @@ export default {
     ...mapActions('analysis', ['searchAnalyses']),
     async handleUpdate(tableState) {
       await this.searchAnalyses(tableState.options)
+      this.options = tableState.options
     },
   },
 }

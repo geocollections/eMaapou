@@ -53,6 +53,7 @@ export default {
         }
       )
 
+      this.options = tableState.options
       this.items = referenceResponse.items
       this.count = referenceResponse.count
     },

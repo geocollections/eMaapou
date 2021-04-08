@@ -1,9 +1,9 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch, externalOptions }"
+    v-bind="{ showSearch }"
     :headers="headers"
     :items="items"
-    :init-options="options"
+    :options="options"
     :count="count"
     v-on="$listeners"
   >
@@ -90,10 +90,6 @@ export default {
     showSearch: {
       type: Boolean,
       default: true,
-    },
-    externalOptions: {
-      type: Boolean,
-      default: false,
     },
     items: {
       type: Array,

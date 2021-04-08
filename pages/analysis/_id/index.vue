@@ -41,6 +41,7 @@ export default {
         }
       )
 
+      this.options = tableState.options
       this.analysisResults = analysisResultResponse.items
       this.count = analysisResultResponse.count
     },

@@ -1,7 +1,6 @@
 <template>
   <site-table
     :show-search="false"
-    external-options
     :items="items"
     :count="count"
     :options="options"
@@ -46,6 +45,7 @@ export default {
           searchFilters: {},
         }
       )
+      this.options = tableState.options
       this.items = sampleResponse.items
       this.count = sampleResponse.count
     },

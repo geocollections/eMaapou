@@ -41,6 +41,7 @@ export default {
         }
       )
 
+      this.options = tableState.options
       this.sites = solrResponse.items
       this.count = solrResponse.count
     },

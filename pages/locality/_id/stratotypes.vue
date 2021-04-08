@@ -40,6 +40,7 @@ export default {
           queryFields: this.$getQueryFields(STRATOTYPE.queryFields),
         }
       )
+      this.options = tableState.options
       this.stratotypes = stratotypeResponse.items
       this.count = stratotypeResponse.count
     },

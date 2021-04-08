@@ -52,6 +52,7 @@ export default {
           queryFields: this.$getQueryFields(STRATIGRAPHY.queryFields),
         }
       )
+      this.options = tableState.options
       this.items = analysisResponse.items
       this.count = analysisResponse.count
     },

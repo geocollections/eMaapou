@@ -46,6 +46,7 @@ export default {
           queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
         }
       )
+      this.options = tableState.options
       this.attachments = attachmentResponse.items
       this.count = attachmentResponse.count
     },

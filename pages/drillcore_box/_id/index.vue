@@ -48,6 +48,7 @@ export default {
           queryFields: this.$getQueryFields(SAMPLE.queryFields),
         }
       )
+      this.options = tableState.options
       this.samples = sampleResponse.items
       this.count = sampleResponse.count
     },

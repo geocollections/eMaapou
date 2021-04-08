@@ -30,7 +30,6 @@
       <v-col cols="12" md="9">
         <locality-table
           :show-search="false"
-          external-options
           :items="items"
           :count="count"
           :options="options"
@@ -61,6 +60,7 @@ export default {
     ...mapActions('locality', ['searchLocalities']),
     async handleUpdate(tableState) {
       await this.searchLocalities(tableState.options)
+      this.options = tableState.options
     },
   },
 }

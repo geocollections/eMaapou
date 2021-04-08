@@ -1,10 +1,10 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch, externalOptions }"
+    v-bind="{ showSearch }"
     :items="items"
     :headers="headers"
     :count="count"
-    :init-options="options"
+    :options="options"
     v-on="$listeners"
   >
     <template #item.file="{ item }">
@@ -45,10 +45,6 @@ export default {
     showSearch: {
       type: Boolean,
       default: true,
-    },
-    externalOptions: {
-      type: Boolean,
-      default: false,
     },
     items: {
       type: Array,

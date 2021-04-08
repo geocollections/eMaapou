@@ -40,6 +40,7 @@ export default {
           queryFields: this.$getQueryFields(TAXON_LIST.queryFields),
         }
       )
+      this.options = tableState.options
       this.taxa = taxonResponse.items
       this.count = taxonResponse.count
     },

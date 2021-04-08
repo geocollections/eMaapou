@@ -1,7 +1,6 @@
 <template>
   <preparation-table
     :show-search="false"
-    external-options
     :items="items"
     :count="count"
     :options="options"
@@ -46,6 +45,7 @@ export default {
           searchFilters: {},
         }
       )
+      this.options = tableState.options
       this.items = preparationResponse.items
       this.count = preparationResponse.count
     },

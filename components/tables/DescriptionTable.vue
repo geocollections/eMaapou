@@ -3,7 +3,7 @@
     :items="items"
     :headers="headers"
     :count="count"
-    :init-options="options"
+    :options="options"
     v-on="$listeners"
   >
     <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -69,10 +69,6 @@ export default {
     showSearch: {
       type: Boolean,
       default: true,
-    },
-    externalOptions: {
-      type: Boolean,
-      default: false,
     },
     items: {
       type: Array,

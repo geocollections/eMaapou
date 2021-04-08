@@ -8,14 +8,14 @@
     :expanded.sync="expanded"
     :headers="headers"
     :items="items"
-    :options.sync="options"
+    :options="options"
     :server-items-length="count"
     :footer-props="footerProps"
     mobile-breakpoint="0"
     @update:options="handleChange"
   >
     <template #no-data>{{ $t('table.noData') }}</template>
-    <template #top="{ pagination, updateOptions }">
+    <template #top="{ pagination, updateOptions, options }">
       <v-row no-gutters>
         <v-col cols="12" sm="4" class="py-0 px-3">
           <v-text-field

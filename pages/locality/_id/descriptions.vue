@@ -41,6 +41,7 @@ export default {
           queryFields: this.$getQueryFields(DESCRIPTION.queryFields),
         }
       )
+      this.options = tableState.options
       this.descriptions = descriptionResponse.items.map((item) => {
         return { ...item, canExpand: !isEmpty(item.description) }
       })
