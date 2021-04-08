@@ -1,6 +1,9 @@
 <template>
-  <div class="d-flex justify-space-between px-4">
-    <div>
+  <div
+    class="d-flex justify-space-between px-4"
+    :class="{ 'page-title my-3': title || $slots.title }"
+  >
+    <div class="align-self-center text-no-wrap">
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -8,7 +11,7 @@
             nuxt
             icon
             :disabled="!computedFirstId"
-            :title="$t('common.first')"
+            :title="$t('common.first', { id: computedFirstId })"
             :to="
               localePath({
                 params: { id: computedFirstId },
@@ -20,7 +23,7 @@
           </v-btn>
         </template>
 
-        <span>{{ $t('common.first') }}</span>
+        <span>{{ $t('common.first', { id: computedFirstId }) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -30,7 +33,7 @@
             nuxt
             icon
             :disabled="!computedPrevId"
-            :title="$t('common.previous')"
+            :title="$t('common.previous', { id: computedPrevId })"
             :to="
               localePath({
                 params: { id: computedPrevId },
@@ -42,11 +45,17 @@
           </v-btn>
         </template>
 
-        <span>{{ $t('common.previous') }}</span>
+        <span>{{ $t('common.previous', { id: computedPrevId }) }}</span>
       </v-tooltip>
     </div>
 
-    <div>
+    <slot name="title">
+      <h1 class="text-center">
+        {{ title }}
+      </h1>
+    </slot>
+
+    <div class="align-self-center text-no-wrap">
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -54,7 +63,7 @@
             nuxt
             icon
             :disabled="!computedNextId"
-            :title="$t('common.next')"
+            :title="$t('common.next', { id: computedNextId })"
             :to="
               localePath({
                 params: { id: computedNextId },
@@ -66,7 +75,7 @@
           </v-btn>
         </template>
 
-        <span>{{ $t('common.next') }}</span>
+        <span>{{ $t('common.next', { id: computedNextId }) }}</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
@@ -75,7 +84,7 @@
             nuxt
             icon
             :disabled="!computedLastId"
-            :title="$t('common.last')"
+            :title="$t('common.last', { id: computedLastId })"
             :to="
               localePath({
                 params: { id: computedLastId },
@@ -87,7 +96,7 @@
           </v-btn>
         </template>
 
-        <span>{{ $t('common.last') }}</span>
+        <span>{{ $t('common.last', { id: computedLastId }) }}</span>
       </v-tooltip>
     </div>
   </div>
@@ -95,7 +104,7 @@
 
 <script>
 export default {
-  name: 'PrevNextNav',
+  name: 'PrevNextNavTitle',
   props: {
     arrowKeys: {
       type: Boolean,
@@ -111,6 +120,11 @@ export default {
       type: Object,
       required: false,
       default: () => {},
+    },
+    title: {
+      type: String,
+      required: false,
+      default: '',
     },
   },
   computed: {

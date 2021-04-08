@@ -1,15 +1,15 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center my-3 page-title">
-        {{
+      <prev-next-nav-title
+        :ids="ids"
+        :title="
           $translate({
             et: stratigraphy.stratigraphy,
             en: stratigraphy.stratigraphy_en,
           })
-        }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+        "
+      />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -196,13 +196,13 @@ import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable'
 import { STRATOTYPE } from '~/constants'
 
 export default {
   components: {
-    PrevNextNav,
+    PrevNextNavTitle,
     Tabs,
     LinkDataRow,
     DataRow,

@@ -1,10 +1,10 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center my-3 page-title">
-        {{ $translate({ et: locality.locality, en: locality.locality_en }) }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="$translate({ et: locality.locality, en: locality.locality_en })"
+      />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -279,10 +279,10 @@ import LinkDataRow from '~/components/LinkDataRow'
 import DataRow from '~/components/DataRow'
 import LeafletMap from '~/components/LeafletMap'
 import Tabs from '~/components/Tabs'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
-  components: { PrevNextNav, DataRow, LinkDataRow, LeafletMap, Tabs },
+  components: { PrevNextNavTitle, DataRow, LinkDataRow, LeafletMap, Tabs },
   async asyncData({ params, route, app, error }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(

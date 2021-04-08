@@ -1,14 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center pt-3 page-title">
-        {{ fileTitle }}
-      </h1>
-      <h2 class="text-center pb-3 page-title">
-        {{ $t('file.idTitle') }}: {{ file.id }}
-      </h2>
-
-      <prev-next-nav :ids="ids" />
+      <prev-next-nav-title :ids="ids" :title="fileTitle" />
 
       <v-card flat tile>
         <v-row no-gutters>
@@ -444,10 +437,16 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/LeafletMap'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
-  components: { PrevNextNav, LeafletMap, BoxImageLoader, DataRow, LinkDataRow },
+  components: {
+    PrevNextNavTitle,
+    LeafletMap,
+    BoxImageLoader,
+    DataRow,
+    LinkDataRow,
+  },
   async asyncData({ params, route, error, app }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(

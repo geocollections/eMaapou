@@ -1,10 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center my-3 page-title">
-        {{ sampleTitle }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+      <prev-next-nav-title :ids="ids" :title="sampleTitle" />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -319,9 +316,9 @@ import DataRow from '@/components/DataRow'
 import LinkDataRow from '@/components/LinkDataRow'
 import Tabs from '@/components/Tabs'
 import LeafletMap from '@/components/LeafletMap'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 export default {
-  components: { PrevNextNav, LinkDataRow, DataRow, Tabs, LeafletMap },
+  components: { PrevNextNavTitle, LinkDataRow, DataRow, Tabs, LeafletMap },
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(

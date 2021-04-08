@@ -1,16 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center py-3 page-title">
-        {{
-          $translate({
-            et: drillcoreBox.drillcore__drillcore,
-            en: drillcoreBox.drillcore__drillcore_en,
-          })
-        }},
-        {{ $t('drillcoreBox.nr', { number: drillcoreBox.number }) }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+      <prev-next-nav-title :ids="ids" :title="drillcoreBoxTitle" />
       <v-card v-if="activeImage" class="my-2 mx-4">
         <v-card-text>
           <client-only>
@@ -246,10 +237,10 @@ import BoxImageLoader from '@/components/BoxImageLoader'
 import Tabs from '@/components/Tabs'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNav from '~/components/PrevNextNav.vue'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle.vue'
 
 export default {
-  components: { Tabs, BoxImageLoader, DataRow, LinkDataRow, PrevNextNav },
+  components: { Tabs, BoxImageLoader, DataRow, LinkDataRow, PrevNextNavTitle },
   async asyncData({ $axios, params, route, error, app }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(
@@ -355,6 +346,18 @@ export default {
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+
+    drillcoreBoxTitle() {
+      let title = this.$translate({
+        et: this.drillcoreBox.drillcore__drillcore,
+        en: this.drillcoreBox.drillcore__drillcore_en,
+      })
+      if (this.drillcoreBox.number)
+        title += `, ${this.$t('drillcoreBox.nr', {
+          number: this.drillcoreBox.number,
+        })}`
+      return title
     },
   },
   methods: {

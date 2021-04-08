@@ -1,12 +1,12 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center my-3 page-title">
-        {{
+      <prev-next-nav-title
+        :ids="ids"
+        :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
-        }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+        "
+      />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -164,10 +164,10 @@ import LeafletMap from '@/components/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
-  components: { PrevNextNav, Tabs, LeafletMap, DataRow, LinkDataRow },
+  components: { PrevNextNavTitle, Tabs, LeafletMap, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app }) {
     try {
       const drillcoreResponse = await app.$services.sarvREST.getResource(
