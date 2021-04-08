@@ -2,11 +2,11 @@ export const ANALYSIS = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [],
-    sortDesc: [],
+    sortBy: ['id'],
+    sortDesc: [true],
   },
   queryFields: {
-    id: (locale) => 'id',
+    id: (locale) => 'id_l',
     sample_number: (locale) => 'sample_number',
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
@@ -47,11 +47,11 @@ export const SAMPLE = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [],
-    sortDesc: [],
+    sortBy: ['id'],
+    sortDesc: [true],
   },
   queryFields: {
-    id: (locale) => 'id',
+    id: (locale) => 'id_l',
     number: (locale) => 'number',
     locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
     depth: (locale) => 'depth',
@@ -142,7 +142,7 @@ export const SITE = {
     sortDesc: [true],
   },
   queryFields: {
-    id: (locale) => 'id',
+    id: (locale) => 'id_l',
     name: (locale) => 'name',
     x: (locale) => 'x',
     y: (locale) => 'y',
@@ -176,10 +176,11 @@ export const LOCALITY = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [],
-    sortDesc: [],
+    sortBy: ['id'],
+    sortDesc: [true],
   },
   queryFields: {
+    id: (locale) => 'id_l',
     locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
     country: (locale) => (locale === 'et' ? 'country' : 'country_en'),
     latitude: (locale) => 'latitude',
@@ -191,10 +192,11 @@ export const DRILLCORE = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [],
-    sortDesc: [],
+    sortBy: ['id'],
+    sortDesc: [true],
   },
   queryFields: {
+    id: (locale) => 'id_l',
     drillcore: (locale) => (locale === 'et' ? 'drillcore' : 'drillcore_en'),
     depth: (locale) => 'depth',
     boxes: (locale) => 'boxes',
