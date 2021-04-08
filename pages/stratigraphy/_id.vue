@@ -125,11 +125,13 @@
 
                     <data-row :title="$t('stratigraphy.index')">
                       <template #value>
+                        <!-- eslint-disable-next-line vue/no-v-html -->
                         <div v-html="stratigraphy.index_main_html" />
                       </template>
                     </data-row>
                     <data-row :title="$t('stratigraphy.indexAlt')">
                       <template #value>
+                        <!-- eslint-disable-next-line vue/no-v-html -->
                         <div v-html="stratigraphy.index_additional_html" />
                       </template>
                     </data-row>
@@ -175,6 +177,8 @@
         <v-row no-gutters>
           <v-col cols="12">
             <v-card-title>{{ $t('common.description') }}</v-card-title>
+
+            <!-- eslint-disable vue/no-v-html -->
             <v-card-text
               v-html="
                 $translate({
@@ -183,6 +187,7 @@
                 })
               "
             />
+            <!-- eslint-enable -->
           </v-col>
         </v-row>
       </v-card>

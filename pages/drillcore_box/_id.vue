@@ -330,7 +330,6 @@ export default {
             : tabs,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Cannot find drillcore box ${route.params.id}`,
         path: route.path,
