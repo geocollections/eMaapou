@@ -441,7 +441,7 @@ import { isNull, isNil } from 'lodash'
 import BoxImageLoader from '@/components/BoxImageLoader'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import LeafletMap from '~/components/LeafletMap'
+import LeafletMap from '~/components/map/LeafletMap'
 import PrevNextNav from '~/components/PrevNextNav'
 
 export default {

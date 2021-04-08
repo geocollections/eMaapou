@@ -318,7 +318,7 @@ import { isNil } from 'lodash'
 import DataRow from '@/components/DataRow'
 import LinkDataRow from '@/components/LinkDataRow'
 import Tabs from '@/components/Tabs'
-import LeafletMap from '@/components/LeafletMap'
+import LeafletMap from '@/components/map/LeafletMap'
 import PrevNextNav from '~/components/PrevNextNav'
 export default {
   components: { PrevNextNav, LinkDataRow, DataRow, Tabs, LeafletMap },

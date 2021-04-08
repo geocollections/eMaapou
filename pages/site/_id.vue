@@ -290,7 +290,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import LeafletMap from '@/components/LeafletMap'
+import LeafletMap from '@/components/map/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 import PrevNextNav from '~/components/PrevNextNav'
 

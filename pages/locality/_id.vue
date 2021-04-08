@@ -277,7 +277,7 @@
 import { isNil, isEmpty } from 'lodash'
 import LinkDataRow from '~/components/LinkDataRow'
 import DataRow from '~/components/DataRow'
-import LeafletMap from '~/components/LeafletMap'
+import LeafletMap from '~/components/map/LeafletMap'
 import Tabs from '~/components/Tabs'
 import PrevNextNav from '~/components/PrevNextNav'
 
