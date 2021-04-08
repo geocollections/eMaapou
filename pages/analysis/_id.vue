@@ -34,7 +34,7 @@
                       :href="
                         localePath({
                           name: 'sample-id',
-                          params: { id: analysis.sample__number },
+                          params: { id: analysis.sample },
                         })
                       "
                     />

@@ -17,6 +17,7 @@
     </template>
 
     <template #item.formula="{ item }">
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div v-if="item.formula_html" v-html="item.formula_html" />
       <div v-else>{{ item.formula }}</div>
     </template>

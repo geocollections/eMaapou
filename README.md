@@ -1,5 +1,5 @@
 # e-Maapõu
-Web application to provide access of geological data, and link to other resources and e-services in Estonia.
+e-Maapõu is a web application to provide access to geological information deposited in the geoscience data management SARV, and link to other geology-related data resources and e-services in Estonia.
 
 ## Build Setup
 

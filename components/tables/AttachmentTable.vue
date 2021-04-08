@@ -12,14 +12,16 @@
         :src="`https://files.geocollections.info/small/${item.attachment__filename}`"
         :type="item.attachment__attachment_format__value"
         @click="
-          $router.push(localePath({ name: 'file-id', params: { id: item.id } }))
+          $router.push(
+            localePath({ name: 'file-id', params: { id: item.attachment } })
+          )
         "
       />
     </template>
     <template #item.description="{ item }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item[idField] } })"
+        :to="localePath({ name: 'file-id', params: { id: item.attachment } })"
       >
         {{
           $translate({
@@ -65,6 +67,7 @@ export default {
         sortDesc: [],
       }),
     },
+    // ??? Why is this needed
     idField: {
       type: String,
       required: false,
