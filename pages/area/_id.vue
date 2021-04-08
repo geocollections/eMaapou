@@ -1,10 +1,10 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center my-3 page-title">
-        {{ $translate({ et: area.name, en: area.name_en }) }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="$translate({ et: area.name, en: area.name_en })"
+      />
       <v-card flat tile>
         <v-row no-gutters justify="center">
           <v-col cols="12" md="9" lg="7" xl="6">
@@ -156,10 +156,10 @@ import { isNil } from 'lodash'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
-  components: { PrevNextNav, Tabs, DataRow, LinkDataRow },
+  components: { PrevNextNavTitle, Tabs, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(

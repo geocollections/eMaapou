@@ -33,7 +33,6 @@ export default {
   async fetch() {
     const isLoggedInRespones = await this.$services.sarvRwapi.isLoggedIn()
     this.isLoggedIn = !!isLoggedInRespones?.results?.success
-    this.isLoggedIn = true
   },
   computed: {
     style() {

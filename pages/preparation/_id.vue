@@ -1,10 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center my-3 page-title">
-        {{ preparation.preparation_number }}
-      </h1>
-      <prev-next-nav :ids="ids" />
+      <prev-next-nav-title :ids="ids" :title="preparation.preparation_number" />
       <v-card flat tile class="my-2">
         <v-container>
           <v-row>
@@ -124,12 +121,12 @@
 <script>
 import { isNil } from 'lodash'
 import Tabs from '~/components/Tabs.vue'
-import PrevNextNav from '~/components/PrevNextNav'
+import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import DataRow from '~/components/DataRow'
 import LinkDataRow from '~/components/LinkDataRow'
 
 export default {
-  components: { LinkDataRow, DataRow, PrevNextNav, Tabs },
+  components: { LinkDataRow, DataRow, PrevNextNavTitle, Tabs },
   async asyncData({ params, route, error, app }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
