@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       headers: [
+        { text: this.$t('locality.id'), value: 'id' },
         { text: this.$t('locality.name'), value: 'locality' },
         { text: this.$t('locality.country'), value: 'country' },
         { text: this.$t('locality.latitude'), value: 'latitude' },

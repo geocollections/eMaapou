@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       headers: [
+        { text: this.$t('drillcore.id'), value: 'id' },
         { text: this.$t('drillcore.name'), value: 'drillcore' },
         { text: this.$t('drillcore.depth'), value: 'depth' },
         { text: this.$t('drillcore.boxes'), value: 'boxes' },
