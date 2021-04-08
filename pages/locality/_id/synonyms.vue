@@ -27,11 +27,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const synonymResponse = await this.$services.sarvREST.getResourceList(
         'locality_synonym',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.locality),
           defaultParams: {
             locality: this.locality,

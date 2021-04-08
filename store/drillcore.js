@@ -88,7 +88,7 @@ export const actions = {
     const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
       'drillcore',
       {
-        tableOptions: options,
+        options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(DRILLCORE.queryFields),
         searchFilters: {},
@@ -106,7 +106,7 @@ export const actions = {
     const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
       'drillcore',
       {
-        tableOptions: options,
+        options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(DRILLCORE.queryFields),
         searchFilters: state.filters.byIds,

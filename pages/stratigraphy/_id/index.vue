@@ -35,16 +35,16 @@ export default {
     search: {
       handler: debounce(function (value) {
         this.options.page = 1
-        this.handleUpdate({ tableOptions: { ...this.options }, search: value })
+        this.handleUpdate({ options: { ...this.options }, search: value })
       }, 500),
     },
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const referenceResponse = await this.$services.sarvREST.getResourceList(
         'stratigraphy_reference',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.stratigraphy),
           defaultParams: {
             stratigraphy: this.stratigraphy,

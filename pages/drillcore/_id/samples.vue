@@ -29,11 +29,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const sampleResponse = await this.$services.sarvSolr.getResourceList(
         'sample',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.locality),
           defaultParams: {
             fq: `locality_id:${this.locality}`,

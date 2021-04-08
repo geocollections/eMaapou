@@ -28,11 +28,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const solrResponse = await this.$services.sarvSolr.getResourceList(
         'site',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.area),
           defaultParams: {
             fq: `area_id:${this.area}`,

@@ -29,11 +29,11 @@ export default {
   },
   methods: {
     round,
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const descriptionResponse = await this.$services.sarvREST.getResourceList(
         'locality_description',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.site),
           defaultParams: {
             site: this.site,

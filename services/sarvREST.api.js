@@ -31,7 +31,7 @@ export default ($axios) => ({
   },
   async getResourceList(
     resource,
-    { defaultParams, queryFields, search, tableOptions, isValid, ...options }
+    { defaultParams, queryFields, search, options, isValid }
   ) {
     if (isValid) {
       return { items: [], count: 0 }
@@ -46,8 +46,8 @@ export default ($axios) => ({
     const params = {
       ...defaultParams,
       multi_search: multiSearch,
-      ...getPaginationParams(tableOptions),
-      ...getSortByParams(tableOptions, queryFields),
+      ...getPaginationParams(options),
+      ...getSortByParams(options, queryFields),
     }
 
     const response = await $axios.$get(`${resource}/`, { params })

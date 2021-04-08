@@ -28,11 +28,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const sampleResponse = await this.$services.sarvSolr.getResourceList(
         'sample',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.stratigraphy),
           defaultParams: {
             fq: `stratigraphy_id:${this.stratigraphy}`,

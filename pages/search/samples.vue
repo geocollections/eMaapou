@@ -31,22 +31,21 @@ export default {
     search: {
       handler: debounce(function (value) {
         this.options.page = 1
-        this.handleUpdate({ tableOptions: { ...this.options }, search: value })
+        this.handleUpdate({ options: { ...this.options }, search: value })
       }, 500),
     },
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const sampleResponse = await this.$services.sarvSolr.getResourceList(
         'sample',
         {
-          tableOptions: options.tableOptions,
+          options: tableState.options,
           search: this.search,
           queryFields: this.$getQueryFields(SAMPLE.queryFields),
           searchFilters: {},
         }
       )
-      this.options = options.tableOptions
       this.items = sampleResponse.items
       this.count = sampleResponse.count
     },

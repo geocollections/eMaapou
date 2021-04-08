@@ -59,8 +59,8 @@ export default {
   },
   methods: {
     ...mapActions('sample', ['searchSamples']),
-    async handleUpdate(options) {
-      await this.searchSamples(options.tableOptions)
+    async handleUpdate(tableState) {
+      await this.searchSamples(tableState.options)
     },
   },
 }

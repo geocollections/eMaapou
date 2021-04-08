@@ -60,8 +60,8 @@ export default {
   },
   methods: {
     ...mapActions('analysis', ['searchAnalyses']),
-    async handleUpdate(options) {
-      await this.searchAnalyses(options.tableOptions)
+    async handleUpdate(tableState) {
+      await this.searchAnalyses(tableState.options)
     },
   },
 }

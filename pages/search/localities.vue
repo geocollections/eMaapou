@@ -32,24 +32,23 @@ export default {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({
-          tableOptions: { ...this.options },
+          options: { ...this.options },
           search: value,
         })
       }, 500),
     },
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const localityResponse = await this.$services.sarvSolr.getResourceList(
         'locality',
         {
-          tableOptions: options.tableOptions,
+          options: tableState.options,
           search: this.search,
           queryFields: this.$getQueryFields(LOCALITY.queryFields),
           searchFilters: {},
         }
       )
-      this.options = options.tableOptions
       this.items = localityResponse.items
       this.count = localityResponse.count
     },

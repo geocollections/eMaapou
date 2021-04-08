@@ -72,7 +72,7 @@ export const actions = {
     commit('SET_OPTIONS', options)
 
     const siteResponse = await this.$services.sarvSolr.getResourceList('site', {
-      tableOptions: options,
+      options,
       search: rootState.landing.search,
       queryFields: this.$getQueryFields(SITE.queryFields),
       searchFilters: {},
@@ -86,7 +86,7 @@ export const actions = {
   ) {
     commit('SET_OPTIONS', options)
     const siteResponse = await this.$services.sarvSolr.getResourceList('site', {
-      tableOptions: options,
+      options,
       search: rootState.landing.search,
       queryFields: this.$getQueryFields(SITE.queryFields),
       searchFilters: state.filters.byIds,

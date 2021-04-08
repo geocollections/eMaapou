@@ -40,17 +40,11 @@ export default {
   },
   methods: {
     handleChange(options) {
-      if (!this.externalOptions) {
-        this.options = options
-      }
-      this.$emit('update', { tableOptions: options, search: this.search })
+      this.$emit('update', { options, search: this.search })
     },
     handleSearch: debounce(function () {
-      if (!this.externalOptions) {
-        this.options = { ...this.options, page: 1 }
-      }
       this.$emit('update', {
-        tableOptions: { ...this.options, page: 1 },
+        options: { ...this.options, page: 1 },
         search: this.search,
       })
     }, 500),

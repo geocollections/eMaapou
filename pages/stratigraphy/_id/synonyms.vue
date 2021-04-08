@@ -27,11 +27,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const synonymResponse = await this.$services.sarvREST.getResourceList(
         'stratigraphy_synonym',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.stratigraphy),
           defaultParams: {
             stratigraphy__id: this.stratigraphy,

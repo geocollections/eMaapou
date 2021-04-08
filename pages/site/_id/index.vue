@@ -32,11 +32,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const attachmentResponse = await this.$services.sarvREST.getResourceList(
         'attachment_link',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.site),
           defaultParams: {
             or_search: `drillcore:${this.$route.params.id};site:${this.site}`,

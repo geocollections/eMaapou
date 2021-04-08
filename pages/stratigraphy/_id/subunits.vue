@@ -35,16 +35,16 @@ export default {
     search: {
       handler: debounce(function (value) {
         this.options.page = 1
-        this.handleUpdate({ tableOptions: { ...this.options }, search: value })
+        this.handleUpdate({ options: { ...this.options }, search: value })
       }, 500),
     },
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const analysisResponse = await this.$services.sarvSolr.getResourceList(
         'stratigraphy',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.stratigraphy),
           defaultParams: {
             fq: `parent_id:${this.stratigraphy}`,

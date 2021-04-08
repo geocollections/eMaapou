@@ -31,22 +31,21 @@ export default {
     search: {
       handler: debounce(function (value) {
         this.options.page = 1
-        this.handleUpdate({ tableOptions: { ...this.options }, search: value })
+        this.handleUpdate({ options: { ...this.options }, search: value })
       }, 500),
     },
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
         'drillcore',
         {
-          tableOptions: options.tableOptions,
+          options: tableState.options,
           search: this.search,
           queryFields: this.$getQueryFields(DRILLCORE.queryFields),
           searchFilters: {},
         }
       )
-      this.options = options.tableOptions
       this.items = drillcoreResponse.items
       this.count = drillcoreResponse.count
     },

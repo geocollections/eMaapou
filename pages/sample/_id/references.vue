@@ -27,11 +27,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const referenceResponse = await this.$services.sarvREST.getResourceList(
         'sample_reference',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.sample),
           defaultParams: {
             sample: this.sample,

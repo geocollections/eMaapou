@@ -32,11 +32,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const preparationResponse = await this.$services.sarvREST.getResourceList(
         'preparation',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.sample),
           defaultParams: {
             sample: this.sample,

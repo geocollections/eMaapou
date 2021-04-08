@@ -28,11 +28,11 @@ export default {
     }
   },
   methods: {
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const stratotypeResponse = await this.$services.sarvREST.getResourceList(
         'stratigraphy_stratotype',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.locality),
           defaultParams: {
             locality__id: this.locality,

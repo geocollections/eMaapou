@@ -59,8 +59,8 @@ export default {
   },
   methods: {
     ...mapActions('locality', ['searchLocalities']),
-    async handleUpdate(options) {
-      await this.searchLocalities(options.tableOptions)
+    async handleUpdate(tableState) {
+      await this.searchLocalities(tableState.options)
     },
   },
 }

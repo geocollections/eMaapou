@@ -87,7 +87,7 @@ export const actions = {
     const localityResponse = await this.$services.sarvSolr.getResourceList(
       'locality',
       {
-        tableOptions: options,
+        options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(LOCALITY.queryFields),
         searchFilters: {},
@@ -105,7 +105,7 @@ export const actions = {
     const localityResponse = await this.$services.sarvSolr.getResourceList(
       'locality',
       {
-        tableOptions: options,
+        options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(LOCALITY.queryFields),
         searchFilters: state.filters.byIds,

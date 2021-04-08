@@ -75,7 +75,7 @@ export const actions = {
     const preparationResponse = await this.$services.sarvSolr.getResourceList(
       'preparation',
       {
-        tableOptions: options,
+        options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(PREPARATION.queryFields),
         searchFilters: {},
@@ -93,7 +93,7 @@ export const actions = {
     const preparationResponse = await this.$services.sarvSolr.getResourceList(
       'preparation',
       {
-        tableOptions: options,
+        options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(PREPARATION.queryFields),
         searchFilters: state.filters.byIds,

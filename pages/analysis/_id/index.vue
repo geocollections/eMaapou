@@ -28,11 +28,11 @@ export default {
   },
   methods: {
     round,
-    async handleUpdate(options) {
+    async handleUpdate(tableState) {
       const analysisResultResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          ...options,
+          ...tableState,
           isValid: isNil(this.analysis),
           defaultParams: {
             fq: `analysis_id:${this.analysis}`,
