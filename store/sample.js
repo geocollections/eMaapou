@@ -30,9 +30,10 @@ const getDefaultState = () => {
           fields: ['stratigraphy', 'stratigraphy_en'],
         },
         hierarchy: {
-          value: '',
-          type: 'text',
-          lookUpType: 'startsWith',
+          value: null,
+          type: 'object',
+          searchField: 'hierarchy_string',
+          lookUpType: 'exact',
           label: 'sample.hierarchy',
           fields: [
             'stratigraphy_hierarchy',

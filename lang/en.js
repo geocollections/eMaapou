@@ -329,7 +329,7 @@ export default {
     taxa: 'Taxa ({number})',
     sampleReferences: 'References ({number})',
     sample: 'Sample',
-    hierarchy: 'Hierarchy',
+    hierarchy: 'Stratigraafia',
   },
   preparation: {
     id: 'ID',

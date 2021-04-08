@@ -15,10 +15,10 @@
       :label="$t(filters.byIds.locality.label)"
     />
 
-    <text-search-field
-      v-model="stratigraphy"
-      :label="$t(filters.byIds.stratigraphy.label)"
-    />
+    <!--    <text-search-field-->
+    <!--      v-model="stratigraphy"-->
+    <!--      :label="$t(filters.byIds.stratigraphy.label)"-->
+    <!--    />-->
 
     <autocomplete-search-field
       v-model="hierarchy"
@@ -26,8 +26,6 @@
       :loading="autocomplete.loaders.stratigraphy"
       :label="$t(filters.byIds.hierarchy.label)"
       :item-text="stratigraphyLabel"
-      item-value="hierarchy_string"
-      no-filter
       @search:items="autocompleteStratigraphySearch"
     />
 
@@ -99,6 +97,9 @@ export default {
       mass: 'filters.byIds.mass.value',
     }),
   },
+  created() {
+    this.fillAutocompleteLists()
+  },
   methods: {
     ...mapActions('sample', ['searchSamples', 'resetSampleFilters']),
     ...mapActions('landing', ['resetSearch']),
@@ -109,6 +110,9 @@ export default {
       this.resetSearch()
       this.resetSampleFilters()
       this.searchSamples()
+    },
+    fillAutocompleteLists() {
+      if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
     },
   },
 }
