@@ -35,6 +35,11 @@ export const ATTACHMENT = {
     reference: (locale) => 'reference',
     type: (locale) => 'type',
     image: (locale) => 'uuid_filename',
+    description: (locale) =>
+      locale === 'et'
+        ? 'attachment__description'
+        : 'attachment__description_en',
+    attachment__author__agent: (locale) => 'attachment__author__agent',
   },
 }
 
