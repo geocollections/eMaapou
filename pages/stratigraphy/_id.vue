@@ -152,7 +152,9 @@
               />
               <v-card id="map-wrap" elevation="0" height="300">
                 <leaflet-map
-                  is-estonian
+                  :is-estonian="
+                    stratotypes[0].locality__country__value === 'Eesti'
+                  "
                   :height="300"
                   :markers="stratigraphyMarkers"
                 />
