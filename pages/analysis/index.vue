@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <h1 class="text-center">{{ $t('common.analyses') }}</h1>
-      </v-col>
-    </v-row>
+    <search-view-title
+      title="common.analysesCount"
+      :count="count"
+      icon="mdi-chart-scatter-plot"
+    />
     <!--    <v-row>-->
     <!--      <v-col>-->
     <!--        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam posuere,-->
@@ -44,10 +44,11 @@
 import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/AnalysisSearchForm'
+import SearchViewTitle from '~/components/search/SearchViewTitle'
 
 export default {
   name: 'AnalysisSearch',
-  components: { AnalysisSearchForm, AnalysisTable },
+  components: { SearchViewTitle, AnalysisSearchForm, AnalysisTable },
   head() {
     return {
       title: this.$t('analysis.pageTitle'),
