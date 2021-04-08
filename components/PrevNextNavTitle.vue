@@ -1,9 +1,9 @@
 <template>
   <div
-    class="d-flex justify-space-between px-4"
+    class="d-flex justify-space-between px-4 flex-column flex-sm-row"
     :class="{ 'page-title my-3': title || $slots.title }"
   >
-    <div class="align-self-center text-no-wrap">
+    <div class="align-self-start align-self-sm-center text-no-wrap">
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -55,7 +55,7 @@
       </h1>
     </slot>
 
-    <div class="align-self-center text-no-wrap">
+    <div class="align-self-end align-self-sm-center text-no-wrap">
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
