@@ -1,14 +1,12 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center pt-3 page-title">
+      <h1 class="text-center my-3 page-title">
         {{ fileTitle }}
       </h1>
-      <h2 class="text-center pb-3 page-title">
-        {{ $t('file.idTitle') }}: {{ file.id }}
-      </h2>
+      <h3 class="text-center pb-3">{{ $t('file.idTitle') }}: {{ file.id }}</h3>
 
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
 
       <v-card flat tile>
         <v-row no-gutters>
@@ -454,6 +452,7 @@ export default {
         'attachment',
         params.id
       )
+      const ids = fileResponse?.ids
       const file = fileResponse.results[0]
       let specimenIdentification
       let specimenIdentificationGeology
@@ -668,6 +667,7 @@ export default {
         specimenIdentificationGeology,
         attachmentKeywords,
         tabs,
+        ids,
       }
     } catch (err) {
       error({

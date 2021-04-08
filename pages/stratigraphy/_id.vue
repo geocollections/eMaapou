@@ -9,7 +9,7 @@
           })
         }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -221,6 +221,7 @@ export default {
           },
         }
       )
+      const ids = stratigraphyResponse?.ids
       const stratigraphy = stratigraphyResponse.results[0]
 
       const tabs = [
@@ -295,6 +296,7 @@ export default {
         stratigraphy,
         stratotypes,
         stratotypeCount,
+        ids,
         initActiveTab: route.path,
         tabs: await Promise.all(
           tabs.map(

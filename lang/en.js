@@ -29,8 +29,10 @@ export default {
     pictures: 'Pictures',
     noValue: '',
     home: 'e·Maapõu',
+    first: 'First',
     previous: 'Previous',
     next: 'Next',
+    last: 'Last',
     links: 'Links',
     search: 'Search',
     small: 'Small',
@@ -50,7 +52,7 @@ export default {
     sites: 'Sites',
     about: 'About',
     searchAlt: 'Enter one or more keywords, ex. Estonia ...',
-    history: 'History',
+    history: 'Recently viewed',
     quickSearch: 'Quick search',
     description: 'Description',
   },
@@ -385,6 +387,22 @@ export default {
     tu: 'University of Tartu',
     elm: 'Estonian Museum of Natural History',
     el: 'European Union',
+  },
+  frontDrillcores: {
+    title: 'Drillcores',
+    description: 'Catalogue of drillcores',
+  },
+  frontLocalities: {
+    title: 'Localities',
+    description: 'Outcrops, boreholes and other localities',
+  },
+  frontSamples: {
+    title: 'Samples',
+    description: 'Rock-, sediment-, and water samples',
+  },
+  frontAnalyses: {
+    title: 'Analytical data',
+    description: 'Analyses and results',
   },
   geocollections: {
     title: ' Geocollections',

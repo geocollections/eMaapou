@@ -6,7 +6,7 @@
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         }}
       </h1>
-      <prev-next-nav />
+      <prev-next-nav :ids="ids" />
       <v-card flat tile>
         <v-row no-gutters>
           <v-col cols="12" md="6">
@@ -174,6 +174,7 @@ export default {
         'drillcore',
         params.id
       )
+      const ids = drillcoreResponse?.ids
       const drillcore = drillcoreResponse.results[0]
 
       const tabs = [
@@ -232,6 +233,7 @@ export default {
 
       return {
         drillcore,
+        ids,
         initActiveTab: route.path,
         tabs: drillcore?.locality_id
           ? (
