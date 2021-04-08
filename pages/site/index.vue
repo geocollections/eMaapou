@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <h1 class="text-center">{{ $t('common.sites') }}</h1>
-      </v-col>
-    </v-row>
+    <search-view-title
+      title="common.sitesCount"
+      :count="count"
+      icon="mdi-map-marker-star-outline"
+    />
     <!--    <v-row>-->
     <!--      <v-col>-->
     <!--        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam posuere,-->
@@ -22,12 +22,12 @@
     <!--      </v-col>-->
     <!--    </v-row>-->
     <v-row>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
         <v-card class="pa-3">
           <site-search-form />
         </v-card>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="12" md="9">
         <site-table
           :show-search="false"
           external-options
@@ -45,9 +45,10 @@
 import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '@/components/search/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
+import SearchViewTitle from '~/components/search/SearchViewTitle'
 
 export default {
-  components: { SiteSearchForm, SiteTable },
+  components: { SearchViewTitle, SiteSearchForm, SiteTable },
   head() {
     return {
       title: this.$t('site.pageTitle'),

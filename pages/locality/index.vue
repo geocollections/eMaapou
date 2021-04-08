@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <h1 class="text-center">{{ $t('common.localities') }}</h1>
-      </v-col>
-    </v-row>
+    <search-view-title
+      title="common.localitiesCount"
+      :count="count"
+      icon="mdi-map-marker-outline"
+    />
     <!--    <v-row>-->
     <!--      <v-col>-->
     <!--        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam posuere,-->
@@ -45,9 +45,10 @@
 import { mapState, mapActions } from 'vuex'
 import LocalitySearchForm from '@/components/search/LocalitySearchForm'
 import LocalityTable from '~/components/tables/LocalityTable.vue'
+import SearchViewTitle from '~/components/search/SearchViewTitle'
 
 export default {
-  components: { LocalityTable, LocalitySearchForm },
+  components: { SearchViewTitle, LocalityTable, LocalitySearchForm },
   head() {
     return {
       title: this.$t('locality.pageTitle'),
