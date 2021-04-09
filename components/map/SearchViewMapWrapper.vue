@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-4">
+  <v-card>
     <v-card-title class="py-1">
       <div class="card-title--clickable" @click="showMap = !showMap">
         <span>{{ $t('common.map') }}</span>
