@@ -10,6 +10,7 @@
         @baselayerchange="handleBaseLayerChange"
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
+        @ready="fitBounds"
       >
         <l-control-layers />
         <l-control-fullscreen position="topleft" />
@@ -54,6 +55,16 @@
           :radius="5"
           :weight="2"
           color="red"
+          @click="
+            marker.id && marker.routeName
+              ? $router.push(
+                  localePath({
+                    name: `${marker.routeName}-id`,
+                    params: { id: marker.id },
+                  })
+                )
+              : ''
+          "
         >
           <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
             marker.text
@@ -127,7 +138,7 @@ export default {
           duration: 1000,
         },
       },
-      activeBaseLayer: this.isEstonian ? 'Estonian map' : 'OpenStreetMap',
+      activeBaseLayer: this.isEstonian ? 'Estonian map' : 'CartoDB',
       activeOverlays: [],
       layers: {
         base: [
@@ -136,7 +147,7 @@ export default {
             name: 'CartoDB',
             url:
               'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            visible: false,
+            visible: !this.isEstonian,
             options: {
               attribution:
                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -146,8 +157,7 @@ export default {
             id: 'open-steet-base',
             name: 'OpenStreetMap',
             url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-
-            visible: !this.isEstonian,
+            visible: false,
             options: {
               attribution:
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -287,26 +297,11 @@ export default {
     invalidateSize(newVal) {
       if (newVal) {
         this.$refs.map.mapObject.invalidateSize()
-        // HACK: This fixes initial bounds problem (markers out of bounds)
+        // HACK: This fixes initial bounds problem in search view (markers out of bounds)
         this.fitBounds()
       }
     },
   },
-  // mounted() {
-  //   console.log(this.markers.length)
-  //   this.$nextTick(() => {
-  //     console.log(this.markers.length)
-  //     if (this.markers.length > 0) {
-  //       this.$refs.map.mapObject.fitBounds(
-  //         this.markers.map((m) => {
-  //           return [m.latitude, m.longitude]
-  //         }),
-  //         { padding: [50, 50] }
-  //       )
-  //     }
-  //     this.$refs.map.setZoom(this.mapZoom)
-  //   })
-  // },
   methods: {
     handleBaseLayerChange(event) {
       this.activeBaseLayer = event.name
