@@ -216,7 +216,7 @@ export default {
     StratigraphyStratotypeTable,
     LeafletMap,
   },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, redirect }) {
     try {
       const stratigraphyResponse = await app.$services.sarvREST.getResource(
         'stratigraphy',
@@ -299,42 +299,55 @@ export default {
       const stratotypes = stratotypeResponse.items
       const stratotypeCount = stratotypeResponse.count
 
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateCount(tab, {
+              api: {
+                default: {
+                  stratigraphy: stratigraphy.id,
+                },
+                stratigraphy_stratotype: {
+                  stratigraphy__id: stratigraphy.id,
+                },
+                stratigraphy_synonym: {
+                  stratigraphy__id: stratigraphy.id,
+                },
+                lithostratigraphy: {
+                  age_chronostratigraphy_id: stratigraphy.id,
+                },
+                subunits: {
+                  parent_id: stratigraphy.id,
+                },
+              },
+              solr: {
+                default: {
+                  fq: `stratigraphy_id:${stratigraphy.id}`,
+                },
+              },
+              fields: tab.fields ?? 'id',
+            })
+        )
+      )
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: stratigraphy.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
       return {
         stratigraphy,
         stratotypes,
         stratotypeCount,
         ids,
-        initActiveTab: route.path,
-        tabs: await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                api: {
-                  default: {
-                    stratigraphy: stratigraphy.id,
-                  },
-                  stratigraphy_stratotype: {
-                    stratigraphy__id: stratigraphy.id,
-                  },
-                  stratigraphy_synonym: {
-                    stratigraphy__id: stratigraphy.id,
-                  },
-                  lithostratigraphy: {
-                    age_chronostratigraphy_id: stratigraphy.id,
-                  },
-                  subunits: {
-                    parent_id: stratigraphy.id,
-                  },
-                },
-                solr: {
-                  default: {
-                    fq: `stratigraphy_id:${stratigraphy.id}`,
-                  },
-                },
-                fields: tab.fields ?? 'id',
-              })
-          )
-        ),
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({

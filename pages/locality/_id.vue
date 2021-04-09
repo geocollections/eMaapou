@@ -266,7 +266,7 @@
         </div>
       </v-card>
 
-      <v-card class="mt-6 mx-4 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </v-col>
@@ -283,7 +283,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
   components: { PrevNextNavTitle, DataRow, LinkDataRow, LeafletMap, Tabs },
-  async asyncData({ params, route, app, error }) {
+  async asyncData({ params, route, app, error, redirect }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(
         'locality',
@@ -387,31 +387,44 @@ export default {
         tabs.join()
       }
 
+      const hydratedTabs = (
+        await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$hydrateCount(tab, {
+                solr: {
+                  default: {
+                    fq: `locality_id:${params.id}`,
+                  },
+                },
+                api: { default: { locality_id: locality.id } },
+              })
+          )
+        )
+      ).map((tab) =>
+        app.$populateProps(tab, {
+          ...tab.props,
+          locality: locality.id,
+        })
+      )
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: locality.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
       return {
         locality,
         ids,
-        tabs: (
-          await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateCount(tab, {
-                  solr: {
-                    default: {
-                      fq: `locality_id:${params.id}`,
-                    },
-                  },
-                  api: { default: { locality_id: locality.id } },
-                })
-            )
-          )
-        ).map((tab) =>
-          app.$populateProps(tab, {
-            ...tab.props,
-            locality: locality.id,
-          })
-        ),
+        tabs: hydratedTabs,
         drillcore,
-        initActiveTab: route.path,
+        initActiveTab: path,
         attachments,
       }
     } catch (err) {

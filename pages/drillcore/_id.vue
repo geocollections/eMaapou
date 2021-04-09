@@ -168,7 +168,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
   components: { PrevNextNavTitle, Tabs, LeafletMap, DataRow, LinkDataRow },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, redirect }) {
     try {
       const drillcoreResponse = await app.$services.sarvREST.getResource(
         'drillcore',
@@ -231,37 +231,52 @@ export default {
         },
       ]
 
+      const hydratedTabs = drillcore?.locality_id
+        ? (
+            await Promise.all(
+              tabs.map(
+                async (tab) =>
+                  await app.$hydrateCount(tab, {
+                    solr: {
+                      default: {
+                        fq: `locality_id :${drillcore.locality_id}`,
+                      },
+                    },
+                    api: {
+                      default: { locality: drillcore.locality_id },
+                      attachment_link: {
+                        or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
+                      },
+                    },
+                  })
+              )
+            )
+          ).map((tab) =>
+            app.$populateProps(tab, {
+              ...tab.props,
+              locality: drillcore.locality_id,
+            })
+          )
+        : tabs
+
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: drillcore.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
+
       return {
         drillcore,
         ids,
-        initActiveTab: route.path,
-        tabs: drillcore?.locality_id
-          ? (
-              await Promise.all(
-                tabs.map(
-                  async (tab) =>
-                    await app.$hydrateCount(tab, {
-                      solr: {
-                        default: {
-                          fq: `locality_id :${drillcore.locality_id}`,
-                        },
-                      },
-                      api: {
-                        default: { locality: drillcore.locality_id },
-                        attachment_link: {
-                          or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
-                        },
-                      },
-                    })
-                )
-              )
-            ).map((tab) =>
-              app.$populateProps(tab, {
-                ...tab.props,
-                locality: drillcore.locality_id,
-              })
-            )
-          : tabs,
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({

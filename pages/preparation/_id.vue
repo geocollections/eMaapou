@@ -127,7 +127,7 @@ import LinkDataRow from '~/components/LinkDataRow'
 
 export default {
   components: { LinkDataRow, DataRow, PrevNextNavTitle, Tabs },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'preparation',
@@ -154,26 +154,39 @@ export default {
         },
       ]
 
+      const hydratedTabs = (
+        await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$hydrateCount(tab, {
+                solr: { default: { fq: `preparation_id:${preparation.id}` } },
+                api: { default: { preparation: preparation.id } },
+              })
+          )
+        )
+      ).map((tab) =>
+        app.$populateProps(tab, {
+          ...tab.props,
+          preparation: preparation.id,
+        })
+      )
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: preparation.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
       return {
         preparation,
         ids,
-        initActiveTab: route.path,
-        tabs: (
-          await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateCount(tab, {
-                  solr: { default: { fq: `preparation_id:${preparation.id}` } },
-                  api: { default: { preparation: preparation.id } },
-                })
-            )
-          )
-        ).map((tab) =>
-          app.$populateProps(tab, {
-            ...tab.props,
-            preparation: preparation.id,
-          })
-        ),
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
