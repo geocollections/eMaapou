@@ -28,6 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
+        <search-view-map-wrapper :items="items" />
+
         <sample-table
           :show-search="false"
           :items="items"
@@ -45,9 +47,15 @@ import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/SampleSearchForm'
 import SampleTable from '~/components/tables/SampleTable.vue'
 import SearchViewTitle from '~/components/search/SearchViewTitle'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
-  components: { SearchViewTitle, SampleSearchForm, SampleTable },
+  components: {
+    SearchViewMapWrapper,
+    SearchViewTitle,
+    SampleSearchForm,
+    SampleTable,
+  },
   head() {
     return {
       title: this.$t('sample.pageTitle'),

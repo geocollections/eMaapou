@@ -28,6 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
+        <search-view-map-wrapper :items="items" />
+
         <locality-table
           :show-search="false"
           :items="items"
@@ -45,9 +47,15 @@ import { mapState, mapActions } from 'vuex'
 import LocalitySearchForm from '@/components/search/LocalitySearchForm'
 import LocalityTable from '~/components/tables/LocalityTable.vue'
 import SearchViewTitle from '~/components/search/SearchViewTitle'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
-  components: { SearchViewTitle, LocalityTable, LocalitySearchForm },
+  components: {
+    SearchViewMapWrapper,
+    SearchViewTitle,
+    LocalityTable,
+    LocalitySearchForm,
+  },
   head() {
     return {
       title: this.$t('locality.pageTitle'),

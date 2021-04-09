@@ -28,6 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
+        <search-view-map-wrapper :items="items" />
+
         <site-table
           :show-search="false"
           :items="items"
@@ -45,9 +47,15 @@ import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '@/components/search/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
 import SearchViewTitle from '~/components/search/SearchViewTitle'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
-  components: { SearchViewTitle, SiteSearchForm, SiteTable },
+  components: {
+    SearchViewMapWrapper,
+    SearchViewTitle,
+    SiteSearchForm,
+    SiteTable,
+  },
   head() {
     return {
       title: this.$t('site.pageTitle'),

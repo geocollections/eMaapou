@@ -60,6 +60,8 @@ export default {
     history: 'Hiljuti vaadatud',
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',
+    map:
+      'Kaart | Kaart: <b>{count}</b> asukoht | Kaart: <b>{count}</b> asukohta',
   },
   link: {
     sarvAPI: 'Avalik API',

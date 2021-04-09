@@ -1,5 +1,5 @@
 <template>
-  <div class="text-right">
+  <div class="text-right text-no-wrap px-2">
     <span class="google-map">
       <a
         class="text-link"

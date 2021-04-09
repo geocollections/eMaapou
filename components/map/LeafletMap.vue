@@ -49,13 +49,15 @@
         />
         <l-circle-marker
           v-for="(marker, idx) in markers"
-          :key="`marker-${idx}`"
+          :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
           :lat-lng="[marker.latitude, marker.longitude]"
           :radius="5"
           :weight="2"
           color="red"
         >
-          <l-tooltip :options="tooltipOptions">{{ marker.text }}</l-tooltip>
+          <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
+            marker.text
+          }}</l-tooltip>
         </l-circle-marker>
 
         <!-- <map-legend
@@ -96,7 +98,7 @@ export default {
     center: {
       type: Object,
       default() {
-        return { latitude: 0, longitude: 0 }
+        return { latitude: 58.5, longitude: 25.5 }
       },
     },
     markers: {
@@ -110,6 +112,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    invalidateSize: Boolean,
   },
   data() {
     return {
@@ -123,11 +126,6 @@ export default {
           },
           duration: 1000,
         },
-      },
-      tooltipOptions: {
-        permanent: this.markers.length <= 5,
-        direction: 'top',
-        offset: [1, -7],
       },
       activeBaseLayer: this.isEstonian ? 'Estonian map' : 'OpenStreetMap',
       activeOverlays: [],
@@ -267,17 +265,48 @@ export default {
         this.markers.map((marker) => marker.longitude),
       ]
     },
+
+    tooltipOptions() {
+      return {
+        permanent: this.markers.length <= 5,
+        direction: 'top',
+        offset: [1, -7],
+      }
+    },
+
+    markersAsFitBoundsObject() {
+      return this.markers.map((m) => {
+        return [m.latitude, m.longitude]
+      })
+    },
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.$refs.map.mapObject.fitBounds(
-        this.markers.map((m) => {
-          return [m.latitude, m.longitude]
-        })
-      )
-      this.$refs.map.setZoom(this.mapZoom)
-    })
+  watch: {
+    markers() {
+      this.fitBounds()
+    },
+    invalidateSize(newVal) {
+      if (newVal) {
+        this.$refs.map.mapObject.invalidateSize()
+        // HACK: This fixes initial bounds problem (markers out of bounds)
+        this.fitBounds()
+      }
+    },
   },
+  // mounted() {
+  //   console.log(this.markers.length)
+  //   this.$nextTick(() => {
+  //     console.log(this.markers.length)
+  //     if (this.markers.length > 0) {
+  //       this.$refs.map.mapObject.fitBounds(
+  //         this.markers.map((m) => {
+  //           return [m.latitude, m.longitude]
+  //         }),
+  //         { padding: [50, 50] }
+  //       )
+  //     }
+  //     this.$refs.map.setZoom(this.mapZoom)
+  //   })
+  // },
   methods: {
     handleBaseLayerChange(event) {
       this.activeBaseLayer = event.name
@@ -291,6 +320,15 @@ export default {
     handleOverlayRemove(event) {
       const index = this.activeOverlays.indexOf(event.name)
       if (index > -1) this.activeOverlays.splice(index, 1)
+    },
+
+    fitBounds() {
+      if (this.markersAsFitBoundsObject.length > 0) {
+        this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
+          padding: [50, 50],
+          maxZoom: this.mapZoom,
+        })
+      }
     },
   },
 }
