@@ -60,6 +60,7 @@ export default {
     history: 'Recently viewed',
     quickSearch: 'Quick search',
     description: 'Description',
+    map: 'Map',
   },
   link: {
     sarvAPI: 'Public API',
