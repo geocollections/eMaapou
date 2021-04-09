@@ -270,17 +270,36 @@ export default {
       ]
     },
   },
-  mounted() {
-    this.$nextTick(() => {
-      console.log(this.markers)
-      this.$refs.map.mapObject.fitBounds(
-        this.markers.map((m) => {
-          return [m.latitude, m.longitude]
-        })
-      )
-      this.$refs.map.setZoom(this.mapZoom)
-    })
+  watch: {
+    markers: {
+      handler(newVal) {
+        console.log(newVal.length)
+        if (newVal.length > 0) {
+          this.$refs.map.mapObject.fitBounds(
+            newVal.map((m) => {
+              return [m.latitude, m.longitude]
+            }),
+            { padding: [50, 50] }
+          )
+        }
+      },
+    },
   },
+  // mounted() {
+  //   console.log(this.markers.length)
+  //   this.$nextTick(() => {
+  //     console.log(this.markers.length)
+  //     if (this.markers.length > 0) {
+  //       this.$refs.map.mapObject.fitBounds(
+  //         this.markers.map((m) => {
+  //           return [m.latitude, m.longitude]
+  //         }),
+  //         { padding: [50, 50] }
+  //       )
+  //     }
+  //     this.$refs.map.setZoom(this.mapZoom)
+  //   })
+  // },
   methods: {
     handleBaseLayerChange(event) {
       this.activeBaseLayer = event.name
