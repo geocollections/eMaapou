@@ -55,7 +55,9 @@
           :weight="2"
           color="red"
         >
-          <l-tooltip :options="tooltipOptions">{{ marker.text }}</l-tooltip>
+          <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
+            marker.text
+          }}</l-tooltip>
         </l-circle-marker>
 
         <!-- <map-legend
@@ -270,6 +272,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      console.log(this.markers)
       this.$refs.map.mapObject.fitBounds(
         this.markers.map((m) => {
           return [m.latitude, m.longitude]

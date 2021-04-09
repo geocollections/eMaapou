@@ -28,6 +28,25 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
+        <!--    Todo: Put it into component    -->
+        <v-card>
+          <leaflet-map
+            :markers="
+              items.reduce((filtered, item) => {
+                if (item.latitude && item.longitude) {
+                  let newItem = {
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                    text: 'tere',
+                  }
+                  filtered.push(newItem)
+                }
+                return filtered
+              }, [])
+            "
+          />
+        </v-card>
+
         <sample-table
           :show-search="false"
           :items="items"
@@ -45,9 +64,10 @@ import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/SampleSearchForm'
 import SampleTable from '~/components/tables/SampleTable.vue'
 import SearchViewTitle from '~/components/search/SearchViewTitle'
+import LeafletMap from '~/components/map/LeafletMap'
 
 export default {
-  components: { SearchViewTitle, SampleSearchForm, SampleTable },
+  components: { LeafletMap, SearchViewTitle, SampleSearchForm, SampleTable },
   head() {
     return {
       title: this.$t('sample.pageTitle'),
