@@ -49,7 +49,7 @@
         />
         <l-circle-marker
           v-for="(marker, idx) in markers"
-          :key="`marker-${idx}`"
+          :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
           :lat-lng="[marker.latitude, marker.longitude]"
           :radius="5"
           :weight="2"
@@ -125,11 +125,6 @@ export default {
           },
           duration: 1000,
         },
-      },
-      tooltipOptions: {
-        permanent: this.markers.length <= 5,
-        direction: 'top',
-        offset: [1, -7],
       },
       activeBaseLayer: this.isEstonian ? 'Estonian map' : 'OpenStreetMap',
       activeOverlays: [],
@@ -268,6 +263,15 @@ export default {
         this.markers.map((marker) => marker.latitude),
         this.markers.map((marker) => marker.longitude),
       ]
+    },
+
+    tooltipOptions() {
+      console.log(this.markers.length)
+      return {
+        permanent: this.markers.length <= 5,
+        direction: 'top',
+        offset: [1, -7],
+      }
     },
   },
   watch: {
