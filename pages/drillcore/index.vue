@@ -28,6 +28,8 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
+        <search-view-map-wrapper :items="items" />
+
         <drillcore-table
           :show-search="false"
           :items="items"
@@ -45,9 +47,15 @@ import { mapState, mapActions } from 'vuex'
 import DrillcoreSearchForm from '@/components/search/DrillcoreSearchForm'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import SearchViewTitle from '~/components/search/SearchViewTitle'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
-  components: { SearchViewTitle, DrillcoreSearchForm, DrillcoreTable },
+  components: {
+    SearchViewMapWrapper,
+    SearchViewTitle,
+    DrillcoreSearchForm,
+    DrillcoreTable,
+  },
   head() {
     return {
       title: this.$t('drillcore.pageTitle'),

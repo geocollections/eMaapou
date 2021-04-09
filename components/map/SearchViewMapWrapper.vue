@@ -43,7 +43,7 @@ export default {
             longitude: item.longitude,
             text:
               this.$translate({ et: item.locality, en: item.locality_en }) ??
-              `ID: ${item.id}`,
+              (item.name || `ID: ${item.id}`),
           }
 
           const isItemInArray = !!filtered.find(
