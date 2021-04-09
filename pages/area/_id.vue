@@ -160,7 +160,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
   components: { PrevNextNavTitle, Tabs, DataRow, LinkDataRow },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'area',
@@ -214,30 +214,45 @@ export default {
         await forLoop()
       }
 
+      const hydratedTabs = (
+        await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$hydrateCount(tab, {
+                solr: {
+                  default: { fq: `area_id:${area.id}` },
+                },
+                api: {
+                  default: { area: area.id },
+                },
+              })
+          )
+        )
+      ).map((tab) =>
+        app.$populateProps(tab, {
+          ...tab.props,
+          area: area.id,
+        })
+      )
+
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: area.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
+
       return {
         area,
         ids,
-        initActiveTab: route.path,
-        tabs: (
-          await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateCount(tab, {
-                  solr: {
-                    default: { fq: `area_id:${area.id}` },
-                  },
-                  api: {
-                    default: { area: area.id },
-                  },
-                })
-            )
-          )
-        ).map((tab) =>
-          app.$populateProps(tab, {
-            ...tab.props,
-            area: area.id,
-          })
-        ),
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({

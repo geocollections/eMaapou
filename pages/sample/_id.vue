@@ -320,7 +320,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
   components: { PrevNextNavTitle, LinkDataRow, DataRow, Tabs, LeafletMap },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'sample',
@@ -367,19 +367,33 @@ export default {
           props: { sample: sample.id },
         },
       ]
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateCount(tab, {
+              solr: { default: { fq: `sample_id:${sample.id}` } },
+              api: { default: { sample: sample.id } },
+            })
+        )
+      )
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: sample.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
       return {
         sample,
         ids,
-        initActiveTab: route.path,
-        tabs: await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: { default: { fq: `sample_id:${sample.id}` } },
-                api: { default: { sample: sample.id } },
-              })
-          )
-        ),
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({

@@ -241,7 +241,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle.vue'
 
 export default {
   components: { Tabs, BoxImageLoader, DataRow, LinkDataRow, PrevNextNavTitle },
-  async asyncData({ $axios, params, route, error, app }) {
+  async asyncData({ $axios, params, route, error, app, redirect }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(
         'drillcore_box',
@@ -295,30 +295,43 @@ export default {
         },
       ]
 
+      const hydratedTabs =
+        !isNil(drillcoreBox?.drillcore__locality) &&
+        !isNil(drillcoreBox?.depth_start) &&
+        !isNil(drillcoreBox?.depth_end)
+          ? await Promise.all(
+              tabs.map(
+                async (tab) =>
+                  await app.$hydrateCount(tab, {
+                    solr: {
+                      default: {
+                        fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
+                      },
+                    },
+                    api: {},
+                  })
+              )
+            )
+          : tabs
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: drillcoreBox.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
       return {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
         ids,
-        initActiveTab: route.path,
-        tabs:
-          !isNil(drillcoreBox?.drillcore__locality) &&
-          !isNil(drillcoreBox?.depth_start) &&
-          !isNil(drillcoreBox?.depth_end)
-            ? await Promise.all(
-                tabs.map(
-                  async (tab) =>
-                    await app.$hydrateCount(tab, {
-                      solr: {
-                        default: {
-                          fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
-                        },
-                      },
-                      api: {},
-                    })
-                )
-              )
-            : tabs,
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({

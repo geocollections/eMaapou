@@ -296,7 +296,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 
 export default {
   components: { PrevNextNavTitle, Tabs, LeafletMap },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'site',
@@ -337,26 +337,41 @@ export default {
         },
       ]
 
+      const hydratedTabs = (
+        await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await app.$hydrateCount(tab, {
+                solr: { default: { fq: `site_id:${site.id}` } },
+                api: { default: { site: site.id } },
+              })
+          )
+        )
+      ).map((tab) =>
+        app.$populateProps(tab, {
+          ...tab.props,
+          site: site.id,
+        })
+      )
+
+      // Find tab that has items
+      const initTab = hydratedTabs.find((tab) => tab.count > 0)
+
+      // Constuct route
+      const path = initTab
+        ? app.localePath({
+            name: initTab.routeName,
+            params: { id: site.id },
+          })
+        : route.path
+
+      if (initTab && path !== route.path) redirect(path)
+
       return {
         site,
         ids,
-        initActiveTab: route.path,
-        tabs: (
-          await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateCount(tab, {
-                  solr: { default: { fq: `site_id:${site.id}` } },
-                  api: { default: { site: site.id } },
-                })
-            )
-          )
-        ).map((tab) =>
-          app.$populateProps(tab, {
-            ...tab.props,
-            site: site.id,
-          })
-        ),
+        initActiveTab: path,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
