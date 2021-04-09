@@ -28,7 +28,6 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
-        <!--    Todo: Put it into component    -->
         <search-view-map-wrapper :items="items" />
 
         <sample-table

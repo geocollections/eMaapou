@@ -98,7 +98,7 @@ export default {
     center: {
       type: Object,
       default() {
-        return { latitude: 0, longitude: 0 }
+        return { latitude: 58.5, longitude: 25.5 }
       },
     },
     markers: {
@@ -112,6 +112,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    invalidateSize: Boolean,
   },
   data() {
     return {
@@ -266,27 +267,29 @@ export default {
     },
 
     tooltipOptions() {
-      console.log(this.markers.length)
       return {
         permanent: this.markers.length <= 5,
         direction: 'top',
         offset: [1, -7],
       }
     },
+
+    markersAsFitBoundsObject() {
+      return this.markers.map((m) => {
+        return [m.latitude, m.longitude]
+      })
+    },
   },
   watch: {
-    markers: {
-      handler(newVal) {
-        console.log(newVal.length)
-        if (newVal.length > 0) {
-          this.$refs.map.mapObject.fitBounds(
-            newVal.map((m) => {
-              return [m.latitude, m.longitude]
-            }),
-            { padding: [50, 50] }
-          )
-        }
-      },
+    markers() {
+      this.fitBounds()
+    },
+    invalidateSize(newVal) {
+      if (newVal) {
+        this.$refs.map.mapObject.invalidateSize()
+        // HACK: This fixes initial bounds problem (markers out of bounds)
+        this.fitBounds()
+      }
     },
   },
   // mounted() {
@@ -317,6 +320,15 @@ export default {
     handleOverlayRemove(event) {
       const index = this.activeOverlays.indexOf(event.name)
       if (index > -1) this.activeOverlays.splice(index, 1)
+    },
+
+    fitBounds() {
+      if (this.markersAsFitBoundsObject.length > 0) {
+        this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
+          padding: [50, 50],
+          maxZoom: this.mapZoom,
+        })
+      }
     },
   },
 }
