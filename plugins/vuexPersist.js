@@ -5,6 +5,7 @@ const vuexOptions = {
   reducer: (state) => ({
     settings: {
       cookiePolicy: state.settings.cookiePolicy,
+      showSearchViewMap: state.settings.showSearchViewMap,
     },
     history: {
       ...state.history,
