@@ -127,7 +127,7 @@ export default {
           duration: 1000,
         },
       },
-      activeBaseLayer: this.isEstonian ? 'Estonian map' : 'OpenStreetMap',
+      activeBaseLayer: this.isEstonian ? 'Estonian map' : 'CartoDB',
       activeOverlays: [],
       layers: {
         base: [
@@ -136,7 +136,7 @@ export default {
             name: 'CartoDB',
             url:
               'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            visible: false,
+            visible: !this.isEstonian,
             options: {
               attribution:
                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -146,8 +146,7 @@ export default {
             id: 'open-steet-base',
             name: 'OpenStreetMap',
             url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-
-            visible: !this.isEstonian,
+            visible: false,
             options: {
               attribution:
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
