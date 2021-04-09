@@ -33,7 +33,7 @@ const getDefaultState = () => {
           value: null,
           type: 'object',
           searchField: 'hierarchy_string',
-          lookUpType: 'exact',
+          lookUpType: 'startsWith',
           label: 'sample.hierarchy',
           fields: [
             'stratigraphy_hierarchy',
