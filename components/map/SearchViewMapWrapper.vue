@@ -36,6 +36,7 @@ export default {
       showMap: 'showSearchViewMap',
     }),
     mapMarkers() {
+      const routeName = this.$route.name.split('___')[0]
       return this.items.reduce((filtered, item) => {
         if (item.latitude && item.longitude) {
           const newItem = {
@@ -44,6 +45,8 @@ export default {
             text:
               this.$translate({ et: item.locality, en: item.locality_en }) ??
               (item.name || `ID: ${item.id}`),
+            routeName: routeName === 'site' ? 'site' : 'locality',
+            id: item.locality_id ?? item.id,
           }
 
           const isItemInArray = !!filtered.find(

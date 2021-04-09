@@ -55,6 +55,16 @@
           :radius="5"
           :weight="2"
           color="red"
+          @click="
+            marker.id && marker.routeName
+              ? $router.push(
+                  localePath({
+                    name: `${marker.routeName}-id`,
+                    params: { id: marker.id },
+                  })
+                )
+              : ''
+          "
         >
           <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
             marker.text
