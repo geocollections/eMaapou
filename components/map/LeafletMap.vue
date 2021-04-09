@@ -10,6 +10,7 @@
         @baselayerchange="handleBaseLayerChange"
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
+        @ready="fitBounds"
       >
         <l-control-layers />
         <l-control-fullscreen position="topleft" />
@@ -286,26 +287,11 @@ export default {
     invalidateSize(newVal) {
       if (newVal) {
         this.$refs.map.mapObject.invalidateSize()
-        // HACK: This fixes initial bounds problem (markers out of bounds)
+        // HACK: This fixes initial bounds problem in search view (markers out of bounds)
         this.fitBounds()
       }
     },
   },
-  // mounted() {
-  //   console.log(this.markers.length)
-  //   this.$nextTick(() => {
-  //     console.log(this.markers.length)
-  //     if (this.markers.length > 0) {
-  //       this.$refs.map.mapObject.fitBounds(
-  //         this.markers.map((m) => {
-  //           return [m.latitude, m.longitude]
-  //         }),
-  //         { padding: [50, 50] }
-  //       )
-  //     }
-  //     this.$refs.map.setZoom(this.mapZoom)
-  //   })
-  // },
   methods: {
     handleBaseLayerChange(event) {
       this.activeBaseLayer = event.name
