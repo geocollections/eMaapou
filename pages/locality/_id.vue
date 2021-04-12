@@ -156,6 +156,7 @@
                       :title="$t('locality.remarks')"
                       :value="locality.remarks"
                     />
+                    <data-row :title="$t('locality.id')" :value="locality.id" />
                   </tbody>
                 </template>
               </v-simple-table>

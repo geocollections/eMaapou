@@ -135,6 +135,10 @@
                         <div v-html="stratigraphy.index_additional_html" />
                       </template>
                     </data-row>
+                    <data-row
+                      :title="$t('stratigraphy.id')"
+                      :value="stratigraphy.id"
+                    />
                   </tbody>
                 </template>
               </v-simple-table>
