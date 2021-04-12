@@ -19,7 +19,7 @@
     "leaflet-gesture-handling": "^1.2.1",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.4",
-    "nuxt-i18n": "^6.23.0",
+    "nuxt-i18n": "^6.24.0",
     "vue-gtag": "^1.11.0",
     "vue-infinite-loading": "^2.4.5",
     "vue2-leaflet": "^2.7.0",
