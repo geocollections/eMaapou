@@ -130,7 +130,7 @@ export default {
         },
         {
           id: 'attachment',
-          routeName: 'search-attachments',
+          routeName: 'search-files',
           title: 'landing.attachments',
           isSolr: true,
           count: 0,
