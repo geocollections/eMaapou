@@ -323,7 +323,7 @@
                 </template>
               </v-simple-table>
 
-              <v-card v-if="showMap" id="map-wrap" elevation="0" height="300">
+              <v-card v-if="showMap" id="map-wrap" elevation="0">
                 <v-card-title class="pl-0">{{
                   $t('locality.map')
                 }}</v-card-title>
