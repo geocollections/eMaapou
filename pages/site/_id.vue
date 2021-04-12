@@ -21,23 +21,17 @@
                 <v-simple-table dense class="custom-table">
                   <template #default>
                     <tbody>
-                      <tr>
-                        <td>{{ $t('site.name') }}</td>
-                        <td>
-                          {{
-                            $translate({
-                              et: site.name,
-                              en: site.name_en,
-                            })
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.area') }}</td>
-                        <td v-if="isNil(site.area)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
+                      <data-row
+                        :title="$t('site.name')"
+                        :value="
+                          $translate({
+                            et: site.name,
+                            en: site.name_en,
+                          })
+                        "
+                      />
+                      <data-row :value="site.area" :title="$t('site.area')">
+                        <template #value>
                           <a
                             v-if="site.area__area_type === 2"
                             class="text-link"
@@ -61,14 +55,15 @@
                               })
                             }}
                           </div>
-                        </td>
-                      </tr>
-                      <tr v-if="site.area__area_type === 2">
-                        <td>{{ $t('site.areaText1') }}</td>
-                        <td v-if="isNil(site.area__text1)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
+                        </template>
+                      </data-row>
+
+                      <data-row
+                        v-if="site.area__area_type === 2"
+                        :value="site.area"
+                        :title="$t('site.areaText1')"
+                      >
+                        <template #value>
                           <span v-for="(item, index) in planArray" :key="index">
                             <a
                               class="text-link"
@@ -86,53 +81,25 @@
                               >|</span
                             >
                           </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.coordx') }}</td>
-                        <td v-if="isNil(site.coordx)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.coordx }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.coordy') }}</td>
-                        <td v-if="isNil(site.coordy)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.coordy }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.elevation') }}</td>
-                        <td v-if="isNil(site.elevation)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.elevation }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.depth') }}</td>
-                        <td v-if="isNil(site.depth)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.depth }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.description') }}</td>
-                        <td v-if="isNil(site.description)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.description }}
-                        </td>
-                      </tr>
+                        </template>
+                      </data-row>
+                      <data-row
+                        :title="$t('site.coordx')"
+                        :value="site.coordx"
+                      />
+                      <data-row
+                        :title="$t('site.coordy')"
+                        :value="site.coordy"
+                      />
+                      <data-row
+                        :title="$t('site.elevation')"
+                        :value="site.elevation"
+                      />
+                      <data-row :title="$t('site.depth')" :value="site.depth" />
+                      <data-row
+                        :title="$t('site.description')"
+                        :value="site.description"
+                      />
                     </tbody>
                   </template>
                 </v-simple-table>
@@ -151,43 +118,34 @@
                 <v-simple-table dense class="mb-4 custom-table">
                   <template #default>
                     <tbody>
-                      <tr>
-                        <td>{{ $t('locality.locality') }}</td>
-                        <td>
-                          <a
-                            class="text-link"
-                            :href="
-                              localePath({
-                                name: 'locality-id',
-                                params: { id: site.locality_id },
-                              })
-                            "
-                          >
-                            {{
-                              $translate({
-                                et: site.locality__locality,
-                                en: site.locality__locality_en,
-                              })
-                            }}
-                          </a>
-                        </td>
-                      </tr>
-                      <tr v-if="site.locality__country">
-                        <td>{{ $t('locality.country') }}</td>
-                        <td
-                          v-if="
-                            isNil(
-                              $translate({
-                                et: site.locality__country__value,
-                                en: site.locality__country__value_en,
-                              })
-                            )
-                          "
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
+                      <link-data-row
+                        :title="$t('locality.locality')"
+                        :value="
+                          $translate({
+                            et: site.locality__locality,
+                            en: site.locality__locality_en,
+                          })
+                        "
+                        nuxt
+                        :href="
+                          localePath({
+                            name: 'locality-id',
+                            params: { id: site.locality_id },
+                          })
+                        "
+                      />
+                      <data-row
+                        :title="$t('locality.country')"
+                        :value="
+                          isNil(
+                            $translate({
+                              et: site.locality__country__value,
+                              en: site.locality__country__value_en,
+                            })
+                          )
+                        "
+                      >
+                        <template #value>
                           {{
                             $t('locality.countryFormat', {
                               name: $translate({
@@ -197,57 +155,28 @@
                               iso: site.locality__country__iso_code,
                             })
                           }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.latitude') }}</td>
-                        <td v-if="isNil(site.latitude)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.latitude }}
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>{{ $t('locality.longitude') }}</td>
-                        <td v-if="isNil(site.longitude)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.longitude }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.elevation') }}</td>
-                        <td v-if="isNil(site.elevation)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.elevation }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('site.elevationAccuracy') }}</td>
-                        <td
-                          v-if="isNil(site.elevation_accuracy)"
-                          class="no-value"
-                        >
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.elevation_accuracy }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>{{ $t('locality.depth') }}</td>
-                        <td v-if="isNil(site.locality__depth)" class="no-value">
-                          {{ $t('common.noValue') }}
-                        </td>
-                        <td v-else>
-                          {{ site.locality__depth }}
-                        </td>
-                      </tr>
+                        </template>
+                      </data-row>
+                      <data-row
+                        :title="$t('locality.latitude')"
+                        :value="site.latitude"
+                      />
+                      <data-row
+                        :title="$t('locality.longitude')"
+                        :value="site.longitude"
+                      />
+                      <data-row
+                        :title="$t('locality.elevation')"
+                        :value="site.elevation"
+                      />
+                      <data-row
+                        :title="$t('locality.elevationAccuracy')"
+                        :value="site.elevationAccuracy"
+                      />
+                      <data-row
+                        :title="$t('locality.depth')"
+                        :value="site.locality__depth"
+                      />
                     </tbody>
                   </template>
                 </v-simple-table>
@@ -293,9 +222,11 @@ import { isNil } from 'lodash'
 import LeafletMap from '@/components/map/LeafletMap'
 import Tabs from '~/components/Tabs.vue'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle'
+import DataRow from '~/components/DataRow.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
 
 export default {
-  components: { PrevNextNavTitle, Tabs, LeafletMap },
+  components: { PrevNextNavTitle, Tabs, LeafletMap, DataRow, LinkDataRow },
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
