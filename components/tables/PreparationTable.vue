@@ -7,15 +7,14 @@
     :count="count"
     v-on="$listeners"
   >
-    <!-- Todo: Uncomment when preparation detail view is done -->
-    <!--    <template #item.preparation_number="{ item }">-->
-    <!--      <nuxt-link-->
-    <!--        class="text-link"-->
-    <!--        :to="localePath({ name: 'preparation-id', params: { id: item.id } })"-->
-    <!--      >-->
-    <!--        {{ item.preparation_number }}-->
-    <!--      </nuxt-link>-->
-    <!--    </template>-->
+    <template #item.preparation_number="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'preparation-id', params: { id: item.id } })"
+      >
+        {{ item.preparation_number }}
+      </nuxt-link>
+    </template>
     <template #item.locality="{ item }">
       <nuxt-link
         class="text-link"
@@ -35,7 +34,6 @@
         <span v-if="item.depth_interval">({{ item.depth_interval }})</span>
       </div>
     </template>
-    <!-- Todo: Add lithostratigraphy -->
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
         <external-link
