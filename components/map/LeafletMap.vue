@@ -319,9 +319,11 @@ export default {
 
     fitBounds() {
       if (this.markersAsFitBoundsObject.length > 0) {
-        this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
-          padding: [50, 50],
-          maxZoom: this.mapZoom,
+        this.$nextTick(() => {
+          this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
+            padding: [50, 50],
+            maxZoom: this.mapZoom,
+          })
         })
       }
     },
