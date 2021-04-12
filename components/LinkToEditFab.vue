@@ -1,5 +1,5 @@
 <template>
-  <v-fab-transition v-if="isLoggedIn">
+  <v-fab-transition>
     <v-tooltip left>
       <template #activator="{ on }">
         <v-btn
