@@ -69,7 +69,6 @@ export default {
     ...mapActions('sample', ['searchSamples']),
     async handleUpdate(tableState) {
       await this.searchSamples(tableState.options)
-      this.options = tableState.options
     },
   },
 }

@@ -70,7 +70,6 @@ export default {
     ...mapActions('analysis', ['searchAnalyses']),
     async handleUpdate(tableState) {
       await this.searchAnalyses(tableState.options)
-      this.options = tableState.options
     },
   },
 }
