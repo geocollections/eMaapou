@@ -6,8 +6,10 @@
       class="transition-swing"
       :class="{ 'on-hover': hover }"
       :elevation="hover ? 12 : 2"
-      :href="link"
-      :target="innerLink ? '_self' : '_blank'"
+      :href="!innerLink ? link : ''"
+      :target="!innerLink ? '_blank' : ''"
+      :nuxt="innerLink"
+      @click="innerLink ? $router.push(localePath({ name: link })) : ''"
     >
       <v-img
         :src="background"
@@ -32,8 +34,10 @@
             outlined
             class="rounded-tr-lg rounded-bl-lg"
             small
-            :href="link"
-            target="_blank"
+            :href="!innerLink ? link : ''"
+            :target="!innerLink ? '_blank' : ''"
+            :nuxt="innerLink"
+            @click="innerLink ? $router.push(localePath({ name: link })) : ''"
             >{{ $t('landing.visit_site') }}
             <v-icon right small>mdi-open-in-new</v-icon></v-btn
           >

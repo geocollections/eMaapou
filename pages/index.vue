@@ -211,7 +211,7 @@ export default {
         drillcores: {
           title: 'frontDrillcores.title',
           description: 'frontDrillcores.description',
-          href: 'https://geoloogia.info/drillcore',
+          href: 'drillcore',
           background: require('~/assets/frontpage/drillcores.jpg'),
           innerLink: true,
           sm: 4,
@@ -221,7 +221,7 @@ export default {
         localities: {
           title: 'frontLocalities.title',
           description: 'frontLocalities.description',
-          href: 'https://geoloogia.info/locality',
+          href: 'locality',
           background: require('~/assets/frontpage/localities.jpg'),
           innerLink: true,
           sm: 4,
@@ -231,7 +231,7 @@ export default {
         samples: {
           title: 'frontSamples.title',
           description: 'frontSamples.description',
-          href: 'https://geoloogia.info/sample',
+          href: 'sample',
           background: require('~/assets/frontpage/samples.jpg'),
           innerLink: true,
           sm: 4,
@@ -241,7 +241,7 @@ export default {
         analyses: {
           title: 'frontAnalyses.title',
           description: 'frontAnalyses.description',
-          href: 'https://geoloogia.info/analysis',
+          href: 'analysis',
           background: require('~/assets/frontpage/analyses.jpg'),
           innerLink: true,
           sm: 4,
