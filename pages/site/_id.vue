@@ -100,6 +100,7 @@
                         :title="$t('site.description')"
                         :value="site.description"
                       />
+                      <data-row :title="$t('site.id')" :value="site.id" />
                     </tbody>
                   </template>
                 </v-simple-table>
