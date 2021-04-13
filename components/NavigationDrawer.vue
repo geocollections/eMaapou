@@ -27,7 +27,7 @@
               :key="item.name"
               :to="localePath({ name: item.name })"
               class="mb-1 menu-link"
-              exact-active-class="menu-link-active"
+              active-class="menu-link-active"
               ><v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
               {{ $t(`common.${item.lang}`) }}
             </nuxt-link>
@@ -121,16 +121,16 @@ export default {
           lang: 'sites',
           icon: 'mdi-binoculars',
         },
-        {
-          name: 'file',
-          lang: 'attachments',
-          icon: 'mdi-folder-open-outline',
-        },
-        {
-          name: 'stratigraphy',
-          lang: 'stratigraphy',
-          icon: '',
-        },
+        // {
+        //   name: 'file',
+        //   lang: 'attachments',
+        //   icon: 'mdi-folder-open-outline',
+        // },
+        // {
+        //   name: 'stratigraphy',
+        //   lang: 'stratigraphy',
+        //   icon: '',
+        // },
       ],
       links: [
         { name: 'link.geokogud', url: 'https://geocollections.info' },
