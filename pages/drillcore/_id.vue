@@ -1,161 +1,153 @@
 <template>
-  <v-row>
-    <v-col>
+  <detail>
+    <template #title>
       <prev-next-nav-title
         :ids="ids"
         :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         "
       />
-      <v-card flat tile>
-        <v-row no-gutters>
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('common.general') }}</v-card-title>
-            <v-card-text>
-              <v-simple-table dense class="custom-table">
-                <template #default>
-                  <tbody>
-                    <data-row
-                      :title="$t('drillcore.name')"
-                      :value="
-                        $translate({
-                          et: drillcore.drillcore,
-                          en: drillcore.drillcore_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('drillcore.boxes')"
-                      :value="drillcore.boxes"
-                    />
-                    <data-row
-                      :title="$t('drillcore.boxNumbers')"
-                      :value="drillcore.box_numbers"
-                    />
-                    <data-row
-                      :title="$t('drillcore.repository')"
-                      :value="
-                        $translate({
-                          et: drillcore.depository__value,
-                          en: drillcore.depository__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('drillcore.storage')"
-                      :value="drillcore.storage__location"
-                    />
-                    <data-row
-                      :title="$t('drillcore.driller')"
-                      :value="drillcore.agent__agent"
-                    />
-                    <data-row
-                      :title="$t('drillcore.year')"
-                      :value="drillcore.year"
-                    />
-                    <data-row
-                      :title="$t('drillcore.metersInBox')"
-                      :value="drillcore.number_meters"
-                    />
-                    <data-row
-                      :title="$t('drillcore.id')"
-                      :value="drillcore.id"
-                    />
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-            <div v-if="drillcore.remarks">
-              <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
-              <v-card-text>{{ drillcore.remarks }}</v-card-text>
-            </div>
-          </v-col>
-          <v-col v-if="drillcore.locality_id" cols="12" md="6">
-            <v-card-title>{{ $t('locality.locality') }}</v-card-title>
-            <v-card-text>
-              <v-simple-table dense class="mb-4 custom-table">
-                <template #default>
-                  <tbody>
-                    <link-data-row
-                      :title="$t('locality.locality')"
-                      :value="
-                        $translate({
-                          et: drillcore.locality__locality,
-                          en: drillcore.locality__locality_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'locality-id',
-                          params: { id: drillcore.locality_id },
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.country')"
-                      :value="
-                        $translate({
-                          et: drillcore.locality__country__value,
-                          en: drillcore.locality__country__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.latitude')"
-                      :value="drillcore.locality__latitude"
-                    />
-                    <data-row
-                      :title="$t('locality.longitude')"
-                      :value="drillcore.locality__longitude"
-                    />
-                    <data-row
-                      :title="$t('locality.elevation')"
-                      :value="drillcore.locality__elevation"
-                    />
-                    <data-row
-                      :title="$t('locality.depth')"
-                      :value="drillcore.locality__depth"
-                    />
-                  </tbody>
-                </template>
-              </v-simple-table>
-              <v-card
-                v-if="
-                  drillcore.locality__latitude && drillcore.locality__longitude
+    </template>
+
+    <template #column-left>
+      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-text>
+        <v-simple-table dense class="custom-table">
+          <template #default>
+            <tbody>
+              <data-row
+                :title="$t('drillcore.name')"
+                :value="
+                  $translate({
+                    et: drillcore.drillcore,
+                    en: drillcore.drillcore_en,
+                  })
                 "
-                id="map-wrap"
-                elevation="0"
-                height="300"
-              >
-                <leaflet-map
-                  :is-estonian="drillcore.locality__country__value === 'Eesti'"
-                  :height="300"
-                  :center="{
-                    latitude: drillcore.locality__latitude,
-                    longitude: drillcore.locality__longitude,
-                  }"
-                  :markers="[
-                    {
-                      latitude: drillcore.locality__latitude,
-                      longitude: drillcore.locality__longitude,
-                      text: $translate({
-                        et: drillcore.locality__locality,
-                        en: drillcore.locality__locality_en,
-                      }),
-                    },
-                  ]"
-                />
-              </v-card>
-            </v-card-text>
-          </v-col>
-        </v-row>
-      </v-card>
+              />
+              <data-row
+                :title="$t('drillcore.boxes')"
+                :value="drillcore.boxes"
+              />
+              <data-row
+                :title="$t('drillcore.boxNumbers')"
+                :value="drillcore.box_numbers"
+              />
+              <data-row
+                :title="$t('drillcore.repository')"
+                :value="
+                  $translate({
+                    et: drillcore.depository__value,
+                    en: drillcore.depository__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('drillcore.storage')"
+                :value="drillcore.storage__location"
+              />
+              <data-row
+                :title="$t('drillcore.driller')"
+                :value="drillcore.agent__agent"
+              />
+              <data-row :title="$t('drillcore.year')" :value="drillcore.year" />
+              <data-row
+                :title="$t('drillcore.metersInBox')"
+                :value="drillcore.number_meters"
+              />
+              <data-row :title="$t('drillcore.id')" :value="drillcore.id" />
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card-text>
+      <div v-if="drillcore.remarks">
+        <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+        <v-card-text>{{ drillcore.remarks }}</v-card-text>
+      </div>
+    </template>
+
+    <template v-if="drillcore.locality_id" #column-right>
+      <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+      <v-card-text>
+        <v-simple-table dense class="mb-4 custom-table">
+          <template #default>
+            <tbody>
+              <link-data-row
+                :title="$t('locality.locality')"
+                :value="
+                  $translate({
+                    et: drillcore.locality__locality,
+                    en: drillcore.locality__locality_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: drillcore.locality_id },
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.country')"
+                :value="
+                  $translate({
+                    et: drillcore.locality__country__value,
+                    en: drillcore.locality__country__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.latitude')"
+                :value="drillcore.locality__latitude"
+              />
+              <data-row
+                :title="$t('locality.longitude')"
+                :value="drillcore.locality__longitude"
+              />
+              <data-row
+                :title="$t('locality.elevation')"
+                :value="drillcore.locality__elevation"
+              />
+              <data-row
+                :title="$t('locality.depth')"
+                :value="drillcore.locality__depth"
+              />
+            </tbody>
+          </template>
+        </v-simple-table>
+        <v-card
+          v-if="drillcore.locality__latitude && drillcore.locality__longitude"
+          id="map-wrap"
+          elevation="0"
+          height="300"
+        >
+          <leaflet-map
+            :is-estonian="drillcore.locality__country__value === 'Eesti'"
+            :height="300"
+            :center="{
+              latitude: drillcore.locality__latitude,
+              longitude: drillcore.locality__longitude,
+            }"
+            :markers="[
+              {
+                latitude: drillcore.locality__latitude,
+                longitude: drillcore.locality__longitude,
+                text: $translate({
+                  et: drillcore.locality__locality,
+                  en: drillcore.locality__locality_en,
+                }),
+              },
+            ]"
+          />
+        </v-card>
+      </v-card-text>
+    </template>
+    <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
-    </v-col>
-  </v-row>
+    </template>
+  </detail>
 </template>
 
 <script>
@@ -165,9 +157,17 @@ import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle'
+import Detail from '~/components/templates/Detail.vue'
 
 export default {
-  components: { PrevNextNavTitle, Tabs, LeafletMap, DataRow, LinkDataRow },
+  components: {
+    PrevNextNavTitle,
+    Tabs,
+    LeafletMap,
+    DataRow,
+    LinkDataRow,
+    Detail,
+  },
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const drillcoreResponse = await app.$services.sarvREST.getResource(

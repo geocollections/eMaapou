@@ -1,7 +1,9 @@
 <template>
-  <v-row>
-    <v-col>
+  <detail>
+    <template #title>
       <prev-next-nav-title :ids="ids" :title="drillcoreBoxTitle" />
+    </template>
+    <template #top>
       <v-card v-if="activeImage" class="my-2 mx-4">
         <v-card-text>
           <client-only>
@@ -132,6 +134,8 @@
           </div>
         </v-card-text>
       </v-card>
+    </template>
+    <template #default>
       <v-card flat tile>
         <v-card-title>{{ $t('common.general') }}</v-card-title>
         <v-card-text>
@@ -223,12 +227,13 @@
           </v-simple-table>
         </v-card-text>
       </v-card>
-
+    </template>
+    <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
-    </v-col>
-  </v-row>
+    </template>
+  </detail>
 </template>
 
 <script>
@@ -238,9 +243,17 @@ import Tabs from '@/components/Tabs'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle.vue'
+import Detail from '~/components/templates/Detail.vue'
 
 export default {
-  components: { Tabs, BoxImageLoader, DataRow, LinkDataRow, PrevNextNavTitle },
+  components: {
+    Tabs,
+    BoxImageLoader,
+    DataRow,
+    LinkDataRow,
+    PrevNextNavTitle,
+    Detail,
+  },
   async asyncData({ $axios, params, route, error, app, redirect }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(

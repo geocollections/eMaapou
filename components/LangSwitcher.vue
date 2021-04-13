@@ -3,7 +3,7 @@
     <template #activator="{ on, attrs }">
       <v-btn
         aria-label="select language"
-        class="d-block lang-button mr-1"
+        class="d-block header-icon-button mr-2"
         icon
         v-bind="attrs"
         v-on="on"
@@ -56,8 +56,8 @@ export default {
 
 <style scoped lang="scss">
 .lang-button {
-  height: 30px !important;
-  width: 30px !important;
+  height: 36px !important;
+  width: 36px !important;
 }
 
 .lang-icon {

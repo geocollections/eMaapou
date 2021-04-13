@@ -1,277 +1,199 @@
 <template>
-  <v-row>
-    <v-col>
+  <detail>
+    <template #title>
       <prev-next-nav-title
         :ids="ids"
         :title="$translate({ et: locality.locality, en: locality.locality_en })"
       />
-      <v-card flat tile>
-        <v-row no-gutters>
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('common.general') }}</v-card-title>
-            <v-card-text>
-              <v-simple-table dense class="custom-table">
-                <template #default>
-                  <tbody>
-                    <data-row
-                      :title="$t('locality.name')"
-                      :value="
-                        $translate({
-                          et: locality.locality,
-                          en: locality.locality_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.type')"
-                      :value="
-                        $translate({
-                          et: locality.type__value,
-                          en: locality.type__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.country')"
-                      :value="
-                        $translate({
-                          et: locality.country__value,
-                          en: locality.country__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.parish')"
-                      :value="
-                        $translate({
-                          et: locality.vald__vald,
-                          en: locality.vald__vald_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.settlement')"
-                      :value="
-                        $translate({
-                          et: locality.asustusyksus__asustusyksus,
-                          en: locality.asustusyksus__asustusyksus_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.elevation')"
-                      :value="locality.elevation"
-                    />
-                    <data-row
-                      :title="$t('locality.latitude')"
-                      :value="locality.latitude"
-                    />
-                    <data-row
-                      :title="$t('locality.longitude')"
-                      :value="locality.longitude"
-                    />
-                    <data-row
-                      :title="$t('locality.coordinateSystem')"
-                      :value="locality.coord_system"
-                    />
-                    <data-row
-                      :title="$t('locality.coordinateX')"
-                      :value="locality.coordx"
-                    />
-                    <data-row
-                      :title="$t('locality.coordinateY')"
-                      :value="locality.coordy"
-                    />
-                    <data-row
-                      :title="$t('locality.coordinatePrecision')"
-                      :value="locality.coord_det_precision__value"
-                    />
-                    <data-row
-                      :title="$t('locality.coordinateMethod')"
-                      :value="
-                        $translate({
-                          et: locality.coord_det_method__value,
-                          en: locality.coord_det_method__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.coordinateAgent')"
-                      :value="locality.coord_det_agent__agent"
-                    />
-                    <data-row
-                      :title="$t('locality.locationRemarks')"
-                      :value="locality.remarks_location"
-                    />
-                    <link-data-row
-                      :title="$t('locality.stratigraphyTop')"
-                      :value="
-                        $translate({
-                          et: locality.stratigraphy_top__stratigraphy,
-                          en: locality.stratigraphy_top__stratigraphy_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'stratigraphy-id',
-                          params: { id: locality.stratigraphy_top_id },
-                        })
-                      "
-                    />
-                    <link-data-row
-                      :title="$t('locality.stratigraphyBase')"
-                      :value="
-                        $translate({
-                          et: locality.stratigraphy_base__stratigraphy,
-                          en: locality.stratigraphy_base__stratigraphy_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'stratigraphy-id',
-                          params: { id: locality.stratigraphy_base_id },
-                        })
-                      "
-                    />
-                    <link-data-row
-                      v-if="drillcore"
-                      nuxt
-                      :title="$t('locality.drillcore')"
-                      :value="
-                        $translate({
-                          et: drillcore.drillcore,
-                          en: drillcore.drillcore_en,
-                        })
-                      "
-                      :href="
-                        localePath({
-                          name: 'drillcore-id',
-                          params: { id: drillcore.id },
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('locality.remarks')"
-                      :value="locality.remarks"
-                    />
-                    <data-row :title="$t('locality.id')" :value="locality.id" />
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-col>
-          <v-col
-            v-if="locality.latitude && locality.longitude"
-            cols="12"
-            md="6"
-          >
-            <v-card-title>{{ $t('locality.map') }}</v-card-title>
-            <v-card-text>
-              <v-card id="map-wrap" elevation="0" height="600">
-                <leaflet-map
-                  :is-estonian="locality.country__value === 'Eesti'"
-                  :height="600"
-                  :center="{
-                    latitude: locality.latitude,
-                    longitude: locality.longitude,
-                  }"
-                  :markers="[
-                    {
-                      latitude: locality.latitude,
-                      longitude: locality.longitude,
-                      text: $translate({
-                        et: locality.locality,
-                        en: locality.locality_en,
-                      }),
-                    },
-                  ]"
-                />
-              </v-card>
-            </v-card-text>
-          </v-col>
-        </v-row>
-      </v-card>
+    </template>
 
-      <v-card
-        v-if="images.length > 0"
-        class="mt-6 mx-4 d-flex align-center"
-        style="overflow-x: auto"
-        flat
-      >
-        <div v-for="(item, index) in images" :key="index" class="mx-3 mb-3">
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-hover v-slot="{ hover }">
-                <v-img
-                  v-bind="attrs"
-                  :src="`https://files.geocollections.info/small/${item.uuid_filename}`"
-                  :lazy-src="`https://files.geocollections.info/small/${item.uuid_filename}`"
-                  max-width="200"
-                  max-height="200"
-                  width="200"
-                  height="200"
-                  :class="{
-                    'elevation-4': hover,
-                    'elevation-2': !hover,
-                  }"
-                  class="grey lighten-2 rounded transition-swing cursor-pointer"
-                  v-on="on"
-                  @click="
-                    $router.push(
-                      localePath({
-                        name: 'file-id',
-                        params: { id: item.attachment_id },
-                      })
-                    )
-                  "
-                >
-                  <template #placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular
-                        indeterminate
-                        color="grey lighten-5"
-                      ></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-hover>
-            </template>
+    <template #column-left>
+      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-text>
+        <v-simple-table dense class="custom-table">
+          <template #default>
+            <tbody>
+              <data-row
+                :title="$t('locality.name')"
+                :value="
+                  $translate({
+                    et: locality.locality,
+                    en: locality.locality_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.type')"
+                :value="
+                  $translate({
+                    et: locality.type__value,
+                    en: locality.type__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.country')"
+                :value="
+                  $translate({
+                    et: locality.country__value,
+                    en: locality.country__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.parish')"
+                :value="
+                  $translate({
+                    et: locality.vald__vald,
+                    en: locality.vald__vald_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.settlement')"
+                :value="
+                  $translate({
+                    et: locality.asustusyksus__asustusyksus,
+                    en: locality.asustusyksus__asustusyksus_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.elevation')"
+                :value="locality.elevation"
+              />
+              <data-row
+                :title="$t('locality.latitude')"
+                :value="locality.latitude"
+              />
+              <data-row
+                :title="$t('locality.longitude')"
+                :value="locality.longitude"
+              />
+              <data-row
+                :title="$t('locality.coordinateSystem')"
+                :value="locality.coord_system"
+              />
+              <data-row
+                :title="$t('locality.coordinateX')"
+                :value="locality.coordx"
+              />
+              <data-row
+                :title="$t('locality.coordinateY')"
+                :value="locality.coordy"
+              />
+              <data-row
+                :title="$t('locality.coordinatePrecision')"
+                :value="locality.coord_det_precision__value"
+              />
+              <data-row
+                :title="$t('locality.coordinateMethod')"
+                :value="
+                  $translate({
+                    et: locality.coord_det_method__value,
+                    en: locality.coord_det_method__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.coordinateAgent')"
+                :value="locality.coord_det_agent__agent"
+              />
+              <data-row
+                :title="$t('locality.locationRemarks')"
+                :value="locality.remarks_location"
+              />
+              <link-data-row
+                :title="$t('locality.stratigraphyTop')"
+                :value="
+                  $translate({
+                    et: locality.stratigraphy_top__stratigraphy,
+                    en: locality.stratigraphy_top__stratigraphy_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: locality.stratigraphy_top_id },
+                  })
+                "
+              />
+              <link-data-row
+                :title="$t('locality.stratigraphyBase')"
+                :value="
+                  $translate({
+                    et: locality.stratigraphy_base__stratigraphy,
+                    en: locality.stratigraphy_base__stratigraphy_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: locality.stratigraphy_base_id },
+                  })
+                "
+              />
+              <link-data-row
+                v-if="drillcore"
+                nuxt
+                :title="$t('locality.drillcore')"
+                :value="
+                  $translate({
+                    et: drillcore.drillcore,
+                    en: drillcore.drillcore_en,
+                  })
+                "
+                :href="
+                  localePath({
+                    name: 'drillcore-id',
+                    params: { id: drillcore.id },
+                  })
+                "
+              />
+              <data-row
+                :title="$t('locality.remarks')"
+                :value="locality.remarks"
+              />
+              <data-row :title="$t('locality.id')" :value="locality.id" />
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card-text>
+    </template>
+    <template v-if="locality.latitude && locality.longitude" #column-right>
+      <v-card-title>{{ $t('locality.map') }}</v-card-title>
+      <v-card-text>
+        <v-card id="map-wrap" elevation="0" height="600">
+          <leaflet-map
+            :is-estonian="locality.country__value === 'Eesti'"
+            :height="600"
+            :center="{
+              latitude: locality.latitude,
+              longitude: locality.longitude,
+            }"
+            :markers="[
+              {
+                latitude: locality.latitude,
+                longitude: locality.longitude,
+                text: $translate({
+                  et: locality.locality,
+                  en: locality.locality_en,
+                }),
+              },
+            ]"
+          />
+        </v-card>
+      </v-card-text>
+    </template>
 
-            <div
-              v-if="item.agent || item.date_created || item.date_created_free"
-            >
-              <div v-if="item.agent">
-                <span class="font-weight-bold"
-                  >{{ $t('locality.author') }}:
-                </span>
-                <span>{{ item.agent }}</span>
-              </div>
-              <div v-if="item.date_created || item.date_created_free">
-                <span class="font-weight-bold"
-                  >{{ $t('locality.date') }}:
-                </span>
-                <span v-if="item.date_created">
-                  {{ new Date(item.date_created).toISOString().split('T')[0] }}
-                </span>
-                <span v-else>{{ item.date_created_free }}</span>
-              </div>
-            </div>
-            <div v-else>Click to open</div>
-          </v-tooltip>
-        </div>
-      </v-card>
-
+    <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
-    </v-col>
-  </v-row>
+    </template>
+  </detail>
 </template>
 
 <script>
@@ -281,9 +203,17 @@ import DataRow from '~/components/DataRow'
 import LeafletMap from '~/components/map/LeafletMap'
 import Tabs from '~/components/Tabs'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle'
+import Detail from '~/components/templates/Detail.vue'
 
 export default {
-  components: { PrevNextNavTitle, DataRow, LinkDataRow, LeafletMap, Tabs },
+  components: {
+    PrevNextNavTitle,
+    DataRow,
+    LinkDataRow,
+    LeafletMap,
+    Tabs,
+    Detail,
+  },
   async asyncData({ params, route, app, error, redirect }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(
