@@ -228,7 +228,7 @@ export default {
         {
           params: {
             fields:
-              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year',
+              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string',
           },
         }
       )
@@ -276,7 +276,7 @@ export default {
           title: 'stratigraphy.specimens',
           isSolr: true,
           count: 0,
-          props: { stratigraphy: stratigraphy.id },
+          props: { stratigraphy },
         },
         {
           id: 'sample',
@@ -285,7 +285,7 @@ export default {
           title: 'stratigraphy.samples',
           isSolr: true,
           count: 0,
-          props: { stratigraphy: stratigraphy.id },
+          props: { stratigraphy },
         },
       ]
 
@@ -326,7 +326,8 @@ export default {
               },
               solr: {
                 default: {
-                  fq: `stratigraphy_id:${stratigraphy.id}`,
+                  fq: `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`,
+                  // fq: `stratigraphy_id:${stratigraphy.id}`,
                 },
               },
               fields: tab.fields ?? 'id',
