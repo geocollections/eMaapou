@@ -60,9 +60,9 @@
       {{ $t('common.about') }}
     </v-btn>
 
-    <links v-if="$vuetify.breakpoint.smAndUp" />
+    <links />
 
-    <app-header-search class="mr-3" />
+    <app-header-search class="mr-2" />
 
     <lang-switcher />
 
@@ -93,7 +93,7 @@
       :text="$vuetify.breakpoint.smAndUp"
       :icon="!$vuetify.breakpoint.smAndUp"
       class="font-weight-bold"
-      :class="{ 'ml-3 mr-1': !$vuetify.breakpoint.smAndUp }"
+      :class="{ 'mr-1 header-icon-button': !$vuetify.breakpoint.smAndUp }"
       aria-label="Open navigation drawer"
       :small="!$vuetify.breakpoint.smAndUp"
       @click.stop="$emit('toggle:navigationDrawer')"
@@ -175,6 +175,7 @@ export default {
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
 }
+
 .tabs {
   background-color: #7781b5;
 }

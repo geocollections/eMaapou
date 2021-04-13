@@ -100,7 +100,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
 .page-title {
   /* font-weight: normal; */
-  background-color: #FFD600;
+  background-color: #ffd600;
   font-weight: bold;
   /* border-top: solid #5c659887; */
   /* border-bottom: solid #5c659887; */
@@ -173,4 +173,9 @@ th {
 .emaapou-detail {
   //font-size: 1.5rem !important;
   letter-spacing: 0.75px;
+}
+
+.header-icon-button {
+  height: 36px !important;
+  width: 36px !important;
 }

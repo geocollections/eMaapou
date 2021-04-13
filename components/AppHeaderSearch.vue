@@ -19,7 +19,7 @@
     @focus="searchClosed = false"
     @blur="searchClosed = true"
   ></v-text-field>
-  <v-btn v-else icon style="height: 32px; width: 32px" @click="handleSearch">
+  <v-btn v-else icon class="header-icon-button" @click="handleSearch">
     <v-icon>mdi-magnify</v-icon>
   </v-btn>
 </template>
