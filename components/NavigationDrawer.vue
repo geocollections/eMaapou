@@ -5,6 +5,7 @@
     right
     temporary
     width="100%"
+    color="quaternary"
     class="elevation-4"
     :height="$vuetify.breakpoint.smAndUp ? 'unset' : `100%`"
     :style="`z-index: 2050; margin-top: ${$vuetify.application.top}px; opacity: 0.95`"
@@ -26,7 +27,6 @@
               :key="item.name"
               :to="localePath({ name: item.name })"
               class="mb-1 menu-link"
-              exact
               exact-active-class="menu-link-active"
               ><v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
               {{ $t(`common.${item.lang}`) }}

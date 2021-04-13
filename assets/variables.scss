@@ -4,6 +4,11 @@
 // $font-size-root: 20px;
 
 $body-font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+$anchor: #FE5F55;
+$anchor-darken-1: #FE4134;
+$anchor-darken-2: #FE1C0B;
+$anchor-darken-3: #DF1001;
+$anchor-darken-4: #B70D01;
 
 //
 // @import '~vuetify/src/styles/styles.sass';
@@ -20,6 +25,6 @@ $body-font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 // HACK: This is done do change tab overflow arrow colors. It also overrides other active icon colors, so it might change some icons inadvertently.
 $material-light: (
   icons: (
-    active: #e64a19,
+    active: $anchor-darken-2,
   ),
 );

@@ -28,7 +28,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="9">
-        <search-view-map-wrapper :items="items" />
+        <search-view-map-wrapper :items="items" class="mb-6" />
 
         <locality-table
           :show-search="false"

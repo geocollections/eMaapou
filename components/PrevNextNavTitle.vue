@@ -1,7 +1,7 @@
 <template>
   <div
-    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2"
-    :class="{ 'page-title my-3': title || $slots.title }"
+    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 tertiary"
+    :class="{ 'my-3': title || $slots.title }"
   >
     <div class="align-self-start align-self-sm-center text-no-wrap">
       <v-tooltip bottom>
@@ -50,9 +50,14 @@
     </div>
 
     <slot name="title">
-      <h1 class="text-center">
-        {{ title }}
-      </h1>
+      <div class="d-flex flex-column">
+        <h1 class="text-center">
+          {{ title }}
+        </h1>
+        <h4 class="text-center" style="opacity: 0.7">
+          {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
+        </h4>
+      </div>
     </slot>
 
     <div class="align-self-end align-self-sm-center text-no-wrap">
@@ -142,6 +147,10 @@ export default {
 
     computedFirstId() {
       return this.ids?.first_id
+    },
+
+    routeName() {
+      return this.getRouteBaseName().split('-id')[0]
     },
   },
   beforeMount() {
