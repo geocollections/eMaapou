@@ -53,13 +53,13 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title">{{ $t('common.links') }}</div>
+          <div class="section-title">{{ $t('common.institutions') }}</div>
 
           <hr />
 
           <div class="d-flex flex-column align-start">
             <a
-              v-for="item in links"
+              v-for="item in institutions"
               :key="item.name"
               :href="item.url"
               class="mb-1 menu-link"
@@ -68,6 +68,12 @@
               {{ $t(item.name) }}
             </a>
           </div>
+
+          <div class="section-title">{{ $t('common.lang') }}</div>
+
+          <hr />
+
+          <lang-list class="py-0" />
         </v-col>
       </v-row>
     </v-container>
@@ -75,8 +81,10 @@
 </template>
 
 <script>
+import LangList from '~/components/lang_switcher/LangList'
 export default {
   name: 'NavigationDrawer',
+  components: { LangList },
   props: {
     drawer: {
       type: Boolean,
@@ -133,17 +141,48 @@ export default {
         // },
       ],
       links: [
-        { name: 'link.geokogud', url: 'https://geocollections.info' },
-        { name: 'link.geokirjandus', url: 'https://geocollections.info' },
-        { name: 'link.sarvDOI', url: 'https://doi.geocollections.info/' },
-        { name: 'link.fossils', url: 'https://fossiilid.info/' },
-        { name: 'link.turvas', url: 'https://turba.geoloogia.info' },
-        { name: 'link.chitinozoa', url: 'https://chitinozoa.net/' },
-        { name: 'link.eurocore', url: 'https://eurocore.rocks/' },
+        { name: 'geocollections.title', url: 'https://geocollections.info' },
+        { name: 'kirjandus.title', url: 'https://kirjandus.geoloogia.info' },
+        { name: 'gmre.title', url: 'https://geoloogia.info/geology' },
+        { name: 'fond.title', url: 'https://fond.egt.ee' },
+        { name: 'fossiilid.title', url: 'https://fossiilid.info' },
+        { name: 'kivid.title', url: 'https://kivid.info' },
+        { name: 'stratigraphy.title', url: 'http://stratigraafia.info' },
+        {
+          name: 'maardlad.title',
+          url:
+            'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+        },
+        { name: 'doi.title', url: 'https://doi.geocollections.info' },
+        { name: 'turba.title', url: 'https://turba.geoloogia.info' },
+        { name: 'geocase.title', url: 'https://geocase.eu' },
+        { name: 'eurocore.title', url: 'eurocore.description' },
+        { name: 'sarv.title', url: 'https://edit.geocollections.info' },
         { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
         { name: 'link.github', url: 'https://github.com/geocollections/' },
       ],
+      institutions: [
+        {
+          name: 'institutions.ttu',
+          url: 'https://taltech.ee/geoloogia-instituut',
+        },
+        { name: 'institutions.tu', url: 'https://geoloogia.ut.ee' },
+        { name: 'institutions.egt', url: 'https://egt.ee' },
+        {
+          name: 'institutions.maaamet',
+          url:
+            'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+        },
+        { name: 'institutions.egeos', url: 'https://egeos.ee' },
+        { name: 'institutions.maeselts', url: 'http://maeselts.ee' },
+        { name: 'institutions.steiger', url: 'https://steiger.ee' },
+      ],
     }
+  },
+  computed: {
+    availableLocales() {
+      return this.$i18n.locales
+    },
   },
 }
 </script>
@@ -165,5 +204,33 @@ export default {
 
 .use-padding-bottom {
   padding-bottom: 56px;
+}
+
+.lang-icon {
+  height: 20px;
+  width: 20px !important;
+}
+
+.flag {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  line-height: 1em;
+  background-size: cover;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  border-radius: 100%;
+}
+
+.flag:before {
+  content: '\A0';
+}
+
+.flag-et {
+  background-image: url('~assets/et.svg');
+}
+
+.flag-en {
+  background-image: url('~assets/en.svg');
 }
 </style>

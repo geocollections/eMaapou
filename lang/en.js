@@ -66,6 +66,8 @@ export default {
     close: 'Close',
     attachments: 'Files',
     stratigraphy: 'Stratigraphy',
+    institutions: 'Geological institutions, organisations and companies',
+    lang: 'Language',
   },
   link: {
     sarvAPI: 'Public API',
@@ -671,5 +673,14 @@ export default {
     'search-rocks': 'Quick search: Rocks',
     'search-drillcores': 'Quick search: Drillcores',
     'stratigraphy-id': 'Stratigraphy ID: {id}',
+  },
+  institutions: {
+    ttu: 'TalTech Department of Geology',
+    tu: 'University of Tartu Department of Geology',
+    egt: 'Geological Survey of Estonia',
+    maaamet: 'Department of Geology, Land Board',
+    egeos: 'Geological Society of Estonia',
+    maeselts: 'Mining Society of Estonia',
+    steiger: 'Engineering Bureau Steiger',
   },
 }

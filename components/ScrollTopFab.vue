@@ -4,7 +4,7 @@
       v-show="showFab"
       v-scroll="onScroll"
       fab
-      color="deep-orange darken-2"
+      color="quinary darken-3"
       dark
       @click="toTop"
     >

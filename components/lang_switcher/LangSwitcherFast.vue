@@ -66,10 +66,10 @@ export default {
 }
 
 .flag-et {
-  background-image: url('~assets/et.svg');
+  background-image: url('~~/assets/et.svg');
 }
 
 .flag-en {
-  background-image: url('~assets/en.svg');
+  background-image: url('~~/assets/en.svg');
 }
 </style>

@@ -11,37 +11,17 @@
         <span :class="classObject" />
       </v-btn>
     </template>
-    <v-list>
-      <v-list-item
-        v-for="(locale, i) in availableLocales"
-        :key="i"
-        dense
-        class="header-menu-item"
-        @click.prevent.stop="$i18n.setLocale(locale.code)"
-      >
-        <v-list-item-title class="d-flex">
-          <span
-            v-if="locale.code === 'et'"
-            class="flag flag-et mr-2 lang-icon"
-          />
-          <span
-            v-if="locale.code === 'en'"
-            class="flag flag-en mr-2 lang-icon"
-          />
-          <span class="align-self-center">{{ locale.name }}</span>
-        </v-list-item-title>
-      </v-list-item>
-    </v-list>
+
+    <lang-list />
   </v-menu>
 </template>
 
 <script>
+import LangList from '~/components/lang_switcher/LangList'
 export default {
   name: 'LangSwitcher',
+  components: { LangList },
   computed: {
-    availableLocales() {
-      return this.$i18n.locales
-    },
     classObject() {
       return {
         flag: true,
@@ -55,14 +35,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.lang-button {
-  height: 36px !important;
-  width: 36px !important;
-}
-
 .lang-icon {
-  height: 20px;
-  width: 20px !important;
+  height: 24px;
+  width: 24px !important;
 }
 
 .flag {
@@ -73,9 +48,6 @@ export default {
   background-size: cover;
   background-position: 50%;
   background-repeat: no-repeat;
-
-  width: 1em;
-
   border-radius: 100%;
 }
 

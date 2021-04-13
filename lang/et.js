@@ -67,6 +67,8 @@ export default {
     close: 'Sulge',
     attachments: 'Failid',
     stratigraphy: 'Stratigraafia',
+    institutions: 'Geoloogia asutused, organisatsioonid, ettevõtted',
+    lang: 'Keel',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -672,5 +674,14 @@ export default {
     'search-rocks': 'Kiirpäring: Mineraalid ja kivimid',
     'search-drillcores': 'Kiirpäring: Puursüdamikud',
     'stratigraphy-id': 'Stratigraafia ID: {id}',
+  },
+  institutions: {
+    ttu: 'TTÜ geoloogia instituut',
+    tu: 'TÜ geoloogia osakond',
+    egt: 'Eesti Geoloogiateenistus',
+    maaamet: 'Maa-ameti geoloogia osakond',
+    egeos: 'MTÜ Eesti Geoloogia Selts',
+    maeselts: 'MTÜ Eesti Mäeselts',
+    steiger: 'OÜ Inseneribüroo Steiger',
   },
 }

@@ -113,9 +113,9 @@
 
 <script>
 import Links from '@/components/Links'
-import LangSwitcher from '@/components/LangSwitcher'
+import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 import AppHeaderSearch from '~/components/AppHeaderSearch'
-import LangSwitcherFast from '~/components/LangSwitcherFast'
+import LangSwitcherFast from '~/components/lang_switcher/LangSwitcherFast'
 export default {
   name: 'AppHeader',
   components: { LangSwitcherFast, AppHeaderSearch, LangSwitcher, Links },
