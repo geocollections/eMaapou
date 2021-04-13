@@ -1,13 +1,5 @@
 <template>
-  <v-app-bar
-    app
-    color="#6A76AB"
-    :prominent="!isDetail"
-    :hide-on-scroll="!isDetail"
-    :dense="isDetail"
-    :src="require(`~/assets/header/header1a.jpg`)"
-    dark
-  >
+  <v-app-bar app color="#5c6598" dark>
     <template #img="{ props }">
       <v-img
         v-bind="props"
@@ -38,7 +30,8 @@
         </nuxt-link>
       </v-app-bar-title>
 
-      <template v-if="isDetail">
+      <!-- BUTTONS ON DENSE BAR -->
+      <!-- <template>
         <v-btn
           v-for="(item, index) in tabs"
           :key="index"
@@ -53,22 +46,38 @@
           :to="localePath({ name: item.name })"
           >{{ $t(`common.${item.lang}`) }}</v-btn
         >
-      </template>
+      </template> -->
     </v-toolbar-items>
 
     <v-spacer />
 
-    <app-header-search class="d-none d-sm-flex" />
-    <links />
-    <lang-switcher v-if="false" />
-    <lang-switcher-fast :is-detail="isDetail" />
-    <template v-if="!isDetail" #extension>
+    <v-btn
+      v-show="$vuetify.breakpoint.smAndUp"
+      nuxt
+      aria-label="about page"
+      text
+      :to="localePath({ name: 'about' })"
+    >
+      <template #default>
+        <span class="header-text">
+          {{ $t('common.about') }}
+        </span>
+      </template>
+    </v-btn>
+    <links v-if="$vuetify.breakpoint.smAndUp" />
+    <app-header-search class="mr-3" />
+    <lang-switcher />
+    <lang-switcher-fast v-if="false" :is-detail="isDetail" />
+
+    <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
+        class="tabs"
         optional
         show-arrows
         center-active
+        centered
       >
         <v-tab
           v-for="(item, index) in tabs"
@@ -76,24 +85,22 @@
           nuxt
           :exact="item.name !== 'search'"
           :to="localePath({ name: item.name })"
-          >{{ $t(`common.${item.lang}`) }}</v-tab
+          ><b>{{ $t(`common.${item.lang}`) }}</b></v-tab
         >
       </v-tabs>
     </template>
 
-    <v-tooltip bottom>
-      <template #activator="{ on }">
-        <v-app-bar-nav-icon
-          small
-          :class="{ 'd-none': !isDetail, 'd-flex d-lg-none ml-1': isDetail }"
-          aria-label="Open navigation drawer"
-          style="height: 32px; width: 32px"
-          v-on="on"
-          @click.stop="$emit('toggle:navigationDrawer')"
-        />
-      </template>
-      <span>{{ $t('landing.showMenu') }}</span>
-    </v-tooltip>
+    <v-btn
+      v-if="$vuetify.breakpoint.xsOnly"
+      small
+      icon
+      class="ml-3 mr-1"
+      aria-label="Open navigation drawer"
+      style="height: 32px; width: 32px"
+      @click.stop="$emit('toggle:navigationDrawer')"
+    >
+      <v-icon>mdi-menu</v-icon>
+    </v-btn>
   </v-app-bar>
 </template>
 
@@ -115,14 +122,6 @@ export default {
   data() {
     return {
       tabs: [
-        {
-          name: 'about',
-          lang: 'about',
-        },
-        {
-          name: 'search',
-          lang: 'search',
-        },
         {
           name: 'drillcore',
           lang: 'drillcores',
@@ -161,5 +160,8 @@ export default {
 <style scoped>
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
+}
+.tabs {
+  background-color: #7781b5;
 }
 </style>

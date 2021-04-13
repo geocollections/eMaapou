@@ -3,7 +3,7 @@
     <template #activator="{ on, attrs }">
       <v-btn
         aria-label="select language"
-        class="d-block lang-button"
+        class="d-block lang-button mr-1"
         icon
         v-bind="attrs"
         v-on="on"
