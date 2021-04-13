@@ -1,12 +1,5 @@
 <template>
-  <v-app-bar app color="#5c6598" dark style="z-index: 2050">
-    <template #img="{ props }">
-      <v-img
-        v-bind="props"
-        gradient="to top right, rgba(100,115,201,.7), rgba(25,32,72,.7)"
-      ></v-img>
-    </template>
-
+  <v-app-bar app dark style="z-index: 2050" color="secondary">
     <v-toolbar-items>
       <v-app-bar-title class="app-title align-self-center">
         <nuxt-link :to="localePath({ path: '/' })" class="title-link">
@@ -60,9 +53,9 @@
       {{ $t('common.about') }}
     </v-btn>
 
-    <links v-if="$vuetify.breakpoint.smAndUp" />
+    <links v-if="false" />
 
-    <app-header-search class="mr-3" />
+    <app-header-search class="mx-3" />
 
     <lang-switcher />
 
@@ -72,17 +65,18 @@
       <v-tabs
         :value="tabValue"
         align-with-title
-        class="tabs"
+        class="tertiary"
         optional
         show-arrows
         center-active
+        light
         centered
       >
         <v-tab
           v-for="(item, index) in tabs"
           :key="index"
           nuxt
-          :exact="item.name !== 'search'"
+          active-class="black--text"
           :to="localePath({ name: item.name })"
           ><b>{{ $t(`common.${item.lang}`) }}</b></v-tab
         >
@@ -152,6 +146,10 @@ export default {
           name: 'analysis',
           lang: 'analyses',
         },
+        {
+          name: 'site',
+          lang: 'sites',
+        },
       ],
     }
   },
@@ -174,8 +172,5 @@ export default {
 <style scoped>
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
-}
-.tabs {
-  background-color: #7781b5;
 }
 </style>
