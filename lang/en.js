@@ -61,6 +61,10 @@ export default {
     quickSearch: 'Quick search',
     description: 'Description',
     map: 'Map | Map: <b>{count}</b> locality | Map: <b>{count}</b> localities',
+    more: 'More',
+    close: 'Close',
+    attachments: 'Files',
+    stratigraphy: 'Stratigraphy',
   },
   link: {
     sarvAPI: 'Public API',

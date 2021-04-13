@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="#5c6598" dark>
+  <v-app-bar app color="#5c6598" dark style="z-index: 2050">
     <template #img="{ props }">
       <v-img
         v-bind="props"
@@ -16,8 +16,6 @@
                 v-bind="attrs"
                 class="header-text text-none text-nowrap"
                 :class="{
-                  emaapou: !isDetail,
-                  'emaapou-detail': isDetail,
                   'mr-4': $vuetify.breakpoint.smAndUp,
                 }"
                 v-on="on"
@@ -55,19 +53,20 @@
       v-show="$vuetify.breakpoint.smAndUp"
       nuxt
       aria-label="about page"
+      class="font-weight-bold"
       text
       :to="localePath({ name: 'about' })"
     >
-      <template #default>
-        <span class="header-text">
-          {{ $t('common.about') }}
-        </span>
-      </template>
+      {{ $t('common.about') }}
     </v-btn>
+
     <links v-if="$vuetify.breakpoint.smAndUp" />
+
     <app-header-search class="mr-3" />
+
     <lang-switcher />
-    <lang-switcher-fast v-if="false" :is-detail="isDetail" />
+
+    <lang-switcher-fast v-if="false" />
 
     <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
@@ -91,15 +90,29 @@
     </template>
 
     <v-btn
-      v-if="$vuetify.breakpoint.xsOnly"
-      small
-      icon
-      class="ml-3 mr-1"
+      :text="$vuetify.breakpoint.smAndUp"
+      :icon="!$vuetify.breakpoint.smAndUp"
+      class="font-weight-bold"
+      :class="{ 'ml-3 mr-1': !$vuetify.breakpoint.smAndUp }"
       aria-label="Open navigation drawer"
-      style="height: 32px; width: 32px"
+      :small="!$vuetify.breakpoint.smAndUp"
       @click.stop="$emit('toggle:navigationDrawer')"
     >
-      <v-icon>mdi-menu</v-icon>
+      <div v-if="drawer">
+        <span
+          v-show="$vuetify.breakpoint.smAndUp"
+          style="vertical-align: middle"
+          >{{ $t('common.close') }}</span
+        ><v-icon size="font-size: 24px">mdi-close</v-icon>
+      </div>
+      <div v-else>
+        <span
+          v-show="$vuetify.breakpoint.smAndUp"
+          style="vertical-align: middle"
+          >{{ $t('common.more') }}</span
+        >
+        <v-icon size="font-size: 24px">mdi-menu</v-icon>
+      </div>
     </v-btn>
   </v-app-bar>
 </template>
@@ -118,6 +131,7 @@ export default {
       required: false,
       default: false,
     },
+    drawer: Boolean,
   },
   data() {
     return {

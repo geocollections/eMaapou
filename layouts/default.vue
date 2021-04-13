@@ -3,6 +3,7 @@
     <v-main>
       <app-header
         :is-detail="isDetail"
+        :drawer="drawer"
         @toggle:navigationDrawer="drawer = !drawer"
       />
       <navigation-drawer

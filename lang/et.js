@@ -62,6 +62,10 @@ export default {
     description: 'Kirjeldus',
     map:
       'Kaart | Kaart: <b>{count}</b> asukoht | Kaart: <b>{count}</b> asukohta',
+    more: 'Rohkem',
+    close: 'Sulge',
+    attachments: 'Failid',
+    stratigraphy: 'Stratigraafia',
   },
   link: {
     sarvAPI: 'Avalik API',
