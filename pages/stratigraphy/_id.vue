@@ -1,6 +1,6 @@
 <template>
-  <v-row>
-    <v-col>
+  <detail>
+    <template #title>
       <prev-next-nav-title
         :ids="ids"
         :title="
@@ -10,163 +10,160 @@
           })
         "
       />
-      <v-card flat tile>
-        <v-row no-gutters>
-          <v-col cols="12" md="6">
-            <v-card-title>{{ $t('common.general') }}</v-card-title>
-            <v-card-text>
-              <v-simple-table dense class="custom-table">
-                <template #default>
-                  <tbody>
-                    <link-data-row
-                      :title="$t('stratigraphy.parentStratigraphy')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.parent__stratigraphy,
-                          en: stratigraphy.parent__stratigraphy_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'stratigraphy-id',
-                          params: { id: stratigraphy.parent_id },
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.type')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.type__value,
-                          en: stratigraphy.type__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.rank')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.rank__value,
-                          en: stratigraphy.rank__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.scope')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.scope__value,
-                          en: stratigraphy.scope__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.status')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.status__value,
-                          en: stratigraphy.status__value_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.author')"
-                      :value="stratigraphy.author_free"
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.year')"
-                      :value="stratigraphy.year"
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.etymon')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.etymon,
-                          en: stratigraphy.etymon_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.originalLocality')"
-                      :value="stratigraphy.original_locality"
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.ageTop')"
-                      :value="stratigraphy.age_top"
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.ageBase')"
-                      :value="stratigraphy.age_base"
-                    />
-                    <link-data-row
-                      :title="$t('stratigraphy.age')"
-                      :value="
-                        $translate({
-                          et: stratigraphy.age_chronostratigraphy__stratigraphy,
-                          en:
-                            stratigraphy.age_chronostratigraphy__stratigraphy_en,
-                        })
-                      "
-                      nuxt
-                      :href="
-                        localePath({
-                          name: 'stratigraphy-id',
-                          params: {
-                            id: stratigraphy.age_chronostratigraphy_id,
-                          },
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('stratigraphy.ageReference')"
-                      :value="stratigraphy.age_reference__reference"
-                    />
+    </template>
 
-                    <data-row :title="$t('stratigraphy.index')">
-                      <template #value>
-                        <!-- eslint-disable-next-line vue/no-v-html -->
-                        <div v-html="stratigraphy.index_main_html" />
-                      </template>
-                    </data-row>
-                    <data-row :title="$t('stratigraphy.indexAlt')">
-                      <template #value>
-                        <!-- eslint-disable-next-line vue/no-v-html -->
-                        <div v-html="stratigraphy.index_additional_html" />
-                      </template>
-                    </data-row>
-                    <data-row
-                      :title="$t('stratigraphy.id')"
-                      :value="stratigraphy.id"
-                    />
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-col>
-          <v-col v-if="stratotypeCount > 0" cols="12" md="6">
-            <v-card-title>{{ $t('stratigraphy.stratotypes') }}</v-card-title>
-            <v-card-text>
-              <stratigraphy-stratotype-table
-                only-table
-                :items="stratotypes"
-                :count="stratotypeCount"
-                :options="options"
-                class="mb-2"
+    <template #column-left>
+      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-text>
+        <v-simple-table dense class="custom-table">
+          <template #default>
+            <tbody>
+              <link-data-row
+                :title="$t('stratigraphy.parentStratigraphy')"
+                :value="
+                  $translate({
+                    et: stratigraphy.parent__stratigraphy,
+                    en: stratigraphy.parent__stratigraphy_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: stratigraphy.parent_id },
+                  })
+                "
               />
-              <v-card id="map-wrap" elevation="0" height="300">
-                <leaflet-map
-                  :is-estonian="
-                    stratotypes[0].locality__country__value === 'Eesti'
-                  "
-                  :height="300"
-                  :markers="stratigraphyMarkers"
-                />
-              </v-card>
-            </v-card-text>
-          </v-col>
-        </v-row>
-      </v-card>
+              <data-row
+                :title="$t('stratigraphy.type')"
+                :value="
+                  $translate({
+                    et: stratigraphy.type__value,
+                    en: stratigraphy.type__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('stratigraphy.rank')"
+                :value="
+                  $translate({
+                    et: stratigraphy.rank__value,
+                    en: stratigraphy.rank__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('stratigraphy.scope')"
+                :value="
+                  $translate({
+                    et: stratigraphy.scope__value,
+                    en: stratigraphy.scope__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('stratigraphy.status')"
+                :value="
+                  $translate({
+                    et: stratigraphy.status__value,
+                    en: stratigraphy.status__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('stratigraphy.author')"
+                :value="stratigraphy.author_free"
+              />
+              <data-row
+                :title="$t('stratigraphy.year')"
+                :value="stratigraphy.year"
+              />
+              <data-row
+                :title="$t('stratigraphy.etymon')"
+                :value="
+                  $translate({
+                    et: stratigraphy.etymon,
+                    en: stratigraphy.etymon_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('stratigraphy.originalLocality')"
+                :value="stratigraphy.original_locality"
+              />
+              <data-row
+                :title="$t('stratigraphy.ageTop')"
+                :value="stratigraphy.age_top"
+              />
+              <data-row
+                :title="$t('stratigraphy.ageBase')"
+                :value="stratigraphy.age_base"
+              />
+              <link-data-row
+                :title="$t('stratigraphy.age')"
+                :value="
+                  $translate({
+                    et: stratigraphy.age_chronostratigraphy__stratigraphy,
+                    en: stratigraphy.age_chronostratigraphy__stratigraphy_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: {
+                      id: stratigraphy.age_chronostratigraphy_id,
+                    },
+                  })
+                "
+              />
+              <data-row
+                :title="$t('stratigraphy.ageReference')"
+                :value="stratigraphy.age_reference__reference"
+              />
+
+              <data-row :title="$t('stratigraphy.index')">
+                <template #value>
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <div v-html="stratigraphy.index_main_html" />
+                </template>
+              </data-row>
+              <data-row :title="$t('stratigraphy.indexAlt')">
+                <template #value>
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <div v-html="stratigraphy.index_additional_html" />
+                </template>
+              </data-row>
+              <data-row
+                :title="$t('stratigraphy.id')"
+                :value="stratigraphy.id"
+              />
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card-text>
+    </template>
+    <template v-if="stratotypeCount > 0" #column-right>
+      <v-card-title>{{ $t('stratigraphy.stratotypes') }}</v-card-title>
+      <v-card-text>
+        <stratigraphy-stratotype-table
+          only-table
+          :items="stratotypes"
+          :count="stratotypeCount"
+          :options="options"
+          class="mb-2"
+        />
+        <v-card id="map-wrap" elevation="0" height="300">
+          <leaflet-map
+            :is-estonian="stratotypes[0].locality__country__value === 'Eesti'"
+            :height="300"
+            :markers="stratigraphyMarkers"
+          />
+        </v-card>
+      </v-card-text>
+    </template>
+
+    <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
@@ -197,8 +194,8 @@
           </v-col>
         </v-row>
       </v-card>
-    </v-col>
-  </v-row>
+    </template>
+  </detail>
 </template>
 
 <script>
@@ -210,7 +207,7 @@ import LinkDataRow from '~/components/LinkDataRow.vue'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable'
 import { STRATOTYPE } from '~/constants'
-
+import Detail from '~/components/templates/Detail'
 export default {
   components: {
     PrevNextNavTitle,
@@ -219,6 +216,7 @@ export default {
     DataRow,
     StratigraphyStratotypeTable,
     LeafletMap,
+    Detail,
   },
   async asyncData({ params, route, error, app, redirect }) {
     try {

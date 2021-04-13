@@ -1,10 +1,13 @@
 <template>
-  <v-row>
-    <v-col>
+  <detail>
+    <template #title>
       <prev-next-nav-title
         :ids="ids"
         :title="$translate({ et: area.name, en: area.name_en })"
       />
+    </template>
+
+    <template #default>
       <v-card flat tile>
         <v-row no-gutters justify="center">
           <v-col cols="12" md="9" lg="7" xl="6">
@@ -140,15 +143,16 @@
           </v-col>
         </v-row>
       </v-card>
+    </template>
+    <template #bottom>
       <v-card v-if="filteredTabs.length > 0" flat tile class="mt-6 mx-4 mb-4">
         <v-row no-gutters justify="center" class="px-4">
           <v-col cols="12" md="9" lg="7" xl="6" class="elevation-2 rounded">
             <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
           </v-col>
-        </v-row>
-      </v-card>
-    </v-col>
-  </v-row>
+        </v-row> </v-card
+    ></template>
+  </detail>
 </template>
 
 <script>
@@ -157,9 +161,10 @@ import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle'
+import Detail from '~/components/templates/Detail.vue'
 
 export default {
-  components: { PrevNextNavTitle, Tabs, DataRow, LinkDataRow },
+  components: { PrevNextNavTitle, Tabs, DataRow, LinkDataRow, Detail },
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
