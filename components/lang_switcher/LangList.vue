@@ -5,7 +5,7 @@
       :key="i"
       dense
       class="header-menu-item"
-      @click.prevent.stop="$i18n.setLocale(locale.code)"
+      @click="$i18n.setLocale(locale.code)"
     >
       <v-list-item-title class="d-flex">
         <span v-if="locale.code === 'et'" class="flag flag-et mr-2 lang-icon" />
