@@ -243,11 +243,6 @@
                         </ul>
                       </template>
                     </data-row>
-                    <link-data-row
-                      :title="$t('file.filename')"
-                      :value="file.uuid_filename"
-                      @link-click="$openImage(file.uuid_filename)"
-                    />
                     <data-row
                       :title="$t('file.imagePlace')"
                       :value="file.image_place"
