@@ -312,17 +312,17 @@ export default {
         ? drillcoreResponse.items[0]
         : null
 
-      const attachmentOutcropResponse = await app.$services.sarvSolr.getResourceList(
-        'attachment',
-        {
-          defaultParams: {
-            fq: `locality_id:${locality.id} AND locality_type:[3 TO 5] AND specimen_image_attachment:2`,
-            sort: 'date_created desc,date_created_free desc,stars desc,id desc',
-          },
-        }
-      )
-
-      const attachmentsOutcrop = attachmentOutcropResponse.items ?? []
+      // const attachmentOutcropResponse = await app.$services.sarvSolr.getResourceList(
+      //   'attachment',
+      //   {
+      //     defaultParams: {
+      //       fq: `locality_id:${locality.id} AND locality_type:[3 TO 5] AND specimen_image_attachment:2`,
+      //       sort: 'date_created desc,date_created_free desc,stars desc,id desc',
+      //     },
+      //   }
+      // )
+      //
+      // const attachmentsOutcrop = attachmentOutcropResponse.items ?? []
 
       const attachmentResponse = await app.$services.sarvSolr.getResourceList(
         'attachment',
@@ -438,7 +438,7 @@ export default {
         tabs: hydratedTabs,
         drillcore,
         initActiveTab: path,
-        attachmentsOutcrop,
+        // attachmentsOutcrop,
         attachments,
       }
     } catch (err) {
@@ -462,7 +462,8 @@ export default {
     },
 
     images() {
-      return this.attachmentsOutcrop.concat(this.attachments)
+      // return this.attachmentsOutcrop.concat(this.attachments)
+      return this.attachments
     },
   },
   methods: {
