@@ -16,8 +16,8 @@ export default {
   components: { SampleTable },
   props: {
     stratigraphy: {
-      type: Number,
-      default: null,
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -29,13 +29,15 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      console.log(this.stratigraphy)
       const sampleResponse = await this.$services.sarvSolr.getResourceList(
         'sample',
         {
           ...tableState,
           isValid: isNil(this.stratigraphy),
           defaultParams: {
-            fq: `stratigraphy_id:${this.stratigraphy}`,
+            // fq: `stratigraphy_id:${this.stratigraphy}`,
+            fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${this.stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
           },
           queryFields: this.$getQueryFields(SAMPLE.queryFields),
         }
