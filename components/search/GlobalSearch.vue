@@ -3,8 +3,8 @@
     v-model="search"
     dense
     outlined
+    class="search-input"
     color="deep-orange darken-2"
-    append-icon="mdi-magnify"
     :label="$t('common.search')"
     hide-details
     clearable
@@ -21,3 +21,10 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="scss">
+.v-text-field--outlined ::v-deep fieldset {
+  border-color: var(--v-primary-base);
+  border-width: 2px;
+}
+</style>
