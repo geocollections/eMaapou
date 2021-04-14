@@ -49,22 +49,28 @@
       </v-col>
     </v-row>
     <v-row class="my-6" justify="center" align="center">
-      <v-col
-        v-for="(item, index) in cards.outerIds"
-        :key="index"
-        class="pa-2"
-        cols="12"
-        :sm="cards[item].sm || 6"
-        :md="cards[item].md || 6"
-      >
-        <card-wrapper
-          :title="cards[item].title"
-          :description="cards[item].description"
-          :link="cards[item].href"
-          :background="cards[item].background"
-          grayscale
-        />
-      </v-col>
+      <!--
+        NOTE: For some reason rendering external links from server results in a rendering mismatch.
+            Added client-only to fix this mismatch
+        -->
+      <client-only>
+        <v-col
+          v-for="(item, index) in cards.outerIds"
+          :key="index"
+          class="pa-2"
+          cols="12"
+          :sm="cards[item].sm || 6"
+          :md="cards[item].md || 6"
+        >
+          <card-wrapper
+            :title="cards[item].title"
+            :description="cards[item].description"
+            :link="cards[item].href"
+            :background="cards[item].background"
+            grayscale
+          />
+        </v-col>
+      </client-only>
     </v-row>
   </div>
 </template>
@@ -75,14 +81,15 @@ import { isEmpty } from 'lodash'
 import CardWrapper from '~/components/CardWrapper'
 export default {
   components: { CardWrapper },
-  data() {
+
+  async asyncData() {
     return {
       cards: {
         geocollections: {
           title: 'geocollections.title',
           description: 'geocollections.description',
           href: 'https://geocollections.info',
-          background: require('~/assets/frontpage/geokogud.jpg'),
+          background: await require('~/assets/frontpage/geokogud.jpg'),
           sm: 6,
           md: 3,
           lg: 3,
@@ -91,7 +98,7 @@ export default {
           title: 'kirjandus.title',
           description: 'kirjandus.description',
           href: 'https://kirjandus.geoloogia.info',
-          background: require('~/assets/frontpage/geokirjandus.jpg'),
+          background: await require('~/assets/frontpage/geokirjandus.jpg'),
           sm: 6,
           md: 4,
           lg: 4,
@@ -100,7 +107,7 @@ export default {
           title: 'gmre.title',
           description: 'gmre.description',
           href: 'https://geoloogia.info/geology',
-          background: require('~/assets/frontpage/gmre.jpg'),
+          background: await require('~/assets/frontpage/gmre.jpg'),
           sm: 6,
           md: 2,
           lg: 2,
@@ -109,7 +116,7 @@ export default {
           title: 'fond.title',
           description: 'fond.description',
           href: 'https://fond.egt.ee',
-          background: require('~/assets/frontpage/geoloogiafond.jpg'),
+          background: await require('~/assets/frontpage/geoloogiafond.jpg'),
           sm: 6,
           md: 4,
           lg: 4,
@@ -119,7 +126,7 @@ export default {
           title: 'fossiilid.title',
           description: 'fossiilid.description',
           href: 'https://fossiilid.info',
-          background: require('~/assets/frontpage/fossiilid.jpg'),
+          background: await require('~/assets/frontpage/fossiilid.jpg'),
           sm: 6,
           md: 3,
           lg: 3,
@@ -128,7 +135,7 @@ export default {
           title: 'kivid.title',
           description: 'kivid.description',
           href: 'https://kivid.info',
-          background: require('~/assets/frontpage/kivid.jpg'),
+          background: await require('~/assets/frontpage/kivid.jpg'),
           sm: 6,
           md: 6,
           lg: 6,
@@ -137,7 +144,7 @@ export default {
           title: 'stratigraphy.title',
           description: 'stratigraphy.description',
           href: 'http://stratigraafia.info',
-          background: require('~/assets/frontpage/stratigraafia.jpg'),
+          background: await require('~/assets/frontpage/stratigraafia.jpg'),
           sm: 6,
           md: 4,
           lg: 4,
@@ -148,7 +155,7 @@ export default {
           description: 'maardlad.description',
           href:
             'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
-          background: require('~/assets/frontpage/maardlad.jpg'),
+          background: await require('~/assets/frontpage/maardlad.jpg'),
           sm: 6,
           md: 4,
           lg: 4,
@@ -157,7 +164,7 @@ export default {
           title: 'doi.title',
           description: 'doi.description',
           href: 'https://doi.geocollections.info',
-          background: require('~/assets/frontpage/sarv-doi.jpg'),
+          background: await require('~/assets/frontpage/sarv-doi.jpg'),
           sm: 6,
           md: 3,
           lg: 3,
@@ -166,7 +173,7 @@ export default {
           title: 'turba.title',
           description: 'turba.description',
           href: 'https://turba.geoloogia.info',
-          background: require('~/assets/frontpage/turba.jpg'),
+          background: await require('~/assets/frontpage/turba.jpg'),
           sm: 6,
           md: 3,
           lg: 3,
@@ -176,7 +183,7 @@ export default {
           title: 'geocase.title',
           description: 'geocase.description',
           href: 'https://geocase.eu',
-          background: require('~/assets/frontpage/geocase.jpg'),
+          background: await require('~/assets/frontpage/geocase.jpg'),
           sm: 6,
           md: 5,
           lg: 5,
@@ -185,7 +192,7 @@ export default {
           title: 'eurocore.title',
           description: 'eurocore.description',
           href: 'https://eurocore.rocks',
-          background: require('~/assets/frontpage/eurocore.jpg'),
+          background: await require('~/assets/frontpage/eurocore.jpg'),
           sm: 6,
           md: 5,
           lg: 5,
@@ -194,7 +201,7 @@ export default {
           title: 'sarv.title',
           description: 'sarv.description',
           href: 'https://edit.geocollections.info',
-          background: require('~/assets/frontpage/sarv-wb.jpg'),
+          background: await require('~/assets/frontpage/sarv-wb.jpg'),
           sm: 6,
           md: 2,
           lg: 2,
@@ -203,7 +210,7 @@ export default {
           title: 'ema.title',
           description: 'ema.description',
           href: 'https://geoloogia.info',
-          background: require('~/assets/header/header1a.jpg'),
+          background: await require('~/assets/header/header1a.jpg'),
           sm: 12,
           md: 12,
           lg: 12,
@@ -212,7 +219,7 @@ export default {
           title: 'frontDrillcores.title',
           description: 'frontDrillcores.description',
           href: 'drillcore',
-          background: require('~/assets/frontpage/drillcores.jpg'),
+          background: await require('~/assets/frontpage/drillcores.jpg'),
           innerLink: true,
           sm: 6,
           md: 3,
@@ -222,7 +229,7 @@ export default {
           title: 'frontLocalities.title',
           description: 'frontLocalities.description',
           href: 'locality',
-          background: require('~/assets/frontpage/localities.jpg'),
+          background: await require('~/assets/frontpage/localities.jpg'),
           innerLink: true,
           sm: 6,
           md: 3,
@@ -232,7 +239,7 @@ export default {
           title: 'frontSamples.title',
           description: 'frontSamples.description',
           href: 'sample',
-          background: require('~/assets/frontpage/samples.jpg'),
+          background: await require('~/assets/frontpage/samples.jpg'),
           innerLink: true,
           sm: 6,
           md: 3,
@@ -242,7 +249,7 @@ export default {
           title: 'frontAnalyses.title',
           description: 'frontAnalyses.description',
           href: 'analysis',
-          background: require('~/assets/frontpage/analyses.jpg'),
+          background: await require('~/assets/frontpage/analyses.jpg'),
           innerLink: true,
           sm: 6,
           md: 3,
