@@ -18,6 +18,7 @@
     @change="updateSearch"
     @focus="searchClosed = false"
     @blur="searchClosed = true"
+    @click:prepend-inner="handleSearch"
   ></v-text-field>
   <v-btn v-else icon class="header-icon-button" @click="handleSearch">
     <v-icon>mdi-magnify</v-icon>
