@@ -14,6 +14,20 @@ const getDefaultState = () => {
           label: 'site.name',
           fields: ['name'],
         },
+        area: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'site.area',
+          fields: ['area_name', 'area_name_en'],
+        },
+        project: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'site.project',
+          fields: ['project_name'],
+        },
         latitude: {
           type: 'range',
           lookUpType: 'range',

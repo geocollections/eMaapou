@@ -6,17 +6,10 @@
       <search-button />
     </div>
     <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
-    <range-search-field
-      v-model="latitude"
-      :min="-90"
-      :max="90"
-      :label="$t(filters.byIds.latitude.label)"
-    />
-    <range-search-field
-      v-model="longitude"
-      :min="-180"
-      :max="180"
-      :label="$t(filters.byIds.longitude.label)"
+    <text-search-field v-model="area" :label="$t(filters.byIds.area.label)" />
+    <text-search-field
+      v-model="project"
+      :label="$t(filters.byIds.project.label)"
     />
   </v-form>
 </template>
@@ -29,7 +22,6 @@ import GlobalSearch from './GlobalSearch.vue'
 import TextSearchField from './TextSearchField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
-import RangeSearchField from './RangeSearchField.vue'
 
 export default {
   name: 'SiteSearchForm',
@@ -38,7 +30,6 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
-    RangeSearchField,
   },
   computed: {
     ...mapState('site', ['filters']),
@@ -46,6 +37,8 @@ export default {
       name: 'filters.byIds.name.value',
       latitude: 'filters.byIds.latitude.value',
       longitude: 'filters.byIds.longitude.value',
+      area: 'filters.byIds.area.value',
+      project: 'filters.byIds.project.value',
     }),
   },
   methods: {
