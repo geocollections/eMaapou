@@ -672,6 +672,7 @@ export default {
     'search-stratigraphy': 'Quick search: Stratigraphy',
     'search-rocks': 'Quick search: Rocks',
     'search-drillcores': 'Quick search: Drillcores',
+    'search-files': 'Quick search: Files',
     'stratigraphy-id': 'Stratigraphy ID: {id}',
   },
   institutions: {

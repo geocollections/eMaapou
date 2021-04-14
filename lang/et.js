@@ -673,6 +673,7 @@ export default {
     'search-stratigraphy': 'Kiirpäring: Stratigraafia',
     'search-rocks': 'Kiirpäring: Mineraalid ja kivimid',
     'search-drillcores': 'Kiirpäring: Puursüdamikud',
+    'search-files': 'Kiirpäring: Failid',
     'stratigraphy-id': 'Stratigraafia ID: {id}',
   },
   institutions: {
