@@ -5,56 +5,58 @@
     </template>
     <template #column-left>
       <v-card-text class="text-center">
-        <client-only>
+        <!-- Image -->
+        <v-img
+          v-if="isImage"
+          content-class="image-content"
+          max-height="700"
+          contain
+          :lazy-src="`https://files.geocollections.info/small/${file.filename}`"
+          :src="`https://files.geocollections.info/medium/${file.filename}`"
+        >
           <template #placeholder>
-            <box-image-loader height="400" />
+            <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+              ></v-progress-circular>
+            </v-row>
           </template>
+        </v-img>
 
-          <!-- Image -->
-          <template v-if="isImage">
-            <v-img
-              contain
-              :lazy-src="`https://files.geocollections.info/small/${file.filename}`"
-              max-height="700"
-              max-width="1000"
-              :src="`https://files.geocollections.info/medium/${file.filename}`"
-            ></v-img>
-          </template>
+        <!-- Audio -->
+        <audio v-else-if="isAudio" controls>
+          <source
+            :src="`https://files.geocollections.info/${file.uuid_filename}`"
+          />
+          Your browser does not support the audio element.
+          <v-icon>mdi-file-music-outline</v-icon>
+        </audio>
 
-          <!-- Audio -->
-          <audio v-else-if="isAudio" controls>
-            <source
-              :src="`https://files.geocollections.info/${file.uuid_filename}`"
-            />
-            Your browser does not support the audio element.
-            <v-icon>mdi-file-music-outline</v-icon>
-          </audio>
+        <!-- Video -->
+        <video v-else-if="isVideo" controls>
+          <source
+            :src="`https://files.geocollections.info/${file.uuid_filename}`"
+          />
+          Your browser does not support the video element.
+          <v-icon>mdi-file-video-outline</v-icon>
+        </video>
 
-          <!-- Video -->
-          <video v-else-if="isVideo" controls>
-            <source
-              :src="`https://files.geocollections.info/${file.uuid_filename}`"
-            />
-            Your browser does not support the video element.
-            <v-icon>mdi-file-video-outline</v-icon>
-          </video>
-
-          <!-- File -->
-          <div
-            v-else
-            class="file-download rounded deep-orange--text"
-            @click="
-              $openWindow(
-                `https://files.geocollections.info/${file.uuid_filename}`
-              )
-            "
+        <!-- File -->
+        <div
+          v-else
+          class="file-download rounded deep-orange--text"
+          @click="
+            $openWindow(
+              `https://files.geocollections.info/${file.uuid_filename}`
+            )
+          "
+        >
+          <v-icon large color="deep-orange darken-2"
+            >mdi-file-download-outline</v-icon
           >
-            <v-icon large color="deep-orange darken-2"
-              >mdi-file-download-outline</v-icon
-            >
-            {{ $t('file.download') }}
-          </div>
-        </client-only>
+          {{ $t('file.download') }}
+        </div>
 
         <div
           class="d-flex justify-center flex-column justify-md-space-between flex-md-row"
@@ -402,7 +404,6 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import BoxImageLoader from '@/components/BoxImageLoader'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
@@ -412,7 +413,6 @@ export default {
   components: {
     PrevNextNavTitle,
     LeafletMap,
-    BoxImageLoader,
     DataRow,
     LinkDataRow,
     Detail,
