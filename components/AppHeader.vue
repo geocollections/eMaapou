@@ -131,12 +131,16 @@ export default {
     return {
       tabs: [
         {
-          name: 'drillcore',
-          lang: 'drillcores',
-        },
-        {
           name: 'locality',
           lang: 'localities',
+        },
+        {
+          name: 'site',
+          lang: 'sites',
+        },
+        {
+          name: 'drillcore',
+          lang: 'drillcores',
         },
         {
           name: 'sample',
@@ -145,10 +149,6 @@ export default {
         {
           name: 'analysis',
           lang: 'analyses',
-        },
-        {
-          name: 'site',
-          lang: 'sites',
         },
       ],
     }
