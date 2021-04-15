@@ -5,12 +5,9 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
-    <text-search-field v-model="area" :label="$t(filters.byIds.area.label)" />
-    <text-search-field
-      v-model="project"
-      :label="$t(filters.byIds.project.label)"
-    />
+    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
+    <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
+    <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
   </v-form>
 </template>
 
@@ -18,15 +15,15 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import TextField from '../fields/TextField.vue'
 import GlobalSearch from './GlobalSearch.vue'
-import TextSearchField from './TextSearchField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
 
 export default {
   name: 'SiteSearchForm',
   components: {
-    TextSearchField,
+    TextField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,

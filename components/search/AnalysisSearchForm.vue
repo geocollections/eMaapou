@@ -5,9 +5,9 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="id" :label="$t(filters.byIds.id.label)" />
+    <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
     <!-- TODO: Get min and max dynamically -->
-    <range-search-field
+    <range-slider-field
       v-model="depth"
       :min="-20"
       :max="5000"
@@ -20,17 +20,17 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import TextField from '../fields/TextField.vue'
+import RangeSliderField from '../fields/RangeSliderField.vue'
 import GlobalSearch from './GlobalSearch.vue'
-import TextSearchField from './TextSearchField.vue'
-import RangeSearchField from './RangeSearchField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
 
 export default {
   name: 'AnalysisSearchForm',
   components: {
-    TextSearchField,
-    RangeSearchField,
+    TextField,
+    RangeSliderField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,

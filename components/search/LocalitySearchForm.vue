@@ -5,19 +5,16 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
+    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
 
-    <text-search-field
-      v-model="country"
-      :label="$t(filters.byIds.country.label)"
-    />
+    <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
 
-    <text-search-field
+    <text-field
       v-model="stratigraphy"
       :label="$t(filters.byIds.stratigraphy.label)"
     />
 
-    <text-search-field
+    <text-field
       v-model="reference"
       :label="$t(filters.byIds.reference.label)"
     />
@@ -28,15 +25,15 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import TextField from '../fields/TextField.vue'
 import GlobalSearch from './GlobalSearch.vue'
-import TextSearchField from './TextSearchField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
 
 export default {
   name: 'LocalitySearchForm',
   components: {
-    TextSearchField,
+    TextField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,

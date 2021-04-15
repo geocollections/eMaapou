@@ -5,23 +5,14 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field v-model="name" :label="$t(filters.byIds.name.label)" />
-    <text-search-field
+    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
+    <text-field
       v-model="repository"
       :label="$t(filters.byIds.repository.label)"
     />
-    <text-search-field
-      v-model="country"
-      :label="$t(filters.byIds.country.label)"
-    />
-    <text-search-field
-      v-model="storage"
-      :label="$t(filters.byIds.storage.label)"
-    />
-    <range-search-text-field
-      v-model="boxes"
-      :label="$t(filters.byIds.boxes.label)"
-    />
+    <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
+    <text-field v-model="storage" :label="$t(filters.byIds.storage.label)" />
+    <range-text-field v-model="boxes" :label="$t(filters.byIds.boxes.label)" />
   </v-form>
 </template>
 
@@ -29,17 +20,17 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import TextField from '../fields/TextField.vue'
+import RangeTextField from '../fields/RangeTextField.vue'
 import GlobalSearch from './GlobalSearch.vue'
-import TextSearchField from './TextSearchField.vue'
-import RangeSearchTextField from './RangeSearchTextField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
 
 export default {
   name: 'DrillcoreSearchForm',
   components: {
-    TextSearchField,
-    RangeSearchTextField,
+    TextField,
+    RangeTextField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,

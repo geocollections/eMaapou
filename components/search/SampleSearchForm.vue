@@ -5,22 +5,16 @@
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
-    <text-search-field
-      v-model="number"
-      :label="$t(filters.byIds.number.label)"
-    />
+    <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
 
-    <text-search-field
-      v-model="locality"
-      :label="$t(filters.byIds.locality.label)"
-    />
+    <text-field v-model="locality" :label="$t(filters.byIds.locality.label)" />
 
-    <!--    <text-search-field-->
+    <!--    <text-field-->
     <!--      v-model="stratigraphy"-->
     <!--      :label="$t(filters.byIds.stratigraphy.label)"-->
     <!--    />-->
 
-    <autocomplete-search-field
+    <autocomplete-field
       v-model="hierarchy"
       :items="autocomplete.stratigraphy"
       :loading="autocomplete.loaders.stratigraphy"
@@ -29,19 +23,19 @@
       @search:items="autocompleteStratigraphySearch"
     />
 
-    <text-search-field
+    <text-field
       v-model="collector"
       :label="$t(filters.byIds.collector.label)"
     />
 
-    <range-search-field
+    <range-slider-field
       v-model="depth"
       :min="-20"
       :max="5000"
       :label="$t(filters.byIds.depth.label)"
     />
 
-    <text-search-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
+    <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
 
     <!--    <range-search-field-->
     <!--      v-model="mass"-->
@@ -56,23 +50,23 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import TextField from '../fields/TextField.vue'
+import RangeSliderField from '../fields/RangeSliderField'
 import GlobalSearch from './GlobalSearch.vue'
-import TextSearchField from './TextSearchField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
-import RangeSearchField from './RangeSearchField'
-import AutocompleteSearchField from '~/components/search/AutocompleteSearchField'
+import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 
 export default {
   name: 'SampleSearchForm',
   components: {
-    AutocompleteSearchField,
-    TextSearchField,
+    AutocompleteField,
+    TextField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
-    RangeSearchField,
+    RangeSliderField,
   },
   mixins: [autocompleteMixin],
   data() {

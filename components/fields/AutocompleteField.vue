@@ -1,5 +1,6 @@
 <template>
   <v-autocomplete
+    class="pt-4"
     v-bind="$attrs"
     hide-details
     hide-no-data
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  name: 'AutocompleteSearchField',
+  name: 'AutocompleteField',
   data() {
     return {
       search: null,

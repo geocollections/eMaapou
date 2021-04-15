@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-subheader v-if="label">{{ label }}</v-subheader>
+  <div class="pt-1">
+    <v-subheader v-if="label" class="px-0 d-inline">{{ label }}</v-subheader>
     <v-range-slider
       :value="value"
       :min="min"
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: 'RangeSearchField',
+  name: 'RangeSliderField',
   props: {
     min: {
       type: Number,

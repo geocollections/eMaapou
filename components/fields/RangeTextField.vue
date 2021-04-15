@@ -1,6 +1,7 @@
 <template>
   <div class="pt-1">
     <v-subheader
+      v-if="label"
       class="px-0 d-inline"
       :class="{ 'primary--text text--darken-3': isFocused }"
       >{{ label }}</v-subheader

@@ -1,5 +1,6 @@
 <template>
   <v-text-field
+    class="pt-4"
     :label="label"
     hide-details
     :value="value"
@@ -10,7 +11,7 @@
 
 <script>
 export default {
-  name: 'TextSearchField',
+  name: 'TextField',
   props: {
     value: { type: String, default: '' },
     label: { type: String, default: '' },
