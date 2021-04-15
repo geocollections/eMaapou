@@ -476,6 +476,7 @@ export default {
     specimens: 'Eksemplarid ({number})',
     samples: 'Proovid ({number})',
     subUnits: 'Alamüksused ({number})',
+    pageTitle: 'Stratigraafia otsing',
   },
   stratigraphyReference: {
     reference: 'Viide',
@@ -657,6 +658,7 @@ export default {
     drillcore_box: 'Puursüdamiku kastid',
     'drillcore_box-id': 'Puursüdamiku kast ID: {id}',
     preparation: 'Preparaadid',
+    stratigraphy: 'Stratigraafia',
     'preparation-id': 'Preparaat ID: {id}',
     'search-specimens': 'Kiirpäring: Eksemplarid',
     'search-analyses': 'Kiirpäring: Analüüsid',

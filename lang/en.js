@@ -475,6 +475,7 @@ export default {
     specimens: 'Specimens ({number})',
     samples: 'Samples ({number})',
     subUnits: 'Sub units ({number})',
+    pageTitle: 'Stratigraphy search',
   },
   stratigraphyReference: {
     reference: 'Reference',
@@ -656,6 +657,7 @@ export default {
     drillcore_box: 'Drillcore boxes',
     'drillcore_box-id': 'Drillcore box ID: {id}',
     preparation: 'Preparations',
+    stratigraphy: 'Stratigraphy',
     'preparation-id': 'Preparation ID: {id}',
     'search-specimens': 'Quick search: Eksemplarid',
     'search-analyses': 'Quick search: Analyses',
