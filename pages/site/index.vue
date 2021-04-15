@@ -44,7 +44,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SiteSearchForm from '@/components/search/SiteSearchForm'
+import SiteSearchForm from '@/components/search/forms/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'

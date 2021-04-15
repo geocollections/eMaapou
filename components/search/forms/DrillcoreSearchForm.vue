@@ -20,11 +20,11 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import TextField from '../fields/TextField.vue'
-import RangeTextField from '../fields/RangeTextField.vue'
-import GlobalSearch from './GlobalSearch.vue'
-import ResetSearchButton from './ResetSearchButton.vue'
-import SearchButton from './SearchButton.vue'
+import GlobalSearch from '../GlobalSearch.vue'
+import ResetSearchButton from '../ResetSearchButton.vue'
+import SearchButton from '../SearchButton.vue'
+import RangeTextField from '~/components/fields/RangeTextField.vue'
+import TextField from '~/components/fields/TextField.vue'
 
 export default {
   name: 'DrillcoreSearchForm',

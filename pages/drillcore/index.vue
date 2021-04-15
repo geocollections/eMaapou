@@ -44,7 +44,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DrillcoreSearchForm from '@/components/search/DrillcoreSearchForm'
+import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'

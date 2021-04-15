@@ -45,7 +45,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
-import AnalysisSearchForm from '~/components/search/AnalysisSearchForm'
+import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 

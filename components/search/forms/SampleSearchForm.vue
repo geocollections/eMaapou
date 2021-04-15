@@ -50,11 +50,11 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import TextField from '../fields/TextField.vue'
-import RangeSliderField from '../fields/RangeSliderField'
-import GlobalSearch from './GlobalSearch.vue'
-import ResetSearchButton from './ResetSearchButton.vue'
-import SearchButton from './SearchButton.vue'
+import GlobalSearch from '../GlobalSearch.vue'
+import ResetSearchButton from '../ResetSearchButton.vue'
+import SearchButton from '../SearchButton.vue'
+import RangeSliderField from '~/components/fields/RangeSliderField'
+import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 
