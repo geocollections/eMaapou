@@ -15,7 +15,7 @@
           hide-details
           single-line
           type="number"
-          @change="handleChange"
+          @change="$set(value, 0, $event)"
           @focus="handleFocus"
           @blur="handleBlur"
         >
