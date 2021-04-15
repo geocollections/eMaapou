@@ -49,4 +49,8 @@ export default {
   transition: all 0.4s ease;
   -webkit-transition: all 0.4s ease;
 }
+
+.v-slide-group__wrapper {
+  touch-action: none;
+}
 </style>
