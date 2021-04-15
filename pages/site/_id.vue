@@ -75,6 +75,15 @@
                   </span>
                 </template>
               </data-row>
+              <data-row
+                :title="$t('site.project')"
+                :value="
+                  $translate({
+                    et: site.project__name,
+                    en: site.project__name_en,
+                  })
+                "
+              />
               <data-row :title="$t('site.coordx')" :value="site.coordx" />
               <data-row :title="$t('site.coordy')" :value="site.coordy" />
               <data-row :title="$t('site.elevation')" :value="site.elevation" />
