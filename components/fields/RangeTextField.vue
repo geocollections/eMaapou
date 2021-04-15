@@ -40,7 +40,7 @@
 
 <script>
 export default {
-  name: 'RangeSearchTextField',
+  name: 'RangeTextField',
   props: {
     value: {
       type: Array,
