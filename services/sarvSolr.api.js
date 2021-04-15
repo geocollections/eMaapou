@@ -132,10 +132,10 @@ const buildFilterQueryParameter = (filters) => {
               //   return encodeURIComponent(el)
               // })
 
-              const start = isNil(searchParameter.value[0])
+              const start = isEmpty(searchParameter.value[0])
                 ? '*'
                 : searchParameter.value[0]
-              const end = isNil(searchParameter.value[1])
+              const end = isEmpty(searchParameter.value[1])
                 ? '*'
                 : searchParameter.value[1]
               return `${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *])`
