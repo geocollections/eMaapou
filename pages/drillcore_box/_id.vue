@@ -6,40 +6,31 @@
     <template #top>
       <v-card v-if="activeImage" class="my-2 mx-4">
         <v-card-text>
-          <client-only>
-            <template #placeholder>
-              <box-image-loader height="400" />
-            </template>
-            <v-hover v-slot="{ hover }">
-              <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
-              <v-img
-                contain
-                class="ma-4 transition-swing cursor-pointer rounded"
-                :class="{
-                  'elevation-8': hover,
-                  'elevation-4': !hover,
-                }"
-                :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
-                :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
-                max-width="2000"
-                max-height="1000"
-                @click="$openImage(activeImage.attachment__uuid_filename)"
-              >
-                <template #placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-            </v-hover>
-          </client-only>
+          <v-hover v-slot="{ hover }">
+            <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
+            <v-img
+              contain
+              class="ma-4 transition-swing cursor-pointer rounded"
+              :class="{
+                'elevation-8': hover,
+                'elevation-4': !hover,
+              }"
+              :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
+              :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
+              max-width="2000"
+              max-height="1000"
+              @click="$openImage(activeImage.attachment__uuid_filename)"
+            >
+              <template #placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-hover>
 
           <div
             class="d-flex justify-center flex-column justify-md-space-between flex-md-row mx-8"
@@ -238,7 +229,6 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import BoxImageLoader from '@/components/BoxImageLoader'
 import Tabs from '@/components/Tabs'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -248,7 +238,6 @@ import Detail from '~/components/templates/Detail.vue'
 export default {
   components: {
     Tabs,
-    BoxImageLoader,
     DataRow,
     LinkDataRow,
     PrevNextNavTitle,
