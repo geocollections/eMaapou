@@ -5,6 +5,7 @@
       :value="value"
       :min="min"
       :max="max"
+      hide-details=""
       @input="$emit('input', $event)"
     >
       <template #prepend>
