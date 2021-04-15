@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-view-title
+    <page-title-wrapper
       title="common.samplesCount"
       :count="count"
       icon="mdi-test-tube"
@@ -46,13 +46,13 @@
 import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/SampleSearchForm'
 import SampleTable from '~/components/tables/SampleTable.vue'
-import SearchViewTitle from '~/components/search/SearchViewTitle'
+import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   components: {
     SearchViewMapWrapper,
-    SearchViewTitle,
+    PageTitleWrapper,
     SampleSearchForm,
     SampleTable,
   },

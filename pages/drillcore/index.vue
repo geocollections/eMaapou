@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-view-title
+    <page-title-wrapper
       title="common.drillcoresCount"
       :count="count"
       icon="mdi-screw-machine-flat-top"
@@ -46,13 +46,13 @@
 import { mapState, mapActions } from 'vuex'
 import DrillcoreSearchForm from '@/components/search/DrillcoreSearchForm'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
-import SearchViewTitle from '~/components/search/SearchViewTitle'
+import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   components: {
     SearchViewMapWrapper,
-    SearchViewTitle,
+    PageTitleWrapper,
     DrillcoreSearchForm,
     DrillcoreTable,
   },
