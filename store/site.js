@@ -26,7 +26,7 @@ const getDefaultState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'site.project',
-          fields: ['project_name'],
+          fields: ['project_name', 'project_name_en'],
         },
         latitude: {
           type: 'range',
