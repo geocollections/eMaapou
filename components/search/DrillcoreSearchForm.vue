@@ -18,11 +18,8 @@
       v-model="storage"
       :label="$t(filters.byIds.storage.label)"
     />
-    <!-- TODO: Get min and max dynamically -->
-    <range-search-field
+    <range-search-text-field
       v-model="boxes"
-      :min="0"
-      :max="150"
       :label="$t(filters.byIds.boxes.label)"
     />
   </v-form>
@@ -34,7 +31,7 @@ import { mapFields } from 'vuex-map-fields'
 
 import GlobalSearch from './GlobalSearch.vue'
 import TextSearchField from './TextSearchField.vue'
-import RangeSearchField from './RangeSearchField.vue'
+import RangeSearchTextField from './RangeSearchTextField.vue'
 import ResetSearchButton from './ResetSearchButton.vue'
 import SearchButton from './SearchButton.vue'
 
@@ -42,7 +39,7 @@ export default {
   name: 'DrillcoreSearchForm',
   components: {
     TextSearchField,
-    RangeSearchField,
+    RangeSearchTextField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,

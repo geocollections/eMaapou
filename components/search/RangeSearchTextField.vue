@@ -1,49 +1,46 @@
 <template>
-  <div>
-    <v-subheader v-if="label">{{ label }}</v-subheader>
-    <v-range-slider
-      :value="value"
-      :min="min"
-      :max="max"
-      @input="$emit('input', $event)"
+  <div class="pt-1">
+    <v-subheader
+      class="px-0 d-inline"
+      :class="{ 'primary--text text--darken-3': isFocused }"
+      >{{ label }}</v-subheader
     >
-      <template #prepend>
+    <v-row>
+      <v-col cols="6">
         <v-text-field
           :value="value[0]"
-          class="mt-0 pt-0"
+          color="primary darken-3"
+          :label="fieldLabels.min"
           hide-details
           single-line
           type="number"
-          style="width: 50px"
           @change="$set(value, 0, $event)"
-        ></v-text-field>
-      </template>
-      <template #append>
+          @focus="handleFocus"
+          @blur="handleBlur"
+        >
+        </v-text-field>
+      </v-col>
+      <v-col cols="6">
         <v-text-field
           :value="value[1]"
-          class="mt-0 pt-0"
+          color="primary darken-3"
+          :label="fieldLabels.max"
           hide-details
           single-line
           type="number"
-          style="width: 50px"
           @change="$set(value, 1, $event)"
-        ></v-text-field> </template
-    ></v-range-slider>
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'RangeSearchField',
+  name: 'RangeSearchTextField',
   props: {
-    min: {
-      type: Number,
-      default: 0,
-    },
-    max: {
-      type: Number,
-      default: 100,
-    },
     value: {
       type: Array,
       default: () => {
@@ -61,10 +58,21 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      isFocused: false,
+    }
+  },
   created() {
     this.$emit('input', [this.min, this.max])
   },
   methods: {
+    handleFocus(e) {
+      this.isFocused = true
+    },
+    handleBlur(e) {
+      this.isFocused = false
+    },
     handleInput(e) {
       if (e.isMin === true) {
         this.$emit('input', { ...this.value, min: e.value })
@@ -75,3 +83,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.v-text-field {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+</style>
