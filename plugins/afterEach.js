@@ -1,23 +1,32 @@
 export default ({ app, store }, inject) => {
   app.router.afterEach((to, from) => {
-    let name = from.name ?? 'index'
-    if (name.includes('___')) name = name.split('___')[0]
-    const text = `breadcrumbs.${name}`
+    const name = serializeName(from)
+
     const id = from.params?.id ?? null
-    const uniqueIdentifier = `${name}.${id}`
-    const lastHistoryEntry = store.getters['history/getLastHistoryEntry']
+
+    const historyObject = {
+      text: `breadcrumbs.${name}`,
+      id,
+      to: from.path,
+      uniqueIdentifier: `${name}.${id}`,
+    }
+
     const lastHistoryEntryUniqueIdentifier =
-      lastHistoryEntry?.uniqueIdentifier ?? 'index.null'
+      store.getters['history/getLastHistoryEntry']?.uniqueIdentifier ??
+      'index.null'
+
     if (
-      uniqueIdentifier !== lastHistoryEntryUniqueIdentifier &&
-      !uniqueIdentifier.includes('-id-')
+      historyObject.uniqueIdentifier !== lastHistoryEntryUniqueIdentifier &&
+      !historyObject.uniqueIdentifier.includes('-id-')
     ) {
-      store.dispatch('history/pushHistory', {
-        text,
-        id,
-        to: from.path,
-        uniqueIdentifier,
-      })
+      store.dispatch('history/pushHistory', historyObject)
     }
   })
+}
+
+function serializeName(route) {
+  let name = route.name ?? 'index'
+  if (name.includes('___')) name = name.split('___')[0]
+  if (name.includes('-id-')) name = `${name.split('-id-')[0]}-id`
+  return name
 }
