@@ -14,7 +14,7 @@
           hide-details
           single-line
           type="number"
-          @change="$set(value, 0, $event)"
+          @change="handleChange"
           @focus="handleFocus"
           @blur="handleBlur"
         >
@@ -73,11 +73,10 @@ export default {
     handleBlur(e) {
       this.isFocused = false
     },
-    handleInput(e) {
-      if (e.isMin === true) {
-        this.$emit('input', { ...this.value, min: e.value })
-      } else {
-        this.$emit('input', { ...this.value, max: e.value })
+    handleChange(e) {
+      this.$set(this.value, 0, e)
+      if (this.value[1] == null) {
+        this.$set(this.value, 1, e)
       }
     },
   },
