@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-view-title
+    <page-title-wrapper
       title="common.localitiesCount"
       :count="count"
       icon="mdi-map-marker-outline"
@@ -46,13 +46,13 @@
 import { mapState, mapActions } from 'vuex'
 import LocalitySearchForm from '@/components/search/LocalitySearchForm'
 import LocalityTable from '~/components/tables/LocalityTable.vue'
-import SearchViewTitle from '~/components/search/SearchViewTitle'
+import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   components: {
     SearchViewMapWrapper,
-    SearchViewTitle,
+    PageTitleWrapper,
     LocalityTable,
     LocalitySearchForm,
   },

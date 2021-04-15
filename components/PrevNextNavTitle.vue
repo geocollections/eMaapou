@@ -50,14 +50,11 @@
     </div>
 
     <slot name="title">
-      <div class="d-flex flex-column">
-        <h1 class="text-center">
-          {{ title }}
-        </h1>
-        <h4 class="text-center" style="opacity: 0.7">
-          {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
-        </h4>
-      </div>
+      <page-title
+        class="text-center"
+        :title="title"
+        :subtitle="$t(`breadcrumbs.${routeName}-id`, { id: $route.params.id })"
+      />
     </slot>
 
     <div class="align-self-end align-self-sm-center text-no-wrap">
@@ -108,8 +105,10 @@
 </template>
 
 <script>
+import PageTitle from '~/components/PageTitle'
 export default {
   name: 'PrevNextNavTitle',
+  components: { PageTitle },
   props: {
     arrowKeys: {
       type: Boolean,

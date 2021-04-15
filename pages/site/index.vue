@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-view-title
+    <page-title-wrapper
       title="common.sitesCount"
       :count="count"
       icon="mdi-map-marker-star-outline"
@@ -46,13 +46,13 @@
 import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '@/components/search/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
-import SearchViewTitle from '~/components/search/SearchViewTitle'
+import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   components: {
     SearchViewMapWrapper,
-    SearchViewTitle,
+    PageTitleWrapper,
     SiteSearchForm,
     SiteTable,
   },
