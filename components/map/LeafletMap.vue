@@ -48,28 +48,32 @@
           :transparent="layer.transparent"
           :options="layer.options"
         />
-        <l-circle-marker
-          v-for="(marker, idx) in markers"
-          :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
-          :lat-lng="[marker.latitude, marker.longitude]"
-          :radius="5"
-          :weight="2"
-          color="red"
-          @click="
-            marker.id && marker.routeName
-              ? $router.push(
-                  localePath({
-                    name: `${marker.routeName}-id`,
-                    params: { id: marker.id },
-                  })
-                )
-              : ''
-          "
+        <v-marker-cluster
+          :options="{ spiderfyOnMaxZoom: false, disableClusteringAtZoom: 11 }"
         >
-          <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
-            marker.text
-          }}</l-tooltip>
-        </l-circle-marker>
+          <l-circle-marker
+            v-for="(marker, idx) in markers"
+            :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
+            :lat-lng="[marker.latitude, marker.longitude]"
+            :radius="5"
+            :weight="2"
+            color="red"
+            @click="
+              marker.id && marker.routeName
+                ? $router.push(
+                    localePath({
+                      name: `${marker.routeName}-id`,
+                      params: { id: marker.id },
+                    })
+                  )
+                : ''
+            "
+          >
+            <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
+              marker.text
+            }}</l-tooltip>
+          </l-circle-marker>
+        </v-marker-cluster>
 
         <!-- <map-legend
           :active-base-layer="activeBaseLayer"
