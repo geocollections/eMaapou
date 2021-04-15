@@ -1,8 +1,8 @@
 <template>
   <v-card class="mb-4" tile>
     <v-row no-gutters class="tertiary">
-      <v-col md="9" offset-md="3" class="py-0">
-        <div class="d-flex justify-center justify-md-start">
+      <v-col class="py-2">
+        <div class="d-flex justify-center">
           <v-icon v-if="icon" large left>{{ icon }}</v-icon>
           <div class="d-flex flex-column">
             <h1 style="font-size: 1.75rem">
