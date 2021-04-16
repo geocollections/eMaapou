@@ -16,8 +16,8 @@ executors:
     docker:
       - image: circleci/node:lts-stretch
         auth:
-          username: $DOCKERHUB_USERNAME,
-          password: $DOCKERHUB_PASSWORD
+          username: ${DOCKERHUB_USERNAME},
+          password: ${DOCKERHUB_PASSWORD}
 
 jobs:
   build_docker_image:
