@@ -112,7 +112,6 @@ export default {
           name: 'site',
           lang: 'sites',
         },
-        { name: 'stratigraphy', lang: 'stratigraphy' },
         {
           name: 'drillcore',
           lang: 'drillcores',
@@ -125,6 +124,7 @@ export default {
           name: 'analysis',
           lang: 'analyses',
         },
+        { name: 'stratigraphy', lang: 'stratigraphy' },
       ],
       logo: require('~/assets/emaapou5white.svg'),
     }
