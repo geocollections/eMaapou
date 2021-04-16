@@ -138,6 +138,7 @@ export default {
           name: 'site',
           lang: 'sites',
         },
+        { name: 'stratigraphy', lang: 'stratigraphy' },
         {
           name: 'drillcore',
           lang: 'drillcores',
