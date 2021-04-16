@@ -15,9 +15,6 @@ executors:
       IMAGE_NAME_DEV: geocollections/ema-dev
     docker:
       - image: circleci/node:lts-stretch
-        auth:
-          username: ${DOCKERHUB_USERNAME},
-          password: ${DOCKERHUB_PASSWORD}
 
 jobs:
   build_docker_image:
