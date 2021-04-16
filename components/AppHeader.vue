@@ -20,24 +20,6 @@
       </v-app-bar-title>
     </v-toolbar-items>
 
-    <!-- BUTTONS ON DENSE BAR -->
-    <!-- <template>
-        <v-btn
-          v-for="(item, index) in tabs"
-          :key="index"
-          nuxt
-          text
-          :class="{
-            'd-none d-lg-flex': item.name !== 'about' && item.name !== 'search',
-            'd-none d-md-flex': item.name === 'about' || item.name === 'search',
-          }"
-          style="color: rgba(255, 255, 255, 0.6)"
-          :exact="item.name !== 'search'"
-          :to="localePath({ name: item.name })"
-          >{{ $t(`common.${item.lang}`) }}</v-btn
-        >
-      </template> -->
-
     <v-spacer />
 
     <v-btn
@@ -54,10 +36,6 @@
     <links v-if="false" />
 
     <app-header-search class="mx-3" />
-
-    <lang-switcher />
-
-    <lang-switcher-fast v-if="false" />
 
     <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
@@ -111,12 +89,10 @@
 
 <script>
 import Links from '@/components/Links'
-import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 import AppHeaderSearch from '~/components/AppHeaderSearch'
-import LangSwitcherFast from '~/components/lang_switcher/LangSwitcherFast'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcherFast, AppHeaderSearch, LangSwitcher, Links },
+  components: { AppHeaderSearch, Links },
   props: {
     isDetail: {
       type: Boolean,
