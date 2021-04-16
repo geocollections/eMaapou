@@ -90,6 +90,7 @@
 
     <template #item.parent_stratigraphy="{ item }">
       <nuxt-link
+        v-if="item.parent_id"
         class="text-link"
         :to="
           localePath({
