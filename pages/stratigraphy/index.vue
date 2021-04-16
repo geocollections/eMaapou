@@ -4,7 +4,7 @@
       <page-title-wrapper
         title="common.stratigraphy"
         :count="count"
-        icon="mdi-test-tube"
+        icon="mdi-layers-triple"
       />
     </template>
 
