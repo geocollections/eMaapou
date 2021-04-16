@@ -77,7 +77,6 @@ export default {
     ...mapActions('site', ['searchSites']),
     async handleUpdate(tableState) {
       await this.searchSites(tableState.options)
-      this.options = tableState.options
     },
   },
 }
