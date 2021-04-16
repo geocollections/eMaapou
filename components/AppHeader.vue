@@ -1,28 +1,27 @@
 <template>
-  <v-app-bar app dark style="z-index: 2050" color="secondary">
+  <v-app-bar app dark height="70" style="z-index: 2050" color="secondary">
     <v-toolbar-items>
-      <v-app-bar-title class="app-title align-self-center">
-        <nuxt-link :to="localePath({ path: '/' })" class="title-link">
+      <v-app-bar-title class="align-self-center">
+        <nuxt-link :to="localePath({ path: '/' })" class="">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <span
+              <v-img
+                max-height="50"
+                max-width="120"
+                :src="logo"
                 v-bind="attrs"
-                class="header-text text-none text-nowrap"
-                :class="{
-                  'mr-4': $vuetify.breakpoint.smAndUp,
-                }"
                 v-on="on"
-                >{{ $t('common.home') }}</span
-              >
+              />
             </template>
 
             <span>{{ $t('landing.goToFrontpage') }}</span>
           </v-tooltip>
         </nuxt-link>
       </v-app-bar-title>
+    </v-toolbar-items>
 
-      <!-- BUTTONS ON DENSE BAR -->
-      <!-- <template>
+    <!-- BUTTONS ON DENSE BAR -->
+    <!-- <template>
         <v-btn
           v-for="(item, index) in tabs"
           :key="index"
@@ -38,7 +37,6 @@
           >{{ $t(`common.${item.lang}`) }}</v-btn
         >
       </template> -->
-    </v-toolbar-items>
 
     <v-spacer />
 
@@ -152,6 +150,7 @@ export default {
           lang: 'analyses',
         },
       ],
+      logo: require('~/assets/emaapou5white.svg'),
     }
   },
   computed: {
