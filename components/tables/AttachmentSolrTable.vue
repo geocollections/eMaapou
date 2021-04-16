@@ -9,6 +9,7 @@
   >
     <template #item.id="{ item }">
       <nuxt-link
+        v-if="item.attachment_id"
         class="text-link"
         :to="
           localePath({

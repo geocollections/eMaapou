@@ -17,6 +17,7 @@
     </template>
     <template #item.sample_number="{ item }">
       <nuxt-link
+        v-if="item.sample_id"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >

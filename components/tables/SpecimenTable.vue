@@ -47,6 +47,7 @@
     </template>
     <template #item.stratigraphy="{ item }">
       <nuxt-link
+        v-if="item.stratigraphy_id"
         class="text-link"
         :to="
           localePath({
@@ -65,6 +66,7 @@
     </template>
     <template #item.lithostratigraphy="{ item }">
       <nuxt-link
+        v-if="item.lithostratigraphy_id"
         class="text-link"
         :to="
           localePath({

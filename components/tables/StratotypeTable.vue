@@ -9,6 +9,7 @@
   >
     <template #item.stratigraphy="{ item }">
       <nuxt-link
+        v-if="item.stratigraphy_id"
         class="text-link"
         :to="
           localePath({
@@ -35,6 +36,7 @@
     </template>
     <template #item.reference="{ item }">
       <a
+        v-if="item.reference__reference"
         class="text-link"
         @click="$openGeology('reference', item.reference__id)"
         >{{ item.reference__reference }}</a

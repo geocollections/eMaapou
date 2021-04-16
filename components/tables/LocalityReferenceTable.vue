@@ -8,9 +8,12 @@
     v-on="$listeners"
   >
     <template #item.reference="{ item }">
-      <a class="text-link" @click="$openGeology('reference', item.reference)">{{
-        item.reference__reference
-      }}</a>
+      <a
+        v-if="item.reference"
+        class="text-link"
+        @click="$openGeology('reference', item.reference)"
+        >{{ item.reference__reference }}</a
+      >
     </template>
   </table-wrapper>
 </template>

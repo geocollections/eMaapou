@@ -19,6 +19,7 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="stratigraphy.parent_id"
                 :title="$t('stratigraphy.parentStratigraphy')"
                 :value="
                   $translate({
