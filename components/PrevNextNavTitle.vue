@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 tertiary"
+    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 emp-title"
     :class="{ 'my-3': title || $slots.title }"
   >
     <div class="align-self-start align-self-sm-center text-no-wrap">

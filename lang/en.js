@@ -1,6 +1,7 @@
 export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
+  slogan: 'Geological data from Estonia',
   landing: {
     searchTitle: 'Find quickly from e·Maapõu',
     drillcores: 'Drillcores ({number})',

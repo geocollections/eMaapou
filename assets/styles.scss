@@ -37,11 +37,12 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   @extend .underline;
 
   text-decoration: none;
-  color: var(--v-quinary-darken1) !important;
+  /*color: var(--v-quinary-darken1) !important;*/
+  color: #555 !important;
   @include transition(color 200ms ease);
 
   &:hover {
-    color: var(--v-quinary-darken3) !important;
+    color: #000 !important;
   }
 }
 
@@ -178,4 +179,38 @@ th {
 
 .image-content {
   width: inherit !important;
+}
+
+.emp-header {
+  background-color: #009270 !important;
+}
+.emp-footer {
+  background-color: #333 !important;
+}
+.emp-title {
+  /*color: #e36f5c !important;*/
+  color: #333 !important;
+  background-color: #ccd4c7 !important;
+}
+.emp-headermenu {
+  color: #333 !important;
+  background-color: #bfe6cf !important;
+}
+.emp-gzhelian {
+  background-color: #ccd4c7 !important;
+}
+.emp-cambrian {
+  background-color: #7fa056 !important;
+  color: #fff !important;
+}
+.v-tab--active {
+  background-color: #fff !important;
+  color: #e36f5c !important;
+}
+.v-tab--active a {
+  color: #fff !important;
+}
+.emp-activetab {
+  background-color: #fff !important;
+  color: #333 !important;
 }

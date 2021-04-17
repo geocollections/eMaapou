@@ -1,13 +1,20 @@
 <template>
-  <v-app-bar app dark height="70" style="z-index: 2050" color="secondary">
+  <v-app-bar
+    app
+    dark
+    dense
+    height="70"
+    style="z-index: 2050"
+    class="emp-header"
+  >
     <v-toolbar-items>
       <v-app-bar-title class="align-self-center">
         <nuxt-link :to="localePath({ path: '/' })" class="">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-img
-                max-height="50"
-                max-width="120"
+                max-height="40"
+                max-width="90"
                 :src="logo"
                 v-bind="attrs"
                 v-on="on"
@@ -19,7 +26,11 @@
         </nuxt-link>
       </v-app-bar-title>
     </v-toolbar-items>
-
+    <div
+      style="margin: 0 10px; border-left: solid #fff 1px; padding: 0 0 0 10px"
+    >
+      {{ $t('slogan') }}
+    </div>
     <v-spacer />
 
     <v-btn
@@ -41,7 +52,7 @@
       <v-tabs
         :value="tabValue"
         align-with-title
-        class="tertiary"
+        class="emp-headermenu"
         optional
         show-arrows
         center-active
@@ -52,7 +63,7 @@
           v-for="(item, index) in tabs"
           :key="index"
           nuxt
-          active-class="black--text"
+          active-class="emp-activetab"
           :to="localePath({ name: item.name })"
           ><b>{{ $t(`common.${item.lang}`) }}</b></v-tab
         >
