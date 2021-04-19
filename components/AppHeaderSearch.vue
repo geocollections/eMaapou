@@ -106,7 +106,7 @@ export default {
         border-bottom-right-radius: 4px !important;
         border-top-left-radius: 0px !important;
         border-bottom-left-radius: 0px !important;
-        background: var(--v-primary-base) !important;
+        background: var(--v-primary-darken2) !important;
         border-width: 1px;
         border-style: solid;
         border-color: white;

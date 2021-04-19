@@ -1,12 +1,5 @@
 <template>
-  <v-app-bar
-    app
-    dark
-    dense
-    height="70"
-    style="z-index: 2050"
-    class="emp-header"
-  >
+  <v-app-bar app dark dense height="70" style="z-index: 2050" color="primary">
     <v-toolbar-items>
       <v-app-bar-title class="align-self-center">
         <nuxt-link :to="localePath({ path: '/' })" class="">
@@ -51,7 +44,7 @@
       <v-tabs
         :value="tabValue"
         align-with-title
-        class="emp-headermenu"
+        class="header-tabs"
         optional
         show-arrows
         center-active
@@ -62,7 +55,7 @@
           v-for="(item, index) in tabs"
           :key="index"
           nuxt
-          active-class="emp-activetab"
+          active-class="active-tab"
           :to="localePath({ name: item.name })"
           ><b>{{ $t(`common.${item.lang}`) }}</b></v-tab
         >
@@ -164,5 +157,14 @@ export default {
 <style scoped>
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
+}
+
+.header-tabs {
+  background-color: var(--v-secondary-base);
+}
+
+.active-tab {
+  background-color: var(--v-quaternary-base) !important;
+  color: var(--v-tertiary-base) !important;
 }
 </style>
