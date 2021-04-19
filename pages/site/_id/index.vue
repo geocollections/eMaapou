@@ -39,7 +39,7 @@ export default {
           ...tableState,
           isValid: isNil(this.site),
           defaultParams: {
-            or_search: `drillcore:${this.$route.params.id};site:${this.site}`,
+            or_search: `site:${this.site}`,
           },
           queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
         }

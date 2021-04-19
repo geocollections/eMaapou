@@ -97,90 +97,94 @@
           </template>
         </v-simple-table>
       </v-card-text>
+      <div v-if="(site.latitude && site.longitude) || site.locality_id">
+        <v-card-title class="pl-md-0 pr-md-4 px-0">{{
+          $t('site.locality')
+        }}</v-card-title>
+        <v-card-text class="pl-md-0 pr-md-4 px-0">
+          <v-simple-table dense class="mb-4 custom-table">
+            <template #default>
+              <tbody>
+                <link-data-row
+                  :title="$t('locality.locality')"
+                  :value="
+                    $translate({
+                      et: site.locality__locality,
+                      en: site.locality__locality_en,
+                    })
+                  "
+                  nuxt
+                  :href="
+                    localePath({
+                      name: 'locality-id',
+                      params: { id: site.locality_id },
+                    })
+                  "
+                />
+                <data-row
+                  :title="$t('locality.country')"
+                  :value="
+                    isNil(
+                      $translate({
+                        et: site.locality__country__value,
+                        en: site.locality__country__value_en,
+                      })
+                    )
+                  "
+                >
+                  <template #value>
+                    {{
+                      $t('locality.countryFormat', {
+                        name: $translate({
+                          et: site.locality__country__value,
+                          en: site.locality__country__value_en,
+                        }),
+                        iso: site.locality__country__iso_code,
+                      })
+                    }}
+                  </template>
+                </data-row>
+                <data-row
+                  :title="$t('locality.latitude')"
+                  :value="site.latitude"
+                />
+                <data-row
+                  :title="$t('locality.longitude')"
+                  :value="site.longitude"
+                />
+                <data-row
+                  :title="$t('locality.elevation')"
+                  :value="site.elevation"
+                />
+                <data-row
+                  :title="$t('locality.elevationAccuracy')"
+                  :value="site.elevationAccuracy"
+                />
+                <data-row
+                  :title="$t('locality.depth')"
+                  :value="site.locality__depth"
+                />
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card-text>
+      </div>
     </template>
 
     <template
       v-if="(site.latitude && site.longitude) || site.locality_id"
       #column-right
     >
-      <v-card-title class="pr-md-0 pl-md-4 px-0">{{
-        $t('site.locality')
-      }}</v-card-title>
       <v-card-text class="pr-md-0 pl-md-4 px-0">
-        <v-simple-table dense class="mb-4 custom-table">
-          <template #default>
-            <tbody>
-              <link-data-row
-                :title="$t('locality.locality')"
-                :value="
-                  $translate({
-                    et: site.locality__locality,
-                    en: site.locality__locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: site.locality_id },
-                  })
-                "
-              />
-              <data-row
-                :title="$t('locality.country')"
-                :value="
-                  isNil(
-                    $translate({
-                      et: site.locality__country__value,
-                      en: site.locality__country__value_en,
-                    })
-                  )
-                "
-              >
-                <template #value>
-                  {{
-                    $t('locality.countryFormat', {
-                      name: $translate({
-                        et: site.locality__country__value,
-                        en: site.locality__country__value_en,
-                      }),
-                      iso: site.locality__country__iso_code,
-                    })
-                  }}
-                </template>
-              </data-row>
-              <data-row
-                :title="$t('locality.latitude')"
-                :value="site.latitude"
-              />
-              <data-row
-                :title="$t('locality.longitude')"
-                :value="site.longitude"
-              />
-              <data-row
-                :title="$t('locality.elevation')"
-                :value="site.elevation"
-              />
-              <data-row
-                :title="$t('locality.elevationAccuracy')"
-                :value="site.elevationAccuracy"
-              />
-              <data-row
-                :title="$t('locality.depth')"
-                :value="site.locality__depth"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
         <v-card
           v-if="site.latitude && site.longitude"
           id="map-wrap"
           elevation="0"
-          height="300"
+          height="500"
         >
           <leaflet-map
             :is-estonian="site.locality__country__value === 'Eesti'"
-            :height="300"
+            :height="500"
             :center="{
               latitude: site.latitude,
               longitude: site.longitude,
