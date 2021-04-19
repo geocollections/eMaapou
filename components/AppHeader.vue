@@ -2,11 +2,11 @@
   <v-app-bar app dark dense height="70" style="z-index: 2050" color="primary">
     <v-toolbar-items>
       <v-app-bar-title class="align-self-center">
-        <nuxt-link :to="localePath({ path: '/' })" class="">
+        <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-img
-                max-height="40"
+                max-height="50"
                 max-width="90"
                 :src="logo"
                 v-bind="attrs"
@@ -19,9 +19,15 @@
         </nuxt-link>
       </v-app-bar-title>
     </v-toolbar-items>
+    <v-divider
+      v-if="$vuetify.breakpoint.mdAndUp"
+      vertical
+      inset
+      class="quaternary mx-3"
+    />
     <div
       v-if="$vuetify.breakpoint.mdAndUp"
-      style="margin: 0 10px; border-left: solid #fff 1px; padding: 0 0 0 10px"
+      style="font-family: 'Montserrat', sans-serif"
     >
       {{ $t('slogan') }}
     </div>
