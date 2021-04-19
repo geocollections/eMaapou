@@ -40,9 +40,7 @@
     class="font-weight-bold"
     text
     height="38px"
-    v-bind="attrs"
     @click="handleSearch"
-    v-on="on"
   >
     <v-icon>mdi-magnify</v-icon>
   </v-btn>
