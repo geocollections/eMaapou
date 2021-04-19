@@ -21,7 +21,7 @@
     </v-toolbar-items>
 
     <v-spacer />
-
+    <app-header-search v-if="!isLanding && !isSearchPage" class="mx-3" />
     <v-btn
       v-show="$vuetify.breakpoint.smAndUp"
       nuxt
@@ -34,8 +34,6 @@
     </v-btn>
 
     <links v-if="false" />
-
-    <app-header-search class="mx-3" />
 
     <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
@@ -130,6 +128,12 @@ export default {
     }
   },
   computed: {
+    isLanding() {
+      return this.$route.name.startsWith('index')
+    },
+    isSearchPage() {
+      return this.$route.name.startsWith('search')
+    },
     isNotSearchPath() {
       return !this.$route.path.startsWith('/search')
     },
