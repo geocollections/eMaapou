@@ -144,6 +144,8 @@ export const SITE = {
   queryFields: {
     id: (locale) => 'id_l',
     name: (locale) => 'name',
+    latitude: (locale) => 'latitude',
+    longitude: (locale) => 'longitude',
     x: (locale) => 'x',
     y: (locale) => 'y',
     z: (locale) => 'z',
