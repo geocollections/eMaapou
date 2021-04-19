@@ -27,6 +27,7 @@
       </v-app-bar-title>
     </v-toolbar-items>
     <div
+      v-if="$vuetify.breakpoint.mdAndUp"
       style="margin: 0 10px; border-left: solid #fff 1px; padding: 0 0 0 10px"
     >
       {{ $t('slogan') }}
@@ -37,14 +38,14 @@
       v-show="$vuetify.breakpoint.smAndUp"
       nuxt
       aria-label="about page"
-      class="font-weight-bold"
+      class="font-weight-bold mr-3"
       text
       :to="localePath({ name: 'about' })"
     >
       {{ $t('common.about') }}
     </v-btn>
 
-    <links v-if="false" />
+    <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
 
     <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
@@ -97,11 +98,11 @@
 </template>
 
 <script>
-import Links from '@/components/Links'
 import AppHeaderSearch from '~/components/AppHeaderSearch'
+import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 export default {
   name: 'AppHeader',
-  components: { AppHeaderSearch, Links },
+  components: { AppHeaderSearch, LangSwitcher },
   props: {
     isDetail: {
       type: Boolean,
