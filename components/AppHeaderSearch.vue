@@ -11,7 +11,6 @@
     flat
     tile
     clearable
-    :label="$t('common.search')"
     autocomplete="off"
     @keyup.enter="handleSearch"
     @change="updateSearch"
