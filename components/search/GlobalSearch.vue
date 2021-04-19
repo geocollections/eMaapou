@@ -4,7 +4,7 @@
     dense
     outlined
     class="search-input"
-    color="deep-orange darken-2"
+    color="primary darken-2"
     :label="$t('common.search')"
     hide-details
     clearable
