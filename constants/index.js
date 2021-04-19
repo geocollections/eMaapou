@@ -146,6 +146,7 @@ export const SITE = {
     name: (locale) => 'name',
     latitude: (locale) => 'latitude',
     longitude: (locale) => 'longitude',
+    area: (locale) => (locale === 'et' ? 'area_name' : 'area_name_en'),
     x: (locale) => 'x',
     y: (locale) => 'y',
     z: (locale) => 'z',
