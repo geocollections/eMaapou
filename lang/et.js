@@ -123,6 +123,7 @@ export default {
     author: 'Autor',
     stratigraphy: 'Stratigraafia',
     reference: 'Kirjandus',
+    elevationAccuracy: 'Kõrguse täpsus',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',

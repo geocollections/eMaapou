@@ -122,6 +122,7 @@ export default {
     author: 'Author',
     stratigraphy: 'Stratigraphy',
     reference: 'Reference',
+    elevationAccuracy: 'Elevation accuracy',
   },
   localitySynonym: {
     synonym: 'Synonym',
