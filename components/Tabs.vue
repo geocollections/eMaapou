@@ -5,7 +5,7 @@
       v-model="activeTab"
       class="tabs"
       background-color="grey lighten-3"
-      color="deep-orange darken-2"
+      color="primary darken-2"
       :show-arrows="$vuetify.breakpoint.smAndUp"
       active-class="active"
       :vertical="$vuetify.breakpoint.xsOnly"

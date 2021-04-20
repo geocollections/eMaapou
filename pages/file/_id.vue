@@ -45,14 +45,14 @@
         <!-- File -->
         <div
           v-else
-          class="file-download rounded deep-orange--text"
+          class="file-download rounded primary--text"
           @click="
             $openWindow(
               `https://files.geocollections.info/${file.uuid_filename}`
             )
           "
         >
-          <v-icon large color="deep-orange darken-2"
+          <v-icon large color="primary darken-2"
             >mdi-file-download-outline</v-icon
           >
           {{ $t('file.download') }}
@@ -85,7 +85,7 @@
                 <v-icon
                   v-if="size === 'original'"
                   small
-                  color="deep-orange darken-2"
+                  color="primary darken-2"
                   >mdi-file-download-outline</v-icon
                 >
               </a>
@@ -362,7 +362,7 @@
                               class="text-link"
                               @click="$openGeoDetail(item.id, row[item.id])"
                               >{{ row[item.id] }}
-                              <v-icon small color="deep-orange darken-2"
+                              <v-icon small color="primary darken-2"
                                 >mdi-open-in-new</v-icon
                               >
                             </a>
@@ -379,7 +379,7 @@
                                 )
                               "
                               >{{ row[item.id] }}
-                              <v-icon small color="deep-orange darken-2"
+                              <v-icon small color="primary darken-2"
                                 >mdi-open-in-new</v-icon
                               ></a
                             >

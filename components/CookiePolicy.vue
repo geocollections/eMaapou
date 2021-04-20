@@ -20,13 +20,13 @@
           :to="localePath({ name: 'terms_of_use' })"
         >
           {{ $t('cookiePolicy.readMoreButton') }}
-          <v-icon small color="deep-orange darken-2">mdi-cookie</v-icon>
+          <v-icon small color="primary darken-2">mdi-cookie</v-icon>
         </nuxt-link>
       </div>
 
       <div class="align-self-center">
         <v-btn
-          color="deep-orange darken-2 white--text"
+          color="primary darken-2 white--text"
           :title="$t('cookiePolicy.acceptAndClose')"
           @click="closeCookiePolicy"
         >

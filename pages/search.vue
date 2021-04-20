@@ -15,7 +15,7 @@
           outlined
           single-line
           :autofocus="true"
-          color="deep-orange darken-2"
+          color="primary darken-2"
           append-icon="mdi-magnify"
           :label="$t('common.searchAlt')"
           hide-details

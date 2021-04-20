@@ -122,7 +122,7 @@
                             @click="$openTurba('plaanid', item.trim(), false)"
                           >
                             {{ item }}
-                            <v-icon small color="deep-orange darken-2"
+                            <v-icon small color="primary darken-2"
                               >mdi-file-download-outline</v-icon
                             >
                           </a>
