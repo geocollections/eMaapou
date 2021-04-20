@@ -92,83 +92,77 @@
                 :title="$t('site.description')"
                 :value="site.description"
               />
-              <data-row :title="$t('site.id')" :value="site.id" />
+
+              <link-data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
+                :title="$t('locality.locality')"
+                :value="
+                  $translate({
+                    et: site.locality__locality,
+                    en: site.locality__locality_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: site.locality_id },
+                  })
+                "
+              />
+              <data-row
+                v-if="site.locality_id"
+                :title="$t('locality.country')"
+                :value="
+                  isNil(
+                    $translate({
+                      et: site.locality__country__value,
+                      en: site.locality__country__value_en,
+                    })
+                  )
+                "
+              >
+                <template #value>
+                  {{
+                    $t('locality.countryFormat', {
+                      name: $translate({
+                        et: site.locality__country__value,
+                        en: site.locality__country__value_en,
+                      }),
+                      iso: site.locality__country__iso_code,
+                    })
+                  }}
+                </template>
+              </data-row>
+              <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
+                :title="$t('locality.latitude')"
+                :value="site.latitude"
+              />
+              <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
+                :title="$t('locality.longitude')"
+                :value="site.longitude"
+              />
+              <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
+                :title="$t('locality.elevation')"
+                :value="site.elevation"
+              />
+              <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
+                :title="$t('locality.elevationAccuracy')"
+                :value="site.elevationAccuracy"
+              />
+              <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
+                :title="$t('locality.depth')"
+                :value="site.locality__depth"
+              />
             </tbody>
           </template>
         </v-simple-table>
       </v-card-text>
-      <div v-if="(site.latitude && site.longitude) || site.locality_id">
-        <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-          $t('site.locality')
-        }}</v-card-title>
-        <v-card-text class="pl-md-0 pr-md-4 px-0">
-          <v-simple-table dense class="mb-4 custom-table">
-            <template #default>
-              <tbody>
-                <link-data-row
-                  :title="$t('locality.locality')"
-                  :value="
-                    $translate({
-                      et: site.locality__locality,
-                      en: site.locality__locality_en,
-                    })
-                  "
-                  nuxt
-                  :href="
-                    localePath({
-                      name: 'locality-id',
-                      params: { id: site.locality_id },
-                    })
-                  "
-                />
-                <data-row
-                  :title="$t('locality.country')"
-                  :value="
-                    isNil(
-                      $translate({
-                        et: site.locality__country__value,
-                        en: site.locality__country__value_en,
-                      })
-                    )
-                  "
-                >
-                  <template #value>
-                    {{
-                      $t('locality.countryFormat', {
-                        name: $translate({
-                          et: site.locality__country__value,
-                          en: site.locality__country__value_en,
-                        }),
-                        iso: site.locality__country__iso_code,
-                      })
-                    }}
-                  </template>
-                </data-row>
-                <data-row
-                  :title="$t('locality.latitude')"
-                  :value="site.latitude"
-                />
-                <data-row
-                  :title="$t('locality.longitude')"
-                  :value="site.longitude"
-                />
-                <data-row
-                  :title="$t('locality.elevation')"
-                  :value="site.elevation"
-                />
-                <data-row
-                  :title="$t('locality.elevationAccuracy')"
-                  :value="site.elevationAccuracy"
-                />
-                <data-row
-                  :title="$t('locality.depth')"
-                  :value="site.locality__depth"
-                />
-              </tbody>
-            </template>
-          </v-simple-table>
-        </v-card-text>
-      </div>
     </template>
 
     <template
@@ -316,9 +310,8 @@ export default {
   },
   head() {
     return {
-      title: this.$translate({
-        et: this.site.name,
-        en: this.site.name_en,
+      title: this.$t(`breadcrumbs.${this.routeName}-id`, {
+        id: this.$route.params.id,
       }),
     }
   },
@@ -332,6 +325,9 @@ export default {
           return this.site.area__text1.split(',')
         } else return [this.site.area__text1]
       } else return []
+    },
+    routeName() {
+      return this.getRouteBaseName().split('-id')[0]
     },
   },
   methods: {
