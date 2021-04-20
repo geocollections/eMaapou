@@ -70,6 +70,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     institutions: 'Geoloogia asutused, organisatsioonid, ettevõtted',
     lang: 'Keel',
+    clickToOpen: 'Vajuta avamiseks',
   },
   link: {
     sarvAPI: 'Avalik API',

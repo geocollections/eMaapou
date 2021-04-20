@@ -69,6 +69,7 @@ export default {
     stratigraphy: 'Stratigraphy',
     institutions: 'Geological institutions, organisations and companies',
     lang: 'Language',
+    clickToOpen: 'Click to open',
   },
   link: {
     sarvAPI: 'Public API',

@@ -199,6 +199,69 @@
     </template>
 
     <template #bottom>
+      <image-bar v-if="images.length > 0" :images="images">
+        <template #image="{ item, on, attrs }">
+          <v-hover v-slot="{ hover }">
+            <v-img
+              v-bind="attrs"
+              :src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
+              :lazy-src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
+              max-width="200"
+              max-height="200"
+              width="200"
+              height="200"
+              :class="{
+                'elevation-4': hover,
+                'elevation-2': !hover,
+              }"
+              class="grey lighten-2 rounded transition-swing cursor-pointer"
+              v-on="on"
+              @click="
+                $router.push(
+                  localePath({
+                    name: 'file-id',
+                    params: { id: item.attachment },
+                  })
+                )
+              "
+            >
+              <template #placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-hover>
+        </template>
+        <template #info="{ item }">
+          <div v-if="item.attachment__author__agent">
+            <span class="font-weight-bold"
+              >{{ $t('attachment.author') }}:
+            </span>
+            <span>{{ item.attachment__author__agent }}</span>
+          </div>
+          <div
+            v-if="
+              item.attachment__date_created ||
+              item.attachment__date_created_free
+            "
+          >
+            <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
+            <span v-if="item.attachment__date_created">
+              {{
+                new Date(item.attachment__date_created)
+                  .toISOString()
+                  .split('T')[0]
+              }}
+            </span>
+            <span v-else>{{ item.attachment__date_created_free }}</span>
+          </div>
+          <div v-else>{{ $t('common.clickToOpen') }}</div>
+        </template>
+      </image-bar>
       <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
@@ -214,6 +277,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
+import ImageBar from '~/components/ImageBar.vue'
 
 export default {
   components: {
@@ -223,6 +287,7 @@ export default {
     DataRow,
     LinkDataRow,
     Detail,
+    ImageBar,
   },
   async asyncData({ params, route, error, app, redirect }) {
     try {
@@ -265,6 +330,18 @@ export default {
         },
       ]
 
+      const attachmentResponse = await app.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          isValid: isNil(site.id),
+          defaultParams: {
+            site: site.id,
+          },
+          queryFields: {},
+        }
+      )
+      const attachments = attachmentResponse.items ?? []
+
       const hydratedTabs = (
         await Promise.all(
           tabs.map(
@@ -300,6 +377,7 @@ export default {
         ids,
         initActiveTab: path,
         tabs: hydratedTabs,
+        images: attachments,
       }
     } catch (err) {
       error({
