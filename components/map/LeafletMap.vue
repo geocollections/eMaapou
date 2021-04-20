@@ -48,32 +48,12 @@
           :transparent="layer.transparent"
           :options="layer.options"
         />
-        <v-marker-cluster
-          :options="{ spiderfyOnMaxZoom: false, disableClusteringAtZoom: 1 }"
-        >
-          <l-circle-marker
-            v-for="(marker, idx) in markers"
-            :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
-            :lat-lng="[marker.latitude, marker.longitude]"
-            :radius="5"
-            :weight="2"
-            color="red"
-            @click="
-              marker.id && marker.routeName
-                ? $router.push(
-                    localePath({
-                      name: `${marker.routeName}-id`,
-                      params: { id: marker.id },
-                    })
-                  )
-                : ''
-            "
-          >
-            <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
-              marker.text
-            }}</l-tooltip>
-          </l-circle-marker>
-        </v-marker-cluster>
+        <v-marker-cluster-wrapper
+          v-if="markers.length >= 250"
+          :markers="markers"
+        />
+
+        <l-circle-marker-wrapper v-else :markers="markers" />
 
         <!-- <map-legend
           :active-base-layer="activeBaseLayer"
@@ -102,9 +82,11 @@
 <script>
 // import MapLegend from '~/components/map/MapLegend'
 import MapLinks from '~/components/map/MapLinks'
+import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
+import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
 export default {
   name: 'LeafletMap',
-  components: { MapLinks },
+  components: { VMarkerClusterWrapper, LCircleMarkerWrapper, MapLinks },
   props: {
     height: {
       type: Number,
