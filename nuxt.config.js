@@ -102,11 +102,9 @@ export default {
     defaultLocale: 'et',
     strategy: 'prefix_and_default',
     detectBrowserLanguage: {
-      alwaysRedirect: true,
+      useCookie: true,
+      onlyOnRoot: true,
       fallbackLocale: 'et',
-    },
-    vuex: {
-      syncLocale: true,
     },
   },
 
