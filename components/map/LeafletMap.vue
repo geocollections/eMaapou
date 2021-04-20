@@ -49,7 +49,7 @@
           :options="layer.options"
         />
         <v-marker-cluster
-          :options="{ spiderfyOnMaxZoom: false, disableClusteringAtZoom: 11 }"
+          :options="{ spiderfyOnMaxZoom: false, disableClusteringAtZoom: 1 }"
         >
           <l-circle-marker
             v-for="(marker, idx) in markers"
