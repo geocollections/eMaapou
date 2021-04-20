@@ -170,7 +170,7 @@ export default {
 }
 
 .active-tab {
-  background-color: var(--v-quaternary-base) !important;
+  background-color: var(--v-quinary-base) !important;
   color: var(--v-tertiary-base) !important;
 }
 </style>

@@ -132,7 +132,7 @@ export default {
           secondary: '#bfe6cf',
           tertiary: '#333333',
           quaternary: '#fdf7f0',
-          quinary: '#FF5722',
+          quinary: '#fcf2df',
           anchor: '#009270',
         },
         light: {
@@ -140,7 +140,7 @@ export default {
           secondary: '#bfe6cf',
           tertiary: '#333333',
           quaternary: '#fdf7f0',
-          quinary: '#FF5722',
+          quinary: '#fcf2df',
           anchor: '#009270',
         },
       },
