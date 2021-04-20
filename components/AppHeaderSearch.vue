@@ -70,17 +70,25 @@ export default {
     },
     handleBlur() {
       if (isEmpty(this.search)) {
-        this.searchClosed = true
+        // HACK: Done to prevent blur event firing before button click.
+        // Seems a bit hacky, probably there is a better way of doing this.
+        setTimeout(() => {
+          this.searchClosed = true
+        }, 200)
       }
     },
     handleClick() {
       if (this.$vuetify.breakpoint.xsOnly) {
         this.handleSearch()
-      } else if (this.searchClosed) {
-        this.searchClosed = false
+        return
+      }
 
+      if (this.searchClosed) {
+        this.searchClosed = false
         this.$refs.searchInput.focus()
-      } else this.handleSearch()
+      } else {
+        this.handleSearch()
+      }
     },
   },
 }
