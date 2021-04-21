@@ -109,11 +109,12 @@ export const STRATIGRAPHY_REFERENCE = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: [],
-    sortDesc: [],
+    sortBy: ['year'],
+    sortDesc: [true],
   },
   queryFields: {
     reference: (locale) => 'reference__reference',
+    year: (locale) => 'reference__year',
     pages: (locale) => 'pages',
     remarks: (locale) => 'remarks',
   },
