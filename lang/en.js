@@ -474,7 +474,7 @@ export default {
     references: 'References ({number})',
     stratotypes: 'Stratotypes',
     synonyms: 'Synonyms ({number})',
-    lithostratigraphy: 'Related units ({number})',
+    relatedUnits: 'Related units ({number})',
     specimens: 'Specimens ({number})',
     samples: 'Samples ({number})',
     subUnits: 'Sub units ({number})',
