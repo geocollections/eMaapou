@@ -3,7 +3,7 @@
     <v-icon v-if="icon" large left>{{ icon }}</v-icon>
     <div class="d-flex flex-column">
       <h1 style="font-size: 1.75rem">
-        {{ $t(title) }}
+        {{ title }}
       </h1>
       <h3 v-if="subtitle" style="opacity: 0.7">
         {{ subtitle }}
