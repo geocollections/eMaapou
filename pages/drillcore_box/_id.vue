@@ -209,10 +209,6 @@
                   :title="$t('drillcoreBox.remarks')"
                   :value="drillcoreBox.remarks"
                 />
-                <data-row
-                  :title="$t('drillcoreBox.id')"
-                  :value="drillcoreBox.id"
-                />
               </tbody>
             </template>
           </v-simple-table>

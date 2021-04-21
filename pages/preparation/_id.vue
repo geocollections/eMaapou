@@ -92,7 +92,6 @@
                 :title="$t('preparation.remarks')"
                 :value="preparation.remarks"
               />
-              <data-row :title="$t('preparation.id')" :value="preparation.id" />
             </tbody>
           </template>
         </v-simple-table>

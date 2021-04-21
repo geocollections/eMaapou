@@ -54,7 +54,6 @@
                 :title="$t('drillcore.metersInBox')"
                 :value="drillcore.number_meters"
               />
-              <data-row :title="$t('drillcore.id')" :value="drillcore.id" />
             </tbody>
           </template>
         </v-simple-table>

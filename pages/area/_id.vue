@@ -134,8 +134,6 @@
                         </span>
                       </template>
                     </data-row>
-
-                    <data-row :title="$t('area.id')" :value="area.id" />
                   </tbody>
                 </template>
               </v-simple-table>

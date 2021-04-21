@@ -115,7 +115,6 @@
                         })
                       "
                     />
-                    <data-row :title="$t('analysis.id')" :value="analysis.id" />
                   </tbody>
                 </template>
               </v-simple-table>
