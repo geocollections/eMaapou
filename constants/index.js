@@ -446,5 +446,7 @@ export const STRATIGRAPHY = {
     age_stratigraphy: (locale) =>
       locale === 'et' ? 'age_stratigraphy' : 'age_stratigraphy_en',
     age: (locale) => 'age_base,age_top',
+    ageBase: (locale) => 'age_base',
+    ageTop: (locale) => 'age_top',
   },
 }
