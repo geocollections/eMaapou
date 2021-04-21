@@ -152,6 +152,21 @@
                   })
                 "
               />
+
+              <data-row
+                v-if="locality.date_added"
+                :title="$t('locality.dateAdded')"
+                :value="
+                  new Date(locality.date_added).toISOString().split('T')[0]
+                "
+              />
+              <data-row
+                v-if="locality.date_changed"
+                :title="$t('locality.dateChanged')"
+                :value="
+                  new Date(locality.date_changed).toISOString().split('T')[0]
+                "
+              />
               <data-row
                 :title="$t('locality.remarks')"
                 :value="locality.remarks"

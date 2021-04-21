@@ -124,6 +124,8 @@ export default {
     stratigraphy: 'Stratigraphy',
     reference: 'Reference',
     elevationAccuracy: 'Elevation accuracy',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   localitySynonym: {
     synonym: 'Synonym',
@@ -153,6 +155,8 @@ export default {
     depth: 'Depth',
     acronym: 'Owner',
     drillcore: 'Drillcore',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   drillcoreBox: {
     id: 'ID',
@@ -169,6 +173,8 @@ export default {
     diameter: 'Diameter',
     author: 'Image author',
     date: 'Image date',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   localityDescription: {
     stratigraphy: 'Stratigraphy',
@@ -230,6 +236,8 @@ export default {
     results: 'Results ({number})',
     attachments: 'Attachments ({number})',
     analysis: 'Sample no.',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   analysisResult: {
     parameter: 'Parameter',
@@ -276,6 +284,8 @@ export default {
     maardlaLink: 'Deposit information in the Estonian Land Board',
     sites: 'Sites ({number})',
     localityReferences: 'References ({number})',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   site: {
     pageTitle: 'Site search',
@@ -298,6 +308,8 @@ export default {
     latitude: 'Latitude',
     longitude: 'Longitude',
     site: 'Site',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   sample: {
     pageTitle: 'Samples search',
@@ -341,6 +353,8 @@ export default {
     sampleReferences: 'References ({number})',
     sample: 'Sample',
     hierarchy: 'Stratigraafia',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   preparation: {
     id: 'ID',
@@ -365,6 +379,8 @@ export default {
     location: 'Location',
     attachments: 'Attachments ({number})',
     taxa: 'Taxa ({number})',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   taxon: {
     id: 'ID',
@@ -479,6 +495,8 @@ export default {
     samples: 'Samples ({number})',
     subUnits: 'Sub units ({number})',
     pageTitle: 'Stratigraphy search',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   stratigraphyReference: {
     reference: 'Reference',

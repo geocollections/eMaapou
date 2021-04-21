@@ -146,6 +146,18 @@
                   })
                 "
               />
+              <data-row
+                v-if="sample.date_added"
+                :title="$t('sample.dateAdded')"
+                :value="new Date(sample.date_added).toISOString().split('T')[0]"
+              />
+              <data-row
+                v-if="sample.date_changed"
+                :title="$t('sample.dateChanged')"
+                :value="
+                  new Date(sample.date_changed).toISOString().split('T')[0]
+                "
+              />
             </tbody>
           </template>
         </v-simple-table>

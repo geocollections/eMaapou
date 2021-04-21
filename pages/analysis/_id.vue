@@ -123,6 +123,24 @@
                         })
                       "
                     />
+                    <data-row
+                      v-if="analysis.date_added"
+                      :title="$t('analysis.dateAdded')"
+                      :value="
+                        new Date(analysis.date_added)
+                          .toISOString()
+                          .split('T')[0]
+                      "
+                    />
+                    <data-row
+                      v-if="analysis.date_changed"
+                      :title="$t('analysis.dateChanged')"
+                      :value="
+                        new Date(analysis.date_changed)
+                          .toISOString()
+                          .split('T')[0]
+                      "
+                    />
                   </tbody>
                 </template>
               </v-simple-table>

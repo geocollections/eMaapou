@@ -125,6 +125,8 @@ export default {
     stratigraphy: 'Stratigraafia',
     reference: 'Kirjandus',
     elevationAccuracy: 'Kõrguse täpsus',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',
@@ -154,6 +156,8 @@ export default {
     depth: 'Sügavus',
     acronym: 'Omanik',
     drillcore: 'Puursüdamik',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   drillcoreBox: {
     id: 'ID',
@@ -170,6 +174,8 @@ export default {
     diameter: 'Diameeter',
     author: 'Foto autor',
     date: 'Foto kuupäev',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
@@ -231,6 +237,8 @@ export default {
     results: 'Tulemused ({number})',
     attachments: 'Failid ({number})',
     analysis: 'Proovi nr.',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -277,6 +285,8 @@ export default {
     maardlaLink: 'Maardla info Maa-ameti geoportaalis',
     sites: 'Uuringupunktid ({number})',
     localityReferences: 'Kirjandus ({number})',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   site: {
     pageTitle: 'Uuringupunktide otsing',
@@ -299,6 +309,8 @@ export default {
     latitude: 'Lat',
     longitude: 'Long',
     site: 'Uuringupunkt',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   sample: {
     pageTitle: 'Proovide otsing',
@@ -342,6 +354,8 @@ export default {
     sampleReferences: 'Kirjandus ({number})',
     sample: 'Proov',
     hierarchy: 'Stratigraafia',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   preparation: {
     id: 'ID',
@@ -366,6 +380,8 @@ export default {
     location: 'Hoiukoht',
     attachments: 'Failid ({number})',
     taxa: 'Taksonid ({number})',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   taxon: {
     id: 'ID',
@@ -480,6 +496,8 @@ export default {
     samples: 'Proovid ({number})',
     subUnits: 'Alamüksused ({number})',
     pageTitle: 'Stratigraafia otsing',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   stratigraphyReference: {
     reference: 'Viide',

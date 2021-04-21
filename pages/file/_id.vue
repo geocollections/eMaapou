@@ -287,10 +287,12 @@
               />
               <data-row :title="$t('file.remarks')" :value="file.remarks" />
               <data-row
+                v-if="file.date_added"
                 :title="$t('file.dateAdded')"
                 :value="new Date(file.date_added).toISOString().split('T')[0]"
               />
               <data-row
+                v-if="file.date_changed"
                 :title="$t('file.dateChanged')"
                 :value="new Date(file.date_changed).toISOString().split('T')[0]"
               />

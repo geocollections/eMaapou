@@ -135,6 +135,22 @@
                   <div v-html="stratigraphy.index_additional_html" />
                 </template>
               </data-row>
+              <data-row
+                v-if="stratigraphy.date_added"
+                :title="$t('stratigraphy.dateAdded')"
+                :value="
+                  new Date(stratigraphy.date_added).toISOString().split('T')[0]
+                "
+              />
+              <data-row
+                v-if="stratigraphy.date_changed"
+                :title="$t('stratigraphy.dateChanged')"
+                :value="
+                  new Date(stratigraphy.date_changed)
+                    .toISOString()
+                    .split('T')[0]
+                "
+              />
             </tbody>
           </template>
         </v-simple-table>
@@ -223,7 +239,7 @@ export default {
         {
           params: {
             fields:
-              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string',
+              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string,date_added,date_changed',
           },
         }
       )

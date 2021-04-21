@@ -159,6 +159,16 @@
                 :title="$t('locality.depth')"
                 :value="site.locality__depth"
               />
+              <data-row
+                v-if="site.date_added"
+                :title="$t('site.dateAdded')"
+                :value="new Date(site.date_added).toISOString().split('T')[0]"
+              />
+              <data-row
+                v-if="site.date_changed"
+                :title="$t('site.dateChanged')"
+                :value="new Date(site.date_changed).toISOString().split('T')[0]"
+              />
             </tbody>
           </template>
         </v-simple-table>

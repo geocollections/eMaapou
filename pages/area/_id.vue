@@ -134,6 +134,20 @@
                         </span>
                       </template>
                     </data-row>
+                    <data-row
+                      v-if="area.date_added"
+                      :title="$t('area.dateAdded')"
+                      :value="
+                        new Date(area.date_added).toISOString().split('T')[0]
+                      "
+                    />
+                    <data-row
+                      v-if="area.date_changed"
+                      :title="$t('area.dateChanged')"
+                      :value="
+                        new Date(area.date_changed).toISOString().split('T')[0]
+                      "
+                    />
                   </tbody>
                 </template>
               </v-simple-table>
