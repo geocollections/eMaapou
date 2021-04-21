@@ -485,6 +485,7 @@ export default {
     pages: 'Pages',
     remarks: 'Remarks',
     year: 'Year',
+    content: 'Content',
   },
   stratigraphySynonym: {
     synonym: 'Synonym',

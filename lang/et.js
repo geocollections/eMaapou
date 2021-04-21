@@ -486,6 +486,7 @@ export default {
     pages: 'Leheküljed',
     remarks: 'Lisainfo',
     year: 'Aasta',
+    content: 'Sisu',
   },
   stratigraphySynonym: {
     synonym: 'Sünonüüm',

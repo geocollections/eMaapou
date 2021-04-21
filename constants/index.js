@@ -117,6 +117,7 @@ export const STRATIGRAPHY_REFERENCE = {
     year: (locale) => 'reference__year',
     pages: (locale) => 'pages',
     remarks: (locale) => 'remarks',
+    content: (locale) => (locale === 'et' ? 'content' : 'content_en'),
   },
 }
 
