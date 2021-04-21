@@ -6,8 +6,8 @@
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-img
-                max-height="50"
-                max-width="90"
+                height="45"
+                width="110"
                 :src="logo"
                 v-bind="attrs"
                 v-on="on"
@@ -135,7 +135,7 @@ export default {
         },
         { name: 'stratigraphy', lang: 'stratigraphy' },
       ],
-      logo: require('~/assets/emaapou5white.svg'),
+      logo: require('~/assets/logos/emaapou5white.svg'),
     }
   },
   computed: {
