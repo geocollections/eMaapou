@@ -6,7 +6,8 @@
         style="z-index: 0"
         :options="options"
         :zoom="mapZoom"
-        :center="[center.latitude, center.longitude]"
+        :center="currentCenter"
+        @update:center="updateCenter"
         @baselayerchange="handleBaseLayerChange"
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
@@ -61,7 +62,7 @@
           :height="height"
         />-->
       </l-map>
-      <map-links :latitude="center.latitude" :longitude="center.longitude" />
+      <map-links :latitude="currentCenter.lat" :longitude="currentCenter.lng" />
     </div>
     <template #placeholder>
       <div
@@ -113,6 +114,7 @@ export default {
   },
   data() {
     return {
+      currentCenter: { lat: this.center.latitude, lng: this.center.longitude },
       options: {
         gestureHandling: true,
         gestureHandlingOptions: {
@@ -261,7 +263,6 @@ export default {
         this.markers.map((marker) => marker.longitude),
       ]
     },
-
     tooltipOptions() {
       return {
         permanent: this.markers.length <= 5,
@@ -295,6 +296,9 @@ export default {
     },
   },
   methods: {
+    updateCenter(center) {
+      this.currentCenter = center
+    },
     handleBaseLayerChange(event) {
       this.activeBaseLayer = event.name
     },
