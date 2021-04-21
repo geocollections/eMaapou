@@ -571,6 +571,7 @@ export default {
     keywords: 'Keywords',
     type: 'Type',
     download: 'Download file',
+    remarks: 'Remarks',
   },
   cookiePolicy: {
     introduction:

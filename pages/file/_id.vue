@@ -285,6 +285,7 @@
                 :value="file.licence__licence_en"
                 @link-click="$openWindow(file.licence__licence_url_en)"
               />
+              <data-row :title="$t('file.remarks')" :value="file.remarks" />
               <data-row
                 :title="$t('file.dateAdded')"
                 :value="new Date(file.date_added).toISOString().split('T')[0]"

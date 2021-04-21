@@ -187,9 +187,9 @@ export default {
     referenceTitle: 'Pealkiri',
   },
   sampleReference: {
-    reference: 'Reference',
-    remarks: 'Remarks',
-    pages: 'Pages',
+    reference: 'Kirje',
+    remarks: 'Lisainfo',
+    pages: 'Lk',
     referenceTitle: 'Pealkiri',
   },
   attachment: {
@@ -572,6 +572,7 @@ export default {
     keywords: 'Märksõnad',
     type: 'Tüüp',
     download: 'Lae alla',
+    remarks: 'Lisainfo',
   },
   cookiePolicy: {
     introduction:
