@@ -475,7 +475,7 @@ export default {
     references: 'Kirjandus ({number})',
     stratotypes: 'Stratotüübid',
     synonyms: 'Sünonüümid ({number})',
-    lithostratigraphy: 'Litostratigraafia ({number})',
+    lithostratigraphy: 'Seotud üksused ({number})',
     specimens: 'Eksemplarid ({number})',
     samples: 'Proovid ({number})',
     subUnits: 'Alamüksused ({number})',
