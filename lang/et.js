@@ -219,7 +219,7 @@ export default {
     analysedBy: 'Isik/asutus',
     date: 'Aeg',
     thickness: 'Paksus',
-    title: 'Analüüs ID: {id}',
+    title: 'Analüüs ({method}) proovist {sample}',
     remarks: 'Lisainfo',
     reference: 'Viide',
     dataset: 'Andmekogu',

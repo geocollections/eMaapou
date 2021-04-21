@@ -3,7 +3,15 @@
     <template #title>
       <prev-next-nav-title
         :ids="ids"
-        :title="$t('analysis.title', { id: analysis.id })"
+        :title="
+          $t('analysis.title', {
+            method: $translate({
+              et: analysis.analysis_method__analysis_method,
+              en: analysis.analysis_method__method_en,
+            }),
+            sample: analysis.sample__number,
+          })
+        "
       />
     </template>
 

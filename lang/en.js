@@ -218,7 +218,7 @@ export default {
     analysedBy: 'Person/Institution',
     date: 'Date',
     thickness: 'Thickness',
-    title: 'Analysis ID: {id}',
+    title: 'Analysis ({method}) from sample {sample}',
     remarks: 'Remarks',
     reference: 'Reference',
     dataset: 'Dataset',
