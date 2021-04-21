@@ -133,19 +133,19 @@ export default {
   },
   computed: {
     computedPrevId() {
-      return this.ids?.prev_id
+      return this.ids?.prev_id ?? 0
     },
 
     computedNextId() {
-      return this.ids?.next_id
+      return this.ids?.next_id ?? 0
     },
 
     computedLastId() {
-      return this.ids?.last_id
+      return this.ids?.last_id ?? 0
     },
 
     computedFirstId() {
-      return this.ids?.first_id
+      return this.ids?.first_id ?? 0
     },
 
     routeName() {
