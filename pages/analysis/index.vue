@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title-wrapper
-      title="common.analysesCount"
+      :title="$t('common.analysesCount')"
       :count="count"
       icon="mdi-chart-scatter-plot"
     />

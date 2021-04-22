@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <page-title-wrapper
-        title="common.stratigraphy"
+        :title="$t('common.stratigraphy')"
         :count="count"
         icon="mdi-layers-triple"
       />

@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title-wrapper
-      title="common.samplesCount"
+      :title="$t('common.samplesCount')"
       :count="count"
       icon="mdi-test-tube"
     />

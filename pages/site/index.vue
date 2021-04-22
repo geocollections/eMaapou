@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title-wrapper
-      title="common.sitesCount"
+      :title="$t('common.sitesCount')"
       :count="count"
       icon="mdi-map-marker-star-outline"
     />
