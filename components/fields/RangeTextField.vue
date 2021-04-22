@@ -64,21 +64,12 @@ export default {
       isFocused: false,
     }
   },
-  created() {
-    this.$emit('input', [this.min, this.max])
-  },
   methods: {
     handleFocus(e) {
       this.isFocused = true
     },
     handleBlur(e) {
       this.isFocused = false
-    },
-    handleChange(e) {
-      this.$set(this.value, 0, e)
-      if (this.value[1] == null) {
-        this.$set(this.value, 1, e)
-      }
     },
   },
 }
