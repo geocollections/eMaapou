@@ -137,6 +137,8 @@ export default {
               'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
             visible: !this.isEstonian,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             },
@@ -147,6 +149,8 @@ export default {
             url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             visible: false,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             },
@@ -157,6 +161,8 @@ export default {
             url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
             visible: false,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
             },
@@ -168,6 +174,8 @@ export default {
               'https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: false,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
               tms: true,
@@ -182,6 +190,8 @@ export default {
               'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: this.isEstonian,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
               tms: true,
@@ -198,6 +208,8 @@ export default {
               'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: false,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 "Estonian maps: <a  href='http://www.maaamet.ee/'>Republic of Estonia Land Board</a>",
               tms: true,
@@ -214,6 +226,8 @@ export default {
             visible: this.isEstonian,
             transparent: true,
             options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
               attribution:
                 "Estonian maps: <a  href='https://ttu.ee/geoloogia-instituut'>Department of Geology</a>",
               format: 'image/png',
