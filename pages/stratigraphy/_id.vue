@@ -101,6 +101,7 @@
                 :value="stratigraphy.age_base"
               />
               <link-data-row
+                v-if="stratigraphy.age_chronostratigraphy_id"
                 :title="$t('stratigraphy.age')"
                 :value="
                   $translate({
@@ -123,13 +124,19 @@
                 :value="stratigraphy.age_reference__reference"
               />
 
-              <data-row :title="$t('stratigraphy.index')">
+              <data-row
+                v-if="stratigraphy.index_main_html"
+                :title="$t('stratigraphy.index')"
+              >
                 <template #value>
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="stratigraphy.index_main_html" />
                 </template>
               </data-row>
-              <data-row :title="$t('stratigraphy.indexAlt')">
+              <data-row
+                v-if="stratigraphy.index_additional_html"
+                :title="$t('stratigraphy.indexAlt')"
+              >
                 <template #value>
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="stratigraphy.index_additional_html" />
