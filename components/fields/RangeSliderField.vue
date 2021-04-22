@@ -28,8 +28,9 @@
           type="number"
           style="width: 50px"
           @change="$set(value, 1, $event)"
-        ></v-text-field> </template
-    ></v-range-slider>
+        ></v-text-field>
+      </template>
+    </v-range-slider>
   </div>
 </template>
 
@@ -60,18 +61,6 @@ export default {
       default: () => {
         return { min: 'min', max: 'max' }
       },
-    },
-  },
-  created() {
-    this.$emit('input', [this.min, this.max])
-  },
-  methods: {
-    handleInput(e) {
-      if (e.isMin === true) {
-        this.$emit('input', { ...this.value, min: e.value })
-      } else {
-        this.$emit('input', { ...this.value, max: e.value })
-      }
     },
   },
 }

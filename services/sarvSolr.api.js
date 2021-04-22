@@ -131,11 +131,10 @@ const buildFilterQueryParameter = (filters) => {
               // const encodedValue = searchParameter.value.map((el) => {
               //   return encodeURIComponent(el)
               // })
-
-              const start = isEmpty(searchParameter.value[0])
+              const start = isNil(searchParameter.value[0])
                 ? '*'
                 : searchParameter.value[0]
-              const end = isEmpty(searchParameter.value[1])
+              const end = isNil(searchParameter.value[1])
                 ? '*'
                 : searchParameter.value[1]
               return `${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *])`
