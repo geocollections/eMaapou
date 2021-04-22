@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app dark dense height="70" style="z-index: 2050" color="primary">
+  <v-app-bar app dark style="z-index: 2050" color="primary">
     <v-toolbar-items>
       <v-app-bar-title class="align-self-center">
         <nuxt-link :to="localePath({ path: '/' })">
@@ -7,7 +7,8 @@
             <template #activator="{ on, attrs }">
               <v-img
                 height="45"
-                width="110"
+                width="90"
+                contain
                 :src="logo"
                 v-bind="attrs"
                 v-on="on"
@@ -32,19 +33,47 @@
       {{ $t('slogan') }}
     </div>
     <v-spacer />
-    <app-header-search v-if="!isLanding && !isSearchPage" class="mx-3" />
-    <v-btn
-      v-show="$vuetify.breakpoint.smAndUp"
-      nuxt
-      aria-label="about page"
-      class="font-weight-bold mr-3"
-      text
-      :to="localePath({ name: 'about' })"
-    >
-      {{ $t('common.about') }}
-    </v-btn>
+    <app-header-search v-if="!isLanding && !isSearchPage" class="mr-2" />
 
-    <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
+    <v-toolbar-items>
+      <v-btn
+        v-show="$vuetify.breakpoint.smAndUp"
+        nuxt
+        aria-label="about page"
+        class="font-weight-bold"
+        text
+        :to="localePath({ name: 'about' })"
+      >
+        {{ $t('common.about') }}
+      </v-btn>
+
+      <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
+      <v-btn
+        :text="$vuetify.breakpoint.smAndUp"
+        :icon="!$vuetify.breakpoint.smAndUp"
+        class="font-weight-bold"
+        :class="{ 'mr-1 header-icon-button': !$vuetify.breakpoint.smAndUp }"
+        aria-label="Open navigation drawer"
+        :small="!$vuetify.breakpoint.smAndUp"
+        @click.stop="$emit('toggle:navigationDrawer')"
+      >
+        <div v-if="drawer">
+          <span
+            v-show="$vuetify.breakpoint.smAndUp"
+            style="vertical-align: middle"
+            >{{ $t('common.close') }}</span
+          ><v-icon size="font-size: 24px">mdi-close</v-icon>
+        </div>
+        <div v-else>
+          <span
+            v-show="$vuetify.breakpoint.smAndUp"
+            style="vertical-align: middle"
+            >{{ $t('common.more') }}</span
+          >
+          <v-icon size="font-size: 24px">mdi-menu</v-icon>
+        </div>
+      </v-btn>
+    </v-toolbar-items>
 
     <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
@@ -67,32 +96,6 @@
         >
       </v-tabs>
     </template>
-
-    <v-btn
-      :text="$vuetify.breakpoint.smAndUp"
-      :icon="!$vuetify.breakpoint.smAndUp"
-      class="font-weight-bold"
-      :class="{ 'mr-1 header-icon-button': !$vuetify.breakpoint.smAndUp }"
-      aria-label="Open navigation drawer"
-      :small="!$vuetify.breakpoint.smAndUp"
-      @click.stop="$emit('toggle:navigationDrawer')"
-    >
-      <div v-if="drawer">
-        <span
-          v-show="$vuetify.breakpoint.smAndUp"
-          style="vertical-align: middle"
-          >{{ $t('common.close') }}</span
-        ><v-icon size="font-size: 24px">mdi-close</v-icon>
-      </div>
-      <div v-else>
-        <span
-          v-show="$vuetify.breakpoint.smAndUp"
-          style="vertical-align: middle"
-          >{{ $t('common.more') }}</span
-        >
-        <v-icon size="font-size: 24px">mdi-menu</v-icon>
-      </div>
-    </v-btn>
   </v-app-bar>
 </template>
 
@@ -170,7 +173,11 @@ export default {
 }
 
 .active-tab {
-  background-color: var(--v-quinary-base) !important;
+  background-color: var(--v-quaternary-base) !important;
   color: var(--v-tertiary-base) !important;
+}
+
+.v-app-bar ::v-deep .v-toolbar__content {
+  padding-right: 0;
 }
 </style>
