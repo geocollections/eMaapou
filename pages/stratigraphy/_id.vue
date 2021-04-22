@@ -337,7 +337,9 @@ export default {
               },
               solr: {
                 default: {
-                  fq: `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`,
+                  fq: stratigraphy.hierarchy_string
+                    ? `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`
+                    : `(stratigraphy_hierarchy:("")+OR+age_hierarchy:("")+OR+lithostratigraphy_hierarchy:(""))`,
                   // fq: `stratigraphy_id:${stratigraphy.id}`,
                 },
               },
