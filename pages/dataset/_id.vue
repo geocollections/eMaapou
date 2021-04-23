@@ -104,6 +104,14 @@ export default {
 
       const tabs = [
         {
+          id: 'dataset_analysis',
+          table: 'dataset_analysis',
+          routeName: 'dataset-id',
+          title: 'dataset.analyses',
+          count: 0,
+          props: { dataset: dataset.id },
+        },
+        {
           id: 'dataset_reference',
           table: 'dataset_reference',
           routeName: 'dataset-id-references',
@@ -111,16 +119,9 @@ export default {
           count: 0,
           props: { dataset: dataset.id },
         },
-        // {
-        //   id: 'attachment_link',
-        //   routeName: 'analysis-id-attachments',
-        //   title: 'analysis.attachments',
-        //   count: 0,
-        //   props: { analysis: dataset.id },
-        // },
       ]
 
-      const solrParams = { fq: `analysis_id:${dataset.id}` }
+      const solrParams = { fq: `dataset_id:${dataset.id}` }
       const apiParams = { dataset: dataset.id }
 
       const forLoop = async () => {

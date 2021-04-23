@@ -240,6 +240,10 @@ export default {
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
   },
+  datasetAnalysis: {
+    analysis: 'Analüüs',
+    sampleNumber: 'Proovi number',
+  },
   analysisResult: {
     parameter: 'Parameeter',
     value: 'Väärtus',
@@ -638,6 +642,7 @@ export default {
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
     references: 'Kirjandus ({number})',
+    analyses: 'Analüüsid ({number})',
   },
   reference: {
     id: 'ID',

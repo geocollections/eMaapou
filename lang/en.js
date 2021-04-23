@@ -239,6 +239,10 @@ export default {
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
   },
+  datasetAnalysis: {
+    analysis: 'Analysis',
+    sampleNumber: 'Sample number',
+  },
   analysisResult: {
     parameter: 'Parameter',
     value: 'Value',
@@ -637,6 +641,7 @@ export default {
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
     references: 'References ({number})',
+    analyses: 'Analyses ({number})',
   },
   reference: {
     id: 'ID',

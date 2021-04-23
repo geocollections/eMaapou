@@ -19,6 +19,19 @@ export const ANALYSIS = {
   },
 }
 
+export const DATASET_ANALYSIS = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    analysis: (locale) => 'analysis',
+    sample: (locale) => 'analysis__sample__number',
+  },
+}
+
 export const ATTACHMENT = {
   options: {
     page: 1,
