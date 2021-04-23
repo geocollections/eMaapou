@@ -35,7 +35,7 @@ const getDefaultState = () => {
           lookUpType: 'range',
           label: 'stratigraphy.age',
           placeholders: ['stratigraphy.min', 'stratigraphy.max'],
-          fields: ['age_base'],
+          fields: ['age_base', 'age_top'],
         },
         hierarchy: {
           value: null,
