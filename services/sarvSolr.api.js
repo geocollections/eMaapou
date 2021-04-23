@@ -71,29 +71,22 @@ export default ($axios) => ({
 })
 
 const buildQueryParameter = (search) => {
-  // const s = search
-  //   .split(' ')
-  //   .map((s) => {
-  //     if (
-  //       !s.startsWith('-') &&
-  //       s.includes('-') &&
-  //       !s.startsWith('"') &&
-  //       !s.endsWith('"')
-  //     )
-  //       return `"${s}"`
-  //     return s
-  //   })
-  //   .join(' ')
-  let s = search
-  if (
-    !isEmpty(search) &&
-    search.includes('-') &&
-    !search.includes(' -') &&
-    !search.startsWith('"') &&
-    !search.endsWith('"')
-  ) {
-    s = `"${search}"`
-  }
+  console.log('tset1' + search)
+  const s = search
+    ? search
+        .split(' ')
+        .map((s) => {
+          if (
+            !s.startsWith('-') &&
+            s.includes('-') &&
+            !s.startsWith('"') &&
+            !s.endsWith('"')
+          )
+            return `"${s}"`
+          return s
+        })
+        .join(' ')
+    : null
   return {
     q: isEmpty(s) ? '*' : `${encodeURIComponent(s)}`,
   }
