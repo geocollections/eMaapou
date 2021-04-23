@@ -119,6 +119,14 @@ export default {
           count: 0,
           props: { dataset: dataset.id },
         },
+        {
+          id: 'attachments_link',
+          table: 'attachment_link',
+          routeName: 'dataset-id-attachments',
+          title: 'dataset.attachments',
+          count: 0,
+          props: { dataset: dataset.id },
+        },
       ]
 
       const solrParams = { fq: `dataset_id:${dataset.id}` }

@@ -642,6 +642,7 @@ export default {
     dateChanged: 'Date changed',
     references: 'References ({number})',
     analyses: 'Analyses ({number})',
+    attachments: 'Attachments ({number})',
   },
   reference: {
     id: 'ID',

@@ -643,6 +643,7 @@ export default {
     dateChanged: 'Kirje muudetud',
     references: 'Kirjandus ({number})',
     analyses: 'Analüüsid ({number})',
+    attachments: 'Failid ({number})',
   },
   reference: {
     id: 'ID',
