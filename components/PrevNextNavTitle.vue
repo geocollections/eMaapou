@@ -4,8 +4,7 @@
     :class="{ 'my-3': title || $slots.title }"
   >
     <div
-      v-show="$vuetify.breakpoint.smAndUp"
-      class="align-self-start align-self-sm-center text-no-wrap"
+      class="align-self-start align-self-sm-center text-no-wrap hidden-xs-only"
     >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
@@ -61,8 +60,7 @@
     </slot>
 
     <div
-      v-show="$vuetify.breakpoint.smAndUp"
-      class="align-self-end align-self-sm-center text-no-wrap"
+      class="align-self-end align-self-sm-center text-no-wrap hidden-xs-only"
     >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
