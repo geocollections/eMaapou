@@ -71,7 +71,6 @@ export default ($axios) => ({
 })
 
 const buildQueryParameter = (search) => {
-  console.log('tset1' + search)
   const s = search
     ? search
         .split(' ')
