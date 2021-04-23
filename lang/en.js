@@ -631,6 +631,11 @@ export default {
     date: 'Date',
     database: 'Database',
     dataset: 'Dataset',
+    author: 'Corresponding author',
+    copyright: 'Copyright',
+    licence: 'Licence',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   reference: {
     id: 'ID',
@@ -700,6 +705,7 @@ export default {
     'search-drillcores': 'Quick search: Drillcores',
     'search-files': 'Quick search: Files',
     'stratigraphy-id': 'Stratigraphy ID: {id}',
+    'dataset-id': 'Dataset ID: {id}',
   },
   institutions: {
     ttu: 'TalTech Department of Geology',

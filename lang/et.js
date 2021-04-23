@@ -632,6 +632,11 @@ export default {
     date: 'Kuupäev',
     database: 'Andmebaas',
     dataset: 'Andmekogu',
+    author: 'Põhiautor',
+    copyright: 'Autoriõigused',
+    licence: 'Kasutustingimused',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   reference: {
     id: 'ID',
@@ -701,6 +706,7 @@ export default {
     'search-drillcores': 'Kiirpäring: Puursüdamikud',
     'search-files': 'Kiirpäring: Failid',
     'stratigraphy-id': 'Stratigraafia ID: {id}',
+    'dataset-id': 'Dataset ID: {id}',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',
