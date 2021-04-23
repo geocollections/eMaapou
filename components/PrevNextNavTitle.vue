@@ -3,7 +3,10 @@
     class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 emp-title"
     :class="{ 'my-3': title || $slots.title }"
   >
-    <div class="align-self-start align-self-sm-center text-no-wrap">
+    <div
+      v-show="$vuetify.breakpoint.smAndUp"
+      class="align-self-start align-self-sm-center text-no-wrap"
+    >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -57,7 +60,10 @@
       />
     </slot>
 
-    <div class="align-self-end align-self-sm-center text-no-wrap">
+    <div
+      v-show="$vuetify.breakpoint.smAndUp"
+      class="align-self-end align-self-sm-center text-no-wrap"
+    >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
