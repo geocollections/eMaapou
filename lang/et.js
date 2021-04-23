@@ -637,6 +637,7 @@ export default {
     licence: 'Kasutustingimused',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    references: 'Kirjandus ({number})',
   },
   reference: {
     id: 'ID',

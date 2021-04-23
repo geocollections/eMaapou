@@ -636,6 +636,7 @@ export default {
     licence: 'Licence',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    references: 'References ({number})',
   },
   reference: {
     id: 'ID',

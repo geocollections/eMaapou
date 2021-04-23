@@ -105,6 +105,21 @@ export const LOCALITY_REFERENCE = {
   },
 }
 
+export const DATASET_REFERENCE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    reference: (locale) => 'reference__reference',
+    title: (locale) => 'reference__title',
+    pages: (locale) => 'reference__pages',
+    journal: (locale) => 'reference__journal__journal_name',
+  },
+}
+
 export const STRATIGRAPHY_REFERENCE = {
   options: {
     page: 1,

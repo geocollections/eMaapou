@@ -103,14 +103,14 @@ export default {
       const dataset = datasetResponse.results[0]
 
       const tabs = [
-        // {
-        //   id: 'analysis_results',
-        //   isSolr: true,
-        //   routeName: 'analysis-id',
-        //   title: 'analysis.results',
-        //   count: 0,
-        //   props: { analysis: dataset.id },
-        // },
+        {
+          id: 'dataset_reference',
+          table: 'dataset_reference',
+          routeName: 'dataset-id-references',
+          title: 'dataset.references',
+          count: 0,
+          props: { dataset: dataset.id },
+        },
         // {
         //   id: 'attachment_link',
         //   routeName: 'analysis-id-attachments',
@@ -121,7 +121,7 @@ export default {
       ]
 
       const solrParams = { fq: `analysis_id:${dataset.id}` }
-      const apiParams = { analysis: dataset.id }
+      const apiParams = { dataset: dataset.id }
 
       const forLoop = async () => {
         const filteredTabs = tabs.filter((item) => !!item.id)
@@ -130,16 +130,18 @@ export default {
           if (item?.isSolr)
             countResponse = await app.$services.sarvSolr.getResourceCount(
               item.id,
-              solrParams
+              solrParams,
+              'dataset'
             )
           else
             countResponse = await app.$services.sarvREST.getResourceCount(
               item.id,
-              apiParams
+              apiParams,
+              'dataset'
             )
           item.count = countResponse?.count ?? 0
           item.props = {
-            analysis: dataset.id,
+            dataset: dataset.id,
           }
         }
       }
@@ -150,11 +152,8 @@ export default {
           tabs.map(
             async (tab) =>
               await app.$hydrateCount(tab, {
-                solr: {
-                  default: { fq: `analysis_id:${dataset.id}` },
-                },
                 api: {
-                  default: { analysis: dataset.id },
+                  default: { dataset: dataset.id },
                 },
               })
           )
@@ -162,7 +161,7 @@ export default {
       ).map((tab) =>
         app.$populateProps(tab, {
           ...tab.props,
-          analysis: dataset.id,
+          dataset: dataset.id,
         })
       )
 
