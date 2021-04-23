@@ -277,7 +277,13 @@ export default {
   },
   head() {
     return {
-      title: this.$t('analysis.title', { id: this.analysis.id }),
+      title: this.$t('analysis.title', {
+        method: this.$translate({
+          et: this.analysis.analysis_method__analysis_method,
+          en: this.analysis.analysis_method__method_en,
+        }),
+        sample: this.analysis.sample__number,
+      }),
     }
   },
   computed: {
