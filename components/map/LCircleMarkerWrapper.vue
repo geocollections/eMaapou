@@ -4,9 +4,11 @@
       v-for="(marker, idx) in markers"
       :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
       :lat-lng="[marker.latitude, marker.longitude]"
-      :radius="5"
+      :radius="7"
       :weight="2"
-      color="red"
+      color="#fff"
+      fill-color="red"
+      fill-opacity="0.9"
       @click="
         marker.id && marker.routeName
           ? $router.push(

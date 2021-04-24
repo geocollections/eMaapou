@@ -37,11 +37,13 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   @extend .underline;
 
   text-decoration: none;
-  color: var(--v-primary-darken1) !important;
+  color: #7bbc9a !important;
+  /* color: var(--v-primary-lighten1) !important;*/
   @include transition(color 200ms ease);
 
   &:hover {
-    color: var(--v-primary-darken3) !important;
+    /*color: var(--v-primary-lighten3) !important;*/
+    color: #406451 !important;
   }
 }
 
@@ -193,7 +195,19 @@ th {
 }
 
 .emp-title {
-  /*color: #e36f5c !important;*/
-  color: var(--v-tertiary-base) !important;
-  background-color: var(--v-quinary-base) !important;
+  color: #fff !important;
+  background-color: #7bbc9a !important;
+  /*color: var(--v-tertiary-base) !important;
+  background-color: var(--v-quinary-base) !important;*/
+}
+
+#app {
+  background-color: #f7f6f4 !important;
+}
+
+.frontsearch {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #406451 !important;
+  background-color: white;
 }

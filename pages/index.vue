@@ -9,11 +9,11 @@
       <v-col sm="7" md="5">
         <v-text-field
           v-model="search"
-          dense
+          class="frontsearch"
           outlined
           single-line
           :autofocus="true"
-          color="primary darken-2"
+          color="primary lighthen-2"
           append-icon="mdi-magnify"
           :label="$t('common.searchAlt')"
           hide-details
@@ -91,8 +91,8 @@ export default {
           href: 'https://geocollections.info',
           background: await require('~/assets/frontpage/geokogud.jpg'),
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         kirjandus: {
           title: 'kirjandus.title',
@@ -109,8 +109,8 @@ export default {
           href: 'https://geoloogia.info/geology',
           background: await require('~/assets/frontpage/gmre.jpg'),
           sm: 6,
-          md: 2,
-          lg: 2,
+          md: 4,
+          lg: 4,
         },
         fond: {
           title: 'fond.title',
@@ -128,8 +128,8 @@ export default {
           href: 'https://fossiilid.info',
           background: await require('~/assets/frontpage/fossiilid.jpg'),
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         kivid: {
           title: 'kivid.title',
@@ -137,8 +137,8 @@ export default {
           href: 'https://kivid.info',
           background: await require('~/assets/frontpage/kivid.jpg'),
           sm: 6,
-          md: 6,
-          lg: 6,
+          md: 3,
+          lg: 3,
         },
         stratigraphy: {
           title: 'stratigraphy.title',
@@ -185,8 +185,8 @@ export default {
           href: 'https://geocase.eu',
           background: await require('~/assets/frontpage/geocase.jpg'),
           sm: 6,
-          md: 5,
-          lg: 5,
+          md: 4,
+          lg: 4,
         },
         eurocore: {
           title: 'eurocore.title',
@@ -194,8 +194,8 @@ export default {
           href: 'https://eurocore.rocks',
           background: await require('~/assets/frontpage/eurocore.jpg'),
           sm: 6,
-          md: 5,
-          lg: 5,
+          md: 4,
+          lg: 4,
         },
         sarv: {
           title: 'sarv.title',
@@ -203,8 +203,8 @@ export default {
           href: 'https://edit.geocollections.info',
           background: await require('~/assets/frontpage/sarv-wb.jpg'),
           sm: 6,
-          md: 2,
-          lg: 2,
+          md: 3,
+          lg: 3,
         },
         ema: {
           title: 'ema.title',
@@ -255,22 +255,35 @@ export default {
           md: 3,
           lg: 3,
         },
-        innerIds: ['drillcores', 'localities', 'samples', 'analyses'],
-        outerIds: [
-          // 'ema',
+        innerIds: [
+          'drillcores',
+          'localities',
+          'samples',
+          'analyses',
           'geocollections',
           'kirjandus',
-          'gmre',
-          'doi',
-          'fond',
-          'stratigraphy',
-          'maardlad',
           'fossiilid',
           'kivid',
           'turba',
+          'doi',
+          'sarv',
+        ],
+        outerIds: [
+          // 'ema',
+          // 'geocollections',
+          // 'kirjandus',
+
+          // 'doi',
+          'fond',
+          'maardlad',
+          'stratigraphy',
+          // 'fossiilid',
+          // 'kivid',
+          // 'turba',
+          'gmre',
           'geocase',
           'eurocore',
-          'sarv',
+          // 'sarv',
         ],
       },
     }
