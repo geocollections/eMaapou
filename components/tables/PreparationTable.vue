@@ -17,6 +17,7 @@
     </template>
     <template #item.locality="{ item }">
       <nuxt-link
+        v-if="item.locality_en"
         class="text-link"
         :to="
           localePath({

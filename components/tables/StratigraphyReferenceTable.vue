@@ -15,6 +15,12 @@
         {{ item.reference__reference }}
       </external-link>
     </template>
+    <template #item.year="{ item }">
+      {{ item.reference__year }}
+    </template>
+    <template #item.content="{ item }">
+      {{ $translate({ et: item.content, en: item.content_en }) }}
+    </template>
   </table-wrapper>
 </template>
 
@@ -54,6 +60,8 @@ export default {
           text: this.$t('stratigraphyReference.reference'),
           value: 'reference',
         },
+        { text: this.$t('stratigraphyReference.content'), value: 'content' },
+        { text: this.$t('stratigraphyReference.year'), value: 'year' },
         { text: this.$t('stratigraphyReference.pages'), value: 'pages' },
         { text: this.$t('stratigraphyReference.remarks'), value: 'remarks' },
       ],

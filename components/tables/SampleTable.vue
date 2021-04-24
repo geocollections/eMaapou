@@ -17,6 +17,7 @@
     </template>
     <template #item.number="{ item }">
       <nuxt-link
+        v-if="item.number"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.id } })"
       >
@@ -25,6 +26,7 @@
     </template>
     <template #item.locality="{ item }">
       <nuxt-link
+        v-if="item.locality_id"
         class="text-link"
         :to="
           localePath({ name: 'locality-id', params: { id: item.locality_id } })
@@ -35,6 +37,7 @@
     </template>
     <template #item.stratigraphy="{ item }">
       <nuxt-link
+        v-if="item.stratigraphy_id"
         class="text-link"
         :to="
           localePath({
@@ -53,6 +56,7 @@
     </template>
     <template #item.lithostratigraphy="{ item }">
       <nuxt-link
+        v-if="item.lithostratigraphy"
         class="text-link"
         :to="
           localePath({

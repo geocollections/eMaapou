@@ -45,14 +45,14 @@
         <!-- File -->
         <div
           v-else
-          class="file-download rounded deep-orange--text"
+          class="file-download rounded primary--text"
           @click="
             $openWindow(
               `https://files.geocollections.info/${file.uuid_filename}`
             )
           "
         >
-          <v-icon large color="deep-orange darken-2"
+          <v-icon large color="primary darken-2"
             >mdi-file-download-outline</v-icon
           >
           {{ $t('file.download') }}
@@ -85,7 +85,7 @@
                 <v-icon
                   v-if="size === 'original'"
                   small
-                  color="deep-orange darken-2"
+                  color="primary darken-2"
                   >mdi-file-download-outline</v-icon
                 >
               </a>
@@ -285,11 +285,14 @@
                 :value="file.licence__licence_en"
                 @link-click="$openWindow(file.licence__licence_url_en)"
               />
+              <data-row :title="$t('file.remarks')" :value="file.remarks" />
               <data-row
+                v-if="file.date_added"
                 :title="$t('file.dateAdded')"
                 :value="new Date(file.date_added).toISOString().split('T')[0]"
               />
               <data-row
+                v-if="file.date_changed"
                 :title="$t('file.dateChanged')"
                 :value="new Date(file.date_changed).toISOString().split('T')[0]"
               />
@@ -362,7 +365,7 @@
                               class="text-link"
                               @click="$openGeoDetail(item.id, row[item.id])"
                               >{{ row[item.id] }}
-                              <v-icon small color="deep-orange darken-2"
+                              <v-icon small color="primary darken-2"
                                 >mdi-open-in-new</v-icon
                               >
                             </a>
@@ -379,7 +382,7 @@
                                 )
                               "
                               >{{ row[item.id] }}
-                              <v-icon small color="deep-orange darken-2"
+                              <v-icon small color="primary darken-2"
                                 >mdi-open-in-new</v-icon
                               ></a
                             >

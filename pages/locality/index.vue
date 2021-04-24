@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title-wrapper
-      title="common.localitiesCount"
+      :title="$t('common.localitiesCount')"
       :count="count"
       icon="mdi-map-marker-outline"
     />

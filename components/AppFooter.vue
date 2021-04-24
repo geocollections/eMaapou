@@ -1,6 +1,6 @@
 <template>
   <v-footer padless class="mt-4">
-    <v-card width="100%" flat tile class="secondary">
+    <v-card width="100%" flat tile color="tertiary">
       <v-card-text class="text-center">
         <a
           v-for="(item, index) in imageLinks"

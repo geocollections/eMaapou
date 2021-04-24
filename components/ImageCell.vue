@@ -1,6 +1,6 @@
 <template>
   <v-img
-    v-ripple="{ class: 'deep-orange--text darken-2' }"
+    v-ripple="{ class: 'primary--text darken-2' }"
     class="image-cell rounded"
     max-height="80px"
     width="90px"

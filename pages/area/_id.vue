@@ -122,7 +122,7 @@
                             @click="$openTurba('plaanid', item.trim(), false)"
                           >
                             {{ item }}
-                            <v-icon small color="deep-orange darken-2"
+                            <v-icon small color="primary darken-2"
                               >mdi-file-download-outline</v-icon
                             >
                           </a>
@@ -134,8 +134,20 @@
                         </span>
                       </template>
                     </data-row>
-
-                    <data-row :title="$t('area.id')" :value="area.id" />
+                    <data-row
+                      v-if="area.date_added"
+                      :title="$t('area.dateAdded')"
+                      :value="
+                        new Date(area.date_added).toISOString().split('T')[0]
+                      "
+                    />
+                    <data-row
+                      v-if="area.date_changed"
+                      :title="$t('area.dateChanged')"
+                      :value="
+                        new Date(area.date_changed).toISOString().split('T')[0]
+                      "
+                    />
                   </tbody>
                 </template>
               </v-simple-table>

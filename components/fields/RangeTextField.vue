@@ -15,7 +15,7 @@
           hide-details
           single-line
           type="number"
-          @change="$set(value, 0, $event)"
+          @input="handleInput($event, true)"
           @focus="handleFocus"
           @blur="handleBlur"
         >
@@ -29,7 +29,7 @@
           hide-details
           single-line
           type="number"
-          @change="$set(value, 1, $event)"
+          @input="handleInput($event, false)"
           @focus="handleFocus"
           @blur="handleBlur"
         />
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { isEmpty } from 'lodash'
+
 export default {
   name: 'RangeTextField',
   props: {
@@ -64,9 +66,6 @@ export default {
       isFocused: false,
     }
   },
-  created() {
-    this.$emit('input', [this.min, this.max])
-  },
   methods: {
     handleFocus(e) {
       this.isFocused = true
@@ -74,10 +73,15 @@ export default {
     handleBlur(e) {
       this.isFocused = false
     },
-    handleChange(e) {
-      this.$set(this.value, 0, e)
-      if (this.value[1] == null) {
-        this.$set(this.value, 1, e)
+    parseInput(input) {
+      if (isEmpty(input)) return null
+      else return parseInt(input)
+    },
+    handleInput(e, isMin) {
+      if (isMin) {
+        this.$emit('input', [this.parseInput(e), this.value[1]])
+      } else {
+        this.$emit('input', [this.value[0], this.parseInput(e)])
       }
     },
   },

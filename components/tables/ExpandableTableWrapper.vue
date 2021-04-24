@@ -20,7 +20,7 @@
         <v-col cols="12" sm="4" class="py-0 px-3">
           <v-text-field
             v-model="search"
-            color="deep-orange darken-2"
+            color="primary darken-2"
             append-icon="mdi-magnify"
             :label="$t('common.search')"
             hide-details

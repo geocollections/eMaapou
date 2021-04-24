@@ -83,13 +83,16 @@
       </div>
     </template>
 
-    <template #item.age="{ item }">
-      <div v-if="item.age_base">{{ item.age_base }}</div>
-      <div v-if="item.age_top">{{ item.age_top }}</div>
+    <template #item.ageBase="{ item }">
+      {{ item.age_base }}
+    </template>
+    <template #item.ageTop="{ item }">
+      {{ item.age_top }}
     </template>
 
     <template #item.parent_stratigraphy="{ item }">
       <nuxt-link
+        v-if="item.parent_id"
         class="text-link"
         :to="
           localePath({
@@ -163,7 +166,9 @@ export default {
           text: this.$t('stratigraphy.parent_stratigraphy'),
           value: 'parent_stratigraphy',
         },
-        { text: this.$t('stratigraphy.age'), value: 'age' },
+
+        { text: this.$t('stratigraphy.ageBase'), value: 'ageBase' },
+        { text: this.$t('stratigraphy.ageTop'), value: 'ageTop' },
         {
           text: this.$t('stratigraphy.age_stratigraphy'),
           value: 'age_stratigraphy',

@@ -5,6 +5,7 @@
       :key="i"
       dense
       class="header-menu-item"
+      :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       @click="$i18n.setLocale(locale.code)"
     >
       <v-list-item-title class="d-flex">

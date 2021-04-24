@@ -19,6 +19,7 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="stratigraphy.parent_id"
                 :title="$t('stratigraphy.parentStratigraphy')"
                 :value="
                   $translate({
@@ -100,6 +101,7 @@
                 :value="stratigraphy.age_base"
               />
               <link-data-row
+                v-if="stratigraphy.age_chronostratigraphy_id"
                 :title="$t('stratigraphy.age')"
                 :value="
                   $translate({
@@ -122,21 +124,39 @@
                 :value="stratigraphy.age_reference__reference"
               />
 
-              <data-row :title="$t('stratigraphy.index')">
+              <data-row
+                v-if="stratigraphy.index_main_html"
+                :title="$t('stratigraphy.index')"
+              >
                 <template #value>
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="stratigraphy.index_main_html" />
                 </template>
               </data-row>
-              <data-row :title="$t('stratigraphy.indexAlt')">
+              <data-row
+                v-if="stratigraphy.index_additional_html"
+                :title="$t('stratigraphy.indexAlt')"
+              >
                 <template #value>
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="stratigraphy.index_additional_html" />
                 </template>
               </data-row>
               <data-row
-                :title="$t('stratigraphy.id')"
-                :value="stratigraphy.id"
+                v-if="stratigraphy.date_added"
+                :title="$t('stratigraphy.dateAdded')"
+                :value="
+                  new Date(stratigraphy.date_added).toISOString().split('T')[0]
+                "
+              />
+              <data-row
+                v-if="stratigraphy.date_changed"
+                :title="$t('stratigraphy.dateChanged')"
+                :value="
+                  new Date(stratigraphy.date_changed)
+                    .toISOString()
+                    .split('T')[0]
+                "
               />
             </tbody>
           </template>
@@ -226,7 +246,7 @@ export default {
         {
           params: {
             fields:
-              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string',
+              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string,date_added,date_changed',
           },
         }
       )
@@ -252,18 +272,18 @@ export default {
           props: { stratigraphy: stratigraphy.id },
         },
         {
-          id: 'lithostratigraphy',
-          table: 'stratigraphy',
-          routeName: 'stratigraphy-id-lithostratigraphy',
-          title: 'stratigraphy.lithostratigraphy',
-          count: 0,
-          props: { stratigraphy: stratigraphy.id },
-        },
-        {
           id: 'subunits',
           table: 'stratigraphy',
           routeName: 'stratigraphy-id-subunits',
           title: 'stratigraphy.subUnits',
+          count: 0,
+          props: { stratigraphy: stratigraphy.id },
+        },
+        {
+          id: 'lithostratigraphy',
+          table: 'stratigraphy',
+          routeName: 'stratigraphy-id-relatedUnits',
+          title: 'stratigraphy.relatedUnits',
           count: 0,
           props: { stratigraphy: stratigraphy.id },
         },
@@ -324,7 +344,9 @@ export default {
               },
               solr: {
                 default: {
-                  fq: `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`,
+                  fq: stratigraphy.hierarchy_string
+                    ? `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`
+                    : `(stratigraphy_hierarchy:("")+OR+age_hierarchy:("")+OR+lithostratigraphy_hierarchy:(""))`,
                   // fq: `stratigraphy_id:${stratigraphy.id}`,
                 },
               },

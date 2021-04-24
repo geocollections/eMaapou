@@ -3,7 +3,15 @@
     <template #title>
       <prev-next-nav-title
         :ids="ids"
-        :title="$t('analysis.title', { id: analysis.id })"
+        :title="
+          $t('analysis.title', {
+            method: $translate({
+              et: analysis.analysis_method__analysis_method,
+              en: analysis.analysis_method__method_en,
+            }),
+            sample: analysis.sample__number,
+          })
+        "
       />
     </template>
 
@@ -115,7 +123,24 @@
                         })
                       "
                     />
-                    <data-row :title="$t('analysis.id')" :value="analysis.id" />
+                    <data-row
+                      v-if="analysis.date_added"
+                      :title="$t('analysis.dateAdded')"
+                      :value="
+                        new Date(analysis.date_added)
+                          .toISOString()
+                          .split('T')[0]
+                      "
+                    />
+                    <data-row
+                      v-if="analysis.date_changed"
+                      :title="$t('analysis.dateChanged')"
+                      :value="
+                        new Date(analysis.date_changed)
+                          .toISOString()
+                          .split('T')[0]
+                      "
+                    />
                   </tbody>
                 </template>
               </v-simple-table>
@@ -252,7 +277,13 @@ export default {
   },
   head() {
     return {
-      title: this.$t('analysis.title', { id: this.analysis.id }),
+      title: this.$t('analysis.title', {
+        method: this.$translate({
+          et: this.analysis.analysis_method__analysis_method,
+          en: this.analysis.analysis_method__method_en,
+        }),
+        sample: this.analysis.sample__number,
+      }),
     }
   },
   computed: {

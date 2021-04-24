@@ -37,7 +37,7 @@
                         en: site.area__name_en,
                       })
                     }}
-                    <v-icon small color="deep-orange darken-2"
+                    <v-icon small color="primary darken-2"
                       >mdi-open-in-new</v-icon
                     >
                   </a>
@@ -65,7 +65,7 @@
                       @click="$openTurba('plaanid', item.trim(), false)"
                     >
                       {{ item }}
-                      <v-icon small color="deep-orange darken-2"
+                      <v-icon small color="primary darken-2"
                         >mdi-file-download-outline</v-icon
                       >
                     </a>
@@ -92,25 +92,9 @@
                 :title="$t('site.description')"
                 :value="site.description"
               />
-              <data-row :title="$t('site.id')" :value="site.id" />
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-card-text>
-    </template>
 
-    <template
-      v-if="(site.latitude && site.longitude) || site.locality_id"
-      #column-right
-    >
-      <v-card-title class="pr-md-0 pl-md-4 px-0">{{
-        $t('site.locality')
-      }}</v-card-title>
-      <v-card-text class="pr-md-0 pl-md-4 px-0">
-        <v-simple-table dense class="mb-4 custom-table">
-          <template #default>
-            <tbody>
               <link-data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
@@ -127,6 +111,7 @@
                 "
               />
               <data-row
+                v-if="site.locality_id"
                 :title="$t('locality.country')"
                 :value="
                   isNil(
@@ -150,37 +135,60 @@
                 </template>
               </data-row>
               <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.latitude')"
                 :value="site.latitude"
               />
               <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.longitude')"
                 :value="site.longitude"
               />
               <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.elevation')"
                 :value="site.elevation"
               />
               <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.elevationAccuracy')"
                 :value="site.elevationAccuracy"
               />
               <data-row
+                v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.depth')"
                 :value="site.locality__depth"
+              />
+              <data-row
+                v-if="site.date_added"
+                :title="$t('site.dateAdded')"
+                :value="new Date(site.date_added).toISOString().split('T')[0]"
+              />
+              <data-row
+                v-if="site.date_changed"
+                :title="$t('site.dateChanged')"
+                :value="new Date(site.date_changed).toISOString().split('T')[0]"
               />
             </tbody>
           </template>
         </v-simple-table>
+      </v-card-text>
+    </template>
+
+    <template
+      v-if="(site.latitude && site.longitude) || site.locality_id"
+      #column-right
+    >
+      <v-card-text class="pr-md-0 pl-md-4 px-0">
         <v-card
           v-if="site.latitude && site.longitude"
           id="map-wrap"
           elevation="0"
-          height="300"
+          height="500"
         >
           <leaflet-map
             :is-estonian="site.locality__country__value === 'Eesti'"
-            :height="300"
+            :height="500"
             :center="{
               latitude: site.latitude,
               longitude: site.longitude,
@@ -201,6 +209,69 @@
     </template>
 
     <template #bottom>
+      <image-bar v-if="images.length > 0" :images="images">
+        <template #image="{ item, on, attrs }">
+          <v-hover v-slot="{ hover }">
+            <v-img
+              v-bind="attrs"
+              :src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
+              :lazy-src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
+              max-width="200"
+              max-height="200"
+              width="200"
+              height="200"
+              :class="{
+                'elevation-4': hover,
+                'elevation-2': !hover,
+              }"
+              class="grey lighten-2 rounded transition-swing cursor-pointer"
+              v-on="on"
+              @click="
+                $router.push(
+                  localePath({
+                    name: 'file-id',
+                    params: { id: item.attachment },
+                  })
+                )
+              "
+            >
+              <template #placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </v-hover>
+        </template>
+        <template #info="{ item }">
+          <div v-if="item.attachment__author__agent">
+            <span class="font-weight-bold"
+              >{{ $t('attachment.author') }}:
+            </span>
+            <span>{{ item.attachment__author__agent }}</span>
+          </div>
+          <div
+            v-if="
+              item.attachment__date_created ||
+              item.attachment__date_created_free
+            "
+          >
+            <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
+            <span v-if="item.attachment__date_created">
+              {{
+                new Date(item.attachment__date_created)
+                  .toISOString()
+                  .split('T')[0]
+              }}
+            </span>
+            <span v-else>{{ item.attachment__date_created_free }}</span>
+          </div>
+          <div v-else>{{ $t('common.clickToOpen') }}</div>
+        </template>
+      </image-bar>
       <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
@@ -216,6 +287,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
+import ImageBar from '~/components/ImageBar.vue'
 
 export default {
   components: {
@@ -225,6 +297,7 @@ export default {
     DataRow,
     LinkDataRow,
     Detail,
+    ImageBar,
   },
   async asyncData({ params, route, error, app, redirect }) {
     try {
@@ -267,6 +340,18 @@ export default {
         },
       ]
 
+      const attachmentResponse = await app.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          isValid: isNil(site.id),
+          defaultParams: {
+            site: site.id,
+          },
+          queryFields: {},
+        }
+      )
+      const attachments = attachmentResponse.items ?? []
+
       const hydratedTabs = (
         await Promise.all(
           tabs.map(
@@ -302,6 +387,7 @@ export default {
         ids,
         initActiveTab: path,
         tabs: hydratedTabs,
+        images: attachments,
       }
     } catch (err) {
       error({
@@ -312,9 +398,8 @@ export default {
   },
   head() {
     return {
-      title: this.$translate({
-        et: this.site.name,
-        en: this.site.name_en,
+      title: this.$t(`breadcrumbs.${this.routeName}-id`, {
+        id: this.$route.params.id,
       }),
     }
   },
@@ -328,6 +413,9 @@ export default {
           return this.site.area__text1.split(',')
         } else return [this.site.area__text1]
       } else return []
+    },
+    routeName() {
+      return this.getRouteBaseName().split('-id')[0]
     },
   },
   methods: {

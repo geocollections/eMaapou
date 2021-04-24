@@ -71,16 +71,21 @@ export default ($axios) => ({
 })
 
 const buildQueryParameter = (search) => {
-  let s = search
-  if (
-    !isEmpty(search) &&
-    search.includes('-') &&
-    !search.includes(' -') &&
-    !search.startsWith('"') &&
-    !search.endsWith('"')
-  ) {
-    s = `"${search}"`
-  }
+  const s = search
+    ? search
+        .split(' ')
+        .map((s) => {
+          if (
+            !s.startsWith('-') &&
+            s.includes('-') &&
+            !s.startsWith('"') &&
+            !s.endsWith('"')
+          )
+            return `"${s}"`
+          return s
+        })
+        .join(' ')
+    : null
   return {
     q: isEmpty(s) ? '*' : `${encodeURIComponent(s)}`,
   }
@@ -131,14 +136,15 @@ const buildFilterQueryParameter = (filters) => {
               // const encodedValue = searchParameter.value.map((el) => {
               //   return encodeURIComponent(el)
               // })
-
-              const start = isEmpty(searchParameter.value[0])
+              const start = isNil(searchParameter.value[0])
                 ? '*'
                 : searchParameter.value[0]
-              const end = isEmpty(searchParameter.value[1])
+              const end = isNil(searchParameter.value[1])
                 ? '*'
                 : searchParameter.value[1]
-              return `${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *])`
+              // return `${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *])`
+
+              return `${fieldId}:[${start} TO ${end}]`
             }
             case 'checkbox': {
               const encodedValue = encodeURIComponent(searchParameter.value)

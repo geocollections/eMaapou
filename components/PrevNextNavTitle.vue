@@ -1,9 +1,11 @@
 <template>
   <div
-    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 tertiary"
+    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 emp-title"
     :class="{ 'my-3': title || $slots.title }"
   >
-    <div class="align-self-start align-self-sm-center text-no-wrap">
+    <div
+      class="align-self-start align-self-sm-center text-no-wrap hidden-xs-only"
+    >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -57,7 +59,9 @@
       />
     </slot>
 
-    <div class="align-self-end align-self-sm-center text-no-wrap">
+    <div
+      class="align-self-end align-self-sm-center text-no-wrap hidden-xs-only"
+    >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -133,19 +137,19 @@ export default {
   },
   computed: {
     computedPrevId() {
-      return this.ids?.prev_id
+      return this.ids?.prev_id ?? 0
     },
 
     computedNextId() {
-      return this.ids?.next_id
+      return this.ids?.next_id ?? 0
     },
 
     computedLastId() {
-      return this.ids?.last_id
+      return this.ids?.last_id ?? 0
     },
 
     computedFirstId() {
-      return this.ids?.first_id
+      return this.ids?.first_id ?? 0
     },
 
     routeName() {

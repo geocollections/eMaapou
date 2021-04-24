@@ -1,13 +1,13 @@
 <template>
-  <div class="d-flex justify-center py-2">
+  <div class="d-flex justify-center py-2 emp-title">
     <v-icon v-if="icon" large left>{{ icon }}</v-icon>
     <div class="d-flex flex-column">
       <h1 style="font-size: 1.75rem">
-        {{ $t(title) }}
+        {{ title }}
       </h1>
-      <h4 v-if="subtitle" style="opacity: 0.7">
+      <h3 v-if="subtitle" style="opacity: 0.7">
         {{ subtitle }}
-      </h4>
+      </h3>
     </div>
   </div>
 </template>

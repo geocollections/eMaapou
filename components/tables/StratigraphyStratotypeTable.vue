@@ -9,6 +9,7 @@
   >
     <template #item.locality="{ item }">
       <nuxt-link
+        v-if="item.locality_id"
         class="text-link"
         :to="
           localePath({ name: 'locality-id', params: { id: item.locality__id } })

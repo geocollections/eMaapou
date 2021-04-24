@@ -19,6 +19,19 @@ export const ANALYSIS = {
   },
 }
 
+export const DATASET_ANALYSIS = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    analysis: (locale) => 'analysis',
+    sample: (locale) => 'analysis__sample__number',
+  },
+}
+
 export const ATTACHMENT = {
   options: {
     page: 1,
@@ -105,7 +118,7 @@ export const LOCALITY_REFERENCE = {
   },
 }
 
-export const STRATIGRAPHY_REFERENCE = {
+export const DATASET_REFERENCE = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -114,8 +127,25 @@ export const STRATIGRAPHY_REFERENCE = {
   },
   queryFields: {
     reference: (locale) => 'reference__reference',
+    title: (locale) => 'reference__title',
+    pages: (locale) => 'reference__pages',
+    journal: (locale) => 'reference__journal__journal_name',
+  },
+}
+
+export const STRATIGRAPHY_REFERENCE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: ['year'],
+    sortDesc: [true],
+  },
+  queryFields: {
+    reference: (locale) => 'reference__reference',
+    year: (locale) => 'reference__year',
     pages: (locale) => 'pages',
     remarks: (locale) => 'remarks',
+    content: (locale) => (locale === 'et' ? 'content' : 'content_en'),
   },
 }
 
@@ -144,6 +174,9 @@ export const SITE = {
   queryFields: {
     id: (locale) => 'id_l',
     name: (locale) => 'name',
+    latitude: (locale) => 'latitude',
+    longitude: (locale) => 'longitude',
+    area: (locale) => (locale === 'et' ? 'area_name' : 'area_name_en'),
     x: (locale) => 'x',
     y: (locale) => 'y',
     z: (locale) => 'z',
@@ -441,5 +474,7 @@ export const STRATIGRAPHY = {
     age_stratigraphy: (locale) =>
       locale === 'et' ? 'age_stratigraphy' : 'age_stratigraphy_en',
     age: (locale) => 'age_base,age_top',
+    ageBase: (locale) => 'age_base',
+    ageTop: (locale) => 'age_top',
   },
 }

@@ -105,14 +105,19 @@ export default {
           icon: 'mdi-magnify',
         },
         {
-          name: 'drillcore',
-          lang: 'drillcores',
-          icon: 'mdi-screw-machine-flat-top',
-        },
-        {
           name: 'locality',
           lang: 'localities',
           icon: 'mdi-map-marker-outline',
+        },
+        {
+          name: 'site',
+          lang: 'sites',
+          icon: 'mdi-binoculars',
+        },
+        {
+          name: 'drillcore',
+          lang: 'drillcores',
+          icon: 'mdi-screw-machine-flat-top',
         },
         {
           name: 'sample',
@@ -124,21 +129,16 @@ export default {
           lang: 'analyses',
           icon: 'mdi-chart-scatter-plot',
         },
-        {
-          name: 'site',
-          lang: 'sites',
-          icon: 'mdi-binoculars',
-        },
         // {
         //   name: 'file',
         //   lang: 'attachments',
         //   icon: 'mdi-folder-open-outline',
         // },
-        // {
-        //   name: 'stratigraphy',
-        //   lang: 'stratigraphy',
-        //   icon: '',
-        // },
+        {
+          name: 'stratigraphy',
+          lang: 'stratigraphy',
+          icon: 'mdi-layers-triple',
+        },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },

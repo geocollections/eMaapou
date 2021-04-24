@@ -17,6 +17,8 @@
     />
 
     <text-field v-model="index" :label="$t(filters.byIds.index.label)" />
+
+    <range-text-field v-model="age" :label="$t(filters.byIds.age.label)" />
   </v-form>
 </template>
 
@@ -30,6 +32,7 @@ import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import RangeTextField from '~/components/fields/RangeTextField'
 
 export default {
   name: 'StratigraphySearchForm',
@@ -39,6 +42,7 @@ export default {
     ResetSearchButton,
     SearchButton,
     AutocompleteField,
+    RangeTextField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -58,6 +62,7 @@ export default {
       stratigraphy: 'filters.byIds.stratigraphy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       index: 'filters.byIds.index.value',
+      age: 'filters.byIds.age.value',
     }),
   },
   created() {

@@ -29,6 +29,14 @@ const getDefaultState = () => {
           label: 'stratigraphy.index',
           fields: ['index_main', 'index_additional'],
         },
+        age: {
+          value: [null, null],
+          type: 'range',
+          lookUpType: 'range',
+          label: 'stratigraphy.age',
+          placeholders: ['stratigraphy.min', 'stratigraphy.max'],
+          fields: ['age_base', 'age_top'],
+        },
         hierarchy: {
           value: null,
           type: 'object',
@@ -38,7 +46,7 @@ const getDefaultState = () => {
           fields: ['hierarchy_string'],
         },
       },
-      allIds: ['id', 'stratigraphy'],
+      allIds: ['id', 'stratigraphy', 'age'],
     },
   }
 }

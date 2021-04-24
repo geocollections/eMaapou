@@ -10,7 +10,6 @@ const vuexOptions = {
     history: {
       ...state.history,
     },
-    i18n: { locale: state.i18n.locale },
   }),
 }
 

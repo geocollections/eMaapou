@@ -205,13 +205,28 @@
                   :title="$t('drillcoreBox.stratigraphyBaseFree')"
                   :value="drillcoreBox.stratigraphy_base_free"
                 />
+
+                <data-row
+                  v-if="drillcoreBox.date_added"
+                  :title="$t('drillcoreBox.dateAdded')"
+                  :value="
+                    new Date(drillcoreBox.date_added)
+                      .toISOString()
+                      .split('T')[0]
+                  "
+                />
+                <data-row
+                  v-if="drillcoreBox.date_changed"
+                  :title="$t('drillcoreBox.dateChanged')"
+                  :value="
+                    new Date(drillcoreBox.date_changed)
+                      .toISOString()
+                      .split('T')[0]
+                  "
+                />
                 <data-row
                   :title="$t('drillcoreBox.remarks')"
                   :value="drillcoreBox.remarks"
-                />
-                <data-row
-                  :title="$t('drillcoreBox.id')"
-                  :value="drillcoreBox.id"
                 />
               </tbody>
             </template>

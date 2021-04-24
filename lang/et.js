@@ -1,6 +1,7 @@
 export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
+  slogan: 'Kogu info Eesti maapõuest',
   landing: {
     searchTitle: 'Leia kiirelt e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
@@ -69,6 +70,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     institutions: 'Geoloogia asutused, organisatsioonid, ettevõtted',
     lang: 'Keel',
+    clickToOpen: 'Vajuta avamiseks',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -122,6 +124,9 @@ export default {
     author: 'Autor',
     stratigraphy: 'Stratigraafia',
     reference: 'Kirjandus',
+    elevationAccuracy: 'Kõrguse täpsus',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',
@@ -151,6 +156,8 @@ export default {
     depth: 'Sügavus',
     acronym: 'Omanik',
     drillcore: 'Puursüdamik',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   drillcoreBox: {
     id: 'ID',
@@ -167,6 +174,8 @@ export default {
     diameter: 'Diameeter',
     author: 'Foto autor',
     date: 'Foto kuupäev',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   localityDescription: {
     stratigraphy: 'Stratigraafia',
@@ -184,9 +193,9 @@ export default {
     referenceTitle: 'Pealkiri',
   },
   sampleReference: {
-    reference: 'Reference',
-    remarks: 'Remarks',
-    pages: 'Pages',
+    reference: 'Kirje',
+    remarks: 'Lisainfo',
+    pages: 'Lk',
     referenceTitle: 'Pealkiri',
   },
   attachment: {
@@ -216,7 +225,7 @@ export default {
     analysedBy: 'Isik/asutus',
     date: 'Aeg',
     thickness: 'Paksus',
-    title: 'Analüüs ID: {id}',
+    title: 'Analüüs ({method}) proovist {sample}',
     remarks: 'Lisainfo',
     reference: 'Viide',
     dataset: 'Andmekogu',
@@ -228,6 +237,12 @@ export default {
     results: 'Tulemused ({number})',
     attachments: 'Failid ({number})',
     analysis: 'Proovi nr.',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
+  },
+  datasetAnalysis: {
+    analysis: 'Analüüs',
+    sampleNumber: 'Proovi number',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -274,6 +289,8 @@ export default {
     maardlaLink: 'Maardla info Maa-ameti geoportaalis',
     sites: 'Uuringupunktid ({number})',
     localityReferences: 'Kirjandus ({number})',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   site: {
     pageTitle: 'Uuringupunktide otsing',
@@ -296,6 +313,8 @@ export default {
     latitude: 'Lat',
     longitude: 'Long',
     site: 'Uuringupunkt',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   sample: {
     pageTitle: 'Proovide otsing',
@@ -339,6 +358,8 @@ export default {
     sampleReferences: 'Kirjandus ({number})',
     sample: 'Proov',
     hierarchy: 'Stratigraafia',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   preparation: {
     id: 'ID',
@@ -363,6 +384,8 @@ export default {
     location: 'Hoiukoht',
     attachments: 'Failid ({number})',
     taxa: 'Taksonid ({number})',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   taxon: {
     id: 'ID',
@@ -472,16 +495,20 @@ export default {
     references: 'Kirjandus ({number})',
     stratotypes: 'Stratotüübid',
     synonyms: 'Sünonüümid ({number})',
-    lithostratigraphy: 'Litostratigraafia ({number})',
+    relatedUnits: 'Seotud üksused ({number})',
     specimens: 'Eksemplarid ({number})',
     samples: 'Proovid ({number})',
     subUnits: 'Alamüksused ({number})',
     pageTitle: 'Stratigraafia otsing',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   stratigraphyReference: {
     reference: 'Viide',
     pages: 'Leheküljed',
     remarks: 'Lisainfo',
+    year: 'Aasta',
+    content: 'Sisu',
   },
   stratigraphySynonym: {
     synonym: 'Sünonüüm',
@@ -567,6 +594,7 @@ export default {
     keywords: 'Märksõnad',
     type: 'Tüüp',
     download: 'Lae alla',
+    remarks: 'Lisainfo',
   },
   cookiePolicy: {
     introduction:
@@ -608,6 +636,14 @@ export default {
     date: 'Kuupäev',
     database: 'Andmebaas',
     dataset: 'Andmekogu',
+    author: 'Põhiautor',
+    copyright: 'Autoriõigused',
+    licence: 'Kasutustingimused',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
+    references: 'Kirjandus ({number})',
+    analyses: 'Analüüsid ({number})',
+    attachments: 'Failid ({number})',
   },
   reference: {
     id: 'ID',
@@ -677,6 +713,7 @@ export default {
     'search-drillcores': 'Kiirpäring: Puursüdamikud',
     'search-files': 'Kiirpäring: Failid',
     'stratigraphy-id': 'Stratigraafia ID: {id}',
+    'dataset-id': 'Dataset ID: {id}',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',

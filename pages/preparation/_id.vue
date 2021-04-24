@@ -89,10 +89,23 @@
                 :value="preparation.owner__agent"
               />
               <data-row
+                v-if="preparation.date_added"
+                :title="$t('preparation.dateAdded')"
+                :value="
+                  new Date(preparation.date_added).toISOString().split('T')[0]
+                "
+              />
+              <data-row
+                v-if="preparation.date_changed"
+                :title="$t('preparation.dateChanged')"
+                :value="
+                  new Date(preparation.date_changed).toISOString().split('T')[0]
+                "
+              />
+              <data-row
                 :title="$t('preparation.remarks')"
                 :value="preparation.remarks"
               />
-              <data-row :title="$t('preparation.id')" :value="preparation.id" />
             </tbody>
           </template>
         </v-simple-table>

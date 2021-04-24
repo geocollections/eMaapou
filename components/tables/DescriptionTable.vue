@@ -22,6 +22,7 @@
     </template>
     <template #item.stratigraphy="{ item }">
       <nuxt-link
+        v-if="item.stratigraphy"
         class="text-link"
         :to="
           localePath({

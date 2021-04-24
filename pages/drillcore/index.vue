@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title-wrapper
-      title="common.drillcoresCount"
+      :title="$t('common.drillcoresCount')"
       :count="count"
       icon="mdi-screw-machine-flat-top"
     />

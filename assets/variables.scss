@@ -3,28 +3,14 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
-$body-font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-$anchor: #ff5722;
-$anchor-darken-1: #f4511e;
-$anchor-darken-2: #e64a19;
-$anchor-darken-3: #d84315;
-$anchor-darken-4: #bf360c;
-
-//
-// @import '~vuetify/src/styles/styles.sass';
-// $material-light: (
-//   icons: (
-//     active:
-//       map-get(
-//         $map: $deep-orange,
-//         $key: 'darken-2',
-//       ),
-//   ),
-// );
+$body-font-family: 'Open Sans', sans-serif;
+$heading-font-family: 'Montserrat', sans-serif !important;
 
 // HACK: This is done do change tab overflow arrow colors. It also overrides other active icon colors, so it might change some icons inadvertently.
 $material-light: (
   icons: (
-    active: $anchor-darken-2,
+    active: var(--v-primary-darken1),
   ),
 );
+
+@import '~vuetify/src/styles/styles.sass';

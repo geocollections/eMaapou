@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title-wrapper
-      title="common.sitesCount"
+      :title="$t('common.sitesCount')"
       :count="count"
       icon="mdi-map-marker-star-outline"
     />
@@ -77,7 +77,6 @@ export default {
     ...mapActions('site', ['searchSites']),
     async handleUpdate(tableState) {
       await this.searchSites(tableState.options)
-      this.options = tableState.options
     },
   },
 }

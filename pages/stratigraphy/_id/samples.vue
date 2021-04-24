@@ -29,7 +29,6 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
-      console.log(this.stratigraphy)
       const sampleResponse = await this.$services.sarvSolr.getResourceList(
         'sample',
         {

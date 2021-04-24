@@ -7,13 +7,27 @@
     :count="count"
     v-on="$listeners"
   >
-    <template #item.reference="{ item }">
-      <a
-        v-if="item.reference"
+    <template #item.analysis="{ item }">
+      <nuxt-link
         class="text-link"
-        @click="$openGeology('reference', item.reference)"
-        >{{ item.reference__reference }}</a
+        :to="localePath({ name: 'analysis-id', params: { id: item.analysis } })"
       >
+        {{ item.analysis }}
+      </nuxt-link>
+    </template>
+    <template #item.sample="{ item }">
+      <nuxt-link
+        v-if="item.analysis__sample__id"
+        class="text-link"
+        :to="
+          localePath({
+            name: 'sample-id',
+            params: { id: item.analysis__sample__id },
+          })
+        "
+      >
+        {{ item.analysis__sample__number }}
+      </nuxt-link>
     </template>
   </table-wrapper>
 </template>
@@ -22,7 +36,7 @@
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
-  name: 'LocalityReferenceTable',
+  name: 'DatasetAnalysisTable',
   components: { TableWrapper },
   props: {
     showSearch: {
@@ -50,13 +64,11 @@ export default {
   data() {
     return {
       headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
+        { text: this.$t('datasetAnalysis.analysis'), value: 'analysis' },
         {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
+          text: this.$t('datasetAnalysis.sampleNumber'),
+          value: 'sample',
         },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
       ],
     }
   },

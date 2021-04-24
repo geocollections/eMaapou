@@ -3,7 +3,7 @@
     <image-cell v-if="isImage && src" :src="src" @click="$emit('click')" />
     <v-icon
       v-else-if="isImage"
-      color="deep-orange darken-2"
+      color="primary darken-2"
       large
       @click="$emit('click')"
     >
@@ -11,13 +11,13 @@
     </v-icon>
     <v-icon
       v-else-if="isVideo"
-      color="deep-orange darken-2"
+      color="primary darken-2"
       large
       @click="$emit('click')"
     >
       mdi-file-video-outline
     </v-icon>
-    <v-icon v-else color="deep-orange darken-2" large @click="$emit('click')">
+    <v-icon v-else color="primary darken-2" large @click="$emit('click')">
       mdi-file-outline
     </v-icon>
   </div>

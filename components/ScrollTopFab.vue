@@ -4,11 +4,12 @@
       v-show="showFab"
       v-scroll="onScroll"
       fab
-      color="quinary darken-3"
+      small
+      color="primary darken-3"
       dark
       @click="toTop"
     >
-      <v-icon large>mdi-chevron-up</v-icon>
+      <v-icon>mdi-chevron-up</v-icon>
     </v-btn>
   </v-fab-transition>
 </template>

@@ -8,21 +8,23 @@
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <external-link
+      <nuxt-link
         v-if="item.id"
-        @click.native="$openGeoDetail('dataset', item.id)"
+        class="text-link"
+        :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </external-link>
+      </nuxt-link>
     </template>
 
     <template #item.name="{ item }">
-      <external-link
+      <nuxt-link
         v-if="$translate({ et: item.name, en: item.name_en })"
-        @click.native="$openGeoDetail('dataset', item.id)"
+        class="text-link"
+        :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
       >
         {{ $translate({ et: item.name, en: item.name_en }) }}
-      </external-link>
+      </nuxt-link>
     </template>
 
     <template #item.date="{ item }">

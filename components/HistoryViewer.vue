@@ -3,7 +3,10 @@
     <v-subheader class="pb-1">{{ `${$t('common.history')}:` }}</v-subheader>
     <span class="history-viewer pb-1">
       <span v-for="(item, index) in history" :key="index">
-        <nuxt-link class="text-link" :to="localePath({ path: item.to })">
+        <nuxt-link
+          class="text-link-grey history-link"
+          :to="localePath({ path: item.to })"
+        >
           {{ $t(item.text, { id: item.id }) }}
         </nuxt-link>
         <span v-if="index !== history.length - 1" class="divider mx-1">
@@ -51,7 +54,7 @@ export default {
   background: rgba(0, 0, 0, 0.66);
 }
 
-.text-link {
+.history-link {
   font-size: 0.8em;
 }
 

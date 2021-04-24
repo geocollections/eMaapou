@@ -28,6 +28,19 @@
         }}
       </nuxt-link>
     </template>
+    <template #item.area="{ item }">
+      <nuxt-link
+        class="text-link"
+        :to="localePath({ name: 'area-id', params: { id: item.area_id } })"
+      >
+        {{
+          $translate({
+            et: item.area_name,
+            en: item.area_name_en,
+          })
+        }}
+      </nuxt-link>
+    </template>
   </table-wrapper>
 </template>
 
@@ -65,8 +78,9 @@ export default {
       headers: [
         { text: this.$t('site.id'), value: 'id' },
         { text: this.$t('site.name'), value: 'name' },
-        { text: this.$t('site.coordx'), value: 'x' },
-        { text: this.$t('site.coordy'), value: 'y' },
+        { text: this.$t('site.area'), value: 'area' },
+        { text: this.$t('site.latitude'), value: 'latitude' },
+        { text: this.$t('site.longitude'), value: 'longitude' },
         {
           text: this.$t('site.elevation'),
           value: 'z',

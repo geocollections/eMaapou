@@ -68,7 +68,11 @@
                       })
                     }}
                   </v-card-title>
-                  <v-simple-table dense class="custom-table">
+                  <v-simple-table
+                    v-if="boxHasInfo(box)"
+                    dense
+                    class="custom-table"
+                  >
                     <template #default>
                       <tbody>
                         <data-row
@@ -80,6 +84,7 @@
                           :value="box.drillcore_box__depth_end"
                         />
                         <link-data-row
+                          v-if="box.drillcore_box__stratigraphy_top"
                           :title="$t('drillcoreBox.stratigraphyTop')"
                           :value="
                             $translate({
@@ -100,6 +105,7 @@
                           "
                         />
                         <link-data-row
+                          v-if="box.drillcore_box__stratigraphy_base"
                           :title="$t('drillcoreBox.stratigraphyBase')"
                           :value="
                             $translate({
@@ -140,7 +146,7 @@
         <client-only>
           <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
             <template #spinner>
-              <v-progress-circular color="deep-orange darken-2" indeterminate />
+              <v-progress-circular color="primary darken-2" indeterminate />
             </template>
             <template #no-more>{{ $t('infinite.noMore') }}</template>
             <template #error="{ trigger }">
@@ -148,7 +154,7 @@
                 {{ $t('infinite.error') }}
               </div>
               <br />
-              <v-btn outlined color="deep-orange darken-2" @click="trigger">
+              <v-btn outlined color="primary darken-2" @click="trigger">
                 {{ $t('infinite.retry') }}
               </v-btn>
             </template>
@@ -182,6 +188,16 @@ export default {
   },
   methods: {
     isNull,
+    boxHasInfo(box) {
+      return (
+        box.drillcore_box__depth_start ||
+        box.drillcore_box__depth_end ||
+        box.drillcore_box__stratigraphy_top ||
+        box.drillcore_box__stratigraphy_base ||
+        box.drillcore_box__depth_other ||
+        box.drillcore_box__remarks
+      )
+    },
     infiniteHandler($state) {
       if (this.drillcore) {
         const paginateBy = 5

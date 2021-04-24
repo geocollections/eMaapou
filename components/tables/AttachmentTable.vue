@@ -20,6 +20,7 @@
     </template>
     <template #item.description="{ item }">
       <nuxt-link
+        v-if="item.attachment"
         class="text-link"
         :to="localePath({ name: 'file-id', params: { id: item.attachment } })"
       >

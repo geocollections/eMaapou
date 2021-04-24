@@ -20,7 +20,15 @@ export default {
           'e-Maapõu is web portal for geoscience data from Estonia. It provides direct search capabilities to information system SARV and links to other relevant data sources',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://fonts.googleapis.com/css2?family=Montserrat&display=swap',
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -94,11 +102,9 @@ export default {
     defaultLocale: 'et',
     strategy: 'prefix_and_default',
     detectBrowserLanguage: {
-      alwaysRedirect: true,
+      useCookie: true,
+      onlyOnRoot: true,
       fallbackLocale: 'et',
-    },
-    vuex: {
-      syncLocale: true,
     },
   },
 
@@ -120,20 +126,20 @@ export default {
           // warning: colors.amber.base,
           // error: colors.deepOrange.accent4,
           // success: colors.green.accent3,
-          primary: '#495867',
-          secondary: '#577399',
-          tertiary: '#BDD5EA',
+          primary: '#009270',
+          secondary: '#bfe6cf',
+          tertiary: '#333333',
           quaternary: '#F7F7FF',
-          quinary: '#FE5F55',
-          anchor: '#FE5F55',
+          quinary: '#fcf2df',
+          anchor: '#009270',
         },
         light: {
-          primary: '#495867',
-          secondary: '#577399',
-          tertiary: '#BDD5EA',
+          primary: '#009270',
+          secondary: '#bfe6cf',
+          tertiary: '#333333',
           quaternary: '#F7F7FF',
-          quinary: '#FE5F55',
-          anchor: '#FE5F55',
+          quinary: '#fcf2df',
+          anchor: '#009270',
         },
       },
     },

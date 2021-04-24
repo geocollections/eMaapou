@@ -194,7 +194,7 @@
         <client-only>
           <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
             <template #spinner>
-              <v-progress-circular color="deep-orange darken-2" indeterminate />
+              <v-progress-circular color="primary darken-2" indeterminate />
             </template>
             <template #no-more>{{ $t('infinite.noMore') }}</template>
             <template #error="{ trigger }">
@@ -202,7 +202,7 @@
                 {{ $t('infinite.error') }}
               </div>
               <br />
-              <v-btn outlined color="deep-orange darken-2" @click="trigger">
+              <v-btn outlined color="primary darken-2" @click="trigger">
                 {{ $t('infinite.retry') }}
               </v-btn>
             </template>

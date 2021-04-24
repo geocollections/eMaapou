@@ -3,18 +3,20 @@
     :items="attachments"
     :count="count"
     :options="options"
+    id-field="attachment"
     @update="handleUpdate"
   />
 </template>
 
 <script>
 import { isNil } from 'lodash'
-import AttachmentTable from '~/components/tables/AttachmentTable'
+import AttachmentTable from '@/components/tables/AttachmentTable'
+
 import { ATTACHMENT } from '~/constants'
 export default {
   components: { AttachmentTable },
   props: {
-    site: {
+    dataset: {
       type: Number,
       default: null,
     },
@@ -37,9 +39,9 @@ export default {
         'attachment_link',
         {
           ...tableState,
-          isValid: isNil(this.site),
+          isValid: isNil(this.dataset),
           defaultParams: {
-            or_search: `site:${this.site}`,
+            dataset: this.dataset,
           },
           queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
         }

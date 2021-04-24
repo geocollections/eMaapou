@@ -1,71 +1,85 @@
 <template>
-  <v-app-bar app dark style="z-index: 2050" color="secondary">
+  <v-app-bar app dark style="z-index: 2050" color="primary">
     <v-toolbar-items>
-      <v-app-bar-title class="app-title align-self-center">
-        <nuxt-link :to="localePath({ path: '/' })" class="title-link">
+      <v-app-bar-title class="align-self-center">
+        <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
-              <span
+              <v-img
+                height="45"
+                width="90"
+                contain
+                :src="logo"
                 v-bind="attrs"
-                class="header-text text-none text-nowrap"
-                :class="{
-                  'mr-4': $vuetify.breakpoint.smAndUp,
-                }"
                 v-on="on"
-                >{{ $t('common.home') }}</span
-              >
+              />
             </template>
 
             <span>{{ $t('landing.goToFrontpage') }}</span>
           </v-tooltip>
         </nuxt-link>
       </v-app-bar-title>
-
-      <!-- BUTTONS ON DENSE BAR -->
-      <!-- <template>
-        <v-btn
-          v-for="(item, index) in tabs"
-          :key="index"
-          nuxt
-          text
-          :class="{
-            'd-none d-lg-flex': item.name !== 'about' && item.name !== 'search',
-            'd-none d-md-flex': item.name === 'about' || item.name === 'search',
-          }"
-          style="color: rgba(255, 255, 255, 0.6)"
-          :exact="item.name !== 'search'"
-          :to="localePath({ name: item.name })"
-          >{{ $t(`common.${item.lang}`) }}</v-btn
-        >
-      </template> -->
     </v-toolbar-items>
-
-    <v-spacer />
-
-    <v-btn
-      v-show="$vuetify.breakpoint.smAndUp"
-      nuxt
-      aria-label="about page"
-      class="font-weight-bold"
-      text
-      :to="localePath({ name: 'about' })"
+    <v-divider
+      v-if="$vuetify.breakpoint.mdAndUp"
+      vertical
+      inset
+      class="quaternary mx-3"
+    />
+    <div
+      v-if="$vuetify.breakpoint.mdAndUp"
+      style="font-family: 'Montserrat', sans-serif"
     >
-      {{ $t('common.about') }}
-    </v-btn>
+      {{ $t('slogan') }}
+    </div>
+    <v-spacer />
+    <app-header-search v-if="!isLanding && !isSearchPage" class="mr-2" />
 
-    <links v-if="false" />
+    <v-toolbar-items>
+      <v-btn
+        v-show="$vuetify.breakpoint.smAndUp"
+        nuxt
+        aria-label="about page"
+        class="font-weight-bold"
+        text
+        :to="localePath({ name: 'about' })"
+      >
+        {{ $t('common.about') }}
+      </v-btn>
 
-    <app-header-search class="mx-3" />
-
-    <lang-switcher />
-
-    <lang-switcher-fast v-if="false" />
+      <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
+      <v-btn
+        :text="$vuetify.breakpoint.smAndUp"
+        :icon="!$vuetify.breakpoint.smAndUp"
+        class="font-weight-bold"
+        :class="{ 'mr-1 header-icon-button': !$vuetify.breakpoint.smAndUp }"
+        aria-label="Open navigation drawer"
+        :small="!$vuetify.breakpoint.smAndUp"
+        @click.stop="$emit('toggle:navigationDrawer')"
+      >
+        <div v-if="drawer">
+          <span
+            v-show="$vuetify.breakpoint.smAndUp"
+            style="vertical-align: middle"
+            >{{ $t('common.close') }}</span
+          ><v-icon size="font-size: 24px">mdi-close</v-icon>
+        </div>
+        <div v-else>
+          <span
+            v-show="$vuetify.breakpoint.smAndUp"
+            style="vertical-align: middle"
+            >{{ $t('common.more') }}</span
+          >
+          <v-icon size="font-size: 24px">mdi-menu</v-icon>
+        </div>
+      </v-btn>
+    </v-toolbar-items>
 
     <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
-        class="tertiary"
+        class="header-tabs"
         optional
         show-arrows
         center-active
@@ -76,49 +90,21 @@
           v-for="(item, index) in tabs"
           :key="index"
           nuxt
-          active-class="black--text"
+          active-class="active-tab"
           :to="localePath({ name: item.name })"
           ><b>{{ $t(`common.${item.lang}`) }}</b></v-tab
         >
       </v-tabs>
     </template>
-
-    <v-btn
-      :text="$vuetify.breakpoint.smAndUp"
-      :icon="!$vuetify.breakpoint.smAndUp"
-      class="font-weight-bold"
-      :class="{ 'mr-1 header-icon-button': !$vuetify.breakpoint.smAndUp }"
-      aria-label="Open navigation drawer"
-      :small="!$vuetify.breakpoint.smAndUp"
-      @click.stop="$emit('toggle:navigationDrawer')"
-    >
-      <div v-if="drawer">
-        <span
-          v-show="$vuetify.breakpoint.smAndUp"
-          style="vertical-align: middle"
-          >{{ $t('common.close') }}</span
-        ><v-icon size="font-size: 24px">mdi-close</v-icon>
-      </div>
-      <div v-else>
-        <span
-          v-show="$vuetify.breakpoint.smAndUp"
-          style="vertical-align: middle"
-          >{{ $t('common.more') }}</span
-        >
-        <v-icon size="font-size: 24px">mdi-menu</v-icon>
-      </div>
-    </v-btn>
   </v-app-bar>
 </template>
 
 <script>
-import Links from '@/components/Links'
-import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 import AppHeaderSearch from '~/components/AppHeaderSearch'
-import LangSwitcherFast from '~/components/lang_switcher/LangSwitcherFast'
+import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcherFast, AppHeaderSearch, LangSwitcher, Links },
+  components: { AppHeaderSearch, LangSwitcher },
   props: {
     isDetail: {
       type: Boolean,
@@ -150,10 +136,18 @@ export default {
           name: 'analysis',
           lang: 'analyses',
         },
+        { name: 'stratigraphy', lang: 'stratigraphy' },
       ],
+      logo: require('~/assets/logos/emaapou5white.svg'),
     }
   },
   computed: {
+    isLanding() {
+      return this.$route.name.startsWith('index')
+    },
+    isSearchPage() {
+      return this.$route.name.startsWith('search')
+    },
     isNotSearchPath() {
       return !this.$route.path.startsWith('/search')
     },
@@ -172,5 +166,18 @@ export default {
 <style scoped>
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
+}
+
+.header-tabs {
+  background-color: var(--v-secondary-base);
+}
+
+.active-tab {
+  background-color: var(--v-quaternary-base) !important;
+  color: var(--v-tertiary-base) !important;
+}
+
+.v-app-bar ::v-deep .v-toolbar__content {
+  padding-right: 0;
 }
 </style>
