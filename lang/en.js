@@ -440,6 +440,10 @@ export default {
     title: 'Analytical data',
     description: 'Analyses and results',
   },
+  frontStratigraphy: {
+    title: 'Stratotype sections',
+    description: 'Database on stratotype outcrops in Estonia',
+  },
   geocollections: {
     title: ' Geocollections',
     description: 'Geoscience Collections Portal',
@@ -450,7 +454,7 @@ export default {
   },
   gmre: {
     title: 'Geology of Estonia',
-    description: 'Book',
+    description: 'Book by Raukas & Teedumäe (eds), 1997',
   },
   fond: {
     title: 'Geoloogiafond',
@@ -475,8 +479,6 @@ export default {
     age_stratigraphy: 'Age',
     age: 'Age (Ma)',
     parent_stratigraphy: 'Belongs to',
-    title: 'Stratigraphy and time scale',
-    description: 'Estonian Commission on Stratigraphy',
     parentStratigraphy: 'Belongs to',
     type: 'Type',
     rank: 'Rank',

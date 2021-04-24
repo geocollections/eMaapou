@@ -141,9 +141,9 @@ export default {
           lg: 3,
         },
         stratigraphy: {
-          title: 'stratigraphy.title',
-          description: 'stratigraphy.description',
-          href: 'http://stratigraafia.info',
+          title: 'frontStratigraphy.title',
+          description: 'frontStratigraphy.description',
+          href: 'https://stratotuup.ut.ee',
           background: await require('~/assets/frontpage/stratigraafia.jpg'),
           sm: 6,
           md: 4,

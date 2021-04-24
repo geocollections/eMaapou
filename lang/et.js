@@ -441,8 +441,12 @@ export default {
     title: 'Analüüsid',
     description: 'Maapõue analüütiline andmestik',
   },
+  frontStratigraphy: {
+    title: 'Stratotüübid',
+    description: 'Eesti stratotüüpsete paljandite andmebaas',
+  },
   geocollections: {
-    title: 'Geokogud',
+    title: 'Kollektsioonid',
     description: 'Eesti geokogude portaal',
   },
   kirjandus: {
@@ -451,7 +455,7 @@ export default {
   },
   gmre: {
     title: 'Eesti Geoloogia',
-    description: 'Raamat',
+    description: 'Raamat: Raukas ja Teedumäe (toim), 1997',
   },
   fond: {
     title: 'Geoloogiafond',
@@ -476,8 +480,6 @@ export default {
     age_stratigraphy: 'Vanus',
     age: 'Vanus (Ma)',
     parent_stratigraphy: 'Kuulub',
-    title: 'Stratigraafia',
-    description: 'Eesti Stratigraafia Komisjon',
     parentStratigraphy: 'Kuulub',
     type: 'Tüüp',
     rank: 'Tase',

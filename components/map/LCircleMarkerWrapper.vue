@@ -4,7 +4,7 @@
       v-for="(marker, idx) in markers"
       :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
       :lat-lng="[marker.latitude, marker.longitude]"
-      :radius="7"
+      :radius="6"
       :weight="2"
       color="#fff"
       fill-color="red"

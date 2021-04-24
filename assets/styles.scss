@@ -201,6 +201,36 @@ th {
   background-color: var(--v-quinary-base) !important;*/
 }
 
+.emp-title-stratigraphy {
+  color: #fff !important;
+  background-color: #cb8c37 !important;
+}
+
+.emp-title-analysis {
+  color: #fff !important;
+  background-color: #80a8c2 !important;
+}
+
+.emp-title-sample {
+  color: #fff !important;
+  background-color: #bc7b7b !important;
+}
+
+.emp-title-drillcore {
+  color: #fff !important;
+  background-color: #8f7e9f !important;
+}
+
+.emp-title-locality {
+  color: #fff !important;
+  background-color: #7bbc9a !important;
+}
+
+.emp-title-site {
+  color: #fff !important;
+  background-color: #8ba56c !important;
+}
+
 #app {
   background-color: #f7f6f4 !important;
 }
@@ -210,4 +240,11 @@ th {
   font-weight: bold;
   color: #406451 !important;
   background-color: white;
+}
+
+.theme--light.v-data-table tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, .03);
+}
+.theme--dark.v-data-table tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, .5);
 }

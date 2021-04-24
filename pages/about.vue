@@ -1,7 +1,13 @@
 <template>
   <div>
-    <h1 class="text-center my-3">{{ $t('about.title') }}</h1>
-    <v-card v-if="page" width="100%" flat tile class="roundedBorder aboutpage">
+    <v-card
+      v-if="page"
+      width="100%"
+      raised-1
+      tile
+      class="roundedBorder aboutpage"
+    >
+      <h1 class="text-center my-3">{{ $t('about.title') }}</h1>
       <div
         v-html="$translate({ et: page.content_et, en: page.content_en })"
       ></div>

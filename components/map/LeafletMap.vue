@@ -248,6 +248,7 @@ export default {
             transparent: true,
             options: {
               maxNativeZoom: 18,
+              minZoom: 13,
               maxZoom: 21,
               attribution:
                 "Localities: <a  href='https://geoloogia.info'>SARV</a>",
@@ -255,6 +256,23 @@ export default {
               tiled: true,
               detectRetina: true,
               updateWhenIdle: true,
+              zIndex: 2,
+            },
+          },
+          {
+            id: 'locs_tms',
+            name: 'Localities (overview)',
+            url:
+              'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
+            // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
+            visible: true,
+            options: {
+              maxNativeZoom: 12,
+              maxZoom: 12,
+              attribution:
+                "Localities: <a  href='https://geoloogia.info'>SARV</a>",
+              tms: true,
+              detectRetina: true,
               zIndex: 2,
             },
           },
