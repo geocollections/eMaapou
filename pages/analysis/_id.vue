@@ -16,9 +16,9 @@
     </template>
 
     <template #default>
-      <v-card flat tile>
+      <v-card>
         <v-row no-gutters justify="center">
-          <v-col cols="12" md="9" lg="7" xl="6">
+          <v-col>
             <v-card-title>{{ $t('common.general') }}</v-card-title>
             <v-card-text>
               <v-simple-table dense class="custom-table">
