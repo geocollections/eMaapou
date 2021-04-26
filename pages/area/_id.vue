@@ -7,10 +7,10 @@
       />
     </template>
 
-    <template #default>
+    <template #column-left>
       <v-card flat tile>
         <v-row no-gutters justify="center">
-          <v-col cols="12" md="9" lg="7" xl="6">
+          <v-col cols="12">
             <v-card-title>{{ $t('common.general') }}</v-card-title>
             <v-card-text>
               <v-simple-table dense class="custom-table">
@@ -156,10 +156,25 @@
         </v-row>
       </v-card>
     </template>
+
+    <template v-if="computedSites" #column-right>
+      <v-card-title>{{ $t('locality.map') }}</v-card-title>
+      <v-card-text>
+        <v-card id="map-wrap" elevation="0">
+          <leaflet-map
+            rounded
+            :is-estonian="true"
+            :height="600"
+            :markers="computedSites"
+          />
+        </v-card>
+      </v-card-text>
+    </template>
+
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" flat tile class="mt-6 mx-4 mb-4">
         <v-row no-gutters justify="center" class="px-4">
-          <v-col cols="12" md="9" lg="7" xl="6" class="elevation-2 rounded">
+          <v-col cols="12" class="elevation-2 rounded">
             <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
           </v-col>
         </v-row> </v-card
@@ -174,9 +189,17 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import Detail from '~/components/templates/Detail.vue'
+import LeafletMap from '~/components/map/LeafletMap'
 
 export default {
-  components: { PrevNextNavTitle, Tabs, DataRow, LinkDataRow, Detail },
+  components: {
+    LeafletMap,
+    PrevNextNavTitle,
+    Tabs,
+    DataRow,
+    LinkDataRow,
+    Detail,
+  },
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
@@ -185,6 +208,17 @@ export default {
       )
       const ids = detailViewResponse?.ids
       const area = detailViewResponse.results[0]
+
+      const sitesResponse = await app.$services.sarvSolr.getResourceList(
+        'site',
+        {
+          defaultParams: {
+            fq: `area_id:${params.id}`,
+          },
+        }
+      )
+
+      const sites = sitesResponse.items
 
       const tabs = [
         {
@@ -268,6 +302,7 @@ export default {
       return {
         area,
         ids,
+        sites,
         initActiveTab: path,
         tabs: hydratedTabs,
       }
@@ -312,6 +347,31 @@ export default {
         if (this.area.text1.includes(',')) {
           return this.area.text1.split(',')
         } else return [this.area.text1]
+      } else return []
+    },
+
+    computedSites() {
+      if (this.sites) {
+        return this.sites.reduce((filtered, item) => {
+          if (item.longitude && item.latitude) {
+            const newItem = {
+              longitude: item.longitude,
+              latitude: item.latitude,
+              text:
+                this.$translate({ et: item.name, en: item.name_en }) ??
+                `ID: ${item.id}`,
+              routeName: 'site',
+              id: item.id,
+            }
+            const isItemInArray = !!filtered.find(
+              (existingItem) =>
+                existingItem.latitude === item.latitude &&
+                existingItem.longitude === item.longitude
+            )
+            if (!isItemInArray) filtered.push(newItem)
+          }
+          return filtered
+        }, [])
       } else return []
     },
   },
