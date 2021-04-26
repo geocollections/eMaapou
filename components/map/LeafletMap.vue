@@ -14,8 +14,9 @@
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
         @ready="fitBounds"
+        @click="handleClick"
       >
-        <l-control-layers />
+        <l-control-layers ref="layer-control" />
         <l-control-fullscreen position="topleft" />
         <l-control-scale
           position="bottomleft"
@@ -84,6 +85,7 @@
 
 <script>
 // import MapLegend from '~/components/map/MapLegend'
+import { debounce } from 'lodash'
 import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
@@ -299,6 +301,25 @@ export default {
               zIndex: 2,
             },
           },
+          {
+            id: 'sites',
+            isWMS: true,
+            name: 'Sites',
+            url: 'https://gis.geocollections.info/geoserver/wms',
+            layers: 'sarv:site_summary',
+            visible: false,
+            transparent: true,
+            options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
+              attribution: "Sites: <a  href='https://geoloogia.info'>SARV</a>",
+              format: 'image/png',
+              tiled: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 2,
+            },
+          },
         ],
       },
     }
@@ -399,6 +420,48 @@ export default {
         })
       }
     },
+
+    handleClick: debounce(async function (event) {
+      console.log('click')
+      // site: sarv:site_summary, locality: sarv:locality_summary, drillcore: sarv:locality_drillcores
+      // Todo: Check if layer visible
+      const latlng = event.latlng
+      // Todo: Maybe bbox size needs testing
+      const bbox = {
+        minX: latlng.lng - 0.1,
+        minY: latlng.lat - 0.1,
+        maxX: latlng.lng + 0.1,
+        maxY: latlng.lat + 0.1,
+      }
+
+      const wmsResponse = await this.$services.geoserver.getWMSData({
+        QUERY_LAYERS:
+          'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+        LAYERS:
+          'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+        BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
+      })
+      console.log(wmsResponse)
+      if (wmsResponse?.features?.length > 0) {
+        if (wmsResponse?.features?.[0]?.properties?.url) {
+          const url = wmsResponse.features[0].properties.url
+          if (url.includes('/')) {
+            const splitUrl = url.split('/')
+            if (splitUrl.length >= 2) {
+              const object = splitUrl[splitUrl.length - 2]
+              const id = splitUrl[splitUrl.length - 1]
+              if (object && id)
+                this.$router.push(
+                  this.localePath({
+                    name: `${object}-id`,
+                    params: { id },
+                  })
+                )
+            }
+          }
+        }
+      }
+    }, 400),
   },
 }
 </script>
