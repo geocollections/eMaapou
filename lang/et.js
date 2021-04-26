@@ -245,6 +245,9 @@ export default {
   datasetAnalysis: {
     analysis: 'Analüüs',
     sampleNumber: 'Proovi number',
+    stratigraphy: 'Stratigraafia',
+    lithostratigraphy: 'Litostratigraafia',
+    locality: 'Lokaliteet',
   },
   analysisResult: {
     parameter: 'Parameeter',

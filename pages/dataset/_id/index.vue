@@ -29,13 +29,13 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
-      const analysisResponse = await this.$services.sarvREST.getResourceList(
-        'dataset_analysis',
+      const analysisResponse = await this.$services.sarvSolr.getResourceList(
+        'analytical_data',
         {
           ...tableState,
           isValid: isNil(this.dataset),
           defaultParams: {
-            dataset: this.dataset,
+            fq: `dataset_id:${this.dataset}`,
           },
           queryFields: this.$getQueryFields(DATASET_ANALYSIS.queryFields),
         }

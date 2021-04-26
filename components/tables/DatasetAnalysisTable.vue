@@ -10,23 +10,71 @@
     <template #item.analysis="{ item }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'analysis-id', params: { id: item.analysis } })"
+        :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
       >
-        {{ item.analysis }}
+        {{ item.id }}
       </nuxt-link>
     </template>
     <template #item.sample="{ item }">
       <nuxt-link
-        v-if="item.analysis__sample__id"
+        v-if="item.sample_id"
         class="text-link"
         :to="
           localePath({
             name: 'sample-id',
-            params: { id: item.analysis__sample__id },
+            params: { id: item.sample_id },
           })
         "
       >
-        {{ item.analysis__sample__number }}
+        {{ item.sample_id }}
+      </nuxt-link>
+    </template>
+    <template #item.locality="{ item }">
+      <nuxt-link
+        v-if="item.locality_id"
+        class="text-link"
+        :to="
+          localePath({
+            name: 'locality-id',
+            params: { id: item.locality_id },
+          })
+        "
+      >
+        {{ item.locality }}
+      </nuxt-link>
+    </template>
+    <template #item.stratigraphy="{ item }">
+      <nuxt-link
+        v-if="item.stratigraphy_id"
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.stratigraphy_id },
+          })
+        "
+      >
+        {{ $translate({ et: item.stratigraphy, en: item.stratigraphy_en }) }}
+      </nuxt-link>
+    </template>
+
+    <template #item.lithostratigraphy="{ item }">
+      <nuxt-link
+        v-if="item.lithostratigraphy_id"
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.lithostratigraphy_id },
+          })
+        "
+      >
+        {{
+          $translate({
+            et: item.lithostratigraphy,
+            en: item.lithostratigraphy_en,
+          })
+        }}
       </nuxt-link>
     </template>
   </table-wrapper>
@@ -68,6 +116,15 @@ export default {
         {
           text: this.$t('datasetAnalysis.sampleNumber'),
           value: 'sample',
+        },
+        { text: this.$t('datasetAnalysis.locality'), value: 'locality' },
+        {
+          text: this.$t('datasetAnalysis.stratigraphy'),
+          value: 'stratigraphy',
+        },
+        {
+          text: this.$t('datasetAnalysis.lithostratigraphy'),
+          value: 'lithostratigraphy',
         },
       ],
     }

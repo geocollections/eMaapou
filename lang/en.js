@@ -244,6 +244,9 @@ export default {
   datasetAnalysis: {
     analysis: 'Analysis',
     sampleNumber: 'Sample number',
+    stratigraphy: 'Stratigraphy',
+    lithostratigraphy: 'Lithostratigraphy',
+    locality: 'Locality',
   },
   analysisResult: {
     parameter: 'Parameter',

@@ -29,6 +29,11 @@ export const DATASET_ANALYSIS = {
   queryFields: {
     analysis: (locale) => 'analysis',
     sample: (locale) => 'analysis__sample__number',
+    stratigraphy: (locale) =>
+      locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
+    lithostratigraphy: (locale) =>
+      locale === 'et' ? 'lithostratigraphy' : 'lithostratigraphy_en',
+    locality: (locale) => 'locality',
   },
 }
 
