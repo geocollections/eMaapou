@@ -451,10 +451,12 @@ export default {
               const object = splitUrl[splitUrl.length - 2]
               const id = splitUrl[splitUrl.length - 1]
               if (object && id)
-                this.localePath({
-                  name: `${object}-id`,
-                  params: { id },
-                })
+                this.$router.push(
+                  this.localePath({
+                    name: `${object}-id`,
+                    params: { id },
+                  })
+                )
             }
           }
         }
