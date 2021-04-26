@@ -3,6 +3,7 @@
     <div>
       <l-map
         ref="map"
+        :class="{ rounded: rounded }"
         :style="{ height: `${height}px` }"
         style="z-index: 0"
         :options="options"
@@ -112,6 +113,7 @@ export default {
       default: false,
     },
     invalidateSize: Boolean,
+    rounded: Boolean,
   },
   data() {
     return {
