@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list class="py-0">
     <v-list-item
       v-for="(locale, i) in availableLocales"
       :key="i"

@@ -8,10 +8,8 @@
     </template>
 
     <template #column-left>
-      <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-        $t('common.general')
-      }}</v-card-title>
-      <v-card-text class="pl-md-0 pr-md-4 px-0">
+      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-text>
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
@@ -179,12 +177,11 @@
       v-if="(site.latitude && site.longitude) || site.locality_id"
       #column-right
     >
-      <v-card-text class="pr-md-0 pl-md-4 px-0">
+      <v-card-text>
         <v-card
           v-if="site.latitude && site.longitude"
           id="map-wrap"
           elevation="0"
-          height="500"
         >
           <leaflet-map
             :is-estonian="site.locality__country__value === 'Eesti'"

@@ -4,7 +4,7 @@
       <slot name="title" />
       <slot name="top" />
       <slot>
-        <v-card flat tile>
+        <v-card>
           <v-row no-gutters justify="center">
             <v-col v-if="$slots['column-left']" cols>
               <slot name="column-left" />

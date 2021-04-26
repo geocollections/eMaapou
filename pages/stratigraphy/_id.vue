@@ -173,7 +173,7 @@
           :options="options"
           class="mb-2"
         />
-        <v-card id="map-wrap" elevation="0" height="300">
+        <v-card id="map-wrap" elevation="0">
           <leaflet-map
             :is-estonian="stratotypes[0].locality__country__value === 'Eesti'"
             :height="300"
@@ -184,7 +184,7 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
       <v-card

@@ -266,7 +266,6 @@
           v-if="sample.locality__latitude && sample.locality__longitude"
           id="map-wrap"
           elevation="0"
-          height="300"
         >
           <leaflet-map
             :is-estonian="sample.locality__country__value === 'Eesti'"

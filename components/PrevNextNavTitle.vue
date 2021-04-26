@@ -1,6 +1,6 @@
 <template>
-  <div
-    class="d-flex justify-space-between px-4 flex-column flex-sm-row elevation-2 emp-title"
+  <v-card
+    class="d-flex justify-space-between px-4 flex-column flex-sm-row emp-title"
     :class="{ 'my-3': title || $slots.title }"
   >
     <div
@@ -105,7 +105,7 @@
         <span>{{ $t('common.last', { id: computedLastId }) }}</span>
       </v-tooltip>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>

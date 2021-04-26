@@ -179,7 +179,7 @@
     <template v-if="locality.latitude && locality.longitude" #column-right>
       <v-card-title>{{ $t('locality.map') }}</v-card-title>
       <v-card-text>
-        <v-card id="map-wrap" elevation="0" height="600">
+        <v-card id="map-wrap" elevation="0">
           <leaflet-map
             :is-estonian="locality.country__value === 'Eesti'"
             :height="600"
@@ -204,7 +204,7 @@
 
     <template #bottom>
       <image-bar v-if="images.length > 0" :images="images" />
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mx-4 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>

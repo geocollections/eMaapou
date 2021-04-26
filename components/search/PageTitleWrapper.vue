@@ -1,14 +1,10 @@
 <template>
-  <v-card class="mb-4" tile>
-    <v-row no-gutters class="tertiary">
-      <v-col>
-        <page-title
-          :icon="icon"
-          :title="title"
-          :subtitle="$t('common.count', { count: count })"
-        />
-      </v-col>
-    </v-row>
+  <v-card class="mb-4">
+    <page-title
+      :icon="icon"
+      :title="title"
+      :subtitle="$t('common.count', { count: count })"
+    />
   </v-card>
 </template>
 

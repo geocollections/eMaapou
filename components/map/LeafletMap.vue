@@ -1,8 +1,9 @@
 <template>
   <client-only>
-    <div :style="{ height: `${height}px` }">
+    <div>
       <l-map
         ref="map"
+        :style="{ height: `${height}px` }"
         style="z-index: 0"
         :options="options"
         :zoom="mapZoom"

@@ -8,7 +8,7 @@
       :weight="2"
       color="#fff"
       fill-color="red"
-      fill-opacity="0.9"
+      :fill-opacity="0.9"
       @click="
         marker.id && marker.routeName
           ? $router.push(
