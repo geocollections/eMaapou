@@ -57,20 +57,7 @@ export default {
   },
   computed: {
     isDetail() {
-      const detailViewRouteNames = [
-        'drillcore-id',
-        'analysis-id',
-        'area-id',
-        'drillcore_box-id',
-        'locality-id',
-        'sample-id',
-        'site-id',
-        'file-id',
-        'stratigraphy-id',
-      ]
-      return detailViewRouteNames.some((route) =>
-        this.getRouteBaseName().startsWith(route)
-      )
+      return this.getRouteBaseName().includes('-id')
     },
 
     isFrontPage() {
