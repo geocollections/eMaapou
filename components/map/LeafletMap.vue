@@ -3,7 +3,7 @@
     <div>
       <l-map
         ref="map"
-        :class="{ rounded: rounded }"
+        :class="{ rounded: rounded, 'cursor-crosshair': isMapClickEnabled }"
         :style="{ height: `${height}px` }"
         style="z-index: 0"
         :options="options"
@@ -249,7 +249,7 @@ export default {
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary',
             styles: 'point',
-            visible: true,
+            visible: this.getRouteBaseName().includes('locality'),
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -270,7 +270,7 @@ export default {
             url:
               'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
             // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: true,
+            visible: this.getRouteBaseName().includes('locality'),
             options: {
               maxNativeZoom: 12,
               maxZoom: 12,
@@ -287,7 +287,7 @@ export default {
             name: 'Boreholes',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_drillcores',
-            visible: true,
+            visible: this.getRouteBaseName().includes('drillcore'),
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -307,7 +307,7 @@ export default {
             name: 'Sites',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:site_summary',
-            visible: false,
+            visible: this.getRouteBaseName().includes('site'),
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -373,6 +373,17 @@ export default {
         return [m.latitude, m.longitude]
       })
     },
+
+    // Todo: Should check active layers instead
+    isMapClickEnabled() {
+      const routeName = this.getRouteBaseName()
+      // return (
+      //   routeName === 'locality' ||
+      //   routeName === 'drillcore' ||
+      //   routeName === 'site'
+      // )
+      return !routeName.includes('-id')
+    },
   },
   watch: {
     markers() {
@@ -421,42 +432,53 @@ export default {
       }
     },
 
+    // Todo: Check if layer visible
     handleClick: debounce(async function (event) {
-      console.log('click')
-      // site: sarv:site_summary, locality: sarv:locality_summary, drillcore: sarv:locality_drillcores
-      // Todo: Check if layer visible
-      const latlng = event.latlng
-      // Todo: Maybe bbox size needs testing
-      const bbox = {
-        minX: latlng.lng - 0.1,
-        minY: latlng.lat - 0.1,
-        maxX: latlng.lng + 0.1,
-        maxY: latlng.lat + 0.1,
-      }
+      if (this.isMapClickEnabled) {
+        const MAX_ZOOM = 21
+        const radius =
+          (MAX_ZOOM + 0.25 - this.$refs.map.mapObject.getZoom()) * 1000
+        const circle = this.$L
+          .circle(event.latlng, { radius })
+          .addTo(this.$refs.map.mapObject)
+        const bbox = circle.getBounds().toBBoxString()
 
-      const wmsResponse = await this.$services.geoserver.getWMSData({
-        QUERY_LAYERS:
-          'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
-        LAYERS:
-          'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
-        BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
-      })
-      console.log(wmsResponse)
-      if (wmsResponse?.features?.length > 0) {
-        if (wmsResponse?.features?.[0]?.properties?.url) {
-          const url = wmsResponse.features[0].properties.url
-          if (url.includes('/')) {
-            const splitUrl = url.split('/')
-            if (splitUrl.length >= 2) {
-              const object = splitUrl[splitUrl.length - 2]
-              const id = splitUrl[splitUrl.length - 1]
-              if (object && id)
-                this.$router.push(
-                  this.localePath({
-                    name: `${object}-id`,
-                    params: { id },
-                  })
-                )
+        // eslint-disable-next-line no-unused-vars
+        // const rect = this.$L
+        //   .rectangle(circle.getBounds(), { color: 'green', weight: 1 })
+        //   .addTo(this.$refs.map.mapObject)
+        circle.remove()
+
+        const wmsResponse = await this.$services.geoserver.getWMSData({
+          QUERY_LAYERS:
+            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+          LAYERS:
+            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+          // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
+          BBOX: bbox,
+          // X: Math.floor(event.layerPoint.x),
+          // Y: Math.floor(event.layerPoint.y),
+          // HEIGHT: this.$refs.map.mapObject._size.y,
+          // WIDTH: this.$refs.map.mapObject._size.x,
+        })
+
+        // console.log(wmsResponse)
+        if (wmsResponse?.features?.length > 0) {
+          if (wmsResponse?.features?.[0]?.properties?.url) {
+            const url = wmsResponse.features[0].properties.url
+            if (url.includes('/')) {
+              const splitUrl = url.split('/')
+              if (splitUrl.length >= 2) {
+                const object = splitUrl[splitUrl.length - 2]
+                const id = splitUrl[splitUrl.length - 1]
+                if (object && id)
+                  this.$router.push(
+                    this.localePath({
+                      name: `${object}-id`,
+                      params: { id },
+                    })
+                  )
+              }
             }
           }
         }
@@ -465,3 +487,13 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+.cursor-crosshair:active {
+  cursor: grabbing;
+}
+</style>
