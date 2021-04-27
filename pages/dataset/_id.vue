@@ -66,8 +66,20 @@
                 :value="parameters"
               >
                 <template #value>
-                  <v-chip-group column>
-                    <v-chip v-for="(parameter, i) in parameters" :key="i" small>
+                  <v-chip-group
+                    :value="selectedParameterValues"
+                    multiple
+                    column
+                    active-class="primary--text text--darken-2"
+                    @change="handleParameterChange"
+                  >
+                    <v-chip
+                      v-for="(parameter, i) in parameters"
+                      :key="i"
+                      active-class="chip-active"
+                      :value="parameter.value"
+                      small
+                    >
                       {{ parameter.text }}
                     </v-chip>
                   </v-chip-group>
@@ -123,6 +135,13 @@ export default {
       const parsedParameters = parameterValues.map((v, i) => {
         return { text: parameterText[i], value: v }
       })
+
+      const selectedParameters = parsedParameters.slice(0, 5)
+
+      const selectedParameterValues = selectedParameters.map(
+        (param) => param.value
+      )
+
       const tabs = [
         {
           id: 'dataset_analysis',
@@ -130,7 +149,10 @@ export default {
           routeName: 'dataset-id',
           title: 'dataset.analyses',
           count: 0,
-          props: { dataset: dataset.id, parameters: parsedParameters },
+          props: {
+            dataset: dataset.id,
+            parameters: selectedParameters,
+          },
         },
         {
           id: 'dataset_reference',
@@ -192,6 +214,7 @@ export default {
         tabs: hydratedTabs,
         initActiveTab: validPath,
         parameters: parsedParameters,
+        selectedParameterValues,
       }
     } catch (err) {
       error({
@@ -216,6 +239,15 @@ export default {
   methods: {
     isEmpty,
     isNil,
+    handleParameterChange(e) {
+      const analysisTab = this.tabs.find((tab) => tab.id === 'dataset_analysis')
+
+      const newParams = this.parameters.filter((parameter) =>
+        e.includes(parameter.value)
+      )
+
+      analysisTab.props = { ...analysisTab.props, parameters: newParams }
+    },
   },
 }
 </script>

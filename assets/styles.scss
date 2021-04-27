@@ -248,3 +248,10 @@ th {
 .theme--dark.v-data-table tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+.chip-active {
+  font-weight: bold;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--v-primary-darken2) !important;
+}
