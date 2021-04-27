@@ -1,5 +1,5 @@
 <template>
-  <v-chip-group column active-class="active primary--text text--darken-2">
+  <v-chip-group column active-class="chip-active primary--text text--darken-2">
     <transition-group name="flip-list">
       <v-chip
         v-for="(item, index) in tabs"
@@ -39,13 +39,6 @@ export default {
 .tabs {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-}
-
-.active {
-  font-weight: bold;
-  border-width: 2px;
-  border-style: solid;
-  border-color: var(--v-primary-darken2);
 }
 
 .flip-list-move {
