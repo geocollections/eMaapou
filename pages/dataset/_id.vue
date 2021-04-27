@@ -98,6 +98,18 @@ export default {
       const ids = datasetResponse?.ids
       const dataset = datasetResponse.results[0]
 
+      const parameterResponse = await app.$services.sarvSolr.getResource(
+        'dataset',
+        `dataset_id:${params.id}`,
+        { fl: 'parameter_index_list,parameter_list' }
+      )
+      const parameters = parameterResponse.results[0]
+
+      const parameterValues = parameters.parameter_index_list[0].split('; ')
+      const parameterText = parameters.parameter_list[0].split('; ')
+      const parsedParameters = parameterValues.map((v, i) => {
+        return { text: parameterText[i], value: v }
+      })
       const tabs = [
         {
           id: 'dataset_analysis',
@@ -105,7 +117,7 @@ export default {
           routeName: 'dataset-id',
           title: 'dataset.analyses',
           count: 0,
-          props: { dataset: dataset.id },
+          props: { dataset: dataset.id, parameters: parsedParameters },
         },
         {
           id: 'dataset_reference',
@@ -145,29 +157,19 @@ export default {
               'dataset'
             )
           item.count = countResponse?.count ?? 0
-          item.props = {
-            dataset: dataset.id,
-          }
         }
       }
       await forLoop()
 
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                api: {
-                  default: { dataset: dataset.id },
-                },
-              })
-          )
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateCount(tab, {
+              api: {
+                default: { dataset: dataset.id },
+              },
+            })
         )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          dataset: dataset.id,
-        })
       )
 
       // Find tab that has items
@@ -182,12 +184,12 @@ export default {
         : route.path
 
       if (initTab && path !== route.path) redirect(path)
-
       return {
         dataset,
         ids,
         tabs: hydratedTabs,
         initActiveTab: path,
+        parameters: parsedParameters,
       }
     } catch (err) {
       error({

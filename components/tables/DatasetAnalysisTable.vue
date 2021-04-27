@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="headers"
+    :headers="mergedHeaders"
     :items="items"
     :options="options"
     :count="count"
@@ -108,6 +108,10 @@ export default {
         sortDesc: [],
       }),
     },
+    additionalHeaders: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -128,6 +132,11 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    mergedHeaders() {
+      return this.headers.concat(this.additionalHeaders)
+    },
   },
   methods: {
     round,

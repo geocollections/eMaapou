@@ -3,6 +3,7 @@
     :items="analyses"
     :count="count"
     :options="options"
+    :additional-headers="parameters"
     @update="handleUpdate"
   />
 </template>
@@ -19,6 +20,10 @@ export default {
       type: Number,
       default: null,
     },
+    parameters: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -26,6 +31,18 @@ export default {
       count: 0,
       options: DATASET_ANALYSIS.options,
     }
+  },
+  computed: {
+    mergedQueryFields() {
+      const parameterQueryFields = this.parameters.reduce(
+        (obj, item) => ({ ...obj, [item.value]: item.value }),
+        {}
+      )
+      return {
+        ...this.$getQueryFields(DATASET_ANALYSIS.queryFields),
+        ...parameterQueryFields,
+      }
+    },
   },
   methods: {
     async handleUpdate(tableState) {
@@ -37,7 +54,7 @@ export default {
           defaultParams: {
             fq: `dataset_id:${this.dataset}`,
           },
-          queryFields: this.$getQueryFields(DATASET_ANALYSIS.queryFields),
+          queryFields: this.mergedQueryFields,
         }
       )
       this.options = tableState.options
