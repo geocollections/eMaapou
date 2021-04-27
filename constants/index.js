@@ -23,20 +23,23 @@ export const ANALYTICAL_DATA = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
+    sortBy: ['sample_number'],
     sortDesc: [true],
   },
   queryFields: {
-    id: (locale) => 'id_l',
     sample_number: (locale) => 'sample_number',
+    locality: (locale) => 'locality,locality_id,locality_str',
+    stratigraphy: (locale) =>
+      locale === 'et'
+        ? 'stratigraphy,stratigraphy,stratigraphy_id'
+        : 'stratigraphy_en,stratigraphy_en_str,stratigraphy_id',
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
-    method: (locale) =>
-      locale === 'et' ? 'analysis_method' : 'analysis_method_en',
-    method_details: (locale) =>
-      locale === 'et' ? 'method_details' : 'method_details_en',
-    agent: (locale) => 'agent',
-    date: (locale) => 'date',
+    rock: (locale) =>
+      locale === 'et' ? 'rock,rock_str,rock_id' : 'rock_en,rock_en_str,rock_id',
+    reference: (locale) => 'reference,reference_str,reference_id',
+    dataset_id: (locale) => 'dataset_name,dataset_name_str,dataset_id',
+    analysis_id: (locale) => 'analysis_id',
   },
 }
 

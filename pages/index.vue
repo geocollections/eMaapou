@@ -248,7 +248,7 @@ export default {
         analyses: {
           title: 'frontAnalyses.title',
           description: 'frontAnalyses.description',
-          href: 'analysis',
+          href: 'analytical_data',
           background: await require('~/assets/frontpage/analyses.jpg'),
           innerLink: true,
           sm: 6,
