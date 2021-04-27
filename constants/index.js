@@ -19,6 +19,27 @@ export const ANALYSIS = {
   },
 }
 
+export const ANALYTICAL_DATA = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: ['id'],
+    sortDesc: [true],
+  },
+  queryFields: {
+    id: (locale) => 'id_l',
+    sample_number: (locale) => 'sample_number',
+    depth: (locale) => 'depth',
+    depth_interval: (locale) => 'depth_interval',
+    method: (locale) =>
+      locale === 'et' ? 'analysis_method' : 'analysis_method_en',
+    method_details: (locale) =>
+      locale === 'et' ? 'method_details' : 'method_details_en',
+    agent: (locale) => 'agent',
+    date: (locale) => 'date',
+  },
+}
+
 export const DATASET_ANALYSIS = {
   options: {
     page: 1,
