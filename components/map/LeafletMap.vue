@@ -251,7 +251,7 @@ export default {
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary',
             styles: 'point',
-            visible: this.isLocalityLayerVisibleAtStart,
+            visible: false,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -272,10 +272,7 @@ export default {
             url:
               'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
             // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible:
-              this.getRouteBaseName().includes('locality') ||
-              this.getRouteBaseName().includes('sample') ||
-              this.getRouteBaseName().includes('analysis'),
+            visible: false,
             options: {
               maxNativeZoom: 12,
               maxZoom: 12,
@@ -292,10 +289,7 @@ export default {
             name: 'Boreholes',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_drillcores',
-            visible:
-              this.getRouteBaseName().includes('drillcore') ||
-              this.getRouteBaseName().includes('sample') ||
-              this.getRouteBaseName().includes('analysis'),
+            visible: false,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -315,10 +309,7 @@ export default {
             name: 'Sites',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:site_summary',
-            visible:
-              this.getRouteBaseName().includes('site') ||
-              this.getRouteBaseName().includes('sample') ||
-              this.getRouteBaseName().includes('analysis'),
+            visible: false,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -340,17 +331,56 @@ export default {
       return this.layers.overlay.map((item) => {
         if (item.id === 'est-bed-overlay')
           return { ...item, visible: this.isEstonianBedrockVisibleAtAStart }
+        else if (item.id === 'locs')
+          return { ...item, visible: this.isLocalityLayerVisibleAtStart }
+        else if (item.id === 'locs_tms')
+          return { ...item, visible: this.isLocalityLayerVisibleAtStart }
+        else if (item.id === 'drillcores')
+          return { ...item, visible: this.isDrillcoreLayerVisibleAtStart }
+        else if (item.id === 'sites')
+          return { ...item, visible: this.isSiteLayerVisibleAtStart }
         else return item
       })
     },
 
     isEstonianBedrockVisibleAtAStart() {
       // HACK: Should probably be a prop
+      const routeName = this.getRouteBaseName()
       return (
         this.isEstonian &&
-        (this.$route.name.includes('drillcore-') ||
-          this.$route.name.includes('locality-') ||
-          this.$route.name.includes('stratigraphy-'))
+        (routeName === 'drillcore-id' ||
+          routeName === 'locality-id' ||
+          routeName === 'stratigraphy-id')
+      )
+    },
+
+    isLocalityLayerVisibleAtStart() {
+      const routeName = this.getRouteBaseName()
+      return (
+        routeName === 'locality' ||
+        routeName === 'sample' ||
+        routeName === 'analysis' ||
+        routeName === 'analytical_data'
+      )
+    },
+
+    isDrillcoreLayerVisibleAtStart() {
+      const routeName = this.getRouteBaseName()
+      return (
+        routeName === 'drillcore' ||
+        routeName === 'sample' ||
+        routeName === 'analysis' ||
+        routeName === 'analytical_data'
+      )
+    },
+
+    isSiteLayerVisibleAtStart() {
+      const routeName = this.getRouteBaseName()
+      return (
+        routeName === 'site' ||
+        routeName === 'sample' ||
+        routeName === 'analysis' ||
+        routeName === 'analytical_data'
       )
     },
 

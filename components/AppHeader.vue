@@ -133,8 +133,8 @@ export default {
           lang: 'samples',
         },
         {
-          name: 'analysis',
-          lang: 'analyses',
+          name: 'analytical_data',
+          lang: 'analyticalData',
         },
         { name: 'stratigraphy', lang: 'stratigraphy' },
         { name: 'dataset', lang: 'datasets' },
