@@ -367,24 +367,16 @@ export default {
           locality: locality.id,
         })
       )
-      // Find tab that has items
-      const initTab = hydratedTabs.find((tab) => tab.count > 0)
 
-      // Constuct route
-      const path = initTab
-        ? app.localePath({
-            name: initTab.routeName,
-            params: { id: locality.id },
-          })
-        : route.path
+      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      if (validPath !== route.path) redirect(validPath)
 
-      if (initTab && path !== route.path) redirect(path)
       return {
         locality,
         ids,
         tabs: hydratedTabs,
         drillcore,
-        initActiveTab: path,
+        initActiveTab: validPath,
         // attachmentsOutcrop,
         attachments,
       }

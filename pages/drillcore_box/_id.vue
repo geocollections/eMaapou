@@ -330,24 +330,16 @@ export default {
               )
             )
           : tabs
-      // Find tab that has items
-      const initTab = hydratedTabs.find((tab) => tab.count > 0)
 
-      // Constuct route
-      const path = initTab
-        ? app.localePath({
-            name: initTab.routeName,
-            params: { id: drillcoreBox.id },
-          })
-        : route.path
+      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      if (validPath !== route.path) redirect(validPath)
 
-      if (initTab && path !== route.path) redirect(path)
       return {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
         ids,
-        initActiveTab: path,
+        initActiveTab: validPath,
         tabs: hydratedTabs,
       }
     } catch (err) {

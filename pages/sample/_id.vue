@@ -372,22 +372,14 @@ export default {
             })
         )
       )
-      // Find tab that has items
-      const initTab = hydratedTabs.find((tab) => tab.count > 0)
 
-      // Constuct route
-      const path = initTab
-        ? app.localePath({
-            name: initTab.routeName,
-            params: { id: sample.id },
-          })
-        : route.path
+      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      if (validPath !== route.path) redirect(validPath)
 
-      if (initTab && path !== route.path) redirect(path)
       return {
         sample,
         ids,
-        initActiveTab: path,
+        initActiveTab: validPath,
         tabs: hydratedTabs,
       }
     } catch (err) {
