@@ -2,8 +2,9 @@
   <client-only>
     <div>
       <l-map
+        id="map"
         ref="map"
-        :class="{ rounded: rounded, 'cursor-crosshair': isMapClickEnabled }"
+        :class="{ rounded: rounded }"
         :style="{ height: `${height}px` }"
         style="z-index: 0"
         :options="options"
@@ -89,6 +90,7 @@ import { debounce } from 'lodash'
 import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
+
 export default {
   name: 'LeafletMap',
   components: { VMarkerClusterWrapper, LCircleMarkerWrapper, MapLinks },
@@ -374,15 +376,23 @@ export default {
       })
     },
 
-    // Todo: Should check active layers instead
-    isMapClickEnabled() {
-      const routeName = this.getRouteBaseName()
-      // return (
-      //   routeName === 'locality' ||
-      //   routeName === 'drillcore' ||
-      //   routeName === 'site'
-      // )
-      return !routeName.includes('-id')
+    checkableLayers() {
+      const checkableLayerNames = [
+        'Boreholes',
+        'Sites',
+        'Localities',
+        'Localities (overview)',
+      ]
+
+      return this.$refs['layer-control'].mapObject._layers.reduce(
+        (layers, item) => {
+          if (checkableLayerNames.includes(item.name)) {
+            layers[item.name] = item.layer
+          }
+          return layers
+        },
+        {}
+      )
     },
   },
   watch: {
@@ -402,6 +412,17 @@ export default {
         )
       }
     },
+    activeOverlays(newVal) {
+      if (Object.keys(this.checkableLayers).some((el) => newVal.includes(el)))
+        document.getElementById('map').classList.add('cursor-crosshair')
+      else document.getElementById('map').classList.remove('cursor-crosshair')
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (this.isMapClickEnabled())
+        document.getElementById('map').classList.add('cursor-crosshair')
+    })
   },
   methods: {
     updateCenter(center) {
@@ -432,9 +453,16 @@ export default {
       }
     },
 
-    // Todo: Check if layer visible
+    isMapClickEnabled() {
+      if (this.$refs?.map?.mapObject) {
+        return Object.values(this.checkableLayers).some((layer) =>
+          this.$refs.map.mapObject.hasLayer(layer)
+        )
+      } else return false
+    },
+
     handleClick: debounce(async function (event) {
-      if (this.isMapClickEnabled) {
+      if (this.isMapClickEnabled()) {
         const MAX_ZOOM = 21
         const radius =
           (MAX_ZOOM + 0.25 - this.$refs.map.mapObject.getZoom()) * 1000
@@ -450,8 +478,7 @@ export default {
         circle.remove()
 
         const wmsResponse = await this.$services.geoserver.getWMSData({
-          QUERY_LAYERS:
-            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+          QUERY_LAYERS: this.buildQueryLayers(),
           LAYERS:
             'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
           // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
@@ -484,6 +511,20 @@ export default {
         }
       }
     }, 400),
+
+    buildQueryLayers() {
+      const queryLayers = []
+      if (this.activeOverlays.includes('Sites'))
+        queryLayers.push('sarv:site_summary')
+      if (this.activeOverlays.includes('Boreholes'))
+        queryLayers.push('sarv:locality_drillcores')
+      if (
+        this.activeOverlays.includes('Localities') ||
+        this.activeOverlays.includes('Localities (overview)')
+      )
+        queryLayers.push('sarv:locality_summary1')
+      return queryLayers.join(',')
+    },
   },
 }
 </script>
