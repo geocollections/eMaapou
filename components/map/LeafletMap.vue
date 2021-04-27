@@ -251,7 +251,7 @@ export default {
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary',
             styles: 'point',
-            visible: this.getRouteBaseName().includes('locality'),
+            visible: this.isLocalityLayerVisibleAtStart,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -272,7 +272,10 @@ export default {
             url:
               'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
             // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: this.getRouteBaseName().includes('locality'),
+            visible:
+              this.getRouteBaseName().includes('locality') ||
+              this.getRouteBaseName().includes('sample') ||
+              this.getRouteBaseName().includes('analysis'),
             options: {
               maxNativeZoom: 12,
               maxZoom: 12,
@@ -289,7 +292,10 @@ export default {
             name: 'Boreholes',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_drillcores',
-            visible: this.getRouteBaseName().includes('drillcore'),
+            visible:
+              this.getRouteBaseName().includes('drillcore') ||
+              this.getRouteBaseName().includes('sample') ||
+              this.getRouteBaseName().includes('analysis'),
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -309,7 +315,10 @@ export default {
             name: 'Sites',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:site_summary',
-            visible: this.getRouteBaseName().includes('site'),
+            visible:
+              this.getRouteBaseName().includes('site') ||
+              this.getRouteBaseName().includes('sample') ||
+              this.getRouteBaseName().includes('analysis'),
             transparent: true,
             options: {
               maxNativeZoom: 18,
