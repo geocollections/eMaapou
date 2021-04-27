@@ -656,6 +656,7 @@ export default {
     references: 'Kirjandus ({number})',
     analyses: 'Analüüsid ({number})',
     attachments: 'Failid ({number})',
+    parameters: 'Parameetrid',
   },
   reference: {
     id: 'ID',

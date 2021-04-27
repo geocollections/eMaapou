@@ -60,6 +60,19 @@
                   new Date(dataset.date_changed).toISOString().split('T')[0]
                 "
               />
+              <data-row
+                v-if="parameters"
+                :title="$t('dataset.parameters')"
+                :value="parameters"
+              >
+                <template #value>
+                  <v-chip-group column>
+                    <v-chip v-for="(parameter, i) in parameters" :key="i" small>
+                      {{ parameter.text }}
+                    </v-chip>
+                  </v-chip-group>
+                </template>
+              </data-row>
             </tbody>
           </template>
         </v-simple-table>

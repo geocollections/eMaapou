@@ -655,6 +655,7 @@ export default {
     references: 'References ({number})',
     analyses: 'Analyses ({number})',
     attachments: 'Attachments ({number})',
+    parameters: 'Parameters',
   },
   reference: {
     id: 'ID',
