@@ -7,17 +7,6 @@
     :count="count"
     v-on="$listeners"
   >
-    <template #item.analysis_id="{ item }">
-      <nuxt-link
-        v-if="item.analysis_id"
-        class="text-link"
-        :to="
-          localePath({ name: 'analysis-id', params: { id: item.analysis_id } })
-        "
-      >
-        {{ item.analysis_id }}
-      </nuxt-link>
-    </template>
     <template #item.sample_number="{ item }">
       <nuxt-link
         v-if="item.sample_id"
@@ -66,15 +55,48 @@
         }}
       </div>
     </template>
+    <template #item.reference="{ item }">
+      <external-link
+        v-if="item.reference_id"
+        @click.native="$openGeology('reference', item.reference_id)"
+      >
+        {{ item.reference }}
+      </external-link>
+      <div v-else>{{ item.reference_str }}</div>
+    </template>
+    <template #item.dataset_id="{ item }">
+      <nuxt-link
+        v-if="item.dataset_id"
+        class="text-link"
+        :to="
+          localePath({ name: 'dataset-id', params: { id: item.dataset_id } })
+        "
+      >
+        {{ item.dataset_name }}
+      </nuxt-link>
+      <div v-else>{{ item.dataset_name_str }}</div>
+    </template>
+    <template #item.analysis_id="{ item }">
+      <nuxt-link
+        v-if="item.analysis_id"
+        class="text-link"
+        :to="
+          localePath({ name: 'analysis-id', params: { id: item.analysis_id } })
+        "
+      >
+        {{ item.analysis_id }}
+      </nuxt-link>
+    </template>
   </table-wrapper>
 </template>
 
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'AnalyticalDataTable',
-  components: { TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
