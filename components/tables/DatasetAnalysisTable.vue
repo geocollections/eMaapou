@@ -130,6 +130,10 @@ export default {
           text: this.$t('datasetAnalysis.lithostratigraphy'),
           value: 'lithostratigraphy',
         },
+        {
+          text: this.$t('datasetAnalysis.depth'),
+          value: 'depth',
+        },
       ],
     }
   },

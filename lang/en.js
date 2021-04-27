@@ -247,6 +247,7 @@ export default {
     stratigraphy: 'Stratigraphy',
     lithostratigraphy: 'Lithostratigraphy',
     locality: 'Locality',
+    depth: 'Depth',
   },
   analysisResult: {
     parameter: 'Parameter',

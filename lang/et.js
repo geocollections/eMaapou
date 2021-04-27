@@ -248,6 +248,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     lithostratigraphy: 'Litostratigraafia',
     locality: 'Lokaliteet',
+    depth: 'Sügavus',
   },
   analysisResult: {
     parameter: 'Parameeter',

@@ -34,6 +34,7 @@ export const DATASET_ANALYSIS = {
     lithostratigraphy: (locale) =>
       locale === 'et' ? 'lithostratigraphy' : 'lithostratigraphy_en',
     locality: (locale) => 'locality',
+    depth: (locale) => 'depth',
   },
 }
 
