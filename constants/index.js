@@ -28,17 +28,17 @@ export const ANALYTICAL_DATA = {
   },
   queryFields: {
     sample_number: (locale) => 'sample_number',
-    locality: (locale) => 'locality,locality_id,locality_str',
+    locality: (locale) => 'locality,locality_id',
     stratigraphy: (locale) =>
       locale === 'et'
-        ? 'stratigraphy,stratigraphy,stratigraphy_id'
-        : 'stratigraphy_en,stratigraphy_en_str,stratigraphy_id',
+        ? 'stratigraphy,stratigraphy_id'
+        : 'stratigraphy_en,stratigraphy_id',
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
     rock: (locale) =>
-      locale === 'et' ? 'rock,rock_str,rock_id' : 'rock_en,rock_en_str,rock_id',
-    reference: (locale) => 'reference,reference_str,reference_id',
-    dataset_id: (locale) => 'dataset_name,dataset_name_str,dataset_id',
+      locale === 'et' ? 'rock,rock_txt,rock_id' : 'rock_en,rock_en_txt,rock_id',
+    reference: (locale) => 'reference,reference_id',
+    dataset_id: (locale) => 'dataset_name,dataset_id',
     analysis_id: (locale) => 'analysis_id',
   },
 }

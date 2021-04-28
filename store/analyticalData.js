@@ -7,23 +7,82 @@ const getDefaultState = () => {
     options: ANALYTICAL_DATA.options,
     filters: {
       byIds: {
-        id: {
+        stratigraphy: {
+          value: null,
+          type: 'object',
+          searchField: 'hierarchy_string',
+          lookUpType: 'contains',
+          label: 'analyticalData.stratigraphy',
+          fields: ['stratigraphy_hierarchy'],
+        },
+        lithostratigraphy: {
+          value: null,
+          type: 'object',
+          searchField: 'hierarchy_string',
+          lookUpType: 'contains',
+          label: 'analyticalData.lithostratigraphy',
+          fields: ['lithostratigraphy_hierarchy'],
+        },
+        method: {
           value: '',
           type: 'text',
           lookUpType: 'contains',
-          label: 'analyticalData.id',
-          fields: ['id'],
+          label: 'analyticalData.method',
+          fields: ['analysis_method', 'analysis_method_en', 'method_details'],
         },
-        depth: {
-          value: [-20, 5000],
-          type: 'range',
-          lookUpType: 'range',
-          label: 'analyticalData.depth',
-          placeholders: ['depth.min', 'depth.max'],
-          fields: ['depth'],
+        reference: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.reference',
+          fields: ['reference'],
         },
+        dataset: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.dataset',
+          fields: ['dataset_name'],
+        },
+        stratigraphyBed: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.stratigraphyBed',
+          fields: [
+            'stratigraphy',
+            'stratigraphy_en',
+            'lithostratigraphy',
+            'lithostratigraphy_en',
+          ],
+        },
+        rock: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.rock',
+          fields: ['rock', 'rock_en', 'rock_txt', 'rock_en_txt'],
+        },
+        sample: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.sample',
+          fields: ['sample_id', 'sample_number', 'sample_type'],
+        },
+        // Todo: Dynamic parameters
       },
-      allIds: ['id', 'depth'],
+      allIds: [
+        'stratigraphy',
+        'lithostratigraphy',
+        'method',
+        'reference',
+        'dataset',
+        'stratigraphyBed',
+        'rock',
+        'sample',
+        // Todo: Dynamic parameters
+      ],
     },
   }
 }
@@ -54,10 +113,10 @@ export const mutations = {
 }
 
 export const actions = {
-  resetanalyticalDataFilters({ commit }) {
+  resetAnalyticalDataFilters({ commit }) {
     commit('RESET_FILTERS')
   },
-  async quickSearchAnalyses(
+  async quickSearchAnalyticalData(
     { commit, rootState, state },
     options = { ...state.options, page: 1 }
   ) {
