@@ -1,5 +1,6 @@
 import { getField, updateField } from 'vuex-map-fields'
 import { ANALYTICAL_DATA } from '~/constants'
+
 const getDefaultState = () => {
   return {
     items: [],

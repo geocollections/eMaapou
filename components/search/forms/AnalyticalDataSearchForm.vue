@@ -233,15 +233,17 @@ export default {
     }
   },
   async fetch() {
-    const listParametersResponse = await this.$services.sarvSolr.getResourceList(
-      'analysis_parameter',
-      {
-        defaultParams: {
-          fq: 'id_l:[2 TO *]', // Because first one is N/A
-        },
-      }
-    )
-    this.setListParameters(listParametersResponse?.items)
+    if (this.listParameters.length === 0) {
+      const listParametersResponse = await this.$services.sarvSolr.getResourceList(
+        'analysis_parameter',
+        {
+          defaultParams: {
+            fq: 'id_l:[2 TO *]', // Because first one is N/A
+          },
+        }
+      )
+      this.setListParameters(listParametersResponse?.items)
+    }
   },
   computed: {
     ...mapState('analyticalData', [
