@@ -757,5 +757,6 @@ export default {
     lithostratigraphy: 'Litostratigraafia',
     method: 'Meetod',
     stratigraphyBed: 'Stratigraafia kiht',
+    columns: 'Veerud',
   },
 }

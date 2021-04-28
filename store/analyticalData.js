@@ -84,6 +84,36 @@ const getDefaultState = () => {
         // Todo: Dynamic parameters
       ],
     },
+    listParameters: [],
+    activeListParameters: [],
+    shownActiveListParameters: [],
+    tableHeaders: [
+      { text: 'analyticalData.sample', value: 'sample_number' },
+      { text: 'analyticalData.locality', value: 'locality' },
+      { text: 'analyticalData.stratigraphy', value: 'stratigraphy' },
+
+      { text: 'analyticalData.depth', value: 'depth' },
+      {
+        text: 'analyticalData.depthInterval',
+        value: 'depth_interval',
+      },
+      {
+        text: 'analyticalData.rock',
+        value: 'rock',
+      },
+      {
+        text: 'analyticalData.reference',
+        value: 'reference',
+      },
+      {
+        text: 'analyticalData.dataset',
+        value: 'dataset_id',
+      },
+      {
+        text: 'analyticalData.analysis',
+        value: 'analysis_id',
+      },
+    ],
   }
 }
 
@@ -110,11 +140,36 @@ export const mutations = {
     state.filters = defaultState.filters
     state.options = { ...state.options, page: defaultState.options.page }
   },
+  SET_LIST_PARAMETERS(state, parameters) {
+    state.listParameters = parameters
+  },
+  UPDATE_ANALYTICAL_DATA_HEADERS(state, listOfNewHeaders) {
+    const ANALYTICAL_DATA_HEADERS_DEFAULT_LENGTH = 9
+    if (state.tableHeaders.length > ANALYTICAL_DATA_HEADERS_DEFAULT_LENGTH)
+      state.tableHeaders.length = ANALYTICAL_DATA_HEADERS_DEFAULT_LENGTH
+
+    if (listOfNewHeaders && listOfNewHeaders.length > 0) {
+      listOfNewHeaders = listOfNewHeaders.map((item) => {
+        return {
+          text: item.parameter,
+          value: item.parameter_index,
+          align: 'center',
+          translate: false,
+        }
+      })
+    }
+
+    state.tableHeaders = [...state.tableHeaders, ...listOfNewHeaders]
+  },
+  SET_SHOWN_ACTIVE_LIST_PARAMETERS(state, list) {
+    state.shownActiveListParameters = list
+  },
 }
 
 export const actions = {
-  resetAnalyticalDataFilters({ commit }) {
+  resetAnalyticalDataFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('updateAnalyticalDataHeaders', [])
   },
   async quickSearchAnalyticalData(
     { commit, rootState, state },
@@ -151,5 +206,17 @@ export const actions = {
     )
     commit('SET_ITEMS', analyticalDataResponse.items)
     commit('SET_COUNT', analyticalDataResponse.count)
+  },
+  setListParameters({ commit }, parameters) {
+    if (parameters && parameters.length > 0) {
+      commit('SET_LIST_PARAMETERS', parameters)
+    }
+  },
+  updateAnalyticalDataHeaders({ commit, dispatch }, value) {
+    commit('UPDATE_ANALYTICAL_DATA_HEADERS', value)
+    dispatch('setShownActiveListParameters', value)
+  },
+  setShownActiveListParameters({ commit }, list) {
+    commit('SET_SHOWN_ACTIVE_LIST_PARAMETERS', list)
   },
 }

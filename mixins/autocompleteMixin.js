@@ -5,6 +5,10 @@ export default {
     stratigraphyLabel() {
       return this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'
     },
+
+    nameLabel() {
+      return this.$i18n.locale === 'et' ? 'name' : 'name_en'
+    },
   },
 
   methods: {

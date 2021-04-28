@@ -64,6 +64,24 @@
         <text-field v-model="sample" :label="$t(filters.byIds.sample.label)" />
       </v-col>
     </v-row>
+
+    <v-row no-gutters>
+      <v-col cols="12">
+        <autocomplete-field
+          :label="$t('analyticalData.columns')"
+          chips
+          clearable
+          multiple
+          :items="listParameters"
+          :value="shownActiveListParameters"
+          return-object
+          item-text="parameter"
+          small-chips
+          deletable-chips
+          @input="updateAnalyticalDataHeaders"
+        />
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
@@ -100,8 +118,23 @@ export default {
       },
     }
   },
+  async fetch() {
+    const listParametersResponse = await this.$services.sarvSolr.getResourceList(
+      'analysis_parameter',
+      {
+        defaultParams: {
+          fq: 'id_l:[2 TO *]', // Because first one is N/A
+        },
+      }
+    )
+    this.setListParameters(listParametersResponse?.items)
+  },
   computed: {
-    ...mapState('analyticalData', ['filters']),
+    ...mapState('analyticalData', [
+      'filters',
+      'listParameters',
+      'shownActiveListParameters',
+    ]),
     ...mapFields('analyticalData', {
       stratigraphy: 'filters.byIds.stratigraphy.value',
       lithostratigraphy: 'filters.byIds.lithostratigraphy.value',
@@ -117,6 +150,8 @@ export default {
     ...mapActions('analyticalData', [
       'searchAnalyticalData',
       'resetAnalyticalDataFilters',
+      'setListParameters',
+      'updateAnalyticalDataHeaders',
     ]),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {

@@ -13,15 +13,22 @@ const getPaginationParams = (options) => {
 const getSortByParams = (options, queryFields) => {
   if (options?.sortBy && options?.sortDesc) {
     if (!isEmpty(options.sortBy)) {
-      const orderBy = options.sortBy.map((field, i) => {
-        // Support for multivalue fields #219
-        return queryFields[field]
-          .split(',')
-          .map((item) => (options.sortDesc[i] ? `${item} desc` : `${item} asc`))
-          .join()
-        // if (options.sortDesc[i]) return `${queryFields[field]} desc`
-        // return `${queryFields[field]} asc`
-      })
+      const orderBy = options.sortBy
+        .map((field, i) => {
+          // Support for multivalue fields #219
+          if (queryFields?.[field]) {
+            return queryFields[field]
+              .split(',')
+              .map((item) =>
+                options.sortDesc[i] ? `${item} desc` : `${item} asc`
+              )
+              .join()
+          } else return options.sortDesc[i] ? `${field} desc` : `${field} asc`
+
+          // if (options.sortDesc[i]) return `${queryFields[field]} desc`
+          // return `${queryFields[field]} asc`
+        })
+        .filter((item) => item)
 
       return { sort: orderBy.join(',') }
     }

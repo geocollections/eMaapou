@@ -756,5 +756,6 @@ export default {
     lithostratigraphy: 'Lithostratigraphy',
     method: 'Method',
     stratigraphyBed: 'Stratigraphy bed',
+    columns: 'Columns',
   },
 }
