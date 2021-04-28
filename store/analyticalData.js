@@ -13,7 +13,7 @@ const getDefaultState = () => {
           searchField: 'hierarchy_string',
           lookUpType: 'contains',
           label: 'analyticalData.stratigraphy',
-          fields: ['stratigraphy_hierarchy'],
+          fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
         },
         lithostratigraphy: {
           value: null,
@@ -70,7 +70,6 @@ const getDefaultState = () => {
           label: 'analyticalData.sample',
           fields: ['sample_id', 'sample_number', 'sample_type'],
         },
-        // Todo: Dynamic parameters
       },
       allIds: [
         'stratigraphy',
@@ -81,7 +80,6 @@ const getDefaultState = () => {
         'stratigraphyBed',
         'rock',
         'sample',
-        // Todo: Dynamic parameters
       ],
     },
     listParameters: [],
@@ -139,6 +137,7 @@ export const getters = {
       const distinctList = state.listParameters.filter(
         (param) => !state.activeListParameters.includes(param)
       )
+      console.log(distinctList.length)
       return [mustSeeParam, ...distinctList]
     } else return [mustSeeParam]
   },
@@ -171,7 +170,6 @@ export const mutations = {
 
     if (listOfNewHeaders && listOfNewHeaders.length > 0) {
       listOfNewHeaders = listOfNewHeaders.map((item) => {
-        console.log(item)
         return {
           text: item.parameter,
           value: item.parameter_index,
@@ -190,14 +188,25 @@ export const mutations = {
     state.activeListParameters = parameters
   },
   ADD_ACTIVE_LIST_PARAMETER(state) {
-    const nextUniqueParam = state.listParameters.find(
-      (param) => !state.activeListParameters.includes(param)
+    const LIST_PARAMETERS = state.listParameters.map(
+      (item) => item.parameter_index
+    )
+    const ACTIVE_LIST_PARAMETERS = state.activeListParameters.map(
+      (item) => item.parameter_index
     )
 
-    if (nextUniqueParam) {
+    const nextUniqueParam = LIST_PARAMETERS.find(
+      (param) => !ACTIVE_LIST_PARAMETERS.includes(param)
+    )
+
+    const nextUniqueParamObject = state.listParameters.find(
+      (item) => item.parameter_index === nextUniqueParam
+    )
+
+    if (nextUniqueParamObject) {
       state.activeListParameters = [
         ...state.activeListParameters,
-        nextUniqueParam,
+        nextUniqueParamObject,
       ]
     }
   },
@@ -206,14 +215,32 @@ export const mutations = {
     state.activeListParameters.splice(index, 1)
   },
   UPDATE_ACTIVE_LIST_PARAMETERS(state, payload) {
-    state.activeListParameters.splice(payload.index, 1, payload.event)
+    state.activeListParameters.splice(payload.indexToReplace, 1, payload.event)
+  },
+  UPDATE_ACTIVE_PARAM(state, payload) {
+    if (state.filters.byIds?.[payload.key])
+      state.filters.byIds[payload.key].value = payload.value
+  },
+  UPDATE_ACTIVE_LIST_PARAMETERS_FILTERS(state, newFilters) {
+    state.filters = {
+      byIds: { ...state.filters.byIds, ...newFilters },
+      allIds: Object.keys(state.filters.byIds),
+    }
+  },
+  REMOVE_ACTIVE_LIST_PARAMETER_FILTER(state, filterName) {
+    if (filterName) {
+      const index = state.filters.allIds.indexOf(filterName)
+      if (state.filters.byIds[filterName])
+        delete state.filters.byIds[filterName]
+      if (index !== -1) state.filters.allIds.splice(index, 1)
+    }
   },
 }
 
 export const actions = {
-  resetAnalyticalDataFilters({ commit, dispatch }) {
+  resetAnalyticalDataFilters({ state, commit, dispatch }) {
     commit('RESET_FILTERS')
-    dispatch('updateAnalyticalDataHeaders', [])
+    dispatch('setListParameters', state.listParameters, true)
   },
   async quickSearchAnalyticalData(
     { commit, rootState, state },
@@ -251,9 +278,26 @@ export const actions = {
     commit('SET_ITEMS', analyticalDataResponse.items)
     commit('SET_COUNT', analyticalDataResponse.count)
   },
-  setListParameters({ commit, dispatch }, parameters) {
-    if (parameters && parameters.length > 0) {
-      // Todo: Map params!!!
+  setListParameters({ commit, dispatch }, parameters, reset = false) {
+    if (reset) {
+      commit('SET_LIST_PARAMETERS', parameters)
+      dispatch('initActiveListParameters', parameters)
+    } else if (parameters && parameters.length > 0) {
+      parameters = parameters.map((item) => {
+        // Todo: Check if text field or not
+        // Todo: Check: '/' -> 31, '%' -> 199, 'ppm' -> 61, '‰' -> 6, '[grains]' -> 2; TOTAL: 299/347
+        return {
+          type: 'range',
+          lookUpType: 'range',
+          value: [null, null],
+          label: item.parameter,
+          placeholders: ['common.from', 'common.to'],
+          parameter: item.parameter,
+          parameter_index: item.parameter_index,
+          fields: [item.parameter_index],
+          isText: false,
+        }
+      })
       commit('SET_LIST_PARAMETERS', parameters)
       dispatch('initActiveListParameters', parameters)
     }
@@ -265,34 +309,70 @@ export const actions = {
   setShownActiveListParameters({ commit }, list) {
     commit('SET_SHOWN_ACTIVE_LIST_PARAMETERS', list)
   },
-  initActiveListParameters({ commit }, parameters) {
-    commit('INIT_ACTIVE_LIST_PARAMETERS', [
-      parameters[0],
-      parameters[1],
-      parameters[2],
-    ])
+  initActiveListParameters({ commit, dispatch }, parameters) {
+    // Ag, Au, U
+    const DEFAULT_PARAMETERS = [parameters[0], parameters[9], parameters[308]]
+
+    commit('INIT_ACTIVE_LIST_PARAMETERS', DEFAULT_PARAMETERS)
+    dispatch('updateAnalyticalDataHeaders', DEFAULT_PARAMETERS)
+    dispatch('addActiveListParameterToFilters', DEFAULT_PARAMETERS)
   },
   updateActiveListParameters({ state, commit, dispatch }, payload) {
-    commit('UPDATE_ACTIVE_LIST_PARAMETERS', payload)
-    const updatedParameters = [
-      ...state.shownActiveListParameters,
-      payload.event,
-    ]
+    if (payload.keyToReplace !== payload.event.parameter_index) {
+      commit('UPDATE_ACTIVE_LIST_PARAMETERS', payload)
+      dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
 
-    const uniqueParameters = [...new Set(updatedParameters)]
-    dispatch('updateAnalyticalDataHeaders', uniqueParameters)
+      dispatch('addActiveListParameterToFilters', state.activeListParameters)
+      dispatch('removeActiveListParameterFromFilters', payload.keyToReplace)
+    }
   },
   addActiveListParameter({ state, commit, dispatch }) {
     if (state.activeListParameters && state.activeListParameters.length < 10) {
       commit('ADD_ACTIVE_LIST_PARAMETER')
       dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
+      dispatch('addActiveListParameterToFilters', state.activeListParameters)
     }
   },
 
-  removeActiveListParameter({ state, commit, dispatch }, index) {
+  removeActiveListParameter({ state, commit, dispatch }, payload) {
     if (state.activeListParameters && state.activeListParameters.length >= 2) {
-      commit('REMOVE_ACTIVE_LIST_PARAMETER', index)
+      commit('REMOVE_ACTIVE_LIST_PARAMETER', payload.index)
       dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
+      dispatch('removeActiveListParameterFromFilters', payload.filterName)
     }
+  },
+
+  addActiveListParameterToFilters({ state, commit }, activeListParameters) {
+    const newFilters = Object.entries(activeListParameters).reduce(
+      (prev, [k, v]) => {
+        if (!state.filters.allIds.includes(v.parameter_index))
+          return { ...prev, [v.parameter_index]: v }
+        else return prev
+      },
+      {}
+    )
+    commit('UPDATE_ACTIVE_LIST_PARAMETERS_FILTERS', newFilters)
+  },
+
+  removeActiveListParameterFromFilters({ commit }, filterName) {
+    commit('REMOVE_ACTIVE_LIST_PARAMETER_FILTER', filterName)
+  },
+
+  updateActiveListParameterInFilters({ state, commit }, activeListParameters) {
+    console.log(state.activeListParameters)
+    const newFilters = Object.entries(state.activeListParameters).reduce(
+      (prev, [k, v]) => {
+        if (!state.filters.allIds.includes(v.parameter_index))
+          return { ...prev, [v.parameter_index]: v }
+        else return prev
+      },
+      {}
+    )
+    console.log(newFilters)
+    console.log(activeListParameters)
+  },
+
+  updateActiveParam({ commit }, payload) {
+    commit('UPDATE_ACTIVE_PARAM', payload)
   },
 }

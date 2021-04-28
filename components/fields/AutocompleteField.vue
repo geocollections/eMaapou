@@ -7,7 +7,7 @@
     autocomplete="off"
     :search-input.sync="search"
     :clearable="!removeClearable"
-    cache-items
+    :cache-items="!doNotCache"
     :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
     :return-object="!$attrs['item-value']"
     v-on="$listeners"
@@ -20,6 +20,7 @@ export default {
   name: 'AutocompleteField',
   props: {
     removeClearable: Boolean,
+    doNotCache: Boolean,
   },
   data() {
     return {

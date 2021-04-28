@@ -76,6 +76,8 @@ export default {
     lang: 'Keel',
     clickToOpen: 'Vajuta avamiseks',
     textField: 'Tektsiväli',
+    from: 'Alates',
+    to: 'Kuni',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -751,7 +753,7 @@ export default {
     stratigraphy: 'Stratigraafia',
     depth: 'Sügavus',
     depthInterval: 'Sügavus kuni',
-    rock: 'Nimi',
+    rock: 'Kivim, sete',
     reference: 'Kirjandus',
     dataset: 'Andmekogu',
     analysis: 'Analüüs',

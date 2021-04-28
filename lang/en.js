@@ -75,6 +75,8 @@ export default {
     lang: 'Language',
     clickToOpen: 'Click to open',
     textField: 'Text field',
+    from: 'From',
+    to: 'To',
   },
   link: {
     sarvAPI: 'Public API',
@@ -750,7 +752,7 @@ export default {
     stratigraphy: 'Stratigraphy',
     depth: 'Depth',
     depthInterval: 'Depth to',
-    rock: 'Name',
+    rock: 'Rock, sediment',
     reference: 'Reference',
     dataset: 'Dataset',
     analysis: 'Analysis',
