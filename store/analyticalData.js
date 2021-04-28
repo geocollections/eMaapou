@@ -218,8 +218,12 @@ export const mutations = {
     state.activeListParameters.splice(payload.indexToReplace, 1, payload.event)
   },
   UPDATE_ACTIVE_PARAM(state, payload) {
-    if (state.filters.byIds?.[payload.key])
+    if (state.filters.byIds?.[payload.key]) {
       state.filters.byIds[payload.key].value = payload.value
+      state.activeListParameters.find(
+        (item) => item.parameter_index === payload.key
+      ).value = payload.value
+    }
   },
   UPDATE_ACTIVE_LIST_PARAMETERS_FILTERS(state, newFilters) {
     state.filters = {

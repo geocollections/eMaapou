@@ -245,9 +245,6 @@ export default {
       this.setListParameters(listParametersResponse?.items)
     }
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   computed: {
     ...mapState('analyticalData', [
       'filters',
@@ -266,6 +263,9 @@ export default {
       rock: 'filters.byIds.rock.value',
       sample: 'filters.byIds.sample.value',
     }),
+  },
+  created() {
+    this.fillAutocompleteLists()
   },
   methods: {
     ...mapActions('analyticalData', [
