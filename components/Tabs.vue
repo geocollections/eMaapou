@@ -1,13 +1,12 @@
 <template>
   <div>
     <v-tabs
-      ref="tabs"
       v-model="activeTab"
       class="tabs"
-      background-color="grey lighten-3"
-      color="primary darken-2"
+      light
+      background-color="primary lighten-3"
+      slider-color="tertiary"
       :show-arrows="$vuetify.breakpoint.smAndUp"
-      active-class="active"
       :vertical="$vuetify.breakpoint.xsOnly"
       grow
     >
@@ -16,6 +15,7 @@
         :key="index"
         :disabled="item.count === 0"
         nuxt
+        active-class="active-tab"
         exact
         :to="
           localePath({
@@ -79,16 +79,9 @@ export default {
   border-top-right-radius: 4px;
 }
 
-.active {
+.active-tab {
   font-weight: bold;
-
-  div {
-    .v-slide-group__prev {
-      .v-icon {
-        color: red;
-      }
-    }
-  }
+  color: var(--v-tertiary-base) !important;
 }
 
 .v-tabs--vertical {
