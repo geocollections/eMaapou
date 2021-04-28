@@ -137,7 +137,6 @@ export const getters = {
       const distinctList = state.listParameters.filter(
         (param) => !state.activeListParameters.includes(param)
       )
-      console.log(distinctList.length)
       return [mustSeeParam, ...distinctList]
     } else return [mustSeeParam]
   },
@@ -359,7 +358,6 @@ export const actions = {
   },
 
   updateActiveListParameterInFilters({ state, commit }, activeListParameters) {
-    console.log(state.activeListParameters)
     const newFilters = Object.entries(state.activeListParameters).reduce(
       (prev, [k, v]) => {
         if (!state.filters.allIds.includes(v.parameter_index))
@@ -368,8 +366,6 @@ export const actions = {
       },
       {}
     )
-    console.log(newFilters)
-    console.log(activeListParameters)
   },
 
   updateActiveParam({ commit }, payload) {
