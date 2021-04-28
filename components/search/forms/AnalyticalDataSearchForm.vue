@@ -245,6 +245,9 @@ export default {
       this.setListParameters(listParametersResponse?.items)
     }
   },
+  created() {
+    this.fillAutocompleteLists()
+  },
   computed: {
     ...mapState('analyticalData', [
       'filters',
@@ -287,6 +290,12 @@ export default {
     parseInput(input) {
       if (isEmpty(input)) return null
       else return parseFloat(input)
+    },
+    fillAutocompleteLists() {
+      if (this.stratigraphy)
+        this.autocomplete.chronostratigraphy.push(this.stratigraphy)
+      if (this.lithostratigraphy)
+        this.autocomplete.lithostratigraphy.push(this.lithostratigraphy)
     },
   },
 }
