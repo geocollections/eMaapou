@@ -74,6 +74,9 @@ export default {
     institutions: 'Geological institutions, organisations and companies',
     lang: 'Language',
     clickToOpen: 'Click to open',
+    textField: 'Text field',
+    from: 'From',
+    to: 'To',
   },
   link: {
     sarvAPI: 'Public API',
@@ -749,7 +752,7 @@ export default {
     stratigraphy: 'Stratigraphy',
     depth: 'Depth',
     depthInterval: 'Depth to',
-    rock: 'Name',
+    rock: 'Rock, sediment',
     reference: 'Reference',
     dataset: 'Dataset',
     analysis: 'Analysis',
@@ -757,5 +760,6 @@ export default {
     method: 'Method',
     stratigraphyBed: 'Stratigraphy bed',
     columns: 'Columns',
+    parameter: 'Parameter',
   },
 }
