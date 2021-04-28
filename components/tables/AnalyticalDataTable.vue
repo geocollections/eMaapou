@@ -128,7 +128,7 @@ export default {
       return this.tableHeaders.map((header) => {
         return {
           ...header,
-          text: this.$t(header.text),
+          text: header.translate ? this.$t(header.text) : header.text,
         }
       })
     },

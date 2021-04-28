@@ -65,6 +65,66 @@
       </v-col>
     </v-row>
 
+    <v-row
+      v-if="activeListParameters && activeListParameters.length > 0"
+      no-gutters
+    >
+      <v-col
+        v-for="(entity, index) in activeListParameters"
+        :key="index"
+        cols="12"
+      >
+        <v-row no-gutters>
+          <v-col cols="4" class="pr-3">
+            <autocomplete-field
+              :label="$t('analyticalData.parameter')"
+              :items="distinctListParameters(entity)"
+              return-object
+              item-text="parameter"
+              :value="entity"
+              remove-clearable
+              @input="
+                updateActiveListParameters({ event: $event, index: index })
+              "
+            />
+          </v-col>
+
+          <v-col cols="6" class="pl-3">
+            <v-row no-gutters>
+              <v-col cols="12">
+                <text-field
+                  :label="$t('common.textField')"
+                  :value="entity.text"
+                />
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col cols="1" align-self="center" class="text-center">
+            <v-btn
+              icon
+              color="success"
+              :disabled="activeListParameters.length >= 10"
+              @click="addActiveListParameter"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+
+          <v-col cols="1" align-self="center" class="text-center">
+            <v-btn
+              icon
+              color="error"
+              :disabled="activeListParameters.length <= 1"
+              @click="removeActiveListParameter(index)"
+            >
+              <v-icon>mdi-minus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+
     <v-row no-gutters>
       <v-col cols="12">
         <autocomplete-field
@@ -86,7 +146,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import GlobalSearch from '../GlobalSearch.vue'
@@ -133,8 +193,10 @@ export default {
     ...mapState('analyticalData', [
       'filters',
       'listParameters',
+      'activeListParameters',
       'shownActiveListParameters',
     ]),
+    ...mapGetters('analyticalData', ['distinctListParameters']),
     ...mapFields('analyticalData', {
       stratigraphy: 'filters.byIds.stratigraphy.value',
       lithostratigraphy: 'filters.byIds.lithostratigraphy.value',
@@ -152,6 +214,9 @@ export default {
       'resetAnalyticalDataFilters',
       'setListParameters',
       'updateAnalyticalDataHeaders',
+      'updateActiveListParameters',
+      'addActiveListParameter',
+      'removeActiveListParameter',
     ]),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {

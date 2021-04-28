@@ -75,6 +75,7 @@ export default {
     institutions: 'Geoloogia asutused, organisatsioonid, ettevõtted',
     lang: 'Keel',
     clickToOpen: 'Vajuta avamiseks',
+    textField: 'Tektsiväli',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -758,5 +759,6 @@ export default {
     method: 'Meetod',
     stratigraphyBed: 'Stratigraafia kiht',
     columns: 'Veerud',
+    parameter: 'Parameeter',
   },
 }

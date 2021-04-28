@@ -6,7 +6,7 @@
     hide-no-data
     autocomplete="off"
     :search-input.sync="search"
-    clearable
+    :clearable="!removeClearable"
     cache-items
     :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
     :return-object="!$attrs['item-value']"
@@ -18,6 +18,9 @@
 <script>
 export default {
   name: 'AutocompleteField',
+  props: {
+    removeClearable: Boolean,
+  },
   data() {
     return {
       search: null,
