@@ -753,5 +753,9 @@ export default {
     reference: 'Reference',
     dataset: 'Dataset',
     analysis: 'Analysis',
+    lithostratigraphy: 'Lithostratigraphy',
+    method: 'Method',
+    stratigraphyBed: 'Stratigraphy bed',
+    columns: 'Columns',
   },
 }
