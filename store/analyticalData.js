@@ -357,17 +357,6 @@ export const actions = {
     commit('REMOVE_ACTIVE_LIST_PARAMETER_FILTER', filterName)
   },
 
-  updateActiveListParameterInFilters({ state, commit }, activeListParameters) {
-    const newFilters = Object.entries(state.activeListParameters).reduce(
-      (prev, [k, v]) => {
-        if (!state.filters.allIds.includes(v.parameter_index))
-          return { ...prev, [v.parameter_index]: v }
-        else return prev
-      },
-      {}
-    )
-  },
-
   updateActiveParam({ commit }, payload) {
     commit('UPDATE_ACTIVE_PARAM', payload)
   },
