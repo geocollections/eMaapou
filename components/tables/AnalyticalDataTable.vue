@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="headers"
+    :headers="translatedHeaders"
     :items="items"
     :options="options"
     :count="count"
@@ -92,6 +92,7 @@
 
 <script>
 import { round } from 'lodash'
+import { mapState } from 'vuex'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
 export default {
@@ -120,36 +121,17 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      headers: [
-        { text: this.$t('analyticalData.sample'), value: 'sample_number' },
-        { text: this.$t('analyticalData.locality'), value: 'locality' },
-        { text: this.$t('analyticalData.stratigraphy'), value: 'stratigraphy' },
+  computed: {
+    ...mapState('analyticalData', ['tableHeaders']),
 
-        { text: this.$t('analyticalData.depth'), value: 'depth' },
-        {
-          text: this.$t('analyticalData.depthInterval'),
-          value: 'depth_interval',
-        },
-        {
-          text: this.$t('analyticalData.rock'),
-          value: 'rock',
-        },
-        {
-          text: this.$t('analyticalData.reference'),
-          value: 'reference',
-        },
-        {
-          text: this.$t('analyticalData.dataset'),
-          value: 'dataset_id',
-        },
-        {
-          text: this.$t('analyticalData.analysis'),
-          value: 'analysis_id',
-        },
-      ],
-    }
+    translatedHeaders() {
+      return this.tableHeaders.map((header) => {
+        return {
+          ...header,
+          text: this.$t(header.text),
+        }
+      })
+    },
   },
   methods: {
     round,

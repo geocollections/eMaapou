@@ -754,5 +754,9 @@ export default {
     reference: 'Kirjandus',
     dataset: 'Andmekogu',
     analysis: 'Analüüs',
+    lithostratigraphy: 'Litostratigraafia',
+    method: 'Meetod',
+    stratigraphyBed: 'Stratigraafia kiht',
+    columns: 'Veerud',
   },
 }

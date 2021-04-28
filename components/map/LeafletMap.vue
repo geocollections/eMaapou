@@ -452,14 +452,16 @@ export default {
       }
     },
     activeOverlays(newVal) {
-      if (Object.keys(this.checkableLayers).some((el) => newVal.includes(el)))
-        document.getElementById('map').classList.add('cursor-crosshair')
-      else document.getElementById('map').classList.remove('cursor-crosshair')
+      if (document.getElementById('map')) {
+        if (Object.keys(this.checkableLayers).some((el) => newVal.includes(el)))
+          document.getElementById('map').classList.add('cursor-crosshair')
+        else document.getElementById('map').classList.remove('cursor-crosshair')
+      }
     },
   },
   mounted() {
     this.$nextTick(() => {
-      if (this.isMapClickEnabled())
+      if (this.isMapClickEnabled() && document.getElementById('map'))
         document.getElementById('map').classList.add('cursor-crosshair')
     })
   },
