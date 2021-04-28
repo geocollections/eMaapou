@@ -7,20 +7,7 @@
     </v-row>
     <v-row justify="center">
       <v-col sm="7" md="5">
-        <v-text-field
-          v-model="search"
-          class="frontsearch"
-          outlined
-          single-line
-          :autofocus="true"
-          color="primary lighthen-2"
-          append-icon="mdi-magnify"
-          :label="$t('common.searchAlt')"
-          hide-details
-          clearable
-          @click:append="handleSearch"
-          @keyup.enter="handleSearch"
-        ></v-text-field>
+        <quick-search-form @submit="handleSearch" />
       </v-col>
     </v-row>
     <v-row class="my-6" justify="center" align="center">
@@ -78,9 +65,10 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
+import QuickSearchForm from '~/components/search/forms/QuickSearchForm'
 import CardWrapper from '~/components/CardWrapper'
 export default {
-  components: { CardWrapper },
+  components: { CardWrapper, QuickSearchForm },
 
   async asyncData() {
     return {

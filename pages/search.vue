@@ -9,19 +9,7 @@
     </v-row>
     <v-row justify="center">
       <v-col sm="7" md="5">
-        <v-text-field
-          v-model="search"
-          dense
-          outlined
-          single-line
-          :autofocus="true"
-          color="primary darken-2"
-          append-icon="mdi-magnify"
-          :label="$t('common.searchAlt')"
-          hide-details
-          clearable
-          @input="handleSearch"
-        />
+        <global-search @input="handleSearch" />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -40,9 +28,10 @@
 import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
 import ButtonTabs from '@/components/ButtonTabs'
 import { mapFields } from 'vuex-map-fields'
+import GlobalSearch from '~/components/search/GlobalSearch.vue'
 export default {
   name: 'QuickSearch',
-  components: { ButtonTabs },
+  components: { ButtonTabs, GlobalSearch },
   // layout: 'search',
   async asyncData({ params, route, error, app, store }) {
     try {
@@ -225,7 +214,7 @@ export default {
             })
         )
       )
-      // this.updateRouteQuery()
+      this.updateRouteQuery()
     }, 500),
 
     updateRouteQuery() {

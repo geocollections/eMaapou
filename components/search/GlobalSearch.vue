@@ -2,11 +2,14 @@
   <v-text-field
     v-model="search"
     outlined
-    class="search-input frontsearch"
+    height=""
+    class=""
     color="primary darken-2"
-    :label="$t('common.search')"
+    :label="$t('common.searchAlt')"
     hide-details
     clearable
+    autofocus
+    @input="$emit('input')"
   ></v-text-field>
 </template>
 
