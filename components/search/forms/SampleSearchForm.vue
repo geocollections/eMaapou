@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <global-search />
-    <div class="text-right">
+    <div class="text-right mt-2">
       <reset-search-button @click="handleReset" />
       <search-button />
     </div>
