@@ -15,12 +15,12 @@
         {{ item.id }}
       </external-link>
     </template>
-    <template #item.specimen_number="{ item }">
+    <template #item.specimen_full_name="{ item }">
       <external-link
-        v-if="item.specimen_number"
+        v-if="item.specimen_full_name"
         @click.native="$openGeoDetail('specimen', item.id)"
       >
-        {{ item.specimen_number }}
+        {{ item.specimen_full_name }}
       </external-link>
     </template>
     <template #item.locality="{ item }">
@@ -150,7 +150,7 @@ export default {
     return {
       headers: [
         { text: this.$t('specimen.id'), value: 'id' },
-        { text: this.$t('specimen.number'), value: 'specimen_number' },
+        { text: this.$t('specimen.number'), value: 'specimen_full_name' },
         { text: this.$t('specimen.locality'), value: 'locality' },
         { text: this.$t('specimen.depth'), value: 'depth' },
         { text: this.$t('specimen.depthInterval'), value: 'depth_interval' },
