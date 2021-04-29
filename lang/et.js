@@ -762,5 +762,6 @@ export default {
     stratigraphyBed: 'Stratigraafia kiht',
     columns: 'Veerud',
     parameter: 'Parameeter',
+    analysisMethod: 'Meetod',
   },
 }

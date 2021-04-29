@@ -8,6 +8,21 @@ const getDefaultState = () => {
     options: ANALYTICAL_DATA.options,
     filters: {
       byIds: {
+        locality: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.locality',
+          fields: ['locality', 'locality_id_s', 'site', 'site_id_s'],
+        },
+        depth: {
+          type: 'range',
+          lookUpType: 'range',
+          value: [null, null],
+          label: 'analyticalData.depth',
+          placeholders: ['analyticalData.depthMin', 'analyticalData.depthMin'],
+          fields: ['depth', 'depth_interval'],
+        },
         stratigraphy: {
           value: null,
           type: 'object',
@@ -23,6 +38,13 @@ const getDefaultState = () => {
           lookUpType: 'contains',
           label: 'analyticalData.lithostratigraphy',
           fields: ['lithostratigraphy_hierarchy'],
+        },
+        analysis: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.analysis',
+          fields: ['id'],
         },
         method: {
           value: '',
@@ -92,6 +114,11 @@ const getDefaultState = () => {
       {
         text: 'analyticalData.id',
         value: 'id_l',
+        translate: true,
+      },
+      {
+        text: 'analyticalData.analysisMethod',
+        value: 'analysis_method',
         translate: true,
       },
       {

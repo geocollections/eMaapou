@@ -28,16 +28,18 @@ export const ANALYTICAL_DATA = {
   },
   queryFields: {
     id: (locale) => 'id_l',
+    analysis_method: (locale) =>
+      locale === 'et' ? 'analysis_method' : 'analysis_method_en',
     sample_number: (locale) => 'sample_number,sample_id_sl',
-    locality: (locale) => 'locality,locality_id_sl',
+    locality: (locale) => 'locality,locality_id_sl,site,site_id_sl',
     stratigraphy: (locale) =>
       locale === 'et'
-        ? 'stratigraphy,stratigraphy_id_sl'
-        : 'stratigraphy_en,stratigraphy_id_sl',
-    lithostratigraphy: (locale) =>
-      locale === 'et'
-        ? 'lithostratigraphy,lithostratigraphy_id_sl'
-        : 'lithostratigraphy_en,lithostratigraphy_id_sl',
+        ? 'stratigraphy,stratigraphy_id_sl,lithostratigraphy,lithostratigraphy_id_sl'
+        : 'stratigraphy_en,stratigraphy_id_sl,lithostratigraphy_en,lithostratigraphy_id_sl',
+    // lithostratigraphy: (locale) =>
+    //   locale === 'et'
+    //     ? 'lithostratigraphy,lithostratigraphy_id_sl'
+    //     : 'lithostratigraphy_en,lithostratigraphy_id_sl',
     depth: (locale) => 'depth,depth_interval',
     // depth_interval: (locale) => 'depth_interval',
     rock: (locale) =>

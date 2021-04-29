@@ -16,6 +16,11 @@
         {{ item.id_l }}
       </nuxt-link>
     </template>
+    <template #item.analysis_method="{ item }">
+      {{
+        $translate({ et: item.analysis_method, en: item.analysis_method_en })
+      }}
+    </template>
     <template #item.sample_number="{ item }">
       <nuxt-link
         v-if="item.sample_id"
@@ -35,33 +40,58 @@
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
-      <div v-else>{{ item.locality_str }}</div>
+      <nuxt-link
+        v-else-if="item.site_id"
+        class="text-link"
+        :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
+      >
+        {{ item.site }}
+      </nuxt-link>
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
-        v-if="item.stratigraphy_id"
-        class="text-link"
-        :to="
-          localePath({
-            name: 'stratigraphy-id',
-            params: { id: item.stratigraphy_id },
-          })
-        "
-      >
-        {{
-          $translate({
-            et: item.stratigraphy,
-            en: item.stratigraphy_en,
-          })
-        }}
-      </nuxt-link>
-      <div v-else>
-        {{
-          $translate({
-            et: item.stratigraphy_str,
-            en: item.stratigraphy_en_str,
-          })
-        }}
+      <div class="d-flex flex-row justify-space-between">
+        <nuxt-link
+          v-if="item.stratigraphy_id"
+          class="text-link"
+          :to="
+            localePath({
+              name: 'stratigraphy-id',
+              params: { id: item.stratigraphy_id },
+            })
+          "
+        >
+          {{
+            $translate({
+              et: item.stratigraphy,
+              en: item.stratigraphy_en,
+            })
+          }}
+        </nuxt-link>
+
+        <div
+          v-if="item.stratigraphy_id && item.lithostratigraphy_id"
+          class="px-1 font-weight-bold"
+        >
+          |
+        </div>
+
+        <nuxt-link
+          v-if="item.lithostratigraphy_id"
+          class="text-link font-italic"
+          :to="
+            localePath({
+              name: 'stratigraphy-id',
+              params: { id: item.lithostratigraphy_id },
+            })
+          "
+        >
+          {{
+            $translate({
+              et: item.lithostratigraphy,
+              en: item.lithostratigraphy_en,
+            })
+          }}
+        </nuxt-link>
       </div>
     </template>
     <template #item.depth="{ item }">
