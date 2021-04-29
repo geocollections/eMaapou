@@ -7,6 +7,15 @@
     :count="count"
     v-on="$listeners"
   >
+    <template #item.id_l="{ item }">
+      <nuxt-link
+        v-if="item.id_l"
+        class="text-link"
+        :to="localePath({ name: 'analysis-id', params: { id: item.id_l } })"
+      >
+        {{ item.id_l }}
+      </nuxt-link>
+    </template>
     <template #item.sample_number="{ item }">
       <nuxt-link
         v-if="item.sample_id"

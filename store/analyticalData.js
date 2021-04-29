@@ -322,7 +322,13 @@ export const actions = {
   },
   initActiveListParameters({ commit, dispatch }, parameters) {
     // Ag, Au, U
-    const DEFAULT_PARAMETERS = [parameters[0], parameters[9], parameters[308]]
+    // CaO, MgO, SiO, Al2O3
+    const DEFAULT_PARAMETERS = [
+      parameters[24],
+      parameters[109],
+      parameters[163],
+      parameters[1],
+    ]
 
     commit('INIT_ACTIVE_LIST_PARAMETERS', DEFAULT_PARAMETERS)
     dispatch('updateAnalyticalDataHeaders', DEFAULT_PARAMETERS)
