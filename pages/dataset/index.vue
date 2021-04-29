@@ -1,27 +1,27 @@
 <template>
-  <div>
-    <page-title-wrapper
-      :title="$t('common.datasetCount')"
-      :count="count"
-      icon="mdi-screw-machine-flat-top"
-    />
-    <v-row>
-      <v-col cols="12" md="3">
-        <v-card class="pa-3">
-          <dataset-search-form />
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="9">
-        <dataset-table
-          :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
-          @update="handleUpdate"
-        />
-      </v-col>
-    </v-row>
-  </div>
+  <search>
+    <template #title>
+      <page-title-wrapper
+        :title="$t('common.datasetCount')"
+        :count="count"
+        icon="mdi-screw-machine-flat-top"
+      />
+    </template>
+
+    <template #form>
+      <dataset-search-form />
+    </template>
+
+    <template #result>
+      <dataset-table
+        :show-search="false"
+        :items="items"
+        :count="count"
+        :options="options"
+        @update="handleUpdate"
+      />
+    </template>
+  </search>
 </template>
 
 <script>
@@ -29,9 +29,11 @@ import { mapState, mapActions } from 'vuex'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import DatasetTable from '~/components/tables/DatasetTable'
 import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
+import Search from '~/components/templates/Search'
 
 export default {
   components: {
+    Search,
     DatasetSearchForm,
     DatasetTable,
     PageTitleWrapper,

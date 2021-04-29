@@ -6,6 +6,7 @@ const vuexOptions = {
     settings: {
       cookiePolicy: state.settings.cookiePolicy,
       showSearchViewMap: state.settings.showSearchViewMap,
+      showSearchViewForm: state.settings.showSearchViewForm,
     },
     history: {
       ...state.history,
