@@ -55,6 +55,12 @@
         }}
       </div>
     </template>
+    <template #item.depth="{ item }">
+      <span v-if="item.depth && item.depth_interval"
+        >{{ item.depth }} - {{ item.depth_interval }} m</span
+      >
+      <span v-else>{{ item.depth }}</span>
+    </template>
     <template #item.reference="{ item }">
       <external-link
         v-if="item.reference_id"

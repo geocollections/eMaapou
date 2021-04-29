@@ -38,8 +38,8 @@ export const ANALYTICAL_DATA = {
       locale === 'et'
         ? 'lithostratigraphy,lithostratigraphy_id_sl'
         : 'lithostratigraphy_en,lithostratigraphy_id_sl',
-    depth: (locale) => 'depth',
-    depth_interval: (locale) => 'depth_interval',
+    depth: (locale) => 'depth,depth_interval',
+    // depth_interval: (locale) => 'depth_interval',
     rock: (locale) =>
       locale === 'et'
         ? 'rock,rock_txt,rock_id_sl'
