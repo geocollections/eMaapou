@@ -362,7 +362,10 @@ export const actions = {
     dispatch('addActiveListParameterToFilters', DEFAULT_PARAMETERS)
   },
   updateActiveListParameters({ state, commit, dispatch }, payload) {
-    if (payload.keyToReplace !== payload.event.parameter_index) {
+    if (
+      payload.event &&
+      payload.keyToReplace !== payload.event.parameter_index
+    ) {
       commit('UPDATE_ACTIVE_LIST_PARAMETERS', payload)
       dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
 
