@@ -42,6 +42,13 @@ const getDefaultState = () => {
           label: 'dataset.remarks',
           fields: ['remarks'],
         },
+        parameters: {
+          value: [],
+          type: 'list',
+          lookUpType: 'contains',
+          label: 'dataset.parameters',
+          fields: ['parameter_index_list'],
+        },
       },
       allIds: ['name', 'owner', 'date', 'remarks'],
     },

@@ -119,6 +119,7 @@ const buildFilterQueryParameter = (filters) => {
         (typeof v.value !== 'object' || !v.value?.[v.searchField])
       )
         return false
+      if (v.type === 'list' && isEmpty(v.value)) return false
       return v.value !== null
     })
     .reduce((prev, [k, v]) => {
@@ -184,6 +185,17 @@ const buildFilterQueryParameter = (filters) => {
                   fieldId
                 )}`
               )
+            }
+            case 'list': {
+              return searchParameter.fields
+                .map((field) => {
+                  return searchParameter.value
+                    .map((obj) => {
+                      return `(${field}:${obj.value})`
+                    })
+                    .join(' OR ')
+                })
+                .join(' OR ')
             }
             default:
               return null

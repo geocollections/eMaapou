@@ -9,6 +9,20 @@
     <text-field v-model="owner" :label="$t(filters.byIds.owner.label)" />
     <text-field v-model="date" :label="$t(filters.byIds.date.label)" />
     <text-field v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
+
+    <autocomplete-field
+      :label="$t('dataset.parameters')"
+      chips
+      clearable
+      multiple
+      :items="availableParameters"
+      :value="parameters"
+      return-object
+      item-text="text"
+      small-chips
+      deletable-chips
+      @input="handleParameterInput"
+    />
   </v-form>
 </template>
 
@@ -20,6 +34,7 @@ import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField.vue'
+import AutocompleteField from '~/components/fields/AutocompleteField'
 
 export default {
   name: 'DatasetSearchForm',
@@ -28,6 +43,29 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    AutocompleteField,
+  },
+  data() {
+    return {
+      availableParameters: [],
+    }
+  },
+  async fetch() {
+    if (this.availableParameters.length === 0) {
+      const availableParametersResponse = await this.$services.sarvSolr.getResourceList(
+        'analysis_parameter',
+        {
+          defaultParams: {
+            fq: 'id_l:[2 TO *]', // Because first one is N/A
+          },
+        }
+      )
+      this.availableParameters = availableParametersResponse?.items.map(
+        (parameter) => {
+          return { text: parameter.parameter, value: parameter.parameter_index }
+        }
+      )
+    }
   },
   computed: {
     ...mapState('dataset', ['filters']),
@@ -36,6 +74,7 @@ export default {
       owner: 'filters.byIds.owner.value',
       date: 'filters.byIds.date.value',
       remarks: 'filters.byIds.remarks.value',
+      parameters: 'filters.byIds.parameters.value',
     }),
   },
   methods: {
@@ -48,6 +87,9 @@ export default {
     },
     handleSearch(e) {
       this.searchDatasets()
+    },
+    handleParameterInput(e) {
+      this.parameters = e
     },
   },
 }
