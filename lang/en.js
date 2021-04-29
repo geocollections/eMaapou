@@ -77,6 +77,7 @@ export default {
     textField: 'Text field',
     from: 'From',
     to: 'To',
+    showSearch: 'Search',
   },
   link: {
     sarvAPI: 'Public API',

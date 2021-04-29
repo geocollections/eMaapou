@@ -78,6 +78,7 @@ export default {
     textField: 'Tektsiväli',
     from: 'Alates',
     to: 'Kuni',
+    showSearch: 'Otsing',
   },
   link: {
     sarvAPI: 'Avalik API',
