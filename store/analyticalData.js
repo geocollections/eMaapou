@@ -90,6 +90,11 @@ const getDefaultState = () => {
     shownActiveListParameters: [],
     tableHeaders: [
       {
+        text: 'analyticalData.id',
+        value: 'id_l',
+        translate: true,
+      },
+      {
         text: 'analyticalData.sample',
         value: 'sample_number',
         translate: true,

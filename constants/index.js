@@ -23,10 +23,11 @@ export const ANALYTICAL_DATA = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['sample_number'],
+    sortBy: ['id_l'],
     sortDesc: [true],
   },
   queryFields: {
+    id: (locale) => 'id_l',
     sample_number: (locale) => 'sample_number,sample_id_sl',
     locality: (locale) => 'locality,locality_id_sl',
     stratigraphy: (locale) =>
