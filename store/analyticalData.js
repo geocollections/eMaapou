@@ -36,14 +36,14 @@ const getDefaultState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'analyticalData.reference',
-          fields: ['reference'],
+          fields: ['reference', 'reference_id_s'],
         },
         dataset: {
           value: '',
           type: 'text',
           lookUpType: 'contains',
           label: 'analyticalData.dataset',
-          fields: ['dataset_name'],
+          fields: ['dataset_name', 'dataset_id_s'],
         },
         stratigraphyBed: {
           value: '',
@@ -53,8 +53,10 @@ const getDefaultState = () => {
           fields: [
             'stratigraphy',
             'stratigraphy_en',
+            'stratigraphy_id_s',
             'lithostratigraphy',
             'lithostratigraphy_en',
+            'lithostratigraphy_id_s',
           ],
         },
         rock: {
@@ -62,14 +64,14 @@ const getDefaultState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'analyticalData.rock',
-          fields: ['rock', 'rock_en', 'rock_txt', 'rock_en_txt'],
+          fields: ['rock', 'rock_en', 'rock_txt', 'rock_en_txt', 'rock_id_s'],
         },
         sample: {
           value: '',
           type: 'text',
           lookUpType: 'contains',
           label: 'analyticalData.sample',
-          fields: ['sample_id', 'sample_number', 'sample_type'],
+          fields: ['sample_id_s', 'sample_number', 'sample_type'],
         },
       },
       allIds: [

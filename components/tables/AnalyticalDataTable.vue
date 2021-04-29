@@ -72,9 +72,8 @@
           localePath({ name: 'dataset-id', params: { id: item.dataset_id } })
         "
       >
-        {{ item.dataset_name }}
+        {{ item.dataset_id }}
       </nuxt-link>
-      <div v-else>{{ item.dataset_name_str }}</div>
     </template>
     <template #item.analysis_id="{ item }">
       <nuxt-link
