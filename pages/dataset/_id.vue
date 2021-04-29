@@ -130,15 +130,15 @@ export default {
       )
       const parameters = parameterResponse.results[0]
 
-      const parameterValues = parameters.parameter_index_list[0].split('; ')
-      const parameterText = parameters.parameter_list[0].split('; ')
-      const parsedParameters = parameterValues.map((v, i) => {
+      const parameterValues = parameters?.parameter_index_list?.[0]?.split('; ')
+
+      const parameterText = parameters?.parameter_list?.[0]?.split('; ')
+      const parsedParameters = parameterValues?.map((v, i) => {
         return { text: parameterText[i], value: v }
       })
+      const selectedParameters = parsedParameters?.slice(0, 5)
 
-      const selectedParameters = parsedParameters.slice(0, 5)
-
-      const selectedParameterValues = selectedParameters.map(
+      const selectedParameterValues = selectedParameters?.map(
         (param) => param.value
       )
 
@@ -217,6 +217,7 @@ export default {
         selectedParameterValues,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Could not find dataset ${route.params.id}`,
         path: route.path,
