@@ -23,22 +23,25 @@ export const ANALYTICAL_DATA = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['sample_number'],
+    sortBy: ['id_l'],
     sortDesc: [true],
   },
   queryFields: {
+    id: (locale) => 'id_l',
+    analysis_method: (locale) =>
+      locale === 'et' ? 'analysis_method' : 'analysis_method_en',
     sample_number: (locale) => 'sample_number,sample_id_sl',
-    locality: (locale) => 'locality,locality_id_sl',
+    locality: (locale) => 'locality,locality_id_sl,site,site_id_sl',
     stratigraphy: (locale) =>
       locale === 'et'
-        ? 'stratigraphy,stratigraphy_id_sl'
-        : 'stratigraphy_en,stratigraphy_id_sl',
-    lithostratigraphy: (locale) =>
-      locale === 'et'
-        ? 'lithostratigraphy,lithostratigraphy_id_sl'
-        : 'lithostratigraphy_en,lithostratigraphy_id_sl',
-    depth: (locale) => 'depth',
-    depth_interval: (locale) => 'depth_interval',
+        ? 'stratigraphy,stratigraphy_id_sl,lithostratigraphy,lithostratigraphy_id_sl'
+        : 'stratigraphy_en,stratigraphy_id_sl,lithostratigraphy_en,lithostratigraphy_id_sl',
+    // lithostratigraphy: (locale) =>
+    //   locale === 'et'
+    //     ? 'lithostratigraphy,lithostratigraphy_id_sl'
+    //     : 'lithostratigraphy_en,lithostratigraphy_id_sl',
+    depth: (locale) => 'depth,depth_interval',
+    // depth_interval: (locale) => 'depth_interval',
     rock: (locale) =>
       locale === 'et'
         ? 'rock,rock_txt,rock_id_sl'

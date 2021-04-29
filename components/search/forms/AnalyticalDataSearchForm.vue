@@ -8,6 +8,21 @@
 
     <v-row no-gutters>
       <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
+        <text-field
+          v-model="locality"
+          :label="$t(filters.byIds.locality.label)"
+        />
+      </v-col>
+      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
+        <range-text-field
+          v-model="depth"
+          :label="$t(filters.byIds.depth.label)"
+        />
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters>
+      <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
         <autocomplete-field
           v-model="stratigraphy"
           :items="autocomplete.chronostratigraphy"
@@ -31,36 +46,45 @@
 
     <v-row no-gutters>
       <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-        <text-field v-model="method" :label="$t(filters.byIds.method.label)" />
+        <text-field
+          v-model="analysis"
+          :label="$t(filters.byIds.analysis.label)"
+        />
       </v-col>
       <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
+        <text-field v-model="method" :label="$t(filters.byIds.method.label)" />
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters>
+      <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
         <text-field
           v-model="reference"
           :label="$t(filters.byIds.reference.label)"
         />
       </v-col>
-    </v-row>
-
-    <v-row no-gutters>
-      <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
+      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
         <text-field
           v-model="dataset"
           :label="$t(filters.byIds.dataset.label)"
         />
       </v-col>
-      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
+    </v-row>
+
+    <v-row no-gutters>
+      <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
         <text-field
           v-model="stratigraphyBed"
           :label="$t(filters.byIds.stratigraphyBed.label)"
         />
       </v-col>
+      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
+        <text-field v-model="rock" :label="$t(filters.byIds.rock.label)" />
+      </v-col>
     </v-row>
 
     <v-row no-gutters>
       <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-        <text-field v-model="rock" :label="$t(filters.byIds.rock.label)" />
-      </v-col>
-      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
         <text-field v-model="sample" :label="$t(filters.byIds.sample.label)" />
       </v-col>
     </v-row>
@@ -208,10 +232,12 @@ import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import NumberField from '~/components/fields/NumberField'
+import RangeTextField from '~/components/fields/RangeTextField'
 
 export default {
   name: 'AnalyticalDataSearchForm',
   components: {
+    RangeTextField,
     NumberField,
     AutocompleteField,
     TextField,
@@ -254,8 +280,11 @@ export default {
     ]),
     ...mapGetters('analyticalData', ['distinctListParameters']),
     ...mapFields('analyticalData', {
+      locality: 'filters.byIds.locality.value',
+      depth: 'filters.byIds.depth.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       lithostratigraphy: 'filters.byIds.lithostratigraphy.value',
+      analysis: 'filters.byIds.analysis.value',
       method: 'filters.byIds.method.value',
       reference: 'filters.byIds.reference.value',
       dataset: 'filters.byIds.dataset.value',

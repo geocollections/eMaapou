@@ -761,5 +761,6 @@ export default {
     stratigraphyBed: 'Stratigraphy bed',
     columns: 'Columns',
     parameter: 'Parameter',
+    analysisMethod: 'Method',
   },
 }

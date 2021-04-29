@@ -8,6 +8,21 @@ const getDefaultState = () => {
     options: ANALYTICAL_DATA.options,
     filters: {
       byIds: {
+        locality: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.locality',
+          fields: ['locality', 'locality_id_s', 'site', 'site_id_s'],
+        },
+        depth: {
+          type: 'range',
+          lookUpType: 'range',
+          value: [null, null],
+          label: 'analyticalData.depth',
+          placeholders: ['analyticalData.depthMin', 'analyticalData.depthMin'],
+          fields: ['depth', 'depth_interval'],
+        },
         stratigraphy: {
           value: null,
           type: 'object',
@@ -23,6 +38,13 @@ const getDefaultState = () => {
           lookUpType: 'contains',
           label: 'analyticalData.lithostratigraphy',
           fields: ['lithostratigraphy_hierarchy'],
+        },
+        analysis: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.analysis',
+          fields: ['id'],
         },
         method: {
           value: '',
@@ -90,6 +112,16 @@ const getDefaultState = () => {
     shownActiveListParameters: [],
     tableHeaders: [
       {
+        text: 'analyticalData.id',
+        value: 'id_l',
+        translate: true,
+      },
+      {
+        text: 'analyticalData.analysisMethod',
+        value: 'analysis_method',
+        translate: true,
+      },
+      {
         text: 'analyticalData.sample',
         value: 'sample_number',
         translate: true,
@@ -102,11 +134,11 @@ const getDefaultState = () => {
       },
 
       { text: 'analyticalData.depth', value: 'depth', translate: true },
-      {
-        text: 'analyticalData.depthInterval',
-        value: 'depth_interval',
-        translate: true,
-      },
+      // {
+      //   text: 'analyticalData.depthInterval',
+      //   value: 'depth_interval',
+      //   translate: true,
+      // },
       {
         text: 'analyticalData.rock',
         value: 'rock',
@@ -317,14 +349,23 @@ export const actions = {
   },
   initActiveListParameters({ commit, dispatch }, parameters) {
     // Ag, Au, U
-    const DEFAULT_PARAMETERS = [parameters[0], parameters[9], parameters[308]]
+    // CaO, MgO, SiO, Al2O3
+    const DEFAULT_PARAMETERS = [
+      parameters[24],
+      parameters[109],
+      parameters[163],
+      parameters[1],
+    ]
 
     commit('INIT_ACTIVE_LIST_PARAMETERS', DEFAULT_PARAMETERS)
     dispatch('updateAnalyticalDataHeaders', DEFAULT_PARAMETERS)
     dispatch('addActiveListParameterToFilters', DEFAULT_PARAMETERS)
   },
   updateActiveListParameters({ state, commit, dispatch }, payload) {
-    if (payload.keyToReplace !== payload.event.parameter_index) {
+    if (
+      payload.event &&
+      payload.keyToReplace !== payload.event.parameter_index
+    ) {
       commit('UPDATE_ACTIVE_LIST_PARAMETERS', payload)
       dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
 
