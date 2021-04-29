@@ -57,8 +57,8 @@ export const DATASET_ANALYSIS = {
     sortDesc: [],
   },
   queryFields: {
-    analysis: (locale) => 'analysis',
-    sample: (locale) => 'analysis__sample__number',
+    analysis: (locale) => 'id_l',
+    sample: (locale) => 'sample_id_sl',
     stratigraphy: (locale) =>
       locale === 'et' ? 'stratigraphy' : 'stratigraphy_en',
     lithostratigraphy: (locale) =>
