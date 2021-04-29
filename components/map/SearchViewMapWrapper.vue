@@ -10,7 +10,7 @@
         <v-icon>{{ showMap ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       </v-btn>
     </v-card-title>
-    <v-card-text v-show="showMap" class="px-0 pb-6">
+    <v-card-text v-show="showMap" class="px-0 pb-1">
       <leaflet-map :markers="mapMarkers" :invalidate-size="showMap" />
     </v-card-text>
   </v-card>
