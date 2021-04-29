@@ -27,19 +27,25 @@ export const ANALYTICAL_DATA = {
     sortDesc: [true],
   },
   queryFields: {
-    sample_number: (locale) => 'sample_number',
-    locality: (locale) => 'locality,locality_id',
+    sample_number: (locale) => 'sample_number,sample_id_sl',
+    locality: (locale) => 'locality,locality_id_sl',
     stratigraphy: (locale) =>
       locale === 'et'
-        ? 'stratigraphy,stratigraphy_id'
-        : 'stratigraphy_en,stratigraphy_id',
+        ? 'stratigraphy,stratigraphy_id_sl'
+        : 'stratigraphy_en,stratigraphy_id_sl',
+    lithostratigraphy: (locale) =>
+      locale === 'et'
+        ? 'lithostratigraphy,lithostratigraphy_id_sl'
+        : 'lithostratigraphy_en,lithostratigraphy_id_sl',
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
     rock: (locale) =>
-      locale === 'et' ? 'rock,rock_txt,rock_id' : 'rock_en,rock_en_txt,rock_id',
-    reference: (locale) => 'reference,reference_id',
-    dataset_id: (locale) => 'dataset_name,dataset_id',
-    analysis_id: (locale) => 'analysis_id',
+      locale === 'et'
+        ? 'rock,rock_txt,rock_id_sl'
+        : 'rock_en,rock_en_txt,rock_id_sl',
+    reference: (locale) => 'reference,reference_id_sl',
+    dataset_id: (locale) => 'dataset_id_sl,dataset_name',
+    analysis_id: (locale) => 'analysis_id_sl',
   },
 }
 
