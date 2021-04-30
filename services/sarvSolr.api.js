@@ -193,9 +193,9 @@ const buildFilterQueryParameter = (filters) => {
                     .map((obj) => {
                       return `(${field}:${obj.value})`
                     })
-                    .join(' OR ')
+                    .join(' AND ')
                 })
-                .join(' OR ')
+                .join(' AND ')
             }
             default:
               return null
