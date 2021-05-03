@@ -325,82 +325,80 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" flat class="mt-2 mx-4">
-        <v-row>
-          <v-col
-            v-for="(item, index) in filteredTabs"
-            :key="index"
-            cols="12"
-            md="6"
-          >
-            <v-card>
-              <v-card-title>{{ $t(item.title) }}</v-card-title>
+      <v-row v-if="filteredTabs.length > 0" class="mt-2">
+        <v-col
+          v-for="(item, index) in filteredTabs"
+          :key="index"
+          cols="12"
+          md="6"
+        >
+          <v-card>
+            <v-card-title>{{ $t(item.title) }}</v-card-title>
 
-              <v-card-text>
-                <v-simple-table>
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>{{ $t(`${item.id}.${item.id}`) }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(row, key) in item.items" :key="key">
-                        <td>
-                          <template v-if="item.isLink">
-                            <nuxt-link
-                              v-if="item.isNuxtLink"
-                              class="text-link"
-                              :to="
-                                localePath({
-                                  name: `${item.id}-id`,
-                                  params: { id: row[item.id] },
-                                })
-                              "
-                              >{{ row[item.id] }}</nuxt-link
+            <v-card-text>
+              <v-simple-table>
+                <template #default>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>{{ $t(`${item.id}.${item.id}`) }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(row, key) in item.items" :key="key">
+                      <td>
+                        <template v-if="item.isLink">
+                          <nuxt-link
+                            v-if="item.isNuxtLink"
+                            class="text-link"
+                            :to="
+                              localePath({
+                                name: `${item.id}-id`,
+                                params: { id: row[item.id] },
+                              })
+                            "
+                            >{{ row[item.id] }}</nuxt-link
+                          >
+                          <a
+                            v-else-if="item.isGeoLink"
+                            class="text-link"
+                            @click="$openGeoDetail(item.id, row[item.id])"
+                            >{{ row[item.id] }}
+                            <v-icon small color="primary darken-2"
+                              >mdi-open-in-new</v-icon
                             >
-                            <a
-                              v-else-if="item.isGeoLink"
-                              class="text-link"
-                              @click="$openGeoDetail(item.id, row[item.id])"
-                              >{{ row[item.id] }}
-                              <v-icon small color="primary darken-2"
-                                >mdi-open-in-new</v-icon
-                              >
-                            </a>
-                            <a
-                              v-else
-                              class="text-link"
-                              @click="
-                                $openWindow(
-                                  `${item.href}${
-                                    item.id === 'doi'
-                                      ? row.doi__identifier
-                                      : row[item.id]
-                                  }`
-                                )
-                              "
-                              >{{ row[item.id] }}
-                              <v-icon small color="primary darken-2"
-                                >mdi-open-in-new</v-icon
-                              ></a
-                            >
-                          </template>
-                          <template v-else>
-                            {{ row[item.id] }}
-                          </template>
-                        </td>
-                        <td>{{ buildData(item.id, row) }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card>
+                          </a>
+                          <a
+                            v-else
+                            class="text-link"
+                            @click="
+                              $openWindow(
+                                `${item.href}${
+                                  item.id === 'doi'
+                                    ? row.doi__identifier
+                                    : row[item.id]
+                                }`
+                              )
+                            "
+                            >{{ row[item.id] }}
+                            <v-icon small color="primary darken-2"
+                              >mdi-open-in-new</v-icon
+                            ></a
+                          >
+                        </template>
+                        <template v-else>
+                          {{ row[item.id] }}
+                        </template>
+                      </td>
+                      <td>{{ buildData(item.id, row) }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </template>
   </detail>
 </template>
