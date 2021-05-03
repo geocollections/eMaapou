@@ -30,8 +30,8 @@ const getDefaultState = () => {
           fields: ['index_main', 'index_additional'],
         },
         age: {
-          value: [null, null],
-          type: 'range',
+          value: '',
+          type: 'range_alt',
           lookUpType: 'range',
           label: 'stratigraphy.age',
           placeholders: ['stratigraphy.min', 'stratigraphy.max'],
