@@ -361,6 +361,22 @@ export default {
           count: 0,
           props: { sample: sample.id },
         },
+        {
+          id: 'analysis_results',
+          isSolr: true,
+          routeName: 'sample-id-analysis_results',
+          title: 'sample.analysisResults',
+          count: 0,
+          props: { sample: sample.id },
+        },
+        {
+          id: 'analytical_data',
+          isSolr: true,
+          routeName: 'sample-id-statistics',
+          title: 'sample.analyticalData',
+          count: 0,
+          props: { sample: sample.id },
+        },
       ]
 
       const hydratedTabs = await Promise.all(

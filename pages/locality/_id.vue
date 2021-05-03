@@ -335,6 +335,22 @@ export default {
           count: 0,
           props: {},
         },
+        {
+          id: 'analysis_results',
+          isSolr: true,
+          routeName: 'locality-id-analysis_results',
+          title: 'sample.analysisResults',
+          count: 0,
+          props: {},
+        },
+        {
+          id: 'analytical_data',
+          isSolr: true,
+          routeName: 'locality-id-statistics',
+          title: 'sample.analyticalData',
+          count: 0,
+          props: {},
+        },
       ]
 
       if (drillcore) {
