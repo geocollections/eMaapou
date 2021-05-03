@@ -47,15 +47,6 @@ export default {
     AutocompleteField,
   },
   mixins: [autocompleteMixin],
-  computed: {
-    ...mapState('locality', ['filters']),
-    ...mapFields('locality', {
-      name: 'filters.byIds.name.value',
-      country: 'filters.byIds.country.value',
-      stratigraphy: 'filters.byIds.stratigraphy.value',
-      reference: 'filters.byIds.reference.value',
-    }),
-  },
   data() {
     return {
       autocomplete: {
@@ -67,6 +58,15 @@ export default {
         },
       },
     }
+  },
+  computed: {
+    ...mapState('locality', ['filters']),
+    ...mapFields('locality', {
+      name: 'filters.byIds.name.value',
+      country: 'filters.byIds.country.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      reference: 'filters.byIds.reference.value',
+    }),
   },
   methods: {
     ...mapActions('locality', ['searchLocalities', 'resetLocalityFilters']),
