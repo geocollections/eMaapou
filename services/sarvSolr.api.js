@@ -110,7 +110,10 @@ const buildFilterQueryParameter = (filters) => {
     .filter(([_, v]) => {
       if (v.type === 'range' && isNil(v.value[0]) && isNil(v.value[1]))
         return false
-      if (v.type === 'text' && (!v.value || v.value.trim().length <= 0))
+      if (
+        (v.type === 'text' || v.type === 'range_alt') &&
+        (!v.value || v.value.trim().length <= 0)
+      )
         return false
       if (v.type === 'select' && (v.value === null || v.value.length < 1))
         return false
@@ -161,6 +164,14 @@ const buildFilterQueryParameter = (filters) => {
 
               return `${fieldId}:[${start} TO ${end}]`
             }
+            case 'range_alt': {
+              const fieldValue = isNil(searchParameter.value)
+                ? '*'
+                : searchParameter.value
+              return idx === 0
+                ? `${searchParameter.fields[0]}:[${fieldValue} TO *]`
+                : `${searchParameter.fields[1]}:[* TO ${fieldValue}]`
+            }
             case 'checkbox': {
               const encodedValue = encodeURIComponent(searchParameter.value)
               return `${fieldId}:${encodedValue}`
@@ -204,6 +215,8 @@ const buildFilterQueryParameter = (filters) => {
 
         if (idx === 0)
           return `${prev}${buildEncodedParameterStr(v, curr) ?? ''}`
+        else if (v.type === 'range_alt')
+          return `${prev} AND ${buildEncodedParameterStr(v, curr) ?? ''}`
         else return `${prev} OR ${buildEncodedParameterStr(v, curr) ?? ''}`
       }, '')
 
