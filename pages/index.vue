@@ -11,22 +11,25 @@
       </v-col>
     </v-row>
     <v-row class="my-6" justify="center" align="center">
-      <v-col
-        v-for="(item, index) in cards.innerIds"
-        :key="index"
-        class="pa-2"
-        cols="12"
-        :sm="cards[item].sm || 6"
-        :md="cards[item].md || 6"
-      >
-        <card-wrapper
-          :title="cards[item].title"
-          :description="cards[item].description"
-          :link="cards[item].href"
-          :background="cards[item].background"
-          :inner-link="cards[item].innerLink"
-        />
-      </v-col>
+      <!-- NOTE: added client-only to fix server and client mismatch. -->
+      <client-only>
+        <v-col
+          v-for="(item, index) in cards.innerIds"
+          :key="index"
+          class="pa-2"
+          cols="12"
+          :sm="cards[item].sm || 6"
+          :md="cards[item].md || 6"
+        >
+          <card-wrapper
+            :title="cards[item].title"
+            :description="cards[item].description"
+            :link="cards[item].href"
+            :background="cards[item].background"
+            :inner-link="cards[item].innerLink"
+          />
+        </v-col>
+      </client-only>
     </v-row>
     <v-row justify="center" align="center">
       <v-col>
