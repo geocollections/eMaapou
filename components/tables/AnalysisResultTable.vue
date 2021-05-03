@@ -7,6 +7,9 @@
     :count="count"
     v-on="$listeners"
   >
+    <template #item.analysis_method="{ item }">{{
+      $translate({ et: item.analysis_method, en: item.analysis_method_en })
+    }}</template>
   </table-wrapper>
 </template>
 
@@ -43,6 +46,7 @@ export default {
     return {
       headers: [
         { text: this.$t('analysisResult.parameter'), value: 'parameter' },
+        { text: this.$t('analysisResult.method'), value: 'analysis_method' },
         { text: this.$t('analysisResult.value'), value: 'value' },
         { text: this.$t('analysisResult.valueText'), value: 'value_txt' },
         { text: this.$t('analysisResult.valueError'), value: 'value_error' },

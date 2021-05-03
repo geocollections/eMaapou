@@ -258,6 +258,7 @@ export default {
   },
   analysisResult: {
     parameter: 'Parameeter',
+    method: 'Meetod',
     value: 'Väärtus',
     valueText: 'Tekst',
     valueError: 'Viga',
@@ -368,6 +369,8 @@ export default {
     preparations: 'Preparaadid ({number})',
     taxa: 'Taksonid ({number})',
     sampleReferences: 'Kirjandus ({number})',
+    analysisResults: 'Analüüsitulemused ({number})',
+    analyticalData: 'Statistilised graafikud',
     sample: 'Proov',
     hierarchy: 'Stratigraafia',
     dateAdded: 'Kirje lisatud',
