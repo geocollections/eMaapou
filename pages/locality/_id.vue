@@ -349,7 +349,7 @@ export default {
           routeName: 'locality-id-statistics',
           title: 'sample.analyticalData',
           count: 0,
-          props: {},
+          props: { localityObject: locality },
         },
       ]
 

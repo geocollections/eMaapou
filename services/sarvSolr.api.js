@@ -39,7 +39,15 @@ const getSortByParams = (options, queryFields) => {
 export default ($axios) => ({
   async getResourceList(
     resource,
-    { defaultParams, queryFields, search, options, isValid, searchFilters = {} }
+    {
+      useRawSolr,
+      defaultParams,
+      queryFields,
+      search,
+      options,
+      isValid,
+      searchFilters = {},
+    }
   ) {
     if (isValid) {
       return {
@@ -55,11 +63,14 @@ export default ($axios) => ({
       ...getSortByParams(options, queryFields),
     }
 
-    const response = await $axios.$get(`solr/${resource}/`, { params })
+    const response = await $axios.$get(
+      `${useRawSolr ? 'raw_solr' : 'solr'}/${resource}/`,
+      { params }
+    )
 
     return {
-      items: response.results,
-      count: response.count,
+      items: useRawSolr ? response.response.docs : response.results,
+      count: useRawSolr ? response.response.numFound : response.count,
     }
   },
 

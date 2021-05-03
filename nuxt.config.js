@@ -46,6 +46,7 @@ export default {
     { src: '~plugins/gtag.js', mode: 'client' },
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.js', mode: 'client' },
+    { src: '~plugins/vueECharts.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
