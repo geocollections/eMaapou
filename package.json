@@ -23,7 +23,7 @@
     "nuxt-i18n": "^6.23.0",
     "qs": "^6.10.1",
     "vue-echarts": "^6.0.0-rc.5",
-    "vue-gtag": "^1.11.0",
+    "vue-gtag": "^1.16.1",
     "vue-infinite-loading": "^2.4.5",
     "vue2-leaflet": "^2.7.0",
     "vue2-leaflet-fullscreen": "^1.0.0",
