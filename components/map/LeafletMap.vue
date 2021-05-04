@@ -348,9 +348,9 @@ export default {
       const routeName = this.getRouteBaseName()
       return (
         this.isEstonian &&
-        (routeName === 'drillcore-id' ||
-          routeName === 'locality-id' ||
-          routeName === 'stratigraphy-id')
+        (routeName.startsWith('drillcore-id') ||
+          routeName.startsWith('locality-id') ||
+          routeName.startsWith('stratigraphy-id'))
       )
     },
 
