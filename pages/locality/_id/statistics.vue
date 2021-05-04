@@ -54,7 +54,7 @@ export default {
       )
       this.analysisResults = analysisResultsResponse?.items
 
-      const depthResponse = await this.$services.sarvSolr.getResourceList(
+      const statsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
           useRawSolr: true,
@@ -63,34 +63,31 @@ export default {
             fq: `locality_id:${this.locality}`,
             rows: 0,
             fl: 'depth',
-            sort: 'depth asc',
+            sort: 'depth asc, parameter asc',
             stats: 'on',
-            'stats.field': 'depth',
+            'stats.field': ['depth', 'parameter'],
             'stats.calcdistinct': true,
           },
         }
       )
-      console.log(depthResponse)
-      this.depth = depthResponse?.stats?.stats_fields?.depth?.distinctValues
-
-      this.parameters = [
-        ...new Set(this.analysisResults.map((item) => item.parameter)),
-      ]
+      this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
+      this.parameters =
+        statsResponse?.stats?.stats_fields?.parameter?.distinctValues
 
       this.selectedParameters = [
         this.parameters[0],
         this.parameters[1],
         this.parameters[2],
       ]
-
-      console.log([
-        ...new Set(this.analysisResults.map((item) => item.depth).sort()),
-      ])
     }
   },
   computed: {
     lineChartOptions() {
-      if (this.analysisResults && this.analysisResults.length > 0) {
+      if (
+        this?.analysisResults.length > 0 &&
+        this.depth?.length > 0 &&
+        this.parameters?.length > 0
+      ) {
         return {
           title: {
             text: this.$translate({
@@ -176,9 +173,7 @@ export default {
           yAxis: {
             type: 'value',
           },
-          series: [
-            ...new Set(this.analysisResults.map((item) => item.parameter)),
-          ].map((item) => {
+          series: this.parameters.map((item) => {
             return {
               name: item,
               type: 'line',
