@@ -33,9 +33,18 @@
       {{ $t('slogan') }}
     </div>
     <v-spacer />
-    <app-header-search v-if="!isLanding && !isSearchPage" class="mr-2" />
 
     <v-toolbar-items>
+      <v-btn
+        v-show="$vuetify.breakpoint.smAndUp"
+        nuxt
+        aria-label="search"
+        class="font-weight-bold"
+        text
+        :to="localePath({ name: 'search' })"
+      >
+        {{ $t('common.search') }}
+      </v-btn>
       <v-btn
         v-show="$vuetify.breakpoint.smAndUp"
         nuxt
@@ -100,11 +109,10 @@
 </template>
 
 <script>
-import AppHeaderSearch from '~/components/AppHeaderSearch'
 import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 export default {
   name: 'AppHeader',
-  components: { AppHeaderSearch, LangSwitcher },
+  components: { LangSwitcher },
   props: {
     isDetail: {
       type: Boolean,

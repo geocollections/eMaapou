@@ -668,6 +668,8 @@ export default {
     analyses: 'Analyses ({number})',
     attachments: 'Attachments ({number})',
     parameters: 'Parameters',
+    creators: 'Creators',
+    doi: 'DOI',
   },
   reference: {
     id: 'ID',

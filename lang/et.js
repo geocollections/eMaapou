@@ -669,6 +669,8 @@ export default {
     analyses: 'Analüüsid ({number})',
     attachments: 'Failid ({number})',
     parameters: 'Parameetrid',
+    creators: 'Loojad',
+    doi: 'DOI',
   },
   reference: {
     id: 'ID',
