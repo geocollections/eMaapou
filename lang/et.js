@@ -259,6 +259,8 @@ export default {
   analysisResult: {
     parameter: 'Parameeter',
     method: 'Meetod',
+    depth: 'Sügavus',
+    depthInterval: 'Sügavus kuni',
     value: 'Väärtus',
     valueText: 'Tekst',
     valueError: 'Viga',

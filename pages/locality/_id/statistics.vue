@@ -24,6 +24,7 @@ export default {
   data() {
     return {
       analysisResults: [],
+      depth: [],
       count: 0,
       options: {
         page: 1,
@@ -51,15 +52,26 @@ export default {
           },
         }
       )
-      this.analysisResults = analysisResultsResponse?.items.map((item) => {
-        return {
-          ...item,
-          calculatedDepth:
-            item.depth && item.depth_interval
-              ? ((item.depth + item.depth_interval) / 2).toFixed(2)
-              : item.depth,
+      this.analysisResults = analysisResultsResponse?.items
+
+      const depthResponse = await this.$services.sarvSolr.getResourceList(
+        'analysis_results',
+        {
+          useRawSolr: true,
+          isValid: isNil(this.locality),
+          defaultParams: {
+            fq: `locality_id:${this.locality}`,
+            rows: 0,
+            fl: 'depth',
+            sort: 'depth asc',
+            stats: 'on',
+            'stats.field': 'depth',
+            'stats.calcdistinct': true,
+          },
         }
-      })
+      )
+      console.log(depthResponse)
+      this.depth = depthResponse?.stats?.stats_fields?.depth?.distinctValues
 
       this.parameters = [
         ...new Set(this.analysisResults.map((item) => item.parameter)),
@@ -70,6 +82,10 @@ export default {
         this.parameters[1],
         this.parameters[2],
       ]
+
+      console.log([
+        ...new Set(this.analysisResults.map((item) => item.depth).sort()),
+      ])
     }
   },
   computed: {
@@ -82,38 +98,80 @@ export default {
               en: this?.localityObject?.locality_en,
             }),
             left: 'center',
+            top: 45,
+            textStyle: {
+              fontSize: 22,
+            },
           },
+          // visualMap: {
+          //   orient: 'vertical',
+          // },
           tooltip: {
             trigger: 'axis',
           },
           legend: {
             type: 'scroll',
-            top: '25',
+            top: '90',
             padding: [5, 50],
             data: this.parameters,
             selected: this.selectedParameters,
             animationDurationUpdate: 400,
           },
           grid: {
+            show: true,
+            top: 135,
             containLabel: true,
           },
           toolbox: {
+            // orient: 'vertical',
+            right: 35,
             feature: {
               saveAsImage: {},
               restore: {},
+              dataView: {},
               dataZoom: {},
-              magicType: {},
+              magicType: {
+                type: ['line', 'bar', 'stack'],
+              },
               brush: {},
             },
           },
+          brush: {
+            toolbox: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
+          },
+          dataZoom: [
+            {
+              type: 'slider',
+              show: true,
+              xAxisIndex: [0],
+              // start: 1,
+              // end: 35,
+            },
+            {
+              type: 'slider',
+              show: true,
+              yAxisIndex: [0],
+              left: '93%',
+              // start: 29,
+              // end: 36,
+            },
+            {
+              type: 'inside',
+              xAxisIndex: [0],
+              // start: 1,
+              // end: 35,
+            },
+            {
+              type: 'inside',
+              yAxisIndex: [0],
+              // start: 29,
+              // end: 36,
+            },
+          ],
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: [
-              ...new Set(
-                this.analysisResults.map((item) => item.calculatedDepth)
-              ),
-            ].sort(),
+            data: this.depth,
           },
           yAxis: {
             type: 'value',
@@ -123,9 +181,10 @@ export default {
           ].map((item) => {
             return {
               name: item,
-              test: 'te',
               type: 'line',
-              stack: 'test',
+              stack: this.analysisResults.find(
+                (result) => result.parameter === item
+              ).analysis_method,
               data: this.analysisResults
                 .filter((result) => result.parameter === item)
                 .map((t) => t.value),
