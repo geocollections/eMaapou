@@ -14,6 +14,11 @@
           <template #default>
             <tbody>
               <data-row
+                :title="$t('dataset.creators')"
+                :value="dataset.owner_txt"
+              />
+              <data-row :title="$t('dataset.date')" :value="dataset.date_txt" />
+              <data-row
                 :title="$t('dataset.description')"
                 :value="
                   $translate({
@@ -22,11 +27,6 @@
                   })
                 "
               />
-              <data-row
-                :title="$t('dataset.author')"
-                :value="dataset.owner__agent"
-              />
-              <data-row :title="$t('dataset.date')" :value="dataset.date_txt" />
               <data-row
                 :title="$t('dataset.copyright')"
                 :value="dataset.copyright_agent__agent"
