@@ -8,7 +8,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col sm="7" md="5">
+      <v-col sm="8" md="6">
         <global-search @input="handleSearch" />
       </v-col>
     </v-row>
