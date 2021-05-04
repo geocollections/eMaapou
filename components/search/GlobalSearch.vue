@@ -4,6 +4,7 @@
     outlined
     height=""
     class=""
+    background-color="white"
     color="primary darken-2"
     :label="$t('common.searchAlt')"
     hide-details
