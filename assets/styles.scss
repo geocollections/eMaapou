@@ -37,13 +37,22 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   @extend .underline;
 
   text-decoration: none;
-  color: #3d8661 !important;
+  color: var(--v-accent-base) !important;
   /* color: var(--v-primary-lighten1) !important;*/
+
+  .v-icon {
+    color: var(--v-accent-base) !important;
+  }
+
   @include transition(color 200ms ease);
 
   &:hover {
     /*color: var(--v-primary-lighten3) !important;*/
-    color: #406451 !important;
+    color: var(--v-accent-darken3) !important;
+
+    .v-icon {
+      color: var(--v-accent-darken3) !important;
+    }
   }
 }
 

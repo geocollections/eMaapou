@@ -34,13 +34,12 @@
             outlined
             class="rounded-tr-lg rounded-bl-lg"
             small
-            :href="!innerLink ? link : ''"
             :target="!innerLink ? '_blank' : ''"
             :nuxt="innerLink"
             @click="innerLink ? $router.push(localePath({ name: link })) : ''"
             >{{ $t('landing.visit_site') }}
-            <v-icon right small>mdi-open-in-new</v-icon></v-btn
-          >
+            <v-icon right small>mdi-open-in-new</v-icon>
+          </v-btn>
         </v-card-actions>
       </v-img>
     </v-card>
@@ -73,6 +72,11 @@ export default {
     },
     innerLink: Boolean,
     grayscale: Boolean,
+  },
+  computed: {
+    image() {
+      return `${require(this.background)}`
+    },
   },
 }
 </script>

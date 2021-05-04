@@ -9,9 +9,14 @@
 
     <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
 
-    <text-field
+    <autocomplete-field
       v-model="stratigraphy"
+      :items="autocomplete.chronostratigraphy"
+      :loading="autocomplete.loaders.chronostratigraphy"
       :label="$t(filters.byIds.stratigraphy.label)"
+      :item-text="stratigraphyLabel"
+      :item-value="stratigraphyLabel"
+      @search:items="autocompleteChronostratigraphySearch"
     />
 
     <text-field
@@ -29,6 +34,8 @@ import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField.vue'
+import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import autocompleteMixin from '~/mixins/autocompleteMixin'
 
 export default {
   name: 'LocalitySearchForm',
@@ -37,6 +44,20 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    AutocompleteField,
+  },
+  mixins: [autocompleteMixin],
+  data() {
+    return {
+      autocomplete: {
+        chronostratigraphy: [],
+        lithostratigraphy: [],
+        loaders: {
+          chronostratigraphy: false,
+          lithostratigraphy: false,
+        },
+      },
+    }
   },
   computed: {
     ...mapState('locality', ['filters']),

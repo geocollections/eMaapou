@@ -4,7 +4,7 @@
     <span style="white-space: nowrap"
       >&#xfeff;
       <slot name="icon">
-        <v-icon color="primary" small>mdi-open-in-new</v-icon>
+        <v-icon small>mdi-open-in-new</v-icon>
       </slot>
     </span>
   </a>
