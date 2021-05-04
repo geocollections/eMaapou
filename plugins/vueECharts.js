@@ -4,7 +4,7 @@ import { use } from 'echarts/core'
 
 // import ECharts modules manually to reduce bundle size
 import { CanvasRenderer } from 'echarts/renderers'
-import { BarChart, LineChart } from 'echarts/charts'
+import { BarChart, LineChart, ScatterChart } from 'echarts/charts'
 import {
   LegendComponent,
   TooltipComponent,
@@ -12,17 +12,19 @@ import {
   ToolboxComponent,
   GridComponent,
   DataZoomComponent,
-  VisualMapComponent,
   BrushComponent,
+  DatasetComponent,
 } from 'echarts/components'
 
 use([
   // renderers
   CanvasRenderer,
+  // SVGRenderer,
 
   // charts
   LineChart,
   BarChart,
+  ScatterChart,
 
   // components
   GridComponent,
@@ -31,8 +33,8 @@ use([
   TitleComponent,
   LegendComponent,
   DataZoomComponent,
-  VisualMapComponent,
   BrushComponent,
+  DatasetComponent,
 ])
 
 // register globally (or you can do it locally)

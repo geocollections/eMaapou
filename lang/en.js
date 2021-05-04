@@ -371,7 +371,7 @@ export default {
     taxa: 'Taxa ({number})',
     sampleReferences: 'References ({number})',
     analysisResults: 'Analysis results ({number})',
-    analyticalData: 'Statistical graphs',
+    analyticalData: 'Graphs',
     sample: 'Sample',
     hierarchy: 'Stratigraafia',
     dateAdded: 'Date added',
@@ -770,5 +770,10 @@ export default {
     columns: 'Columns',
     parameter: 'Parameter',
     analysisMethod: 'Method',
+  },
+  statistics: {
+    analysisMethods: 'Analysis methods',
+    activeParameters: 'Active parameters',
+    activeParametersEmpty: 'Nothing to show, please select a parameter.',
   },
 }

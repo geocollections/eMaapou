@@ -1,4 +1,5 @@
 import { isEmpty, isNil } from 'lodash'
+import qs from 'qs'
 
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
@@ -65,7 +66,12 @@ export default ($axios) => ({
 
     const response = await $axios.$get(
       `${useRawSolr ? 'raw_solr' : 'solr'}/${resource}/`,
-      { params }
+      {
+        params,
+        paramsSerializer: (par) => {
+          return qs.stringify(par, { indices: false })
+        },
+      }
     )
 
     return {

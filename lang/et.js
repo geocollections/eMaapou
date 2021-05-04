@@ -372,7 +372,7 @@ export default {
     taxa: 'Taksonid ({number})',
     sampleReferences: 'Kirjandus ({number})',
     analysisResults: 'Analüüsitulemused ({number})',
-    analyticalData: 'Statistilised graafikud',
+    analyticalData: 'Graafikud',
     sample: 'Proov',
     hierarchy: 'Stratigraafia',
     dateAdded: 'Kirje lisatud',
@@ -771,5 +771,10 @@ export default {
     columns: 'Veerud',
     parameter: 'Parameeter',
     analysisMethod: 'Meetod',
+  },
+  statistics: {
+    analysisMethods: 'Analüüsimeetodid',
+    activeParameters: 'Aktiivsed parameetrid',
+    activeParametersEmpty: 'Palun valige mõni parameeter, et andmeid kuvada.',
   },
 }
