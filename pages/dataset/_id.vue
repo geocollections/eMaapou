@@ -27,6 +27,12 @@
                   })
                 "
               />
+              <link-data-row
+                v-if="doi"
+                :title="$t('dataset.doi')"
+                :value="doi"
+                :href="`https://doi.geocollections.info/${doi}`"
+              />
               <data-row
                 :title="$t('dataset.copyright')"
                 :value="dataset.copyright_agent__agent"
@@ -142,6 +148,14 @@ export default {
         (param) => param.value
       )
 
+      const doiResponse = await app.$services.sarvREST.getResourceList('doi', {
+        defaultParams: {
+          dataset: params.id,
+        },
+      })
+
+      const doi = doiResponse.items[0]?.identifier
+
       const tabs = [
         {
           id: 'dataset_analysis',
@@ -215,6 +229,7 @@ export default {
         initActiveTab: validPath,
         parameters: parsedParameters,
         selectedParameterValues,
+        doi,
       }
     } catch (err) {
       console.log(err)
