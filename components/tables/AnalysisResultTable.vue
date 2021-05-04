@@ -47,6 +47,11 @@ export default {
       headers: [
         { text: this.$t('analysisResult.parameter'), value: 'parameter' },
         { text: this.$t('analysisResult.method'), value: 'analysis_method' },
+        { text: this.$t('analysisResult.depth'), value: 'depth' },
+        {
+          text: this.$t('analysisResult.depthInterval'),
+          value: 'depth_interval',
+        },
         { text: this.$t('analysisResult.value'), value: 'value' },
         { text: this.$t('analysisResult.valueText'), value: 'value_txt' },
         { text: this.$t('analysisResult.valueError'), value: 'value_error' },

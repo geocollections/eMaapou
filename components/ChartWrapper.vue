@@ -39,6 +39,7 @@ export default {
 
 <style scoped>
 .chart {
-  height: 66.6667vh;
+  /*height: 66.6667vh;*/
+  height: 75vh;
 }
 </style>
