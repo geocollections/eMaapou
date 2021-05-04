@@ -257,6 +257,7 @@ export default {
   },
   analysisResult: {
     parameter: 'Parameter',
+    method: 'Method',
     value: 'Value',
     valueText: 'Text',
     valueError: 'Error',
@@ -367,6 +368,8 @@ export default {
     preparations: 'Preparations ({number})',
     taxa: 'Taxa ({number})',
     sampleReferences: 'References ({number})',
+    analysisResults: 'Analysis results ({number})',
+    analyticalData: 'Statistical graphs',
     sample: 'Sample',
     hierarchy: 'Stratigraafia',
     dateAdded: 'Date added',
