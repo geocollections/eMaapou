@@ -258,6 +258,8 @@ export default {
   analysisResult: {
     parameter: 'Parameter',
     method: 'Method',
+    depth: 'Depth',
+    depthInterval: 'Depth to',
     value: 'Value',
     valueText: 'Text',
     valueError: 'Error',
