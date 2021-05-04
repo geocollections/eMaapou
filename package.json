@@ -21,6 +21,7 @@
     "lodash": "^4.17.21",
     "nuxt": "^2.15.4",
     "nuxt-i18n": "^6.23.0",
+    "qs": "^6.10.1",
     "vue-echarts": "^6.0.0-rc.5",
     "vue-gtag": "^1.11.0",
     "vue-infinite-loading": "^2.4.5",
