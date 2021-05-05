@@ -1,18 +1,23 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <div><b>Message: </b> {{ error.message }}</div>
-    <NuxtLink to="/"> Home page </NuxtLink>
-  </v-app>
+  <v-row justify="center">
+    <v-col sm="8" md="6" class="text-center">
+      <h1 style="font-size: 1.75rem">
+        {{ title }}
+      </h1>
+      <div>{{ error.message }}</div>
+      <quick-search-form class="my-4" @submit="handleSearch" />
+      <NuxtLink to="/" class="text-link-grey">
+        {{ $t('common.backToLanding') }}
+      </NuxtLink>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
+import { isEmpty } from 'lodash'
+import QuickSearchForm from '~/components/search/forms/QuickSearchForm.vue'
 export default {
+  components: { QuickSearchForm },
   layout: 'empty',
   props: {
     error: {
@@ -32,6 +37,22 @@ export default {
     return {
       title,
     }
+  },
+  computed: {
+    title() {
+      return this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+    },
+  },
+  methods: {
+    handleSearch() {
+      const routeName = this.$route.name.includes('search')
+        ? this.$route.name.split('__')[0]
+        : 'search'
+      const query = isEmpty(this.search)
+        ? { ...this.$route.query }
+        : { ...this.$route.query, q: this.search }
+      this.$router.push(this.localePath({ name: routeName, query }))
+    },
   },
 }
 </script>

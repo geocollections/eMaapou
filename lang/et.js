@@ -79,6 +79,7 @@ export default {
     from: 'Alates',
     to: 'Kuni',
     showSearch: 'Otsing',
+    backToLanding: 'Tagasi avalehele',
   },
   link: {
     sarvAPI: 'Avalik API',
