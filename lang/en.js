@@ -775,6 +775,6 @@ export default {
   statistics: {
     analysisMethods: 'Analysis methods',
     activeParameters: 'Active parameters',
-    activeParametersEmpty: 'Nothing to show, please select a parameter.',
+    isEmptyMessage: 'Nothing to show, please select an option.',
   },
 }
