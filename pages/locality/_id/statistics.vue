@@ -195,6 +195,7 @@ export default {
             show: true,
             top: 135,
             bottom: 90,
+            right: '11%',
             containLabel: true,
           },
 
@@ -222,7 +223,7 @@ export default {
             {
               type: 'slider',
               show: true,
-              yAxisIndex: [0],
+              yAxisIndex: [0, 1],
               left: '93%',
             },
             {
@@ -244,21 +245,34 @@ export default {
             nameGap: 25,
             splitNumber: 7,
           },
-          yAxis: {
-            type: 'value',
-            name: 'Value',
-            nameLocation: 'center',
-            nameTextStyle: {
-              fontWeight: 'bold',
-              fontSize: 16,
+          yAxis: [
+            {
+              type: 'value',
+              name: 'Value',
+              nameLocation: 'center',
+              nameTextStyle: {
+                fontWeight: 'bold',
+                fontSize: 16,
+              },
+              nameGap: 55,
             },
-            nameGap: 55,
-          },
+            {
+              type: 'value',
+              name: 'ppm',
+              nameLocation: 'center',
+              nameTextStyle: {
+                fontWeight: 'bold',
+                fontSize: 16,
+              },
+              nameGap: 30,
+            },
+          ],
 
           series: this.parameters.map((item) => {
             return {
               name: item,
               type: 'scatter',
+              yAxisIndex: item.includes('ppm') ? 1 : 0,
               data: this.analysisResults
                 .filter((result) => result.parameter === item)
                 .map((t) => [t.depth, t.value]),
