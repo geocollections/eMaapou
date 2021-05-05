@@ -775,6 +775,6 @@ export default {
   statistics: {
     analysisMethods: 'Analüüsimeetodid',
     activeParameters: 'Aktiivsed parameetrid',
-    activeParametersEmpty: 'Palun valige mõni parameeter, et andmeid kuvada.',
+    isEmptyMessage: 'Palun valige mõni parameeter, et andmeid kuvada.',
   },
 }
