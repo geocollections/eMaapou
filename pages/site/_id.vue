@@ -184,7 +184,11 @@
           elevation="0"
         >
           <leaflet-map
-            :is-estonian="site.locality__country__value === 'Eesti'"
+            :estonian-map="site.locality__country__value === 'Eesti'"
+            :estonian-bedrock-overlay="
+              site.locality__country__value === 'Eesti'
+            "
+            site-overlay
             :height="500"
             :center="{
               latitude: site.latitude,

@@ -181,7 +181,9 @@
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
           <leaflet-map
-            :is-estonian="locality.country__value === 'Eesti'"
+            :estonian-map="locality.country__value === 'Eesti'"
+            :estonian-bedrock-overlay="locality.country__value === 'Eesti'"
+            locality-overlay
             :height="600"
             :center="{
               latitude: locality.latitude,

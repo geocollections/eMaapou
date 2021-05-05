@@ -112,7 +112,27 @@ export default {
         return []
       },
     },
-    isEstonian: {
+    estonianMap: {
+      type: Boolean,
+      default: false,
+    },
+    boreholeOverlay: {
+      type: Boolean,
+      default: false,
+    },
+    localityOverlay: {
+      type: Boolean,
+      default: false,
+    },
+    siteOverlay: {
+      type: Boolean,
+      default: false,
+    },
+    estonianBedrockOverlay: {
+      type: Boolean,
+      default: false,
+    },
+    estonianHybridOverlay: {
       type: Boolean,
       default: false,
     },
@@ -133,7 +153,7 @@ export default {
           duration: 1000,
         },
       },
-      activeBaseLayer: this.isEstonian ? 'Estonian map' : 'CartoDB',
+      activeBaseLayer: this.estonianMap ? 'Estonian map' : 'CartoDB',
       activeOverlays: [],
       layers: {
         base: [
@@ -142,7 +162,7 @@ export default {
             name: 'CartoDB',
             url:
               'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            visible: !this.isEstonian,
+            visible: !this.estonianMap,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -195,7 +215,7 @@ export default {
             name: 'Estonian map',
             url:
               'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: this.isEstonian,
+            visible: this.estonianMap,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -213,7 +233,7 @@ export default {
             name: 'Estonian hybrid',
             url:
               'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: false,
+            visible: this.estonianHybridOverlay,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -230,7 +250,7 @@ export default {
             name: 'Estonian bedrock',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'geocollections:bedrock400k',
-            visible: this.isEstonian,
+            visible: this.estonianBedrockOverlay,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -251,7 +271,7 @@ export default {
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary',
             styles: 'point',
-            visible: false,
+            visible: this.localityOverlay,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -272,7 +292,7 @@ export default {
             url:
               'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
             // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: false,
+            visible: this.localityOverlay,
             options: {
               maxNativeZoom: 12,
               maxZoom: 12,
@@ -289,7 +309,7 @@ export default {
             name: 'Boreholes',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_drillcores',
-            visible: false,
+            visible: this.boreholeOverlay,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -309,7 +329,7 @@ export default {
             name: 'Sites',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:site_summary',
-            visible: false,
+            visible: this.siteOverlay,
             transparent: true,
             options: {
               maxNativeZoom: 18,
@@ -327,73 +347,16 @@ export default {
     }
   },
   computed: {
-    computedTileOverlays() {
-      return this.layers.overlay.map((item) => {
-        if (item.id === 'est-bed-overlay')
-          return { ...item, visible: this.isEstonianBedrockVisibleAtAStart }
-        else if (item.id === 'locs')
-          return { ...item, visible: this.isLocalityLayerVisibleAtStart }
-        else if (item.id === 'locs_tms')
-          return { ...item, visible: this.isLocalityLayerVisibleAtStart }
-        else if (item.id === 'drillcores')
-          return { ...item, visible: this.isDrillcoreLayerVisibleAtStart }
-        else if (item.id === 'sites')
-          return { ...item, visible: this.isSiteLayerVisibleAtStart }
-        else return item
-      })
-    },
-
-    isEstonianBedrockVisibleAtAStart() {
-      // HACK: Should probably be a prop
-      const routeName = this.getRouteBaseName()
-      return (
-        this.isEstonian &&
-        (routeName.startsWith('drillcore-id') ||
-          routeName.startsWith('locality-id') ||
-          routeName.startsWith('stratigraphy-id'))
-      )
-    },
-
-    isLocalityLayerVisibleAtStart() {
-      const routeName = this.getRouteBaseName()
-      return (
-        routeName === 'locality' ||
-        routeName === 'sample' ||
-        routeName === 'analysis' ||
-        routeName === 'analytical_data'
-      )
-    },
-
-    isDrillcoreLayerVisibleAtStart() {
-      const routeName = this.getRouteBaseName()
-      return (
-        routeName === 'drillcore' ||
-        routeName === 'sample' ||
-        routeName === 'analysis' ||
-        routeName === 'analytical_data'
-      )
-    },
-
-    isSiteLayerVisibleAtStart() {
-      const routeName = this.getRouteBaseName()
-      return (
-        routeName === 'site' ||
-        routeName === 'sample' ||
-        routeName === 'analysis' ||
-        routeName === 'analytical_data'
-      )
-    },
-
     mapZoom() {
-      return this.isEstonianBedrockVisibleAtAStart ? 9 : 11
+      return this.estonianBedrockOverlay ? 9 : 11
     },
 
     tileOverlays() {
-      return this.computedTileOverlays.filter((item) => !item.isWMS)
+      return this.layers.overlay.filter((item) => !item.isWMS)
     },
 
     wmsOverlays() {
-      return this.computedTileOverlays.filter((item) => item.isWMS)
+      return this.layers.overlay.filter((item) => item.isWMS)
     },
     latLngMarkers() {
       return [

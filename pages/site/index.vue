@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper :items="items" class="mb-6" />
+      <search-view-map-wrapper site-overlay :items="items" class="mb-6" />
 
       <site-table
         :show-search="false"

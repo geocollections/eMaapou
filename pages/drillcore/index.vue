@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper :items="items" class="mb-6" />
+      <search-view-map-wrapper borehole-overlay :items="items" class="mb-6" />
 
       <drillcore-table
         :show-search="false"

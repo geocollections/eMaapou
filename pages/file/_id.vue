@@ -303,7 +303,8 @@
         <v-card v-if="showMap" id="map-wrap" elevation="0">
           <v-card-title class="pl-0">{{ $t('locality.map') }}</v-card-title>
           <leaflet-map
-            :is-estonian="mapIsEstonian"
+            :estonian-map="mapIsEstonian"
+            :estonian-bedrock-layer="mapIsEstonian"
             :height="300"
             :center="{
               latitude: mapLatitude,

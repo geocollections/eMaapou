@@ -13,7 +13,13 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        site-overlay
+        locality-overlay
+        borehole-overlay
+        :items="items"
+        class="mb-6"
+      />
 
       <sample-table
         :show-search="false"

@@ -134,7 +134,11 @@
           elevation="0"
         >
           <leaflet-map
-            :is-estonian="drillcore.locality__country__value === 'Eesti'"
+            :estonian-map="drillcore.locality__country__value === 'Eesti'"
+            :estonian-bedrock-overlay="
+              drillcore.locality__country__value === 'Eesti'
+            "
+            borehole-overlay
             :height="300"
             :center="{
               latitude: drillcore.locality__latitude,

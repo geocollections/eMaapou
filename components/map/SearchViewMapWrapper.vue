@@ -11,7 +11,11 @@
       </v-btn>
     </v-card-title>
     <v-card-text v-show="showMap" class="px-0 pb-1">
-      <leaflet-map :markers="mapMarkers" :invalidate-size="showMap" />
+      <leaflet-map
+        v-bind="$attrs"
+        :markers="mapMarkers"
+        :invalidate-size="showMap"
+      />
     </v-card-text>
   </v-card>
 </template>
