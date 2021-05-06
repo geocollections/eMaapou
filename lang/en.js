@@ -128,6 +128,7 @@ export default {
     descriptions: 'Descriptions ({number})',
     drillcore: 'Drillcore',
     drillcoreBoxes: 'Boxes ({number})',
+    analyses: 'Analyses ({number})',
     date: 'Date',
     author: 'Author',
     stratigraphy: 'Stratigraphy',
