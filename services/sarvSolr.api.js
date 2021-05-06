@@ -75,9 +75,10 @@ export default ($axios) => ({
     )
 
     return {
-      items: useRawSolr ? response.response.docs : response.results,
-      count: useRawSolr ? response.response.numFound : response.count,
+      items: useRawSolr ? response?.response?.docs : response.results,
+      count: useRawSolr ? response?.response?.numFound : response.count,
       stats: response?.stats,
+      grouped: response?.grouped,
     }
   },
 
