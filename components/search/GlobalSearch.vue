@@ -13,14 +13,7 @@
     @input="$emit('input')"
   >
     <template v-if="showButton" #append>
-      <v-btn
-        type="submit"
-        flat
-        large
-        color="primary darken-2"
-        dark
-        elevation="0"
-      >
+      <v-btn type="submit" large color="primary darken-2" dark elevation="0">
         <v-icon class="pr-2">mdi-magnify</v-icon>
         {{ $t('common.searchCommand') }}
       </v-btn>
