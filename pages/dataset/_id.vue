@@ -184,6 +184,15 @@ export default {
           count: 0,
           props: { dataset: dataset.id },
         },
+        {
+          table: 'analysis_results',
+          id: 'graphs',
+          isSolr: true,
+          routeName: 'dataset-id-graphs',
+          title: 'locality.graphs',
+          count: 0,
+          props: { dataset: dataset.id, datasetObject: dataset },
+        },
       ]
 
       const solrParams = { fq: `dataset_id:${dataset.id}` }
