@@ -129,6 +129,7 @@ export default {
     descriptions: 'Kirjeldused ({number})',
     drillcore: 'Puursüdamik',
     drillcoreBoxes: 'Kastid ({number})',
+    analyses: 'Analüüsid ({number})',
     date: 'Kuupäev',
     author: 'Autor',
     stratigraphy: 'Stratigraafia',

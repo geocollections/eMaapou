@@ -338,10 +338,10 @@ export default {
           props: {},
         },
         {
-          id: 'analysis_results',
+          id: 'analysis',
           isSolr: true,
-          routeName: 'locality-id-analysis_results',
-          title: 'sample.analysisResults',
+          routeName: 'locality-id-analyses',
+          title: 'locality.analyses',
           count: 0,
           props: {},
         },
