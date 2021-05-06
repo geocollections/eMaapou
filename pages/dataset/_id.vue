@@ -15,7 +15,7 @@
             <tbody>
               <data-row
                 :title="$t('dataset.creators')"
-                :value="dataset.owner_txt"
+                :value="dataset.owner_txt || dataset.owner__agent"
               />
               <data-row :title="$t('dataset.date')" :value="dataset.date_txt" />
               <data-row
