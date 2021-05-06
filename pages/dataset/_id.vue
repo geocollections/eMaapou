@@ -33,6 +33,12 @@
                 :value="doi"
                 :href="`https://doi.geocollections.info/${doi}`"
               />
+              <link-data-row
+                v-if="reference"
+                :title="$t('dataset.reference')"
+                :value="reference.reference"
+                :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
+              />
               <data-row
                 :title="$t('dataset.copyright')"
                 :value="dataset.copyright_agent__agent"
@@ -155,6 +161,10 @@ export default {
       })
 
       const doi = doiResponse.items?.[0]?.identifier
+      const reference = {
+        id: doiResponse.items?.[0]?.reference,
+        reference: doiResponse.items?.[0]?.reference__reference,
+      }
 
       const tabs = [
         {
@@ -239,9 +249,9 @@ export default {
         parameters: parsedParameters,
         selectedParameterValues,
         doi,
+        reference,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find dataset ${route.params.id}`,
         path: route.path,

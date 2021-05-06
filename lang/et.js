@@ -673,6 +673,7 @@ export default {
     parameters: 'Parameetrid',
     creators: 'Loojad',
     doi: 'DOI',
+    reference: 'Kirjandus',
   },
   reference: {
     id: 'ID',

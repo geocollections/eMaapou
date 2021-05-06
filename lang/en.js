@@ -672,6 +672,7 @@ export default {
     parameters: 'Parameters',
     creators: 'Creators',
     doi: 'DOI',
+    reference: 'Reference',
   },
   reference: {
     id: 'ID',
