@@ -373,12 +373,16 @@ export default {
           props: { sample: sample.id },
         },
         {
-          id: 'analytical_data',
+          table: 'analysis_results',
+          id: 'graphs',
           isSolr: true,
-          routeName: 'sample-id-statistics',
-          title: 'sample.analyticalData',
+          routeName: 'sample-id-graphs',
+          title: 'locality.graphs',
           count: 0,
-          props: { sample: sample.id },
+          props: {
+            sample: sample.id,
+            sampleObject: { ...sample },
+          },
         },
       ]
 
