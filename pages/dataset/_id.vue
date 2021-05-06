@@ -154,7 +154,7 @@ export default {
         },
       })
 
-      const doi = doiResponse.items[0]?.identifier
+      const doi = doiResponse.items?.[0]?.identifier
 
       const tabs = [
         {
