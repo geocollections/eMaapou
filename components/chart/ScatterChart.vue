@@ -21,13 +21,23 @@ import ExternalLegendOptions from '~/components/chart/ExternalLegendOptions'
 export default {
   components: { ExternalLegendOptions, ChartWrapper },
   props: {
-    locality: {
+    tableKey: {
+      type: String,
+      required: true,
+      default: 'locality_id',
+    },
+    tableId: {
       type: Number,
       default: null,
     },
-    localityObject: {
+    tableObject: {
       type: Object,
       default: () => {},
+    },
+    chartTitle: {
+      type: String,
+      required: true,
+      default: 'Chart title',
     },
   },
   data() {
@@ -84,7 +94,9 @@ export default {
         return {
           animation: false,
 
-          title: this.buildChartTitle(),
+          title: {
+            text: this.chartTitle,
+          },
 
           legend: this.buildChartLegend(),
 
@@ -126,9 +138,9 @@ export default {
         'analysis_results',
         {
           useRawSolr: true,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.tableId),
           defaultParams: {
-            fq: `locality_id:${this.locality}`,
+            fq: `${this.tableKey}:${this.tableId}`,
             start: 0,
             rows: 50000,
             fl:
@@ -141,9 +153,9 @@ export default {
         'analysis_results',
         {
           useRawSolr: true,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.tableId),
           defaultParams: {
-            fq: `locality_id:${this.locality}`,
+            fq: `${this.tableKey}:${this.tableId}`,
             rows: 0,
             fl: 'depth',
             sort: 'depth asc, parameter asc',

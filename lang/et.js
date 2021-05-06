@@ -137,6 +137,7 @@ export default {
     elevationAccuracy: 'Kõrguse täpsus',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    graphs: 'Graafikud',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',
@@ -374,7 +375,6 @@ export default {
     taxa: 'Taksonid ({number})',
     sampleReferences: 'Kirjandus ({number})',
     analysisResults: 'Analüüsitulemused ({number})',
-    analyticalData: 'Graafikud',
     sample: 'Proov',
     hierarchy: 'Stratigraafia',
     dateAdded: 'Kirje lisatud',
