@@ -245,6 +245,15 @@ export default {
           count: 0,
           props: {},
         },
+        {
+          table: 'analysis_results',
+          id: 'graphs',
+          isSolr: true,
+          routeName: 'drillcore-id-graphs',
+          title: 'locality.graphs',
+          count: 0,
+          props: { drillcoreObject: drillcore },
+        },
       ]
 
       const hydratedTabs = drillcore?.locality_id
