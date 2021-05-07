@@ -24,6 +24,24 @@
         {{ item.sample_number }}
       </nuxt-link>
     </template>
+    <template #item.locality="{ item }">
+      <nuxt-link
+        v-if="item.locality_id"
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality_id } })
+        "
+      >
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
+      </nuxt-link>
+      <nuxt-link
+        v-else-if="item.site_id"
+        class="text-link"
+        :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
+      >
+        {{ $translate({ et: item.name, en: item.name_en }) }}
+      </nuxt-link>
+    </template>
     <template #item.thickness="{ item }">
       {{
         !item.depth_interval || !item.depth
@@ -90,6 +108,7 @@ export default {
       headers: [
         { text: this.$t('analysis.id'), value: 'id' },
         { text: this.$t('analysis.sampleNumber'), value: 'sample_number' },
+        { text: this.$t('analysis.locality'), value: 'locality' },
         { text: this.$t('analysis.depth'), value: 'depth' },
         { text: this.$t('analysis.depthInterval'), value: 'depth_interval' },
 
