@@ -26,7 +26,7 @@
         >
           {{ $t(selectFieldTitle) }}
         </div>
-        <v-select
+        <v-autocomplete
           v-model="selectedItems"
           :items="allItems"
           multiple
@@ -38,7 +38,7 @@
           :error-messages="
             selectedItems.length === 0 ? $t('statistics.isEmptyMessage') : ''
           "
-        ></v-select>
+        ></v-autocomplete>
       </div>
     </v-card-text>
   </v-card>
