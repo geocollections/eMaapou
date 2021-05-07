@@ -197,6 +197,12 @@ export default {
             fontSize: 16,
           },
           nameGap: 55,
+          min(value) {
+            return (value.min - 0.1).toFixed(2) * 1
+          },
+          max(value) {
+            return (value.max + 0.1).toFixed(2) * 1
+          },
         },
         {
           type: 'value',
@@ -207,6 +213,12 @@ export default {
             fontSize: 16,
           },
           nameGap: 30,
+          min(value) {
+            return (value.min - 0.1).toFixed(2) * 1
+          },
+          max(value) {
+            return (value.max + 0.1).toFixed(2) * 1
+          },
         },
       ]
       if (this.selectedParameters.some((item) => item.includes('ppm')))

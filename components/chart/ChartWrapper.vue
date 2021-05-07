@@ -59,6 +59,12 @@ export default {
           },
           nameGap: 25,
           splitNumber: 7,
+          min(value) {
+            return (value.min - 0.1).toFixed(2) * 1
+          },
+          max(value) {
+            return (value.max + 0.1).toFixed(2) * 1
+          },
         },
 
         tooltip: {
@@ -87,16 +93,19 @@ export default {
             type: 'slider',
             show: true,
             xAxisIndex: [0],
+            filterMode: 'empty',
           },
           {
             type: 'slider',
             show: true,
             yAxisIndex: [0, 1],
             left: '93%',
+            filterMode: 'empty',
           },
           {
             type: 'inside',
             xAxisIndex: [0],
+            filterMode: 'empty',
           },
         ],
       },
