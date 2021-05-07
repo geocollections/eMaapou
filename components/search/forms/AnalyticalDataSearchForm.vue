@@ -88,115 +88,23 @@
         <text-field v-model="sample" :label="$t(filters.byIds.sample.label)" />
       </v-col>
     </v-row>
-
-    <v-row
-      v-if="activeListParameters && activeListParameters.length > 0"
-      no-gutters
-    >
+    <v-row no-gutters>
       <v-col
         v-for="(entity, index) in activeListParameters"
         :key="index"
         cols="12"
       >
-        <v-row no-gutters>
-          <v-col cols="4" class="pr-1">
-            <autocomplete-field
-              :label="$t('analyticalData.parameter')"
-              :items="distinctListParameters(entity)"
-              return-object
-              item-text="parameter"
-              :value="entity"
-              remove-clearable
-              do-not-cache
-              @input="
-                updateActiveListParameters({
-                  event: $event,
-                  keyToReplace: entity.parameter_index,
-                  indexToReplace: index,
-                })
-              "
-            />
-          </v-col>
-
-          <v-col v-if="entity.isText" cols="6">
-            <v-row no-gutters>
-              <v-col cols="12" class="pr-1">
-                <text-field
-                  :label="$t('common.textField')"
-                  :value="entity.text"
-                  @input="
-                    updateActiveParam({
-                      value: $event,
-                      field: 'text',
-                      index: index,
-                    })
-                  "
-                />
-              </v-col>
-            </v-row>
-          </v-col>
-
-          <v-col v-else cols="6">
-            <v-row no-gutters>
-              <v-col cols="6" class="px-1">
-                <number-field
-                  :label="$t(entity.placeholders[0])"
-                  step="0.1"
-                  :value="entity.value[0]"
-                  @input="
-                    updateActiveParam({
-                      value: [parseInput($event), entity.value[1]],
-                      key: entity.parameter_index,
-                    })
-                  "
-                />
-              </v-col>
-
-              <v-col cols="6" class="px-1">
-                <number-field
-                  :label="$t(entity.placeholders[1])"
-                  step="0.1"
-                  :value="entity.value[1]"
-                  @input="
-                    updateActiveParam({
-                      value: [entity.value[0], parseInput($event)],
-                      key: entity.parameter_index,
-                    })
-                  "
-                />
-              </v-col>
-            </v-row>
-          </v-col>
-
-          <v-col cols="1" align-self="center" class="text-center">
-            <v-btn
-              small
-              icon
-              color="success"
-              :disabled="activeListParameters.length >= 10"
-              @click="addActiveListParameter"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-col>
-
-          <v-col cols="1" align-self="center" class="text-center">
-            <v-btn
-              small
-              icon
-              color="error"
-              :disabled="activeListParameters.length <= 1"
-              @click="
-                removeActiveListParameter({
-                  index,
-                  filterName: entity.parameter_index,
-                })
-              "
-            >
-              <v-icon>mdi-minus</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <parameter-field
+          :value="entity"
+          :parameters="distinctListParameters(entity)"
+          :disable-remove="activeListParameters.length <= 1"
+          :disable-add="activeListParameters.length >= 10"
+          @input="handleParameterUpdate($event, index)"
+          @add:parameter="addActiveListParameter"
+          @remove:parameter="
+            removeActiveListParameter({ filterName: entity.id, index })
+          "
+        />
       </v-col>
     </v-row>
 
@@ -210,7 +118,7 @@
           :items="listParameters"
           :value="shownActiveListParameters"
           return-object
-          item-text="parameter"
+          item-text="label"
           small-chips
           deletable-chips
           @input="updateAnalyticalDataHeaders"
@@ -231,19 +139,19 @@ import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import NumberField from '~/components/fields/NumberField'
 import RangeTextField from '~/components/fields/RangeTextField'
+import ParameterField from '~/components/fields/ParameterField.vue'
 
 export default {
   name: 'AnalyticalDataSearchForm',
   components: {
     RangeTextField,
-    NumberField,
     AutocompleteField,
     TextField,
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    ParameterField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -302,10 +210,9 @@ export default {
       'resetAnalyticalDataFilters',
       'setListParameters',
       'updateAnalyticalDataHeaders',
-      'updateActiveListParameters',
       'addActiveListParameter',
       'removeActiveListParameter',
-      'updateActiveParam',
+      'updateParameter',
     ]),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {
@@ -325,6 +232,9 @@ export default {
         this.autocomplete.chronostratigraphy.push(this.stratigraphy)
       if (this.lithostratigraphy)
         this.autocomplete.lithostratigraphy.push(this.lithostratigraphy)
+    },
+    handleParameterUpdate(e, index) {
+      this.updateParameter({ index, parameter: e })
     },
   },
 }
