@@ -462,7 +462,7 @@ export const DATASET = {
     sortDesc: [true],
   },
   queryFields: {
-    id: (locale) => 'id',
+    id: (locale) => 'dataset_id',
     name: (locale) => (locale === 'et' ? 'name' : 'name_en'),
     date: (locale) => 'date,date_txt',
     database_acronym: (locale) => 'database_acronym',

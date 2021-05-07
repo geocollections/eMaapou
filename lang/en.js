@@ -128,6 +128,7 @@ export default {
     descriptions: 'Descriptions ({number})',
     drillcore: 'Drillcore',
     drillcoreBoxes: 'Boxes ({number})',
+    analyses: 'Analyses ({number})',
     date: 'Date',
     author: 'Author',
     stratigraphy: 'Stratigraphy',
@@ -135,6 +136,7 @@ export default {
     elevationAccuracy: 'Elevation accuracy',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    graphs: 'Graphs',
   },
   localitySynonym: {
     synonym: 'Synonym',
@@ -372,7 +374,6 @@ export default {
     taxa: 'Taxa ({number})',
     sampleReferences: 'References ({number})',
     analysisResults: 'Analysis results ({number})',
-    analyticalData: 'Graphs',
     sample: 'Sample',
     hierarchy: 'Stratigraafia',
     dateAdded: 'Date added',
@@ -671,6 +672,7 @@ export default {
     parameters: 'Parameters',
     creators: 'Creators',
     doi: 'DOI',
+    reference: 'Reference',
   },
   reference: {
     id: 'ID',

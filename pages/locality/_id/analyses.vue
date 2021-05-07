@@ -1,6 +1,6 @@
 <template>
-  <analytical-data-table
-    :items="analyticalData"
+  <analysis-table
+    :items="analyses"
     :count="count"
     :options="options"
     @update="handleUpdate"
@@ -9,19 +9,19 @@
 
 <script>
 import { isNil } from 'lodash'
-import { ANALYTICAL_DATA } from '~/constants'
-import AnalyticalDataTable from '~/components/tables/AnalyticalDataTable'
+import { ANALYSIS } from '~/constants'
+import AnalysisTable from '~/components/tables/AnalysisTable'
 export default {
-  components: { AnalyticalDataTable },
+  components: { AnalysisTable },
   props: {
-    sample: {
+    locality: {
       type: Number,
       default: null,
     },
   },
   data() {
     return {
-      analyticalData: [],
+      analyses: [],
       count: 0,
       options: {
         page: 1,
@@ -34,18 +34,18 @@ export default {
   methods: {
     async handleUpdate(tableState) {
       const response = await this.$services.sarvSolr.getResourceList(
-        'analytical_data',
+        'analysis',
         {
           ...tableState,
-          isValid: isNil(this.sample),
+          isValid: isNil(this.locality),
           defaultParams: {
-            fq: `sample_id:${this.sample}`,
+            fq: `locality_id:${this.locality}`,
           },
-          queryFields: this.$getQueryFields(ANALYTICAL_DATA.queryFields),
+          queryFields: this.$getQueryFields(ANALYSIS.queryFields),
         }
       )
       this.options = tableState.options
-      this.analyticalData = response.items
+      this.analyses = response.items
       this.count = response.count
     },
   },
