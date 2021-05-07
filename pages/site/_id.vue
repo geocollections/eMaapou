@@ -189,7 +189,6 @@
               site.locality__country__value === 'Eesti'
             "
             site-overlay
-            :height="500"
             :center="{
               latitude: site.latitude,
               longitude: site.longitude,

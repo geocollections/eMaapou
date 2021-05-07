@@ -184,7 +184,6 @@
             :estonian-map="locality.country__value === 'Eesti'"
             :estonian-bedrock-overlay="locality.country__value === 'Eesti'"
             locality-overlay
-            :height="600"
             :center="{
               latitude: locality.latitude,
               longitude: locality.longitude,

@@ -165,7 +165,6 @@
             rounded
             estonian-map
             estonian-bedrock-layer
-            :height="600"
             :markers="computedSites"
           />
         </v-card>

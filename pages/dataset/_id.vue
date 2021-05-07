@@ -107,7 +107,7 @@
       <v-card-title>{{ $t('locality.map') }}</v-card-title>
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
-          <leaflet-map rounded :height="600" :markers="computedLocations" />
+          <leaflet-map rounded :markers="computedLocations" />
         </v-card>
       </v-card-text>
     </template>
