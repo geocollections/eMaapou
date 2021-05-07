@@ -104,28 +104,7 @@ export default {
             data: this.depth,
           },
 
-          yAxis: [
-            {
-              type: 'value',
-              name: 'Value',
-              nameLocation: 'center',
-              nameTextStyle: {
-                fontWeight: 'bold',
-                fontSize: 16,
-              },
-              nameGap: 55,
-            },
-            {
-              type: 'value',
-              name: 'ppm',
-              nameLocation: 'center',
-              nameTextStyle: {
-                fontWeight: 'bold',
-                fontSize: 16,
-              },
-              nameGap: 30,
-            },
-          ],
+          yAxis: this.buildYAxis(),
 
           series: this.buildChartSeries(),
         }
@@ -205,6 +184,35 @@ export default {
           symbolSize: 8,
         }
       })
+    },
+
+    buildYAxis() {
+      const yAxis = [
+        {
+          type: 'value',
+          name: 'Value',
+          nameLocation: 'center',
+          nameTextStyle: {
+            fontWeight: 'bold',
+            fontSize: 16,
+          },
+          nameGap: 55,
+        },
+        {
+          type: 'value',
+          name: 'ppm',
+          nameLocation: 'center',
+          nameTextStyle: {
+            fontWeight: 'bold',
+            fontSize: 16,
+          },
+          nameGap: 30,
+        },
+      ]
+      if (this.selectedParameters.some((item) => item.includes('ppm')))
+        yAxis[1].name = 'ppm'
+      else yAxis[1].name = ''
+      return yAxis
     },
   },
 }
