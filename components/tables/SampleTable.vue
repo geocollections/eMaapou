@@ -34,6 +34,13 @@
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
+      <nuxt-link
+        v-else-if="item.site_id"
+        class="text-link"
+        :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
+      >
+        {{ $translate({ et: item.site_name, en: item.site_name_en }) }}
+      </nuxt-link>
     </template>
     <template #item.stratigraphy="{ item }">
       <nuxt-link

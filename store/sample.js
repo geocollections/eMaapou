@@ -20,7 +20,7 @@ const getDefaultState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'sample.locality',
-          fields: ['locality', 'locality_en'],
+          fields: ['locality', 'locality_en', 'site_name', 'site_name_en'],
         },
         stratigraphy: {
           value: '',

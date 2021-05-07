@@ -105,7 +105,8 @@ export const SAMPLE = {
   queryFields: {
     id: (locale) => 'id_l',
     number: (locale) => 'number',
-    locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
+    locality: (locale) =>
+      locale === 'et' ? 'locality,site_name' : 'locality_en,site_name_en',
     depth: (locale) => 'depth',
     depth_interval: (locale) => 'depth_interval',
     stratigraphy: (locale) =>
