@@ -109,8 +109,9 @@ export default {
 </script>
 
 <style scoped>
-/* Todo: Add min and max height */
 .chart {
   height: 75vh;
+  min-height: 600px;
+  max-height: 1000px;
 }
 </style>
