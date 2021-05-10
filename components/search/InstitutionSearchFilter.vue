@@ -20,18 +20,25 @@
         class="d-flex flex-column flex-sm-row flex-md-column flex-wrap justify-space-between"
       >
         <div v-for="(entity, key) in institutions" :key="key">
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-checkbox
-                multiple
-                :value="entity.id"
-                hide-details
-                :label="entity.acronym"
-                :input-value="institution"
-                v-bind="attrs"
-                @change="$emit('change:institution', $event)"
-                v-on="on"
-              />
+          <v-tooltip
+            bottom
+            :nudge-left="
+              $vuetify.breakpoint.xs || $vuetify.breakpoint.mdAndUp
+                ? '200'
+                : '0'
+            "
+          >
+            <template #activator="{ on }">
+              <span v-on="on">
+                <v-checkbox
+                  multiple
+                  :value="entity.id"
+                  hide-details
+                  :label="entity.acronym"
+                  :input-value="institution"
+                  @change="$emit('change:institution', $event)"
+                />
+              </span>
             </template>
 
             <span>{{

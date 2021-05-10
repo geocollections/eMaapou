@@ -44,13 +44,6 @@ const getDefaultState = () => {
           placeholders: ['boxes.min', 'boxes.max'],
           fields: ['boxes'],
         },
-        institution: {
-          type: 'list_or',
-          lookUpType: 'exact',
-          value: [],
-          label: 'drillcore.boxes',
-          fields: ['database_id'],
-        },
       },
       allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
     },
@@ -83,8 +76,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetDrillcoreFilters({ commit }) {
+  resetDrillcoreFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
   },
   async quickSearchDrillcores(
     { commit, rootState, state },
@@ -116,7 +110,10 @@ export const actions = {
         options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(DRILLCORE.queryFields),
-        searchFilters: state.filters.byIds,
+        searchFilters: {
+          ...state.filters.byIds,
+          ...rootState.globalSearch.filters.byIds,
+        },
       }
     )
     commit('SET_ITEMS', drillcoreResponse.items)

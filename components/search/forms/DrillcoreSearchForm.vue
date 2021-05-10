@@ -45,13 +45,15 @@ export default {
   },
   computed: {
     ...mapState('drillcore', ['filters']),
-    ...mapState('settings', ['institutions']),
+    ...mapState('globalSearch', ['institutions']),
     ...mapFields('drillcore', {
       name: 'filters.byIds.name.value',
       repository: 'filters.byIds.repository.value',
       country: 'filters.byIds.country.value',
       boxes: 'filters.byIds.boxes.value',
       storage: 'filters.byIds.storage.value',
+    }),
+    ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',
     }),
   },
