@@ -10,7 +10,9 @@
         :drawer="drawer"
         @update:navigationDrawer="drawer = $event"
       />
-      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-container
+        :fluid="$vuetify.breakpoint.lgAndDown || $vuetify.breakpoint.xlOnly"
+      >
         <link-to-edit-fab v-if="isDetail" />
         <client-only>
           <history-viewer
