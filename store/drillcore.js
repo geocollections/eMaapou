@@ -44,6 +44,13 @@ const getDefaultState = () => {
           placeholders: ['boxes.min', 'boxes.max'],
           fields: ['boxes'],
         },
+        institution: {
+          type: 'list_or',
+          lookUpType: 'exact',
+          value: [],
+          label: 'drillcore.boxes',
+          fields: ['database_id'],
+        },
       },
       allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
     },

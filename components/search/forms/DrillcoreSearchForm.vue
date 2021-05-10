@@ -13,6 +13,12 @@
     <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
     <text-field v-model="storage" :label="$t(filters.byIds.storage.label)" />
     <range-text-field v-model="boxes" :label="$t(filters.byIds.boxes.label)" />
+
+    <institution-search-filter
+      class="pt-3"
+      :institution="institution"
+      @change:institution="institution = $event"
+    />
   </v-form>
 </template>
 
@@ -20,6 +26,7 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
@@ -29,6 +36,7 @@ import TextField from '~/components/fields/TextField.vue'
 export default {
   name: 'DrillcoreSearchForm',
   components: {
+    InstitutionSearchFilter,
     TextField,
     RangeTextField,
     GlobalSearch,
@@ -37,12 +45,14 @@ export default {
   },
   computed: {
     ...mapState('drillcore', ['filters']),
+    ...mapState('settings', ['institutions']),
     ...mapFields('drillcore', {
       name: 'filters.byIds.name.value',
       repository: 'filters.byIds.repository.value',
       country: 'filters.byIds.country.value',
       boxes: 'filters.byIds.boxes.value',
       storage: 'filters.byIds.storage.value',
+      institution: 'filters.byIds.institution.value',
     }),
   },
   methods: {

@@ -79,6 +79,7 @@ export default {
     from: 'Alates',
     to: 'Kuni',
     showSearch: 'Otsing',
+    showInstitutions: 'Asutused',
     backToLanding: 'Tagasi avalehele',
   },
   link: {

@@ -78,6 +78,7 @@ export default {
     from: 'From',
     to: 'To',
     showSearch: 'Search',
+    showInstitutions: 'Institutions',
     backToLanding: 'Go back to landing page',
   },
   link: {
