@@ -140,6 +140,7 @@ export default {
             rows: 50000,
             fl:
               'id,analysis_id,depth,depth_interval,parameter,analysis_method,analysis_method_en,value',
+            sort: 'depth asc',
           },
         }
       )
@@ -192,7 +193,7 @@ export default {
       return this.parameters.map((item) => {
         return {
           name: item,
-          type: 'scatter',
+          type: 'line',
           yAxisIndex: item.includes('ppm') ? 1 : 0,
           data: this.analysisResults
             .filter((result) => result.parameter === item)
