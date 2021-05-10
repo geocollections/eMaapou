@@ -133,13 +133,18 @@ const getDefaultState = () => {
         value: 'stratigraphy',
         translate: true,
       },
+      {
+        text: 'analyticalData.lithostratigraphy',
+        value: 'lithostratigraphy',
+        translate: true,
+      },
 
       { text: 'analyticalData.depth', value: 'depth', translate: true },
-      // {
-      //   text: 'analyticalData.depthInterval',
-      //   value: 'depth_interval',
-      //   translate: true,
-      // },
+      {
+        text: 'analyticalData.depthInterval',
+        value: 'depth_interval',
+        translate: true,
+      },
       {
         text: 'analyticalData.rock',
         value: 'rock',
