@@ -198,7 +198,10 @@ export default {
           data: this.analysisResults
             .filter((result) => result.parameter === item)
             .map((t) => [t.depth, t.value]),
-          symbolSize: 8,
+          // symbolSize: 8,
+          emphasis: {
+            focus: 'series',
+          },
         }
       })
     },
