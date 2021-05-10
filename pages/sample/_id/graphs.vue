@@ -1,16 +1,12 @@
 <template>
-  <scatter-chart
-    table-key="sample_id"
-    :table-id="sample"
-    :chart-title="chartTitle"
-  />
+  <pie-chart table-key="sample" :table-id="sample" :chart-title="chartTitle" />
 </template>
 
 <script>
-import ScatterChart from '~/components/chart/ScatterChart'
+import PieChart from '@/components/chart/PieChart'
 
 export default {
-  components: { ScatterChart },
+  components: { PieChart },
   props: {
     sample: {
       type: Number,

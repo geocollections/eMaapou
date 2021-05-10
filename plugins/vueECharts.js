@@ -4,7 +4,7 @@ import { use } from 'echarts/core'
 
 // import ECharts modules manually to reduce bundle size
 import { CanvasRenderer } from 'echarts/renderers'
-import { BarChart, LineChart, ScatterChart } from 'echarts/charts'
+import { BarChart, LineChart, ScatterChart, PieChart } from 'echarts/charts'
 import {
   LegendComponent,
   TooltipComponent,
@@ -25,6 +25,7 @@ use([
   LineChart,
   BarChart,
   ScatterChart,
+  PieChart,
 
   // components
   GridComponent,

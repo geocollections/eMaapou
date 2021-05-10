@@ -404,9 +404,8 @@ export default {
           props: { sample: sample.id },
         },
         {
-          table: 'analysis_results',
+          table: 'taxon_list',
           id: 'graphs',
-          isSolr: true,
           routeName: 'sample-id-graphs',
           title: 'locality.graphs',
           count: 0,

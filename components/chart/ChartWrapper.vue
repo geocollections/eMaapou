@@ -20,6 +20,11 @@ export default {
       required: false,
       default: () => {},
     },
+    useDeepMerge: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   data() {
     return {
@@ -46,25 +51,6 @@ export default {
           bottom: 90,
           right: '11%',
           containLabel: true,
-        },
-
-        xAxis: {
-          type: 'value',
-          boundaryGap: false,
-          name: 'Depth',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 25,
-          splitNumber: 7,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
         },
 
         tooltip: {
@@ -113,7 +99,7 @@ export default {
   },
   computed: {
     computedOptions() {
-      // Todo: Keep an eye on default options if series is missing then errors start showing,
+      // Todo: Keep an eye on options if series or any other option which should/shouldn't exist then errors start showing,
       const deepMergedObject = deepmerge(this.defaultOptions, this.options)
       if (deepMergedObject?.series?.length > 0) return deepMergedObject
       else return {}

@@ -101,6 +101,22 @@ export default {
           legend: this.buildChartLegend(),
 
           xAxis: {
+            type: 'value',
+            boundaryGap: false,
+            name: 'Depth',
+            nameLocation: 'center',
+            nameTextStyle: {
+              fontWeight: 'bold',
+              fontSize: 16,
+            },
+            nameGap: 25,
+            splitNumber: 7,
+            min(value) {
+              return (value.min - 0.1).toFixed(2) * 1
+            },
+            max(value) {
+              return (value.max + 0.1).toFixed(2) * 1
+            },
             data: this.depth,
           },
 
