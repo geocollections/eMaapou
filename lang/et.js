@@ -81,6 +81,8 @@ export default {
     showSearch: 'Otsing',
     showInstitutions: 'Asutused',
     backToLanding: 'Tagasi avalehele',
+    resetSearch: 'Puhasta',
+    resetSearchLong: 'Puhasta otsinguväljad',
   },
   link: {
     sarvAPI: 'Avalik API',

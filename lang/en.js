@@ -80,6 +80,8 @@ export default {
     showSearch: 'Search',
     showInstitutions: 'Institutions',
     backToLanding: 'Go back to landing page',
+    resetSearch: 'Clear',
+    resetSearchLong: 'Clear search fields',
   },
   link: {
     sarvAPI: 'Public API',

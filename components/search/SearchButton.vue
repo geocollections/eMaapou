@@ -1,7 +1,7 @@
 <template>
-  <v-btn type="submit" large color="primary darken-2" dark>
-    <v-icon class="pr-2">mdi-magnify</v-icon>
+  <v-btn type="submit" color="accent" dark class="px-3">
     {{ $t('common.searchCommand') }}
+    <v-icon right>mdi-magnify</v-icon>
   </v-btn>
 </template>
 <script>
