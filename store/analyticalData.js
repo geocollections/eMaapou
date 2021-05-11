@@ -295,7 +295,10 @@ export const actions = {
   resetAnalyticalDataFilters({ state, commit, dispatch }) {
     commit('RESET_FILTERS')
     dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
-    dispatch('setListParameters', state.listParameters, true)
+    dispatch('setListParameters', {
+      parameters: state.listParameters,
+      reset: true,
+    })
   },
   async quickSearchAnalyticalData(
     { commit, rootState, state },
@@ -336,8 +339,11 @@ export const actions = {
     commit('SET_ITEMS', analyticalDataResponse.items)
     commit('SET_COUNT', analyticalDataResponse.count)
   },
-  setListParameters({ commit, dispatch }, parameters, reset = false) {
+  setListParameters({ commit, dispatch }, { parameters, reset }) {
     if (reset) {
+      parameters = parameters.map((item) => {
+        return { ...item, value: [null, null] }
+      })
       commit('SET_LIST_PARAMETERS', parameters)
       dispatch('initActiveListParameters', parameters)
     } else if (parameters && parameters.length > 0) {
@@ -367,7 +373,6 @@ export const actions = {
     commit('SET_SHOWN_ACTIVE_LIST_PARAMETERS', list)
   },
   initActiveListParameters({ commit, dispatch }, parameters) {
-    // Ag, Au, U
     // CaO, MgO, SiO, Al2O3
     const DEFAULT_PARAMETERS = [
       parameters[24],

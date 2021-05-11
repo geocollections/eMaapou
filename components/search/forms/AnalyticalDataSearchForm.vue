@@ -188,7 +188,7 @@ export default {
           },
         }
       )
-      this.setListParameters(listParametersResponse?.items)
+      this.setListParameters({ parameters: listParametersResponse?.items })
     }
   },
   computed: {
