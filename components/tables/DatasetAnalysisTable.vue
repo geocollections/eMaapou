@@ -42,6 +42,13 @@
       >
         {{ item.locality }}
       </nuxt-link>
+      <nuxt-link
+        v-else-if="item.site_id"
+        class="text-link"
+        :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
+      >
+        {{ item.site }}
+      </nuxt-link>
     </template>
     <template #item.stratigraphy="{ item }">
       <nuxt-link
