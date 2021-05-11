@@ -45,7 +45,6 @@ export default {
   },
   computed: {
     ...mapState('drillcore', ['filters']),
-    ...mapState('globalSearch', ['institutions']),
     ...mapFields('drillcore', {
       name: 'filters.byIds.name.value',
       repository: 'filters.byIds.repository.value',

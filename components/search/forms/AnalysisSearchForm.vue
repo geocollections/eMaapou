@@ -13,6 +13,12 @@
       :max="5000"
       :label="$t(filters.byIds.depth.label)"
     />
+
+    <institution-search-filter
+      class="pt-3"
+      :institution="institution"
+      @change:institution="institution = $event"
+    />
   </v-form>
 </template>
 
@@ -20,6 +26,7 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
@@ -29,6 +36,7 @@ import TextField from '~/components/fields/TextField.vue'
 export default {
   name: 'AnalysisSearchForm',
   components: {
+    InstitutionSearchFilter,
     TextField,
     RangeSliderField,
     GlobalSearch,
@@ -40,6 +48,9 @@ export default {
     ...mapFields('analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
+    }),
+    ...mapFields('globalSearch', {
+      institution: 'filters.byIds.institution.value',
     }),
   },
   methods: {

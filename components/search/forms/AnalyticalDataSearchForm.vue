@@ -125,6 +125,16 @@
         />
       </v-col>
     </v-row>
+
+    <v-row no-gutters>
+      <v-col cols="12">
+        <institution-search-filter
+          class="pt-3"
+          :institution="institution"
+          @change:institution="institution = $event"
+        />
+      </v-col>
+    </v-row>
   </v-form>
 </template>
 
@@ -133,6 +143,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import { isEmpty } from 'lodash'
+import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
@@ -145,6 +156,7 @@ import ParameterField from '~/components/fields/ParameterField.vue'
 export default {
   name: 'AnalyticalDataSearchForm',
   components: {
+    InstitutionSearchFilter,
     RangeTextField,
     AutocompleteField,
     TextField,
@@ -199,6 +211,9 @@ export default {
       stratigraphyBed: 'filters.byIds.stratigraphyBed.value',
       rock: 'filters.byIds.rock.value',
       sample: 'filters.byIds.sample.value',
+    }),
+    ...mapFields('globalSearch', {
+      institution: 'filters.byIds.institution.value',
     }),
   },
   created() {

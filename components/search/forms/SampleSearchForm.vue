@@ -43,6 +43,12 @@
     <!--      :max="1000000"-->
     <!--      :label="$t(filters.byIds.mass.label)"-->
     <!--    />-->
+
+    <institution-search-filter
+      class="pt-3"
+      :institution="institution"
+      @change:institution="institution = $event"
+    />
   </v-form>
 </template>
 
@@ -50,6 +56,7 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
@@ -61,6 +68,7 @@ import autocompleteMixin from '~/mixins/autocompleteMixin'
 export default {
   name: 'SampleSearchForm',
   components: {
+    InstitutionSearchFilter,
     AutocompleteField,
     TextField,
     GlobalSearch,
@@ -89,6 +97,9 @@ export default {
       depth: 'filters.byIds.depth.value',
       collector: 'filters.byIds.collector.value',
       mass: 'filters.byIds.mass.value',
+    }),
+    ...mapFields('globalSearch', {
+      institution: 'filters.byIds.institution.value',
     }),
   },
   created() {

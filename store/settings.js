@@ -4,7 +4,7 @@ export const state = () => ({
   cookiePolicy: true,
   showSearchViewMap: false,
   showSearchViewForm: true,
-  showInstitutionFilters: true,
+  showInstitutionFilters: false,
 })
 
 export const actions = {

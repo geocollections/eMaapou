@@ -54,8 +54,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetAnalysisFilters({ commit }) {
+  resetAnalysisFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
   },
   async quickSearchAnalyses(
     { commit, rootState, state },
@@ -87,7 +88,10 @@ export const actions = {
         options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(ANALYSIS.queryFields),
-        searchFilters: state.filters.byIds,
+        searchFilters: {
+          ...state.filters.byIds,
+          ...rootState.globalSearch.filters.byIds,
+        },
       }
     )
     commit('SET_ITEMS', analysisResponse.items)

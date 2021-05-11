@@ -23,6 +23,12 @@
       deletable-chips
       @input="handleParameterInput"
     />
+
+    <institution-search-filter
+      class="pt-3"
+      :institution="institution"
+      @change:institution="institution = $event"
+    />
   </v-form>
 </template>
 
@@ -30,6 +36,7 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
@@ -39,6 +46,7 @@ import AutocompleteField from '~/components/fields/AutocompleteField'
 export default {
   name: 'DatasetSearchForm',
   components: {
+    InstitutionSearchFilter,
     TextField,
     GlobalSearch,
     ResetSearchButton,
@@ -75,6 +83,9 @@ export default {
       date: 'filters.byIds.date.value',
       remarks: 'filters.byIds.remarks.value',
       parameters: 'filters.byIds.parameters.value',
+    }),
+    ...mapFields('globalSearch', {
+      institution: 'filters.byIds.institution.value',
     }),
   },
   methods: {

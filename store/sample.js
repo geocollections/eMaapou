@@ -103,8 +103,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetSampleFilters({ commit }) {
+  resetSampleFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
   },
   async quickSearchSamples(
     { commit, rootState, state },
@@ -136,7 +137,10 @@ export const actions = {
         options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(SAMPLE.queryFields),
-        searchFilters: state.filters.byIds,
+        searchFilters: {
+          ...state.filters.byIds,
+          ...rootState.globalSearch.filters.byIds,
+        },
       }
     )
     commit('SET_ITEMS', sampleResponse.items)

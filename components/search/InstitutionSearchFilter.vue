@@ -65,7 +65,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('settings', ['institutions']),
+    ...mapState('globalSearch', ['institutions']),
     ...mapFields('settings', {
       showInstitutions: 'showInstitutionFilters',
     }),

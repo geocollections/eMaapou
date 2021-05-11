@@ -294,6 +294,7 @@ export const actions = {
   },
   resetAnalyticalDataFilters({ state, commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
     dispatch('setListParameters', state.listParameters, true)
   },
   async quickSearchAnalyticalData(
@@ -326,7 +327,10 @@ export const actions = {
         options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(ANALYTICAL_DATA.queryFields),
-        searchFilters: state.filters.byIds,
+        searchFilters: {
+          ...state.filters.byIds,
+          ...rootState.globalSearch.filters.byIds,
+        },
       }
     )
     commit('SET_ITEMS', analyticalDataResponse.items)
