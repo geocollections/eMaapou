@@ -175,10 +175,8 @@
         />
         <v-card id="map-wrap" elevation="0">
           <leaflet-map
-            :estonian-map="stratotypes[0].locality__country__value === 'Eesti'"
-            :estonian-bedrock-layer="
-              stratotypes[0].locality__country__value === 'Eesti'
-            "
+            :estonian-map="mapIsEstonian"
+            :estonian-bedrock-overlay="mapIsEstonian"
             :height="300"
             :markers="stratigraphyMarkers"
           />
@@ -407,6 +405,14 @@ export default {
           })})`,
         }
       })
+    },
+    mapIsEstonian() {
+      if (this.stratotypes?.length > 0) {
+        return this.stratotypes.some(
+          (item) => item.locality__country__value_en === 'Estonia'
+        )
+      }
+      return false
     },
   },
   methods: {

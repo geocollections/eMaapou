@@ -164,7 +164,7 @@
           <leaflet-map
             rounded
             estonian-map
-            estonian-bedrock-layer
+            estonian-bedrock-overlay
             :markers="computedSites"
           />
         </v-card>
