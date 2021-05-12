@@ -1,13 +1,20 @@
 <template>
-  <v-app-bar app dark style="z-index: 2050" color="primary">
+  <v-app-bar
+    app
+    dark
+    style="z-index: 2050"
+    color="primary"
+    :height="isLanding ? 112 : $vuetify.breakpoint.smAndDown ? 56 : 64"
+  >
     <v-toolbar-items>
       <v-app-bar-title class="align-self-center">
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-img
-                height="45"
-                width="90"
+                class="transition-logo"
+                :height="isLanding ? 65 : 45"
+                :width="isLanding ? 130 : 90"
                 contain
                 :src="logo"
                 v-bind="attrs"
@@ -84,7 +91,7 @@
       </v-btn>
     </v-toolbar-items>
 
-    <template v-if="$vuetify.breakpoint.smAndUp" #extension>
+    <template v-if="$vuetify.breakpoint.smAndUp && !isLanding" #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
@@ -188,5 +195,9 @@ export default {
 
 .v-app-bar ::v-deep .v-toolbar__content {
   padding-right: 0;
+}
+
+.transition-logo {
+  transition: width 250ms ease-in-out, height 250ms ease-in-out;
 }
 </style>
