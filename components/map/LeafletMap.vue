@@ -17,7 +17,7 @@
         @ready="fitBounds"
         @click="handleClick"
       >
-        <l-control-layers ref="layer-control" />
+        <l-control-layers ref="layer-control" :auto-z-index="false" />
         <l-control-fullscreen position="topleft" />
         <l-control-scale
           position="bottomleft"
@@ -40,6 +40,7 @@
           :visible="layer.visible"
           :name="layer.name"
           :url="layer.url"
+          :z-index="layer.zIndex"
           :options="layer.options"
         />
         <l-wms-tile-layer
@@ -51,6 +52,7 @@
           :base-url="layer.url"
           :layers="layer.layers"
           :transparent="layer.transparent"
+          :z-index="layer.zIndex"
           :options="layer.options"
         />
         <v-marker-cluster-wrapper
@@ -234,6 +236,7 @@ export default {
             url:
               'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: this.estonianHybridOverlay,
+            zIndex: 20,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -241,7 +244,7 @@ export default {
                 "Estonian maps: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
               tms: true,
               detectRetina: true,
-              zIndex: 2,
+              zIndex: 20,
             },
           },
           {
@@ -252,6 +255,7 @@ export default {
             layers: 'geocollections:bedrock400k',
             visible: this.estonianBedrockOverlay,
             transparent: true,
+            zIndex: 10,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -261,7 +265,7 @@ export default {
               tiled: true,
               detectRetina: true,
               updateWhenIdle: true,
-              zIndex: 2,
+              zIndex: 10,
             },
           },
           {
@@ -273,6 +277,7 @@ export default {
             styles: 'point',
             visible: this.localityOverlay,
             transparent: true,
+            zIndex: 30,
             options: {
               maxNativeZoom: 18,
               minZoom: 13,
@@ -283,7 +288,7 @@ export default {
               tiled: true,
               detectRetina: true,
               updateWhenIdle: true,
-              zIndex: 2,
+              zIndex: 30,
             },
           },
           {
@@ -293,6 +298,7 @@ export default {
               'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
             // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: this.localityOverlay,
+            zIndex: 30,
             options: {
               maxNativeZoom: 12,
               maxZoom: 12,
@@ -300,7 +306,7 @@ export default {
                 "Localities: <a  href='https://geoloogia.info'>SARV</a>",
               tms: true,
               detectRetina: true,
-              zIndex: 2,
+              zIndex: 30,
             },
           },
           {
@@ -311,6 +317,7 @@ export default {
             layers: 'sarv:locality_drillcores',
             visible: this.boreholeOverlay,
             transparent: true,
+            zIndex: 40,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -320,7 +327,7 @@ export default {
               tiled: true,
               detectRetina: true,
               updateWhenIdle: true,
-              zIndex: 2,
+              zIndex: 40,
             },
           },
           {
@@ -331,6 +338,7 @@ export default {
             layers: 'sarv:site_summary',
             visible: this.siteOverlay,
             transparent: true,
+            zIndex: 50,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -339,7 +347,7 @@ export default {
               tiled: true,
               detectRetina: true,
               updateWhenIdle: true,
-              zIndex: 2,
+              zIndex: 50,
             },
           },
         ],
