@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-center py-2 emp-title">
+  <div class="d-flex justify-center py-2 emp-title" :class="titleColor">
     <v-icon v-if="icon" large left>{{ icon }}</v-icon>
     <div class="d-flex flex-column">
       <h1 style="font-size: 1.75rem">
@@ -29,6 +29,26 @@ export default {
       type: String,
       required: false,
       default: '',
+    },
+  },
+  computed: {
+    titleColor() {
+      let name = this.getRouteBaseName()
+      if (name.includes('-')) name = name.split('-')[0]
+      if (
+        name === 'analysis' ||
+        name === 'analytical_data' ||
+        name === 'dataset'
+      )
+        return 'emp-analysis'
+      if (name === 'preparation' || name === 'sample') return 'emp-sample'
+      if (name === 'area' || name === 'locality' || name === 'site')
+        return 'emp-main'
+      if (name === 'drillcore' || name === 'drillcore_box')
+        return 'emp-drillcore'
+      if (name === 'file' || name === 'image') return 'emp-sample'
+      if (name === 'stratigraphy') return 'emp-stratigraphy'
+      return 'emp-main'
     },
   },
 }

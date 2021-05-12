@@ -1,7 +1,7 @@
 <template>
   <v-card
-    class="d-flex justify-space-between px-4 flex-column flex-sm-row emp-title"
-    :class="{ 'my-3': title || $slots.title }"
+    class="d-flex justify-space-between px-4 flex-column flex-sm-row"
+    :class="{ 'my-3': title || $slots.title, [titleColor]: true }"
   >
     <div
       class="align-self-start align-self-sm-center text-no-wrap hidden-xs-only"
@@ -154,6 +154,25 @@ export default {
 
     routeName() {
       return this.getRouteBaseName().split('-id')[0]
+    },
+
+    titleColor() {
+      let name = this.getRouteBaseName()
+      if (name.includes('-')) name = name.split('-')[0]
+      if (
+        name === 'analysis' ||
+        name === 'analytical_data' ||
+        name === 'dataset'
+      )
+        return 'emp-analysis'
+      if (name === 'preparation' || name === 'sample') return 'emp-sample'
+      if (name === 'area' || name === 'locality' || name === 'site')
+        return 'emp-main'
+      if (name === 'drillcore' || name === 'drillcore_box')
+        return 'emp-drillcore'
+      if (name === 'file' || name === 'image') return 'emp-sample'
+      if (name === 'stratigraphy') return 'emp-stratigraphy'
+      return 'emp-main'
     },
   },
   beforeMount() {
