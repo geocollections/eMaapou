@@ -95,6 +95,24 @@ export const ATTACHMENT = {
   },
 }
 
+export const IMAGE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: ['id'],
+    sortDesc: [true],
+  },
+  queryFields: {
+    id: (locale) => 'id_sl',
+    image_number: (locale) => 'image_number',
+    agent: (locale) => 'agent',
+    date: (locale) => 'date_created,date_created_free',
+    locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
+    image_object: (locale) => 'image_object',
+    tags: (locale) => 'tags',
+  },
+}
+
 export const SAMPLE = {
   options: {
     page: 1,

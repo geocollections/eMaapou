@@ -34,12 +34,21 @@ export default {
         return []
       },
     },
+    useCustomMarkers: {
+      type: Boolean,
+      required: false,
+      default() {
+        return false
+      },
+    },
   },
   computed: {
     ...mapFields('settings', {
       showMap: 'showSearchViewMap',
     }),
     mapMarkers() {
+      if (this.useCustomMarkers) return this.items
+
       const routeName = this.$route.name.split('___')[0]
       return this.items.reduce((filtered, item) => {
         if (item.latitude && item.longitude) {

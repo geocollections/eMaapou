@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: Click event should be stopped in order to propagate wms layer click. Some solutions were applied but without results -->
     <l-circle-marker
       v-for="(marker, idx) in markers"
       :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"

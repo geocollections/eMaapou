@@ -152,7 +152,7 @@ export default {
           lang: 'analyticalData',
         },
         { name: 'dataset', lang: 'datasets' },
-        { name: 'stratigraphy', lang: 'stratigraphy' },
+        { name: 'image', lang: 'image' },
       ],
       logo: require('~/assets/logos/emaapou5white.svg'),
     }

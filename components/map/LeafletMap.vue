@@ -40,7 +40,6 @@
           :visible="layer.visible"
           :name="layer.name"
           :url="layer.url"
-          :z-index="layer.zIndex"
           :options="layer.options"
         />
         <l-wms-tile-layer
@@ -52,7 +51,6 @@
           :base-url="layer.url"
           :layers="layer.layers"
           :transparent="layer.transparent"
-          :z-index="layer.zIndex"
           :options="layer.options"
         />
         <v-marker-cluster-wrapper
