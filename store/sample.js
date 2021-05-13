@@ -59,7 +59,7 @@ const getDefaultState = () => {
         mass: {
           value: '',
           type: 'text',
-          lookUpType: 'exact',
+          lookUpType: 'equals',
           label: 'sample.mass',
           fields: ['mass'],
         },

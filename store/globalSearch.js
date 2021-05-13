@@ -6,7 +6,7 @@ const getDefaultState = () => {
       byIds: {
         institution: {
           type: 'list_or',
-          lookUpType: 'exact',
+          lookUpType: 'equals',
           value: [],
           fields: ['database_id'],
         },
@@ -56,6 +56,15 @@ const getDefaultState = () => {
         name: 'Eesti Geoloogiateenistus',
         name_en: 'Geological Survey of Estonia',
       },
+    ],
+    lookUpTypes: [
+      { text: 'contains', value: 'contains' },
+      { text: 'equals', value: 'equals' },
+      { text: 'starts with', value: 'startsWith' },
+      { text: 'ends with', value: 'endsWith' },
+      { text: 'does not contain', value: 'doesNotContain' },
+      { text: 'greater than', value: 'greaterThan' },
+      { text: 'smaller than', value: 'smallerThan' },
     ],
   }
 }

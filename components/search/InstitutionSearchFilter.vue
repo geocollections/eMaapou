@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card flat class="mt-1">
     <v-card-title class="py-1 px-0">
       <div
         class="card-title--clickable"

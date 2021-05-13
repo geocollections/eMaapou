@@ -45,7 +45,7 @@
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
-  name: 'ImageTable',
+  name: 'PhotoTable',
   components: { TableWrapper },
   props: {
     showSearch: {

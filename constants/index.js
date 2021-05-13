@@ -106,7 +106,7 @@ export const IMAGE = {
     id: (locale) => 'id_sl',
     image_number: (locale) => 'image_number',
     agent: (locale) => 'agent',
-    date: (locale) => 'date_created,date_created_free',
+    date: (locale) => 'date_created_dt,date_created_free',
     locality: (locale) => (locale === 'et' ? 'locality' : 'locality_en'),
     image_object: (locale) => 'image_object',
     tags: (locale) => 'tags',

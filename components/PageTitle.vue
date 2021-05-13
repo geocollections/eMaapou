@@ -46,7 +46,7 @@ export default {
         return 'emp-main'
       if (name === 'drillcore' || name === 'drillcore_box')
         return 'emp-drillcore'
-      if (name === 'file' || name === 'image') return 'emp-sample'
+      if (name === 'file' || name === 'photo') return 'emp-sample'
       if (name === 'stratigraphy') return 'emp-stratigraphy'
       return 'emp-main'
     },

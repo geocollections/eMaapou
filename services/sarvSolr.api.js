@@ -161,6 +161,12 @@ const buildFilterQueryParameter = (filters) => {
                   return `${str}*`
                 case 'endsWith':
                   return `*${str}`
+                case 'doesNotContain':
+                  return `-${fieldId}:${str}`
+                case 'greaterThan':
+                  return `[${str} TO *]`
+                case 'smallerThan':
+                  return `[* TO ${str}]`
                 default:
                   return `${fieldId}:${str}`
               }

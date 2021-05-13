@@ -12,7 +12,7 @@ const getDefaultState = () => {
           value: '',
           type: 'text',
           lookUpType: 'contains',
-          label: 'locality.name',
+          label: 'image.locality',
           fields: ['locality', 'locality_en'],
         },
         people: {
@@ -21,6 +21,68 @@ const getDefaultState = () => {
           lookUpType: 'contains',
           label: 'image.people',
           fields: ['image_people'],
+        },
+        tags: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'image.tags',
+          fields: ['tags'],
+        },
+        country: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'image.country',
+          fields: [
+            'country',
+            'country_en',
+            'maakond',
+            'maakond_en',
+            'vald',
+            'vald_en',
+          ],
+        },
+        date: {
+          value: '',
+          type: 'text',
+          lookUpType: 'greaterThan',
+          label: 'image.date',
+          fields: ['date_created'],
+        },
+        dateFree: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'image.dateFree',
+          fields: ['date_created_free'],
+        },
+        imageNumber: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'image.imageNumber',
+          fields: ['image_number'],
+        },
+        author: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'image.author',
+          fields: ['agent', 'author_free'],
+        },
+        imageSize: {
+          value: '',
+          type: 'text',
+          lookUpType: 'greaterThan',
+          label: 'image.size',
+          fields: ['image_width', 'image_height'],
+        },
+        specimenImageAttachment: {
+          value: '2',
+          type: 'text',
+          lookUpType: 'equals',
+          fields: ['specimen_image_attachment'],
         },
       },
       allIds: ['locality', 'people'],
@@ -54,8 +116,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetImageFilters({ commit }) {
+  resetImageFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
   },
   async quickSearchImages(
     { commit, rootState, state },
@@ -70,9 +133,6 @@ export const actions = {
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(IMAGE.queryFields),
         searchFilters: {},
-        defaultParams: {
-          fq: 'specimen_image_attachment:2',
-        },
       }
     )
     commit('SET_ITEMS', imageResponse.items)
@@ -90,9 +150,9 @@ export const actions = {
         options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(IMAGE.queryFields),
-        searchFilters: state.filters.byIds,
-        defaultParams: {
-          fq: 'specimen_image_attachment:2',
+        searchFilters: {
+          ...state.filters.byIds,
+          ...rootState.globalSearch.filters.byIds,
         },
       }
     )
