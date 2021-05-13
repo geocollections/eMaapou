@@ -86,6 +86,9 @@ export default {
     backToLanding: 'Tagasi avalehele',
     resetSearch: 'Puhasta',
     resetSearchLong: 'Puhasta otsinguväljad',
+    table: 'Tabel',
+    image: 'Pildid',
+    containImages: 'Vältige piltide kärpimist',
   },
   link: {
     sarvAPI: 'Avalik API',

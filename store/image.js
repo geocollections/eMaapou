@@ -6,6 +6,7 @@ const getDefaultState = () => {
     items: [],
     count: 0,
     options: IMAGE.options,
+    currentView: 'image',
     filters: {
       byIds: {
         locality: {

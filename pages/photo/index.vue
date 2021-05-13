@@ -19,27 +19,58 @@
         :items="mapMarkers"
         class="mb-6"
       />
-      <photo-table
-        :show-search="false"
-        :items="items"
-        :count="count"
-        :options="options"
-        @update="handleUpdate"
-      />
+
+      <v-card>
+        <v-radio-group
+          v-model="currentView"
+          row
+          hide-details
+          class="pa-4"
+          mandatory
+        >
+          <v-radio
+            v-for="entity in listOfViews"
+            :key="entity"
+            :label="$t(`common.${entity}`)"
+            :value="entity"
+            color="light-blue darken-1"
+          ></v-radio>
+        </v-radio-group>
+
+        <photo-table
+          v-if="currentView === 'table'"
+          flat
+          :show-search="false"
+          :items="items"
+          :count="count"
+          :options="options"
+          @update="handleUpdate"
+        />
+
+        <image-view
+          v-if="currentView === 'image'"
+          :items="items"
+          :count="count"
+          @update="handleUpdate"
+        />
+      </v-card>
     </template>
   </search>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
+import ImageView from '~/components/ImageView'
 
 export default {
   components: {
+    ImageView,
     PhotoTable,
     PhotoSearchForm,
     Search,
@@ -54,6 +85,8 @@ export default {
   computed: {
     ...mapState('landing', ['search']),
     ...mapState('image', ['options', 'items', 'count']),
+    ...mapState('settings', ['listOfViews']),
+    ...mapFields('image', ['currentView']),
     mapMarkers() {
       if (this.items?.length > 0) {
         return this.items.reduce((filtered, item) => {
@@ -91,7 +124,8 @@ export default {
   methods: {
     ...mapActions('image', ['searchImages']),
     async handleUpdate(tableState) {
-      await this.searchImages(tableState.options)
+      console.log(tableState?.options)
+      await this.searchImages(tableState?.options)
     },
   },
 }

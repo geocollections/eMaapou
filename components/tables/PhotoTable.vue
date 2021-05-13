@@ -1,6 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
+    :flat="$attrs.flat"
     :headers="headers"
     :items="items"
     :options="options"

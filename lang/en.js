@@ -85,6 +85,9 @@ export default {
     backToLanding: 'Go back to landing page',
     resetSearch: 'Clear',
     resetSearchLong: 'Clear search fields',
+    table: 'Table',
+    image: 'Images',
+    containImages: 'Prevent image cropping',
   },
   link: {
     sarvAPI: 'Public API',

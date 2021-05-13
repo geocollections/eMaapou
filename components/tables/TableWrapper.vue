@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :flat="$attrs.flat">
     <v-data-table
       dense
       calculate-widths
