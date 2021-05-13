@@ -35,14 +35,31 @@
                 "
               />
               <data-row
-                v-if="isNil(sample.locality)"
                 :title="$t('sample.latitude')"
                 :value="sample.locality__latitude"
               />
               <data-row
-                v-if="isNil(sample.locality)"
                 :title="$t('sample.longitude')"
                 :value="sample.locality__longitude"
+              />
+              <link-data-row
+                :title="$t('sample.site')"
+                :value="sample.site__name"
+                nuxt
+                :href="
+                  localePath({
+                    name: 'site-id',
+                    params: { id: sample.site },
+                  })
+                "
+              />
+              <data-row
+                :title="$t('sample.latitude')"
+                :value="sample.site__latitude"
+              />
+              <data-row
+                :title="$t('sample.longitude')"
+                :value="sample.site__longitude"
               />
               <data-row :title="$t('sample.depth')" :value="sample.depth" />
               <data-row
@@ -467,7 +484,7 @@ export default {
     },
 
     computedLocations() {
-      return this.locations.reduce((filtered, item) => {
+      const locations = this.locations.reduce((filtered, item) => {
         if (item.latitude && item.longitude) {
           const newItem = {
             latitude: item.latitude,
@@ -488,6 +505,18 @@ export default {
         }
         return filtered
       }, [])
+
+      if (this.sample.site) {
+        locations.push({
+          latitude: this.sample.site__latitude,
+          longitude: this.sample.site__longitude,
+          text: this.sample.site__name,
+          routeName: 'site',
+          id: this.sample.site_id,
+        })
+      }
+
+      return locations
     },
   },
   methods: {

@@ -384,6 +384,9 @@ export default {
     hierarchy: 'Stratigraafia',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    site: 'Site',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
   },
   preparation: {
     id: 'ID',

@@ -385,6 +385,9 @@ export default {
     hierarchy: 'Stratigraafia',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    site: 'Uuringupunkt',
+    latitude: 'Laiuskraad',
+    longitude: 'Pikkuskraad',
   },
   preparation: {
     id: 'ID',
