@@ -82,13 +82,12 @@
                     :value="selectedParameterValues"
                     multiple
                     column
-                    active-class="primary--text text--darken-2"
+                    active-class="light-blue lighten-3 font-weight-bold elevation-3"
                     @change="handleParameterChange"
                   >
                     <v-chip
                       v-for="(parameter, i) in parameters"
                       :key="i"
-                      active-class="chip-active"
                       :value="parameter.value"
                       small
                     >

@@ -1,17 +1,16 @@
 <template>
   <v-chip-group
     column
-    active-class="success2--text text--darken-1 font-weight-bold elevation-3"
+    active-class="light-blue lighten-3 font-weight-bold elevation-3"
   >
     <transition-group name="flip-list">
       <v-chip
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
-        class="mx-2 mb-3 elevation-2"
+        class="mx-2 mb-3"
         :disabled="item.count === 0"
         nuxt
         rounded
-        outlined
         exact
         :to="
           localePath({
