@@ -4,17 +4,22 @@
     dark
     style="z-index: 2050"
     color="primary"
-    :height="isLanding ? 112 : $vuetify.breakpoint.smAndDown ? 56 : 64"
+    class="gradient-background"
+    :height="isLanding ? ($vuetify.breakpoint.smAndDown ? 56 : 112) : 64"
   >
     <v-toolbar-items>
-      <v-app-bar-title class="align-self-center">
+      <v-app-bar-title class="align-self-center app-title">
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
               <v-img
                 class="transition-logo"
-                :height="isLanding ? 65 : 45"
-                :width="isLanding ? 130 : 90"
+                :height="
+                  isLanding ? ($vuetify.breakpoint.smAndDown ? 45 : 65) : 45
+                "
+                :width="
+                  isLanding ? ($vuetify.breakpoint.smAndDown ? 90 : 130) : 90
+                "
                 contain
                 :src="logo"
                 v-bind="attrs"
@@ -35,6 +40,7 @@
     />
     <div
       v-if="$vuetify.breakpoint.mdAndUp"
+      :class="isLanding ? 'mt-8' : 'mt-5'"
       style="font-family: 'Montserrat', sans-serif"
     >
       {{ $t('slogan') }}
@@ -95,7 +101,7 @@
       <v-tabs
         :value="tabValue"
         align-with-title
-        class="header-tabs"
+        class="header-tabs white"
         optional
         show-arrows
         center-active
@@ -152,7 +158,7 @@ export default {
           lang: 'analyticalData',
         },
         { name: 'dataset', lang: 'datasets' },
-        { name: 'image', lang: 'image' },
+        { name: 'photo', lang: 'photo' },
       ],
       logo: require('~/assets/logos/emaapou5white.svg'),
     }
@@ -199,5 +205,13 @@ export default {
 
 .transition-logo {
   transition: width 250ms ease-in-out, height 250ms ease-in-out;
+}
+
+.gradient-background {
+  background: linear-gradient(
+    320deg,
+    rgba(62, 163, 202, 1),
+    rgba(0, 0, 0, 1)
+  ) !important;
 }
 </style>
