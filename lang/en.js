@@ -89,6 +89,7 @@ export default {
     image: 'Images',
     containImages: 'Prevent image cropping',
     pagination: 'Paginate by {value}',
+    goBack: 'Back to search',
   },
   link: {
     sarvAPI: 'Public API',

@@ -11,11 +11,12 @@
         @update:navigationDrawer="drawer = $event"
       />
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+        <go-back-fab v-if="isDetail" />
         <link-to-edit-fab v-if="isDetail" />
         <client-only>
           <history-viewer
             v-if="$vuetify.breakpoint.smAndUp && !isFrontPage"
-            class="mr-16"
+            :class="{ 'ml-11 mr-16': isDetail }"
           />
         </client-only>
         <nuxt />
@@ -38,9 +39,11 @@ import ScrollTopFab from '~/components/ScrollTopFab.vue'
 import CookiePolicy from '~/components/CookiePolicy'
 import HistoryViewer from '~/components/HistoryViewer.vue'
 import NavigationDrawer from '~/components/NavigationDrawer'
+import GoBackFab from '~/components/GoBackFab'
 
 export default {
   components: {
+    GoBackFab,
     NavigationDrawer,
     CookiePolicy,
     AppHeader,

@@ -90,6 +90,7 @@ export default {
     image: 'Pildid',
     containImages: 'Vältige piltide kärpimist',
     pagination: 'Kuva {value} kaupa',
+    goBack: 'Tagasi otsingusse',
   },
   link: {
     sarvAPI: 'Avalik API',
