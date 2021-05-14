@@ -4,7 +4,7 @@
       <page-title-wrapper
         :title="$t('common.photosCount')"
         :count="count"
-        icon="mdi-map-marker-outline"
+        icon="mdi-file-image-outline"
       />
     </template>
 

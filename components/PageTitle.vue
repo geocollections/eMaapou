@@ -1,6 +1,9 @@
 <template>
-  <div class="d-flex justify-center py-2 emp-title" :class="titleColor">
-    <v-icon v-if="icon" large left>{{ icon }}</v-icon>
+  <div
+    class="d-flex justify-center py-2 emp-title text-center"
+    :class="titleColor"
+  >
+    <v-icon v-if="icon" large left color="white">{{ icon }}</v-icon>
     <div class="d-flex flex-column">
       <h1 style="font-size: 1.75rem">
         {{ title }}
