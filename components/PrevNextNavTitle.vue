@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="d-flex justify-space-between px-4 flex-column flex-sm-row"
-    :class="{ 'my-3': title || $slots.title, [titleColor]: true }"
+    :class="{ 'mb-3': title || $slots.title, [titleColor]: true }"
   >
     <div
       class="align-self-start align-self-sm-center text-no-wrap hidden-xs-only"
