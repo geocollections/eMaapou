@@ -3,7 +3,7 @@
     <v-tooltip left>
       <template #activator="{ on }">
         <v-btn
-          absolute
+          fixed
           right
           fab
           small
