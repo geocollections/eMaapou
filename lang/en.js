@@ -88,6 +88,7 @@ export default {
     table: 'Table',
     image: 'Images',
     containImages: 'Prevent image cropping',
+    pagination: 'Paginate by {value}',
   },
   link: {
     sarvAPI: 'Public API',

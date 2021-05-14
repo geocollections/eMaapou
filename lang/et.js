@@ -89,6 +89,7 @@ export default {
     table: 'Tabel',
     image: 'Pildid',
     containImages: 'Vältige piltide kärpimist',
+    pagination: 'Kuva {value} kaupa',
   },
   link: {
     sarvAPI: 'Avalik API',

@@ -112,10 +112,6 @@ export default {
       containImages: false,
     }
   },
-  // Todo: For now but later it should come from the wrapper which has page and paginateBy components
-  created() {
-    this.$emit('update')
-  },
 }
 </script>
 

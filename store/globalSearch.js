@@ -66,6 +66,15 @@ const getDefaultState = () => {
       { text: 'greater than', value: 'greaterThan' },
       { text: 'smaller than', value: 'smallerThan' },
     ],
+    paginateByOptions: [
+      { text: 'common.pagination', value: 10 },
+      { text: 'common.pagination', value: 25 },
+      { text: 'common.pagination', value: 50 },
+      { text: 'common.pagination', value: 100 },
+      { text: 'common.pagination', value: 250 },
+      { text: 'common.pagination', value: 500 },
+      { text: 'common.pagination', value: 1000 },
+    ],
   }
 }
 

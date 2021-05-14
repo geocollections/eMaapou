@@ -47,10 +47,11 @@
           @update="handleUpdate"
         />
 
-        <image-view
+        <image-view-wrapper
           v-if="currentView === 'image'"
           :items="items"
           :count="count"
+          :options="options"
           @update="handleUpdate"
         />
       </v-card>
@@ -66,11 +67,11 @@ import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
-import ImageView from '~/components/ImageView'
+import ImageViewWrapper from '~/components/ImageViewWrapper'
 
 export default {
   components: {
-    ImageView,
+    ImageViewWrapper,
     PhotoTable,
     PhotoSearchForm,
     Search,
@@ -124,6 +125,7 @@ export default {
   methods: {
     ...mapActions('image', ['searchImages']),
     async handleUpdate(tableState) {
+      console.log(tableState)
       await this.searchImages(tableState?.options)
     },
   },
