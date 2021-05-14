@@ -476,6 +476,10 @@ export default {
     title: 'Stratotype sections',
     description: 'Database on stratotype outcrops in Estonia',
   },
+  frontPhotos: {
+    title: 'Photo Archive',
+    description: 'Photos of geology and geologists',
+  },
   geocollections: {
     title: ' Geocollections',
     description: 'Geoscience Collections Portal',

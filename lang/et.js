@@ -477,6 +477,10 @@ export default {
     title: 'Stratotüübid',
     description: 'Eesti stratotüüpsete paljandite andmebaas',
   },
+  frontPhotos: {
+    title: 'Fotoarhiiv',
+    description: 'Fotod geoloogiast ja geoloogidest',
+  },
   geocollections: {
     title: 'Kollektsioonid',
     description: 'Eesti geokogude portaal',
