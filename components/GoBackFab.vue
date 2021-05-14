@@ -36,7 +36,8 @@ export default {
   methods: {
     handleClick() {
       let table = this.table
-      if (table === 'photo' || table === 'file') table = 'attachment'
+      if (table === 'photo' || table === 'file') table = 'photo'
+      else if (table === 'area') table = 'site'
       this.$router.push(this.localePath({ name: table }))
     },
   },
