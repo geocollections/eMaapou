@@ -5,7 +5,7 @@
       v-scroll="onScroll"
       fab
       small
-      color="primary darken-3"
+      color="primary"
       dark
       @click="toTop"
     >
