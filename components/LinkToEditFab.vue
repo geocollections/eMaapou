@@ -11,7 +11,7 @@
           :style="style"
           color="deep-orange darken-2"
           v-on="on"
-          @click="$openEdit(table, $route.params.id)"
+          @click="handleClick"
         >
           <v-icon>mdi-square-edit-outline</v-icon>
         </v-btn>
@@ -52,6 +52,12 @@ export default {
   methods: {
     refreshIsLoggedIn() {
       this.$fetch()
+    },
+
+    handleClick() {
+      let table = this.table
+      if (table === 'photo' || table === 'file') table = 'attachment'
+      this.$openEdit(table, this.$route.params.id)
     },
   },
 }
