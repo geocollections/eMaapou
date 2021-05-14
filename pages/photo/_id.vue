@@ -423,7 +423,12 @@ export default {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
         'attachment',
-        params.id
+        params.id,
+        {
+          params: {
+            only_photo_ids: true,
+          },
+        }
       )
       const ids = fileResponse?.ids
       const file = fileResponse.results[0]
