@@ -45,10 +45,11 @@ const getDefaultState = () => {
           ],
         },
         date: {
-          value: '',
-          type: 'text',
-          lookUpType: 'greaterThan',
+          type: 'range',
+          lookUpType: 'range',
+          value: [null, null],
           label: 'image.date',
+          placeholders: ['boxes.min', 'boxes.max'],
           fields: ['date_created'],
         },
         dateFree: {

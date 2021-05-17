@@ -125,7 +125,6 @@ export default {
   methods: {
     ...mapActions('image', ['searchImages']),
     async handleUpdate(tableState) {
-      console.log(tableState)
       await this.searchImages(tableState?.options)
     },
   },

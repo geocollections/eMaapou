@@ -13,13 +13,7 @@
 
     <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
 
-    <look-up-type-field
-      v-model="dateLookUpType"
-      class="pt-4"
-      type="range"
-      :custom-prepend-inner="$t(filters.byIds.date.label)"
-    />
-    <text-field v-model="date" :label="$t(filters.byIds.date.label)" />
+    <range-text-field v-model="date" :label="$t(filters.byIds.date.label)" />
 
     <text-field v-model="dateFree" :label="$t(filters.byIds.dateFree.label)" />
 
@@ -52,12 +46,12 @@ import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
-import LookUpTypeField from '~/components/fields/LookUpTypeField'
+import RangeTextField from '~/components/fields/RangeTextField'
 
 export default {
   name: 'PhotoSearchForm',
   components: {
-    LookUpTypeField,
+    RangeTextField,
     InstitutionSearchFilter,
     TextField,
     GlobalSearch,
