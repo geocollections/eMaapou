@@ -60,6 +60,20 @@ const getDefaultState = () => {
           label: 'analyticalData.method',
           fields: ['analysis_method', 'analysis_method_en', 'method_details'],
         },
+        lab: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.lab',
+          fields: ['lab', 'lab_en'],
+        },
+        agentAnalysed: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'analyticalData.agentAnalysed',
+          fields: ['agent_analysed', 'agent_analysed_free'],
+        },
         reference: {
           value: '',
           type: 'text',

@@ -58,6 +58,18 @@
 
     <v-row no-gutters>
       <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
+        <text-field v-model="lab" :label="$t(filters.byIds.lab.label)" />
+      </v-col>
+      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
+        <text-field
+          v-model="agentAnalysed"
+          :label="$t(filters.byIds.agentAnalysed.label)"
+        />
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters>
+      <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
         <text-field
           v-model="reference"
           :label="$t(filters.byIds.reference.label)"
@@ -206,6 +218,8 @@ export default {
       lithostratigraphy: 'filters.byIds.lithostratigraphy.value',
       analysis: 'filters.byIds.analysis.value',
       method: 'filters.byIds.method.value',
+      lab: 'filters.byIds.lab.value',
+      agentAnalysed: 'filters.byIds.agentAnalysed.value',
       reference: 'filters.byIds.reference.value',
       dataset: 'filters.byIds.dataset.value',
       stratigraphyBed: 'filters.byIds.stratigraphyBed.value',

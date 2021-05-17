@@ -796,6 +796,8 @@ export default {
     columns: 'Veerud',
     parameter: 'Parameeter',
     analysisMethod: 'Meetod',
+    lab: 'Labor',
+    agentAnalysed: 'Analüüsija',
   },
   statistics: {
     analysisMethods: 'Analüüsimeetodid',

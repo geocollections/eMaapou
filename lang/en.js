@@ -795,6 +795,8 @@ export default {
     columns: 'Columns',
     parameter: 'Parameter',
     analysisMethod: 'Method',
+    lab: 'Lab',
+    agentAnalysed: 'Lab person',
   },
   statistics: {
     analysisMethods: 'Analysis methods',
