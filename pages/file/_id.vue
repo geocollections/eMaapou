@@ -199,36 +199,22 @@
                 :value="file.imageset__imageset_number"
               />
               <data-row
-                :title="$t('file.type')"
-                :value="
-                  $translate({
-                    et: file.type__value,
-                    en: file.type__value_en,
-                  })
-                "
-              />
-              <data-row
-                :title="$t('file.format')"
-                :value="file.attachment_format__value"
+                :title="$t('file.imagesetDescription')"
+                :value="file.imageset__description"
               />
               <data-row
                 :title="$t('file.author')"
                 :value="file.author__agent"
               />
+              <data-row :title="$t('file.author')" :value="file.author_free" />
+              <data-row
+                :title="$t('file.imagePeople')"
+                :value="file.image_people"
+              />
               <data-row
                 :title="$t('file.date')"
                 :value="file.date_created || file.date_created_free"
               />
-              <data-row
-                :title="$t('file.keywords')"
-                :value="attachmentKeywords"
-              >
-                <template #value>
-                  <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                    <li>{{ item.keyword__keyword }}</li>
-                  </ul>
-                </template>
-              </data-row>
               <data-row
                 :title="$t('file.imagePlace')"
                 :value="file.image_place"
@@ -257,6 +243,29 @@
                 :title="$t('file.imageLongitude')"
                 :value="file.image_longitude"
               />
+              <data-row
+                :title="$t('file.type')"
+                :value="
+                  $translate({
+                    et: file.type__value,
+                    en: file.type__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('file.format')"
+                :value="file.attachment_format__value"
+              />
+              <data-row
+                :title="$t('file.keywords')"
+                :value="attachmentKeywords"
+              >
+                <template #value>
+                  <ul v-for="(item, index) in attachmentKeywords" :key="index">
+                    <li>{{ item.keyword__keyword }}</li>
+                  </ul>
+                </template>
+              </data-row>
               <data-row
                 :title="$t('file.personDigitised')"
                 :value="file.agent_digitised__agent"
@@ -423,7 +432,12 @@ export default {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
         'attachment',
-        params.id
+        params.id,
+        {
+          params: {
+            only_photo_ids: route.name.startsWith('photo'),
+          },
+        }
       )
       const ids = fileResponse?.ids
       const file = fileResponse.results[0]
