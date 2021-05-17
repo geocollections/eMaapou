@@ -174,6 +174,15 @@
             </tbody>
           </template>
         </v-simple-table>
+
+        <v-btn
+          small
+          color="accent"
+          class="mt-2 lighten-2"
+          @click="goToAnalyticalData"
+          >{{ $t('locality.linkToAnalyticalData') }}
+          <v-icon right>mdi-chart-scatter-plot</v-icon>
+        </v-btn>
       </v-card-text>
     </template>
     <template v-if="locality.latitude && locality.longitude" #column-right>
@@ -214,6 +223,7 @@
 
 <script>
 import { isNil, isEmpty } from 'lodash'
+import { mapFields } from 'vuex-map-fields'
 import LinkDataRow from '~/components/LinkDataRow'
 import DataRow from '~/components/DataRow'
 import LeafletMap from '~/components/map/LeafletMap'
@@ -414,6 +424,9 @@ export default {
     }
   },
   computed: {
+    ...mapFields('analyticalData', {
+      analyticalDataLocality: 'filters.byIds.locality.value',
+    }),
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },
@@ -426,6 +439,14 @@ export default {
   methods: {
     isNil,
     isEmpty,
+
+    goToAnalyticalData() {
+      this.analyticalDataLocality = this.$translate({
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      })
+      this.$router.push(this.localePath({ name: 'analytical_data' }))
+    },
   },
 }
 </script>

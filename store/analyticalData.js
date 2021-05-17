@@ -14,7 +14,13 @@ const getDefaultState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'analyticalData.locality',
-          fields: ['locality', 'locality_id_s', 'site', 'site_id_s'],
+          fields: [
+            'locality',
+            'locality_en',
+            'locality_id_s',
+            'site',
+            'site_id_s',
+          ],
         },
         depth: {
           type: 'range',

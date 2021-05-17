@@ -148,6 +148,7 @@ export default {
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
     graphs: 'Graphs',
+    linkToAnalyticalData: 'View analytical data',
   },
   localitySynonym: {
     synonym: 'Synonym',
