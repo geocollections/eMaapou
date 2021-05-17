@@ -54,6 +54,14 @@
           :options="options"
           @update="handleUpdate"
         />
+
+        <gallery-view-wrapper
+          v-if="currentView === 'gallery'"
+          :items="items"
+          :count="count"
+          :options="options"
+          @update="handleUpdate"
+        />
       </v-card>
     </template>
   </search>
@@ -68,9 +76,11 @@ import Search from '~/components/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
 import ImageViewWrapper from '~/components/ImageViewWrapper'
+import GalleryViewWrapper from '~/components/GalleryViewWrapper'
 
 export default {
   components: {
+    GalleryViewWrapper,
     ImageViewWrapper,
     PhotoTable,
     PhotoSearchForm,

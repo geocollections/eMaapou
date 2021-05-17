@@ -87,6 +87,7 @@ export default {
     resetSearchLong: 'Clear search fields',
     table: 'Table',
     image: 'Images',
+    gallery: 'Gallery',
     containImages: 'Prevent image cropping',
     pagination: 'Paginate by {value}',
     goBack: 'Back to search',

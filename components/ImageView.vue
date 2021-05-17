@@ -47,10 +47,7 @@
                     align="center"
                     justify="center"
                   >
-                    <v-progress-circular
-                      indeterminate
-                      color="light-blue lighten-4"
-                    />
+                    <v-progress-circular indeterminate color="grey lighten-5" />
                   </v-row>
                 </template>
               </v-img>
@@ -74,7 +71,7 @@
               <span v-if="image.date_created">{{
                 image.date_created.split('T')[0]
               }}</span>
-              <span v-else>image.date_created_free</span>
+              <span v-else>{{ image.date_created_free }}</span>
               <br />
             </span>
             <span v-if="image.agent || image.author_free">

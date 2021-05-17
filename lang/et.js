@@ -88,6 +88,7 @@ export default {
     resetSearchLong: 'Puhasta otsinguväljad',
     table: 'Tabel',
     image: 'Pildid',
+    gallery: 'Galerii',
     containImages: 'Vältige piltide kärpimist',
     pagination: 'Kuva {value} kaupa',
     goBack: 'Tagasi otsingusse',

@@ -5,7 +5,7 @@ export const state = () => ({
   showSearchViewMap: false,
   showSearchViewForm: true,
   showInstitutionFilters: false,
-  listOfViews: ['table', 'image'],
+  listOfViews: ['table', 'image', 'gallery'],
 })
 
 export const actions = {
