@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="count > 0" flat>
+  <v-card v-if="items && items.length > 0" flat>
     <pagination
       v-if="count > 10"
       :paginate-by="options.itemsPerPage"
@@ -142,6 +142,12 @@ export default {
   created() {
     this.$emit('update', { options: { ...this.options } })
   },
+  beforeMount() {
+    window.addEventListener('keyup', this.handleKeyup)
+  },
+  beforeDestroy() {
+    window.removeEventListener('keyup', this.handleKeyup)
+  },
   methods: {
     updatePaginateBy(paginateBy) {
       this.$emit('update', {
@@ -159,6 +165,20 @@ export default {
 
     handleThumbnailClick(newIndex) {
       this.activeIndex = newIndex
+    },
+
+    handleKeyup(e) {
+      if (this.items?.length > 0) {
+        if (e.keyCode === 37) {
+          // ArrowLeft
+          if (this.activeIndex === 0) this.activeIndex = this.items.length - 1
+          else this.activeIndex -= 1
+        } else if (e.keyCode === 39) {
+          // ArrowRight
+          if (this.activeIndex === this.items.length - 1) this.activeIndex = 0
+          else this.activeIndex += 1
+        }
+      }
     },
   },
 }
