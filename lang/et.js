@@ -627,6 +627,7 @@ export default {
     scalebar: 'Skaalariba',
     imageNumber: 'Foto nr.',
     imagesetNumber: 'Pildiseeria nr.',
+    imagesetDescription: 'Pildiseeria kirjeldus',
     imagePlace: 'Koht, objekt',
     imagePeople: 'Inimesed pildil',
     imageLatitude: 'Pildi laiuskraad',

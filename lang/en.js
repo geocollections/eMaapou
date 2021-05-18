@@ -626,6 +626,7 @@ export default {
     scalebar: 'Scale bar',
     imageNumber: 'Photo no.',
     imagesetNumber: 'Imageset no.',
+    imagesetDescription: 'Imageset description',
     imagePlace: 'Place, subject',
     imagePeople: 'People in image',
     imageLatitude: 'Image latitude',
