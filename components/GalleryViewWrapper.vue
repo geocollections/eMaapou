@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card v-if="count > 0" flat>
     <pagination
       v-if="count > 10"
       :paginate-by="options.itemsPerPage"
@@ -14,18 +14,18 @@
         <v-carousel
           v-model="activeIndex"
           style="max-width: 1000px"
+          height="600"
           hide-delimiters
           hide-delimiter-background
-          class="rounded elevation-2 mx-auto"
+          class="rounded mx-auto gallery__v-carousel"
         >
           <v-carousel-item
             v-for="(item, index) in items"
             :key="index"
-            :src="`https://files.geocollections.info/medium/${item.uuid_filename}`"
             nuxt
             :to="localePath({ name: 'photo-id', params: { id: item.id } })"
-          >
-          </v-carousel-item>
+            :src="`https://files.geocollections.info/medium/${item.uuid_filename}`"
+          />
         </v-carousel>
 
         <div
@@ -176,5 +176,10 @@ export default {
   /* elevation-2 */
   /*box-shadow: 0 3px 1px -2px rgba(62, 163, 202, 0.4),*/
   /*  0 2px 2px 0 rgba(62, 163, 202, 0.28), 0 1px 5px 0 rgba(62, 163, 202, 0.22) !important;*/
+}
+
+/* Overriding default 'cover' setting in order to correctly show portrait images */
+.gallery__v-carousel >>> .v-carousel__item > .v-image__image--cover {
+  background-size: contain;
 }
 </style>
