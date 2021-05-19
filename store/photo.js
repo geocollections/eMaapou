@@ -34,7 +34,7 @@ const getDefaultState = () => {
           value: '',
           type: 'text',
           lookUpType: 'contains',
-          label: 'image.country',
+          label: 'image.countryCountyParish',
           fields: [
             'country',
             'country_en',
