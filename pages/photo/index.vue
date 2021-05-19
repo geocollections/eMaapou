@@ -44,6 +44,7 @@
           :items="items"
           :count="count"
           :options="options"
+          use-dynamic-headers
           @update="handleUpdate"
         />
 
@@ -77,6 +78,7 @@ import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
 import ImageViewWrapper from '~/components/ImageViewWrapper'
 import GalleryViewWrapper from '~/components/GalleryViewWrapper'
+import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 
 export default {
   components: {
@@ -88,6 +90,7 @@ export default {
     SearchViewMapWrapper,
     PageTitleWrapper,
   },
+  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('image.pageTitle'),
@@ -95,9 +98,9 @@ export default {
   },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('image', ['options', 'items', 'count']),
+    ...mapState('photo', ['options', 'items', 'count']),
     ...mapState('settings', ['listOfViews']),
-    ...mapFields('image', ['currentView']),
+    ...mapFields('photo', ['currentView']),
     mapMarkers() {
       if (this.items?.length > 0) {
         return this.items.reduce((filtered, item) => {
@@ -133,7 +136,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('image', ['searchImages']),
+    ...mapActions('photo', ['searchImages']),
     async handleUpdate(tableState) {
       await this.searchImages(tableState?.options)
     },

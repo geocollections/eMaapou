@@ -32,6 +32,7 @@ import LocalityTable from '~/components/tables/LocalityTable.vue'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
+import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 
 export default {
   components: {
@@ -41,6 +42,7 @@ export default {
     LocalityTable,
     LocalitySearchForm,
   },
+  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('locality.pageTitle'),

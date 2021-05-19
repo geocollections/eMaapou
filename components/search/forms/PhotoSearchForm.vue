@@ -30,10 +30,12 @@
     />
 
     <institution-search-filter
-      class="pt-3"
+      class="pt-1"
       :institution="institution"
       @change:institution="institution = $event"
     />
+
+    <extra-options class="pt-1" />
   </v-form>
 </template>
 
@@ -47,10 +49,12 @@ import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeTextField from '~/components/fields/RangeTextField'
+import ExtraOptions from '~/components/search/ExtraOptions'
 
 export default {
   name: 'PhotoSearchForm',
   components: {
+    ExtraOptions,
     RangeTextField,
     InstitutionSearchFilter,
     TextField,
@@ -59,8 +63,8 @@ export default {
     SearchButton,
   },
   computed: {
-    ...mapState('image', ['filters']),
-    ...mapFields('image', {
+    ...mapState('photo', ['filters']),
+    ...mapFields('photo', {
       locality: 'filters.byIds.locality.value',
       people: 'filters.byIds.people.value',
       tags: 'filters.byIds.tags.value',
@@ -77,7 +81,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('image', ['searchImages', 'resetImageFilters']),
+    ...mapActions('photo', ['searchImages', 'resetImageFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {
       this.searchImages()
