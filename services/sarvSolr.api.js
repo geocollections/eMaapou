@@ -101,6 +101,15 @@ export default ($axios) => ({
       count: response.count,
     }
   },
+
+  async getAllFieldNames(resource, params) {
+    const response = await $axios.$get(`raw_solr/${resource}/`, {
+      params,
+    })
+    return {
+      fields: response?.response,
+    }
+  },
 })
 
 const buildQueryParameter = (search) => {
