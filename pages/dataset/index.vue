@@ -18,6 +18,7 @@
         :items="items"
         :count="count"
         :options="options"
+        use-dynamic-headers
         @update="handleUpdate"
       />
     </template>
