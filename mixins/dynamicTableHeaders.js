@@ -21,7 +21,7 @@ export default {
       }
     )
     if (allFieldNames?.fields) {
-      await this.$store.dispatch(`tableHeaders/setAllFieldNames`, {
+      await this.$store.dispatch(`tableHeaders/setTableHeaders`, {
         module: this.stateModuleName,
         fields: allFieldNames?.fields.trim().split(','),
       })
