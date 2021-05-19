@@ -14,7 +14,7 @@
         <v-carousel
           v-model="activeIndex"
           style="max-width: 1000px"
-          height="600"
+          :height="carouselHeight"
           hide-delimiters
           hide-delimiter-background
           class="rounded mx-auto gallery__v-carousel"
@@ -133,6 +133,13 @@ export default {
       activeIndex: 0,
       imageSizes: ['small', 'medium', 'large', 'original'],
     }
+  },
+  computed: {
+    carouselHeight() {
+      if (this.$vuetify.breakpoint.xsOnly) return '35vh'
+      else if (this.$vuetify.breakpoint.smOnly) return '40vh'
+      else return '600px'
+    },
   },
   watch: {
     items() {
