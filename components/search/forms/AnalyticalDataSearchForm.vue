@@ -141,7 +141,7 @@
     <v-row no-gutters>
       <v-col cols="12">
         <institution-search-filter
-          class="pt-3"
+          class="pt-1"
           :institution="institution"
           @change:institution="institution = $event"
         />

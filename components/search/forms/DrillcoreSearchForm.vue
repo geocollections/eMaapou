@@ -15,10 +15,12 @@
     <range-text-field v-model="boxes" :label="$t(filters.byIds.boxes.label)" />
 
     <institution-search-filter
-      class="pt-3"
+      class="pt-1"
       :institution="institution"
       @change:institution="institution = $event"
     />
+
+    <extra-options class="pt-1" />
   </v-form>
 </template>
 
@@ -32,10 +34,12 @@ import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
+import ExtraOptions from '~/components/search/ExtraOptions'
 
 export default {
   name: 'DrillcoreSearchForm',
   components: {
+    ExtraOptions,
     InstitutionSearchFilter,
     TextField,
     RangeTextField,

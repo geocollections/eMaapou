@@ -79,13 +79,13 @@ export default {
   data() {
     return {
       headers: [
-        { text: this.$t('image.id'), value: 'id' },
-        { text: this.$t('image.number'), value: 'image_number' },
-        { text: this.$t('image.agent'), value: 'agent' },
-        { text: this.$t('image.date'), value: 'date' },
-        { text: this.$t('image.locality'), value: 'locality' },
-        { text: this.$t('image.imageObject'), value: 'image_object' },
-        { text: this.$t('image.tags'), value: 'tags' },
+        { text: this.$t('photo.id'), value: 'id' },
+        { text: this.$t('photo.number'), value: 'image_number' },
+        { text: this.$t('photo.agent'), value: 'agent' },
+        { text: this.$t('photo.date'), value: 'date' },
+        { text: this.$t('photo.locality'), value: 'locality' },
+        { text: this.$t('photo.imageObject'), value: 'image_object' },
+        { text: this.$t('photo.tags'), value: 'tags' },
       ],
     }
   },

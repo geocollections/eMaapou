@@ -6,7 +6,8 @@ export default {
       return table
     },
     stateModuleName() {
-      const table = this.getRouteBaseName()
+      let table = this.getRouteBaseName()
+      if (table === 'analytical_data') table = 'analyticalData'
       return table
     },
   },
@@ -23,7 +24,8 @@ export default {
     if (allFieldNames?.fields) {
       await this.$store.dispatch(`tableHeaders/setTableHeaders`, {
         module: this.stateModuleName,
-        fields: allFieldNames?.fields.trim().split(','),
+        rawFields: allFieldNames.fields.trim(),
+        fields: allFieldNames.fields.trim().split(','),
       })
     }
   },

@@ -34,6 +34,7 @@ import SiteTable from '~/components/tables/SiteTable.vue'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
+import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 
 export default {
   components: {
@@ -43,6 +44,7 @@ export default {
     SiteSearchForm,
     SiteTable,
   },
+  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('site.pageTitle'),

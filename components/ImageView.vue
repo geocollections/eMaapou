@@ -65,9 +65,9 @@
           </template>
 
           <span>
-            <b>{{ $t('image.id') }}: </b> {{ image.id }}<br />
+            <b>{{ $t('photo.id') }}: </b> {{ image.id }}<br />
             <span v-if="image.date_created || image.date_created_free">
-              <b>{{ $t('image.date') }}: </b>
+              <b>{{ $t('photo.date') }}: </b>
               <span v-if="image.date_created">{{
                 image.date_created.split('T')[0]
               }}</span>
@@ -75,12 +75,12 @@
               <br />
             </span>
             <span v-if="image.agent || image.author_free">
-              <b>{{ $t('image.author') }}: </b
+              <b>{{ $t('photo.author') }}: </b
               >{{ image.agent || image.author_free }}
               <br />
             </span>
             <span v-if="image.image_number">
-              <b>{{ $t('image.number') }}: </b>
+              <b>{{ $t('photo.number') }}: </b>
               {{ image.image_number }}
               <br />
             </span>

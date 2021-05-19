@@ -40,13 +40,35 @@ export default {
   name: 'ExtraOptions',
   computed: {
     ...mapState('tableHeaders', {
+      analysis(state) {
+        return state.analysis.tableHeaders
+      },
+      dataset(state) {
+        return state.dataset.tableHeaders
+      },
+      drillcore(state) {
+        return state.drillcore.tableHeaders
+      },
+      locality(state) {
+        return state.locality.tableHeaders
+      },
       photo(state) {
         return state.photo.tableHeaders
+      },
+      sample(state) {
+        return state.sample.tableHeaders
+      },
+      site(state) {
+        return state.site.tableHeaders
+      },
+      stratigraphy(state) {
+        return state.stratigraphy.tableHeaders
       },
     }),
     ...mapFields('settings', ['showExtraOptions']),
     stateModuleName() {
-      const table = this.getRouteBaseName()
+      let table = this.getRouteBaseName()
+      if (table === 'analytical_data') table = 'analyticalData'
       return table
     },
     allTableHeaders() {

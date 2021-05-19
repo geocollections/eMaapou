@@ -36,7 +36,7 @@
             <div
               v-if="items[activeIndex].agent || items[activeIndex].author_free"
             >
-              <b>{{ $t('image.author') }}: </b
+              <b>{{ $t('photo.author') }}: </b
               >{{ items[activeIndex].agent || items[activeIndex].author_free }}
             </div>
             <div
@@ -45,7 +45,7 @@
                 items[activeIndex].date_created_free
               "
             >
-              <b>{{ $t('image.date') }}: </b>
+              <b>{{ $t('photo.date') }}: </b>
               <span v-if="items[activeIndex].date_created">{{
                 items[activeIndex].date_created.split('T')[0]
               }}</span>

@@ -45,10 +45,12 @@
     <!--    />-->
 
     <institution-search-filter
-      class="pt-3"
+      class="pt-1"
       :institution="institution"
       @change:institution="institution = $event"
     />
+
+    <extra-options class="pt-1" />
   </v-form>
 </template>
 
@@ -64,10 +66,12 @@ import RangeSliderField from '~/components/fields/RangeSliderField'
 import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import ExtraOptions from '~/components/search/ExtraOptions'
 
 export default {
   name: 'SampleSearchForm',
   components: {
+    ExtraOptions,
     InstitutionSearchFilter,
     AutocompleteField,
     TextField,

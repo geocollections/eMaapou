@@ -8,6 +8,8 @@
     <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
     <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
     <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+
+    <extra-options class="pt-1" />
   </v-form>
 </template>
 
@@ -19,10 +21,12 @@ import TextField from '../../fields/TextField.vue'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import ExtraOptions from '~/components/search/ExtraOptions'
 
 export default {
   name: 'SiteSearchForm',
   components: {
+    ExtraOptions,
     TextField,
     GlobalSearch,
     ResetSearchButton,

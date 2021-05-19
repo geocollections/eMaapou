@@ -23,6 +23,8 @@
       v-model="reference"
       :label="$t(filters.byIds.reference.label)"
     />
+
+    <extra-options class="pt-1" />
   </v-form>
 </template>
 
@@ -36,10 +38,12 @@ import SearchButton from '../SearchButton.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import ExtraOptions from '~/components/search/ExtraOptions'
 
 export default {
   name: 'LocalitySearchForm',
   components: {
+    ExtraOptions,
     TextField,
     GlobalSearch,
     ResetSearchButton,

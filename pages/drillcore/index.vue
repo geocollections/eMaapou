@@ -34,6 +34,7 @@ import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
+import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 
 export default {
   components: {
@@ -43,6 +44,7 @@ export default {
     DrillcoreSearchForm,
     DrillcoreTable,
   },
+  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('drillcore.pageTitle'),

@@ -93,7 +93,7 @@ export default {
   mixins: [dynamicTableHeaders],
   head() {
     return {
-      title: this.$t('image.pageTitle'),
+      title: this.$t('photo.pageTitle'),
     }
   },
   computed: {

@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="headers"
+    :headers="useDynamicHeaders ? dynamicHeaders : headers"
     :items="items"
     :options="options"
     :count="count"
@@ -20,6 +20,7 @@
 
 <script>
 import { round } from 'lodash'
+import { mapState } from 'vuex'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   name: 'DrillcoreTable',
@@ -46,6 +47,10 @@ export default {
         sortDesc: [],
       }),
     },
+    useDynamicHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -60,6 +65,22 @@ export default {
         { text: this.$t('drillcore.acronym'), value: 'acronym' },
       ],
     }
+  },
+  computed: {
+    ...mapState('tableHeaders', {
+      tableHeaders(state) {
+        return state.drillcore.tableHeaders
+      },
+    }),
+
+    dynamicHeaders() {
+      return this.tableHeaders.reduce((prev, item) => {
+        if (item.show) {
+          prev.push({ ...item, text: this.$t(item.text) })
+        }
+        return prev
+      }, [])
+    },
   },
   methods: {
     round,
