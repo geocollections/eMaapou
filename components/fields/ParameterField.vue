@@ -113,7 +113,7 @@ export default {
   methods: {
     parseInput(input) {
       if (isEmpty(input)) return null
-      else return parseInt(input)
+      else return parseFloat(input)
     },
     handleParameter(parameter) {
       this.$emit('input', {
