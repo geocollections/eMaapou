@@ -289,9 +289,10 @@ export const mutations = {
     }
   },
   UPDATE_ACTIVE_LIST_PARAMETERS_FILTERS(state, newFilters) {
+    const byIds = { ...state.filters.byIds, ...newFilters }
     state.filters = {
-      byIds: { ...state.filters.byIds, ...newFilters },
-      allIds: Object.keys(state.filters.byIds),
+      byIds,
+      allIds: Object.keys(byIds),
     }
   },
   REMOVE_ACTIVE_LIST_PARAMETER_FILTER(state, filterName) {
