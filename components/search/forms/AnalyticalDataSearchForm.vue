@@ -196,7 +196,7 @@ export default {
         'analysis_parameter',
         {
           defaultParams: {
-            fq: 'id_l:[2 TO *]', // Because first one is N/A
+            fq: 'is_null:false',
           },
         }
       )

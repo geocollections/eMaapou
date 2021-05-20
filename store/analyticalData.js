@@ -391,12 +391,12 @@ export const actions = {
     commit('SET_SHOWN_ACTIVE_LIST_PARAMETERS', list)
   },
   initActiveListParameters({ commit, dispatch }, parameters) {
-    // CaO, MgO, SiO, Al2O3
+    // CaO, MgO, SiO2, Al2O3
     const DEFAULT_PARAMETERS = [
-      parameters[24],
-      parameters[109],
-      parameters[163],
-      parameters[1],
+      parameters.find((param) => param.id === 'Ca_pct'),
+      parameters.find((param) => param.id === 'MgO_pct'),
+      parameters.find((param) => param.id === 'SiO2_pct'),
+      parameters.find((param) => param.id === 'Al2O3_pct'),
     ]
 
     commit('INIT_ACTIVE_LIST_PARAMETERS', DEFAULT_PARAMETERS)
