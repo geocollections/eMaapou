@@ -274,11 +274,7 @@ export const mutations = {
     state.activeListParameters.splice(index, 1)
   },
   UPDATE_ACTIVE_LIST_PARAMETERS(state, payload) {
-    state.activeListParameters.splice(
-      payload.indexToReplace,
-      1,
-      payload.parameter
-    )
+    state.activeListParameters.splice(payload.index, 1, payload.parameter)
   },
   UPDATE_ACTIVE_PARAM(state, payload) {
     if (state.filters.byIds?.[payload.keyToReplace]) {
