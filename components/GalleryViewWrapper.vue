@@ -191,14 +191,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .active-thumbnail {
   /* elevation-4 */
   /*box-shadow: 0 2px 4px -1px rgba(1, 87, 155, 0.8),*/
   /*  0 4px 5px 0 rgba(1, 87, 155, 0.56), 0 1px 10px 0 rgba(1, 87, 155, 0.44) !important;*/
 
-  box-shadow: 0 2px 4px -1px rgba(61, 134, 97, 0.8),
-    0 2px 5px 0 rgba(61, 134, 97, 0.56), 0 1px 5px 0 rgba(61, 134, 97, 0.44) !important;
+  box-shadow: 0 2px 4px -1px rgba(48, 145, 181, 0.8),
+    0 2px 5px 0 rgba(48, 145, 181, 0.56), 0 1px 5px 0 rgba(48, 145, 181, 0.44) !important;
 
   /* elevation-2 */
   /*box-shadow: 0 3px 1px -2px rgba(62, 163, 202, 0.4),*/

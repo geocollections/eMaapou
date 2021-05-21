@@ -210,7 +210,7 @@ export default {
 .gradient-background {
   background: linear-gradient(
     320deg,
-    rgba(62, 163, 202, 1),
+    var(--v-header-base),
     rgba(0, 0, 0, 1)
   ) !important;
 }

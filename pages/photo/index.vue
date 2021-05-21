@@ -33,7 +33,7 @@
             :key="entity"
             :label="$t(`common.${entity}`)"
             :value="entity"
-            color="light-blue darken-1"
+            color="header"
           ></v-radio>
         </v-radio-group>
 

@@ -5,7 +5,7 @@
         v-model="containImages"
         class="mt-0"
         hide-details
-        color="light-blue"
+        color="header"
         :label="$t('common.containImages')"
       />
     </div>
@@ -20,7 +20,7 @@
         md="3"
         lg="2"
       >
-        <v-tooltip bottom color="light-blue" z-index="51000" max-width="250">
+        <v-tooltip bottom color="header" z-index="51000" max-width="250">
           <template #activator="{ on }">
             <v-card
               flat

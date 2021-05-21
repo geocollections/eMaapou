@@ -18,7 +18,7 @@
           'font-smaller': $vuetify.breakpoint.xsOnly,
         }"
         style="font-size: 0.75rem"
-        color="light-blue"
+        color="header"
         circle
         :length="Math.ceil(count / paginateBy)"
         :total-visible="
