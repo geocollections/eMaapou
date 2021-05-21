@@ -50,7 +50,7 @@ const getDefaultState = () => {
           value: [null, null],
           label: 'photo.date',
           placeholders: ['boxes.min', 'boxes.max'],
-          fields: ['date_created'],
+          fields: ['date_created', 'date_created_free_year'],
         },
         dateFree: {
           value: '',
