@@ -1,5 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
-
+// import colors from 'vuetify/es5/util/colors'
 // import axios from 'axios'
 
 export default {
@@ -130,13 +129,14 @@ export default {
           accent: '#327b96',
           success2: '#7bbc9a',
           'emp-main': '#7bbc9a',
-          'emp-stratigraphy': '#cb8c37',
-          'emp-analysis': '#3091b5',
+          'emp-stratigraphy': '#accb95',
+          'emp-analysis': '#7ea3ca',
+          'emp-dataset': '#e49e5c',
           'emp-sample': '#bc7b7b',
           'emp-drillcore': '#8f7e9f',
-          'emp-locality': '#7bbc9a',
-          'emp-site': '#8ba56c',
-          'emp-photo': '#8c6d4e',
+          'emp-locality': '#c78a6e',
+          'emp-site': '#7bbc9a',
+          'emp-photo': '#ab9f93',
         },
         light: {
           primary: '#7c8996',
@@ -149,13 +149,14 @@ export default {
           accent: '#327b96',
           success2: '#7bbc9a',
           'emp-main': '#7bbc9a',
-          'emp-stratigraphy': '#cb8c37',
-          'emp-analysis': '#3091b5',
+          'emp-stratigraphy': '#accb95',
+          'emp-analysis': '#7ea3ca',
+          'emp-dataset': '#e49e5c',
           'emp-sample': '#bc7b7b',
           'emp-drillcore': '#8f7e9f',
-          'emp-locality': '#7bbc9a',
-          'emp-site': '#8ba56c',
-          'emp-photo': '#8c6d4e',
+          'emp-locality': '#c78a6e',
+          'emp-site': '#7bbc9a',
+          'emp-photo': '#ab9f93',
         },
       },
     },

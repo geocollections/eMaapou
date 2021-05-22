@@ -14,7 +14,6 @@
 
     <template #result>
       <search-view-map-wrapper
-        locality-overlay
         use-custom-markers
         :items="mapMarkers"
         class="mb-6"

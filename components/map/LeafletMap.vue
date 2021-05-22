@@ -269,7 +269,7 @@ export default {
           {
             id: 'locs',
             isWMS: true,
-            name: 'Localities',
+            name: 'Lokaliteedid / Localities',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary',
             styles: 'point',
@@ -277,9 +277,9 @@ export default {
             transparent: true,
             zIndex: 30,
             options: {
-              maxNativeZoom: 18,
-              minZoom: 13,
-              maxZoom: 21,
+              // maxNativeZoom: 18,
+              // minZoom: 13,
+              // maxZoom: 21,
               attribution:
                 "Localities: <a  href='https://geoloogia.info'>SARV</a>",
               format: 'image/png',
@@ -289,36 +289,36 @@ export default {
               zIndex: 30,
             },
           },
-          {
-            id: 'locs_tms',
-            name: 'Localities (overview)',
-            url:
-              'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
-            // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: this.localityOverlay,
-            zIndex: 30,
-            options: {
-              maxNativeZoom: 12,
-              maxZoom: 12,
-              attribution:
-                "Localities: <a  href='https://geoloogia.info'>SARV</a>",
-              tms: true,
-              detectRetina: true,
-              zIndex: 30,
-            },
-          },
+          // {
+          //   id: 'locs_tms',
+          //   name: 'Localities (overview)',
+          //   url:
+          //     'https://gis.geocollections.info/geoserver/gwc/service/tms/1.0.0/sarv:locality_summary@EPSG3857@png/{z}/{x}/{-y}.png',
+          //   // 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
+          //   visible: this.localityOverlay,
+          //   zIndex: 30,
+          //   options: {
+          //     maxNativeZoom: 12,
+          //     maxZoom: 12,
+          //     attribution:
+          //       "Localities: <a  href='https://geoloogia.info'>SARV</a>",
+          //     tms: true,
+          //     detectRetina: true,
+          //     zIndex: 30,
+          //   },
+          // },
           {
             id: 'drillcores',
             isWMS: true,
-            name: 'Boreholes',
+            name: 'Puursüdamikud / Drillcores',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_drillcores',
             visible: this.boreholeOverlay,
             transparent: true,
             zIndex: 40,
             options: {
-              maxNativeZoom: 18,
-              maxZoom: 21,
+              // maxNativeZoom: 18,
+              // maxZoom: 21,
               attribution:
                 "Boreholes: <a  href='https://geoloogia.info'>SARV</a>",
               format: 'image/png',
@@ -331,15 +331,15 @@ export default {
           {
             id: 'sites',
             isWMS: true,
-            name: 'Sites',
+            name: 'Uuringupunktid / Sites',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:site_summary',
             visible: this.siteOverlay,
             transparent: true,
             zIndex: 50,
             options: {
-              maxNativeZoom: 18,
-              maxZoom: 21,
+              // maxNativeZoom: 18,
+              // maxZoom: 21,
               attribution: "Sites: <a  href='https://geoloogia.info'>SARV</a>",
               format: 'image/png',
               tiled: true,

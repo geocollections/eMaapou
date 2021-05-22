@@ -16,11 +16,9 @@
       <search-view-map-wrapper
         site-overlay
         locality-overlay
-        borehole-overlay
         :items="items"
         class="mb-6"
       />
-
       <analytical-data-table
         :show-search="false"
         :items="items"

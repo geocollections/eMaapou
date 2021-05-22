@@ -159,18 +159,16 @@ export default {
     titleColor() {
       let name = this.getRouteBaseName()
       if (name.includes('-')) name = name.split('-')[0]
-      if (
-        name === 'analysis' ||
-        name === 'analytical_data' ||
-        name === 'dataset'
-      )
+      if (name === 'analysis' || name === 'analytical_data')
         return 'emp-analysis'
+      if (name === 'dataset') return 'emp-dataset'
       if (name === 'preparation' || name === 'sample') return 'emp-sample'
-      if (name === 'area' || name === 'locality' || name === 'site')
-        return 'emp-main'
+      if (name === 'area') return 'emp-main'
+      if (name === 'locality') return 'emp-locality'
+      if (name === 'site') return 'emp-site'
       if (name === 'drillcore' || name === 'drillcore_box')
         return 'emp-drillcore'
-      if (name === 'file' || name === 'photo') return 'emp-sample'
+      if (name === 'file' || name === 'photo') return 'emp-photo' // #bfbe8b or #8c6d4e
       if (name === 'stratigraphy') return 'emp-stratigraphy'
       return 'emp-main'
     },

@@ -420,7 +420,7 @@ export default {
     coordy: 'Y (L-EST, m)',
     elevation: 'Z (m)',
     depth: 'Sügavus / paksus (m)',
-    description: 'Arvamus',
+    description: 'Kirjeldus',
     elevationAccuracy: 'Kõrguse täpsus',
     locality: 'Asukoht',
     attachments: 'Failid ({number})',
