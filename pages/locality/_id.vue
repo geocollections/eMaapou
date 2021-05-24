@@ -135,23 +135,25 @@
                   })
                 "
               />
-              <link-data-row
-                v-if="drillcore"
-                nuxt
-                :title="$t('locality.drillcore')"
-                :value="
-                  $translate({
-                    et: drillcore.drillcore,
-                    en: drillcore.drillcore_en,
-                  })
-                "
-                :href="
-                  localePath({
-                    name: 'drillcore-id',
-                    params: { id: drillcore.id },
-                  })
-                "
-              />
+
+              <!-- NOTE: #466 added same link as a button -->
+              <!--              <link-data-row-->
+              <!--                v-if="drillcore"-->
+              <!--                nuxt-->
+              <!--                :title="$t('locality.drillcore')"-->
+              <!--                :value="-->
+              <!--                  $translate({-->
+              <!--                    et: drillcore.drillcore,-->
+              <!--                    en: drillcore.drillcore_en,-->
+              <!--                  })-->
+              <!--                "-->
+              <!--                :href="-->
+              <!--                  localePath({-->
+              <!--                    name: 'drillcore-id',-->
+              <!--                    params: { id: drillcore.id },-->
+              <!--                  })-->
+              <!--                "-->
+              <!--              />-->
 
               <data-row
                 v-if="locality.date_added"
@@ -178,11 +180,33 @@
         <v-btn
           v-if="analysisResultsCount > 0"
           small
-          color="accent"
-          class="mt-2 lighten-2"
+          color="emp-analysis"
+          class="mt-2 white--text"
           @click="goToAnalyticalData"
           >{{ $t('locality.linkToAnalyticalData') }}
           <v-icon right>mdi-chart-scatter-plot</v-icon>
+        </v-btn>
+
+        <v-btn
+          v-if="drillcore"
+          small
+          color="emp-drillcore"
+          class="mt-2 white--text"
+          @click="
+            $router.push(
+              localePath({
+                name: 'drillcore-id',
+                params: { id: drillcore.id },
+              })
+            )
+          "
+          >{{
+            $translate({
+              et: drillcore.drillcore,
+              en: drillcore.drillcore_en,
+            })
+          }}
+          <v-icon right>mdi-screw-machine-flat-top</v-icon>
         </v-btn>
       </v-card-text>
     </template>
