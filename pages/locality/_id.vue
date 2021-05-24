@@ -287,7 +287,8 @@ export default {
         {
           defaultParams: {
             fq: `locality_id:${locality.id} AND specimen_image_attachment:2`,
-            sort: 'date_created desc,date_created_free desc,stars desc,id desc',
+            sort:
+              'date_created_dt desc,date_created_free desc,stars desc,id desc',
           },
         }
       )
