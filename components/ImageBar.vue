@@ -8,7 +8,7 @@
   -->
   <v-card class="mt-6 mx-4 d-flex align-center" style="overflow-x: auto" flat>
     <div v-for="(item, index) in images" :key="index" class="mx-3 mb-3">
-      <v-tooltip bottom>
+      <v-tooltip bottom color="header">
         <template #activator="{ on, attrs }">
           <slot name="image" :item="item" :on="on" :attrs="attrs">
             <v-hover v-slot="{ hover }">
