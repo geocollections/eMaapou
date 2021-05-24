@@ -176,6 +176,7 @@
         </v-simple-table>
 
         <v-btn
+          v-if="analysisResultsCount > 0"
           small
           color="accent"
           class="mt-2 lighten-2"
@@ -435,6 +436,10 @@ export default {
     images() {
       // return this.attachmentsOutcrop.concat(this.attachments)
       return this.attachments
+    },
+
+    analysisResultsCount() {
+      return this.tabs?.find((tab) => tab.id === 'graphs')?.count
     },
   },
   methods: {
