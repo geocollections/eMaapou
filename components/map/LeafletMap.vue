@@ -414,10 +414,6 @@ export default {
 
         // HACK: This fixes initial bounds problem in search view (markers out of bounds)
         this.fitBounds()
-        this.$refs.map.mapObject.setView(
-          this.$refs.map.center,
-          this.$refs.map.zoom
-        )
       }
     },
     activeOverlays(newVal) {
