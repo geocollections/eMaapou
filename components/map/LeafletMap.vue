@@ -410,7 +410,6 @@ export default {
     invalidateSize(newVal) {
       if (newVal) {
         this.$refs.map.mapObject.invalidateSize()
-        // Fixes tooltip perminent positions when opeing map
 
         // HACK: This fixes initial bounds problem in search view (markers out of bounds)
         this.fitBounds()
