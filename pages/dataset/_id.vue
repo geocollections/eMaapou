@@ -15,9 +15,11 @@
             <tbody>
               <data-row
                 :title="$t('dataset.creators')"
-                :value="dataset.owner_txt || dataset.owner__agent"
+                :value="
+                  dataset.creators || dataset.owner_txt || dataset.owner__agent
+                "
               />
-              <data-row :title="$t('dataset.date')" :value="dataset.date_txt" />
+              <!-- <data-row :title="$t('dataset.date')" :value="dataset.date_txt" /> -->
               <data-row
                 :title="$t('dataset.description')"
                 :value="
@@ -26,6 +28,47 @@
                     en: dataset.description_en,
                   })
                 "
+              />
+              <data-row
+                :title="$t('dataset.abstract')"
+                :value="dataset.abstract"
+              />
+              <data-row
+                :title="$t('dataset.resourceType')"
+                :value="dataset.resource_type__value"
+              />
+              <data-row
+                :title="$t('dataset.resourceTopic')"
+                :value="dataset.resource"
+              />
+              <data-row
+                :title="$t('dataset.publisher')"
+                :value="dataset.publisher"
+              />
+              <data-row
+                :title="$t('dataset.publicationYear')"
+                :value="dataset.publication_year"
+              />
+              <data-row
+                :title="$t('dataset.subjects')"
+                :value="dataset.subjects"
+              />
+              <data-row
+                :title="$t('dataset.language')"
+                :value="
+                  $translate({
+                    et: dataset.language__value,
+                    en: dataset.language__value_en,
+                  })
+                "
+              />
+              <data-row
+                :title="$t('dataset.methods')"
+                :value="dataset.methods"
+              />
+              <data-row
+                :title="$t('dataset.version')"
+                :value="dataset.version"
               />
               <link-data-row
                 v-if="doi"
