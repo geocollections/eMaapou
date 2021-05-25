@@ -209,6 +209,11 @@ export default {
     reference: 'Reference',
     remarks: 'Remarks',
   },
+  datasetAuthor: {
+    name: 'Name',
+    affiliation: 'Affiliation',
+    type: 'Type',
+  },
   drillcore: {
     pageTitle: 'Drillcores search',
     id: 'ID',
@@ -921,6 +926,7 @@ export default {
     methods: 'Methods',
     abstract: 'Abstract',
     locality: 'Locality',
+    authors: 'Authors ({number})',
   },
   reference: {
     id: 'ID',

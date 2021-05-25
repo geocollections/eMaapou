@@ -95,6 +95,24 @@ export const ATTACHMENT = {
   },
 }
 
+export const DATASET_AUTHORS = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'id',
+    dataset: (locale) => 'dataset',
+    agent: (locale) => 'agent',
+    affiliation: (locale) => 'affiliation',
+    name: (locale) => 'name',
+    remarks: (locale) => 'remarks',
+    type: (locale) => 'agent_type__value',
+  },
+}
+
 export const IMAGE = {
   options: {
     page: 1,

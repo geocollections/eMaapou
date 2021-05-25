@@ -286,6 +286,14 @@ export default {
           count: 0,
           props: { dataset: dataset.id },
         },
+        {
+          id: 'dataset_author',
+          table: 'dataset_author',
+          routeName: 'dataset-id-authors',
+          title: 'dataset.authors',
+          count: 0,
+          props: { dataset: dataset.id },
+        },
       ]
 
       if (locations.length === 1) {

@@ -210,6 +210,11 @@ export default {
     reference: 'Viide',
     remarks: 'Lisainfo',
   },
+  datasetAuthor: {
+    name: 'Nimi',
+    affiliation: 'Kuuluvus',
+    type: 'Tüüp',
+  },
   drillcore: {
     pageTitle: 'Puursüdamike otsing',
     id: 'ID',
@@ -922,6 +927,7 @@ export default {
     methods: 'Meetodid',
     abstract: 'Abstrakt',
     locality: 'Lokaliteet',
+    authors: 'Autorid ({number})',
   },
   reference: {
     id: 'ID',
