@@ -1,4 +1,5 @@
 import { debounce } from 'lodash'
+import XLSX from 'xlsx'
 
 export default {
   props: {
@@ -40,6 +41,20 @@ export default {
   methods: {
     handleChange(options) {
       this.$emit('update', { options, search: this.search })
+    },
+    handleExport() {
+      // const fields = this.headers.map((header) => {
+      //   return header.value
+      // })
+      try {
+        const ws = XLSX.utils.json_to_sheet(this.items)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, 'Export')
+        console.log(ws)
+        XLSX.writeFile(wb, 'export.csv', { bookType: 'csv' })
+      } catch (err) {
+        console.error(err)
+      }
     },
     handleSearch: debounce(function () {
       const options = { ...this.options, page: 1 }

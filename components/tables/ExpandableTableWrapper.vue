@@ -28,6 +28,11 @@
             @input="handleSearch"
           ></v-text-field>
         </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col class="px-3" align-self="center">
+          <v-btn color="primary" @click="handleExport()"> EXPORT </v-btn>
+        </v-col>
         <v-col class="pa-0">
           <v-data-footer
             style="border: none"
