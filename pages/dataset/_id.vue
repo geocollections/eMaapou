@@ -79,8 +79,24 @@
               <link-data-row
                 v-if="reference"
                 :title="$t('dataset.reference')"
-                :value="reference.reference"
-                :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
+                :value="dataset.reference__reference"
+                :href="`https://kirjandus.geoloogia.info/reference/${dataset.reference__id}`"
+              />
+              <link-data-row
+                :title="$t('dataset.locality')"
+                :value="
+                  $translate({
+                    et: dataset.locality__locality,
+                    en: dataset.locality__locality_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'locality-id',
+                    params: { id: dataset.locality },
+                  })
+                "
               />
               <data-row
                 :title="$t('dataset.copyright')"

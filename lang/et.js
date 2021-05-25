@@ -921,6 +921,7 @@ export default {
     subjects: 'Märksõnad',
     methods: 'Meetodid',
     abstract: 'Abstrakt',
+    locality: 'Lokaliteet',
   },
   reference: {
     id: 'ID',

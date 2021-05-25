@@ -920,6 +920,7 @@ export default {
     subjects: 'Subjects',
     methods: 'Methods',
     abstract: 'Abstract',
+    locality: 'Locality',
   },
   reference: {
     id: 'ID',
