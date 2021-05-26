@@ -55,17 +55,24 @@ export default {
       })
       return filteredItems
     },
+    removeSortIndicators(table) {
+      const tableCopy = table.cloneNode(true)
+      const sortIndicators = tableCopy.querySelectorAll(
+        'thead > tr > th > .v-data-table-header__sort-badge'
+      )
+      sortIndicators.forEach((indicator) => {
+        indicator.parentElement.removeChild(indicator)
+      })
+      return tableCopy
+    },
+    createWorkbook(table) {
+      const tableCopy = this.removeSortIndicators(table)
+      const wb = XLSX.utils.table_to_book(tableCopy)
+      return wb
+    },
     handleExportCsv() {
       try {
-        const tableCopy = document.querySelector('#table table').cloneNode(true)
-        const children = tableCopy.querySelectorAll(
-          'thead > tr > th > .v-data-table-header__sort-badge'
-        )
-        children.forEach((child) => {
-          child.parentElement.removeChild(child)
-        })
-
-        const wb = XLSX.utils.table_to_book(tableCopy)
+        const wb = this.createWorkbook(document.querySelector('#table table'))
 
         XLSX.writeFile(wb, 'export.csv', { bookType: 'csv' })
       } catch (err) {
@@ -74,15 +81,7 @@ export default {
     },
     handleExportExcel() {
       try {
-        const tableCopy = document.querySelector('#table table').cloneNode(true)
-        const children = tableCopy.querySelectorAll(
-          'thead > tr > th > .v-data-table-header__sort-badge'
-        )
-        children.forEach((child) => {
-          child.parentElement.removeChild(child)
-        })
-
-        const wb = XLSX.utils.table_to_book(tableCopy)
+        const wb = this.createWorkbook(document.querySelector('#table table'))
 
         XLSX.writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
       } catch (err) {
