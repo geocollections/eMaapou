@@ -416,7 +416,6 @@ export default {
     },
     activeOverlays(newVal) {
       if (document.getElementById('map')) {
-        console.log(this.checkableLayers)
         if (Object.keys(this.checkableLayers).some((el) => newVal.includes(el)))
           document.getElementById('map').classList.add('cursor-crosshair')
         else document.getElementById('map').classList.remove('cursor-crosshair')
