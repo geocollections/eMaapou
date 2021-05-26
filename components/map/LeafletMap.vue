@@ -17,6 +17,8 @@
         @ready="fitBounds"
         @click="handleClick"
       >
+        <l-draw-toolbar position="topleft" />
+
         <l-control-layers ref="layer-control" :auto-z-index="false" />
         <l-control-fullscreen position="topleft" />
         <l-control-scale
@@ -537,5 +539,9 @@ export default {
 
 .cursor-crosshair:active {
   cursor: grabbing;
+}
+
+.leaflet-draw-toolbar {
+  padding-left: unset;
 }
 </style>
