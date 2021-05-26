@@ -1,10 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
-        :ids="ids"
-        :title="$translate({ et: dataset.name, en: dataset.name_en })"
-      />
+      <prev-next-nav-title :ids="ids" :title="dataset.title" />
     </template>
 
     <template #column-left>
@@ -13,30 +10,26 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
+              <data-row :title="$t('dataset.title')" :value="dataset.title" />
+              <data-row
+                :title="$t('dataset.titleTranslated')"
+                :value="dataset.title_translated"
+              />
+              <data-row
+                :title="$t('dataset.titleAlt')"
+                :value="dataset.title_alternative"
+              />
               <data-row
                 :title="$t('dataset.creators')"
                 :value="
                   dataset.creators || dataset.owner_txt || dataset.owner__agent
                 "
               />
-              <!-- <data-row :title="$t('dataset.date')" :value="dataset.date_txt" /> -->
               <data-row
-                :title="$t('dataset.description')"
-                :value="
-                  $translate({
-                    et: dataset.description,
-                    en: dataset.description_en,
-                  })
-                "
+                :title="$t('dataset.publicationYear')"
+                :value="dataset.publication_year"
               />
-              <data-row
-                :title="$t('dataset.abstract')"
-                :value="dataset.abstract"
-              />
-              <data-row
-                :title="$t('dataset.resourceType')"
-                :value="dataset.resource_type__value"
-              />
+              <data-row :title="$t('dataset.date')" :value="dataset.date" />
               <data-row
                 :title="$t('dataset.resourceTopic')"
                 :value="dataset.resource"
@@ -44,10 +37,6 @@
               <data-row
                 :title="$t('dataset.publisher')"
                 :value="dataset.publisher"
-              />
-              <data-row
-                :title="$t('dataset.publicationYear')"
-                :value="dataset.publication_year"
               />
               <data-row
                 :title="$t('dataset.subjects')"
@@ -61,6 +50,10 @@
                     en: dataset.language__value_en,
                   })
                 "
+              />
+              <data-row
+                :title="$t('dataset.abstract')"
+                :value="dataset.abstract"
               />
               <data-row
                 :title="$t('dataset.methods')"
