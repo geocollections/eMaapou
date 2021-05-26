@@ -386,10 +386,9 @@ export default {
 
     checkableLayers() {
       const checkableLayerNames = [
-        'Boreholes',
-        'Sites',
-        'Localities',
-        'Localities (overview)',
+        'Lokaliteedid / Localities',
+        'Puursüdamikud / Drillcores',
+        'Uuringupunktid / Sites',
       ]
 
       return this.$refs['layer-control'].mapObject._layers.reduce(
@@ -417,6 +416,7 @@ export default {
     },
     activeOverlays(newVal) {
       if (document.getElementById('map')) {
+        console.log(this.checkableLayers)
         if (Object.keys(this.checkableLayers).some((el) => newVal.includes(el)))
           document.getElementById('map').classList.add('cursor-crosshair')
         else document.getElementById('map').classList.remove('cursor-crosshair')
@@ -485,7 +485,7 @@ export default {
         const wmsResponse = await this.$services.geoserver.getWMSData({
           QUERY_LAYERS: this.buildQueryLayers(),
           LAYERS:
-            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+            'sarv:locality_summary,sarv:locality_drillcores,sarv:site_summary',
           // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
           BBOX: bbox,
           // X: Math.floor(event.layerPoint.x),
@@ -519,15 +519,12 @@ export default {
 
     buildQueryLayers() {
       const queryLayers = []
-      if (this.activeOverlays.includes('Sites'))
+      if (this.activeOverlays.includes('Uuringupunktid / Sites'))
         queryLayers.push('sarv:site_summary')
-      if (this.activeOverlays.includes('Boreholes'))
+      if (this.activeOverlays.includes('Puursüdamikud / Drillcores'))
         queryLayers.push('sarv:locality_drillcores')
-      if (
-        this.activeOverlays.includes('Localities') ||
-        this.activeOverlays.includes('Localities (overview)')
-      )
-        queryLayers.push('sarv:locality_summary1')
+      if (this.activeOverlays.includes('Lokaliteedid / Localities'))
+        queryLayers.push('sarv:locality_summary')
       return queryLayers.join(',')
     },
   },
