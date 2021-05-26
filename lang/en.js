@@ -93,6 +93,8 @@ export default {
     goBack: 'Back to search',
     extraOptions: 'Extra options',
     tableHeaders: 'Table headers',
+    clipboard: 'Copy to clipboard',
+    export: 'Export',
   },
   link: {
     sarvAPI: 'Public API',

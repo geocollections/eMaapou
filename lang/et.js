@@ -94,6 +94,8 @@ export default {
     goBack: 'Tagasi otsingusse',
     extraOptions: 'Lisavõimalused',
     tableHeaders: 'Tabeli päised',
+    clipboard: 'Kopeeri lõikelauale',
+    export: 'Eksport',
   },
   link: {
     sarvAPI: 'Avalik API',

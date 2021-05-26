@@ -42,19 +42,66 @@ export default {
     handleChange(options) {
       this.$emit('update', { options, search: this.search })
     },
-    handleExport() {
-      // const fields = this.headers.map((header) => {
-      //   return header.value
-      // })
+    filterItemsByKeys(items, keys) {
+      const filteredItems = items.map((item) => {
+        const res = {}
+
+        Object.keys(item).forEach((key) => {
+          if (keys.includes(key)) {
+            res[key] = item[key]
+          }
+        })
+        return res
+      })
+      return filteredItems
+    },
+    handleExportCsv() {
       try {
-        const ws = XLSX.utils.json_to_sheet(this.items)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, ws, 'Export')
-        console.log(ws)
+        const wb = XLSX.utils.table_to_book(
+          document.querySelector('#table table')
+        )
         XLSX.writeFile(wb, 'export.csv', { bookType: 'csv' })
       } catch (err) {
         console.error(err)
       }
+    },
+    handleExportExcel() {
+      try {
+        const wb = XLSX.utils.table_to_book(
+          document.querySelector('#table table')
+        )
+
+        XLSX.writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    handleClipboard() {
+      const el = document
+        .getElementById('table')
+        .getElementsByTagName('table')[0]
+
+      const body = document.body
+      let range
+      let sel
+      if (document.createRange && window.getSelection) {
+        range = document.createRange()
+        sel = window.getSelection()
+        sel.removeAllRanges()
+        try {
+          range.selectNodeContents(el)
+          sel.addRange(range)
+        } catch (e) {
+          range.selectNode(el)
+          sel.addRange(range)
+        }
+      } else if (body.createTextRange) {
+        range = body.createTextRange()
+        range.moveToElementText(el)
+        range.select()
+      }
+      document.execCommand('Copy')
+      sel.removeAllRanges()
     },
     handleSearch: debounce(function () {
       const options = { ...this.options, page: 1 }

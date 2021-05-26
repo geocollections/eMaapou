@@ -30,8 +30,34 @@
         </v-col>
       </v-row>
       <v-row no-gutters>
-        <v-col class="px-3" align-self="center">
-          <v-btn color="primary" @click="handleExport()"> EXPORT </v-btn>
+        <v-col cols="auto" class="px-3" align-self="center">
+          <v-menu transition="slide-y-transition" offset-y bottom right>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                aria-label="export table"
+                class="d-block"
+                v-bind="attrs"
+                v-on="on"
+              >
+                {{ $t('common.export') }}
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item @click="handleExportCsv()">
+                <v-list-item-title>CSV</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="handleExportExcel()">
+                <v-list-item-title>XLSX (Excel)</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="handleClipboard()">
+                <v-list-item-title>
+                  {{ $t('common.clipboard') }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-col>
         <v-col class="pa-0">
           <v-data-footer
