@@ -164,6 +164,15 @@
                 "
               />
               <data-row
+                :title="$t('sample.project')"
+                :value="
+                  $translate({
+                    et: sample.project__name,
+                    en: sample.project__name_en,
+                  })
+                "
+              />
+              <data-row
                 v-if="sample.date_added"
                 :title="$t('sample.dateAdded')"
                 :value="new Date(sample.date_added).toISOString().split('T')[0]"

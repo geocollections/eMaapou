@@ -536,6 +536,7 @@ export default {
     lithostratigraphy_hierarchy: 'lithostratigraphy_hierarchy',
     collector_full_name: 'collector_full_name',
     date_collected: 'date_collected',
+    project: 'Project',
   },
   preparation: {
     id: 'ID',
