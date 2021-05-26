@@ -1036,6 +1036,7 @@ export default {
     analysisMethod: 'Method',
     lab: 'Lab',
     agentAnalysed: 'Lab person',
+    project: 'Project',
   },
   statistics: {
     analysisMethods: 'Analysis methods',

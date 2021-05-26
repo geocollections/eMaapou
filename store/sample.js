@@ -63,6 +63,13 @@ const getDefaultState = () => {
           label: 'sample.mass',
           fields: ['mass'],
         },
+        project: {
+          value: '',
+          type: 'text',
+          lookUpType: 'equals',
+          label: 'sample.project',
+          fields: ['project_name', 'project_name_en'],
+        },
         // mass: {
         //   type: 'range',
         //   lookUpType: 'range',

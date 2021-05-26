@@ -36,7 +36,7 @@
     />
 
     <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
-
+    <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
     <!--    <range-search-field-->
     <!--      v-model="mass"-->
     <!--      :min="0"-->
@@ -101,6 +101,7 @@ export default {
       depth: 'filters.byIds.depth.value',
       collector: 'filters.byIds.collector.value',
       mass: 'filters.byIds.mass.value',
+      project: 'filters.byIds.project.value',
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',

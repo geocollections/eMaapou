@@ -1037,6 +1037,7 @@ export default {
     analysisMethod: 'Meetod',
     lab: 'Labor',
     agentAnalysed: 'Analüüsija',
+    project: 'Projekt',
   },
   statistics: {
     analysisMethods: 'Analüüsimeetodid',

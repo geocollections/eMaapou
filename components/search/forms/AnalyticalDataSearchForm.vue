@@ -99,6 +99,12 @@
       <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
         <text-field v-model="sample" :label="$t(filters.byIds.sample.label)" />
       </v-col>
+      <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
+        <text-field
+          v-model="project"
+          :label="$t(filters.byIds.project.label)"
+        />
+      </v-col>
     </v-row>
     <v-row no-gutters>
       <v-col
@@ -225,6 +231,7 @@ export default {
       stratigraphyBed: 'filters.byIds.stratigraphyBed.value',
       rock: 'filters.byIds.rock.value',
       sample: 'filters.byIds.sample.value',
+      project: 'filters.byIds.project.value',
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',

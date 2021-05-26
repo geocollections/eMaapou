@@ -116,6 +116,13 @@ const getDefaultState = () => {
           label: 'analyticalData.sample',
           fields: ['sample_id_s', 'sample_number', 'sample_type'],
         },
+        project: {
+          value: '',
+          type: 'text',
+          lookUpType: 'equals',
+          label: 'analyticalData.project',
+          fields: ['project_name', 'project_name_en'],
+        },
       },
       allIds: [
         'stratigraphy',
