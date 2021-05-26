@@ -57,9 +57,16 @@ export default {
     },
     handleExportCsv() {
       try {
-        const wb = XLSX.utils.table_to_book(
-          document.querySelector('#table table')
+        const tableCopy = document.querySelector('#table table').cloneNode(true)
+        const children = tableCopy.querySelectorAll(
+          'thead > tr > th > .v-data-table-header__sort-badge'
         )
+        children.forEach((child) => {
+          child.parentElement.removeChild(child)
+        })
+
+        const wb = XLSX.utils.table_to_book(tableCopy)
+
         XLSX.writeFile(wb, 'export.csv', { bookType: 'csv' })
       } catch (err) {
         console.error(err)
@@ -67,9 +74,15 @@ export default {
     },
     handleExportExcel() {
       try {
-        const wb = XLSX.utils.table_to_book(
-          document.querySelector('#table table')
+        const tableCopy = document.querySelector('#table table').cloneNode(true)
+        const children = tableCopy.querySelectorAll(
+          'thead > tr > th > .v-data-table-header__sort-badge'
         )
+        children.forEach((child) => {
+          child.parentElement.removeChild(child)
+        })
+
+        const wb = XLSX.utils.table_to_book(tableCopy)
 
         XLSX.writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
       } catch (err) {
