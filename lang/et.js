@@ -933,6 +933,13 @@ export default {
     abstract: 'Abstrakt',
     locality: 'Lokaliteet',
     authors: 'Autorid ({number})',
+    geolocations: 'Geopunkt ({number})',
+  },
+  datasetGeolocation: {
+    name: 'Nimi',
+    longitude: 'Pikkuskraad',
+    latitude: 'Laiuskraad',
+    isPolygon: 'Polügoon',
   },
   reference: {
     id: 'ID',

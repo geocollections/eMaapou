@@ -287,6 +287,14 @@ export default {
           count: 0,
           props: { dataset: dataset.id },
         },
+        {
+          id: 'dataset_geolocation',
+          table: 'dataset_geolocation',
+          routeName: 'dataset-id-geolocations',
+          title: 'dataset.geolocations',
+          count: 0,
+          props: { dataset: dataset.id },
+        },
       ]
 
       if (locations.length === 1) {

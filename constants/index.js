@@ -113,6 +113,25 @@ export const DATASET_AUTHORS = {
   },
 }
 
+export const DATASET_GEOLOCATIONS = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    // id: (locale) => 'id',
+    // dataset: (locale) => 'dataset',
+    // agent: (locale) => 'agent',
+
+    name: (locale) =>
+      locale === 'et' ? 'locality__locality' : 'locality__locality_en',
+    latitude: (locale) => 'point_latitude',
+    longitude: (locale) => 'point_longitude',
+  },
+}
+
 export const IMAGE = {
   options: {
     page: 1,

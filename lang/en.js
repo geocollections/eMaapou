@@ -932,6 +932,13 @@ export default {
     abstract: 'Abstract',
     locality: 'Locality',
     authors: 'Authors ({number})',
+    geolocations: 'Geolocations ({number})',
+  },
+  datasetGeolocation: {
+    name: 'Name',
+    longitude: 'Longitude',
+    latitude: 'Latitude',
+    isPolygon: 'Polygon',
   },
   reference: {
     id: 'ID',
