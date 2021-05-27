@@ -8,7 +8,8 @@ import LControlFullscreen from 'vue2-leaflet-fullscreen'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-import LDrawToolbar from 'vue2-leaflet-draw-toolbar'
+import '@geoman-io/leaflet-geoman-free'
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 
 // Build icon assets.
 import { Icon } from 'leaflet'
@@ -37,7 +38,6 @@ Vue.component('LTooltip', Vue2Leaflet.LTooltip)
 Vue.component('LWmsTileLayer', Vue2Leaflet.LWMSTileLayer)
 Vue.component('LControlFullscreen', LControlFullscreen)
 Vue.component('VMarkerCluster', Vue2LeafletMarkerCluster)
-Vue.component('LDrawToolbar', LDrawToolbar)
 
 delete Icon.Default.prototype._getIconUrl
 

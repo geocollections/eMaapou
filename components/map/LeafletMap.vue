@@ -17,8 +17,6 @@
         @ready="fitBounds"
         @click="handleClick"
       >
-        <l-draw-toolbar position="topleft" />
-
         <l-control-layers ref="layer-control" :auto-z-index="false" />
         <l-control-fullscreen position="topleft" />
         <l-control-scale
@@ -89,13 +87,18 @@
 <script>
 // import MapLegend from '~/components/map/MapLegend'
 import { debounce } from 'lodash'
+import { mapFields } from 'vuex-map-fields'
 import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
 
 export default {
   name: 'LeafletMap',
-  components: { VMarkerClusterWrapper, LCircleMarkerWrapper, MapLinks },
+  components: {
+    VMarkerClusterWrapper,
+    LCircleMarkerWrapper,
+    MapLinks,
+  },
   props: {
     height: {
       type: Number,
@@ -104,7 +107,10 @@ export default {
     center: {
       type: Object,
       default() {
-        return { latitude: 58.5, longitude: 25.5 }
+        return {
+          latitude: 58.5,
+          longitude: 25.5,
+        }
       },
     },
     markers: {
@@ -139,11 +145,20 @@ export default {
       default: false,
     },
     invalidateSize: Boolean,
+    // Adds rounded class to leaflet
     rounded: Boolean,
+    // Enables search functionality: Drawing etc.
+    activateSearch: Boolean,
   },
   data() {
     return {
-      currentCenter: { lat: this.center.latitude, lng: this.center.longitude },
+      map: null,
+      allGeomanLayers: null,
+      activeGeomanLayer: null,
+      currentCenter: {
+        lat: this.center.latitude,
+        lng: this.center.longitude,
+      },
       options: {
         gestureHandling: true,
         gestureHandlingOptions: {
@@ -355,6 +370,9 @@ export default {
     }
   },
   computed: {
+    ...mapFields('globalSearch', {
+      geoJSON: 'filters.byIds.geoJSON.value',
+    }),
     mapZoom() {
       return this.estonianBedrockOverlay ? 9 : 11
     },
@@ -423,12 +441,44 @@ export default {
         else document.getElementById('map').classList.remove('cursor-crosshair')
       }
     },
+
+    // Todo: watch language update, this means pull request for et.json file should be made
+    activeGeomanLayer(newVal) {
+      if (newVal) {
+        // LON LAT
+        const json = newVal.toGeoJSON()
+        // LAT LON
+        const reversedJson = this.$L
+          .geoJSON(json, {
+            coordsToLatLng: (coords) =>
+              new this.$L.LatLng(coords[0], coords[1], coords[2]),
+          })
+          .toGeoJSON().features[0]
+
+        // Adding radius if Circle
+        if (newVal instanceof this.$L.Circle) {
+          json.properties.radius = newVal.getRadius()
+          reversedJson.properties.radius = newVal.getRadius()
+        }
+
+        // if (reversedJson) this.geoJSON = reversedJson
+        if (json) this.geoJSON = json
+      } else this.geoJSON = null
+    },
   },
   mounted() {
     this.$nextTick(() => {
-      if (this.isMapClickEnabled() && document.getElementById('map'))
+      this.map = this.$refs.map
+
+      if (this.activateSearch) this.initLeafletGeoman()
+
+      if (this.isMapClickEnabled() && document.getElementById('map')) {
         document.getElementById('map').classList.add('cursor-crosshair')
+      }
     })
+  },
+  beforeDestroy() {
+    if (this.activateSearch) this.terminateLeafletGeoman()
   },
   methods: {
     updateCenter(center) {
@@ -439,13 +489,16 @@ export default {
     },
 
     handleOverlayAdd(event) {
-      if (!this.activeOverlays.includes(event.name))
+      if (!this.activeOverlays.includes(event.name)) {
         this.activeOverlays.push(event.name)
+      }
     },
 
     handleOverlayRemove(event) {
       const index = this.activeOverlays.indexOf(event.name)
-      if (index > -1) this.activeOverlays.splice(index, 1)
+      if (index > -1) {
+        this.activeOverlays.splice(index, 1)
+      }
     },
 
     fitBounds() {
@@ -464,7 +517,9 @@ export default {
         return Object.values(this.checkableLayers).some((layer) =>
           this.$refs.map.mapObject.hasLayer(layer)
         )
-      } else return false
+      } else {
+        return false
+      }
     },
 
     handleClick: debounce(async function (event) {
@@ -504,13 +559,14 @@ export default {
               if (splitUrl.length >= 2) {
                 const object = splitUrl[splitUrl.length - 2]
                 const id = splitUrl[splitUrl.length - 1]
-                if (object && id)
+                if (object && id) {
                   this.$router.push(
                     this.localePath({
                       name: `${object}-id`,
                       params: { id },
                     })
                   )
+                }
               }
             }
           }
@@ -520,13 +576,53 @@ export default {
 
     buildQueryLayers() {
       const queryLayers = []
-      if (this.activeOverlays.includes('Uuringupunktid / Sites'))
+      if (this.activeOverlays.includes('Uuringupunktid / Sites')) {
         queryLayers.push('sarv:site_summary')
-      if (this.activeOverlays.includes('Puursüdamikud / Drillcores'))
+      }
+      if (this.activeOverlays.includes('Puursüdamikud / Drillcores')) {
         queryLayers.push('sarv:locality_drillcores')
-      if (this.activeOverlays.includes('Lokaliteedid / Localities'))
+      }
+      if (this.activeOverlays.includes('Lokaliteedid / Localities')) {
         queryLayers.push('sarv:locality_summary')
+      }
       return queryLayers.join(',')
+    },
+
+    initLeafletGeoman() {
+      if (this.map?.mapObject) {
+        this.map.mapObject.pm.addControls({
+          position: 'topleft',
+          drawMarker: false,
+          drawCircleMarker: false,
+          drawPolyline: false,
+          editMode: false,
+          dragMode: false,
+          cutPolygon: false,
+          rotateMode: false,
+        })
+
+        this.allGeomanLayers = this.$L.layerGroup()
+        this.allGeomanLayers.addTo(this.map.mapObject)
+
+        this.map.mapObject.on('pm:create', this.handlePmCreate)
+        this.map.mapObject.on('pm:remove', this.handlePmRemove)
+      }
+    },
+
+    terminateLeafletGeoman() {
+      this.map.mapObject.off('pm:create', this.handlePmCreate)
+      this.map.mapObject.off('pm:remove', this.handlePmRemove)
+    },
+
+    handlePmCreate({ layer }) {
+      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+      layer.addTo(this.allGeomanLayers)
+      this.activeGeomanLayer = layer
+    },
+
+    handlePmRemove() {
+      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+      this.activeGeomanLayer = null
     },
   },
 }

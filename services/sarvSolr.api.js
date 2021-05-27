@@ -1,5 +1,6 @@
 import { isEmpty, isNil } from 'lodash'
 import qs from 'qs'
+import Wkt from 'wicket/wicket'
 
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
@@ -134,7 +135,7 @@ const buildQueryParameter = (search) => {
 }
 
 const buildFilterQueryParameter = (filters) => {
-  const filterQueryStr = Object.entries(filters)
+  let filterQueryStr = Object.entries(filters)
     .filter(([_, v]) => {
       if (v.type === 'range' && isNil(v.value[0]) && isNil(v.value[1]))
         return false
@@ -254,6 +255,30 @@ const buildFilterQueryParameter = (filters) => {
                 })
                 .join(' OR ')
             }
+            case 'geom': {
+              if (searchParameter.value.geometry.type === 'Polygon') {
+                // POLYGON
+                const wkt = new Wkt.Wkt()
+                wkt.read(JSON.stringify(searchParameter.value.geometry))
+                const wktString = wkt.write()
+
+                console.log(wktString)
+
+                return `${fieldId}:"isWithin(${wktString})"`
+              } else {
+                const reversedCoordinates = [
+                  ...searchParameter.value.geometry.coordinates,
+                ].reverse()
+                // convert to km (from m) and round to 1 decimal place
+                const radius =
+                  Math.round(
+                    (searchParameter.value.properties.radius / 1000) * 10
+                  ) / 10
+
+                // return `{!geofilt})&d=${radius}&pt=${searchParameter.value.geometry.coordinates}&sfield=${fieldId}`
+                return `{!geofilt})&d=${radius}&pt=${reversedCoordinates}&sfield=${fieldId}`
+              }
+            }
             default:
               return null
           }
@@ -270,5 +295,9 @@ const buildFilterQueryParameter = (filters) => {
       if (prev.length > 0) return `${prev} AND (${filterQueryParam})`
       return `${prev}(${filterQueryParam})`
     }, '')
+
+  // Hack: Special case for spatial search CIRCLE:
+  if (filterQueryStr.includes('{!geofilt}') && filterQueryStr.endsWith(')'))
+    filterQueryStr = filterQueryStr.slice(0, -1)
   return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
 }
