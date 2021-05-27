@@ -95,6 +95,7 @@ export default {
     tableHeaders: 'Table headers',
     clipboard: 'Copy to clipboard',
     export: 'Export',
+    taxa: 'Taxa',
   },
   link: {
     sarvAPI: 'Public API',
@@ -576,6 +577,12 @@ export default {
     fossilGroup: 'Fossil group',
     authorYear: 'Author',
     parentTaxon: 'Parent taxon',
+    species: 'Species',
+    locality: 'Locality',
+    stratigraphyHierarchy: 'Stratigraphy',
+    taxonHierarchy: 'Parent taxon',
+    author: 'Author',
+    pageTitle: 'Taxon search',
   },
   infinite: {
     noMore: '',

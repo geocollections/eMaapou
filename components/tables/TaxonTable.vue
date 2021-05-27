@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="headers"
+    :headers="useDynamicHeaders ? dynamicHeaders : headers"
     :items="items"
     :options="options"
     :count="count"
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
@@ -69,6 +70,10 @@ export default {
         sortDesc: [],
       }),
     },
+    useDynamicHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -86,6 +91,22 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    ...mapState('tableHeaders', {
+      tableHeaders(state) {
+        return state.taxon.tableHeaders
+      },
+    }),
+
+    dynamicHeaders() {
+      return this.tableHeaders.reduce((prev, item) => {
+        if (item.show) {
+          prev.push({ ...item, text: this.$t(item.text) })
+        }
+        return prev
+      }, [])
+    },
   },
   methods: {
     round,

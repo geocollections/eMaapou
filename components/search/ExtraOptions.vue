@@ -64,6 +64,9 @@ export default {
       stratigraphy(state) {
         return state.stratigraphy.tableHeaders
       },
+      taxon(state) {
+        return state.taxon.tableHeaders
+      },
     }),
     ...mapFields('settings', ['showExtraOptions']),
     stateModuleName() {

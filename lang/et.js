@@ -96,6 +96,7 @@ export default {
     tableHeaders: 'Tabeli päised',
     clipboard: 'Kopeeri lõikelauale',
     export: 'Eksport',
+    taxa: 'Taksonid',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -577,6 +578,12 @@ export default {
     fossilGroup: 'Fossiili grupp',
     authorYear: 'Autor',
     parentTaxon: 'Kuulub: takson',
+    species: 'Liik',
+    locality: 'Lokaliteet',
+    stratigraphyHierarchy: 'Stratigraafia',
+    taxonHierarchy: 'Ülem takson',
+    author: 'Autor',
+    pageTitle: 'Taksoni otsing',
   },
   infinite: {
     noMore: '',

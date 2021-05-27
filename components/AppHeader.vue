@@ -158,6 +158,10 @@ export default {
           lang: 'analyticalData',
         },
         { name: 'dataset', lang: 'datasets' },
+        {
+          name: 'taxa',
+          lang: 'taxa',
+        },
         { name: 'photo', lang: 'photo' },
       ],
       logo: require('~/assets/logos/emaapou5white.svg'),

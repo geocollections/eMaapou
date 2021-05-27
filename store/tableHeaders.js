@@ -103,6 +103,24 @@ const getDefaultState = () => {
         { text: 'site.depth', value: 'depth', show: true },
       ],
     },
+    taxon: {
+      allFieldNames: null,
+      tableHeaders: [
+        { text: 'taxon.id', value: 'id', show: true },
+        { text: 'taxon.taxon', value: 'taxon', show: true },
+        {
+          text: 'taxon.authorYear',
+          value: 'author_year',
+          show: true,
+        },
+        { text: 'taxon.parentTaxon', value: 'parent_taxon', show: true },
+        {
+          text: 'taxon.fossilGroup',
+          value: 'fossil_group',
+          show: true,
+        },
+      ],
+    },
     stratigraphy: {
       allFieldNames: null,
       tableHeaders: [
