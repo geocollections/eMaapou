@@ -370,6 +370,26 @@ export default {
         et: this.dataset.name,
         en: this.dataset.name_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$translate({
+            et: this.dataset.name,
+            en: this.dataset.name_en,
+          }),
+          hid: 'og:title',
+        },
+        {
+          property: 'og:description',
+          content: this.dataset.abstract,
+          hid: 'og:description',
+        },
+        {
+          property: 'description',
+          content: this.dataset.abstract,
+          hid: 'description',
+        },
+      ],
     }
   },
   computed: {

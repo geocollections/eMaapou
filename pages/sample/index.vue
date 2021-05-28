@@ -53,6 +53,13 @@ export default {
   head() {
     return {
       title: this.$t('sample.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('sample.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

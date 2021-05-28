@@ -302,13 +302,23 @@ export default {
   },
   head() {
     return {
-      title: this.$translate({
-        et: this.drillcore.drillcore,
-        en: this.drillcore.drillcore_en,
-      }),
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          content: this.title,
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
+    title() {
+      return this.$translate({
+        et: this.drillcore.drillcore,
+        en: this.drillcore.drillcore_en,
+      })
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

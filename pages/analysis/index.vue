@@ -49,6 +49,13 @@ export default {
   head() {
     return {
       title: this.$t('analysis.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$t('analysis.pageTitle'),
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {

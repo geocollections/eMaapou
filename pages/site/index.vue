@@ -48,6 +48,13 @@ export default {
   head() {
     return {
       title: this.$t('site.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('site.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

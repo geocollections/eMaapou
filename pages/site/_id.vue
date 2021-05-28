@@ -388,12 +388,22 @@ export default {
   },
   head() {
     return {
-      title: this.$t(`breadcrumbs.${this.routeName}-id`, {
-        id: this.$route.params.id,
-      }),
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
     }
   },
   computed: {
+    title() {
+      return this.$t(`breadcrumbs.${this.routeName}-id`, {
+        id: this.$route.params.id,
+      })
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

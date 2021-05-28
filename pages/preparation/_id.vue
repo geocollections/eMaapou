@@ -5,10 +5,8 @@
     </template>
 
     <template #column-left>
-      <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-        $t('common.general')
-      }}</v-card-title>
-      <v-card-text class="pl-md-0 pr-md-4 px-0">
+      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-text>
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
@@ -192,6 +190,13 @@ export default {
   head() {
     return {
       title: this.preparation.preparation_number,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.preparation.preparation_number,
+        },
+      ],
     }
   },
   computed: {

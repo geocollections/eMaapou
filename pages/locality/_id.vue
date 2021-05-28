@@ -447,6 +447,16 @@ export default {
         et: this.locality.locality,
         en: this.locality.locality_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$translate({
+            et: this.locality.locality,
+            en: this.locality.locality_en,
+          }),
+        },
+      ],
     }
   },
   computed: {

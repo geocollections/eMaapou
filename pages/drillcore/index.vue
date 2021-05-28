@@ -48,6 +48,13 @@ export default {
   head() {
     return {
       title: this.$t('drillcore.pageTitle'),
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.$t('drillcore.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

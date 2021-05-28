@@ -262,18 +262,28 @@ export default {
   },
   head() {
     return {
-      title: this.$t('analysis.title', {
-        method: this.$translate({
-          et: this.analysis.analysis_method__analysis_method,
-          en: this.analysis.analysis_method__method_en,
-        }),
-        sample: this.analysis.sample__number,
-      }),
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          content: this.title,
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+    title() {
+      return this.$t('analysis.title', {
+        method: this.$translate({
+          et: this.analysis.analysis_method__analysis_method,
+          en: this.analysis.analysis_method__method_en,
+        }),
+        sample: this.analysis.sample__number,
+      })
     },
   },
   methods: {

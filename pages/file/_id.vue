@@ -666,6 +666,13 @@ export default {
   head() {
     return {
       title: this.fileTitle,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.fileTitle,
+        },
+      ],
     }
   },
   computed: {

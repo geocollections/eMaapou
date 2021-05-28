@@ -93,6 +93,13 @@ export default {
   head() {
     return {
       title: this.$t('photo.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('photo.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

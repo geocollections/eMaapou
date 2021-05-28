@@ -356,15 +356,25 @@ export default {
   },
   head() {
     return {
-      title: `${this.$t('drillcoreBox.nr', {
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
+    }
+  },
+  computed: {
+    title() {
+      return `${this.$t('drillcoreBox.nr', {
         number: this.drillcoreBox.number,
       })} - ${this.$translate({
         et: this.drillcoreBox.drillcore__drillcore,
         en: this.drillcoreBox.drillcore__drillcore_en,
-      })}`,
-    }
-  },
-  computed: {
+      })}`
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

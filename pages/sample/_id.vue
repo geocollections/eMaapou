@@ -472,14 +472,25 @@ export default {
   },
   head() {
     return {
-      title:
-        this.sample.number ||
-        this.sample.number_additional ||
-        this.sample.number_field ||
-        this.sample.id,
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
     }
   },
   computed: {
+    title() {
+      return (
+        this.sample.number ||
+        this.sample.number_additional ||
+        this.sample.number_field ||
+        this.sample.id
+      )
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

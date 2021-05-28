@@ -43,6 +43,13 @@ export default {
   head() {
     return {
       title: this.$t('stratigraphy.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('stratigraphy.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

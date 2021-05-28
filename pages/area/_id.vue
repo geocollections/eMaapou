@@ -309,6 +309,32 @@ export default {
         et: this.area.name,
         en: this.area.name_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$translate({
+            et: this.area.name,
+            en: this.area.name_en,
+          }),
+          hid: 'og:title',
+        },
+        {
+          property: 'og:description',
+          content: this.$translate({
+            et: this.area.description,
+            en: this.area.description_en,
+          }),
+          hid: 'og:description',
+        },
+        {
+          property: 'description',
+          content: this.$translate({
+            et: this.area.description,
+            en: this.area.description_en,
+          }),
+          hid: 'description',
+        },
+      ],
     }
   },
   computed: {

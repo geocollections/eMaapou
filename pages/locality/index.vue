@@ -47,6 +47,13 @@ export default {
   head() {
     return {
       title: this.$t('locality.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('locality.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

@@ -51,6 +51,13 @@ export default {
   head() {
     return {
       title: this.$t('analyticalData.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$t('analyticalData.pageTitle'),
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
