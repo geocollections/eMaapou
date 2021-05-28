@@ -88,9 +88,14 @@ export default {
     // routes() {
     //   return axios.get('/sitemap/ema')
     // },
+    hostname: 'https://geoloogia.info',
     path: '/sitemap.xml',
+    i18n: {
+      locales: ['et', 'en'],
+      routesNameSeparator: '___',
+    },
     gzip: true,
-    generate: false,
+    generate: true,
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
