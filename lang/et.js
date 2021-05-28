@@ -995,6 +995,7 @@ export default {
     'sample-id': 'Proov ID: {id}',
     site: 'Uuringupunktid',
     'site-id': 'Uuringupunkt ID: {id}',
+    taxon: 'Taksonid',
     drillcore_box: 'Puursüdamiku kastid',
     'drillcore_box-id': 'Puursüdamiku kast ID: {id}',
     preparation: 'Preparaadid',

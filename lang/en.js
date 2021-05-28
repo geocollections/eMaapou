@@ -999,6 +999,7 @@ export default {
     preparation: 'Preparations',
     stratigraphy: 'Stratigraphy',
     dataset: 'Datasets',
+    taxon: 'Taxa',
     analytical_data: 'Analytical data',
     photo: 'Photo Archive',
     'photo-id': 'Photo ID: {id}',
