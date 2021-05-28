@@ -1,4 +1,4 @@
-import { isEmpty, isNil } from 'lodash'
+import { cloneDeep, isEmpty, isNil } from 'lodash'
 import qs from 'qs'
 import Wkt from 'wicket/wicket'
 
@@ -258,14 +258,65 @@ const buildFilterQueryParameter = (filters) => {
             case 'geom': {
               if (searchParameter.value.geometry.type === 'Polygon') {
                 // POLYGON
-                const wkt = new Wkt.Wkt()
-                wkt.read(JSON.stringify(searchParameter.value.geometry))
-                const wktString = wkt.write()
+                // LON LAT
+                const value = cloneDeep(searchParameter.value)
 
-                console.log(wktString)
+                // NOTE: order of polygon points matters! You must follow the so-called "right hand rule":
+                // the exterior ring must be counter-clockwise order and the interior holes must be clockwise.
+
+                // leaflet toGeoJSON returns clockwise for outer rings that's why we have to reverse it
+                // Todo: Needs testing if MultiPolygon inner sections need reversing
+                // LON LAT
+                // const determinePolygonOrientation = value.geometry.coordinates.reduce(
+                //   (sum, intersection) => {
+                //     let edgeCount = 0
+                //     console.log(intersection)
+                //
+                //     // if (intersection.length > 5) {
+                //     intersection.forEach((point, index, arr) => {
+                //       // Skip last as last is same as first
+                //       if (index !== intersection.length - 1) {
+                //         const x1 = point[0]
+                //         const y1 = point[1]
+                //
+                //         const x2 = arr[index + 1][0]
+                //         const y2 = arr[index + 1][1]
+                //
+                //         edgeCount = (x2 - x1) * (y2 - y1)
+                //       }
+                //     })
+                //     // } else {
+                //     // Todo: have to use some other method to determine orientation
+                //     // }
+                //
+                //     sum += edgeCount
+                //     return sum
+                //   },
+                //   0
+                // )
+
+                // console.log(determinePolygonOrientation)
+
+                // Todo: Needs some testing and calculating/validating when to reverse
+                value.geometry.coordinates = value.geometry.coordinates.reduce(
+                  (prev, intersection) => {
+                    const firstCoord = intersection[0]
+                    const secondCoord = intersection[1]
+                    if (parseFloat(firstCoord[1]) <= parseFloat(secondCoord[1]))
+                      prev.push(intersection.reverse())
+                    prev.push(intersection)
+                    return prev
+                  },
+                  []
+                )
+
+                const wkt = new Wkt.Wkt()
+                wkt.read(JSON.stringify(value.geometry))
+                const wktString = wkt.write()
 
                 return `${fieldId}:"isWithin(${wktString})"`
               } else {
+                // CIRCLE
                 const reversedCoordinates = [
                   ...searchParameter.value.geometry.coordinates,
                 ].reverse()
@@ -275,7 +326,6 @@ const buildFilterQueryParameter = (filters) => {
                     (searchParameter.value.properties.radius / 1000) * 10
                   ) / 10
 
-                // return `{!geofilt})&d=${radius}&pt=${searchParameter.value.geometry.coordinates}&sfield=${fieldId}`
                 return `{!geofilt})&d=${radius}&pt=${reversedCoordinates}&sfield=${fieldId}`
               }
             }

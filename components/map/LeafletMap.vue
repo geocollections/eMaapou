@@ -422,6 +422,7 @@ export default {
       )
     },
   },
+  // Todo: watch language update for leaflet geoman, this means pull request for et.json file should be made
   watch: {
     markers() {
       this.fitBounds()
@@ -442,26 +443,15 @@ export default {
       }
     },
 
-    // Todo: watch language update, this means pull request for et.json file should be made
     activeGeomanLayer(newVal) {
       if (newVal) {
-        // LON LAT
         const json = newVal.toGeoJSON()
-        // LAT LON
-        const reversedJson = this.$L
-          .geoJSON(json, {
-            coordsToLatLng: (coords) =>
-              new this.$L.LatLng(coords[0], coords[1], coords[2]),
-          })
-          .toGeoJSON().features[0]
 
         // Adding radius if Circle
         if (newVal instanceof this.$L.Circle) {
           json.properties.radius = newVal.getRadius()
-          reversedJson.properties.radius = newVal.getRadius()
         }
 
-        // if (reversedJson) this.geoJSON = reversedJson
         if (json) this.geoJSON = json
       } else this.geoJSON = null
     },
@@ -615,6 +605,8 @@ export default {
     },
 
     handlePmCreate({ layer }) {
+      // layer.pm.enable({ allowSelfIntersection: false })
+      // console.log(layer.pm.hasSelfIntersection())
       this.allGeomanLayers.eachLayer((layer) => layer.remove())
       layer.addTo(this.allGeomanLayers)
       this.activeGeomanLayer = layer
