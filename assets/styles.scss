@@ -273,7 +273,6 @@ th {
 // Overrides vuetify list padding style
 .leaflet-draw-toolbar {
   padding-left: 0 !important;
-
 }
 
 // Fixes color picker li elements
@@ -289,12 +288,12 @@ th {
 
   // Sets eyedropper icon
   .fa-fill-drip::before {
-    content: "\F020A";
+    content: '\F020A';
   }
 
   .fas:before {
     display: inline-block;
-    font: normal normal normal 24px/1 "Material Design Icons";
+    font: normal normal normal 24px/1 'Material Design Icons';
     font-size: 16px;
     color: grey;
     text-rendering: auto;
@@ -303,4 +302,6 @@ th {
   }
 }
 
-
+.montserrat {
+  font-family: 'Montserrat', sans-serif;
+}

@@ -188,10 +188,6 @@ export default {
 </script>
 
 <style scoped>
-.montserrat {
-  font-family: 'Montserrat', sans-serif;
-}
-
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
 }

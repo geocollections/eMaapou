@@ -14,7 +14,7 @@
       <v-col
         v-for="(item, index) in cards.innerIds"
         :key="index"
-        class="pa-2"
+        class="pa-1"
         cols="12"
         :sm="cards[item].sm || 6"
         :md="cards[item].md || 6"
@@ -39,7 +39,7 @@
       <v-col
         v-for="(item, index) in cards.outerIds"
         :key="index"
-        class="pa-2"
+        class="pa-1"
         cols="12"
         :sm="cards[item].sm || 6"
         :md="cards[item].md || 6"
