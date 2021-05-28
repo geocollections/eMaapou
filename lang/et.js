@@ -24,6 +24,7 @@ export default {
     goToFrontpage: 'Mine pealehele',
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
+    searchRoutes: 'Otsing',
   },
   common: {
     general: 'Üldinfo',
@@ -35,7 +36,7 @@ export default {
     next: 'Järgmine ID: {id}',
     last: 'Viimane ID: {id}',
     links: 'Lingid',
-    search: 'Otsing',
+    search: 'Kiirotsing',
     small: 'Väike',
     medium: 'Keskmine',
     large: 'Suur',

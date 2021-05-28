@@ -38,22 +38,17 @@
       inset
       class="quaternary mx-3"
     />
-    <div
-      v-if="$vuetify.breakpoint.mdAndUp"
-      :class="isLanding ? 'mt-8' : 'mt-5'"
-      style="font-family: 'Montserrat', sans-serif"
-    >
+    <div v-if="$vuetify.breakpoint.mdAndUp" class="montserrat">
       {{ $t('slogan') }}
     </div>
-    <v-spacer />
 
-    <v-toolbar-items>
+    <v-toolbar-items class="ml-3">
       <v-btn
         v-show="$vuetify.breakpoint.smAndUp"
         nuxt
         aria-label="search"
-        class="font-weight-bold"
         text
+        class="montserrat"
         :to="localePath({ name: 'search' })"
       >
         {{ $t('common.search') }}
@@ -62,19 +57,21 @@
         v-show="$vuetify.breakpoint.smAndUp"
         nuxt
         aria-label="about page"
-        class="font-weight-bold"
         text
+        class="montserrat"
         :to="localePath({ name: 'about' })"
       >
         {{ $t('common.about') }}
       </v-btn>
-
+    </v-toolbar-items>
+    <v-spacer />
+    <v-toolbar-items>
       <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
       <v-btn
         :text="$vuetify.breakpoint.smAndUp"
         :icon="!$vuetify.breakpoint.smAndUp"
-        class="font-weight-bold"
-        :class="{ 'mr-1 header-icon-button': !$vuetify.breakpoint.smAndUp }"
+        class="montserrat"
+        :class="{ 'header-icon-button': !$vuetify.breakpoint.smAndUp }"
         aria-label="Open navigation drawer"
         :small="!$vuetify.breakpoint.smAndUp"
         @click.stop="$emit('toggle:navigationDrawer')"
@@ -112,9 +109,10 @@
           v-for="(item, index) in tabs"
           :key="index"
           nuxt
-          active-class="active-tab"
+          active-class="active-tab font-weight-bold"
           :to="localePath({ name: item.name })"
-          ><b>{{ $t(`common.${item.lang}`) }}</b></v-tab
+          class="montserrat"
+          >{{ $t(`common.${item.lang}`) }}</v-tab
         >
       </v-tabs>
     </template>
@@ -159,7 +157,7 @@ export default {
         },
         { name: 'dataset', lang: 'datasets' },
         {
-          name: 'taxa',
+          name: 'taxon',
           lang: 'taxa',
         },
         { name: 'photo', lang: 'photo' },
@@ -190,6 +188,10 @@ export default {
 </script>
 
 <style scoped>
+.montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
 }

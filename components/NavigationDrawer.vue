@@ -25,6 +25,25 @@
             <nuxt-link
               v-for="item in routes"
               :key="item.name"
+              exact
+              :to="localePath({ name: item.name })"
+              class="mb-1 menu-link"
+              active-class="menu-link-active"
+              ><v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
+              {{ $t(`common.${item.lang}`) }}
+            </nuxt-link>
+          </div>
+          <div class="section-title">
+            {{ $t('landing.searchRoutes') }}
+          </div>
+
+          <hr />
+
+          <div class="d-flex flex-column align-start">
+            <nuxt-link
+              v-for="item in searchRoutes"
+              :key="item.name"
+              exact
               :to="localePath({ name: item.name })"
               class="mb-1 menu-link"
               active-class="menu-link-active"
@@ -95,15 +114,17 @@ export default {
     return {
       routes: [
         {
-          name: 'about',
-          lang: 'about',
-          icon: 'mdi-information-outline',
-        },
-        {
           name: 'search',
           lang: 'search',
           icon: 'mdi-magnify',
         },
+        {
+          name: 'about',
+          lang: 'about',
+          icon: 'mdi-information-outline',
+        },
+      ],
+      searchRoutes: [
         {
           name: 'locality',
           lang: 'localities',
@@ -129,6 +150,21 @@ export default {
           lang: 'analyses',
           icon: 'mdi-chart-scatter-plot',
         },
+        {
+          name: 'analytical_data',
+          lang: 'analyticalData',
+          icon: 'mdi-chart-scatter-plot',
+        },
+        {
+          name: 'dataset',
+          lang: 'datasets',
+          icon: 'mdi-screw-machine-flat-top',
+        },
+        {
+          name: 'taxon',
+          lang: 'taxa',
+          icon: 'mdi-layers-triple',
+        },
         // {
         //   name: 'file',
         //   lang: 'attachments',
@@ -139,6 +175,7 @@ export default {
           lang: 'stratigraphy',
           icon: 'mdi-layers-triple',
         },
+        { name: 'photo', lang: 'photo', icon: 'mdi-file-image-outline' },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },

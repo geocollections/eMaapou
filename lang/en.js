@@ -24,6 +24,7 @@ export default {
     goToFrontpage: 'Go to frontpage',
     showMenu: 'Show menu',
     routes: 'Routes',
+    searchRoutes: 'Search',
   },
   common: {
     general: 'General info',
@@ -35,7 +36,7 @@ export default {
     next: 'Next ID: {id}',
     last: 'Last ID: {id}',
     links: 'Links',
-    search: 'Search',
+    search: 'Quick search',
     small: 'Small',
     medium: 'Medium',
     large: 'Large',
