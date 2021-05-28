@@ -15,6 +15,7 @@
         v-bind="$attrs"
         :markers="mapMarkers"
         :invalidate-size="showMap"
+        activate-search
       />
     </v-card-text>
   </v-card>

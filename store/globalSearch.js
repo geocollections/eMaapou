@@ -10,8 +10,14 @@ const getDefaultState = () => {
           value: [],
           fields: ['database_id'],
         },
+        geoJSON: {
+          type: 'geom',
+          lookUpType: 'equals',
+          value: null,
+          fields: ['latlong'],
+        },
       },
-      allIds: ['institutions'],
+      allIds: ['institutions', 'geoJSON'],
     },
     institutions: [
       {
