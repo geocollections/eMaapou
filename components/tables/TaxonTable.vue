@@ -37,6 +37,41 @@
       </external-link>
       <div v-else>{{ item.parent_taxon }}</div>
     </template>
+
+    <template #item.locality="{ item }">
+      <nuxt-link
+        v-if="item.locality_id"
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality_id } })
+        "
+      >
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
+      </nuxt-link>
+    </template>
+
+    <template #item.fad="{ item }">
+      <nuxt-link
+        v-if="item.fad_id"
+        class="text-link"
+        :to="
+          localePath({ name: 'stratigraphy-id', params: { id: item.fad_id } })
+        "
+      >
+        {{ $translate({ et: item.fad, en: item.fad_en }) }}
+      </nuxt-link>
+    </template>
+    <template #item.lad="{ item }">
+      <nuxt-link
+        v-if="item.lad_id"
+        class="text-link"
+        :to="
+          localePath({ name: 'stratigraphy-id', params: { id: item.lad_id } })
+        "
+      >
+        {{ $translate({ et: item.lad, en: item.lad_en }) }}
+      </nuxt-link>
+    </template>
   </table-wrapper>
 </template>
 

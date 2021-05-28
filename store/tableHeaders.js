@@ -106,17 +106,30 @@ const getDefaultState = () => {
     taxon: {
       allFieldNames: null,
       tableHeaders: [
-        { text: 'taxon.id', value: 'id', show: true },
+        {
+          text: 'taxon.fossilGroup',
+          value: 'fossil_group',
+          show: true,
+        },
         { text: 'taxon.taxon', value: 'taxon', show: true },
+        {
+          text: 'taxon.locality',
+          value: 'locality',
+          show: true,
+        },
         {
           text: 'taxon.authorYear',
           value: 'author_year',
           show: true,
         },
-        { text: 'taxon.parentTaxon', value: 'parent_taxon', show: true },
         {
-          text: 'taxon.fossilGroup',
-          value: 'fossil_group',
+          text: 'taxon.fad',
+          value: 'fad',
+          show: true,
+        },
+        {
+          text: 'taxon.lad',
+          value: 'lad',
           show: true,
         },
       ],

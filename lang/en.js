@@ -584,6 +584,8 @@ export default {
     taxonHierarchy: 'Parent taxon',
     author: 'Author',
     pageTitle: 'Taxon search',
+    fad: 'First appearance datum',
+    lad: 'Last appearance datum',
   },
   infinite: {
     noMore: '',
