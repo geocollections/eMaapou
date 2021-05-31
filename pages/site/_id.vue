@@ -209,7 +209,7 @@
     </template>
 
     <template #bottom>
-      <image-bar v-if="images.length > 0" :images="images">
+      <image-bar v-if="images.length > 0" class="mt-4" :images="images">
         <template #image="{ item, on, attrs }">
           <v-hover v-slot="{ hover }">
             <v-img
@@ -272,7 +272,7 @@
           <div v-else>{{ $t('common.clickToOpen') }}</div>
         </template>
       </image-bar>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>

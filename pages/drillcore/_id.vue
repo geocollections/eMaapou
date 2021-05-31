@@ -159,7 +159,7 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
