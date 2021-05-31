@@ -585,8 +585,8 @@ export default {
     taxonHierarchy: 'Ülem takson',
     author: 'Autor',
     pageTitle: 'Taksoni otsing',
-    fad: 'Esmane alguspunkt',
-    lad: 'Viimane alguspunkt',
+    fad: 'Ilmumine',
+    lad: 'Kadumine',
   },
   infinite: {
     noMore: '',

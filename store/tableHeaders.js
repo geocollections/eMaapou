@@ -118,11 +118,6 @@ const getDefaultState = () => {
           show: true,
         },
         {
-          text: 'taxon.authorYear',
-          value: 'author_year',
-          show: true,
-        },
-        {
           text: 'taxon.fad',
           value: 'fad',
           show: true,
