@@ -39,9 +39,9 @@ export default {
     }
   },
   methods: {
-    handleChange(options) {
+    handleChange: debounce(function (options) {
       this.$emit('update', { options, search: this.search })
-    },
+    }, 500),
     filterItemsByKeys(items, keys) {
       const filteredItems = items.map((item) => {
         const res = {}
