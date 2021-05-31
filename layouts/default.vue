@@ -10,7 +10,9 @@
         :drawer="drawer"
         @update:navigationDrawer="drawer = $event"
       />
-      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-container
+        :fluid="getRouteBaseName() === 'index' || $vuetify.breakpoint.lgAndDown"
+      >
         <go-back-fab v-if="isDetail" />
         <link-to-edit-fab v-if="isDetail" />
         <client-only>

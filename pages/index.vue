@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="center" align="center">
+    <v-row class="mt-4" justify="center" align="center">
       <v-col>
         <h1 class="text-center my-3">{{ $t('landing.searchTitle') }}:</h1>
       </v-col>
@@ -10,7 +10,7 @@
         <quick-search-form @submit="handleSearch" />
       </v-col>
     </v-row>
-    <v-row class="my-6" justify="center" align="center">
+    <v-row class="mt-12 mb-6" justify="center" align="center">
       <v-col
         v-for="(item, index) in cards.innerIds"
         :key="index"
