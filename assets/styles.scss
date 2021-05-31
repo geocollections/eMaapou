@@ -116,6 +116,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
         border-right: 1px solid map-get($map: $grey, $key: 'lighten-2');
         font-weight: 700;
         font-size: small !important;
+        width: 200px;
       }
     }
   }
