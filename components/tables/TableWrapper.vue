@@ -34,7 +34,7 @@
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="auto" class="px-3" align-self="center">
+            <v-col cols="auto" class="px-3 my-3" align-self="center">
               <v-menu transition="slide-y-transition" offset-y bottom right>
                 <template #activator="{ on, attrs }">
                   <v-btn
@@ -63,7 +63,7 @@
                 </v-list>
               </v-menu>
             </v-col>
-            <v-col class="pa-0">
+            <v-col>
               <v-data-footer
                 style="border: none"
                 :pagination="pagination"
