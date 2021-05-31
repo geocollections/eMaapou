@@ -1,6 +1,7 @@
 import { cloneDeep, isEmpty, isNil } from 'lodash'
 import qs from 'qs'
 import Wkt from 'wicket/wicket'
+import earcut from 'earcut'
 
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
@@ -261,60 +262,89 @@ const buildFilterQueryParameter = (filters) => {
                 // LON LAT
                 const value = cloneDeep(searchParameter.value)
 
-                // NOTE: order of polygon points matters! You must follow the so-called "right hand rule":
-                // the exterior ring must be counter-clockwise order and the interior holes must be clockwise.
+                const data = earcut.flatten(value.geometry.coordinates)
+                const triangles = earcut(
+                  data.vertices,
+                  data.holes,
+                  data.dimensions
+                )
 
-                // leaflet toGeoJSON returns clockwise for outer rings that's why we have to reverse it
-                // Todo: Needs testing if MultiPolygon inner sections need reversing
-                // LON LAT
-                // const determinePolygonOrientation = value.geometry.coordinates.reduce(
-                //   (sum, intersection) => {
-                //     let edgeCount = 0
-                //     console.log(intersection)
-                //
-                //     // if (intersection.length > 5) {
-                //     intersection.forEach((point, index, arr) => {
-                //       // Skip last as last is same as first
-                //       if (index !== intersection.length - 1) {
-                //         const x1 = point[0]
-                //         const y1 = point[1]
-                //
-                //         const x2 = arr[index + 1][0]
-                //         const y2 = arr[index + 1][1]
-                //
-                //         edgeCount = (x2 - x1) * (y2 - y1)
-                //       }
-                //     })
-                //     // } else {
-                //     // Todo: have to use some other method to determine orientation
-                //     // }
-                //
-                //     sum += edgeCount
-                //     return sum
-                //   },
-                //   0
-                // )
+                const coordinates = triangles.map((item) => {
+                  const startIndex = item * 2
+                  return [
+                    data.vertices[startIndex],
+                    data.vertices[startIndex + 1],
+                  ]
+                })
 
-                // console.log(determinePolygonOrientation)
-
-                // Todo: Needs some testing and calculating/validating when to reverse
-                value.geometry.coordinates = value.geometry.coordinates.reduce(
-                  (prev, intersection) => {
-                    const firstCoord = intersection[0]
-                    const secondCoord = intersection[1]
-                    if (parseFloat(firstCoord[1]) <= parseFloat(secondCoord[1]))
-                      prev.push(intersection.reverse())
-                    prev.push(intersection)
+                const triangleCoordinates = coordinates.reduce(
+                  (prev, item, index, arr) => {
+                    if ((index + 1) % 3 === 0) {
+                      const triangleArray = [
+                        arr[index - 2],
+                        arr[index - 1],
+                        arr[index],
+                      ]
+                      console.log(`isClockwise: ${isClockwise(triangleArray)}`)
+                      if (isClockwise(triangleArray))
+                        prev.push(triangleArray.reverse())
+                      else prev.push(triangleArray)
+                    }
                     return prev
                   },
                   []
                 )
 
-                const wkt = new Wkt.Wkt()
-                wkt.read(JSON.stringify(value.geometry))
-                const wktString = wkt.write()
+                console.log(data)
+                console.log(triangles)
+                console.log(coordinates)
+                console.log(triangleCoordinates)
+                console.log(value)
+                const wkt2 = new Wkt.Wkt()
+                console.log({
+                  coordinates:
+                    triangleCoordinates.length > 1
+                      ? [triangleCoordinates]
+                      : triangleCoordinates,
+                  type:
+                    triangleCoordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
+                })
+                wkt2.read(
+                  JSON.stringify({
+                    coordinates:
+                      triangleCoordinates.length > 1
+                        ? [triangleCoordinates]
+                        : triangleCoordinates,
+                    type:
+                      triangleCoordinates.length > 1
+                        ? 'MultiPolygon'
+                        : 'Polygon',
+                  })
+                )
+                const wktString2 = wkt2.write()
 
-                return `${fieldId}:"isWithin(${wktString})"`
+                console.log(wktString2)
+
+                // console.log(determinePolygonOrientation)
+
+                // Todo: Needs some testing and calculating/validating when to reverse
+                // value.geometry.coordinates = value.geometry.coordinates.reduce(
+                //   (prev, intersection) => {
+                //     const firstCoord = intersection[0]
+                //     const secondCoord = intersection[1]
+                //     if (parseFloat(firstCoord[1]) <= parseFloat(secondCoord[1]))
+                //       prev.push(intersection.reverse())
+                //     prev.push(intersection)
+                //     return prev
+                //   },
+                //   []
+                // )
+                //
+                // const wkt = new Wkt.Wkt()
+                // wkt.read(JSON.stringify(value.geometry))
+                // const wktString = wkt.write()
+
+                return `${fieldId}:"isWithin(${wktString2})"`
               } else {
                 // CIRCLE
                 const reversedCoordinates = [
@@ -350,4 +380,14 @@ const buildFilterQueryParameter = (filters) => {
   if (filterQueryStr.includes('{!geofilt}') && filterQueryStr.endsWith(')'))
     filterQueryStr = filterQueryStr.slice(0, -1)
   return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
+}
+
+const isClockwise = (poly) => {
+  let sum = 0
+  for (let i = 0; i < poly.length - 1; i++) {
+    const cur = poly[i]
+    const next = poly[i + 1]
+    sum += (next[0] - cur[0]) * (next[1] + cur[1])
+  }
+  return sum > 0
 }
