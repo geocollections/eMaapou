@@ -134,7 +134,7 @@
                     :value="selectedParameterValues"
                     multiple
                     column
-                    active-class="header lighten-2 font-weight-bold elevation-3"
+                    active-class="header lighten-2 font-weight-bold elevation-1"
                     @change="handleParameterChange"
                   >
                     <v-chip
