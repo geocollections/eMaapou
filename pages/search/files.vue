@@ -36,6 +36,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const response = await this.$services.sarvSolr.getResourceList(
         'attachment',
         {
@@ -45,7 +46,6 @@ export default {
           searchFilters: {},
         }
       )
-      this.options = tableState.options
       this.items = response.items
       this.count = response.count
     },

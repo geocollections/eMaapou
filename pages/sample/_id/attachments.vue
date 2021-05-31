@@ -28,6 +28,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const attachmentResponse = await this.$services.sarvREST.getResourceList(
         'attachment_link',
         {
@@ -39,7 +40,6 @@ export default {
           queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
         }
       )
-      this.options = tableState.options
       this.attachments = attachmentResponse.items
       this.count = attachmentResponse.count
     },

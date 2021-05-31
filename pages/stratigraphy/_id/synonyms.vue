@@ -28,6 +28,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const synonymResponse = await this.$services.sarvREST.getResourceList(
         'stratigraphy_synonym',
         {
@@ -39,7 +40,6 @@ export default {
           queryFields: this.$getQueryFields(STRATIGRAPHY_SYNONYM.queryFields),
         }
       )
-      this.options = tableState.options
       this.synonyms = synonymResponse.items
       this.count = synonymResponse.count
     },

@@ -36,6 +36,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const drillcoreResponse = await this.$services.sarvSolr.getResourceList(
         'drillcore',
         {
@@ -45,7 +46,6 @@ export default {
           searchFilters: {},
         }
       )
-      this.options = tableState.options
       this.items = drillcoreResponse.items
       this.count = drillcoreResponse.count
     },
