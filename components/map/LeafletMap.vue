@@ -60,6 +60,32 @@
 
         <l-circle-marker-wrapper v-else :markers="markers" />
 
+        <l-marker
+          v-if="gpsEnabled && gpsLocation"
+          :lat-lng="gpsLocation"
+          @click="handleNearMeSliderChange(nearMeRadius)"
+        >
+          <l-tooltip :options="{ direction: 'top', offset: [-15, -15] }"
+            ><b>GPS</b> ({{ $t('map.clickToSearchNearMe') }})</l-tooltip
+          >
+          <l-popup>
+            <div class="d-flex flex-row">
+              <div class="align-self-center text-no-wrap">1 km</div>
+              <v-slider
+                v-model="nearMeRadius"
+                style="width: 150px"
+                :min="1"
+                :max="20"
+                hide-details
+                thumb-label="always"
+                color="header"
+                @input="handleNearMeSliderChange"
+              />
+              <div class="align-self-center text-no-wrap">20 km</div>
+            </div>
+          </l-popup>
+        </l-marker>
+
         <!-- <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
@@ -156,8 +182,9 @@ export default {
       map: null,
       allGeomanLayers: null,
       activeGeomanLayer: null,
-      GPSLocation: null,
+      gpsLocation: null,
       gpsID: null,
+      nearMeRadius: 5,
       currentCenter: {
         lat: this.center.latitude,
         lng: this.center.longitude,
@@ -648,21 +675,11 @@ export default {
     },
 
     successGeo(position) {
-      if (position !== null) {
-        if (this.GPSLocation !== null)
-          this.map.mapObject.removeLayer(this.GPSLocation)
-
-        this.GPSLocation = this.$L
-          .marker(
-            { lat: position.coords.latitude, lng: position.coords.longitude },
-            { zIndexOffset: -1 }
-          )
-          .addTo(this.map.mapObject)
-
-        this.GPSLocation.bindTooltip('GPS', {
-          permanent: true,
-          direction: 'right',
-        })
+      if (position) {
+        this.gpsLocation = {
+          lng: position.coords.longitude,
+          lat: position.coords.latitude,
+        }
       }
     },
 
@@ -671,6 +688,15 @@ export default {
       console.error(`Error: ${error.message}`)
     },
     // GPS end
+
+    handleNearMeSliderChange(val) {
+      if (val) {
+        this.removeAllGeomanLayers()
+        const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })
+        circle.addTo(this.allGeomanLayers)
+        this.activeGeomanLayer = circle
+      }
+    },
   },
 }
 </script>
