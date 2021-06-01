@@ -258,10 +258,10 @@ const buildFilterQueryParameter = (filters) => {
             }
             case 'geom': {
               if (searchParameter.value.geometry.type === 'Polygon') {
-                // POLYGON
                 // LON LAT
                 const value = cloneDeep(searchParameter.value)
 
+                // Polygon triangulation
                 const data = earcut.flatten(value.geometry.coordinates)
                 const triangles = earcut(
                   data.vertices,
@@ -269,6 +269,7 @@ const buildFilterQueryParameter = (filters) => {
                   data.dimensions
                 )
 
+                // Reversing triangles to geo coordinates
                 const coordinates = triangles.map((item) => {
                   const startIndex = item * 2
                   return [
@@ -276,40 +277,24 @@ const buildFilterQueryParameter = (filters) => {
                     data.vertices[startIndex + 1],
                   ]
                 })
-
                 const triangleCoordinates = coordinates.reduce(
                   (prev, item, index, arr) => {
                     if ((index + 1) % 3 === 0) {
-                      const triangleArray = [
+                      prev.push([
                         arr[index - 2],
                         arr[index - 1],
                         arr[index],
-                      ]
-                      console.log(`isClockwise: ${isClockwise(triangleArray)}`)
-                      if (isClockwise(triangleArray))
-                        prev.push(triangleArray.reverse())
-                      else prev.push(triangleArray)
+                        arr[index - 2],
+                      ])
                     }
                     return prev
                   },
                   []
                 )
 
-                console.log(data)
-                console.log(triangles)
-                console.log(coordinates)
-                console.log(triangleCoordinates)
-                console.log(value)
-                const wkt2 = new Wkt.Wkt()
-                console.log({
-                  coordinates:
-                    triangleCoordinates.length > 1
-                      ? [triangleCoordinates]
-                      : triangleCoordinates,
-                  type:
-                    triangleCoordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
-                })
-                wkt2.read(
+                // Creating WKT string for query
+                const wkt = new Wkt.Wkt()
+                wkt.read(
                   JSON.stringify({
                     coordinates:
                       triangleCoordinates.length > 1
@@ -321,30 +306,10 @@ const buildFilterQueryParameter = (filters) => {
                         : 'Polygon',
                   })
                 )
-                const wktString2 = wkt2.write()
+                let wktString = wkt.write()
+                wktString = wktString.replaceAll('),(', ')),((')
 
-                console.log(wktString2)
-
-                // console.log(determinePolygonOrientation)
-
-                // Todo: Needs some testing and calculating/validating when to reverse
-                // value.geometry.coordinates = value.geometry.coordinates.reduce(
-                //   (prev, intersection) => {
-                //     const firstCoord = intersection[0]
-                //     const secondCoord = intersection[1]
-                //     if (parseFloat(firstCoord[1]) <= parseFloat(secondCoord[1]))
-                //       prev.push(intersection.reverse())
-                //     prev.push(intersection)
-                //     return prev
-                //   },
-                //   []
-                // )
-                //
-                // const wkt = new Wkt.Wkt()
-                // wkt.read(JSON.stringify(value.geometry))
-                // const wktString = wkt.write()
-
-                return `${fieldId}:"isWithin(${wktString2})"`
+                return `${fieldId}:"isWithin(${wktString})"`
               } else {
                 // CIRCLE
                 const reversedCoordinates = [
@@ -380,14 +345,4 @@ const buildFilterQueryParameter = (filters) => {
   if (filterQueryStr.includes('{!geofilt}') && filterQueryStr.endsWith(')'))
     filterQueryStr = filterQueryStr.slice(0, -1)
   return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
-}
-
-const isClockwise = (poly) => {
-  let sum = 0
-  for (let i = 0; i < poly.length - 1; i++) {
-    const cur = poly[i]
-    const next = poly[i + 1]
-    sum += (next[0] - cur[0]) * (next[1] + cur[1])
-  }
-  return sum > 0
 }
