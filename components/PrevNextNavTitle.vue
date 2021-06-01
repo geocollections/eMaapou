@@ -1,11 +1,17 @@
 <template>
-  <v-card
-    class="d-flex justify-space-between px-4 flex-column flex-sm-row"
-    :class="{ 'mb-3': title || $slots.title, [titleColor]: true }"
+  <title-card
+    :title="title"
+    :subtitle="$t(`breadcrumbs.${routeName}-id`, { id: $route.params.id })"
   >
-    <div
-      class="align-self-start align-self-sm-center text-no-wrap hidden-xs-only"
-    >
+    <template #subtitle>
+      <h3 class="d-flex grey--text justify-center text--darken-1">
+        <div class="align-self-center mr-1">
+          {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
+        </div>
+        <edit-button />
+      </h3>
+    </template>
+    <template #left>
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -49,19 +55,8 @@
 
         <span>{{ $t('common.previous', { id: computedPrevId }) }}</span>
       </v-tooltip>
-    </div>
-
-    <slot name="title">
-      <page-title
-        class="text-center"
-        :title="title"
-        :subtitle="$t(`breadcrumbs.${routeName}-id`, { id: $route.params.id })"
-      />
-    </slot>
-
-    <div
-      class="align-self-end align-self-sm-center text-no-wrap hidden-xs-only"
-    >
+    </template>
+    <template #right>
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -104,15 +99,16 @@
 
         <span>{{ $t('common.last', { id: computedLastId }) }}</span>
       </v-tooltip>
-    </div>
-  </v-card>
+    </template>
+  </title-card>
 </template>
 
 <script>
-import PageTitle from '~/components/PageTitle'
+import EditButton from './EditButton.vue'
+import TitleCard from './TitleCard.vue'
 export default {
   name: 'PrevNextNavTitle',
-  components: { PageTitle },
+  components: { TitleCard, EditButton },
   props: {
     arrowKeys: {
       type: Boolean,
@@ -154,23 +150,6 @@ export default {
 
     routeName() {
       return this.getRouteBaseName().split('-id')[0]
-    },
-
-    titleColor() {
-      let name = this.getRouteBaseName()
-      if (name.includes('-')) name = name.split('-')[0]
-      if (name === 'analysis' || name === 'analytical_data')
-        return 'emp-analysis'
-      if (name === 'dataset') return 'emp-dataset'
-      if (name === 'preparation' || name === 'sample') return 'emp-sample'
-      if (name === 'area') return 'emp-main'
-      if (name === 'locality') return 'emp-locality'
-      if (name === 'site') return 'emp-site'
-      if (name === 'drillcore' || name === 'drillcore_box')
-        return 'emp-drillcore'
-      if (name === 'file' || name === 'photo') return 'emp-photo' // #bfbe8b or #8c6d4e
-      if (name === 'stratigraphy') return 'emp-stratigraphy'
-      return 'emp-main'
     },
   },
   beforeMount() {

@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.analysesCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-chart-scatter-plot"
+        class="title-analysis"
       />
     </template>
 
@@ -31,19 +32,19 @@
 import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   name: 'AnalysisSearch',
   components: {
     Search,
     SearchViewMapWrapper,
-    PageTitleWrapper,
     AnalysisSearchForm,
     AnalysisTable,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {

@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.datasetCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-screw-machine-flat-top"
+        class="title-dataset"
       />
     </template>
 
@@ -27,18 +28,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import DatasetTable from '~/components/tables/DatasetTable'
 import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     DatasetSearchForm,
     DatasetTable,
-    PageTitleWrapper,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {

@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="dataset.title" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="dataset.title"
+        class="title-dataset"
+      />
     </template>
 
     <template #column-left>

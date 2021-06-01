@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.stratigraphy')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-layers-triple"
+        class="title-stratigraphy"
       />
     </template>
 
@@ -30,14 +31,15 @@ import { mapState, mapActions } from 'vuex'
 import Search from '@/components/templates/Search'
 import StratigraphySearchForm from '@/components/search/forms/StratigraphySearchForm.vue'
 import StratigraphyTable from '@/components/tables/StratigraphyTable'
-import PageTitleWrapper from '@/components/search/PageTitleWrapper'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
+
 export default {
   components: {
     Search,
     StratigraphySearchForm,
     StratigraphyTable,
-    PageTitleWrapper,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {

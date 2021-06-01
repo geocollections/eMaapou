@@ -14,7 +14,7 @@
         :fluid="getRouteBaseName() === 'index' || $vuetify.breakpoint.lgAndDown"
       >
         <go-back-fab v-if="isDetail" />
-        <link-to-edit-fab v-if="isDetail" />
+        <link-to-edit-fab v-if="false & isDetail" />
         <client-only>
           <history-viewer
             v-if="$vuetify.breakpoint.smAndUp && !isFrontPage"

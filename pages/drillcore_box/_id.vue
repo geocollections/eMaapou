@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="drillcoreBoxTitle" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="drillcoreBoxTitle"
+        class="title"
+      />
     </template>
     <template #top>
       <v-card v-if="activeImage" class="my-2 mx-4">

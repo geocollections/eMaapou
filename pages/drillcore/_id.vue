@@ -6,6 +6,7 @@
         :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         "
+        class="title-drillcore"
       />
     </template>
 

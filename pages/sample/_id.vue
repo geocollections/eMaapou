@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="sampleTitle" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="sampleTitle"
+        class="title-sample"
+      />
     </template>
     <template #column-left>
       <v-card-title>{{ $t('common.general') }}</v-card-title>

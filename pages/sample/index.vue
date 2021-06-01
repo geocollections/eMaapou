@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.samplesCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-test-tube"
+        class="title-sample"
       />
     </template>
 
@@ -36,18 +37,18 @@
 import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/forms/SampleSearchForm'
 import SampleTable from '~/components/tables/SampleTable.vue'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     SearchViewMapWrapper,
-    PageTitleWrapper,
     SampleSearchForm,
     SampleTable,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {

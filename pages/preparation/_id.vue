@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="preparation.preparation_number" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="preparation.preparation_number"
+        class="title"
+      />
     </template>
 
     <template #column-left>

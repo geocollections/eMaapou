@@ -4,6 +4,7 @@
       <prev-next-nav-title
         :ids="ids"
         :title="$translate({ et: area.name, en: area.name_en })"
+        class="title-area"
       />
     </template>
 

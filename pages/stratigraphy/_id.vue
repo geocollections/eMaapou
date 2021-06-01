@@ -9,6 +9,7 @@
             en: stratigraphy.stratigraphy_en,
           })
         "
+        class="title-stratigraphy"
       />
     </template>
 

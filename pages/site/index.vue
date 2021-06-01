@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.sitesCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-map-marker-star-outline"
+        class="title-site"
       />
     </template>
 
@@ -31,18 +32,18 @@
 import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '@/components/search/forms/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     SearchViewMapWrapper,
-    PageTitleWrapper,
     SiteSearchForm,
     SiteTable,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {

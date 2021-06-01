@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.drillcoresCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-screw-machine-flat-top"
+        class="title-drillcore"
       />
     </template>
 
@@ -31,18 +32,18 @@
 import { mapState, mapActions } from 'vuex'
 import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     SearchViewMapWrapper,
-    PageTitleWrapper,
     DrillcoreSearchForm,
     DrillcoreTable,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {

@@ -12,6 +12,7 @@
             sample: analysis.sample__number,
           })
         "
+        class="title-analysis"
       />
     </template>
 
