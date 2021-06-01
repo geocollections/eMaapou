@@ -17,6 +17,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "core-js": "^3.10.1",
     "deepmerge": "^4.2.2",
+    "earcut": "^2.2.2",
     "echarts": "^5.1.1",
     "leaflet": "^1.7.1",
     "leaflet-gesture-handling": "^1.2.1",

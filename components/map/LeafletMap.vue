@@ -455,6 +455,10 @@ export default {
         if (json) this.geoJSON = json
       } else this.geoJSON = null
     },
+
+    geoJSON(newVal) {
+      if (!newVal) this.removeAllGeomanLayers()
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -591,6 +595,11 @@ export default {
           rotateMode: false,
         })
 
+        this.map.mapObject.pm.setGlobalOptions({
+          allowSelfIntersection: false,
+          finishOn: 'dblclick',
+        })
+
         this.allGeomanLayers = this.$L.layerGroup()
         this.allGeomanLayers.addTo(this.map.mapObject)
 
@@ -607,14 +616,18 @@ export default {
     handlePmCreate({ layer }) {
       // layer.pm.enable({ allowSelfIntersection: false })
       // console.log(layer.pm.hasSelfIntersection())
-      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+      this.removeAllGeomanLayers()
       layer.addTo(this.allGeomanLayers)
       this.activeGeomanLayer = layer
     },
 
     handlePmRemove() {
-      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+      this.removeAllGeomanLayers()
       this.activeGeomanLayer = null
+    },
+
+    removeAllGeomanLayers() {
+      this.allGeomanLayers.eachLayer((layer) => layer.remove())
     },
   },
 }
