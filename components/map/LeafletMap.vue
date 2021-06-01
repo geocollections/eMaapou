@@ -149,12 +149,15 @@ export default {
     rounded: Boolean,
     // Enables search functionality: Drawing etc.
     activateSearch: Boolean,
+    gpsEnabled: Boolean,
   },
   data() {
     return {
       map: null,
       allGeomanLayers: null,
       activeGeomanLayer: null,
+      GPSLocation: null,
+      gpsID: null,
       currentCenter: {
         lat: this.center.latitude,
         lng: this.center.longitude,
@@ -466,12 +469,15 @@ export default {
 
       if (this.activateSearch) this.initLeafletGeoman()
 
+      if (this.gpsEnabled) this.trackPosition()
+
       if (this.isMapClickEnabled() && document.getElementById('map')) {
         document.getElementById('map').classList.add('cursor-crosshair')
       }
     })
   },
   beforeDestroy() {
+    if (this.gpsID) navigator.geolocation.clearWatch(this.gpsID)
     if (this.activateSearch) this.terminateLeafletGeoman()
   },
   methods: {
@@ -629,6 +635,42 @@ export default {
     removeAllGeomanLayers() {
       this.allGeomanLayers.eachLayer((layer) => layer.remove())
     },
+
+    // GPS start
+    trackPosition() {
+      if (navigator.geolocation) {
+        this.gpsID = navigator.geolocation.watchPosition(
+          this.successGeo,
+          this.errorGeo
+        )
+        // eslint-disable-next-line no-console
+      } else console.error('Geolocation is not supported by this browser.')
+    },
+
+    successGeo(position) {
+      if (position !== null) {
+        if (this.GPSLocation !== null)
+          this.map.mapObject.removeLayer(this.GPSLocation)
+
+        this.GPSLocation = this.$L
+          .marker(
+            { lat: position.coords.latitude, lng: position.coords.longitude },
+            { zIndexOffset: -1 }
+          )
+          .addTo(this.map.mapObject)
+
+        this.GPSLocation.bindTooltip('GPS', {
+          permanent: true,
+          direction: 'right',
+        })
+      }
+    },
+
+    errorGeo(error) {
+      // eslint-disable-next-line no-console
+      console.error(`Error: ${error.message}`)
+    },
+    // GPS end
   },
 }
 </script>
