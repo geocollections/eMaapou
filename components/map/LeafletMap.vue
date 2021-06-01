@@ -595,6 +595,11 @@ export default {
           rotateMode: false,
         })
 
+        this.map.mapObject.pm.setGlobalOptions({
+          allowSelfIntersection: false,
+          finishOn: 'dblclick',
+        })
+
         this.allGeomanLayers = this.$L.layerGroup()
         this.allGeomanLayers.addTo(this.map.mapObject)
 
