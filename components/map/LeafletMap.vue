@@ -60,6 +60,32 @@
 
         <l-circle-marker-wrapper v-else :markers="markers" />
 
+        <l-marker
+          v-if="gpsEnabled && gpsLocation"
+          :lat-lng="gpsLocation"
+          @click="handleNearMeSliderChange(nearMeRadius)"
+        >
+          <l-tooltip :options="{ direction: 'top', offset: [-15, -15] }"
+            ><b>GPS</b> ({{ $t('map.clickToSearchNearMe') }})</l-tooltip
+          >
+          <l-popup>
+            <div class="d-flex flex-row">
+              <div class="align-self-center text-no-wrap">1 km</div>
+              <v-slider
+                v-model="nearMeRadius"
+                style="width: 150px"
+                :min="1"
+                :max="20"
+                hide-details
+                thumb-label="always"
+                color="header"
+                @input="handleNearMeSliderChange"
+              />
+              <div class="align-self-center text-no-wrap">20 km</div>
+            </div>
+          </l-popup>
+        </l-marker>
+
         <!-- <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
@@ -149,12 +175,16 @@ export default {
     rounded: Boolean,
     // Enables search functionality: Drawing etc.
     activateSearch: Boolean,
+    gpsEnabled: Boolean,
   },
   data() {
     return {
       map: null,
       allGeomanLayers: null,
       activeGeomanLayer: null,
+      gpsLocation: null,
+      gpsID: null,
+      nearMeRadius: 5,
       currentCenter: {
         lat: this.center.latitude,
         lng: this.center.longitude,
@@ -466,12 +496,15 @@ export default {
 
       if (this.activateSearch) this.initLeafletGeoman()
 
+      if (this.gpsEnabled) this.trackPosition()
+
       if (this.isMapClickEnabled() && document.getElementById('map')) {
         document.getElementById('map').classList.add('cursor-crosshair')
       }
     })
   },
   beforeDestroy() {
+    if (this.gpsID) navigator.geolocation.clearWatch(this.gpsID)
     if (this.activateSearch) this.terminateLeafletGeoman()
   },
   methods: {
@@ -628,6 +661,41 @@ export default {
 
     removeAllGeomanLayers() {
       this.allGeomanLayers.eachLayer((layer) => layer.remove())
+    },
+
+    // GPS start
+    trackPosition() {
+      if (navigator.geolocation) {
+        this.gpsID = navigator.geolocation.watchPosition(
+          this.successGeo,
+          this.errorGeo
+        )
+        // eslint-disable-next-line no-console
+      } else console.error('Geolocation is not supported by this browser.')
+    },
+
+    successGeo(position) {
+      if (position) {
+        this.gpsLocation = {
+          lng: position.coords.longitude,
+          lat: position.coords.latitude,
+        }
+      }
+    },
+
+    errorGeo(error) {
+      // eslint-disable-next-line no-console
+      console.error(`Error: ${error.message}`)
+    },
+    // GPS end
+
+    handleNearMeSliderChange(val) {
+      if (val) {
+        this.removeAllGeomanLayers()
+        const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })
+        circle.addTo(this.allGeomanLayers)
+        this.activeGeomanLayer = circle
+      }
     },
   },
 }

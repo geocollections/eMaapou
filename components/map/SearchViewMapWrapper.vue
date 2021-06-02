@@ -16,6 +16,7 @@
         :markers="mapMarkers"
         :invalidate-size="showMap"
         activate-search
+        gps-enabled
       />
     </v-card-text>
   </v-card>

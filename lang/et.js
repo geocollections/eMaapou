@@ -816,6 +816,7 @@ export default {
   map: {
     estonian_geoportal: 'Maa-ameti kaart',
     google_maps: 'Google Maps',
+    clickToSearchNearMe: 'vajuta, et otsida minu lähedal',
   },
   file: {
     specimenTitle: 'Säiliku foto',
