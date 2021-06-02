@@ -590,8 +590,8 @@ export default {
             latlng: event.latlng,
             features: wmsResponse.features,
           }
+          this.$refs.popup.mapObject.openPopup(event.latlng)
         } else this.mapClickResponse = null
-        this.$refs.popup.mapObject.openPopup(event.latlng)
       }
     }, 400),
 
@@ -630,6 +630,10 @@ export default {
         this.allGeomanLayers = this.$L.layerGroup()
         this.allGeomanLayers.addTo(this.map.mapObject)
 
+        this.map.mapObject.on(
+          'pm:globaldrawmodetoggled',
+          this.handlePmGlobalDrawModeToggled
+        )
         this.map.mapObject.on('pm:create', this.handlePmCreate)
         this.map.mapObject.on('pm:remove', this.handlePmRemove)
       }
@@ -638,6 +642,15 @@ export default {
     terminateLeafletGeoman() {
       this.map.mapObject.off('pm:create', this.handlePmCreate)
       this.map.mapObject.off('pm:remove', this.handlePmRemove)
+    },
+
+    handlePmGlobalDrawModeToggled(event) {
+      // Todo: #501
+      console.log(event)
+      if (event.enabled) {
+        this.$L.DomEvent.stopPropagation(event)
+        this.$L.DomEvent.preventDefault(event)
+      }
     },
 
     handlePmCreate({ layer }) {
