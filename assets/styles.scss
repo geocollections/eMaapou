@@ -304,11 +304,19 @@ th {
   background-color: white;
 }
 
-.theme--light.v-data-table tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.03);
+.theme--light.v-data-table {
+  &:not(.custom-table) {
+    tbody tr:nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
 }
-.theme--dark.v-data-table tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.5);
+.theme--dark.v-data-table {
+  &:not(.custom-table) {
+    tbody tr:nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
 }
 
 .chip-active {
