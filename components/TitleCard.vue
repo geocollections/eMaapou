@@ -14,7 +14,7 @@
         </slot>
         <div class="d-flex flex-column">
           <slot name="title">
-            <h1 style="font-size: 1.75rem">
+            <h1>
               {{ title }}
             </h1>
           </slot>

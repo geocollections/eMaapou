@@ -8,7 +8,8 @@
     :height="isLanding ? ($vuetify.breakpoint.smAndDown ? 56 : 112) : 64"
   >
     <v-toolbar-items>
-      <v-app-bar-title class="align-self-center app-title">
+      <go-back-button v-if="showBack" />
+      <v-app-bar-title class="align-self-center app-title ml-3">
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -120,10 +121,11 @@
 </template>
 
 <script>
+import GoBackButton from './GoBackButton.vue'
 import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcher },
+  components: { LangSwitcher, GoBackButton },
   props: {
     isDetail: {
       type: Boolean,
@@ -131,6 +133,10 @@ export default {
       default: false,
     },
     drawer: Boolean,
+    showBack: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -203,6 +209,7 @@ export default {
 
 .v-app-bar ::v-deep .v-toolbar__content {
   padding-right: 0;
+  padding-left: 0;
 }
 
 .transition-logo {
