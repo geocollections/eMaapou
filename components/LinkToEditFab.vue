@@ -1,4 +1,6 @@
 <template>
+  <!-- !!!: IS NOT USED! -->
+  <!-- NOTE: Delete this if the new component EditButton is confirmed to stay -->
   <v-fab-transition>
     <v-tooltip left>
       <template #activator="{ on }">
