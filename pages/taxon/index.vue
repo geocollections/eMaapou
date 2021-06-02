@@ -5,7 +5,7 @@
         :title="$t('common.taxa')"
         :subtitle="$t('common.count', { count: count })"
         icon="mdi-layers-triple"
-        class="title"
+        class="title-main"
       />
     </template>
 

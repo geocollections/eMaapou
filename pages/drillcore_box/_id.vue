@@ -4,7 +4,7 @@
       <prev-next-nav-title
         :ids="ids"
         :title="drillcoreBoxTitle"
-        class="title"
+        class="title-main"
       />
     </template>
     <template #top>

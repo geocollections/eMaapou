@@ -4,7 +4,7 @@
       <prev-next-nav-title
         :ids="ids"
         :title="preparation.preparation_number"
-        class="title"
+        class="title-main"
       />
     </template>
 
