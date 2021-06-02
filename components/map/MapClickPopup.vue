@@ -1,6 +1,6 @@
 <template>
-  <l-popup :options="{ minWidth: 175 }">
-    <div v-if="response" style="max-height: 200px; overflow: auto">
+  <l-popup v-if="response" :options="{ minWidth: 175 }">
+    <div style="max-height: 200px; overflow: auto">
       <v-simple-table
         dense
         :fixed-header="response.features.length > 3"
@@ -47,7 +47,6 @@
         </template>
       </v-simple-table>
     </div>
-    <div v-else class="text-center">{{ $t('map.noResults') }}</div>
   </l-popup>
 </template>
 
