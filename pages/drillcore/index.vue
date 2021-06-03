@@ -14,7 +14,12 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper borehole-overlay :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        borehole-overlay
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
 
       <drillcore-table
         :show-search="false"
@@ -65,7 +70,7 @@ export default {
   methods: {
     ...mapActions('drillcore', ['searchDrillcores']),
     async handleUpdate(tableState) {
-      await this.searchDrillcores(tableState.options)
+      await this.searchDrillcores(tableState?.options)
     },
   },
 }

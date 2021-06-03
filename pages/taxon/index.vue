@@ -14,7 +14,12 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper locality-overlay :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        locality-overlay
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
       <taxon-table
         :show-search="false"
         :items="items"
@@ -64,7 +69,7 @@ export default {
   methods: {
     ...mapActions('taxon', ['searchTaxa']),
     async handleUpdate(tableState) {
-      await this.searchTaxa(tableState.options)
+      await this.searchTaxa(tableState?.options)
     },
   },
 }

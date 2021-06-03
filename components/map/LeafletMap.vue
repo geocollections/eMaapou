@@ -490,6 +490,9 @@ export default {
 
         if (json) this.geoJSON = json
       } else this.geoJSON = null
+
+      // Updating activeGeomanLayer triggers search update
+      this.$emit('update')
     },
 
     geoJSON(newVal) {
@@ -631,7 +634,11 @@ export default {
 
         this.map.mapObject.on(
           'pm:globaldrawmodetoggled',
-          this.handlePmGlobalDrawModeToggled
+          this.handlePmGlobalDrawOrRemovalModeToggled
+        )
+        this.map.mapObject.on(
+          'pm:globalremovalmodetoggled',
+          this.handlePmGlobalDrawOrRemovalModeToggled
         )
         this.map.mapObject.on('pm:create', this.handlePmCreate)
         this.map.mapObject.on('pm:remove', this.handlePmRemove)
@@ -643,7 +650,7 @@ export default {
       this.map.mapObject.off('pm:remove', this.handlePmRemove)
     },
 
-    handlePmGlobalDrawModeToggled(event) {
+    handlePmGlobalDrawOrRemovalModeToggled(event) {
       if (event.enabled) this.map.mapObject.off('click', this.handleMapClick)
       else this.map.mapObject.on('click', this.handleMapClick)
     },
@@ -691,14 +698,14 @@ export default {
     },
     // GPS end
 
-    handleNearMeSliderChange(val) {
+    handleNearMeSliderChange: debounce(function (val) {
       if (val) {
         this.removeAllGeomanLayers()
         const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })
         circle.addTo(this.allGeomanLayers)
         this.activeGeomanLayer = circle
       }
-    },
+    }, 500),
   },
 }
 </script>

@@ -17,6 +17,7 @@
         :invalidate-size="showMap"
         activate-search
         gps-enabled
+        @update="$emit('update')"
       />
     </v-card-text>
   </v-card>

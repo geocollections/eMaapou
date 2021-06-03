@@ -61,7 +61,7 @@ export default {
   methods: {
     ...mapActions('stratigraphy', ['searchStratigraphy']),
     async handleUpdate(tableState) {
-      await this.searchStratigraphy(tableState.options)
+      await this.searchStratigraphy(tableState?.options)
     },
   },
 }

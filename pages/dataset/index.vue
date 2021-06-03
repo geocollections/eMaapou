@@ -61,7 +61,7 @@ export default {
   methods: {
     ...mapActions('dataset', ['searchDatasets']),
     async handleUpdate(tableState) {
-      await this.searchDatasets(tableState.options)
+      await this.searchDatasets(tableState?.options)
     },
   },
 }

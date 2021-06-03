@@ -19,6 +19,7 @@
         locality-overlay
         :items="items"
         class="mb-6"
+        @update="handleUpdate"
       />
 
       <sample-table
@@ -70,7 +71,7 @@ export default {
   methods: {
     ...mapActions('sample', ['searchSamples']),
     async handleUpdate(tableState) {
-      await this.searchSamples(tableState.options)
+      await this.searchSamples(tableState?.options)
     },
   },
 }

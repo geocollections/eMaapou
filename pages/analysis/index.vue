@@ -14,7 +14,11 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
 
       <analysis-table
         :show-search="false"
@@ -66,7 +70,7 @@ export default {
   methods: {
     ...mapActions('analysis', ['searchAnalyses']),
     async handleUpdate(tableState) {
-      await this.searchAnalyses(tableState.options)
+      await this.searchAnalyses(tableState?.options)
     },
   },
 }
