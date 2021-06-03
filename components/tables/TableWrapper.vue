@@ -7,6 +7,7 @@
       dense
       calculate-widths
       multi-sort
+      :loading="isLoading"
       :headers="headers"
       :items="items"
       :options="options"
@@ -16,7 +17,10 @@
       :show-expand="expandable"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
-      @update:options="handleChange"
+      @update:options="
+        isLoading = true
+        handleChange($event)
+      "
     >
       <template #no-data>{{ $t('table.noData') }}</template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -150,7 +154,13 @@ export default {
         'items-per-page-text': this.$t('table.itemsPerPage'),
       },
       expanded: [],
+      isLoading: false,
     }
+  },
+  watch: {
+    items() {
+      this.isLoading = false
+    },
   },
   methods: {
     handleChange: debounce(function (options) {
