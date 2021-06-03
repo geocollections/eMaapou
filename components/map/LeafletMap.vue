@@ -15,7 +15,6 @@
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
         @ready="fitBounds"
-        @click="handleClick"
       >
         <l-control-layers ref="layer-control" :auto-z-index="false" />
         <l-control-fullscreen position="topleft" />
@@ -506,6 +505,7 @@ export default {
       if (this.gpsEnabled) this.trackPosition()
 
       if (this.isMapClickEnabled() && document.getElementById('map')) {
+        this.map.mapObject.on('click', this.handleMapClick)
         document.getElementById('map').classList.add('cursor-crosshair')
       }
     })
@@ -513,6 +513,7 @@ export default {
   beforeDestroy() {
     if (this.gpsID) navigator.geolocation.clearWatch(this.gpsID)
     if (this.activateSearch) this.terminateLeafletGeoman()
+    this.map.mapObject.off('click', this.handleMapClick)
   },
   methods: {
     updateCenter(center) {
@@ -547,16 +548,14 @@ export default {
     },
 
     isMapClickEnabled() {
-      if (this.$refs?.map?.mapObject) {
+      if (this.$refs?.map?.mapObject)
         return Object.values(this.checkableLayers).some((layer) =>
           this.$refs.map.mapObject.hasLayer(layer)
         )
-      } else {
-        return false
-      }
+      else return false
     },
 
-    handleClick: debounce(async function (event) {
+    handleMapClick: debounce(async function (event) {
       if (this.isMapClickEnabled()) {
         const MAX_ZOOM = 21
         const radius =
@@ -645,12 +644,8 @@ export default {
     },
 
     handlePmGlobalDrawModeToggled(event) {
-      // Todo: #501
-      console.log(event)
-      if (event.enabled) {
-        this.$L.DomEvent.stopPropagation(event)
-        this.$L.DomEvent.preventDefault(event)
-      }
+      if (event.enabled) this.map.mapObject.off('click', this.handleMapClick)
+      else this.map.mapObject.on('click', this.handleMapClick)
     },
 
     handlePmCreate({ layer }) {
