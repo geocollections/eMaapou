@@ -28,6 +28,7 @@
         <v-card-text class="text-body-1 text-center text-shadow">{{
           $t(description)
         }}</v-card-text>
+        <!-- Todo: remove buttons -->
         <v-card-actions class="justify-center mb-2">
           <v-btn
             outlined

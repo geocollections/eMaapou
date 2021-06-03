@@ -86,6 +86,10 @@
           </l-popup>
         </l-marker>
 
+        <l-layer-group ref="popup">
+          <map-click-popup :response="mapClickResponse" />
+        </l-layer-group>
+
         <!-- <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
@@ -117,10 +121,12 @@ import { mapFields } from 'vuex-map-fields'
 import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
+import MapClickPopup from '~/components/map/MapClickPopup'
 
 export default {
   name: 'LeafletMap',
   components: {
+    MapClickPopup,
     VMarkerClusterWrapper,
     LCircleMarkerWrapper,
     MapLinks,
@@ -189,6 +195,7 @@ export default {
         lat: this.center.latitude,
         lng: this.center.longitude,
       },
+      mapClickResponse: null,
       options: {
         gestureHandling: true,
         gestureHandlingOptions: {
@@ -568,7 +575,7 @@ export default {
         const wmsResponse = await this.$services.geoserver.getWMSData({
           QUERY_LAYERS: this.buildQueryLayers(),
           LAYERS:
-            'sarv:locality_summary,sarv:locality_drillcores,sarv:site_summary',
+            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
           // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
           BBOX: bbox,
           // X: Math.floor(event.layerPoint.x),
@@ -579,25 +586,12 @@ export default {
 
         // console.log(wmsResponse)
         if (wmsResponse?.features?.length > 0) {
-          if (wmsResponse?.features?.[0]?.properties?.url) {
-            const url = wmsResponse.features[0].properties.url
-            if (url.includes('/')) {
-              const splitUrl = url.split('/')
-              if (splitUrl.length >= 2) {
-                const object = splitUrl[splitUrl.length - 2]
-                const id = splitUrl[splitUrl.length - 1]
-                if (object && id) {
-                  this.$router.push(
-                    this.localePath({
-                      name: `${object}-id`,
-                      params: { id },
-                    })
-                  )
-                }
-              }
-            }
+          this.mapClickResponse = {
+            latlng: event.latlng,
+            features: wmsResponse.features,
           }
-        }
+          this.$refs.popup.mapObject.openPopup(event.latlng)
+        } else this.mapClickResponse = null
       }
     }, 400),
 
@@ -610,7 +604,7 @@ export default {
         queryLayers.push('sarv:locality_drillcores')
       }
       if (this.activeOverlays.includes('Lokaliteedid / Localities')) {
-        queryLayers.push('sarv:locality_summary')
+        queryLayers.push('sarv:locality_summary1')
       }
       return queryLayers.join(',')
     },
@@ -636,6 +630,10 @@ export default {
         this.allGeomanLayers = this.$L.layerGroup()
         this.allGeomanLayers.addTo(this.map.mapObject)
 
+        this.map.mapObject.on(
+          'pm:globaldrawmodetoggled',
+          this.handlePmGlobalDrawModeToggled
+        )
         this.map.mapObject.on('pm:create', this.handlePmCreate)
         this.map.mapObject.on('pm:remove', this.handlePmRemove)
       }
@@ -644,6 +642,15 @@ export default {
     terminateLeafletGeoman() {
       this.map.mapObject.off('pm:create', this.handlePmCreate)
       this.map.mapObject.off('pm:remove', this.handlePmRemove)
+    },
+
+    handlePmGlobalDrawModeToggled(event) {
+      // Todo: #501
+      console.log(event)
+      if (event.enabled) {
+        this.$L.DomEvent.stopPropagation(event)
+        this.$L.DomEvent.preventDefault(event)
+      }
     },
 
     handlePmCreate({ layer }) {

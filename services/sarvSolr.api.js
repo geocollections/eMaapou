@@ -257,6 +257,7 @@ const buildFilterQueryParameter = (filters) => {
                 .join(' OR ')
             }
             case 'geom': {
+              console.log(searchParameter)
               if (searchParameter.value.geometry.type === 'Polygon') {
                 // LON LAT
                 const value = cloneDeep(searchParameter.value)

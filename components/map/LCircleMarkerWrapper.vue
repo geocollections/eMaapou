@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- TODO: Click event should be stopped in order to propagate wms layer click. Some solutions were applied but without results -->
     <l-circle-marker
       v-for="(marker, idx) in markers"
       :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
@@ -10,16 +9,7 @@
       color="#fff"
       fill-color="red"
       :fill-opacity="0.9"
-      @click="
-        marker.id && marker.routeName
-          ? $router.push(
-              localePath({
-                name: `${marker.routeName}-id`,
-                params: { id: marker.id },
-              })
-            )
-          : ''
-      "
+      @click="handleClick($event, marker)"
     >
       <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
         marker.text
@@ -46,6 +36,19 @@ export default {
         permanent: this.markers.length <= 5,
         direction: 'top',
         offset: [1, -7],
+      }
+    },
+  },
+  methods: {
+    handleClick(event, marker) {
+      this.$L.DomEvent.stopPropagation(event)
+      if (marker.id && marker.routeName) {
+        this.$router.push(
+          this.localePath({
+            name: `${marker.routeName}-id`,
+            params: { id: marker.id },
+          })
+        )
       }
     },
   },
