@@ -2,17 +2,20 @@
   <v-card :flat="$attrs.flat">
     <v-data-table
       id="table"
+      item-key="id"
+      mobile-breakpoint="0"
       dense
       calculate-widths
       multi-sort
       :headers="headers"
       :items="items"
       :options="options"
-      item-key="_version"
       :server-items-length="count"
       :footer-props="footerProps"
-      mobile-breakpoint="0"
       :hide-default-footer="onlyTable"
+      :show-expand="expandable"
+      :single-expand="singleExpand"
+      :expanded.sync="expanded"
       @update:options="handleChange"
     >
       <template #no-data>{{ $t('table.noData') }}</template>
@@ -77,6 +80,19 @@
           </v-row>
         </div>
       </template>
+      <template
+        v-if="expandable"
+        #item.data-table-expand="{ expand, isExpanded, item }"
+      >
+        <v-btn
+          v-if="item.canExpand"
+          icon
+          :class="{ active: isExpanded }"
+          @click="expand(!isExpanded)"
+        >
+          <v-icon>mdi-chevron-down</v-icon>
+        </v-btn>
+      </template>
       <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
         <slot :name="slotName" v-bind="context" />
       </template>
@@ -85,9 +101,68 @@
 </template>
 
 <script>
-import tableMixin from '~/mixins/tableMixin'
+import { debounce } from 'lodash'
+import exportMixin from '~/mixins/exportMixin'
+
 export default {
   name: 'TableWrapper',
-  mixins: [tableMixin],
+  mixins: [exportMixin],
+  props: {
+    onlyTable: {
+      type: Boolean,
+      default: false,
+    },
+    items: {
+      type: Array,
+      default: () => [],
+    },
+    headers: {
+      type: Array,
+      default: () => [],
+    },
+    options: {
+      type: Object,
+      default: () => {},
+    },
+    count: {
+      type: Number,
+      default: 0,
+    },
+    showSearch: {
+      type: Boolean,
+      default: true,
+    },
+    expandable: {
+      type: Boolean,
+      default: false,
+    },
+    singleExpand: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      search: '',
+      footerProps: {
+        showFirstLastPage: true,
+        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
+        'items-per-page-text': this.$t('table.itemsPerPage'),
+      },
+      expanded: [],
+    }
+  },
+  methods: {
+    handleChange: debounce(function (options) {
+      this.$emit('update', { options, search: this.search })
+    }, 500),
+    handleSearch: debounce(function () {
+      const options = { ...this.options, page: 1 }
+      this.$emit('update', {
+        options,
+        search: this.search,
+      })
+    }, 500),
+  },
 }
 </script>

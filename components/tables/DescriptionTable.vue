@@ -1,5 +1,6 @@
 <template>
-  <expandable-table-wrapper
+  <table-wrapper
+    expandable
     :items="items"
     :headers="headers"
     :count="count"
@@ -57,15 +58,15 @@
         {{ item.author_free }}
       </div>
     </template>
-  </expandable-table-wrapper>
+  </table-wrapper>
 </template>
 
 <script>
 import { round } from 'lodash'
-import ExpandableTableWrapper from '~/components/tables/ExpandableTableWrapper.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   name: 'DescriptionTable',
-  components: { ExpandableTableWrapper },
+  components: { TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
