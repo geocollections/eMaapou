@@ -18,6 +18,7 @@
         use-custom-markers
         :items="mapMarkers"
         class="mb-6"
+        @update="handleUpdate"
       />
 
       <v-card>

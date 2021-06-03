@@ -14,7 +14,12 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper locality-overlay :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        locality-overlay
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
       <locality-table
         :show-search="false"
         :items="items"
@@ -64,7 +69,7 @@ export default {
   methods: {
     ...mapActions('locality', ['searchLocalities']),
     async handleUpdate(tableState) {
-      await this.searchLocalities(tableState.options)
+      await this.searchLocalities(tableState?.options)
     },
   },
 }

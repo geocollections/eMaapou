@@ -19,6 +19,7 @@
         locality-overlay
         :items="items"
         class="mb-6"
+        @update="handleUpdate"
       />
       <analytical-data-table
         :show-search="false"
@@ -68,7 +69,7 @@ export default {
   methods: {
     ...mapActions('analyticalData', ['searchAnalyticalData']),
     async handleUpdate(tableState) {
-      await this.searchAnalyticalData(tableState.options)
+      await this.searchAnalyticalData(tableState?.options)
     },
   },
 }

@@ -14,7 +14,12 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper site-overlay :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        site-overlay
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
 
       <site-table
         :show-search="false"
@@ -73,7 +78,7 @@ export default {
   methods: {
     ...mapActions('site', ['searchSites']),
     async handleUpdate(tableState) {
-      await this.searchSites(tableState.options)
+      await this.searchSites(tableState?.options)
     },
   },
 }
