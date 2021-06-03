@@ -16,22 +16,15 @@
           <tbody>
             <tr v-for="(item, index) in response.features" :key="index">
               <td>
-                <div v-if="buildRouteObject(item)">
-                  <nuxt-link
-                    class="text-link"
-                    :to="localePath(buildRouteObject(item))"
-                  >
-                    {{
-                      $translate({
-                        et: item.properties.locality || item.properties.name,
-                        en:
-                          item.properties.locality_en ||
-                          item.properties.name_en,
-                      })
-                    }}
-                  </nuxt-link>
-                </div>
-                <div v-else>
+                <nuxt-link
+                  class="text-link"
+                  :to="
+                    localePath({
+                      name: `${item.properties.table}-id`,
+                      params: { id: item.properties.object_id },
+                    })
+                  "
+                >
                   {{
                     $translate({
                       et: item.properties.locality || item.properties.name,
@@ -39,7 +32,7 @@
                         item.properties.locality_en || item.properties.name_en,
                     })
                   }}
-                </div>
+                </nuxt-link>
               </td>
               <td>{{ item.properties.total_related_records }}</td>
             </tr>
