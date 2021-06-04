@@ -25,6 +25,7 @@ export default {
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
     searchRoutes: 'Otsing',
+    eMaapouPages: 'e·Maapõu ökosüsteem',
   },
   common: {
     general: 'Üldinfo',
@@ -59,7 +60,7 @@ export default {
     sitesCount: 'Uuringupunktid',
     datasets: 'Andmesetid',
     datasetCount: 'Andmesetid',
-    analyticalData: 'Analüüsitulemused',
+    analyticalData: 'Laboriandmed',
     analyticalDataCount: 'Analüüsitulemused',
     photos: 'Fotoarhiiv',
     photosCount: 'Fotoarhiiv',

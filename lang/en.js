@@ -25,6 +25,7 @@ export default {
     showMenu: 'Show menu',
     routes: 'Routes',
     searchRoutes: 'Search',
+    eMaapouPages: 'e·Maapõu ecosystem',
   },
   common: {
     general: 'General info',
