@@ -12,6 +12,7 @@
             sample: analysis.sample__number,
           })
         "
+        class="title-analysis"
       />
     </template>
 
@@ -150,7 +151,7 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -262,18 +263,28 @@ export default {
   },
   head() {
     return {
-      title: this.$t('analysis.title', {
-        method: this.$translate({
-          et: this.analysis.analysis_method__analysis_method,
-          en: this.analysis.analysis_method__method_en,
-        }),
-        sample: this.analysis.sample__number,
-      }),
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          content: this.title,
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+    title() {
+      return this.$t('analysis.title', {
+        method: this.$translate({
+          et: this.analysis.analysis_method__analysis_method,
+          en: this.analysis.analysis_method__method_en,
+        }),
+        sample: this.analysis.sample__number,
+      })
     },
   },
   methods: {

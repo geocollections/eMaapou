@@ -36,13 +36,13 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const response = await this.$services.sarvSolr.getResourceList('doi', {
         options: tableState.options,
         search: this.search,
         queryFields: this.$getQueryFields(DOI.queryFields),
         searchFilters: {},
       })
-      this.options = tableState.options
       this.items = response.items
       this.count = response.count
     },

@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const geolocationsResponse = await this.$services.sarvREST.getResourceList(
         'dataset_geolocation',
         {
@@ -46,7 +47,6 @@ export default {
           queryFields: this.$getQueryFields(DATASET_GEOLOCATIONS.queryFields),
         }
       )
-      this.options = tableState.options
       this.geolocations = geolocationsResponse.items
       this.count = geolocationsResponse.count
     },

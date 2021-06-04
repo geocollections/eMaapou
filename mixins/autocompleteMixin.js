@@ -5,6 +5,9 @@ export default {
     stratigraphyLabel() {
       return this.$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'
     },
+    taxonLabel() {
+      return this.$i18n.locale === 'et' ? 'taxon' : 'taxon'
+    },
 
     nameLabel() {
       return this.$i18n.locale === 'et' ? 'name' : 'name_en'
@@ -14,6 +17,10 @@ export default {
   methods: {
     autocompleteStratigraphySearch(value) {
       this.$_autocompleteMixin_search(value, 'stratigraphy')
+    },
+
+    autocompleteTaxonSearch(value) {
+      this.$_autocompleteMixin_search(value, 'taxon')
     },
 
     autocompleteChronostratigraphySearch(value) {
@@ -72,5 +79,8 @@ function buildAutocompleteQuery(value, type) {
       return `type:1 AND stratigraphy:(*${value}*) OR stratigraphy_en:(*${value}*)&fl=id,stratigraphy,stratigraphy_en,hierarchy_string`
     case 'lithostratigraphy':
       return `type:2 AND stratigraphy:(*${value}*) OR stratigraphy_en:(*${value}*)&fl=id,stratigraphy,stratigraphy_en,hierarchy_string`
+    case 'taxon':
+      // return `taxon:(*${value}*)&fl=id,taxon,taxon_hierarchy`
+      return `taxon:(*${value}*)`
   }
 }

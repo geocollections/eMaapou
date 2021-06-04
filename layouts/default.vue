@@ -2,6 +2,7 @@
   <v-app dark>
     <v-main>
       <app-header
+        :show-back="isDetail"
         :is-detail="isDetail"
         :drawer="drawer"
         @toggle:navigationDrawer="drawer = !drawer"
@@ -10,14 +11,11 @@
         :drawer="drawer"
         @update:navigationDrawer="drawer = $event"
       />
-      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-        <go-back-fab v-if="isDetail" />
-        <link-to-edit-fab v-if="isDetail" />
+      <v-container
+        :fluid="getRouteBaseName() === 'index' || $vuetify.breakpoint.lgAndDown"
+      >
         <client-only>
-          <history-viewer
-            v-if="$vuetify.breakpoint.smAndUp && !isFrontPage"
-            :class="{ 'ml-11 mr-16': isDetail }"
-          />
+          <history-viewer v-if="$vuetify.breakpoint.smAndUp && !isFrontPage" />
         </client-only>
         <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />
@@ -34,22 +32,18 @@
 <script>
 import AppFooter from '@/components/AppFooter'
 import AppHeader from '@/components/AppHeader'
-import LinkToEditFab from '@/components/LinkToEditFab'
 import ScrollTopFab from '~/components/ScrollTopFab.vue'
 import CookiePolicy from '~/components/CookiePolicy'
 import HistoryViewer from '~/components/HistoryViewer.vue'
 import NavigationDrawer from '~/components/NavigationDrawer'
-import GoBackFab from '~/components/GoBackFab'
 
 export default {
   components: {
-    GoBackFab,
     NavigationDrawer,
     CookiePolicy,
     AppHeader,
     AppFooter,
     ScrollTopFab,
-    LinkToEditFab,
     HistoryViewer,
   },
   data() {

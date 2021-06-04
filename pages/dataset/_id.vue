@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="dataset.title" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="dataset.title"
+        class="title-dataset"
+      />
     </template>
 
     <template #column-left>
@@ -134,7 +138,7 @@
                     :value="selectedParameterValues"
                     multiple
                     column
-                    active-class="header lighten-2 font-weight-bold elevation-3"
+                    active-class="header lighten-2 font-weight-bold elevation-1"
                     @change="handleParameterChange"
                   >
                     <v-chip
@@ -164,7 +168,7 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -370,6 +374,26 @@ export default {
         et: this.dataset.name,
         en: this.dataset.name_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$translate({
+            et: this.dataset.name,
+            en: this.dataset.name_en,
+          }),
+          hid: 'og:title',
+        },
+        {
+          property: 'og:description',
+          content: this.dataset.abstract,
+          hid: 'og:description',
+        },
+        {
+          property: 'description',
+          content: this.dataset.abstract,
+          hid: 'description',
+        },
+      ],
     }
   },
   computed: {

@@ -24,6 +24,7 @@ export default {
     goToFrontpage: 'Go to frontpage',
     showMenu: 'Show menu',
     routes: 'Routes',
+    searchRoutes: 'Search',
   },
   common: {
     general: 'General info',
@@ -35,7 +36,7 @@ export default {
     next: 'Next ID: {id}',
     last: 'Last ID: {id}',
     links: 'Links',
-    search: 'Search',
+    search: 'Quick search',
     small: 'Small',
     medium: 'Medium',
     large: 'Large',
@@ -95,6 +96,7 @@ export default {
     tableHeaders: 'Table headers',
     clipboard: 'Copy to clipboard',
     export: 'Export',
+    taxa: 'Taxa',
   },
   link: {
     sarvAPI: 'Public API',
@@ -576,6 +578,14 @@ export default {
     fossilGroup: 'Fossil group',
     authorYear: 'Author',
     parentTaxon: 'Parent taxon',
+    species: 'Species',
+    locality: 'Locality',
+    stratigraphyHierarchy: 'Stratigraphy',
+    taxonHierarchy: 'Parent taxon',
+    author: 'Author',
+    pageTitle: 'Taxon search',
+    fad: 'First appearance datum',
+    lad: 'Last appearance datum',
   },
   infinite: {
     noMore: '',
@@ -805,6 +815,10 @@ export default {
   map: {
     estonian_geoportal: 'Estonian Geoportal',
     google_maps: 'Google Maps',
+    clickToSearchNearMe: 'click to search near me',
+    name: 'Name',
+    relatedRecords: 'Related records',
+    noResults: 'No results',
   },
   file: {
     specimenTitle: 'Image of specimen',
@@ -991,6 +1005,7 @@ export default {
     preparation: 'Preparations',
     stratigraphy: 'Stratigraphy',
     dataset: 'Datasets',
+    taxon: 'Taxa',
     analytical_data: 'Analytical data',
     photo: 'Photo Archive',
     'photo-id': 'Photo ID: {id}',

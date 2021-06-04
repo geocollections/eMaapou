@@ -29,6 +29,7 @@ export default {
   methods: {
     round,
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const analysisResultResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
@@ -41,7 +42,6 @@ export default {
         }
       )
 
-      this.options = tableState.options
       this.analysisResults = analysisResultResponse.items
       this.count = analysisResultResponse.count
     },

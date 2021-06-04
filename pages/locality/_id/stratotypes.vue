@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const stratotypeResponse = await this.$services.sarvREST.getResourceList(
         'stratigraphy_stratotype',
         {
@@ -40,7 +41,6 @@ export default {
           queryFields: this.$getQueryFields(STRATOTYPE.queryFields),
         }
       )
-      this.options = tableState.options
       this.stratotypes = stratotypeResponse.items
       this.count = stratotypeResponse.count
     },

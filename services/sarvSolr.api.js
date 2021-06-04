@@ -1,5 +1,7 @@
-import { isEmpty, isNil } from 'lodash'
+import { cloneDeep, isEmpty, isNil } from 'lodash'
 import qs from 'qs'
+import Wkt from 'wicket/wicket'
+import earcut from 'earcut'
 
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
@@ -134,7 +136,7 @@ const buildQueryParameter = (search) => {
 }
 
 const buildFilterQueryParameter = (filters) => {
-  const filterQueryStr = Object.entries(filters)
+  let filterQueryStr = Object.entries(filters)
     .filter(([_, v]) => {
       if (v.type === 'range' && isNil(v.value[0]) && isNil(v.value[1]))
         return false
@@ -254,6 +256,74 @@ const buildFilterQueryParameter = (filters) => {
                 })
                 .join(' OR ')
             }
+            case 'geom': {
+              if (searchParameter.value.geometry.type === 'Polygon') {
+                // LON LAT
+                const value = cloneDeep(searchParameter.value)
+
+                // Polygon triangulation
+                const data = earcut.flatten(value.geometry.coordinates)
+                const triangles = earcut(
+                  data.vertices,
+                  data.holes,
+                  data.dimensions
+                )
+
+                // Reversing triangles to geo coordinates
+                const coordinates = triangles.map((item) => {
+                  const startIndex = item * 2
+                  return [
+                    data.vertices[startIndex],
+                    data.vertices[startIndex + 1],
+                  ]
+                })
+                const triangleCoordinates = coordinates.reduce(
+                  (prev, item, index, arr) => {
+                    if ((index + 1) % 3 === 0) {
+                      prev.push([
+                        arr[index - 2],
+                        arr[index - 1],
+                        arr[index],
+                        arr[index - 2],
+                      ])
+                    }
+                    return prev
+                  },
+                  []
+                )
+
+                // Creating WKT string for query
+                const wkt = new Wkt.Wkt()
+                wkt.read(
+                  JSON.stringify({
+                    coordinates:
+                      triangleCoordinates.length > 1
+                        ? [triangleCoordinates]
+                        : triangleCoordinates,
+                    type:
+                      triangleCoordinates.length > 1
+                        ? 'MultiPolygon'
+                        : 'Polygon',
+                  })
+                )
+                let wktString = wkt.write()
+                wktString = wktString.replaceAll('),(', ')),((')
+
+                return `${fieldId}:"isWithin(${wktString})"`
+              } else {
+                // CIRCLE
+                const reversedCoordinates = [
+                  ...searchParameter.value.geometry.coordinates,
+                ].reverse()
+                // convert to km (from m) and round to 1 decimal place
+                const radius =
+                  Math.round(
+                    (searchParameter.value.properties.radius / 1000) * 10
+                  ) / 10
+
+                return `{!geofilt})&d=${radius}&pt=${reversedCoordinates}&sfield=${fieldId}`
+              }
+            }
             default:
               return null
           }
@@ -270,5 +340,9 @@ const buildFilterQueryParameter = (filters) => {
       if (prev.length > 0) return `${prev} AND (${filterQueryParam})`
       return `${prev}(${filterQueryParam})`
     }, '')
+
+  // Hack: Special case for spatial search CIRCLE:
+  if (filterQueryStr.includes('{!geofilt}') && filterQueryStr.endsWith(')'))
+    filterQueryStr = filterQueryStr.slice(0, -1)
   return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
 }

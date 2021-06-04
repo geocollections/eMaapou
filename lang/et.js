@@ -24,6 +24,7 @@ export default {
     goToFrontpage: 'Mine pealehele',
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
+    searchRoutes: 'Otsing',
   },
   common: {
     general: 'Üldinfo',
@@ -35,7 +36,7 @@ export default {
     next: 'Järgmine ID: {id}',
     last: 'Viimane ID: {id}',
     links: 'Lingid',
-    search: 'Otsing',
+    search: 'Kiirotsing',
     small: 'Väike',
     medium: 'Keskmine',
     large: 'Suur',
@@ -96,6 +97,7 @@ export default {
     tableHeaders: 'Tabeli päised',
     clipboard: 'Kopeeri lõikelauale',
     export: 'Eksport',
+    taxa: 'Taksonid',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -577,6 +579,14 @@ export default {
     fossilGroup: 'Fossiili grupp',
     authorYear: 'Autor',
     parentTaxon: 'Kuulub: takson',
+    species: 'Liik',
+    locality: 'Lokaliteet',
+    stratigraphyHierarchy: 'Stratigraafia',
+    taxonHierarchy: 'Ülem takson',
+    author: 'Autor',
+    pageTitle: 'Taksoni otsing',
+    fad: 'Ilmumine',
+    lad: 'Kadumine',
   },
   infinite: {
     noMore: '',
@@ -806,6 +816,10 @@ export default {
   map: {
     estonian_geoportal: 'Maa-ameti kaart',
     google_maps: 'Google Maps',
+    clickToSearchNearMe: 'vajuta, et otsida minu lähedal',
+    name: 'Nimi',
+    relatedRecords: 'Seotud kirjed',
+    noResults: 'Tulemused puuduvad',
   },
   file: {
     specimenTitle: 'Säiliku foto',
@@ -987,6 +1001,7 @@ export default {
     'sample-id': 'Proov ID: {id}',
     site: 'Uuringupunktid',
     'site-id': 'Uuringupunkt ID: {id}',
+    taxon: 'Taksonid',
     drillcore_box: 'Puursüdamiku kastid',
     'drillcore_box-id': 'Puursüdamiku kast ID: {id}',
     preparation: 'Preparaadid',

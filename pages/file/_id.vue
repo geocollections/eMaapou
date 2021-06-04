@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="fileTitle" />
+      <prev-next-nav-title :ids="ids" :title="fileTitle" class="title-main" />
     </template>
     <template #column-left>
       <v-card-text class="text-center">
@@ -666,6 +666,13 @@ export default {
   head() {
     return {
       title: this.fileTitle,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.fileTitle,
+        },
+      ],
     }
   },
   computed: {

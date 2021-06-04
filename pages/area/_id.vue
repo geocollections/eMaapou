@@ -4,157 +4,149 @@
       <prev-next-nav-title
         :ids="ids"
         :title="$translate({ et: area.name, en: area.name_en })"
+        class="title-area"
       />
     </template>
 
     <template #column-left>
-      <v-card flat tile>
-        <v-row no-gutters justify="center">
-          <v-col cols="12">
-            <v-card-title>{{ $t('common.general') }}</v-card-title>
-            <v-card-text>
-              <v-simple-table dense class="custom-table">
-                <template #default>
-                  <tbody>
-                    <data-row
-                      :title="$t('area.name')"
-                      :value="$translate({ et: area.name, en: area.name_en })"
-                    />
-                    <link-data-row
-                      v-if="area.area_type === 2"
-                      :title="$t('area.areaType')"
-                      :value="
-                        $translate({
-                          et: area.area_type__name,
-                          en: area.area_type__name_en,
-                        })
-                      "
-                      @link-click="$openTurba('turbaala', area.id)"
-                    />
-                    <data-row
-                      v-else
-                      :title="$t('area.name')"
-                      :value="
-                        $translate({
-                          et: area.area_type__name,
-                          en: area.area_type__name_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('area.maakond')"
-                      :value="
-                        $translate({
-                          et: area.maakond__maakond,
-                          en: area.maakond__maakond_en,
-                        })
-                      "
-                    />
-                    <data-row
-                      :title="$t('area.areaHa')"
-                      :value="area.area_ha"
-                    />
-                    <data-row
-                      :title="$t('area.depositAreaHa')"
-                      :value="area.deposit_area_ha"
-                    />
-                    <data-row :title="$t('area.description')">
-                      <template #value>
-                        <!-- eslint-disable vue/no-v-html -->
-                        <div
-                          v-html="
-                            $translate({
-                              et: area.description,
-                              en: area.description_en,
-                            })
-                          "
-                        />
-                        <!-- eslint-enable -->
-                      </template>
-                    </data-row>
-                    <data-row :title="$t('area.egf')">
-                      <template #value>
-                        <span v-for="(item, index) in egfArray" :key="index">
-                          <a class="text-link" @click="$openEgf(item)">
-                            {{ item }}
-                          </a>
-                          <span
-                            v-if="index !== egfArray.length - 1"
-                            class="mr-1"
-                            >|</span
-                          >
-                        </span>
-                      </template>
-                    </data-row>
-                    <link-data-row
-                      :title="$t('area.maardla')"
-                      @link-click="$openEelis(item)"
-                    >
-                      <template #value>
-                        {{ $t('area.maardlaLink') }} ({{ area.maardla }})
-                      </template>
-                    </link-data-row>
-                    <data-row :title="$t('area.eelis')">
-                      <template #value>
-                        <span v-for="(item, index) in eelisArray" :key="index">
-                          <a class="text-link" @click="$openEelis(item)">
-                            {{ item }}
-                          </a>
-                          <span
-                            v-if="index !== eelisArray.length - 1"
-                            class="mr-1"
-                            >|</span
-                          >
-                        </span>
-                      </template>
-                    </data-row>
+      <v-row no-gutters justify="center">
+        <v-col cols="12">
+          <v-card-title>{{ $t('common.general') }}</v-card-title>
+          <v-card-text>
+            <v-simple-table dense class="custom-table">
+              <template #default>
+                <tbody>
+                  <data-row
+                    :title="$t('area.name')"
+                    :value="$translate({ et: area.name, en: area.name_en })"
+                  />
+                  <link-data-row
+                    v-if="area.area_type === 2"
+                    :title="$t('area.areaType')"
+                    :value="
+                      $translate({
+                        et: area.area_type__name,
+                        en: area.area_type__name_en,
+                      })
+                    "
+                    @link-click="$openTurba('turbaala', area.id)"
+                  />
+                  <data-row
+                    v-else
+                    :title="$t('area.name')"
+                    :value="
+                      $translate({
+                        et: area.area_type__name,
+                        en: area.area_type__name_en,
+                      })
+                    "
+                  />
+                  <data-row
+                    :title="$t('area.maakond')"
+                    :value="
+                      $translate({
+                        et: area.maakond__maakond,
+                        en: area.maakond__maakond_en,
+                      })
+                    "
+                  />
+                  <data-row :title="$t('area.areaHa')" :value="area.area_ha" />
+                  <data-row
+                    :title="$t('area.depositAreaHa')"
+                    :value="area.deposit_area_ha"
+                  />
+                  <data-row :title="$t('area.description')">
+                    <template #value>
+                      <!-- eslint-disable vue/no-v-html -->
+                      <div
+                        v-html="
+                          $translate({
+                            et: area.description,
+                            en: area.description_en,
+                          })
+                        "
+                      />
+                      <!-- eslint-enable -->
+                    </template>
+                  </data-row>
+                  <data-row :title="$t('area.egf')">
+                    <template #value>
+                      <span v-for="(item, index) in egfArray" :key="index">
+                        <a class="text-link" @click="$openEgf(item)">
+                          {{ item }}
+                        </a>
+                        <span v-if="index !== egfArray.length - 1" class="mr-1"
+                          >|</span
+                        >
+                      </span>
+                    </template>
+                  </data-row>
+                  <link-data-row
+                    :title="$t('area.maardla')"
+                    @link-click="$openEelis(item)"
+                  >
+                    <template #value>
+                      {{ $t('area.maardlaLink') }} ({{ area.maardla }})
+                    </template>
+                  </link-data-row>
+                  <data-row :title="$t('area.eelis')">
+                    <template #value>
+                      <span v-for="(item, index) in eelisArray" :key="index">
+                        <a class="text-link" @click="$openEelis(item)">
+                          {{ item }}
+                        </a>
+                        <span
+                          v-if="index !== eelisArray.length - 1"
+                          class="mr-1"
+                          >|</span
+                        >
+                      </span>
+                    </template>
+                  </data-row>
 
-                    <data-row
-                      v-if="area.area_type === 2"
-                      :title="$t('area.text1')"
-                      :value="planArray"
-                    >
-                      <template #value>
-                        <span v-for="(item, index) in planArray" :key="index">
-                          <a
-                            class="text-link"
-                            :download="item.trim()"
-                            @click="$openTurba('plaanid', item.trim(), false)"
+                  <data-row
+                    v-if="area.area_type === 2"
+                    :title="$t('area.text1')"
+                    :value="planArray"
+                  >
+                    <template #value>
+                      <span v-for="(item, index) in planArray" :key="index">
+                        <a
+                          class="text-link"
+                          :download="item.trim()"
+                          @click="$openTurba('plaanid', item.trim(), false)"
+                        >
+                          {{ item }}
+                          <v-icon small color="primary darken-2"
+                            >mdi-file-download-outline</v-icon
                           >
-                            {{ item }}
-                            <v-icon small color="primary darken-2"
-                              >mdi-file-download-outline</v-icon
-                            >
-                          </a>
-                          <span
-                            v-if="index !== planArray.length - 1"
-                            class="mr-1"
-                            >|</span
-                          >
-                        </span>
-                      </template>
-                    </data-row>
-                    <data-row
-                      v-if="area.date_added"
-                      :title="$t('area.dateAdded')"
-                      :value="
-                        new Date(area.date_added).toISOString().split('T')[0]
-                      "
-                    />
-                    <data-row
-                      v-if="area.date_changed"
-                      :title="$t('area.dateChanged')"
-                      :value="
-                        new Date(area.date_changed).toISOString().split('T')[0]
-                      "
-                    />
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-col>
-        </v-row>
-      </v-card>
+                        </a>
+                        <span v-if="index !== planArray.length - 1" class="mr-1"
+                          >|</span
+                        >
+                      </span>
+                    </template>
+                  </data-row>
+                  <data-row
+                    v-if="area.date_added"
+                    :title="$t('area.dateAdded')"
+                    :value="
+                      new Date(area.date_added).toISOString().split('T')[0]
+                    "
+                  />
+                  <data-row
+                    v-if="area.date_changed"
+                    :title="$t('area.dateChanged')"
+                    :value="
+                      new Date(area.date_changed).toISOString().split('T')[0]
+                    "
+                  />
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-col>
+      </v-row>
     </template>
 
     <template v-if="computedSites" #column-right>
@@ -172,13 +164,10 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" flat tile class="mt-6 mx-4 mb-4">
-        <v-row no-gutters justify="center" class="px-4">
-          <v-col cols="12" class="elevation-2 rounded">
-            <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
-          </v-col>
-        </v-row> </v-card
-    ></template>
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+      </v-card>
+    </template>
   </detail>
 </template>
 
@@ -309,6 +298,32 @@ export default {
         et: this.area.name,
         en: this.area.name_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$translate({
+            et: this.area.name,
+            en: this.area.name_en,
+          }),
+          hid: 'og:title',
+        },
+        {
+          property: 'og:description',
+          content: this.$translate({
+            et: this.area.description,
+            en: this.area.description_en,
+          }),
+          hid: 'og:description',
+        },
+        {
+          property: 'description',
+          content: this.$translate({
+            et: this.area.description,
+            en: this.area.description_en,
+          }),
+          hid: 'description',
+        },
+      ],
     }
   },
   computed: {

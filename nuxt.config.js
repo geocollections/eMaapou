@@ -18,6 +18,23 @@ export default {
         content:
           'e-Maapõu is web portal for geoscience data from Estonia. It provides direct search capabilities to information system SARV and links to other relevant data sources',
       },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: 'e-Maapõu',
+        template: (chunk) => `${chunk} | e-Maapõu`,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+        hid: 'og:type',
+      },
+      {
+        property: 'og:description',
+        content:
+          'e-Maapõu is web portal for geoscience data from Estonia. It provides direct search capabilities to information system SARV and links to other relevant data sources',
+        hid: 'og:description',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -71,9 +88,14 @@ export default {
     // routes() {
     //   return axios.get('/sitemap/ema')
     // },
+    hostname: 'https://geoloogia.info',
     path: '/sitemap.xml',
+    i18n: {
+      locales: ['et', 'en'],
+      routesNameSeparator: '___',
+    },
     gzip: true,
-    generate: false,
+    generate: true,
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

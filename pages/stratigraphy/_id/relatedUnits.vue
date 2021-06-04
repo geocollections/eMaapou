@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const analysisResponse = await this.$services.sarvSolr.getResourceList(
         'stratigraphy',
         {
@@ -52,7 +53,6 @@ export default {
           queryFields: this.$getQueryFields(STRATIGRAPHY.queryFields),
         }
       )
-      this.options = tableState.options
       this.items = analysisResponse.items
       this.count = analysisResponse.count
     },

@@ -2,19 +2,25 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.stratigraphy')"
+        :title="$t('common.taxa')"
         :subtitle="$t('common.count', { count: count })"
         icon="mdi-layers-triple"
-        class="title-stratigraphy"
+        class="title-main"
       />
     </template>
 
     <template #form>
-      <stratigraphy-search-form />
+      <taxon-search-form />
     </template>
 
     <template #result>
-      <stratigraphy-table
+      <search-view-map-wrapper
+        locality-overlay
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
+      <taxon-table
         :show-search="false"
         :items="items"
         :count="count"
@@ -29,39 +35,41 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import Search from '@/components/templates/Search'
-import StratigraphySearchForm from '@/components/search/forms/StratigraphySearchForm.vue'
-import StratigraphyTable from '@/components/tables/StratigraphyTable'
+import TaxonSearchForm from '@/components/search/forms/TaxonSearchForm.vue'
+import TaxonTable from '@/components/tables/TaxonTable'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
-    StratigraphySearchForm,
-    StratigraphyTable,
+    TaxonSearchForm,
+    TaxonTable,
+    SearchViewMapWrapper,
     TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {
     return {
-      title: this.$t('stratigraphy.pageTitle'),
+      title: this.$t('taxon.pageTitle'),
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.$t('stratigraphy.pageTitle'),
+          content: this.$t('taxon.pageTitle'),
         },
       ],
     }
   },
   computed: {
     ...mapState('landing', ['search']),
-    ...mapState('stratigraphy', ['options', 'items', 'count']),
+    ...mapState('taxon', ['options', 'items', 'count']),
   },
   methods: {
-    ...mapActions('stratigraphy', ['searchStratigraphy']),
+    ...mapActions('taxon', ['searchTaxa']),
     async handleUpdate(tableState) {
-      await this.searchStratigraphy(tableState?.options)
+      await this.searchTaxa(tableState?.options)
     },
   },
 }

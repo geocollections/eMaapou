@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.analyticalDataCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-chart-scatter-plot"
+        class="title-analysis"
       />
     </template>
 
@@ -18,6 +19,7 @@
         locality-overlay
         :items="items"
         class="mb-6"
+        @update="handleUpdate"
       />
       <analytical-data-table
         :show-search="false"
@@ -33,11 +35,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import AnalyticalDataTable from '~/components/tables/AnalyticalDataTable'
 import AnalyticalDataSearchForm from '~/components/search/forms/AnalyticalDataSearchForm'
 import Search from '~/components/templates/Search'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   name: 'AnalysisSearch',
@@ -46,11 +48,18 @@ export default {
     AnalyticalDataSearchForm,
     AnalyticalDataTable,
     SearchViewMapWrapper,
-    PageTitleWrapper,
+    TitleCard,
   },
   head() {
     return {
       title: this.$t('analyticalData.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$t('analyticalData.pageTitle'),
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
@@ -60,7 +69,7 @@ export default {
   methods: {
     ...mapActions('analyticalData', ['searchAnalyticalData']),
     async handleUpdate(tableState) {
-      await this.searchAnalyticalData(tableState.options)
+      await this.searchAnalyticalData(tableState?.options)
     },
   },
 }

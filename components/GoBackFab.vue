@@ -1,4 +1,6 @@
 <template>
+  <!-- !!!: IS NOT USED -->
+  <!-- NOTE: Should be deleted if the new GoBackButton is found to be the better solution -->
   <v-fab-transition>
     <v-tooltip right>
       <template #activator="{ on }">

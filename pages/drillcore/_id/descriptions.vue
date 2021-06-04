@@ -30,6 +30,7 @@ export default {
   methods: {
     round,
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const descriptionResponse = await this.$services.sarvREST.getResourceList(
         'locality_description',
         {
@@ -41,7 +42,6 @@ export default {
           queryFields: this.$getQueryFields(DESCRIPTION.queryFields),
         }
       )
-      this.options = tableState.options
       this.descriptions = descriptionResponse.items.map((item) => {
         return { ...item, canExpand: !isEmpty(item.description) }
       })

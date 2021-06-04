@@ -75,8 +75,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetLocalityFilters({ commit }) {
+  resetLocalityFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
   },
   async quickSearchLocalities(
     { commit, rootState, state },
@@ -102,13 +103,17 @@ export const actions = {
   ) {
     commit('SET_OPTIONS', options)
 
+    const globalSearchFilters = {
+      geoJSON: rootState.globalSearch.filters.byIds.geoJSON,
+    }
+
     const localityResponse = await this.$services.sarvSolr.getResourceList(
       'locality',
       {
         options,
         search: rootState.landing.search,
         queryFields: this.$getQueryFields(LOCALITY.queryFields),
-        searchFilters: state.filters.byIds,
+        searchFilters: { ...state.filters.byIds, ...globalSearchFilters },
       }
     )
     commit('SET_ITEMS', localityResponse.items)

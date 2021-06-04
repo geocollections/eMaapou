@@ -46,6 +46,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const analysisResponse = await this.$services.sarvSolr.getResourceList(
         'analytical_data',
         {
@@ -57,7 +58,6 @@ export default {
           queryFields: this.mergedQueryFields,
         }
       )
-      this.options = tableState.options
       this.analyses = analysisResponse.items
       this.count = analysisResponse.count
     },

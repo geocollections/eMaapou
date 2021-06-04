@@ -4,6 +4,7 @@
       <prev-next-nav-title
         :ids="ids"
         :title="$translate({ et: locality.locality, en: locality.locality_en })"
+        class="title-locality"
       />
     </template>
 
@@ -238,8 +239,8 @@
     </template>
 
     <template #bottom>
-      <image-bar v-if="images.length > 0" :images="images" />
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -447,6 +448,16 @@ export default {
         et: this.locality.locality,
         en: this.locality.locality_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$translate({
+            et: this.locality.locality,
+            en: this.locality.locality_en,
+          }),
+        },
+      ],
     }
   },
   computed: {

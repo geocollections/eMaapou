@@ -1,47 +1,7 @@
-import { debounce } from 'lodash'
 import XLSX from 'xlsx'
 
 export default {
-  props: {
-    onlyTable: {
-      type: Boolean,
-      default: false,
-    },
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    headers: {
-      type: Array,
-      default: () => [],
-    },
-    options: {
-      type: Object,
-      default: () => {},
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      search: '',
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
-    }
-  },
   methods: {
-    handleChange(options) {
-      this.$emit('update', { options, search: this.search })
-    },
     filterItemsByKeys(items, keys) {
       const filteredItems = items.map((item) => {
         const res = {}
@@ -115,12 +75,5 @@ export default {
       document.execCommand('Copy')
       sel.removeAllRanges()
     },
-    handleSearch: debounce(function () {
-      const options = { ...this.options, page: 1 }
-      this.$emit('update', {
-        options,
-        search: this.search,
-      })
-    }, 500),
   },
 }

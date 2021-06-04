@@ -3,6 +3,7 @@ export default {
     tableName() {
       let table = this.getRouteBaseName()
       if (table === 'photo') table = 'attachment'
+      if (table === 'taxon') table = 'taxon_search'
       return table
     },
     stateModuleName() {

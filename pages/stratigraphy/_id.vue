@@ -9,6 +9,7 @@
             en: stratigraphy.stratigraphy_en,
           })
         "
+        class="title-stratigraphy"
       />
     </template>
 
@@ -185,7 +186,7 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
       <v-card
@@ -385,6 +386,16 @@ export default {
         et: this.stratigraphy.stratigraphy,
         en: this.stratigraphy.stratigraphy_en,
       }),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$translate({
+            et: this.stratigraphy.stratigraphy,
+            en: this.stratigraphy.stratigraphy_en,
+          }),
+        },
+      ],
     }
   },
   computed: {

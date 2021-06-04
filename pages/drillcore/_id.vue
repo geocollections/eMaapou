@@ -6,6 +6,7 @@
         :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         "
+        class="title-drillcore"
       />
     </template>
 
@@ -159,7 +160,7 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -302,13 +303,23 @@ export default {
   },
   head() {
     return {
-      title: this.$translate({
-        et: this.drillcore.drillcore,
-        en: this.drillcore.drillcore_en,
-      }),
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          content: this.title,
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
+    title() {
+      return this.$translate({
+        et: this.drillcore.drillcore,
+        en: this.drillcore.drillcore_en,
+      })
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

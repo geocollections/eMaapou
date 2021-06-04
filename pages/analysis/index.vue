@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.analysesCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-chart-scatter-plot"
+        class="title-analysis"
       />
     </template>
 
@@ -13,7 +14,11 @@
     </template>
 
     <template #result>
-      <search-view-map-wrapper :items="items" class="mb-6" />
+      <search-view-map-wrapper
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
 
       <analysis-table
         :show-search="false"
@@ -31,24 +36,31 @@
 import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   name: 'AnalysisSearch',
   components: {
     Search,
     SearchViewMapWrapper,
-    PageTitleWrapper,
     AnalysisSearchForm,
     AnalysisTable,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('analysis.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          content: this.$t('analysis.pageTitle'),
+          hid: 'og:title',
+        },
+      ],
     }
   },
   computed: {
@@ -58,7 +70,7 @@ export default {
   methods: {
     ...mapActions('analysis', ['searchAnalyses']),
     async handleUpdate(tableState) {
-      await this.searchAnalyses(tableState.options)
+      await this.searchAnalyses(tableState?.options)
     },
   },
 }

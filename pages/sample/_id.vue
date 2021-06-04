@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="sampleTitle" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="sampleTitle"
+        class="title-sample"
+      />
     </template>
     <template #column-left>
       <v-card-title>{{ $t('common.general') }}</v-card-title>
@@ -303,6 +307,7 @@
               latitude: sample.locality__latitude,
               longitude: sample.locality__longitude,
             }"
+            sample-overlay
             :markers="[
               {
                 latitude: sample.locality__latitude,
@@ -328,7 +333,7 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -472,14 +477,25 @@ export default {
   },
   head() {
     return {
-      title:
-        this.sample.number ||
-        this.sample.number_additional ||
-        this.sample.number_field ||
-        this.sample.id,
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
     }
   },
   computed: {
+    title() {
+      return (
+        this.sample.number ||
+        this.sample.number_additional ||
+        this.sample.number_field ||
+        this.sample.id
+      )
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

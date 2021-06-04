@@ -444,6 +444,8 @@ export const TAXON = {
     taxon: (locale) => 'taxon',
     author_year: (locale) => 'author_year',
     parent_taxon: (locale) => 'parent_taxon',
+    fad: (locale) => (locale === 'et' ? 'fad' : 'fad_en'),
+    lad: (locale) => (locale === 'et' ? 'lad' : 'lad_en'),
   },
 }
 

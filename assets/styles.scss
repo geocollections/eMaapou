@@ -116,6 +116,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
         border-right: 1px solid map-get($map: $grey, $key: 'lighten-2');
         font-weight: 700;
         font-size: small !important;
+        width: 200px;
       }
     }
   }
@@ -203,41 +204,93 @@ th {
   width: inherit !important;
 }
 
+.title-border {
+  border-bottom-width: 5px !important;
+  border-bottom-style: solid !important;
+}
+
 .emp-title {
-  color: #fff !important;
-  background-color: #7bbc9a !important;
   /*color: var(--v-tertiary-base) !important;
   background-color: var(--v-quinary-base) !important;*/
+
+  @extend .title-border;
+  border-color: var(--v-main-base) !important;
 }
 
 .emp-title-stratigraphy {
-  color: #fff !important;
-  background-color: #cb8c37 !important;
+  @extend .title-border;
+  border-color: var(--v-emp-stratigraphy-base) !important;
 }
 
 .emp-title-analysis {
-  color: #fff !important;
-  background-color: #80a8c2 !important;
+  @extend .title-border;
+  border-color: var(--v-emp-analysis-base) !important;
 }
 
 .emp-title-sample {
-  color: #fff !important;
-  background-color: #bc7b7b !important;
+  @extend .title-border;
+  border-color: var(--v-emp-sample-base) !important;
 }
 
 .emp-title-drillcore {
-  color: #fff !important;
-  background-color: #8f7e9f !important;
+  @extend .title-border;
+  border-color: var(--v-emp-drillcore-base) !important;
 }
 
 .emp-title-locality {
-  color: #fff !important;
-  background-color: #835b51 !important;
+  @extend .title-border;
+  border-color: var(--v-emp-locality-base) !important;
 }
 
 .emp-title-site {
-  color: #fff !important;
-  background-color: #8ba56c !important;
+  @extend .title-border;
+  border-color: var(--v-emp-site-base) !important;
+}
+
+.title-main {
+  /*color: var(--v-tertiary-base) !important;
+  background-color: var(--v-quinary-base) !important;*/
+
+  @extend .title-border;
+  border-color: var(--v-main-base) !important;
+}
+
+.title-stratigraphy {
+  @extend .title-border;
+  border-color: var(--v-emp-stratigraphy-base) !important;
+}
+
+.title-analysis {
+  @extend .title-border;
+  border-color: var(--v-emp-analysis-base) !important;
+}
+
+.title-sample {
+  @extend .title-border;
+  border-color: var(--v-emp-sample-base) !important;
+}
+
+.title-drillcore {
+  @extend .title-border;
+  border-color: var(--v-emp-drillcore-base) !important;
+}
+
+.title-locality {
+  @extend .title-border;
+  border-color: var(--v-emp-locality-base) !important;
+}
+
+.title-site {
+  @extend .title-border;
+  border-color: var(--v-emp-site-base) !important;
+}
+.title-photo {
+  @extend .title-border;
+  border-color: var(--v-emp-photo-base) !important;
+}
+.title-dataset {
+  @extend .title-border;
+  border-color: var(--v-emp-dataset-base) !important;
 }
 
 #app {
@@ -251,11 +304,19 @@ th {
   background-color: white;
 }
 
-.theme--light.v-data-table tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.03);
+.theme--light.v-data-table {
+  &:not(.custom-table) {
+    tbody tr:nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+  }
 }
-.theme--dark.v-data-table tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.5);
+.theme--dark.v-data-table {
+  &:not(.custom-table) {
+    tbody tr:nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
 }
 
 .chip-active {
@@ -263,4 +324,45 @@ th {
   border-width: 1px;
   border-style: solid;
   border-color: var(--v-primary-darken2) !important;
+}
+
+// NOTE: vue2-leaflet-draw-toolbar style fixes / overrides
+// Fixes margin issue
+.leaflet-draw-toolbar.leaflet-control-toolbar {
+  margin-top: 0 !important;
+}
+// Overrides vuetify list padding style
+.leaflet-draw-toolbar {
+  padding-left: 0 !important;
+}
+
+// Fixes color picker li elements
+.leaflet-draw-toolbar {
+  .leaflet-toolbar-1 {
+    .leaflet-toolbar-icon {
+      float: unset !important;
+    }
+    div {
+      border-color: white !important;
+    }
+  }
+
+  // Sets eyedropper icon
+  .fa-fill-drip::before {
+    content: '\F020A';
+  }
+
+  .fas:before {
+    display: inline-block;
+    font: normal normal normal 24px/1 'Material Design Icons';
+    font-size: 16px;
+    color: grey;
+    text-rendering: auto;
+    line-height: inherit;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.montserrat {
+  font-family: 'Montserrat', sans-serif;
 }

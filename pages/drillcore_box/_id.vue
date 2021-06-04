@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="drillcoreBoxTitle" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="drillcoreBoxTitle"
+        class="title-main"
+      />
     </template>
     <template #top>
       <v-card v-if="activeImage" class="my-2 mx-4">
@@ -235,7 +239,7 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -356,15 +360,25 @@ export default {
   },
   head() {
     return {
-      title: `${this.$t('drillcoreBox.nr', {
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
+    }
+  },
+  computed: {
+    title() {
+      return `${this.$t('drillcoreBox.nr', {
         number: this.drillcoreBox.number,
       })} - ${this.$translate({
         et: this.drillcoreBox.drillcore__drillcore,
         en: this.drillcoreBox.drillcore__drillcore_en,
-      })}`,
-    }
-  },
-  computed: {
+      })}`
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

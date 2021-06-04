@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.photosCount')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-file-image-outline"
+        class="title-photo"
       />
     </template>
 
@@ -17,6 +18,7 @@
         use-custom-markers
         :items="mapMarkers"
         class="mb-6"
+        @update="handleUpdate"
       />
 
       <v-card>
@@ -70,7 +72,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import PageTitleWrapper from '~/components/search/PageTitleWrapper'
+import TitleCard from '~/components/TitleCard.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
@@ -87,12 +89,19 @@ export default {
     PhotoSearchForm,
     Search,
     SearchViewMapWrapper,
-    PageTitleWrapper,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('photo.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('photo.pageTitle'),
+        },
+      ],
     }
   },
   computed: {

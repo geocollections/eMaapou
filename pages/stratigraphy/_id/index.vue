@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const referenceResponse = await this.$services.sarvREST.getResourceList(
         'stratigraphy_reference',
         {
@@ -53,7 +54,6 @@ export default {
         }
       )
 
-      this.options = tableState.options
       this.items = referenceResponse.items
       this.count = referenceResponse.count
     },

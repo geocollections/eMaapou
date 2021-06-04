@@ -1,14 +1,16 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="preparation.preparation_number" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="preparation.preparation_number"
+        class="title-main"
+      />
     </template>
 
     <template #column-left>
-      <v-card-title class="pl-md-0 pr-md-4 px-0">{{
-        $t('common.general')
-      }}</v-card-title>
-      <v-card-text class="pl-md-0 pr-md-4 px-0">
+      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-text>
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
@@ -112,7 +114,7 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -192,6 +194,13 @@ export default {
   head() {
     return {
       title: this.preparation.preparation_number,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.preparation.preparation_number,
+        },
+      ],
     }
   },
   computed: {
