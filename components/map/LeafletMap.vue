@@ -167,6 +167,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    sampleOverlay: {
+      type: Boolean,
+      default: false,
+    },
     estonianBedrockOverlay: {
       type: Boolean,
       default: false,
@@ -401,6 +405,27 @@ export default {
               zIndex: 50,
             },
           },
+          {
+            id: 'samples',
+            isWMS: true,
+            name: 'Proovid / Samples',
+            url: 'https://gis.geocollections.info/geoserver/wms',
+            layers: 'sarv:sample_summary',
+            visible: this.sampleOverlay,
+            transparent: true,
+            zIndex: 50,
+            options: {
+              // maxNativeZoom: 18,
+              // maxZoom: 21,
+              attribution:
+                "Samples: <a  href='https://geoloogia.info'>SARV</a>",
+              format: 'image/png',
+              tiled: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 50,
+            },
+          },
         ],
       },
     }
@@ -445,6 +470,7 @@ export default {
         'Lokaliteedid / Localities',
         'Puursüdamikud / Drillcores',
         'Uuringupunktid / Sites',
+        'Proovid / Samples',
       ]
 
       return this.$refs['layer-control'].mapObject._layers.reduce(
@@ -577,7 +603,7 @@ export default {
         const wmsResponse = await this.$services.geoserver.getWMSData({
           QUERY_LAYERS: this.buildQueryLayers(),
           LAYERS:
-            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary',
+            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary',
           // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
           BBOX: bbox,
           // X: Math.floor(event.layerPoint.x),
@@ -607,6 +633,9 @@ export default {
       }
       if (this.activeOverlays.includes('Lokaliteedid / Localities')) {
         queryLayers.push('sarv:locality_summary1')
+      }
+      if (this.activeOverlays.includes('Proovid / Samples')) {
+        queryLayers.push('sarv:sample_summary')
       }
       return queryLayers.join(',')
     },

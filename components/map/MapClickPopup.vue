@@ -1,20 +1,20 @@
 <template>
-  <l-popup v-if="response" :options="{ minWidth: 175 }">
+  <l-popup :options="{ minWidth: 175 }">
     <div style="max-height: 200px; overflow: auto">
       <v-simple-table
         dense
-        :fixed-header="response.features.length > 3"
-        :height="response.features.length > 3 ? 200 : 'unset'"
+        :fixed-header="featuresLength > 3"
+        :height="featuresLength > 3 ? 200 : 'unset'"
       >
         <template #default>
           <thead>
             <tr>
               <th>{{ $t('map.name') }}</th>
-              <th>{{ $t('map.relatedRecords') }}</th>
+              <!--              <th>{{ $t('map.relatedRecords') }}</th>-->
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in response.features" :key="index">
+            <tr v-for="(item, index) in features" :key="index">
               <td>
                 <nuxt-link
                   class="text-link"
@@ -34,7 +34,7 @@
                   }}
                 </nuxt-link>
               </td>
-              <td>{{ item.properties.total_related_records }}</td>
+              <!--              <td>{{ item.properties.total_related_records }}</td>-->
             </tr>
           </tbody>
         </template>
@@ -53,20 +53,13 @@ export default {
       default: () => {},
     },
   },
-  methods: {
-    buildRouteObject(item) {
-      // { name: 'locality-id', params: { id: item.id } }
-      // Todo: Backend should return 'table' and 'object_id'
-      const url = item.properties.url
-      if (url.includes('/')) {
-        const splitUrl = url.split('/')
-        if (splitUrl.length >= 2) {
-          const object = splitUrl[splitUrl.length - 2]
-          const id = splitUrl[splitUrl.length - 1]
-          if (object && id) return { name: `${object}-id`, params: { id } }
-        }
-      }
-      return false
+  computed: {
+    features() {
+      console.log(this?.response?.features ?? [])
+      return this?.response?.features ?? []
+    },
+    featuresLength() {
+      return this?.response?.features?.length ?? 0
     },
   },
 }
