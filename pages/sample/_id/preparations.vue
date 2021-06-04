@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const preparationResponse = await this.$services.sarvREST.getResourceList(
         'preparation',
         {
@@ -44,7 +45,6 @@ export default {
           queryFields: this.$getQueryFields(PREPARATION.queryFields),
         }
       )
-      this.options = tableState.options
       this.preparations = preparationResponse.items
       this.count = preparationResponse.count
     },

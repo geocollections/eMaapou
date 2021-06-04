@@ -39,6 +39,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const localityResponse = await this.$services.sarvSolr.getResourceList(
         'locality',
         {
@@ -48,7 +49,6 @@ export default {
           searchFilters: {},
         }
       )
-      this.options = tableState.options
       this.items = localityResponse.items
       this.count = localityResponse.count
     },

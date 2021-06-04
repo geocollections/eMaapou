@@ -1,31 +1,23 @@
 <template>
-  <!-- !!!: IS NOT USED! -->
-  <!-- NOTE: Delete this if the new component EditButton is confirmed to stay -->
-  <v-fab-transition>
-    <v-tooltip left>
-      <template #activator="{ on }">
-        <v-btn
-          fixed
-          right
-          fab
-          small
-          dark
-          :style="style"
-          color="deep-orange darken-2"
-          v-on="on"
-          @click="handleClick"
-        >
-          <v-icon>mdi-square-edit-outline</v-icon>
-        </v-btn>
-      </template>
-      <span>{{ $t('common.linkToEdit') }}</span>
-    </v-tooltip>
-  </v-fab-transition>
+  <v-tooltip bottom>
+    <template #activator="{ on }">
+      <v-btn
+        icon
+        dark
+        color="deep-orange darken-2"
+        v-on="on"
+        @click="handleClick"
+      >
+        <v-icon>mdi-square-edit-outline</v-icon>
+      </v-btn>
+    </template>
+    <span>{{ $t('common.linkToEdit') }}</span>
+  </v-tooltip>
 </template>
 
 <script>
 export default {
-  name: 'LinkToEditFab',
+  name: 'EditButton',
   fetchOnServer: false,
   data() {
     return {
@@ -64,5 +56,3 @@ export default {
   },
 }
 </script>
-
-<style scoped></style>

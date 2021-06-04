@@ -15,7 +15,6 @@
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
         @ready="fitBounds"
-        @click="handleClick"
       >
         <l-control-layers ref="layer-control" :auto-z-index="false" />
         <l-control-fullscreen position="topleft" />
@@ -60,6 +59,36 @@
 
         <l-circle-marker-wrapper v-else :markers="markers" />
 
+        <l-marker
+          v-if="gpsEnabled && gpsLocation"
+          :lat-lng="gpsLocation"
+          @click="handleNearMeSliderChange(nearMeRadius)"
+        >
+          <l-tooltip :options="{ direction: 'top', offset: [-15, -15] }"
+            ><b>GPS</b> ({{ $t('map.clickToSearchNearMe') }})</l-tooltip
+          >
+          <l-popup>
+            <div class="d-flex flex-row">
+              <div class="align-self-center text-no-wrap">1 km</div>
+              <v-slider
+                v-model="nearMeRadius"
+                style="width: 150px"
+                :min="1"
+                :max="20"
+                hide-details
+                thumb-label="always"
+                color="header"
+                @input="handleNearMeSliderChange"
+              />
+              <div class="align-self-center text-no-wrap">20 km</div>
+            </div>
+          </l-popup>
+        </l-marker>
+
+        <l-layer-group ref="popup">
+          <map-click-popup :response="mapClickResponse" />
+        </l-layer-group>
+
         <!-- <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
@@ -91,10 +120,12 @@ import { mapFields } from 'vuex-map-fields'
 import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
+import MapClickPopup from '~/components/map/MapClickPopup'
 
 export default {
   name: 'LeafletMap',
   components: {
+    MapClickPopup,
     VMarkerClusterWrapper,
     LCircleMarkerWrapper,
     MapLinks,
@@ -136,6 +167,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    sampleOverlay: {
+      type: Boolean,
+      default: false,
+    },
     estonianBedrockOverlay: {
       type: Boolean,
       default: false,
@@ -149,16 +184,21 @@ export default {
     rounded: Boolean,
     // Enables search functionality: Drawing etc.
     activateSearch: Boolean,
+    gpsEnabled: Boolean,
   },
   data() {
     return {
       map: null,
       allGeomanLayers: null,
       activeGeomanLayer: null,
+      gpsLocation: null,
+      gpsID: null,
+      nearMeRadius: 5,
       currentCenter: {
         lat: this.center.latitude,
         lng: this.center.longitude,
       },
+      mapClickResponse: null,
       options: {
         gestureHandling: true,
         gestureHandlingOptions: {
@@ -365,6 +405,27 @@ export default {
               zIndex: 50,
             },
           },
+          {
+            id: 'samples',
+            isWMS: true,
+            name: 'Proovid / Samples',
+            url: 'https://gis.geocollections.info/geoserver/wms',
+            layers: 'sarv:sample_summary',
+            visible: this.sampleOverlay,
+            transparent: true,
+            zIndex: 50,
+            options: {
+              // maxNativeZoom: 18,
+              // maxZoom: 21,
+              attribution:
+                "Samples: <a  href='https://geoloogia.info'>SARV</a>",
+              format: 'image/png',
+              tiled: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 50,
+            },
+          },
         ],
       },
     }
@@ -409,6 +470,7 @@ export default {
         'Lokaliteedid / Localities',
         'Puursüdamikud / Drillcores',
         'Uuringupunktid / Sites',
+        'Proovid / Samples',
       ]
 
       return this.$refs['layer-control'].mapObject._layers.reduce(
@@ -454,6 +516,13 @@ export default {
 
         if (json) this.geoJSON = json
       } else this.geoJSON = null
+
+      // Updating activeGeomanLayer triggers search update
+      this.$emit('update')
+    },
+
+    geoJSON(newVal) {
+      if (!newVal) this.removeAllGeomanLayers()
     },
   },
   mounted() {
@@ -462,13 +531,18 @@ export default {
 
       if (this.activateSearch) this.initLeafletGeoman()
 
+      if (this.gpsEnabled) this.trackPosition()
+
       if (this.isMapClickEnabled() && document.getElementById('map')) {
+        this.map.mapObject.on('click', this.handleMapClick)
         document.getElementById('map').classList.add('cursor-crosshair')
       }
     })
   },
   beforeDestroy() {
+    if (this.gpsID) navigator.geolocation.clearWatch(this.gpsID)
     if (this.activateSearch) this.terminateLeafletGeoman()
+    this.map.mapObject.off('click', this.handleMapClick)
   },
   methods: {
     updateCenter(center) {
@@ -503,16 +577,14 @@ export default {
     },
 
     isMapClickEnabled() {
-      if (this.$refs?.map?.mapObject) {
+      if (this.$refs?.map?.mapObject)
         return Object.values(this.checkableLayers).some((layer) =>
           this.$refs.map.mapObject.hasLayer(layer)
         )
-      } else {
-        return false
-      }
+      else return false
     },
 
-    handleClick: debounce(async function (event) {
+    handleMapClick: debounce(async function (event) {
       if (this.isMapClickEnabled()) {
         const MAX_ZOOM = 21
         const radius =
@@ -531,7 +603,7 @@ export default {
         const wmsResponse = await this.$services.geoserver.getWMSData({
           QUERY_LAYERS: this.buildQueryLayers(),
           LAYERS:
-            'sarv:locality_summary,sarv:locality_drillcores,sarv:site_summary',
+            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary',
           // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
           BBOX: bbox,
           // X: Math.floor(event.layerPoint.x),
@@ -542,25 +614,12 @@ export default {
 
         // console.log(wmsResponse)
         if (wmsResponse?.features?.length > 0) {
-          if (wmsResponse?.features?.[0]?.properties?.url) {
-            const url = wmsResponse.features[0].properties.url
-            if (url.includes('/')) {
-              const splitUrl = url.split('/')
-              if (splitUrl.length >= 2) {
-                const object = splitUrl[splitUrl.length - 2]
-                const id = splitUrl[splitUrl.length - 1]
-                if (object && id) {
-                  this.$router.push(
-                    this.localePath({
-                      name: `${object}-id`,
-                      params: { id },
-                    })
-                  )
-                }
-              }
-            }
+          this.mapClickResponse = {
+            latlng: event.latlng,
+            features: wmsResponse.features,
           }
-        }
+          this.$refs.popup.mapObject.openPopup(event.latlng)
+        } else this.mapClickResponse = null
       }
     }, 400),
 
@@ -573,7 +632,10 @@ export default {
         queryLayers.push('sarv:locality_drillcores')
       }
       if (this.activeOverlays.includes('Lokaliteedid / Localities')) {
-        queryLayers.push('sarv:locality_summary')
+        queryLayers.push('sarv:locality_summary1')
+      }
+      if (this.activeOverlays.includes('Proovid / Samples')) {
+        queryLayers.push('sarv:sample_summary')
       }
       return queryLayers.join(',')
     },
@@ -591,9 +653,22 @@ export default {
           rotateMode: false,
         })
 
+        this.map.mapObject.pm.setGlobalOptions({
+          allowSelfIntersection: false,
+          finishOn: 'dblclick',
+        })
+
         this.allGeomanLayers = this.$L.layerGroup()
         this.allGeomanLayers.addTo(this.map.mapObject)
 
+        this.map.mapObject.on(
+          'pm:globaldrawmodetoggled',
+          this.handlePmGlobalDrawOrRemovalModeToggled
+        )
+        this.map.mapObject.on(
+          'pm:globalremovalmodetoggled',
+          this.handlePmGlobalDrawOrRemovalModeToggled
+        )
         this.map.mapObject.on('pm:create', this.handlePmCreate)
         this.map.mapObject.on('pm:remove', this.handlePmRemove)
       }
@@ -604,18 +679,62 @@ export default {
       this.map.mapObject.off('pm:remove', this.handlePmRemove)
     },
 
+    handlePmGlobalDrawOrRemovalModeToggled(event) {
+      if (event.enabled) this.map.mapObject.off('click', this.handleMapClick)
+      else this.map.mapObject.on('click', this.handleMapClick)
+    },
+
     handlePmCreate({ layer }) {
       // layer.pm.enable({ allowSelfIntersection: false })
       // console.log(layer.pm.hasSelfIntersection())
-      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+      this.removeAllGeomanLayers()
       layer.addTo(this.allGeomanLayers)
       this.activeGeomanLayer = layer
     },
 
     handlePmRemove() {
-      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+      this.removeAllGeomanLayers()
       this.activeGeomanLayer = null
     },
+
+    removeAllGeomanLayers() {
+      this.allGeomanLayers.eachLayer((layer) => layer.remove())
+    },
+
+    // GPS start
+    trackPosition() {
+      if (navigator.geolocation) {
+        this.gpsID = navigator.geolocation.watchPosition(
+          this.successGeo,
+          this.errorGeo
+        )
+        // eslint-disable-next-line no-console
+      } else console.error('Geolocation is not supported by this browser.')
+    },
+
+    successGeo(position) {
+      if (position) {
+        this.gpsLocation = {
+          lng: position.coords.longitude,
+          lat: position.coords.latitude,
+        }
+      }
+    },
+
+    errorGeo(error) {
+      // eslint-disable-next-line no-console
+      console.error(`Error: ${error.message}`)
+    },
+    // GPS end
+
+    handleNearMeSliderChange: debounce(function (val) {
+      if (val) {
+        this.removeAllGeomanLayers()
+        const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })
+        circle.addTo(this.allGeomanLayers)
+        this.activeGeomanLayer = circle
+      }
+    }, 500),
   },
 }
 </script>

@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="dataset.title" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="dataset.title"
+        class="title-dataset"
+      />
     </template>
 
     <template #column-left>
@@ -134,7 +138,7 @@
                     :value="selectedParameterValues"
                     multiple
                     column
-                    active-class="header lighten-2 font-weight-bold elevation-3"
+                    active-class="header lighten-2 font-weight-bold elevation-1"
                     @change="handleParameterChange"
                   >
                     <v-chip
@@ -164,7 +168,7 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-6 mb-4">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>

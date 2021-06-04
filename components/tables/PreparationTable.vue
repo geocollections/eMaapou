@@ -37,12 +37,14 @@
     </template>
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
-        <external-link
+        <nuxt-link
           v-if="item.stratigraphy_id"
-          @click.native="
-            $openWindow(
-              `http://stratigraafia.info/term/${item.stratigraphy_id}`
-            )
+          class="text-link"
+          :to="
+            localePath({
+              name: 'stratigraphy-id',
+              params: { id: item.stratigraphy_id },
+            })
           "
         >
           {{
@@ -51,7 +53,8 @@
               en: item.stratigraphy_en,
             })
           }}
-        </external-link>
+        </nuxt-link>
+
         <span v-if="item.lithostratigraphy_id"> | </span>
         <external-link
           v-if="item.lithostratigraphy_id"

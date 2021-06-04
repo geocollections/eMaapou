@@ -585,8 +585,8 @@ export default {
     taxonHierarchy: 'Ülem takson',
     author: 'Autor',
     pageTitle: 'Taksoni otsing',
-    fad: 'Esmane alguspunkt',
-    lad: 'Viimane alguspunkt',
+    fad: 'Ilmumine',
+    lad: 'Kadumine',
   },
   infinite: {
     noMore: '',
@@ -816,6 +816,10 @@ export default {
   map: {
     estonian_geoportal: 'Maa-ameti kaart',
     google_maps: 'Google Maps',
+    clickToSearchNearMe: 'vajuta, et otsida minu lähedal',
+    name: 'Nimi',
+    relatedRecords: 'Seotud kirjed',
+    noResults: 'Tulemused puuduvad',
   },
   file: {
     specimenTitle: 'Säiliku foto',

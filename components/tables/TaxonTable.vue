@@ -12,7 +12,7 @@
         v-if="item.id"
         @click.native="$openWindow(`https://fossiilid.info/${item.id}`)"
       >
-        {{ item.taxon }}
+        {{ `${item.taxon} ${item.author_year ? item.author_year : ''}` }}
       </external-link>
     </template>
 
@@ -115,10 +115,6 @@ export default {
       headers: [
         { text: this.$t('taxon.id'), value: 'id' },
         { text: this.$t('taxon.taxon'), value: 'taxon' },
-        {
-          text: this.$t('taxon.authorYear'),
-          value: 'author_year',
-        },
         { text: this.$t('taxon.parentTaxon'), value: 'parent_taxon' },
         {
           text: this.$t('taxon.fossilGroup'),

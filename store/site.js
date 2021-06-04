@@ -76,8 +76,9 @@ export const mutations = {
 }
 
 export const actions = {
-  resetSiteFilters({ commit }) {
+  resetSiteFilters({ commit, dispatch }) {
     commit('RESET_FILTERS')
+    dispatch('globalSearch/resetGlobalSearchFilters', null, { root: true })
   },
   async quickSearchSites(
     { commit, rootState, state },
@@ -99,11 +100,16 @@ export const actions = {
     options = { ...state.options, page: 1 }
   ) {
     commit('SET_OPTIONS', options)
+
+    const globalSearchFilters = {
+      geoJSON: rootState.globalSearch.filters.byIds.geoJSON,
+    }
+
     const siteResponse = await this.$services.sarvSolr.getResourceList('site', {
       options,
       search: rootState.landing.search,
       queryFields: this.$getQueryFields(SITE.queryFields),
-      searchFilters: state.filters.byIds,
+      searchFilters: { ...state.filters.byIds, ...globalSearchFilters },
     })
     commit('SET_ITEMS', siteResponse.items)
     commit('SET_COUNT', siteResponse.count)

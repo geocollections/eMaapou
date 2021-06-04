@@ -815,6 +815,10 @@ export default {
   map: {
     estonian_geoportal: 'Estonian Geoportal',
     google_maps: 'Google Maps',
+    clickToSearchNearMe: 'click to search near me',
+    name: 'Name',
+    relatedRecords: 'Related records',
+    noResults: 'No results',
   },
   file: {
     specimenTitle: 'Image of specimen',

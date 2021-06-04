@@ -1,7 +1,11 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="preparation.preparation_number" />
+      <prev-next-nav-title
+        :ids="ids"
+        :title="preparation.preparation_number"
+        class="title-main"
+      />
     </template>
 
     <template #column-left>
@@ -110,7 +114,7 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-2 pb-2">
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>

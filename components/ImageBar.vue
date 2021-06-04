@@ -6,7 +6,7 @@
     (ex. attachment -> uuid_filename and attachment_link -> attachment__uuid_filename).
     NOTE: Currently these field names can be overwritten by using scoped slots.
   -->
-  <v-card class="mt-6 d-flex align-center" style="overflow-x: auto">
+  <v-card class="d-flex align-center" style="overflow-x: auto">
     <div v-for="(item, index) in images" :key="index" class="mx-3 my-3">
       <v-tooltip bottom color="header">
         <template #activator="{ on, attrs }">

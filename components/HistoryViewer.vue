@@ -1,6 +1,8 @@
 <template>
   <div v-if="history.length > 0" class="d-flex flex-row align-center">
-    <v-subheader class="pb-1">{{ `${$t('common.history')}:` }}</v-subheader>
+    <v-subheader class="pb-1 pl-0">{{
+      `${$t('common.history')}:`
+    }}</v-subheader>
     <span class="history-viewer pb-1">
       <span v-for="(item, index) in history" :key="index">
         <nuxt-link

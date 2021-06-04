@@ -1,10 +1,11 @@
 <template>
   <search>
     <template #title>
-      <page-title-wrapper
+      <title-card
         :title="$t('common.taxa')"
-        :count="count"
+        :subtitle="$t('common.count', { count: count })"
         icon="mdi-layers-triple"
+        class="title-main"
       />
     </template>
 
@@ -13,6 +14,12 @@
     </template>
 
     <template #result>
+      <search-view-map-wrapper
+        locality-overlay
+        :items="items"
+        class="mb-6"
+        @update="handleUpdate"
+      />
       <taxon-table
         :show-search="false"
         :items="items"
@@ -30,14 +37,17 @@ import { mapState, mapActions } from 'vuex'
 import Search from '@/components/templates/Search'
 import TaxonSearchForm from '@/components/search/forms/TaxonSearchForm.vue'
 import TaxonTable from '@/components/tables/TaxonTable'
-import PageTitleWrapper from '@/components/search/PageTitleWrapper'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import TitleCard from '~/components/TitleCard.vue'
+
 export default {
   components: {
     Search,
     TaxonSearchForm,
     TaxonTable,
-    PageTitleWrapper,
+    SearchViewMapWrapper,
+    TitleCard,
   },
   mixins: [dynamicTableHeaders],
   head() {
@@ -59,7 +69,7 @@ export default {
   methods: {
     ...mapActions('taxon', ['searchTaxa']),
     async handleUpdate(tableState) {
-      await this.searchTaxa(tableState.options)
+      await this.searchTaxa(tableState?.options)
     },
   },
 }

@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     async handleUpdate(tableState) {
+      this.options = tableState.options
       const authorsResponse = await this.$services.sarvREST.getResourceList(
         'dataset_author',
         {
@@ -46,7 +47,6 @@ export default {
           queryFields: this.$getQueryFields(DATASET_AUTHORS.queryFields),
         }
       )
-      this.options = tableState.options
       this.authors = authorsResponse.items
       this.count = authorsResponse.count
     },

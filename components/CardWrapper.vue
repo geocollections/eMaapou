@@ -17,7 +17,7 @@
         :gradient="`to bottom, rgba(0,0,0,.3), rgba(0,0,0,${
           grayscale ? '.5' : '.5'
         })`"
-        height="200px"
+        height="250px"
         content-class="my-auto"
       >
         <v-card-title
@@ -28,6 +28,7 @@
         <v-card-text class="text-body-1 text-center text-shadow">{{
           $t(description)
         }}</v-card-text>
+        <!-- Todo: remove buttons -->
         <v-card-actions class="justify-center mb-2">
           <v-btn
             outlined
