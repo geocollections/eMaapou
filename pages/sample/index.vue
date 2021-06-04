@@ -15,8 +15,7 @@
 
     <template #result>
       <search-view-map-wrapper
-        site-overlay
-        locality-overlay
+        sample-overlay
         :items="items"
         class="mb-6"
         @update="handleUpdate"

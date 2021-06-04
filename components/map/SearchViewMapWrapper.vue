@@ -66,8 +66,13 @@ export default {
               }) ||
                 item.name ||
                 `ID: ${item.id}`),
-            routeName: routeName === 'site' ? 'site' : 'locality',
-            id: item.locality_id ?? item.id,
+            routeName:
+              routeName === 'site'
+                ? 'site'
+                : item.site_id
+                ? 'site'
+                : 'locality',
+            id: (item.locality_id || item.site_id) ?? item.id,
           }
 
           const isItemInArray = !!filtered.find(
