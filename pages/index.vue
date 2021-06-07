@@ -96,7 +96,7 @@
       </v-col>
     </v-row> -->
 
-    <h1 class="text-h4 mt-6 mb-10 ml-4">
+    <h1 class="text-center text-h4 mt-6 mb-10 ml-4">
       {{ $t('landing.eMaapouPages') }}
     </h1>
     <v-row class="mb-6 px-1" justify="center" align="center">
@@ -118,7 +118,7 @@
       </v-col>
     </v-row>
 
-    <h1 class="text-h5 grey--text text--darken-1 ml-4">
+    <h1 class="text-center text-h5 grey--text text--darken-1 ml-4">
       {{ $t('landing.otherPages') }}
     </h1>
     <v-row class="my-6 px-1" justify="center" align="center">
