@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="headers"
+    :headers="computedHeaders"
     :items="items"
     :options="options"
     :count="count"
@@ -41,6 +41,8 @@ export default {
         sortDesc: [],
       }),
     },
+    hideDepth: Boolean,
+    hideMethod: Boolean,
   },
   data() {
     return {
@@ -57,6 +59,15 @@ export default {
         { text: this.$t('analysisResult.valueError'), value: 'value_error' },
       ],
     }
+  },
+  computed: {
+    computedHeaders() {
+      return this.headers.filter((item) => {
+        if (item.value.includes('depth')) return !this.hideDepth
+        if (item.value === 'analysis_method') return !this.hideMethod
+        else return item
+      })
+    },
   },
   methods: {
     round,
