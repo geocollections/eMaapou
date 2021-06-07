@@ -37,7 +37,14 @@
           </v-hover>
 
           <div
-            class="d-flex justify-center flex-column justify-md-space-between flex-md-row mx-8"
+            class="
+              d-flex
+              justify-center
+              flex-column
+              justify-md-space-between
+              flex-md-row
+              mx-8
+            "
           >
             <div class="text-center text-md-left">
               <div

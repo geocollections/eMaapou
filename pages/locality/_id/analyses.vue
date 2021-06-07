@@ -3,6 +3,7 @@
     :items="analyses"
     :count="count"
     :options="options"
+    hide-locality
     @update="handleUpdate"
   />
 </template>

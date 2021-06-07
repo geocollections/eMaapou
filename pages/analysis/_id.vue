@@ -91,6 +91,10 @@
                       :title="$t('analysis.depth')"
                       :value="analysis.sample__depth"
                     />
+                    <data-row
+                      :title="$t('analysis.depthInterval')"
+                      :value="analysis.sample__depth_interval"
+                    />
                     <link-data-row
                       :title="$t('analysis.stratigraphy')"
                       :value="
@@ -112,8 +116,7 @@
                       :value="
                         $translate({
                           et: analysis.sample__lithostratigraphy__stratigraphy,
-                          en:
-                            analysis.sample__lithostratigraphy__stratigraphy__en,
+                          en: analysis.sample__lithostratigraphy__stratigraphy__en,
                         })
                       "
                       nuxt
