@@ -15,7 +15,7 @@
         class="white--text align-end transition-swing"
         :class="{ grayscale: grayscale }"
         :gradient="`to bottom, rgba(0,0,0,.3), rgba(0,0,0,${
-          grayscale ? '.5' : '.5'
+          grayscale ? '.3' : '.3'
         })`"
         height="175px"
         content-class="my-auto"

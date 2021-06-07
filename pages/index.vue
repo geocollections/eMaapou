@@ -28,7 +28,7 @@
           </v-tab>
         </v-tabs> -->
         <div
-          class="pt-3 px-2"
+          class="pt-3"
           :class="{
             'd-flex flex-wrap justify-center': $vuetify.breakpoint.smAndUp,
           }"
@@ -49,6 +49,52 @@
         </div>
       </v-col>
     </v-row>
+
+    <!-- <v-row>
+      <v-col md="6">
+        <div class="aboutpage montserrat ml-4">
+          <h1 class="aboutpage my-3">Mis on e·Maapõu?</h1>
+          <div>
+            <p>
+              <strong
+                >e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja
+                e-teenuste juurde.</strong
+              >
+            </p>
+
+            <p>
+              Eestis toodavad ja haldavad maapõue andmeid peamiselt&nbsp;<a
+                href="https://egt.ee"
+                >Geoloogiateenistus</a
+              >, <a href="https://maaamet.ee">Maa-amet</a>,
+              <a href="https://keskkonnaamet.ee">Keskkonnaamet</a>,
+              teadusasutused (<a href="https://taltech.ee/geoloogia-instituut"
+                >Tallinna Tehnikaülikooli geoloogia instituut</a
+              >,
+              <a href="https://natmuseum.ut.ee"
+                >Tartu Ülikooli loodusmuuseum ja botaanikaaed</a
+              >,
+              <a href="https://geoloogia.ut.ee"
+                >Tartu Ülikooli geoloogia osakond</a
+              >&nbsp;ja&nbsp;<a href="https://loodusmuuseum.ee"
+                >Eesti Loodusmuuseum</a
+              >), ning valdkonnas tegutsevad ettevõtted.&nbsp;
+            </p>
+
+            <p>
+              e-Maapõu võimaldab otsida andmeid maapõue infosüsteemis SARV, mida
+              kasutavad põhiliselt teadusasutused. Sellisteks andmeteks on
+              näiteks geoloogilised kollektsioonid, geoloogia-alased
+              publikatsioonid, puursüdamikud, paljandid,&nbsp;kivimiproovid,
+              fossiilid, analüütiline andmestik, fotoarhiiv jne.
+            </p>
+          </div>
+        </div>
+      </v-col>
+      <v-col md="6">
+        <leaflet-map> </leaflet-map>
+      </v-col>
+    </v-row> -->
 
     <h1 class="text-h4 mt-6 mb-10 ml-4">
       {{ $t('landing.eMaapouPages') }}
