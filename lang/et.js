@@ -3,7 +3,7 @@ export default {
   subtitle: 'Eesti geoloogia infoportaal',
   slogan: 'Kogu info Eesti maapõuest',
   landing: {
-    searchTitle: 'Leia kiirelt e·Maapõuest',
+    searchTitle: 'Leia e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
     localities: 'Lokaliteedid ({number})',
     sites: 'Uuringupunktid ({number})',
@@ -65,7 +65,7 @@ export default {
     photos: 'Fotoarhiiv',
     photosCount: 'Fotoarhiiv',
     about: 'Tutvustus',
-    searchAlt: 'Otsinguks sisesta üks või mitu märksõna, nt Viki ... ',
+    searchAlt: 'Sisesta märksõna, nt Viki',
     history: 'Hiljuti vaadatud',
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',

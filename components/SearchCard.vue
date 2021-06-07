@@ -4,7 +4,7 @@
     :class="`${cardClass}`"
     hover
     nuxt
-    height="90px"
+    :height="height"
     :width="$vuetify.breakpoint.smAndUp ? '200px' : '100%'"
     :to="localePath({ name: href })"
   >
@@ -33,6 +33,10 @@ export default {
     href: {
       type: String,
       default: '',
+    },
+    height: {
+      type: String,
+      default: '90px',
     },
   },
 }

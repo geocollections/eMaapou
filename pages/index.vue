@@ -3,6 +3,7 @@
     <v-row>
       <v-col>
         <v-tabs
+          v-if="$vuetify.breakpoint.smAndUp"
           :value="tabValue"
           align-with-title
           optional
@@ -26,6 +27,21 @@
             ></search-card>
           </v-tab>
         </v-tabs>
+        <div v-else>
+          <div
+            v-for="(item, index) in tabs.slice(0, 5)"
+            :key="`tab-mobile-${index}`"
+            class="montserrat white--text px-1 pb-2"
+          >
+            <search-card
+              class="text--h6"
+              height="60px"
+              :title="$t(`common.${item.lang}`)"
+              :card-class="item.class"
+              :href="item.name"
+            ></search-card>
+          </div>
+        </div>
       </v-col>
     </v-row>
 

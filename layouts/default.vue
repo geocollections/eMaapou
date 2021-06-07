@@ -2,8 +2,8 @@
   <v-app dark>
     <v-img
       v-if="isLanding"
-      height="300px"
-      max-height="300px"
+      height="350px"
+      max-height="350px"
       width="100%"
       class="elevation-4"
       :src="require('~/assets/frontpage/header_img.jpg')"
@@ -15,10 +15,11 @@
         </h1>
 
         <quick-search-form
-          class="mt-5 elevation-12"
+          class="mt-5"
           :class="{
             'form-sm-up': $vuetify.breakpoint.smAndUp,
             'form-lg-up': $vuetify.breakpoint.lgAndUp,
+            'form-xs': $vuetify.breakpoint.xs,
           }"
           :only-icon="$vuetify.breakpoint.smAndDown"
           @submit="handleSearch"
@@ -171,6 +172,10 @@ export default {
 
 .v-image ::v-deep .v-image__image {
   background-position: center 40% !important;
+}
+
+.form-xs {
+  width: 85%;
 }
 
 .form-sm-up {
