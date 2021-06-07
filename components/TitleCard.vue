@@ -1,5 +1,8 @@
 <template>
   <v-card
+    flat
+    tile
+    style="background-color: transparent"
     class="mb-4 d-flex justify-space-between px-4 flex-column flex-sm-row"
   >
     <div
@@ -8,7 +11,7 @@
       <slot name="left"></slot>
     </div>
     <slot>
-      <div class="d-flex justify-center py-2 text-center">
+      <div class="d-flex justify-center pt-2 text-center pb-4">
         <slot name="prepend">
           <v-icon v-if="icon" large left>{{ icon }}</v-icon>
         </slot>
