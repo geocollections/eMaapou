@@ -5,7 +5,7 @@
     hover
     nuxt
     :height="height"
-    :width="$vuetify.breakpoint.smAndUp ? '200px' : '100%'"
+    :width="'100%'"
     :to="localePath({ name: href })"
   >
     <v-card-title class="montserrat text-none">

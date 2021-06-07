@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-row>
-      <v-col>
-        <v-tabs
+      <v-col class="pt-0 px-0">
+        <!-- <v-tabs
           v-if="$vuetify.breakpoint.smAndUp"
           :value="tabValue"
           align-with-title
@@ -26,10 +26,15 @@
               :href="item.name"
             ></search-card>
           </v-tab>
-        </v-tabs>
-        <div v-else>
+        </v-tabs> -->
+        <div
+          class="pt-3 px-2"
+          :class="{
+            'd-flex flex-wrap justify-center': $vuetify.breakpoint.smAndUp,
+          }"
+        >
           <div
-            v-for="(item, index) in tabs.slice(0, 5)"
+            v-for="(item, index) in tabs"
             :key="`tab-mobile-${index}`"
             class="montserrat white--text px-1 pb-2"
           >
@@ -45,10 +50,10 @@
       </v-col>
     </v-row>
 
-    <h1 class="text-center text-h4 mt-6 mb-10">
+    <h1 class="text-h4 mt-6 mb-10 ml-4">
       {{ $t('landing.eMaapouPages') }}
     </h1>
-    <v-row class="mb-6" justify="center" align="center">
+    <v-row class="mb-6 px-1" justify="center" align="center">
       <v-col
         v-for="(item, index) in cards.innerIds"
         :key="index"
@@ -67,10 +72,10 @@
       </v-col>
     </v-row>
 
-    <h1 class="text-center text-h5 grey--text text--darken-1">
+    <h1 class="text-h5 grey--text text--darken-1 ml-4">
       {{ $t('landing.otherPages') }}
     </h1>
-    <v-row class="my-6" justify="center" align="center">
+    <v-row class="my-6 px-1" justify="center" align="center">
       <v-col
         v-for="(item, index) in cards.outerIds"
         :key="index"

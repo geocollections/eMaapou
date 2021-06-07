@@ -20,12 +20,11 @@
         height="175px"
         content-class="my-auto"
       >
-        <v-card-title
-          style="word-break: keep-all"
-          class="montserrat justify-center text-center text-uppercase"
-          >{{ $t(title) }}</v-card-title
-        >
-        <v-card-text class="text-center text-shadow montserrat">{{
+        <v-card-title style="word-break: keep-all" class="montserrat text-h5"
+          >{{ $t(title) }}
+          <v-icon right small>mdi-open-in-new</v-icon>
+        </v-card-title>
+        <v-card-text class="text-shadow montserrat">{{
           $t(description)
         }}</v-card-text>
         <!-- Todo: remove buttons -->
