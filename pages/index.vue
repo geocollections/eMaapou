@@ -1,16 +1,59 @@
 <template>
   <div>
-    <v-row class="mt-4" justify="center" align="center">
-      <v-col>
-        <h1 class="text-center my-3">{{ $t('landing.searchTitle') }}:</h1>
+    <v-row>
+      <v-col class="pt-0 px-0">
+        <!-- <v-tabs
+          v-if="$vuetify.breakpoint.smAndUp"
+          :value="tabValue"
+          align-with-title
+          optional
+          height="auto"
+          background-color="transparent"
+          show-arrows
+          center-active
+          light
+          centered
+        >
+          <v-tab
+            v-for="(item, index) in tabs"
+            :key="`tab-${index}`"
+            class="montserrat white--text px-1 py-3"
+          >
+            <search-card
+              class="mx-1 my-1 text--h6"
+              :title="$t(`common.${item.lang}`)"
+              :card-class="item.class"
+              :href="item.name"
+            ></search-card>
+          </v-tab>
+        </v-tabs> -->
+        <div
+          class="pt-3 px-2"
+          :class="{
+            'd-flex flex-wrap justify-center': $vuetify.breakpoint.smAndUp,
+          }"
+        >
+          <div
+            v-for="(item, index) in tabs"
+            :key="`tab-mobile-${index}`"
+            class="montserrat white--text px-1 pb-2"
+          >
+            <search-card
+              class="text--h6"
+              height="60px"
+              :title="$t(`common.${item.lang}`)"
+              :card-class="item.class"
+              :href="item.name"
+            ></search-card>
+          </div>
+        </div>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col sm="8" md="6">
-        <quick-search-form @submit="handleSearch" />
-      </v-col>
-    </v-row>
-    <v-row class="mt-12 mb-6" justify="center" align="center">
+
+    <h1 class="text-h4 mt-6 mb-10 ml-4">
+      {{ $t('landing.eMaapouPages') }}
+    </h1>
+    <v-row class="mb-6 px-1" justify="center" align="center">
       <v-col
         v-for="(item, index) in cards.innerIds"
         :key="index"
@@ -28,14 +71,11 @@
         />
       </v-col>
     </v-row>
-    <v-row justify="center" align="center">
-      <v-col>
-        <h2 class="text-center grey--text text--darken-1">
-          {{ $t('landing.otherPages') }}:
-        </h2>
-      </v-col>
-    </v-row>
-    <v-row class="my-6" justify="center" align="center">
+
+    <h1 class="text-h5 grey--text text--darken-1 ml-4">
+      {{ $t('landing.otherPages') }}
+    </h1>
+    <v-row class="my-6 px-1" justify="center" align="center">
       <v-col
         v-for="(item, index) in cards.outerIds"
         :key="index"
@@ -59,13 +99,49 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
-import QuickSearchForm from '~/components/search/forms/QuickSearchForm'
 import CardWrapper from '~/components/CardWrapper'
+import SearchCard from '~/components/SearchCard.vue'
 export default {
-  components: { CardWrapper, QuickSearchForm },
-
+  components: {
+    CardWrapper,
+    SearchCard,
+  },
   data() {
     return {
+      tabs: [
+        {
+          name: 'locality',
+          lang: 'localities',
+          class: 'title-locality',
+        },
+        {
+          name: 'site',
+          lang: 'sites',
+          class: 'title-site',
+        },
+        {
+          name: 'drillcore',
+          lang: 'drillcores',
+          class: 'title-drillcore',
+        },
+        {
+          name: 'sample',
+          lang: 'samples',
+          class: 'title-sample',
+        },
+        {
+          name: 'analytical_data',
+          lang: 'analyticalData',
+          class: 'title-analysis',
+        },
+        { name: 'dataset', lang: 'datasets', class: 'title-dataset' },
+        {
+          name: 'taxon',
+          lang: 'taxa',
+          class: 'title-main',
+        },
+        { name: 'photo', lang: 'photo', class: 'title-photo' },
+      ],
       cards: {
         geocollections: {
           title: 'geocollections.title',
@@ -82,8 +158,8 @@ export default {
           href: 'https://kirjandus.geoloogia.info',
           background: require('~/assets/frontpage/geokirjandus.jpg'),
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 6,
+          lg: 6,
         },
         gmre: {
           title: 'gmre.title',
@@ -148,8 +224,8 @@ export default {
           href: 'https://doi.geocollections.info',
           background: require('~/assets/frontpage/sarv-doi.jpg'),
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 6,
+          lg: 6,
         },
         turba: {
           title: 'turba.title',
@@ -197,62 +273,7 @@ export default {
           md: 12,
           lg: 12,
         },
-        drillcores: {
-          title: 'frontDrillcores.title',
-          description: 'frontDrillcores.description',
-          href: 'drillcore',
-          background: require('~/assets/frontpage/drillcores.jpg'),
-          innerLink: true,
-          sm: 6,
-          md: 3,
-          lg: 3,
-        },
-        localities: {
-          title: 'frontLocalities.title',
-          description: 'frontLocalities.description',
-          href: 'locality',
-          background: require('~/assets/frontpage/localities.jpg'),
-          innerLink: true,
-          sm: 6,
-          md: 3,
-          lg: 3,
-        },
-        samples: {
-          title: 'frontSamples.title',
-          description: 'frontSamples.description',
-          href: 'sample',
-          background: require('~/assets/frontpage/samples.jpg'),
-          innerLink: true,
-          sm: 6,
-          md: 3,
-          lg: 3,
-        },
-        analyses: {
-          title: 'frontAnalyses.title',
-          description: 'frontAnalyses.description',
-          href: 'analytical_data',
-          background: require('~/assets/frontpage/analyses.jpg'),
-          innerLink: true,
-          sm: 6,
-          md: 3,
-          lg: 3,
-        },
-        photos: {
-          title: 'frontPhotos.title',
-          description: 'frontPhotos.description',
-          href: 'photo',
-          background: require('~/assets/frontpage/photos.jpg'),
-          innerLink: true,
-          sm: 6,
-          md: 4,
-          lg: 4,
-        },
         innerIds: [
-          'drillcores',
-          'localities',
-          'samples',
-          'analyses',
-          'photos',
           'kirjandus',
           'doi',
           'geocollections',
@@ -288,6 +309,14 @@ export default {
   },
   computed: {
     ...mapFields('landing', ['search']),
+    tabValue() {
+      // https://github.com/vuetifyjs/vuetify/issues/12265
+      const path = this.$route.path
+      const full = this.$route.fullPath
+      return path[path.length - 1] !== '/'
+        ? `${path}/${full.substring(path.length)}`
+        : `${full}/`
+    },
   },
   methods: {
     handleSearch() {

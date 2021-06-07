@@ -17,19 +17,18 @@
         :gradient="`to bottom, rgba(0,0,0,.3), rgba(0,0,0,${
           grayscale ? '.5' : '.5'
         })`"
-        height="250px"
+        height="175px"
         content-class="my-auto"
       >
-        <v-card-title
-          style="word-break: keep-all"
-          class="montserrat justify-center text-center text-shadow font-weight-bold text-uppercase"
-          >{{ $t(title) }}</v-card-title
-        >
-        <v-card-text class="text-body-1 text-center text-shadow">{{
+        <v-card-title style="word-break: keep-all" class="montserrat text-h5"
+          >{{ $t(title) }}
+          <v-icon right small>mdi-open-in-new</v-icon>
+        </v-card-title>
+        <v-card-text class="text-shadow montserrat">{{
           $t(description)
         }}</v-card-text>
         <!-- Todo: remove buttons -->
-        <v-card-actions class="justify-center mb-2">
+        <!-- <v-card-actions class="justify-center mb-2">
           <v-btn
             outlined
             small
@@ -39,7 +38,7 @@
             >{{ $t('landing.visit_site') }}
             <v-icon right small>mdi-open-in-new</v-icon>
           </v-btn>
-        </v-card-actions>
+        </v-card-actions> -->
       </v-img>
     </v-card>
   </v-hover>

@@ -3,7 +3,7 @@ export default {
   subtitle: 'Opening up geological data in Estonia',
   slogan: 'Geological data from Estonia',
   landing: {
-    searchTitle: 'Find quickly from e·Maapõu',
+    searchTitle: 'Find from e·Maapõu',
     drillcores: 'Drillcores ({number})',
     localities: 'Localities ({number})',
     sites: 'Sites ({number})',
@@ -25,6 +25,7 @@ export default {
     showMenu: 'Show menu',
     routes: 'Routes',
     searchRoutes: 'Search',
+    eMaapouPages: 'e·Maapõu ecosystem',
   },
   common: {
     general: 'General info',
@@ -64,7 +65,7 @@ export default {
     photos: 'Photo Archive',
     photosCount: 'Photo Archive',
     about: 'About',
-    searchAlt: 'Enter one or more keywords, ex. Estonia ...',
+    searchAlt: 'Enter keyword, ex. Estonia',
     history: 'Recently viewed',
     quickSearch: 'Quick search',
     description: 'Description',

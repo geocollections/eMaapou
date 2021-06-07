@@ -2,10 +2,10 @@
   <v-app-bar
     app
     dark
+    :absolute="isLanding"
     style="z-index: 2050"
-    color="primary"
-    class="gradient-background"
-    :height="isLanding ? ($vuetify.breakpoint.smAndDown ? 56 : 112) : 64"
+    :color="isLanding ? 'transparent' : 'primary'"
+    :elevation="isLanding ? 0 : 4"
   >
     <v-toolbar-items>
       <go-back-button v-if="showBack" />
@@ -15,12 +15,8 @@
             <template #activator="{ on, attrs }">
               <v-img
                 class="transition-logo"
-                :height="
-                  isLanding ? ($vuetify.breakpoint.smAndDown ? 45 : 65) : 45
-                "
-                :width="
-                  isLanding ? ($vuetify.breakpoint.smAndDown ? 90 : 130) : 90
-                "
+                :height="45"
+                :width="90"
                 contain
                 :src="logo"
                 v-bind="attrs"
@@ -37,7 +33,7 @@
       v-if="$vuetify.breakpoint.mdAndUp"
       vertical
       inset
-      class="quaternary mx-3"
+      class="white mx-3"
     />
     <div v-if="$vuetify.breakpoint.mdAndUp" class="montserrat">
       {{ $t('slogan') }}
@@ -69,12 +65,9 @@
     <v-toolbar-items>
       <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
       <v-btn
-        :text="$vuetify.breakpoint.smAndUp"
-        :icon="!$vuetify.breakpoint.smAndUp"
+        text
         class="montserrat"
-        :class="{ 'header-icon-button': !$vuetify.breakpoint.smAndUp }"
         aria-label="Open navigation drawer"
-        :small="!$vuetify.breakpoint.smAndUp"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
         <div v-if="drawer">
@@ -173,7 +166,7 @@ export default {
   },
   computed: {
     isLanding() {
-      return this.$route.name.startsWith('index')
+      return this.getRouteBaseName().startsWith('index')
     },
     isSearchPage() {
       return this.$route.name.startsWith('search')
