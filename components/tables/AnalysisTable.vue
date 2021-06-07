@@ -1,7 +1,7 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+    :headers="useDynamicHeaders ? dynamicHeaders : filteredHeaders"
     :items="items"
     :options="options"
     :count="count"
@@ -107,6 +107,9 @@ export default {
       type: Boolean,
       default: false,
     },
+    hideDepth: Boolean,
+    hideLocality: Boolean,
+    hideSample: Boolean,
   },
   data() {
     return {
@@ -134,8 +137,19 @@ export default {
       },
     }),
 
+    filteredHeaders() {
+      return this[this.useDynamicHeaders ? 'tableHeaders' : 'headers'].filter(
+        (item) => {
+          if (item.value.includes('depth')) return !this.hideDepth
+          else if (item.value === 'locality') return !this.hideLocality
+          else if (item.value === 'sample_number') return !this.hideSample
+          else return item
+        }
+      )
+    },
+
     dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
+      return this.filteredHeaders.reduce((prev, item) => {
         if (item.show) {
           prev.push({ ...item, text: this.$t(item.text) })
         }
