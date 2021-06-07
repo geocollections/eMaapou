@@ -32,15 +32,17 @@ export default {
     round,
     async handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResultResponse =
-        await this.$services.sarvSolr.getResourceList('analysis_results', {
+      const analysisResultResponse = await this.$services.sarvSolr.getResourceList(
+        'analysis_results',
+        {
           ...tableState,
           isValid: isNil(this.analysis),
           defaultParams: {
             fq: `analysis_id:${this.analysis}`,
           },
           queryFields: this.$getQueryFields(ANALYSIS_RESULT.queryFields),
-        })
+        }
+      )
 
       this.analysisResults = analysisResultResponse.items
       this.count = analysisResultResponse.count

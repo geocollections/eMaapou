@@ -116,7 +116,8 @@
                       :value="
                         $translate({
                           et: analysis.sample__lithostratigraphy__stratigraphy,
-                          en: analysis.sample__lithostratigraphy__stratigraphy__en,
+                          en:
+                            analysis.sample__lithostratigraphy__stratigraphy__en,
                         })
                       "
                       nuxt
