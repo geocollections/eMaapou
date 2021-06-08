@@ -1,8 +1,5 @@
 <template>
   <v-card
-    flat
-    tile
-    style="background-color: transparent"
     class="mb-4 d-flex justify-space-between px-4 flex-column flex-sm-row"
   >
     <div

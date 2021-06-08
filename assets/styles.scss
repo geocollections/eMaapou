@@ -262,80 +262,70 @@ th {
 }
 
 .title-border {
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: red;
-    height: 5px;
-    border-radius: 10px 10px 10px 10px;
-  }
+  border-bottom-width: 5px !important;
+  border-bottom-style: solid !important;
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 0;
+  //   right: 0;
+  //   background-color: red;
+  //   height: 5px;
+  //   border-radius: 10px 10px 10px 10px;
+  // }
 }
 
 .title-main {
-  /*color: var(--v-tertiary-base) !important;
-  background-color: var(--v-quinary-base) !important;*/
-
   @extend .title-border;
-  &::after {
-    background-color: var(--v-main-base) !important;
-  }
+
+  border-color: var(--v-main-base) !important;
 }
 
 .title-stratigraphy {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-stratigraphy-base) !important;
-  }
+
+  border-color: var(--v-emp-stratigraphy-base) !important;
 }
 
 .title-analysis {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-analysis-base) !important;
-  }
+
+  border-color: var(--v-emp-analysis-base) !important;
 }
 
 .title-sample {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-sample-base) !important;
-  }
+
+  border-color: var(--v-emp-sample-base) !important;
 }
 
 .title-drillcore {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-drillcore-base) !important;
-  }
+
+  border-color: var(--v-emp-drillcore-base) !important;
 }
 
 .title-locality {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-locality-base) !important;
-  }
+
+  border-color: var(--v-emp-locality-base) !important;
 }
 
 .title-site {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-site-base) !important;
-  }
+
+  border-color: var(--v-emp-site-base) !important;
 }
 .title-photo {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-photo-base) !important;
-  }
+
+  border-color: var(--v-emp-photo-base) !important;
 }
 .title-dataset {
   @extend .title-border;
-  &::after {
-    background-color: var(--v-emp-dataset-base) !important;
-  }
+
+  border-color: var(--v-emp-dataset-base) !important;
 }
 
 #app {
