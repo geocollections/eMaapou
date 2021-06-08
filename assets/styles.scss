@@ -204,10 +204,64 @@ th {
   width: inherit !important;
 }
 
-.title-border {
-  // border-bottom-width: 5px !important;
-  // border-bottom-style: double !important;
+.search-card-border {
+  border-bottom-width: 5px !important;
+  border-bottom-style: solid !important;
+}
 
+.search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-main-base) !important;
+}
+
+.stratigraphy-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-stratigraphy-base) !important;
+}
+
+.analysis-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-analysis-base) !important;
+}
+
+.sample-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-sample-base) !important;
+}
+
+.drillcore-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-drillcore-base) !important;
+}
+
+.locality-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-locality-base) !important;
+}
+
+.site-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-site-base) !important;
+}
+.photo-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-photo-base) !important;
+}
+.dataset-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-dataset-base) !important;
+}
+
+.title-border {
   &::after {
     content: '';
     position: absolute;

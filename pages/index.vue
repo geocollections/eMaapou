@@ -21,7 +21,7 @@
           >
             <search-card
               class="mx-1 my-1 text--h6"
-              :title="$t(`common.${item.lang}`)"
+              :title="$t(`common.${item.title}`)"
               :card-class="item.class"
               :href="item.name"
             ></search-card>
@@ -34,16 +34,16 @@
           }"
         >
           <div
-            v-for="(item, index) in tabs"
+            v-for="(item, index) in searchCards"
             :key="`tab-mobile-${index}`"
             class="montserrat white--text px-1 pb-2"
           >
             <search-card
               class="text--h6"
               height="60px"
-              :title="$t(`common.${item.lang}`)"
+              :title="item.title"
               :card-class="item.class"
-              :href="item.name"
+              :to="localePath({ name: item.localeName })"
             ></search-card>
           </div>
         </div>
@@ -101,19 +101,20 @@
     </h1>
     <v-row class="mb-6 px-1" justify="center" align="center">
       <v-col
-        v-for="(item, index) in cards.innerIds"
+        v-for="(item, index) in externalCards.innerIds.map(
+          (id) => externalCards[id]
+        )"
         :key="index"
         class="pa-1"
         cols="12"
-        :sm="cards[item].sm || 6"
-        :md="cards[item].md || 6"
+        :sm="item.sm || 6"
+        :md="item.md || 6"
       >
-        <card-wrapper
-          :title="cards[item].title"
-          :description="cards[item].description"
-          :link="cards[item].href"
-          :background="cards[item].background"
-          :inner-link="cards[item].innerLink"
+        <external-link-card
+          :title="$t(item.title)"
+          :description="$t(item.description)"
+          :href="item.href"
+          :background="item.background"
         />
       </v-col>
     </v-row>
@@ -123,18 +124,20 @@
     </h1>
     <v-row class="my-6 px-1" justify="center" align="center">
       <v-col
-        v-for="(item, index) in cards.outerIds"
+        v-for="(item, index) in externalCards.outerIds.map(
+          (id) => externalCards[id]
+        )"
         :key="index"
         class="pa-1"
         cols="12"
-        :sm="cards[item].sm || 6"
-        :md="cards[item].md || 6"
+        :sm="item.sm || 6"
+        :md="item.md || 6"
       >
-        <card-wrapper
-          :title="cards[item].title"
-          :description="cards[item].description"
-          :link="cards[item].href"
-          :background="cards[item].background"
+        <external-link-card
+          :title="$t(item.title)"
+          :description="$t(item.description)"
+          :href="item.href"
+          :background="item.background"
           grayscale
         />
       </v-col>
@@ -145,50 +148,58 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
-import CardWrapper from '~/components/CardWrapper'
+import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import SearchCard from '~/components/SearchCard.vue'
 export default {
   components: {
-    CardWrapper,
+    ExternalLinkCard,
     SearchCard,
   },
   data() {
     return {
-      tabs: [
+      searchCards: [
         {
-          name: 'locality',
-          lang: 'localities',
-          class: 'title-locality',
+          localeName: 'locality',
+          title: this.$t('common.localities'),
+          class: 'locality-search-card',
         },
         {
-          name: 'site',
-          lang: 'sites',
-          class: 'title-site',
+          localeName: 'site',
+          title: this.$t('common.sites'),
+          class: 'site-search-card',
         },
         {
-          name: 'drillcore',
-          lang: 'drillcores',
-          class: 'title-drillcore',
+          localeName: 'drillcore',
+          title: this.$t('common.drillcores'),
+          class: 'drillcore-search-card',
         },
         {
-          name: 'sample',
-          lang: 'samples',
-          class: 'title-sample',
+          localeName: 'sample',
+          title: this.$t('common.samples'),
+          class: 'sample-search-card',
         },
         {
-          name: 'analytical_data',
-          lang: 'analyticalData',
-          class: 'title-analysis',
+          localeName: 'analytical_data',
+          title: this.$t('common.analyticalData'),
+          class: 'analysis-search-card',
         },
-        { name: 'dataset', lang: 'datasets', class: 'title-dataset' },
         {
-          name: 'taxon',
-          lang: 'taxa',
-          class: 'title-main',
+          localeName: 'dataset',
+          title: this.$t('common.datasets'),
+          class: 'dataset-search-card',
         },
-        { name: 'photo', lang: 'photo', class: 'title-photo' },
+        {
+          localeName: 'taxon',
+          title: this.$t('common.taxa'),
+          class: 'search-card',
+        },
+        {
+          localeName: 'photo',
+          title: this.$t('common.photo'),
+          class: 'photo-search-card',
+        },
       ],
-      cards: {
+      externalCards: {
         geocollections: {
           title: 'geocollections.title',
           description: 'geocollections.description',
@@ -310,40 +321,22 @@ export default {
           md: 3,
           lg: 3,
         },
-        ema: {
-          title: 'ema.title',
-          description: 'ema.description',
-          href: 'https://geoloogia.info',
-          background: require('~/assets/header/header1a.jpg'),
-          sm: 12,
-          md: 12,
-          lg: 12,
-        },
         innerIds: [
           'kirjandus',
           'doi',
           'geocollections',
           'fossiilid',
           'kivid',
-          // 'turba',
           'sarv',
         ],
         outerIds: [
-          // 'ema',
-          // 'geocollections',
-          // 'kirjandus',
-
-          // 'doi',
           'fond',
           'maardlad',
           'stratigraphy',
-          // 'fossiilid',
-          // 'kivid',
           'gmre',
           'turba',
           'geocase',
           'eurocore',
-          // 'sarv',
         ],
       },
     }

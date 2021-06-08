@@ -5,10 +5,8 @@
       class="transition-swing"
       :class="{ 'on-hover': hover }"
       :elevation="hover ? 12 : 2"
-      :href="!innerLink ? link : ''"
-      :target="!innerLink ? '_blank' : ''"
-      :nuxt="innerLink"
-      @click="innerLink ? $router.push(localePath({ name: link })) : ''"
+      :href="href"
+      target="_blank"
     >
       <v-img
         :src="background"
@@ -21,11 +19,11 @@
         content-class="my-auto"
       >
         <v-card-title style="word-break: keep-all" class="montserrat text-h5"
-          >{{ $t(title) }}
+          >{{ title }}
           <v-icon right small>mdi-open-in-new</v-icon>
         </v-card-title>
         <v-card-text class="text-shadow montserrat">{{
-          $t(description)
+          description
         }}</v-card-text>
         <!-- Todo: remove buttons -->
         <!-- <v-card-actions class="justify-center mb-2">
@@ -46,7 +44,7 @@
 
 <script>
 export default {
-  name: 'CardWrapper',
+  name: 'ExternalLinkCard',
   props: {
     title: {
       type: String,
@@ -58,17 +56,16 @@ export default {
       required: false,
       default: 'Description',
     },
-    link: {
+    href: {
       type: String,
       required: false,
-      default: 'Link',
+      default: '',
     },
     background: {
       type: String,
       required: false,
       default: 'https://picsum.photos/700/300',
     },
-    innerLink: Boolean,
     grayscale: Boolean,
   },
   computed: {

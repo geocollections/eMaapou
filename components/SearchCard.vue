@@ -6,7 +6,7 @@
     nuxt
     :height="height"
     :width="'100%'"
-    :to="localePath({ name: href })"
+    :to="to"
   >
     <v-card-title class="montserrat text-none">
       {{ title }}
@@ -30,7 +30,7 @@ export default {
       type: String,
       default: 'main',
     },
-    href: {
+    to: {
       type: String,
       default: '',
     },
