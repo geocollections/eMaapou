@@ -6,6 +6,7 @@
     style="z-index: 2050"
     :color="isLanding ? 'transparent' : 'primary'"
     :elevation="isLanding ? 0 : 4"
+    :class="{ 'gradient-background': !isLanding }"
   >
     <v-toolbar-items>
       <go-back-button v-if="showBack" />
@@ -212,8 +213,8 @@ export default {
 .gradient-background {
   background: linear-gradient(
     320deg,
-    var(--v-header-base),
-    rgba(0, 0, 0, 1)
+    var(--v-primary-lighten1),
+    var(--v-accent-lighten1)
   ) !important;
 }
 </style>
