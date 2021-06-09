@@ -1,15 +1,19 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
-    <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
-    <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+    <search-fields-wrapper>
+      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
+      <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
+      <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+    </search-fields-wrapper>
 
-    <extra-options class="pt-1" />
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -21,6 +25,7 @@ import TextField from '../../fields/TextField.vue'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import ExtraOptions from '~/components/search/ExtraOptions'
 
 export default {
@@ -31,6 +36,7 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    SearchFieldsWrapper,
   },
   computed: {
     ...mapState('site', ['filters']),

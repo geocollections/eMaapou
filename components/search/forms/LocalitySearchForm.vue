@@ -1,30 +1,35 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
 
-    <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
+    <search-fields-wrapper>
+      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
 
-    <autocomplete-field
-      v-model="stratigraphy"
-      :items="autocomplete.chronostratigraphy"
-      :loading="autocomplete.loaders.chronostratigraphy"
-      :label="$t(filters.byIds.stratigraphy.label)"
-      :item-text="stratigraphyLabel"
-      :item-value="stratigraphyLabel"
-      @search:items="autocompleteChronostratigraphySearch"
-    />
+      <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
 
-    <text-field
-      v-model="reference"
-      :label="$t(filters.byIds.reference.label)"
-    />
+      <autocomplete-field
+        v-model="stratigraphy"
+        :items="autocomplete.chronostratigraphy"
+        :loading="autocomplete.loaders.chronostratigraphy"
+        :label="$t(filters.byIds.stratigraphy.label)"
+        :item-text="stratigraphyLabel"
+        :item-value="stratigraphyLabel"
+        @search:items="autocompleteChronostratigraphySearch"
+      />
 
-    <extra-options class="pt-1" />
+      <text-field
+        v-model="reference"
+        :label="$t(filters.byIds.reference.label)"
+      />
+    </search-fields-wrapper>
+
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -35,6 +40,7 @@ import { mapFields } from 'vuex-map-fields'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
@@ -49,8 +55,10 @@ export default {
     ResetSearchButton,
     SearchButton,
     AutocompleteField,
+    SearchFieldsWrapper,
   },
   mixins: [autocompleteMixin],
+
   data() {
     return {
       autocomplete: {

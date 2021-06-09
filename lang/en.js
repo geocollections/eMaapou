@@ -84,6 +84,7 @@ export default {
     to: 'To',
     showSearch: 'Search',
     showInstitutions: 'Institutions',
+    showSearchFields: 'Search Fields',
     backToLanding: 'Go back to landing page',
     resetSearch: 'Clear',
     resetSearchLong: 'Clear search fields',

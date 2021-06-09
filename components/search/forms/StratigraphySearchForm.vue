@@ -1,26 +1,31 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
 
-    <autocomplete-field
-      v-model="hierarchy"
-      :items="autocomplete.stratigraphy"
-      :loading="autocomplete.loaders.stratigraphy"
-      :label="$t(filters.byIds.stratigraphy.label)"
-      :item-text="stratigraphyLabel"
-      @search:items="autocompleteStratigraphySearch"
-    />
+    <search-fields-wrapper>
+      <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
 
-    <text-field v-model="index" :label="$t(filters.byIds.index.label)" />
+      <autocomplete-field
+        v-model="hierarchy"
+        :items="autocomplete.stratigraphy"
+        :loading="autocomplete.loaders.stratigraphy"
+        :label="$t(filters.byIds.stratigraphy.label)"
+        :item-text="stratigraphyLabel"
+        @search:items="autocompleteStratigraphySearch"
+      />
 
-    <text-field v-model="age" :label="$t(filters.byIds.age.label)" />
+      <text-field v-model="index" :label="$t(filters.byIds.index.label)" />
 
-    <extra-options class="pt-1" />
+      <text-field v-model="age" :label="$t(filters.byIds.age.label)" />
+    </search-fields-wrapper>
+
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -31,10 +36,11 @@ import { mapFields } from 'vuex-map-fields'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
-import TextField from '~/components/fields/TextField'
-import AutocompleteField from '~/components/fields/AutocompleteField'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import TextField from '~/components/fields/TextField.vue'
+import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions'
+import ExtraOptions from '~/components/search/ExtraOptions.vue'
 
 export default {
   name: 'StratigraphySearchForm',
@@ -45,6 +51,7 @@ export default {
     ResetSearchButton,
     SearchButton,
     AutocompleteField,
+    SearchFieldsWrapper,
   },
   mixins: [autocompleteMixin],
   data() {

@@ -1,26 +1,31 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
-    <!-- TODO: Get min and max dynamically -->
-    <range-slider-field
-      v-model="depth"
-      :min="-20"
-      :max="5000"
-      :label="$t(filters.byIds.depth.label)"
-    />
+
+    <search-fields-wrapper>
+      <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
+      <!-- TODO: Get min and max dynamically -->
+      <range-slider-field
+        v-model="depth"
+        :min="-20"
+        :max="5000"
+        :label="$t(filters.byIds.depth.label)"
+      />
+    </search-fields-wrapper>
 
     <institution-search-filter
-      class="pt-1"
+      class="mt-2"
       :institution="institution"
       @change:institution="institution = $event"
     />
 
-    <extra-options class="pt-1" />
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -32,6 +37,7 @@ import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import RangeSliderField from '~/components/fields/RangeSliderField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import ExtraOptions from '~/components/search/ExtraOptions'
@@ -46,6 +52,7 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    SearchFieldsWrapper,
   },
   computed: {
     ...mapState('analysis', ['filters']),

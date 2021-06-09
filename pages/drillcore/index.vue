@@ -35,10 +35,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm'
+import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm.vue'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
-import Search from '~/components/templates/Search'
+import Search from '~/components/templates/Search.vue'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 

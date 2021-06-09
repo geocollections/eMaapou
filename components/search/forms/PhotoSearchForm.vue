@@ -1,41 +1,51 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="locality" :label="$t(filters.byIds.locality.label)" />
+    <search-fields-wrapper>
+      <text-field
+        v-model="locality"
+        :label="$t(filters.byIds.locality.label)"
+      />
 
-    <text-field v-model="people" :label="$t(filters.byIds.people.label)" />
+      <text-field v-model="people" :label="$t(filters.byIds.people.label)" />
 
-    <text-field v-model="tags" :label="$t(filters.byIds.tags.label)" />
+      <text-field v-model="tags" :label="$t(filters.byIds.tags.label)" />
 
-    <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
+      <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
 
-    <range-text-field v-model="date" :label="$t(filters.byIds.date.label)" />
+      <range-text-field v-model="date" :label="$t(filters.byIds.date.label)" />
 
-    <text-field v-model="dateFree" :label="$t(filters.byIds.dateFree.label)" />
+      <text-field
+        v-model="dateFree"
+        :label="$t(filters.byIds.dateFree.label)"
+      />
 
-    <text-field
-      v-model="imageNumber"
-      :label="$t(filters.byIds.imageNumber.label)"
-    />
+      <text-field
+        v-model="imageNumber"
+        :label="$t(filters.byIds.imageNumber.label)"
+      />
 
-    <text-field v-model="author" :label="$t(filters.byIds.author.label)" />
+      <text-field v-model="author" :label="$t(filters.byIds.author.label)" />
 
-    <text-field
-      v-model="imageSize"
-      :label="$t(filters.byIds.imageSize.label)"
-    />
+      <text-field
+        v-model="imageSize"
+        :label="$t(filters.byIds.imageSize.label)"
+      />
+    </search-fields-wrapper>
 
     <institution-search-filter
-      class="pt-1"
+      class="mt-2"
       :institution="institution"
       @change:institution="institution = $event"
     />
 
-    <extra-options class="pt-1" />
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -46,6 +56,7 @@ import { mapFields } from 'vuex-map-fields'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import TextField from '~/components/fields/TextField.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeTextField from '~/components/fields/RangeTextField'
@@ -61,6 +72,7 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    SearchFieldsWrapper,
   },
   computed: {
     ...mapState('photo', ['filters']),

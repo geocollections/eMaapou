@@ -4,9 +4,7 @@
       <slot name="title"></slot>
       <v-row>
         <v-col cols="12" md="3">
-          <search-view-form-wrapper>
-            <slot name="form"></slot>
-          </search-view-form-wrapper>
+          <slot name="form"></slot>
         </v-col>
         <v-col cols="12" md="9">
           <slot name="result"></slot>
@@ -16,8 +14,8 @@
   </v-row>
 </template>
 <script>
-import SearchViewFormWrapper from '~/components/search/forms/SearchViewFormWrapper'
 export default {
-  components: { SearchViewFormWrapper },
+  // NOTE: Should probably named something more descriptive
+  name: 'Search',
 }
 </script>

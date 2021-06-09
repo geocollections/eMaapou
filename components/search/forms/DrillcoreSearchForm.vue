@@ -1,26 +1,34 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
-    <text-field
-      v-model="repository"
-      :label="$t(filters.byIds.repository.label)"
-    />
-    <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
-    <text-field v-model="storage" :label="$t(filters.byIds.storage.label)" />
-    <range-text-field v-model="boxes" :label="$t(filters.byIds.boxes.label)" />
+
+    <search-fields-wrapper>
+      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
+      <text-field
+        v-model="repository"
+        :label="$t(filters.byIds.repository.label)"
+      />
+      <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
+      <text-field v-model="storage" :label="$t(filters.byIds.storage.label)" />
+      <range-text-field
+        v-model="boxes"
+        :label="$t(filters.byIds.boxes.label)"
+      />
+    </search-fields-wrapper>
 
     <institution-search-filter
-      class="pt-1"
+      class="mt-2"
       :institution="institution"
       @change:institution="institution = $event"
     />
 
-    <extra-options class="pt-1" />
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -28,13 +36,14 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
+import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter.vue'
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
-import ExtraOptions from '~/components/search/ExtraOptions'
+import ExtraOptions from '~/components/search/ExtraOptions.vue'
 
 export default {
   name: 'DrillcoreSearchForm',
@@ -46,6 +55,7 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+    SearchFieldsWrapper,
   },
   computed: {
     ...mapState('drillcore', ['filters']),

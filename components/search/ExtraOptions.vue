@@ -1,5 +1,28 @@
 <template>
-  <v-card flat class="mt-1">
+  <card-expandable
+    :show-body="showExtraOptions"
+    @click="showExtraOptions = $event"
+  >
+    <template #title="{ showBody }">
+      <div @click="$emit('click', !showBody)">
+        <span>{{ $t('common.extraOptions') }}</span>
+        <v-icon class="pb-1">mdi-table-cog</v-icon>
+      </div>
+    </template>
+    <v-autocomplete
+      :items="allTableHeaders"
+      :value="shownTableHeaders"
+      chips
+      small-chips
+      deletable-chips
+      multiple
+      hide-details
+      cache-items
+      :label="$t('common.tableHeaders')"
+      @change="handleTableHeaderChange"
+    />
+  </card-expandable>
+  <!-- <v-card flat class="mt-1">
     <v-card-title class="py-1 px-0">
       <div
         class="card-title--clickable"
@@ -29,15 +52,17 @@
         @change="handleTableHeaderChange"
       />
     </v-card-text>
-  </v-card>
+  </v-card> -->
 </template>
 
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapState } from 'vuex'
+import CardExpandable from '../CardExpandable.vue'
 
 export default {
   name: 'ExtraOptions',
+  components: { CardExpandable },
   computed: {
     ...mapState('tableHeaders', {
       analysis(state) {

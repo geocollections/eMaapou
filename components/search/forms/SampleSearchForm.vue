@@ -1,56 +1,63 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
+    <search-fields-wrapper>
+      <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
 
-    <text-field v-model="locality" :label="$t(filters.byIds.locality.label)" />
+      <text-field
+        v-model="locality"
+        :label="$t(filters.byIds.locality.label)"
+      />
 
-    <!--    <text-field-->
-    <!--      v-model="stratigraphy"-->
-    <!--      :label="$t(filters.byIds.stratigraphy.label)"-->
-    <!--    />-->
+      <!--    <text-field-->
+      <!--      v-model="stratigraphy"-->
+      <!--      :label="$t(filters.byIds.stratigraphy.label)"-->
+      <!--    />-->
 
-    <autocomplete-field
-      v-model="hierarchy"
-      :items="autocomplete.stratigraphy"
-      :loading="autocomplete.loaders.stratigraphy"
-      :label="$t(filters.byIds.hierarchy.label)"
-      :item-text="stratigraphyLabel"
-      @search:items="autocompleteStratigraphySearch"
-    />
+      <autocomplete-field
+        v-model="hierarchy"
+        :items="autocomplete.stratigraphy"
+        :loading="autocomplete.loaders.stratigraphy"
+        :label="$t(filters.byIds.hierarchy.label)"
+        :item-text="stratigraphyLabel"
+        @search:items="autocompleteStratigraphySearch"
+      />
 
-    <text-field
-      v-model="collector"
-      :label="$t(filters.byIds.collector.label)"
-    />
+      <text-field
+        v-model="collector"
+        :label="$t(filters.byIds.collector.label)"
+      />
 
-    <range-slider-field
-      v-model="depth"
-      :min="-20"
-      :max="5000"
-      :label="$t(filters.byIds.depth.label)"
-    />
+      <range-slider-field
+        v-model="depth"
+        :min="-20"
+        :max="5000"
+        :label="$t(filters.byIds.depth.label)"
+      />
 
-    <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
-    <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
-    <!--    <range-search-field-->
-    <!--      v-model="mass"-->
-    <!--      :min="0"-->
-    <!--      :max="1000000"-->
-    <!--      :label="$t(filters.byIds.mass.label)"-->
-    <!--    />-->
+      <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
+      <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+      <!--    <range-search-field-->
+      <!--      v-model="mass"-->
+      <!--      :min="0"-->
+      <!--      :max="1000000"-->
+      <!--      :label="$t(filters.byIds.mass.label)"-->
+      <!--    />-->
+    </search-fields-wrapper>
 
     <institution-search-filter
-      class="pt-1"
+      class="mt-2"
       :institution="institution"
       @change:institution="institution = $event"
     />
 
-    <extra-options class="pt-1" />
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -62,6 +69,7 @@ import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import RangeSliderField from '~/components/fields/RangeSliderField'
 import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
@@ -79,6 +87,7 @@ export default {
     ResetSearchButton,
     SearchButton,
     RangeSliderField,
+    SearchFieldsWrapper,
   },
   mixins: [autocompleteMixin],
   data() {

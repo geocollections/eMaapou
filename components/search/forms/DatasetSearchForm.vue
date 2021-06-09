@@ -1,36 +1,40 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <global-search />
-    <div class="mt-2 d-flex justify-end align-center">
-      <reset-search-button @click="handleReset" />
-      <search-button />
+    <div class="mb-3">
+      <global-search />
+      <div class="mt-2 d-flex justify-end align-center">
+        <reset-search-button @click="handleReset" />
+        <search-button />
+      </div>
     </div>
-    <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
-    <text-field v-model="owner" :label="$t(filters.byIds.owner.label)" />
-    <text-field v-model="date" :label="$t(filters.byIds.date.label)" />
-    <text-field v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
+    <search-fields-wrapper>
+      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
+      <text-field v-model="owner" :label="$t(filters.byIds.owner.label)" />
+      <text-field v-model="date" :label="$t(filters.byIds.date.label)" />
+      <text-field v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
 
-    <autocomplete-field
-      :label="$t('dataset.parameters')"
-      chips
-      clearable
-      multiple
-      :items="availableParameters"
-      :value="parameters"
-      return-object
-      item-text="text"
-      small-chips
-      deletable-chips
-      @input="handleParameterInput"
-    />
+      <autocomplete-field
+        :label="$t('dataset.parameters')"
+        chips
+        clearable
+        multiple
+        :items="availableParameters"
+        :value="parameters"
+        return-object
+        item-text="text"
+        small-chips
+        deletable-chips
+        @input="handleParameterInput"
+      />
+    </search-fields-wrapper>
 
     <institution-search-filter
-      class="pt-1"
+      class="mt-2"
       :institution="institution"
       @change:institution="institution = $event"
     />
 
-    <extra-options class="pt-1" />
+    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -42,6 +46,7 @@ import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter
 import GlobalSearch from '../GlobalSearch.vue'
 import ResetSearchButton from '../ResetSearchButton.vue'
 import SearchButton from '../SearchButton.vue'
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import ExtraOptions from '~/components/search/ExtraOptions'
@@ -56,6 +61,7 @@ export default {
     ResetSearchButton,
     SearchButton,
     AutocompleteField,
+    SearchFieldsWrapper,
   },
   data() {
     return {
