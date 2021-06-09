@@ -3,7 +3,7 @@
     <!-- NOTE: Font size should be set with class 'text-body-1', but it overrides font-family -->
     <v-card-title
       class="pl-2 py-1 montserrat"
-      style="font-size: 1rem"
+      style="font-size: 1rem; cursor: pointer"
       @click="$emit('click', !showBody)"
     >
       <slot name="title" :showBody="showBody">
