@@ -10,16 +10,18 @@
         <v-icon>{{ showMap ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       </v-btn>
     </v-card-title>
-    <v-card-text v-show="showMap" class="px-0 pb-1">
-      <leaflet-map
-        v-bind="$attrs"
-        :markers="mapMarkers"
-        :invalidate-size="showMap"
-        activate-search
-        gps-enabled
-        @update="$emit('update')"
-      />
-    </v-card-text>
+    <v-expand-transition>
+      <v-card-text v-show="showMap" class="px-0 pb-1">
+        <leaflet-map
+          v-bind="$attrs"
+          :markers="mapMarkers"
+          :invalidate-size="showMap"
+          activate-search
+          gps-enabled
+          @update="$emit('update')"
+        />
+      </v-card-text>
+    </v-expand-transition>
   </v-card>
 </template>
 
