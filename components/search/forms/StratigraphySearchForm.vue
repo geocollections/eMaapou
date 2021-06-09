@@ -1,13 +1,15 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <div class="mb-3">
+    <v-card flat tile color="transparent" class="mb-3">
+      <v-card-title class="pl-2 py-1">{{
+        $t('common.showSearch')
+      }}</v-card-title>
       <global-search />
       <div class="mt-2 d-flex justify-end align-center">
         <reset-search-button @click="handleReset" />
         <search-button />
       </div>
-    </div>
-
+    </v-card>
     <search-fields-wrapper>
       <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
 

@@ -1,4 +1,5 @@
 <template>
+  <!-- NOTE: Deprecated. Replaced with CardExpandable component. -->
   <v-card tile flat color="transparent" class="pa-0">
     <v-card-title class="py-1">
       <div class="card-title--clickable" @click="showSearch = !showSearch">
