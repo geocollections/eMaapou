@@ -2,7 +2,11 @@
   <v-card>
     <v-card-title class="py-1">
       <div class="card-title--clickable" @click="showMap = !showMap">
-        <span v-html="$tc('common.map', mapMarkers.length)" />
+        <span
+          class="montserrat"
+          style="font-size: 1rem"
+          v-html="$tc('common.map', mapMarkers.length)"
+        />
         <v-icon class="pb-1">mdi-earth</v-icon>
       </div>
       <v-spacer></v-spacer>

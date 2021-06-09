@@ -1,15 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <v-card flat tile color="transparent" class="mb-3">
-      <v-card-title class="pl-2 py-1">{{
-        $t('common.showSearch')
-      }}</v-card-title>
-      <global-search />
-      <div class="mt-2 d-flex justify-end align-center">
-        <reset-search-button @click="handleReset" />
-        <search-button />
-      </div>
-    </v-card>
+    <search-actions class="mb-3" @click="handleReset" />
 
     <search-fields-wrapper>
       <v-row no-gutters>
@@ -175,10 +166,9 @@ import { mapFields } from 'vuex-map-fields'
 
 import { isEmpty } from 'lodash'
 import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
-import GlobalSearch from '../GlobalSearch.vue'
-import ResetSearchButton from '../ResetSearchButton.vue'
-import SearchButton from '../SearchButton.vue'
+
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
@@ -192,11 +182,9 @@ export default {
     RangeTextField,
     AutocompleteField,
     TextField,
-    GlobalSearch,
-    ResetSearchButton,
-    SearchButton,
     ParameterField,
     SearchFieldsWrapper,
+    SearchActions,
   },
   mixins: [autocompleteMixin],
   data() {

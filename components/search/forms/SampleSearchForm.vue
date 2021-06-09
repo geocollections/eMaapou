@@ -1,15 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <v-card flat tile color="transparent" class="mb-3">
-      <v-card-title class="pl-2 py-1">{{
-        $t('common.showSearch')
-      }}</v-card-title>
-      <global-search />
-      <div class="mt-2 d-flex justify-end align-center">
-        <reset-search-button @click="handleReset" />
-        <search-button />
-      </div>
-    </v-card>
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper>
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
 
@@ -69,10 +60,9 @@ import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
-import GlobalSearch from '../GlobalSearch.vue'
-import ResetSearchButton from '../ResetSearchButton.vue'
-import SearchButton from '../SearchButton.vue'
+
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import SearchActions from '../SearchActions.vue'
 import RangeSliderField from '~/components/fields/RangeSliderField'
 import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
@@ -86,11 +76,9 @@ export default {
     InstitutionSearchFilter,
     AutocompleteField,
     TextField,
-    GlobalSearch,
-    ResetSearchButton,
-    SearchButton,
     RangeSliderField,
     SearchFieldsWrapper,
+    SearchActions,
   },
   mixins: [autocompleteMixin],
   data() {

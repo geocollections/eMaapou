@@ -3,7 +3,7 @@
     outlined
     tile
     color="grey"
-    class="reset-search mr-2 px-3"
+    class="reset-search mr-2 px-3 montserrat"
     :icon="$vuetify.breakpoint.mdOnly"
     @click="$emit('click')"
   >
