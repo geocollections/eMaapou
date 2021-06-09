@@ -55,7 +55,7 @@ export default {
   },
   computed: {
     features() {
-      console.log(this?.response?.features ?? [])
+      // console.log(this?.response?.features ?? [])
       return this?.response?.features ?? []
     },
     featuresLength() {
