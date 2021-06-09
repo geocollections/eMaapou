@@ -9,9 +9,11 @@
         <v-icon>{{ showBody ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       </v-btn>
     </v-card-title>
-    <div v-show="showBody" class="px-3 pb-3 pt-1">
-      <slot></slot>
-    </div>
+    <v-expand-transition>
+      <div v-show="showBody" class="px-3 pb-3 pt-1">
+        <slot></slot>
+      </div>
+    </v-expand-transition>
   </v-card>
 </template>
 
