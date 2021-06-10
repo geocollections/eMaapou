@@ -1,5 +1,10 @@
 <template>
-  <v-card flat tile class="mb-4" style="background-color: transparent">
+  <v-card
+    flat
+    tile
+    class="mb-4 mt-4 mt-md-0"
+    style="background-color: transparent"
+  >
     <slot name="before"> </slot>
     <slot>
       <v-card-title class="text-sm-h3 text-h4 pt-0 px-0 px-sm-3">
