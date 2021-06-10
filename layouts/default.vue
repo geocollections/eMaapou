@@ -10,7 +10,7 @@
       :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
     >
       <div class="d-flex flex-column justify-center align-center fill-height">
-        <h1 class="text-center my-3 montserrat white--text">
+        <h1 class="text-h3 text-center my-3 montserrat white--text">
           {{ $t('landing.searchTitle') }}
         </h1>
 
