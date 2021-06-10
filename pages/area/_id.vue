@@ -189,6 +189,7 @@ export default {
     LinkDataRow,
     Detail,
   },
+  scrollToTop: true,
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(

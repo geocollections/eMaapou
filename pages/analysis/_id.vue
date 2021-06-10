@@ -171,6 +171,7 @@ import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import Detail from '~/components/templates/Detail.vue'
 export default {
   components: { PrevNextNavTitle, DataRow, LinkDataRow, Tabs, Detail },
+  scrollToTop: true,
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const analysisResponse = await app.$services.sarvREST.getResource(

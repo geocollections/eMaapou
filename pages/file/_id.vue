@@ -428,6 +428,7 @@ export default {
     LinkDataRow,
     Detail,
   },
+  scrollToTop: true,
   async asyncData({ params, route, error, app }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(

@@ -268,6 +268,7 @@ export default {
     Detail,
     ImageBar,
   },
+  scrollToTop: true,
   async asyncData({ params, route, app, error, redirect }) {
     try {
       const localityResponse = await app.$services.sarvREST.getResource(
