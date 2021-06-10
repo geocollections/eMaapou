@@ -50,8 +50,8 @@
       </v-col>
     </v-row>
 
-    <!-- <v-row>
-      <v-col md="6">
+    <!-- <v-row justify="end">
+      <v-col>
         <div class="aboutpage montserrat ml-4">
           <h1 class="aboutpage my-3">Mis on e·Maapõu?</h1>
           <div>
@@ -90,13 +90,52 @@
             </p>
           </div>
         </div>
+        <leaflet-map site-overlay> </leaflet-map>
       </v-col>
-      <v-col md="6">
-        <leaflet-map> </leaflet-map>
+      <v-col
+        :cols="$vuetify.breakpoint.mdAndUp ? 'auto' : 12"
+        :style="{ width: $vuetify.breakpoint.mdAndUp ? '400px' : '' }"
+      >
+        <h1 class="text-h4 mt-4 mb-3">
+          {{ $t('landing.eMaapouPages') }}
+        </h1>
+        <div
+          v-for="(item, index) in externalCards.innerIds.map(
+            (id) => externalCards[id]
+          )"
+          :key="`inner-${index}`"
+          class="pa-1"
+        >
+          <external-link-card
+            :title="$t(item.title)"
+            :description="$t(item.description)"
+            :href="item.href"
+            :background="item.background"
+            height="95px"
+          />
+        </div>
+        <h1 class="text-h5 grey--text text--darken-1 mt-4 mb-3">
+          {{ $t('landing.otherPages') }}
+        </h1>
+        <div
+          v-for="(item, index) in externalCards.outerIds.map(
+            (id) => externalCards[id]
+          )"
+          :key="`outer-${index}`"
+          class="pa-1"
+        >
+          <external-link-card
+            :title="$t(item.title)"
+            :description="$t(item.description)"
+            :href="item.href"
+            :background="item.background"
+            height="95px"
+            grayscale
+          />
+        </div>
       </v-col>
     </v-row> -->
-
-    <h1 class="text-center text-h4 mt-6 mb-10 ml-4">
+    <h1 class="text-h4 mt-6 mb-10 ml-4">
       {{ $t('landing.eMaapouPages') }}
     </h1>
     <v-row class="mb-6 px-1" justify="center" align="center">
@@ -106,9 +145,7 @@
         )"
         :key="index"
         class="pa-1"
-        cols="12"
-        :sm="item.sm || 6"
-        :md="item.md || 6"
+        cols="3"
       >
         <external-link-card
           :title="$t(item.title)"
@@ -150,10 +187,12 @@ import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import SearchCard from '~/components/SearchCard.vue'
+// import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   components: {
     ExternalLinkCard,
     SearchCard,
+    // LeafletMap,
   },
   data() {
     return {
@@ -197,6 +236,16 @@ export default {
           localeName: 'photo',
           title: this.$t('common.photo'),
           class: 'photo-search-card',
+        },
+        {
+          localeName: 'analysis',
+          title: this.$t('common.analyses'),
+          class: 'analysis-search-card',
+        },
+        {
+          localeName: 'stratigraphy',
+          title: this.$t('common.stratigraphy'),
+          class: 'stratigraphy-search-card',
         },
       ],
       externalCards: {
