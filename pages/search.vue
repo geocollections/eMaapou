@@ -2,7 +2,7 @@
   <div>
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-center my-3">
+        <h1 class="text-sm-h3 text-h4 text-center my-3">
           {{ $t('landing.searchTitle') }}
         </h1>
       </v-col>
