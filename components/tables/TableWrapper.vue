@@ -47,7 +47,7 @@
                   <v-btn
                     color="primary"
                     aria-label="export table"
-                    class="d-block"
+                    class="d-block montserrat"
                     v-bind="attrs"
                     v-on="on"
                   >

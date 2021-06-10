@@ -11,7 +11,9 @@
     <template #column-left>
       <v-row no-gutters justify="center">
         <v-col cols="12">
-          <v-card-title>{{ $t('common.general') }}</v-card-title>
+          <v-card-title class="subsection-title">{{
+            $t('common.general')
+          }}</v-card-title>
           <v-card-text>
             <v-simple-table dense class="custom-table">
               <template #default>
@@ -150,7 +152,9 @@
     </template>
 
     <template v-if="computedSites" #column-right>
-      <v-card-title>{{ $t('locality.map') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('locality.map')
+      }}</v-card-title>
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
           <leaflet-map

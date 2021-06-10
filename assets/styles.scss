@@ -415,3 +415,7 @@ th {
 .montserrat {
   font-family: 'Montserrat', sans-serif !important;
 }
+
+.subsection-title {
+  @extend .montserrat;
+}

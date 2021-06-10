@@ -8,7 +8,9 @@
       />
     </template>
     <template #column-left>
-      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('common.general')
+      }}</v-card-title>
       <v-card-text>
         <v-simple-table dense class="custom-table">
           <template #default>
@@ -195,7 +197,9 @@
     </template>
 
     <template v-if="sample.locality_id" #column-right>
-      <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('locality.locality')
+      }}</v-card-title>
       <v-card-text>
         <v-simple-table dense class="mb-4 custom-table">
           <template #default>
@@ -324,7 +328,9 @@
     </template>
 
     <template v-else-if="computedLocations.length > 0" #column-right>
-      <v-card-title>{{ $t('locality.map') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('locality.map')
+      }}</v-card-title>
       <v-card-text>
         <v-card elevation="0">
           <leaflet-map rounded :markers="computedLocations" />

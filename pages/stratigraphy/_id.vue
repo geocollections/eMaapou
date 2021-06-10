@@ -14,7 +14,9 @@
     </template>
 
     <template #column-left>
-      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('common.general')
+      }}</v-card-title>
       <v-card-text>
         <v-simple-table dense class="custom-table">
           <template #default>
@@ -165,7 +167,9 @@
       </v-card-text>
     </template>
     <template v-if="stratotypeCount > 0" #column-right>
-      <v-card-title>{{ $t('stratigraphy.stratotypes') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('stratigraphy.stratotypes')
+      }}</v-card-title>
       <v-card-text>
         <stratigraphy-stratotype-table
           only-table
@@ -201,7 +205,9 @@
       >
         <v-row no-gutters>
           <v-col cols="12">
-            <v-card-title>{{ $t('common.description') }}</v-card-title>
+            <v-card-title class="subsection-title">{{
+              $t('common.description')
+            }}</v-card-title>
 
             <!-- eslint-disable vue/no-v-html -->
             <v-card-text

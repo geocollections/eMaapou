@@ -11,7 +11,9 @@
     </template>
 
     <template #column-left>
-      <v-card-title>{{ $t('common.general') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('common.general')
+      }}</v-card-title>
       <v-card-text>
         <v-simple-table dense class="custom-table">
           <template #default>
@@ -74,13 +76,17 @@
         </v-simple-table>
       </v-card-text>
       <div v-if="drillcore.remarks">
-        <v-card-title>{{ $t('drillcore.remarks') }}</v-card-title>
+        <v-card-title class="subsection-title">{{
+          $t('drillcore.remarks')
+        }}</v-card-title>
         <v-card-text>{{ drillcore.remarks }}</v-card-text>
       </div>
     </template>
 
     <template v-if="drillcore.locality_id" #column-right>
-      <v-card-title>{{ $t('locality.locality') }}</v-card-title>
+      <v-card-title class="subsection-title">{{
+        $t('locality.locality')
+      }}</v-card-title>
       <v-card-text>
         <v-simple-table dense class="mb-4 custom-table">
           <template #default>

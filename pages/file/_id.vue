@@ -310,7 +310,9 @@
         </v-simple-table>
 
         <v-card v-if="showMap" id="map-wrap" elevation="0">
-          <v-card-title class="pl-0">{{ $t('locality.map') }}</v-card-title>
+          <v-card-title class="pl-0 subsection-title">{{
+            $t('locality.map')
+          }}</v-card-title>
           <leaflet-map
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
@@ -343,7 +345,9 @@
           md="6"
         >
           <v-card>
-            <v-card-title>{{ $t(item.title) }}</v-card-title>
+            <v-card-title class="subsection-title">{{
+              $t(item.title)
+            }}</v-card-title>
 
             <v-card-text>
               <v-simple-table>
