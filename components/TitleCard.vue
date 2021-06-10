@@ -1,5 +1,15 @@
 <template>
-  <v-card
+  <v-card flat tile class="mb-4" style="background-color: transparent">
+    <slot name="before"> </slot>
+    <slot>
+      <v-card-title class="text-sm-h3 text-h4 pt-0 px-0 px-sm-3">
+        <v-icon class="pr-2" x-large>{{ icon }}</v-icon>
+        {{ title }}
+      </v-card-title>
+    </slot>
+  </v-card>
+  <!-- NOTE: Old implementation -->
+  <!-- <v-card
     class="mb-4 d-flex justify-space-between px-4 flex-column flex-sm-row"
   >
     <div
@@ -32,7 +42,7 @@
     >
       <slot name="right"></slot>
     </div>
-  </v-card>
+  </v-card> -->
 </template>
 
 <script>

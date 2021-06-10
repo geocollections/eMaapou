@@ -1,9 +1,14 @@
 <template>
   <v-card flat tile color="transparent">
-    <v-card-title class="pl-2 py-1 montserrat">{{
-      $t('common.showSearch')
-    }}</v-card-title>
+    <v-card-title class="pl-2 py-1 montserrat">
+      <div>
+        {{ $t('common.showSearch') }}
+      </div>
+    </v-card-title>
     <global-search />
+    <div class="d-flex justify-end montserrat pt-1" style="font-size: 1rem">
+      {{ count ? $tc('common.count', count) : '' }}
+    </div>
     <div class="mt-2 d-flex justify-end align-center">
       <reset-search-button @click="$emit('click')" />
       <search-button />
@@ -22,6 +27,12 @@ export default {
     GlobalSearch,
     ResetSearchButton,
     SearchButton,
+  },
+  props: {
+    count: {
+      type: Number,
+      default: 0,
+    },
   },
 }
 </script>

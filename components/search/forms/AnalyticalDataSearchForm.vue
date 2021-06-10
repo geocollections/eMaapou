@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <search-actions class="mb-3" @click="handleReset" />
+    <search-actions class="mb-3" :count="count" @click="handleReset" />
 
     <search-fields-wrapper>
       <v-row no-gutters>
@@ -218,6 +218,7 @@ export default {
       'listParameters',
       'activeListParameters',
       'shownActiveListParameters',
+      'count',
     ]),
     ...mapGetters('analyticalData', ['distinctListParameters']),
     ...mapFields('analyticalData', {

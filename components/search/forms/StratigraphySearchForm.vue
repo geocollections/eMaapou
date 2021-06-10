@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <search-actions class="mb-3" @click="handleReset" />
+    <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper>
       <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
 
@@ -54,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('stratigraphy', ['filters']),
+    ...mapState('stratigraphy', ['filters', 'count']),
     ...mapFields('stratigraphy', {
       number: 'filters.byIds.id.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',

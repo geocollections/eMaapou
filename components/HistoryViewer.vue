@@ -1,6 +1,6 @@
 <template>
   <div v-if="history.length > 0" class="d-flex flex-row align-center">
-    <v-subheader class="pb-1 pl-0">{{
+    <v-subheader class="pb-1 pl-0 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
     <span class="history-viewer pb-1">

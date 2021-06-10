@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <search-actions class="mb-3" @click="handleReset" />
+    <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper>
       <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
       <!-- TODO: Get min and max dynamically -->
@@ -45,7 +45,7 @@ export default {
     SearchActions,
   },
   computed: {
-    ...mapState('analysis', ['filters']),
+    ...mapState('analysis', ['filters', 'count']),
     ...mapFields('analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',

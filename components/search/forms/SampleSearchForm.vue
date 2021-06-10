@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <search-actions class="mb-3" @click="handleReset" />
+    <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper>
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
 
@@ -92,7 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('sample', ['filters']),
+    ...mapState('sample', ['filters', 'count']),
     ...mapFields('sample', {
       number: 'filters.byIds.number.value',
       locality: 'filters.byIds.locality.value',

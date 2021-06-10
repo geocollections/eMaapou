@@ -15,6 +15,7 @@
         :key="index"
         :disabled="item.count === 0"
         nuxt
+        class="montserrat"
         active-class="active-tab"
         exact
         :to="

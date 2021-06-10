@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <search-actions class="mb-3" @click="handleReset" />
+    <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper>
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
@@ -29,7 +29,7 @@ export default {
     SearchActions,
   },
   computed: {
-    ...mapState('site', ['filters']),
+    ...mapState('site', ['filters', 'count']),
     ...mapFields('site', {
       name: 'filters.byIds.name.value',
       latitude: 'filters.byIds.latitude.value',

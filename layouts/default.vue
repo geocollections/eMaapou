@@ -65,10 +65,14 @@
         @update:navigationDrawer="drawer = $event"
       />
       <v-container
+        :class="{ 'pt-0': !isLanding }"
         :fluid="getRouteBaseName() === 'index' || $vuetify.breakpoint.lgAndDown"
       >
         <client-only>
-          <history-viewer v-if="$vuetify.breakpoint.smAndUp && !isLanding" />
+          <history-viewer
+            v-if="$vuetify.breakpoint.smAndUp && !isLanding"
+            class="pb-3"
+          />
         </client-only>
         <nuxt />
         <scroll-top-fab class="fab-container fab-bottom-right ma-3" />

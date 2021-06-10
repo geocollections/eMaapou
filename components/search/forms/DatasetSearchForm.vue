@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <search-actions class="mb-3" @click="handleReset" />
+    <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper>
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <text-field v-model="owner" :label="$t(filters.byIds.owner.label)" />
@@ -77,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('dataset', ['filters']),
+    ...mapState('dataset', ['filters', 'count']),
     ...mapFields('dataset', {
       name: 'filters.byIds.name.value',
       owner: 'filters.byIds.owner.value',
