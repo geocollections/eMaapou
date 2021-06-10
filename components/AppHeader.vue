@@ -198,7 +198,7 @@ export default {
 
 .active-tab {
   background-color: var(--v-quaternary-base) !important;
-  color: var(--v-tertiary-base) !important;
+  color: var(--v-accent-darken1) !important;
 }
 
 .v-app-bar ::v-deep .v-toolbar__content {
