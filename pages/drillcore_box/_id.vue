@@ -264,7 +264,6 @@ export default {
     PrevNextNavTitle,
     Detail,
   },
-  scrollToTop: true,
   async asyncData({ $axios, params, route, error, app, redirect }) {
     try {
       const drillcoreBoxResponse = await app.$services.sarvREST.getResource(

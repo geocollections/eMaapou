@@ -246,7 +246,6 @@ export default {
     LeafletMap,
     Detail,
   },
-  scrollToTop: true,
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const stratigraphyResponse = await app.$services.sarvREST.getResource(

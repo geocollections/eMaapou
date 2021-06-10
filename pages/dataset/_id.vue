@@ -196,7 +196,6 @@ export default {
     DataRow,
     LinkDataRow,
   },
-  scrollToTop: true,
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const datasetResponse = await app.$services.sarvREST.getResource(

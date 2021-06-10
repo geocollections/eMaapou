@@ -191,7 +191,6 @@ export default {
     LinkDataRow,
     Detail,
   },
-  scrollToTop: true,
   async asyncData({ params, route, error, app, redirect }) {
     try {
       const drillcoreResponse = await app.$services.sarvREST.getResource(
