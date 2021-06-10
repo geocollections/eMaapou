@@ -20,7 +20,9 @@
       <v-card>
         <v-row no-gutters justify="center">
           <v-col>
-            <v-card-title>{{ $t('common.general') }}</v-card-title>
+            <v-card-title class="subsection-title">{{
+              $t('common.general')
+            }}</v-card-title>
             <v-card-text>
               <v-simple-table dense class="custom-table">
                 <template #default>
