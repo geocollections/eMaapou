@@ -403,9 +403,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$t(`breadcrumbs.${this.routeName}-id`, {
-        id: this.$route.params.id,
-      })
+      return this.$translate({ et: this.site.name, en: this.site.name_en })
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
