@@ -11,16 +11,15 @@
 
     <template #form>
       <sample-search-form />
-    </template>
-
-    <template #result>
       <search-view-map-wrapper
         sample-overlay
         :items="items"
-        class="mb-6"
+        class="mb-6 mt-2"
         @update="handleUpdate"
       />
+    </template>
 
+    <template #result>
       <sample-table
         :show-search="false"
         :items="items"

@@ -11,15 +11,14 @@
 
     <template #form>
       <analysis-search-form />
+      <search-view-map-wrapper
+        :items="items"
+        class="mb-6 mt-2"
+        @update="handleUpdate"
+      />
     </template>
 
     <template #result>
-      <search-view-map-wrapper
-        :items="items"
-        class="mb-6"
-        @update="handleUpdate"
-      />
-
       <analysis-table
         :show-search="false"
         :items="items"

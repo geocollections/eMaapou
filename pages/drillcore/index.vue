@@ -11,16 +11,15 @@
 
     <template #form>
       <drillcore-search-form />
-    </template>
-
-    <template #result>
       <search-view-map-wrapper
         borehole-overlay
         :items="items"
-        class="mb-6"
+        class="mb-6 mt-2"
         @update="handleUpdate"
       />
+    </template>
 
+    <template #result>
       <drillcore-table
         :show-search="false"
         :items="items"

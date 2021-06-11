@@ -11,16 +11,15 @@
 
     <template #form>
       <photo-search-form />
-    </template>
-
-    <template #result>
       <search-view-map-wrapper
         use-custom-markers
         :items="mapMarkers"
-        class="mb-6"
+        class="mb-6 mt-2"
         @update="handleUpdate"
       />
+    </template>
 
+    <template #result>
       <v-card>
         <v-radio-group
           v-model="currentView"

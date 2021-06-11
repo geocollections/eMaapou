@@ -11,16 +11,16 @@
 
     <template #form>
       <analytical-data-search-form />
-    </template>
-
-    <template #result>
       <search-view-map-wrapper
         site-overlay
         locality-overlay
         :items="items"
-        class="mb-6"
+        class="mb-6 mt-2"
         @update="handleUpdate"
       />
+    </template>
+
+    <template #result>
       <analytical-data-table
         :show-search="false"
         :items="items"
