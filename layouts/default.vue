@@ -2,8 +2,8 @@
   <v-app dark>
     <v-img
       v-if="isLanding"
-      height="350px"
-      max-height="350px"
+      height="400px"
+      max-height="400px"
       width="100%"
       class="elevation-4"
       position="center 20%"
