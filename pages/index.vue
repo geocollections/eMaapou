@@ -146,7 +146,9 @@
         )"
         :key="index"
         class="pa-1"
-        cols="3"
+        cols="12"
+        :sm="item.sm || 6"
+        :md="item.md || 6"
       >
         <external-link-card
           :title="$t(item.title)"
@@ -255,8 +257,8 @@ export default {
           href: 'https://geocollections.info',
           background: require('~/assets/frontpage/geokogud.jpg'),
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         kirjandus: {
           title: 'kirjandus.title',
@@ -264,8 +266,8 @@ export default {
           href: 'https://kirjandus.geoloogia.info',
           background: require('~/assets/frontpage/geokirjandus.jpg'),
           sm: 6,
-          md: 6,
-          lg: 6,
+          md: 4,
+          lg: 4,
         },
         gmre: {
           title: 'gmre.title',
@@ -292,8 +294,8 @@ export default {
           href: 'https://fossiilid.info',
           background: require('~/assets/frontpage/fossiilid.jpg'),
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         kivid: {
           title: 'kivid.title',
@@ -301,8 +303,8 @@ export default {
           href: 'https://kivid.info',
           background: require('~/assets/frontpage/kivid.jpg'),
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         stratigraphy: {
           title: 'frontStratigraphy.title',
@@ -330,8 +332,8 @@ export default {
           href: 'https://doi.geocollections.info',
           background: require('~/assets/frontpage/sarv-doi.jpg'),
           sm: 6,
-          md: 6,
-          lg: 6,
+          md: 4,
+          lg: 4,
         },
         turba: {
           title: 'turba.title',
@@ -367,8 +369,8 @@ export default {
           href: 'https://edit.geocollections.info',
           background: require('~/assets/frontpage/sarv-wb.jpg'),
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         innerIds: [
           'kirjandus',

@@ -71,7 +71,7 @@
       />
       <v-container
         :class="{ 'pt-0': !isLanding }"
-        :fluid="getRouteBaseName() === 'index' || $vuetify.breakpoint.lgAndDown"
+        :fluid="$vuetify.breakpoint.lgAndDown"
       >
         <client-only>
           <history-viewer v-if="$vuetify.breakpoint.smAndUp && !isLanding" />
