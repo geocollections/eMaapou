@@ -6,7 +6,10 @@
     style="z-index: 2050"
     :color="isLanding ? 'transparent' : 'primary'"
     :elevation="isLanding ? 0 : 4"
-    :class="{ 'gradient-background': !isLanding }"
+    :class="{
+      'gradient-background': !isLanding,
+      'gradient-background-front': isLanding,
+    }"
   >
     <v-toolbar-items>
       <go-back-button v-if="showBack" />
@@ -187,7 +190,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .app-title >>> .v-app-bar-title__content {
   width: unset !important;
 }
@@ -210,11 +213,22 @@ export default {
   transition: width 250ms ease-in-out, height 250ms ease-in-out;
 }
 
+$gradient-col: rgb(150, 163, 177);
+$gradient-col-sec: rgb(80, 149, 177);
+
+.gradient-background-front {
+  background: linear-gradient(
+    320deg,
+    rgba($gradient-col, 0.6),
+    rgba($gradient-col-sec, 0.6)
+  ) !important;
+}
+
 .gradient-background {
   background: linear-gradient(
     320deg,
-    var(--v-primary-lighten1),
-    var(--v-accent-lighten1)
+    rgba($gradient-col, 1),
+    rgba($gradient-col-sec, 1)
   ) !important;
 }
 </style>

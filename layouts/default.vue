@@ -6,10 +6,13 @@
       max-height="350px"
       width="100%"
       class="elevation-4"
+      position="center 20%"
       :src="require('~/assets/frontpage/header_img.jpg')"
       :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
     >
-      <div class="d-flex flex-column justify-center align-center fill-height">
+      <div
+        class="mt-5 d-flex flex-column justify-center align-center fill-height"
+      >
         <h1 class="text-h3 text-center my-3 montserrat white--text">
           {{ $t('landing.searchTitle') }}
         </h1>
@@ -171,9 +174,9 @@ export default {
   right: 0;
 }
 
-.v-image ::v-deep .v-image__image {
-  background-position: center 40% !important;
-}
+// .v-image ::v-deep .v-image__image {
+//   background-position: center 40% !important;
+// }
 
 .form-xs {
   width: 85%;
