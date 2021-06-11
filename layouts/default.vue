@@ -13,7 +13,9 @@
       <div
         class="mt-5 d-flex flex-column justify-center align-center fill-height"
       >
-        <h1 class="text-h3 text-center my-3 montserrat white--text">
+        <h1
+          class="text-h3 font-weight-bold text-center my-3 montserrat white--text"
+        >
           {{ $t('landing.searchTitle') }}
         </h1>
 
