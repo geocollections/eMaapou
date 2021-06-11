@@ -135,7 +135,7 @@
         </div>
       </v-col>
     </v-row> -->
-    <leaflet-map locality-overlay> </leaflet-map>
+    <!-- <leaflet-map locality-overlay> </leaflet-map> -->
     <h1 class="text-center text-h4 mt-6 mb-10 ml-4">
       {{ $t('landing.eMaapouPages') }}
     </h1>
@@ -187,12 +187,12 @@ import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import SearchCard from '~/components/SearchCard.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+// import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   components: {
     ExternalLinkCard,
     SearchCard,
-    LeafletMap,
+    // LeafletMap,
   },
   data() {
     return {
