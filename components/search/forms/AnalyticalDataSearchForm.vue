@@ -285,7 +285,7 @@ export default {
     handleParameterUpdate(e, index) {
       this.updateParameter({ index, parameter: e })
     },
-    async handleUpdate(tableState) {
+    async handleMapUpdate(tableState) {
       await this.searchAnalyticalData(tableState?.options)
     },
   },

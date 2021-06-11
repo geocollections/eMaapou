@@ -61,6 +61,9 @@ export default {
   },
   methods: {
     ...mapActions('analyticalData', ['searchAnalyticalData']),
+    async handleUpdate(tableState) {
+      await this.searchAnalyticalData(tableState?.options)
+    },
   },
 }
 </script>
