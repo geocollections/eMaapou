@@ -1,4 +1,11 @@
 <template>
+  <!-- HACK: line 22 'isLoading = !onlyTable is hacky.
+      For some reason @update is getting called on created,
+      because of that the loading indicator stayies perminantly active
+      on tables where update function is not set.
+      To fix this for now, tables that have onlyTable prop do not
+      enable loading indicator when created.
+' -->
   <v-card :flat="$attrs.flat">
     <v-data-table
       id="table"
@@ -18,7 +25,7 @@
       :single-expand="singleExpand"
       :expanded.sync="expanded"
       @update:options="
-        isLoading = true
+        isLoading = !onlyTable
         handleChange($event)
       "
     >
@@ -35,7 +42,7 @@
                 :label="$t('common.search')"
                 hide-details
                 clearable
-                @input="handleSearch"
+                @input="handleSearch($event)"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -168,6 +175,7 @@ export default {
     }, 500),
     handleSearch: debounce(function () {
       const options = { ...this.options, page: 1 }
+      this.isLoading = true
       this.$emit('update', {
         options,
         search: this.search,
