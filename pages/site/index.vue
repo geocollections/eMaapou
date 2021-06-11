@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.sitesCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-map-marker-star-outline"
         class="title-site"
       />
@@ -20,6 +19,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <site-table
         :show-search="false"
         :items="items"

@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.drillcoresCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-screw-machine-flat-top"
         class="title-drillcore"
       />
@@ -20,6 +19,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <drillcore-table
         :show-search="false"
         :items="items"

@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.samplesCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-test-tube"
         class="title-sample"
       />
@@ -20,6 +19,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <sample-table
         :show-search="false"
         :items="items"

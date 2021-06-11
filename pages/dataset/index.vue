@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.datasetCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-screw-machine-flat-top"
         class="title-dataset"
       />
@@ -14,6 +13,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <dataset-table
         :show-search="false"
         :items="items"

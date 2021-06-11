@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.stratigraphy')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-layers-triple"
         class="title-stratigraphy"
       />
@@ -14,6 +13,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <stratigraphy-table
         :show-search="false"
         :items="items"

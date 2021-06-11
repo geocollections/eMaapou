@@ -6,9 +6,6 @@
       </div>
     </v-card-title>
     <global-search />
-    <div class="d-flex justify-end montserrat pt-1" style="font-size: 1rem">
-      {{ count ? $tc('common.count', count) : '' }}
-    </div>
     <div class="mt-2 d-flex justify-end align-center">
       <reset-search-button @click="$emit('click')" />
       <search-button />

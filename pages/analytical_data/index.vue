@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.analyticalDataCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-chart-scatter-plot"
         class="title-analysis"
       />
@@ -21,6 +20,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <analytical-data-table
         :show-search="false"
         :items="items"

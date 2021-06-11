@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.photosCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-file-image-outline"
         class="title-photo"
       />
@@ -20,12 +19,15 @@
     </template>
 
     <template #result>
-      <v-card>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
+      <v-card class="mt-0">
         <v-radio-group
           v-model="currentView"
           row
           hide-details
-          class="pa-4"
+          class="pa-4 mt-0"
           mandatory
         >
           <v-radio

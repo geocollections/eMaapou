@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('common.localitiesCount')"
-        :subtitle="$t('common.count', { count: count })"
         icon="mdi-map-marker-outline"
         class="title-locality"
       />
@@ -20,6 +19,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pt-1 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <locality-table
         :show-search="false"
         :items="items"
