@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'GoBackButton',
+  name: 'BackButtonDetail',
   computed: {
     table() {
       return this.$route.name.substring(0, this.$route.name.indexOf('-'))

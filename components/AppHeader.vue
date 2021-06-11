@@ -12,7 +12,7 @@
     }"
   >
     <v-toolbar-items>
-      <go-back-button v-if="showBack" />
+      <back-button-detail v-if="showBack" />
       <v-app-bar-title class="align-self-center app-title ml-3">
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
@@ -118,11 +118,11 @@
 </template>
 
 <script>
-import GoBackButton from './GoBackButton.vue'
+import BackButtonDetail from './BackButtonDetail.vue'
 import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcher, GoBackButton },
+  components: { LangSwitcher, BackButtonDetail },
   props: {
     isDetail: {
       type: Boolean,
