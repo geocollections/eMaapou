@@ -10,12 +10,6 @@
 
     <template #form>
       <site-search-form />
-      <search-view-map-wrapper
-        site-overlay
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      />
     </template>
 
     <template #result>
@@ -38,7 +32,6 @@
 import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '@/components/search/forms/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
@@ -46,7 +39,6 @@ import TitleCard from '~/components/TitleCard.vue'
 export default {
   components: {
     Search,
-    SearchViewMapWrapper,
     SiteSearchForm,
     SiteTable,
     TitleCard,

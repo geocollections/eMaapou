@@ -22,6 +22,13 @@
       />
     </search-fields-wrapper>
 
+    <search-view-map-wrapper
+      locality-overlay
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
+
     <extra-options class="mt-2" />
   </v-form>
 </template>
@@ -36,6 +43,7 @@ import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 export default {
   name: 'LocalitySearchForm',
   components: {
@@ -44,6 +52,7 @@ export default {
     AutocompleteField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   mixins: [autocompleteMixin],
 
@@ -60,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('locality', ['filters', 'count']),
+    ...mapState('locality', ['filters', 'count', 'items']),
     ...mapFields('locality', {
       name: 'filters.byIds.name.value',
       country: 'filters.byIds.country.value',
@@ -78,6 +87,9 @@ export default {
       this.resetSearch()
       this.resetLocalityFilters()
       this.searchLocalities()
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchLocalities(tableState?.options)
     },
   },
 }

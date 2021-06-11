@@ -44,7 +44,12 @@
       <!--      :label="$t(filters.byIds.mass.label)"-->
       <!--    />-->
     </search-fields-wrapper>
-
+    <search-view-map-wrapper
+      sample-overlay
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
     <institution-search-filter
       class="mt-2"
       :institution="institution"
@@ -68,6 +73,7 @@ import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   name: 'SampleSearchForm',
@@ -79,6 +85,7 @@ export default {
     RangeSliderField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -92,7 +99,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('sample', ['filters', 'count']),
+    ...mapState('sample', ['filters', 'count', 'items']),
     ...mapFields('sample', {
       number: 'filters.byIds.number.value',
       locality: 'filters.byIds.locality.value',
@@ -123,6 +130,9 @@ export default {
     },
     fillAutocompleteLists() {
       if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchSamples(tableState?.options)
     },
   },
 }

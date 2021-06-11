@@ -6,7 +6,12 @@
       <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
       <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
     </search-fields-wrapper>
-
+    <search-view-map-wrapper
+      site-overlay
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
     <extra-options class="mt-2" />
   </v-form>
 </template>
@@ -19,6 +24,7 @@ import TextField from '../../fields/TextField.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import ExtraOptions from '~/components/search/ExtraOptions'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 
 export default {
   name: 'SiteSearchForm',
@@ -27,9 +33,10 @@ export default {
     TextField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   computed: {
-    ...mapState('site', ['filters', 'count']),
+    ...mapState('site', ['filters', 'count', 'items']),
     ...mapFields('site', {
       name: 'filters.byIds.name.value',
       latitude: 'filters.byIds.latitude.value',
@@ -48,6 +55,9 @@ export default {
       this.resetSearch()
       this.resetSiteFilters()
       this.searchSites()
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchSites(tableState?.options)
     },
   },
 }

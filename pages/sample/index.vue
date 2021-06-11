@@ -10,12 +10,6 @@
 
     <template #form>
       <sample-search-form />
-      <search-view-map-wrapper
-        sample-overlay
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      />
     </template>
 
     <template #result>
@@ -38,7 +32,6 @@
 import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/forms/SampleSearchForm'
 import SampleTable from '~/components/tables/SampleTable.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
@@ -46,7 +39,6 @@ import TitleCard from '~/components/TitleCard.vue'
 export default {
   components: {
     Search,
-    SearchViewMapWrapper,
     SampleSearchForm,
     SampleTable,
     TitleCard,

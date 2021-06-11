@@ -147,7 +147,13 @@
         </v-col>
       </v-row>
     </search-fields-wrapper>
-
+    <search-view-map-wrapper
+      site-overlay
+      locality-overlay
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
     <v-row no-gutters>
       <v-col cols="12">
         <institution-search-filter
@@ -175,6 +181,7 @@ import autocompleteMixin from '~/mixins/autocompleteMixin'
 import RangeTextField from '~/components/fields/RangeTextField'
 import ParameterField from '~/components/fields/ParameterField.vue'
 
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 export default {
   name: 'AnalyticalDataSearchForm',
   components: {
@@ -185,6 +192,7 @@ export default {
     ParameterField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -219,6 +227,7 @@ export default {
       'activeListParameters',
       'shownActiveListParameters',
       'count',
+      'items',
     ]),
     ...mapGetters('analyticalData', ['distinctListParameters']),
     ...mapFields('analyticalData', {
@@ -275,6 +284,9 @@ export default {
     },
     handleParameterUpdate(e, index) {
       this.updateParameter({ index, parameter: e })
+    },
+    async handleUpdate(tableState) {
+      await this.searchAnalyticalData(tableState?.options)
     },
   },
 }

@@ -16,6 +16,13 @@
       />
     </search-fields-wrapper>
 
+    <search-view-map-wrapper
+      borehole-overlay
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
+
     <institution-search-filter
       class="mt-2"
       :institution="institution"
@@ -37,6 +44,7 @@ import SearchActions from '../SearchActions.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 
 export default {
   name: 'DrillcoreSearchForm',
@@ -47,9 +55,10 @@ export default {
     RangeTextField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   computed: {
-    ...mapState('drillcore', ['filters', 'count']),
+    ...mapState('drillcore', ['filters', 'count', 'items']),
     ...mapFields('drillcore', {
       name: 'filters.byIds.name.value',
       repository: 'filters.byIds.repository.value',
@@ -71,6 +80,9 @@ export default {
     },
     handleSearch(e) {
       this.searchDrillcores()
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchDrillcores(tableState?.options)
     },
   },
 }

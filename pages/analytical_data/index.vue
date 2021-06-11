@@ -10,13 +10,6 @@
 
     <template #form>
       <analytical-data-search-form />
-      <search-view-map-wrapper
-        site-overlay
-        locality-overlay
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      />
     </template>
 
     <template #result>
@@ -37,7 +30,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import AnalyticalDataTable from '~/components/tables/AnalyticalDataTable'
 import AnalyticalDataSearchForm from '~/components/search/forms/AnalyticalDataSearchForm'
 import Search from '~/components/templates/Search'
@@ -49,7 +41,6 @@ export default {
     Search,
     AnalyticalDataSearchForm,
     AnalyticalDataTable,
-    SearchViewMapWrapper,
     TitleCard,
   },
   head() {
@@ -70,9 +61,6 @@ export default {
   },
   methods: {
     ...mapActions('analyticalData', ['searchAnalyticalData']),
-    async handleUpdate(tableState) {
-      await this.searchAnalyticalData(tableState?.options)
-    },
   },
 }
 </script>

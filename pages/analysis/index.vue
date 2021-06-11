@@ -10,11 +10,6 @@
 
     <template #form>
       <analysis-search-form />
-      <search-view-map-wrapper
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      />
     </template>
 
     <template #result>
@@ -37,7 +32,6 @@
 import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
@@ -46,7 +40,6 @@ export default {
   name: 'AnalysisSearch',
   components: {
     Search,
-    SearchViewMapWrapper,
     AnalysisSearchForm,
     AnalysisTable,
     TitleCard,

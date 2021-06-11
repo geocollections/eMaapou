@@ -29,7 +29,12 @@
 
       <text-field v-model="author" :label="$t(filters.byIds.author.label)" />
     </search-fields-wrapper>
-
+    <search-view-map-wrapper
+      locality-overlay
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
     <extra-options class="mt-2" />
   </v-form>
 </template>
@@ -44,6 +49,7 @@ import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   name: 'TaxonSearchForm',
@@ -53,6 +59,7 @@ export default {
     TextField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -68,7 +75,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('taxon', ['filters', 'count']),
+    ...mapState('taxon', ['filters', 'count', 'items']),
     ...mapFields('taxon', {
       species: 'filters.byIds.species.value',
       locality: 'filters.byIds.locality.value',
@@ -96,6 +103,9 @@ export default {
     },
     fillAutocompleteLists() {
       if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchTaxa(tableState?.options)
     },
   },
 }

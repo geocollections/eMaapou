@@ -32,7 +32,12 @@
         :label="$t(filters.byIds.imageSize.label)"
       />
     </search-fields-wrapper>
-
+    <search-view-map-wrapper
+      use-custom-markers
+      :items="markers"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
     <institution-search-filter
       class="mt-2"
       :institution="institution"
@@ -53,6 +58,7 @@ import TextField from '~/components/fields/TextField.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeTextField from '~/components/fields/RangeTextField'
 import ExtraOptions from '~/components/search/ExtraOptions'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 
 export default {
   name: 'PhotoSearchForm',
@@ -63,9 +69,16 @@ export default {
     TextField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
+  },
+  props: {
+    markers: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
-    ...mapState('photo', ['filters', 'count']),
+    ...mapState('photo', ['filters', 'count', 'items']),
     ...mapFields('photo', {
       locality: 'filters.byIds.locality.value',
       people: 'filters.byIds.people.value',
@@ -92,6 +105,9 @@ export default {
       this.resetSearch()
       this.resetImageFilters()
       this.searchImages()
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchImages(tableState?.options)
     },
   },
 }

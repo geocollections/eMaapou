@@ -9,13 +9,7 @@
     </template>
 
     <template #form>
-      <photo-search-form />
-      <search-view-map-wrapper
-        use-custom-markers
-        :items="mapMarkers"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      />
+      <photo-search-form :markers="mapMarkers" />
     </template>
 
     <template #result>
@@ -74,7 +68,6 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import TitleCard from '~/components/TitleCard.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
@@ -89,7 +82,6 @@ export default {
     PhotoTable,
     PhotoSearchForm,
     Search,
-    SearchViewMapWrapper,
     TitleCard,
   },
   mixins: [dynamicTableHeaders],

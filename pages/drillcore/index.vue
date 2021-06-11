@@ -10,12 +10,12 @@
 
     <template #form>
       <drillcore-search-form />
-      <search-view-map-wrapper
+      <!-- <search-view-map-wrapper
         borehole-overlay
         :items="items"
         class="mb-6 mt-2"
         @update="handleUpdate"
-      />
+      /> -->
     </template>
 
     <template #result>
@@ -38,7 +38,6 @@
 import { mapState, mapActions } from 'vuex'
 import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm.vue'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import Search from '~/components/templates/Search.vue'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
@@ -46,7 +45,6 @@ import TitleCard from '~/components/TitleCard.vue'
 export default {
   components: {
     Search,
-    SearchViewMapWrapper,
     DrillcoreSearchForm,
     DrillcoreTable,
     TitleCard,

@@ -11,12 +11,6 @@
 
     <template #form>
       <taxon-search-form />
-      <search-view-map-wrapper
-        locality-overlay
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      />
     </template>
 
     <template #result>
@@ -38,7 +32,6 @@ import Search from '@/components/templates/Search'
 import TaxonSearchForm from '@/components/search/forms/TaxonSearchForm.vue'
 import TaxonTable from '@/components/tables/TaxonTable'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -46,7 +39,6 @@ export default {
     Search,
     TaxonSearchForm,
     TaxonTable,
-    SearchViewMapWrapper,
     TitleCard,
   },
   mixins: [dynamicTableHeaders],

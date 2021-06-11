@@ -12,6 +12,12 @@
       />
     </search-fields-wrapper>
 
+    <search-view-map-wrapper
+      :items="items"
+      class="mt-2"
+      @update="handleMapUpdate"
+    />
+
     <institution-search-filter
       class="mt-2"
       :institution="institution"
@@ -33,7 +39,7 @@ import SearchActions from '../SearchActions.vue'
 import RangeSliderField from '~/components/fields/RangeSliderField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import ExtraOptions from '~/components/search/ExtraOptions'
-
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 export default {
   name: 'AnalysisSearchForm',
   components: {
@@ -43,9 +49,10 @@ export default {
     RangeSliderField,
     SearchFieldsWrapper,
     SearchActions,
+    SearchViewMapWrapper,
   },
   computed: {
-    ...mapState('analysis', ['filters', 'count']),
+    ...mapState('analysis', ['filters', 'count', 'items']),
     ...mapFields('analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
@@ -64,6 +71,9 @@ export default {
     },
     handleSearch(e) {
       this.searchAnalyses()
+    },
+    async handleMapUpdate(tableState) {
+      await this.searchAnalyses(tableState?.options)
     },
   },
 }
