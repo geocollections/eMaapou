@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
+      <title-card-detail
         :ids="ids"
         :title="
           $translate({
@@ -229,16 +229,16 @@
 <script>
 import { isEmpty, isNull, isNil } from 'lodash'
 import LeafletMap from '@/components/map/LeafletMap'
+import TitleCardDetail from '@/components/TitleCardDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable'
 import { STRATOTYPE } from '~/constants'
 import Detail from '~/components/templates/Detail'
 export default {
   components: {
-    PrevNextNavTitle,
+    TitleCardDetail,
     Tabs,
     LinkDataRow,
     DataRow,

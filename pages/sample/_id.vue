@@ -1,11 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
-        :ids="ids"
-        :title="sampleTitle"
-        class="title-sample"
-      />
+      <title-card-detail :ids="ids" :title="sampleTitle" class="title-sample" />
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">{{
@@ -352,12 +348,12 @@ import DataRow from '@/components/DataRow'
 import LinkDataRow from '@/components/LinkDataRow'
 import Tabs from '@/components/Tabs'
 import LeafletMap from '@/components/map/LeafletMap'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle'
+import TitleCardDetail from '@/components/TitleCardDetail'
 import Detail from '~/components/templates/Detail'
 
 export default {
   components: {
-    PrevNextNavTitle,
+    TitleCardDetail,
     LinkDataRow,
     DataRow,
     Tabs,

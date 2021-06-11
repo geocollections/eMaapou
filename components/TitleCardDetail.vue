@@ -103,119 +103,14 @@
       </div>
     </template>
   </title-card>
-  <!-- NOTE: Old implementation -->
-  <!-- <title-card
-    :title="title"
-    :subtitle="$t(`breadcrumbs.${routeName}-id`, { id: $route.params.id })"
-  >
-    <template #subtitle>
-      <h3 class="d-flex grey--text justify-center text--darken-1">
-        <div class="align-self-center mr-1">
-          {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
-        </div>
-        <edit-button />
-      </h3>
-    </template>
-    <template #left>
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            nuxt
-            icon
-            :disabled="!computedFirstId"
-            :title="$t('common.first', { id: computedFirstId })"
-            :to="
-              localePath({
-                params: { id: computedFirstId },
-              })
-            "
-            v-on="on"
-          >
-            <v-icon>mdi-page-first</v-icon>
-          </v-btn>
-        </template>
-
-        <span>{{ $t('common.first', { id: computedFirstId }) }}</span>
-      </v-tooltip>
-
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            nuxt
-            icon
-            :disabled="!computedPrevId"
-            :title="$t('common.previous', { id: computedPrevId })"
-            :to="
-              localePath({
-                params: { id: computedPrevId },
-              })
-            "
-            v-on="on"
-          >
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-        </template>
-
-        <span>{{ $t('common.previous', { id: computedPrevId }) }}</span>
-      </v-tooltip>
-    </template>
-    <template #right>
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            nuxt
-            icon
-            :disabled="!computedNextId"
-            :title="$t('common.next', { id: computedNextId })"
-            :to="
-              localePath({
-                params: { id: computedNextId },
-              })
-            "
-            v-on="on"
-          >
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </template>
-
-        <span>{{ $t('common.next', { id: computedNextId }) }}</span>
-      </v-tooltip>
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
-          <v-btn
-            v-bind="attrs"
-            nuxt
-            icon
-            :disabled="!computedLastId"
-            :title="$t('common.last', { id: computedLastId })"
-            :to="
-              localePath({
-                params: { id: computedLastId },
-              })
-            "
-            v-on="on"
-          >
-            <v-icon>mdi-page-last</v-icon>
-          </v-btn>
-        </template>
-
-        <span>{{ $t('common.last', { id: computedLastId }) }}</span>
-      </v-tooltip>
-    </template>
-  </title-card> -->
 </template>
 
 <script>
 import EditButton from './EditButton.vue'
 import TitleCard from './TitleCard.vue'
-// import TitleCard from './TitleCard.vue'
 export default {
-  name: 'PrevNextNavTitle',
+  name: 'TitleCardDetail',
   components: {
-    // TitleCard,
     EditButton,
     TitleCard,
   },

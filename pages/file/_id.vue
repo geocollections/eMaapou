@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title :ids="ids" :title="fileTitle" class="title-main" />
+      <title-card-detail :ids="ids" :title="fileTitle" class="title-main" />
     </template>
     <template #column-left>
       <v-card-text class="text-center">
@@ -419,14 +419,14 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
+import TitleCardDetail from '@/components/TitleCardDetail'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import Detail from '~/components/templates/Detail'
 export default {
   components: {
-    PrevNextNavTitle,
+    TitleCardDetail,
     LeafletMap,
     DataRow,
     LinkDataRow,

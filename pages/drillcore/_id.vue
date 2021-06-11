@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
+      <title-card-detail
         :ids="ids"
         :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
@@ -176,15 +176,15 @@
 <script>
 import { isEmpty, isNull } from 'lodash'
 import LeafletMap from '@/components/map/LeafletMap'
+import TitleCardDetail from '@/components/TitleCardDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import Detail from '~/components/templates/Detail.vue'
 
 export default {
   components: {
-    PrevNextNavTitle,
+    TitleCardDetail,
     Tabs,
     LeafletMap,
     DataRow,

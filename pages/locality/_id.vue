@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
+      <title-card-detail
         :ids="ids"
         :title="$translate({ et: locality.locality, en: locality.locality_en })"
         class="title-locality"
@@ -254,17 +254,17 @@
 <script>
 import { isNil, isEmpty } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
+import TitleCardDetail from '@/components/TitleCardDetail'
 import LinkDataRow from '~/components/LinkDataRow'
 import DataRow from '~/components/DataRow'
 import LeafletMap from '~/components/map/LeafletMap'
 import Tabs from '~/components/Tabs'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 
 export default {
   components: {
-    PrevNextNavTitle,
+    TitleCardDetail,
     DataRow,
     LinkDataRow,
     LeafletMap,

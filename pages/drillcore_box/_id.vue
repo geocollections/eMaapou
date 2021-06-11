@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
+      <title-card-detail
         :ids="ids"
         :title="drillcoreBoxTitle"
         class="title-main"
@@ -251,9 +251,9 @@
 <script>
 import { isNull, isNil } from 'lodash'
 import Tabs from '@/components/Tabs'
+import TitleCardDetail from '@/components/TitleCardDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle.vue'
 import Detail from '~/components/templates/Detail.vue'
 
 export default {
@@ -261,7 +261,7 @@ export default {
     Tabs,
     DataRow,
     LinkDataRow,
-    PrevNextNavTitle,
+    TitleCardDetail,
     Detail,
   },
   async asyncData({ $axios, params, route, error, app, redirect }) {

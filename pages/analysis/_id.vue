@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <prev-next-nav-title
+      <title-card-detail
         :ids="ids"
         :title="
           $t('analysis.title', {
@@ -166,13 +166,13 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
+import TitleCardDetail from '@/components/TitleCardDetail'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Tabs from '~/components/Tabs'
-import PrevNextNavTitle from '~/components/PrevNextNavTitle'
 import Detail from '~/components/templates/Detail.vue'
 export default {
-  components: { PrevNextNavTitle, DataRow, LinkDataRow, Tabs, Detail },
+  components: { TitleCardDetail, DataRow, LinkDataRow, Tabs, Detail },
 
   async asyncData({ params, route, error, app, redirect }) {
     try {
