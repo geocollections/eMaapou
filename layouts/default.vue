@@ -14,7 +14,7 @@
         class="mt-5 d-flex flex-column justify-center align-center fill-height"
       >
         <h1
-          class="text-h3 font-weight-bold text-center my-3 montserrat white--text"
+          class="text-h3 font-weight-bold text-center my-3 montserrat white--text text-shadow"
         >
           {{ $t('landing.searchTitle') }}
         </h1>
@@ -190,6 +190,10 @@ export default {
 
 .form-lg-up {
   width: 33%;
+}
+
+.text-shadow {
+  text-shadow: black 0 0 6px;
 }
 
 // .v-image ::v-deep .v-responsive__content {
