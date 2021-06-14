@@ -6,7 +6,7 @@
     temporary
     width="100%"
     color="quaternary"
-    class="elevation-4"
+    class="elevation-4 montserrat"
     :height="$vuetify.breakpoint.smAndUp ? 'unset' : `100%`"
     :style="`z-index: 2050; margin-top: ${$vuetify.application.top}px; opacity: 0.95`"
     :class="{ 'use-padding-bottom': $vuetify.breakpoint.smAndDown }"

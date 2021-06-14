@@ -8,7 +8,7 @@
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       @click="$i18n.setLocale(locale.code)"
     >
-      <v-list-item-title class="d-flex">
+      <v-list-item-title class="d-flex montserrat">
         <span v-if="locale.code === 'et'" class="flag flag-et mr-2 lang-icon" />
         <span v-if="locale.code === 'en'" class="flag flag-en mr-2 lang-icon" />
         <span class="align-self-center">{{ locale.name }}</span>
