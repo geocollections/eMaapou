@@ -566,6 +566,11 @@ export default {
     geoJSON(newVal) {
       if (!newVal) this.removeAllGeomanLayers()
     },
+    gestureHandling(value) {
+      if (!this.map) return
+      if (!value) this.map.mapObject.gestureHandling.disable()
+      else this.map.mapObject.gestureHandling.enable()
+    },
   },
   mounted() {
     this.$nextTick(() => {

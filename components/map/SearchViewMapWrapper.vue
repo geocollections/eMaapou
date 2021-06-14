@@ -19,6 +19,7 @@
         :invalidate-size="showBody"
         activate-search
         gps-enabled
+        :gesture-handling="$vuetify.breakpoint.smAndDown"
         @update="$emit('update')"
       />
     </template>
@@ -28,7 +29,7 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import CardExpandable from '../CardExpandable.vue'
-import LeafletMap from '~/components/map/LeafletMap'
+import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   name: 'SearchViewMapWrapper',
   components: { LeafletMap, CardExpandable },
