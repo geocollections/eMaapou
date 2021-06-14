@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row class="px-10">
       <v-col class="pt-0 px-0">
         <!-- <v-tabs
           v-if="$vuetify.breakpoint.smAndUp"
@@ -135,16 +135,25 @@
         </div>
       </v-col>
     </v-row> -->
-    <!-- <leaflet-map locality-overlay> </leaflet-map> -->
-    <h1 class="text-center text-h4 mt-6 mb-10 ml-4">
-      {{ $t('landing.eMaapouPages') }}
-    </h1>
-    <v-row class="mb-6 px-1" justify="center" align="center">
+    <leaflet-map
+      class="mt-4 elevation-5"
+      :height="750"
+      summary-overlay
+      :zoom="7"
+      :show-links="false"
+    >
+    </leaflet-map>
+    <v-row class="my-6 px-10" justify="center" align="center">
+      <v-col cols="12">
+        <h1 class="text-h4 ml-3">
+          {{ $t('landing.otherPages') }}
+        </h1>
+      </v-col>
       <v-col
         v-for="(item, index) in externalCards.innerIds.map(
           (id) => externalCards[id]
         )"
-        :key="index"
+        :key="`inner-${index}`"
         class="pa-1"
         cols="12"
         :sm="item.sm || 6"
@@ -157,8 +166,26 @@
           :background="item.background"
         />
       </v-col>
+      <v-col
+        v-for="(item, index) in externalCards.outerIds.map(
+          (id) => externalCards[id]
+        )"
+        :key="`outer-${index}`"
+        class="pa-1"
+        cols="12"
+        :sm="item.sm || 6"
+        :md="item.md || 6"
+      >
+        <external-link-card
+          :title="$t(item.title)"
+          :description="$t(item.description)"
+          :href="item.href"
+          :background="item.background"
+          grayscale
+        />
+      </v-col>
     </v-row>
-    <h1 class="text-center text-h5 grey--text text--darken-1 ml-4">
+    <!-- <h1 class="text-center text-h5 grey--text text--darken-1 ml-4">
       {{ $t('landing.otherPages') }}
     </h1>
     <v-row class="my-6 px-1" justify="center" align="center">
@@ -180,7 +207,7 @@
           grayscale
         />
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
@@ -189,12 +216,12 @@ import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import SearchCard from '~/components/SearchCard.vue'
-// import LeafletMap from '~/components/map/LeafletMap.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   components: {
     ExternalLinkCard,
     SearchCard,
-    // LeafletMap,
+    LeafletMap,
   },
   data() {
     return {

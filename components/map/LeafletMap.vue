@@ -95,7 +95,11 @@
           :height="height"
         />-->
       </l-map>
-      <map-links :latitude="currentCenter.lat" :longitude="currentCenter.lng" />
+      <map-links
+        v-if="showLinks"
+        :latitude="currentCenter.lat"
+        :longitude="currentCenter.lng"
+      />
     </div>
     <template #placeholder>
       <div
@@ -131,6 +135,11 @@ export default {
     MapLinks,
   },
   props: {
+    zoom: {
+      type: Number,
+      require: false,
+      default: null,
+    },
     height: {
       type: Number,
       default: 500,
@@ -171,6 +180,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    summaryOverlay: {
+      type: Boolean,
+      default: false,
+    },
     estonianBedrockOverlay: {
       type: Boolean,
       default: false,
@@ -185,6 +198,14 @@ export default {
     // Enables search functionality: Drawing etc.
     activateSearch: Boolean,
     gpsEnabled: Boolean,
+    gestureHandling: {
+      type: Boolean,
+      default: true,
+    },
+    showLinks: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -200,7 +221,7 @@ export default {
       },
       mapClickResponse: null,
       options: {
-        gestureHandling: true,
+        gestureHandling: this.gestureHandling,
         gestureHandlingOptions: {
           text: {
             touch: this.$t('gestureHandling.touch'),
@@ -426,6 +447,27 @@ export default {
               zIndex: 50,
             },
           },
+          {
+            id: 'summary',
+            isWMS: true,
+            name: 'Üldine / Summary',
+            url: 'https://gis.geocollections.info/geoserver/wms',
+            layers: 'sarv:locality_summary_front',
+            visible: this.summaryOverlay,
+            transparent: true,
+            zIndex: 50,
+            options: {
+              // maxNativeZoom: 18,
+              // maxZoom: 21,
+              attribution:
+                "Summary: <a  href='https://geoloogia.info'>SARV</a>",
+              format: 'image/png',
+              tiled: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 50,
+            },
+          },
         ],
       },
     }
@@ -435,7 +477,7 @@ export default {
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
     mapZoom() {
-      return this.estonianBedrockOverlay ? 9 : 11
+      return this.zoom ?? (this.estonianBedrockOverlay ? 9 : 11)
     },
 
     tileOverlays() {
