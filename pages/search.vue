@@ -14,7 +14,9 @@
     </v-row>
     <v-row justify="center">
       <v-col>
-        <button-tabs ref="tabs" :tabs="computedTabs" />
+        <div class="mb-2">
+          <button-tabs ref="tabs" :tabs="computedTabs" />
+        </div>
 
         <v-card>
           <nuxt-child keep-alive />
