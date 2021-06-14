@@ -38,10 +38,10 @@ export default {
     },
   },
   created() {
-    this.interval = setInterval(() => this.refreshIsLoggedIn(), 60000)
+    // this.interval = setInterval(() => this.refreshIsLoggedIn(), 60000)
   },
   beforeDestroy() {
-    clearInterval(this.interval)
+    // clearInterval(this.interval)
   },
   methods: {
     refreshIsLoggedIn() {
