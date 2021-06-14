@@ -191,6 +191,7 @@
           elevation="0"
         >
           <leaflet-map
+            rounded
             :estonian-map="site.locality__country__value === 'Eesti'"
             :estonian-bedrock-overlay="
               site.locality__country__value === 'Eesti'

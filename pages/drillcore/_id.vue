@@ -145,6 +145,7 @@
             :estonian-bedrock-overlay="
               drillcore.locality__country__value === 'Eesti'
             "
+            rounded
             borehole-overlay
             :height="300"
             :center="{

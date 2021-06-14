@@ -314,6 +314,7 @@
             $t('locality.map')
           }}</v-card-title>
           <leaflet-map
+            rounded
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
             :height="300"

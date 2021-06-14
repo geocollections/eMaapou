@@ -265,6 +265,7 @@
           elevation="0"
         >
           <leaflet-map
+            rounded
             :estonian-map="sample.locality__country__value === 'Eesti'"
             :estonian-bedrock-overlay="
               sample.locality__country__value === 'Eesti'

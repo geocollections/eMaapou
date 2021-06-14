@@ -180,6 +180,7 @@
         />
         <v-card id="map-wrap" elevation="0">
           <leaflet-map
+            rounded
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
             :height="300"

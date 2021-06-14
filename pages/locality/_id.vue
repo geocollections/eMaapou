@@ -220,6 +220,7 @@
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
           <leaflet-map
+            rounded
             :estonian-map="locality.country__value === 'Eesti'"
             :estonian-bedrock-overlay="locality.country__value === 'Eesti'"
             locality-overlay
