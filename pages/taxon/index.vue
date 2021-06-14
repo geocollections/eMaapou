@@ -14,6 +14,9 @@
     </template>
 
     <template #result>
+      <div class="text-h6 pl-2 py-1">
+        {{ count ? $tc('common.count', count) : '' }}
+      </div>
       <taxon-table
         :show-search="false"
         :items="items"

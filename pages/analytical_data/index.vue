@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pt-1 py-1">
+      <div class="text-h6 pl-2 py-1">
         {{ count ? $tc('common.count', count) : '' }}
       </div>
       <analytical-data-table
