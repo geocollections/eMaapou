@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="px-10">
+    <v-row class="px-3 px-md-10">
       <v-col class="pt-0 px-0">
         <!-- <v-tabs
           v-if="$vuetify.breakpoint.smAndUp"
@@ -143,7 +143,7 @@
       :show-links="false"
     >
     </leaflet-map>
-    <v-row class="my-6 px-10" justify="center" align="center">
+    <v-row class="my-6 px-3 px-md-10" justify="center" align="center">
       <v-col cols="12">
         <h1 class="text-h4 ml-3">
           {{ $t('landing.otherPages') }}
