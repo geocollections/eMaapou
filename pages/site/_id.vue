@@ -25,7 +25,11 @@
                   })
                 "
               />
-              <data-row :value="site.area" :title="$t('site.area')">
+              <data-row
+                v-if="site.area"
+                :value="site.area"
+                :title="$t('site.area')"
+              >
                 <template #value>
                   <a
                     v-if="site.area__area_type === 2"
