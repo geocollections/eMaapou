@@ -85,7 +85,7 @@ export default {
     to: 'Kuni',
     showSearch: 'Otsing',
     showInstitutions: 'Asutused',
-    showSearchFields: 'Otsingu väljad',
+    showSearchFields: 'Filtrid',
     backToLanding: 'Tagasi avalehele',
     resetSearch: 'Puhasta',
     resetSearchLong: 'Puhasta otsinguväljad',
