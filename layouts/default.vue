@@ -59,7 +59,6 @@
       </div>
     </v-img>
     <app-header
-      :show-back="isDetail"
       :is-detail="isDetail"
       :drawer="drawer"
       @toggle:navigationDrawer="drawer = !drawer"

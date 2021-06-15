@@ -1,9 +1,10 @@
 <template>
   <title-card>
     <v-card-title
-      class="d-flex align-start text-sm-h3 text-h4 pt-0 px-0 px-sm-3"
+      class="d-flex align-start text-sm-h3 text-h4 pt-1 px-0 px-sm-3"
       style="word-break: normal"
     >
+      <back-button-detail />
       {{ title }}
       <edit-button />
     </v-card-title>
@@ -106,13 +107,16 @@
 </template>
 
 <script>
+import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
 import TitleCard from './TitleCard.vue'
+
 export default {
   name: 'TitleCardDetail',
   components: {
     EditButton,
     TitleCard,
+    BackButtonDetail,
   },
   props: {
     arrowKeys: {

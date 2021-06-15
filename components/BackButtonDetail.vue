@@ -1,7 +1,7 @@
 <template>
   <v-tooltip bottom>
     <template #activator="{ on }">
-      <v-btn small text v-on="on" @click="handleClick">
+      <v-btn icon small text v-on="on" @click="handleClick">
         <v-icon>mdi-subdirectory-arrow-left mdi-rotate-90</v-icon>
       </v-btn>
     </template>

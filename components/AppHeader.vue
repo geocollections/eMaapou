@@ -11,7 +11,6 @@
     }"
   >
     <v-toolbar-items>
-      <back-button-detail v-if="showBack" />
       <v-app-bar-title class="align-self-center app-title ml-3">
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
@@ -117,11 +116,10 @@
 </template>
 
 <script>
-import BackButtonDetail from './BackButtonDetail.vue'
-import LangSwitcher from '~/components/lang_switcher/LangSwitcher'
+import LangSwitcher from '~/components/lang_switcher/LangSwitcher.vue'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcher, BackButtonDetail },
+  components: { LangSwitcher },
   props: {
     isDetail: {
       type: Boolean,
@@ -129,10 +127,6 @@ export default {
       default: false,
     },
     drawer: Boolean,
-    showBack: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
