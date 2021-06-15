@@ -193,7 +193,7 @@ export default {
 }
 
 .text-shadow {
-  text-shadow: black 0 0 6px;
+  text-shadow: black 0 0 20px;
 }
 
 // .v-image ::v-deep .v-responsive__content {
