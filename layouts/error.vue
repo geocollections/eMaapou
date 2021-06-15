@@ -1,12 +1,12 @@
 <template>
   <v-row justify="center">
     <v-col sm="8" md="6" class="text-center">
-      <h1 style="font-size: 1.75rem">
+      <h1 class="text-h4">
         {{ title }}
       </h1>
-      <div>{{ error.message }}</div>
+      <div class="montserrat">{{ error.message }}</div>
       <quick-search-form class="my-4" @submit="handleSearch" />
-      <NuxtLink to="/" class="text-link-grey">
+      <NuxtLink to="/" class="text-link-grey montserrat">
         {{ $t('common.backToLanding') }}
       </NuxtLink>
     </v-col>
