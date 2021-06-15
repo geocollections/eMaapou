@@ -703,6 +703,7 @@ export default {
         this.map.mapObject.pm.setGlobalOptions({
           allowSelfIntersection: false,
           finishOn: 'dblclick',
+          snappable: false,
         })
 
         this.allGeomanLayers = this.$L.layerGroup()
