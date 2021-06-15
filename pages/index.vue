@@ -135,42 +135,69 @@
         </div>
       </v-col>
     </v-row> -->
-    <leaflet-map
-      class="mt-4 elevation-5"
-      :height="750"
-      summary-overlay
-      :zoom="7"
-      :show-links="false"
-    >
-    </leaflet-map>
-    <v-row class="my-6 px-3 px-md-10" justify="center" align="center">
+    <v-row>
+      <v-col cols="12" md="6">
+        <div class="aboutpage montserrat ml-4">
+          <h1 class="aboutpage text-h4 my-3 ml-3">Mis on e·Maapõu?</h1>
+          <div>
+            <p>
+              <strong
+                >e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja
+                e-teenuste juurde.</strong
+              >
+            </p>
+
+            <p>
+              Eestis toodavad ja haldavad maapõue andmeid peamiselt&nbsp;<a
+                href="https://egt.ee"
+                >Geoloogiateenistus</a
+              >, <a href="https://maaamet.ee">Maa-amet</a>,
+              <a href="https://keskkonnaamet.ee">Keskkonnaamet</a>,
+              teadusasutused (<a href="https://taltech.ee/geoloogia-instituut"
+                >Tallinna Tehnikaülikooli geoloogia instituut</a
+              >,
+              <a href="https://natmuseum.ut.ee"
+                >Tartu Ülikooli loodusmuuseum ja botaanikaaed</a
+              >,
+              <a href="https://geoloogia.ut.ee"
+                >Tartu Ülikooli geoloogia osakond</a
+              >&nbsp;ja&nbsp;<a href="https://loodusmuuseum.ee"
+                >Eesti Loodusmuuseum</a
+              >), ning valdkonnas tegutsevad ettevõtted.&nbsp;
+            </p>
+
+            <p>
+              e-Maapõu võimaldab otsida andmeid maapõue infosüsteemis SARV, mida
+              kasutavad põhiliselt teadusasutused. Sellisteks andmeteks on
+              näiteks geoloogilised kollektsioonid, geoloogia-alased
+              publikatsioonid, puursüdamikud, paljandid,&nbsp;kivimiproovid,
+              fossiilid, analüütiline andmestik, fotoarhiiv jne.
+            </p>
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="12" md="6">
+        <leaflet-map
+          class="mt-4 rounded elevation-3"
+          :height="650"
+          summary-overlay
+          :zoom="7"
+          rounded
+          :show-links="false"
+        />
+      </v-col>
+    </v-row>
+    <v-row class="my-6" justify="center" align="center">
       <v-col cols="12">
         <h1 class="text-h4 ml-3">
           {{ $t('landing.otherPages') }}
         </h1>
       </v-col>
       <v-col
-        v-for="(item, index) in externalCards.innerIds.map(
+        v-for="(item, index) in externalCards.ids.map(
           (id) => externalCards[id]
         )"
         :key="`inner-${index}`"
-        class="pa-1"
-        cols="12"
-        :sm="item.sm || 6"
-        :md="item.md || 6"
-      >
-        <external-link-card
-          :title="$t(item.title)"
-          :description="$t(item.description)"
-          :href="item.href"
-          :background="item.background"
-        />
-      </v-col>
-      <v-col
-        v-for="(item, index) in externalCards.outerIds.map(
-          (id) => externalCards[id]
-        )"
-        :key="`outer-${index}`"
         class="pa-1"
         cols="12"
         :sm="item.sm || 6"
@@ -185,29 +212,6 @@
         />
       </v-col>
     </v-row>
-    <!-- <h1 class="text-center text-h5 grey--text text--darken-1 ml-4">
-      {{ $t('landing.otherPages') }}
-    </h1>
-    <v-row class="my-6 px-1" justify="center" align="center">
-      <v-col
-        v-for="(item, index) in externalCards.outerIds.map(
-          (id) => externalCards[id]
-        )"
-        :key="index"
-        class="pa-1"
-        cols="12"
-        :sm="item.sm || 6"
-        :md="item.md || 6"
-      >
-        <external-link-card
-          :title="$t(item.title)"
-          :description="$t(item.description)"
-          :href="item.href"
-          :background="item.background"
-          grayscale
-        />
-      </v-col>
-    </v-row> -->
   </div>
 </template>
 
@@ -399,6 +403,21 @@ export default {
           md: 4,
           lg: 4,
         },
+        ids: [
+          'kirjandus',
+          'doi',
+          'geocollections',
+          'fossiilid',
+          'kivid',
+          'sarv',
+          'fond',
+          'maardlad',
+          'stratigraphy',
+          'gmre',
+          'turba',
+          'geocase',
+          'eurocore',
+        ],
         innerIds: [
           'kirjandus',
           'doi',

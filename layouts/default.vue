@@ -69,8 +69,8 @@
         @update:navigationDrawer="drawer = $event"
       />
       <v-container
-        :class="{ 'pt-0': !isLanding, 'px-0': isLanding }"
-        :fluid="$vuetify.breakpoint.lgAndDown || isLanding"
+        :class="{ 'pt-0': !isLanding }"
+        :fluid="$vuetify.breakpoint.lgAndDown"
       >
         <client-only>
           <history-viewer v-if="$vuetify.breakpoint.smAndUp && !isLanding" />
