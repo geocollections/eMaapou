@@ -1,5 +1,6 @@
 <template>
   <card-expandable
+    :active="active"
     :show-body="showInstitutions"
     @click="showInstitutions = $event"
   >
@@ -102,6 +103,10 @@ export default {
       type: Array,
       required: true,
       default: () => [],
+    },
+    active: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

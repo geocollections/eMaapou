@@ -41,6 +41,7 @@
     />
     <institution-search-filter
       class="mt-2"
+      :active="!isEmpty(institution)"
       :institution="institution"
       @change:institution="institution = $event"
     />
@@ -52,6 +53,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -98,6 +100,7 @@ export default {
     }),
   },
   methods: {
+    isEmpty,
     ...mapActions('photo', ['searchImages', 'resetImageFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {

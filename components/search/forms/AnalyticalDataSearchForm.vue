@@ -159,6 +159,7 @@
       <v-col cols="12">
         <institution-search-filter
           class="mt-2"
+          :active="!isEmpty(institution)"
           :institution="institution"
           @change:institution="institution = $event"
         />
@@ -256,6 +257,7 @@ export default {
     this.fillAutocompleteLists()
   },
   methods: {
+    isEmpty,
     ...mapActions('analyticalData', [
       'searchAnalyticalData',
       'resetAnalyticalDataFilters',

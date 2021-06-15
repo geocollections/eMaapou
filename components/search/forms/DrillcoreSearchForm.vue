@@ -26,6 +26,7 @@
 
     <institution-search-filter
       class="mt-2"
+      :active="!isEmpty(institution)"
       :institution="institution"
       @change:institution="institution = $event"
     />
@@ -37,6 +38,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import { isEmpty } from 'lodash'
 
 import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter.vue'
 
@@ -73,6 +75,7 @@ export default {
     }),
   },
   methods: {
+    isEmpty,
     ...mapActions('drillcore', ['searchDrillcores', 'resetDrillcoreFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {
