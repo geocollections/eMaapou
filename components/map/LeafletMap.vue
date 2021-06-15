@@ -56,7 +56,6 @@
           v-if="markers.length >= 250"
           :markers="markers"
         />
-        <l-geo-json v-if="geoJSON" :geojson="geoJSON" />
         <l-circle-marker-wrapper v-else :markers="markers" />
 
         <l-marker
@@ -85,6 +84,7 @@
           </l-popup>
         </l-marker>
 
+        <l-geo-json v-if="geoJSON" :geojson="geoJSON" />
         <l-layer-group ref="popup">
           <map-click-popup :response="mapClickResponse" />
         </l-layer-group>
