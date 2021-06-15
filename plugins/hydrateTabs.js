@@ -22,7 +22,7 @@ export default ({ app }, inject) => {
     return { ...tab, props }
   }
 
-  const validateTabRoute = (route, tabs, { findMax = false }) => {
+  const validateTabRoute = (route, tabs, ...{ findMax = false }) => {
     const currentTab = tabs.find(
       (tab) =>
         route.path ===
