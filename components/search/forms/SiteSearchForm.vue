@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper>
+    <search-fields-wrapper :active="hasActiveFilters">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
       <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import TextField from '../../fields/TextField.vue'
@@ -48,6 +48,7 @@ export default {
     ...mapFields('globalSearch', {
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
+    ...mapGetters('site', ['hasActiveFilters']),
   },
   methods: {
     ...mapActions('site', ['searchSites', 'resetSiteFilters']),

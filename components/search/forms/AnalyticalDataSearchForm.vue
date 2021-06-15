@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
 
-    <search-fields-wrapper>
+    <search-fields-wrapper :active="hasActiveFilters">
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
           <text-field
@@ -231,7 +231,10 @@ export default {
       'count',
       'items',
     ]),
-    ...mapGetters('analyticalData', ['distinctListParameters']),
+    ...mapGetters('analyticalData', [
+      'distinctListParameters',
+      'hasActiveFilters',
+    ]),
     ...mapFields('analyticalData', {
       locality: 'filters.byIds.locality.value',
       depth: 'filters.byIds.depth.value',

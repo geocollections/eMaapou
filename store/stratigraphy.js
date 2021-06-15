@@ -1,4 +1,5 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { isEmpty, isNil } from 'lodash'
 import { STRATIGRAPHY } from '~/constants'
 
 const getDefaultState = () => {
@@ -55,6 +56,15 @@ export const state = () => getDefaultState()
 
 export const getters = {
   getField,
+  hasActiveFilters(state) {
+    return Object.values(state.filters.byIds).some((filter) => {
+      if (Array.isArray(filter.value))
+        return filter.value.some(function (v) {
+          return v !== null
+        })
+      return !isEmpty(filter.value) && !isNil(filter.value)
+    })
+  },
 }
 
 export const mutations = {

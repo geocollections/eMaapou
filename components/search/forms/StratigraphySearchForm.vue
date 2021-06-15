@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper>
+    <search-fields-wrapper :active="hasActiveFilters">
       <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
 
       <autocomplete-field
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
@@ -62,6 +62,7 @@ export default {
       index: 'filters.byIds.index.value',
       age: 'filters.byIds.age.value',
     }),
+    ...mapGetters('stratigraphy', ['hasActiveFilters']),
   },
   created() {
     this.fillAutocompleteLists()

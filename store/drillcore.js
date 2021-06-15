@@ -1,3 +1,4 @@
+import { isEmpty, isNil } from 'lodash'
 import { getField, updateField } from 'vuex-map-fields'
 import { DRILLCORE } from '~/constants'
 
@@ -54,6 +55,15 @@ export const state = () => getDefaultState()
 
 export const getters = {
   getField,
+  hasActiveFilters(state) {
+    return Object.values(state.filters.byIds).some((filter) => {
+      if (Array.isArray(filter.value))
+        return filter.value.some(function (v) {
+          return v !== null
+        })
+      return !isEmpty(filter.value) && !isNil(filter.value)
+    })
+  },
 }
 
 export const mutations = {

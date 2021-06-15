@@ -1,5 +1,6 @@
 <template>
   <card-expandable
+    :active="active"
     :show-body="showSearchViewForm"
     @click="showSearchViewForm = $event"
   >
@@ -19,6 +20,12 @@ import CardExpandable from '~/components/CardExpandable.vue'
 export default {
   name: 'SearchFieldWrapper',
   components: { CardExpandable },
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     ...mapFields('settings', {
       showSearchViewForm: 'showSearchViewForm',

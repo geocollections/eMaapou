@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper>
+    <search-fields-wrapper :active="hasActiveFilters">
       <text-field v-model="species" :label="$t(filters.byIds.species.label)" />
 
       <text-field
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
@@ -88,6 +88,7 @@ export default {
       institution: 'filters.byIds.institution.value',
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
+    ...mapGetters('taxon', ['hasActiveFilters']),
   },
   created() {
     this.fillAutocompleteLists()

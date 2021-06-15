@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper>
+    <search-fields-wrapper :active="hasActiveFilters">
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
 
       <text-field
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 
@@ -117,6 +117,7 @@ export default {
       institution: 'filters.byIds.institution.value',
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
+    ...mapGetters('sample', ['hasActiveFilters']),
   },
   created() {
     this.fillAutocompleteLists()

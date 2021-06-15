@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper>
+    <search-fields-wrapper :active="hasActiveFilters">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
 
       <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
@@ -80,6 +80,7 @@ export default {
     ...mapFields('globalSearch', {
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
+    ...mapGetters('locality', ['hasActiveFilters']),
   },
   methods: {
     ...mapActions('locality', ['searchLocalities', 'resetLocalityFilters']),
