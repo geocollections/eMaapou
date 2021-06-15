@@ -56,7 +56,7 @@
           v-if="markers.length >= 250"
           :markers="markers"
         />
-
+        <l-geo-json v-if="geoJSON" :geojson="geoJSON" />
         <l-circle-marker-wrapper v-else :markers="markers" />
 
         <l-marker
@@ -743,6 +743,8 @@ export default {
     handlePmRemove() {
       this.removeAllGeomanLayers()
       this.activeGeomanLayer = null
+      this.geoJSON = null
+      this.$emit('update')
     },
 
     removeAllGeomanLayers() {
