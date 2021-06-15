@@ -25,8 +25,9 @@ export default {
     }
   },
   async fetch() {
-    const isLoggedInRespones = await this.$services.sarvRwapi.isLoggedIn()
-    this.isLoggedIn = !!isLoggedInRespones?.results?.success
+    // NOTE: Should think over if we want to show the edit button based on the login state
+    // const isLoggedInRespones = await this.$services.sarvRwapi.isLoggedIn()
+    // this.isLoggedIn = !!isLoggedInRespones?.results?.success
   },
   computed: {
     style() {
