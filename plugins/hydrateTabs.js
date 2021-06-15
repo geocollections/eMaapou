@@ -22,7 +22,7 @@ export default ({ app }, inject) => {
     return { ...tab, props }
   }
 
-  const validateTabRoute = (route, tabs) => {
+  const validateTabRoute = (route, tabs, { findMax = false }) => {
     const currentTab = tabs.find(
       (tab) =>
         route.path ===
@@ -35,7 +35,10 @@ export default ({ app }, inject) => {
     if (currentTab.count > 0) return route.path
 
     // Find tab that has items
-    const initTab = tabs.find((tab) => tab.count > 0)
+    const initTab = findMax
+      ? tabs.reduce((max, tab) => (max.count > tab.count ? max : tab))
+      : tabs.find((tab) => tab.count > 0)
+
     // Constuct route
     // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
     const path = app.localePath({

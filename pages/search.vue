@@ -35,7 +35,7 @@ export default {
   name: 'QuickSearch',
   components: { ButtonTabs, GlobalSearch },
   // layout: 'search',
-  async asyncData({ params, route, error, app, store }) {
+  async asyncData({ params, route, error, app, store, redirect }) {
     try {
       const tabs = [
         {
@@ -152,22 +152,27 @@ export default {
           props: {},
         },
       ]
-
-      return {
-        tabs: await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: {
-                  default: {
-                    q: isEmpty(store.state.landing.search)
-                      ? '*'
-                      : `${store.state.landing.search}`,
-                  },
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateCount(tab, {
+              solr: {
+                default: {
+                  q: isEmpty(store.state.landing.search)
+                    ? '*'
+                    : `${store.state.landing.search}`,
                 },
-              })
-          )
-        ),
+              },
+            })
+        )
+      )
+
+      const validPath = app.$validateTabRoute(route, hydratedTabs, {
+        findMax: true,
+      })
+      if (validPath !== route.path) redirect(validPath)
+      return {
+        tabs: hydratedTabs,
       }
     } catch (err) {}
   },
