@@ -10,6 +10,7 @@
       site-overlay
       :items="items"
       class="mt-2"
+      :active="geoJSON"
       @update="handleMapUpdate"
     />
     <extra-options class="mt-2" />
@@ -43,6 +44,9 @@ export default {
       longitude: 'filters.byIds.longitude.value',
       area: 'filters.byIds.area.value',
       project: 'filters.byIds.project.value',
+    }),
+    ...mapFields('globalSearch', {
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   methods: {

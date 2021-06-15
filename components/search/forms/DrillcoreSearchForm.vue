@@ -18,6 +18,7 @@
 
     <search-view-map-wrapper
       borehole-overlay
+      :active="geoJSON"
       :items="items"
       class="mt-2"
       @update="handleMapUpdate"
@@ -68,6 +69,7 @@ export default {
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   methods: {

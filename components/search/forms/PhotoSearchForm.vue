@@ -36,6 +36,7 @@
       use-custom-markers
       :items="markers"
       class="mt-2"
+      :active="geoJSON"
       @update="handleMapUpdate"
     />
     <institution-search-filter
@@ -93,6 +94,7 @@ export default {
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   methods: {

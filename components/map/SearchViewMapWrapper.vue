@@ -1,5 +1,9 @@
 <template>
-  <card-expandable :show-body="showMap" @click="showMap = $event">
+  <card-expandable
+    :active="active"
+    :show-body="showMap"
+    @click="showMap = $event"
+  >
     <template #title="{ showBody }">
       <div @click="$emit('click', !showBody)">
         <span
@@ -48,6 +52,10 @@ export default {
       default() {
         return false
       },
+    },
+    active: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

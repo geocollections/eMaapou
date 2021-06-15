@@ -26,6 +26,7 @@
       locality-overlay
       :items="items"
       class="mt-2"
+      :active="geoJSON"
       @update="handleMapUpdate"
     />
 
@@ -75,6 +76,9 @@ export default {
       country: 'filters.byIds.country.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       reference: 'filters.byIds.reference.value',
+    }),
+    ...mapFields('globalSearch', {
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   methods: {

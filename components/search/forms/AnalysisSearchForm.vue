@@ -15,6 +15,7 @@
     <search-view-map-wrapper
       :items="items"
       class="mt-2"
+      :active="geoJSON"
       @update="handleMapUpdate"
     />
 
@@ -59,6 +60,7 @@ export default {
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   methods: {

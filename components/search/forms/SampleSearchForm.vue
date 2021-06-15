@@ -48,6 +48,7 @@
       sample-overlay
       :items="items"
       class="mt-2"
+      :active="geoJSON"
       @update="handleMapUpdate"
     />
     <institution-search-filter
@@ -112,6 +113,7 @@ export default {
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   created() {

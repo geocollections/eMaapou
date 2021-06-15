@@ -152,6 +152,7 @@
       locality-overlay
       :items="items"
       class="mt-2"
+      :active="geoJSON"
       @update="handleMapUpdate"
     />
     <v-row no-gutters>
@@ -248,6 +249,7 @@ export default {
     }),
     ...mapFields('globalSearch', {
       institution: 'filters.byIds.institution.value',
+      geoJSON: 'filters.byIds.geoJSON.value',
     }),
   },
   created() {

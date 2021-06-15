@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :class="{ active: active }">
     <!-- NOTE: Font size should be set with class 'text-body-1', but it overrides font-family -->
     <v-card-title
       class="pl-2 py-1 montserrat card-title--clickable"
@@ -37,6 +37,10 @@ export default {
       type: String,
       default: 'Title',
     },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
@@ -49,5 +53,8 @@ export default {
     cursor: pointer;
     opacity: 0.7;
   }
+}
+.active {
+  border: 2px solid var(--v-accent-lighten2);
 }
 </style>
