@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('drillcore')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <text-field
         v-model="repository"
@@ -17,7 +17,7 @@
 
     <search-view-map-wrapper
       borehole-overlay
-      :active="geoJSON"
+      :active="geoJSON !== null"
       :items="items"
       class="mt-2"
       @update="handleMapUpdate"
@@ -47,6 +47,7 @@ import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import { DRILLCORE } from '~/constants'
 
 export default {
   name: 'DrillcoreSearchForm',
@@ -60,34 +61,53 @@ export default {
     SearchViewMapWrapper,
   },
   computed: {
-    ...mapState('drillcore', ['filters', 'count', 'items']),
-    ...mapFields('drillcore', {
+    ...mapState('search/drillcore', ['filters', 'count', 'items']),
+    ...mapFields('search/drillcore', {
       name: 'filters.byIds.name.value',
       repository: 'filters.byIds.repository.value',
       country: 'filters.byIds.country.value',
       boxes: 'filters.byIds.boxes.value',
       storage: 'filters.byIds.storage.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
+    ...mapFields('search', {
+      institution: 'filters.byIds.institutions.value',
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
-    ...mapGetters('drillcore', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('drillcore', ['searchDrillcores', 'resetDrillcoreFilters']),
+    ...mapActions('search', ['searchResource', 'resetFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleReset(e) {
       this.resetSearch()
-      this.resetDrillcoreFilters()
-      this.searchDrillcores()
+      this.resetFilters('drillcore')
+      this.searchResource({
+        module: 'drillcore',
+        resource: 'drillcore',
+        isMapEnabled: true,
+        isInsitutionsEnabled: true,
+        resourceDefaults: DRILLCORE,
+      })
     },
     handleSearch(e) {
-      this.searchDrillcores()
+      this.searchResource({
+        module: 'drillcore',
+        resource: 'drillcore',
+        isMapEnabled: true,
+        isInsitutionsEnabled: true,
+        resourceDefaults: DRILLCORE,
+      })
     },
     async handleMapUpdate(tableState) {
-      await this.searchDrillcores(tableState?.options)
+      await this.searchResource({
+        options: tableState?.options,
+        module: 'drillcore',
+        resource: 'drillcore',
+        isMapEnabled: true,
+        isInsitutionsEnabled: true,
+        resourceDefaults: DRILLCORE,
+      })
     },
   },
 }

@@ -110,7 +110,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('globalSearch', ['institutions']),
+    ...mapState('search', ['institutions']),
     ...mapFields('settings', {
       showInstitutions: 'showInstitutionFilters',
     }),

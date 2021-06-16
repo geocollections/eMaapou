@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { debounce } from 'lodash'
 import { SITE } from '~/constants'
 import SiteTable from '~/components/tables/SiteTable.vue'
@@ -22,9 +21,6 @@ export default {
       items: [],
       count: 0,
     }
-  },
-  computed: {
-    ...mapState('landing', ['search']),
   },
   watch: {
     search: {

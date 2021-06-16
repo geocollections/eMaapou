@@ -444,7 +444,7 @@ export default {
     }
   },
   computed: {
-    ...mapFields('landing', ['search']),
+    ...mapFields('search', ['searchQuery']),
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path

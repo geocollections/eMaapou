@@ -98,7 +98,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('landing', ['search']),
     ...mapState('photo', ['options', 'items', 'count']),
     ...mapState('settings', ['listOfViews']),
     ...mapFields('photo', ['currentView']),

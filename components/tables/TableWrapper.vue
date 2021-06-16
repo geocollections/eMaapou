@@ -171,11 +171,13 @@ export default {
   },
   methods: {
     handleChange: debounce(function (options) {
+      console.log('change', options)
       this.$emit('update', { options, search: this.search })
     }, 500),
     handleSearch: debounce(function () {
       const options = { ...this.options, page: 1 }
       this.isLoading = true
+      console.log('search')
       this.$emit('update', {
         options,
         search: this.search,

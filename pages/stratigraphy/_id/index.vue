@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { debounce, isNil } from 'lodash'
 import { STRATIGRAPHY_REFERENCE } from '~/constants'
 import StratigraphyReferenceTable from '~/components/tables/StratigraphyReferenceTable'
@@ -27,9 +26,6 @@ export default {
       items: [],
       count: 0,
     }
-  },
-  computed: {
-    ...mapState('landing', ['search']),
   },
   watch: {
     search: {

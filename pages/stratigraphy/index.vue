@@ -57,7 +57,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('landing', ['search']),
     ...mapState('stratigraphy', ['options', 'items', 'count']),
   },
   methods: {

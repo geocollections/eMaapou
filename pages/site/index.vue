@@ -57,7 +57,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('landing', ['search']),
     ...mapState('site', ['options', 'items', 'count']),
     translatedHeaders() {
       return this.headers.map((header) => {

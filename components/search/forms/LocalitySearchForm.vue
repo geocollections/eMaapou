@@ -26,7 +26,7 @@
       locality-overlay
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
 
@@ -45,6 +45,7 @@ import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import { LOCALITY } from '~/constants'
 export default {
   name: 'LocalitySearchForm',
   components: {
@@ -77,24 +78,40 @@ export default {
       stratigraphy: 'filters.byIds.stratigraphy.value',
       reference: 'filters.byIds.reference.value',
     }),
-    ...mapFields('globalSearch', {
+    ...mapFields('search', {
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
     ...mapGetters('locality', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('locality', ['searchLocalities', 'resetLocalityFilters']),
+    ...mapActions('search', ['searchResource', 'resetFilters']),
     ...mapActions('landing', ['resetSearch']),
     handleSearch(e) {
-      this.searchLocalities()
+      this.searchResource({
+        module: 'locality',
+        resource: 'locality',
+        isMapEnabled: true,
+        resourceDefaults: LOCALITY,
+      })
     },
     handleReset(e) {
       this.resetSearch()
-      this.resetLocalityFilters()
-      this.searchLocalities()
+      this.resetFilters('locality')
+      this.searchResource({
+        module: 'locality',
+        resource: 'locality',
+        isMapEnabled: true,
+        resourceDefaults: LOCALITY,
+      })
     },
     async handleMapUpdate(tableState) {
-      await this.searchLocalities(tableState?.options)
+      await this.searchResource({
+        options: tableState?.options,
+        module: 'locality',
+        resource: 'locality',
+        isMapEnabled: true,
+        resourceDefaults: LOCALITY,
+      })
     },
   },
 }

@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-model="search"
+    v-model="searchQuery"
     class="global-search"
     background-color="white"
     color="accent"
@@ -48,7 +48,7 @@ export default {
     },
   },
   computed: {
-    ...mapFields('landing', ['search']),
+    ...mapFields('search', ['searchQuery']),
   },
 }
 </script>

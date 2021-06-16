@@ -473,7 +473,7 @@ export default {
     }
   },
   computed: {
-    ...mapFields('globalSearch', {
+    ...mapFields('search', {
       geoJSON: 'filters.byIds.geoJSON.value',
     }),
     mapZoom() {

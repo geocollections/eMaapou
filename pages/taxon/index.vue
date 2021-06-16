@@ -58,7 +58,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('landing', ['search']),
     ...mapState('taxon', ['options', 'items', 'count']),
   },
   methods: {

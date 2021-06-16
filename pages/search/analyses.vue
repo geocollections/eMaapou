@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import { debounce } from 'lodash'
 import { ANALYSIS } from '~/constants'
@@ -22,9 +21,6 @@ export default {
       items: [],
       count: 0,
     }
-  },
-  computed: {
-    ...mapState('landing', ['search']),
   },
   watch: {
     search: {

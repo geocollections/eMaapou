@@ -182,7 +182,7 @@ export default {
     }
   },
   computed: {
-    ...mapFields('landing', ['search']),
+    ...mapFields('search', ['searchQuery']),
     computedTabs() {
       // Filtering out empty tabs but still showing active tab whether it is empty or not
       const filteredTabs = this.tabs.filter(
