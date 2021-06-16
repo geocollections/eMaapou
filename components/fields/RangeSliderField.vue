@@ -16,7 +16,7 @@
           single-line
           type="number"
           style="width: 50px"
-          @change="$set(value, 0, $event)"
+          @input="handleInput($event, true)"
         ></v-text-field>
       </template>
       <template #append>
@@ -27,7 +27,7 @@
           single-line
           type="number"
           style="width: 50px"
-          @change="$set(value, 1, $event)"
+          @input="handleInput($event, false)"
         ></v-text-field>
       </template>
     </v-range-slider>
@@ -35,8 +35,10 @@
 </template>
 
 <script>
+import rangeFieldMixin from '@/mixins/rangeFieldMixin'
 export default {
   name: 'RangeSliderField',
+  mixins: [rangeFieldMixin],
   props: {
     min: {
       type: Number,
@@ -45,22 +47,6 @@ export default {
     max: {
       type: Number,
       default: 100,
-    },
-    value: {
-      type: Array,
-      default: () => {
-        return [null, null]
-      },
-    },
-    label: {
-      type: String,
-      default: null,
-    },
-    fieldLabels: {
-      type: Object,
-      default: () => {
-        return { min: 'min', max: 'max' }
-      },
     },
   },
 }
