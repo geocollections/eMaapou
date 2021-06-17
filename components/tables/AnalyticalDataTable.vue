@@ -152,7 +152,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('analyticalData', ['tableHeaders']),
+    ...mapState('search/analytical_data', ['tableHeaders']),
 
     translatedHeaders() {
       return this.tableHeaders.map((header) => {
