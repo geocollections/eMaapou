@@ -374,6 +374,7 @@ export const actions = {
     commit('SET_ITEMS', analyticalDataResponse.items)
     commit('SET_COUNT', analyticalDataResponse.count)
   },
+
   setListParameters({ commit, dispatch }, { parameters, reset }) {
     if (reset) {
       parameters = parameters.map((item) => {

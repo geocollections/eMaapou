@@ -5,6 +5,8 @@ export const initState = () => {
     items: [],
     count: 0,
     options: LOCALITY.options,
+    useMap: true,
+    useInstitutions: false,
     filters: {
       byIds: {
         name: {
@@ -43,9 +45,9 @@ export const initState = () => {
           fields: ['locality_references'],
         },
       },
-      allIds: ['name', 'country'],
+      allIds: ['name', 'country', 'stratigraphy', 'reference'],
     },
   }
 }
 
-export default initState()
+export default initState

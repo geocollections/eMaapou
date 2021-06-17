@@ -56,12 +56,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('analyticalData', ['items', 'count', 'options']),
+    ...mapState('search/analytical_data', ['items', 'count', 'options']),
   },
   methods: {
-    ...mapActions('analyticalData', ['searchAnalyticalData']),
-    async handleUpdate(tableState) {
-      await this.searchAnalyticalData(tableState?.options)
+    ...mapActions('search/analytical_data', ['searchAnalyticalData']),
+    handleUpdate(tableState) {
+      this.searchAnalyticalData(tableState?.options)
     },
   },
 }

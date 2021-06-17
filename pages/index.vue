@@ -179,9 +179,9 @@
       <v-col cols="12" md="6">
         <leaflet-map
           class="mt-4 rounded elevation-3"
-          :height="650"
+          :height="550"
           summary-overlay
-          :zoom="7"
+          :zoom="6"
           rounded
           :show-links="false"
         />

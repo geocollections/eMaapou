@@ -5,6 +5,8 @@ export const initState = () => {
     items: [],
     count: 0,
     options: DRILLCORE.options,
+    useMap: true,
+    useInstitutions: true,
     filters: {
       byIds: {
         name: {

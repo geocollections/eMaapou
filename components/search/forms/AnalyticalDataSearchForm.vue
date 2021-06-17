@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
 
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('analytical_data')">
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
           <text-field
@@ -152,7 +152,7 @@
       locality-overlay
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
     <v-row no-gutters>
@@ -223,7 +223,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('analyticalData', [
+    ...mapState('search/analytical_data', [
       'filters',
       'listParameters',
       'activeListParameters',
@@ -231,11 +231,9 @@ export default {
       'count',
       'items',
     ]),
-    ...mapGetters('analyticalData', [
-      'distinctListParameters',
-      'hasActiveFilters',
-    ]),
-    ...mapFields('analyticalData', {
+    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/analytical_data', ['distinctListParameters']),
+    ...mapFields('search/analytical_data', {
       locality: 'filters.byIds.locality.value',
       depth: 'filters.byIds.depth.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
@@ -251,9 +249,9 @@ export default {
       sample: 'filters.byIds.sample.value',
       project: 'filters.byIds.project.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
-      geoJSON: 'filters.byIds.geoJSON.value',
+    ...mapFields('search', {
+      institution: 'globalFilters.byIds.institutions.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
   },
   created() {
@@ -261,7 +259,8 @@ export default {
   },
   methods: {
     isEmpty,
-    ...mapActions('analyticalData', [
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/analytical_data', [
       'searchAnalyticalData',
       'resetAnalyticalDataFilters',
       'setListParameters',
@@ -270,18 +269,15 @@ export default {
       'removeActiveListParameter',
       'updateParameter',
     ]),
-    ...mapActions('landing', ['resetSearch']),
-    handleReset(e) {
-      this.resetSearch()
-      this.resetAnalyticalDataFilters()
+    async handleReset(e) {
+      await this.resetFilters('analytical_data')
       this.searchAnalyticalData()
     },
     handleSearch(e) {
       this.searchAnalyticalData()
     },
-    parseInput(input) {
-      if (isEmpty(input)) return null
-      else return parseFloat(input)
+    handleMapUpdate(tableState) {
+      this.searchAnalyticalData(tableState?.options)
     },
     fillAutocompleteLists() {
       if (this.stratigraphy)
@@ -291,9 +287,6 @@ export default {
     },
     handleParameterUpdate(e, index) {
       this.updateParameter({ index, parameter: e })
-    },
-    async handleMapUpdate(tableState) {
-      await this.searchAnalyticalData(tableState?.options)
     },
   },
 }

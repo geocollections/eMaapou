@@ -1,7 +1,7 @@
 export const initState = () => {
   return {
     searchQuery: '',
-    filters: {
+    globalFilters: {
       byIds: {
         institutions: {
           type: 'list_or',

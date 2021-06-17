@@ -41,7 +41,6 @@ import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import Search from '~/components/templates/Search.vue'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
-import { DRILLCORE } from '~/constants'
 
 export default {
   components: {
@@ -67,16 +66,9 @@ export default {
     ...mapState('search/drillcore', ['options', 'items', 'count']),
   },
   methods: {
-    ...mapActions('search', ['searchResource']),
-    async handleUpdate(tableState) {
-      await this.searchResource({
-        resource: 'drillcore',
-        resourceDefaults: DRILLCORE,
-        module: 'drillcore',
-        isMapEnabled: true,
-        isInsitutionsEnabled: true,
-        options: tableState?.options,
-      })
+    ...mapActions('search/drillcore', ['searchDrillcores']),
+    handleUpdate(tableState) {
+      this.searchDrillcores(tableState?.options)
     },
   },
 }

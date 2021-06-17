@@ -35,7 +35,6 @@ import LocalityTable from '~/components/tables/LocalityTable.vue'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
-import { LOCALITY } from '~/constants'
 
 export default {
   components: {
@@ -61,15 +60,9 @@ export default {
     ...mapState('search/locality', ['options', 'items', 'count']),
   },
   methods: {
-    ...mapActions('search', ['searchResource']),
-    async handleUpdate(tableState) {
-      await this.searchResource({
-        resource: 'locality',
-        resourceDefaults: LOCALITY,
-        module: 'locality',
-        isMapEnabled: true,
-        options: tableState?.options,
-      })
+    ...mapActions('search/locality', ['searchLocalities']),
+    handleUpdate(tableState) {
+      this.searchLocalities(tableState?.options)
     },
   },
 }

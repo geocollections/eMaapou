@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('analysis')">
       <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
       <!-- TODO: Get min and max dynamically -->
       <range-slider-field
@@ -54,31 +54,30 @@ export default {
     SearchViewMapWrapper,
   },
   computed: {
-    ...mapState('analysis', ['filters', 'count', 'items']),
-    ...mapFields('analysis', {
+    ...mapState('search/analysis', ['filters', 'count', 'items']),
+    ...mapFields('search/analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
-      geoJSON: 'filters.byIds.geoJSON.value',
+    ...mapFields('search', {
+      institution: 'globalFilters.byIds.institutions.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('analysis', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('analysis', ['searchAnalyses', 'resetAnalysisFilters']),
-    ...mapActions('landing', ['resetSearch']),
-    handleReset(e) {
-      this.resetSearch()
-      this.resetAnalysisFilters()
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/analysis', ['searchAnalyses']),
+    async handleReset(e) {
+      await this.resetFilters('analysis')
       this.searchAnalyses()
     },
     handleSearch(e) {
       this.searchAnalyses()
     },
-    async handleMapUpdate(tableState) {
-      await this.searchAnalyses(tableState?.options)
+    handleMapUpdate(tableState) {
+      this.searchAnalyses(tableState?.options)
     },
   },
 }

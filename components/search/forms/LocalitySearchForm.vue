@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('locality')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
 
       <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
@@ -45,7 +45,7 @@ import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
-import { LOCALITY } from '~/constants'
+
 export default {
   name: 'LocalitySearchForm',
   components: {
@@ -71,47 +71,31 @@ export default {
     }
   },
   computed: {
-    ...mapState('locality', ['filters', 'count', 'items']),
-    ...mapFields('locality', {
-      name: 'filters.byIds.name.value',
-      country: 'filters.byIds.country.value',
-      stratigraphy: 'filters.byIds.stratigraphy.value',
-      reference: 'filters.byIds.reference.value',
+    ...mapState('search/locality', ['filters', 'count', 'items']),
+    // NOTE: For some reason 'search/locality' does not work here.
+    ...mapFields('search', {
+      name: 'locality.filters.byIds.name.value',
+      country: 'locality.filters.byIds.country.value',
+      stratigraphy: 'locality.filters.byIds.stratigraphy.value',
+      reference: 'locality.filters.byIds.reference.value',
     }),
     ...mapFields('search', {
-      geoJSON: 'filters.byIds.geoJSON.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('locality', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('search', ['searchResource', 'resetFilters']),
-    ...mapActions('landing', ['resetSearch']),
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/locality', ['searchLocalities']),
     handleSearch(e) {
-      this.searchResource({
-        module: 'locality',
-        resource: 'locality',
-        isMapEnabled: true,
-        resourceDefaults: LOCALITY,
-      })
+      this.searchLocalities()
     },
-    handleReset(e) {
-      this.resetSearch()
-      this.resetFilters('locality')
-      this.searchResource({
-        module: 'locality',
-        resource: 'locality',
-        isMapEnabled: true,
-        resourceDefaults: LOCALITY,
-      })
+    async handleReset(e) {
+      await this.resetFilters('locality')
+      this.searchLocalities()
     },
-    async handleMapUpdate(tableState) {
-      await this.searchResource({
-        options: tableState?.options,
-        module: 'locality',
-        resource: 'locality',
-        isMapEnabled: true,
-        resourceDefaults: LOCALITY,
-      })
+    handleMapUpdate(tableState) {
+      this.searchLocalities(tableState?.options)
     },
   },
 }

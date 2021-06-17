@@ -1,38 +1,48 @@
-export default {
-  resetFilters({ commit }, module) {
-    const { initState } = import(`/${module}/state.js`)
-    commit('RESET_MODULE_FILTERS', { module, defaultState: initState() })
+import {
+  RESET_GEOJSON,
+  RESET_INSTITUTIONS,
+  RESET_MODULE_FILTERS,
+  RESET_SEARCH_QUERY,
+  SET_MODULE_COUNT,
+  SET_MODULE_ITEMS,
+  SET_MODULE_OPTIONS,
+} from '../mutation_types'
 
-    commit('RESET_SEARCH')
-    commit('RESET_INSTITUTIONS')
-    commit('RESET_GEOJSON')
+export default {
+  async resetFilters({ commit }, module) {
+    const { initState } = await import(`/${module}/state.js`)
+    commit(RESET_MODULE_FILTERS, { module, defaultState: initState() })
+
+    commit(RESET_SEARCH_QUERY)
+    commit(RESET_GEOJSON)
+    commit(RESET_INSTITUTIONS)
   },
   async searchResource(
-    { commit, rootState, state },
+    { commit, state },
     {
       resource,
       resourceDefaults,
       module,
-      isMapEnabled = false,
-      isInsitutionsEnabled = false,
+      useMap = state[module].useMap,
+      useInstitutions = state[module].useInstitutions,
       options = { ...state[module].options, page: 1 },
     }
   ) {
-    commit('SET_OPTIONS', { module, options })
+    commit(SET_MODULE_OPTIONS, { module, options })
 
-    const additionalFilters = {
-      ...(isMapEnabled && { geoJSON: state.filters.byIds.geoJSON }),
-      ...(isInsitutionsEnabled && {
-        institutions: state.filters.byIds.institutions,
+    const globalFilters = {
+      ...(useMap && { geoJSON: state.globalFilters.byIds.geoJSON }),
+      ...(useInstitutions && {
+        institutions: state.globalFilters.byIds.institutions,
       }),
     }
     const response = await this.$services.sarvSolr.getResourceList(resource, {
       options,
       search: state.searchQuery,
       queryFields: this.$getQueryFields(resourceDefaults.queryFields),
-      searchFilters: { ...state[module].filters.byIds, ...additionalFilters },
+      searchFilters: { ...state[module].filters.byIds, ...globalFilters },
     })
-    commit('SET_ITEMS', { module, items: response.items })
-    commit('SET_COUNT', { module, count: response.count })
+    commit(SET_MODULE_ITEMS, { module, items: response.items })
+    commit(SET_MODULE_COUNT, { module, count: response.count })
   },
 }

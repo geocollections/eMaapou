@@ -47,7 +47,6 @@ import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
-import { DRILLCORE } from '~/constants'
 
 export default {
   name: 'DrillcoreSearchForm',
@@ -70,44 +69,24 @@ export default {
       storage: 'filters.byIds.storage.value',
     }),
     ...mapFields('search', {
-      institution: 'filters.byIds.institutions.value',
-      geoJSON: 'filters.byIds.geoJSON.value',
+      institution: 'globalFilters.byIds.institutions.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
     ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['searchResource', 'resetFilters']),
-    ...mapActions('landing', ['resetSearch']),
-    handleReset(e) {
-      this.resetSearch()
-      this.resetFilters('drillcore')
-      this.searchResource({
-        module: 'drillcore',
-        resource: 'drillcore',
-        isMapEnabled: true,
-        isInsitutionsEnabled: true,
-        resourceDefaults: DRILLCORE,
-      })
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/drillcore', ['searchDrillcores']),
+    async handleReset(e) {
+      await this.resetFilters('drillcore')
+      this.searchDrillcores()
     },
     handleSearch(e) {
-      this.searchResource({
-        module: 'drillcore',
-        resource: 'drillcore',
-        isMapEnabled: true,
-        isInsitutionsEnabled: true,
-        resourceDefaults: DRILLCORE,
-      })
+      this.searchDrillcores()
     },
-    async handleMapUpdate(tableState) {
-      await this.searchResource({
-        options: tableState?.options,
-        module: 'drillcore',
-        resource: 'drillcore',
-        isMapEnabled: true,
-        isInsitutionsEnabled: true,
-        resourceDefaults: DRILLCORE,
-      })
+    handleMapUpdate(tableState) {
+      this.searchDrillcores(tableState?.options)
     },
   },
 }

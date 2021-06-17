@@ -58,10 +58,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('analysis', ['items', 'count', 'options']),
+    ...mapState('search/analysis', ['items', 'count', 'options']),
   },
   methods: {
-    ...mapActions('analysis', ['searchAnalyses']),
+    ...mapActions('search/analysis', ['searchAnalyses']),
     async handleUpdate(tableState) {
       await this.searchAnalyses(tableState?.options)
     },

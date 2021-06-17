@@ -474,7 +474,7 @@ export default {
   },
   computed: {
     ...mapFields('search', {
-      geoJSON: 'filters.byIds.geoJSON.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
     mapZoom() {
       return this.zoom ?? (this.estonianBedrockOverlay ? 9 : 11)
