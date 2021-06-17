@@ -10,6 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
+import { mapState } from 'vuex'
 import { REFERENCE } from '~/constants'
 import ReferenceTable from '~/components/tables/ReferenceTable'
 
@@ -21,6 +22,9 @@ export default {
       items: [],
       count: 0,
     }
+  },
+  computed: {
+    ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
     search: {

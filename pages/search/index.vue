@@ -10,9 +10,9 @@
 
 <script>
 import { debounce } from 'lodash'
+import { mapState } from 'vuex'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import { DRILLCORE } from '~/constants'
-
 export default {
   components: { DrillcoreTable },
   data() {
@@ -21,6 +21,9 @@ export default {
       items: [],
       count: 0,
     }
+  },
+  computed: {
+    ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
     search: {

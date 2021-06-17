@@ -10,6 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
+import { mapState } from 'vuex'
 import { ROCK } from '~/constants'
 import RockTable from '~/components/tables/RockTable'
 
@@ -21,6 +22,9 @@ export default {
       items: [],
       count: 0,
     }
+  },
+  computed: {
+    ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
     search: {

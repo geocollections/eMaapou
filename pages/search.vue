@@ -152,15 +152,16 @@ export default {
           props: {},
         },
       ]
+
       const hydratedTabs = await Promise.all(
         tabs.map(
           async (tab) =>
             await app.$hydrateCount(tab, {
               solr: {
                 default: {
-                  q: isEmpty(store.state.landing.search)
+                  q: isEmpty(store.state.search.searchQuery)
                     ? '*'
-                    : `${store.state.landing.search}`,
+                    : `${store.state.search.searchQuery}`,
                 },
               },
             })
@@ -216,7 +217,9 @@ export default {
           async (tab) =>
             await this.$hydrateCount(tab, {
               solr: {
-                default: { q: isEmpty(this.search) ? '*' : `${this.search}` },
+                default: {
+                  q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
+                },
               },
             })
         )

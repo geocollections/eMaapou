@@ -11,6 +11,7 @@
 <script>
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import { debounce } from 'lodash'
+import { mapState } from 'vuex'
 import { ANALYSIS } from '~/constants'
 
 export default {
@@ -21,6 +22,10 @@ export default {
       items: [],
       count: 0,
     }
+  },
+
+  computed: {
+    ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
     search: {

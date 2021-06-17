@@ -11,6 +11,7 @@
 <script>
 import PreparationTable from '@/components/tables/PreparationTable'
 import { debounce } from 'lodash'
+import { mapState } from 'vuex'
 import { PREPARATION } from '~/constants'
 
 export default {
@@ -21,6 +22,9 @@ export default {
       items: [],
       count: 0,
     }
+  },
+  computed: {
+    ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
     search: {
