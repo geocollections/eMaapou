@@ -69,7 +69,7 @@ export default {
     history: 'Hiljuti vaadatud',
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',
-    count: 'Leitud: {count}',
+    count: 'Leitud {count} kirjet',
     map:
       'Kaart | Kaart: <b>{count}</b> asukoht | Kaart: <b>{count}</b> asukohta',
     more: 'Rohkem',

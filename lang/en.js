@@ -69,7 +69,7 @@ export default {
     history: 'Recently viewed',
     quickSearch: 'Quick search',
     description: 'Description',
-    count: 'Found: {count}',
+    count: 'Found {count} records',
     map: 'Map | Map: <b>{count}</b> locality | Map: <b>{count}</b> localities',
     more: 'More',
     close: 'Close',
