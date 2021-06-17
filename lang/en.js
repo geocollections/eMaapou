@@ -17,6 +17,7 @@ export default {
     dois: 'DOIs ({number})',
     datasets: 'Datasets ({number})',
     attachments: 'Files ({number})',
+    photos: 'Photos ({number})',
     stratigraphy: 'Stratigraphy ({number})',
     visit_site: 'View',
     title: 'Geological data and e-services',

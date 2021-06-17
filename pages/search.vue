@@ -128,6 +128,15 @@ export default {
           props: {},
         },
         {
+          id: 'photo',
+          table: 'attachment',
+          routeName: 'search-photos',
+          title: 'landing.photos',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
           id: 'taxon',
           routeName: 'search-taxa',
           title: 'landing.taxa',
@@ -161,6 +170,9 @@ export default {
                   q: isEmpty(store.state.landing.search)
                     ? '*'
                     : `${store.state.landing.search}`,
+                },
+                photo: {
+                  fq: 'specimen_image_attachment:2',
                 },
               },
             })
@@ -217,6 +229,9 @@ export default {
             await this.$hydrateCount(tab, {
               solr: {
                 default: { q: isEmpty(this.search) ? '*' : `${this.search}` },
+                photo: {
+                  fq: 'specimen_image_attachment:2',
+                },
               },
             })
         )

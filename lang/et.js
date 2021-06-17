@@ -17,6 +17,7 @@ export default {
     dois: 'DOI ({number})',
     datasets: 'Andmesetid ({number})',
     attachments: 'Failid ({number})',
+    photos: 'Pildid ({number})',
     stratigraphy: 'Stratigraafia ({number})',
     visit_site: 'Vaata',
     title: 'Geoloogilised andmed ja e-teenused',
