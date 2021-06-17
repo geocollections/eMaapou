@@ -2,7 +2,7 @@
   <div>
     <v-row justify="center" align="center">
       <v-col>
-        <h1 class="text-sm-h3 text-h4 text-center my-3">
+        <h1 class="text-sm-h3 font-weight-bold text-h4 text-center my-3">
           {{ $t('landing.searchTitle') }}
         </h1>
       </v-col>
@@ -128,6 +128,15 @@ export default {
           props: {},
         },
         {
+          id: 'photo',
+          table: 'attachment',
+          routeName: 'search-photos',
+          title: 'landing.photos',
+          isSolr: true,
+          count: 0,
+          props: {},
+        },
+        {
           id: 'taxon',
           routeName: 'search-taxa',
           title: 'landing.taxa',
@@ -162,6 +171,9 @@ export default {
                   q: isEmpty(store.state.search.searchQuery)
                     ? '*'
                     : `${store.state.search.searchQuery}`,
+                },
+                photo: {
+                  fq: 'specimen_image_attachment:2',
                 },
               },
             })
@@ -219,6 +231,9 @@ export default {
               solr: {
                 default: {
                   q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
+                },
+                photo: {
+                  fq: 'specimen_image_attachment:2',
                 },
               },
             })

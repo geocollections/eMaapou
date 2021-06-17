@@ -9,7 +9,7 @@
     <slot>
       <v-card-title
         style="word-break: normal"
-        class="text-sm-h3 text-h4 pt-0 px-0 px-sm-3"
+        class="text-sm-h3 font-weight-bold text-h4 pt-0 px-0 px-sm-3"
       >
         <v-icon class="pr-2" x-large>{{ icon }}</v-icon>
         {{ title }}
