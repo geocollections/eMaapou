@@ -31,7 +31,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('globalSearch', ['lookUpTypes']),
+    ...mapState('search', ['lookUpTypes']),
 
     computedLookUpTypes() {
       return this.lookUpTypes.filter((item) => {

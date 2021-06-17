@@ -14,7 +14,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'PaginateByField',
   computed: {
-    ...mapState('globalSearch', ['paginateByOptions']),
+    ...mapState('search', ['paginateByOptions']),
 
     translatedPaginateByOptions() {
       return this.paginateByOptions.map((item) => {
