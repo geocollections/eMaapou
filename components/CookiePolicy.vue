@@ -28,7 +28,7 @@
         <v-btn
           color="primary darken-2 white--text"
           :title="$t('cookiePolicy.acceptAndClose')"
-          @click="closeCookiePolicy"
+          @click="cookiePolicy = false"
         >
           OK
         </v-btn>
@@ -38,15 +38,12 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 
 export default {
   name: 'CookiePolicy',
   computed: {
-    ...mapState('settings', ['cookiePolicy']),
-  },
-  methods: {
-    ...mapActions('settings', ['closeCookiePolicy']),
+    ...mapFields('settings', ['cookiePolicy']),
   },
 }
 </script>
