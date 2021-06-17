@@ -57,12 +57,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('sample', ['options', 'items', 'count']),
+    ...mapState('search/sample', ['options', 'items', 'count']),
   },
   methods: {
-    ...mapActions('sample', ['searchSamples']),
-    async handleUpdate(tableState) {
-      await this.searchSamples(tableState?.options)
+    ...mapActions('search/sample', ['searchSamples']),
+    handleUpdate(tableState) {
+      this.searchSamples(tableState?.options)
     },
   },
 }

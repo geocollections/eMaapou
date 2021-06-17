@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('stratigraphy')">
       <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
 
       <autocomplete-field
@@ -54,32 +54,28 @@ export default {
     }
   },
   computed: {
-    ...mapState('stratigraphy', ['filters', 'count']),
-    ...mapFields('stratigraphy', {
+    ...mapState('search/stratigraphy', ['filters', 'count']),
+    ...mapFields('search/stratigraphy', {
       number: 'filters.byIds.id.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       index: 'filters.byIds.index.value',
       age: 'filters.byIds.age.value',
     }),
-    ...mapGetters('stratigraphy', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   created() {
     this.fillAutocompleteLists()
   },
   methods: {
-    ...mapActions('stratigraphy', [
-      'searchStratigraphy',
-      'resetStratigraphyFilters',
-    ]),
-    ...mapActions('landing', ['resetSearch']),
+    ...mapActions('stratigraphy', ['resetFilters']),
+    ...mapActions('search/stratigraphy', ['searchStratigraphies']),
     handleSearch(e) {
-      this.searchStratigraphy()
+      this.searchStratigraphies()
     },
-    handleReset(e) {
-      this.resetSearch()
-      this.resetStratigraphyFilters()
-      this.searchStratigraphy()
+    async handleReset(e) {
+      await this.resetFilters('stratigraphy')
+      this.searchStratigraphies()
     },
     fillAutocompleteLists() {
       if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)

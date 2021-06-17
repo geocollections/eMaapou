@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('site')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
       <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
@@ -10,7 +10,7 @@
       site-overlay
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON != null"
       @update="handleMapUpdate"
     />
     <extra-options class="mt-2" />
@@ -37,28 +37,27 @@ export default {
     SearchViewMapWrapper,
   },
   computed: {
-    ...mapState('site', ['filters', 'count', 'items']),
-    ...mapFields('site', {
+    ...mapState('search/site', ['filters', 'count', 'items']),
+    ...mapFields('search/site', {
       name: 'filters.byIds.name.value',
       latitude: 'filters.byIds.latitude.value',
       longitude: 'filters.byIds.longitude.value',
       area: 'filters.byIds.area.value',
       project: 'filters.byIds.project.value',
     }),
-    ...mapFields('globalSearch', {
-      geoJSON: 'filters.byIds.geoJSON.value',
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('site', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('site', ['searchSites', 'resetSiteFilters']),
-    ...mapActions('landing', ['resetSearch']),
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/site', ['searchSites']),
     handleSearch(e) {
       this.searchSites()
     },
-    handleReset(e) {
-      this.resetSearch()
-      this.resetSiteFilters()
+    async handleReset(e) {
+      await this.resetFilters('site')
       this.searchSites()
     },
     async handleMapUpdate(tableState) {

@@ -1,18 +1,13 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('sample')">
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
 
       <text-field
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
-
-      <!--    <text-field-->
-      <!--      v-model="stratigraphy"-->
-      <!--      :label="$t(filters.byIds.stratigraphy.label)"-->
-      <!--    />-->
 
       <autocomplete-field
         v-model="hierarchy"
@@ -48,7 +43,7 @@
       sample-overlay
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON != null"
       @update="handleMapUpdate"
     />
     <institution-search-filter
@@ -102,8 +97,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('sample', ['filters', 'count', 'items']),
-    ...mapFields('sample', {
+    ...mapState('search/sample', ['filters', 'count', 'items']),
+    ...mapFields('search/sample', {
       number: 'filters.byIds.number.value',
       locality: 'filters.byIds.locality.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
@@ -113,32 +108,31 @@ export default {
       mass: 'filters.byIds.mass.value',
       project: 'filters.byIds.project.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
-      geoJSON: 'filters.byIds.geoJSON.value',
+    ...mapFields('search', {
+      institution: 'globalFilters.byIds.institutions.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('sample', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   created() {
     this.fillAutocompleteLists()
   },
   methods: {
     isEmpty,
-    ...mapActions('sample', ['searchSamples', 'resetSampleFilters']),
-    ...mapActions('landing', ['resetSearch']),
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/sample', ['searchSamples']),
     handleSearch(e) {
       this.searchSamples()
     },
-    handleReset(e) {
-      this.resetSearch()
-      this.resetSampleFilters()
+    async handleReset(e) {
+      await this.resetFilters('sample')
       this.searchSamples()
     },
     fillAutocompleteLists() {
       if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
     },
-    async handleMapUpdate(tableState) {
-      await this.searchSamples(tableState?.options)
+    handleMapUpdate(tableState) {
+      this.searchSamples(tableState?.options)
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('dataset')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <text-field v-model="owner" :label="$t(filters.byIds.owner.label)" />
       <text-field v-model="date" :label="$t(filters.byIds.date.label)" />
@@ -79,26 +79,25 @@ export default {
     }
   },
   computed: {
-    ...mapState('dataset', ['filters', 'count']),
-    ...mapFields('dataset', {
+    ...mapState('search/dataset', ['filters', 'count']),
+    ...mapFields('search/dataset', {
       name: 'filters.byIds.name.value',
       owner: 'filters.byIds.owner.value',
       date: 'filters.byIds.date.value',
       remarks: 'filters.byIds.remarks.value',
       parameters: 'filters.byIds.parameters.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
+    ...mapFields('search', {
+      institution: 'globalFilters.byIds.institutions.value',
     }),
-    ...mapGetters('dataset', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('dataset', ['searchDatasets', 'resetDatasetFilters']),
-    ...mapActions('landing', ['resetSearch']),
-    handleReset(e) {
-      this.resetSearch()
-      this.resetDatasetFilters()
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/dataset', ['searchDatasets']),
+    async handleReset(e) {
+      await this.resetFilters('dataset')
       this.searchDatasets()
     },
     handleSearch(e) {

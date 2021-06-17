@@ -98,9 +98,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('photo', ['options', 'items', 'count']),
+    ...mapState('search/image', ['options', 'items', 'count']),
     ...mapState('settings', ['listOfViews']),
-    ...mapFields('photo', ['currentView']),
+    ...mapFields('search/image', ['currentView']),
     mapMarkers() {
       if (this.items?.length > 0) {
         return this.items.reduce((filtered, item) => {
@@ -136,7 +136,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('photo', ['searchImages']),
+    ...mapActions('search/image', ['searchImages']),
     async handleUpdate(tableState) {
       await this.searchImages(tableState?.options)
     },

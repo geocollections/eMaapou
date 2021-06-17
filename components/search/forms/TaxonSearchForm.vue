@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('taxon')">
       <text-field v-model="species" :label="$t(filters.byIds.species.label)" />
 
       <text-field
@@ -33,7 +33,7 @@
       locality-overlay
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
     <extra-options class="mt-2" />
@@ -76,39 +76,37 @@ export default {
     }
   },
   computed: {
-    ...mapState('taxon', ['filters', 'count', 'items']),
-    ...mapFields('taxon', {
+    ...mapState('search/taxon', ['filters', 'count', 'items']),
+    ...mapFields('search/taxon', {
       species: 'filters.byIds.species.value',
       locality: 'filters.byIds.locality.value',
       stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
       taxonHierarchy: 'filters.byIds.taxonHierarchy.value',
       author: 'filters.byIds.author.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
-      geoJSON: 'filters.byIds.geoJSON.value',
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('taxon', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   created() {
     this.fillAutocompleteLists()
   },
   methods: {
-    ...mapActions('taxon', ['searchTaxa', 'resetTaxonFilters']),
-    ...mapActions('landing', ['resetSearch']),
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/taxon', ['searchTaxa']),
     handleSearch(e) {
       this.searchTaxa()
     },
-    handleReset(e) {
-      this.resetSearch()
-      this.resetTaxonFilters()
+    async handleReset(e) {
+      await this.resetFilters('taxon')
       this.searchTaxa()
     },
     fillAutocompleteLists() {
       if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
     },
-    async handleMapUpdate(tableState) {
-      await this.searchTaxa(tableState?.options)
+    handleMapUpdate(tableState) {
+      this.searchTaxa(tableState?.options)
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
+    <search-fields-wrapper :active="hasActiveFilters('image')">
       <text-field
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
@@ -36,7 +36,7 @@
       use-custom-markers
       :items="markers"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
     <institution-search-filter
@@ -81,8 +81,8 @@ export default {
     },
   },
   computed: {
-    ...mapState('photo', ['filters', 'count', 'items']),
-    ...mapFields('photo', {
+    ...mapState('search/image', ['filters', 'count', 'items']),
+    ...mapFields('search/image', {
       locality: 'filters.byIds.locality.value',
       people: 'filters.byIds.people.value',
       tags: 'filters.byIds.tags.value',
@@ -94,26 +94,25 @@ export default {
       author: 'filters.byIds.author.value',
       imageSize: 'filters.byIds.imageSize.value',
     }),
-    ...mapFields('globalSearch', {
-      institution: 'filters.byIds.institution.value',
-      geoJSON: 'filters.byIds.geoJSON.value',
+    ...mapFields('search', {
+      institution: 'globalFilters.byIds.institutions.value',
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('photo', ['hasActiveFilters']),
+    ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('photo', ['searchImages', 'resetImageFilters']),
-    ...mapActions('landing', ['resetSearch']),
+    ...mapActions('search', ['resetFilters']),
+    ...mapActions('search/image', ['searchImages']),
     handleSearch(e) {
       this.searchImages()
     },
-    handleReset(e) {
-      this.resetSearch()
-      this.resetImageFilters()
+    async handleReset(e) {
+      await this.resetFilters('image')
       this.searchImages()
     },
-    async handleMapUpdate(tableState) {
-      await this.searchImages(tableState?.options)
+    handleMapUpdate(tableState) {
+      this.searchImages(tableState?.options)
     },
   },
 }
