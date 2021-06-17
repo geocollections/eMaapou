@@ -1,7 +1,7 @@
 <template>
   <title-card>
     <v-card-title
-      class="d-flex align-start text-sm-h3 text-h4 pt-1 px-0 px-sm-3"
+      class="d-flex align-start text-sm-h3 font-weight-bold text-h4 pt-1 px-0 px-sm-3"
       style="word-break: normal"
     >
       <back-button-detail />
