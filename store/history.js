@@ -1,3 +1,5 @@
+import { PUSH_HISTORY } from './mutation_types'
+
 const HISTORY_SIZE = 10
 
 export const state = () => {
@@ -7,7 +9,7 @@ export const state = () => {
 }
 
 export const mutations = {
-  PUSH_HISTORY(state, historyObject) {
+  [PUSH_HISTORY](state, historyObject) {
     // Remove duplicates from history
     state.history.forEach((h, i) => {
       if (h.to === historyObject.to) state.history.splice(i, 1)
@@ -26,7 +28,7 @@ export const mutations = {
 
 export const actions = {
   pushHistory({ commit }, historyObject) {
-    commit('PUSH_HISTORY', historyObject)
+    commit(PUSH_HISTORY, historyObject)
   },
 }
 
