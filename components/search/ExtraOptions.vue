@@ -64,7 +64,7 @@ export default {
   name: 'ExtraOptions',
   components: { CardExpandable },
   computed: {
-    ...mapState('tableHeaders', {
+    ...mapState('table_headers', {
       analysis(state) {
         return state.analysis.tableHeaders
       },
@@ -113,7 +113,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('tableHeaders', ['updateTableHeaders']),
+    ...mapActions('table_headers', ['updateTableHeaders']),
     handleTableHeaderChange(headers) {
       this.updateTableHeaders({ module: this.stateModuleName, headers })
     },

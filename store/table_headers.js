@@ -1,5 +1,11 @@
 import { getField, updateField } from 'vuex-map-fields'
 
+import {
+  SET_ALL_FIELD_NAMES,
+  SET_TABLE_HEADERS,
+  UPDATE_TABLE_HEADERS,
+} from './mutation_types'
+
 const getDefaultState = () => {
   return {
     analysis: {
@@ -19,6 +25,64 @@ const getDefaultState = () => {
         },
         { text: 'analysis.analysedBy', value: 'agent', show: true },
         { text: 'analysis.date', value: 'date', show: true },
+      ],
+    },
+    analyticalData: {
+      allFieldNames: null,
+      tableHeaders: [
+        {
+          text: 'analyticalData.id',
+          value: 'id_l',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.analysisMethod',
+          value: 'analysis_method',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.sample',
+          value: 'sample_number',
+          translate: true,
+        },
+        { text: 'analyticalData.locality', value: 'locality', translate: true },
+        {
+          text: 'analyticalData.stratigraphy',
+          value: 'stratigraphy',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.lithostratigraphy',
+          value: 'lithostratigraphy',
+          translate: true,
+        },
+
+        { text: 'analyticalData.depth', value: 'depth', translate: true },
+        {
+          text: 'analyticalData.depthInterval',
+          value: 'depth_interval',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.rock',
+          value: 'rock',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.reference',
+          value: 'reference',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.dataset',
+          value: 'dataset_id',
+          translate: true,
+        },
+        {
+          text: 'analyticalData.analysis',
+          value: 'analysis_id',
+          translate: true,
+        },
       ],
     },
     dataset: {
@@ -185,13 +249,13 @@ export const getters = {
 
 export const mutations = {
   updateField,
-  SET_ALL_FIELD_NAMES(state, { module, rawFields }) {
+  [SET_ALL_FIELD_NAMES](state, { module, rawFields }) {
     state[module].allFieldNames = rawFields
   },
-  SET_TABLE_HEADERS(state, { module, headers }) {
+  [SET_TABLE_HEADERS](state, { module, headers }) {
     state[module].tableHeaders = [...state[module].tableHeaders, ...headers]
   },
-  UPDATE_TABLE_HEADERS(state, { module, headers }) {
+  [UPDATE_TABLE_HEADERS](state, { module, headers }) {
     const newHeaders = [...state[module].tableHeaders]
 
     newHeaders.forEach((item) => {
@@ -221,11 +285,11 @@ export const actions = {
       }
       return prev
     }, [])
-    commit('SET_ALL_FIELD_NAMES', { module, rawFields })
-    commit('SET_TABLE_HEADERS', { module, headers })
+    commit(SET_ALL_FIELD_NAMES, { module, rawFields })
+    commit(SET_TABLE_HEADERS, { module, headers })
   },
 
   updateTableHeaders({ commit }, payload) {
-    commit('UPDATE_TABLE_HEADERS', payload)
+    commit(UPDATE_TABLE_HEADERS, payload)
   },
 }

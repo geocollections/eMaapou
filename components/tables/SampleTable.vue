@@ -144,7 +144,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('tableHeaders', {
+    ...mapState('table_headers', {
       tableHeaders(state) {
         return state.sample.tableHeaders
       },
