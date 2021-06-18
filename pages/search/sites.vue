@@ -10,12 +10,17 @@
 
 <script>
 import { debounce } from 'lodash'
-import { mapState } from 'vuex'
 import { SITE } from '~/constants'
 import SiteTable from '~/components/tables/SiteTable.vue'
 
 export default {
   components: { SiteTable },
+  props: {
+    query: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       options: SITE.options,
@@ -23,11 +28,8 @@ export default {
       count: 0,
     }
   },
-  computed: {
-    ...mapState('search', { search: 'searchQuery' }),
-  },
   watch: {
-    search: {
+    query: {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({ options: { ...this.options }, search: value })
@@ -41,7 +43,7 @@ export default {
         'site',
         {
           options: tableState.options,
-          search: this.search,
+          search: this.query,
           queryFields: this.$getQueryFields(SITE.queryFields),
           searchFilters: {},
         }

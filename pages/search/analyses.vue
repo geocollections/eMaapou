@@ -16,6 +16,12 @@ import { ANALYSIS } from '~/constants'
 
 export default {
   components: { AnalysisTable },
+  props: {
+    query: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       options: ANALYSIS.options,
@@ -23,12 +29,11 @@ export default {
       count: 0,
     }
   },
-
   computed: {
     ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
-    search: {
+    query: {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({ options: { ...this.options }, search: value })
@@ -42,7 +47,7 @@ export default {
         'analysis',
         {
           options: tableState.options,
-          search: this.search,
+          search: this.query,
           queryFields: this.$getQueryFields(ANALYSIS.queryFields),
           searchFilters: {},
         }

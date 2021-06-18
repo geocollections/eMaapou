@@ -10,12 +10,17 @@
 
 <script>
 import { debounce } from 'lodash'
-import { mapState } from 'vuex'
 import { DOI } from '~/constants'
 import DoiTable from '~/components/tables/DoiTable'
 
 export default {
   components: { DoiTable },
+  props: {
+    query: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       options: DOI.options,
@@ -23,11 +28,8 @@ export default {
       count: 0,
     }
   },
-  computed: {
-    ...mapState('search', { search: 'searchQuery' }),
-  },
   watch: {
-    search: {
+    query: {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({ options: { ...this.options }, search: value })
@@ -39,7 +41,7 @@ export default {
       this.options = tableState.options
       const response = await this.$services.sarvSolr.getResourceList('doi', {
         options: tableState.options,
-        search: this.search,
+        search: this.query,
         queryFields: this.$getQueryFields(DOI.queryFields),
         searchFilters: {},
       })

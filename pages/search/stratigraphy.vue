@@ -10,12 +10,17 @@
 
 <script>
 import { debounce } from 'lodash'
-import { mapState } from 'vuex'
 import { STRATIGRAPHY } from '~/constants'
 import StratigraphyTable from '~/components/tables/StratigraphyTable'
 
 export default {
   components: { StratigraphyTable },
+  props: {
+    query: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       options: STRATIGRAPHY.options,
@@ -23,11 +28,8 @@ export default {
       count: 0,
     }
   },
-  computed: {
-    ...mapState('search', { search: 'searchQuery' }),
-  },
   watch: {
-    search: {
+    query: {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({ options: { ...this.options }, search: value })
@@ -41,7 +43,7 @@ export default {
         'stratigraphy',
         {
           options: tableState.options,
-          search: this.search,
+          search: this.query,
           queryFields: this.$getQueryFields(STRATIGRAPHY.queryFields),
           searchFilters: {},
         }

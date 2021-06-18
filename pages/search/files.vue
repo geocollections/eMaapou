@@ -10,12 +10,17 @@
 
 <script>
 import { debounce } from 'lodash'
-import { mapState } from 'vuex'
 import { ATTACHMENT } from '~/constants'
 import AttachmentSolrTable from '~/components/tables/AttachmentSolrTable'
 
 export default {
   components: { AttachmentSolrTable },
+  props: {
+    query: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       options: ATTACHMENT.options,
@@ -23,11 +28,8 @@ export default {
       count: 0,
     }
   },
-  computed: {
-    ...mapState('search', { search: 'searchQuery' }),
-  },
   watch: {
-    search: {
+    query: {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({ options: { ...this.options }, search: value })
@@ -41,7 +43,7 @@ export default {
         'attachment',
         {
           options: tableState.options,
-          search: this.search,
+          search: this.query,
           queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
           searchFilters: {},
         }
