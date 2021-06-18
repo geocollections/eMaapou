@@ -400,7 +400,7 @@ export default {
         {
           id: 'analysis_results',
           isSolr: true,
-          routeName: 'sample-id-analysis_results',
+          routeName: 'sample-id-analysis-results',
           title: 'sample.analysisResults',
           count: 0,
           props: { sample: sample.id },

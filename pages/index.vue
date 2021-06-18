@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="px-3 px-md-10">
-      <v-col class="pt-0 px-0">
+      <v-col class="px-0 pt-0">
         <!-- <v-tabs
           v-if="$vuetify.breakpoint.smAndUp"
           :value="tabValue"
@@ -17,7 +17,7 @@
           <v-tab
             v-for="(item, index) in tabs"
             :key="`tab-${index}`"
-            class="montserrat white--text px-1 py-3"
+            class="px-1 py-3 montserrat white--text"
           >
             <search-card
               class="mx-1 my-1 text--h6"
@@ -36,7 +36,7 @@
           <div
             v-for="(item, index) in searchCards"
             :key="`tab-mobile-${index}`"
-            class="montserrat white--text px-1 pb-2"
+            class="px-1 pb-2 montserrat white--text"
           >
             <search-card
               class="text--h6"
@@ -52,8 +52,8 @@
 
     <!-- <v-row justify="end">
       <v-col>
-        <div class="aboutpage montserrat ml-4">
-          <h1 class="aboutpage my-3">Mis on e·Maapõu?</h1>
+        <div class="ml-4 aboutpage montserrat">
+          <h1 class="my-3 aboutpage">Mis on e·Maapõu?</h1>
           <div>
             <p>
               <strong
@@ -96,7 +96,7 @@
         :cols="$vuetify.breakpoint.mdAndUp ? 'auto' : 12"
         :style="{ width: $vuetify.breakpoint.mdAndUp ? '400px' : '' }"
       >
-        <h1 class="text-h4 mt-4 mb-3">
+        <h1 class="mt-4 mb-3 text-h4">
           {{ $t('landing.eMaapouPages') }}
         </h1>
         <div
@@ -114,7 +114,7 @@
             height="95px"
           />
         </div>
-        <h1 class="text-h5 grey--text text--darken-1 mt-4 mb-3">
+        <h1 class="mt-4 mb-3 text-h5 grey--text text--darken-1">
           {{ $t('landing.otherPages') }}
         </h1>
         <div
@@ -137,8 +137,8 @@
     </v-row> -->
     <v-row>
       <v-col cols="12" md="6">
-        <div class="aboutpage montserrat ml-4">
-          <h1 class="aboutpage text-h4 my-3 ml-3">Mis on e·Maapõu?</h1>
+        <div class="ml-4 aboutpage montserrat">
+          <h1 class="my-3 ml-3 aboutpage text-h4">Mis on e·Maapõu?</h1>
           <div>
             <p>
               <strong
@@ -189,7 +189,7 @@
     </v-row>
     <v-row class="my-6" justify="center" align="center">
       <v-col cols="12">
-        <h1 class="text-h4 ml-3">
+        <h1 class="ml-3 text-h4">
           {{ $t('landing.otherPages') }}
         </h1>
       </v-col>
@@ -251,7 +251,7 @@ export default {
           class: 'sample-search-card',
         },
         {
-          localeName: 'analytical_data',
+          localeName: 'analytical-data',
           title: this.$t('common.analyticalData'),
           class: 'analysis-search-card',
         },

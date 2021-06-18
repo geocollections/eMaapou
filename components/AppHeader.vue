@@ -11,7 +11,7 @@
     }"
   >
     <v-toolbar-items>
-      <v-app-bar-title class="align-self-center app-title ml-3">
+      <v-app-bar-title class="ml-3 align-self-center app-title">
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -35,7 +35,7 @@
       v-if="$vuetify.breakpoint.mdAndUp"
       vertical
       inset
-      class="white mx-3"
+      class="mx-3 white"
     />
     <div v-if="$vuetify.breakpoint.mdAndUp" class="montserrat">
       {{ $t('slogan') }}
@@ -130,6 +130,7 @@ export default {
   },
   data() {
     return {
+      // NOTE: name and lang is confusing, could probably change to name -> localeName/routeName and lang -> text
       tabs: [
         {
           name: 'locality',
@@ -148,7 +149,7 @@ export default {
           lang: 'samples',
         },
         {
-          name: 'analytical_data',
+          name: 'analytical-data',
           lang: 'analyticalData',
         },
         { name: 'dataset', lang: 'datasets' },

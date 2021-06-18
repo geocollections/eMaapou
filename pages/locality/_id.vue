@@ -399,7 +399,7 @@ export default {
 
       if (drillcore) {
         tabs.splice(3, 0, {
-          routeName: 'locality-id-drillcore_boxes',
+          routeName: 'locality-id-drillcore-boxes',
           title: 'locality.drillcoreBoxes',
           count: drillcore.boxes,
           props: { drillcore: drillcore.id },
@@ -491,7 +491,7 @@ export default {
         et: this.locality.locality,
         en: this.locality.locality_en,
       })
-      this.$router.push(this.localePath({ name: 'analytical_data' }))
+      this.$router.push(this.localePath({ name: 'analytical-data' }))
     },
   },
 }

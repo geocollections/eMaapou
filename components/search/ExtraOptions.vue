@@ -23,7 +23,7 @@
     />
   </card-expandable>
   <!-- <v-card flat class="mt-1">
-    <v-card-title class="py-1 px-0">
+    <v-card-title class="px-0 py-1">
       <div
         class="card-title--clickable"
         @click="showExtraOptions = !showExtraOptions"
@@ -96,7 +96,7 @@ export default {
     ...mapFields('settings', ['showExtraOptions']),
     stateModuleName() {
       let table = this.getRouteBaseName()
-      if (table === 'analytical_data') table = 'analyticalData'
+      if (table === 'analytical-data') table = 'analyticalData'
       return table
     },
     allTableHeaders() {

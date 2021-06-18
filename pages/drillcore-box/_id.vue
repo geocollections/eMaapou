@@ -8,13 +8,13 @@
       />
     </template>
     <template #top>
-      <v-card v-if="activeImage" class="my-2 mx-4">
+      <v-card v-if="activeImage" class="mx-4 my-2">
         <v-card-text>
           <v-hover v-slot="{ hover }">
             <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
             <v-img
               contain
-              class="ma-4 transition-swing cursor-pointer rounded"
+              class="rounded cursor-pointer ma-4 transition-swing"
               :class="{
                 'elevation-8': hover,
                 'elevation-4': !hover,
@@ -37,7 +37,7 @@
           </v-hover>
 
           <div
-            class="d-flex justify-center flex-column justify-md-space-between flex-md-row mx-8"
+            class="justify-center mx-8 d-flex flex-column justify-md-space-between flex-md-row"
           >
             <div class="text-center text-md-left">
               <div
@@ -108,7 +108,7 @@
                     'elevation-4': hover,
                     'elevation-2': !hover,
                   }"
-                  class="grey lighten-2 rounded transition-swing cursor-pointer"
+                  class="rounded cursor-pointer grey lighten-2 transition-swing"
                   @click="activeImage = drillcoreBoxImages[index]"
                 >
                   <template #placeholder>
@@ -282,7 +282,7 @@ export default {
       const tabs = [
         {
           id: 'sample',
-          routeName: 'drillcore_box-id',
+          routeName: 'drillcore-box-id',
           isSolr: true,
           title: 'drillcore.samples',
           count: 0,
@@ -294,7 +294,7 @@ export default {
         },
         {
           id: 'analysis',
-          routeName: 'drillcore_box-id-analyses',
+          routeName: 'drillcore-box-id-analyses',
           title: 'drillcore.analyses',
           isSolr: true,
           count: 0,
@@ -306,7 +306,7 @@ export default {
         },
         {
           id: 'specimen',
-          routeName: 'drillcore_box-id-specimens',
+          routeName: 'drillcore-box-id-specimens',
           title: 'drillcore.specimens',
           isSolr: true,
           count: 0,

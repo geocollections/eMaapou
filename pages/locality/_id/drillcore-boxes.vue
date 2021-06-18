@@ -24,7 +24,7 @@
             tile
             :ripple="false"
             @click="
-              $openNuxtWindow('drillcore_box-id', { id: box.drillcore_box })
+              $openNuxtWindow('drillcore-box-id', { id: box.drillcore_box })
             "
           >
             <v-card-text class="drillcore-box__card">
@@ -33,7 +33,7 @@
                   <!-- TODO: #74 Add placeholder, for case when box does not have a picture -->
                   <client-only>
                     <v-img
-                      class="rounded mx-auto transition-swing"
+                      class="mx-auto rounded transition-swing"
                       :class="{
                         'elevation-8': hover,
                         'elevation-4': !hover,

@@ -11,10 +11,10 @@
       :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
     >
       <div
-        class="mt-5 d-flex flex-column justify-center align-center fill-height"
+        class="justify-center mt-5 d-flex flex-column align-center fill-height"
       >
         <h1
-          class="text-h3 font-weight-bold text-center my-3 montserrat white--text text-shadow"
+          class="my-3 text-center text-h3 font-weight-bold montserrat white--text text-shadow"
         >
           {{ $t('landing.searchTitle') }}
         </h1>
@@ -32,7 +32,7 @@
         <!-- <v-tabs
           :value="tabValue"
           align-with-title
-          class="header-tabs flex-grow-0"
+          class="flex-grow-0 header-tabs"
           style="position: absolute; bottom: 0"
           optional
           background-color="transparent"
@@ -47,7 +47,7 @@
             nuxt
             active-class="active-tab font-weight-bold"
             :to="localePath({ name: item.name })"
-            class="montserrat white--text px-1"
+            class="px-1 montserrat white--text"
           >
             <v-card class="pa-2" :class="`title-main`">
 
@@ -112,34 +112,6 @@ export default {
     return {
       includeList: ['AnalysisSearch'],
       drawer: false,
-      tabs: [
-        {
-          name: 'locality',
-          lang: 'localities',
-        },
-        {
-          name: 'site',
-          lang: 'sites',
-        },
-        {
-          name: 'drillcore',
-          lang: 'drillcores',
-        },
-        {
-          name: 'sample',
-          lang: 'samples',
-        },
-        {
-          name: 'analytical_data',
-          lang: 'analyticalData',
-        },
-        { name: 'dataset', lang: 'datasets' },
-        {
-          name: 'taxon',
-          lang: 'taxa',
-        },
-        { name: 'photo', lang: 'photo' },
-      ],
     }
   },
   computed: {

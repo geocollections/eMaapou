@@ -45,7 +45,7 @@
         <!-- File -->
         <div
           v-else
-          class="file-download rounded primary--text"
+          class="rounded file-download primary--text"
           @click="
             $openWindow(
               `https://files.geocollections.info/${file.uuid_filename}`
@@ -59,7 +59,7 @@
         </div>
 
         <div
-          class="d-flex justify-center flex-column justify-md-space-between flex-md-row"
+          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
@@ -368,7 +368,7 @@
                             class="text-link"
                             :to="
                               localePath({
-                                name: `${item.id}-id`,
+                                name: `${item.route ? item.route : item.id}-id`,
                                 params: { id: row[item.id] },
                               })
                             "
@@ -566,6 +566,7 @@ export default {
         },
         {
           id: 'drillcore_box',
+          route: 'drillcore-box',
           fields: 'drillcore_box,drillcore_box__number',
           title: 'related.drillcore_box',
           count: 0,

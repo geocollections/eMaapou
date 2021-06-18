@@ -291,7 +291,7 @@ export default {
         {
           id: 'lithostratigraphy',
           table: 'stratigraphy',
-          routeName: 'stratigraphy-id-relatedUnits',
+          routeName: 'stratigraphy-id-related-units',
           title: 'stratigraphy.relatedUnits',
           count: 0,
           props: { stratigraphy: stratigraphy.id },

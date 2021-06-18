@@ -8,7 +8,7 @@ export default {
     },
     stateModuleName() {
       let table = this.getRouteBaseName()
-      if (table === 'analytical_data') table = 'analyticalData'
+      if (table === 'analytical-data') table = 'analyticalData'
       return table
     },
   },
