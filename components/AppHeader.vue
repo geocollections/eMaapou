@@ -102,13 +102,13 @@
         centered
       >
         <v-tab
-          v-for="(item, index) in tabs"
+          v-for="(tab, index) in tabs"
           :key="index"
           nuxt
           active-class="active-tab font-weight-bold"
-          :to="localePath({ name: item.name })"
+          :to="localePath({ name: tab.routeName })"
           class="montserrat"
-          >{{ $t(`common.${item.lang}`) }}</v-tab
+          >{{ tab.text }}</v-tab
         >
       </v-tabs>
     </template>
@@ -130,34 +130,34 @@ export default {
   },
   data() {
     return {
-      // NOTE: name and lang is confusing, could probably change to name -> localeName/routeName and lang -> text
       tabs: [
         {
-          name: 'locality',
-          lang: 'localities',
+          routeName: 'locality',
+
+          text: this.$t('common.localities'),
         },
         {
-          name: 'site',
-          lang: 'sites',
+          routeName: 'site',
+          text: this.$t('common.sites'),
         },
         {
-          name: 'drillcore',
-          lang: 'drillcores',
+          routeName: 'drillcore',
+          text: this.$t('common.drillcores'),
         },
         {
-          name: 'sample',
-          lang: 'samples',
+          routeName: 'sample',
+          text: this.$t('common.samples'),
         },
         {
-          name: 'analytical-data',
-          lang: 'analyticalData',
+          routeName: 'analytical-data',
+          text: this.$t('common.analyticalData'),
         },
-        { name: 'dataset', lang: 'datasets' },
+        { routeName: 'dataset', text: this.$t('common.datasets') },
         {
-          name: 'taxon',
-          lang: 'taxa',
+          routeName: 'taxon',
+          text: this.$t('common.taxa'),
         },
-        { name: 'photo', lang: 'photo' },
+        { routeName: 'photo', text: this.$t('common.photo') },
       ],
       logo: require('~/assets/logos/emaapou5white.svg'),
     }
@@ -165,12 +165,6 @@ export default {
   computed: {
     isLanding() {
       return this.getRouteBaseName().startsWith('index')
-    },
-    isSearchPage() {
-      return this.$route.name.startsWith('search')
-    },
-    isNotSearchPath() {
-      return !this.$route.path.startsWith('/search')
     },
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
