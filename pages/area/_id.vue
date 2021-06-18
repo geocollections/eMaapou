@@ -230,33 +230,31 @@ export default {
           props: {},
         },
       ]
-      // FIXME: If check seems unneccessary
-      if (area?.id) {
-        const solrParams = { fq: `area_id:${area.id}` }
-        const apiParams = { area: area.id }
 
-        const forLoop = async () => {
-          const filteredTabs = tabs.filter((item) => !!item.id)
-          for (const item of filteredTabs) {
-            let countResponse
-            if (item?.isSolr)
-              countResponse = await app.$services.sarvSolr.getResourceCount(
-                item.id,
-                solrParams
-              )
-            else
-              countResponse = await app.$services.sarvREST.getResourceCount(
-                item.id,
-                apiParams
-              )
-            item.count = countResponse?.count ?? 0
-            item.props = {
-              area: area.id,
-            }
+      const solrParams = { fq: `area_id:${area.id}` }
+      const apiParams = { area: area.id }
+
+      const forLoop = async () => {
+        const filteredTabs = tabs.filter((item) => !!item.id)
+        for (const item of filteredTabs) {
+          let countResponse
+          if (item?.isSolr)
+            countResponse = await app.$services.sarvSolr.getResourceCount(
+              item.id,
+              solrParams
+            )
+          else
+            countResponse = await app.$services.sarvREST.getResourceCount(
+              item.id,
+              apiParams
+            )
+          item.count = countResponse?.count ?? 0
+          item.props = {
+            area: area.id,
           }
         }
-        await forLoop()
       }
+      await forLoop()
 
       const hydratedTabs = (
         await Promise.all(
