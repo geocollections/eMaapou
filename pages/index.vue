@@ -50,136 +50,19 @@
       </v-col>
     </v-row>
 
-    <!-- <v-row justify="end">
-      <v-col>
-        <div class="ml-4 aboutpage montserrat">
-          <h1 class="my-3 aboutpage">Mis on e·Maapõu?</h1>
-          <div>
-            <p>
-              <strong
-                >e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja
-                e-teenuste juurde.</strong
-              >
-            </p>
-
-            <p>
-              Eestis toodavad ja haldavad maapõue andmeid peamiselt&nbsp;<a
-                href="https://egt.ee"
-                >Geoloogiateenistus</a
-              >, <a href="https://maaamet.ee">Maa-amet</a>,
-              <a href="https://keskkonnaamet.ee">Keskkonnaamet</a>,
-              teadusasutused (<a href="https://taltech.ee/geoloogia-instituut"
-                >Tallinna Tehnikaülikooli geoloogia instituut</a
-              >,
-              <a href="https://natmuseum.ut.ee"
-                >Tartu Ülikooli loodusmuuseum ja botaanikaaed</a
-              >,
-              <a href="https://geoloogia.ut.ee"
-                >Tartu Ülikooli geoloogia osakond</a
-              >&nbsp;ja&nbsp;<a href="https://loodusmuuseum.ee"
-                >Eesti Loodusmuuseum</a
-              >), ning valdkonnas tegutsevad ettevõtted.&nbsp;
-            </p>
-
-            <p>
-              e-Maapõu võimaldab otsida andmeid maapõue infosüsteemis SARV, mida
-              kasutavad põhiliselt teadusasutused. Sellisteks andmeteks on
-              näiteks geoloogilised kollektsioonid, geoloogia-alased
-              publikatsioonid, puursüdamikud, paljandid,&nbsp;kivimiproovid,
-              fossiilid, analüütiline andmestik, fotoarhiiv jne.
-            </p>
-          </div>
-        </div>
-        <leaflet-map site-overlay> </leaflet-map>
-      </v-col>
-      <v-col
-        :cols="$vuetify.breakpoint.mdAndUp ? 'auto' : 12"
-        :style="{ width: $vuetify.breakpoint.mdAndUp ? '400px' : '' }"
-      >
-        <h1 class="mt-4 mb-3 text-h4">
-          {{ $t('landing.eMaapouPages') }}
-        </h1>
-        <div
-          v-for="(item, index) in externalCards.innerIds.map(
-            (id) => externalCards[id]
-          )"
-          :key="`inner-${index}`"
-          class="pa-1"
-        >
-          <external-link-card
-            :title="$t(item.title)"
-            :description="$t(item.description)"
-            :href="item.href"
-            :background="item.background"
-            height="95px"
-          />
-        </div>
-        <h1 class="mt-4 mb-3 text-h5 grey--text text--darken-1">
-          {{ $t('landing.otherPages') }}
-        </h1>
-        <div
-          v-for="(item, index) in externalCards.outerIds.map(
-            (id) => externalCards[id]
-          )"
-          :key="`outer-${index}`"
-          class="pa-1"
-        >
-          <external-link-card
-            :title="$t(item.title)"
-            :description="$t(item.description)"
-            :href="item.href"
-            :background="item.background"
-            height="95px"
-            grayscale
-          />
-        </div>
-      </v-col>
-    </v-row> -->
     <v-row>
       <v-col cols="12" md="6">
-        <div class="ml-4 aboutpage montserrat">
-          <h1 class="my-3 ml-3 aboutpage text-h4">Mis on e·Maapõu?</h1>
-          <div>
-            <p>
-              <strong
-                >e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja
-                e-teenuste juurde.</strong
-              >
-            </p>
-
-            <p>
-              Eestis toodavad ja haldavad maapõue andmeid peamiselt&nbsp;<a
-                href="https://egt.ee"
-                >Geoloogiateenistus</a
-              >, <a href="https://maaamet.ee">Maa-amet</a>,
-              <a href="https://keskkonnaamet.ee">Keskkonnaamet</a>,
-              teadusasutused (<a href="https://taltech.ee/geoloogia-instituut"
-                >Tallinna Tehnikaülikooli geoloogia instituut</a
-              >,
-              <a href="https://natmuseum.ut.ee"
-                >Tartu Ülikooli loodusmuuseum ja botaanikaaed</a
-              >,
-              <a href="https://geoloogia.ut.ee"
-                >Tartu Ülikooli geoloogia osakond</a
-              >&nbsp;ja&nbsp;<a href="https://loodusmuuseum.ee"
-                >Eesti Loodusmuuseum</a
-              >), ning valdkonnas tegutsevad ettevõtted.&nbsp;
-            </p>
-
-            <p>
-              e-Maapõu võimaldab otsida andmeid maapõue infosüsteemis SARV, mida
-              kasutavad põhiliselt teadusasutused. Sellisteks andmeteks on
-              näiteks geoloogilised kollektsioonid, geoloogia-alased
-              publikatsioonid, puursüdamikud, paljandid,&nbsp;kivimiproovid,
-              fossiilid, analüütiline andmestik, fotoarhiiv jne.
-            </p>
-          </div>
-        </div>
+        <h1 class="my-3 text-h4">{{ $t('about.title') }}</h1>
+        <div
+          class="aboutpage montserrat"
+          v-html="$translate({ et: page.content_et, en: page.content_en })"
+        ></div>
       </v-col>
       <v-col cols="12" md="6">
+        <h1 class="my-3 text-h4">{{ $t('landing.map') }}</h1>
         <leaflet-map
           class="mt-4 rounded elevation-3"
-          :height="550"
+          :height="750"
           summary-overlay
           :zoom="6"
           rounded
@@ -189,7 +72,7 @@
     </v-row>
     <v-row class="my-6" justify="center" align="center">
       <v-col cols="12">
-        <h1 class="ml-3 text-h4">
+        <h1 class="text-h4">
           {{ $t('landing.otherPages') }}
         </h1>
       </v-col>
@@ -226,6 +109,10 @@ export default {
     ExternalLinkCard,
     SearchCard,
     LeafletMap,
+  },
+  async asyncData({ route, error, app }) {
+    const data = await app.$services.sarvREST.getResource('page', 78)
+    return { page: data.results[0] }
   },
   data() {
     return {

@@ -27,6 +27,7 @@ export default {
     routes: 'Routes',
     searchRoutes: 'Search',
     eMaapouPages: 'e·Maapõu ecosystem',
+    map: 'Data on map',
   },
   common: {
     general: 'General info',

@@ -27,6 +27,7 @@ export default {
     routes: 'Navigatsioon',
     searchRoutes: 'Otsing',
     eMaapouPages: 'e·Maapõu ökosüsteem',
+    map: 'Andmed kaardil',
   },
   common: {
     general: 'Üldinfo',
