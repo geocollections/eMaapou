@@ -36,11 +36,20 @@ export default {
         institutions: state.globalFilters.byIds.institutions,
       }),
     }
+
+    const moduleFilters = {
+      ...state[module].filters.byIds,
+    }
+
     const response = await this.$services.sarvSolr.getResourceList(resource, {
       options,
       search: state.searchQuery,
       queryFields: this.$getQueryFields(resourceDefaults.queryFields),
-      searchFilters: { ...state[module].filters.byIds, ...globalFilters },
+      searchFilters: {
+        ...moduleFilters,
+        ...globalFilters,
+        ...state[module].persistantFilters,
+      },
     })
     commit(SET_MODULE_ITEMS, { module, items: response.items })
     commit(SET_MODULE_COUNT, { module, count: response.count })

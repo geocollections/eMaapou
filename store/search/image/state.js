@@ -81,14 +81,18 @@ export const initState = () => {
           label: 'photo.size',
           fields: ['image_width', 'image_height'],
         },
-        specimenImageAttachment: {
-          value: '2',
-          type: 'text',
-          lookUpType: 'equals',
-          fields: ['specimen_image_attachment'],
-        },
       },
       allIds: ['locality', 'people'],
+    },
+    // NOTE: Because this filter does not ever change, it was separated from the rest.
+    // So that the hasActiveFilter does not return false positives.
+    persistantFilters: {
+      specimenImageAttachment: {
+        value: '2',
+        type: 'text',
+        lookUpType: 'equals',
+        fields: ['specimen_image_attachment'],
+      },
     },
   }
 }
