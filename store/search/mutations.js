@@ -34,6 +34,6 @@ export default {
     state.globalFilters.byIds.geoJSON.value = null
   },
   [RESET_SEARCH_QUERY](state) {
-    state.search = ''
+    state.searchQuery = ''
   },
 }

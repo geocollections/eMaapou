@@ -68,7 +68,7 @@ export default {
     this.fillAutocompleteLists()
   },
   methods: {
-    ...mapActions('stratigraphy', ['resetFilters']),
+    ...mapActions('search', ['resetFilters']),
     ...mapActions('search/stratigraphy', ['searchStratigraphies']),
     handleSearch(e) {
       this.searchStratigraphies()
