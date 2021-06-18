@@ -72,12 +72,11 @@ export default {
   },
   computed: {
     ...mapState('search/locality', ['filters', 'count', 'items']),
-    // NOTE: For some reason 'search/locality' does not work here.
-    ...mapFields('search', {
-      name: 'locality.filters.byIds.name.value',
-      country: 'locality.filters.byIds.country.value',
-      stratigraphy: 'locality.filters.byIds.stratigraphy.value',
-      reference: 'locality.filters.byIds.reference.value',
+    ...mapFields('search/locality', {
+      name: 'filters.byIds.name.value',
+      country: 'filters.byIds.country.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      reference: 'filters.byIds.reference.value',
     }),
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
