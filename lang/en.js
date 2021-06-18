@@ -464,6 +464,7 @@ export default {
     z: 'z',
     remarks: 'remarks',
     name_en: 'name_en',
+    latlong: 'latlong',
   },
   sample: {
     pageTitle: 'Samples search',
