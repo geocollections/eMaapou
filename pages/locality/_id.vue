@@ -183,7 +183,7 @@
         <v-btn
           v-if="analysisResultsCount > 0"
           small
-          color="emp-analysis"
+          color="emp-analysis montserrat"
           class="mt-2 white--text"
           @click="goToAnalyticalData"
           >{{ $t('locality.linkToAnalyticalData') }}
@@ -193,7 +193,7 @@
         <v-btn
           v-if="drillcore"
           small
-          color="emp-drillcore"
+          color="emp-drillcore  montserrat"
           class="mt-2 white--text"
           @click="
             $router.push(
