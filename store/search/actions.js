@@ -11,7 +11,7 @@ import {
 export default {
   async resetFilters({ commit }, module) {
     const { initState } = await import(`/${module}/state.js`)
-    commit(RESET_MODULE_FILTERS, { module, defaultState: initState() })
+    commit(RESET_MODULE_FILTERS, { module, initState: initState() })
 
     commit(RESET_SEARCH_QUERY)
     commit(RESET_GEOJSON)
@@ -47,8 +47,8 @@ export default {
       queryFields: this.$getQueryFields(resourceDefaults.queryFields),
       searchFilters: {
         ...moduleFilters,
-        ...globalFilters,
         ...state[module].persistantFilters,
+        ...globalFilters,
       },
     })
     commit(SET_MODULE_ITEMS, { module, items: response.items })

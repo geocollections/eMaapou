@@ -20,11 +20,11 @@ export default {
   [SET_MODULE_OPTIONS](state, { module, options }) {
     state[module].options = options
   },
-  [RESET_MODULE_FILTERS](state, { module, defaultState }) {
-    state[module].filters = defaultState.filters
+  [RESET_MODULE_FILTERS](state, { module, initState }) {
+    state[module].filters = initState.filters
     state[module].options = {
       ...state[module].options,
-      page: defaultState.options.page,
+      page: initState.options.page,
     }
   },
   [RESET_INSTITUTIONS](state) {
