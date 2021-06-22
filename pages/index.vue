@@ -62,7 +62,7 @@
         <h1 class="my-3 text-h4">{{ $t('landing.map') }}</h1>
         <leaflet-map
           class="mt-4 rounded elevation-3"
-          :height="750"
+          :height="550"
           summary-overlay
           :zoom="6"
           rounded
@@ -111,7 +111,7 @@ export default {
     LeafletMap,
   },
   async asyncData({ route, error, app }) {
-    const data = await app.$services.sarvREST.getResource('page', 78)
+    const data = await app.$services.sarvREST.getResource('page', 87)
     return { page: data.results[0] }
   },
   data() {
@@ -212,8 +212,8 @@ export default {
           href: 'https://fossiilid.info',
           background: require('~/assets/frontpage/fossiilid.jpg'),
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 3,
+          lg: 3,
         },
         kivid: {
           title: 'kivid.title',
@@ -221,8 +221,8 @@ export default {
           href: 'https://kivid.info',
           background: require('~/assets/frontpage/kivid.jpg'),
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 6,
+          lg: 6,
         },
         stratigraphy: {
           title: 'frontStratigraphy.title',
@@ -287,8 +287,8 @@ export default {
           href: 'https://edit.geocollections.info',
           background: require('~/assets/frontpage/sarv-wb.jpg'),
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 3,
+          lg: 3,
         },
         ids: [
           'kirjandus',
