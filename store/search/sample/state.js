@@ -52,7 +52,7 @@ export const initState = () => {
         depth: {
           type: 'range',
           lookUpType: 'range',
-          value: [-20, 5000],
+          value: [null, null],
           label: 'sample.depth',
           placeholders: ['depth.min', 'depth.max'],
           fields: ['depth'],

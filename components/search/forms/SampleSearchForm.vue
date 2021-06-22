@@ -22,22 +22,13 @@
         v-model="collector"
         :label="$t(filters.byIds.collector.label)"
       />
-
-      <range-slider-field
+      <range-text-field
         v-model="depth"
-        :min="-20"
-        :max="5000"
         :label="$t(filters.byIds.depth.label)"
       />
 
       <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
       <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
-      <!--    <range-search-field-->
-      <!--      v-model="mass"-->
-      <!--      :min="0"-->
-      <!--      :max="1000000"-->
-      <!--      :label="$t(filters.byIds.mass.label)"-->
-      <!--    />-->
     </search-fields-wrapper>
     <search-view-map-wrapper
       sample-overlay
@@ -62,16 +53,15 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 
-import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
-
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import RangeSliderField from '~/components/fields/RangeSliderField'
-import TextField from '~/components/fields/TextField'
-import AutocompleteField from '~/components/fields/AutocompleteField'
+import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
+import RangeTextField from '~/components/fields/RangeTextField.vue'
+import TextField from '~/components/fields/TextField.vue'
+import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import ExtraOptions from '~/components/search/ExtraOptions.vue'
+import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 
 export default {
   name: 'SampleSearchForm',
@@ -80,7 +70,7 @@ export default {
     InstitutionSearchFilter,
     AutocompleteField,
     TextField,
-    RangeSliderField,
+    RangeTextField,
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
