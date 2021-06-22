@@ -40,7 +40,12 @@ export default {
     const moduleFilters = {
       ...state[module].filters.byIds,
     }
-
+    // NOTE: Right now the geom filter has to be in the last position
+    // else the search will not work correctly when drawing circle on map.
+    // This can be seen in the photo archive page if the presistantFilters are
+    // moved below globalFilters.
+    // This could become a problem another global filter is added after geom filter.
+    // The result should not depend on the order of the filters.
     const response = await this.$services.sarvSolr.getResourceList(resource, {
       options,
       search: state.searchQuery,
