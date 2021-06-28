@@ -10,6 +10,7 @@
       </div>
     </template>
     <v-autocomplete
+      class="montserrat"
       :items="allTableHeaders"
       :value="shownTableHeaders"
       chips
@@ -20,7 +21,13 @@
       cache-items
       :label="$t('common.tableHeaders')"
       @change="handleTableHeaderChange"
-    />
+    >
+      <template #item="{ item }">
+        <v-list-item-content class="montserrat">
+          {{ item.text }}
+        </v-list-item-content>
+      </template>
+    </v-autocomplete>
   </card-expandable>
   <!-- <v-card flat class="mt-1">
     <v-card-title class="px-0 py-1">

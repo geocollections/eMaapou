@@ -2,7 +2,7 @@
   <div class="pt-1">
     <v-subheader
       v-if="label"
-      class="px-0 d-inline"
+      class="px-0 d-inline montserrat"
       :class="{ 'primary--text text--darken-3': isFocused }"
       >{{ label }}</v-subheader
     >
@@ -10,6 +10,7 @@
       <v-col cols="6">
         <v-text-field
           :value="value[0]"
+          class="montserrat"
           color="primary darken-3"
           :label="fieldLabels.min"
           hide-details
@@ -24,6 +25,7 @@
       <v-col cols="6">
         <v-text-field
           :value="value[1]"
+          class="montserrat"
           color="primary darken-3"
           :label="fieldLabels.max"
           hide-details

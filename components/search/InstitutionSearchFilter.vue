@@ -26,6 +26,7 @@
                 multiple
                 :value="entity.id"
                 hide-details
+                class="montserrat"
                 :label="entity.acronym"
                 :input-value="institution"
                 @change="$emit('change:institution', $event)"

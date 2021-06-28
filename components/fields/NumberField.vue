@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    class="pt-4"
+    class="pt-4 montserrat"
     :label="label"
     hide-details
     v-bind="$attrs"

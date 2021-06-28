@@ -1,6 +1,6 @@
 <template>
   <v-autocomplete
-    class="pt-4"
+    class="pt-4 montserrat"
     v-bind="$attrs"
     hide-details
     hide-no-data
@@ -12,7 +12,13 @@
     :return-object="!$attrs['item-value']"
     v-on="$listeners"
     @change="resetSearchInput"
-  />
+  >
+    <template #item="{ item }">
+      <v-list-item-content class="montserrat">
+        {{ item[$attrs['item-text']] }}
+      </v-list-item-content>
+    </template>
+  </v-autocomplete>
 </template>
 
 <script>

@@ -2,6 +2,7 @@
   <v-row no-gutters>
     <v-col cols="4" class="pr-1">
       <autocomplete-field
+        class="montserrat"
         :label="$t('analyticalData.parameter')"
         :items="parameters"
         return-object
