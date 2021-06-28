@@ -53,7 +53,7 @@
       </v-row>
     </v-col>
 
-    <v-col cols="1" align-self="center" class="text-center">
+    <v-col cols="1" align-self="end" class="text-center">
       <v-btn
         small
         icon
@@ -65,7 +65,7 @@
       </v-btn>
     </v-col>
 
-    <v-col cols="1" align-self="center" class="text-center">
+    <v-col cols="1" align-self="end" class="text-center">
       <v-btn
         small
         icon
