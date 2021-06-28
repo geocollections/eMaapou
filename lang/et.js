@@ -22,7 +22,7 @@ export default {
     visit_site: 'Vaata',
     title: 'Geoloogilised andmed ja e-teenused',
     otherPages: 'Geoloogilised andmed teistes e-teenustes',
-    goToFrontpage: 'Mine pealehele',
+    goToFrontpage: 'Pealehele',
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
     searchRoutes: 'Otsing',
