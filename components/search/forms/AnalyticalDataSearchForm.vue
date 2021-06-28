@@ -119,7 +119,7 @@
             :value="entity"
             :parameters="distinctListParameters(entity)"
             :disable-remove="activeListParameters.length <= 1"
-            :disable-add="activeListParameters.length >= 10"
+            :disable-add="activeListParameters.length !== index + 1"
             @input="handleParameterUpdate($event, index)"
             @add:parameter="addActiveListParameter"
             @remove:parameter="
