@@ -33,20 +33,32 @@
           <v-col
             cols="10"
             sm="8"
-            md="5"
-            lg="4"
+            md="12"
+            lg="12"
             offset-md="1"
             offset-sm="2"
             offset="1"
+            class="mb-5"
           >
-            <v-img
+            <!-- <v-img
               dark
               :height="100"
               :width="200"
               contain
               :src="logo"
               class="mx-auto mt-5 mb-sm-5"
-            />
+            /> -->
+            <div
+              class="d-flex flex-row align-center text-md-h3 text-sm-h4 white--text"
+            >
+              <img
+                style="height: 100px; width: 200px"
+                :src="logo"
+                class="mt-5 mb-sm-5 mr-4"
+              />
+              <v-divider vertical class="white my-5" />
+              <div class="ml-4 font-weight-bold">Kogu info Eesti maapõuest</div>
+            </div>
           </v-col>
         </v-row>
         <v-row
@@ -65,34 +77,15 @@
                 ($vuetify.breakpoint.smAndUp &&
                   $vuetify.breakpoint.height < 400)
                   ? 'auto'
-                  : '70vh'
+                  : 'auto'
               "
-              class="pb-10 pt-5 pt-sm-0"
-              :class="{ 'rounded-l': showMap }"
+              class="pt-5 pt-sm-0"
               outlines
-              :tile="showMap"
               elevation="15"
             >
               <v-row no-gutters>
                 <v-col>
                   <div class="d-flex flex-column justify-start fill-height">
-                    <div v-if="renderMap" class="text-right">
-                      <v-btn
-                        :ripple="false"
-                        plain
-                        dark
-                        class="montserrat py-6"
-                        @click="showMap = !showMap"
-                      >
-                        {{
-                          showMap ? $t('common.closeMap') : $t('common.openMap')
-                        }}
-
-                        <v-icon>{{
-                          showMap ? 'mdi-chevron-left' : 'mdi-chevron-right'
-                        }}</v-icon>
-                      </v-btn>
-                    </div>
                     <div class="my-4 my-sm-10 my-md-15">
                       <v-card-title
                         style="word-break: break-word"
@@ -111,6 +104,23 @@
                           @submit="handleSearch"
                         />
                       </v-card-actions>
+                    </div>
+                    <div v-if="renderMap" class="text-right">
+                      <v-btn
+                        :ripple="false"
+                        plain
+                        dark
+                        class="montserrat py-6"
+                        @click="showMap = !showMap"
+                      >
+                        {{
+                          showMap ? $t('common.closeMap') : $t('common.openMap')
+                        }}
+
+                        <v-icon>{{
+                          showMap ? 'mdi-chevron-left' : 'mdi-chevron-right'
+                        }}</v-icon>
+                      </v-btn>
                     </div>
 
                     <v-divider class="white mx-2 mx-sm-5"></v-divider>
@@ -150,12 +160,12 @@
           <v-slide-x-transition mode="in-out">
             <v-col v-show="renderMap && showMap" md="5" lg="6" class="pa-0">
               <leaflet-map
-                class="elevation-3"
+                class="ml-4 elevation-3"
                 height="70vh"
                 summary-overlay
                 :invalidate-size="showMap"
                 :zoom="6"
-                map-class="rounded-r"
+                rounded
                 :show-links="false"
                 :gesture-handling="false"
               />
@@ -310,7 +320,7 @@ export default {
 
 <style lang="scss" scoped>
 .background-image ::v-deep > .v-image__image {
-  filter: brightness(0.5) !important;
+  filter: brightness(0.7) !important;
 }
 
 .fab-container {

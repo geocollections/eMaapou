@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="my-2 my-sm-4" justify="center" align="center">
+    <v-row class="my-2 my-sm-10" justify="center" align="center">
       <v-col cols="12">
         <title-card
           :title="$t('landing.otherPages')"
@@ -31,8 +31,8 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col cols="12" md="6">
+    <v-row justify="center" class="my-2 my-sm-10">
+      <v-col cols="12">
         <title-card
           :title="$t('about.title')"
           class="title-border"
@@ -40,7 +40,8 @@
         />
 
         <div
-          class="aboutpage montserrat"
+          class="aboutpage montserrat px-2 px-sm-5"
+          style="column-count: 3"
           v-html="$translate({ et: page.content_et, en: page.content_en })"
         ></div>
       </v-col>

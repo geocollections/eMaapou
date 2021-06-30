@@ -2,7 +2,7 @@
   <v-app-bar
     app
     dark
-    absolute
+    :absolute="isLanding"
     style="z-index: 2050"
     :color="isLanding ? 'transparent' : 'primary'"
     :elevation="isLanding ? 0 : 4"
@@ -11,7 +11,10 @@
     }"
   >
     <v-toolbar-items>
-      <v-app-bar-title class="ml-3 align-self-center app-title">
+      <v-app-bar-title
+        v-if="!isLanding || (isLanding && $vuetify.breakpoint.xsOnly)"
+        class="ml-3 align-self-center app-title"
+      >
         <nuxt-link :to="localePath({ path: '/' })">
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -32,16 +35,16 @@
       </v-app-bar-title>
     </v-toolbar-items>
     <v-divider
-      v-if="$vuetify.breakpoint.mdAndUp"
+      v-if="!isLanding && $vuetify.breakpoint.mdAndUp"
       vertical
       inset
       class="mx-3 white"
     />
-    <div v-if="$vuetify.breakpoint.mdAndUp" class="montserrat">
+    <div v-if="!isLanding && $vuetify.breakpoint.mdAndUp" class="montserrat">
       {{ $t('slogan') }}
     </div>
 
-    <v-toolbar-items class="ml-3">
+    <v-toolbar-items v-if="!isLanding" class="ml-3">
       <v-btn
         v-show="$vuetify.breakpoint.smAndUp"
         nuxt

@@ -1,9 +1,10 @@
 <template>
   <v-chip
-    class="align-center d-flex"
+    class="align-center d-flex font-weight-bold"
     :class="`${cardClass}`"
     hover
     nuxt
+    label
     style="background-color: white"
     :height="height"
     :width="'100%'"
