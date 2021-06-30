@@ -205,7 +205,7 @@ export default {
 }
 
 $gradient-col: rgb(150, 163, 177);
-$gradient-col-sec: rgb(80, 149, 177);
+$gradient-col-sec: rgb(0, 119, 154);
 
 .gradient-background-front {
   background: linear-gradient(
