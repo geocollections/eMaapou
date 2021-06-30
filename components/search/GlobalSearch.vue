@@ -1,31 +1,37 @@
 <template>
   <v-text-field
     v-model="searchQuery"
-    class="global-search montserrat"
-    background-color="white"
+    class="montserrat"
     color="accent"
     :placeholder="$t('common.searchAlt')"
     single-line
     hide-details
     solo
+    height="48px"
     clearable
     autofocus
     @input="$emit('input')"
   >
-    <template v-if="showButton" #append>
+    <!-- <template v-if="showButton" #append>
       <v-btn type="submit" color="accent darken-1" dark elevation="0">
         <v-icon>mdi-magnify</v-icon>
         <div v-if="!iconButton" class="pl-2 montserrat">
           {{ $t('common.searchCommand') }}
         </div>
       </v-btn>
-    </template>
+    </template> -->
     <!-- <template #message>
       <div class="montserrat" :class="{ 'white--text': dark }">
         {{ $t('common.searchAlt') }}
       </div>
     </template> -->
   </v-text-field>
+  <!-- <v-btn class="mx-3" type="submit" color="accent darken-1" dark>
+      <v-icon>mdi-magnify</v-icon>
+      <div v-if="!iconButton" class="pl-2 montserrat">
+        {{ $t('common.searchCommand') }}
+      </div>
+    </v-btn> -->
 </template>
 
 <script>

@@ -2,12 +2,12 @@
   <v-app-bar
     app
     dark
+    absolute
     style="z-index: 2050"
     :color="isLanding ? 'transparent' : 'primary'"
     :elevation="isLanding ? 0 : 4"
     :class="{
       'gradient-background': !isLanding,
-      'gradient-background-front': isLanding,
     }"
   >
     <v-toolbar-items>

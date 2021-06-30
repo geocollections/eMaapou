@@ -2,60 +2,160 @@
   <v-app dark>
     <v-img
       v-if="isLanding"
-      height="400px"
-      max-height="400px"
+      :height="
+        $vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700
+          ? '1000px'
+          : '100vh'
+      "
+      :max-height="
+        $vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700
+          ? '1000px'
+          : '100vh'
+      "
       width="100%"
-      class="elevation-4"
+      class="elevation-4 background-image"
       position="center 20%"
       :src="require('~/assets/frontpage/header_img.jpg')"
       :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
     >
       <div
-        class="justify-center mt-5 d-flex flex-column align-center fill-height"
+        class="d-flex flex-column align-sm-content-start align-sm-content-center"
+        style="height: 100%"
       >
-        <h1
-          class="my-3 text-center text-h3 font-weight-bold montserrat white--text text-shadow"
+        <v-row
+          no-gutters
+          align-content="end"
+          class="mt-10 mt-sm-2 flex-grow-0 flex-sm-grow-1"
         >
-          {{ $t('landing.searchTitle') }}
-        </h1>
-
-        <quick-search-form
-          class="mt-5"
-          :class="{
-            'form-sm-up': $vuetify.breakpoint.smAndUp,
-            'form-lg-up': $vuetify.breakpoint.lgAndUp,
-            'form-xs': $vuetify.breakpoint.xs,
-          }"
-          :only-icon="$vuetify.breakpoint.smAndDown"
-          @submit="handleSearch"
-        />
-        <!-- <v-tabs
-          :value="tabValue"
-          align-with-title
-          class="flex-grow-0 header-tabs"
-          style="position: absolute; bottom: 0"
-          optional
-          background-color="transparent"
-          show-arrows
-          center-active
-          light
-          centered
-        >
-          <v-tab
-            v-for="(item, index) in tabs"
-            :key="index"
-            nuxt
-            active-class="active-tab font-weight-bold"
-            :to="localePath({ name: item.name })"
-            class="px-1 montserrat white--text"
+          <v-col
+            cols="10"
+            sm="8"
+            md="5"
+            lg="4"
+            offset-md="1"
+            offset-sm="2"
+            offset="1"
           >
-            <v-card class="pa-2" :class="`title-main`">
+            <v-img
+              dark
+              :height="100"
+              :width="200"
+              contain
+              :src="logo"
+              class="mx-auto mt-5 mb-sm-5"
+            />
+          </v-col>
+        </v-row>
+        <v-row
+          no-gutters
+          align-content="start"
+          align-content-sm="start"
+          justify="center"
+          justify-sm="start"
+          class="mt-2"
+        >
+          <v-col
+            cols="11"
+            sm="8"
+            :md="showMap ? 10 : 5"
+            :lg="showMap ? 10 : 4"
+            offset-md="1"
+            offset-sm="2"
+          >
+            <v-card
+              color="header darken-1"
+              :height="$vuetify.breakpoint.xsOnly ? 'auto' : '70vh'"
+              class="pb-10 pt-5 pt-sm-0"
+              outlines
+              elevation="15"
+            >
+              <v-row no-gutters>
+                <v-col :md="showMap ? 6 : 12" :lg="showMap ? 5 : 12">
+                  <div class="d-flex flex-column justify-start fill-height">
+                    <div v-if="renderMap" class="text-right">
+                      <v-btn
+                        :ripple="false"
+                        plain
+                        dark
+                        class="montserrat py-6"
+                        @click="showMap = !showMap"
+                      >
+                        {{
+                          showMap ? $t('common.closeMap') : $t('common.openMap')
+                        }}
 
-              {{ $t(`common.${item.lang}`) }}
+                        <v-icon>{{
+                          showMap ? 'mdi-chevron-left' : 'mdi-chevron-right'
+                        }}</v-icon>
+                      </v-btn>
+                    </div>
+                    <div class="my-4 my-sm-10 my-md-15">
+                      <v-card-title
+                        style="word-break: break-word"
+                        :class="{
+                          'font-small montserrat':
+                            $vuetify.breakpoint.smAndDown,
+                        }"
+                        class="mx-3 mb-4 pa-0 px-sm-2 text-sm-h4 white--text"
+                      >
+                        {{ $t('landing.quickSearch') }}
+                      </v-card-title>
+                      <v-card-actions class="mx-3 mx-sm-5 pa-0">
+                        <quick-search-form
+                          style="width: 100%"
+                          :only-icon="$vuetify.breakpoint.smAndDown"
+                          @submit="handleSearch"
+                        />
+                      </v-card-actions>
+                    </div>
 
+                    <v-divider class="white mx-2 mx-sm-5"></v-divider>
+
+                    <div class="my-4 my-sm-10 my-md-15">
+                      <v-card-title
+                        style="word-break: break-word"
+                        :class="{
+                          'font-small montserrat':
+                            $vuetify.breakpoint.smAndDown,
+                        }"
+                        class="mx-3 mb-4 pa-0 px-sm-2 text-sm-h4 white--text"
+                      >
+                        {{ $t('landing.viewMore') }}
+                      </v-card-title>
+                      <div class="mx-3 mx-sm-5 mt-2 d-flex flex-wrap">
+                        <div
+                          v-for="(item, index) in tabs"
+                          :key="`tab-mobile-${index}`"
+                          class="px-1 pb-2 montserrat white--text"
+                        >
+                          <search-card
+                            class="text--h6"
+                            height="50px"
+                            :title="item.title"
+                            :card-class="item.class"
+                            :to="localePath({ name: item.localeName })"
+                          ></search-card>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col v-show="renderMap && showMap" class="pa-0">
+                  <leaflet-map
+                    class="rounded elevation-3"
+                    height="70vh"
+                    summary-overlay
+                    :invalidate-size="showMap"
+                    :zoom="6"
+                    rounded
+                    :show-links="false"
+                    :gesture-handling="false"
+                  />
+                </v-col>
+              </v-row>
             </v-card>
-          </v-tab>
-        </v-tabs> -->
+          </v-col>
+        </v-row>
       </div>
     </v-img>
     <app-header
@@ -97,6 +197,8 @@ import CookiePolicy from '~/components/CookiePolicy'
 import HistoryViewer from '~/components/HistoryViewer.vue'
 import NavigationDrawer from '~/components/NavigationDrawer'
 import QuickSearchForm from '~/components/search/forms/QuickSearchForm'
+import SearchCard from '~/components/SearchCard.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
 
 export default {
   components: {
@@ -107,11 +209,67 @@ export default {
     ScrollTopFab,
     HistoryViewer,
     QuickSearchForm,
+    SearchCard,
+    LeafletMap,
   },
   data() {
     return {
       includeList: ['AnalysisSearch'],
+      logo: require('~/assets/logos/emaapou5white.svg'),
       drawer: false,
+      showMap: false,
+      tabs: [
+        {
+          localeName: 'locality',
+          title: this.$t('common.localities'),
+          class: 'locality-search-card',
+        },
+        {
+          localeName: 'site',
+          title: this.$t('common.sites'),
+          class: 'site-search-card',
+        },
+        {
+          localeName: 'drillcore',
+          title: this.$t('common.drillcores'),
+          class: 'drillcore-search-card',
+        },
+        {
+          localeName: 'sample',
+          title: this.$t('common.samples'),
+          class: 'sample-search-card',
+        },
+        {
+          localeName: 'analytical-data',
+          title: this.$t('common.analyticalData'),
+          class: 'analysis-search-card',
+        },
+        {
+          localeName: 'dataset',
+          title: this.$t('common.datasets'),
+          class: 'dataset-search-card',
+        },
+        {
+          localeName: 'taxon',
+          title: this.$t('common.taxa'),
+          class: 'search-card',
+        },
+        {
+          localeName: 'photo',
+          title: this.$t('common.photo'),
+          class: 'photo-search-card',
+        },
+        {
+          localeName: 'analysis',
+          title: this.$t('common.analyses'),
+          class: 'analysis-search-card',
+        },
+        {
+          localeName: 'stratigraphy',
+          title: this.$t('common.stratigraphy'),
+          class: 'stratigraphy-search-card',
+        },
+      ],
     }
   },
   computed: {
@@ -120,6 +278,14 @@ export default {
     },
     isLanding() {
       return this.getRouteBaseName().startsWith('index')
+    },
+    renderMap() {
+      return this.$vuetify.breakpoint.mdAndUp
+    },
+  },
+  watch: {
+    '$vuetify.breakpoint.mdAndUp'(newVal, oldVal) {
+      if (newVal === false) this.showMap = false
     },
   },
   methods: {
@@ -137,6 +303,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.background-image ::v-deep > .v-image__image {
+  filter: brightness(0.5) !important;
+}
+
 .fab-container {
   z-index: 1500;
   position: fixed;
@@ -165,6 +335,16 @@ export default {
 
 .text-shadow {
   text-shadow: black 0 0 20px;
+}
+
+.font-small {
+  font-size: 1.7rem;
+}
+
+.quick-search-card {
+  border-left-width: 5px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--v-accent-base) !important;
 }
 
 // .v-image ::v-deep .v-responsive__content {

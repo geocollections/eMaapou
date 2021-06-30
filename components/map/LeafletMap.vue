@@ -5,7 +5,10 @@
         id="map"
         ref="map"
         :class="{ rounded: rounded }"
-        :style="{ height: `${height}px` }"
+        :style="{
+          height: `${height}`,
+          position: height === '100%' ? 'absolute' : 'relative',
+        }"
         style="z-index: 0"
         :options="options"
         :zoom="mapZoom"
@@ -141,8 +144,8 @@ export default {
       default: null,
     },
     height: {
-      type: Number,
-      default: 500,
+      type: String,
+      default: '500px',
     },
     center: {
       type: Object,
@@ -513,6 +516,7 @@ export default {
         'Puursüdamikud / Drillcores',
         'Uuringupunktid / Sites',
         'Proovid / Samples',
+        'Üldine / Summary',
       ]
 
       return this.$refs['layer-control'].mapObject._layers.reduce(
@@ -650,7 +654,7 @@ export default {
         const wmsResponse = await this.$services.geoserver.getWMSData({
           QUERY_LAYERS: this.buildQueryLayers(),
           LAYERS:
-            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary',
+            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary,sarv:locality_summary_front',
           // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
           BBOX: bbox,
           // X: Math.floor(event.layerPoint.x),
@@ -683,6 +687,9 @@ export default {
       }
       if (this.activeOverlays.includes('Proovid / Samples')) {
         queryLayers.push('sarv:sample_summary')
+      }
+      if (this.activeOverlays.includes('Üldine / Summary')) {
+        queryLayers.push('sarv:locality_summary_front')
       }
       return queryLayers.join(',')
     },

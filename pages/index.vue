@@ -27,7 +27,7 @@
             ></search-card>
           </v-tab>
         </v-tabs> -->
-        <div
+        <!-- <div
           class="pt-3"
           :class="{
             'd-flex flex-wrap justify-center': $vuetify.breakpoint.smAndUp,
@@ -46,30 +46,10 @@
               :to="localePath({ name: item.localeName })"
             ></search-card>
           </div>
-        </div>
+        </div> -->
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12" md="6">
-        <h1 class="my-3 text-h4">{{ $t('about.title') }}</h1>
-        <div
-          class="aboutpage montserrat"
-          v-html="$translate({ et: page.content_et, en: page.content_en })"
-        ></div>
-      </v-col>
-      <v-col cols="12" md="6">
-        <h1 class="my-3 text-h4">{{ $t('landing.map') }}</h1>
-        <leaflet-map
-          class="mt-4 rounded elevation-3"
-          :height="550"
-          summary-overlay
-          :zoom="6"
-          rounded
-          :show-links="false"
-        />
-      </v-col>
-    </v-row>
     <v-row class="my-6" justify="center" align="center">
       <v-col cols="12">
         <h1 class="text-h4">
@@ -95,6 +75,16 @@
         />
       </v-col>
     </v-row>
+    <v-row justify="center">
+      <v-col cols="12" md="6">
+        <h1 class="my-3 text-h4">{{ $t('about.title') }}</h1>
+
+        <div
+          class="aboutpage montserrat"
+          v-html="$translate({ et: page.content_et, en: page.content_en })"
+        ></div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -102,13 +92,9 @@
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
-import SearchCard from '~/components/SearchCard.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   components: {
     ExternalLinkCard,
-    SearchCard,
-    LeafletMap,
   },
   async asyncData({ route, error, app }) {
     const data = await app.$services.sarvREST.getResource('page', 87)

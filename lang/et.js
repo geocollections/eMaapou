@@ -28,6 +28,8 @@ export default {
     searchRoutes: 'Otsing',
     eMaapouPages: 'e·Maapõu ökosüsteem',
     map: 'Andmed kaardil',
+    quickSearch: 'Leia kiirelt',
+    viewMore: 'Vaata lähemalt',
   },
   common: {
     general: 'Üldinfo',
@@ -102,6 +104,8 @@ export default {
     clipboard: 'Kopeeri lõikelauale',
     export: 'Eksport',
     taxa: 'Taksonid',
+    closeMap: 'Sulge kaart',
+    openMap: 'Ava kaart',
   },
   link: {
     sarvAPI: 'Avalik API',

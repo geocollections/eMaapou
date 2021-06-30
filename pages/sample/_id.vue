@@ -270,7 +270,7 @@
             :estonian-bedrock-overlay="
               sample.locality__country__value === 'Eesti'
             "
-            :height="300"
+            height="300px"
             :center="{
               latitude: sample.locality__latitude,
               longitude: sample.locality__longitude,

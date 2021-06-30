@@ -183,7 +183,7 @@
             rounded
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
-            :height="300"
+            height="300px"
             :markers="stratigraphyMarkers"
           />
         </v-card>

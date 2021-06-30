@@ -28,6 +28,8 @@ export default {
     searchRoutes: 'Search',
     eMaapouPages: 'e·Maapõu ecosystem',
     map: 'Data on map',
+    quickSearch: 'Find quickly',
+    viewMore: 'View more',
   },
   common: {
     general: 'General info',
@@ -101,6 +103,8 @@ export default {
     clipboard: 'Copy to clipboard',
     export: 'Export',
     taxa: 'Taxa',
+    closeMap: 'Close map',
+    openMap: 'Open map',
   },
   link: {
     sarvAPI: 'Public API',

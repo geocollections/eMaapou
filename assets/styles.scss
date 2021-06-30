@@ -219,7 +219,7 @@ th {
 }
 
 .search-card-border {
-  border-bottom-width: 5px !important;
+  border-bottom-width: 3px !important;
   border-bottom-style: solid !important;
 }
 
@@ -278,6 +278,7 @@ th {
 .title-border {
   border-bottom-width: 5px !important;
   border-bottom-style: solid !important;
+
   // &::after {
   //   content: '';
   //   position: absolute;
@@ -293,7 +294,7 @@ th {
 .title-main {
   @extend .title-border;
 
-  border-color: var(--v-main-base) !important;
+  border-bottom-color: var(--v-main-base) !important;
 }
 
 .title-stratigraphy {
