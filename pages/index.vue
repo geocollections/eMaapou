@@ -1,83 +1,43 @@
 <template>
   <div>
-    <v-row class="px-3 px-md-10">
-      <v-col class="px-0 pt-0">
-        <!-- <v-tabs
-          v-if="$vuetify.breakpoint.smAndUp"
-          :value="tabValue"
-          align-with-title
-          optional
-          height="auto"
-          background-color="transparent"
-          show-arrows
-          center-active
-          light
-          centered
-        >
-          <v-tab
-            v-for="(item, index) in tabs"
-            :key="`tab-${index}`"
-            class="px-1 py-3 montserrat white--text"
-          >
-            <search-card
-              class="mx-1 my-1 text--h6"
-              :title="$t(`common.${item.title}`)"
-              :card-class="item.class"
-              :href="item.name"
-            ></search-card>
-          </v-tab>
-        </v-tabs> -->
-        <!-- <div
-          class="pt-3"
-          :class="{
-            'd-flex flex-wrap justify-center': $vuetify.breakpoint.smAndUp,
-          }"
-        >
-          <div
-            v-for="(item, index) in searchCards"
-            :key="`tab-mobile-${index}`"
-            class="px-1 pb-2 montserrat white--text"
-          >
-            <search-card
-              class="text--h6"
-              height="60px"
-              :title="item.title"
-              :card-class="item.class"
-              :to="localePath({ name: item.localeName })"
-            ></search-card>
-          </div>
-        </div> -->
-      </v-col>
-    </v-row>
-
-    <v-row class="my-6" justify="center" align="center">
+    <v-row class="my-2 my-sm-4" justify="center" align="center">
       <v-col cols="12">
-        <h1 class="text-h4">
-          {{ $t('landing.otherPages') }}
-        </h1>
-      </v-col>
-      <v-col
-        v-for="(item, index) in externalCards.ids.map(
-          (id) => externalCards[id]
-        )"
-        :key="`inner-${index}`"
-        class="pa-1"
-        cols="12"
-        :sm="item.sm || 6"
-        :md="item.md || 6"
-      >
-        <external-link-card
-          :title="$t(item.title)"
-          :description="$t(item.description)"
-          :href="item.href"
-          :background="item.background"
-          grayscale
+        <title-card
+          :title="$t('landing.otherPages')"
+          class="title-border"
+          style="border-color: var(--v-header-darken1)"
         />
+      </v-col>
+      <v-col>
+        <v-row class="px-2 px-sm-5">
+          <v-col
+            v-for="(item, index) in externalCards.ids.map(
+              (id) => externalCards[id]
+            )"
+            :key="`inner-${index}`"
+            class="pa-1"
+            cols="12"
+            :sm="item.sm || 6"
+            :md="item.md || 6"
+          >
+            <external-link-card
+              :title="$t(item.title)"
+              :description="$t(item.description)"
+              :href="item.href"
+              :background="item.background"
+              grayscale
+            />
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <v-row justify="center">
       <v-col cols="12" md="6">
-        <h1 class="my-3 text-h4">{{ $t('about.title') }}</h1>
+        <title-card
+          :title="$t('about.title')"
+          class="title-border"
+          style="border-color: var(--v-header-darken1)"
+        />
 
         <div
           class="aboutpage montserrat"
@@ -92,9 +52,11 @@
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
+import TitleCard from '~/components/TitleCard.vue'
 export default {
   components: {
     ExternalLinkCard,
+    TitleCard,
   },
   async asyncData({ route, error, app }) {
     const data = await app.$services.sarvREST.getResource('page', 87)
