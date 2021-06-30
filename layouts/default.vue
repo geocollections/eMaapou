@@ -57,14 +57,7 @@
           justify-sm="start"
           class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
         >
-          <v-col
-            cols="11"
-            sm="8"
-            :md="showMap ? 10 : 5"
-            :lg="showMap ? 10 : 4"
-            offset-md="1"
-            offset-sm="2"
-          >
+          <v-col cols="11" sm="8" :md="5" :lg="4" offset-md="1" offset-sm="2">
             <v-card
               color="header darken-1"
               :height="
@@ -75,11 +68,13 @@
                   : '70vh'
               "
               class="pb-10 pt-5 pt-sm-0"
+              :class="{ 'rounded-l': showMap }"
               outlines
+              :tile="showMap"
               elevation="15"
             >
               <v-row no-gutters>
-                <v-col :md="showMap ? 6 : 12" :lg="showMap ? 5 : 12">
+                <v-col>
                   <div class="d-flex flex-column justify-start fill-height">
                     <div v-if="renderMap" class="text-right">
                       <v-btn
@@ -149,23 +144,23 @@
                     </div>
                   </div>
                 </v-col>
-                <v-slide-x-transition mode="in-out">
-                  <v-col v-show="renderMap && showMap" class="pa-0">
-                    <leaflet-map
-                      class="rounded elevation-3"
-                      height="70vh"
-                      summary-overlay
-                      :invalidate-size="showMap"
-                      :zoom="6"
-                      rounded
-                      :show-links="false"
-                      :gesture-handling="false"
-                    />
-                  </v-col>
-                </v-slide-x-transition>
               </v-row>
             </v-card>
           </v-col>
+          <v-slide-x-transition mode="in-out">
+            <v-col v-show="renderMap && showMap" md="5" lg="6" class="pa-0">
+              <leaflet-map
+                class="elevation-3"
+                height="70vh"
+                summary-overlay
+                :invalidate-size="showMap"
+                :zoom="6"
+                map-class="rounded-r"
+                :show-links="false"
+                :gesture-handling="false"
+              />
+            </v-col>
+          </v-slide-x-transition>
         </v-row>
       </div>
     </v-img>

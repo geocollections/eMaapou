@@ -4,7 +4,10 @@
       <l-map
         id="map"
         ref="map"
-        :class="{ rounded: rounded }"
+        :class="{
+          rounded: rounded,
+          [mapClass]: true,
+        }"
         :style="{
           height: `${height}`,
           position: height === '100%' ? 'absolute' : 'relative',
@@ -208,6 +211,10 @@ export default {
     showLinks: {
       type: Boolean,
       default: true,
+    },
+    mapClass: {
+      type: String,
+      default: '',
     },
   },
   data() {
