@@ -3,13 +3,15 @@
     <v-img
       v-if="isLanding"
       :height="
-        $vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700
-          ? '1000px'
+        ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
+        ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
+          ? '700px'
           : '100vh'
       "
       :max-height="
-        $vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700
-          ? '1000px'
+        ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
+        ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
+          ? '700px'
           : '100vh'
       "
       width="100%"
@@ -20,12 +22,13 @@
     >
       <div
         class="d-flex flex-column align-sm-content-start align-sm-content-center"
-        style="height: 100%"
+        style="height: 100%; margin-top: 64px"
       >
         <v-row
+          v-if="!$vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height > 400"
           no-gutters
           align-content="end"
-          class="mt-10 mt-sm-2 flex-grow-0 flex-sm-grow-1"
+          class="mt-sm-2 flex-grow-0"
         >
           <v-col
             cols="10"
@@ -48,11 +51,11 @@
         </v-row>
         <v-row
           no-gutters
-          align-content="start"
+          align-content="center"
           align-content-sm="start"
           justify="center"
           justify-sm="start"
-          class="mt-2"
+          class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
         >
           <v-col
             cols="11"
@@ -64,7 +67,13 @@
           >
             <v-card
               color="header darken-1"
-              :height="$vuetify.breakpoint.xsOnly ? 'auto' : '70vh'"
+              :height="
+                $vuetify.breakpoint.xsOnly ||
+                ($vuetify.breakpoint.smAndUp &&
+                  $vuetify.breakpoint.height < 400)
+                  ? 'auto'
+                  : '70vh'
+              "
               class="pb-10 pt-5 pt-sm-0"
               outlines
               elevation="15"
