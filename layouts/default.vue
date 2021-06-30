@@ -149,18 +149,20 @@
                     </div>
                   </div>
                 </v-col>
-                <v-col v-show="renderMap && showMap" class="pa-0">
-                  <leaflet-map
-                    class="rounded elevation-3"
-                    height="70vh"
-                    summary-overlay
-                    :invalidate-size="showMap"
-                    :zoom="6"
-                    rounded
-                    :show-links="false"
-                    :gesture-handling="false"
-                  />
-                </v-col>
+                <v-slide-x-transition mode="in-out">
+                  <v-col v-show="renderMap && showMap" class="pa-0">
+                    <leaflet-map
+                      class="rounded elevation-3"
+                      height="70vh"
+                      summary-overlay
+                      :invalidate-size="showMap"
+                      :zoom="6"
+                      rounded
+                      :show-links="false"
+                      :gesture-handling="false"
+                    />
+                  </v-col>
+                </v-slide-x-transition>
               </v-row>
             </v-card>
           </v-col>
