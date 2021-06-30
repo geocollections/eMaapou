@@ -8,7 +8,7 @@
       height="48px"
       class="ml-3 mt-2 mt-sm-0"
       type="submit"
-      color="warning "
+      color="warning"
       dark
     >
       <v-icon>mdi-magnify</v-icon>
