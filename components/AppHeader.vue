@@ -110,7 +110,7 @@
           nuxt
           active-class="active-tab font-weight-bold"
           :to="localePath({ name: tab.routeName })"
-          class="montserrat"
+          class="montserrat font-weight-bold"
           >{{ tab.text }}</v-tab
         >
       </v-tabs>
@@ -204,22 +204,14 @@ export default {
   transition: width 250ms ease-in-out, height 250ms ease-in-out;
 }
 
-$gradient-col: rgb(150, 163, 177);
-$gradient-col-sec: rgb(0, 119, 154);
-
-.gradient-background-front {
-  background: linear-gradient(
-    320deg,
-    rgba($gradient-col, 0.6),
-    rgba($gradient-col-sec, 0.6)
-  ) !important;
-}
+$gradient-col: var(--v-primary-base);
+$gradient-col-sec: var(--v-header-darken1);
 
 .gradient-background {
   background: linear-gradient(
     320deg,
-    rgba($gradient-col, 1),
-    rgba($gradient-col-sec, 1)
+    $gradient-col,
+    $gradient-col-sec
   ) !important;
 }
 </style>
