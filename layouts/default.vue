@@ -195,16 +195,24 @@
             </v-col>
           </v-slide-x-transition>
         </v-row>
-        <v-btn
-          :ripple="false"
-          absolute
-          dark
-          icon
-          large
-          style="left: 50%; bottom: 0"
-          @click="$vuetify.goTo('#otherServices')"
-          ><v-icon>mdi-chevron-down</v-icon></v-btn
-        >
+        <v-fade-transition>
+          <div
+            v-if="scrollY === 0"
+            class="d-flex justify-center"
+            style="position: absolute; bottom: 0; width: 100%"
+          >
+            <v-btn
+              :ripple="false"
+              dark
+              x-large
+              plain
+              icon
+              class="pulse d-flex flex-column"
+              @click="$vuetify.goTo('#otherServices')"
+              ><v-icon x-large>mdi-chevron-down</v-icon>
+            </v-btn>
+          </div>
+        </v-fade-transition>
       </div>
     </v-img>
     <app-header
@@ -267,6 +275,7 @@ export default {
       logo: require('~/assets/logos/emaapou5white.svg'),
       drawer: false,
       showMap: false,
+      scrollY: 0,
       imageLinks: [
         {
           href: 'https://taltech.ee/geoloogia-instituut',
@@ -363,7 +372,17 @@ export default {
       if (newVal === false) this.showMap = false
     },
   },
+  beforeMount() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
   methods: {
+    handleScroll() {
+      // Your scroll handling here
+      this.scrollY = window.scrollY
+    },
     handleSearch() {
       const routeName = this.$route.name.includes('search')
         ? this.$route.name.split('__')[0]
@@ -429,4 +448,18 @@ export default {
 // .v-image ::v-deep .v-responsive__content {
 //   align-self: center;
 // }
+.pulse {
+  animation: pulse 2s infinite;
+  @keyframes pulse {
+    0% {
+      padding-bottom: 30px;
+    }
+    70% {
+      padding-bottom: 0px;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
 </style>
