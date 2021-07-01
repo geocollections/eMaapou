@@ -41,7 +41,7 @@
 
         <div
           class="aboutpage montserrat px-2 px-sm-5"
-          style="column-count: 3"
+          :style="{ 'column-count': aboutTextColumns }"
           v-html="$translate({ et: page.content_et, en: page.content_en })"
         ></div>
       </v-col>
@@ -288,6 +288,11 @@ export default {
       return path[path.length - 1] !== '/'
         ? `${path}/${full.substring(path.length)}`
         : `${full}/`
+    },
+    aboutTextColumns() {
+      if (this.$vuetify.breakpoint.lgAndUp) return 3
+      if (this.$vuetify.breakpoint.mdOnly) return 2
+      return 1
     },
   },
   methods: {

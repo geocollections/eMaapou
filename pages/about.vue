@@ -1,14 +1,21 @@
 <template>
   <div>
+    <title-card
+      :title="$t('about.title')"
+      class="title-border"
+      style="border-color: var(--v-header-darken1)"
+    />
     <v-card
       v-if="page"
       width="100%"
-      raised-1
       tile
-      class="roundedBorder aboutpage"
+      flat
+      color="transparent"
+      class="roundedBorder"
     >
-      <h1 class="text-center my-3">{{ $t('about.title') }}</h1>
       <div
+        :style="{ columns: aboutTextColumns }"
+        class="mx-3 montserrat"
         v-html="$translate({ et: page.content_et, en: page.content_en })"
       ></div>
     </v-card>
@@ -16,7 +23,9 @@
 </template>
 
 <script>
+import TitleCard from '~/components/TitleCard.vue'
 export default {
+  components: { TitleCard },
   async asyncData({ route, error, app }) {
     try {
       const data = await app.$services.sarvREST.getResource('page', 78)
@@ -32,6 +41,13 @@ export default {
     return {
       title: this.$t('about.pageTitle'),
     }
+  },
+  computed: {
+    aboutTextColumns() {
+      if (this.$vuetify.breakpoint.lgAndUp) return 3
+      if (this.$vuetify.breakpoint.mdOnly) return 2
+      return 1
+    },
   },
 }
 </script>

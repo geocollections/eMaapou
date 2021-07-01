@@ -320,7 +320,7 @@ export default {
 
 <style lang="scss" scoped>
 .background-image ::v-deep > .v-image__image {
-  filter: brightness(0.7) !important;
+  filter: brightness(0.6) !important;
 }
 
 .fab-container {
