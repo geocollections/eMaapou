@@ -29,7 +29,7 @@ export default {
     eMaapouPages: 'e·Maapõu ecosystem',
     map: 'Data on map',
     quickSearch: 'Find quickly',
-    viewMore: 'View more',
+    viewMore: 'Browse and search',
   },
   common: {
     general: 'General info',

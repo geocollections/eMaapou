@@ -28,12 +28,12 @@
           v-if="!$vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height > 400"
           no-gutters
           align-content="end"
-          class="mt-sm-2 flex-grow-0"
+          class="flex-grow-0"
         >
           <v-col
             cols="10"
             sm="8"
-            md="12"
+            md="10"
             lg="12"
             offset-md="1"
             offset-sm="2"
@@ -57,7 +57,7 @@
                 class="mt-5 mb-sm-5 mr-4"
               />
               <v-divider vertical class="white my-5" />
-              <div class="ml-4 font-weight-bold">Kogu info Eesti maapõuest</div>
+              <div class="ml-4 font-weight-bold">{{ $t('slogan') }}</div>
             </div>
           </v-col>
         </v-row>
@@ -71,7 +71,7 @@
         >
           <v-col cols="11" sm="8" :md="5" :lg="4" offset-md="1" offset-sm="2">
             <v-card
-              color="header darken-1"
+              style="background-color: rgba(0, 119, 154, 0.9)"
               :height="
                 $vuetify.breakpoint.xsOnly ||
                 ($vuetify.breakpoint.smAndUp &&
@@ -86,7 +86,7 @@
               <v-row no-gutters>
                 <v-col>
                   <div class="d-flex flex-column justify-start fill-height">
-                    <div class="my-4 my-sm-10 my-md-15">
+                    <div class="my-4 my-sm-7 my-md-12">
                       <v-card-title
                         style="word-break: break-word"
                         :class="{
@@ -125,7 +125,7 @@
 
                     <v-divider class="white mx-2 mx-sm-5"></v-divider>
 
-                    <div class="my-4 my-sm-10 my-md-15">
+                    <div class="my-4 my-sm-7 my-md-12">
                       <v-card-title
                         style="word-break: break-word"
                         :class="{
@@ -156,6 +156,29 @@
                 </v-col>
               </v-row>
             </v-card>
+            <div class="mt-4">
+              <a
+                v-for="(item, index) in imageLinks"
+                :key="index"
+                :href="item.href"
+                target="FooterLink"
+                rel="noopener noreferrer"
+              >
+                <v-tooltip top>
+                  <template #activator="{ on, attrs }">
+                    <img
+                      v-bind="attrs"
+                      :src="item.src"
+                      :alt="$t(item.alt)"
+                      class="footer-logo py-1 py-sm-0 px-3"
+                      v-on="on"
+                    />
+                  </template>
+
+                  <span>{{ $t(item.title) }}</span>
+                </v-tooltip>
+              </a>
+            </div>
           </v-col>
           <v-slide-x-transition mode="in-out">
             <v-col v-show="renderMap && showMap" md="5" lg="6" class="pa-0">
@@ -234,6 +257,32 @@ export default {
       logo: require('~/assets/logos/emaapou5white.svg'),
       drawer: false,
       showMap: false,
+      imageLinks: [
+        {
+          href: 'https://taltech.ee/geoloogia-instituut',
+          src: require('~/assets/logos/tutaltech2.png'),
+          title: 'footerLinks.ttu',
+          alt: 'footerLinks.ttu',
+        },
+        {
+          href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
+          src: require('~/assets/logos/TY_logo_ring_jooneta_valge.png'),
+          title: 'footerLinks.tu',
+          alt: 'footerLinks.tu',
+        },
+        {
+          href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
+          src: require('~/assets/logos/ELM_logo_white1.png'),
+          title: 'footerLinks.elm',
+          alt: 'footerLinks.elm',
+        },
+        /* {
+          href: 'https://struktuurifondid.ee',
+          src: require('~/assets/logos/EL_mv.png'),
+          title: 'footerLinks.el',
+          alt: 'footerLinks.el',
+        }, */
+      ],
       tabs: [
         {
           localeName: 'locality',
@@ -362,7 +411,11 @@ export default {
   border-left-style: solid !important;
   border-left-color: var(--v-accent-base) !important;
 }
-
+.footer-logo {
+  height: 60px;
+  width: auto;
+  /*padding: 0 10px;*/
+}
 // .v-image ::v-deep .v-responsive__content {
 //   align-self: center;
 // }
