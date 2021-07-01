@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="my-2 my-sm-10" justify="center" align="center">
-      <v-col cols="12">
+      <v-col id="otherServices" cols="12">
         <title-card
           :title="$t('landing.otherPages')"
           class="title-border"

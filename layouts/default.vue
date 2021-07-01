@@ -145,7 +145,7 @@
                           <search-card
                             class="text--h6"
                             height="50px"
-                            :title="item.title"
+                            :title="$t(item.title)"
                             :card-class="item.class"
                             :to="localePath({ name: item.localeName })"
                           ></search-card>
@@ -195,6 +195,16 @@
             </v-col>
           </v-slide-x-transition>
         </v-row>
+        <v-btn
+          :ripple="false"
+          absolute
+          dark
+          icon
+          large
+          style="left: 50%; bottom: 0"
+          @click="$vuetify.goTo('#otherServices')"
+          ><v-icon>mdi-chevron-down</v-icon></v-btn
+        >
       </div>
     </v-img>
     <app-header
@@ -286,52 +296,52 @@ export default {
       tabs: [
         {
           localeName: 'locality',
-          title: this.$t('common.localities'),
+          title: 'common.localities',
           class: 'locality-search-card',
         },
         {
           localeName: 'site',
-          title: this.$t('common.sites'),
+          title: 'common.sites',
           class: 'site-search-card',
         },
         {
           localeName: 'drillcore',
-          title: this.$t('common.drillcores'),
+          title: 'common.drillcores',
           class: 'drillcore-search-card',
         },
         {
           localeName: 'sample',
-          title: this.$t('common.samples'),
+          title: 'common.samples',
           class: 'sample-search-card',
         },
         {
           localeName: 'analytical-data',
-          title: this.$t('common.analyticalData'),
+          title: 'common.analyticalData',
           class: 'analysis-search-card',
         },
         {
           localeName: 'dataset',
-          title: this.$t('common.datasets'),
+          title: 'common.datasets',
           class: 'dataset-search-card',
         },
         {
           localeName: 'taxon',
-          title: this.$t('common.taxa'),
+          title: 'common.taxa',
           class: 'search-card',
         },
         {
           localeName: 'photo',
-          title: this.$t('common.photo'),
+          title: 'common.photo',
           class: 'photo-search-card',
         },
         {
           localeName: 'analysis',
-          title: this.$t('common.analyses'),
+          title: 'common.analyses',
           class: 'analysis-search-card',
         },
         {
           localeName: 'stratigraphy',
-          title: this.$t('common.stratigraphy'),
+          title: 'common.stratigraphy',
           class: 'stratigraphy-search-card',
         },
       ],
