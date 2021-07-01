@@ -14,7 +14,7 @@
 
     <template #result>
       <div class="text-h6 pl-2 py-1">
-        {{ count ? $tc('common.count', count) : '' }}
+        {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <locality-table
         :show-search="false"
