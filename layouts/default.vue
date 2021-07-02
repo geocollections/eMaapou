@@ -40,14 +40,7 @@
             offset="1"
             class="mb-5"
           >
-            <!-- <v-img
-              dark
-              :height="100"
-              :width="200"
-              contain
-              :src="logo"
-              class="mx-auto mt-5 mb-sm-5"
-            /> -->
+            <!-- TITLE -->
             <div
               class="d-flex flex-row align-center text-md-h3 text-sm-h4 white--text"
             >
@@ -70,6 +63,7 @@
           class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
         >
           <v-col cols="11" sm="8" :md="5" :lg="4" offset-md="1" offset-sm="2">
+            <!-- MAIN CARD -->
             <v-card
               style="background-color: rgba(0, 119, 154, 0.9)"
               :height="
@@ -84,6 +78,7 @@
               elevation="15"
             >
               <v-row no-gutters>
+                <!-- QUICK SEARCH -->
                 <v-col>
                   <div class="d-flex flex-column justify-start fill-height">
                     <div class="my-4 my-sm-7 my-md-12">
@@ -105,6 +100,7 @@
                         />
                       </v-card-actions>
                     </div>
+                    <!-- MAP BUTTON -->
                     <div v-if="renderMap" class="text-right">
                       <v-btn
                         :ripple="false"
@@ -124,7 +120,7 @@
                     </div>
 
                     <v-divider class="white mx-2 mx-sm-5"></v-divider>
-
+                    <!-- DETAIL SEARCH CHIPS -->
                     <div class="my-4 my-sm-7 my-md-12">
                       <v-card-title
                         style="word-break: break-word"
@@ -156,6 +152,7 @@
                 </v-col>
               </v-row>
             </v-card>
+            <!-- INSTITUTION ICONS -->
             <div v-if="!$vuetify.breakpoint.xsOnly" class="mt-4">
               <a
                 v-for="(item, index) in imageLinks"
@@ -180,6 +177,7 @@
               </a>
             </div>
           </v-col>
+          <!-- MAP -->
           <v-slide-x-transition mode="in-out">
             <v-col v-show="renderMap && showMap" md="5" lg="6" class="pa-0">
               <leaflet-map
@@ -195,6 +193,7 @@
             </v-col>
           </v-slide-x-transition>
         </v-row>
+        <!-- SCROLL INDICATOR -->
         <v-fade-transition>
           <div
             v-if="scrollY === 0"
@@ -206,7 +205,7 @@
               dark
               x-large
               plain
-              icon
+              icons
               class="pulse d-flex flex-column"
               @click="$vuetify.goTo('#otherServices')"
               ><v-icon x-large>mdi-chevron-down</v-icon>
