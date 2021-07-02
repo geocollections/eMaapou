@@ -14,6 +14,13 @@ import {
 } from '~/store/mutation_types'
 
 export default {
+  updateParameter({ commit, state, dispatch }, payload) {
+    const oldParam = state.activeListParameters[payload.index]
+    dispatch('updateActiveListParameters', {
+      ...payload,
+      keyToReplace: oldParam.id,
+    })
+  },
   async searchAnalyticalData({ dispatch }, options = null) {
     await dispatch(
       'search/searchResource',
@@ -60,7 +67,7 @@ export default {
   initActiveListParameters({ commit, dispatch }, parameters) {
     // CaO, MgO, SiO2, Al2O3
     const DEFAULT_PARAMETERS = [
-      parameters.find((param) => param.id === 'Ca_pct'),
+      parameters.find((param) => param.id === 'CaO_pct'),
       parameters.find((param) => param.id === 'MgO_pct'),
       parameters.find((param) => param.id === 'SiO2_pct'),
       parameters.find((param) => param.id === 'Al2O3_pct'),
