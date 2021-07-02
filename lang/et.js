@@ -1,7 +1,7 @@
 export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
-  slogan: 'Eesti geoloogilised andmed',
+  slogan: 'Geoloogilised andmed',
   landing: {
     searchTitle: 'Leia e·Maapõuest',
     drillcores: 'Puursüdamikud ({number})',
