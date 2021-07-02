@@ -156,10 +156,10 @@ export default {
           text: this.$t('common.analyticalData'),
         },
         { routeName: 'dataset', text: this.$t('common.datasets') },
-        {
-          routeName: 'taxon',
-          text: this.$t('common.taxa'),
-        },
+        // {
+        //   routeName: 'taxon',
+        //   text: this.$t('common.taxa'),
+        // },
         { routeName: 'photo', text: this.$t('common.photo') },
       ],
       logo: require('~/assets/logos/emaapou5white.svg'),

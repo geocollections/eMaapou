@@ -334,11 +334,11 @@ export default {
           title: 'common.datasets',
           class: 'dataset-search-card',
         },
-        {
-          localeName: 'taxon',
-          title: 'common.taxa',
-          class: 'search-card',
-        },
+        // {
+        //   localeName: 'taxon',
+        //   title: 'common.taxa',
+        //   class: 'search-card',
+        // },
         {
           localeName: 'photo',
           title: 'common.photo',
