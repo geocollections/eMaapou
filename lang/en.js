@@ -69,7 +69,7 @@ export default {
     photos: 'Photo Archive',
     photosCount: 'Photo Archive',
     about: 'About',
-    searchAlt: 'Enter keyword, ex. Estonia',
+    searchAlt: 'Enter keyword, e.g. Viki',
     history: 'Recently viewed',
     quickSearch: 'Quick search',
     description: 'Description',
