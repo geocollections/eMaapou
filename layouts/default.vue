@@ -156,7 +156,7 @@
                 </v-col>
               </v-row>
             </v-card>
-            <div class="mt-4">
+            <div v-if="!$vuetify.breakpoint.xsOnly" class="mt-4">
               <a
                 v-for="(item, index) in imageLinks"
                 :key="index"
