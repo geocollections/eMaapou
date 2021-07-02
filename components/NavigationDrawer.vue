@@ -151,7 +151,7 @@ export default {
           icon: 'mdi-chart-scatter-plot',
         },
         {
-          name: 'analytical_data',
+          name: 'analytical-data',
           lang: 'analyticalData',
           icon: 'mdi-chart-scatter-plot',
         },
