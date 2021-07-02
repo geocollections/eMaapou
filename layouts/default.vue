@@ -5,13 +5,13 @@
       :height="
         ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
         ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
-          ? '700px'
+          ? '800px'
           : '100vh'
       "
       :max-height="
         ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
         ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
-          ? '700px'
+          ? '800px'
           : '100vh'
       "
       width="100%"
@@ -24,12 +24,7 @@
         class="d-flex flex-column align-sm-content-start align-sm-content-center"
         style="height: 100%; margin-top: 64px"
       >
-        <v-row
-          v-if="!$vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height > 400"
-          no-gutters
-          align-content="end"
-          class="flex-grow-0"
-        >
+        <v-row no-gutters align-content="end" class="flex-grow-0">
           <v-col
             cols="10"
             sm="8"
@@ -42,15 +37,22 @@
           >
             <!-- TITLE -->
             <div
-              class="d-flex flex-row align-center text-md-h3 text-sm-h4 white--text"
+              class="d-flex flex-row align-center text-h4 text-md-h3 text-sm-h4 white--text"
             >
               <img
+                v-if="$vuetify.breakpoint.smAndUp"
                 style="height: 100px; width: 200px"
                 :src="logo"
                 class="mt-5 mb-sm-5 mr-4"
               />
-              <v-divider vertical class="white my-5" />
-              <div class="ml-4 font-weight-bold">{{ $t('slogan') }}</div>
+              <v-divider
+                v-if="$vuetify.breakpoint.smAndUp"
+                vertical
+                class="white my-5"
+              />
+              <div class="ml-sm-4 font-weight-bold">
+                {{ $t('slogan') }}
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -73,7 +75,7 @@
                   ? 'auto'
                   : 'auto'
               "
-              class="pt-5 pt-sm-0"
+              class="pt-0 pt-sm-0"
               outlines
               elevation="15"
             >
@@ -88,7 +90,7 @@
                           'font-small montserrat':
                             $vuetify.breakpoint.smAndDown,
                         }"
-                        class="mx-3 mb-4 pa-0 px-sm-2 text-sm-h4 white--text"
+                        class="mx-3 mb-4 pa-0 px-sm-2 text-h5 text-sm-h4 white--text"
                       >
                         {{ $t('landing.quickSearch') }}
                       </v-card-title>
@@ -128,7 +130,7 @@
                           'font-small montserrat':
                             $vuetify.breakpoint.smAndDown,
                         }"
-                        class="mx-3 mb-4 pa-0 px-sm-2 text-sm-h4 white--text"
+                        class="mx-3 mb-4 pa-0 px-sm-2 text-h5 text-sm-h4 white--text"
                       >
                         {{ $t('landing.viewMore') }}
                       </v-card-title>
