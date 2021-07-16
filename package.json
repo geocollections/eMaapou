@@ -18,7 +18,7 @@
     "core-js": "^3.13.1",
     "deepmerge": "^4.2.2",
     "earcut": "^2.2.2",
-    "echarts": "^5.1.1",
+    "echarts": "^5.1.2",
     "leaflet": "^1.7.1",
     "leaflet-gesture-handling": "^1.2.1",
     "lodash": "^4.17.21",
