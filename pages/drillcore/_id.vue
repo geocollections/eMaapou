@@ -147,7 +147,7 @@
             "
             rounded
             borehole-overlay
-            :height="300"
+            height="300px"
             :center="{
               latitude: drillcore.locality__latitude,
               longitude: drillcore.locality__longitude,
