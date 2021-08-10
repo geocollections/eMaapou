@@ -186,6 +186,11 @@
                 :value="site.remarks_location"
               />
               <data-row
+                v-if="studied"
+                :title="$t('site.studied')"
+                :value="studied"
+              />
+              <data-row
                 v-if="site.date_added"
                 :title="$t('site.dateAdded')"
                 :value="new Date(site.date_added).toISOString().split('T')[0]"
@@ -452,9 +457,16 @@ export default {
       }
       return this.site.elevation
     },
+    studied() {
+      if (this.site.date_start) return this.formatDate(this.site.date_start)
+      return this.site.date_free
+    },
   },
   methods: {
     isNil,
+    formatDate(isoDateTime) {
+      return new Date(isoDateTime).toISOString().split('T')[0]
+    },
   },
 }
 </script>

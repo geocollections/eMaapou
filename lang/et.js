@@ -475,6 +475,7 @@ export default {
     remarksLocation: 'Asukoha täpsustus',
     extent: 'Pindalaline ulatus (m)',
     locationAccuracy: 'Koordinaatide täpsus (m)',
+    studied: 'Uuringu aeg',
   },
   sample: {
     pageTitle: 'Proovide otsing',

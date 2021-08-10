@@ -474,6 +474,7 @@ export default {
     remarksLocation: 'Location info',
     extent: 'Spatial extent (m)',
     locationAccuracy: 'Coordinate accuracy (m)',
+    studied: 'Studied',
   },
   sample: {
     pageTitle: 'Samples search',
