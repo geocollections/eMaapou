@@ -18,7 +18,7 @@
       {{
         !item.depth_base || !item.depth_top
           ? null
-          : round(item.depth_base - item.depth_top, 3)
+          : Math.abs(round(item.depth_base - item.depth_top, 3))
       }}
     </template>
     <template #item.stratigraphy="{ item }">
