@@ -111,7 +111,7 @@
           active-class="active-tab font-weight-bold"
           :to="localePath({ name: tab.routeName })"
           class="montserrat font-weight-bold"
-          >{{ tab.text }}</v-tab
+          >{{ $t(tab.text) }}</v-tab
         >
       </v-tabs>
     </template>
@@ -137,30 +137,30 @@ export default {
         {
           routeName: 'locality',
 
-          text: this.$t('common.localities'),
+          text: 'common.localities',
         },
         {
           routeName: 'site',
-          text: this.$t('common.sites'),
+          text: 'common.sites',
         },
         {
           routeName: 'drillcore',
-          text: this.$t('common.drillcores'),
+          text: 'common.drillcores',
         },
         {
           routeName: 'sample',
-          text: this.$t('common.samples'),
+          text: 'common.samples',
         },
         {
           routeName: 'analytical-data',
-          text: this.$t('common.analyticalData'),
+          text: 'common.analyticalData',
         },
-        { routeName: 'dataset', text: this.$t('common.datasets') },
+        { routeName: 'dataset', text: 'common.datasets' },
         // {
         //   routeName: 'taxon',
         //   text: this.$t('common.taxa'),
         // },
-        { routeName: 'photo', text: this.$t('common.photo') },
+        { routeName: 'photo', text: 'common.photo' },
       ],
       logo: require('~/assets/logos/emaapou5white.svg'),
     }
