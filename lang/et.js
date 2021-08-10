@@ -435,7 +435,7 @@ export default {
     areaText1: 'Turbaala plaan',
     coordx: 'X (L-EST, m)',
     coordy: 'Y (L-EST, m)',
-    elevation: 'Z (m)',
+    elevation: 'Kõrgus (m)',
     depth: 'Sügavus / paksus (m)',
     description: 'Kirjeldus',
     elevationAccuracy: 'Kõrguse täpsus',

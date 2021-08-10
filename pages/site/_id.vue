@@ -91,7 +91,6 @@
               />
               <data-row :title="$t('site.coordx')" :value="site.coordx" />
               <data-row :title="$t('site.coordy')" :value="site.coordy" />
-              <data-row :title="$t('site.elevation')" :value="site.elevation" />
               <data-row :title="$t('site.depth')" :value="site.depth" />
               <data-row
                 :title="$t('site.description')"
@@ -150,14 +149,9 @@
                 :value="site.longitude"
               />
               <data-row
-                v-if="(site.latitude && site.longitude) || site.locality_id"
-                :title="$t('locality.elevation')"
-                :value="site.elevation"
-              />
-              <data-row
-                v-if="(site.latitude && site.longitude) || site.locality_id"
-                :title="$t('locality.elevationAccuracy')"
-                :value="site.elevationAccuracy"
+                v-if="elevation"
+                :title="$t('site.elevation')"
+                :value="elevation"
               />
               <data-row
                 v-if="(site.latitude && site.longitude) || site.locality_id"
@@ -422,6 +416,12 @@ export default {
     },
     routeName() {
       return this.getRouteBaseName().split('-id')[0]
+    },
+    elevation() {
+      if (this.site.elevation_accuracy) {
+        return `${this.site.elevation} (± ${this.site.elevation_accuracy})`
+      }
+      return this.site.elevation
     },
   },
   methods: {

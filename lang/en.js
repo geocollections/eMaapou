@@ -434,7 +434,7 @@ export default {
     areaText1: 'Peat area plan',
     coordx: 'X (L-EST, m)',
     coordy: 'Y (L-EST, m)',
-    elevation: 'Z (m)',
+    elevation: 'Elevation (m)',
     depth: 'Depth / thickness (m)',
     description: 'Description',
     elevationAccuracy: 'Elevation accuracy',
