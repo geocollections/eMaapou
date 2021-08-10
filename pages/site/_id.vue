@@ -370,6 +370,8 @@ export default {
           isValid: isNil(site.id),
           defaultParams: {
             site: site.id,
+            or_search:
+              'attachment__attachment_format__value__startswith:image;attachment__uuid_filename__endswith:jpg;attachment__uuid_filename__endswith:png',
           },
           queryFields: {},
         }
