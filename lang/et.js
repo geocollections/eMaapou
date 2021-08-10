@@ -468,10 +468,11 @@ export default {
     date_free: 'date_free',
     id_l: 'id_l',
     z: 'z',
-    remarks: 'remarks',
+    remarks: 'Märkused',
     name_en: 'name_en',
     latlong: 'latlong',
     coordDetMethod: 'Koordinaatide meetod',
+    remarksLocation: 'Märkuste asukoht',
   },
   sample: {
     pageTitle: 'Proovide otsing',

@@ -467,10 +467,11 @@ export default {
     date_free: 'date_free',
     id_l: 'id_l',
     z: 'z',
-    remarks: 'remarks',
+    remarks: 'Remarks',
     name_en: 'name_en',
     latlong: 'latlong',
     coordDetMethod: 'Coordinate method',
+    remarksLocation: 'Remarks location',
   },
   sample: {
     pageTitle: 'Samples search',

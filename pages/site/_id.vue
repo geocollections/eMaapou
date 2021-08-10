@@ -92,10 +92,6 @@
               <data-row :title="$t('site.coordx')" :value="site.coordx" />
               <data-row :title="$t('site.coordy')" :value="site.coordy" />
               <data-row :title="$t('site.depth')" :value="site.depth" />
-              <data-row
-                :title="$t('site.description')"
-                :value="site.description"
-              />
 
               <link-data-row
                 v-if="(site.latitude && site.longitude) || site.locality_id"
@@ -168,6 +164,20 @@
                     en: site.coord_det_method__value_en,
                   })
                 "
+              />
+              <data-row
+                :title="$t('site.description')"
+                :value="site.description"
+              />
+              <data-row
+                v-if="site.remarks"
+                :title="$t('site.remarks')"
+                :value="site.remarks"
+              />
+              <data-row
+                v-if="site.remarks_location"
+                :title="$t('site.remarksLocation')"
+                :value="site.remarks_location"
               />
               <data-row
                 v-if="site.date_added"
