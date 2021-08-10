@@ -138,6 +138,7 @@
                   }}
                 </template>
               </data-row>
+              <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
               <data-row
                 v-if="(site.latitude && site.longitude) || site.locality_id"
                 :title="$t('locality.latitude')"
@@ -154,9 +155,19 @@
                 :value="elevation"
               />
               <data-row
-                v-if="(site.latitude && site.longitude) || site.locality_id"
+                v-if="site.locality__depth"
                 :title="$t('locality.depth')"
                 :value="site.locality__depth"
+              />
+              <data-row
+                v-if="site.coord_det_method"
+                :title="$t('site.coordDetMethod')"
+                :value="
+                  $translate({
+                    et: site.coord_det_method__value,
+                    en: site.coord_det_method__value_en,
+                  })
+                "
               />
               <data-row
                 v-if="site.date_added"

@@ -470,6 +470,7 @@ export default {
     remarks: 'remarks',
     name_en: 'name_en',
     latlong: 'latlong',
+    coordDetMethod: 'Coordinate method',
   },
   sample: {
     pageTitle: 'Samples search',

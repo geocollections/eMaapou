@@ -471,6 +471,7 @@ export default {
     remarks: 'remarks',
     name_en: 'name_en',
     latlong: 'latlong',
+    coordDetMethod: 'Koordinaatide meetod',
   },
   sample: {
     pageTitle: 'Proovide otsing',
