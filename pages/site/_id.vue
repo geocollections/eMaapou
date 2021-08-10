@@ -91,6 +91,7 @@
               />
               <data-row :title="$t('site.coordx')" :value="site.coordx" />
               <data-row :title="$t('site.coordy')" :value="site.coordy" />
+              <data-row :title="$t('site.extent')" :value="site.extent" />
               <data-row :title="$t('site.depth')" :value="site.depth" />
 
               <link-data-row

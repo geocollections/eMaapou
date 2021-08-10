@@ -473,6 +473,7 @@ export default {
     latlong: 'latlong',
     coordDetMethod: 'Koordinaatide meetod',
     remarksLocation: 'Märkuste asukoht',
+    extent: 'Pindalaline ulatus (m)',
   },
   sample: {
     pageTitle: 'Proovide otsing',

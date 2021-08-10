@@ -472,6 +472,7 @@ export default {
     latlong: 'latlong',
     coordDetMethod: 'Coordinate method',
     remarksLocation: 'Remarks location',
+    extent: 'Spatial extent (m)',
   },
   sample: {
     pageTitle: 'Samples search',
