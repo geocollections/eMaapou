@@ -248,7 +248,8 @@ export default {
           {
             id: 'carto-base',
             name: 'CartoDB',
-            url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            url:
+              'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
             visible: !this.estonianMap,
             options: {
               maxNativeZoom: 18,
@@ -284,7 +285,8 @@ export default {
           {
             id: 'est-sat-base',
             name: 'Estonian satellite',
-            url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
+            url:
+              'https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: false,
             options: {
               maxNativeZoom: 18,
@@ -299,7 +301,8 @@ export default {
           {
             id: 'est-map-base',
             name: 'Estonian map',
-            url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
+            url:
+              'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: this.estonianMap,
             options: {
               maxNativeZoom: 18,
@@ -316,7 +319,8 @@ export default {
           {
             id: 'est-hyb-overlay',
             name: 'Estonian hybrid',
-            url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
+            url:
+              'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
             visible: this.estonianHybridOverlay,
             zIndex: 20,
             options: {
