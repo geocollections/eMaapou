@@ -474,6 +474,7 @@ export default {
     coordDetMethod: 'Koordinaatide meetod',
     remarksLocation: 'Märkuste asukoht',
     extent: 'Pindalaline ulatus (m)',
+    locationAccuracy: 'Koordinaatide täpsus (m)',
   },
   sample: {
     pageTitle: 'Proovide otsing',

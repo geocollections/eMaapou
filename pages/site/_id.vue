@@ -157,6 +157,11 @@
                 :value="site.locality__depth"
               />
               <data-row
+                v-if="site.location_accuracy"
+                :title="$t('site.locationAccuracy')"
+                :value="site.location_accuracy"
+              />
+              <data-row
                 v-if="site.coord_det_method"
                 :title="$t('site.coordDetMethod')"
                 :value="

@@ -473,6 +473,7 @@ export default {
     coordDetMethod: 'Coordinate method',
     remarksLocation: 'Remarks location',
     extent: 'Spatial extent (m)',
+    locationAccuracy: 'Coordinate accuracy (m)',
   },
   sample: {
     pageTitle: 'Samples search',
