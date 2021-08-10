@@ -65,58 +65,6 @@ export default {
   },
   data() {
     return {
-      searchCards: [
-        {
-          localeName: 'locality',
-          title: this.$t('common.localities'),
-          class: 'locality-search-card',
-        },
-        {
-          localeName: 'site',
-          title: this.$t('common.sites'),
-          class: 'site-search-card',
-        },
-        {
-          localeName: 'drillcore',
-          title: this.$t('common.drillcores'),
-          class: 'drillcore-search-card',
-        },
-        {
-          localeName: 'sample',
-          title: this.$t('common.samples'),
-          class: 'sample-search-card',
-        },
-        {
-          localeName: 'analytical-data',
-          title: this.$t('common.analyticalData'),
-          class: 'analysis-search-card',
-        },
-        {
-          localeName: 'dataset',
-          title: this.$t('common.datasets'),
-          class: 'dataset-search-card',
-        },
-        {
-          localeName: 'taxon',
-          title: this.$t('common.taxa'),
-          class: 'search-card',
-        },
-        {
-          localeName: 'photo',
-          title: this.$t('common.photo'),
-          class: 'photo-search-card',
-        },
-        {
-          localeName: 'analysis',
-          title: this.$t('common.analyses'),
-          class: 'analysis-search-card',
-        },
-        {
-          localeName: 'stratigraphy',
-          title: this.$t('common.stratigraphy'),
-          class: 'stratigraphy-search-card',
-        },
-      ],
       externalCards: {
         geocollections: {
           title: 'geocollections.title',
