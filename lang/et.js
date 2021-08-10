@@ -472,7 +472,7 @@ export default {
     name_en: 'name_en',
     latlong: 'latlong',
     coordDetMethod: 'Koordinaatide meetod',
-    remarksLocation: 'Märkuste asukoht',
+    remarksLocation: 'Asukoha täpsustus',
     extent: 'Pindalaline ulatus (m)',
     locationAccuracy: 'Koordinaatide täpsus (m)',
   },

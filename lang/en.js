@@ -471,7 +471,7 @@ export default {
     name_en: 'name_en',
     latlong: 'latlong',
     coordDetMethod: 'Coordinate method',
-    remarksLocation: 'Remarks location',
+    remarksLocation: 'Location info',
     extent: 'Spatial extent (m)',
     locationAccuracy: 'Coordinate accuracy (m)',
   },
