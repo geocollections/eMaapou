@@ -28,6 +28,7 @@
         isLoading = !onlyTable
         handleChange($event)
       "
+      @click:row="handleRowClick"
     >
       <template #no-data>{{ $t('table.noData') }}</template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -99,7 +100,7 @@
           v-if="item.canExpand"
           icon
           :class="{ active: isExpanded }"
-          @click="expand(!isExpanded)"
+          @click.stop="expand(!isExpanded)"
         >
           <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
@@ -181,6 +182,16 @@ export default {
         search: this.search,
       })
     }, 500),
+    handleRowClick(item, slot) {
+      // HACK: This is added to handle propagation,
+      // as this function does not have a event argument (https://vuetifyjs.com/en/api/v-data-table/#api-events)
+      // .stop cannot be used to stop propagation.
+      // Right now we check if the target has class 'text-link',
+      // if does then we know that the user clicked a link and we do not expand the row.
+      // Workaround found from: https://github.com/vuetifyjs/vuetify/issues/1538
+      if (event.target.classList.contains('text-link')) return
+      slot.expand(!slot.isExpanded)
+    },
   },
 }
 </script>
