@@ -43,7 +43,19 @@ export default {
         }
       )
       this.descriptions = descriptionResponse.items.map((item) => {
-        return { ...item, canExpand: !isEmpty(item.description) }
+        return {
+          ...item,
+          canExpand:
+            !isEmpty(item.description) ||
+            item.rock__name ||
+            item.rock__name__en ||
+            item.zero_level ||
+            item.author_free ||
+            item.reference ||
+            item.year ||
+            item.stratigraphy_free ||
+            item.remarks,
+        }
       })
       this.count = descriptionResponse.count
     },

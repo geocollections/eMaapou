@@ -355,15 +355,20 @@ th {
 }
 
 .theme--light.v-data-table {
+  &.custom-table {
+    tbody > tr {
+      background-color: white !important;
+    }
+  }
   &:not(.custom-table) {
-    tbody tr:nth-of-type(even) {
+    tbody > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
       background-color: rgba(0, 0, 0, 0.03);
     }
   }
 }
 .theme--dark.v-data-table {
   &:not(.custom-table) {
-    tbody tr:nth-of-type(even) {
+    tbody tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
       background-color: rgba(0, 0, 0, 0.5);
     }
   }
