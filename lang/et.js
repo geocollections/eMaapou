@@ -562,6 +562,7 @@ export default {
     collector_full_name: 'collector_full_name',
     date_collected: 'date_collected',
     project: 'Projekt',
+    igsn: 'IGSN',
   },
   preparation: {
     id: 'ID',

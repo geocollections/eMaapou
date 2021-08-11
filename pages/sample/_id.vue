@@ -12,6 +12,11 @@
           <template #default>
             <tbody>
               <data-row :title="$t('sample.number')" :value="sample.number" />
+              <link-data-row
+                :title="$t('sample.igsn')"
+                :value="sample.igsn"
+                :href="`http://igsn.org/${sample.igsn}`"
+              />
               <data-row
                 :title="$t('sample.numberAdditional')"
                 :value="sample.number_additional"
