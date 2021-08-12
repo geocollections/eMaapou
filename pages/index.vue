@@ -134,8 +134,7 @@ export default {
         maardlad: {
           title: 'maardlad.title',
           description: 'maardlad.description',
-          href:
-            'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+          href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
           background: require('~/assets/frontpage/maardlad.jpg'),
           sm: 6,
           md: 4,

@@ -21,7 +21,11 @@
       :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
     >
       <div
-        class="d-flex flex-column align-sm-content-start align-sm-content-center"
+        class="
+          d-flex
+          flex-column
+          align-sm-content-start align-sm-content-center
+        "
         style="height: 100%; margin-top: 64px"
       >
         <v-row no-gutters align-content="end" class="flex-grow-0">
@@ -37,7 +41,13 @@
           >
             <!-- TITLE -->
             <div
-              class="d-flex flex-row align-center text-h4 text-md-h3 text-sm-h4 white--text"
+              class="
+                d-flex
+                flex-row
+                align-center
+                text-h4 text-md-h3 text-sm-h4
+                white--text
+              "
             >
               <img
                 v-if="$vuetify.breakpoint.smAndUp"
@@ -90,7 +100,14 @@
                           'font-small montserrat':
                             $vuetify.breakpoint.smAndDown,
                         }"
-                        class="mx-3 mb-4 pa-0 px-sm-2 text-h5 text-sm-h4 white--text"
+                        class="
+                          mx-3
+                          mb-4
+                          pa-0
+                          px-sm-2
+                          text-h5 text-sm-h4
+                          white--text
+                        "
                       >
                         {{ $t('landing.quickSearch') }}
                       </v-card-title>
@@ -112,7 +129,9 @@
                         @click="showMap = !showMap"
                       >
                         {{
-                          showMap ? $t('common.closeMap') : $t('common.openMap')
+                          showMap
+                            ? $t('common.switchNews')
+                            : $t('common.switchMap')
                         }}
 
                         <v-icon>{{
@@ -130,7 +149,14 @@
                           'font-small montserrat':
                             $vuetify.breakpoint.smAndDown,
                         }"
-                        class="mx-3 mb-4 pa-0 px-sm-2 text-h5 text-sm-h4 white--text"
+                        class="
+                          mx-3
+                          mb-4
+                          pa-0
+                          px-sm-2
+                          text-h5 text-sm-h4
+                          white--text
+                        "
                       >
                         {{ $t('landing.viewMore') }}
                       </v-card-title>
@@ -180,8 +206,8 @@
             </div>
           </v-col>
           <!-- MAP -->
-          <v-slide-x-transition mode="in-out">
-            <v-col v-show="renderMap && showMap" md="5" lg="6" class="pa-0">
+          <v-slide-x-transition v-if="renderMap" mode="out-in">
+            <v-col v-if="showMap" key="map" md="5" lg="6" class="pa-0">
               <leaflet-map
                 class="ml-4 elevation-3"
                 height="70vh"
@@ -192,6 +218,9 @@
                 :show-links="false"
                 :gesture-handling="false"
               />
+            </v-col>
+            <v-col v-else key="news" md="5" lg="6" class="pa-0">
+              <the-news-section />
             </v-col>
           </v-slide-x-transition>
         </v-row>
@@ -257,6 +286,7 @@ import NavigationDrawer from '~/components/NavigationDrawer'
 import QuickSearchForm from '~/components/search/forms/QuickSearchForm'
 import SearchCard from '~/components/SearchCard.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
+import TheNewsSection from '~/components/landing/TheNewsSection.vue'
 
 export default {
   components: {
@@ -269,10 +299,10 @@ export default {
     QuickSearchForm,
     SearchCard,
     LeafletMap,
+    TheNewsSection,
   },
   data() {
     return {
-      includeList: ['AnalysisSearch'],
       logo: require('~/assets/logos/emaapou5white.svg'),
       drawer: false,
       showMap: false,

@@ -103,8 +103,11 @@ export default {
     clipboard: 'Copy to clipboard',
     export: 'Export',
     taxa: 'Taxa',
-    closeMap: 'Close map',
-    openMap: 'Open map',
+    news: 'News',
+    viewNews: 'View news',
+    readNewsArticle: 'Read',
+    switchMap: 'View map',
+    switchNews: 'View news',
   },
   link: {
     sarvAPI: 'Public API',

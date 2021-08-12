@@ -74,8 +74,7 @@ export default {
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',
     count: 'Leitud {count} kirjet',
-    map:
-      'Kaart | Kaart: <b>{count}</b> asukoht | Kaart: <b>{count}</b> asukohta',
+    map: 'Kaart | Kaart: <b>{count}</b> asukoht | Kaart: <b>{count}</b> asukohta',
     more: 'Rohkem',
     close: 'Sulge',
     attachments: 'Failid',
@@ -104,8 +103,11 @@ export default {
     clipboard: 'Kopeeri lõikelauale',
     export: 'Eksport',
     taxa: 'Taksonid',
-    closeMap: 'Sulge kaart',
-    openMap: 'Ava kaart',
+    news: 'Uudised',
+    viewNews: 'Vaata uudiseid',
+    readNewsArticle: 'Loe',
+    switchMap: 'Kaart',
+    switchNews: 'Uudised',
   },
   link: {
     sarvAPI: 'Avalik API',
