@@ -1,23 +1,30 @@
 <template>
-  <v-card elevation="0" color="transparent" v-bind="$attrs">
-    <div class="pl-4 white--text montserrat">
+  <v-card
+    elevation="0"
+    color="transparent"
+    v-bind="$attrs"
+    @click.stop="$emit('click')"
+  >
+    <div class="pl-4 montserrat" :class="{ 'white--text': dark }">
       {{ formatDate(date) }}
     </div>
     <v-card-title
-      class="montserrat white--text pt-0"
+      class="montserrat pt-0"
+      :class="{ 'white--text': dark }"
       style="word-break: normal"
       >{{ title }}</v-card-title
     >
 
     <v-card-text
-      class="montserrat white--text pb-0"
-      v-html="$options.filters.truncate(extractContent(content), 200)"
+      class="montserrat pb-0"
+      :class="{ 'white--text': dark }"
+      v-html="$options.filters.truncate(extractContent(content), previewLenght)"
     >
     </v-card-text>
 
-    <v-card-actions class="justify-self-end">
+    <v-card-actions class="justify-self-end pb-0">
       <v-spacer />
-      <v-btn color="white" text @click="$emit('click')">
+      <v-btn :color="dark ? 'white' : 'black'" text @click="$emit('click')">
         {{ $t('common.readNewsArticle') }}</v-btn
       >
     </v-card-actions>
@@ -39,14 +46,16 @@ export default {
     },
   },
   props: {
+    dark: { type: Boolean, default: false },
     title: { type: String, default: null },
     content: { type: String, default: null },
     date: { type: String, default: null },
+    previewLenght: { type: Number, default: 200 },
   },
   methods: {
     extractContent(html) {
-      // BUG: Does not handle unicode characters
-      return html.replace(/<[^>]+>/g, '')
+      if (html) return html.replace(/<[^>]+>/g, '')
+      return null
     },
     formatDate(isoDateTime) {
       return new Date(isoDateTime).toISOString().split('T')[0]

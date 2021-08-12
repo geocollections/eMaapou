@@ -65,6 +65,17 @@
       >
         {{ $t('common.about') }}
       </v-btn>
+
+      <v-btn
+        v-show="$vuetify.breakpoint.smAndUp"
+        nuxt
+        aria-label="news page"
+        text
+        class="montserrat"
+        :to="localePath({ name: 'news' })"
+      >
+        {{ $t('common.news') }}
+      </v-btn>
     </v-toolbar-items>
     <v-spacer />
     <v-toolbar-items>
