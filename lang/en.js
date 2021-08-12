@@ -1054,6 +1054,8 @@ export default {
     'search-files': 'Quick search: Files',
     'stratigraphy-id': 'Stratigraphy ID: {id}',
     'dataset-id': 'Dataset ID: {id}',
+    news: 'News',
+    'news-id': 'News: {id}',
   },
   institutions: {
     ttu: 'TalTech Department of Geology',

@@ -1054,6 +1054,8 @@ export default {
     'search-files': 'Kiirpäring: Failid',
     'stratigraphy-id': 'Stratigraafia ID: {id}',
     'dataset-id': 'Dataset ID: {id}',
+    news: 'Uudised',
+    'news-id': 'Uudis: {id}',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',
