@@ -44,9 +44,7 @@
             >
               {{ showMap ? $t('common.switchNews') : $t('common.switchMap') }}
 
-              <v-icon>{{
-                showMap ? 'mdi-chevron-left' : 'mdi-chevron-right'
-              }}</v-icon>
+              <v-icon>{{ 'mdi-chevron-right' }}</v-icon>
             </v-btn>
           </div>
 
