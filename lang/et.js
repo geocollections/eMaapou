@@ -108,8 +108,8 @@ export default {
     readNewsArticle: 'Loe',
     switchMap: 'Kaart',
     switchNews: 'Uudised',
-    specimenCount: 'Eksemplaarid',
-    specimen: 'Eksemlaarid',
+    specimenCount: 'Eksemplarid',
+    specimen: 'Eksemplarid',
   },
   link: {
     sarvAPI: 'Avalik API',
