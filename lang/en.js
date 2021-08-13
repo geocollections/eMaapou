@@ -1210,4 +1210,7 @@ export default {
     image_longitude: 'image_longitude',
     remarks: 'remarks',
   },
+  news: {
+    pageTitle: 'News',
+  },
 }

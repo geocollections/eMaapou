@@ -38,6 +38,24 @@ export default {
       news: newsResponse.results[0],
     }
   },
+
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
+    }
+  },
+  computed: {
+    title() {
+      return this.$translate({ et: this.news.title_et, en: this.news.title_en })
+    },
+  },
   methods: {
     formatDate(isoDateTime) {
       return new Date(isoDateTime).toISOString().split('T')[0]

@@ -196,12 +196,29 @@ export default {
         // tabs: hydratedTabs,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find specimen ${route.params.id}`,
         path: route.path,
       })
     }
+  },
+
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.title,
+        },
+      ],
+    }
+  },
+  computed: {
+    title() {
+      return this.specimen.specimen_id
+    },
   },
 }
 </script>

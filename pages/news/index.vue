@@ -58,6 +58,19 @@ export default {
       newsList: [],
     }
   },
+
+  head() {
+    return {
+      title: this.$t('news.pageTitle'),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: this.$t('news.pageTitle'),
+        },
+      ],
+    }
+  },
   methods: {
     infiniteHandler($state) {
       this.$services.sarvREST
