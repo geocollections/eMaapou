@@ -52,7 +52,8 @@
                 "
                 nuxt
                 :href="
-                  localePath('locality-id', {
+                  localePath({
+                    name: 'locality-id',
                     params: { id: specimen.locality },
                   })
                 "
@@ -68,7 +69,8 @@
                 "
                 nuxt
                 :href="
-                  localePath('stratigraphy-id', {
+                  localePath({
+                    name: 'stratigraphy-id',
                     params: { id: specimen.stratigraphy_id },
                   })
                 "
