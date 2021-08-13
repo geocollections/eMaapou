@@ -193,6 +193,27 @@ const getDefaultState = () => {
         },
       ],
     },
+    specimen: {
+      allFieldNames: null,
+      tableHeaders: [
+        { text: 'specimen.id', value: 'id', show: true },
+        { text: 'specimen.number', value: 'specimen_full_name', show: true },
+        { text: 'specimen.locality', value: 'locality', show: true },
+        { text: 'specimen.depth', value: 'depth', show: true },
+        { text: 'specimen.depthInterval', value: 'depth_interval', show: true },
+        { text: 'specimen.stratigraphy', value: 'stratigraphy', show: true },
+        {
+          text: 'sample.lithostratigraphy',
+          value: 'lithostratigraphy',
+          show: true,
+        },
+        // { text: this.$t('specimen.kind'), value: 'kind' },
+        // { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
+        { text: 'specimen.taxon', value: 'taxon', show: true },
+        { text: 'specimen.rock', value: 'rock', show: true },
+        { text: 'specimen.image', value: 'image', show: true },
+      ],
+    },
     stratigraphy: {
       allFieldNames: null,
       tableHeaders: [

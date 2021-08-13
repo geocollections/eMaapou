@@ -155,6 +155,11 @@ export default {
           title: 'common.stratigraphy',
           class: 'stratigraphy-search-card',
         },
+        {
+          localeName: 'specimen',
+          title: 'common.specimen',
+          class: 'specimen-search-card',
+        },
       ],
     }
   },

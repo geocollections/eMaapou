@@ -93,6 +93,9 @@ export default {
       site(state) {
         return state.site.tableHeaders
       },
+      specimen(state) {
+        return state.specimen.tableHeaders
+      },
       stratigraphy(state) {
         return state.stratigraphy.tableHeaders
       },

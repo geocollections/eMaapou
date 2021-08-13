@@ -123,6 +123,11 @@ export default {
           lang: 'about',
           icon: 'mdi-information-outline',
         },
+        {
+          name: 'news',
+          lang: 'news',
+          icon: 'mdi-newspaper-variant-outline',
+        },
       ],
       searchRoutes: [
         {
@@ -176,6 +181,7 @@ export default {
           icon: 'mdi-layers-triple',
         },
         { name: 'photo', lang: 'photo', icon: 'mdi-file-image-outline' },
+        { name: 'specimen', lang: 'specimen', icon: 'mdi-test-tube' },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },
@@ -187,8 +193,7 @@ export default {
         { name: 'stratigraphy.title', url: 'http://stratigraafia.info' },
         {
           name: 'maardlad.title',
-          url:
-            'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+          url: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
         },
         { name: 'doi.title', url: 'https://doi.geocollections.info' },
         { name: 'turba.title', url: 'https://turba.geoloogia.info' },
@@ -207,8 +212,7 @@ export default {
         { name: 'institutions.egt', url: 'https://egt.ee' },
         {
           name: 'institutions.maaamet',
-          url:
-            'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+          url: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
         },
         { name: 'institutions.egeos', url: 'https://egeos.ee' },
         { name: 'institutions.maeselts', url: 'http://maeselts.ee' },

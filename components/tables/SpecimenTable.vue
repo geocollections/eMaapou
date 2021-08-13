@@ -1,27 +1,29 @@
 <template>
   <table-wrapper
     v-bind="{ showSearch }"
-    :headers="headers"
+    :headers="useDynamicHeaders ? dynamicHeaders : headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
   >
     <template #item.id="{ item }">
-      <external-link
+      <nuxt-link
         v-if="item.id"
-        @click.native="$openGeoDetail('specimen', item.id)"
+        class="text-link"
+        :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </external-link>
+      </nuxt-link>
     </template>
     <template #item.specimen_full_name="{ item }">
-      <external-link
+      <nuxt-link
         v-if="item.specimen_full_name"
-        @click.native="$openGeoDetail('specimen', item.id)"
+        class="text-link"
+        :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
       >
         {{ item.specimen_full_name }}
-      </external-link>
+      </nuxt-link>
     </template>
     <template #item.locality="{ item }">
       <nuxt-link
@@ -117,6 +119,8 @@
 
 <script>
 import { round } from 'lodash'
+import { mapState } from 'vuex'
+
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
 import ExternalLink from '~/components/ExternalLink'
@@ -145,6 +149,10 @@ export default {
         sortDesc: [],
       }),
     },
+    useDynamicHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -166,6 +174,22 @@ export default {
         { text: this.$t('specimen.image'), value: 'image' },
       ],
     }
+  },
+  computed: {
+    ...mapState('table_headers', {
+      tableHeaders(state) {
+        return state.specimen.tableHeaders
+      },
+    }),
+
+    dynamicHeaders() {
+      return this.tableHeaders.reduce((prev, item) => {
+        if (item.show) {
+          prev.push({ ...item, text: this.$t(item.text) })
+        }
+        return prev
+      }, [])
+    },
   },
   methods: {
     round,
