@@ -95,16 +95,12 @@
               <data-row
                 v-if="preparation.date_added"
                 :title="$t('preparation.dateAdded')"
-                :value="
-                  new Date(preparation.date_added).toISOString().split('T')[0]
-                "
+                :value="$formatDate(preparation.date_added)"
               />
               <data-row
                 v-if="preparation.date_changed"
                 :title="$t('preparation.dateChanged')"
-                :value="
-                  new Date(preparation.date_changed).toISOString().split('T')[0]
-                "
+                :value="$formatDate(preparation.date_changed)"
               />
               <data-row
                 :title="$t('preparation.remarks')"

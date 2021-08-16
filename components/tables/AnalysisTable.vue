@@ -67,7 +67,7 @@
     </template>
     <template #item.date="{ item }">
       <div v-if="item.date">
-        {{ item.date ? new Date(item.date).toISOString().split('T')[0] : null }}
+        {{ item.date ? $formatDate(item.date) : null }}
       </div>
       <div v-else>{{ item.date_free }}</div>
     </template>

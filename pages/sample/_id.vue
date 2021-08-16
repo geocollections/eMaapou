@@ -182,14 +182,12 @@
               <data-row
                 v-if="sample.date_added"
                 :title="$t('sample.dateAdded')"
-                :value="new Date(sample.date_added).toISOString().split('T')[0]"
+                :value="$formatDate(sample.date_added)"
               />
               <data-row
                 v-if="sample.date_changed"
                 :title="$t('sample.dateChanged')"
-                :value="
-                  new Date(sample.date_changed).toISOString().split('T')[0]
-                "
+                :value="$formatDate(sample.date_changed)"
               />
             </tbody>
           </template>
@@ -342,20 +340,17 @@ export default {
       const ids = detailViewResponse?.ids
       const sample = detailViewResponse.results[0]
 
-      const localityGroupedResponse = await app.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
+      const localityGroupedResponse =
+        await app.$services.sarvSolr.getResourceList('analysis', {
           useRawSolr: true,
           defaultParams: {
             fq: `sample_id:${sample?.id}`,
-            fl:
-              'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
             group: true,
             'group.field': ['locality_id', 'site_id'],
             rows: 10000,
           },
-        }
-      )
+        })
 
       const localities = localityGroupedResponse?.grouped?.locality_id?.groups
         ?.map((item) => item?.doclist?.docs?.[0])

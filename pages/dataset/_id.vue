@@ -119,16 +119,12 @@
               <data-row
                 v-if="dataset.date_added"
                 :title="$t('dataset.dateAdded')"
-                :value="
-                  new Date(dataset.date_added).toISOString().split('T')[0]
-                "
+                :value="$formatDate(dataset.date_added)"
               />
               <data-row
                 v-if="dataset.date_changed"
                 :title="$t('dataset.dateChanged')"
-                :value="
-                  new Date(dataset.date_changed).toISOString().split('T')[0]
-                "
+                :value="$formatDate(dataset.date_changed)"
               />
               <data-row
                 v-if="parameters"
@@ -236,20 +232,17 @@ export default {
         reference: doiResponse.items?.[0]?.reference__reference,
       }
 
-      const localityGroupedResponse = await app.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
+      const localityGroupedResponse =
+        await app.$services.sarvSolr.getResourceList('analysis', {
           useRawSolr: true,
           defaultParams: {
             fq: `dataset_id:${dataset.id}`,
-            fl:
-              'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
             group: true,
             'group.field': ['locality_id', 'site_id'],
             rows: 10000,
           },
-        }
-      )
+        })
 
       const localities = localityGroupedResponse?.grouped?.locality_id?.groups
         ?.map((item) => item?.doclist?.docs?.[0])

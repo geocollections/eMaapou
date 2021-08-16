@@ -193,12 +193,12 @@
               <data-row
                 v-if="site.date_added"
                 :title="$t('site.dateAdded')"
-                :value="new Date(site.date_added).toISOString().split('T')[0]"
+                :value="$formatDate(site.date_added)"
               />
               <data-row
                 v-if="site.date_changed"
                 :title="$t('site.dateChanged')"
-                :value="new Date(site.date_changed).toISOString().split('T')[0]"
+                :value="$formatDate(site.date_changed)"
               />
             </tbody>
           </template>
@@ -295,11 +295,7 @@
           >
             <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
             <span v-if="item.attachment__date_created">
-              {{
-                new Date(item.attachment__date_created)
-                  .toISOString()
-                  .split('T')[0]
-              }}
+              {{ $formatDate(item.attachment__date_created) }}
             </span>
             <span v-else>{{ item.attachment__date_created_free }}</span>
           </div>
@@ -458,15 +454,12 @@ export default {
       return this.site.elevation
     },
     studied() {
-      if (this.site.date_start) return this.formatDate(this.site.date_start)
+      if (this.site.date_start) return this.$formatDate(this.site.date_start)
       return this.site.date_free
     },
   },
   methods: {
     isNil,
-    formatDate(isoDateTime) {
-      return new Date(isoDateTime).toISOString().split('T')[0]
-    },
   },
 }
 </script>

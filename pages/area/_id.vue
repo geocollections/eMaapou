@@ -132,16 +132,12 @@
                   <data-row
                     v-if="area.date_added"
                     :title="$t('area.dateAdded')"
-                    :value="
-                      new Date(area.date_added).toISOString().split('T')[0]
-                    "
+                    :value="$formatDate(area.date_added)"
                   />
                   <data-row
                     v-if="area.date_changed"
                     :title="$t('area.dateChanged')"
-                    :value="
-                      new Date(area.date_changed).toISOString().split('T')[0]
-                    "
+                    :value="$formatDate(area.date_changed)"
                   />
                 </tbody>
               </template>

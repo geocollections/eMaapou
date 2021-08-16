@@ -148,18 +148,12 @@
               <data-row
                 v-if="stratigraphy.date_added"
                 :title="$t('stratigraphy.dateAdded')"
-                :value="
-                  new Date(stratigraphy.date_added).toISOString().split('T')[0]
-                "
+                :value="$formatDate(stratigraphy.date_added)"
               />
               <data-row
                 v-if="stratigraphy.date_changed"
                 :title="$t('stratigraphy.dateChanged')"
-                :value="
-                  new Date(stratigraphy.date_changed)
-                    .toISOString()
-                    .split('T')[0]
-                "
+                :value="$formatDate(stratigraphy.date_changed)"
               />
             </tbody>
           </template>

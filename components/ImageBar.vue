@@ -62,7 +62,7 @@
             <div v-if="item.date_created || item.date_created_free">
               <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
               <span v-if="item.date_created">
-                {{ new Date(item.date_created).toISOString().split('T')[0] }}
+                {{ $formatDate(item.date_created) }}
               </span>
               <span v-else>{{ item.date_created_free }}</span>
             </div>

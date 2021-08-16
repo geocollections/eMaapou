@@ -118,8 +118,7 @@
                       :value="
                         $translate({
                           et: analysis.sample__lithostratigraphy__stratigraphy,
-                          en:
-                            analysis.sample__lithostratigraphy__stratigraphy__en,
+                          en: analysis.sample__lithostratigraphy__stratigraphy__en,
                         })
                       "
                       nuxt
@@ -133,20 +132,12 @@
                     <data-row
                       v-if="analysis.date_added"
                       :title="$t('analysis.dateAdded')"
-                      :value="
-                        new Date(analysis.date_added)
-                          .toISOString()
-                          .split('T')[0]
-                      "
+                      :value="$formatDate(analysis.date_added)"
                     />
                     <data-row
                       v-if="analysis.date_changed"
                       :title="$t('analysis.dateChanged')"
-                      :value="
-                        new Date(analysis.date_changed)
-                          .toISOString()
-                          .split('T')[0]
-                      "
+                      :value="$formatDate(analysis.date_changed)"
                     />
                   </tbody>
                 </template>

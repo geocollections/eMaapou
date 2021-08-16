@@ -161,16 +161,12 @@
               <data-row
                 v-if="locality.date_added"
                 :title="$t('locality.dateAdded')"
-                :value="
-                  new Date(locality.date_added).toISOString().split('T')[0]
-                "
+                :value="$formatDate(locality.date_added)"
               />
               <data-row
                 v-if="locality.date_changed"
                 :title="$t('locality.dateChanged')"
-                :value="
-                  new Date(locality.date_changed).toISOString().split('T')[0]
-                "
+                :value="$formatDate(locality.date_changed)"
               />
               <data-row
                 :title="$t('locality.remarks')"
@@ -318,8 +314,7 @@ export default {
         {
           defaultParams: {
             fq: `locality_id:${locality.id} AND specimen_image_attachment:2`,
-            sort:
-              'date_created_dt desc,date_created_free desc,stars desc,id desc',
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
           },
         }
       )

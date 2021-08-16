@@ -60,16 +60,12 @@
               <data-row
                 v-if="drillcore.date_added"
                 :title="$t('drillcore.dateAdded')"
-                :value="
-                  new Date(drillcore.date_added).toISOString().split('T')[0]
-                "
+                :value="$formatDate(drillcore.date_added)"
               />
               <data-row
                 v-if="drillcore.date_changed"
                 :title="$t('drillcore.dateChanged')"
-                :value="
-                  new Date(drillcore.date_changed).toISOString().split('T')[0]
-                "
+                :value="$formatDate(drillcore.date_changed)"
               />
             </tbody>
           </template>

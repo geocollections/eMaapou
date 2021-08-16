@@ -37,7 +37,14 @@
           </v-hover>
 
           <div
-            class="justify-center mx-8 d-flex flex-column justify-md-space-between flex-md-row"
+            class="
+              justify-center
+              mx-8
+              d-flex
+              flex-column
+              justify-md-space-between
+              flex-md-row
+            "
           >
             <div class="text-center text-md-left">
               <div
@@ -215,20 +222,12 @@
                 <data-row
                   v-if="drillcoreBox.date_added"
                   :title="$t('drillcoreBox.dateAdded')"
-                  :value="
-                    new Date(drillcoreBox.date_added)
-                      .toISOString()
-                      .split('T')[0]
-                  "
+                  :value="$formatDate(drillcoreBox.date_added)"
                 />
                 <data-row
                   v-if="drillcoreBox.date_changed"
                   :title="$t('drillcoreBox.dateChanged')"
-                  :value="
-                    new Date(drillcoreBox.date_changed)
-                      .toISOString()
-                      .split('T')[0]
-                  "
+                  :value="$formatDate(drillcoreBox.date_changed)"
                 />
                 <data-row
                   :title="$t('drillcoreBox.remarks')"

@@ -59,7 +59,13 @@
         </div>
 
         <div
-          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
+          class="
+            justify-center
+            d-flex
+            flex-column
+            justify-md-space-between
+            flex-md-row
+          "
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
@@ -298,12 +304,12 @@
               <data-row
                 v-if="file.date_added"
                 :title="$t('file.dateAdded')"
-                :value="new Date(file.date_added).toISOString().split('T')[0]"
+                :value="$formatDate(file.date_added)"
               />
               <data-row
                 v-if="file.date_changed"
                 :title="$t('file.dateChanged')"
-                :value="new Date(file.date_changed).toISOString().split('T')[0]"
+                :value="$formatDate(file.date_changed)"
               />
             </tbody>
           </template>
@@ -449,39 +455,39 @@ export default {
       let specimenIdentification
       let specimenIdentificationGeology
       if (file.specimen) {
-        const specimenIdentificationResponse = await app.$services.sarvREST.getResourceList(
-          'specimen_identification',
-          {
-            isValid: isNil(file.id),
-            defaultParams: {
-              current: true,
-              specimen_id: file.specimen,
-            },
-          }
-        )
+        const specimenIdentificationResponse =
+          await app.$services.sarvREST.getResourceList(
+            'specimen_identification',
+            {
+              isValid: isNil(file.id),
+              defaultParams: {
+                current: true,
+                specimen_id: file.specimen,
+              },
+            }
+          )
         specimenIdentification = specimenIdentificationResponse.items
-        const specimenIdentificationGeologyResponse = await app.$services.sarvREST.getResourceList(
-          'specimen_identification_geology',
-          {
-            isValid: isNil(file.id),
-            defaultParams: {
-              current: true,
-              specimen_id: file.specimen,
-            },
-          }
-        )
+        const specimenIdentificationGeologyResponse =
+          await app.$services.sarvREST.getResourceList(
+            'specimen_identification_geology',
+            {
+              isValid: isNil(file.id),
+              defaultParams: {
+                current: true,
+                specimen_id: file.specimen,
+              },
+            }
+          )
         specimenIdentificationGeology =
           specimenIdentificationGeologyResponse.items
       }
-      const attachmentKeywordsResponse = await app.$services.sarvREST.getResourceList(
-        'attachment_keyword',
-        {
+      const attachmentKeywordsResponse =
+        await app.$services.sarvREST.getResourceList('attachment_keyword', {
           isValid: isNil(file.id),
           defaultParams: {
             attachment: file.id,
           },
-        }
-      )
+        })
       const attachmentKeywords = attachmentKeywordsResponse.items
 
       const tabs = [

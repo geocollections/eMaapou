@@ -6,7 +6,7 @@
     @click.stop="$emit('click')"
   >
     <div class="pl-4 montserrat" :class="{ 'white--text': dark }">
-      {{ formatDate(date) }}
+      {{ $formatDate(date) }}
     </div>
     <v-card-title
       class="montserrat pt-0"
@@ -56,9 +56,6 @@ export default {
     extractContent(html) {
       if (html) return html.replace(/<[^>]+>/g, '')
       return null
-    },
-    formatDate(isoDateTime) {
-      return new Date(isoDateTime).toISOString().split('T')[0]
     },
   },
 }

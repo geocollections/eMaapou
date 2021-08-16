@@ -29,7 +29,7 @@
 
     <template #item.date="{ item }">
       <div v-if="item.date">
-        {{ new Date(item.date).toISOString().split('T')[0] }}
+        {{ $formatDate(item.date) }}
       </div>
       <div v-else>{{ item.date_txt }}</div>
     </template>

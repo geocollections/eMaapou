@@ -41,8 +41,7 @@ export default {
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
       {
         rel: 'stylesheet',
-        href:
-          'https://fonts.googleapis.com/css2?family=Montserrat&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat&display=swap',
       },
     ],
   },
@@ -63,6 +62,7 @@ export default {
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.js', mode: 'client' },
     { src: '~plugins/vueECharts.js', mode: 'client' },
+    '~/plugins/formatDate.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

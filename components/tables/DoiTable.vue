@@ -20,7 +20,7 @@
     <template #item.datacite_created="{ item }">
       <div v-if="item.datacite_created">
         <div>
-          {{ new Date(item.datacite_created).toISOString().split('T')[0] }}
+          {{ $formatDate(item.datacite_created) }}
         </div>
         <div
           v-if="
@@ -28,7 +28,7 @@
             item.datacite_created !== item.datacite_updated
           "
         >
-          ({{ new Date(item.datacite_updated).toISOString().split('T')[0] }})
+          ({{ $formatDate(item.datacite_updated) }})
         </div>
       </div>
     </template>

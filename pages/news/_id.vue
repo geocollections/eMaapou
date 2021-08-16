@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col>
         <div class="text-right montserrat pr-4">
-          {{ formatDate(news.date_added) }}
+          {{ $formatDate(news.date_added) }}
         </div>
         <title-card
           :title="$translate({ et: news.title_et, en: news.title_en })"
@@ -54,11 +54,6 @@ export default {
   computed: {
     title() {
       return this.$translate({ et: this.news.title_et, en: this.news.title_en })
-    },
-  },
-  methods: {
-    formatDate(isoDateTime) {
-      return new Date(isoDateTime).toISOString().split('T')[0]
     },
   },
 }

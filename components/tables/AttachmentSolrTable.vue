@@ -23,7 +23,7 @@
     </template>
     <template #item.date="{ item }">
       <div v-if="item.date_created">
-        {{ new Date(item.date_created).toISOString().split('T')[0] }}
+        {{ $formatDate(item.date_created) }}
       </div>
       <div v-else>{{ item.date_created_free }}</div>
     </template>
