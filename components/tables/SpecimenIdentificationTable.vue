@@ -40,9 +40,6 @@
       }}
     </template>
     <template #item.current="{ item }">
-      <!-- NOTE:  Should probably create a component for checkmark/cross.
-          This is piece of code is also in RockTable.
-       -->
       <boolean-indicator :value="item.current" />
     </template>
   </table-wrapper>
