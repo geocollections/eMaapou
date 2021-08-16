@@ -584,6 +584,29 @@ export const SPECIMEN_IDENTIFICATION = {
     sortDesc: [],
   },
   queryFields: {
-    name: (locale) => 'name',
+    name: (locale) => 'taxon__taxon',
+    agent: (locale) => 'agent__agent',
+    dateIdentified: (locale) => 'date_identified',
+    reference: (locale) => 'reference__reference',
+    type: (locale) =>
+      locale === 'et'
+        ? 'identification_type__value'
+        : 'identification_type__value_en',
+    current: (locale) => 'current',
+  },
+}
+
+export const SPECIMEN_REFERENCE = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    reference: (locale) => 'reference__reference',
+    pages: (locale) => 'pages',
+    figures: (locale) => 'figures',
+    remarks: (locale) => 'remarks',
   },
 }

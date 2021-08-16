@@ -425,6 +425,7 @@ export default {
     dateCollected: 'Kogumise aeg',
     identifications: 'Määrangud ({number})',
     lithostratigraphy: 'Litostratigraafia',
+    references: 'Viited ({number})',
   },
   specimenIdentification: {
     name: 'Nimi',
@@ -434,6 +435,12 @@ export default {
     type: 'Tüüp',
     remarks: 'Lisainfo',
     current: 'Eelistatud',
+  },
+  specimenReference: {
+    reference: 'Viide',
+    pages: 'Lk.',
+    figures: 'Joon.',
+    remarks: 'Lisainfo',
   },
   stratotype: {
     stratigraphy: 'Stratigraafia',

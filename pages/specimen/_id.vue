@@ -205,6 +205,15 @@ export default {
           count: 0,
           props: { specimen: specimen.id },
         },
+        {
+          id: 'specimen_reference',
+          table: 'specimen_reference',
+          isSolr: false,
+          routeName: 'specimen-id-references',
+          title: 'specimen.references',
+          count: 0,
+          props: { specimen: specimen.id },
+        },
       ]
 
       const hydratedTabs = await Promise.all(
@@ -212,7 +221,10 @@ export default {
           async (tab) =>
             await app.$hydrateCount(tab, {
               solr: { default: { fq: `specimen_id:${specimen.id}` } },
-              api: { default: { specimen_id: specimen.id } },
+              api: {
+                default: { specimen_id: specimen.id },
+                specimen_reference: { specimen: specimen.id },
+              },
             })
         )
       )

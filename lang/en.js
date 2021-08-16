@@ -425,6 +425,7 @@ export default {
     dateCollected: 'Date collected',
     identifications: 'Identifications ({number})',
     lithostratigraphy: 'Lithostratigraphy',
+    references: 'References ({number})',
   },
   specimenIdentification: {
     name: 'Name',
@@ -434,6 +435,12 @@ export default {
     type: 'Type',
     remarks: 'Remarks',
     current: 'Current',
+  },
+  specimenReference: {
+    reference: 'Reference',
+    pages: 'Pages',
+    figures: 'Figures',
+    remarks: 'Remarks',
   },
   stratotype: {
     stratigraphy: 'Stratigraphy',
