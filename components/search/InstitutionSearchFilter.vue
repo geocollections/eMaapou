@@ -11,7 +11,11 @@
       </div>
     </template>
     <div
-      class="d-flex flex-column flex-sm-row flex-md-column flex-wrap justify-space-between"
+      class="
+        d-flex
+        flex-column flex-sm-row flex-md-column flex-wrap
+        justify-space-between
+      "
     >
       <div v-for="(entity, key) in institutions" :key="key">
         <v-tooltip

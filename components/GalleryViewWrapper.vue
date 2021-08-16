@@ -29,7 +29,16 @@
         </v-carousel>
 
         <div
-          class="mt-2 mx-2 d-flex justify-center flex-column justify-sm-space-between flex-sm-row mx-auto"
+          class="
+            mt-2
+            mx-2
+            d-flex
+            justify-center
+            flex-column
+            justify-sm-space-between
+            flex-sm-row
+            mx-auto
+          "
           style="max-width: 1000px"
         >
           <div class="text-center text-sm-left">
