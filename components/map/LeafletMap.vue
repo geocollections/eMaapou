@@ -816,4 +816,7 @@ export default {
 .leaflet-draw-toolbar {
   padding-left: unset;
 }
+.leaflet-container {
+  font-family: 'Open Sans', sans-serif;
+}
 </style>
