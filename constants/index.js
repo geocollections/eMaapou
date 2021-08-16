@@ -575,3 +575,15 @@ export const STRATIGRAPHY = {
     ageTop: (locale) => 'age_top',
   },
 }
+
+export const SPECIMEN_IDENTIFICATION = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    name: (locale) => 'name',
+  },
+}

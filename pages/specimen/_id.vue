@@ -3,7 +3,7 @@
     <template #title>
       <title-card-detail
         :ids="ids"
-        :title="specimen.specimen_id"
+        :title="`${specimen.database__acronym} ${specimen.specimen_id}`"
         class="title-sample"
       />
     </template>
@@ -15,10 +15,12 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row
+              <link-data-row
                 :title="$t('specimen.collectionNr')"
                 :value="specimen.coll__number"
+                @link-click="$openGeoDetail('collection', specimen.coll)"
               />
+
               <data-row
                 :title="$t('specimen.number')"
                 :value="specimen.specimen_id"
@@ -84,7 +86,10 @@
                 :title="$t('specimen.remarks')"
                 :value="specimen.remarks"
               />
-
+              <data-row
+                :title="$t('specimen.dateCollected')"
+                :value="dateCollected"
+              />
               <data-row
                 :title="$t('specimen.collector')"
                 :value="specimen.agent_collected__agent"
@@ -115,7 +120,11 @@
         $t('locality.map')
       }}</v-card-title>
       <v-card-text>
-        <v-card elevation="0">
+        <v-card
+          v-if="specimen.locality__latitude && specimen.locality__longitude"
+          id="map-wrap"
+          elevation="0"
+        >
           <leaflet-map
             rounded
             :estonian-map="specimen.locality__country__value === 'Eesti'"
@@ -141,6 +150,11 @@
         </v-card>
       </v-card-text>
     </template>
+    <template #bottom>
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+      </v-card>
+    </template>
   </detail>
 </template>
 
@@ -150,6 +164,7 @@ import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
+import Tabs from '~/components/Tabs.vue'
 export default {
   components: {
     Detail,
@@ -157,6 +172,7 @@ export default {
     DataRow,
     LinkDataRow,
     LeafletMap,
+    Tabs,
   },
   async asyncData({ params, route, error, app, redirect }) {
     try {
@@ -167,35 +183,36 @@ export default {
       const ids = detailViewResponse?.ids
       const specimen = detailViewResponse.results[0]
 
-      // const tabs = [
-      //   // {
-      //   //   id: 'analysis',
-      //   //   isSolr: true,
-      //   //   routeName: 'sample-id',
-      //   //   title: 'sample.analyses',
-      //   //   count: 0,
-      //   //   props: { sample: specimen.id },
-      //   // },
-      // ]
+      const tabs = [
+        {
+          id: 'specimen_identification',
+          table: 'specimen_identification',
+          isSolr: false,
+          routeName: 'specimen-id',
+          title: 'specimen.identifications',
+          count: 0,
+          props: { specimen: specimen.id },
+        },
+      ]
 
-      // const hydratedTabs = await Promise.all(
-      //   tabs.map(
-      //     async (tab) =>
-      //       await app.$hydrateCount(tab, {
-      //         solr: { default: { fq: `specimen_id:${specimen.id}` } },
-      //         api: { default: { sample: specimen.id } },
-      //       })
-      //   )
-      // )
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateCount(tab, {
+              solr: { default: { fq: `specimen_id:${specimen.id}` } },
+              api: { default: { specimen_id: specimen.id } },
+            })
+        )
+      )
 
-      // const validPath = app.$validateTabRoute(route, hydratedTabs)
-      // if (validPath !== route.path) redirect(validPath)
+      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      if (validPath !== route.path) redirect(validPath)
 
       return {
         specimen,
         ids,
-        // initActiveTab: validPath,
-        // tabs: hydratedTabs,
+        initActiveTab: validPath,
+        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
@@ -220,6 +237,13 @@ export default {
   computed: {
     title() {
       return this.specimen.specimen_id
+    },
+    filteredTabs() {
+      return this.tabs.filter((item) => item.count > 0)
+    },
+    dateCollected() {
+      if (this.specimen.date_collected) return this.specimen.date_collected
+      return this.specimen.date_collected_free
     },
   },
 }
