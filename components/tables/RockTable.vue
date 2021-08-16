@@ -23,8 +23,7 @@
     </template>
 
     <template #item.in_estonia="{ item }">
-      <v-icon v-if="item.in_estonia" color="green" small>mdi-check-bold</v-icon>
-      <v-icon v-else color="red" small>mdi-close-thick</v-icon>
+      <boolean-indicator :value="item.is_estonia" />
     </template>
 
     <template #item.mindat_id="{ item }">
@@ -42,10 +41,11 @@
 
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
+import BooleanIndicator from '../BooleanIndicator.vue'
 import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'RockTable',
-  components: { ExternalLink, TableWrapper },
+  components: { ExternalLink, TableWrapper, BooleanIndicator },
   props: {
     showSearch: {
       type: Boolean,

@@ -14,12 +14,13 @@
       >
         {{ item.taxon__taxon }}
       </external-link>
+
+      <div v-if="item.name">| {{ item.name }}</div>
     </template>
     <template #item.agent="{ item }">
       {{ item.agent__agent }}
     </template>
     <template #item.dateIdentified="{ item }">
-      <!-- NOTE: Needs to be formated -->
       {{ item.date_identified }}
     </template>
     <template #item.reference="{ item }">
@@ -42,18 +43,18 @@
       <!-- NOTE:  Should probably create a component for checkmark/cross.
           This is piece of code is also in RockTable.
        -->
-      <v-icon v-if="item.current" color="green" small>mdi-check-bold</v-icon>
-      <v-icon v-else color="red" small>mdi-close-thick</v-icon>
+      <boolean-indicator :value="item.current" />
     </template>
   </table-wrapper>
 </template>
 
 <script>
 import ExternalLink from '../ExternalLink.vue'
+import BooleanIndicator from '../BooleanIndicator.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 export default {
   name: 'SpecimenIdentificationTable',
-  components: { TableWrapper, ExternalLink },
+  components: { TableWrapper, ExternalLink, BooleanIndicator },
   props: {
     showSearch: {
       type: Boolean,
