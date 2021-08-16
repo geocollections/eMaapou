@@ -424,6 +424,7 @@ export default {
     pageTitle: 'Eksemplaari otsing',
     dateCollected: 'Kogumise aeg',
     identifications: 'Määrangud ({number})',
+    lithostratigraphy: 'Litostratigraafia',
   },
   specimenIdentification: {
     name: 'Nimi',

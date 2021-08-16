@@ -73,6 +73,22 @@
                   })
                 "
               />
+              <link-data-row
+                :title="$t('specimen.lithostratigraphy')"
+                :value="
+                  $translate({
+                    et: specimen.lithostratigraphy__stratigraphy,
+                    en: specimen.lithostratigraphy__stratigraphy_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'stratigraphy-id',
+                    params: { id: specimen.lithostratigraphy_id },
+                  })
+                "
+              />
               <data-row
                 :title="$t('specimen.stratigraphyRemarks')"
                 :value="specimen.stratigraphy_free"

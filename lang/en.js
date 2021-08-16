@@ -424,6 +424,7 @@ export default {
     pageTitle: 'Specimen search',
     dateCollected: 'Date collected',
     identifications: 'Identifications ({number})',
+    lithostratigraphy: 'Lithostratigraphy',
   },
   specimenIdentification: {
     name: 'Name',
