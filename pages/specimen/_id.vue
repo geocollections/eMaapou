@@ -163,6 +163,7 @@
       </v-card-text>
     </template>
     <template #bottom>
+      <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
@@ -177,6 +178,7 @@ import Detail from '~/components/templates/Detail.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
+import ImageBar from '~/components/ImageBar.vue'
 export default {
   components: {
     Detail,
@@ -185,6 +187,7 @@ export default {
     LinkDataRow,
     LeafletMap,
     Tabs,
+    ImageBar,
   },
   async asyncData({ params, route, error, app, redirect }) {
     try {
@@ -232,9 +235,18 @@ export default {
       const validPath = app.$validateTabRoute(route, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
+      const specimenImagesResponse =
+        await app.$services.sarvREST.getResourceList('specimen_image', {
+          defaultParams: {
+            specimen: specimen.id,
+          },
+        })
+      const images = specimenImagesResponse.items ?? []
+
       return {
         specimen,
         ids,
+        images,
         initActiveTab: validPath,
         tabs: hydratedTabs,
       }
