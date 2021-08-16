@@ -1,11 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
-        :ids="ids"
-        :title="`${specimen.database__acronym} ${specimen.specimen_id}`"
-        class="title-sample"
-      />
+      <title-card-detail :ids="ids" :title="title" class="title-sample" />
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">
@@ -236,7 +232,7 @@ export default {
   },
   computed: {
     title() {
-      return this.specimen.specimen_id
+      return `${this.specimen.database__acronym} ${this.specimen.specimen_id}`
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
