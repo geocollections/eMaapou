@@ -1,12 +1,10 @@
 <template>
-  <v-tooltip bottom>
-    <template #activator="{ on }">
-      <v-btn icon small text v-on="on" @click="handleClick">
-        <v-icon>mdi-subdirectory-arrow-left mdi-rotate-90</v-icon>
-      </v-btn>
-    </template>
-    <span>{{ $t('common.goBack') }}</span>
-  </v-tooltip>
+  <v-btn id="back-btn-detail" icon small text @click="handleClick">
+    <v-icon>mdi-subdirectory-arrow-left mdi-rotate-90</v-icon>
+    <v-tooltip bottom activator="#back-btn-detail">
+      <span>{{ $t('common.goBack') }}</span>
+    </v-tooltip>
+  </v-btn>
 </template>
 
 <script>

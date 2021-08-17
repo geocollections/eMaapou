@@ -2,6 +2,24 @@
 
 $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
+// .page-enter-active,
+// .page-leave-active {
+//   transition: opacity 0.15s;
+// }
+// .page-enter,
+// .page-leave-to {
+//   opacity: 0;
+// }
+
+.layout-enter-active,
+.layout-leave-active {
+  transition: opacity 0.2s;
+}
+.layout-enter,
+.layout-leave-to {
+  opacity: 0;
+}
+
 // Usage: @include transition(color 1s, background-color 1s, border-color 1s);
 @mixin transition($x...) {
   -webkit-transition: $x;

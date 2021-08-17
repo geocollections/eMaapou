@@ -2,51 +2,38 @@
   <v-app-bar
     app
     dark
-    :absolute="isLanding"
-    style="z-index: 2050"
-    :color="isLanding ? 'transparent' : 'primary'"
-    :elevation="isLanding ? 0 : 4"
-    :class="{
-      'gradient-background': !isLanding,
-    }"
+    clipped-right
+    absolute
+    :elevation="4"
+    class="gradient-background"
   >
     <v-toolbar-items>
-      <v-app-bar-title
-        v-if="!isLanding || (isLanding && $vuetify.breakpoint.xsOnly)"
-        class="ml-3 align-self-center app-title"
-      >
-        <nuxt-link :to="localePath({ path: '/' })">
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <v-img
-                class="transition-logo"
-                :height="45"
-                :width="90"
-                contain
-                :src="logo"
-                v-bind="attrs"
-                v-on="on"
-              />
-            </template>
-
+      <v-app-bar-title class="ml-3 align-self-center">
+        <!--
+          NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
+          Using v-slot:activator added a transition that made the title disappear when clicked.
+          https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
+         -->
+        <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
+          <v-img :height="45" :width="90" contain :src="logo" />
+          <v-tooltip bottom activator="#app-bar-title">
             <span>{{ $t('landing.goToFrontpage') }}</span>
           </v-tooltip>
         </nuxt-link>
       </v-app-bar-title>
     </v-toolbar-items>
     <v-divider
-      v-if="!isLanding && $vuetify.breakpoint.mdAndUp"
+      v-if="$vuetify.breakpoint.mdAndUp"
       vertical
       inset
       class="mx-3 white"
     />
-    <div v-if="!isLanding && $vuetify.breakpoint.mdAndUp" class="montserrat">
+    <div v-if="$vuetify.breakpoint.mdAndUp" class="montserrat">
       {{ $t('slogan') }}
     </div>
 
-    <v-toolbar-items v-if="!isLanding" class="ml-3">
+    <v-toolbar-items v-show="$vuetify.breakpoint.smAndUp" class="ml-3">
       <v-btn
-        v-show="$vuetify.breakpoint.smAndUp"
         nuxt
         aria-label="search"
         text
@@ -56,7 +43,6 @@
         {{ $t('common.search') }}
       </v-btn>
       <v-btn
-        v-show="$vuetify.breakpoint.smAndUp"
         nuxt
         aria-label="about page"
         text
@@ -67,7 +53,6 @@
       </v-btn>
 
       <v-btn
-        v-show="$vuetify.breakpoint.smAndUp"
         nuxt
         aria-label="news page"
         text
@@ -104,7 +89,7 @@
       </v-btn>
     </v-toolbar-items>
 
-    <template v-if="$vuetify.breakpoint.smAndUp && !isLanding" #extension>
+    <template v-if="$vuetify.breakpoint.smAndUp" #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
@@ -135,11 +120,6 @@ export default {
   name: 'AppHeader',
   components: { LangSwitcher },
   props: {
-    isDetail: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
     drawer: Boolean,
   },
   data() {
@@ -177,9 +157,6 @@ export default {
     }
   },
   computed: {
-    isLanding() {
-      return this.getRouteBaseName().startsWith('index')
-    },
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path
@@ -193,10 +170,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.app-title >>> .v-app-bar-title__content {
-  width: unset !important;
-}
-
 .header-tabs {
   background-color: var(--v-secondary-base);
 }
@@ -209,10 +182,6 @@ export default {
 .v-app-bar ::v-deep .v-toolbar__content {
   padding-right: 0;
   padding-left: 0;
-}
-
-.transition-logo {
-  transition: width 250ms ease-in-out, height 250ms ease-in-out;
 }
 
 $gradient-col: var(--v-primary-base);

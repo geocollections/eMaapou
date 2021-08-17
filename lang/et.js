@@ -1084,6 +1084,7 @@ export default {
     'search-rocks': 'Kiirpäring: Mineraalid ja kivimid',
     'search-drillcores': 'Kiirpäring: Puursüdamikud',
     'search-files': 'Kiirpäring: Failid',
+    'search-photos': 'Kiirpäring: Fotod',
     'stratigraphy-id': 'Stratigraafia ID: {id}',
     'dataset-id': 'Dataset ID: {id}',
     news: 'Uudised',

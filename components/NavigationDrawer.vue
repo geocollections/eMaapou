@@ -2,6 +2,7 @@
   <v-navigation-drawer
     :value="drawer"
     app
+    clipped
     right
     temporary
     width="100%"

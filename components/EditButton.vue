@@ -1,18 +1,16 @@
 <template>
-  <v-tooltip bottom>
-    <template #activator="{ on }">
-      <v-btn
-        icon
-        dark
-        color="deep-orange darken-2"
-        v-on="on"
-        @click="handleClick"
-      >
-        <v-icon>mdi-square-edit-outline</v-icon>
-      </v-btn>
-    </template>
-    <span>{{ $t('common.linkToEdit') }}</span>
-  </v-tooltip>
+  <v-btn
+    id="edit-btn"
+    icon
+    dark
+    color="deep-orange darken-2"
+    @click="handleClick"
+  >
+    <v-icon>mdi-square-edit-outline</v-icon>
+    <v-tooltip bottom activator="#edit-btn">
+      <span>{{ $t('common.linkToEdit') }}</span>
+    </v-tooltip>
+  </v-btn>
 </template>
 
 <script>

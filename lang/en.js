@@ -1084,6 +1084,7 @@ export default {
     'search-rocks': 'Quick search: Rocks',
     'search-drillcores': 'Quick search: Drillcores',
     'search-files': 'Quick search: Files',
+    'search-photos': 'Quick search: Photos',
     'stratigraphy-id': 'Stratigraphy ID: {id}',
     'dataset-id': 'Dataset ID: {id}',
     news: 'News',

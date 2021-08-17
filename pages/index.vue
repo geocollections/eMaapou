@@ -1,51 +1,189 @@
 <template>
   <div>
-    <v-row class="my-2 my-sm-10" justify="center" align="center">
-      <v-col id="otherServices" cols="12">
-        <title-card
-          :title="$t('landing.otherPages')"
-          class="title-border"
-          style="border-color: var(--v-header-darken1)"
-        />
-      </v-col>
-      <v-col>
-        <v-row class="px-2 px-sm-5">
+    <v-img
+      :height="
+        ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
+        ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
+          ? '800px'
+          : '100vh'
+      "
+      :max-height="
+        ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
+        ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
+          ? '800px'
+          : '100vh'
+      "
+      width="100%"
+      class="elevation-4 background-image"
+      position="center 20%"
+      :src="require('~/assets/frontpage/header_img.jpg')"
+      :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
+    >
+      <div
+        class="
+          d-flex
+          flex-column
+          align-sm-content-start align-sm-content-center
+        "
+        style="height: 100%; margin-top: 64px"
+      >
+        <v-row no-gutters align-content="end" class="flex-grow-0">
           <v-col
-            v-for="(item, index) in externalCards.ids.map(
-              (id) => externalCards[id]
-            )"
-            :key="`inner-${index}`"
-            class="pa-1"
-            cols="12"
-            :sm="item.sm || 6"
-            :md="item.md || 6"
+            cols="10"
+            sm="8"
+            md="10"
+            lg="12"
+            offset-md="1"
+            offset-sm="2"
+            offset="1"
+            class="mb-5"
           >
-            <external-link-card
-              :title="$t(item.title)"
-              :description="$t(item.description)"
-              :href="item.href"
-              :background="item.background"
-              grayscale
-            />
+            <!-- TITLE -->
+            <div
+              class="
+                d-flex
+                flex-row
+                align-center
+                text-h4 text-md-h3 text-sm-h4
+                white--text
+              "
+            >
+              <img
+                v-if="$vuetify.breakpoint.smAndUp"
+                style="height: 100px; width: 200px"
+                :src="logo"
+                class="mt-5 mb-sm-5 mr-4"
+              />
+              <v-divider
+                v-if="$vuetify.breakpoint.smAndUp"
+                vertical
+                class="white my-5"
+              />
+              <div class="ml-sm-4 font-weight-bold">
+                {{ $t('slogan') }}
+              </div>
+            </div>
           </v-col>
         </v-row>
-      </v-col>
-    </v-row>
-    <v-row justify="center" class="my-2 my-sm-10">
-      <v-col cols="12">
-        <title-card
-          :title="$t('about.title')"
-          class="title-border"
-          style="border-color: var(--v-header-darken1)"
-        />
+        <v-row
+          no-gutters
+          align-content="center"
+          align-content-sm="start"
+          justify="center"
+          justify-sm="start"
+          class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
+        >
+          <v-col cols="11" sm="8" :md="5" :lg="4" offset-md="1" offset-sm="2">
+            <!-- MAIN CARD -->
+            <the-search-card
+              :show-map="showMap"
+              :render-side-card="renderSideCard"
+              @toggle:side="showMap = !showMap"
+            />
+            <!-- INSTITUTION ICONS -->
+            <div v-if="!$vuetify.breakpoint.xsOnly" class="mt-4">
+              <a
+                v-for="(item, index) in imageLinks"
+                :key="index"
+                :href="item.href"
+                target="FooterLink"
+                rel="noopener noreferrer"
+              >
+                <v-tooltip top>
+                  <template #activator="{ on, attrs }">
+                    <img
+                      v-bind="attrs"
+                      :src="item.src"
+                      :alt="$t(item.alt)"
+                      class="footer-logo py-1 py-sm-0 px-3"
+                      v-on="on"
+                    />
+                  </template>
 
-        <div
-          class="aboutpage px-2 px-sm-5"
-          :style="{ 'column-count': aboutTextColumns }"
-          v-html="$translate({ et: page.content_et, en: page.content_en })"
-        ></div>
-      </v-col>
-    </v-row>
+                  <span>{{ $t(item.title) }}</span>
+                </v-tooltip>
+              </a>
+            </div>
+          </v-col>
+          <!-- SIDE CARD -->
+          <v-slide-x-transition v-if="renderSideCard" mode="out-in">
+            <v-col v-if="showMap" key="map" md="5" lg="6" class="pa-0">
+              <the-map-card :show-map="showMap" />
+            </v-col>
+            <v-col v-else key="news" md="5" lg="6" class="pa-0">
+              <the-news-card />
+            </v-col>
+          </v-slide-x-transition>
+        </v-row>
+        <!-- SCROLL INDICATOR -->
+        <v-fade-transition>
+          <div
+            v-if="scrollY === 0"
+            class="d-flex justify-center"
+            style="position: absolute; bottom: 0; width: 100%"
+          >
+            <v-btn
+              :ripple="false"
+              dark
+              x-large
+              plain
+              icons
+              class="pulse d-flex flex-column"
+              @click="$vuetify.goTo('#otherServices')"
+              ><v-icon x-large>mdi-chevron-down</v-icon>
+            </v-btn>
+          </div>
+        </v-fade-transition>
+      </div>
+    </v-img>
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-row class="my-2 my-sm-10" justify="center" align="center">
+        <v-col id="otherServices" cols="12">
+          <title-card
+            :title="$t('landing.otherPages')"
+            class="title-border"
+            style="border-color: var(--v-header-darken1)"
+          />
+        </v-col>
+        <v-col>
+          <v-row class="px-2 px-sm-5">
+            <v-col
+              v-for="(item, index) in externalCards.ids.map(
+                (id) => externalCards[id]
+              )"
+              :key="`inner-${index}`"
+              class="pa-1"
+              cols="12"
+              :sm="item.sm || 6"
+              :md="item.md || 6"
+            >
+              <external-link-card
+                :title="$t(item.title)"
+                :description="$t(item.description)"
+                :href="item.href"
+                :background="item.background"
+                grayscale
+              />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-row justify="center" class="my-2 my-sm-10">
+        <v-col cols="12">
+          <title-card
+            :title="$t('about.title')"
+            class="title-border"
+            style="border-color: var(--v-header-darken1)"
+          />
+
+          <div
+            class="aboutpage px-2 px-sm-5"
+            :style="{ 'column-count': aboutTextColumns }"
+            v-html="$translate({ et: page.content_et, en: page.content_en })"
+          ></div>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -54,17 +192,54 @@ import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import TitleCard from '~/components/TitleCard.vue'
+import TheNewsCard from '~/components/landing/TheNewsCard.vue'
+import TheSearchCard from '~/components/landing/TheSearchCard.vue'
+import TheMapCard from '~/components/landing/TheMapCard.vue'
 export default {
   components: {
     ExternalLinkCard,
     TitleCard,
+    TheNewsCard,
+    TheSearchCard,
+    TheMapCard,
   },
+  layout: 'landing',
   async asyncData({ route, error, app }) {
     const data = await app.$services.sarvREST.getResource('page', 87)
     return { page: data.results[0] }
   },
   data() {
     return {
+      logo: require('~/assets/logos/emaapou5white.svg'),
+      drawer: false,
+      showMap: false,
+      scrollY: 0,
+      imageLinks: [
+        {
+          href: 'https://taltech.ee/geoloogia-instituut',
+          src: require('~/assets/logos/tutaltech2.png'),
+          title: 'footerLinks.ttu',
+          alt: 'footerLinks.ttu',
+        },
+        {
+          href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
+          src: require('~/assets/logos/TY_logo_ring_jooneta_valge.png'),
+          title: 'footerLinks.tu',
+          alt: 'footerLinks.tu',
+        },
+        {
+          href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
+          src: require('~/assets/logos/ELM_logo_white1.png'),
+          title: 'footerLinks.elm',
+          alt: 'footerLinks.elm',
+        },
+        /* {
+          href: 'https://struktuurifondid.ee',
+          src: require('~/assets/logos/EL_mv.png'),
+          title: 'footerLinks.el',
+          alt: 'footerLinks.el',
+        }, */
+      ],
       externalCards: {
         geocollections: {
           title: 'geocollections.title',
@@ -241,8 +416,26 @@ export default {
       if (this.$vuetify.breakpoint.mdOnly) return 2
       return 1
     },
+    renderSideCard() {
+      return this.$vuetify.breakpoint.mdAndUp
+    },
+  },
+  watch: {
+    '$vuetify.breakpoint.mdAndUp'(newVal, oldVal) {
+      if (newVal === false) this.showMap = false
+    },
+  },
+  beforeMount() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
+    handleScroll() {
+      // Your scroll handling here
+      this.scrollY = window.scrollY
+    },
     handleSearch() {
       const routeName = this.$route.name.includes('search')
         ? this.$route.name.split('__')[0]
@@ -255,3 +448,37 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.background-image ::v-deep > .v-image__image {
+  filter: brightness(0.6) !important;
+}
+
+.quick-search-card {
+  border-left-width: 5px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--v-accent-base) !important;
+}
+.footer-logo {
+  height: 60px;
+  width: auto;
+  /*padding: 0 10px;*/
+}
+// .v-image ::v-deep .v-responsive__content {
+//   align-self: center;
+// }
+.pulse {
+  animation: pulse 2s infinite;
+  @keyframes pulse {
+    0% {
+      padding-bottom: 30px;
+    }
+    70% {
+      padding-bottom: 0px;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+</style>
