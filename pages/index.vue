@@ -40,7 +40,7 @@
         />
 
         <div
-          class="aboutpage montserrat px-2 px-sm-5"
+          class="aboutpage px-2 px-sm-5"
           :style="{ 'column-count': aboutTextColumns }"
           v-html="$translate({ et: page.content_et, en: page.content_en })"
         ></div>

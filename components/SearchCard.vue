@@ -9,7 +9,7 @@
     :width="'100%'"
     :to="to"
   >
-    <div class="montserrat text-none">
+    <div class="text-none">
       {{ title }}
     </div>
   </v-chip>

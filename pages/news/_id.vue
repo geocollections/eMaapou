@@ -14,10 +14,7 @@
     </v-row>
     <v-row no-gutters>
       <v-col class="pl-4" cols="12" md="8" lg="6">
-        <div
-          class="montserrat"
-          v-html="$translate({ et: news.text_et, en: news.text_en })"
-        />
+        <div v-html="$translate({ et: news.text_et, en: news.text_en })" />
       </v-col>
     </v-row>
   </div>

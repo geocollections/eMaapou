@@ -1,7 +1,6 @@
 <template>
   <v-text-field
     v-model="searchQuery"
-    class="montserrat"
     color="accent"
     :placeholder="$t('common.searchAlt')"
     single-line

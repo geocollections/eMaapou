@@ -16,13 +16,13 @@
     >
 
     <v-card-text
-      class="montserrat pb-0"
+      class="pb-0"
       :class="{ 'white--text': dark }"
       v-html="$options.filters.truncate(extractContent(content), previewLenght)"
     >
     </v-card-text>
 
-    <v-card-actions class="justify-self-end pb-0">
+    <v-card-actions class="justify-self-end py-0">
       <v-spacer />
       <v-btn :color="dark ? 'white' : 'black'" text @click="$emit('click')">
         {{ $t('common.readNewsArticle') }}</v-btn
@@ -35,6 +35,9 @@
 export default {
   name: 'NewsPreviewCard',
   filters: {
+    // BUG: If unicode character is at the end of the truncated text
+    // The unicode will get split into two and and ugly artifacts remain.
+    // Should parse unicode before truncating
     truncate(value, length) {
       if (!value) return ''
       value = value.toString()

@@ -4,7 +4,7 @@
       <v-chip
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
-        class="mx-1 mb-1 montserrat elevation-1"
+        class="mx-1 mb-1 elevation-1"
         :disabled="item.count === 0"
         nuxt
         rounded

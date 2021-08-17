@@ -10,7 +10,6 @@
       </div>
     </template>
     <v-autocomplete
-      class="montserrat"
       :items="allTableHeaders"
       :value="shownTableHeaders"
       chips
@@ -23,7 +22,7 @@
       @change="handleTableHeaderChange"
     >
       <template #item="{ item }">
-        <v-list-item-content class="montserrat">
+        <v-list-item-content>
           {{ item.text }}
         </v-list-item-content>
       </template>

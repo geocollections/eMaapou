@@ -26,9 +26,14 @@
             </div>
           </v-card-text>
           <v-card-actions>
-            <v-btn nuxt :to="localePath('news')" color="white" text>{{
-              $t('common.viewNews')
-            }}</v-btn>
+            <v-btn
+              nuxt
+              class="montserrat"
+              :to="localePath('news')"
+              color="white"
+              text
+              >{{ $t('common.viewNews') }}</v-btn
+            >
           </v-card-actions>
         </div>
       </v-col>

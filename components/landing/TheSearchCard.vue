@@ -64,7 +64,7 @@
               <div
                 v-for="(item, index) in tabs"
                 :key="`tab-mobile-${index}`"
-                class="px-1 pb-2 montserrat white--text"
+                class="px-1 pb-2 white--text"
               >
                 <search-card
                   class="text--h6"
