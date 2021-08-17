@@ -23,6 +23,7 @@
         :invalidate-size="showBody"
         activate-search
         gps-enabled
+        rounded
         :show-links="false"
         :gesture-handling="$vuetify.breakpoint.smAndDown"
         @update="$emit('update')"
