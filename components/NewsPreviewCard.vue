@@ -15,11 +15,8 @@
       >{{ title }}</v-card-title
     >
 
-    <v-card-text
-      class="pb-0"
-      :class="{ 'white--text': dark }"
-      v-html="$options.filters.truncate(extractContent(content), previewLenght)"
-    >
+    <v-card-text class="pb-0" :class="{ 'white--text': dark }">
+      {{ extractContent(content) | truncate(previewLenght) }}
     </v-card-text>
 
     <v-card-actions class="justify-self-end py-0">
@@ -35,9 +32,6 @@
 export default {
   name: 'NewsPreviewCard',
   filters: {
-    // BUG: If unicode character is at the end of the truncated text
-    // The unicode will get split into two and and ugly artifacts remain.
-    // Should parse unicode before truncating
     truncate(value, length) {
       if (!value) return ''
       value = value.toString()
@@ -57,7 +51,12 @@ export default {
   },
   methods: {
     extractContent(html) {
-      if (html) return html.replace(/<[^>]+>/g, '')
+      if (html) {
+        // DOM elemet is greated to decode HTML entities (eg. &nbsp;)
+        const txt = document.createElement('textarea')
+        txt.innerHTML = html
+        return txt.value.replace(/<[^>]+>/g, '')
+      }
       return null
     },
   },

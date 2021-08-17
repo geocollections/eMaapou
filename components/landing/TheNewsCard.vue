@@ -16,6 +16,7 @@
             <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
               <news-preview-card
                 dark
+                :preview-lenght="previewLength"
                 :date="news.date_added"
                 :title="$translate({ et: news.title_et, en: news.title_en })"
                 :content="$translate({ et: news.text_et, en: news.text_en })"
@@ -66,6 +67,12 @@ export default {
       }
     )
     this.newsList = newsResponse.items
+  },
+  computed: {
+    previewLength() {
+      if (this.$vuetify.breakpoint.lgAndUp) return 200
+      return 140
+    },
   },
   methods: {
     openNews(news) {
