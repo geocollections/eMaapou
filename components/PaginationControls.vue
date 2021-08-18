@@ -39,6 +39,7 @@
             :value="goToValue"
             type="number"
             :rules="[pageLimitRule]"
+            @keyup.enter="selectPage"
             @input="setGoToValue"
           >
           </v-text-field>
