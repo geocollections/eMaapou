@@ -110,6 +110,9 @@ export default {
     switchNews: 'Uudised',
     specimenCount: 'Eksemplarid',
     specimen: 'Eksemplarid',
+    goTo: 'Leheküljele',
+    goToBtn: 'Mine',
+    pageSelect: '{current} / {count}',
   },
   link: {
     sarvAPI: 'Avalik API',

@@ -110,6 +110,9 @@ export default {
     switchNews: 'View news',
     specimenCount: 'Specimens',
     specimen: 'Specimen',
+    goTo: 'Go to page',
+    goToBtn: 'Go',
+    pageSelect: '{current} / {count}',
   },
   link: {
     sarvAPI: 'Public API',

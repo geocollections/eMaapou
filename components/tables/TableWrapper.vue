@@ -1,5 +1,5 @@
 <template>
-  <!-- HACK: line 22 'isLoading = !onlyTable is hacky.
+  <!-- HACK: line 28 'isLoading = !onlyTable is hacky.
       For some reason @update is getting called on created,
       because of that the loading indicator stayies perminantly active
       on tables where update function is not set.
@@ -19,16 +19,16 @@
       :items="items"
       :options="options"
       :server-items-length="count"
+      hide-default-footer
       :footer-props="footerProps"
-      :hide-default-footer="onlyTable"
       :show-expand="expandable"
       :single-expand="singleExpand"
       :expanded.sync="expanded"
+      @click:row="handleRowClick"
       @update:options="
         isLoading = !onlyTable
         handleChange($event)
       "
-      @click:row="handleRowClick"
     >
       <template #no-data>{{ $t('table.noData') }}</template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -50,36 +50,53 @@
 
           <v-row no-gutters>
             <v-col cols="auto" class="px-3 my-3" align-self="center">
-              <v-menu transition="slide-y-transition" offset-y bottom right>
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    aria-label="export table"
-                    class="d-block montserrat"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    {{ $t('common.export') }}
-                  </v-btn>
-                </template>
-
-                <v-list>
-                  <v-list-item @click="handleExportCsv()">
-                    <v-list-item-title>CSV</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="handleExportExcel()">
-                    <v-list-item-title>XLSX (Excel)</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="handleClipboard()">
-                    <v-list-item-title>
-                      {{ $t('common.clipboard') }}
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+              <v-btn
+                id="export-btn"
+                color="primary"
+                aria-label="export table"
+                class="d-block montserrat"
+              >
+                {{ $t('common.export') }}
+                <v-menu
+                  activator="#export-btn"
+                  transition="slide-y-transition"
+                  offset-y
+                  bottom
+                  right
+                >
+                  <v-list>
+                    <v-list-item @click="handleExportCsv()">
+                      <v-list-item-title>CSV</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="handleExportExcel()">
+                      <v-list-item-title>XLSX (Excel)</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="handleClipboard()">
+                      <v-list-item-title>
+                        {{ $t('common.clipboard') }}
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-btn>
             </v-col>
             <v-col>
-              <v-data-footer
+              <pagination-controls
+                :options="options"
+                :pagination="pagination"
+                :items-per-page-options="footerProps['items-per-page-options']"
+                :items-per-page-text="footerProps['items-per-page-text']"
+                :page-select-text="
+                  $t('common.pageSelect', {
+                    current: options.page,
+                    count: pagination.pageCount,
+                  })
+                "
+                :go-to-text="$t('common.goTo')"
+                :go-to-button-text="$t('common.goToBtn')"
+                @update:options="updateOptions"
+              />
+              <!-- <v-data-footer
                 style="border: none"
                 :pagination="pagination"
                 :options="options"
@@ -87,10 +104,31 @@
                 :items-per-page-options="footerProps['items-per-page-options']"
                 :items-per-page-text="footerProps['items-per-page-text']"
                 @update:options="updateOptions"
-              />
+              /> -->
             </v-col>
           </v-row>
         </div>
+      </template>
+      <template v-if="!onlyTable" #footer="{ props }">
+        <pagination-controls
+          class="py-3"
+          :options="props.options"
+          :pagination="props.pagination"
+          :items-per-page-options="footerProps['items-per-page-options']"
+          :items-per-page-text="footerProps['items-per-page-text']"
+          :page-select-text="
+            $t('common.pageSelect', {
+              current: props.options.page,
+              count: props.pagination.pageCount,
+            })
+          "
+          :go-to-text="$t('common.goTo')"
+          :go-to-button-text="$t('common.goToBtn')"
+          @update:options="
+            isLoading = !onlyTable
+            handleChange($event)
+          "
+        />
       </template>
       <template
         v-if="expandable"
@@ -115,9 +153,10 @@
 <script>
 import { debounce } from 'lodash'
 import exportMixin from '~/mixins/exportMixin'
-
+import PaginationControls from '~/components/PaginationControls.vue'
 export default {
   name: 'TableWrapper',
+  components: { PaginationControls },
   mixins: [exportMixin],
   props: {
     onlyTable: {
