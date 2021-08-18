@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail :ids="ids" :title="title" class="title-sample" />
+      <title-card-detail :ids="ids" :title="title" class="title-specimen" />
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">

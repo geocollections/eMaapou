@@ -163,6 +163,7 @@ export default {
           'emp-locality': '#c78a6e',
           'emp-site': '#7bbc9a',
           'emp-photo': '#ab9f93',
+          'emp-specimen': '#bc7b7b',
         },
         light: {
           primary: '#7c8996',
@@ -183,6 +184,7 @@ export default {
           'emp-locality': '#c78a6e',
           'emp-site': '#7bbc9a',
           'emp-photo': '#ab9f93',
+          'emp-specimen': '#bc7b7b',
         },
       },
     },

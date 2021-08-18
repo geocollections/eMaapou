@@ -361,6 +361,12 @@ th {
   border-color: var(--v-emp-dataset-base) !important;
 }
 
+.title-specimen {
+  @extend .title-border;
+
+  border-color: var(--v-emp-specimen-base) !important;
+}
+
 #app {
   background-color: #f7f6f4 !important;
 }
