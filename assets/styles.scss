@@ -253,6 +253,12 @@ th {
   border-color: var(--v-emp-stratigraphy-base) !important;
 }
 
+.specimen-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-specimen-base) !important;
+}
+
 .analysis-search-card {
   @extend .search-card-border;
 
