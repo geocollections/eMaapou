@@ -120,15 +120,21 @@
           <div
             v-if="scrollY === 0"
             class="d-flex justify-center"
-            style="position: absolute; bottom: 0; width: 100%"
+            style="
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              pointer-events: none;
+            "
           >
             <v-btn
+              style="pointer-events: auto"
               :ripple="false"
               dark
-              x-large
+              small
               plain
-              icons
-              class="pulse d-flex flex-column"
+              icon
+              class="pulse d-flex flex-column px-0"
               @click="$vuetify.goTo('#otherServices')"
               ><v-icon x-large>mdi-chevron-down</v-icon>
             </v-btn>
