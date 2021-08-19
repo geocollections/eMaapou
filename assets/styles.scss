@@ -300,77 +300,139 @@ th {
 }
 
 .title-border {
-  border-bottom-width: 5px !important;
-  border-bottom-style: solid !important;
+  // border-bottom-width: 2px !important;
+  // border-bottom-style: solid !important;
 
-  // &::after {
-  //   content: '';
-  //   position: absolute;
-  //   bottom: 0;
-  //   left: 0;
-  //   right: 0;
-  //   background-color: red;
-  //   height: 5px;
-  //   border-radius: 10px 10px 10px 10px;
-  // }
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--v-main-base);
+    height: 4px;
+    border-radius: 2px 2px 2px 2px;
+  }
+}
+
+.title-heading {
+  @extend .title-border;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-header-darken2),
+      var(--v-header-base)
+    );
+  }
 }
 
 .title-main {
   @extend .title-border;
-
-  border-bottom-color: var(--v-main-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-main-darken2),
+      var(--v-emp-main-base)
+    );
+  }
 }
 
 .title-stratigraphy {
   @extend .title-border;
-
-  border-color: var(--v-emp-stratigraphy-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-stratigraphy-darken2),
+      var(--v-emp-stratigraphy-base)
+    );
+  }
 }
 
 .title-analysis {
   @extend .title-border;
-
-  border-color: var(--v-emp-analysis-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-analysis-darken2),
+      var(--v-emp-analysis-base)
+    );
+  }
 }
 
 .title-sample {
   @extend .title-border;
-
-  border-color: var(--v-emp-sample-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-sample-darken2),
+      var(--v-emp-sample-base)
+    );
+  }
 }
 
 .title-drillcore {
   @extend .title-border;
-
-  border-color: var(--v-emp-drillcore-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-drillcore-darken2),
+      var(--v-emp-drillcore-base)
+    );
+  }
 }
 
 .title-locality {
   @extend .title-border;
-
-  border-color: var(--v-emp-locality-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-locality-darken2),
+      var(--v-emp-locality-base)
+    );
+  }
 }
 
 .title-site {
   @extend .title-border;
-
-  border-color: var(--v-emp-site-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-site-darken2),
+      var(--v-emp-site-base)
+    );
+  }
 }
 .title-photo {
   @extend .title-border;
-
-  border-color: var(--v-emp-photo-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-photo-darken2),
+      var(--v-emp-photo-base)
+    );
+  }
 }
+
 .title-dataset {
   @extend .title-border;
-
-  border-color: var(--v-emp-dataset-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-dataset-darken2),
+      var(--v-emp-dataset-base)
+    );
+  }
 }
 
 .title-specimen {
   @extend .title-border;
-
-  border-color: var(--v-emp-specimen-base) !important;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-specimen-darken2),
+      var(--v-emp-specimen-base)
+    );
+  }
 }
 
 #app {

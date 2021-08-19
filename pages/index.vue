@@ -139,11 +139,7 @@
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row class="my-2 my-sm-10" justify="center" align="center">
         <v-col id="otherServices" cols="12">
-          <title-card
-            :title="$t('landing.otherPages')"
-            class="title-border"
-            style="border-color: var(--v-header-darken1)"
-          />
+          <title-card :title="$t('landing.otherPages')" class="title-heading" />
         </v-col>
         <v-col>
           <v-row class="px-2 px-sm-5">
@@ -170,11 +166,7 @@
       </v-row>
       <v-row justify="center" class="my-2 my-sm-10">
         <v-col cols="12">
-          <title-card
-            :title="$t('about.title')"
-            class="title-border"
-            style="border-color: var(--v-header-darken1)"
-          />
+          <title-card :title="$t('about.title')" class="title-heading" />
 
           <div
             class="aboutpage px-2 px-sm-5"
