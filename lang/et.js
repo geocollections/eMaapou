@@ -1094,6 +1094,9 @@ export default {
     'news-id': 'Uudis: {id}',
     specimen: 'Eksemplarid',
     'specimen-id': 'Eksemplar ID: {id}',
+    elm: 'ELM',
+    git: 'GIT',
+    tug: 'TUG',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',

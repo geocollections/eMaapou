@@ -1094,6 +1094,9 @@ export default {
     'news-id': 'News: {id}',
     specimen: 'Specimens',
     'specimen-id': 'Specimen ID: {id}',
+    elm: 'ELM',
+    git: 'GIT',
+    tug: 'TUG',
   },
   institutions: {
     ttu: 'TalTech Department of Geology',
