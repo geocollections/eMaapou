@@ -2,7 +2,7 @@
   <v-row>
     <v-col>
       <slot name="title"></slot>
-      <v-row>
+      <v-row class="px-0 px-sm-3">
         <v-col cols="12" md="3">
           <slot name="form"></slot>
         </v-col>
