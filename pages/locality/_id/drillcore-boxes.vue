@@ -42,8 +42,20 @@
                       max-width="1000"
                       max-height="800"
                       eager
-                      :lazy-src="`https://files.geocollections.info/small/${box.attachment__filename}`"
-                      :src="`https://files.geocollections.info/medium/${box.attachment__filename}`"
+                      :lazy-src="
+                        $img(
+                          `${box.attachment__filename}`,
+                          { size: 'small' },
+                          { provider: 'geocollections' }
+                        )
+                      "
+                      :src="
+                        $img(
+                          `${box.attachment__filename}`,
+                          { size: 'medium' },
+                          { provider: 'geocollections' }
+                        )
+                      "
                     >
                       <template #placeholder>
                         <v-row
@@ -117,10 +129,8 @@
                             >
                               {{
                                 $translate({
-                                  et:
-                                    box.drillcore_box__stratigraphy_top__stratigraphy,
-                                  en:
-                                    box.drillcore_box__stratigraphy_top__stratigraphy_en,
+                                  et: box.drillcore_box__stratigraphy_top__stratigraphy,
+                                  en: box.drillcore_box__stratigraphy_top__stratigraphy_en,
                                 })
                               }}
                             </a>
@@ -148,10 +158,8 @@
                             >
                               {{
                                 $translate({
-                                  et:
-                                    box.drillcore_box__stratigraphy_base__stratigraphy,
-                                  en:
-                                    box.drillcore_box__stratigraphy_base__stratigraphy_en,
+                                  et: box.drillcore_box__stratigraphy_base__stratigraphy,
+                                  en: box.drillcore_box__stratigraphy_base__stratigraphy_en,
                                 })
                               }}
                             </a>

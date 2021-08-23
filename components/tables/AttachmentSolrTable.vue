@@ -44,7 +44,13 @@
     <template #item.image="{ item }">
       <image-cell
         v-if="item.uuid_filename"
-        :src="`https://files.geocollections.info/medium/${item.uuid_filename}`"
+        :src="
+          $img(
+            `${item.uuid_filename}`,
+            { size: 'medium' },
+            { provider: 'geocollections' }
+          )
+        "
         class="ma-2"
         @click="
           $router.push(

@@ -4,7 +4,7 @@
       <v-card-title class="font-weight-bold py-1 text-body-1"
         >Estonian map</v-card-title
       >
-      <v-img :src="require(`~/assets/map/${estBase}.png`)" />
+      <v-img :src="$img(`/map/${estBase}.png`)" />
     </v-card>
 
     <v-divider />
@@ -13,7 +13,7 @@
       <v-card-title class="font-weight-bold py-1 text-body-1"
         >Estonian hybrid</v-card-title
       >
-      <v-img v-if="estHyb" :src="require(`~/assets/map/${estHyb}.png`)" />
+      <v-img v-if="estHyb" :src="$img(`/map/${estHyb}.png`)" />
     </v-card>
   </v-card>
 </template>

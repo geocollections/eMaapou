@@ -19,8 +19,20 @@
                 'elevation-8': hover,
                 'elevation-4': !hover,
               }"
-              :lazy-src="`https://files.geocollections.info/small/${activeImage.attachment__uuid_filename}`"
-              :src="`https://files.geocollections.info/large/${activeImage.attachment__uuid_filename}`"
+              :lazy-src="
+                $img(
+                  activeImage.attachment__uuid_filename,
+                  { size: 'small' },
+                  { provider: 'geocollections' }
+                )
+              "
+              :src="
+                $img(
+                  activeImage.attachment__uuid_filename,
+                  { size: 'large' },
+                  { provider: 'geocollections' }
+                )
+              "
               max-width="2000"
               max-height="1000"
               @click="$openImage(activeImage.attachment__uuid_filename)"
@@ -107,8 +119,20 @@
             >
               <v-hover v-slot="{ hover }">
                 <v-img
-                  :src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
-                  :lazy-src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
+                  :src="
+                    $img(
+                      item.attachment__uuid_filename,
+                      { size: 'small' },
+                      { provider: 'geocollections' }
+                    )
+                  "
+                  :lazy-src="
+                    $img(
+                      item.attachment__uuid_filename,
+                      { size: 'small' },
+                      { provider: 'geocollections' }
+                    )
+                  "
                   max-width="200"
                   max-height="200"
                   :class="{

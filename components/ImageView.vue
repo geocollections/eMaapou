@@ -38,8 +38,20 @@
                 min-width="72"
                 :contain="containImages"
                 aspect-ratio="1"
-                :lazy-src="`https://files.geocollections.info/small/${image.uuid_filename}`"
-                :src="`https://files.geocollections.info/small/${image.uuid_filename}`"
+                :lazy-src="
+                  $img(
+                    `${item.uuid_filename}`,
+                    { size: 'small', height: 400 },
+                    { provider: 'geocollections' }
+                  )
+                "
+                :src="
+                  $img(
+                    `${item.uuid_filename}`,
+                    { size: 'small', height: 400 },
+                    { provider: 'geocollections' }
+                  )
+                "
               >
                 <template #placeholder>
                   <v-row

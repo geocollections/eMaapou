@@ -248,8 +248,20 @@
           <v-hover v-slot="{ hover }">
             <v-img
               v-bind="attrs"
-              :src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
-              :lazy-src="`https://files.geocollections.info/small/${item.attachment__uuid_filename}`"
+              :src="
+                $img(
+                  `${item.attachment__uuid_filename}`,
+                  { size: 'small' },
+                  { provider: 'geocollections' }
+                )
+              "
+              :lazy-src="
+                $img(
+                  `${item.attachment__uuid_filename}`,
+                  { size: 'small' },
+                  { provider: 'geocollections' }
+                )
+              "
               max-width="200"
               max-height="200"
               width="200"

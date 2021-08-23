@@ -24,7 +24,13 @@
             :key="index"
             nuxt
             :to="localePath({ name: 'photo-id', params: { id: item.id } })"
-            :src="`https://files.geocollections.info/medium/${item.uuid_filename}`"
+            :src="
+              $img(
+                `${item.uuid_filename}`,
+                { size: 'medium' },
+                { provider: 'geocollections' }
+              )
+            "
           />
         </v-carousel>
 
@@ -80,8 +86,20 @@
             <div v-for="(item, index) in items" :key="index" class="my-2 mr-4">
               <v-hover v-slot="{ hover }">
                 <v-img
-                  :src="`https://files.geocollections.info/small/${item.uuid_filename}`"
-                  :lazy-src="`https://files.geocollections.info/small/${item.uuid_filename}`"
+                  :src="
+                    $img(
+                      `${item.uuid_filename}`,
+                      { size: 'small', width: 100 },
+                      { provider: 'geocollections' }
+                    )
+                  "
+                  :lazy-src="
+                    $img(
+                      `${item.uuid_filename}`,
+                      { size: 'small', width: 100 },
+                      { provider: 'geocollections' }
+                    )
+                  "
                   max-width="100"
                   min-width="72"
                   aspect-ratio="1"

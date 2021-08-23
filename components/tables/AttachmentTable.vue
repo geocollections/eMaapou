@@ -9,7 +9,13 @@
   >
     <template #item.file="{ item }">
       <attachment-cell
-        :src="`https://files.geocollections.info/small/${item.attachment__filename}`"
+        :src="
+          $img(
+            `${item.attachment__filename}`,
+            { size: 'small' },
+            { provider: 'geocollections' }
+          )
+        "
         :type="item.attachment__attachment_format__value"
         @click="
           $router.push(

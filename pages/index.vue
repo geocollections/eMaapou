@@ -16,8 +16,8 @@
       width="100%"
       class="elevation-4 background-image"
       position="center 20%"
-      :src="require('~/assets/frontpage/header_img.jpg')"
-      :lazy-src="require('~/assets/frontpage/header_img_medium.jpg')"
+      :src="$img('/frontpage/header_img.jpg')"
+      :lazy-src="$img('/frontpage/header_img_medium.jpg')"
     >
       <div
         class="
@@ -51,7 +51,7 @@
               <img
                 v-if="$vuetify.breakpoint.smAndUp"
                 style="height: 100px; width: 200px"
-                :src="logo"
+                :src="$img(logo)"
                 class="mt-5 mb-sm-5 mr-4"
               />
               <v-divider
@@ -91,7 +91,7 @@
               >
                 <v-tooltip top>
                   <template #activator="{ on, attrs }">
-                    <img
+                    <nuxt-img
                       v-bind="attrs"
                       :src="item.src"
                       :alt="$t(item.alt)"
@@ -163,7 +163,7 @@
                 :title="$t(item.title)"
                 :description="$t(item.description)"
                 :href="item.href"
-                :background="item.background"
+                :background="$img(item.background)"
                 grayscale
               />
             </v-col>
@@ -208,32 +208,32 @@ export default {
   },
   data() {
     return {
-      logo: require('~/assets/logos/emaapou5white.svg'),
+      logo: '/logos/emaapou5white.svg',
       drawer: false,
       showMap: false,
       scrollY: 0,
       imageLinks: [
         {
           href: 'https://taltech.ee/geoloogia-instituut',
-          src: require('~/assets/logos/tutaltech2.png'),
+          src: '/logos/tutaltech2.png',
           title: 'footerLinks.ttu',
           alt: 'footerLinks.ttu',
         },
         {
           href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
-          src: require('~/assets/logos/TY_logo_ring_jooneta_valge.png'),
+          src: '/logos/TY_logo_ring_jooneta_valge.png',
           title: 'footerLinks.tu',
           alt: 'footerLinks.tu',
         },
         {
           href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
-          src: require('~/assets/logos/ELM_logo_white1.png'),
+          src: '/logos/ELM_logo_white1.png',
           title: 'footerLinks.elm',
           alt: 'footerLinks.elm',
         },
         /* {
           href: 'https://struktuurifondid.ee',
-          src: require('~/assets/logos/EL_mv.png'),
+          src: '/logos/EL_mv.png',
           title: 'footerLinks.el',
           alt: 'footerLinks.el',
         }, */
@@ -243,7 +243,7 @@ export default {
           title: 'geocollections.title',
           description: 'geocollections.description',
           href: 'https://geocollections.info',
-          background: require('~/assets/frontpage/geokogud.jpg'),
+          background: '/frontpage/geokogud.jpg',
           sm: 6,
           md: 4,
           lg: 4,
@@ -252,7 +252,7 @@ export default {
           title: 'kirjandus.title',
           description: 'kirjandus.description',
           href: 'https://kirjandus.geoloogia.info',
-          background: require('~/assets/frontpage/geokirjandus.jpg'),
+          background: '/frontpage/geokirjandus.jpg',
           sm: 6,
           md: 4,
           lg: 4,
@@ -261,7 +261,7 @@ export default {
           title: 'gmre.title',
           description: 'gmre.description',
           href: 'https://geoloogia.info/geology',
-          background: require('~/assets/frontpage/gmre.jpg'),
+          background: '/frontpage/gmre.jpg',
           sm: 6,
           md: 3,
           lg: 3,
@@ -270,7 +270,7 @@ export default {
           title: 'fond.title',
           description: 'fond.description',
           href: 'https://fond.egt.ee',
-          background: require('~/assets/frontpage/geoloogiafond.jpg'),
+          background: '/frontpage/geoloogiafond.jpg',
           sm: 6,
           md: 4,
           lg: 4,
@@ -280,7 +280,7 @@ export default {
           title: 'fossiilid.title',
           description: 'fossiilid.description',
           href: 'https://fossiilid.info',
-          background: require('~/assets/frontpage/fossiilid.jpg'),
+          background: '/frontpage/fossiilid.jpg',
           sm: 6,
           md: 3,
           lg: 3,
@@ -289,7 +289,7 @@ export default {
           title: 'kivid.title',
           description: 'kivid.description',
           href: 'https://kivid.info',
-          background: require('~/assets/frontpage/kivid.jpg'),
+          background: '/frontpage/kivid.jpg',
           sm: 6,
           md: 6,
           lg: 6,
@@ -298,7 +298,7 @@ export default {
           title: 'frontStratigraphy.title',
           description: 'frontStratigraphy.description',
           href: 'https://stratotuup.ut.ee',
-          background: require('~/assets/frontpage/stratigraafia.jpg'),
+          background: '/frontpage/stratigraafia.jpg',
           sm: 6,
           md: 4,
           lg: 4,
@@ -308,7 +308,7 @@ export default {
           title: 'maardlad.title',
           description: 'maardlad.description',
           href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
-          background: require('~/assets/frontpage/maardlad.jpg'),
+          background: '/frontpage/maardlad.jpg',
           sm: 6,
           md: 4,
           lg: 4,
@@ -317,7 +317,7 @@ export default {
           title: 'doi.title',
           description: 'doi.description',
           href: 'https://doi.geocollections.info',
-          background: require('~/assets/frontpage/sarv-doi.jpg'),
+          background: '/frontpage/sarv-doi.jpg',
           sm: 6,
           md: 4,
           lg: 4,
@@ -326,7 +326,7 @@ export default {
           title: 'turba.title',
           description: 'turba.description',
           href: 'https://turba.geoloogia.info',
-          background: require('~/assets/frontpage/turba.jpg'),
+          background: '/frontpage/turba.jpg',
           sm: 6,
           md: 3,
           lg: 3,
@@ -336,7 +336,7 @@ export default {
           title: 'geocase.title',
           description: 'geocase.description',
           href: 'https://geocase.eu',
-          background: require('~/assets/frontpage/geocase.jpg'),
+          background: '/frontpage/geocase.jpg',
           sm: 6,
           md: 3,
           lg: 3,
@@ -345,7 +345,7 @@ export default {
           title: 'eurocore.title',
           description: 'eurocore.description',
           href: 'https://eurocore.rocks',
-          background: require('~/assets/frontpage/eurocore.jpg'),
+          background: '/frontpage/eurocore.jpg',
           sm: 6,
           md: 3,
           lg: 3,
@@ -354,7 +354,7 @@ export default {
           title: 'sarv.title',
           description: 'sarv.description',
           href: 'https://edit.geocollections.info',
-          background: require('~/assets/frontpage/sarv-wb.jpg'),
+          background: '/frontpage/sarv-wb.jpg',
           sm: 6,
           md: 3,
           lg: 3,

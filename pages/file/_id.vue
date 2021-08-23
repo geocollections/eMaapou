@@ -8,11 +8,28 @@
         <!-- Image -->
         <v-img
           v-if="isImage"
+          class="rounded"
           content-class="image-content"
           max-height="700"
           contain
-          :lazy-src="`https://files.geocollections.info/small/${file.filename}`"
-          :src="`https://files.geocollections.info/medium/${file.filename}`"
+          :lazy-src="
+            $img(
+              `${file.filename}`,
+              { size: 'small', height: 700 },
+              {
+                provider: 'geocollections',
+              }
+            )
+          "
+          :src="
+            $img(
+              `${file.filename}`,
+              { size: 'medium', height: 700 },
+              {
+                provider: 'geocollections',
+              }
+            )
+          "
         >
           <template #placeholder>
             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -23,6 +40,13 @@
             </v-row>
           </template>
         </v-img>
+        <!-- <nuxt-img
+          v-if="file.filename"
+          fit="contain"
+          sizes="(max-height: 700px)"
+          provider="geocollections"
+          :src="`medium/${file.filename}`"
+        /> -->
 
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>

@@ -4,7 +4,7 @@
       v-if="$vuetify.breakpoint.xsOnly"
       class="ml-3 align-self-center app-title"
     >
-      <v-img :height="45" :width="90" contain :src="logo" />
+      <v-img :height="45" :width="90" contain :src="$img(logo)" />
     </v-app-bar-title>
     <v-spacer />
     <v-toolbar-items>
@@ -45,7 +45,7 @@ export default {
   },
   data() {
     return {
-      logo: require('~/assets/logos/emaapou5white.svg'),
+      logo: '/logos/emaapou5white.svg',
     }
   },
 }

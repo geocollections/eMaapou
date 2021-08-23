@@ -14,12 +14,22 @@
             <v-hover v-slot="{ hover }">
               <v-img
                 v-bind="attrs"
-                :src="`https://files.geocollections.info/small/${item.uuid_filename}`"
-                :lazy-src="`https://files.geocollections.info/small/${item.uuid_filename}`"
+                :src="
+                  $img(
+                    `${item.uuid_filename}`,
+                    { size: 'small', width: 200, height: 200 },
+                    { provider: 'geocollections' }
+                  )
+                "
+                :lazy-src="
+                  $img(
+                    `${item.uuid_filename}`,
+                    { size: 'small', width: 200, height: 200 },
+                    { provider: 'geocollections' }
+                  )
+                "
                 max-width="200"
                 max-height="200"
-                width="200"
-                height="200"
                 :class="{
                   'elevation-4': hover,
                   'elevation-2': !hover,
