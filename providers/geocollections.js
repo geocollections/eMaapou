@@ -11,7 +11,6 @@ export function getImage(
   const operations = []
   // process modifiers
   const operationsString = operations.join(',')
-  console.log(joinURL(baseURL, size, operationsString, src))
   return {
     url: joinURL(baseURL, size, operationsString, src),
   }
