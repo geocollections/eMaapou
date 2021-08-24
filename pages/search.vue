@@ -196,9 +196,8 @@ export default {
             })
         )
       )
-      const validPath = app.$validateTabRoute(route, hydratedTabs, {
-        findMax: true,
-      })
+      const validPath = app.$getMaxTab(route, hydratedTabs)
+
       if (validPath !== route.path) redirect(validPath)
       return {
         tabs: hydratedTabs,
@@ -256,7 +255,6 @@ export default {
       )
       this.updateRouteQuery()
     }, 500),
-
     updateRouteQuery() {
       const routeName = this.$route.name.includes('search')
         ? this.$route.name.split('__')[0]

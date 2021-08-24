@@ -359,6 +359,7 @@ export default {
         locations,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Could not find dataset ${route.params.id}`,
         path: route.path,
