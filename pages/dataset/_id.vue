@@ -136,7 +136,7 @@
                     :value="selectedParameterValues"
                     multiple
                     column
-                    active-class="header lighten-2 font-weight-bold elevation-1"
+                    active-class="active-tab font-weight-bold elevation-1"
                     @change="handleParameterChange"
                   >
                     <v-chip
@@ -438,3 +438,16 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.active-tab {
+  background-color: map-get($map: $grey, $key: 'lighten-3') !important;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: var(--v-accent-lighten2) !important;
+
+  &:before {
+    background-color: white !important;
+  }
+}
+</style>
