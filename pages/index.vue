@@ -16,8 +16,10 @@
       width="100%"
       class="elevation-4 background-image"
       position="center 20%"
-      :src="$img('/frontpage/header_img.jpg')"
-      :lazy-src="$img('/frontpage/header_img_medium.jpg')"
+      :src="$img('/frontpage/header_img.jpg', null, { provider: 'static' })"
+      :lazy-src="
+        $img('/frontpage/header_img_medium.jpg', null, { provider: 'static' })
+      "
     >
       <div
         class="
@@ -51,7 +53,7 @@
               <img
                 v-if="$vuetify.breakpoint.smAndUp"
                 style="height: 100px; width: 200px"
-                :src="$img(logo)"
+                :src="$img(logo, null, { provider: 'static' })"
                 class="mt-5 mb-sm-5 mr-4"
               />
               <v-divider
@@ -95,6 +97,7 @@
                       v-bind="attrs"
                       :src="item.src"
                       :alt="$t(item.alt)"
+                      provider="static"
                       class="footer-logo py-1 py-sm-0 px-3"
                       v-on="on"
                     />
@@ -163,7 +166,9 @@
                 :title="$t(item.title)"
                 :description="$t(item.description)"
                 :href="item.href"
-                :background="$img(item.background)"
+                :background="
+                  $img(item.background, null, { provider: 'static' })
+                "
                 grayscale
               />
             </v-col>

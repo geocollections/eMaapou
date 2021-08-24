@@ -7,9 +7,8 @@
     />
     <v-main>
       <v-container class="pt-0" :fluid="$vuetify.breakpoint.lgAndDown">
-        <client-only>
-          <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
-        </client-only>
+        <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
+
         <nuxt />
         <scroll-top-fab />
       </v-container>
@@ -26,7 +25,7 @@
 import AppFooter from '~/components/AppFooter'
 import AppHeader from '~/components/AppHeader'
 import ScrollTopFab from '~/components/ScrollTopFab.vue'
-import CookiePolicy from '~/components/CookiePolicy'
+import CookiePolicy from '~/components/CookiePolicy.vue'
 import HistoryViewer from '~/components/HistoryViewer.vue'
 import NavigationDrawer from '~/components/NavigationDrawer'
 
@@ -46,13 +45,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.background-image ::v-deep > .v-image__image {
-  filter: brightness(0.6) !important;
-}
-
-// .v-image ::v-deep .v-image__image {
-//   background-position: center 40% !important;
-// }
-</style>

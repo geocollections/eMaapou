@@ -40,13 +40,6 @@
             </v-row>
           </template>
         </v-img>
-        <!-- <nuxt-img
-          v-if="file.filename"
-          fit="contain"
-          sizes="(max-height: 700px)"
-          provider="geocollections"
-          :src="`medium/${file.filename}`"
-        /> -->
 
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>

@@ -4,7 +4,12 @@
       v-if="$vuetify.breakpoint.xsOnly"
       class="ml-3 align-self-center app-title"
     >
-      <v-img :height="45" :width="90" contain :src="$img(logo)" />
+      <v-img
+        :height="45"
+        :width="90"
+        contain
+        :src="$img(logo, null, { provider: 'static' })"
+      />
     </v-app-bar-title>
     <v-spacer />
     <v-toolbar-items>

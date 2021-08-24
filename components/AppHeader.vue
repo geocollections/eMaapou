@@ -7,21 +7,19 @@
     :elevation="4"
     class="gradient-background"
   >
-    <v-toolbar-items>
-      <v-app-bar-title class="ml-3 align-self-center">
-        <!--
+    <v-app-bar-title class="ml-3 align-self-center">
+      <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-        <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
-          <v-img :height="45" :width="90" contain :src="$img(logo)" />
-          <v-tooltip bottom activator="#app-bar-title">
-            <span>{{ $t('landing.goToFrontpage') }}</span>
-          </v-tooltip>
-        </nuxt-link>
-      </v-app-bar-title>
-    </v-toolbar-items>
+      <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
+        <v-img :height="45" :width="90" contain :src="$img(logo)" />
+        <v-tooltip bottom activator="#app-bar-title">
+          <span>{{ $t('landing.goToFrontpage') }}</span>
+        </v-tooltip>
+      </nuxt-link>
+    </v-app-bar-title>
     <v-divider
       v-if="$vuetify.breakpoint.mdAndUp"
       vertical
@@ -64,7 +62,7 @@
     </v-toolbar-items>
     <v-spacer />
     <v-toolbar-items>
-      <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
+      <lang-switcher />
       <v-btn
         text
         class="montserrat"

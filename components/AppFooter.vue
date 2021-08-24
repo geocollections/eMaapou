@@ -15,6 +15,7 @@
                 v-bind="attrs"
                 :src="item.src"
                 :alt="$t(item.alt)"
+                provider="static"
                 class="footer-logo py-1 py-sm-0 px-3"
                 v-on="on"
               />
