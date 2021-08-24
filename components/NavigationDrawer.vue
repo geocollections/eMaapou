@@ -7,7 +7,7 @@
     temporary
     width="100%"
     color="quaternary"
-    class="elevation-4 montserrat"
+    class="elevation-4"
     :height="$vuetify.breakpoint.smAndUp ? 'unset' : `100%`"
     :style="`z-index: 2050; margin-top: ${$vuetify.application.top}px; opacity: 0.95`"
     :class="{ 'use-padding-bottom': $vuetify.breakpoint.smAndDown }"
@@ -16,7 +16,7 @@
     <v-container class="more-menu py-4 mb-6">
       <v-row>
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title">
+          <div class="section-title montserrat">
             {{ $t('landing.routes') }}
           </div>
 
@@ -34,7 +34,7 @@
               {{ $t(`common.${item.lang}`) }}
             </nuxt-link>
           </div>
-          <div class="section-title">
+          <div class="section-title montserrat">
             {{ $t('landing.searchRoutes') }}
           </div>
 
@@ -55,7 +55,7 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title">{{ $t('common.links') }}</div>
+          <div class="section-title montserrat">{{ $t('common.links') }}</div>
 
           <hr />
 
@@ -73,7 +73,9 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title">{{ $t('common.institutions') }}</div>
+          <div class="section-title montserrat">
+            {{ $t('common.institutions') }}
+          </div>
 
           <hr />
 
@@ -89,7 +91,7 @@
             </a>
           </div>
 
-          <div class="section-title">{{ $t('common.lang') }}</div>
+          <div class="section-title montserrat">{{ $t('common.lang') }}</div>
 
           <hr />
 
