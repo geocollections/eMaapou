@@ -1,10 +1,10 @@
 <template>
-  <v-chip-group column active-class="active-tab font-weight-bold elevation-3">
+  <v-chip-group column active-class="active-tab font-weight-bold elevation-1">
     <transition-group name="flip-list">
       <v-chip
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
-        class="mx-1 mb-1 elevation-1"
+        class="mx-1 mb-1"
         :disabled="item.count === 0"
         nuxt
         rounded
@@ -18,6 +18,13 @@
         "
       >
         {{ $t(item.title, { number: item.count }) }}
+        <v-chip
+          small
+          :ripple="false"
+          class="primary font-weight-regular lighten-1 ml-1 ma-0"
+        >
+          {{ item.count }}
+        </v-chip>
       </v-chip>
     </transition-group>
   </v-chip-group>

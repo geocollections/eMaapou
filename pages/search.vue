@@ -1,22 +1,35 @@
 <template>
   <div>
-    <v-row justify="center" align="center">
+    <v-row no-gutters justify="center" align="center">
       <v-col>
-        <h1 class="my-3 text-center text-sm-h3 font-weight-bold text-h4">
-          {{ $t('landing.searchTitle') }}
-        </h1>
+        <title-card :title="$t('landing.searchTitle')" class="title-heading" />
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col sm="8" md="6">
-        <global-search @input="handleSearch" />
+    <v-row class="px-sm-3" no-gutters>
+      <v-col cols="12" md="4" lg="3" class="pr-md-3">
+        <v-card flat color="transparent">
+          <v-card-title class="montserrat pl-2 py-1">
+            {{ $t('common.showSearch') }}
+          </v-card-title>
+          <global-search @input="handleSearch" />
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card flat color="transparent">
+          <v-card-title class="montserrat pl-2 py-1">
+            {{ $t('common.selectModule') }}
+          </v-card-title>
+          <v-card-actions class="pt-0">
+            <button-tabs ref="tabs" :tabs="computedTabs" />
+          </v-card-actions>
+        </v-card>
       </v-col>
     </v-row>
-    <v-row justify="center">
+    <v-row no-gutters class="px-sm-3" justify="center">
       <v-col>
-        <div class="mb-2">
+        <!-- <div class="mb-2">
           <button-tabs ref="tabs" :tabs="computedTabs" />
-        </div>
+        </div> -->
 
         <v-card>
           <nuxt-child :query="searchQuery" keep-alive />
@@ -28,12 +41,13 @@
 
 <script>
 import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
-import ButtonTabs from '@/components/ButtonTabs'
 import { mapFields } from 'vuex-map-fields'
+import ButtonTabs from '~/components/ButtonTabs.vue'
 import GlobalSearch from '~/components/search/GlobalSearch.vue'
+import TitleCard from '~/components/TitleCard.vue'
 export default {
   name: 'QuickSearch',
-  components: { ButtonTabs, GlobalSearch },
+  components: { ButtonTabs, GlobalSearch, TitleCard },
   // layout: 'search',
   async asyncData({ params, route, error, app, store, redirect }) {
     try {
@@ -182,7 +196,6 @@ export default {
             })
         )
       )
-
       const validPath = app.$validateTabRoute(route, hydratedTabs, {
         findMax: true,
       })
@@ -201,14 +214,12 @@ export default {
     ...mapFields('search', ['searchQuery']),
     computedTabs() {
       // Filtering out empty tabs but still showing active tab whether it is empty or not
-      const filteredTabs = this.tabs.filter(
-        (item) =>
-          item.count > 0 ||
-          this.$route.name.includes(
-            item.id === 'drillcore' ? `${item.routeName}__` : item.routeName
-          )
-      )
-      return orderBy(filteredTabs, ['count'], ['desc'])
+      // const filteredTabs = this.tabs.filter((item) =>
+      //   this.$route.name.includes(
+      //     item.id === 'drillcore' ? `${item.routeName}__` : item.routeName
+      //   )
+      // )
+      return orderBy(this.tabs, ['count'], ['desc'])
     },
   },
   watch: {
