@@ -14,6 +14,7 @@
       >
         {{ $t('cookiePolicy.introduction') }}
 
+        <!-- TODO:  Terms of use page is missing -->
         <nuxt-link
           class="text-link text-decoration-none"
           :title="$t('cookiePolicy.readMoreButton')"
