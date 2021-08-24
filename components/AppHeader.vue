@@ -14,7 +14,12 @@
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
-        <v-img :height="45" :width="90" contain :src="$img(logo)" />
+        <v-img
+          :height="45"
+          :width="90"
+          contain
+          :src="$img(logo, null, { provider: 'static' })"
+        />
         <v-tooltip bottom activator="#app-bar-title">
           <span>{{ $t('landing.goToFrontpage') }}</span>
         </v-tooltip>
