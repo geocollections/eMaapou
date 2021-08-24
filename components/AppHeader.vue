@@ -4,6 +4,8 @@
     dark
     clipped-right
     absolute
+    height="56"
+    extension-height="40"
     :elevation="4"
     class="gradient-background"
   >
@@ -15,8 +17,8 @@
          -->
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
         <v-img
-          :height="45"
-          :width="90"
+          :height="40"
+          :width="80"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
@@ -92,7 +94,7 @@
       </v-btn>
     </v-toolbar-items>
 
-    <template v-if="$vuetify.breakpoint.smAndUp" #extension>
+    <template #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
