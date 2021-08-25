@@ -14,7 +14,7 @@
           <global-search @input="handleSearch" />
         </v-card>
       </v-col>
-      <v-col>
+      <v-col class="pt-2 pt-md-0">
         <v-card flat color="transparent">
           <v-card-title class="montserrat pl-2 py-1">
             {{ $t('common.selectModule') }}
