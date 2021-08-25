@@ -2,8 +2,7 @@
   <div>
     <title-card
       :title="$translate({ et: page.title_et, en: page.title_en })"
-      class="title-border"
-      style="border-color: var(--v-header-darken1)"
+      class="title-heading"
     />
     <v-row no-gutters>
       <v-col class="pl-4" cols="12" md="8" lg="7">
