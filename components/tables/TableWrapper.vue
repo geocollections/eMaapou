@@ -94,17 +94,9 @@
                 "
                 :go-to-text="$t('common.goTo')"
                 :go-to-button-text="$t('common.goToBtn')"
+                select-page-id="header-select-btn"
                 @update:options="updateOptions"
               />
-              <!-- <v-data-footer
-                style="border: none"
-                :pagination="pagination"
-                :options="options"
-                :show-first-last-page="footerProps.showFirstLastPage"
-                :items-per-page-options="footerProps['items-per-page-options']"
-                :items-per-page-text="footerProps['items-per-page-text']"
-                @update:options="updateOptions"
-              /> -->
             </v-col>
           </v-row>
         </div>
@@ -124,6 +116,7 @@
           "
           :go-to-text="$t('common.goTo')"
           :go-to-button-text="$t('common.goToBtn')"
+          select-page-id="footer-select-btn"
           @update:options="
             isLoading = !onlyTable
             handleChange($event)

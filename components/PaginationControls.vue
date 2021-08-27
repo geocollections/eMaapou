@@ -21,10 +21,10 @@
       <v-icon>mdi-chevron-left</v-icon>
     </v-btn>
 
-    <v-btn id="page-select-btn" small text class="text-no-wrap text-caption">
+    <v-btn :id="selectPageId" small text class="text-no-wrap text-caption">
       {{ pageSelectText }}
       <v-menu
-        activator="#page-select-btn"
+        :activator="`#${selectPageId}`"
         offset-y
         :close-on-content-click="false"
       >
@@ -114,6 +114,10 @@ export default {
     goToButtonText: {
       type: String,
       default: 'Go',
+    },
+    selectPageId: {
+      type: String,
+      default: 'page-select-btn',
     },
   },
   data() {
