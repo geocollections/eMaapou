@@ -40,14 +40,14 @@
                 aspect-ratio="1"
                 :lazy-src="
                   $img(
-                    `${item.uuid_filename}`,
+                    `${image.uuid_filename}`,
                     { size: 'small', height: 400 },
                     { provider: 'geocollections' }
                   )
                 "
                 :src="
                   $img(
-                    `${item.uuid_filename}`,
+                    `${image.uuid_filename}`,
                     { size: 'small', height: 400 },
                     { provider: 'geocollections' }
                   )
