@@ -25,18 +25,6 @@
         <v-card-text class="text-shadow montserrat">{{
           description
         }}</v-card-text>
-        <!-- Todo: remove buttons -->
-        <!-- <v-card-actions class="justify-center mb-2">
-          <v-btn
-            outlined
-            small
-            :target="!innerLink ? '_blank' : ''"
-            :nuxt="innerLink"
-            @click="innerLink ? $router.push(localePath({ name: link })) : ''"
-            >{{ $t('landing.visit_site') }}
-            <v-icon right small>mdi-open-in-new</v-icon>
-          </v-btn>
-        </v-card-actions> -->
       </v-img>
     </v-card>
   </v-hover>
