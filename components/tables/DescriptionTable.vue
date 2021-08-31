@@ -142,11 +142,6 @@ export default {
   data() {
     return {
       headers: [
-        {
-          text: this.$t('localityDescription.description'),
-          value: 'data-table-expand',
-          align: 'center',
-        },
         { text: this.$t('localityDescription.depthTop'), value: 'depth_top' },
         { text: this.$t('localityDescription.depthBase'), value: 'depth_base' },
         {
@@ -168,6 +163,11 @@ export default {
           text: this.$t('localityDescription.author'),
           value: 'author',
           sortable: false,
+        },
+        {
+          text: this.$t('localityDescription.details'),
+          value: 'data-table-expand',
+          align: 'center',
         },
       ],
     }
