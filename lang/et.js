@@ -1101,6 +1101,10 @@ export default {
     'institution-elm': 'ELM',
     'institution-git': 'GIT',
     'institution-tug': 'TUG',
+    'institution-mumu': 'MUMU',
+    'institution-tugo': 'TUGO',
+    'institution-egk': 'EGK',
+    'institution-egt': 'EGT',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',
