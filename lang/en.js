@@ -1,7 +1,7 @@
 export default {
   title: 'e·Maapõu',
   subtitle: 'Opening up geological data in Estonia',
-  slogan: 'Geological data from Estonia',
+  slogan: 'Estonian geology data portal',
   landing: {
     searchTitle: 'Find from e·Maapõu',
     drillcores: 'Drillcores',
@@ -106,8 +106,8 @@ export default {
     news: 'News',
     viewNews: 'View news',
     readNewsArticle: 'Read',
-    switchMap: 'View map',
-    switchNews: 'View news',
+    openMap: 'Open map',
+    closeMap: 'Close map',
     specimenCount: 'Specimens',
     specimen: 'Specimen',
     goTo: 'Go to page',
@@ -329,6 +329,7 @@ export default {
     rockEn: 'Rock (english)',
     remarks: 'Remarks',
     year: 'Year',
+    details: 'Details',
   },
   localityReference: {
     reference: 'Reference',

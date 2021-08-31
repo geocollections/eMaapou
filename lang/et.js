@@ -1,7 +1,7 @@
 export default {
   title: 'e·Maapõu',
   subtitle: 'Eesti geoloogia infoportaal',
-  slogan: 'Geoloogilised andmed',
+  slogan: 'Eesti geoloogia andmeportaal',
   landing: {
     searchTitle: 'Leia e·Maapõuest',
     drillcores: 'Puursüdamikud',
@@ -106,8 +106,8 @@ export default {
     news: 'Uudised',
     viewNews: 'Vaata uudiseid',
     readNewsArticle: 'Loe',
-    switchMap: 'Kaart',
-    switchNews: 'Uudised',
+    openMap: 'Ava kaart',
+    closeMap: 'Sulge kaart',
     specimenCount: 'Eksemplarid',
     specimen: 'Eksemplarid',
     goTo: 'Leheküljele',
@@ -329,6 +329,7 @@ export default {
     rockEn: 'Kivim (inglise)',
     remarks: 'Märkused',
     year: 'Aasta',
+    details: 'Detailinfo',
   },
   localityReference: {
     reference: 'Kirje',

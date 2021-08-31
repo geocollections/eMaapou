@@ -113,9 +113,6 @@
             <v-col v-if="showMap" key="map" md="5" lg="6" class="pa-0">
               <the-map-card :show-map="showMap" />
             </v-col>
-            <v-col v-else key="news" md="5" lg="6" class="pa-0">
-              <the-news-card />
-            </v-col>
           </v-slide-x-transition>
         </v-row>
         <!-- SCROLL INDICATOR -->
@@ -176,7 +173,12 @@
         </v-col>
       </v-row>
       <v-row justify="center" class="my-2 my-sm-10">
-        <v-col cols="12">
+        <v-col cols="12" lg="6">
+          <client-only>
+            <the-news-card />
+          </client-only>
+        </v-col>
+        <v-col cols="12" lg="6">
           <title-card :title="$t('about.title')" class="title-heading" />
 
           <div
@@ -415,7 +417,7 @@ export default {
         : `${full}/`
     },
     aboutTextColumns() {
-      if (this.$vuetify.breakpoint.lgAndUp) return 3
+      if (this.$vuetify.breakpoint.lgAndUp) return 1
       if (this.$vuetify.breakpoint.mdOnly) return 2
       return 1
     },

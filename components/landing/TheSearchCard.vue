@@ -42,7 +42,7 @@
               class="montserrat py-6"
               @click="$emit('toggle:side')"
             >
-              {{ showMap ? $t('common.switchNews') : $t('common.switchMap') }}
+              {{ showMap ? $t('common.closeMap') : $t('common.openMap') }}
 
               <v-icon>{{ 'mdi-chevron-right' }}</v-icon>
             </v-btn>
