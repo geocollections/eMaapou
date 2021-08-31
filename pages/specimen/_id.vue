@@ -106,12 +106,18 @@
                 :title="$t('specimen.collector')"
                 :value="specimen.agent_collected__agent"
               />
-              <data-row
+              <link-data-row
                 :title="$t('specimen.institution')"
                 :value="
                   $translate({
                     et: specimen.database__name,
                     en: specimen.database__name_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: `institution-${specimen.database__acronym.toLowerCase()}`,
                   })
                 "
               />

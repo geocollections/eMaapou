@@ -161,12 +161,18 @@
                 :title="$t('sample.owner')"
                 :value="sample.owner__agent"
               />
-              <data-row
+              <link-data-row
                 :title="$t('sample.database')"
                 :value="
                   $translate({
                     et: sample.database__name,
                     en: sample.database__name_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: `institution-${sample.database__acronym.toLowerCase()}`,
                   })
                 "
               />

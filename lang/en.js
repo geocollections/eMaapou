@@ -294,6 +294,7 @@ export default {
     id_l: 'id_l',
     location: 'location',
     user_changed: 'user_changed',
+    database: 'Institution',
   },
   drillcoreBox: {
     id: 'ID',
@@ -384,6 +385,7 @@ export default {
     analysis: 'Sample no.',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    institution: 'Institution',
   },
   datasetAnalysis: {
     analysis: 'Analysis',
@@ -1096,9 +1098,9 @@ export default {
     'news-id': 'News: {id}',
     specimen: 'Specimens',
     'specimen-id': 'Specimen ID: {id}',
-    elm: 'ELM',
-    git: 'GIT',
-    tug: 'TUG',
+    'institution-elm': 'ELM',
+    'institution-git': 'GIT',
+    'institution-tug': 'TUG',
   },
   institutions: {
     ttu: 'TalTech Department of Geology',

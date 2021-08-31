@@ -129,6 +129,22 @@
                         })
                       "
                     />
+                    <link-data-row
+                      :title="$t('analysis.institution')"
+                      :value="
+                        $translate({
+                          et: analysis.database__name,
+                          en: analysis.database__name_en,
+                        })
+                      "
+                      nuxt
+                      :href="
+                        localePath({
+                          name: `institution-${analysis.database__acronym.toLowerCase()}`,
+                        })
+                      "
+                    />
+
                     <data-row
                       v-if="analysis.date_added"
                       :title="$t('analysis.dateAdded')"
@@ -173,7 +189,7 @@ export default {
         {
           params: {
             fields:
-              'agent__agent,analysis_method__analysis_method,analysis_method__method_en,database__name,database__name_en,dataset,dataset__name,dataset__name_en,date,date_added,date_changed,date_free,id,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,lab,lab__lab,lab__lab_en,lab_analysis_number,lab_txt,mass,material,method_details,method_details_en,owner__agent,reference,reference__reference,sample,sample__depth,sample__depth_interval,sample__lithostratigraphy__stratigraphy,sample__lithostratigraphy__stratigraphy_en,sample__lithostratigraphy_id,sample__locality__depth,sample__locality__locality,sample__locality__locality_en,sample__locality_free,sample__locality_id,sample__number,sample__parent_sample,sample__stratigraphy__stratigraphy,sample__stratigraphy__stratigraphy_en,sample__stratigraphy_bed,sample__stratigraphy_free,sample__stratigraphy_id',
+              'agent__agent,analysis_method__analysis_method,analysis_method__method_en,database__name,database__name_en,database__acronym,dataset,dataset__name,dataset__name_en,date,date_added,date_changed,date_free,id,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,lab,lab__lab,lab__lab_en,lab_analysis_number,lab_txt,mass,material,method_details,method_details_en,owner__agent,reference,reference__reference,sample,sample__depth,sample__depth_interval,sample__lithostratigraphy__stratigraphy,sample__lithostratigraphy__stratigraphy_en,sample__lithostratigraphy_id,sample__locality__depth,sample__locality__locality,sample__locality__locality_en,sample__locality_free,sample__locality_id,sample__number,sample__parent_sample,sample__stratigraphy__stratigraphy,sample__stratigraphy__stratigraphy_en,sample__stratigraphy_bed,sample__stratigraphy_free,sample__stratigraphy_id',
           },
         }
       )

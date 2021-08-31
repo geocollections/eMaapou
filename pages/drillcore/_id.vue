@@ -57,6 +57,22 @@
                 :title="$t('drillcore.metersInBox')"
                 :value="drillcore.number_meters"
               />
+
+              <link-data-row
+                :title="$t('drillcore.database')"
+                :value="
+                  $translate({
+                    et: drillcore.database__name,
+                    en: drillcore.database__name_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: `institution-${drillcore.database__acronym.toLowerCase()}`,
+                  })
+                "
+              />
               <data-row
                 v-if="drillcore.date_added"
                 :title="$t('drillcore.dateAdded')"

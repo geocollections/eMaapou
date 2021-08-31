@@ -294,6 +294,7 @@ export default {
     id_l: 'id_l',
     location: 'location',
     user_changed: 'user_changed',
+    database: 'Asutus',
   },
   drillcoreBox: {
     id: 'ID',
@@ -384,6 +385,7 @@ export default {
     analysis: 'Proovi nr.',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    institution: 'Asutus',
   },
   datasetAnalysis: {
     analysis: 'Analüüs',
@@ -1096,9 +1098,9 @@ export default {
     'news-id': 'Uudis: {id}',
     specimen: 'Eksemplarid',
     'specimen-id': 'Eksemplar ID: {id}',
-    elm: 'ELM',
-    git: 'GIT',
-    tug: 'TUG',
+    'institution-elm': 'ELM',
+    'institution-git': 'GIT',
+    'institution-tug': 'TUG',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',
