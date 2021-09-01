@@ -428,7 +428,7 @@ export default {
     stratigraphyRemarks: 'Stratigraafia lisainfo',
     hierarchy: 'Stratigraafia',
     fossil: 'Fossil',
-    pageTitle: 'Eksemplaari otsing',
+    pageTitle: 'Eksemplari otsing',
     dateCollected: 'Kogumise aeg',
     identifications: 'Määrangud ({number})',
     lithostratigraphy: 'Litostratigraafia',
