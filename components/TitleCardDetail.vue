@@ -13,7 +13,9 @@
       style="word-break: normal"
     >
       <back-button-detail />
-      {{ title }}
+      <slot>
+        {{ title }}
+      </slot>
       <edit-button />
     </v-card-title>
 

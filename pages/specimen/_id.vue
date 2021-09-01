@@ -1,7 +1,26 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail :ids="ids" :title="title" class="title-specimen" />
+      <title-card-detail :ids="ids" class="title-specimen">
+        <div>
+          {{ title }}
+        </div>
+        <v-divider v-if="titleAlt" class="mx-4" vertical />
+        <a
+          v-if="isRock && titleAlt"
+          target="_blank"
+          style="text-decoration: none"
+          :href="`https://kivid.info/${specimenAlt.rock_id}`"
+          >{{ titleAlt }}</a
+        >
+        <a
+          v-if="isTaxon && titleAlt"
+          target="_blank"
+          style="text-decoration: none"
+          :href="`https://fossiilid.info/${specimenAlt.taxon_id}`"
+          >{{ titleAlt }}</a
+        >
+      </title-card-detail>
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">
@@ -204,6 +223,13 @@ export default {
       const ids = detailViewResponse?.ids
       const specimen = detailViewResponse.results[0]
 
+      const specimenNameResponse = await app.$services.sarvSolr.getResource(
+        'specimen',
+        params.id
+      )
+
+      const specimenAlt = specimenNameResponse.results[0]
+
       const tabs = [
         {
           id: 'specimen_identification',
@@ -251,6 +277,7 @@ export default {
 
       return {
         specimen,
+        specimenAlt,
         ids,
         images,
         initActiveTab: validPath,
@@ -279,6 +306,27 @@ export default {
   computed: {
     title() {
       return `${this.specimen.database__acronym} ${this.specimen.specimen_id}`
+    },
+    titleAlt() {
+      if (this.specimenAlt.rock) {
+        const defaultName = this.$translate({
+          et: this.specimenAlt.rock,
+          en: this.specimenAlt.rock_en,
+        })
+        return this.specimenAlt.rock_txt && this.specimenAlt.rock_txt.length > 0
+          ? this.specimenAlt.rock_txt[0]
+          : defaultName
+      }
+      if (this.specimenAlt.taxon) {
+        return this.specimenAlt.taxon
+      }
+      return null
+    },
+    isRock() {
+      return !!this.specimenAlt.rock_id
+    },
+    isTaxon() {
+      return !!this.specimenAlt.taxon_id
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
