@@ -433,6 +433,7 @@ export default {
     identifications: 'Identifications ({number})',
     lithostratigraphy: 'Lithostratigraphy',
     references: 'References ({number})',
+    name: 'Name',
   },
   specimenIdentification: {
     name: 'Name',

@@ -433,6 +433,7 @@ export default {
     identifications: 'Määrangud ({number})',
     lithostratigraphy: 'Litostratigraafia',
     references: 'Viited ({number})',
+    name: 'Nimi',
   },
   specimenIdentification: {
     name: 'Nimi',
