@@ -8,7 +8,7 @@
       />
     </template>
     <template #top>
-      <v-card v-if="activeImage" class="mx-4 my-2">
+      <v-card v-if="activeImage" class="my-2">
         <v-card-text>
           <v-hover v-slot="{ hover }">
             <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
@@ -162,7 +162,7 @@
       </v-card>
     </template>
     <template #default>
-      <v-card flat tile>
+      <v-card>
         <v-card-title class="subsection-title">{{
           $t('common.general')
         }}</v-card-title>
