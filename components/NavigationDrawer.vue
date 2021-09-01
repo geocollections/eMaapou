@@ -166,12 +166,12 @@ export default {
         {
           name: 'dataset',
           lang: 'datasets',
-          icon: 'mdi-screw-machine-flat-top',
+          icon: 'mdi-database-outline',
         },
         {
           name: 'taxon',
           lang: 'taxa',
-          icon: 'mdi-layers-triple',
+          icon: 'mdi-family-tree',
         },
         // {
         //   name: 'file',
@@ -184,7 +184,7 @@ export default {
           icon: 'mdi-layers-triple',
         },
         { name: 'photo', lang: 'photo', icon: 'mdi-file-image-outline' },
-        { name: 'specimen', lang: 'specimen', icon: 'mdi-test-tube' },
+        { name: 'specimen', lang: 'specimen', icon: 'mdi-microscope' },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },

@@ -3,7 +3,7 @@
     <template #title>
       <title-card
         :title="$t('common.specimenCount')"
-        icon="mdi-test-tube"
+        icon="mdi-microscope"
         class="title-specimen"
       />
     </template>

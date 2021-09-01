@@ -3,7 +3,7 @@
     <template #title>
       <title-card
         :title="$t('common.datasetCount')"
-        icon="mdi-screw-machine-flat-top"
+        icon="mdi-database-outline"
         class="title-dataset"
       />
     </template>

@@ -4,7 +4,7 @@
       <title-card
         :title="$t('common.taxa')"
         :subtitle="$t('common.count', { count: count })"
-        icon="mdi-layers-triple"
+        icon="mdi-family-tree"
         class="title-main"
       />
     </template>
