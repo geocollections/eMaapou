@@ -1106,6 +1106,7 @@ export default {
     'institution-tugo': 'TUGO',
     'institution-egk': 'EGK',
     'institution-egt': 'EGT',
+    terms: 'Terms of use',
   },
   institutions: {
     ttu: 'TalTech Department of Geology',
