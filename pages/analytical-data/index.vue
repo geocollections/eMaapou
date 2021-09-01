@@ -3,7 +3,7 @@
     <template #title>
       <title-card
         :title="$t('common.analyticalDataCount')"
-        icon="mdi-chart-scatter-plot"
+        icon="mdi-chart-line"
         class="title-analysis"
       />
     </template>
