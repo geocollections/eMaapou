@@ -3,8 +3,8 @@ import { isEmpty } from 'lodash'
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
     return {
-      paginate_by: options.itemsPerPage,
-      page: options.page,
+      limit: options.itemsPerPage,
+      offset: (options.page - 1) * options.itemsPerPage,
     }
   }
   return null
@@ -18,7 +18,7 @@ const getSortByParams = (options, queryFields) => {
         return queryFields[field]
       })
 
-      return { order_by: orderBy.join(',') }
+      return { ordering: orderBy.join(',') }
     }
   }
   return null
@@ -26,7 +26,7 @@ const getSortByParams = (options, queryFields) => {
 
 export default ($axios) => ({
   async getResource(resource, id, options = {}) {
-    const response = await $axios.get(`${resource}/${id}`, options)
+    const response = await $axios.get(`${resource}/${id}/`, options)
     return response.data
   },
   async getResourceList(
