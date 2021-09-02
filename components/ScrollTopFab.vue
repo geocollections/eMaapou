@@ -5,7 +5,7 @@
       v-scroll="onScroll"
       fab
       small
-      color="primary"
+      color="accent"
       dark
       fixed
       bottom
