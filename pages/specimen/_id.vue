@@ -32,7 +32,7 @@
             <tbody>
               <link-data-row
                 :title="$t('specimen.collectionNr')"
-                :value="specimen.coll__number"
+                :value="specimen?.coll?.number"
                 @link-click="$openGeoDetail('collection', specimen.coll)"
               />
 
@@ -44,8 +44,8 @@
                 :title="$t('specimen.type')"
                 :value="
                   $translate({
-                    et: specimen.type__value,
-                    en: specimen.type__value_en,
+                    et: specimen?.type?.value,
+                    en: specimen?.type?.value_en,
                   })
                 "
               />
@@ -53,8 +53,8 @@
                 :title="$t('specimen.group')"
                 :value="
                   $translate({
-                    et: specimen.classification__class_field,
-                    en: specimen.classification__class_en,
+                    et: specimen?.classification?.class_field,
+                    en: specimen?.classification?.class_en,
                   })
                 "
               />
@@ -63,8 +63,8 @@
                 :title="$t('specimen.locality')"
                 :value="
                   $translate({
-                    et: specimen.locality__locality,
-                    en: specimen.locality__locality_en,
+                    et: specimen?.locality?.locality,
+                    en: specimen?.locality?.locality_en,
                   })
                 "
                 nuxt
@@ -80,15 +80,15 @@
                 :title="$t('specimen.stratigraphy')"
                 :value="
                   $translate({
-                    et: specimen.stratigraphy__stratigraphy,
-                    en: specimen.stratigraphy__stratigraphy_en,
+                    et: specimen?.stratigraphy?.stratigraphy,
+                    en: specimen?.stratigraphy?.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: specimen.stratigraphy_id },
+                    params: { id: specimen?.stratigraphy_id },
                   })
                 "
               />
@@ -96,26 +96,26 @@
                 :title="$t('specimen.lithostratigraphy')"
                 :value="
                   $translate({
-                    et: specimen.lithostratigraphy__stratigraphy,
-                    en: specimen.lithostratigraphy__stratigraphy_en,
+                    et: specimen?.lithostratigraphy?.stratigraphy,
+                    en: specimen?.lithostratigraphy?.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: specimen.lithostratigraphy_id },
+                    params: { id: specimen?.lithostratigraphy_id },
                   })
                 "
               />
               <data-row
                 :title="$t('specimen.stratigraphyRemarks')"
-                :value="specimen.stratigraphy_free"
+                :value="specimen?.stratigraphy_free"
               />
 
               <data-row
                 :title="$t('specimen.remarks')"
-                :value="specimen.remarks"
+                :value="specimen?.remarks"
               />
               <data-row
                 :title="$t('specimen.dateCollected')"
@@ -123,20 +123,20 @@
               />
               <data-row
                 :title="$t('specimen.collector')"
-                :value="specimen.agent_collected__agent"
+                :value="specimen?.agent_collected?.agent"
               />
               <link-data-row
                 :title="$t('specimen.institution')"
                 :value="
                   $translate({
-                    et: specimen.database__name,
-                    en: specimen.database__name_en,
+                    et: specimen?.database?.name,
+                    en: specimen?.database?.name_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
-                    name: `institution-${specimen.database__acronym.toLowerCase()}`,
+                    name: `institution-${specimen?.database?.acronym?.toLowerCase()}`,
                   })
                 "
               />
@@ -147,9 +147,9 @@
     </template>
     <template
       v-if="
-        specimen.locality_id &&
-        specimen.locality__latitude &&
-        specimen.locality__longitude
+        specimen?.locality?.id &&
+        specimen?.locality?.latitude &&
+        specimen?.locality.longitude
       "
       #column-right
     >
@@ -158,28 +158,28 @@
       }}</v-card-title>
       <v-card-text>
         <v-card
-          v-if="specimen.locality__latitude && specimen.locality__longitude"
+          v-if="specimen?.locality?.latitude && specimen?.locality?.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
             rounded
-            :estonian-map="specimen.locality__country__value === 'Eesti'"
+            :estonian-map="specimen?.locality?.country?.value === 'Eesti'"
             :estonian-bedrock-overlay="
-              specimen.locality__country__value === 'Eesti'
+              specimen?.locality?.country?.value === 'Eesti'
             "
             height="300px"
             :center="{
-              latitude: specimen.locality__latitude,
-              longitude: specimen.locality__longitude,
+              latitude: specimen?.locality?.latitude,
+              longitude: specimen?.locality?.longitude,
             }"
             :markers="[
               {
-                latitude: specimen.locality__latitude,
-                longitude: specimen.locality__longitude,
+                latitude: specimen?.locality?.latitude,
+                longitude: specimen?.locality?.longitude,
                 text: $translate({
-                  et: specimen.locality__locality,
-                  en: specimen.locality__locality_en,
+                  et: specimen?.locality?.locality,
+                  en: specimen?.locality?.locality_en,
                 }),
               },
             ]"
@@ -218,17 +218,18 @@ export default {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'specimen',
-        params.id
+        params.id,
+        { params: { nest: 2 } }
       )
       const ids = detailViewResponse?.ids
-      const specimen = detailViewResponse.results[0]
+      const specimen = detailViewResponse
 
       const specimenNameResponse = await app.$services.sarvSolr.getResource(
         'specimen',
         params.id
       )
 
-      const specimenAlt = specimenNameResponse.results[0]
+      const specimenAlt = specimenNameResponse
 
       const tabs = [
         {
@@ -284,6 +285,7 @@ export default {
         tabs: hydratedTabs,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Could not find specimen ${route.params.id}`,
         path: route.path,
@@ -305,7 +307,7 @@ export default {
   },
   computed: {
     title() {
-      return `${this.specimen.database__acronym} ${this.specimen.specimen_id}`
+      return `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
     },
     titleAlt() {
       if (this.specimenAlt.rock) {
