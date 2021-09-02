@@ -10,21 +10,24 @@
     >
       <v-img
         :src="background"
-        class="white--text align-end transition-swing"
-        :class="{ grayscale: grayscale }"
+        class="white--text transition-swing d-flex align-end"
         :gradient="`to bottom, rgba(0,0,0,.3), rgba(0,0,0,${
           grayscale ? '.3' : '.3'
         })`"
-        height="175px"
-        content-class="my-auto"
+        height="190px"
+        content-class=""
       >
-        <v-card-title style="word-break: keep-all" class="montserrat text-h5"
-          >{{ title }}
-          <v-icon right small>mdi-open-in-new</v-icon>
-        </v-card-title>
-        <v-card-text class="text-shadow montserrat">{{
-          description
-        }}</v-card-text>
+        <div style="background-color: rgba(0, 74, 99, 0.8)">
+          <v-card-title
+            style="word-break: keep-all"
+            class="montserrat text-h6 pb-1 pt-2"
+            >{{ title }}
+            <v-icon right small>mdi-open-in-new</v-icon>
+          </v-card-title>
+          <v-card-text class="text-shadow montserrat">{{
+            description
+          }}</v-card-text>
+        </div>
       </v-img>
     </v-card>
   </v-hover>
