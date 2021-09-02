@@ -139,6 +139,14 @@
       <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
         <slot :name="slotName" v-bind="context" />
       </template>
+
+      <template #item.date_added="{ item }">
+        {{ $formatDate(item.date_added) }}
+      </template>
+
+      <template #item.date_changed="{ item }">
+        {{ $formatDate(item.date_changed) }}
+      </template>
     </v-data-table>
   </v-card>
 </template>
