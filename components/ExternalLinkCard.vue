@@ -17,16 +17,20 @@
         height="190px"
         content-class=""
       >
-        <div style="background-color: rgba(0, 74, 99, 0.8)">
-          <v-card-title
-            style="word-break: keep-all"
-            class="montserrat text-h6 pb-1 pt-2"
+        <div style="background-color: rgba(0, 74, 99, 0.7)">
+          <v-card-title style="word-break: keep-all" class="montserrat text-h6"
             >{{ title }}
-            <v-icon right small>mdi-open-in-new</v-icon>
+            <v-icon right small class="align-self-start">
+              mdi-open-in-new
+            </v-icon>
           </v-card-title>
-          <v-card-text class="text-shadow montserrat">{{
-            description
-          }}</v-card-text>
+          <v-expand-transition>
+            <div v-show="hover">
+              <v-card-text class="text-shadow montserrat pt-0">
+                {{ description }}
+              </v-card-text>
+            </div>
+          </v-expand-transition>
         </div>
       </v-img>
     </v-card>
