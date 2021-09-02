@@ -24,22 +24,12 @@
       <text-field v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
     </search-fields-wrapper>
 
-    <!-- NOTE: Gives error: undefined field latlong -->
-    <!-- <search-view-map-wrapper
-      sample-overlay
-      :items="items"
-      class="mt-2"
-      :active="geoJSON != null"
-      @update="handleMapUpdate"
-    /> -->
-    <!-- NOTE: Gives errorL undefined field database_id -->
-    <!-- <institution-search-filter
+    <institution-search-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
       @change:institution="institution = $event"
-    /> -->
-
+    />
     <extra-options class="mt-2" />
   </v-form>
 </template>
@@ -51,24 +41,22 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-// import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
+import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
 
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
-// import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 
 export default {
   name: 'SpecimenSearchForm',
   components: {
     ExtraOptions,
-    // InstitutionSearchFilter,
+    InstitutionSearchFilter,
     AutocompleteField,
     TextField,
     SearchFieldsWrapper,
     SearchActions,
-    // SearchViewMapWrapper,
   },
   mixins: [autocompleteMixin],
   data() {
