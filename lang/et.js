@@ -125,6 +125,7 @@ export default {
     turvas: 'Turbauuringute andmebaas',
     geokirjandus: 'Eesti maapõue kirjandus',
     geokogud: 'Geokogude portaal',
+    geologyAPI: 'Eesti Geoloogia API',
   },
   locality: {
     pageTitle: 'Lokaliteetide otsing',

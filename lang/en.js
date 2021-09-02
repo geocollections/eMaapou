@@ -125,6 +125,7 @@ export default {
     turvas: 'Peat studies database',
     geokirjandus: 'Geological Literature',
     geokogud: 'Geocollections portal',
+    geologyAPI: 'Estonian Geology API',
   },
   locality: {
     pageTitle: 'Localities search',
