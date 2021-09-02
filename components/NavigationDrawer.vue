@@ -204,6 +204,7 @@ export default {
         { name: 'eurocore.title', url: 'eurocore.description' },
         { name: 'sarv.title', url: 'https://edit.geocollections.info' },
         { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
+        { name: 'link.geologyAPI', url: 'https://api.geoloogia.info' },
         { name: 'link.github', url: 'https://github.com/geocollections/' },
       ],
       institutions: [
