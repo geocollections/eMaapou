@@ -125,6 +125,7 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="file.specimen__coll_number"
                 :title="$t('file.collectionNr')"
                 :value="file.specimen__coll__number"
                 nuxt
@@ -136,6 +137,7 @@
                 "
               />
               <link-data-row
+                v-if="file.specimen__specimen_id"
                 :title="$t('file.specimenNr')"
                 :value="file.specimen__specimen_id"
                 nuxt
@@ -169,6 +171,7 @@
                 />
               </template>
               <link-data-row
+                v-if="file.specimen__locality"
                 :title="$t('file.locality')"
                 :value="
                   $translate({
@@ -185,6 +188,7 @@
                 "
               />
               <link-data-row
+                :v-if="file.specimen__stratigraphy"
                 :title="$t('file.stratigraphy')"
                 :value="
                   $translate({
@@ -243,6 +247,7 @@
                 :value="file.image_place"
               />
               <link-data-row
+                :v-if="file.locality"
                 :title="$t('file.locality')"
                 :value="
                   $translate({
