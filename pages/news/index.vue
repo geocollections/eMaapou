@@ -4,8 +4,7 @@
       <v-col>
         <title-card
           :title="$t('common.news')"
-          class="title-border"
-          style="border-color: var(--v-header-darken1)"
+          class="title-heading"
         ></title-card>
       </v-col>
     </v-row>
