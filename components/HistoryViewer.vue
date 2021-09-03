@@ -3,8 +3,12 @@
     <v-subheader class="pb-3 pl-0 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
-    <span class="history-viewer">
-      <span v-for="(item, index) in history" :key="index">
+    <span class="history-viewer d-flex">
+      <span
+        v-for="(item, index) in history"
+        :key="index"
+        class="d-flex align-center pb-1"
+      >
         <nuxt-link
           :id="`history-${index}`"
           class="text-link-grey history-link d-inline-block text-truncate"
@@ -16,9 +20,13 @@
             <span>{{ item.text }}</span>
           </v-tooltip>
         </nuxt-link>
-        <span v-if="index !== history.length - 1" class="divider mx-1">
-          {{ divider }}
-        </span>
+        <v-icon
+          v-if="index !== history.length - 1"
+          class="divider mx-1"
+          x-small
+        >
+          mdi-arrow-left
+        </v-icon>
       </span>
     </span>
   </div>
@@ -29,13 +37,6 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'HistoryViewer',
-  props: {
-    divider: {
-      type: String,
-      required: false,
-      default: '←',
-    },
-  },
   computed: {
     ...mapState('history', ['history']),
   },
