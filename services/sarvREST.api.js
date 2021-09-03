@@ -38,14 +38,18 @@ export default ($axios) => ({
     }
 
     let multiSearch
-    if (!isEmpty(search))
-      multiSearch = `value:${search};fields:${Object.values(queryFields)
+    let multiSearchFields
+    if (!isEmpty(search)) {
+      multiSearch = search
+      multiSearchFields = Object.values(queryFields)
         .map((field) => field)
-        .join()};lookuptype:icontains`
+        .join()
+    }
 
     const params = {
       ...defaultParams,
-      multi_search: multiSearch,
+      search: multiSearch,
+      search_fields: multiSearchFields,
       ...getPaginationParams(options),
       ...getSortByParams(options, queryFields),
     }
