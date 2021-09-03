@@ -1,15 +1,20 @@
 <template>
   <div v-if="history.length > 0" class="d-flex flex-row align-center">
-    <v-subheader class="pb-1 pl-0 text-no-wrap">{{
+    <v-subheader class="pb-3 pl-0 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
-    <span class="history-viewer pb-1">
+    <span class="history-viewer">
       <span v-for="(item, index) in history" :key="index">
         <nuxt-link
-          class="text-link-grey history-link"
+          :id="`history-${index}`"
+          class="text-link-grey history-link d-inline-block text-truncate"
+          style="max-width: 100px"
           :to="localePath({ path: item.to })"
         >
-          {{ $t(item.text, { id: item.id }) }}
+          {{ item.text }}
+          <v-tooltip open-delay="500" bottom :activator="`#history-${index}`">
+            <span>{{ item.text }}</span>
+          </v-tooltip>
         </nuxt-link>
         <span v-if="index !== history.length - 1" class="divider mx-1">
           {{ divider }}
