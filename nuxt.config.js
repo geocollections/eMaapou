@@ -196,11 +196,6 @@ export default {
     // Setting cssSoruceMap and cacheBusting to false fixes chrome dev tools style change problem (broke styles)
     cssSourceMap: false,
     cacheBusting: false,
-    loaders: {
-      vue: {
-        compiler: require('vue-template-babel-compiler'),
-      },
-    },
   },
 
   image: {

@@ -53,7 +53,6 @@
     "eslint-plugin-vue": "^7.13.0",
     "jest": "^27.0.6",
     "prettier": "^2.3.2",
-    "vue-jest": "^3.0.4",
-    "vue-template-babel-compiler": "^1.0.2"
+    "vue-jest": "^3.0.4"
   }
 }
