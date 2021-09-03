@@ -31,9 +31,10 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="coll"
                 :title="$t('specimen.collectionNr')"
-                :value="specimen?.coll?.number"
-                @link-click="$openGeoDetail('collection', specimen.coll)"
+                :value="coll.number"
+                @link-click="$openGeoDetail('collection', coll)"
               />
 
               <data-row
@@ -41,102 +42,109 @@
                 :value="specimen.specimen_id"
               />
               <data-row
+                v-if="type"
                 :title="$t('specimen.type')"
                 :value="
                   $translate({
-                    et: specimen?.type?.value,
-                    en: specimen?.type?.value_en,
+                    et: type.value,
+                    en: type.value_en,
                   })
                 "
               />
               <data-row
+                v-if="classification"
                 :title="$t('specimen.group')"
                 :value="
                   $translate({
-                    et: specimen?.classification?.class_field,
-                    en: specimen?.classification?.class_en,
+                    et: classification.class_field,
+                    en: classification.class_en,
                   })
                 "
               />
               <data-row :title="$t('specimen.part')" :value="specimen.part" />
               <link-data-row
+                v-if="locality"
                 :title="$t('specimen.locality')"
                 :value="
                   $translate({
-                    et: specimen?.locality?.locality,
-                    en: specimen?.locality?.locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: specimen.locality },
+                    params: { id: locality.id },
                   })
                 "
               />
               <data-row :title="$t('specimen.depth')" :value="specimen.depth" />
               <link-data-row
+                v-if="stratigraphy"
                 :title="$t('specimen.stratigraphy')"
                 :value="
                   $translate({
-                    et: specimen?.stratigraphy?.stratigraphy,
-                    en: specimen?.stratigraphy?.stratigraphy_en,
+                    et: stratigraphy.stratigraphy,
+                    en: stratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: specimen?.stratigraphy_id },
+                    params: { id: stratigraphy.id },
                   })
                 "
               />
               <link-data-row
+                v-if="lithostratigraphy"
                 :title="$t('specimen.lithostratigraphy')"
                 :value="
                   $translate({
-                    et: specimen?.lithostratigraphy?.stratigraphy,
-                    en: specimen?.lithostratigraphy?.stratigraphy_en,
+                    et: lithostratigraphy.stratigraphy,
+                    en: lithostratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: specimen?.lithostratigraphy_id },
+                    params: { id: lithostratigraphy.id },
                   })
                 "
               />
               <data-row
                 :title="$t('specimen.stratigraphyRemarks')"
-                :value="specimen?.stratigraphy_free"
+                :value="specimen.stratigraphy_free"
               />
 
               <data-row
                 :title="$t('specimen.remarks')"
-                :value="specimen?.remarks"
+                :value="specimen.remarks"
               />
               <data-row
                 :title="$t('specimen.dateCollected')"
                 :value="dateCollected"
               />
               <data-row
+                v-if="agent_collected"
                 :title="$t('specimen.collector')"
-                :value="specimen?.agent_collected?.agent"
+                :value="agent_collected.agent"
               />
               <link-data-row
+                v-if="database"
                 :title="$t('specimen.institution')"
                 :value="
                   $translate({
-                    et: specimen?.database?.name,
-                    en: specimen?.database?.name_en,
+                    et: database.name,
+                    en: database.name_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
-                    name: `institution-${specimen?.database?.acronym?.toLowerCase()}`,
+                    name: `institution-${database.acronym.toLowerCase()}`,
                   })
                 "
               />
@@ -145,41 +153,36 @@
         </v-simple-table>
       </v-card-text>
     </template>
-    <template
-      v-if="
-        specimen?.locality?.id &&
-        specimen?.locality?.latitude &&
-        specimen?.locality.longitude
-      "
-      #column-right
-    >
+    <template v-if="locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
       <v-card-text>
         <v-card
-          v-if="specimen?.locality?.latitude && specimen?.locality?.longitude"
+          v-if="locality.latitude && locality.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
             rounded
-            :estonian-map="specimen?.locality?.country?.value === 'Eesti'"
+            :estonian-map="
+              locality.country ? locality.country.value === 'Eesti' : false
+            "
             :estonian-bedrock-overlay="
-              specimen?.locality?.country?.value === 'Eesti'
+              locality.country ? locality.country.value === 'Eesti' : false
             "
             height="300px"
             :center="{
-              latitude: specimen?.locality?.latitude,
-              longitude: specimen?.locality?.longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
             }"
             :markers="[
               {
-                latitude: specimen?.locality?.latitude,
-                longitude: specimen?.locality?.longitude,
+                latitude: locality.latitude,
+                longitude: locality.longitude,
                 text: $translate({
-                  et: specimen?.locality?.locality,
-                  en: specimen?.locality?.locality_en,
+                  et: locality.locality,
+                  en: locality.locality_en,
                 }),
               },
             ]"
@@ -336,6 +339,30 @@ export default {
     dateCollected() {
       if (this.specimen.date_collected) return this.specimen.date_collected
       return this.specimen.date_collected_free
+    },
+    coll() {
+      return this.specimen?.coll
+    },
+    type() {
+      return this.specimen?.type
+    },
+    classification() {
+      return this.specimen?.classification
+    },
+    locality() {
+      return this.specimen?.locality
+    },
+    stratigraphy() {
+      return this.specimen?.stratigraphy
+    },
+    lithostratigraphy() {
+      return this.specimen?.lithostratigraphy
+    },
+    agent_collected() {
+      return this.specimen?.agent_collected
+    },
+    database() {
+      return this.specimen?.database
     },
   },
 }
