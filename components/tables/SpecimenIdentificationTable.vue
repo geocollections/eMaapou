@@ -18,7 +18,7 @@
       <div v-if="item.name">| {{ item.name }}</div>
     </template>
     <template #item.agent="{ item }">
-      <div v-if="agent">
+      <div v-if="item.agent">
         {{ item.agent.agent }}
       </div>
     </template>
@@ -34,7 +34,7 @@
       </external-link>
     </template>
     <template #item.type="{ item }">
-      <div v-if="identification_type">
+      <div v-if="item.identification_type">
         {{
           $translate({
             et: item.identification_type.value,
@@ -105,20 +105,6 @@ export default {
         // { text: this.$t('stratigraphyReference.remarks'), value: 'remarks' },
       ],
     }
-  },
-  computed: {
-    taxon() {
-      return this.item?.taxon
-    },
-    agent() {
-      return this.item?.agent
-    },
-    identification_type() {
-      return this.item?.identification_type
-    },
-    reference() {
-      return this.item?.reference
-    },
   },
 }
 </script>
