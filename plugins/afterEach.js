@@ -1,5 +1,10 @@
+const EXCLUDED_PAGES = ['index', 'about', 'news', 'news-id']
+
 export default ({ app, store }, inject) => {
   app.router.afterEach((to, from) => {
+    if (EXCLUDED_PAGES.some((page) => app.localePath(page) === from.path))
+      return
+
     const name = serializeName(from)
     const id = from.params?.id ?? null
 
