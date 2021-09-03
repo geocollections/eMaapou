@@ -232,7 +232,7 @@ export default {
         params.id
       )
 
-      const specimenAlt = specimenNameResponse
+      const specimenAlt = specimenNameResponse?.[0]
 
       const tabs = [
         {
@@ -271,13 +271,17 @@ export default {
       const validPath = app.$validateTabRoute(route, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
-      const specimenImagesResponse =
-        await app.$services.sarvREST.getResourceList('specimen_image', {
+      const attachmentResponse = await app.$services.sarvSolr.getResourceList(
+        'attachment',
+        {
           defaultParams: {
-            specimen: specimen.id,
+            fq: `specimen_id:${specimen.id} AND specimen_image_attachment:1`,
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
           },
-        })
-      const images = specimenImagesResponse.items ?? []
+        }
+      )
+
+      const images = attachmentResponse.items ?? []
 
       return {
         specimen,
