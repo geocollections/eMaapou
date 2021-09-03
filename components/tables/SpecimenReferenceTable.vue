@@ -9,10 +9,10 @@
   >
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference_id"
-        @click.native="$openGeology('reference', item.reference_id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
   </table-wrapper>

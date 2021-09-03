@@ -36,6 +36,7 @@ export default {
           isValid: isNil(this.specimen),
           defaultParams: {
             specimen: this.specimen,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(SPECIMEN_REFERENCE.queryFields),
         }
