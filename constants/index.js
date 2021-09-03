@@ -592,6 +592,7 @@ export const SPECIMEN_IDENTIFICATION = {
       locale === 'et'
         ? 'identification_type__value'
         : 'identification_type__value_en',
+    remarks: (locale) => 'remarks',
     current: (locale) => 'current',
   },
 }

@@ -261,7 +261,7 @@ export default {
             await app.$hydrateCount(tab, {
               solr: { default: { fq: `specimen_id:${specimen.id}` } },
               api: {
-                default: { specimen_id: specimen.id },
+                default: { specimen: specimen.id },
                 specimen_reference: { specimen: specimen.id },
               },
             })
