@@ -35,20 +35,16 @@
     </template>
 
     <template #item.database_acronym="{ item }">
-      <external-link
-        v-if="
-          item.database_acronym === 'GIT' ||
-          item.database_acronym === 'TUG' ||
-          item.database_acronym === 'ELM'
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: `institution-${item.database_acronym.toLowerCase()}`,
+          })
         "
-        @click.native="
-          $openWindow(
-            `https://geocollections.info/${item.database_acronym.toLowerCase()}`
-          )
-        "
-        >{{ item.database_acronym }}</external-link
       >
-      <div v-else>{{ item.database_acronym }}</div>
+        {{ item.database_acronym }}
+      </nuxt-link>
     </template>
   </table-wrapper>
 </template>
@@ -56,10 +52,9 @@
 <script>
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import { mapState } from 'vuex'
-import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'DatasetTable',
-  components: { ExternalLink, TableWrapper },
+  components: { TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
