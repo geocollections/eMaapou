@@ -403,10 +403,10 @@
                             :to="
                               localePath({
                                 name: `${item.route ? item.route : item.id}-id`,
-                                params: { id: row[item.id] },
+                                params: { id: row[item.id].id },
                               })
                             "
-                            >{{ row[item.id] }}</nuxt-link
+                            >{{ row[item.id].id }}</nuxt-link
                           >
                           <a
                             v-else-if="item.isGeoLink"
@@ -436,7 +436,7 @@
                           >
                         </template>
                         <template v-else>
-                          {{ row[item.id] }}
+                          {{ row[item.id].id }}
                         </template>
                       </td>
                       <td>{{ buildData(item.id, row) }}</td>
@@ -683,6 +683,7 @@ export default {
                 [`${tab.id}__isnull`]: false,
                 attachment: file.id,
                 fields: tab.fields,
+                nest: 1,
               },
             }
           )
@@ -852,6 +853,7 @@ export default {
   methods: {
     isNull,
     isNil,
+    // Todo: Review that code!!! related data not properly shown after api update
     buildData(type, data) {
       const listOfIds = Object.keys(data)
       listOfIds.splice(listOfIds.indexOf(type), 1)
