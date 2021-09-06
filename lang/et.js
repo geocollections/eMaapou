@@ -1307,6 +1307,8 @@ export default {
     link_table: 'link_table',
     image_longitude: 'image_longitude',
     remarks: 'remarks',
+    date_created_free_year: 'date_created_free_year',
+    latlong: 'latlong',
   },
   news: {
     pageTitle: 'Uudised',
