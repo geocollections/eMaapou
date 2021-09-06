@@ -159,6 +159,10 @@ const buildFilterQueryParameter = (filters) => {
           function buildTextParameter(encodedValue, fieldId) {
             const textArray = encodedValue.split(' ')
 
+            console.log(searchParameter)
+            console.log(encodedValue)
+            console.log(fieldId)
+
             const paramArray = textArray.map((str) => {
               switch (searchParameter.lookUpType) {
                 case 'contains':
@@ -219,17 +223,16 @@ const buildFilterQueryParameter = (filters) => {
               return `${fieldId}:${encodeURIComponent(searchParameter.value)}`
             }
             case 'text': {
-              return encodeURIComponent(
-                `${buildTextParameter(searchParameter.value, fieldId)}`
-              )
+              const encodedValue = encodeURIComponent(searchParameter.value)
+
+              return buildTextParameter(encodedValue, fieldId)
             }
             case 'object': {
-              return encodeURIComponent(
-                `${buildTextParameter(
-                  searchParameter.value[searchParameter.searchField],
-                  fieldId
-                )}`
+              const encodedValue = encodeURIComponent(
+                searchParameter.value[searchParameter.searchField]
               )
+
+              return buildTextParameter(encodedValue, fieldId)
             }
             case 'list': {
               return searchParameter.fields
