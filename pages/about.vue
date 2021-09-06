@@ -2,7 +2,7 @@
   <div>
     <title-card
       :title="$t('about.title')"
-      class="title-border"
+      class="title-heading"
       style="border-color: var(--v-header-darken1)"
     />
     <v-card
