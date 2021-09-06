@@ -34,13 +34,13 @@ export default {
   methods: {
     async handleUpdate(tableState) {
       this.options = tableState.options
-      const preparationResponse = await this.$services.sarvREST.getResourceList(
+      const preparationResponse = await this.$services.sarvSolr.getResourceList(
         'preparation',
         {
           ...tableState,
           isValid: isNil(this.sample),
           defaultParams: {
-            sample: this.sample,
+            fq: `sample_id:${this.sample}`,
           },
           queryFields: this.$getQueryFields(PREPARATION.queryFields),
         }
