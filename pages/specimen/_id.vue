@@ -10,14 +10,14 @@
           v-if="isRock && titleAlt"
           target="_blank"
           style="text-decoration: none"
-          :href="`https://kivid.info/${specimenAlt.rock_id}`"
+          :href="`https://kivid.info/${specimenAlt.rock.id}`"
           >{{ titleAlt }}</a
         >
         <a
           v-if="isTaxon && titleAlt"
           target="_blank"
           style="text-decoration: none"
-          :href="`https://fossiilid.info/${specimenAlt.taxon_id}`"
+          :href="`https://fossiilid.info/${specimenAlt.taxon.id}`"
           >{{ titleAlt }}</a
         >
       </title-card-detail>
@@ -292,7 +292,6 @@ export default {
         tabs: hydratedTabs,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find specimen ${route.params.id}`,
         path: route.path,
@@ -332,10 +331,10 @@ export default {
       return null
     },
     isRock() {
-      return !!this.specimenAlt.rock_id
+      return !!this.specimenAlt?.rock?.id
     },
     isTaxon() {
-      return !!this.specimenAlt.taxon_id
+      return !!this.specimenAlt?.taxon?.id
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
