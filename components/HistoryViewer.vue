@@ -12,7 +12,7 @@
         <nuxt-link
           :id="`history-${index}`"
           class="text-link-grey history-link d-inline-block text-truncate"
-          style="max-width: 100px"
+          :style="`max-width: ${linkWidth}px`"
           :to="localePath({ path: item.to })"
         >
           {{ item.text }}
@@ -39,6 +39,11 @@ export default {
   name: 'HistoryViewer',
   computed: {
     ...mapState('history', ['history']),
+    linkWidth() {
+      if (this.$vuetify.breakpoint.lgAndUp) return 200
+
+      return 100
+    },
   },
 }
 </script>
