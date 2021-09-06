@@ -38,6 +38,7 @@ export default {
           isValid: isNil(this.site),
           defaultParams: {
             site: this.site,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(DESCRIPTION.queryFields),
         }
@@ -47,8 +48,8 @@ export default {
           ...item,
           canExpand:
             !isEmpty(item.description) ||
-            item.rock__name ||
-            item.rock__name__en ||
+            item?.rock?.name ||
+            item?.rock?.name__en ||
             item.zero_level ||
             item.author_free ||
             item.reference ||
