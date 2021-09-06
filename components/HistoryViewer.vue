@@ -1,13 +1,13 @@
 <template>
-  <div v-if="history.length > 0" class="d-flex flex-row align-center">
-    <v-subheader class="pb-3 pl-0 text-no-wrap">{{
+  <div v-if="history.length > 0" class="flex-row d-flex align-center">
+    <v-subheader class="pl-0 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
-    <span class="history-viewer d-flex">
+    <span class="pb-1 history-viewer d-flex">
       <span
         v-for="(item, index) in history"
         :key="index"
-        class="d-flex align-center pb-1"
+        class="d-flex align-center"
       >
         <nuxt-link
           :id="`history-${index}`"
@@ -22,7 +22,7 @@
         </nuxt-link>
         <v-icon
           v-if="index !== history.length - 1"
-          class="divider mx-1"
+          class="mx-1 divider"
           x-small
         >
           mdi-arrow-left
