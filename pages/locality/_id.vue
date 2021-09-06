@@ -446,7 +446,6 @@ export default {
         attachments,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find locality ${params.id}`,
         path: route.path,

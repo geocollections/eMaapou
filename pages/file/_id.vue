@@ -86,9 +86,9 @@
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
-            <div v-if="file.author__agent || file.author_free">
+            <div v-if="file.author || file.author_free">
               <span class="font-weight-bold">{{ $t('file.author') }}: </span>
-              <span v-if="file.author__agent">{{ file.author__agent }}</span>
+              <span v-if="file.author">{{ file.author }}</span>
               <span v-else>{{ file.author_free }}</span>
             </div>
             <div v-if="file.date_created || file.date_created_free">
@@ -125,78 +125,84 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="specimen && specimen.coll"
                 :title="$t('file.collectionNr')"
-                :value="file.specimen__coll__number"
+                :value="specimen.coll.number"
                 nuxt
                 :href="
                   localePath({
                     name: 'specimen-id',
-                    params: { id: file.specimen },
+                    params: { id: file.specimen.id },
                   })
                 "
               />
               <link-data-row
+                v-if="specimen"
                 :title="$t('file.specimenNr')"
-                :value="file.specimen__specimen_id"
+                :value="file.specimen.specimen_id"
                 nuxt
                 :href="
                   localePath({
                     name: 'specimen-id',
-                    params: { id: file.specimen },
+                    params: { id: file.specimen.id },
                   })
                 "
               />
               <template v-for="(item, index) in specimenIdentification">
                 <link-data-row
+                  v-if="item.taxon"
                   :key="index"
                   :title="$t('file.name')"
-                  :value="item.taxon__taxon"
+                  :value="item.taxon.taxon"
                   :suffix="item.name ? `| ${item.name}` : ''"
                   @link-click="
-                    $openWindow(`https://fossiilid.info/${item.taxon_id}`)
+                    $openWindow(`https://fossiilid.info/${item.taxon.id}`)
                   "
                 />
               </template>
               <template v-for="(item, index) in specimenIdentificationGeology">
                 <link-data-row
+                  v-if="item.taxon"
                   :key="index"
                   :title="$t('file.name')"
-                  :value="item.taxon__taxon"
+                  :value="item.taxon.taxon"
                   :suffix="item.name ? `| ${item.name}` : ''"
                   @link-click="
-                    $openWindow(`https://fossiilid.info/${item.taxon_id}`)
+                    $openWindow(`https://fossiilid.info/${item.taxon.id}`)
                   "
                 />
               </template>
               <link-data-row
+                v-if="specimen && specimen.locality"
                 :title="$t('file.locality')"
                 :value="
                   $translate({
-                    et: file.specimen__locality__locality,
-                    en: file.specimen__locality__locality_en,
+                    et: specimen.locality.locality,
+                    en: specimen.locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: file.specimen__locality },
+                    params: { id: specimen.locality.id },
                   })
                 "
               />
               <link-data-row
+                v-if="specimen && specimen.stratigraphy"
                 :title="$t('file.stratigraphy')"
                 :value="
                   $translate({
-                    et: file.specimen__stratigraphy__stratigraphy,
-                    en: file.specimen__stratigraphy__stratigraphy_en,
+                    et: specimen.stratigraphy.stratigraphy,
+                    en: specimen.stratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: file.specimen__stratigraphy },
+                    params: { id: specimen.stratigraphy.id },
                   })
                 "
               />
@@ -218,17 +224,16 @@
                 :value="file.image_number"
               />
               <data-row
+                v-if="imageset"
                 :title="$t('file.imagesetNumber')"
-                :value="file.imageset__imageset_number"
+                :value="imageset.imageset_number"
               />
               <data-row
+                v-if="imageset"
                 :title="$t('file.imagesetDescription')"
-                :value="file.imageset__description"
+                :value="imageset.description"
               />
-              <data-row
-                :title="$t('file.author')"
-                :value="file.author__agent"
-              />
+              <data-row :title="$t('file.author')" :value="file.author" />
               <data-row :title="$t('file.author')" :value="file.author_free" />
               <data-row
                 :title="$t('file.imagePeople')"
@@ -243,18 +248,19 @@
                 :value="file.image_place"
               />
               <link-data-row
+                v-if="locality"
                 :title="$t('file.locality')"
                 :value="
                   $translate({
-                    et: file.locality__locality,
-                    en: file.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: file.locality },
+                    params: { id: locality.id },
                   })
                 "
               />
@@ -267,31 +273,34 @@
                 :value="file.image_longitude"
               />
               <data-row
+                v-if="type"
                 :title="$t('file.type')"
                 :value="
                   $translate({
-                    et: file.type__value,
-                    en: file.type__value_en,
+                    et: type.value,
+                    en: type.value_en,
                   })
                 "
               />
               <data-row
                 :title="$t('file.format')"
-                :value="file.attachment_format__value"
+                :value="file.attachment_format"
               />
               <data-row
+                v-if="attachmentKeywords.length > 0"
                 :title="$t('file.keywords')"
                 :value="attachmentKeywords"
               >
                 <template #value>
                   <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                    <li>{{ item.keyword__keyword }}</li>
+                    <li v-if="item.keyword">{{ item.keyword.keyword }}</li>
                   </ul>
                 </template>
               </data-row>
               <data-row
+                v-if="agent_digitised"
                 :title="$t('file.personDigitised')"
-                :value="file.agent_digitised__agent"
+                :value="agent_digitised.agent"
               />
               <data-row
                 :title="$t('file.dateDigitised')"
@@ -299,23 +308,25 @@
               />
               <data-row :title="$t('file.imageSize')" :value="imageSize" />
               <link-data-row
+                v-if="database"
                 :title="$t('file.institution')"
                 :value="
                   $translate({
-                    et: file.database__name,
-                    en: file.database__name_en,
+                    et: database.name,
+                    en: database.name_en,
                   })
                 "
                 @link-click="
                   $openWindow(
-                    `https://geocollections.info/${file.database__acronym.toLowerCase()}`
+                    `https://geocollections.info/${file.database.acronym.toLowerCase()}`
                   )
                 "
               />
               <link-data-row
+                v-if="licence"
                 :title="$t('file.licence')"
-                :value="file.licence__licence_en"
-                @link-click="$openWindow(file.licence__licence_url_en)"
+                :value="licence.licence_en"
+                @link-click="$openWindow(licence.licence_url_en)"
               />
               <data-row :title="$t('file.remarks')" :value="file.remarks" />
               <data-row
@@ -413,7 +424,7 @@
                               $openWindow(
                                 `${item.href}${
                                   item.id === 'doi'
-                                    ? row.doi__identifier
+                                    ? row.doi.identifier
                                     : row[item.id]
                                 }`
                               )
@@ -463,12 +474,13 @@ export default {
         params.id,
         {
           params: {
-            only_photo_ids: route.name.startsWith('photo'),
+            nest: 2,
+            // only_photo_ids: route.name.startsWith('photo'),
           },
         }
       )
       const ids = fileResponse?.ids
-      const file = fileResponse.results[0]
+      const file = fileResponse
       let specimenIdentification
       let specimenIdentificationGeology
       if (file.specimen) {
@@ -479,7 +491,8 @@ export default {
               isValid: isNil(file.id),
               defaultParams: {
                 current: true,
-                specimen_id: file.specimen,
+                specimen: file.specimen.id,
+                nest: 1,
               },
             }
           )
@@ -491,7 +504,8 @@ export default {
               isValid: isNil(file.id),
               defaultParams: {
                 current: true,
-                specimen_id: file.specimen,
+                specimen: file.specimen.id,
+                nest: 1,
               },
             }
           )
@@ -503,6 +517,7 @@ export default {
           isValid: isNil(file.id),
           defaultParams: {
             attachment: file.id,
+            nest: 1,
           },
         })
       const attachmentKeywords = attachmentKeywordsResponse.items
@@ -686,6 +701,7 @@ export default {
         ids,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Cannot find file ${route.params.id}`,
         path: route.path,
@@ -710,18 +726,18 @@ export default {
     },
 
     fileTitle() {
-      switch (this?.file?.specimen_image_attachment) {
+      switch (this.file?.specimen_image_attachment) {
         case 1:
           return `${this.$t('file.specimenTitle')}: ${
-            this.file?.specimen__coll__number
-          }-${this.file?.specimen__specimen_id?.split('-')?.[1]} (ID: ${
-            this.file.specimen
+            this.file?.specimen?.coll?.number
+          }-${this.file?.specimen?.specimen_id?.split('-')?.[1]} (ID: ${
+            this.file.specimen.id
           })`
         case 2:
           return `${this.$t('file.imageTitle')}: ${this.file.image_number}`
         case 4:
           return `${this.$t('file.referenceTitle')}: ${
-            this.file.reference__reference
+            this.file?.reference?.reference
           }`
         default:
           return `${this.$t('file.fileTitle')}: ${this.$translate({
@@ -738,15 +754,15 @@ export default {
     },
 
     isImage() {
-      return this.file.attachment_format__value.includes('image')
+      return this.file?.attachment_format.includes('image')
     },
 
     isAudio() {
-      return this.file.attachment_format__value.includes('audio')
+      return this.file?.attachment_format?.includes('audio')
     },
 
     isVideo() {
-      return this.file.attachment_format__value.includes('video')
+      return this.file?.attachment_format?.includes('video')
     },
 
     imageSizes() {
@@ -757,40 +773,40 @@ export default {
 
     showMap() {
       return (
-        (this.file.locality__latitude && this.file.locality__longitude) ||
+        (this.file?.locality?.latitude && this.file?.locality?.longitude) ||
         (this.file.image_latitude && this.file.image_longitude) ||
-        (this.file.specimen__locality__latitude &&
-          this.file.specimen__locality__longitude)
+        (this.file?.specimen?.locality?.latitude &&
+          this.file?.specimen?.locality?.longitude)
       )
     },
 
     mapIsEstonian() {
       return (
-        this.file.locality__country__value === 'Eesti' ||
-        this.file.specimen__locality__country__value === 'Eesti'
+        this.file?.locality?.country?.value === 'Eesti' ||
+        this.file?.specimen?.locality?.country?.value === 'Eesti'
       )
     },
 
     mapLatitude() {
       return (
-        this.file.locality__latitude ||
-        this.file.specimen__locality__latitude ||
+        this.file?.locality?.latitude ||
+        this.file?.specimen?.locality?.latitude ||
         this.file.image_latitude
       )
     },
 
     mapLongitude() {
       return (
-        this.file.locality__longitude ||
-        this.file.specimen__locality__longitude ||
+        this.file?.locality?.longitude ||
+        this.file?.specimen?.locality?.longitude ||
         this.file.image_longitude
       )
     },
 
     mapLocality() {
       return (
-        this.file.locality__locality ||
-        this.file.specimen__locality__locality ||
+        this.file?.locality?.locality ||
+        this.file?.specimen?.locality?.locality ||
         this.file.image_place ||
         this.file.description
       )
@@ -798,11 +814,39 @@ export default {
 
     mapLocalityEn() {
       return (
-        this.file.locality__locality_en ||
-        this.file.specimen__locality__locality_en ||
+        this.file?.locality?.locality_en ||
+        this.file?.specimen?.locality?.locality_en ||
         this.file.image_place ||
         this.file.description_en
       )
+    },
+
+    specimen() {
+      return this?.file?.specimen
+    },
+
+    imageset() {
+      return this?.file?.imageset
+    },
+
+    locality() {
+      return this?.file?.locality
+    },
+
+    type() {
+      return this?.file?.type
+    },
+
+    agent_digitised() {
+      return this?.file?.agent_digitised
+    },
+
+    database() {
+      return this?.file?.database
+    },
+
+    licence() {
+      return this?.file?.licence
     },
   },
   methods: {
