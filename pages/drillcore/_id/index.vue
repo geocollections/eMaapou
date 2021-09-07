@@ -24,11 +24,11 @@
             tile
             :ripple="false"
             @click="
-              $openNuxtWindow('drillcore-box-id', { id: box.drillcore_box })
+              $openNuxtWindow('drillcore-box-id', { id: box.drillcore_box.id })
             "
           >
             <v-card-text class="drillcore-box__card">
-              <v-row align="start">
+              <v-row v-if="box.drillcore_box" align="start">
                 <v-col cols="12" sm="8" align-self="center">
                   <!-- TODO: #74 Add placeholder, for case when box does not have a picture -->
                   <client-only>
@@ -44,14 +44,14 @@
                       eager
                       :lazy-src="
                         $img(
-                          box.attachment__filename,
+                          box.attachment.filename,
                           { size: 'small' },
                           { provider: 'geocollections' }
                         )
                       "
                       :src="
                         $img(
-                          box.attachment__filename,
+                          box.attachment.filename,
                           { size: 'medium' },
                           { provider: 'geocollections' }
                         )
@@ -76,7 +76,7 @@
                   <v-card-title class="px-0 pt-0">
                     {{
                       $t('drillcoreBox.nr', {
-                        number: box.drillcore_box__number,
+                        number: box.drillcore_box.number,
                       })
                     }}
                   </v-card-title>
@@ -89,19 +89,21 @@
                       <tbody>
                         <data-row
                           :title="$t('drillcoreBox.depthStart')"
-                          :value="box.drillcore_box__depth_start"
+                          :value="box.drillcore_box.depth_start"
                         />
                         <data-row
                           :title="$t('drillcoreBox.depthEnd')"
-                          :value="box.drillcore_box__depth_end"
+                          :value="box.drillcore_box.depth_end"
                         />
                         <link-data-row
-                          v-if="box.drillcore_box__stratigraphy_top"
+                          v-if="box.drillcore_box.stratigraphy_top"
                           :title="$t('drillcoreBox.stratigraphyTop')"
                           :value="
                             $translate({
-                              et: box.drillcore_box__stratigraphy_top__stratigraphy,
-                              en: box.drillcore_box__stratigraphy_top__stratigraphy_en,
+                              et: box.drillcore_box.stratigraphy_top
+                                .stratigraphy,
+                              en: box.drillcore_box.stratigraphy_top
+                                .stratigraphy_en,
                             })
                           "
                           nuxt
@@ -109,18 +111,20 @@
                             localePath({
                               name: 'stratigraphy-id',
                               params: {
-                                id: box.drillcore_box__stratigraphy_top,
+                                id: box.drillcore_box.stratigraphy_top.id,
                               },
                             })
                           "
                         />
                         <link-data-row
-                          v-if="box.drillcore_box__stratigraphy_base"
+                          v-if="box.drillcore_box.stratigraphy_base"
                           :title="$t('drillcoreBox.stratigraphyBase')"
                           :value="
                             $translate({
-                              et: box.drillcore_box__stratigraphy_base__stratigraphy,
-                              en: box.drillcore_box__stratigraphy_base__stratigraphy_en,
+                              et: box.drillcore_box.stratigraphy_base
+                                .stratigraphy,
+                              en: box.drillcore_box.stratigraphy_base
+                                .stratigraphy_en,
                             })
                           "
                           nuxt
@@ -128,18 +132,18 @@
                             localePath({
                               name: 'stratigraphy-id',
                               params: {
-                                id: box.drillcore_box__stratigraphy_base,
+                                id: box.drillcore_box.stratigraphy_base.id,
                               },
                             })
                           "
                         />
                         <data-row
                           :title="$t('drillcoreBox.depthOther')"
-                          :value="box.drillcore_box__depth_other"
+                          :value="box.drillcore_box.depth_other"
                         />
                         <data-row
                           :title="$t('drillcoreBox.remarks')"
-                          :value="box.drillcore_box__remarks"
+                          :value="box.drillcore_box.remarks"
                         />
                       </tbody>
                     </template>
@@ -198,12 +202,12 @@ export default {
     isNull,
     boxHasInfo(box) {
       return (
-        box.drillcore_box__depth_start ||
-        box.drillcore_box__depth_end ||
-        box.drillcore_box__stratigraphy_top ||
-        box.drillcore_box__stratigraphy_base ||
-        box.drillcore_box__depth_other ||
-        box.drillcore_box__remarks
+        box.drillcore_box?.depth_start ||
+        box.drillcore_box?.depth_end ||
+        box.drillcore_box?.stratigraphy_top ||
+        box.drillcore_box?.stratigraphy_base ||
+        box.drillcore_box?.depth_other ||
+        box.drillcore_box?.remarks
       )
     },
     infiniteHandler($state) {
@@ -212,14 +216,14 @@ export default {
         this.$services.sarvREST
           .getResourceList('attachment_link', {
             defaultParams: {
-              order_by: 'drillcore_box__depth_start,drillcore_box',
+              ordering: 'drillcore_box__depth_start,drillcore_box',
               drillcore_box__drillcore: this.drillcore,
               attachment__is_preferred: true,
+              nest: 2,
+            },
+            options: {
               page: this.page,
-              paginate_by: paginateBy,
-              distinct: true,
-              fields:
-                'id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred',
+              itemsPerPage: paginateBy,
             },
             search: this.search,
             queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),

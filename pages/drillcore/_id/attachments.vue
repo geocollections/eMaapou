@@ -12,7 +12,7 @@
 import { isNil } from 'lodash'
 import AttachmentTable from '@/components/tables/AttachmentTable'
 
-import { ATTACHMENT } from '~/constants'
+import { ATTACHMENT_LINK } from '~/constants'
 export default {
   components: { AttachmentTable },
   props: {
@@ -42,9 +42,12 @@ export default {
           ...tableState,
           isValid: isNil(this.locality),
           defaultParams: {
-            or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
+            drillcore: this.$route.params.id,
+            nest: 2,
+            // Todo: OR search not yet supported in new api
+            // or_search: `drillcore:${this.$route.params.id};locality:${this.locality}`,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
+          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
         }
       )
       this.attachments = attachmentResponse.items

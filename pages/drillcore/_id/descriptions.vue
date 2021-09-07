@@ -38,6 +38,7 @@ export default {
           isValid: isNil(this.locality),
           defaultParams: {
             locality: this.locality,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(DESCRIPTION.queryFields),
         }
