@@ -9,14 +9,16 @@
   >
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference_id"
-        @click.native="$openGeology('reference', item.reference_id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
     <template #item.year="{ item }">
-      {{ item.reference__year }}
+      <div v-if="item.reference">
+        {{ item.reference.year }}
+      </div>
     </template>
     <template #item.content="{ item }">
       {{ $translate({ et: item.content, en: item.content_en }) }}

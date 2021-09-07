@@ -22,55 +22,59 @@
           <template #default>
             <tbody>
               <link-data-row
-                v-if="stratigraphy.parent_id"
+                v-if="stratigraphy.parent"
                 :title="$t('stratigraphy.parentStratigraphy')"
                 :value="
                   $translate({
-                    et: stratigraphy.parent__stratigraphy,
-                    en: stratigraphy.parent__stratigraphy_en,
+                    et: stratigraphy.parent.stratigraphy,
+                    en: stratigraphy.parent.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: stratigraphy.parent_id },
+                    params: { id: stratigraphy.parent.id },
                   })
                 "
               />
               <data-row
+                v-if="stratigraphy.type"
                 :title="$t('stratigraphy.type')"
                 :value="
                   $translate({
-                    et: stratigraphy.type__value,
-                    en: stratigraphy.type__value_en,
+                    et: stratigraphy.type.value,
+                    en: stratigraphy.type.value_en,
                   })
                 "
               />
               <data-row
+                v-if="stratigraphy.rank"
                 :title="$t('stratigraphy.rank')"
                 :value="
                   $translate({
-                    et: stratigraphy.rank__value,
-                    en: stratigraphy.rank__value_en,
+                    et: stratigraphy.rank.value,
+                    en: stratigraphy.rank.value_en,
                   })
                 "
               />
               <data-row
+                v-if="stratigraphy.scope"
                 :title="$t('stratigraphy.scope')"
                 :value="
                   $translate({
-                    et: stratigraphy.scope__value,
-                    en: stratigraphy.scope__value_en,
+                    et: stratigraphy.scope.value,
+                    en: stratigraphy.scope.value_en,
                   })
                 "
               />
               <data-row
+                v-if="stratigraphy.status"
                 :title="$t('stratigraphy.status')"
                 :value="
                   $translate({
-                    et: stratigraphy.status__value,
-                    en: stratigraphy.status__value_en,
+                    et: stratigraphy.status.value,
+                    en: stratigraphy.status.value_en,
                   })
                 "
               />
@@ -104,12 +108,12 @@
                 :value="stratigraphy.age_base"
               />
               <link-data-row
-                v-if="stratigraphy.age_chronostratigraphy_id"
+                v-if="stratigraphy.age_chronostratigraphy"
                 :title="$t('stratigraphy.age')"
                 :value="
                   $translate({
-                    et: stratigraphy.age_chronostratigraphy__stratigraphy,
-                    en: stratigraphy.age_chronostratigraphy__stratigraphy_en,
+                    et: stratigraphy.age_chronostratigraphy.stratigraphy,
+                    en: stratigraphy.age_chronostratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
@@ -117,14 +121,15 @@
                   localePath({
                     name: 'stratigraphy-id',
                     params: {
-                      id: stratigraphy.age_chronostratigraphy_id,
+                      id: stratigraphy.age_chronostratigraphy.id,
                     },
                   })
                 "
               />
               <data-row
+                v-if="stratigraphy.age_reference"
                 :title="$t('stratigraphy.ageReference')"
-                :value="stratigraphy.age_reference__reference"
+                :value="stratigraphy.age_reference.reference"
               />
 
               <data-row
@@ -160,19 +165,27 @@
         </v-simple-table>
       </v-card-text>
     </template>
-    <template v-if="stratotypeCount > 0" #column-right>
+    <template
+      v-if="stratotypeCount > 0 || stratigraphyMarkers > 0"
+      #column-right
+    >
       <v-card-title class="subsection-title">{{
         $t('stratigraphy.stratotypes')
       }}</v-card-title>
       <v-card-text>
         <stratigraphy-stratotype-table
+          v-if="stratotypeCount > 0"
           only-table
           :items="stratotypes"
           :count="stratotypeCount"
           :options="options"
           class="mb-2"
         />
-        <v-card id="map-wrap" elevation="0">
+        <v-card
+          v-if="stratigraphyMarkers.length > 0"
+          id="map-wrap"
+          elevation="0"
+        >
           <leaflet-map
             rounded
             :estonian-map="mapIsEstonian"
@@ -248,13 +261,14 @@ export default {
         params.id,
         {
           params: {
-            fields:
-              'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string,date_added,date_changed',
+            nest: 1,
+            // fields:
+            //   'age_base,age_chronostratigraphy__stratigraphy,age_chronostratigraphy__stratigraphy_en,age_chronostratigraphy_id,age_reference__id,age_reference__reference,age_top,author_free,description,description_en,etymon,etymon_en,id,index_additional,index_additional_html,index_main,index_main_html,original_locality,parent__stratigraphy,parent__stratigraphy_en,parent_id,rank__value,rank__value_en,region,region_en,remarks,scope__value,scope__value_en,status__value,status__value_en,stratigraphy,stratigraphy_en,type__value,type__value_en,year,hierarchy_string,date_added,date_changed',
           },
         }
       )
       const ids = stratigraphyResponse?.ids
-      const stratigraphy = stratigraphyResponse.results[0]
+      const stratigraphy = stratigraphyResponse
 
       const tabs = [
         {
@@ -279,6 +293,7 @@ export default {
           table: 'stratigraphy',
           routeName: 'stratigraphy-id-subunits',
           title: 'stratigraphy.subUnits',
+          isSolr: true,
           count: 0,
           props: { stratigraphy: stratigraphy.id },
         },
@@ -287,6 +302,7 @@ export default {
           table: 'stratigraphy',
           routeName: 'stratigraphy-id-related-units',
           title: 'stratigraphy.relatedUnits',
+          isSolr: true,
           count: 0,
           props: { stratigraphy: stratigraphy.id },
         },
@@ -316,7 +332,8 @@ export default {
           ...STRATOTYPE.options,
           isValid: isNil(stratigraphy.id),
           defaultParams: {
-            stratigraphy__id: stratigraphy.id,
+            stratigraphy: stratigraphy.id,
+            nest: 2,
           },
           queryFields: app.$getQueryFields(STRATOTYPE.queryFields),
         }
@@ -333,24 +350,24 @@ export default {
                   stratigraphy: stratigraphy.id,
                 },
                 stratigraphy_stratotype: {
-                  stratigraphy__id: stratigraphy.id,
+                  stratigraphy: stratigraphy.id,
                 },
                 stratigraphy_synonym: {
-                  stratigraphy__id: stratigraphy.id,
-                },
-                lithostratigraphy: {
-                  age_chronostratigraphy_id: stratigraphy.id,
-                },
-                subunits: {
-                  parent_id: stratigraphy.id,
+                  stratigraphy: stratigraphy.id,
                 },
               },
               solr: {
                 default: {
                   fq: stratigraphy.hierarchy_string
-                    ? `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`
-                    : `(stratigraphy_hierarchy:("")+OR+age_hierarchy:("")+OR+lithostratigraphy_hierarchy:(""))`,
+                    ? `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*) OR age_hierarchy:(${stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`
+                    : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
                   // fq: `stratigraphy_id:${stratigraphy.id}`,
+                },
+                lithostratigraphy: {
+                  fq: `age_chronostratigraphy:${stratigraphy.id}`,
+                },
+                subunits: {
+                  fq: `parent_id:${stratigraphy.id}`,
                 },
               },
               fields: tab.fields ?? 'id',
@@ -404,24 +421,27 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
     stratigraphyMarkers() {
-      return this.stratotypes?.map((stratotype) => {
-        return {
-          latitude: stratotype.locality__latitude,
-          longitude: stratotype.locality__longitude,
-          text: `${this.$translate({
-            et: stratotype.locality__locality,
-            en: stratotype.locality__locality_en,
-          })} (${this.$translate({
-            et: stratotype.stratotype_type__value,
-            en: stratotype.stratotype_type__value_en,
-          })})`,
+      return this.stratotypes?.reduce((prev, stratotype) => {
+        if (stratotype.locality) {
+          prev.push({
+            latitude: stratotype?.locality?.latitude,
+            longitude: stratotype?.locality?.longitude,
+            text: `${this.$translate({
+              et: stratotype?.locality?.locality,
+              en: stratotype?.locality?.locality_en,
+            })} (${this.$translate({
+              et: stratotype?.stratotype_type?.value,
+              en: stratotype?.stratotype_type?.value_en,
+            })})`,
+          })
         }
-      })
+        return prev
+      }, [])
     },
     mapIsEstonian() {
       if (this.stratotypes?.length > 0) {
         return this.stratotypes.some(
-          (item) => item.locality__country__value_en === 'Estonia'
+          (item) => item?.locality?.country?.value_en === 'Estonia'
         )
       }
       return false
