@@ -48,8 +48,8 @@ export default {
           ...item,
           canExpand:
             !isEmpty(item.description) ||
-            item.rock__name ||
-            item.rock__name__en ||
+            item.rock?.name ||
+            item.rock?.name_en ||
             item.zero_level ||
             item.author_free ||
             item.reference ||
