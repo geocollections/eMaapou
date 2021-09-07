@@ -7,12 +7,22 @@
     :count="count"
     v-on="$listeners"
   >
-    <template #item.name="{ item }">{{
-      $translate({
-        et: item.locality__locality,
-        en: item.locality__locality_en,
-      })
-    }}</template>
+    <template #item.name="{ item }">
+      <nuxt-link
+        v-if="item.locality"
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality.id } })
+        "
+      >
+        {{
+          $translate({
+            et: item.locality.locality,
+            en: item.locality.locality_en,
+          })
+        }}
+      </nuxt-link></template
+    >
     <template #item.longitude="{ item }">{{ item.point_longitude }}</template>
     <template #item.latitude="{ item }">{{ item.point_latitude }}</template>
     <template #item.is_polygon="{ item }">

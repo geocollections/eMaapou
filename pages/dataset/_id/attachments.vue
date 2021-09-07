@@ -12,7 +12,7 @@
 import { isNil } from 'lodash'
 import AttachmentTable from '@/components/tables/AttachmentTable'
 
-import { ATTACHMENT } from '~/constants'
+import { ATTACHMENT_LINK } from '~/constants'
 export default {
   components: { AttachmentTable },
   props: {
@@ -43,8 +43,9 @@ export default {
           isValid: isNil(this.dataset),
           defaultParams: {
             dataset: this.dataset,
+            nest: 2,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
+          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
         }
       )
       this.attachments = attachmentResponse.items
