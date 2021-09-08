@@ -152,9 +152,9 @@ export default {
     },
   },
   computed: {
-    ...mapState('table_headers', {
+    ...mapState('search/analytical_data', {
       tableHeaders(state) {
-        return state.analyticalData.tableHeaders
+        return state.tableHeaders
       },
     }),
     translatedHeaders() {
