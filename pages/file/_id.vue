@@ -409,15 +409,6 @@
                             >{{ row[item.id].id }}</nuxt-link
                           >
                           <a
-                            v-else-if="item.isGeoLink"
-                            class="text-link"
-                            @click="$openGeoDetail(item.id, row[item.id])"
-                            >{{ row[item.id] }}
-                            <v-icon small color="primary darken-2"
-                              >mdi-open-in-new</v-icon
-                            >
-                          </a>
-                          <a
                             v-else
                             class="text-link"
                             @click="
@@ -425,11 +416,15 @@
                                 `${item.href}${
                                   item.id === 'doi'
                                     ? row.doi.identifier
-                                    : row[item.id]
+                                    : row[item.id].id
                                 }`
                               )
                             "
-                            >{{ row[item.id] }}
+                            >{{
+                              item.id === 'doi'
+                                ? row.doi.identifier
+                                : row[item.id].id
+                            }}
                             <v-icon small color="primary darken-2"
                               >mdi-open-in-new</v-icon
                             ></a
@@ -525,7 +520,6 @@ export default {
       const tabs = [
         {
           id: 'collection',
-          fields: 'collection,collection__name,collection__name_en',
           title: 'related.collection',
           count: 0,
           items: [],
@@ -533,16 +527,14 @@ export default {
         },
         {
           id: 'specimen',
-          fields: 'specimen,specimen__coll__number,specimen__specimen_id',
           title: 'related.specimen',
           count: 0,
           items: [],
           isLink: true,
-          isGeoLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'sample',
-          fields: 'sample,sample__number',
           title: 'related.sample',
           count: 0,
           items: [],
@@ -551,7 +543,6 @@ export default {
         },
         {
           id: 'sample_series',
-          fields: 'sample_series,sample_series__name',
           title: 'related.sample_series',
           count: 0,
           items: [],
@@ -559,7 +550,6 @@ export default {
         },
         {
           id: 'analysis',
-          fields: 'analysis,analysis__sample__number',
           title: 'related.analysis',
           count: 0,
           items: [],
@@ -568,16 +558,14 @@ export default {
         },
         {
           id: 'dataset',
-          fields: 'dataset,dataset__name,dataset__name_en',
           title: 'related.dataset',
           count: 0,
           items: [],
           isLink: true,
-          isGeoLink: true,
+          isNuxtLink: true,
         },
         {
           id: 'doi',
-          fields: 'doi,doi__identifier',
           title: 'related.doi',
           count: 0,
           items: [],
@@ -586,7 +574,6 @@ export default {
         },
         {
           id: 'locality',
-          fields: 'locality,locality__locality,locality__locality_en',
           title: 'related.locality',
           count: 0,
           items: [],
@@ -595,7 +582,6 @@ export default {
         },
         {
           id: 'drillcore',
-          fields: 'drillcore,drillcore__drillcore,drillcore__drillcore_en',
           title: 'related.drillcore',
           count: 0,
           items: [],
@@ -605,7 +591,6 @@ export default {
         {
           id: 'drillcore_box',
           route: 'drillcore-box',
-          fields: 'drillcore_box,drillcore_box__number',
           title: 'related.drillcore_box',
           count: 0,
           items: [],
@@ -614,7 +599,6 @@ export default {
         },
         {
           id: 'preparation',
-          fields: 'preparation,preparation__preparation_number',
           title: 'related.preparation',
           count: 0,
           items: [],
@@ -622,7 +606,6 @@ export default {
         },
         {
           id: 'reference',
-          fields: 'reference,reference__reference',
           title: 'related.reference',
           count: 0,
           items: [],
@@ -631,7 +614,6 @@ export default {
         },
         {
           id: 'storage',
-          fields: 'storage,storage__location',
           title: 'related.storage',
           count: 0,
           items: [],
@@ -639,7 +621,6 @@ export default {
         },
         {
           id: 'project',
-          fields: 'project,project__name,project__name_en',
           title: 'related.project',
           count: 0,
           items: [],
@@ -647,7 +628,6 @@ export default {
         },
         {
           id: 'site',
-          fields: 'site,site__name,site__name_en',
           title: 'related.site',
           count: 0,
           items: [],
@@ -656,7 +636,6 @@ export default {
         },
         {
           id: 'locality_description',
-          fields: 'locality_description,locality_description__description',
           title: 'related.locality_description',
           count: 0,
           items: [],
@@ -664,7 +643,6 @@ export default {
         },
         {
           id: 'taxon',
-          fields: 'taxon,taxon__taxon',
           title: 'related.taxon',
           count: 0,
           items: [],
@@ -682,8 +660,7 @@ export default {
               defaultParams: {
                 [`${tab.id}__isnull`]: false,
                 attachment: file.id,
-                fields: tab.fields,
-                nest: 1,
+                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
               },
             }
           )
@@ -702,11 +679,84 @@ export default {
         ids,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Cannot find file ${route.params.id}`,
         path: route.path,
       })
+    }
+  },
+  data() {
+    return {
+      nameFields: {
+        collection: {
+          et: 'collection_name',
+          en: 'collection_name_en',
+        },
+        specimen: {
+          et: 'number',
+          en: 'number',
+        },
+        sample: {
+          et: 'number',
+          en: 'number',
+        },
+        sample_series: {
+          et: 'name',
+          en: 'name',
+        },
+        analysis: {
+          et: 'number',
+          en: 'number',
+        },
+        dataset: {
+          et: 'name',
+          en: 'name_en',
+        },
+        doi: {
+          et: 'identifier',
+          en: 'identifier',
+        },
+        locality: {
+          et: 'locality',
+          en: 'locality_en',
+        },
+        drillcore: {
+          et: 'drillcore',
+          en: 'drillcore_en',
+        },
+        drillcore_box: {
+          et: 'number',
+          en: 'number',
+        },
+        preparation: {
+          et: 'preparation_number',
+          en: 'preparation_number',
+        },
+        reference: {
+          et: 'reference',
+          en: 'reference',
+        },
+        storage: {
+          et: 'location',
+          en: 'location',
+        },
+        project: {
+          et: 'name',
+          en: 'name_en',
+        },
+        site: {
+          et: 'name',
+          en: 'name_en',
+        },
+        locality_description: {
+          et: 'description',
+          en: 'description',
+        },
+        taxon: {
+          et: 'taxon',
+          en: 'taxon',
+        },
+      },
     }
   },
   head() {
@@ -853,21 +903,20 @@ export default {
   methods: {
     isNull,
     isNil,
-    // Todo: Review that code!!! related data not properly shown after api update
     buildData(type, data) {
-      const listOfIds = Object.keys(data)
+      const listOfIds = Object.keys(data[type])
       listOfIds.splice(listOfIds.indexOf(type), 1)
 
-      if (listOfIds.length === 1) return data[listOfIds[0]]
-      else if (listOfIds.length === 2) {
-        if (type === 'specimen')
-          return `${data[listOfIds[0]].split(' ')[0]} ${data[listOfIds[1]]}`
-        else {
-          return this.$translate({
-            et: data[listOfIds[0]],
-            en: data[listOfIds[1]],
-          })
-        }
+      if (type === 'specimen')
+        return `${data[type].coll.number.split(' ')[0]} ${
+          data[type].specimen_id
+        }`
+      if (type === 'analysis') return data[type].sample.number
+      else {
+        return this.$translate({
+          et: data[type][this.nameFields[type].et],
+          en: data[type][this.nameFields[type].en],
+        })
       }
     },
   },
