@@ -229,16 +229,14 @@ export default {
             queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
           })
           .then((res) => {
-            if (!res.page) {
+            if (!res.next) {
               this.boxes.push(...res.items)
               $state.loaded()
               $state.complete()
-            } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
+            } else {
               this.page += 1
               this.boxes.push(...res.items)
               $state.loaded()
-            } else {
-              $state.complete()
             }
           })
           .catch(() => {
