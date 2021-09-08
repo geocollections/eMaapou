@@ -1,9 +1,13 @@
 <template>
   <data-row v-if="value" :title="title">
     <template #value>
-      <nuxt-link v-if="nuxt" class="text-link" :to="href">{{
-        value
-      }}</nuxt-link>
+      <!-- Changed it into div in order to stop propagation (clicking on boxes in drillcore detail view (stratigraphy link)) -->
+      <div v-if="nuxt" class="text-link" @click.stop="$router.push(href)">
+        {{ value }}
+      </div>
+      <!--      <nuxt-link v-if="nuxt" class="text-link" :to="href">{{-->
+      <!--        value-->
+      <!--      }}</nuxt-link>-->
       <span v-else>
         <a v-if="href" class="text-link" :href="href">
           <slot name="value">

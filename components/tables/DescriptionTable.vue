@@ -27,9 +27,10 @@
                     :value="item.author_free"
                   />
                   <link-data-row
+                    v-if="item.reference"
                     :title="$t('localityDescription.reference')"
-                    :value="item.reference__reference"
-                    @link-click="$openGeology('reference', item.reference)"
+                    :value="item.reference.reference"
+                    @link-click="$openGeology('reference', item.reference.id)"
                   />
                   <data-row
                     :title="$t('localityDescription.year')"
@@ -40,12 +41,14 @@
                     :value="item.stratigraphy_free"
                   />
                   <data-row
+                    v-if="item.rock"
                     :title="$t('localityDescription.rockEt')"
-                    :value="item.rock__name"
+                    :value="item.rock.name"
                   />
                   <data-row
+                    v-if="item.rock"
                     :title="$t('localityDescription.rockEn')"
-                    :value="item.rock__name_en"
+                    :value="item.rock.name_en"
                   />
                   <data-row
                     :title="$t('localityDescription.remarks')"
@@ -59,7 +62,9 @@
       </td>
     </template>
     <template #item.rock="{ item }">
-      {{ $translate({ et: item.rock__name, en: item.rock__name_en }) }}
+      <div v-if="item.rock">
+        {{ $translate({ et: item.rock.name, en: item.rock.name_en }) }}
+      </div>
     </template>
     <template #item.thickness="{ item }">
       {{
@@ -75,14 +80,14 @@
         :to="
           localePath({
             name: 'stratigraphy-id',
-            params: { id: item.stratigraphy },
+            params: { id: item.stratigraphy.id },
           })
         "
       >
         {{
           $translate({
-            et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en,
+            et: item.stratigraphy.stratigraphy,
+            en: item.stratigraphy.stratigraphy_en,
           })
         }}
       </nuxt-link>
@@ -91,15 +96,15 @@
       <a
         v-if="item.reference"
         :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
-        @click="$openGeology('reference', item.reference)"
+        @click="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </a>
       <div
-        v-else-if="item.agent__agent"
+        v-else-if="item.agent"
         :class="{ 'is-preferred': !item.is_preferred }"
       >
-        {{ item.agent__agent }}
+        {{ item.agent.agent }}
       </div>
       <div v-else :class="{ 'is-preferred': !item.is_preferred }">
         {{ item.author_free }}

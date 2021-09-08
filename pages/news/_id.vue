@@ -27,12 +27,12 @@ export default {
   components: { TitleCard },
   async asyncData({ params, app }) {
     const newsResponse = await app.$services.sarvREST.getResource(
-      'webnews',
+      'web_news',
       params.id
     )
 
     return {
-      news: newsResponse.results[0],
+      news: newsResponse,
     }
   },
 

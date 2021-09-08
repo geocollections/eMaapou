@@ -36,21 +36,24 @@
                 :value="drillcore.box_numbers"
               />
               <data-row
+                v-if="depository"
                 :title="$t('drillcore.repository')"
                 :value="
                   $translate({
-                    et: drillcore.depository__value,
-                    en: drillcore.depository__value_en,
+                    et: depository.value,
+                    en: depository.value_en,
                   })
                 "
               />
               <data-row
+                v-if="storage"
                 :title="$t('drillcore.storage')"
-                :value="drillcore.storage__location"
+                :value="storage.location"
               />
               <data-row
+                v-if="agent"
                 :title="$t('drillcore.driller')"
-                :value="drillcore.agent__agent"
+                :value="agent.agent"
               />
               <data-row :title="$t('drillcore.year')" :value="drillcore.year" />
               <data-row
@@ -59,17 +62,18 @@
               />
 
               <link-data-row
+                v-if="database"
                 :title="$t('drillcore.database')"
                 :value="
                   $translate({
-                    et: drillcore.database__name,
-                    en: drillcore.database__name_en,
+                    et: database.name,
+                    en: database.name_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
-                    name: `institution-${drillcore.database__acronym.toLowerCase()}`,
+                    name: `institution-${database.acronym.toLowerCase()}`,
                   })
                 "
               />
@@ -95,7 +99,7 @@
       </div>
     </template>
 
-    <template v-if="drillcore.locality_id" #column-right>
+    <template v-if="drillcore.locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.locality')
       }}</v-card-title>
@@ -107,70 +111,70 @@
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
-                    et: drillcore.locality__locality,
-                    en: drillcore.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: drillcore.locality_id },
+                    params: { id: drillcore.locality.id },
                   })
                 "
               />
               <data-row
+                v-if="locality.country"
                 :title="$t('locality.country')"
                 :value="
                   $translate({
-                    et: drillcore.locality__country__value,
-                    en: drillcore.locality__country__value_en,
+                    et: locality.country.value,
+                    en: locality.country.value_en,
                   })
                 "
               />
               <data-row
                 :title="$t('locality.latitude')"
-                :value="drillcore.locality__latitude"
+                :value="locality.latitude"
               />
               <data-row
                 :title="$t('locality.longitude')"
-                :value="drillcore.locality__longitude"
+                :value="locality.longitude"
               />
               <data-row
                 :title="$t('locality.elevation')"
-                :value="drillcore.locality__elevation"
+                :value="locality.elevation"
               />
-              <data-row
-                :title="$t('locality.depth')"
-                :value="drillcore.locality__depth"
-              />
+              <data-row :title="$t('locality.depth')" :value="locality.depth" />
             </tbody>
           </template>
         </v-simple-table>
         <v-card
-          v-if="drillcore.locality__latitude && drillcore.locality__longitude"
+          v-if="locality.latitude && locality.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
-            :estonian-map="drillcore.locality__country__value === 'Eesti'"
+            :estonian-map="
+              locality.country ? locality.country.value === 'Eesti' : false
+            "
             :estonian-bedrock-overlay="
-              drillcore.locality__country__value === 'Eesti'
+              locality.country ? locality.country.value === 'Eesti' : false
             "
             rounded
             borehole-overlay
             height="300px"
             :center="{
-              latitude: drillcore.locality__latitude,
-              longitude: drillcore.locality__longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
             }"
             :markers="[
               {
-                latitude: drillcore.locality__latitude,
-                longitude: drillcore.locality__longitude,
+                latitude: locality.latitude,
+                longitude: locality.longitude,
                 text: $translate({
-                  et: drillcore.locality__locality,
-                  en: drillcore.locality__locality_en,
+                  et: locality.locality,
+                  en: locality.locality_en,
                 }),
               },
             ]"
@@ -208,10 +212,15 @@ export default {
     try {
       const drillcoreResponse = await app.$services.sarvREST.getResource(
         'drillcore',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 2,
+          },
+        }
       )
       const ids = drillcoreResponse?.ids
-      const drillcore = drillcoreResponse.results[0]
+      const drillcore = drillcoreResponse
 
       const tabs = [
         {
@@ -276,7 +285,7 @@ export default {
         },
       ]
 
-      const hydratedTabs = drillcore?.locality_id
+      const hydratedTabs = drillcore?.locality?.id
         ? (
             await Promise.all(
               tabs.map(
@@ -284,13 +293,15 @@ export default {
                   await app.$hydrateCount(tab, {
                     solr: {
                       default: {
-                        fq: `locality_id :${drillcore.locality_id}`,
+                        fq: `locality_id :${drillcore?.locality?.id}`,
                       },
                     },
                     api: {
-                      default: { locality: drillcore.locality_id },
+                      default: { locality: drillcore?.locality?.id },
                       attachment_link: {
-                        or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
+                        // Todo: OR search not yet supported in new api
+                        // or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
+                        drillcore: drillcore.id,
                       },
                     },
                   })
@@ -299,7 +310,7 @@ export default {
           ).map((tab) =>
             app.$populateProps(tab, {
               ...tab.props,
-              locality: drillcore.locality_id,
+              locality: drillcore?.locality?.id,
             })
           )
         : tabs
@@ -341,6 +352,21 @@ export default {
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+    depository() {
+      return this.drillcore?.depository
+    },
+    storage() {
+      return this.drillcore?.storage
+    },
+    agent() {
+      return this.drillcore?.agent
+    },
+    database() {
+      return this.drillcore?.database
+    },
+    locality() {
+      return this.drillcore?.locality
     },
   },
   methods: {

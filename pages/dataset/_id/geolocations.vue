@@ -36,17 +36,16 @@ export default {
   methods: {
     async handleUpdate(tableState) {
       this.options = tableState.options
-      const geolocationsResponse = await this.$services.sarvREST.getResourceList(
-        'dataset_geolocation',
-        {
+      const geolocationsResponse =
+        await this.$services.sarvREST.getResourceList('dataset_geolocation', {
           ...tableState,
           isValid: isNil(this.dataset),
           defaultParams: {
             dataset: this.dataset,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(DATASET_GEOLOCATIONS.queryFields),
-        }
-      )
+        })
       this.geolocations = geolocationsResponse.items
       this.count = geolocationsResponse.count
     },

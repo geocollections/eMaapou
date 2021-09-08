@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import AttachmentTable from '~/components/tables/AttachmentTable'
-import { ATTACHMENT } from '~/constants'
+import { ATTACHMENT_LINK } from '~/constants'
 export default {
   components: { AttachmentTable },
   props: {
@@ -23,7 +23,7 @@ export default {
     return {
       attachments: [],
       count: 0,
-      options: ATTACHMENT.options,
+      options: ATTACHMENT_LINK.options,
     }
   },
   methods: {
@@ -36,8 +36,9 @@ export default {
           isValid: isNil(this.preparation),
           defaultParams: {
             preparation: `${this.preparation}`,
+            nest: 2,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
+          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
         }
       )
       this.attachments = attachmentResponse.items

@@ -66,33 +66,30 @@ export default ($axios) => ({
       ...getSortByParams(options, queryFields),
     }
 
-    const response = await $axios.$get(
-      `${useRawSolr ? 'raw_solr' : 'solr'}/${resource}/`,
-      {
-        params,
-        paramsSerializer: (par) => {
-          return qs.stringify(par, { indices: false })
-        },
-      }
-    )
+    const response = await $axios.$get(`solr/${resource}`, {
+      params,
+      paramsSerializer: (par) => {
+        return qs.stringify(par, { indices: false })
+      },
+    })
 
     return {
-      items: useRawSolr ? response?.response?.docs : response.results,
-      count: useRawSolr ? response?.response?.numFound : response.count,
+      items: response?.response?.docs,
+      count: response?.response?.numFound,
       stats: response?.stats,
       grouped: response?.grouped,
     }
   },
 
   async getResource(resource, id, options = {}) {
-    const response = await $axios.get(`solr/${resource}/?q=id:${id}`, {
+    const response = await $axios.get(`solr/${resource}?q=id:${id}`, {
       params: { ...options },
     })
-    return response.data
+    return response.data?.response?.docs
   },
 
   async getResourceCount(resource, countParams) {
-    const response = await $axios.$get(`solr/${resource}/`, {
+    const response = await $axios.$get(`solr/${resource}`, {
       params: {
         rows: 0,
         ...countParams,
@@ -100,16 +97,16 @@ export default ($axios) => ({
       },
     })
     return {
-      count: response.count,
+      count: response?.response?.numFound,
     }
   },
 
   async getAllFieldNames(resource, params) {
-    const response = await $axios.$get(`raw_solr/${resource}/`, {
+    const response = await $axios.$get(`solr/${resource}`, {
       params,
     })
     return {
-      fields: response?.response,
+      fields: response,
     }
   },
 })
@@ -161,6 +158,10 @@ const buildFilterQueryParameter = (filters) => {
         function buildEncodedParameterStr(searchParameter, fieldId) {
           function buildTextParameter(encodedValue, fieldId) {
             const textArray = encodedValue.split(' ')
+
+            console.log(searchParameter)
+            console.log(encodedValue)
+            console.log(fieldId)
 
             const paramArray = textArray.map((str) => {
               switch (searchParameter.lookUpType) {
@@ -222,17 +223,16 @@ const buildFilterQueryParameter = (filters) => {
               return `${fieldId}:${encodeURIComponent(searchParameter.value)}`
             }
             case 'text': {
-              return encodeURIComponent(
-                `${buildTextParameter(searchParameter.value, fieldId)}`
-              )
+              const encodedValue = encodeURIComponent(searchParameter.value)
+
+              return buildTextParameter(encodedValue, fieldId)
             }
             case 'object': {
-              return encodeURIComponent(
-                `${buildTextParameter(
-                  searchParameter.value[searchParameter.searchField],
-                  fieldId
-                )}`
+              const encodedValue = encodeURIComponent(
+                searchParameter.value[searchParameter.searchField]
               )
+
+              return buildTextParameter(encodedValue, fieldId)
             }
             case 'list': {
               return searchParameter.fields

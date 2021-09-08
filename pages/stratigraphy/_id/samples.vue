@@ -37,7 +37,7 @@ export default {
           isValid: isNil(this.stratigraphy),
           defaultParams: {
             // fq: `stratigraphy_id:${this.stratigraphy}`,
-            fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*)+OR+age_hierarchy:(${this.stratigraphy.hierarchy_string}*)+OR+lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
+            fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
           },
           queryFields: this.$getQueryFields(SAMPLE.queryFields),
         }

@@ -10,7 +10,7 @@
 <script>
 import AttachmentTable from '@/components/tables/AttachmentTable'
 
-import { ATTACHMENT } from '~/constants'
+import { ATTACHMENT_LINK } from '~/constants'
 export default {
   components: { AttachmentTable },
   data() {
@@ -34,8 +34,9 @@ export default {
           ...tableState,
           defaultParams: {
             locality: `${this.$route.params.id}`,
+            nest: 2,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
+          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
         }
       )
       this.attachments = attachmentResponse.items

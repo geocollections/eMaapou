@@ -210,8 +210,8 @@ export default {
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {
-    const data = await app.$services.sarvREST.getResource('page', 87)
-    return { page: data.results[0] }
+    const data = await app.$services.sarvREST.getResource('web_pages', 87)
+    return { page: data }
   },
   data() {
     return {

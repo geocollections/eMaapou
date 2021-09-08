@@ -6,7 +6,6 @@
         ref="map"
         :class="{
           rounded: rounded,
-          [mapClass]: true,
         }"
         :style="{
           height: `${height}`,
@@ -211,10 +210,6 @@ export default {
     showLinks: {
       type: Boolean,
       default: true,
-    },
-    mapClass: {
-      type: String,
-      default: '',
     },
   },
   data() {

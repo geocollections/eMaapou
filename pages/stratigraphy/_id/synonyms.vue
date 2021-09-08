@@ -35,7 +35,8 @@ export default {
           ...tableState,
           isValid: isNil(this.stratigraphy),
           defaultParams: {
-            stratigraphy__id: this.stratigraphy,
+            stratigraphy: this.stratigraphy,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(STRATIGRAPHY_SYNONYM.queryFields),
         }

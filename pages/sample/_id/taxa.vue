@@ -37,6 +37,7 @@ export default {
           isValid: isNil(this.sample),
           defaultParams: {
             sample: this.sample,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(TAXON_LIST.queryFields),
         }

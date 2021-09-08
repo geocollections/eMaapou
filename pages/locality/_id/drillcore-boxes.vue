@@ -24,11 +24,11 @@
             tile
             :ripple="false"
             @click="
-              $openNuxtWindow('drillcore-box-id', { id: box.drillcore_box })
+              $openNuxtWindow('drillcore-box-id', { id: box.drillcore_box.id })
             "
           >
             <v-card-text class="drillcore-box__card">
-              <v-row align="start">
+              <v-row v-if="box.drillcore_box" align="start">
                 <v-col cols="12" sm="8" align-self="center">
                   <!-- TODO: #74 Add placeholder, for case when box does not have a picture -->
                   <client-only>
@@ -44,14 +44,14 @@
                       eager
                       :lazy-src="
                         $img(
-                          `${box.attachment__filename}`,
+                          `${box.attachment.filename}`,
                           { size: 'small' },
                           { provider: 'geocollections' }
                         )
                       "
                       :src="
                         $img(
-                          `${box.attachment__filename}`,
+                          `${box.attachment.filename}`,
                           { size: 'medium' },
                           { provider: 'geocollections' }
                         )
@@ -76,7 +76,7 @@
                   <v-card-title class="px-0 pt-0">
                     {{
                       $t('drillcoreBox.nr', {
-                        number: box.drillcore_box__number,
+                        number: box.drillcore_box.number,
                       })
                     }}
                   </v-card-title>
@@ -86,25 +86,25 @@
                         <tr>
                           <td>{{ $t('drillcoreBox.depthStart') }}</td>
                           <td
-                            v-if="isNull(box.drillcore_box__depth_start)"
+                            v-if="isNull(box.drillcore_box.depth_start)"
                             class="no-value"
                           >
                             {{ $t('common.noValue') }}
                           </td>
                           <td v-else>
-                            {{ box.drillcore_box__depth_start }}
+                            {{ box.drillcore_box.depth_start }}
                           </td>
                         </tr>
                         <tr>
                           <td>{{ $t('drillcoreBox.depthEnd') }}</td>
                           <td
-                            v-if="isNull(box.drillcore_box__depth_end)"
+                            v-if="isNull(box.drillcore_box.depth_end)"
                             class="no-value"
                           >
                             {{ $t('common.noValue') }}
                           </td>
                           <td v-else>
-                            {{ box.drillcore_box__depth_end }}
+                            {{ box.drillcore_box.depth_end }}
                           </td>
                         </tr>
                         <tr>
@@ -112,7 +112,7 @@
                             {{ $t('drillcoreBox.stratigraphyTop') }}
                           </td>
                           <td
-                            v-if="isNull(box.drillcore_box__stratigraphy_top)"
+                            v-if="isNull(box.drillcore_box.stratigraphy_top)"
                             class="no-value"
                           >
                             {{ $t('common.noValue') }}
@@ -123,14 +123,16 @@
                               @click.stop="
                                 $openGeoDetail(
                                   'stratigraphy',
-                                  box.drillcore_box__stratigraphy_top
+                                  box.drillcore_box.stratigraphy_top.id
                                 )
                               "
                             >
                               {{
                                 $translate({
-                                  et: box.drillcore_box__stratigraphy_top__stratigraphy,
-                                  en: box.drillcore_box__stratigraphy_top__stratigraphy_en,
+                                  et: box.drillcore_box.stratigraphy_top
+                                    .stratigraphy,
+                                  en: box.drillcore_box.stratigraphy_top
+                                    .stratigraphy_en,
                                 })
                               }}
                             </a>
@@ -141,7 +143,7 @@
                             {{ $t('drillcoreBox.stratigraphyBase') }}
                           </td>
                           <td
-                            v-if="isNull(box.drillcore_box__stratigraphy_base)"
+                            v-if="isNull(box.drillcore_box.stratigraphy_base)"
                             class="no-value"
                           >
                             {{ $t('common.noValue') }}
@@ -152,14 +154,16 @@
                               @click.stop="
                                 $openGeoDetail(
                                   'stratigraphy',
-                                  box.drillcore_box__stratigraphy_base
+                                  box.drillcore_box.stratigraphy_base.id
                                 )
                               "
                             >
                               {{
                                 $translate({
-                                  et: box.drillcore_box__stratigraphy_base__stratigraphy,
-                                  en: box.drillcore_box__stratigraphy_base__stratigraphy_en,
+                                  et: box.drillcore_box.stratigraphy_base
+                                    .stratigraphy,
+                                  en: box.drillcore_box.stratigraphy_base
+                                    .stratigraphy_en,
                                 })
                               }}
                             </a>
@@ -168,25 +172,25 @@
                         <tr>
                           <td>{{ $t('drillcoreBox.depthOther') }}</td>
                           <td
-                            v-if="isNull(box.drillcore_box__depth_other)"
+                            v-if="isNull(box.drillcore_box.depth_other)"
                             class="no-value"
                           >
                             {{ $t('common.noValue') }}
                           </td>
                           <td v-else>
-                            {{ box.drillcore_box__depth_other }}
+                            {{ box.drillcore_box.depth_other }}
                           </td>
                         </tr>
                         <tr>
                           <td>{{ $t('drillcoreBox.remarks') }}</td>
                           <td
-                            v-if="isNull(box.drillcore_box__remarks)"
+                            v-if="isNull(box.drillcore_box.remarks)"
                             class="no-value"
                           >
                             {{ $t('common.noValue') }}
                           </td>
                           <td v-else>
-                            {{ box.drillcore_box__remarks }}
+                            {{ box.drillcore_box.remarks }}
                           </td>
                         </tr>
                       </tbody>
@@ -245,14 +249,14 @@ export default {
       this.$services.sarvREST
         .getResourceList('attachment_link', {
           defaultParams: {
-            order_by: 'drillcore_box__depth_start,drillcore_box',
+            ordering: 'drillcore_box__depth_start,drillcore_box',
             drillcore_box__drillcore: this.drillcore,
             attachment__is_preferred: true,
+            nest: 2,
+          },
+          options: {
             page: this.page,
-            paginate_by: paginateBy,
-            distinct: true,
-            fields:
-              'id,drillcore_box,attachment__filename,drillcore_box__number,drillcore_box__stratigraphy_top,drillcore_box__stratigraphy_top__stratigraphy,drillcore_box__stratigraphy_top__stratigraphy_en,drillcore_box__stratigraphy_base,drillcore_box__stratigraphy_base__stratigraphy,drillcore_box__stratigraphy_base__stratigraphy_en,drillcore_box__depth_start,drillcore_box__depth_end,drillcore_box__depth_other,drillcore_box__remarks,attachment__is_preferred',
+            itemsPerPage: paginateBy,
           },
           search: this.search,
           queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),

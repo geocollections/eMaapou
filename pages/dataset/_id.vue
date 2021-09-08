@@ -26,9 +26,10 @@
                 :value="dataset.title_alternative"
               />
               <data-row
+                v-if="dataset.creators || dataset.owner_txt || dataset.owner"
                 :title="$t('dataset.creators')"
                 :value="
-                  dataset.creators || dataset.owner_txt || dataset.owner__agent
+                  dataset.creators || dataset.owner_txt || dataset.owner.agent
                 "
               />
               <data-row
@@ -49,11 +50,12 @@
                 :value="dataset.subjects"
               />
               <data-row
+                v-if="dataset.language"
                 :title="$t('dataset.language')"
                 :value="
                   $translate({
-                    et: dataset.language__value,
-                    en: dataset.language__value_en,
+                    et: dataset.language.value,
+                    en: dataset.language.value_en,
                   })
                 "
               />
@@ -78,15 +80,16 @@
               <link-data-row
                 v-if="reference"
                 :title="$t('dataset.reference')"
-                :value="dataset.reference__reference"
-                :href="`https://kirjandus.geoloogia.info/reference/${dataset.reference__id}`"
+                :value="reference.reference"
+                :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
               />
               <link-data-row
+                v-if="dataset.locality"
                 :title="$t('dataset.locality')"
                 :value="
                   $translate({
-                    et: dataset.locality__locality,
-                    en: dataset.locality__locality_en,
+                    et: dataset.locality.locality,
+                    en: dataset.locality.locality_en,
                   })
                 "
                 nuxt
@@ -98,21 +101,23 @@
                 "
               />
               <data-row
+                v-if="dataset.copyright_agent"
                 :title="$t('dataset.copyright')"
-                :value="dataset.copyright_agent__agent"
+                :value="dataset.copyright_agent.agent"
               />
               <link-data-row
+                v-if="dataset.licence"
                 :title="$t('dataset.licence')"
                 :value="
                   $translate({
-                    et: dataset.licence__licence,
-                    en: dataset.licence__licence_en,
+                    et: dataset.licence.licence,
+                    en: dataset.licence.licence_en,
                   })
                 "
                 :href="
                   $translate({
-                    et: dataset.licence__licence_url,
-                    en: dataset.licence__licence_url_en,
+                    et: dataset.licence.licence_url,
+                    en: dataset.licence.licence_url_en,
                   })
                 "
               />
@@ -196,17 +201,22 @@ export default {
     try {
       const datasetResponse = await app.$services.sarvREST.getResource(
         'dataset',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
       const ids = datasetResponse?.ids
-      const dataset = datasetResponse.results[0]
+      const dataset = datasetResponse
 
       const parameterResponse = await app.$services.sarvSolr.getResource(
         'dataset',
-        `dataset_id:${params.id}`,
+        params.id,
         { fl: 'parameter_index_list,parameter_list' }
       )
-      const parameters = parameterResponse.results[0]
+      const parameters = parameterResponse
 
       const parameterValues = parameters?.parameter_index_list?.[0]?.split('; ')
 
@@ -223,13 +233,14 @@ export default {
       const doiResponse = await app.$services.sarvREST.getResourceList('doi', {
         defaultParams: {
           dataset: params.id,
+          nest: 1,
         },
       })
 
       const doi = doiResponse.items?.[0]?.identifier
       const reference = {
         id: doiResponse.items?.[0]?.reference,
-        reference: doiResponse.items?.[0]?.reference__reference,
+        reference: doiResponse.items?.[0]?.reference?.reference,
       }
 
       const localityGroupedResponse =
@@ -273,7 +284,7 @@ export default {
           props: { dataset: dataset.id },
         },
         {
-          id: 'attachments_link',
+          id: 'attachment_link',
           table: 'attachment_link',
           routeName: 'dataset-id-attachments',
           title: 'dataset.attachments',
@@ -301,7 +312,7 @@ export default {
       if (locations.length === 1) {
         tabs.push({
           table: 'analysis_results',
-          id: 'graphs',
+          id: 'analysis_results',
           isSolr: true,
           routeName: 'dataset-id-graphs',
           title: 'locality.graphs',

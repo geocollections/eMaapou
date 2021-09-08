@@ -36,7 +36,8 @@ export default {
           ...tableState,
           isValid: isNil(this.locality),
           defaultParams: {
-            locality__id: this.locality,
+            locality: this.locality,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(STRATOTYPE.queryFields),
         }

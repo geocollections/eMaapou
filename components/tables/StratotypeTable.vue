@@ -9,38 +9,40 @@
   >
     <template #item.stratigraphy="{ item }">
       <nuxt-link
-        v-if="item.stratigraphy_id"
+        v-if="item.stratigraphy"
         class="text-link"
         :to="
           localePath({
             name: 'stratigraphy-id',
-            params: { id: item.stratigraphy__id },
+            params: { id: item.stratigraphy.id },
           })
         "
       >
         {{
           $translate({
-            et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en,
+            et: item.stratigraphy.stratigraphy,
+            en: item.stratigraphy.stratigraphy_en,
           })
         }}
       </nuxt-link>
     </template>
     <template #item.type="{ item }">
-      {{
-        $translate({
-          et: item.stratotype_type__value,
-          en: item.stratotype_type__value_en,
-        })
-      }}
+      <div v-if="item.stratotype_type">
+        {{
+          $translate({
+            et: item.stratotype_type.value,
+            en: item.stratotype_type.value_en,
+          })
+        }}
+      </div>
     </template>
     <template #item.reference="{ item }">
-      <a
-        v-if="item.reference__reference"
-        class="text-link"
-        @click="$openGeology('reference', item.reference__id)"
-        >{{ item.reference__reference }}</a
+      <external-link
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
+        {{ item.reference.reference }}
+      </external-link>
     </template>
   </table-wrapper>
 </template>
@@ -48,9 +50,10 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'StratotypeTable',
-  components: { TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,

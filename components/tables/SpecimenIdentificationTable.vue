@@ -9,35 +9,39 @@
   >
     <template #item.name="{ item }">
       <external-link
-        v-if="item.taxon_id"
-        @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
+        v-if="item.taxon"
+        @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
-        {{ item.taxon__taxon }}
+        {{ item.taxon.taxon }}
       </external-link>
 
       <div v-if="item.name">| {{ item.name }}</div>
     </template>
     <template #item.agent="{ item }">
-      {{ item.agent__agent }}
+      <div v-if="item.agent">
+        {{ item.agent.agent }}
+      </div>
     </template>
     <template #item.dateIdentified="{ item }">
       {{ item.date_identified }}
     </template>
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference_id"
-        @click.native="$openGeology('reference', item.reference_id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
     <template #item.type="{ item }">
-      {{
-        $translate({
-          et: item.identification_type__value,
-          en: item.identification_type__value_en,
-        })
-      }}
+      <div v-if="item.identification_type">
+        {{
+          $translate({
+            et: item.identification_type.value,
+            en: item.identification_type.value_en,
+          })
+        }}
+      </div>
     </template>
     <template #item.current="{ item }">
       <boolean-indicator :value="item.current" />

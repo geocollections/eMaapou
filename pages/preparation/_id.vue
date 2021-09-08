@@ -21,18 +21,19 @@
                 :value="preparation.preparation_number"
               />
               <link-data-row
+                v-if="sample"
                 :title="$t('preparation.sample')"
                 :value="
-                  preparation.sample__number ||
-                  preparation.sample__number_additional ||
-                  preparation.sample__number_field ||
-                  preparation.sample_id
+                  sample.number ||
+                  sample.number_additional ||
+                  sample.number_field ||
+                  sample.id
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'sample-id',
-                    params: { id: preparation.sample_id },
+                    params: { id: sample.id },
                   })
                 "
               />
@@ -41,30 +42,34 @@
                 :value="preparation.sample_number"
               />
               <link-data-row
+                v-if="analysis"
                 :title="$t('preparation.analysis')"
-                :value="preparation.analysis_id"
+                :value="analysis.id"
                 nuxt
                 :href="
                   localePath({
                     name: 'analysis-id',
-                    params: { id: preparation.analysis_id },
+                    params: { id: analysis.id },
                   })
                 "
               />
               <link-data-row
+                v-if="taxon"
                 :title="$t('preparation.taxon')"
-                :value="preparation.taxon__taxon"
+                :value="taxon.taxon"
                 @link-click="
-                  $openWindow(`https://fossiilid.info/${preparation.taxon}`)
+                  $openWindow(`https://fossiilid.info/${preparation.taxon.id}`)
                 "
               />
               <data-row
+                v-if="agent"
                 :title="$t('preparation.agent')"
-                :value="preparation.agent__agent || preparation.agent_txt"
+                :value="agent.agent || preparation.agent_txt"
               />
               <data-row
+                v-if="identification_agent"
                 :title="$t('preparation.identification_agent')"
-                :value="preparation.identification_agent__agent"
+                :value="identification_agent.agent"
               />
               <data-row
                 :title="$t('preparation.date_prepared')"
@@ -85,12 +90,14 @@
                 :value="preparation.location"
               />
               <data-row
+                v-if="storage"
                 :title="$t('preparation.storage')"
-                :value="preparation.storage__location"
+                :value="storage.location"
               />
               <data-row
+                v-if="owner"
                 :title="$t('preparation.owner')"
-                :value="preparation.owner__agent"
+                :value="owner.agent"
               />
               <data-row
                 v-if="preparation.date_added"
@@ -134,10 +141,15 @@ export default {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'preparation',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
       const ids = detailViewResponse?.ids
-      const preparation = detailViewResponse.results[0]
+      const preparation = detailViewResponse
 
       const tabs = [
         {
@@ -205,6 +217,27 @@ export default {
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+    sample() {
+      return this.preparation?.sample
+    },
+    analysis() {
+      return this.preparation?.analysis
+    },
+    taxon() {
+      return this.preparation?.taxon
+    },
+    agent() {
+      return this.preparation?.agent
+    },
+    identification_agent() {
+      return this.preparation?.identification_agent
+    },
+    storage() {
+      return this.preparation?.storage
+    },
+    owner() {
+      return this.preparation?.owner
     },
   },
   methods: {

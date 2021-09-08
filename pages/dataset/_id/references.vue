@@ -36,6 +36,7 @@ export default {
           isValid: isNil(this.dataset),
           defaultParams: {
             dataset: this.dataset,
+            nest: 2,
           },
           queryFields: this.$getQueryFields(DATASET_REFERENCE.queryFields),
         }

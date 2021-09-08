@@ -9,34 +9,36 @@
   >
     <template #item.locality="{ item }">
       <nuxt-link
-        v-if="item.locality_id"
+        v-if="item.locality"
         class="text-link"
         :to="
-          localePath({ name: 'locality-id', params: { id: item.locality__id } })
+          localePath({ name: 'locality-id', params: { id: item.locality.id } })
         "
       >
         {{
           $translate({
-            et: item.locality__locality,
-            en: item.locality__locality_en,
+            et: item.locality.locality,
+            en: item.locality.locality_en,
           })
         }}
       </nuxt-link>
     </template>
     <template #item.type="{ item }">
-      {{
-        $translate({
-          et: item.stratotype_type__value,
-          en: item.stratotype_type__value_en,
-        })
-      }}
+      <div v-if="item.stratotype_type">
+        {{
+          $translate({
+            et: item.stratotype_type.value,
+            en: item.stratotype_type.value_en,
+          })
+        }}
+      </div>
     </template>
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference__id"
-        @click.native="$openGeology('reference', item.reference__id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
   </table-wrapper>
