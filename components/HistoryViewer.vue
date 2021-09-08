@@ -1,19 +1,32 @@
 <template>
-  <div v-if="history.length > 0" class="d-flex flex-row align-center">
-    <v-subheader class="pb-1 pl-0 text-no-wrap">{{
+  <div v-if="history.length > 0" class="flex-row d-flex align-center">
+    <v-subheader class="pl-0 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
-    <span class="history-viewer pb-1">
-      <span v-for="(item, index) in history" :key="index">
+    <span class="pb-1 history-viewer d-flex">
+      <span
+        v-for="(item, index) in history"
+        :key="index"
+        class="d-flex align-center"
+      >
         <nuxt-link
-          class="text-link-grey history-link"
+          :id="`history-${index}`"
+          class="text-link-grey history-link d-inline-block text-truncate"
+          :style="`max-width: ${linkWidth}px`"
           :to="localePath({ path: item.to })"
         >
-          {{ $t(item.text, { id: item.id }) }}
+          {{ item.text }}
+          <v-tooltip open-delay="500" bottom :activator="`#history-${index}`">
+            <span>{{ item.text }}</span>
+          </v-tooltip>
         </nuxt-link>
-        <span v-if="index !== history.length - 1" class="divider mx-1">
-          {{ divider }}
-        </span>
+        <v-icon
+          v-if="index !== history.length - 1"
+          class="mx-1 divider"
+          x-small
+        >
+          mdi-arrow-left
+        </v-icon>
       </span>
     </span>
   </div>
@@ -24,15 +37,13 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'HistoryViewer',
-  props: {
-    divider: {
-      type: String,
-      required: false,
-      default: '←',
-    },
-  },
   computed: {
     ...mapState('history', ['history']),
+    linkWidth() {
+      if (this.$vuetify.breakpoint.lgAndUp) return 200
+
+      return 100
+    },
   },
 }
 </script>

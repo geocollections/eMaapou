@@ -10,16 +10,10 @@
 
     <template #form>
       <drillcore-search-form />
-      <!-- <search-view-map-wrapper
-        borehole-overlay
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      /> -->
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <drillcore-table

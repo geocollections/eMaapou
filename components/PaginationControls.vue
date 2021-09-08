@@ -1,11 +1,25 @@
 <template>
-  <div class="d-flex align-center fill-height mr-3">
-    <div class="d-flex align-center ml-auto mr-7" style="flex: 0 0 0">
-      <div class="text-no-wrap text-caption mr-3">
+  <div
+    class="align-center fill-height"
+    :class="{
+      'd-flex mr-3': $vuetify.breakpoint.smAndUp,
+      'flex-column': $vuetify.breakpoint.xsOnly,
+    }"
+  >
+    <div
+      class="d-flex align-center"
+      :class="{
+        'justify-end mr-2': $vuetify.breakpoint.xsOnly,
+        'ml-auto mr-7': $vuetify.breakpoint.smAndUp,
+      }"
+      style="flex: 0 0 0"
+    >
+      <div class="mr-3 text-no-wrap text-caption">
         {{ itemsPerPageText }}
       </div>
       <v-select
-        class="text-caption mt-0"
+        class="mt-0 text-caption"
+        style="max-width: 100px"
         dense
         hide-details
         :items="itemsPerPageOptions"
@@ -14,53 +28,63 @@
         @change="changeRowsPerPage"
       />
     </div>
-    <v-btn :disabled="options.page === 1" icon @click="first">
-      <v-icon>mdi-page-first</v-icon>
-    </v-btn>
-    <v-btn :disabled="options.page === 1" icon @click="previous">
-      <v-icon>mdi-chevron-left</v-icon>
-    </v-btn>
+    <div class="justify-end my-1 d-flex align-center">
+      <v-btn :disabled="options.page === 1" icon @click="first">
+        <v-icon>mdi-page-first</v-icon>
+      </v-btn>
+      <v-btn :disabled="options.page === 1" icon @click="previous">
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
 
-    <v-btn :id="selectPageId" small text class="text-no-wrap text-caption">
-      {{ pageSelectText }}
-      <v-menu
-        :activator="`#${selectPageId}`"
-        offset-y
-        :close-on-content-click="false"
+      <v-btn :id="selectPageId" small text class="text-no-wrap text-caption">
+        {{ pageSelectText }}
+        <v-menu
+          :activator="`#${selectPageId}`"
+          offset-y
+          :close-on-content-click="false"
+        >
+          <v-card class="px-2 py-2 d-flex align-center">
+            <div class="mr-2 text-no-wrap text-caption">{{ goToText }}</div>
+            <v-text-field
+              ref="go-to-field"
+              class="mt-0 text-caption"
+              style="width: 64px"
+              dense
+              hide-details
+              :value="goToValue"
+              type="number"
+              :rules="[pageLimitRule]"
+              @keyup.enter="selectPage"
+              @input="setGoToValue"
+            >
+            </v-text-field>
+            <v-btn
+              :disabled="!pageLimitRule(goToValue)"
+              class="px-2 ml-2"
+              small
+              text
+              @click="selectPage"
+            >
+              {{ goToButtonText }} <v-icon small>mdi-chevron-right</v-icon>
+            </v-btn>
+          </v-card>
+        </v-menu>
+      </v-btn>
+      <v-btn
+        :disabled="options.page === pagination.pageCount"
+        icon
+        @click="next"
       >
-        <v-card class="d-flex align-center px-2 py-2">
-          <div class="text-no-wrap text-caption mr-2">{{ goToText }}</div>
-          <v-text-field
-            ref="go-to-field"
-            class="mt-0 text-caption"
-            style="width: 64px"
-            dense
-            hide-details
-            :value="goToValue"
-            type="number"
-            :rules="[pageLimitRule]"
-            @keyup.enter="selectPage"
-            @input="setGoToValue"
-          >
-          </v-text-field>
-          <v-btn
-            :disabled="!pageLimitRule(goToValue)"
-            class="px-2 ml-2"
-            small
-            text
-            @click="selectPage"
-          >
-            {{ goToButtonText }} <v-icon small>mdi-chevron-right</v-icon>
-          </v-btn>
-        </v-card>
-      </v-menu>
-    </v-btn>
-    <v-btn :disabled="options.page === pagination.pageCount" icon @click="next">
-      <v-icon>mdi-chevron-right</v-icon>
-    </v-btn>
-    <v-btn :disabled="options.page === pagination.pageCount" icon @click="last">
-      <v-icon>mdi-page-last</v-icon>
-    </v-btn>
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
+      <v-btn
+        :disabled="options.page === pagination.pageCount"
+        icon
+        @click="last"
+      >
+        <v-icon>mdi-page-last</v-icon>
+      </v-btn>
+    </div>
   </div>
 </template>
 <script>

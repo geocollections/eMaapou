@@ -35,7 +35,7 @@
       <template v-if="!onlyTable" #top="{ pagination, updateOptions, options }">
         <div>
           <v-row no-gutters>
-            <v-col v-if="showSearch" cols="12" sm="4" class="py-0 px-3">
+            <v-col v-if="showSearch" cols="12" sm="4" class="px-3 py-0">
               <v-text-field
                 v-model="search"
                 color="primary darken-2"
@@ -49,7 +49,7 @@
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="auto" class="px-3 my-3" align-self="center">
+            <v-col cols="12" sm="auto" class="px-3 my-3" align-self="center">
               <v-btn
                 id="export-btn"
                 color="primary"
@@ -138,6 +138,14 @@
       </template>
       <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
         <slot :name="slotName" v-bind="context" />
+      </template>
+
+      <template #item.date_added="{ item }">
+        {{ $formatDate(item.date_added) }}
+      </template>
+
+      <template #item.date_changed="{ item }">
+        {{ $formatDate(item.date_changed) }}
       </template>
     </v-data-table>
   </v-card>
