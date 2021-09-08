@@ -7,9 +7,13 @@
     :count="count"
     v-on="$listeners"
   >
-    <template #item.name="{ item }">{{ item.agent__agent }}</template>
+    <template #item.name="{ item }"
+      ><div v-if="item.agent">{{ item.agent.agent }}</div></template
+    >
     <template #item.affiliation="{ item }">{{ item.affiliation }}</template>
-    <template #item.type="{ item }">{{ item.agent_type__value }}</template>
+    <template #item.type="{ item }"
+      ><div v-if="item.agent_type">{{ item.agent_type.value }}</div></template
+    >
   </table-wrapper>
 </template>
 

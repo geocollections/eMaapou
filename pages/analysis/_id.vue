@@ -6,10 +6,10 @@
         :title="
           $t('analysis.title', {
             method: $translate({
-              et: analysis.analysis_method__analysis_method,
-              en: analysis.analysis_method__method_en,
+              et: analysis_method.analysis_method,
+              en: analysis_method.method_en,
             }),
-            sample: analysis.sample__number,
+            sample: sample.number,
           })
         "
         class="title-analysis"
@@ -28,27 +28,30 @@
                 <template #default>
                   <tbody>
                     <data-row
+                      v-if="analysis_method"
                       :title="$t('analysis.method')"
                       :value="
                         $translate({
-                          et: analysis.analysis_method__analysis_method,
-                          en: analysis.analysis_method__method_en,
+                          et: analysis_method.analysis_method,
+                          en: analysis_method.method_en,
                         })
                       "
                     />
                     <data-row
+                      v-if="agent"
                       :title="$t('analysis.analysedBy')"
-                      :value="analysis.agent__agent"
+                      :value="agent.agent"
                     />
 
                     <link-data-row
+                      v-if="sample"
                       :title="$t('analysis.sampleNumber')"
-                      :value="analysis.sample__number"
+                      :value="sample.number"
                       nuxt
                       :href="
                         localePath({
                           name: 'sample-id',
-                          params: { id: analysis.sample },
+                          params: { id: analysis.sample.id },
                         })
                       "
                     />
@@ -58,89 +61,95 @@
                       :value="analysis.remarks"
                     />
                     <link-data-row
+                      v-if="reference"
                       :title="$t('analysis.reference')"
-                      :value="analysis.reference__reference"
-                      @link-click="
-                        $openGeology('reference', analysis.reference)
-                      "
+                      :value="reference.reference"
+                      @link-click="$openGeology('reference', reference.id)"
                     />
                     <data-row
+                      v-if="dataset"
                       :title="$t('analysis.dataset')"
                       :value="
                         $translate({
-                          et: analysis.dataset__name,
-                          en: analysis.dataset__name__en,
+                          et: dataset.name,
+                          en: dataset.name_en,
                         })
                       "
                     />
                     <link-data-row
+                      v-if="sample && sample.locality"
                       :title="$t('analysis.locality')"
                       :value="
                         $translate({
-                          et: analysis.sample__locality__locality,
-                          en: analysis.sample__locality__locality__en,
+                          et: sample.locality.locality,
+                          en: sample.locality.locality_en,
                         })
                       "
                       nuxt
                       :href="
                         localePath({
                           name: 'locality-id',
-                          params: { id: analysis.sample__locality_id },
+                          params: { id: sample.locality.id },
                         })
                       "
                     />
                     <data-row
+                      v-if="sample"
                       :title="$t('analysis.depth')"
-                      :value="analysis.sample__depth"
+                      :value="sample.depth"
                     />
                     <data-row
+                      v-if="sample"
                       :title="$t('analysis.depthInterval')"
-                      :value="analysis.sample__depth_interval"
+                      :value="sample.depth_interval"
                     />
                     <link-data-row
+                      v-if="sample && sample.stratigraphy"
                       :title="$t('analysis.stratigraphy')"
                       :value="
                         $translate({
-                          et: analysis.sample__stratigraphy__stratigraphy,
-                          en: analysis.sample__stratigraphy__stratigraphy__en,
+                          et: sample.stratigraphy.stratigraphy,
+                          en: sample.stratigraphy.stratigraphy_en,
                         })
                       "
                       nuxt
                       :href="
                         localePath({
                           name: 'stratigraphy-id',
-                          params: { id: analysis.sample__stratigraphy_id },
+                          params: { id: sample.stratigraphy.id },
                         })
                       "
                     />
                     <link-data-row
+                      v-if="sample && sample.lithostratigraphy"
                       :title="$t('analysis.lithostratigraphy')"
                       :value="
                         $translate({
-                          et: analysis.sample__lithostratigraphy__stratigraphy,
-                          en: analysis.sample__lithostratigraphy__stratigraphy__en,
+                          et: sample.lithostratigraphy.stratigraphy,
+                          en: sample.lithostratigraphy.stratigraphy_en,
                         })
                       "
                       nuxt
                       :href="
                         localePath({
                           name: 'stratigraphy-id',
-                          params: { id: analysis.sample__lithostratigraphy_id },
+                          params: { id: sample.lithostratigraphy.id },
                         })
                       "
                     />
                     <link-data-row
+                      v-if="database"
                       :title="$t('analysis.institution')"
                       :value="
                         $translate({
-                          et: analysis.database__name,
-                          en: analysis.database__name_en,
+                          et: database.name,
+                          en: database.name_en,
                         })
                       "
                       nuxt
                       :href="
                         localePath({
-                          name: `institution-${analysis.database__acronym.toLowerCase()}`,
+                          name: `institution-${database.acronym.toLowerCase()}`,
                         })
                       "
                     />
@@ -188,13 +197,12 @@ export default {
         params.id,
         {
           params: {
-            fields:
-              'agent__agent,analysis_method__analysis_method,analysis_method__method_en,database__name,database__name_en,database__acronym,dataset,dataset__name,dataset__name_en,date,date_added,date_changed,date_free,id,instrument,instrument__instrument,instrument__instrument_en,instrument_txt,lab,lab__lab,lab__lab_en,lab_analysis_number,lab_txt,mass,material,method_details,method_details_en,owner__agent,reference,reference__reference,sample,sample__depth,sample__depth_interval,sample__lithostratigraphy__stratigraphy,sample__lithostratigraphy__stratigraphy_en,sample__lithostratigraphy_id,sample__locality__depth,sample__locality__locality,sample__locality__locality_en,sample__locality_free,sample__locality_id,sample__number,sample__parent_sample,sample__stratigraphy__stratigraphy,sample__stratigraphy__stratigraphy_en,sample__stratigraphy_bed,sample__stratigraphy_free,sample__stratigraphy_id',
+            nest: 2,
           },
         }
       )
       const ids = analysisResponse?.ids
-      const analysis = analysisResponse.results[0]
+      const analysis = analysisResponse
 
       const tabs = [
         {
@@ -269,6 +277,7 @@ export default {
         initActiveTab: validPath,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Could not find analysis ${route.params.id}`,
         path: route.path,
@@ -294,11 +303,29 @@ export default {
     title() {
       return this.$t('analysis.title', {
         method: this.$translate({
-          et: this.analysis.analysis_method__analysis_method,
-          en: this.analysis.analysis_method__method_en,
+          et: this.analysis?.analysis_method?.analysis_method,
+          en: this.analysis?.analysis_method?.method_en,
         }),
-        sample: this.analysis.sample__number,
+        sample: this.analysis?.sample?.number,
       })
+    },
+    database() {
+      return this.analysis?.database
+    },
+    analysis_method() {
+      return this.analysis?.analysis_method ?? ''
+    },
+    sample() {
+      return this.analysis?.sample
+    },
+    agent() {
+      return this.analysis?.agent
+    },
+    reference() {
+      return this.analysis?.reference
+    },
+    dataset() {
+      return this.analysis?.dataset
     },
   },
   methods: {

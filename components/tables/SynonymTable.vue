@@ -7,15 +7,24 @@
     :count="count"
     v-on="$listeners"
   >
+    <template #item.reference="{ item }">
+      <external-link
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
+      >
+        {{ item.reference.reference }}
+      </external-link>
+    </template>
   </table-wrapper>
 </template>
 
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'SynonymTable',
-  components: { TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
@@ -46,7 +55,7 @@ export default {
         { text: this.$t('localitySynonym.pages'), value: 'pages' },
         {
           text: this.$t('localitySynonym.reference'),
-          value: 'reference__reference',
+          value: 'reference',
         },
         { text: this.$t('localitySynonym.remarks'), value: 'remarks' },
       ],

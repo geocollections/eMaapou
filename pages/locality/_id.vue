@@ -26,38 +26,42 @@
                 "
               />
               <data-row
+                v-if="type"
                 :title="$t('locality.type')"
                 :value="
                   $translate({
-                    et: locality.type__value,
-                    en: locality.type__value_en,
+                    et: type.value,
+                    en: type.value_en,
                   })
                 "
               />
               <data-row
+                v-if="country"
                 :title="$t('locality.country')"
                 :value="
                   $translate({
-                    et: locality.country__value,
-                    en: locality.country__value_en,
+                    et: country.value,
+                    en: country.value_en,
                   })
                 "
               />
               <data-row
+                v-if="vald"
                 :title="$t('locality.parish')"
                 :value="
                   $translate({
-                    et: locality.vald__vald,
-                    en: locality.vald__vald_en,
+                    et: vald.vald,
+                    en: vald.vald_en,
                   })
                 "
               />
               <data-row
+                v-if="asustusyksus"
                 :title="$t('locality.settlement')"
                 :value="
                   $translate({
-                    et: locality.asustusyksus__asustusyksus,
-                    en: locality.asustusyksus__asustusyksus_en,
+                    et: asustusyksus.asustusyksus,
+                    en: asustusyksus.asustusyksus_en,
                   })
                 "
               />
@@ -86,55 +90,60 @@
                 :value="locality.coordy"
               />
               <data-row
+                v-if="coord_det_precision"
                 :title="$t('locality.coordinatePrecision')"
-                :value="locality.coord_det_precision__value"
+                :value="coord_det_precision.value"
               />
               <data-row
+                v-if="coord_det_method"
                 :title="$t('locality.coordinateMethod')"
                 :value="
                   $translate({
-                    et: locality.coord_det_method__value,
-                    en: locality.coord_det_method__value_en,
+                    et: coord_det_method.value,
+                    en: coord_det_method.value_en,
                   })
                 "
               />
               <data-row
+                v-if="coord_det_agent"
                 :title="$t('locality.coordinateAgent')"
-                :value="locality.coord_det_agent__agent"
+                :value="coord_det_agent.agent"
               />
               <data-row
                 :title="$t('locality.locationRemarks')"
                 :value="locality.remarks_location"
               />
               <link-data-row
+                v-if="stratigraphy_top"
                 :title="$t('locality.stratigraphyTop')"
                 :value="
                   $translate({
-                    et: locality.stratigraphy_top__stratigraphy,
-                    en: locality.stratigraphy_top__stratigraphy_en,
+                    et: stratigraphy_top.stratigraphy,
+                    en: stratigraphy_top.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: locality.stratigraphy_top_id },
+                    params: { id: locality.stratigraphy_top.id },
                   })
                 "
               />
               <link-data-row
+                v-if="stratigraphy_base"
                 :title="$t('locality.stratigraphyBase')"
                 :value="
                   $translate({
-                    et: locality.stratigraphy_base__stratigraphy,
-                    en: locality.stratigraphy_base__stratigraphy_en,
+                    et: stratigraphy_base.stratigraphy,
+                    en: stratigraphy_base.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: locality.stratigraphy_base_id },
+                    params: { id: locality.stratigraphy_base.id },
                   })
                 "
               />
@@ -217,8 +226,10 @@
         <v-card id="map-wrap" elevation="0">
           <leaflet-map
             rounded
-            :estonian-map="locality.country__value === 'Eesti'"
-            :estonian-bedrock-overlay="locality.country__value === 'Eesti'"
+            :estonian-map="country ? country.value === 'Eesti' : false"
+            :estonian-bedrock-overlay="
+              country ? country.value === 'Eesti' : false
+            "
             locality-overlay
             :center="{
               latitude: locality.latitude,
@@ -276,13 +287,12 @@ export default {
         params.id,
         {
           params: {
-            fields:
-              'asustusyksus__asustusyksus,asustusyksus__asustusyksus_en,coord_det_agent__agent,coord_det_method__value,coord_det_method__value_en,coord_det_precision__value,coord_system,coordx,coordy,country__iso_code,country__value,country__value_en,date_added,date_changed,depth,eelis,elevation,id,latitude,locality,locality_en,longitude,maaamet_pa_id,maakond__maakond,maakond__maakond_en,number,parent__locality,remarks,remarks_location,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_base_free,stratigraphy_base_id,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_top_free,stratigraphy_top_id,type__value,type__value_en,user_added,vald__vald,vald__vald_en',
+            nest: 1,
           },
         }
       )
       const ids = localityResponse?.ids
-      const locality = localityResponse.results[0]
+      const locality = localityResponse
 
       const drillcoreResponse = await app.$services.sarvREST.getResourceList(
         'drillcore',
@@ -412,7 +422,7 @@ export default {
                     fq: `locality_id:${params.id}`,
                   },
                 },
-                api: { default: { locality_id: locality.id } },
+                api: { default: { locality: locality.id } },
               })
           )
         )
@@ -475,6 +485,33 @@ export default {
 
     analysisResultsCount() {
       return this.tabs?.find((tab) => tab.id === 'graphs')?.count
+    },
+    type() {
+      return this.locality?.type
+    },
+    country() {
+      return this.locality?.country
+    },
+    vald() {
+      return this.locality?.vald
+    },
+    asustusyksus() {
+      return this.locality?.asustusyksus
+    },
+    coord_det_precision() {
+      return this.locality?.coord_det_precision
+    },
+    coord_det_method() {
+      return this.locality?.coord_det_method
+    },
+    coord_det_agent() {
+      return this.locality?.coord_det_agent
+    },
+    stratigraphy_top() {
+      return this.locality?.stratigraphy_top
+    },
+    stratigraphy_base() {
+      return this.locality?.stratigraphy_base
     },
   },
   methods: {

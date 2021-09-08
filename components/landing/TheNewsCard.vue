@@ -39,7 +39,7 @@ export default {
   },
   async fetch() {
     const newsResponse = await this.$services.sarvREST.getResourceList(
-      'webnews',
+      'web_news',
       {
         options: {
           page: 1,

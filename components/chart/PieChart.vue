@@ -76,13 +76,15 @@ export default {
       const resultsResponse = await this.$services.sarvREST.getResourceList(
         'taxon_list',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             [this.tableKey]: this.tableId,
-            page: 0,
-            paginate_by: 1000,
-            fields: 'id,name,taxon,taxon__taxon,frequency',
+            fields: 'id,name,taxon,frequency',
+            nest: 1,
+          },
+          options: {
+            page: 1,
+            itemsPerPage: 1000,
           },
         }
       )
@@ -112,7 +114,7 @@ export default {
           data: this.taxonList.map((item) => {
             return {
               value: item.frequency,
-              name: item.taxon__taxon ?? item.name,
+              name: item.taxon?.taxon ?? item.name,
             }
           }),
         },

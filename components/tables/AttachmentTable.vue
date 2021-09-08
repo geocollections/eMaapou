@@ -9,17 +9,18 @@
   >
     <template #item.file="{ item }">
       <attachment-cell
+        v-if="item.attachment"
         :src="
           $img(
-            `${item.attachment__filename}`,
+            `${item.attachment.filename}`,
             { size: 'small' },
             { provider: 'geocollections' }
           )
         "
-        :type="item.attachment__attachment_format__value"
+        :type="item.attachment.attachment_format.value"
         @click="
           $router.push(
-            localePath({ name: 'file-id', params: { id: item.attachment } })
+            localePath({ name: 'file-id', params: { id: item.attachment.id } })
           )
         "
       />
@@ -28,15 +29,22 @@
       <nuxt-link
         v-if="item.attachment"
         class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item.attachment } })"
+        :to="
+          localePath({ name: 'file-id', params: { id: item.attachment.id } })
+        "
       >
         {{
           $translate({
-            et: item.attachment__description,
-            en: item.attachment__description_en,
+            et: item.attachment.description,
+            en: item.attachment.description_en,
           })
         }}
       </nuxt-link>
+    </template>
+    <template #item.agent="{ item }">
+      <div v-if="item.attachment && item.attachment.author">
+        {{ item.attachment.author.agent }}
+      </div>
     </template>
   </table-wrapper>
 </template>
@@ -89,7 +97,7 @@ export default {
         { text: this.$t('attachment.description'), value: 'description' },
         {
           text: this.$t('attachment.author'),
-          value: 'attachment__author__agent',
+          value: 'agent',
         },
       ],
       queryFields: {

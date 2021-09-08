@@ -73,7 +73,7 @@ export default {
   methods: {
     infiniteHandler($state) {
       this.$services.sarvREST
-        .getResourceList('webnews', {
+        .getResourceList('web_news', {
           options: {
             page: this.page,
             itemsPerPage: 5,

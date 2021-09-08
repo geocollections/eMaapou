@@ -36,6 +36,7 @@ export default {
           isValid: isNil(this.site),
           defaultParams: {
             site: this.site,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(LOCALITY_REFERENCE.queryFields),
         }

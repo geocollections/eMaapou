@@ -11,9 +11,12 @@
       <a
         v-if="item.reference"
         class="text-link"
-        @click="$openGeology('reference', item.reference)"
-        >{{ item.reference__reference }}</a
+        @click="$openGeology('reference', item.reference.id)"
+        >{{ item.reference.reference }}</a
       >
+    </template>
+    <template #item.title="{ item }">
+      <div v-if="item.reference">{{ item.reference.title }}</div>
     </template>
   </table-wrapper>
 </template>
@@ -53,7 +56,7 @@ export default {
         { text: this.$t('localityReference.reference'), value: 'reference' },
         {
           text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
+          value: 'title',
         },
         { text: this.$t('localityReference.pages'), value: 'pages' },
         { text: this.$t('localityReference.remarks'), value: 'remarks' },

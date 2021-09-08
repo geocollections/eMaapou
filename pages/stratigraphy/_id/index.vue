@@ -45,6 +45,7 @@ export default {
           isValid: isNil(this.stratigraphy),
           defaultParams: {
             stratigraphy: this.stratigraphy,
+            nest: 1,
           },
           queryFields: this.$getQueryFields(STRATIGRAPHY_REFERENCE.queryFields),
         }

@@ -26,47 +26,53 @@
                 :value="sample.number_field"
               />
               <link-data-row
+                v-if="locality"
                 :title="$t('sample.locality')"
                 :value="
                   $translate({
-                    et: sample.locality__locality,
-                    en: sample.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: sample.locality_id },
+                    params: { id: sample.locality.id },
                   })
                 "
               />
               <data-row
+                v-if="locality"
                 :title="$t('sample.latitude')"
-                :value="sample.locality__latitude"
+                :value="locality.latitude"
               />
               <data-row
+                v-if="locality"
                 :title="$t('sample.longitude')"
-                :value="sample.locality__longitude"
+                :value="locality.longitude"
               />
               <link-data-row
+                v-if="site"
                 :title="$t('sample.site')"
-                :value="sample.site__name"
+                :value="site.name"
                 nuxt
                 :href="
                   localePath({
                     name: 'site-id',
-                    params: { id: sample.site },
+                    params: { id: site.id },
                   })
                 "
               />
               <data-row
+                v-if="site"
                 :title="$t('sample.latitude')"
-                :value="sample.site__latitude"
+                :value="site.latitude"
               />
               <data-row
+                v-if="site"
                 :title="$t('sample.longitude')"
-                :value="sample.site__longitude"
+                :value="site.longitude"
               />
               <data-row :title="$t('sample.depth')" :value="sample.depth" />
               <data-row
@@ -74,34 +80,36 @@
                 :value="sample.depth_interval"
               />
               <link-data-row
+                v-if="stratigraphy"
                 :title="$t('sample.stratigraphy')"
                 :value="
                   $translate({
-                    et: sample.stratigraphy__stratigraphy,
-                    en: sample.stratigraphy__stratigraphy_en,
+                    et: stratigraphy.stratigraphy,
+                    en: stratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: sample.stratigraphy__id },
+                    params: { id: sample.stratigraphy.id },
                   })
                 "
               />
               <link-data-row
+                v-if="lithostratigraphy"
                 :title="$t('sample.lithostratigraphy')"
                 :value="
                   $translate({
-                    et: sample.lithostratigraphy__stratigraphy,
-                    en: sample.lithostratigraphy__stratigraphy_en,
+                    et: lithostratigraphy.stratigraphy,
+                    en: lithostratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: sample.lithostratigraphy },
+                    params: { id: sample.lithostratigraphy.id },
                   })
                 "
               />
@@ -118,18 +126,18 @@
                 :value="sample.date_collected || sample.date_collected_free"
               />
               <data-row
+                v-if="agent_collected || sample.agent_collected_txt"
                 :title="$t('sample.agentCollected')"
-                :value="
-                  sample.agent_collected__agent || sample.agent_collected_txt
-                "
+                :value="agent_collected.agent || sample.agent_collected_txt"
               />
               <data-row :title="$t('sample.mass')" :value="sample.mass" />
               <data-row
+                v-if="sample_purpose"
                 :title="$t('sample.samplePurpose')"
                 :value="
                   $translate({
-                    et: sample.sample_purpose__value,
-                    en: sample.sample_purpose__value_en,
+                    et: sample_purpose.value,
+                    en: sample_purpose.value_en,
                   })
                 "
               />
@@ -143,11 +151,12 @@
                 "
               />
               <data-row
+                v-if="classification_rock"
                 :title="$t('sample.classificationRock')"
                 :value="
                   $translate({
-                    et: sample.classification_rock__name,
-                    en: sample.classification_rock__name_en,
+                    et: classification_rock.name,
+                    en: classification_rock.name_en,
                   })
                 "
               />
@@ -158,30 +167,33 @@
               <data-row :title="$t('sample.fossils')" :value="sample.fossils" />
               <data-row :title="$t('sample.remarks')" :value="sample.remarks" />
               <data-row
+                v-if="owner"
                 :title="$t('sample.owner')"
-                :value="sample.owner__agent"
+                :value="owner.agent"
               />
               <link-data-row
+                v-if="database"
                 :title="$t('sample.database')"
                 :value="
                   $translate({
-                    et: sample.database__name,
-                    en: sample.database__name_en,
+                    et: database.name,
+                    en: database.name_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
-                    name: `institution-${sample.database__acronym.toLowerCase()}`,
+                    name: `institution-${sample.database.acronym.toLowerCase()}`,
                   })
                 "
               />
               <data-row
+                v-if="project"
                 :title="$t('sample.project')"
                 :value="
                   $translate({
-                    et: sample.project__name,
-                    en: sample.project__name_en,
+                    et: sample.project.name,
+                    en: sample.project.name_en,
                   })
                 "
               />
@@ -201,7 +213,7 @@
       </v-card-text>
     </template>
 
-    <template v-if="sample.locality_id" #column-right>
+    <template v-if="locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.locality')
       }}</v-card-title>
@@ -213,15 +225,15 @@
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
-                    et: sample.locality__locality,
-                    en: sample.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: sample.locality_id },
+                    params: { id: sample.locality.id },
                   })
                 "
               >
@@ -231,64 +243,54 @@
                 :value="sample.locality_free"
               />
               <data-row
-                v-if="
-                  $translate({
-                    et: sample.locality__country__value,
-                    en: sample.locality__country__value_en,
-                  })
-                "
+                v-if="locality.country"
                 :title="$t('locality.country')"
                 :value="
                   $translate({
-                    et: sample.locality__country__value,
-                    en: sample.locality__country__value_en,
+                    et: locality.country.value,
+                    en: locality.country.value_en,
                   })
                 "
               />
               <data-row
-                v-if="sample.locality__latitude"
                 :title="$t('locality.latitude')"
-                :value="sample.locality__latitude"
+                :value="locality.latitude"
               />
               <data-row
-                v-if="sample.locality__longitude"
                 :title="$t('locality.longitude')"
-                :value="sample.locality__longitude"
+                :value="locality.longitude"
               />
               <data-row
-                v-if="sample.locality__elevation"
                 :title="$t('locality.elevation')"
-                :value="sample.locality__elevation"
+                :value="locality.elevation"
               />
-              <data-row
-                v-if="sample.locality__depth"
-                :title="$t('locality.depth')"
-                :value="sample.locality__depth"
-              />
+              <data-row :title="$t('locality.depth')" :value="locality.depth" />
             </tbody>
           </template>
         </v-simple-table>
         <v-card
-          v-if="sample.locality__latitude && sample.locality__longitude"
+          v-if="locality.latitude && locality.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
             rounded
-            :estonian-map="sample.locality__country__value === 'Eesti'"
+            :estonian-map="
+              locality.country ? locality.country.value === 'Eesti' : false
+            "
             :estonian-bedrock-overlay="
-              sample.locality__country__value === 'Eesti'
+              locality.country ? locality.country.value === 'Eesti' : false
             "
             height="300px"
             :center="{
-              latitude: sample.locality__latitude,
-              longitude: sample.locality__longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
             }"
             sample-overlay
             :markers="[
               {
-                latitude: sample.locality__latitude,
-                longitude: sample.locality__longitude,
+                latitude: locality.latitude,
+                longitude: locality.longitude,
                 text: $translate({
                   et: sample.drillcore,
                   en: sample.drillcore_en,
@@ -341,10 +343,15 @@ export default {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'sample',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 2,
+          },
+        }
       )
       const ids = detailViewResponse?.ids
-      const sample = detailViewResponse.results[0]
+      const sample = detailViewResponse
 
       const localityGroupedResponse =
         await app.$services.sarvSolr.getResourceList('analysis', {
@@ -377,6 +384,7 @@ export default {
         },
         {
           id: 'preparation',
+          isSolr: true,
           routeName: 'sample-id-preparations',
           title: 'sample.preparations',
           count: 0,
@@ -509,15 +517,45 @@ export default {
 
       if (this.sample.site) {
         locations.push({
-          latitude: this.sample.site__latitude,
-          longitude: this.sample.site__longitude,
-          text: this.sample.site__name,
+          latitude: this.sample?.site?.latitude,
+          longitude: this.sample?.site?.longitude,
+          text: this.sample?.site?.name,
           routeName: 'site',
           id: this.sample.site_id,
         })
       }
 
       return locations
+    },
+    locality() {
+      return this.sample?.locality
+    },
+    site() {
+      return this.sample?.site
+    },
+    stratigraphy() {
+      return this.sample?.stratigraphy
+    },
+    lithostratigraphy() {
+      return this.sample?.lithostratigraphy
+    },
+    agent_collected() {
+      return this.sample?.agent_collected
+    },
+    sample_purpose() {
+      return this.sample?.sample_purpose
+    },
+    classification_rock() {
+      return this.sample?.classification_rock
+    },
+    owner() {
+      return this.sample?.owner
+    },
+    database() {
+      return this.sample?.database
+    },
+    project() {
+      return this.sample?.project
     },
   },
   methods: {

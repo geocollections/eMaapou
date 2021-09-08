@@ -41,7 +41,8 @@ export default {
             ...tableState,
             isValid: isNil(this.specimen),
             defaultParams: {
-              specimen_id: this.specimen,
+              specimen: this.specimen,
+              nest: 1,
             },
             queryFields: this.$getQueryFields(
               SPECIMEN_IDENTIFICATION.queryFields

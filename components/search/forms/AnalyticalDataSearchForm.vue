@@ -211,14 +211,16 @@ export default {
   },
   async fetch() {
     if (this.listParameters.length === 0) {
-      const listParametersResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis_parameter',
-        {
+      const listParametersResponse =
+        await this.$services.sarvSolr.getResourceList('analysis_parameter', {
           defaultParams: {
             fq: 'is_null:false',
           },
-        }
-      )
+          options: {
+            page: 1,
+            itemsPerPage: 1000,
+          },
+        })
       this.setListParameters({ parameters: listParametersResponse?.items })
     }
   },

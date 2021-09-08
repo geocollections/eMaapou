@@ -105,7 +105,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://api.geocollections.info',
+    baseURL: 'https://api.geoloogia.info',
   },
 
   // i18n module configuration

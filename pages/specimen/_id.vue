@@ -10,14 +10,14 @@
           v-if="isRock && titleAlt"
           target="_blank"
           style="text-decoration: none"
-          :href="`https://kivid.info/${specimenAlt.rock_id}`"
+          :href="`https://kivid.info/${specimenAlt.rock.id}`"
           >{{ titleAlt }}</a
         >
         <a
           v-if="isTaxon && titleAlt"
           target="_blank"
           style="text-decoration: none"
-          :href="`https://fossiilid.info/${specimenAlt.taxon_id}`"
+          :href="`https://fossiilid.info/${specimenAlt.taxon.id}`"
           >{{ titleAlt }}</a
         >
       </title-card-detail>
@@ -31,9 +31,10 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="coll"
                 :title="$t('specimen.collectionNr')"
-                :value="specimen.coll__number"
-                @link-click="$openGeoDetail('collection', specimen.coll)"
+                :value="coll.number"
+                @link-click="$openGeoDetail('collection', coll)"
               />
 
               <data-row
@@ -41,70 +42,75 @@
                 :value="specimen.specimen_id"
               />
               <data-row
+                v-if="type"
                 :title="$t('specimen.type')"
                 :value="
                   $translate({
-                    et: specimen.type__value,
-                    en: specimen.type__value_en,
+                    et: type.value,
+                    en: type.value_en,
                   })
                 "
               />
               <data-row
+                v-if="classification"
                 :title="$t('specimen.group')"
                 :value="
                   $translate({
-                    et: specimen.classification__class_field,
-                    en: specimen.classification__class_en,
+                    et: classification.class_field,
+                    en: classification.class_en,
                   })
                 "
               />
               <data-row :title="$t('specimen.part')" :value="specimen.part" />
               <link-data-row
+                v-if="locality"
                 :title="$t('specimen.locality')"
                 :value="
                   $translate({
-                    et: specimen.locality__locality,
-                    en: specimen.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: specimen.locality },
+                    params: { id: locality.id },
                   })
                 "
               />
               <data-row :title="$t('specimen.depth')" :value="specimen.depth" />
               <link-data-row
+                v-if="stratigraphy"
                 :title="$t('specimen.stratigraphy')"
                 :value="
                   $translate({
-                    et: specimen.stratigraphy__stratigraphy,
-                    en: specimen.stratigraphy__stratigraphy_en,
+                    et: stratigraphy.stratigraphy,
+                    en: stratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: specimen.stratigraphy_id },
+                    params: { id: stratigraphy.id },
                   })
                 "
               />
               <link-data-row
+                v-if="lithostratigraphy"
                 :title="$t('specimen.lithostratigraphy')"
                 :value="
                   $translate({
-                    et: specimen.lithostratigraphy__stratigraphy,
-                    en: specimen.lithostratigraphy__stratigraphy_en,
+                    et: lithostratigraphy.stratigraphy,
+                    en: lithostratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: specimen.lithostratigraphy_id },
+                    params: { id: lithostratigraphy.id },
                   })
                 "
               />
@@ -122,21 +128,23 @@
                 :value="dateCollected"
               />
               <data-row
+                v-if="agent_collected"
                 :title="$t('specimen.collector')"
-                :value="specimen.agent_collected__agent"
+                :value="agent_collected.agent"
               />
               <link-data-row
+                v-if="database"
                 :title="$t('specimen.institution')"
                 :value="
                   $translate({
-                    et: specimen.database__name,
-                    en: specimen.database__name_en,
+                    et: database.name,
+                    en: database.name_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
-                    name: `institution-${specimen.database__acronym.toLowerCase()}`,
+                    name: `institution-${database.acronym.toLowerCase()}`,
                   })
                 "
               />
@@ -145,41 +153,36 @@
         </v-simple-table>
       </v-card-text>
     </template>
-    <template
-      v-if="
-        specimen.locality_id &&
-        specimen.locality__latitude &&
-        specimen.locality__longitude
-      "
-      #column-right
-    >
+    <template v-if="locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
       <v-card-text>
         <v-card
-          v-if="specimen.locality__latitude && specimen.locality__longitude"
+          v-if="locality.latitude && locality.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
             rounded
-            :estonian-map="specimen.locality__country__value === 'Eesti'"
+            :estonian-map="
+              locality.country ? locality.country.value === 'Eesti' : false
+            "
             :estonian-bedrock-overlay="
-              specimen.locality__country__value === 'Eesti'
+              locality.country ? locality.country.value === 'Eesti' : false
             "
             height="300px"
             :center="{
-              latitude: specimen.locality__latitude,
-              longitude: specimen.locality__longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
             }"
             :markers="[
               {
-                latitude: specimen.locality__latitude,
-                longitude: specimen.locality__longitude,
+                latitude: locality.latitude,
+                longitude: locality.longitude,
                 text: $translate({
-                  et: specimen.locality__locality,
-                  en: specimen.locality__locality_en,
+                  et: locality.locality,
+                  en: locality.locality_en,
                 }),
               },
             ]"
@@ -218,17 +221,18 @@ export default {
     try {
       const detailViewResponse = await app.$services.sarvREST.getResource(
         'specimen',
-        params.id
+        params.id,
+        { params: { nest: 2 } }
       )
       const ids = detailViewResponse?.ids
-      const specimen = detailViewResponse.results[0]
+      const specimen = detailViewResponse
 
       const specimenNameResponse = await app.$services.sarvSolr.getResource(
         'specimen',
         params.id
       )
 
-      const specimenAlt = specimenNameResponse.results[0]
+      const specimenAlt = specimenNameResponse?.[0]
 
       const tabs = [
         {
@@ -257,7 +261,7 @@ export default {
             await app.$hydrateCount(tab, {
               solr: { default: { fq: `specimen_id:${specimen.id}` } },
               api: {
-                default: { specimen_id: specimen.id },
+                default: { specimen: specimen.id },
                 specimen_reference: { specimen: specimen.id },
               },
             })
@@ -267,13 +271,17 @@ export default {
       const validPath = app.$validateTabRoute(route, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
-      const specimenImagesResponse =
-        await app.$services.sarvREST.getResourceList('specimen_image', {
+      const attachmentResponse = await app.$services.sarvSolr.getResourceList(
+        'attachment',
+        {
           defaultParams: {
-            specimen: specimen.id,
+            fq: `specimen_id:${specimen.id} AND specimen_image_attachment:1`,
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
           },
-        })
-      const images = specimenImagesResponse.items ?? []
+        }
+      )
+
+      const images = attachmentResponse.items ?? []
 
       return {
         specimen,
@@ -305,7 +313,7 @@ export default {
   },
   computed: {
     title() {
-      return `${this.specimen.database__acronym} ${this.specimen.specimen_id}`
+      return `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
     },
     titleAlt() {
       if (this.specimenAlt.rock) {
@@ -323,10 +331,10 @@ export default {
       return null
     },
     isRock() {
-      return !!this.specimenAlt.rock_id
+      return !!this.specimenAlt?.rock?.id
     },
     isTaxon() {
-      return !!this.specimenAlt.taxon_id
+      return !!this.specimenAlt?.taxon?.id
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
@@ -334,6 +342,30 @@ export default {
     dateCollected() {
       if (this.specimen.date_collected) return this.specimen.date_collected
       return this.specimen.date_collected_free
+    },
+    coll() {
+      return this.specimen?.coll
+    },
+    type() {
+      return this.specimen?.type
+    },
+    classification() {
+      return this.specimen?.classification
+    },
+    locality() {
+      return this.specimen?.locality
+    },
+    stratigraphy() {
+      return this.specimen?.stratigraphy
+    },
+    lithostratigraphy() {
+      return this.specimen?.lithostratigraphy
+    },
+    agent_collected() {
+      return this.specimen?.agent_collected
+    },
+    database() {
+      return this.specimen?.database
     },
   },
 }

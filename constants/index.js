@@ -95,6 +95,29 @@ export const ATTACHMENT = {
   },
 }
 
+export const ATTACHMENT_LINK = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    id: (locale) => 'attachment__id',
+    format_value: (locale) => 'attachment__attachment_format__value',
+    image_number: (locale) => 'attachment__image_number',
+    agent: (locale) => 'attachment__author__agent',
+    date: (locale) => 'attachment__date_created,attachment__date_created_free',
+    reference: (locale) => 'attachment__reference__reference',
+    type: (locale) => 'attachment__type__value,attachment__type__value_en',
+    image: (locale) => 'attachment__uuid_filename',
+    description: (locale) =>
+      locale === 'et'
+        ? 'attachment__description'
+        : 'attachment__description_en',
+  },
+}
+
 export const DATASET_AUTHORS = {
   options: {
     page: 1,
@@ -592,6 +615,7 @@ export const SPECIMEN_IDENTIFICATION = {
       locale === 'et'
         ? 'identification_type__value'
         : 'identification_type__value_en',
+    remarks: (locale) => 'remarks',
     current: (locale) => 'current',
   },
 }

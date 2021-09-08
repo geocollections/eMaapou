@@ -23,8 +23,8 @@ export default {
   components: { TitleCard },
   async asyncData({ route, error, app }) {
     try {
-      const data = await app.$services.sarvREST.getResource('page', 64)
-      return { page: data.results[0] }
+      const data = await app.$services.sarvREST.getResource('web_pages', 64)
+      return { page: data }
     } catch (err) {
       error({
         message: `Could not find about page`,

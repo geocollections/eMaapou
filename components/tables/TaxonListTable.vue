@@ -8,12 +8,18 @@
     v-on="$listeners"
   >
     <template #item.taxon="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
+      <external-link
+        v-if="item.taxon"
+        @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
-        {{ item.taxon__taxon }}
-      </a>
+        {{ item.taxon.taxon }}
+      </external-link>
+    </template>
+
+    <template #item.agent="{ item }">
+      <div v-if="item.agent_identified">
+        {{ item.agent_identified.agent }}
+      </div>
     </template>
 
     <template #item.extra="{ item }">
@@ -26,9 +32,10 @@
 <script>
 import { round } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import ExternalLink from '~/components/ExternalLink'
 export default {
   name: 'TaxonListTable',
-  components: { TableWrapper },
+  components: { ExternalLink, TableWrapper },
   props: {
     showSearch: {
       type: Boolean,
@@ -63,7 +70,7 @@ export default {
         { text: this.$t('taxon.frequency'), value: 'frequency' },
         {
           text: this.$t('taxon.agent_identified'),
-          value: 'agent_identified__agent',
+          value: 'agent',
         },
         { text: this.$t('taxon.date_identified'), value: 'date_identified' },
         { text: this.$t('taxon.extra'), value: 'extra' },
