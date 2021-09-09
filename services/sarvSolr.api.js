@@ -69,7 +69,7 @@ export default ($axios) => ({
     const response = await $axios.$get(`solr/${resource}`, {
       params,
       paramsSerializer: (par) => {
-        return qs.stringify(par, { indices: false })
+        return qs.stringify(par, { indices: false, encode: false })
       },
     })
 
@@ -158,10 +158,6 @@ const buildFilterQueryParameter = (filters) => {
         function buildEncodedParameterStr(searchParameter, fieldId) {
           function buildTextParameter(encodedValue, fieldId) {
             const textArray = encodedValue.split(' ')
-
-            console.log(searchParameter)
-            console.log(encodedValue)
-            console.log(fieldId)
 
             const paramArray = textArray.map((str) => {
               switch (searchParameter.lookUpType) {
