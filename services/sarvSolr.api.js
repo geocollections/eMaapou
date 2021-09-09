@@ -155,34 +155,33 @@ const buildSolrLookUpTypes = (field, value, lookUpType) => {
 }
 
 const isFilterValid = (filter) => {
-  switch (filter.type) {
-    case 'range': {
-      return isNil(filter.value[0]) && isNil(filter.value[1])
-    }
-    case 'text': {
-      return !filter.value || filter.value.trim().length <= 0
-    }
-    case 'range_alt': {
-      return !filter.value || filter.value.trim().length <= 0
-    }
-    case 'select': {
-      return filter.value === null || filter.value.length < 1
-    }
-    case 'object': {
-      return (
-        typeof filter.value !== 'object' || !filter.value?.[filter.searchField]
-      )
-    }
-    case 'list': {
-      return isEmpty(filter.value)
-    }
-    case 'list_or': {
-      return isEmpty(filter.value)
-    }
-    default: {
-      return filter.value !== null
-    }
-  }
+  if (
+    filter.type === 'range' &&
+    isNil(filter.value[0]) &&
+    isNil(filter.value[1])
+  )
+    return false
+  if (
+    (filter.type === 'text' || filter.type === 'range_alt') &&
+    (!filter.value || filter.value.trim().length <= 0)
+  )
+    return false
+  if (
+    filter.type === 'select' &&
+    (filter.value === null || filter.value.length < 1)
+  )
+    return false
+  if (
+    filter.type === 'object' &&
+    (typeof filter.value !== 'object' || !filter.value?.[filter.searchField])
+  )
+    return false
+  if (
+    (filter.type === 'list' || filter.type === 'list_or') &&
+    isEmpty(filter.value)
+  )
+    return false
+  return filter.value !== null
 }
 
 const buildSolrFilters = (filters) => {
