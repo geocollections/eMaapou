@@ -3,42 +3,6 @@ import qs from 'qs'
 import Wkt from 'wicket/wicket'
 import earcut from 'earcut'
 
-const getPaginationParams = (options) => {
-  if (options?.page && options?.itemsPerPage) {
-    return {
-      start: (options.page - 1) * options.itemsPerPage,
-      rows: options.itemsPerPage,
-    }
-  }
-  return null
-}
-
-const getSortByParams = (options, queryFields) => {
-  if (options?.sortBy && options?.sortDesc) {
-    if (!isEmpty(options.sortBy)) {
-      const orderBy = options.sortBy
-        .map((field, i) => {
-          // Support for multivalue fields #219
-          if (queryFields?.[field]) {
-            return queryFields[field]
-              .split(',')
-              .map((item) =>
-                options.sortDesc[i] ? `${item} desc` : `${item} asc`
-              )
-              .join()
-          } else return options.sortDesc[i] ? `${field} desc` : `${field} asc`
-
-          // if (options.sortDesc[i]) return `${queryFields[field]} desc`
-          // return `${queryFields[field]} asc`
-        })
-        .filter((item) => item)
-
-      return { sort: orderBy.join(',') }
-    }
-  }
-  return null
-}
-
 export default ($axios) => ({
   async getResourceList(
     resource,
@@ -61,16 +25,16 @@ export default ($axios) => ({
 
     const params = {
       ...defaultParams,
-      ...buildQueryParameter(search),
-      ...buildSolrFilters(searchFilters),
-      ...getPaginationParams(options),
-      ...getSortByParams(options, queryFields),
+      ...buildSolrQueryParameter(search),
+      ...buildSolrParameters(searchFilters),
+      ...buildSolrPaginationParameters(options),
+      ...buildSolrSortParameter(options, queryFields),
     }
 
     const response = await $axios.$get(`solr/${resource}`, {
       params,
       paramsSerializer: (par) => {
-        return qs.stringify(par, { indices: false, encode: false })
+        return qs.stringify(par, { indices: false })
       },
     })
 
@@ -94,7 +58,7 @@ export default ($axios) => ({
       params: {
         rows: 0,
         ...countParams,
-        ...buildQueryParameter(countParams.q ?? null),
+        ...buildSolrQueryParameter(countParams.q ?? null),
       },
     })
     return {
@@ -112,7 +76,7 @@ export default ($axios) => ({
   },
 })
 
-const buildQueryParameter = (search) => {
+const buildSolrQueryParameter = (search) => {
   const s = search
     ? search
         .split(' ')
@@ -129,11 +93,44 @@ const buildQueryParameter = (search) => {
         .join(' ')
     : null
   return {
-    q: isEmpty(s) ? '*' : `${encodeURIComponent(s)}`,
+    q: isEmpty(s) ? '*' : `${s}`,
   }
 }
 
-const buildSolrLookUpTypes = (field, value, lookUpType) => {
+const buildSolrPaginationParameters = (options) => {
+  if (options?.page && options?.itemsPerPage) {
+    return {
+      start: (options.page - 1) * options.itemsPerPage,
+      rows: options.itemsPerPage,
+    }
+  }
+  return null
+}
+
+const buildSolrSortParameter = (options, queryFields) => {
+  if (options?.sortBy && options?.sortDesc) {
+    if (!isEmpty(options.sortBy)) {
+      const orderBy = options.sortBy
+        .map((field, i) => {
+          // Support for multivalue fields #219
+          if (queryFields?.[field]) {
+            return queryFields[field]
+              .split(',')
+              .map((item) =>
+                options.sortDesc[i] ? `${item} desc` : `${item} asc`
+              )
+              .join()
+          } else return options.sortDesc[i] ? `${field} desc` : `${field} asc`
+        })
+        .filter((item) => item)
+
+      return { sort: orderBy.join(',') }
+    }
+  }
+  return null
+}
+
+const createSolrFieldQuery = (field, value, lookUpType) => {
   switch (lookUpType) {
     case 'contains':
       return `${field}:*${value}*`
@@ -184,24 +181,20 @@ const isFilterValid = (filter) => {
   return filter.value !== null
 }
 
-const buildSolrFilters = (filters) => {
-  const solrParametersObject = { fq: [] }
+const buildSolrParameters = (filters) => {
+  const initialObject = { fq: [] }
 
-  Object.entries(filters)
+  const solrParameters = Object.entries(filters)
     .filter(([_, filter]) => isFilterValid(filter))
-    .forEach(([_, filter]) => {
+    .reduce((prev, [_, filter]) => {
       switch (filter.type) {
         case 'text': {
-          const encodedValue = encodeURIComponent(filter.value)
-
           const solrFilter = filter.fields
             .map((field) =>
-              buildSolrLookUpTypes(field, encodedValue, filter.lookUpType)
+              createSolrFieldQuery(field, filter.value, filter.lookUpType)
             )
             .join(' OR ')
-          solrParametersObject.fq.push(`(${solrFilter})`)
-
-          break
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'range': {
           const start = isNil(filter.value[0]) ? '*' : filter.value[0]
@@ -211,60 +204,48 @@ const buildSolrFilters = (filters) => {
             .map((field) => `${field}:[${start} TO ${end}]`)
             .join(' OR ')
 
-          solrParametersObject.fq.push(`(${solrFilter})`)
-
-          break
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'range_alt': {
           const value = isNil(filter.value)
 
           const solrFilter = `${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}]`
 
-          solrParametersObject.fq.push(`(${solrFilter})`)
-
-          break
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'checkbox': {
-          const encodedValue = encodeURIComponent(filter.value)
-
           const solrFilter = filter.fields
-            .map((field) => `${field}:${encodedValue}`)
+            .map((field) => `${field}:${filter.value}`)
             .join(' OR ')
 
-          solrParametersObject.fq.push(`(${solrFilter})`)
-
-          break
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'select': {
-          const encodedValue = encodeURIComponent(filter.value.join(' '))
           const solrFilter = filter.fields
-            .map((field) => `${field}:(${encodedValue})`)
+            .map((field) => `${field}:(${filter.value.join(' ')})`)
             .join(' OR ')
-          solrParametersObject.fq.push(`(${solrFilter})`)
-          break
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'raw': {
-          const encodedValue = encodeURIComponent(filter.value)
-
           const solrFilter = filter.fields
-            .map((field) => `${field}:${encodedValue}`)
+            .map((field) => `${field}:${filter.value}`)
             .join(' OR ')
 
-          solrParametersObject.fq.push(`(${solrFilter})`)
-          break
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'object': {
-          const encodedValue = encodeURIComponent(
-            filter.value[filter.searchField]
-          )
-
           const solrFilter = filter.fields
             .map((field) =>
-              buildSolrLookUpTypes(field, encodedValue, filter.lookUpType)
+              createSolrFieldQuery(
+                field,
+                filter.value[filter.searchField],
+                filter.lookUpType
+              )
             )
             .join(' OR ')
-          solrParametersObject.fq.push(`(${solrFilter})`)
-          break
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'list': {
           const solrFilter = filter.fields
@@ -276,8 +257,8 @@ const buildSolrFilters = (filters) => {
                 .join(' AND ')
             })
             .join(' AND ')
-          solrParametersObject.fq.push(`(${solrFilter})`)
-          break
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'list_or': {
           const solrFilter = filter.fields
@@ -289,8 +270,8 @@ const buildSolrFilters = (filters) => {
                 .join(' OR ')
             })
             .join(' OR ')
-          solrParametersObject.fq.push(`(${solrFilter})`)
-          break
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case 'geom': {
           if (filter.value.geometry.type === 'Polygon') {
@@ -340,7 +321,7 @@ const buildSolrFilters = (filters) => {
               .forEach((field) => `${field}:"isWithin(${wktString})"`)
               .join(' OR ')
 
-            solrParametersObject.fq.push(`(${solrFilter})`)
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
           } else {
             // CIRCLE
             const reversedCoordinates = [
@@ -352,27 +333,30 @@ const buildSolrFilters = (filters) => {
 
             // NOTE:  Might cause trouble when multiple fields in fields array.
             // Right now there is always one field in the fields array
-            filter.fields.forEach((field) =>
-              solrParametersObject.fq.push(`{!geofilt sfield=${field}}`)
+            const solrFilter = filter.fields.map(
+              (field) => `{!geofilt sfield=${field}}`
             )
 
-            solrParametersObject.d = radius
-            solrParametersObject.pt = `${reversedCoordinates[0]},${reversedCoordinates[1]}`
+            return {
+              ...prev,
+              fq: [...prev.fq, `${solrFilter}`],
+              d: radius,
+              pt: `${reversedCoordinates[0]},${reversedCoordinates[1]}`,
+            }
           }
-
-          break
         }
         default: {
-          break
+          return { ...prev }
         }
       }
-    })
+    }, initialObject)
 
-  if (solrParametersObject.fq && solrParametersObject.fq.length > 0) {
-    solrParametersObject.fq = `(${solrParametersObject.fq.join(' AND ')})`
+  // Join fq array together if array has elements
+  // If no elements in fq delete fq so that fq default parameter is not over written with null
+  if (solrParameters.fq.length > 0) {
+    solrParameters.fq = `(${solrParameters.fq.join(' AND ')})`
   } else {
-    delete solrParametersObject.fq
+    delete solrParameters.fq
   }
-
-  return solrParametersObject
+  return solrParameters
 }
