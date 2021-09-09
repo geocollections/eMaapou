@@ -318,7 +318,7 @@ const buildSolrParameters = (filters) => {
             wktString = wktString.replaceAll('),(', ')),((')
 
             const solrFilter = filter.fields
-              .forEach((field) => `${field}:"isWithin(${wktString})"`)
+              .map((field) => `${field}:"isWithin(${wktString})"`)
               .join(' OR ')
 
             return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
