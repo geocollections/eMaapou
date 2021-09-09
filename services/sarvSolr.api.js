@@ -58,10 +58,11 @@ export default ($axios) => ({
         count: 0,
       }
     }
+
     const params = {
       ...defaultParams,
       ...buildQueryParameter(search),
-      ...buildFilterQueryParameter(searchFilters),
+      ...buildSolrFilters(searchFilters),
       ...getPaginationParams(options),
       ...getSortByParams(options, queryFields),
     }
@@ -132,213 +133,247 @@ const buildQueryParameter = (search) => {
   }
 }
 
-const buildFilterQueryParameter = (filters) => {
-  let filterQueryStr = Object.entries(filters)
-    .filter(([_, v]) => {
-      if (v.type === 'range' && isNil(v.value[0]) && isNil(v.value[1]))
-        return false
-      if (
-        (v.type === 'text' || v.type === 'range_alt') &&
-        (!v.value || v.value.trim().length <= 0)
+const buildSolrLookUpTypes = (field, value, lookUpType) => {
+  switch (lookUpType) {
+    case 'contains':
+      return `${field}:*${value}*`
+    case 'equals':
+      return `${field}:"${value}"`
+    case 'startsWith':
+      return `${field}:${value}*`
+    case 'endsWith':
+      return `${field}:*${value}`
+    case 'doesNotContain':
+      return `-${field}:${value}`
+    case 'greaterThan':
+      return `${field}:[${value} TO *]`
+    case 'smallerThan':
+      return `${field}:[* TO ${value}]`
+    default:
+      return `${field}:${value}`
+  }
+}
+
+const isFilterValid = (filter) => {
+  switch (filter.type) {
+    case 'range': {
+      return isNil(filter.value[0]) && isNil(filter.value[1])
+    }
+    case 'text': {
+      return !filter.value || filter.value.trim().length <= 0
+    }
+    case 'range_alt': {
+      return !filter.value || filter.value.trim().length <= 0
+    }
+    case 'select': {
+      return filter.value === null || filter.value.length < 1
+    }
+    case 'object': {
+      return (
+        typeof filter.value !== 'object' || !filter.value?.[filter.searchField]
       )
-        return false
-      if (v.type === 'select' && (v.value === null || v.value.length < 1))
-        return false
-      if (
-        v.type === 'object' &&
-        (typeof v.value !== 'object' || !v.value?.[v.searchField])
-      )
-        return false
-      if ((v.type === 'list' || v.type === 'list_or') && isEmpty(v.value))
-        return false
-      return v.value !== null
-    })
-    .reduce((prev, [k, v]) => {
-      const filterQueryParam = v.fields.reduce((prev, curr, idx) => {
-        function buildEncodedParameterStr(searchParameter, fieldId) {
-          function buildTextParameter(encodedValue, fieldId) {
-            const textArray = encodedValue.split(' ')
+    }
+    case 'list': {
+      return isEmpty(filter.value)
+    }
+    case 'list_or': {
+      return isEmpty(filter.value)
+    }
+    default: {
+      return filter.value !== null
+    }
+  }
+}
 
-            const paramArray = textArray.map((str) => {
-              switch (searchParameter.lookUpType) {
-                case 'contains':
-                  return `*${str}*`
-                case 'equals':
-                  return `"${str}"`
-                case 'startsWith':
-                  return `${str}*`
-                case 'endsWith':
-                  return `*${str}`
-                case 'doesNotContain':
-                  return `-${fieldId}:${str}`
-                case 'greaterThan':
-                  return `[${str} TO *]`
-                case 'smallerThan':
-                  return `[* TO ${str}]`
-                default:
-                  return `${fieldId}:${str}`
-              }
-            })
+const buildSolrFilters = (filters) => {
+  const solrParametersObject = { fq: [] }
 
-            return `${fieldId}:(${paramArray.join(' AND ')})`
-          }
+  Object.entries(filters)
+    .filter(([_, filter]) => isFilterValid(filter))
+    .forEach(([_, filter]) => {
+      switch (filter.type) {
+        case 'text': {
+          const encodedValue = encodeURIComponent(filter.value)
 
-          switch (searchParameter.type) {
-            case 'range': {
-              // const encodedValue = searchParameter.value.map((el) => {
-              //   return encodeURIComponent(el)
-              // })
-              const start = isNil(searchParameter.value[0])
-                ? '*'
-                : searchParameter.value[0]
-              const end = isNil(searchParameter.value[1])
-                ? '*'
-                : searchParameter.value[1]
-              // return `${fieldId}:[${start} TO ${end}] OR (*:* AND -${fieldId}:[* TO *])`
+          const solrFilter = filter.fields
+            .map((field) =>
+              buildSolrLookUpTypes(field, encodedValue, filter.lookUpType)
+            )
+            .join(' OR ')
+          solrParametersObject.fq.push(`(${solrFilter})`)
 
-              return `${fieldId}:[${start} TO ${end}]`
-            }
-            case 'range_alt': {
-              const fieldValue = isNil(searchParameter.value)
-                ? '*'
-                : searchParameter.value
-              return idx === 0
-                ? `${searchParameter.fields[0]}:[${fieldValue} TO *]`
-                : `${searchParameter.fields[1]}:[* TO ${fieldValue}]`
-            }
-            case 'checkbox': {
-              const encodedValue = encodeURIComponent(searchParameter.value)
-              return `${fieldId}:${encodedValue}`
-            }
-            case 'select': {
-              return `${fieldId}:(${encodeURIComponent(
-                searchParameter.value.join(' ')
-              )})`
-            }
-            case 'raw': {
-              return `${fieldId}:${encodeURIComponent(searchParameter.value)}`
-            }
-            case 'text': {
-              const encodedValue = encodeURIComponent(searchParameter.value)
+          break
+        }
+        case 'range': {
+          const start = isNil(filter.value[0]) ? '*' : filter.value[0]
+          const end = isNil(filter.value[1]) ? '*' : filter.value[1]
 
-              return buildTextParameter(encodedValue, fieldId)
-            }
-            case 'object': {
-              const encodedValue = encodeURIComponent(
-                searchParameter.value[searchParameter.searchField]
-              )
+          const solrFilter = filter.fields
+            .map((field) => `${field}:[${start} TO ${end}]`)
+            .join(' OR ')
 
-              return buildTextParameter(encodedValue, fieldId)
-            }
-            case 'list': {
-              return searchParameter.fields
-                .map((field) => {
-                  return searchParameter.value
-                    .map((obj) => {
-                      return `(${field}:${obj?.value ?? obj})`
-                    })
-                    .join(' AND ')
+          solrParametersObject.fq.push(`(${solrFilter})`)
+
+          break
+        }
+        case 'range_alt': {
+          const value = isNil(filter.value)
+
+          const solrFilter = `${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}]`
+
+          solrParametersObject.fq.push(`(${solrFilter})`)
+
+          break
+        }
+        case 'checkbox': {
+          const encodedValue = encodeURIComponent(filter.value)
+
+          const solrFilter = filter.fields
+            .map((field) => `${field}:${encodedValue}`)
+            .join(' OR ')
+
+          solrParametersObject.fq.push(`(${solrFilter})`)
+
+          break
+        }
+        case 'select': {
+          const encodedValue = encodeURIComponent(filter.value.join(' '))
+          const solrFilter = filter.fields
+            .map((field) => `${field}:(${encodedValue})`)
+            .join(' OR ')
+          solrParametersObject.fq.push(`(${solrFilter})`)
+          break
+        }
+        case 'raw': {
+          const encodedValue = encodeURIComponent(filter.value)
+
+          const solrFilter = filter.fields
+            .map((field) => `${field}:${encodedValue}`)
+            .join(' OR ')
+
+          solrParametersObject.fq.push(`(${solrFilter})`)
+          break
+        }
+        case 'object': {
+          const encodedValue = encodeURIComponent(
+            filter.value[filter.searchField]
+          )
+
+          const solrFilter = filter.fields
+            .map((field) =>
+              buildSolrLookUpTypes(field, encodedValue, filter.lookUpType)
+            )
+            .join(' OR ')
+          solrParametersObject.fq.push(`(${solrFilter})`)
+          break
+        }
+        case 'list': {
+          const solrFilter = filter.fields
+            .map((field) => {
+              return filter.value
+                .map((v) => {
+                  return `(${field}:${v?.value ?? v})`
                 })
                 .join(' AND ')
-            }
-            case 'list_or': {
-              return searchParameter.fields
-                .map((field) => {
-                  return searchParameter.value
-                    .map((obj) => {
-                      return `(${field}:${obj?.value ?? obj})`
-                    })
-                    .join(' OR ')
+            })
+            .join(' AND ')
+          solrParametersObject.fq.push(`(${solrFilter})`)
+          break
+        }
+        case 'list_or': {
+          const solrFilter = filter.fields
+            .map((field) => {
+              return filter.value
+                .map((v) => {
+                  return `(${field}:${v?.value ?? v})`
                 })
                 .join(' OR ')
-            }
-            case 'geom': {
-              if (searchParameter.value.geometry.type === 'Polygon') {
-                // LON LAT
-                const value = cloneDeep(searchParameter.value)
-
-                // Polygon triangulation
-                const data = earcut.flatten(value.geometry.coordinates)
-                const triangles = earcut(
-                  data.vertices,
-                  data.holes,
-                  data.dimensions
-                )
-
-                // Reversing triangles to geo coordinates
-                const coordinates = triangles.map((item) => {
-                  const startIndex = item * 2
-                  return [
-                    data.vertices[startIndex],
-                    data.vertices[startIndex + 1],
-                  ]
-                })
-                const triangleCoordinates = coordinates.reduce(
-                  (prev, item, index, arr) => {
-                    if ((index + 1) % 3 === 0) {
-                      prev.push([
-                        arr[index - 2],
-                        arr[index - 1],
-                        arr[index],
-                        arr[index - 2],
-                      ])
-                    }
-                    return prev
-                  },
-                  []
-                )
-
-                // Creating WKT string for query
-                const wkt = new Wkt.Wkt()
-                wkt.read(
-                  JSON.stringify({
-                    coordinates:
-                      triangleCoordinates.length > 1
-                        ? [triangleCoordinates]
-                        : triangleCoordinates,
-                    type:
-                      triangleCoordinates.length > 1
-                        ? 'MultiPolygon'
-                        : 'Polygon',
-                  })
-                )
-                let wktString = wkt.write()
-                wktString = wktString.replaceAll('),(', ')),((')
-
-                return `${fieldId}:"isWithin(${wktString})"`
-              } else {
-                // CIRCLE
-                const reversedCoordinates = [
-                  ...searchParameter.value.geometry.coordinates,
-                ].reverse()
-                // convert to km (from m) and round to 1 decimal place
-                const radius =
-                  Math.round(
-                    (searchParameter.value.properties.radius / 1000) * 10
-                  ) / 10
-
-                return `{!geofilt})&d=${radius}&pt=${reversedCoordinates}&sfield=${fieldId}`
-              }
-            }
-            default:
-              return null
-          }
+            })
+            .join(' OR ')
+          solrParametersObject.fq.push(`(${solrFilter})`)
+          break
         }
+        case 'geom': {
+          if (filter.value.geometry.type === 'Polygon') {
+            // LON LAT
+            const value = cloneDeep(filter.value)
 
-        if (idx === 0)
-          return `${prev}${buildEncodedParameterStr(v, curr) ?? ''}`
-        else if (v.type === 'range_alt')
-          return `${prev} AND ${buildEncodedParameterStr(v, curr) ?? ''}`
-        else return `${prev} OR ${buildEncodedParameterStr(v, curr) ?? ''}`
-      }, '')
+            // Polygon triangulation
+            const data = earcut.flatten(value.geometry.coordinates)
+            const triangles = earcut(data.vertices, data.holes, data.dimensions)
 
-      if (filterQueryParam === null) return `${prev}`
-      if (prev.length > 0) return `${prev} AND (${filterQueryParam})`
-      return `${prev}(${filterQueryParam})`
-    }, '')
+            // Reversing triangles to geo coordinates
+            const coordinates = triangles.map((item) => {
+              const startIndex = item * 2
+              return [data.vertices[startIndex], data.vertices[startIndex + 1]]
+            })
+            const triangleCoordinates = coordinates.reduce(
+              (prev, item, index, arr) => {
+                if ((index + 1) % 3 === 0) {
+                  prev.push([
+                    arr[index - 2],
+                    arr[index - 1],
+                    arr[index],
+                    arr[index - 2],
+                  ])
+                }
+                return prev
+              },
+              []
+            )
 
-  // Hack: Special case for spatial search CIRCLE:
-  if (filterQueryStr.includes('{!geofilt}') && filterQueryStr.endsWith(')'))
-    filterQueryStr = filterQueryStr.slice(0, -1)
-  return isEmpty(filterQueryStr) ? null : { fq: filterQueryStr }
+            // Creating WKT string for query
+            const wkt = new Wkt.Wkt()
+            wkt.read(
+              JSON.stringify({
+                coordinates:
+                  triangleCoordinates.length > 1
+                    ? [triangleCoordinates]
+                    : triangleCoordinates,
+                type:
+                  triangleCoordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
+              })
+            )
+            let wktString = wkt.write()
+            wktString = wktString.replaceAll('),(', ')),((')
+
+            const solrFilter = filter.fields
+              .forEach((field) => `${field}:"isWithin(${wktString})"`)
+              .join(' OR ')
+
+            solrParametersObject.fq.push(`(${solrFilter})`)
+          } else {
+            // CIRCLE
+            const reversedCoordinates = [
+              ...filter.value.geometry.coordinates,
+            ].reverse()
+            // convert to km (from m) and round to 1 decimal place
+            const radius =
+              Math.round((filter.value.properties.radius / 1000) * 10) / 10
+
+            // NOTE:  Might cause trouble when multiple fields in fields array.
+            // Right now there is always one field in the fields array
+            filter.fields.forEach((field) =>
+              solrParametersObject.fq.push(`{!geofilt sfield=${field}}`)
+            )
+
+            solrParametersObject.d = radius
+            solrParametersObject.pt = `${reversedCoordinates[0]},${reversedCoordinates[1]}`
+          }
+
+          break
+        }
+        default: {
+          break
+        }
+      }
+    })
+
+  if (solrParametersObject.fq && solrParametersObject.fq.length > 0) {
+    solrParametersObject.fq = `(${solrParametersObject.fq.join(' AND ')})`
+  } else {
+    delete solrParametersObject.fq
+  }
+
+  return solrParametersObject
 }
