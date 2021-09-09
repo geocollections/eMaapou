@@ -904,9 +904,6 @@ export default {
     isNull,
     isNil,
     buildData(type, data) {
-      const listOfIds = Object.keys(data[type])
-      listOfIds.splice(listOfIds.indexOf(type), 1)
-
       if (type === 'specimen')
         return `${data[type].coll.number.split(' ')[0]} ${
           data[type].specimen_id
