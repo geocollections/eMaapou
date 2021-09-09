@@ -470,7 +470,7 @@ export default {
         {
           params: {
             nest: 2,
-            // only_photo_ids: route.name.startsWith('photo'),
+            only_photo_ids: route.name.startsWith('photo'),
           },
         }
       )
