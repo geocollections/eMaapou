@@ -983,6 +983,7 @@ export default {
     type: 'Type',
     download: 'Download file',
     remarks: 'Remarks',
+    fileContents: 'File contents',
   },
   cookiePolicy: {
     introduction:
