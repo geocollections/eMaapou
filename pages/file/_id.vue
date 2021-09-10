@@ -493,6 +493,8 @@ export default {
       const file = fileResponse
 
       let fileContent
+      // Todo: Probably should remove it from asyncData as it's not necessary to SSR
+      //  and if request returns 404 or 500 it crashes and breaks whole page
       if (
         file?.uuid_filename?.endsWith('.txt') ||
         file?.uuid_filename?.endsWith('.las')
