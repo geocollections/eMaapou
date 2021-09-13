@@ -14,11 +14,12 @@ export const mutations = {
     state.history.forEach((h, i) => {
       if (
         h.name &&
-        h.to &&
+        h.id &&
         h.name === historyObject.name &&
         h.id === historyObject.id
       )
         state.history.splice(i, 1)
+      // NOTE: If historyObject does not have name and id, check if to fields match
       else if (h.to === historyObject.to) state.history.splice(i, 1)
     })
 
