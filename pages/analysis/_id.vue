@@ -182,11 +182,14 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import slugify from 'slugify'
+
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import Tabs from '~/components/Tabs'
+import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
+
 export default {
   components: { TitleCardDetail, DataRow, LinkDataRow, Tabs, Detail },
 
@@ -208,14 +211,14 @@ export default {
         {
           id: 'analysis_results',
           isSolr: true,
-          routeName: 'analysis-id',
+          routeName: 'analysis-id-slug',
           title: 'analysis.results',
           count: 0,
           props: { analysis: analysis.id },
         },
         {
           id: 'attachment_link',
-          routeName: 'analysis-id-attachments',
+          routeName: 'analysis-id-slug-attachments',
           title: 'analysis.attachments',
           count: 0,
           props: { analysis: analysis.id },
@@ -268,7 +271,26 @@ export default {
         })
       )
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        `${app.$translate({
+          et: analysis?.analysis_method.analysis_method,
+          en: analysis?.analysis_method.method_en,
+        })}-${analysis?.sample.number}`,
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
       return {
         analysis,
@@ -277,7 +299,6 @@ export default {
         initActiveTab: validPath,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find analysis ${route.params.id}`,
         path: route.path,
