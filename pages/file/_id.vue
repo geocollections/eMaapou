@@ -451,6 +451,22 @@
               $t('file.fileContents')
             }}</v-card-title>
 
+            <v-card-text v-if="rawLasFileContent">
+              <v-expansion-panels>
+                <v-expansion-panel>
+                  <v-expansion-panel-header
+                    >Las file content as JSON</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <pre>
+                {{ rawLasFileContent }}
+              </pre
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-card-text>
+
             <v-card-text>
               <pre>{{ fileContent }}</pre>
             </v-card-text>
@@ -505,6 +521,22 @@ export default {
         )
         fileContent = fileContentResponse
         if (fileContent.startsWith('Error: ')) fileContent = ''
+      }
+
+      let rawLasFileContent
+      if (file?.uuid_filename?.endsWith('.las')) {
+        const rawLasfileContentResponse =
+          await app.$services.sarvREST.getResource('file', params.id, {
+            params: {
+              raw_content: 'true',
+            },
+          })
+        rawLasFileContent = rawLasfileContentResponse
+        if (
+          typeof rawLasfileContentResponse === 'string' &&
+          rawLasFileContent.startsWith('Error: ')
+        )
+          rawLasFileContent = ''
       }
 
       let specimenIdentification
@@ -704,6 +736,7 @@ export default {
       return {
         file,
         fileContent,
+        rawLasFileContent,
         specimenIdentification,
         specimenIdentificationGeology,
         attachmentKeywords,
@@ -711,6 +744,7 @@ export default {
         ids,
       }
     } catch (err) {
+      console.log(err)
       error({
         message: `Cannot find file ${route.params.id}`,
         path: route.path,
