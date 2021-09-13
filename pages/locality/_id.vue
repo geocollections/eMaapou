@@ -255,6 +255,22 @@
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
+
+      <v-card v-if="rawLasFileContent">
+        <v-card-title></v-card-title>
+
+        <v-card-text>
+          <las-chart
+            :chart-title="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            :file-data="rawLasFileContent"
+          />
+        </v-card-text>
+      </v-card>
     </template>
   </detail>
 </template>
@@ -269,9 +285,11 @@ import LeafletMap from '~/components/map/LeafletMap'
 import Tabs from '~/components/Tabs'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
+import LasChart from '~/components/chart/LasChart'
 
 export default {
   components: {
+    LasChart,
     TitleCardDetail,
     DataRow,
     LinkDataRow,
@@ -330,6 +348,44 @@ export default {
       )
 
       const attachments = attachmentResponse.items ?? []
+
+      // START of getting .las file data
+      // At first checking if any related .las files
+      const lasFileResponse = await app.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            attachment__uuid_filename__iendswith: '.las',
+            locality: locality.id,
+            fields: 'attachment',
+          },
+        }
+      )
+
+      let rawLasFileContent
+      if (
+        lasFileResponse?.count > 0 &&
+        lasFileResponse?.items?.[0]?.attachment
+      ) {
+        const rawLasfileContentResponse =
+          await app.$services.sarvREST.getResource(
+            'file',
+            lasFileResponse?.items?.[0]?.attachment,
+            {
+              params: {
+                raw_content: 'true',
+              },
+            }
+          )
+
+        rawLasFileContent = rawLasfileContentResponse
+        if (
+          typeof rawLasfileContentResponse === 'string' &&
+          rawLasFileContent.startsWith('Error: ')
+        )
+          rawLasFileContent = ''
+      }
+      // END of getting .las file data
 
       const tabs = [
         {
@@ -444,6 +500,7 @@ export default {
         initActiveTab: validPath,
         // attachmentsOutcrop,
         attachments,
+        rawLasFileContent,
       }
     } catch (err) {
       error({
