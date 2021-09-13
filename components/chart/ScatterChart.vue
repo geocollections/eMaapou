@@ -60,6 +60,8 @@ export default {
       this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
       this.parameters =
         statsResponse?.stats?.stats_fields?.parameter?.distinctValues
+      this.resultValues =
+        statsResponse?.stats?.stats_fields?.value?.distinctValues
 
       const methodKey =
         this.$i18n.locale === 'en' ? 'analysis_method_en' : 'analysis_method'
@@ -88,7 +90,7 @@ export default {
     chartOptions() {
       if (
         this?.analysisResults?.length > 0 &&
-        this?.depth?.length > 0 &&
+        (this?.depth?.length > 0 || this?.resultValues?.length > 0) &&
         this?.parameters?.length > 0
       ) {
         return {
@@ -103,7 +105,7 @@ export default {
           xAxis: {
             type: 'value',
             boundaryGap: false,
-            name: 'Depth',
+            name: this?.depth?.length > 0 ? 'Depth' : 'Result values',
             nameLocation: 'center',
             nameTextStyle: {
               fontWeight: 'bold',
@@ -117,7 +119,7 @@ export default {
             max(value) {
               return (value.max + 0.1).toFixed(2) * 1
             },
-            data: this.depth,
+            data: this?.depth?.length > 0 ? this.depth : this.resultValues,
           },
 
           yAxis: this.buildYAxis(),
@@ -138,8 +140,7 @@ export default {
             fq: `${this.tableKey}:${this.tableId}`,
             start: 0,
             rows: 50000,
-            fl:
-              'id,analysis_id,depth,depth_interval,parameter,analysis_method,analysis_method_en,value',
+            fl: 'id,analysis_id,depth,depth_interval,parameter,analysis_method,analysis_method_en,value',
             sort: 'depth asc',
           },
         }
@@ -161,6 +162,7 @@ export default {
               'parameter',
               'analysis_method',
               'analysis_method_en',
+              'value',
             ],
             'stats.calcdistinct': true,
           },
@@ -197,7 +199,7 @@ export default {
           yAxisIndex: item.includes('ppm') ? 1 : 0,
           data: this.analysisResults
             .filter((result) => result.parameter === item)
-            .map((t) => [t.depth, t.value]),
+            .map((t) => [t.depth ?? t.value, t.value]),
           // symbolSize: 8,
           emphasis: {
             focus: 'series',
