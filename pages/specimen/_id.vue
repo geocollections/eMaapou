@@ -200,6 +200,8 @@
 </template>
 
 <script>
+import slugify from 'slugify'
+
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
@@ -239,7 +241,7 @@ export default {
           id: 'specimen_identification',
           table: 'specimen_identification',
           isSolr: false,
-          routeName: 'specimen-id',
+          routeName: 'specimen-id-slug',
           title: 'specimen.identifications',
           count: 0,
           props: { specimen: specimen.id },
@@ -248,7 +250,7 @@ export default {
           id: 'specimen_reference',
           table: 'specimen_reference',
           isSolr: false,
-          routeName: 'specimen-id-references',
+          routeName: 'specimen-id-slug-references',
           title: 'specimen.references',
           count: 0,
           props: { specimen: specimen.id },
@@ -268,7 +270,23 @@ export default {
         )
       )
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        `${specimen.database.acronym} ${specimen.specimen_id}`,
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       const attachmentResponse = await app.$services.sarvSolr.getResourceList(
@@ -331,10 +349,10 @@ export default {
       return null
     },
     isRock() {
-      return !!this.specimenAlt?.rock?.id
+      return !!this.specimenAlt?.rock
     },
     isTaxon() {
-      return !!this.specimenAlt?.taxon?.id
+      return !!this.specimenAlt?.taxon
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
