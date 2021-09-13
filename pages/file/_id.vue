@@ -451,24 +451,32 @@
               $t('file.fileContents')
             }}</v-card-title>
 
-            <v-card-text v-if="rawLasFileContent">
-              <v-expansion-panels>
+            <v-card-text>
+              <v-expansion-panels v-model="expansionPanel" multiple>
+                <v-expansion-panel v-if="rawLasFileContent">
+                  <v-expansion-panel-header>{{
+                    $t('file.lasGraph')
+                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <las-chart
+                      :chart-title="fileTitle"
+                      :file-data="rawLasFileContent"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+
                 <v-expansion-panel>
-                  <v-expansion-panel-header
-                    >Las file content as JSON</v-expansion-panel-header
+                  <v-expansion-panel-header>
+                    {{ $t('file.lasText') }}</v-expansion-panel-header
                   >
                   <v-expansion-panel-content>
                     <pre>
-                {{ rawLasFileContent }}
+                {{ fileContent }}
               </pre
                     >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
-            </v-card-text>
-
-            <v-card-text>
-              <pre>{{ fileContent }}</pre>
             </v-card-text>
           </v-card>
         </v-col>
@@ -484,9 +492,11 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import Detail from '~/components/templates/Detail'
+import LasChart from '~/components/chart/LasChart'
 
 export default {
   components: {
+    LasChart,
     TitleCardDetail,
     LeafletMap,
     DataRow,
@@ -744,7 +754,6 @@ export default {
         ids,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Cannot find file ${route.params.id}`,
         path: route.path,
@@ -753,6 +762,7 @@ export default {
   },
   data() {
     return {
+      expansionPanel: [0],
       nameFields: {
         collection: {
           et: 'collection_name',

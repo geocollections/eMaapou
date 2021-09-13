@@ -984,6 +984,8 @@ export default {
     download: 'Lae alla',
     remarks: 'Lisainfo',
     fileContents: 'Faili sisu',
+    lasGraph: 'Graafik',
+    lasText: 'Fail teksti kujul',
   },
   cookiePolicy: {
     introduction:
