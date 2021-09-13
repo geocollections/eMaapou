@@ -192,8 +192,9 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
-import LeafletMap from '@/components/map/LeafletMap'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import slugify from 'slugify'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -224,28 +225,28 @@ export default {
 
       const tabs = [
         {
-          routeName: 'drillcore-id',
+          routeName: 'drillcore-id-slug',
           title: 'drillcore.drillcoreBoxesTitle',
           count: drillcore?.boxes || 0,
           props: { drillcore: drillcore.id },
         },
         {
           id: 'locality_description',
-          routeName: 'drillcore-id-descriptions',
+          routeName: 'drillcore-id-slug-descriptions',
           title: 'drillcore.localityDescriptions',
           count: 0,
           props: {},
         },
         {
           id: 'locality_reference',
-          routeName: 'drillcore-id-references',
+          routeName: 'drillcore-id-slug-references',
           title: 'drillcore.localityReferences',
           count: 0,
           props: {},
         },
         {
           id: 'attachment_link',
-          routeName: 'drillcore-id-attachments',
+          routeName: 'drillcore-id-slug-attachments',
           title: 'drillcore.attachments',
           count: 0,
           props: {},
@@ -253,7 +254,7 @@ export default {
         {
           id: 'sample',
           isSolr: true,
-          routeName: 'drillcore-id-samples',
+          routeName: 'drillcore-id-slug-samples',
           title: 'drillcore.samples',
           count: 0,
           props: {},
@@ -261,7 +262,7 @@ export default {
         {
           id: 'analysis',
           isSolr: true,
-          routeName: 'drillcore-id-analyses',
+          routeName: 'drillcore-id-slug-analyses',
           title: 'drillcore.analyses',
           count: 0,
           props: {},
@@ -269,7 +270,7 @@ export default {
         {
           id: 'specimen',
           isSolr: true,
-          routeName: 'drillcore-id-specimens',
+          routeName: 'drillcore-id-slug-specimens',
           title: 'drillcore.specimens',
           count: 0,
           props: {},
@@ -278,7 +279,7 @@ export default {
           table: 'analysis_results',
           id: 'graphs',
           isSolr: true,
-          routeName: 'drillcore-id-graphs',
+          routeName: 'drillcore-id-slug-graphs',
           title: 'locality.graphs',
           count: 0,
           props: { drillcoreObject: drillcore },
@@ -315,7 +316,23 @@ export default {
           )
         : tabs
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        app.$translate({ et: drillcore.drillcore, en: drillcore.drillcore_en }),
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {
