@@ -48,16 +48,11 @@
             </v-img>
           </v-hover>
 
+          <!-- eslint-disable prettier/prettier -->
           <div
-            class="
-              justify-center
-              mx-8
-              d-flex
-              flex-column
-              justify-md-space-between
-              flex-md-row
-            "
+            class="justify-center mx-8  d-flex flex-column justify-md-space-between flex-md-row"
           >
+            <!-- eslint-enable prettier/prettier -->
             <div class="text-center text-md-left">
               <div
                 v-if="
@@ -276,8 +271,10 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import Tabs from '@/components/Tabs'
-import TitleCardDetail from '@/components/TitleCardDetail.vue'
+import slugify from 'slugify'
+
+import Tabs from '~/components/Tabs.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
@@ -319,7 +316,7 @@ export default {
       const tabs = [
         {
           id: 'sample',
-          routeName: 'drillcore-box-id',
+          routeName: 'drillcore-box-id-slug',
           isSolr: true,
           title: 'drillcore.samples',
           count: 0,
@@ -331,7 +328,7 @@ export default {
         },
         {
           id: 'analysis',
-          routeName: 'drillcore-box-id-analyses',
+          routeName: 'drillcore-box-id-slug-analyses',
           title: 'drillcore.analyses',
           isSolr: true,
           count: 0,
@@ -343,7 +340,7 @@ export default {
         },
         {
           id: 'specimen',
-          routeName: 'drillcore-box-id-specimens',
+          routeName: 'drillcore-box-id-slug-specimens',
           title: 'drillcore.specimens',
           isSolr: true,
           count: 0,
@@ -374,7 +371,26 @@ export default {
             )
           : tabs
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        `${app.$translate({
+          et: drillcoreBox.drillcore?.drillcore,
+          en: drillcoreBox.drillcore?.drillcore_en,
+        })}-${drillcoreBox.number}`,
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {
