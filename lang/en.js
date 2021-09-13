@@ -984,6 +984,8 @@ export default {
     download: 'Download file',
     remarks: 'Remarks',
     fileContents: 'File contents',
+    lasGraph: 'Graph',
+    lasText: 'File in text form',
   },
   cookiePolicy: {
     introduction:
