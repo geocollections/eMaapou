@@ -182,12 +182,15 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import TitleCardDetail from '@/components/TitleCardDetail'
-import Tabs from '~/components/Tabs'
+import slugify from 'slugify'
+
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import LeafletMap from '~/components/map/LeafletMap'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+
 export default {
   components: {
     LeafletMap,
@@ -267,7 +270,7 @@ export default {
         {
           id: 'dataset_analysis',
           table: 'dataset_analysis',
-          routeName: 'dataset-id',
+          routeName: 'dataset-id-slug',
           title: 'dataset.analyses',
           count: 0,
           props: {
@@ -278,7 +281,7 @@ export default {
         {
           id: 'dataset_reference',
           table: 'dataset_reference',
-          routeName: 'dataset-id-references',
+          routeName: 'dataset-id-slug-references',
           title: 'dataset.references',
           count: 0,
           props: { dataset: dataset.id },
@@ -286,7 +289,7 @@ export default {
         {
           id: 'attachment_link',
           table: 'attachment_link',
-          routeName: 'dataset-id-attachments',
+          routeName: 'dataset-id-slug-attachments',
           title: 'dataset.attachments',
           count: 0,
           props: { dataset: dataset.id },
@@ -294,7 +297,7 @@ export default {
         {
           id: 'dataset_author',
           table: 'dataset_author',
-          routeName: 'dataset-id-authors',
+          routeName: 'dataset-id-slug-authors',
           title: 'dataset.authors',
           count: 0,
           props: { dataset: dataset.id },
@@ -302,7 +305,7 @@ export default {
         {
           id: 'dataset_geolocation',
           table: 'dataset_geolocation',
-          routeName: 'dataset-id-geolocations',
+          routeName: 'dataset-id-slug-geolocations',
           title: 'dataset.geolocations',
           count: 0,
           props: { dataset: dataset.id },
@@ -355,7 +358,21 @@ export default {
             })
         )
       )
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+
+      const slug = slugify(dataset.title, { lower: true })
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
       return {
         dataset,

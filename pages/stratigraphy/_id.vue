@@ -236,14 +236,15 @@
 
 <script>
 import { isEmpty, isNull, isNil } from 'lodash'
-import LeafletMap from '@/components/map/LeafletMap'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import slugify from 'slugify'
+import { STRATOTYPE } from '~/constants'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable'
-import { STRATOTYPE } from '~/constants'
-import Detail from '~/components/templates/Detail'
+import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable.vue'
+import Detail from '~/components/templates/Detail.vue'
 export default {
   components: {
     TitleCardDetail,
@@ -274,7 +275,7 @@ export default {
         {
           id: 'stratigraphy_reference',
           table: 'stratigraphy_reference',
-          routeName: 'stratigraphy-id',
+          routeName: 'stratigraphy-id-slug',
           title: 'stratigraphy.references',
           count: 0,
           props: { stratigraphy: stratigraphy.id },
@@ -283,7 +284,7 @@ export default {
         {
           id: 'stratigraphy_synonym',
           table: 'stratigraphy_synonym',
-          routeName: 'stratigraphy-id-synonyms',
+          routeName: 'stratigraphy-id-slug-synonyms',
           title: 'stratigraphy.synonyms',
           count: 0,
           props: { stratigraphy: stratigraphy.id },
@@ -291,7 +292,7 @@ export default {
         {
           id: 'subunits',
           table: 'stratigraphy',
-          routeName: 'stratigraphy-id-subunits',
+          routeName: 'stratigraphy-id-slug-subunits',
           title: 'stratigraphy.subUnits',
           isSolr: true,
           count: 0,
@@ -300,7 +301,7 @@ export default {
         {
           id: 'lithostratigraphy',
           table: 'stratigraphy',
-          routeName: 'stratigraphy-id-related-units',
+          routeName: 'stratigraphy-id-slug-related-units',
           title: 'stratigraphy.relatedUnits',
           isSolr: true,
           count: 0,
@@ -309,7 +310,7 @@ export default {
         {
           id: 'specimen',
           table: 'specimen',
-          routeName: 'stratigraphy-id-specimens',
+          routeName: 'stratigraphy-id-slug-specimens',
           title: 'stratigraphy.specimens',
           isSolr: true,
           count: 0,
@@ -318,7 +319,7 @@ export default {
         {
           id: 'sample',
           table: 'sample',
-          routeName: 'stratigraphy-id-samples',
+          routeName: 'stratigraphy-id-slug-samples',
           title: 'stratigraphy.samples',
           isSolr: true,
           count: 0,
@@ -375,7 +376,26 @@ export default {
         )
       )
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        app.$translate({
+          et: stratigraphy.stratigraphy,
+          en: stratigraphy.stratigraphy_en,
+        }),
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

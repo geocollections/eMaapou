@@ -262,11 +262,12 @@
 <script>
 import { isNil, isEmpty } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
-import TitleCardDetail from '@/components/TitleCardDetail'
-import LinkDataRow from '~/components/LinkDataRow'
-import DataRow from '~/components/DataRow'
-import LeafletMap from '~/components/map/LeafletMap'
-import Tabs from '~/components/Tabs'
+import slugify from 'slugify'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
+import DataRow from '~/components/DataRow.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 
@@ -334,28 +335,28 @@ export default {
       const tabs = [
         {
           id: 'locality_reference',
-          routeName: 'locality-id',
+          routeName: 'locality-id-slug',
           title: 'locality.references',
           count: 0,
           props: {},
         },
         {
           id: 'locality_description',
-          routeName: 'locality-id-descriptions',
+          routeName: 'locality-id-slug-descriptions',
           title: 'locality.descriptions',
           count: 0,
           props: {},
         },
         {
           id: 'attachment_link',
-          routeName: 'locality-id-attachments',
+          routeName: 'locality-id-slug-attachments',
           title: 'locality.attachments',
           count: 0,
           props: {},
         },
         {
           id: 'sample',
-          routeName: 'locality-id-samples',
+          routeName: 'locality-id-slug-samples',
           title: 'locality.samples',
           isSolr: true,
           count: 0,
@@ -363,7 +364,7 @@ export default {
         },
         {
           id: 'specimen',
-          routeName: 'locality-id-specimens',
+          routeName: 'locality-id-slug-specimens',
           title: 'locality.specimens',
           isSolr: true,
           count: 0,
@@ -371,14 +372,14 @@ export default {
         },
         {
           id: 'locality_synonym',
-          routeName: 'locality-id-synonyms',
+          routeName: 'locality-id-slug-synonyms',
           title: 'locality.synonyms',
           count: 0,
           props: {},
         },
         {
           id: 'stratigraphy_stratotype',
-          routeName: 'locality-id-stratotypes',
+          routeName: 'locality-id-slug-stratotypes',
           title: 'locality.stratotypes',
           count: 0,
           props: {},
@@ -386,7 +387,7 @@ export default {
         {
           id: 'analysis',
           isSolr: true,
-          routeName: 'locality-id-analyses',
+          routeName: 'locality-id-slug-analyses',
           title: 'locality.analyses',
           count: 0,
           props: {},
@@ -395,7 +396,7 @@ export default {
           table: 'analysis_results',
           id: 'graphs',
           isSolr: true,
-          routeName: 'locality-id-graphs',
+          routeName: 'locality-id-slug-graphs',
           title: 'locality.graphs',
           count: 0,
           props: { localityObject: locality },
@@ -433,7 +434,23 @@ export default {
         })
       )
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        app.$translate({ et: locality.locality, en: locality.locality_en }),
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {
