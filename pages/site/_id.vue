@@ -452,7 +452,6 @@ export default {
         images: attachments,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find site ${route.params.id}`,
         path: route.path,
