@@ -986,6 +986,7 @@ export default {
     fileContents: 'Faili sisu',
     lasGraph: 'Graafik',
     lasText: 'Fail teksti kujul',
+    textTable: 'Fail tabeli kujul',
   },
   cookiePolicy: {
     introduction:

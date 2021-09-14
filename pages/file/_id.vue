@@ -453,14 +453,32 @@
 
             <v-card-text>
               <v-expansion-panels v-model="expansionPanel" multiple>
-                <v-expansion-panel v-if="rawLasFileContent">
+                <v-expansion-panel
+                  v-if="rawFileContent && file.uuid_filename.endsWith('.las')"
+                >
                   <v-expansion-panel-header>{{
                     $t('file.lasGraph')
                   }}</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <las-chart
                       :chart-title="fileTitle"
-                      :file-data="rawLasFileContent"
+                      :file-data="rawFileContent"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-expansion-panel
+                  v-else-if="
+                    rawFileContent && file.uuid_filename.endsWith('.txt')
+                  "
+                >
+                  <v-expansion-panel-header>{{
+                    $t('file.textTable')
+                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      :headers="rawFileContent.headers"
+                      :items="rawFileContent.items"
                     />
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -519,6 +537,7 @@ export default {
       const file = fileResponse
 
       let fileContent
+      let rawFileContent
       // Todo: Probably should remove it from asyncData as it's not necessary to SSR
       //  and if request returns 404 or 500 it crashes and breaks whole page
       if (
@@ -531,22 +550,22 @@ export default {
         )
         fileContent = fileContentResponse
         if (fileContent.startsWith('Error: ')) fileContent = ''
-      }
 
-      let rawLasFileContent
-      if (file?.uuid_filename?.endsWith('.las')) {
-        const rawLasfileContentResponse =
-          await app.$services.sarvREST.getResource('file', params.id, {
+        const rawFileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          params.id,
+          {
             params: {
               raw_content: 'true',
             },
-          })
-        rawLasFileContent = rawLasfileContentResponse
-        if (
-          typeof rawLasfileContentResponse === 'string' &&
-          rawLasFileContent.startsWith('Error: ')
+          }
         )
-          rawLasFileContent = ''
+        rawFileContent = rawFileContentResponse
+        if (
+          typeof rawFileContentResponse === 'string' &&
+          rawFileContent.startsWith('Error: ')
+        )
+          rawFileContent = ''
       }
 
       let specimenIdentification
@@ -746,7 +765,7 @@ export default {
       return {
         file,
         fileContent,
-        rawLasFileContent,
+        rawFileContent,
         specimenIdentification,
         specimenIdentificationGeology,
         attachmentKeywords,
