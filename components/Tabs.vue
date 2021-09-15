@@ -21,7 +21,7 @@
         :to="
           localePath({
             name: item.routeName,
-            params: { id: $route.params.id },
+            params: $route.params,
           })
         "
         >{{ $t(item.title, { number: item.count }) }}</v-tab
@@ -35,7 +35,7 @@
         :value="
           localePath({
             name: item.routeName,
-            params: { id: $route.params.id },
+            params: $route.params,
           })
         "
         :height="$vuetify.breakpoint.xsOnly ? 38 : 'unset'"

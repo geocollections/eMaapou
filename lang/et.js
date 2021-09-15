@@ -983,6 +983,10 @@ export default {
     type: 'Tüüp',
     download: 'Lae alla',
     remarks: 'Lisainfo',
+    fileContents: 'Faili sisu',
+    lasGraph: 'Graafik',
+    lasText: 'Fail teksti kujul',
+    textTable: 'Fail tabeli kujul',
   },
   cookiePolicy: {
     introduction:

@@ -983,6 +983,10 @@ export default {
     type: 'Type',
     download: 'Download file',
     remarks: 'Remarks',
+    fileContents: 'File contents',
+    lasGraph: 'Graph',
+    lasText: 'File in text form',
+    textTable: 'File in table form',
   },
   cookiePolicy: {
     introduction:
