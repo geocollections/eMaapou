@@ -70,8 +70,8 @@
           "
         >
           <v-icon large color="primary darken-2"
-            >mdi-file-download-outline</v-icon
-          >
+            >mdi-file-download-outline
+          </v-icon>
           {{ $t('file.download') }}
         </div>
 
@@ -344,9 +344,9 @@
         </v-simple-table>
 
         <v-card v-if="showMap" id="map-wrap" elevation="0">
-          <v-card-title class="pl-0 subsection-title">{{
-            $t('locality.map')
-          }}</v-card-title>
+          <v-card-title class="pl-0 subsection-title"
+            >{{ $t('locality.map') }}
+          </v-card-title>
           <leaflet-map
             rounded
             :estonian-map="mapIsEstonian"
@@ -380,9 +380,9 @@
           md="6"
         >
           <v-card>
-            <v-card-title class="subsection-title">{{
-              $t(item.title)
-            }}</v-card-title>
+            <v-card-title class="subsection-title"
+              >{{ $t(item.title) }}
+            </v-card-title>
 
             <v-card-text>
               <v-simple-table>
@@ -406,8 +406,8 @@
                                 params: { id: row[item.id].id },
                               })
                             "
-                            >{{ row[item.id].id }}</nuxt-link
-                          >
+                            >{{ row[item.id].id }}
+                          </nuxt-link>
                           <a
                             v-else
                             class="text-link"
@@ -426,9 +426,9 @@
                                 : row[item.id].id
                             }}
                             <v-icon small color="primary darken-2"
-                              >mdi-open-in-new</v-icon
-                            ></a
-                          >
+                              >mdi-open-in-new
+                            </v-icon>
+                          </a>
                         </template>
                         <template v-else>
                           {{ row[item.id].id }}
@@ -439,6 +439,62 @@
                   </tbody>
                 </template>
               </v-simple-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="fileContent" class="mt-2">
+        <v-col cols="12">
+          <v-card>
+            <v-card-title class="subsection-title">{{
+              $t('file.fileContents')
+            }}</v-card-title>
+
+            <v-card-text>
+              <v-expansion-panels v-model="expansionPanel" multiple>
+                <v-expansion-panel
+                  v-if="rawFileContent && file.uuid_filename.endsWith('.las')"
+                >
+                  <v-expansion-panel-header>{{
+                    $t('file.lasGraph')
+                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <las-chart
+                      :chart-title="fileTitle"
+                      :file-data="rawFileContent"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-expansion-panel
+                  v-else-if="
+                    rawFileContent && file.uuid_filename.endsWith('.txt')
+                  "
+                >
+                  <v-expansion-panel-header>{{
+                    $t('file.textTable')
+                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      :headers="rawFileContent.headers"
+                      :items="rawFileContent.items"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-header>
+                    {{ $t('file.lasText') }}</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <pre>
+                {{ fileContent }}
+              </pre
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-card-text>
           </v-card>
         </v-col>
@@ -454,8 +510,11 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import Detail from '~/components/templates/Detail'
+import LasChart from '~/components/chart/LasChart'
+
 export default {
   components: {
+    LasChart,
     TitleCardDetail,
     LeafletMap,
     DataRow,
@@ -476,6 +535,39 @@ export default {
       )
       const ids = fileResponse?.ids
       const file = fileResponse
+
+      let fileContent
+      let rawFileContent
+      // Todo: Probably should remove it from asyncData as it's not necessary to SSR
+      //  and if request returns 404 or 500 it crashes and breaks whole page
+      if (
+        file?.uuid_filename?.endsWith('.txt') ||
+        file?.uuid_filename?.endsWith('.las')
+      ) {
+        const fileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          params.id
+        )
+        fileContent = fileContentResponse
+        if (fileContent.startsWith('Error: ')) fileContent = ''
+
+        const rawFileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          params.id,
+          {
+            params: {
+              raw_content: 'true',
+            },
+          }
+        )
+        rawFileContent = rawFileContentResponse
+        if (
+          typeof rawFileContentResponse === 'string' &&
+          rawFileContent.startsWith('Error: ')
+        )
+          rawFileContent = ''
+      }
+
       let specimenIdentification
       let specimenIdentificationGeology
       if (file.specimen) {
@@ -672,6 +764,8 @@ export default {
 
       return {
         file,
+        fileContent,
+        rawFileContent,
         specimenIdentification,
         specimenIdentificationGeology,
         attachmentKeywords,
@@ -687,6 +781,7 @@ export default {
   },
   data() {
     return {
+      expansionPanel: [0],
       nameFields: {
         collection: {
           et: 'collection_name',
@@ -801,7 +896,9 @@ export default {
     imageSize() {
       if (this.file.image_width && this.file.image_height) {
         return `${this.file.image_width} × ${this.file.image_height} px`
-      } else return null
+      } else {
+        return null
+      }
     },
 
     isImage() {
@@ -818,7 +915,9 @@ export default {
 
     imageSizes() {
       let sizes = ['small', 'medium', 'large', 'original']
-      if (!this.isImage) sizes = ['original']
+      if (!this.isImage) {
+        sizes = ['original']
+      }
       return sizes
     },
 
@@ -904,12 +1003,14 @@ export default {
     isNull,
     isNil,
     buildData(type, data) {
-      if (type === 'specimen')
+      if (type === 'specimen') {
         return `${data[type].coll.number.split(' ')[0]} ${
           data[type].specimen_id
         }`
-      if (type === 'analysis') return data[type].sample.number
-      else {
+      }
+      if (type === 'analysis') {
+        return data[type].sample.number
+      } else {
         return this.$translate({
           et: data[type][this.nameFields[type].et],
           en: data[type][this.nameFields[type].en],

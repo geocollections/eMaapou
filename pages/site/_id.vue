@@ -277,7 +277,7 @@
                 'elevation-4': hover,
                 'elevation-2': !hover,
               }"
-              class="grey lighten-2 rounded transition-swing cursor-pointer"
+              class="rounded cursor-pointer grey lighten-2 transition-swing"
               v-on="on"
               @click="
                 $router.push(
@@ -331,6 +331,7 @@
 import { isNil } from 'lodash'
 import LeafletMap from '@/components/map/LeafletMap'
 import TitleCardDetail from '@/components/TitleCardDetail'
+import slugify from 'slugify'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -364,7 +365,7 @@ export default {
       const tabs = [
         {
           id: 'attachment_link',
-          routeName: 'site-id',
+          routeName: 'site-id-slug',
           title: 'site.attachments',
           count: 0,
           props: {},
@@ -372,21 +373,21 @@ export default {
         {
           id: 'sample',
           isSolr: true,
-          routeName: 'site-id-samples',
+          routeName: 'site-id-slug-samples',
           title: 'site.samples',
           count: 0,
           props: {},
         },
         {
           id: 'locality_description',
-          routeName: 'site-id-descriptions',
+          routeName: 'site-id-slug-descriptions',
           title: 'site.localityDescriptions',
           count: 0,
           props: {},
         },
         {
           id: 'locality_reference',
-          routeName: 'site-id-references',
+          routeName: 'site-id-slug-references',
           title: 'site.localityReferences',
           count: 0,
           props: {},
@@ -424,7 +425,23 @@ export default {
         })
       )
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        app.$translate({ et: site.name, en: site.name_en }),
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {
@@ -435,7 +452,6 @@ export default {
         images: attachments,
       }
     } catch (err) {
-      console.log(err)
       error({
         message: `Could not find site ${route.params.id}`,
         path: route.path,

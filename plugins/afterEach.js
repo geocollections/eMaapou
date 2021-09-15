@@ -13,7 +13,6 @@ export default ({ app, store }, inject) => {
 
     const name = serializeName(from)
     const id = from.params?.id ?? null
-
     const title = document.title
 
     const parsedTitle = title.substring(0, title.lastIndexOf('|')).trim()
@@ -21,6 +20,7 @@ export default ({ app, store }, inject) => {
     const historyObject = {
       text: parsedTitle,
       id,
+      name: app.getRouteBaseName(from),
       to: from.path,
       uniqueIdentifier: `${name}.${id}`,
     }

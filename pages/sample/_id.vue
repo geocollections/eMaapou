@@ -323,12 +323,14 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import DataRow from '@/components/DataRow.vue'
-import LinkDataRow from '@/components/LinkDataRow.vue'
-import Tabs from '@/components/Tabs.vue'
-import LeafletMap from '@/components/map/LeafletMap.vue'
-import TitleCardDetail from '@/components/TitleCardDetail.vue'
-import Detail from '@/components/templates/Detail.vue'
+import slugify from 'slugify'
+
+import DataRow from '~/components/DataRow.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
+import Tabs from '~/components/Tabs.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import Detail from '~/components/templates/Detail.vue'
 
 export default {
   components: {
@@ -377,7 +379,7 @@ export default {
         {
           id: 'analysis',
           isSolr: true,
-          routeName: 'sample-id',
+          routeName: 'sample-id-slug',
           title: 'sample.analyses',
           count: 0,
           props: { sample: sample.id },
@@ -385,28 +387,28 @@ export default {
         {
           id: 'preparation',
           isSolr: true,
-          routeName: 'sample-id-preparations',
+          routeName: 'sample-id-slug-preparations',
           title: 'sample.preparations',
           count: 0,
           props: { sample: sample.id },
         },
         {
           id: 'taxon_list',
-          routeName: 'sample-id-taxa',
+          routeName: 'sample-id-slug-taxa',
           title: 'sample.taxa',
           count: 0,
           props: { sample: sample.id },
         },
         {
           id: 'attachment_link',
-          routeName: 'sample-id-attachments',
+          routeName: 'sample-id-slug-attachments',
           title: 'sample.attachments',
           count: 0,
           props: { sample: sample.id },
         },
         {
           id: 'sample_reference',
-          routeName: 'sample-id-references',
+          routeName: 'sample-id-slug-references',
           title: 'sample.sampleReferences',
           count: 0,
           props: { sample: sample.id },
@@ -414,7 +416,7 @@ export default {
         {
           id: 'analysis_results',
           isSolr: true,
-          routeName: 'sample-id-analysis-results',
+          routeName: 'sample-id-slug-analysis-results',
           title: 'sample.analysisResults',
           count: 0,
           props: { sample: sample.id },
@@ -422,7 +424,7 @@ export default {
         {
           table: 'taxon_list',
           id: 'graphs',
-          routeName: 'sample-id-graphs',
+          routeName: 'sample-id-slug-graphs',
           title: 'locality.graphs',
           count: 0,
           props: {
@@ -441,8 +443,25 @@ export default {
             })
         )
       )
+      const name = `${
+        sample.number || sample.number_additional || sample.number_field
+      }`.trim()
+      // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
+      const slug = slugify(`${isEmpty(name) ? sample.id : name}`, {
+        lower: true,
+      })
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

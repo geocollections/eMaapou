@@ -186,21 +186,40 @@
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
+
+      <v-card v-if="rawLasFileContent">
+        <v-card-title></v-card-title>
+
+        <v-card-text>
+          <las-chart
+            :chart-title="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            :file-data="rawLasFileContent"
+          />
+        </v-card-text>
+      </v-card>
     </template>
   </detail>
 </template>
 
 <script>
 import { isEmpty, isNull } from 'lodash'
-import LeafletMap from '@/components/map/LeafletMap'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import slugify from 'slugify'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
+import LasChart from '~/components/chart/LasChart'
 
 export default {
   components: {
+    LasChart,
     TitleCardDetail,
     Tabs,
     LeafletMap,
@@ -222,30 +241,70 @@ export default {
       const ids = drillcoreResponse?.ids
       const drillcore = drillcoreResponse
 
+      // START of getting .las file data
+      // At first checking if any related .las files
+      let rawLasFileContent
+      if (drillcore?.locality) {
+        const lasFileResponse = await app.$services.sarvREST.getResourceList(
+          'attachment_link',
+          {
+            defaultParams: {
+              attachment__uuid_filename__iendswith: '.las',
+              locality: drillcore.locality.id,
+              fields: 'attachment',
+            },
+          }
+        )
+
+        if (
+          lasFileResponse?.count > 0 &&
+          lasFileResponse?.items?.[0]?.attachment
+        ) {
+          const rawLasfileContentResponse =
+            await app.$services.sarvREST.getResource(
+              'file',
+              lasFileResponse?.items?.[0]?.attachment,
+              {
+                params: {
+                  raw_content: 'true',
+                },
+              }
+            )
+
+          rawLasFileContent = rawLasfileContentResponse
+          if (
+            typeof rawLasfileContentResponse === 'string' &&
+            rawLasFileContent.startsWith('Error: ')
+          )
+            rawLasFileContent = ''
+        }
+      }
+      // END of getting .las file data
+
       const tabs = [
         {
-          routeName: 'drillcore-id',
+          routeName: 'drillcore-id-slug',
           title: 'drillcore.drillcoreBoxesTitle',
           count: drillcore?.boxes || 0,
           props: { drillcore: drillcore.id },
         },
         {
           id: 'locality_description',
-          routeName: 'drillcore-id-descriptions',
+          routeName: 'drillcore-id-slug-descriptions',
           title: 'drillcore.localityDescriptions',
           count: 0,
           props: {},
         },
         {
           id: 'locality_reference',
-          routeName: 'drillcore-id-references',
+          routeName: 'drillcore-id-slug-references',
           title: 'drillcore.localityReferences',
           count: 0,
           props: {},
         },
         {
           id: 'attachment_link',
-          routeName: 'drillcore-id-attachments',
+          routeName: 'drillcore-id-slug-attachments',
           title: 'drillcore.attachments',
           count: 0,
           props: {},
@@ -253,7 +312,7 @@ export default {
         {
           id: 'sample',
           isSolr: true,
-          routeName: 'drillcore-id-samples',
+          routeName: 'drillcore-id-slug-samples',
           title: 'drillcore.samples',
           count: 0,
           props: {},
@@ -261,7 +320,7 @@ export default {
         {
           id: 'analysis',
           isSolr: true,
-          routeName: 'drillcore-id-analyses',
+          routeName: 'drillcore-id-slug-analyses',
           title: 'drillcore.analyses',
           count: 0,
           props: {},
@@ -269,7 +328,7 @@ export default {
         {
           id: 'specimen',
           isSolr: true,
-          routeName: 'drillcore-id-specimens',
+          routeName: 'drillcore-id-slug-specimens',
           title: 'drillcore.specimens',
           count: 0,
           props: {},
@@ -278,7 +337,7 @@ export default {
           table: 'analysis_results',
           id: 'graphs',
           isSolr: true,
-          routeName: 'drillcore-id-graphs',
+          routeName: 'drillcore-id-slug-graphs',
           title: 'locality.graphs',
           count: 0,
           props: { drillcoreObject: drillcore },
@@ -315,7 +374,23 @@ export default {
           )
         : tabs
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const slug = slugify(
+        app.$translate({ et: drillcore.drillcore, en: drillcore.drillcore_en }),
+        { lower: true }
+      )
+
+      const slugRoute = app.localeRoute({
+        ...route,
+        name: app.getRouteBaseName().includes('-slug')
+          ? app.getRouteBaseName()
+          : `${app.getRouteBaseName()}-slug`,
+        params: {
+          ...route.params,
+          slug,
+        },
+      })
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {
@@ -323,6 +398,7 @@ export default {
         ids,
         initActiveTab: validPath,
         tabs: hydratedTabs,
+        rawLasFileContent,
       }
     } catch (err) {
       error({
