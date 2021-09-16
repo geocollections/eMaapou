@@ -278,7 +278,6 @@
 <script>
 import { isNil, isEmpty } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
-import slugify from 'slugify'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import DataRow from '~/components/DataRow.vue'
@@ -287,6 +286,7 @@ import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import LasChart from '~/components/chart/LasChart'
+import { TABS_LOCALITY } from '~/constants'
 
 export default {
   components: {
@@ -299,9 +299,19 @@ export default {
     Detail,
     ImageBar,
   },
-  async asyncData({ params, route, app, error, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $translate,
+    $createSlugRoute,
+  }) {
     try {
-      const localityResponse = await app.$services.sarvREST.getResource(
+      const localityResponse = await $services.sarvREST.getResource(
         'locality',
         params.id,
         {
@@ -313,7 +323,7 @@ export default {
       const ids = localityResponse?.ids
       const locality = localityResponse
 
-      const drillcoreResponse = await app.$services.sarvREST.getResourceList(
+      const drillcoreResponse = await $services.sarvREST.getResourceList(
         'drillcore',
         {
           defaultParams: {
@@ -338,7 +348,7 @@ export default {
       //
       // const attachmentsOutcrop = attachmentOutcropResponse.items ?? []
 
-      const attachmentResponse = await app.$services.sarvSolr.getResourceList(
+      const attachmentResponse = await $services.sarvSolr.getResourceList(
         'attachment',
         {
           defaultParams: {
@@ -352,7 +362,7 @@ export default {
 
       // START of getting .las file data
       // At first checking if any related .las files
-      const lasFileResponse = await app.$services.sarvREST.getResourceList(
+      const lasFileResponse = await $services.sarvREST.getResourceList(
         'attachment_link',
         {
           defaultParams: {
@@ -368,16 +378,15 @@ export default {
         lasFileResponse?.count > 0 &&
         lasFileResponse?.items?.[0]?.attachment
       ) {
-        const rawLasfileContentResponse =
-          await app.$services.sarvREST.getResource(
-            'file',
-            lasFileResponse?.items?.[0]?.attachment,
-            {
-              params: {
-                raw_content: 'true',
-              },
-            }
-          )
+        const rawLasfileContentResponse = await $services.sarvREST.getResource(
+          'file',
+          lasFileResponse?.items?.[0]?.attachment,
+          {
+            params: {
+              raw_content: 'true',
+            },
+          }
+        )
 
         rawLasFileContent = rawLasfileContentResponse
         if (
@@ -388,125 +397,40 @@ export default {
       }
       // END of getting .las file data
 
-      const tabs = [
-        {
-          id: 'locality_reference',
-          routeName: 'locality-id-slug',
-          title: 'locality.references',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_description',
-          routeName: 'locality-id-slug-descriptions',
-          title: 'locality.descriptions',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'locality-id-slug-attachments',
-          title: 'locality.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          routeName: 'locality-id-slug-samples',
-          title: 'locality.samples',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          routeName: 'locality-id-slug-specimens',
-          title: 'locality.specimens',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_synonym',
-          routeName: 'locality-id-slug-synonyms',
-          title: 'locality.synonyms',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'stratigraphy_stratotype',
-          routeName: 'locality-id-slug-stratotypes',
-          title: 'locality.stratotypes',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'locality-id-slug-analyses',
-          title: 'locality.analyses',
-          count: 0,
-          props: {},
-        },
-        {
-          table: 'analysis_results',
-          id: 'graphs',
-          isSolr: true,
-          routeName: 'locality-id-slug-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: { localityObject: locality },
-        },
-      ]
+      const tabsObject = TABS_LOCALITY
 
-      if (drillcore) {
-        tabs.splice(3, 0, {
-          routeName: 'locality-id-drillcore-boxes',
-          title: 'locality.drillcoreBoxes',
-          count: drillcore.boxes,
-          props: { drillcore: drillcore.id },
-        })
-        tabs.join()
-      }
+      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
+      tabsObject.byIds.boxes.props.drillcore = drillcore ? drillcore.id : null
 
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
+      tabsObject.byIds.analysis_results.props.localityObject = locality
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await $hydrateTab(tab, {
+              props: {
+                locality: locality.id,
+              },
+              countParams: {
                 solr: {
                   default: {
                     fq: `locality_id:${params.id}`,
                   },
                 },
                 api: { default: { locality: locality.id } },
-              })
-          )
+              },
+            })
         )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          locality: locality.id,
-        })
       )
 
-      const slug = slugify(
-        app.$translate({ et: locality.locality, en: locality.locality_en }),
-        { lower: true }
+      const slugRoute = $createSlugRoute(
+        route,
+        $translate({ et: locality.locality, en: locality.locality_en })
       )
 
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

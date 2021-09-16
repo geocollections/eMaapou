@@ -13,12 +13,6 @@ import DatasetReferenceTable from '~/components/tables/DatasetReferenceTable.vue
 import { DATASET_REFERENCE } from '~/constants'
 export default {
   components: { DatasetReferenceTable },
-  props: {
-    dataset: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       references: [],
@@ -33,9 +27,9 @@ export default {
         'dataset_reference',
         {
           ...tableState,
-          isValid: isNil(this.dataset),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            dataset: this.dataset,
+            dataset: this.$route.params.id,
             nest: 2,
           },
           queryFields: this.$getQueryFields(DATASET_REFERENCE.queryFields),

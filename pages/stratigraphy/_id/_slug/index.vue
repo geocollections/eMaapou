@@ -14,12 +14,6 @@ import StratigraphyReferenceTable from '~/components/tables/StratigraphyReferenc
 
 export default {
   components: { StratigraphyReferenceTable },
-  props: {
-    stratigraphy: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       options: STRATIGRAPHY_REFERENCE.options,
@@ -42,9 +36,9 @@ export default {
         'stratigraphy_reference',
         {
           ...tableState,
-          isValid: isNil(this.stratigraphy),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            stratigraphy: this.stratigraphy,
+            stratigraphy: this.$route.params.id,
             nest: 1,
           },
           queryFields: this.$getQueryFields(STRATIGRAPHY_REFERENCE.queryFields),

@@ -15,12 +15,6 @@ import DatasetGeolocationTable from '@/components/tables/DatasetGeolocationTable
 import { DATASET_GEOLOCATIONS } from '~/constants'
 export default {
   components: { DatasetGeolocationTable },
-  props: {
-    dataset: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       geolocations: [],
@@ -39,9 +33,9 @@ export default {
       const geolocationsResponse =
         await this.$services.sarvREST.getResourceList('dataset_geolocation', {
           ...tableState,
-          isValid: isNil(this.dataset),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            dataset: this.dataset,
+            dataset: this.$route.params.id,
             nest: 1,
           },
           queryFields: this.$getQueryFields(DATASET_GEOLOCATIONS.queryFields),

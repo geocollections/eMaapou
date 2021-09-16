@@ -33,9 +33,9 @@ export default {
         'stratigraphy_synonym',
         {
           ...tableState,
-          isValid: isNil(this.stratigraphy),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            stratigraphy: this.stratigraphy,
+            stratigraphy: this.$route.params.id,
             nest: 1,
           },
           queryFields: this.$getQueryFields(STRATIGRAPHY_SYNONYM.queryFields),

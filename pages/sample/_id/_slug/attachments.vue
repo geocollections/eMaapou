@@ -13,12 +13,6 @@ import AttachmentTable from '~/components/tables/AttachmentTable'
 import { ATTACHMENT_LINK } from '~/constants'
 export default {
   components: { AttachmentTable },
-  props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       attachments: [],
@@ -33,9 +27,9 @@ export default {
         'attachment_link',
         {
           ...tableState,
-          isValid: isNil(this.sample),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            sample: `${this.sample}`,
+            sample: `${this.$route.params.id}`,
             nest: 2,
           },
           queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),

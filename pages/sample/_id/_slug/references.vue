@@ -13,12 +13,6 @@ import SampleReferenceTable from '@/components/tables/SampleReferenceTable'
 import { SAMPLE_REFERENCE } from '~/constants'
 export default {
   components: { SampleReferenceTable },
-  props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       references: [],
@@ -33,9 +27,9 @@ export default {
         'sample_reference',
         {
           ...tableState,
-          isValid: isNil(this.sample),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            sample: this.sample,
+            sample: this.$route.params.id,
           },
           queryFields: this.$getQueryFields(SAMPLE_REFERENCE.queryFields),
         }

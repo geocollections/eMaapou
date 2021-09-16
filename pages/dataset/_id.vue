@@ -182,7 +182,6 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import slugify from 'slugify'
 
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -190,6 +189,7 @@ import Detail from '~/components/templates/Detail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
+import { TABS_DATASET } from '~/constants'
 
 export default {
   components: {
@@ -200,9 +200,18 @@ export default {
     DataRow,
     LinkDataRow,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $createSlugRoute,
+  }) {
     try {
-      const datasetResponse = await app.$services.sarvREST.getResource(
+      const datasetResponse = await $services.sarvREST.getResource(
         'dataset',
         params.id,
         {
@@ -214,7 +223,7 @@ export default {
       const ids = datasetResponse?.ids
       const dataset = datasetResponse
 
-      const parameterResponse = await app.$services.sarvSolr.getResource(
+      const parameterResponse = await $services.sarvSolr.getResource(
         'dataset',
         params.id,
         { fl: 'parameter_index_list,parameter_list' }
@@ -233,7 +242,7 @@ export default {
         (param) => param.value
       )
 
-      const doiResponse = await app.$services.sarvREST.getResourceList('doi', {
+      const doiResponse = await $services.sarvREST.getResourceList('doi', {
         defaultParams: {
           dataset: params.id,
           nest: 1,
@@ -246,8 +255,9 @@ export default {
         reference: doiResponse.items?.[0]?.reference?.reference,
       }
 
-      const localityGroupedResponse =
-        await app.$services.sarvSolr.getResourceList('analysis', {
+      const localityGroupedResponse = await $services.sarvSolr.getResourceList(
+        'analysis',
+        {
           useRawSolr: true,
           defaultParams: {
             fq: `dataset_id:${dataset.id}`,
@@ -256,7 +266,8 @@ export default {
             'group.field': ['locality_id', 'site_id'],
             rows: 10000,
           },
-        })
+        }
+      )
 
       const localities = localityGroupedResponse?.grouped?.locality_id?.groups
         ?.map((item) => item?.doclist?.docs?.[0])
@@ -266,114 +277,33 @@ export default {
         .filter((item) => !isEmpty(item) && item?.site_id)
       const locations = localities.concat(sites)
 
-      const tabs = [
-        {
-          id: 'dataset_analysis',
-          table: 'dataset_analysis',
-          routeName: 'dataset-id-slug',
-          title: 'dataset.analyses',
-          count: 0,
-          props: {
-            dataset: dataset.id,
-            parameters: selectedParameters,
-          },
-        },
-        {
-          id: 'dataset_reference',
-          table: 'dataset_reference',
-          routeName: 'dataset-id-slug-references',
-          title: 'dataset.references',
-          count: 0,
-          props: { dataset: dataset.id },
-        },
-        {
-          id: 'attachment_link',
-          table: 'attachment_link',
-          routeName: 'dataset-id-slug-attachments',
-          title: 'dataset.attachments',
-          count: 0,
-          props: { dataset: dataset.id },
-        },
-        {
-          id: 'dataset_author',
-          table: 'dataset_author',
-          routeName: 'dataset-id-slug-authors',
-          title: 'dataset.authors',
-          count: 0,
-          props: { dataset: dataset.id },
-        },
-        {
-          id: 'dataset_geolocation',
-          table: 'dataset_geolocation',
-          routeName: 'dataset-id-slug-geolocations',
-          title: 'dataset.geolocations',
-          count: 0,
-          props: { dataset: dataset.id },
-        },
-      ]
+      const tabsObject = TABS_DATASET
 
-      if (locations.length === 1) {
-        tabs.push({
-          table: 'analysis_results',
-          id: 'analysis_results',
-          isSolr: true,
-          routeName: 'dataset-id-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: { dataset: dataset.id, datasetObject: dataset },
-        })
-      }
+      tabsObject.byIds.dataset_analysis.props.parameters = selectedParameters
 
-      const solrParams = { fq: `dataset_id:${dataset.id}` }
-      const apiParams = { dataset: dataset.id }
+      tabsObject.byIds.graphs.count =
+        locations.length === 1 ? locations.length : 0
 
-      const forLoop = async () => {
-        const filteredTabs = tabs.filter((item) => !!item.id)
-        for (const item of filteredTabs) {
-          let countResponse
-          if (item?.isSolr)
-            countResponse = await app.$services.sarvSolr.getResourceCount(
-              item.id,
-              solrParams,
-              'dataset'
-            )
-          else
-            countResponse = await app.$services.sarvREST.getResourceCount(
-              item.id,
-              apiParams,
-              'dataset'
-            )
-          item.count = countResponse?.count ?? 0
-        }
-      }
-      await forLoop()
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
       const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateCount(tab, {
-              api: {
-                default: { dataset: dataset.id },
-              },
-            })
+        tabs.map(async (tab) =>
+          tab.id !== 'analysis_results'
+            ? await $hydrateTab(tab, {
+                countParams: {
+                  api: {
+                    default: { dataset: dataset.id },
+                  },
+                },
+              })
+            : tab
         )
       )
+      const slugRoute = $createSlugRoute(route, dataset.title)
 
-      const slug = slugify(dataset.title, { lower: true })
-
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
+
       return {
         dataset,
         ids,

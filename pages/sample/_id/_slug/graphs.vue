@@ -8,10 +8,6 @@ import PieChart from '@/components/chart/PieChart'
 export default {
   components: { PieChart },
   props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
     sampleObject: {
       type: Object,
       default: () => {},

@@ -200,8 +200,6 @@
 </template>
 
 <script>
-import slugify from 'slugify'
-
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
@@ -209,6 +207,7 @@ import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
+import { TABS_SPECIMEN } from '~/constants'
 export default {
   components: {
     Detail,
@@ -219,9 +218,18 @@ export default {
     Tabs,
     ImageBar,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $createSlugRoute,
+  }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'specimen',
         params.id,
         { params: { nest: 2 } }
@@ -229,67 +237,39 @@ export default {
       const ids = detailViewResponse?.ids
       const specimen = detailViewResponse
 
-      const specimenNameResponse = await app.$services.sarvSolr.getResource(
+      const specimenNameResponse = await $services.sarvSolr.getResource(
         'specimen',
         params.id
       )
 
       const specimenAlt = specimenNameResponse?.[0]
 
-      const tabs = [
-        {
-          id: 'specimen_identification',
-          table: 'specimen_identification',
-          isSolr: false,
-          routeName: 'specimen-id-slug',
-          title: 'specimen.identifications',
-          count: 0,
-          props: { specimen: specimen.id },
-        },
-        {
-          id: 'specimen_reference',
-          table: 'specimen_reference',
-          isSolr: false,
-          routeName: 'specimen-id-slug-references',
-          title: 'specimen.references',
-          count: 0,
-          props: { specimen: specimen.id },
-        },
-      ]
+      const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
 
       const hydratedTabs = await Promise.all(
         tabs.map(
           async (tab) =>
-            await app.$hydrateCount(tab, {
-              solr: { default: { fq: `specimen_id:${specimen.id}` } },
-              api: {
-                default: { specimen: specimen.id },
-                specimen_reference: { specimen: specimen.id },
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: { default: { fq: `specimen_id:${specimen.id}` } },
+                api: {
+                  default: { specimen: specimen.id },
+                  specimen_reference: { specimen: specimen.id },
+                },
               },
             })
         )
       )
 
-      const slug = slugify(
-        `${specimen.database.acronym} ${specimen.specimen_id}`,
-        { lower: true }
+      const slugRoute = $createSlugRoute(
+        route,
+        `${specimen.database.acronym} ${specimen.specimen_id}`
       )
 
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
-      const attachmentResponse = await app.$services.sarvSolr.getResourceList(
+      const attachmentResponse = await $services.sarvSolr.getResourceList(
         'attachment',
         {
           defaultParams: {

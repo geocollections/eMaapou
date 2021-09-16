@@ -15,12 +15,6 @@ import { SAMPLE } from '~/constants'
 
 export default {
   components: { SampleTable },
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       samples: [],
@@ -35,9 +29,9 @@ export default {
         'sample',
         {
           ...tableState,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `locality_id:${this.locality}`,
+            fq: `locality_id:${this.$route.params.id}`,
           },
           queryFields: this.$getQueryFields(SAMPLE.queryFields),
         }

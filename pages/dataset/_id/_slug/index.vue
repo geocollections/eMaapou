@@ -16,10 +16,6 @@ import { DATASET_ANALYSIS } from '~/constants'
 export default {
   components: { DatasetAnalysisTable },
   props: {
-    dataset: {
-      type: Number,
-      default: null,
-    },
     parameters: {
       type: Array,
       default: () => [],
@@ -51,9 +47,9 @@ export default {
         'analytical_data',
         {
           ...tableState,
-          isValid: isNil(this.dataset),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `dataset_id:${this.dataset}`,
+            fq: `dataset_id:${this.$route.params.id}`,
           },
           queryFields: this.mergedQueryFields,
         }

@@ -14,12 +14,6 @@ import StratigraphyTable from '~/components/tables/StratigraphyTable'
 
 export default {
   components: { StratigraphyTable },
-  props: {
-    stratigraphy: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       options: STRATIGRAPHY.options,
@@ -42,9 +36,9 @@ export default {
         'stratigraphy',
         {
           ...tableState,
-          isValid: isNil(this.stratigraphy),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `parent_id:${this.stratigraphy}`,
+            fq: `parent_id:${this.$route.params.id}`,
           },
           queryFields: this.$getQueryFields(STRATIGRAPHY.queryFields),
         }

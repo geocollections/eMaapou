@@ -14,12 +14,6 @@ import { ANALYSIS_RESULT } from '~/constants'
 import AnalysisResultTable from '~/components/tables/AnalysisResultTable'
 export default {
   components: { AnalysisResultTable },
-  props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       analysisResults: [],
@@ -39,9 +33,9 @@ export default {
         'analysis_results',
         {
           ...tableState,
-          isValid: isNil(this.sample),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `sample_id:${this.sample}`,
+            fq: `sample_id:${this.$route.params.id}`,
           },
           queryFields: this.$getQueryFields(ANALYSIS_RESULT.queryFields),
         }

@@ -15,12 +15,6 @@ import { ANALYSIS_RESULT } from '~/constants'
 import AnalysisResultTable from '~/components/tables/AnalysisResultTable.vue'
 export default {
   components: { AnalysisResultTable },
-  props: {
-    analysis: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       analysisResults: [],
@@ -35,9 +29,9 @@ export default {
       const analysisResultResponse =
         await this.$services.sarvSolr.getResourceList('analysis_results', {
           ...tableState,
-          isValid: isNil(this.analysis),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `analysis_id:${this.analysis}`,
+            fq: `analysis_id:${this.$route.params.id}`,
           },
           queryFields: this.$getQueryFields(ANALYSIS_RESULT.queryFields),
         })

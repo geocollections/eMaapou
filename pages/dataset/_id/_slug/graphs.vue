@@ -1,7 +1,7 @@
 <template>
   <scatter-chart
     table-key="dataset_id"
-    :table-id="dataset"
+    :table-id="$route.params.id"
     :chart-title="chartTitle"
   />
 </template>
@@ -12,10 +12,6 @@ import ScatterChart from '~/components/chart/ScatterChart'
 export default {
   components: { ScatterChart },
   props: {
-    dataset: {
-      type: Number,
-      default: null,
-    },
     datasetObject: {
       type: Object,
       default: () => {},

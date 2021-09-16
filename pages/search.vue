@@ -45,158 +45,40 @@ import { mapFields } from 'vuex-map-fields'
 import ButtonTabs from '~/components/ButtonTabs.vue'
 import GlobalSearch from '~/components/search/GlobalSearch.vue'
 import TitleCard from '~/components/TitleCard.vue'
+import { TABS_QUICK_SEARCH } from '~/constants'
 export default {
   name: 'QuickSearch',
   components: { ButtonTabs, GlobalSearch, TitleCard },
   // layout: 'search',
-  async asyncData({ params, route, error, app, store, redirect }) {
+  async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab }) {
     try {
-      const tabs = [
-        {
-          id: 'locality',
-          routeName: 'search-localities',
-          title: 'landing.localities',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'site',
-          routeName: 'search-sites',
-          title: 'landing.sites',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'drillcore',
-          routeName: 'search',
-          title: 'landing.drillcores',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          routeName: 'search-samples',
-          title: 'landing.samples',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'analysis',
-          routeName: 'search-analyses',
-          title: 'landing.analyses',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'preparation',
-          routeName: 'search-preparations',
-          path: '/localities',
-          title: 'landing.preparations',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'reference',
-          routeName: 'search-references',
-          title: 'landing.references',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          routeName: 'search-specimens',
-          title: 'landing.specimens',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'doi',
-          routeName: 'search-dois',
-          title: 'landing.dois',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'dataset',
-          routeName: 'search-datasets',
-          title: 'landing.datasets',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'attachment',
-          routeName: 'search-files',
-          title: 'landing.attachments',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'photo',
-          table: 'attachment',
-          routeName: 'search-photos',
-          title: 'landing.photos',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'taxon',
-          routeName: 'search-taxa',
-          title: 'landing.taxa',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'rock',
-          routeName: 'search-rocks',
-          title: 'landing.rocks',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'stratigraphy',
-          routeName: 'search-stratigraphy',
-          title: 'landing.stratigraphy',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-      ]
+      const tabs = TABS_QUICK_SEARCH.allIds.map(
+        (id) => TABS_QUICK_SEARCH.byIds[id]
+      )
 
       const hydratedTabs = await Promise.all(
         tabs.map(
           async (tab) =>
-            await app.$hydrateCount(tab, {
-              solr: {
-                default: {
-                  q: isEmpty(store.state.search.searchQuery)
-                    ? '*'
-                    : `${store.state.search.searchQuery}`,
-                },
-                photo: {
-                  q: isEmpty(store.state.search.searchQuery)
-                    ? '*'
-                    : `${store.state.search.searchQuery}`,
-                  fq: 'specimen_image_attachment:2',
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: {
+                    q: isEmpty(store.state.search.searchQuery)
+                      ? '*'
+                      : `${store.state.search.searchQuery}`,
+                  },
+                  photo: {
+                    q: isEmpty(store.state.search.searchQuery)
+                      ? '*'
+                      : `${store.state.search.searchQuery}`,
+                    fq: 'specimen_image_attachment:2',
+                  },
                 },
               },
             })
         )
       )
-      const validPath = app.$getMaxTab(route, hydratedTabs)
+      const validPath = $getMaxTab(route, hydratedTabs)
 
       if (validPath !== route.path) redirect(validPath)
       return {
@@ -240,14 +122,16 @@ export default {
       this.tabs = await Promise.all(
         this.tabs.map(
           async (tab) =>
-            await this.$hydrateCount(tab, {
-              solr: {
-                default: {
-                  q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
-                },
-                photo: {
-                  q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
-                  fq: 'specimen_image_attachment:2',
+            await this.$hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: {
+                    q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
+                  },
+                  photo: {
+                    q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
+                    fq: 'specimen_image_attachment:2',
+                  },
                 },
               },
             })

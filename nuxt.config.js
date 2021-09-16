@@ -67,6 +67,7 @@ export default {
     { src: '~plugins/afterEach.js', mode: 'client' },
     { src: '~plugins/vueECharts.js', mode: 'client' },
     '~/plugins/formatDate.js',
+    '~/plugins/slug.js', // this might be only called on server-side
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

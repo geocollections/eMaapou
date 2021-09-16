@@ -14,12 +14,6 @@ import { STRATOTYPE } from '~/constants'
 
 export default {
   components: { StratotypeTable },
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       stratotypes: [],
@@ -34,9 +28,9 @@ export default {
         'stratigraphy_stratotype',
         {
           ...tableState,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            locality: this.locality,
+            locality: this.$route.params.id,
             nest: 1,
           },
           queryFields: this.$getQueryFields(STRATOTYPE.queryFields),

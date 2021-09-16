@@ -240,12 +240,12 @@ export default {
       page: 1,
       boxes: [],
       search: '',
+      paginateBy: 5,
     }
   },
   methods: {
     isNull,
     infiniteHandler($state) {
-      const paginateBy = 5
       this.$services.sarvREST
         .getResourceList('attachment_link', {
           defaultParams: {
@@ -256,22 +256,20 @@ export default {
           },
           options: {
             page: this.page,
-            itemsPerPage: paginateBy,
+            itemsPerPage: this.paginateBy,
           },
           search: this.search,
           queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
         })
         .then((res) => {
-          if (!res.page) {
+          if (!res.next) {
             this.boxes.push(...res.items)
             $state.loaded()
             $state.complete()
-          } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
+          } else {
             this.page += 1
             this.boxes.push(...res.items)
             $state.loaded()
-          } else {
-            $state.complete()
           }
         })
         .catch(() => {

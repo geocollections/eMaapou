@@ -133,13 +133,22 @@ import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow'
 import LinkDataRow from '~/components/LinkDataRow'
 import Detail from '~/components/templates/Detail.vue'
+import { TABS_PREPARATION } from '~/constants'
 
 export default {
   components: { LinkDataRow, DataRow, TitleCardDetail, Tabs, Detail },
 
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+  }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'preparation',
         params.id,
         {
@@ -151,42 +160,23 @@ export default {
       const ids = detailViewResponse?.ids
       const preparation = detailViewResponse
 
-      const tabs = [
-        {
-          id: 'attachment_link',
-          routeName: 'preparation-id',
-          title: 'preparation.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'taxon_list',
-          isSolr: false,
-          routeName: 'preparation-id-taxa',
-          title: 'preparation.taxa',
-          count: 0,
-          props: {},
-        },
-      ]
-
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: { default: { fq: `preparation_id:${preparation.id}` } },
-                api: { default: { preparation: preparation.id } },
-              })
-          )
-        )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          preparation: preparation.id,
-        })
+      const tabs = TABS_PREPARATION.allIds.map(
+        (id) => TABS_PREPARATION.byIds[id]
       )
 
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: { default: { fq: `preparation_id:${preparation.id}` } },
+                api: { default: { preparation: preparation.id } },
+              },
+            })
+        )
+      )
+
+      const validPath = $validateTabRoute(route, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

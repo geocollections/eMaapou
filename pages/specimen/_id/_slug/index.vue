@@ -13,12 +13,6 @@ import SpecimenIdentificationTable from '~/components/tables/SpecimenIdentificat
 import { SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   components: { SpecimenIdentificationTable },
-  props: {
-    specimen: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       identifications: [],
@@ -39,9 +33,9 @@ export default {
           'specimen_identification',
           {
             ...tableState,
-            isValid: isNil(this.specimen),
+            isValid: isNil(this.$route.params.id),
             defaultParams: {
-              specimen: this.specimen,
+              specimen: this.$route.params.id,
               nest: 1,
             },
             queryFields: this.$getQueryFields(

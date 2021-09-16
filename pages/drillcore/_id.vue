@@ -208,7 +208,6 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
-import slugify from 'slugify'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -216,6 +215,7 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
 import LasChart from '~/components/chart/LasChart'
+import { TABS_DRILLCORE } from '~/constants'
 
 export default {
   components: {
@@ -227,9 +227,19 @@ export default {
     LinkDataRow,
     Detail,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $translate,
+    $createSlugRoute,
+  }) {
     try {
-      const drillcoreResponse = await app.$services.sarvREST.getResource(
+      const drillcoreResponse = await $services.sarvREST.getResource(
         'drillcore',
         params.id,
         {
@@ -245,7 +255,7 @@ export default {
       // At first checking if any related .las files
       let rawLasFileContent
       if (drillcore?.locality) {
-        const lasFileResponse = await app.$services.sarvREST.getResourceList(
+        const lasFileResponse = await $services.sarvREST.getResourceList(
           'attachment_link',
           {
             defaultParams: {
@@ -261,7 +271,7 @@ export default {
           lasFileResponse?.items?.[0]?.attachment
         ) {
           const rawLasfileContentResponse =
-            await app.$services.sarvREST.getResource(
+            await $services.sarvREST.getResource(
               'file',
               lasFileResponse?.items?.[0]?.attachment,
               {
@@ -281,75 +291,20 @@ export default {
       }
       // END of getting .las file data
 
-      const tabs = [
-        {
-          routeName: 'drillcore-id-slug',
-          title: 'drillcore.drillcoreBoxesTitle',
-          count: drillcore?.boxes || 0,
-          props: { drillcore: drillcore.id },
-        },
-        {
-          id: 'locality_description',
-          routeName: 'drillcore-id-slug-descriptions',
-          title: 'drillcore.localityDescriptions',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_reference',
-          routeName: 'drillcore-id-slug-references',
-          title: 'drillcore.localityReferences',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'drillcore-id-slug-attachments',
-          title: 'drillcore.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          isSolr: true,
-          routeName: 'drillcore-id-slug-samples',
-          title: 'drillcore.samples',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'drillcore-id-slug-analyses',
-          title: 'drillcore.analyses',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          isSolr: true,
-          routeName: 'drillcore-id-slug-specimens',
-          title: 'drillcore.specimens',
-          count: 0,
-          props: {},
-        },
-        {
-          table: 'analysis_results',
-          id: 'graphs',
-          isSolr: true,
-          routeName: 'drillcore-id-slug-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: { drillcoreObject: drillcore },
-        },
-      ]
+      const tabsObject = TABS_DRILLCORE
+
+      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
+      tabsObject.byIds.analysis_results.props = drillcore
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
       const hydratedTabs = drillcore?.locality?.id
-        ? (
-            await Promise.all(
-              tabs.map(
-                async (tab) =>
-                  await app.$hydrateCount(tab, {
+        ? await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await $hydrateTab(tab, {
+                  props: { locality: drillcore?.locality?.id },
+                  countParams: {
                     solr: {
                       default: {
                         fq: `locality_id :${drillcore?.locality?.id}`,
@@ -363,34 +318,18 @@ export default {
                         drillcore: drillcore.id,
                       },
                     },
-                  })
-              )
+                  },
+                })
             )
-          ).map((tab) =>
-            app.$populateProps(tab, {
-              ...tab.props,
-              locality: drillcore?.locality?.id,
-            })
           )
         : tabs
 
-      const slug = slugify(
-        app.$translate({ et: drillcore.drillcore, en: drillcore.drillcore_en }),
-        { lower: true }
+      const slugRoute = $createSlugRoute(
+        route,
+        $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
       )
 
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

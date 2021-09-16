@@ -14,12 +14,7 @@ import DescriptionTable from '~/components/tables/DescriptionTable.vue'
 
 export default {
   components: { DescriptionTable },
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
+
   data() {
     return {
       descriptions: [],
@@ -35,9 +30,9 @@ export default {
         'locality_description',
         {
           ...tableState,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            locality: this.locality,
+            locality: this.$route.params.id,
             nest: 1,
           },
           queryFields: this.$getQueryFields(DESCRIPTION.queryFields),

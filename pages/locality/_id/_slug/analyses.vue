@@ -14,12 +14,6 @@ import { ANALYSIS } from '~/constants'
 import AnalysisTable from '~/components/tables/AnalysisTable'
 export default {
   components: { AnalysisTable },
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       analyses: [],
@@ -39,9 +33,9 @@ export default {
         'analysis',
         {
           ...tableState,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `locality_id:${this.locality}`,
+            fq: `locality_id:${this.$route.params.id}`,
           },
           queryFields: this.$getQueryFields(ANALYSIS.queryFields),
         }

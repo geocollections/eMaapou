@@ -13,12 +13,6 @@ import LocalityReferenceTable from '~/components/tables/LocalityReferenceTable.v
 import { LOCALITY_REFERENCE } from '~/constants'
 export default {
   components: { LocalityReferenceTable },
-  props: {
-    area: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       references: [],
@@ -33,9 +27,9 @@ export default {
         'locality_reference',
         {
           ...tableState,
-          isValid: isNil(this.area),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            area: this.area,
+            area: this.$route.params.id,
           },
           queryFields: this.$getQueryFields(LOCALITY_REFERENCE.queryFields),
         }

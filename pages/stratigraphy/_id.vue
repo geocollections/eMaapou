@@ -236,8 +236,7 @@
 
 <script>
 import { isEmpty, isNull, isNil } from 'lodash'
-import slugify from 'slugify'
-import { STRATOTYPE } from '~/constants'
+import { STRATOTYPE, TABS_STRATIGRAPHY } from '~/constants'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -255,9 +254,20 @@ export default {
     LeafletMap,
     Detail,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $translate,
+    $createSlugRoute,
+    $getQueryFields,
+  }) {
     try {
-      const stratigraphyResponse = await app.$services.sarvREST.getResource(
+      const stratigraphyResponse = await $services.sarvREST.getResource(
         'stratigraphy',
         params.id,
         {
@@ -271,63 +281,7 @@ export default {
       const ids = stratigraphyResponse?.ids
       const stratigraphy = stratigraphyResponse
 
-      const tabs = [
-        {
-          id: 'stratigraphy_reference',
-          table: 'stratigraphy_reference',
-          routeName: 'stratigraphy-id-slug',
-          title: 'stratigraphy.references',
-          count: 0,
-          props: { stratigraphy: stratigraphy.id },
-          fields: 'reference_id',
-        },
-        {
-          id: 'stratigraphy_synonym',
-          table: 'stratigraphy_synonym',
-          routeName: 'stratigraphy-id-slug-synonyms',
-          title: 'stratigraphy.synonyms',
-          count: 0,
-          props: { stratigraphy: stratigraphy.id },
-        },
-        {
-          id: 'subunits',
-          table: 'stratigraphy',
-          routeName: 'stratigraphy-id-slug-subunits',
-          title: 'stratigraphy.subUnits',
-          isSolr: true,
-          count: 0,
-          props: { stratigraphy: stratigraphy.id },
-        },
-        {
-          id: 'lithostratigraphy',
-          table: 'stratigraphy',
-          routeName: 'stratigraphy-id-slug-related-units',
-          title: 'stratigraphy.relatedUnits',
-          isSolr: true,
-          count: 0,
-          props: { stratigraphy: stratigraphy.id },
-        },
-        {
-          id: 'specimen',
-          table: 'specimen',
-          routeName: 'stratigraphy-id-slug-specimens',
-          title: 'stratigraphy.specimens',
-          isSolr: true,
-          count: 0,
-          props: { stratigraphy },
-        },
-        {
-          id: 'sample',
-          table: 'sample',
-          routeName: 'stratigraphy-id-slug-samples',
-          title: 'stratigraphy.samples',
-          isSolr: true,
-          count: 0,
-          props: { stratigraphy },
-        },
-      ]
-
-      const stratotypeResponse = await app.$services.sarvREST.getResourceList(
+      const stratotypeResponse = await $services.sarvREST.getResourceList(
         'stratigraphy_stratotype',
         {
           ...STRATOTYPE.options,
@@ -336,66 +290,64 @@ export default {
             stratigraphy: stratigraphy.id,
             nest: 2,
           },
-          queryFields: app.$getQueryFields(STRATOTYPE.queryFields),
+          queryFields: $getQueryFields(STRATOTYPE.queryFields),
         }
       )
       const stratotypes = stratotypeResponse.items
       const stratotypeCount = stratotypeResponse.count
 
+      const tabsObject = TABS_STRATIGRAPHY
+
+      tabsObject.byIds.specimen.props.stratigraphy = stratigraphy
+      tabsObject.byIds.sample.props.stratigraphy = stratigraphy
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
       const hydratedTabs = await Promise.all(
         tabs.map(
           async (tab) =>
-            await app.$hydrateCount(tab, {
-              api: {
-                default: {
-                  stratigraphy: stratigraphy.id,
+            await $hydrateTab(tab, {
+              countParams: {
+                api: {
+                  default: {
+                    stratigraphy: stratigraphy.id,
+                  },
+                  stratigraphy_stratotype: {
+                    stratigraphy: stratigraphy.id,
+                  },
+                  stratigraphy_synonym: {
+                    stratigraphy: stratigraphy.id,
+                  },
                 },
-                stratigraphy_stratotype: {
-                  stratigraphy: stratigraphy.id,
+                solr: {
+                  default: {
+                    fq: stratigraphy.hierarchy_string
+                      ? `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*) OR age_hierarchy:(${stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`
+                      : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
+                    // fq: `stratigraphy_id:${stratigraphy.id}`,
+                  },
+                  lithostratigraphy: {
+                    fq: `age_chronostratigraphy:${stratigraphy.id}`,
+                  },
+                  subunits: {
+                    fq: `parent_id:${stratigraphy.id}`,
+                  },
                 },
-                stratigraphy_synonym: {
-                  stratigraphy: stratigraphy.id,
-                },
+                fields: tab.fields ?? 'id',
               },
-              solr: {
-                default: {
-                  fq: stratigraphy.hierarchy_string
-                    ? `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*) OR age_hierarchy:(${stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`
-                    : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
-                  // fq: `stratigraphy_id:${stratigraphy.id}`,
-                },
-                lithostratigraphy: {
-                  fq: `age_chronostratigraphy:${stratigraphy.id}`,
-                },
-                subunits: {
-                  fq: `parent_id:${stratigraphy.id}`,
-                },
-              },
-              fields: tab.fields ?? 'id',
             })
         )
       )
 
-      const slug = slugify(
-        app.$translate({
+      const slugRoute = $createSlugRoute(
+        route,
+        $translate({
           et: stratigraphy.stratigraphy,
           en: stratigraphy.stratigraphy_en,
-        }),
-        { lower: true }
+        })
       )
 
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

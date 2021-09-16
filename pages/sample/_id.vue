@@ -323,7 +323,6 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import slugify from 'slugify'
 
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -331,6 +330,7 @@ import Tabs from '~/components/Tabs.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Detail from '~/components/templates/Detail.vue'
+import { TABS_SAMPLE } from '~/constants'
 
 export default {
   components: {
@@ -341,9 +341,19 @@ export default {
     LeafletMap,
     Detail,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    app,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $createSlugRoute,
+  }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'sample',
         params.id,
         {
@@ -355,8 +365,9 @@ export default {
       const ids = detailViewResponse?.ids
       const sample = detailViewResponse
 
-      const localityGroupedResponse =
-        await app.$services.sarvSolr.getResourceList('analysis', {
+      const localityGroupedResponse = await $services.sarvSolr.getResourceList(
+        'analysis',
+        {
           useRawSolr: true,
           defaultParams: {
             fq: `sample_id:${sample?.id}`,
@@ -365,7 +376,8 @@ export default {
             'group.field': ['locality_id', 'site_id'],
             rows: 10000,
           },
-        })
+        }
+      )
 
       const localities = localityGroupedResponse?.grouped?.locality_id?.groups
         ?.map((item) => item?.doclist?.docs?.[0])
@@ -375,71 +387,78 @@ export default {
         .filter((item) => !isEmpty(item) && item?.site_id)
       const locations = localities.concat(sites)
 
-      const tabs = [
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'sample-id-slug',
-          title: 'sample.analyses',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'preparation',
-          isSolr: true,
-          routeName: 'sample-id-slug-preparations',
-          title: 'sample.preparations',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'taxon_list',
-          routeName: 'sample-id-slug-taxa',
-          title: 'sample.taxa',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'sample-id-slug-attachments',
-          title: 'sample.attachments',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'sample_reference',
-          routeName: 'sample-id-slug-references',
-          title: 'sample.sampleReferences',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'analysis_results',
-          isSolr: true,
-          routeName: 'sample-id-slug-analysis-results',
-          title: 'sample.analysisResults',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          table: 'taxon_list',
-          id: 'graphs',
-          routeName: 'sample-id-slug-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: {
-            sample: sample.id,
-            sampleObject: { ...sample },
-          },
-        },
-      ]
+      // const tabs = [
+      //   {
+      //     id: 'analysis',
+      //     isSolr: true,
+      //     routeName: 'sample-id-slug',
+      //     title: 'sample.analyses',
+      //     count: 0,
+      //     props: { sample: sample.id },
+      //   },
+      //   {
+      //     id: 'preparation',
+      //     isSolr: true,
+      //     routeName: 'sample-id-slug-preparations',
+      //     title: 'sample.preparations',
+      //     count: 0,
+      //     props: { sample: sample.id },
+      //   },
+      //   {
+      //     id: 'taxon_list',
+      //     routeName: 'sample-id-slug-taxa',
+      //     title: 'sample.taxa',
+      //     count: 0,
+      //     props: { sample: sample.id },
+      //   },
+      //   {
+      //     id: 'attachment_link',
+      //     routeName: 'sample-id-slug-attachments',
+      //     title: 'sample.attachments',
+      //     count: 0,
+      //     props: { sample: sample.id },
+      //   },
+      //   {
+      //     id: 'sample_reference',
+      //     routeName: 'sample-id-slug-references',
+      //     title: 'sample.sampleReferences',
+      //     count: 0,
+      //     props: { sample: sample.id },
+      //   },
+      //   {
+      //     id: 'analysis_results',
+      //     isSolr: true,
+      //     routeName: 'sample-id-slug-analysis-results',
+      //     title: 'sample.analysisResults',
+      //     count: 0,
+      //     props: { sample: sample.id },
+      //   },
+      //   {
+      //     table: 'taxon_list',
+      //     id: 'graphs',
+      //     routeName: 'sample-id-slug-graphs',
+      //     title: 'locality.graphs',
+      //     count: 0,
+      //     props: {
+      //       sample: sample.id,
+      //       sampleObject: { ...sample },
+      //     },
+      //   },
+      // ]
 
+      const tabsObject = TABS_SAMPLE
+
+      tabsObject.byIds.graphs.props.sampleObject = sample
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
       const hydratedTabs = await Promise.all(
         tabs.map(
           async (tab) =>
-            await app.$hydrateCount(tab, {
-              solr: { default: { fq: `sample_id:${sample.id}` } },
-              api: { default: { sample: sample.id } },
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: { default: { fq: `sample_id:${sample.id}` } },
+                api: { default: { sample: sample.id } },
+              },
             })
         )
       )
@@ -447,21 +466,12 @@ export default {
         sample.number || sample.number_additional || sample.number_field
       }`.trim()
       // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
-      const slug = slugify(`${isEmpty(name) ? sample.id : name}`, {
-        lower: true,
-      })
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
+      const slugRoute = $createSlugRoute(
+        route,
+        `${isEmpty(name) ? sample.id : name}`
+      )
 
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

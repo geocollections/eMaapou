@@ -1,50 +1,7 @@
 <template>
-  <site-table
-    :items="sites"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <!--
+    NOTE: This file is needed to make the _id parameter mandatory
+    If this file is missing _id is optional and the slug building fails
+   -->
+  <div></div>
 </template>
-
-<script>
-import { isNil } from 'lodash'
-import SiteTable from '@/components/tables/SiteTable'
-import { SITE } from '~/constants'
-
-export default {
-  components: { SiteTable },
-  props: {
-    area: {
-      type: Number,
-      default: null,
-    },
-  },
-  data() {
-    return {
-      sites: [],
-      count: 0,
-      options: SITE.options,
-    }
-  },
-  methods: {
-    async handleUpdate(tableState) {
-      this.options = tableState.options
-      const solrResponse = await this.$services.sarvSolr.getResourceList(
-        'site',
-        {
-          ...tableState,
-          isValid: isNil(this.area),
-          defaultParams: {
-            fq: `area_id:${this.area}`,
-          },
-          queryFields: this.$getQueryFields(SITE.queryFields),
-        }
-      )
-
-      this.sites = solrResponse.items
-      this.count = solrResponse.count
-    },
-  },
-}
-</script>

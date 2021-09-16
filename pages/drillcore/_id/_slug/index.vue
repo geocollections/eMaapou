@@ -185,17 +185,12 @@ import { DRILLCORE_BOX } from '~/constants'
 
 export default {
   components: { DataRow, LinkDataRow },
-  props: {
-    drillcore: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       page: 1,
       boxes: [],
       search: '',
+      paginateBy: 5,
     }
   },
   methods: {
@@ -211,40 +206,35 @@ export default {
       )
     },
     infiniteHandler($state) {
-      if (this.drillcore) {
-        const paginateBy = 5
-        this.$services.sarvREST
-          .getResourceList('attachment_link', {
-            defaultParams: {
-              ordering: 'drillcore_box__depth_start,drillcore_box',
-              drillcore_box__drillcore: this.drillcore,
-              attachment__is_preferred: true,
-              nest: 2,
-            },
-            options: {
-              page: this.page,
-              itemsPerPage: paginateBy,
-            },
-            search: this.search,
-            queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
-          })
-          .then((res) => {
-            if (!res.next) {
-              this.boxes.push(...res.items)
-              $state.loaded()
-              $state.complete()
-            } else {
-              this.page += 1
-              this.boxes.push(...res.items)
-              $state.loaded()
-            }
-          })
-          .catch(() => {
-            $state.error()
-          })
-      } else {
-        $state.error()
-      }
+      this.$services.sarvREST
+        .getResourceList('attachment_link', {
+          defaultParams: {
+            ordering: 'drillcore_box__depth_start,drillcore_box',
+            drillcore_box__drillcore: this.$route.params.id,
+            attachment__is_preferred: true,
+            nest: 2,
+          },
+          options: {
+            page: this.page,
+            itemsPerPage: this.paginateBy,
+          },
+          search: this.search,
+          queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
+        })
+        .then((res) => {
+          if (!res.next) {
+            this.boxes.push(...res.items)
+            $state.loaded()
+            $state.complete()
+          } else {
+            this.page += 1
+            this.boxes.push(...res.items)
+            $state.loaded()
+          }
+        })
+        .catch(() => {
+          $state.error()
+        })
     },
     handleSearch: debounce(function () {
       this.boxes = []

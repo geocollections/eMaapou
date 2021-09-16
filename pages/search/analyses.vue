@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      options: ANALYSIS.options,
+      options: ANALYSIS,
       items: [],
       count: 0,
     }

@@ -12,10 +12,6 @@ import ScatterChart from '~/components/chart/ScatterChart'
 export default {
   components: { ScatterChart },
   props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
     localityObject: {
       type: Object,
       default: () => {},

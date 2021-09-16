@@ -13,12 +13,6 @@ import SpecimenReferenceTable from '~/components/tables/SpecimenReferenceTable.v
 import { SPECIMEN_REFERENCE } from '~/constants'
 export default {
   components: { SpecimenReferenceTable },
-  props: {
-    specimen: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       references: [],
@@ -33,9 +27,9 @@ export default {
         'specimen_reference',
         {
           ...tableState,
-          isValid: isNil(this.specimen),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            specimen: this.specimen,
+            specimen: this.$route.params.id,
             nest: 1,
           },
           queryFields: this.$getQueryFields(SPECIMEN_REFERENCE.queryFields),
