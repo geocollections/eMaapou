@@ -49,8 +49,9 @@ export default {
           show: true,
           top: 135,
           bottom: 90,
-          right: '11%',
+          left: 100,
           containLabel: true,
+          width: 300,
         },
 
         tooltip: {
@@ -78,20 +79,20 @@ export default {
           {
             type: 'slider',
             show: true,
-            xAxisIndex: [0],
             filterMode: 'empty',
           },
           {
             type: 'slider',
             show: true,
-            yAxisIndex: [0, 1],
-            left: '93%',
-            filterMode: 'empty',
+            yAxisIndex: 0,
+            left: 475,
+            filterMode: 'filter',
           },
           {
             type: 'inside',
-            xAxisIndex: [0],
-            filterMode: 'empty',
+            // xAxisIndex: [0],
+            yAxisIndex: 0,
+            filterMode: 'filter',
           },
         ],
       },

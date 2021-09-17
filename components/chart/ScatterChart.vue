@@ -102,7 +102,7 @@ export default {
 
           legend: this.buildChartLegend(),
 
-          xAxis: {
+          yAxis: {
             type: 'value',
             boundaryGap: false,
             name: this?.depth?.length > 0 ? 'Depth' : 'Result values',
@@ -122,7 +122,7 @@ export default {
             data: this?.depth?.length > 0 ? this.depth : this.resultValues,
           },
 
-          yAxis: this.buildYAxis(),
+          xAxis: this.buildYAxis(),
 
           series: this.buildChartSeries(),
         }
@@ -196,10 +196,10 @@ export default {
         return {
           name: item,
           type: 'line',
-          yAxisIndex: item.includes('ppm') ? 1 : 0,
+          xAxisIndex: item.includes('ppm') ? 1 : 0,
           data: this.analysisResults
             .filter((result) => result.parameter === item)
-            .map((t) => [t.depth ?? t.value, t.value]),
+            .map((t) => [t.value, t.depth ?? t.value]),
           // symbolSize: 8,
           emphasis: {
             focus: 'series',
