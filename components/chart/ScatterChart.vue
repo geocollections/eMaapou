@@ -27,12 +27,8 @@ export default {
       default: 'locality_id',
     },
     tableId: {
-      type: Number,
-      default: null,
-    },
-    tableObject: {
-      type: Object,
-      default: () => {},
+      type: String,
+      default: '',
     },
     chartTitle: {
       type: String,
@@ -102,27 +98,9 @@ export default {
 
           legend: this.buildChartLegend(),
 
-          yAxis: {
-            type: 'value',
-            boundaryGap: false,
-            name: this?.depth?.length > 0 ? 'Depth' : 'Result values',
-            nameLocation: 'center',
-            nameTextStyle: {
-              fontWeight: 'bold',
-              fontSize: 16,
-            },
-            nameGap: 25,
-            splitNumber: 7,
-            min(value) {
-              return (value.min - 0.1).toFixed(2) * 1
-            },
-            max(value) {
-              return (value.max + 0.1).toFixed(2) * 1
-            },
-            data: this?.depth?.length > 0 ? this.depth : this.resultValues,
-          },
+          yAxis: this.buildYAxis(),
 
-          xAxis: this.buildYAxis(),
+          xAxis: this.buildXAxis(),
 
           series: this.buildChartSeries(),
         }
@@ -134,7 +112,6 @@ export default {
       const resultsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId}`,
@@ -149,7 +126,6 @@ export default {
       const statsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId}`,
@@ -172,15 +148,6 @@ export default {
       return { resultsResponse, statsResponse }
     },
 
-    buildChartTitle() {
-      return {
-        text: this.$translate({
-          et: this?.localityObject?.locality,
-          en: this?.localityObject?.locality_en,
-        }),
-      }
-    },
-
     buildChartLegend() {
       return {
         data: this.selectedParameters,
@@ -191,12 +158,85 @@ export default {
       }
     },
 
+    buildXAxis() {
+      const units = this.parameters.reduce((prev, curr) => {
+        if (curr.includes('[') && curr.includes(']')) {
+          const unit = curr.substring(curr.indexOf('[') + 1, curr.indexOf(']'))
+          if (!prev.includes(unit)) prev.push(unit)
+        }
+        return prev
+      }, [])
+
+      console.log(units)
+
+      return units.map((item, index) => {
+        return {
+          // Todo: Could we make it toggleable using legend?
+          show: this.selectedParameters.some((param) => param.includes(item)),
+          position: 'bottom',
+          // Calculates axisLabel offset, adds +25 after every axis
+          offset: index * 25,
+          type: 'value',
+          name: item,
+          nameLocation: 'end',
+          nameTextStyle: {
+            fontWeight: 'bold',
+          },
+          // min(value) {
+          //   return (value.min - 0.1).toFixed(2) * 1
+          // },
+          // max(value) {
+          //   return (value.max + 0.1).toFixed(2) * 1
+          // },
+          splitNumber: 2,
+          axisLine: {
+            show: true,
+            symbol: ['none', 'arrow'],
+            symbolSize: [5, 5],
+          },
+          // Todo: Get correct Unit from API (currently metadata omits it)
+          // axisLabel: {
+          //   formatter(value) {
+          //     return `${value} ${item}`
+          //   },
+          // },
+        }
+      })
+    },
+
+    buildYAxis() {
+      return {
+        type: 'value',
+        boundaryGap: false,
+        name: this?.depth?.length > 0 ? 'DEPTH' : 'VALUES',
+        nameLocation: 'end',
+        nameTextStyle: {
+          fontWeight: 'bold',
+          // fontSize: 14,
+          padding: [0, 70, 0, 0],
+        },
+        // nameGap: 25,
+        splitNumber: 7,
+        axisTick: {
+          alignWithLabel: true,
+        },
+        // min(value) {
+        //   return (value.min - 0.1).toFixed(2) * 1
+        // },
+        // max(value) {
+        //   return (value.max + 0.1).toFixed(2) * 1
+        // },
+        data: this?.depth?.length > 0 ? this.depth : this.resultValues,
+      }
+    },
+
     buildChartSeries() {
-      return this.parameters.map((item) => {
+      return this.selectedParameters.map((item) => {
+        console.log(item)
         return {
           name: item,
           type: 'line',
-          xAxisIndex: item.includes('ppm') ? 1 : 0,
+          xAxisIndex: item.includes('ppm') ? 0 : 1,
           data: this.analysisResults
             .filter((result) => result.parameter === item)
             .map((t) => [t.value, t.depth ?? t.value]),
@@ -206,47 +246,6 @@ export default {
           },
         }
       })
-    },
-
-    buildYAxis() {
-      const yAxis = [
-        {
-          type: 'value',
-          name: 'Value',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 55,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
-        },
-        {
-          type: 'value',
-          name: 'ppm',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 30,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
-        },
-      ]
-      if (this.selectedParameters.some((item) => item.includes('ppm')))
-        yAxis[1].name = 'ppm'
-      else yAxis[1].name = ''
-      return yAxis
     },
   },
 }

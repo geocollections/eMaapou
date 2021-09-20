@@ -57,9 +57,9 @@ export default {
       return Object.entries(this.fileData?.data).reduce(
         (prev, curr, currIdx) => {
           if (curr[0] !== 'DEPTH') {
-            const yAxis = {
-              // Todo: Show should be toggleable using legend
-              show: true, // Default is true
+            const xAxis = {
+              // Todo: Could we make it toggleable using legend?
+              show: true,
               position: 'bottom',
               // Calculates axisLabel offset, adds +25 after every axis
               offset: currIdx - 1 > 0 ? (currIdx - 1) * 25 : 0,
@@ -88,7 +88,7 @@ export default {
               //   },
               // },
             }
-            prev.push(yAxis)
+            prev.push(xAxis)
           }
           return prev
         },
