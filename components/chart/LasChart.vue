@@ -36,31 +36,9 @@ export default {
 
           legend: this.buildChartLegend(),
 
-          yAxis: {
-            type: 'category',
-            boundaryGap: false,
-            name: 'DEPTH',
-            nameLocation: 'end',
-            nameTextStyle: {
-              fontWeight: 'bold',
-              // fontSize: 14,
-              padding: [0, 70, 0, 0],
-            },
-            // nameGap: 35,
-            splitNumber: 7,
-            axisTick: {
-              alignWithLabel: true,
-            },
-            // min(value) {
-            //   return (value.min - 0.1).toFixed(2) * 1
-            // },
-            // max(value) {
-            //   return (value.max + 0.1).toFixed(2) * 1
-            // },
-            data: this.fileData?.data?.DEPTH,
-          },
+          xAxis: this.buildXAxis(),
 
-          xAxis: this.buildYAxis(),
+          yAxis: this.buildYAxis(),
 
           series: this.buildChartSeries(),
         }
@@ -74,7 +52,7 @@ export default {
       }
     },
 
-    buildYAxis() {
+    buildXAxis() {
       // First item in data is always DEPTH
       return Object.entries(this.fileData?.data).reduce(
         (prev, curr, currIdx) => {
@@ -116,6 +94,32 @@ export default {
         },
         []
       )
+    },
+
+    buildYAxis() {
+      return {
+        type: 'category',
+        boundaryGap: false,
+        name: 'DEPTH',
+        nameLocation: 'end',
+        nameTextStyle: {
+          fontWeight: 'bold',
+          // fontSize: 14,
+          padding: [0, 70, 0, 0],
+        },
+        // nameGap: 35,
+        splitNumber: 7,
+        axisTick: {
+          alignWithLabel: true,
+        },
+        // min(value) {
+        //   return (value.min - 0.1).toFixed(2) * 1
+        // },
+        // max(value) {
+        //   return (value.max + 0.1).toFixed(2) * 1
+        // },
+        data: this.fileData?.data?.DEPTH,
+      }
     },
 
     buildChartSeries() {

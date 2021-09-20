@@ -111,8 +111,8 @@ export default {
 
 <style scoped>
 .chart {
-  height: 75vh;
+  height: 95vh;
   min-height: 600px;
-  max-height: 1000px;
+  max-height: 2000px;
 }
 </style>
