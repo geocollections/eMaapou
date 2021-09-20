@@ -287,24 +287,6 @@ export default {
             rawLasFileContent.startsWith('Error: ')
           )
             rawLasFileContent = ''
-          rawLasFileContent.data = {
-            ...rawLasFileContent.data,
-            TEST: rawLasFileContent.data.NGAM.map((item) => item * item),
-            TESTO: rawLasFileContent.data.NGAM.map((item) => -item),
-            TESTA: rawLasFileContent.data.NGAM.map((item) => -item * item),
-            TESTU: rawLasFileContent.data.NGAM.map((item) => item - 2 * item),
-          }
-          rawLasFileContent.metadata = {
-            ...rawLasFileContent.metadata,
-            Curves: {
-              ...rawLasFileContent.metadata.Curves,
-              TEST: '',
-              TESTO: '',
-              TESTA: '',
-              TESTU: '',
-            },
-          }
-          console.log(rawLasFileContent)
         }
       }
       // END of getting .las file data
