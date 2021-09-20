@@ -88,15 +88,6 @@ export default {
       return { resultsResponse }
     },
 
-    buildChartTitle() {
-      return {
-        text: this.$translate({
-          et: this?.localityObject?.locality,
-          en: this?.localityObject?.locality_en,
-        }),
-      }
-    },
-
     buildChartSeries() {
       return [
         {
