@@ -1,10 +1,6 @@
 <template>
   <div class="pa-2">
-    <chart-wrapper
-      v-if="!isLoading"
-      :options="chartOptions"
-      :use-deep-merge="false"
-    />
+    <chart-wrapper v-if="!isLoading" :options="chartOptions" />
   </div>
 </template>
 
@@ -20,8 +16,8 @@ export default {
       default: 'locality_id',
     },
     tableId: {
-      type: Number,
-      default: null,
+      type: String,
+      default: '',
     },
     tableObject: {
       type: Object,
