@@ -35,12 +35,6 @@ export default {
       default: '',
     },
   },
-  methods: {
-    test(e) {
-      console.log('test')
-      this.$emit('input', e)
-    },
-  },
 }
 </script>
 
