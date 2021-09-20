@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('stratigraphy')">
       <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
@@ -32,6 +33,7 @@ import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'StratigraphySearchForm',
@@ -41,6 +43,7 @@ export default {
     AutocompleteField,
     SearchFieldsWrapper,
     SearchActions,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -61,6 +64,7 @@ export default {
       hierarchy: 'filters.byIds.hierarchy.value',
       index: 'filters.byIds.index.value',
       age: 'filters.byIds.age.value',
+      query: 'query',
     }),
     ...mapGetters('search', ['hasActiveFilters']),
   },

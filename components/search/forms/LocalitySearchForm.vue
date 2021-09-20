@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('locality')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
@@ -45,6 +46,7 @@ import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'LocalitySearchForm',
@@ -55,6 +57,7 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
 
@@ -77,6 +80,7 @@ export default {
       country: 'filters.byIds.country.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       reference: 'filters.byIds.reference.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',

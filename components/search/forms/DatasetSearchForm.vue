@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('dataset')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
@@ -38,13 +39,13 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 
-import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
-
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import ExtraOptions from '~/components/search/ExtraOptions'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'DatasetSearchForm',
@@ -55,6 +56,7 @@ export default {
     SearchActions,
     AutocompleteField,
     SearchFieldsWrapper,
+    QuerySearchField,
   },
   data() {
     return {
@@ -63,14 +65,12 @@ export default {
   },
   async fetch() {
     if (this.availableParameters.length === 0) {
-      const availableParametersResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis_parameter',
-        {
+      const availableParametersResponse =
+        await this.$services.sarvSolr.getResourceList('analysis_parameter', {
           defaultParams: {
             fq: 'is_null:false',
           },
-        }
-      )
+        })
       this.availableParameters = availableParametersResponse?.items.map(
         (parameter) => {
           return { text: parameter.parameter, value: parameter.parameter_index }
@@ -86,6 +86,7 @@ export default {
       date: 'filters.byIds.date.value',
       remarks: 'filters.byIds.remarks.value',
       parameters: 'filters.byIds.parameters.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

@@ -11,7 +11,7 @@
           <v-card-title class="montserrat pl-2 py-1">
             {{ $t('common.showSearch') }}
           </v-card-title>
-          <global-search @input="handleSearch" />
+          <query-search-field v-model="query" @input="handleSearch" />
         </v-card>
       </v-col>
       <v-col class="pt-2 pt-md-0">
@@ -32,7 +32,7 @@
         </div> -->
 
         <v-card>
-          <nuxt-child :query="searchQuery" keep-alive />
+          <nuxt-child :query="query" keep-alive />
         </v-card>
       </v-col>
     </v-row>
@@ -43,12 +43,12 @@
 import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
 import ButtonTabs from '~/components/ButtonTabs.vue'
-import GlobalSearch from '~/components/search/GlobalSearch.vue'
 import TitleCard from '~/components/TitleCard.vue'
 import { TABS_QUICK_SEARCH } from '~/constants'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 export default {
   name: 'QuickSearch',
-  components: { ButtonTabs, GlobalSearch, TitleCard },
+  components: { ButtonTabs, TitleCard, QuerySearchField },
   // layout: 'search',
   async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab }) {
     try {
@@ -92,7 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapFields('search', ['searchQuery']),
+    ...mapFields('search', { query: 'searchQuery' }),
     computedTabs() {
       // Filtering out empty tabs but still showing active tab whether it is empty or not
       // const filteredTabs = this.tabs.filter((item) =>
@@ -126,10 +126,10 @@ export default {
               countParams: {
                 solr: {
                   default: {
-                    q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
+                    q: isEmpty(this.query) ? '*' : `${this.query}`,
                   },
                   photo: {
-                    q: isEmpty(this.searchQuery) ? '*' : `${this.searchQuery}`,
+                    q: isEmpty(this.query) ? '*' : `${this.query}`,
                     fq: 'specimen_image_attachment:2',
                   },
                 },

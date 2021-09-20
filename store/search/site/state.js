@@ -7,6 +7,7 @@ export const initState = () => {
     options: SITE.options,
     useMap: true,
     useInstitutions: false,
+    query: '',
     filters: {
       byIds: {
         name: {

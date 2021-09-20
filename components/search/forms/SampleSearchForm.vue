@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('sample')">
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
@@ -62,6 +63,7 @@ import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SampleSearchForm',
@@ -74,6 +76,7 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -97,6 +100,7 @@ export default {
       collector: 'filters.byIds.collector.value',
       mass: 'filters.byIds.mass.value',
       project: 'filters.byIds.project.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

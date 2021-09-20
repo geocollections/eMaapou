@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('image')">
       <text-field
@@ -62,6 +63,7 @@ import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter
 import RangeTextField from '~/components/fields/RangeTextField'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'PhotoSearchForm',
@@ -73,6 +75,7 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   props: {
     markers: {
@@ -93,6 +96,7 @@ export default {
       imageNumber: 'filters.byIds.imageNumber.value',
       author: 'filters.byIds.author.value',
       imageSize: 'filters.byIds.imageSize.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

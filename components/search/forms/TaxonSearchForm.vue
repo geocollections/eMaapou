@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('taxon')">
       <text-field v-model="species" :label="$t(filters.byIds.species.label)" />
@@ -51,6 +52,7 @@ import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'TaxonSearchForm',
@@ -61,6 +63,7 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -83,6 +86,7 @@ export default {
       stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
       taxonHierarchy: 'filters.byIds.taxonHierarchy.value',
       author: 'filters.byIds.author.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',

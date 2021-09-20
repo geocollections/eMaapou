@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('analysis')">
       <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
@@ -34,14 +35,14 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 
-import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
-
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
+import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeSliderField from '~/components/fields/RangeSliderField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 export default {
   name: 'AnalysisSearchForm',
   components: {
@@ -52,12 +53,14 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   computed: {
     ...mapState('search/analysis', ['filters', 'count', 'items']),
     ...mapFields('search/analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

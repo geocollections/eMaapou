@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('site')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
@@ -26,6 +27,7 @@ import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SiteSearchForm',
@@ -35,6 +37,7 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   computed: {
     ...mapState('search/site', ['filters', 'count', 'items']),
@@ -44,6 +47,7 @@ export default {
       longitude: 'filters.byIds.longitude.value',
       area: 'filters.byIds.area.value',
       project: 'filters.byIds.project.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',

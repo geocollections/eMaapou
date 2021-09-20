@@ -2,7 +2,9 @@ import { updateField } from 'vuex-map-fields'
 import {
   RESET_GEOJSON,
   RESET_INSTITUTIONS,
+  RESET_MODULE_OPTIONS,
   RESET_MODULE_FILTERS,
+  RESET_MODULE_QUERY,
   RESET_SEARCH_QUERY,
   SET_MODULE_COUNT,
   SET_MODULE_ITEMS,
@@ -20,11 +22,16 @@ export default {
   [SET_MODULE_OPTIONS](state, { module, options }) {
     state[module].options = options
   },
-  [RESET_MODULE_FILTERS](state, { module, initState }) {
-    state[module].filters = initState.filters
+  [RESET_MODULE_QUERY](state, { module, initQuery }) {
+    state[module].query = initQuery
+  },
+  [RESET_MODULE_FILTERS](state, { module, initFilters }) {
+    state[module].filters = initFilters
+  },
+  [RESET_MODULE_OPTIONS](state, { module, initOptions }) {
     state[module].options = {
       ...state[module].options,
-      page: initState.options.page,
+      page: initOptions.page,
     }
   },
   [RESET_INSTITUTIONS](state) {

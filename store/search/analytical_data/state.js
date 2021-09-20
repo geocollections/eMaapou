@@ -7,6 +7,7 @@ export const initState = () => {
     options: ANALYTICAL_DATA.options,
     useMap: true,
     useInstitutions: true,
+    query: '',
     filters: {
       byIds: {
         locality: {

@@ -3,7 +3,7 @@
     class="d-sm-flex text-right text-sm-center"
     @submit.prevent="$emit('submit')"
   >
-    <global-search :icon-button="onlyIcon" show-button />
+    <query-search-field v-model="query" />
     <v-btn
       height="48px"
       class="ml-3 mt-2 mt-sm-0"
@@ -19,16 +19,20 @@
   </v-form>
 </template>
 <script>
-import GlobalSearch from '~/components/search/GlobalSearch.vue'
+import { mapFields } from 'vuex-map-fields'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'QuickSearchForm',
-  components: { GlobalSearch },
+  components: { QuerySearchField },
   props: {
     onlyIcon: {
       type: Boolean,
       default: false,
     },
+  },
+  computed: {
+    ...mapFields('search', { query: 'searchQuery' }),
   },
 }
 </script>

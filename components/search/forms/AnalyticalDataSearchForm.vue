@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
 
     <search-fields-wrapper :active="hasActiveFilters('analytical_data')">
@@ -173,17 +174,17 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 import { isEmpty } from 'lodash'
-import InstitutionSearchFilter from '@/components/search/InstitutionSearchFilter'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
+import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import RangeTextField from '~/components/fields/RangeTextField'
 import ParameterField from '~/components/fields/ParameterField.vue'
-
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 export default {
   name: 'AnalyticalDataSearchForm',
   components: {
@@ -195,6 +196,7 @@ export default {
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -250,6 +252,7 @@ export default {
       rock: 'filters.byIds.rock.value',
       sample: 'filters.byIds.sample.value',
       project: 'filters.byIds.project.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

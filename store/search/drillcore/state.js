@@ -7,6 +7,7 @@ export const initState = () => {
     options: DRILLCORE.options,
     useMap: true,
     useInstitutions: true,
+    query: '',
     filters: {
       byIds: {
         name: {

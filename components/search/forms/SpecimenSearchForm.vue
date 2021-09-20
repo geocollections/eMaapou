@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('specimen')">
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
@@ -42,11 +43,11 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
-
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import ExtraOptions from '~/components/search/ExtraOptions.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SpecimenSearchForm',
@@ -57,6 +58,7 @@ export default {
     TextField,
     SearchFieldsWrapper,
     SearchActions,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -77,6 +79,7 @@ export default {
       locality: 'filters.byIds.locality.value',
       fossil: 'filters.byIds.fossil.value',
       hierarchy: 'filters.byIds.hierarchy.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',
