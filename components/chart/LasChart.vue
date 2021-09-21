@@ -36,28 +36,7 @@ export default {
 
           legend: this.buildChartLegend(),
 
-          xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            name: 'Depth',
-            nameLocation: 'center',
-            nameTextStyle: {
-              fontWeight: 'bold',
-              fontSize: 16,
-            },
-            nameGap: 25,
-            splitNumber: 7,
-            axisTick: {
-              alignWithLabel: true,
-            },
-            min(value) {
-              return (value.min - 0.1).toFixed(2) * 1
-            },
-            max(value) {
-              return (value.max + 0.1).toFixed(2) * 1
-            },
-            data: this.fileData?.data?.DEPTH,
-          },
+          xAxis: this.buildXAxis(),
 
           yAxis: this.buildYAxis(),
 
@@ -73,37 +52,74 @@ export default {
       }
     },
 
-    buildYAxis() {
+    buildXAxis() {
       // First item in data is always DEPTH
       return Object.entries(this.fileData?.data).reduce(
         (prev, curr, currIdx) => {
           if (curr[0] !== 'DEPTH') {
-            const yAxis = {
+            const xAxis = {
+              // Todo: Could we make it toggleable using legend?
+              show: true,
+              position: 'bottom',
+              // Calculates axisLabel offset, adds +25 after every axis
+              offset: currIdx - 1 > 0 ? (currIdx - 1) * 25 : 0,
               type: 'value',
               name: curr[0],
-              nameLocation: 'center',
+              nameLocation: 'end',
               nameTextStyle: {
                 fontWeight: 'bold',
-                fontSize: 16,
               },
+              // min(value) {
+              //   return (value.min - 0.1).toFixed(2) * 1
+              // },
+              // max(value) {
+              //   return (value.max + 0.1).toFixed(2) * 1
+              // },
+              splitNumber: 2,
               axisLine: {
                 show: true,
+                symbol: ['none', 'arrow'],
+                symbolSize: [5, 5],
               },
-              // Calculates axisLabel offset, adds +70 after every axis
-              offset: currIdx - 2 > 0 ? currIdx * 80 : 0,
-              min(value) {
-                return (value.min - 0.1).toFixed(2) * 1
-              },
-              max(value) {
-                return (value.max + 0.1).toFixed(2) * 1
-              },
+              // Todo: Get correct Unit from API (currently metadata omits it)
+              // axisLabel: {
+              //   formatter(value) {
+              //     return `${value} %`
+              //   },
+              // },
             }
-            prev.push(yAxis)
+            prev.push(xAxis)
           }
           return prev
         },
         []
       )
+    },
+
+    buildYAxis() {
+      return {
+        type: 'category',
+        boundaryGap: false,
+        name: 'DEPTH',
+        nameLocation: 'end',
+        nameTextStyle: {
+          fontWeight: 'bold',
+          // fontSize: 14,
+          padding: [0, 70, 0, 0],
+        },
+        nameGap: 10,
+        splitNumber: 7,
+        axisTick: {
+          alignWithLabel: true,
+        },
+        // min(value) {
+        //   return (value.min - 0.1).toFixed(2) * 1
+        // },
+        // max(value) {
+        //   return (value.max + 0.1).toFixed(2) * 1
+        // },
+        data: this.fileData?.data?.DEPTH,
+      }
     },
 
     buildChartSeries() {
@@ -114,7 +130,7 @@ export default {
             const series = {
               name: curr[0],
               type: 'line',
-              yAxisIndex: currIdx - 1,
+              xAxisIndex: currIdx - 1,
               data: curr[1],
               emphasis: {
                 focus: 'series',

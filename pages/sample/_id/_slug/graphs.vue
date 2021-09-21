@@ -1,5 +1,9 @@
 <template>
-  <pie-chart table-key="sample" :table-id="sample" :chart-title="chartTitle" />
+  <pie-chart
+    table-key="sample"
+    :table-id="$route.params.id.toString()"
+    :chart-title="chartTitle"
+  />
 </template>
 
 <script>
