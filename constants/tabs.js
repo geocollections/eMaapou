@@ -446,7 +446,7 @@ export const TABS_PREPARATION = {
   byIds: {
     attachment_link: {
       id: 'attachment_link',
-      routeName: 'preparation-id',
+      routeName: 'preparation-id-slug',
       title: 'preparation.attachments',
       count: 0,
       props: {},
@@ -454,7 +454,7 @@ export const TABS_PREPARATION = {
     taxon_list: {
       id: 'taxon_list',
       isSolr: false,
-      routeName: 'preparation-id-taxa',
+      routeName: 'preparation-id-slug-taxa',
       title: 'preparation.taxa',
       count: 0,
       props: {},
