@@ -50,7 +50,7 @@ export default {
         },
 
         tooltip: {
-          trigger: 'item',
+          trigger: 'axis',
           axisPointer: {
             type: 'cross',
           },

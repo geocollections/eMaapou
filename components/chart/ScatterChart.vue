@@ -56,8 +56,6 @@ export default {
       this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
       this.parameters =
         statsResponse?.stats?.stats_fields?.parameter?.distinctValues
-      this.resultValues =
-        statsResponse?.stats?.stats_fields?.value?.distinctValues
 
       const methodKey =
         this.$i18n.locale === 'en' ? 'analysis_method_en' : 'analysis_method'
@@ -86,7 +84,7 @@ export default {
     chartOptions() {
       if (
         this?.analysisResults?.length > 0 &&
-        (this?.depth?.length > 0 || this?.resultValues?.length > 0) &&
+        this?.depth?.length > 0 &&
         this?.parameters?.length > 0
       ) {
         return {
@@ -148,7 +146,6 @@ export default {
               'parameter',
               'analysis_method',
               'analysis_method_en',
-              'value',
             ],
             'stats.calcdistinct': true,
           },
@@ -203,7 +200,7 @@ export default {
       return {
         type: 'value',
         boundaryGap: false,
-        name: this?.depth?.length > 0 ? 'DEPTH' : 'VALUES',
+        name: 'DEPTH',
         nameLocation: 'end',
         nameTextStyle: {
           fontWeight: 'bold',
@@ -221,7 +218,7 @@ export default {
         max(value) {
           return (value.max + 0.1).toFixed(2) * 1
         },
-        data: this?.depth?.length > 0 ? this.depth : this.resultValues,
+        data: this.depth,
       }
     },
 
@@ -235,7 +232,7 @@ export default {
           xAxisIndex: this.units.findIndex((unit) => item.includes(unit)),
           data: this.analysisResults
             .filter((result) => result.parameter === item)
-            .map((t) => [t.value, t.depth ?? t.value]),
+            .map((t) => [t.value, t.depth]),
           emphasis: {
             focus: 'series',
           },
