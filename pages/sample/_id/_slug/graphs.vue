@@ -1,7 +1,7 @@
 <template>
   <pie-chart
     table-key="sample"
-    :table-id="$route.params.id"
+    :table-id="$route.params.id.toString()"
     :chart-title="chartTitle"
   />
 </template>

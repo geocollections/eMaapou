@@ -107,7 +107,7 @@ export default {
           // fontSize: 14,
           padding: [0, 70, 0, 0],
         },
-        // nameGap: 35,
+        nameGap: 10,
         splitNumber: 7,
         axisTick: {
           alignWithLabel: true,

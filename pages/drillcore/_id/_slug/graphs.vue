@@ -1,7 +1,7 @@
 <template>
   <scatter-chart
     table-key="locality_id"
-    :table-id="locality"
+    :table-id="locality.toString()"
     :chart-title="chartTitle"
   />
 </template>

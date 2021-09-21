@@ -106,6 +106,16 @@ export default {
         }
       } else return {}
     },
+
+    units() {
+      return this.parameters.reduce((prev, curr) => {
+        if (curr.includes('[') && curr.includes(']')) {
+          const unit = curr.substring(curr.indexOf('[') + 1, curr.indexOf(']'))
+          if (!prev.includes(unit)) prev.push(unit)
+        }
+        return prev
+      }, [])
+    },
   },
   methods: {
     async fetchChartData() {
@@ -159,47 +169,32 @@ export default {
     },
 
     buildXAxis() {
-      const units = this.parameters.reduce((prev, curr) => {
-        if (curr.includes('[') && curr.includes(']')) {
-          const unit = curr.substring(curr.indexOf('[') + 1, curr.indexOf(']'))
-          if (!prev.includes(unit)) prev.push(unit)
-        }
-        return prev
-      }, [])
-
-      console.log(units)
-
-      return units.map((item, index) => {
+      // Tried to use activeUnits but then sometimes chart xAxis is not updated
+      //  and some overlapping happens (data object is correct but visually overlaps)
+      return this.units.map((item, index) => {
         return {
-          // Todo: Could we make it toggleable using legend?
+          // If unit in selectedParams then show xAxis otherwise it is just hidden
           show: this.selectedParameters.some((param) => param.includes(item)),
           position: 'bottom',
           // Calculates axisLabel offset, adds +25 after every axis
           offset: index * 25,
           type: 'value',
           name: item,
-          nameLocation: 'end',
           nameTextStyle: {
             fontWeight: 'bold',
           },
-          // min(value) {
-          //   return (value.min - 0.1).toFixed(2) * 1
-          // },
-          // max(value) {
-          //   return (value.max + 0.1).toFixed(2) * 1
-          // },
+          min(value) {
+            return (value.min - 0.1).toFixed(2) * 1
+          },
+          max(value) {
+            return (value.max + 0.1).toFixed(2) * 1
+          },
           splitNumber: 2,
           axisLine: {
             show: true,
             symbol: ['none', 'arrow'],
             symbolSize: [5, 5],
           },
-          // Todo: Get correct Unit from API (currently metadata omits it)
-          // axisLabel: {
-          //   formatter(value) {
-          //     return `${value} ${item}`
-          //   },
-          // },
         }
       })
     },
@@ -215,32 +210,32 @@ export default {
           // fontSize: 14,
           padding: [0, 70, 0, 0],
         },
-        // nameGap: 25,
+        nameGap: 10,
         splitNumber: 7,
         axisTick: {
           alignWithLabel: true,
         },
-        // min(value) {
-        //   return (value.min - 0.1).toFixed(2) * 1
-        // },
-        // max(value) {
-        //   return (value.max + 0.1).toFixed(2) * 1
-        // },
+        min(value) {
+          return (value.min - 0.1).toFixed(2) * 1
+        },
+        max(value) {
+          return (value.max + 0.1).toFixed(2) * 1
+        },
         data: this?.depth?.length > 0 ? this.depth : this.resultValues,
       }
     },
 
     buildChartSeries() {
       return this.selectedParameters.map((item) => {
-        console.log(item)
         return {
           name: item,
           type: 'line',
-          xAxisIndex: item.includes('ppm') ? 0 : 1,
+          // Setting data to corresponding xAxis (units order is defined
+          //  which means xAxis order is the same)
+          xAxisIndex: this.units.findIndex((unit) => item.includes(unit)),
           data: this.analysisResults
             .filter((result) => result.parameter === item)
             .map((t) => [t.value, t.depth ?? t.value]),
-          // symbolSize: 8,
           emphasis: {
             focus: 'series',
           },
