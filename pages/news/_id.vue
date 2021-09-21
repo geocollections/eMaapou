@@ -25,11 +25,26 @@ import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: { TitleCard },
-  async asyncData({ params, app }) {
-    const newsResponse = await app.$services.sarvREST.getResource(
+  async asyncData({
+    params,
+    route,
+    redirect,
+    $services,
+    $translate,
+    $createSlugRoute,
+  }) {
+    const newsResponse = await $services.sarvREST.getResource(
       'web_news',
       params.id
     )
+
+    const text = $translate({
+      et: newsResponse.title_et,
+      en: newsResponse.title_en,
+    })
+
+    const slugRoute = $createSlugRoute(route, text)
+    if (slugRoute.path !== route.path) redirect(slugRoute.path)
 
     return {
       news: newsResponse,
