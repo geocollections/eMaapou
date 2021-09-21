@@ -521,7 +521,15 @@ export default {
     LinkDataRow,
     Detail,
   },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    app,
+    redirect,
+    $createSlugRoute,
+    $translate,
+  }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
         'attachment',
@@ -761,6 +769,27 @@ export default {
         }
       }
       await forLoop()
+
+      const text = () => {
+        switch (file?.specimen_image_attachment) {
+          case 1:
+            return `${file?.specimen?.coll?.number}-${
+              file?.specimen?.specimen_id?.split('-')?.[1]
+            } (ID-${file.specimen.id})`
+          case 2:
+            return file.image_number
+          case 4:
+            return file?.reference?.reference
+          default:
+            return `${$translate({
+              et: file?.description,
+              en: file?.description_en,
+            })}`
+        }
+      }
+
+      const slugRoute = $createSlugRoute(route, text())
+      if (slugRoute.path !== route.path) redirect(slugRoute.path)
 
       return {
         file,

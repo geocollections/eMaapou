@@ -427,7 +427,6 @@ export default {
             })
         )
       )
-      console.log(hydratedTabs)
 
       const slugRoute = $createSlugRoute(
         route,
