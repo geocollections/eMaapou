@@ -12,6 +12,9 @@ const vuexOptions = {
     history: {
       ...state.history,
     },
+    map: {
+      baseLayer: state.map.baseLayer,
+    },
   }),
 }
 
