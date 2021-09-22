@@ -5,7 +5,7 @@ import {
   RESET_MODULE_OPTIONS,
   RESET_MODULE_FILTERS,
   RESET_MODULE_QUERY,
-  RESET_SEARCH_QUERY,
+  RESET_QUERY,
   SET_MODULE_COUNT,
   SET_MODULE_ITEMS,
   SET_MODULE_OPTIONS,
@@ -40,7 +40,7 @@ export default {
   [RESET_GEOJSON](state) {
     state.globalFilters.byIds.geoJSON.value = null
   },
-  [RESET_SEARCH_QUERY](state) {
-    state.searchQuery = ''
+  [RESET_QUERY](state) {
+    state.query = ''
   },
 }

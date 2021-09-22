@@ -63,14 +63,14 @@ export default {
               countParams: {
                 solr: {
                   default: {
-                    q: isEmpty(store.state.search.searchQuery)
+                    q: isEmpty(store.state.search.query)
                       ? '*'
-                      : `${store.state.search.searchQuery}`,
+                      : `${store.state.search.query}`,
                   },
                   photo: {
-                    q: isEmpty(store.state.search.searchQuery)
+                    q: isEmpty(store.state.search.query)
                       ? '*'
-                      : `${store.state.search.searchQuery}`,
+                      : `${store.state.search.query}`,
                     fq: 'specimen_image_attachment:2',
                   },
                 },
@@ -92,7 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapFields('search', { query: 'searchQuery' }),
+    ...mapFields('search', { query: 'query' }),
     computedTabs() {
       // Filtering out empty tabs but still showing active tab whether it is empty or not
       // const filteredTabs = this.tabs.filter((item) =>

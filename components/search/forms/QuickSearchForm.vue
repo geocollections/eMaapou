@@ -32,7 +32,7 @@ export default {
     },
   },
   computed: {
-    ...mapFields('search', { query: 'searchQuery' }),
+    ...mapFields('search', { query: 'query' }),
   },
 }
 </script>
