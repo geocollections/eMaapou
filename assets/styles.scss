@@ -53,7 +53,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
 .text-link {
   @extend .underline;
-
+  cursor: pointer;
   text-decoration: none;
   color: var(--v-accent-base) !important;
   /* color: var(--v-primary-lighten1) !important;*/
