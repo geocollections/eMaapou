@@ -27,12 +27,8 @@ export default {
       default: 'locality_id',
     },
     tableId: {
-      type: Number,
-      default: null,
-    },
-    tableObject: {
-      type: Object,
-      default: () => {},
+      type: String,
+      default: '',
     },
     chartTitle: {
       type: String,
@@ -60,8 +56,6 @@ export default {
       this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
       this.parameters =
         statsResponse?.stats?.stats_fields?.parameter?.distinctValues
-      this.resultValues =
-        statsResponse?.stats?.stats_fields?.value?.distinctValues
 
       const methodKey =
         this.$i18n.locale === 'en' ? 'analysis_method_en' : 'analysis_method'
@@ -90,7 +84,7 @@ export default {
     chartOptions() {
       if (
         this?.analysisResults?.length > 0 &&
-        (this?.depth?.length > 0 || this?.resultValues?.length > 0) &&
+        this?.depth?.length > 0 &&
         this?.parameters?.length > 0
       ) {
         return {
@@ -102,31 +96,23 @@ export default {
 
           legend: this.buildChartLegend(),
 
-          xAxis: {
-            type: 'value',
-            boundaryGap: false,
-            name: this?.depth?.length > 0 ? 'Depth' : 'Result values',
-            nameLocation: 'center',
-            nameTextStyle: {
-              fontWeight: 'bold',
-              fontSize: 16,
-            },
-            nameGap: 25,
-            splitNumber: 7,
-            min(value) {
-              return (value.min - 0.1).toFixed(2) * 1
-            },
-            max(value) {
-              return (value.max + 0.1).toFixed(2) * 1
-            },
-            data: this?.depth?.length > 0 ? this.depth : this.resultValues,
-          },
-
           yAxis: this.buildYAxis(),
+
+          xAxis: this.buildXAxis(),
 
           series: this.buildChartSeries(),
         }
       } else return {}
+    },
+
+    units() {
+      return this.parameters.reduce((prev, curr) => {
+        if (curr.includes('[') && curr.includes(']')) {
+          const unit = curr.substring(curr.indexOf('[') + 1, curr.indexOf(']'))
+          if (!prev.includes(unit)) prev.push(unit)
+        }
+        return prev
+      }, [])
     },
   },
   methods: {
@@ -134,7 +120,6 @@ export default {
       const resultsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId}`,
@@ -149,7 +134,6 @@ export default {
       const statsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId}`,
@@ -162,7 +146,6 @@ export default {
               'parameter',
               'analysis_method',
               'analysis_method_en',
-              'value',
             ],
             'stats.calcdistinct': true,
           },
@@ -170,15 +153,6 @@ export default {
       )
 
       return { resultsResponse, statsResponse }
-    },
-
-    buildChartTitle() {
-      return {
-        text: this.$translate({
-          et: this?.localityObject?.locality,
-          en: this?.localityObject?.locality_en,
-        }),
-      }
     },
 
     buildChartLegend() {
@@ -191,62 +165,79 @@ export default {
       }
     },
 
-    buildChartSeries() {
-      return this.parameters.map((item) => {
+    buildXAxis() {
+      // Tried to use activeUnits but then sometimes chart xAxis is not updated
+      //  and some overlapping happens (data object is correct but visually overlaps)
+      return this.units.map((item, index) => {
         return {
+          // If unit in selectedParams then show xAxis otherwise it is just hidden
+          show: this.selectedParameters.some((param) => param.includes(item)),
+          position: 'bottom',
+          // Calculates axisLabel offset, adds +25 after every axis
+          offset: index * 25,
+          type: 'value',
           name: item,
-          type: 'line',
-          yAxisIndex: item.includes('ppm') ? 1 : 0,
-          data: this.analysisResults
-            .filter((result) => result.parameter === item)
-            .map((t) => [t.depth ?? t.value, t.value]),
-          // symbolSize: 8,
-          emphasis: {
-            focus: 'series',
+          nameTextStyle: {
+            fontWeight: 'bold',
+          },
+          min(value) {
+            return (value.min - 0.1).toFixed(2) * 1
+          },
+          max(value) {
+            return (value.max + 0.1).toFixed(2) * 1
+          },
+          splitNumber: 2,
+          axisLine: {
+            show: true,
+            symbol: ['none', 'arrow'],
+            symbolSize: [5, 5],
           },
         }
       })
     },
 
     buildYAxis() {
-      const yAxis = [
-        {
-          type: 'value',
-          name: 'Value',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 55,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
+      return {
+        type: 'value',
+        boundaryGap: false,
+        name: 'DEPTH',
+        nameLocation: 'end',
+        nameTextStyle: {
+          fontWeight: 'bold',
+          // fontSize: 14,
+          padding: [0, 70, 0, 0],
         },
-        {
-          type: 'value',
-          name: 'ppm',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 30,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
+        nameGap: 10,
+        splitNumber: 7,
+        axisTick: {
+          alignWithLabel: true,
         },
-      ]
-      if (this.selectedParameters.some((item) => item.includes('ppm')))
-        yAxis[1].name = 'ppm'
-      else yAxis[1].name = ''
-      return yAxis
+        min(value) {
+          return (value.min - 0.1).toFixed(2) * 1
+        },
+        max(value) {
+          return (value.max + 0.1).toFixed(2) * 1
+        },
+        data: this.depth,
+      }
+    },
+
+    buildChartSeries() {
+      return this.selectedParameters.map((item) => {
+        return {
+          name: item,
+          type: 'line',
+          // Setting data to corresponding xAxis (units order is defined
+          //  which means xAxis order is the same)
+          xAxisIndex: this.units.findIndex((unit) => item.includes(unit)),
+          data: this.analysisResults
+            .filter((result) => result.parameter === item)
+            .map((t) => [t.value, t.depth]),
+          emphasis: {
+            focus: 'series',
+          },
+        }
+      })
     },
   },
 }

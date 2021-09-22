@@ -416,7 +416,10 @@ export default {
               countParams: {
                 solr: {
                   default: {
-                    fq: `locality_id:${params.id}`,
+                    fq:
+                      tab.id === 'graphs'
+                        ? `locality_id:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
+                        : `locality_id:${params.id}`,
                   },
                 },
                 api: { default: { locality: locality.id } },

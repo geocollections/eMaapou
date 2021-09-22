@@ -146,6 +146,7 @@ export default {
     $validateTabRoute,
     $services,
     $hydrateTab,
+    $createSlugRoute,
   }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
@@ -176,7 +177,9 @@ export default {
         )
       )
 
-      const validPath = $validateTabRoute(route, hydratedTabs)
+      const slugRoute = $createSlugRoute(route, preparation.preparation_number)
+
+      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
       if (validPath !== route.path) redirect(validPath)
 
       return {

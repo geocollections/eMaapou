@@ -313,9 +313,7 @@ export default {
                     api: {
                       default: { locality: drillcore?.locality?.id },
                       attachment_link: {
-                        // Todo: OR search not yet supported in new api
-                        // or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
-                        drillcore: drillcore.id,
+                        or_search: `drillcore:${drillcore.id} OR locality:${drillcore.locality.id}`,
                       },
                     },
                   },
