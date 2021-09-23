@@ -343,6 +343,30 @@ export const HEADERS_DATASET_ANALYSIS = {
   allIds: ['sample', 'locality', 'stratigraphy', 'lithostratigraphy', 'depth'],
 }
 
+export const HEADERS_DATASET_AUTHOR = {
+  byIds: {
+    name: {
+      text: 'datasetAuthor.name',
+      value: 'name',
+      show: true,
+      sortValue: 'agent__agent',
+    },
+    affiliation: {
+      text: 'datasetAuthor.affiliation',
+      value: 'affiliation',
+      show: true,
+      sortValue: 'affiliation',
+    },
+    type: {
+      text: 'datasetAuthor.type',
+      value: 'type',
+      show: true,
+      sortValue: 'agent_type_value',
+    },
+  },
+  allIds: ['name', 'affiliation', 'type'],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },

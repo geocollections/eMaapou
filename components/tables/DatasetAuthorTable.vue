@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.name="{ item }"
       ><div v-if="item.agent">{{ item.agent.agent }}</div></template
@@ -18,16 +20,15 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_AUTHOR } from '~/constants'
 export default {
   name: 'DatasetAuthorTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -48,11 +49,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('datasetAuthor.name'), value: 'name' },
-        { text: this.$t('datasetAuthor.affiliation'), value: 'affiliation' },
-        { text: this.$t('datasetAuthor.type'), value: 'type' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_AUTHOR),
     }
   },
   methods: {
