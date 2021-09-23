@@ -114,6 +114,106 @@ export const HEADERS_ANALYSIS = {
   ],
 }
 
+export const HEADERS_ANALYTICAL_DATA = {
+  byIds: {
+    id_l: {
+      text: 'analyticalData.id',
+      value: 'id_l',
+      show: true,
+      sortValue: 'id_l',
+    },
+    analysis_method: {
+      text: 'analyticalData.analysisMethod',
+      value: 'analysis_method',
+      show: true,
+      sortValue: { et: 'analysis_method', en: 'analysis_method_en' },
+    },
+    sample_number: {
+      text: 'analyticalData.sample',
+      value: 'sample_number',
+      show: true,
+      sortValue: 'sample_number,sample_id_sl',
+    },
+    locality: {
+      text: 'analyticalData.locality',
+      value: 'locality',
+      show: true,
+      sortValue: 'locality,locality_id_sl,site,site_id_sl',
+    },
+    stratigraphy: {
+      text: 'analyticalData.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: {
+        et: 'stratigraphy,stratigraphy_id_sl',
+        en: 'stratigraphy_en,stratigraphy_id_sl',
+      },
+    },
+    lithostratigraphy: {
+      text: 'analyticalData.lithostratigraphy',
+      value: 'lithostratigraphy',
+      show: true,
+      sortValue: {
+        et: 'lithostratigraphy,lithostratigraphy_id_sl',
+        en: 'lithostratigraphy_en,lithostratigraphy_id_sl',
+      },
+    },
+    depth: {
+      text: 'analyticalData.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+    depth_interval: {
+      text: 'analyticalData.depthInterval',
+      value: 'depth_interval',
+      show: true,
+      sortValue: 'depth_interval',
+    },
+    rock: {
+      text: 'analyticalData.rock',
+      value: 'rock',
+      show: true,
+      sortValue: {
+        et: 'rock,rock_txt,rock_id_sl',
+        en: 'rock_en,rock_en_txt,rock_id_sl',
+      },
+    },
+    reference: {
+      text: 'analyticalData.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference,reference_id_sl',
+    },
+    dataset_id: {
+      text: 'analyticalData.dataset',
+      value: 'dataset_id',
+      show: true,
+      sortValue: 'dataset_id_sl,dataset_name',
+    },
+    analysis_id: {
+      text: 'analyticalData.analysis',
+      value: 'analysis_id',
+      show: true,
+      sortValue: 'analysis_id_sl',
+    },
+  },
+  allIds: [
+    'id_l',
+    'analysis_method',
+    'sample_number',
+    'locality',
+    'stratigraphy',
+    'lithostratigraphy',
+    'depth',
+    'depth_interval',
+    'rock',
+    'reference',
+    'dataset_id',
+    'analysis_id',
+  ],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },

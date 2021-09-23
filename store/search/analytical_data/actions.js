@@ -1,4 +1,4 @@
-import { ANALYTICAL_DATA } from '~/constants'
+import { ANALYTICAL_DATA, HEADERS_ANALYTICAL_DATA } from '~/constants'
 
 import {
   SET_LIST_PARAMETERS,
@@ -28,7 +28,10 @@ export default {
         ...(options && { options }),
         module: 'analytical_data',
         resource: 'analytical_data',
-        resourceDefaults: ANALYTICAL_DATA,
+        resourceDefaults: {
+          ...ANALYTICAL_DATA,
+          headers: HEADERS_ANALYTICAL_DATA,
+        },
       },
       { root: true }
     )
