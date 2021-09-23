@@ -1,3 +1,54 @@
+export const HEADERS_ANALYSIS_RESULT = {
+  byIds: {
+    parameter: {
+      text: 'analysisResult.parameter',
+      value: 'parameter',
+      show: true,
+      sortValue: 'parameter',
+    },
+    analysis_method: {
+      text: 'analysisResult.method',
+      value: 'analysis_method',
+      show: true,
+      sortValue: 'analysis_method',
+    },
+    depth: {
+      text: 'analysisResult.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+    depth_interval: {
+      text: 'analysisResult.depthInterval',
+      value: 'depth_interval',
+      show: true,
+      sortValue: 'depth_interval',
+    },
+    value: { text: 'analysisResult.value', value: 'value', show: true },
+    value_txt: {
+      text: 'analysisResult.valueText',
+      value: 'value_txt',
+      show: true,
+      sortValue: 'value_txt',
+    },
+    value_error: {
+      text: 'analysisResult.valueError',
+      value: 'value_error',
+      show: true,
+      sortValue: 'value_error',
+    },
+  },
+  allIds: [
+    'parameter',
+    'analysis_method',
+    'depth',
+    'depth_interval',
+    'value',
+    'value_txt',
+    'value_error',
+  ],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },

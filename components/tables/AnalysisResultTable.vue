@@ -1,24 +1,28 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
+  <table-wrapper-test
+    v-bind="$attrs"
     :headers="computedHeaders"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
   >
     <template #item.analysis_method="{ item }">{{
       $translate({ et: item.analysis_method, en: item.analysis_method_en })
     }}</template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
 import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_ANALYSIS_RESULT } from '~/constants'
 export default {
   name: 'AnalysisResultTable',
-  components: { TableWrapper },
+  components: { TableWrapperTest },
+  mixins: [headersMixin],
   props: {
     showSearch: {
       type: Boolean,
@@ -46,23 +50,12 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('analysisResult.parameter'), value: 'parameter' },
-        { text: this.$t('analysisResult.method'), value: 'analysis_method' },
-        { text: this.$t('analysisResult.depth'), value: 'depth' },
-        {
-          text: this.$t('analysisResult.depthInterval'),
-          value: 'depth_interval',
-        },
-        { text: this.$t('analysisResult.value'), value: 'value' },
-        { text: this.$t('analysisResult.valueText'), value: 'value_txt' },
-        { text: this.$t('analysisResult.valueError'), value: 'value_error' },
-      ],
+      localHeaders: HEADERS_ANALYSIS_RESULT,
     }
   },
   computed: {
     computedHeaders() {
-      return this.headers.filter((item) => {
+      return this.$_headers.filter((item) => {
         if (item.value.includes('depth')) return !this.hideDepth
         if (item.value === 'analysis_method') return !this.hideMethod
         else return item
