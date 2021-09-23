@@ -687,3 +687,49 @@ export const HEADERS_LOCALITY_REFERENCE = {
   },
   allIds: ['reference', 'title', 'pages', 'remarks'],
 }
+
+export const HEADERS_PHOTO = {
+  byIds: {
+    id: { text: 'photo.id', value: 'id', show: true, sortValue: 'id_sl' },
+    image_number: {
+      text: 'photo.number',
+      value: 'image_number',
+      show: true,
+      sortValue: 'image_number',
+    },
+    agent: {
+      text: 'photo.agent',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent',
+    },
+    date: {
+      text: 'photo.date',
+      value: 'date',
+      show: true,
+      sortValue: 'date_created_dt,date_created_free',
+    },
+    locality: {
+      text: 'photo.locality',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality', en: 'locality_en' },
+    },
+    image_object: {
+      text: 'photo.imageObject',
+      value: 'image_object',
+      show: true,
+      sortValue: 'image_object',
+    },
+    tags: { text: 'photo.tags', value: 'tags', show: true, sortValue: 'tags' },
+  },
+  allIds: [
+    'id',
+    'image_number',
+    'agent',
+    'date',
+    'locality',
+    'image_object',
+    'tags',
+  ],
+}
