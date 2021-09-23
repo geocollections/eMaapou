@@ -273,6 +273,34 @@ export const HEADERS_ATTACHMENT_SOLR = {
   ],
 }
 
+export const HEADERS_ATTACHMENT = {
+  byIds: {
+    file: {
+      text: 'attachment.file',
+      value: 'file',
+      width: '120px',
+      show: true,
+      sortable: false,
+    },
+    description: {
+      text: 'attachment.description',
+      value: 'description',
+      show: true,
+      sortValue: {
+        et: 'attachment__description',
+        en: 'attachment__description_en',
+      },
+    },
+    agent: {
+      text: 'attachment.author',
+      value: 'agent',
+      show: true,
+      sortValue: 'attachment__author__agent',
+    },
+  },
+  allIds: ['file', 'description', 'agent'],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },

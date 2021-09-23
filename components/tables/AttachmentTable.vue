@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
-    :headers="headers"
-    :count="count"
     :options="options"
+    :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.file="{ item }">
       <attachment-cell
@@ -46,21 +48,21 @@
         {{ item.attachment.author.agent }}
       </div>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapperTest from './TableWrapperTest.vue'
 import AttachmentCell from '~/components/AttachmentCell.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_ATTACHMENT } from '~/constants'
 
 export default {
   name: 'AttachmentTable',
-  components: { TableWrapper, AttachmentCell },
+  components: { TableWrapperTest, AttachmentCell },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -78,35 +80,10 @@ export default {
         sortDesc: [],
       }),
     },
-    // ??? Why is this needed
-    idField: {
-      type: String,
-      required: false,
-      default: 'id',
-    },
   },
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('attachment.file'),
-          value: 'file',
-          width: '120px',
-          sortable: false,
-        },
-        { text: this.$t('attachment.description'), value: 'description' },
-        {
-          text: this.$t('attachment.author'),
-          value: 'agent',
-        },
-      ],
-      queryFields: {
-        description: () =>
-          this.$i18n.locale === 'et'
-            ? 'attachment__description'
-            : 'attachment__description_en',
-        attachment__author__agent: () => 'attachment__author__agent',
-      },
+      localHeaders: cloneDeep(HEADERS_ATTACHMENT),
     }
   },
 }
