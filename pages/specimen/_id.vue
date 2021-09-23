@@ -267,6 +267,8 @@ export default {
       )
 
       const validPath = $validateTabRoute(slugRoute, hydratedTabs)
+      console.log(validPath)
+      console.log(route.path)
       if (validPath !== route.path) redirect(validPath)
 
       const attachmentResponse = await $services.sarvSolr.getResourceList(
