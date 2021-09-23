@@ -626,3 +626,33 @@ export const HEADERS_DRILLCORE = {
     'acronym',
   ],
 }
+
+export const HEADERS_LOCALITY_REFERENCE = {
+  byIds: {
+    reference: {
+      text: 'localityReference.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    title: {
+      text: 'localityReference.referenceTitle',
+      value: 'title',
+      show: true,
+      sortValue: 'reference__title',
+    },
+    pages: {
+      text: 'localityReference.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'pages',
+    },
+    remarks: {
+      text: 'localityReference.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: ['reference', 'title', 'pages', 'remarks'],
+}
