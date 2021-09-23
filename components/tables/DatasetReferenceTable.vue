@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
@@ -30,20 +32,20 @@
         {{ item.reference.pages }}
       </div>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
   name: 'DatasetReferenceTable',
-  components: { ExternalLink, TableWrapper },
+  components: { ExternalLink, TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -64,12 +66,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('reference.reference'), value: 'reference' },
-        { text: this.$t('reference.title'), value: 'title' },
-        { text: this.$t('reference.journalBook'), value: 'journal' },
-        { text: this.$t('reference.pages'), value: 'pages' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_REFERENCE),
     }
   },
 }

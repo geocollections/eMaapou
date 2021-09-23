@@ -397,6 +397,36 @@ export const HEADERS_DATASET_GEOLOCATION = {
   allIds: [],
 }
 
+export const HEADERS_DATASET_REFERENCE = {
+  byIds: {
+    reference: {
+      text: 'reference.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    title: {
+      text: 'reference.title',
+      value: 'title',
+      show: true,
+      sortValue: 'reference__title',
+    },
+    journal: {
+      text: 'reference.journalBook',
+      value: 'journal',
+      show: true,
+      sortValue: 'reference__pages',
+    },
+    pages: {
+      text: 'reference.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'reference__journal__journal_name',
+    },
+  },
+  allIds: ['reference', 'title', 'journal', 'pages'],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
