@@ -24,10 +24,6 @@ export default {
   components: { TableWrapperTest },
   mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
