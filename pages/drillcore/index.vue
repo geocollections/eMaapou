@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        dynamic-headers
+        stateful-headers
         @update="handleUpdate"
       />
     </template>

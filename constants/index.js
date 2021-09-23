@@ -1,5 +1,5 @@
 export * from './tabs'
-
+export * from './headers'
 export const ANALYSIS = {
   options: {
     page: 1,

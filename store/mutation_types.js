@@ -39,3 +39,7 @@ export const PUSH_HISTORY = 'PUSH_HISTORY'
 // MAP
 
 export const SET_BASE_LAYER = 'SET_BASE_LAYER'
+
+// HEADERS
+export const UPDATE_HEADERS = 'UPDATE_HEADERS'
+export const RESET_HEADERS = 'RESET_HEADERS'
