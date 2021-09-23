@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -46,20 +48,20 @@
         {{ item.database_acronym }}
       </nuxt-link>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapperTest from '@/components/tables/TableWrapperTest.vue'
 import { mapState } from 'vuex'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET } from '~/constants'
 export default {
   name: 'DatasetTable',
-  components: { TableWrapper },
+  components: { TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -77,36 +79,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('dataset.id'), value: 'id' },
-        { text: this.$t('dataset.name'), value: 'name' },
-        { text: this.$t('dataset.date'), value: 'date' },
-        { text: this.$t('dataset.database'), value: 'database_acronym' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET),
+      module: 'dataset',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.dataset.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'dataset' }),
   },
 }
 </script>

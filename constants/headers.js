@@ -301,6 +301,36 @@ export const HEADERS_ATTACHMENT = {
   allIds: ['file', 'description', 'agent'],
 }
 
+export const HEADERS_DATASET = {
+  byIds: {
+    id: {
+      text: 'dataset.id',
+      value: 'id',
+      show: true,
+      sortValue: 'dataset_id',
+    },
+    name: {
+      text: 'dataset.name',
+      value: 'name',
+      show: true,
+      sortValue: { et: 'name', en: 'name_en' },
+    },
+    date: {
+      text: 'dataset.date',
+      value: 'date',
+      show: true,
+      sortValue: 'date,date_txt',
+    },
+    database: {
+      text: 'dataset.database',
+      value: 'database_acronym',
+      show: true,
+      sortValue: 'database_acronym',
+    },
+  },
+  allIds: ['id', 'name', 'date', 'database'],
+}
+
 export const HEADERS_DATASET_ANALYSIS = {
   byIds: {
     analysis: {

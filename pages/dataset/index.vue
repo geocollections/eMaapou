@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <dataset-table
@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        stateful-headers
+        dynamic-headers
         @update="handleUpdate"
       />
     </template>
