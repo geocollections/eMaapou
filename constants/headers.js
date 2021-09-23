@@ -367,6 +367,36 @@ export const HEADERS_DATASET_AUTHOR = {
   allIds: ['name', 'affiliation', 'type'],
 }
 
+export const HEADERS_DATASET_GEOLOCATION = {
+  byIds: {
+    name: {
+      text: 'datasetGeolocation.name',
+      value: 'name',
+      show: true,
+      sortValue: { et: 'locality__locality', en: 'locality__locality_en' },
+    },
+    longitude: {
+      text: 'datasetGeolocation.longitude',
+      value: 'longitude',
+      show: true,
+      sortValue: 'point_latitude',
+    },
+    latitude: {
+      text: 'datasetGeolocation.latitude',
+      value: 'latitude',
+      show: true,
+      sortValue: 'point_longitude',
+    },
+    is_polygon: {
+      text: 'datasetGeolocation.isPolygon',
+      value: 'is_polygon',
+      sortable: false,
+      show: true,
+    },
+  },
+  allIds: [],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
