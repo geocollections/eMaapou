@@ -1,17 +1,20 @@
 <template>
-  <table-wrapper
+  <table-wrapper-test
     expandable
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
-    :headers="headers"
-    :count="count"
     :options="options"
+    :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <!-- eslint-disable-next-line vue/no-template-shadow -->
     <template #expanded-item="{ headers, item }">
       <td class="py-2" :colspan="headers.length">
         <v-row no-gutters>
-          <v-col class="pr-2 pb-4 pt-2">
+          <v-col class="pt-2 pb-4 pr-2">
             {{ item.description }}
           </v-col>
           <v-col cols="12" md="6">
@@ -110,22 +113,21 @@
         {{ item.author_free }}
       </div>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import DataRow from '../DataRow.vue'
 import LinkDataRow from '../LinkDataRow.vue'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DESCRIPTION } from '~/constants'
 export default {
   name: 'DescriptionTable',
-  components: { TableWrapper, DataRow, LinkDataRow },
+  components: { TableWrapperTest, DataRow, LinkDataRow },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -146,35 +148,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('localityDescription.depthTop'), value: 'depth_top' },
-        { text: this.$t('localityDescription.depthBase'), value: 'depth_base' },
-        {
-          text: this.$t('localityDescription.thickness'),
-          value: 'thickness',
-          sortable: false,
-          class: 'static-cell-header',
-          cellClass: 'static-cell',
-        },
-        {
-          text: this.$t('localityDescription.rock'),
-          value: 'rock',
-        },
-        {
-          text: this.$t('localityDescription.stratigraphy'),
-          value: 'stratigraphy',
-        },
-        {
-          text: this.$t('localityDescription.author'),
-          value: 'author',
-          sortable: false,
-        },
-        {
-          text: this.$t('localityDescription.details'),
-          value: 'data-table-expand',
-          align: 'center',
-        },
-      ],
+      localHeaders: cloneDeep(HEADERS_DESCRIPTION),
     }
   },
   methods: {

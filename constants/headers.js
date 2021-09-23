@@ -457,6 +457,69 @@ export const HEADERS_DATASET_REFERENCE = {
   allIds: ['reference', 'title', 'journal', 'pages'],
 }
 
+export const HEADERS_DESCRIPTION = {
+  byIds: {
+    depth_top: {
+      text: 'localityDescription.depthTop',
+      value: 'depth_top',
+      show: true,
+      sortValue: 'depth_top',
+    },
+    depth_base: {
+      text: 'localityDescription.depthBase',
+      value: 'depth_base',
+      show: true,
+      sortValue: 'depth_base',
+    },
+    thickness: {
+      text: 'localityDescription.thickness',
+      value: 'thickness',
+      sortable: false,
+      class: 'static-cell-header',
+      cellClass: 'static-cell',
+      show: true,
+    },
+    rock: {
+      text: 'localityDescription.rock',
+      value: 'rock',
+      show: true,
+      sortValue: { et: 'rock_name', en: 'rock_name_en' },
+    },
+    stratigraphy: {
+      text: 'localityDescription.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: {
+        et: 'stratigraphy__stratigraphy',
+        en: 'stratigraphy__stratigraphy_en',
+      },
+    },
+    author: {
+      text: 'localityDescription.author',
+      value: 'author',
+      sortable: false,
+      show: true,
+      sortValue: 'reference__reference,agent__agent,author_free',
+    },
+    expand: {
+      text: 'localityDescription.details',
+      value: 'data-table-expand',
+      align: 'center',
+      sortable: false,
+      show: true,
+    },
+  },
+  allIds: [
+    'depth_top',
+    'depth_base',
+    'thickness',
+    'rock',
+    'stratigraphy',
+    'author',
+    'expand',
+  ],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
