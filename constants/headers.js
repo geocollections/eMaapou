@@ -627,6 +627,37 @@ export const HEADERS_DRILLCORE = {
   ],
 }
 
+export const HEADERS_LOCALITY = {
+  byIds: {
+    id: { text: 'locality.id', value: 'id', show: true, sortValue: 'id_l' },
+    locality: {
+      text: 'locality.name',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality', en: 'locality_en' },
+    },
+    country: {
+      text: 'locality.country',
+      value: 'country',
+      show: true,
+      sortValue: { et: 'country', en: 'country_en' },
+    },
+    latitude: {
+      text: 'locality.latitude',
+      value: 'latitude',
+      show: true,
+      sortValue: 'latitude',
+    },
+    longitude: {
+      text: 'locality.longitude',
+      value: 'longitude',
+      show: true,
+      sortValue: 'longitude',
+    },
+  },
+  allIds: ['id', 'locality', 'country', 'latitude', 'longitude'],
+}
+
 export const HEADERS_LOCALITY_REFERENCE = {
   byIds: {
     reference: {

@@ -3,6 +3,7 @@ import {
   HEADERS_ANALYTICAL_DATA,
   HEADERS_DATASET,
   HEADERS_DRILLCORE,
+  HEADERS_LOCALITY,
 } from '~/constants'
 
 export const initState = () => {
@@ -11,6 +12,7 @@ export const initState = () => {
     analytical_data: HEADERS_ANALYTICAL_DATA,
     dataset: HEADERS_DATASET,
     drillcore: HEADERS_DRILLCORE,
+    locality: HEADERS_LOCALITY,
   }
 }
 

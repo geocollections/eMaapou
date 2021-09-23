@@ -1,4 +1,4 @@
-import { LOCALITY } from '~/constants'
+import { HEADERS_LOCALITY, LOCALITY } from '~/constants'
 
 export default {
   async searchLocalities({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'locality',
         resource: 'locality',
-        resourceDefaults: LOCALITY,
+        resourceDefaults: { ...LOCALITY, headers: HEADERS_LOCALITY },
       },
       { root: true }
     )
