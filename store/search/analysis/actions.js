@@ -1,4 +1,4 @@
-import { ANALYSIS } from '~/constants'
+import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {
   async searchAnalyses({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'analysis',
         resource: 'analysis',
-        resourceDefaults: ANALYSIS,
+        resourceDefaults: { ...ANALYSIS, headers: HEADERS_ANALYSIS },
       },
       { root: true }
     )

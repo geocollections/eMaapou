@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : filteredHeaders"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="filteredHeaders"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -71,21 +73,20 @@
       </div>
       <div v-else>{{ item.date_free }}</div>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_ANALYSIS } from '~/constants'
 export default {
   name: 'AnalysisTable',
-  components: { TableWrapper },
+  components: { TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -103,58 +104,25 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
     hideDepth: Boolean,
     hideLocality: Boolean,
     hideSample: Boolean,
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('analysis.id'), value: 'id' },
-        { text: this.$t('analysis.sampleNumber'), value: 'sample_number' },
-        { text: this.$t('analysis.locality'), value: 'locality' },
-        { text: this.$t('analysis.depth'), value: 'depth' },
-        { text: this.$t('analysis.depthInterval'), value: 'depth_interval' },
-
-        { text: this.$t('analysis.method'), value: 'method' },
-        {
-          text: this.$t('analysis.methodDetails'),
-          value: 'method_details',
-        },
-        { text: this.$t('analysis.analysedBy'), value: 'agent' },
-        { text: this.$t('analysis.date'), value: 'date' },
-      ],
+      localHeaders: cloneDeep(HEADERS_ANALYSIS),
+      module: 'analysis',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.analysis.tableHeaders
-      },
-    }),
-
+    ...mapState('headers', { stateHeaders: 'analysis' }),
     filteredHeaders() {
-      return this[this.useDynamicHeaders ? 'tableHeaders' : 'headers'].filter(
-        (item) => {
-          if (item.value.includes('depth')) return !this.hideDepth
-          else if (item.value === 'locality') return !this.hideLocality
-          else if (item.value === 'sample_number') return !this.hideSample
-          else return item
-        }
-      )
-    },
-
-    dynamicHeaders() {
-      return this.filteredHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
+      return this.$_headers.filter((item) => {
+        if (item.value.includes('depth')) return !this.hideDepth
+        else if (item.value === 'locality') return !this.hideLocality
+        else if (item.value === 'sample_number') return !this.hideSample
+        else return item
+      })
     },
   },
   methods: {

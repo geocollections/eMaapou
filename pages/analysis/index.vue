@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <analysis-table
@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        stateful-headers
+        dynamic-headers
         @update="handleUpdate"
       />
     </template>
@@ -30,7 +31,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import AnalysisTable from '@/components/tables/AnalysisTable'
+import AnalysisTable from '~/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm.vue'
 import Search from '~/components/templates/Search'
 import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'

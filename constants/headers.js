@@ -49,6 +49,71 @@ export const HEADERS_ANALYSIS_RESULT = {
   ],
 }
 
+export const HEADERS_ANALYSIS = {
+  byIds: {
+    id: { text: 'analysis.id', value: 'id', show: true, sortValue: 'id_l' },
+    sample_number: {
+      text: 'analysis.sampleNumber',
+      value: 'sample_number',
+      show: true,
+      sortValue: 'sample_number',
+    },
+    locality: {
+      text: 'analysis.locality',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality', en: 'locality_en' },
+    },
+    depth: {
+      text: 'analysis.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+    depth_interval: {
+      text: 'analysis.depthInterval',
+      value: 'depth_interval',
+      show: true,
+      sortValue: 'depth_interval',
+    },
+    method: {
+      text: 'analysis.method',
+      value: 'method',
+      show: true,
+      sortValue: { et: 'analysis_method', en: 'analysis_method_en' },
+    },
+    method_details: {
+      text: 'analysis.methodDetails',
+      value: 'method_details',
+      show: true,
+      sortValue: { et: 'method_details', en: 'method_details_en' },
+    },
+    agent: {
+      text: 'analysis.analysedBy',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent',
+    },
+    date: {
+      text: 'analysis.date',
+      value: 'date',
+      show: true,
+      sortValue: 'date',
+    },
+  },
+  allIds: [
+    'id',
+    'sample_number',
+    'locality',
+    'depth',
+    'depth_interval',
+    'method',
+    'method_details',
+    'agent',
+    'date',
+  ],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
