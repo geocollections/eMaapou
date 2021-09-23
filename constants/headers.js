@@ -520,6 +520,55 @@ export const HEADERS_DESCRIPTION = {
   ],
 }
 
+export const HEADERS_DOI = {
+  byIds: {
+    identifier: {
+      text: 'doi.identifier',
+      value: 'identifier',
+      show: true,
+      sortValue: 'identfier',
+    },
+    creator: {
+      text: 'doi.creators',
+      value: 'creators',
+      show: true,
+      sortValue: 'creators',
+    },
+    reference_year: {
+      text: 'doi.reference_year',
+      value: 'reference_year',
+      show: true,
+      sortValue: 'reference_year',
+    },
+    title: {
+      text: 'doi.table_title',
+      value: 'title',
+      show: true,
+      sortValue: 'title',
+    },
+    resource: {
+      text: 'doi.resource',
+      value: 'resource',
+      show: true,
+      sortValue: 'resource',
+    },
+    datacite_created: {
+      text: 'doi.datacite_created',
+      value: 'datacite_created',
+      show: true,
+      sortValue: 'datacite_created',
+    },
+  },
+  allIds: [
+    'identifier',
+    'creator',
+    'reference_year',
+    'title',
+    'resource',
+    'datacite_created',
+  ],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
