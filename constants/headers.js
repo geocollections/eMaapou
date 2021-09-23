@@ -301,6 +301,48 @@ export const HEADERS_ATTACHMENT = {
   allIds: ['file', 'description', 'agent'],
 }
 
+export const HEADERS_DATASET_ANALYSIS = {
+  byIds: {
+    analysis: {
+      text: 'datasetAnalysis.analysis',
+      value: 'analysis',
+      show: true,
+      sortValue: 'id_l',
+    },
+    sample: {
+      text: 'datasetAnalysis.sampleNumber',
+      value: 'sample',
+      show: true,
+      sortValue: 'sample_id_sl',
+    },
+    locality: {
+      text: 'datasetAnalysis.locality',
+      value: 'locality',
+      show: true,
+      sortValue: 'locality',
+    },
+    stratigraphy: {
+      text: 'datasetAnalysis.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
+    },
+    lithostratigraphy: {
+      text: 'datasetAnalysis.lithostratigraphy',
+      value: 'lithostratigraphy',
+      show: true,
+      sortValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
+    },
+    depth: {
+      text: 'datasetAnalysis.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+  },
+  allIds: ['sample', 'locality', 'stratigraphy', 'lithostratigraphy', 'depth'],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
