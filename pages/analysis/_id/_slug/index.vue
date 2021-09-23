@@ -5,6 +5,7 @@
     :options="options"
     hide-depth
     hide-method
+    dynamic-headers
     @update="handleUpdate"
   />
 </template>

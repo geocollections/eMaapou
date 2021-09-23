@@ -7,6 +7,7 @@
     :count="count"
     v-on="$listeners"
     @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.drillcore="{ item }">
       <nuxt-link
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 import TableWrapperTest from './TableWrapperTest.vue'
 import { HEADERS_DRILLCORE } from '~/constants'
@@ -50,7 +51,7 @@ export default {
   },
   data() {
     return {
-      localHeaders: HEADERS_DRILLCORE,
+      localHeaders: cloneDeep(HEADERS_DRILLCORE),
       module: 'drillcore',
     }
   },

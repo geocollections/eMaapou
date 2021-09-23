@@ -4,5 +4,7 @@ export default {
   [UPDATE_HEADERS](state, { module, headers }) {
     state[module] = headers
   },
-  [RESET_HEADERS](state, { module }) {},
+  [RESET_HEADERS](state, { module, initHeaders }) {
+    state[module] = initHeaders
+  },
 }

@@ -99,6 +99,7 @@
                   </v-list-item-content>
                 </template>
               </v-autocomplete>
+              <v-btn @click="$emit('reset:headers')">RESET HEADERS</v-btn>
             </v-col>
             <v-col>
               <pagination-controls

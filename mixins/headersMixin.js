@@ -27,7 +27,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('headers', ['updateHeaders']),
+    ...mapActions('headers', ['updateHeaders', 'resetHeaders']),
     $_handleHeadersChange(e) {
       const tempHeaders = this.statefulHeaders
         ? cloneDeep(this.stateHeaders)
@@ -44,6 +44,10 @@ export default {
       if (this.statefulHeaders)
         this.updateHeaders({ module: this.module, headers: tempHeaders })
       else this.localHeaders = tempHeaders
+    },
+    $_handleHeadersReset() {
+      if (this.statefulHeaders) this.resetHeaders({ module: this.module })
+      else this.localHeaders = this.$options.data().localHeaders
     },
   },
 }

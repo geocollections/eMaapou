@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ANALYSIS_RESULT } from '~/constants'
@@ -46,7 +46,7 @@ export default {
   },
   data() {
     return {
-      localHeaders: HEADERS_ANALYSIS_RESULT,
+      localHeaders: cloneDeep(HEADERS_ANALYSIS_RESULT),
     }
   },
   computed: {
