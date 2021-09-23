@@ -214,6 +214,65 @@ export const HEADERS_ANALYTICAL_DATA = {
   ],
 }
 
+export const HEADERS_ATTACHMENT_SOLR = {
+  byIds: {
+    id: { text: 'attachment.id', value: 'id', show: true, sortValue: 'id' },
+    format_value: {
+      text: 'attachment.format',
+      value: 'format_value',
+      show: true,
+      sortValue: 'format_value',
+    },
+    image_number: {
+      text: 'attachment.image_number',
+      value: 'image_number',
+      show: true,
+      sortValue: 'image_number',
+    },
+    agent: {
+      text: 'attachment.author',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent',
+    },
+    date: {
+      text: 'attachment.date',
+      value: 'date',
+      show: true,
+      sortValue: 'date_created,date_created_free',
+    },
+    reference: {
+      text: 'attachment.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference',
+    },
+    type: {
+      text: 'attachment.type',
+      value: 'type',
+      show: true,
+      sortValue: 'type',
+    },
+    image: {
+      text: 'attachment.image',
+      value: 'image',
+      show: true,
+      sortValue: 'uuid_filename',
+      sortable: false,
+    },
+  },
+  allIds: [
+    'id',
+    'format_value',
+    'image_number',
+    'agent',
+    'date',
+    'reference',
+    'type',
+    'image',
+  ],
+}
+
 export const HEADERS_DRILLCORE = {
   byIds: {
     id: { text: 'drillcore.id', value: 'id', show: true, sortValue: 'id_l' },
