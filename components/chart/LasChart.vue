@@ -1,5 +1,8 @@
 <template>
-  <chart-wrapper :options="chartOptions" />
+  <chart-wrapper
+    :options="chartOptions"
+    :hide-renderer-switch="hideRendererSwitch"
+  />
 </template>
 
 <script>
@@ -17,6 +20,11 @@ export default {
       type: String,
       required: false,
       default: 'Chart title',
+    },
+    hideRendererSwitch: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data() {

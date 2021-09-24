@@ -1,26 +1,11 @@
 <template>
   <client-only>
     <div>
-      <div class="d-flex flex-row px-4">
-        <v-btn
-          width="75"
-          small
-          class="mb-2 rounded-r-0 rounded-l"
-          color="accent"
-          :outlined="initOptions.renderer !== 'canvas'"
-          @click="initOptions.renderer = 'canvas'"
-          >Canvas</v-btn
-        >
-        <v-btn
-          width="75"
-          small
-          class="mb-2 rounded-l-0 rounded-r"
-          color="accent"
-          :outlined="initOptions.renderer !== 'svg'"
-          @click="initOptions.renderer = 'svg'"
-          >SVG</v-btn
-        >
-      </div>
+      <renderer-switch
+        v-if="!hideRendererSwitch"
+        :renderer="renderer"
+        @update="renderer = $event"
+      />
 
       <v-chart
         class="chart"
@@ -36,20 +21,25 @@
 
 <script>
 import deepmerge from 'deepmerge'
+import { mapFields } from 'vuex-map-fields'
+import RendererSwitch from '~/components/chart/RendererSwitch'
 export default {
   name: 'ChartWrapper',
+  components: { RendererSwitch },
   props: {
     options: {
       type: Object,
       required: false,
       default: () => {},
     },
+    hideRendererSwitch: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
-      initOptions: {
-        renderer: 'canvas',
-      },
       defaultOptions: {
         title: {
           text: 'Chart title',
@@ -121,11 +111,18 @@ export default {
     }
   },
   computed: {
+    ...mapFields('chart', ['renderer']),
     computedOptions() {
       // Todo: Keep an eye on options if series or any other option which should/shouldn't exist then errors start showing,
       const deepMergedObject = deepmerge(this.defaultOptions, this.options)
       if (deepMergedObject?.series?.length > 0) return deepMergedObject
       else return {}
+    },
+
+    initOptions() {
+      return {
+        renderer: this.renderer,
+      }
     },
   },
 }

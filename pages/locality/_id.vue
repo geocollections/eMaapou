@@ -255,22 +255,6 @@
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
-
-      <v-card v-if="rawLasFileContent">
-        <v-card-title></v-card-title>
-
-        <v-card-text>
-          <las-chart
-            :chart-title="
-              $translate({
-                et: locality.locality,
-                en: locality.locality_en,
-              })
-            "
-            :file-data="rawLasFileContent"
-          />
-        </v-card-text>
-      </v-card>
     </template>
   </detail>
 </template>
@@ -285,12 +269,10 @@ import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
-import LasChart from '~/components/chart/LasChart'
 import { TABS_LOCALITY } from '~/constants'
 
 export default {
   components: {
-    LasChart,
     TitleCardDetail,
     DataRow,
     LinkDataRow,
@@ -360,8 +342,7 @@ export default {
 
       const attachments = attachmentResponse.items ?? []
 
-      // START of getting .las file data
-      // At first checking if any related .las files
+      // Checking if locality has a related .las file to show in graph tab
       const lasFileResponse = await $services.sarvREST.getResourceList(
         'attachment_link',
         {
@@ -373,40 +354,19 @@ export default {
         }
       )
 
-      let rawLasFileContent
-      if (
-        lasFileResponse?.count > 0 &&
-        lasFileResponse?.items?.[0]?.attachment
-      ) {
-        const rawLasfileContentResponse = await $services.sarvREST.getResource(
-          'file',
-          lasFileResponse?.items?.[0]?.attachment,
-          {
-            params: {
-              raw_content: 'true',
-            },
-          }
-        )
-
-        rawLasFileContent = rawLasfileContentResponse
-        if (
-          typeof rawLasfileContentResponse === 'string' &&
-          rawLasFileContent.startsWith('Error: ')
-        )
-          rawLasFileContent = ''
-      }
-      // END of getting .las file data
-
       const tabsObject = TABS_LOCALITY
 
       tabsObject.byIds.boxes.count = drillcore?.boxes || 0
       tabsObject.byIds.boxes.props.drillcore = drillcore ? drillcore.id : null
 
-      tabsObject.byIds.analysis_results.props.localityObject = locality
+      tabsObject.byIds.analysis_results.props = {
+        localityObject: locality,
+        attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+      }
 
       const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
-      const hydratedTabs = await Promise.all(
+      let hydratedTabs = await Promise.all(
         tabs.map(
           async (tab) =>
             await $hydrateTab(tab, {
@@ -427,6 +387,22 @@ export default {
             })
         )
       )
+      // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
+      hydratedTabs = hydratedTabs.map((item) => {
+        if (item.id === 'graphs') {
+          const count = lasFileResponse?.items?.[0]?.attachment
+            ? item.count + 1
+            : item.count
+          return {
+            ...item,
+            count,
+            props: {
+              ...item.props,
+              analysisResultsCount: item.count,
+            },
+          }
+        } else return item
+      })
 
       const slugRoute = $createSlugRoute(
         route,
@@ -444,7 +420,6 @@ export default {
         initActiveTab: validPath,
         // attachmentsOutcrop,
         attachments,
-        rawLasFileContent,
       }
     } catch (err) {
       error({
@@ -476,7 +451,11 @@ export default {
       analyticalDataLocality: 'filters.byIds.locality.value',
     }),
     filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
+      return this.tabs.filter((item) => {
+        if (item.id === 'graphs') {
+          return item.props.attachment || item.props.analysisResultsCount > 0
+        } else return item.count > 0
+      })
     },
 
     images() {
