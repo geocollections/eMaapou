@@ -1,12 +1,36 @@
 <template>
   <client-only>
-    <v-chart
-      class="chart"
-      v-bind="$attrs"
-      autoresize
-      :option="computedOptions"
-      v-on="$listeners"
-    />
+    <div>
+      <div class="d-flex flex-row px-4">
+        <v-btn
+          width="75"
+          small
+          class="mb-2 rounded-r-0 rounded-l"
+          color="accent"
+          :outlined="initOptions.renderer !== 'canvas'"
+          @click="initOptions.renderer = 'canvas'"
+          >Canvas</v-btn
+        >
+        <v-btn
+          width="75"
+          small
+          class="mb-2 rounded-l-0 rounded-r"
+          color="accent"
+          :outlined="initOptions.renderer !== 'svg'"
+          @click="initOptions.renderer = 'svg'"
+          >SVG</v-btn
+        >
+      </div>
+
+      <v-chart
+        class="chart"
+        v-bind="$attrs"
+        autoresize
+        :init-options="initOptions"
+        :option="computedOptions"
+        v-on="$listeners"
+      />
+    </div>
   </client-only>
 </template>
 
@@ -23,6 +47,9 @@ export default {
   },
   data() {
     return {
+      initOptions: {
+        renderer: 'canvas',
+      },
       defaultOptions: {
         title: {
           text: 'Chart title',
