@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -85,19 +85,19 @@
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE } from '~/constants'
 
 export default {
   name: 'SampleTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

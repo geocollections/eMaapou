@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -48,18 +48,18 @@
         {{ item.database_acronym }}
       </nuxt-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
-import TableWrapperTest from '@/components/tables/TableWrapperTest.vue'
+import TableWrapper from '@/components/tables/TableWrapper.vue'
 import { mapState } from 'vuex'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET } from '~/constants'
 export default {
   name: 'DatasetTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

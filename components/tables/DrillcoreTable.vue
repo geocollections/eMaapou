@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -17,18 +17,18 @@
         {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
       </nuxt-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
-import TableWrapperTest from './TableWrapperTest.vue'
+import TableWrapper from './TableWrapper.vue'
 import { HEADERS_DRILLCORE } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'DrillcoreTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

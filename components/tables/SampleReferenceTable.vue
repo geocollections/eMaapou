@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -17,17 +17,17 @@
         >{{ item.reference__reference }}</a
       >
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE_REFERENCE } from '~/constants'
 export default {
   name: 'SampleReferenceTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

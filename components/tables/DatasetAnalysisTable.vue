@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="mergedHeaders"
     :items="items"
@@ -86,17 +86,17 @@
         }}
       </nuxt-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET_ANALYSIS } from '~/constants'
 export default {
   name: 'DatasetAnalysisTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -111,18 +111,18 @@
         }}
       </nuxt-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY } from '~/constants'
 export default {
   name: 'StratigraphyTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -20,16 +20,16 @@
     <template #item.title="{ item }">
       <div v-if="item.reference">{{ item.reference.title }}</div>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import { HEADERS_LOCALITY_REFERENCE } from '~/constants'
 export default {
   name: 'LocalityReferenceTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   props: {
     items: {
       type: Array,

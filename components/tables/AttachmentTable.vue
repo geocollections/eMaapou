@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -48,19 +48,19 @@
         {{ item.attachment.author.agent }}
       </div>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
-import TableWrapperTest from './TableWrapperTest.vue'
+import TableWrapper from './TableWrapper.vue'
 import AttachmentCell from '~/components/AttachmentCell.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ATTACHMENT } from '~/constants'
 
 export default {
   name: 'AttachmentTable',
-  components: { TableWrapperTest, AttachmentCell },
+  components: { TableWrapper, AttachmentCell },
   mixins: [headersMixin],
   props: {
     items: {

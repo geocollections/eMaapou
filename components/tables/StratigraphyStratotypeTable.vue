@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -43,18 +43,18 @@
         {{ item.reference.reference }}
       </external-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY_STRATOTYPE } from '~/constants'
 export default {
   name: 'StratigraphyStratotypeTable',
-  components: { TableWrapperTest, ExternalLink },
+  components: { TableWrapper, ExternalLink },
   mixins: [headersMixin],
   props: {
     items: {

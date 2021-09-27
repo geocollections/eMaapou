@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="computedHeaders"
     :items="items"
@@ -11,17 +11,17 @@
     <template #item.analysis_method="{ item }">{{
       $translate({ et: item.analysis_method, en: item.analysis_method_en })
     }}</template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ANALYSIS_RESULT } from '~/constants'
 export default {
   name: 'AnalysisResultTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

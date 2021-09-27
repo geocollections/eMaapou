@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -38,19 +38,19 @@
         {{ item.mindat_id }}
       </external-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
 import BooleanIndicator from '../BooleanIndicator.vue'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ROCK } from '~/constants'
 export default {
   name: 'RockTable',
-  components: { ExternalLink, TableWrapperTest, BooleanIndicator },
+  components: { ExternalLink, TableWrapper, BooleanIndicator },
   mixins: [headersMixin],
   props: {
     items: {

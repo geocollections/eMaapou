@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -135,21 +135,21 @@
         {{ item.taxon }}
       </external-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ImageCell from '~/components/ImageCell'
 import ExternalLink from '~/components/ExternalLink'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN } from '~/constants'
 export default {
   name: 'SpecimenTable',
-  components: { ExternalLink, TableWrapperTest, ImageCell },
+  components: { ExternalLink, TableWrapper, ImageCell },
   mixins: [headersMixin],
   props: {
     items: {

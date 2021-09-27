@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -61,19 +61,19 @@
         "
       />
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
-import TableWrapperTest from '@/components/tables/TableWrapperTest.vue'
+import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
 import ExternalLink from '~/components/ExternalLink'
 import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'AttachmentSolrTable',
-  components: { ExternalLink, TableWrapperTest, ImageCell },
+  components: { ExternalLink, TableWrapper, ImageCell },
   mixins: [headersMixin],
   props: {
     items: {

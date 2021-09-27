@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     expandable
     v-bind="$attrs"
     :headers="$_headers"
@@ -113,19 +113,19 @@
         {{ item.author_free }}
       </div>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
 import DataRow from '../DataRow.vue'
 import LinkDataRow from '../LinkDataRow.vue'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DESCRIPTION } from '~/constants'
 export default {
   name: 'DescriptionTable',
-  components: { TableWrapperTest, DataRow, LinkDataRow },
+  components: { TableWrapper, DataRow, LinkDataRow },
   mixins: [headersMixin],
   props: {
     items: {

@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -25,18 +25,18 @@
     <template #item.content="{ item }">
       {{ $translate({ et: item.content, en: item.content_en }) }}
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY_REFERENCE } from '~/constants'
 export default {
   name: 'StratigraphyReferenceTable',
-  components: { TableWrapperTest, ExternalLink },
+  components: { TableWrapper, ExternalLink },
   mixins: [headersMixin],
   props: {
     items: {

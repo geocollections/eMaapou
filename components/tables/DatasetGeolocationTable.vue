@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -31,17 +31,17 @@
       <v-icon v-if="item.polygon" color="green" small>mdi-check-bold</v-icon>
       <v-icon v-else color="red" small>mdi-close-thick</v-icon>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from './TableWrapperTest.vue'
+import TableWrapper from './TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {
   name: 'DatasetGeolocationTable',
-  components: { TableWrapperTest },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

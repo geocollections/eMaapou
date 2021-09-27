@@ -15,7 +15,7 @@
       calculate-widths
       multi-sort
       :loading="isLoading"
-      :headers="headers"
+      :headers="visibleHeaders"
       :items="items"
       :options="options"
       :server-items-length="count"
@@ -79,6 +79,27 @@
                   </v-list>
                 </v-menu>
               </v-btn>
+            </v-col>
+            <v-col v-if="dynamicHeaders">
+              <v-autocomplete
+                :items="headers"
+                :value="visibleHeaders"
+                chips
+                small-chips
+                deletable-chips
+                multiple
+                hide-details
+                cache-items
+                :label="$t('common.tableHeaders')"
+                @change="$emit('change:headers', $event)"
+              >
+                <template #item="{ item }">
+                  <v-list-item-content>
+                    {{ item.text }}
+                  </v-list-item-content>
+                </template>
+              </v-autocomplete>
+              <v-btn @click="$emit('reset:headers')">RESET HEADERS</v-btn>
             </v-col>
             <v-col>
               <pagination-controls
@@ -192,6 +213,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    dynamicHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -204,6 +229,11 @@ export default {
       expanded: [],
       isLoading: false,
     }
+  },
+  computed: {
+    visibleHeaders() {
+      return this.headers.filter((header) => header.show)
+    },
   },
   watch: {
     items() {
@@ -222,6 +252,9 @@ export default {
         search: this.search,
       })
     }, 500),
+    handleHeadersChange(e) {
+      this.$emit('change:headers', e)
+    },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,
       // as this function does not have a event argument (https://vuetifyjs.com/en/api/v-data-table/#api-events)

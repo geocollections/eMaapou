@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -76,18 +76,18 @@
         </external-link>
       </span>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_PREPARATION } from '~/constants'
 export default {
   name: 'PreparationTable',
-  components: { ExternalLink, TableWrapperTest },
+  components: { ExternalLink, TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

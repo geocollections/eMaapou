@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -48,19 +48,19 @@
     <template #item.current="{ item }">
       <boolean-indicator :value="item.current" />
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import BooleanIndicator from '../BooleanIndicator.vue'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   name: 'SpecimenIdentificationTable',
-  components: { TableWrapperTest, ExternalLink, BooleanIndicator },
+  components: { TableWrapper, ExternalLink, BooleanIndicator },
   mixins: [headersMixin],
   props: {
     items: {

@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -74,19 +74,19 @@
         {{ $translate({ et: item.lad, en: item.lad_en }) }}
       </nuxt-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_TAXON } from '~/constants'
 export default {
   name: 'TaxonTable',
-  components: { ExternalLink, TableWrapperTest },
+  components: { ExternalLink, TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {

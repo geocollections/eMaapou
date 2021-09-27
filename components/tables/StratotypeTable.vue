@@ -1,5 +1,5 @@
 <template>
-  <table-wrapper-test
+  <table-wrapper
     v-bind="$attrs"
     :headers="$_headers"
     :items="items"
@@ -46,17 +46,17 @@
         {{ item.reference.reference }}
       </external-link>
     </template>
-  </table-wrapper-test>
+  </table-wrapper>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
 import { HEADERS_STRATOTYPE } from '~/constants'
 export default {
   name: 'StratotypeTable',
-  components: { ExternalLink, TableWrapperTest },
+  components: { ExternalLink, TableWrapper },
   props: {
     items: {
       type: Array,
