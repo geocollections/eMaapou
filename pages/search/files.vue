@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { ATTACHMENT } from '~/constants'
+import { ATTACHMENT, HEADERS_ATTACHMENT } from '~/constants'
 import AttachmentSolrTable from '~/components/tables/AttachmentSolrTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(ATTACHMENT.queryFields),
+          queryFields: this.$getSortValues(HEADERS_ATTACHMENT),
           searchFilters: {},
         }
       )

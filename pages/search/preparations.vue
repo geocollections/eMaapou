@@ -11,7 +11,7 @@
 <script>
 import PreparationTable from '@/components/tables/PreparationTable'
 import { debounce } from 'lodash'
-import { PREPARATION } from '~/constants'
+import { HEADERS_PREPARATION, PREPARATION } from '~/constants'
 
 export default {
   components: { PreparationTable },
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(PREPARATION.queryFields),
+          queryFields: this.$getSortValues(HEADERS_PREPARATION),
           searchFilters: {},
         }
       )

@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { IMAGE } from '~/constants'
+import { HEADERS_PHOTO, IMAGE } from '~/constants'
 import AttachmentSolrTable from '~/components/tables/AttachmentSolrTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(IMAGE.queryFields),
+          queryFields: this.$getSortValues(HEADERS_PHOTO),
           searchFilters: {
             specimenImageAttachment: {
               value: '2',
