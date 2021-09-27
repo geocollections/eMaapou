@@ -217,38 +217,11 @@ export default {
       const ids = analysisResponse?.ids
       const analysis = analysisResponse
 
-      const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `analysis_id:${analysis.id}` },
-                },
-                api: {
-                  default: { analysis: analysis.id },
-                },
-              },
-            })
-        )
-      )
-
-      const text = `${$translate({
-        et: analysis?.analysis_method.analysis_method,
-        en: analysis?.analysis_method.method_en,
-      })}-${analysis?.sample.number}`
-
-      const slugRoute = $createSlugRoute(route, text)
-
-      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
       return {
         analysis,
         ids,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
+        // tabs: hydratedTabs,
+        // initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -257,6 +230,44 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+    }
+  },
+  async fetch() {
+    const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `analysis_id:${this.analysis.id}` },
+              },
+              api: {
+                default: { analysis: this.analysis.id },
+              },
+            },
+          })
+      )
+    )
+    this.tabs = hydratedTabs
+
+    const text = `${this.$translate({
+      et: this.analysis?.analysis_method.analysis_method,
+      en: this.analysis?.analysis_method.method_en,
+    })}-${this.analysis?.sample.number}`
+
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+    this.initActiveTab = validPath
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
