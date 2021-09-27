@@ -878,3 +878,33 @@ export const HEADERS_ROCK = {
   },
   allIds: ['id', 'name', 'name_en', 'formula', 'in_estonia', 'mindat_id'],
 }
+
+export const HEADERS_SAMPLE_REFERENCE = {
+  byIds: {
+    reference: {
+      text: 'sampleReference.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    reference__title: {
+      text: 'sampleReference.referenceTitle',
+      value: 'reference__title',
+      show: true,
+      sortValue: 'reference__title',
+    },
+    pages: {
+      text: 'sampleReference.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'pages',
+    },
+    remarks: {
+      text: 'sampleReference.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: ['reference', 'reference__title', 'pages', 'remarks'],
+}

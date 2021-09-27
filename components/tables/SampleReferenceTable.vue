@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <a
@@ -15,20 +17,19 @@
         >{{ item.reference__reference }}</a
       >
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { round, cloneDeep } from 'lodash'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SAMPLE_REFERENCE } from '~/constants'
 export default {
   name: 'SampleReferenceTable',
-  components: { TableWrapper },
+  components: { TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -49,15 +50,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('sampleReference.reference'), value: 'reference' },
-        {
-          text: this.$t('sampleReference.referenceTitle'),
-          value: 'reference__title',
-        },
-        { text: this.$t('sampleReference.pages'), value: 'pages' },
-        { text: this.$t('sampleReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SAMPLE_REFERENCE),
     }
   },
   methods: {
