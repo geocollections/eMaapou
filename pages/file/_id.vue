@@ -544,79 +544,6 @@ export default {
       const ids = fileResponse?.ids
       const file = fileResponse
 
-      let fileContent
-      let rawFileContent
-      // Todo: Probably should remove it from asyncData as it's not necessary to SSR
-      //  and if request returns 404 or 500 it crashes and breaks whole page
-      if (
-        file?.uuid_filename?.endsWith('.txt') ||
-        file?.uuid_filename?.endsWith('.las')
-      ) {
-        const fileContentResponse = await app.$services.sarvREST.getResource(
-          'file',
-          params.id
-        )
-        fileContent = fileContentResponse
-        if (fileContent.startsWith('Error: ')) fileContent = ''
-
-        const rawFileContentResponse = await app.$services.sarvREST.getResource(
-          'file',
-          params.id,
-          {
-            params: {
-              raw_content: 'true',
-            },
-          }
-        )
-        rawFileContent = rawFileContentResponse
-        if (
-          typeof rawFileContentResponse === 'string' &&
-          rawFileContent.startsWith('Error: ')
-        )
-          rawFileContent = ''
-      }
-
-      let specimenIdentification
-      let specimenIdentificationGeology
-      if (file.specimen) {
-        const specimenIdentificationResponse =
-          await app.$services.sarvREST.getResourceList(
-            'specimen_identification',
-            {
-              isValid: isNil(file.id),
-              defaultParams: {
-                current: true,
-                specimen: file.specimen.id,
-                nest: 1,
-              },
-            }
-          )
-        specimenIdentification = specimenIdentificationResponse.items
-        const specimenIdentificationGeologyResponse =
-          await app.$services.sarvREST.getResourceList(
-            'specimen_identification_geology',
-            {
-              isValid: isNil(file.id),
-              defaultParams: {
-                current: true,
-                specimen: file.specimen.id,
-                nest: 1,
-              },
-            }
-          )
-        specimenIdentificationGeology =
-          specimenIdentificationGeologyResponse.items
-      }
-      const attachmentKeywordsResponse =
-        await app.$services.sarvREST.getResourceList('attachment_keyword', {
-          isValid: isNil(file.id),
-          defaultParams: {
-            attachment: file.id,
-            nest: 1,
-          },
-        })
-      const attachmentKeywords = attachmentKeywordsResponse.items
-
       const text = () => {
         switch (file?.specimen_image_attachment) {
           case 1:
@@ -640,11 +567,6 @@ export default {
 
       return {
         file,
-        fileContent,
-        rawFileContent,
-        specimenIdentification,
-        specimenIdentificationGeology,
-        attachmentKeywords,
         ids,
       }
     } catch (err) {
@@ -656,7 +578,7 @@ export default {
   },
   data() {
     return {
-      expansionPanel: [0],
+      expansionPanel: [1],
       nameFields: {
         collection: {
           et: 'collection_name',
@@ -727,6 +649,11 @@ export default {
           en: 'taxon',
         },
       },
+      specimenIdentification: [],
+      specimenIdentificationGeology: [],
+      attachmentKeywords: [],
+      fileContent: '',
+      rawFileContent: '',
       tabs: [
         {
           id: 'collection',
@@ -863,15 +790,92 @@ export default {
     }
   },
   async fetch() {
+    // Specimen data START
+    if (this.file?.specimen) {
+      const specimenIdentificationResponse =
+        await this.$services.sarvREST.getResourceList(
+          'specimen_identification',
+          {
+            isValid: isNil(this.file?.id),
+            defaultParams: {
+              current: true,
+              specimen: this.file?.specimen?.id,
+              nest: 1,
+            },
+          }
+        )
+      this.specimenIdentification = specimenIdentificationResponse.items
+      const specimenIdentificationGeologyResponse =
+        await this.$services.sarvREST.getResourceList(
+          'specimen_identification_geology',
+          {
+            isValid: isNil(this.file?.id),
+            defaultParams: {
+              current: true,
+              specimen: this.file?.specimen?.id,
+              nest: 1,
+            },
+          }
+        )
+      this.specimenIdentificationGeology =
+        specimenIdentificationGeologyResponse.items
+    }
+    // Specimen data END
+
+    // Attachment keywords START
+    const attachmentKeywordsResponse =
+      await this.$services.sarvREST.getResourceList('attachment_keyword', {
+        isValid: isNil(this.file?.id),
+        defaultParams: {
+          attachment: this.file?.id,
+          nest: 1,
+        },
+      })
+    this.attachmentKeywords = attachmentKeywordsResponse.items
+    // Attachment keywords END
+
+    // Raw file content data START
+    if (
+      this.file?.uuid_filename?.endsWith('.txt') ||
+      this.file?.uuid_filename?.endsWith('.las')
+    ) {
+      // File content (e.g., .las in json format)
+      const fileContentResponse = await this.$services.sarvREST.getResource(
+        'file',
+        this.$route.params.id
+      )
+      this.fileContent = fileContentResponse
+      if (fileContentResponse.startsWith('Error: ')) this.fileContent = ''
+
+      // Raw file content in text format
+      const rawFileContentResponse = await this.$services.sarvREST.getResource(
+        'file',
+        this.$route.params.id,
+        {
+          params: {
+            raw_content: 'true',
+          },
+        }
+      )
+      this.rawFileContent = rawFileContentResponse
+      if (
+        typeof rawFileContentResponse === 'string' &&
+        rawFileContentResponse.startsWith('Error: ')
+      )
+        this.rawFileContent = ''
+    }
+    // Raw file content data END
+
+    // Related data START
     const forLoop = async () => {
       for (const tab of this.tabs) {
         const response = await this.$services.sarvREST.getResourceList(
           'attachment_link',
           {
-            isValid: isNil(this.file.id),
+            isValid: isNil(this.file?.id),
             defaultParams: {
               [`${tab.id}__isnull`]: false,
-              attachment: this.file.id,
+              attachment: this.file?.id,
               nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
             },
           }
@@ -881,6 +885,7 @@ export default {
       }
     }
     await forLoop()
+    // Related data END
   },
   fetchOnServer: false,
   head() {
