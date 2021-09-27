@@ -210,8 +210,6 @@ export default {
       return {
         analysis,
         ids,
-        // tabs: hydratedTabs,
-        // initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -244,7 +242,6 @@ export default {
           })
       )
     )
-    this.tabs = hydratedTabs
 
     const text = `${this.$translate({
       et: this.analysis?.analysis_method.analysis_method,
@@ -254,7 +251,10 @@ export default {
     const slugRoute = this.$createSlugRoute(this.$route, text)
 
     const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
     this.initActiveTab = validPath
+
     if (validPath !== this.$route.path) await this.$router.replace(validPath)
   },
   fetchOnServer: false,
