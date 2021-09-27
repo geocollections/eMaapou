@@ -190,17 +190,7 @@ export default {
     LinkDataRow,
     Detail,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    redirect,
-    $services,
-    $validateTabRoute,
-    $hydrateTab,
-    $translate,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'area',

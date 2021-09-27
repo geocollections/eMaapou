@@ -200,16 +200,7 @@ export default {
     DataRow,
     LinkDataRow,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    redirect,
-    $validateTabRoute,
-    $services,
-    $hydrateTab,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const datasetResponse = await $services.sarvREST.getResource(
         'dataset',
@@ -223,12 +214,11 @@ export default {
       const ids = datasetResponse?.ids
       const dataset = datasetResponse
 
-      const parameterResponse = await $services.sarvSolr.getResource(
+      const parameters = await $services.sarvSolr.getResource(
         'dataset',
         params.id,
         { fl: 'parameter_index_list,parameter_list' }
       )
-      const parameters = parameterResponse
 
       const parameterValues = parameters?.parameter_index_list?.[0]?.split('; ')
 
@@ -237,10 +227,6 @@ export default {
         return { text: parameterText[i], value: v }
       })
       const selectedParameters = parsedParameters?.slice(0, 5)
-
-      const selectedParameterValues = selectedParameters?.map(
-        (param) => param.value
-      )
 
       const doiResponse = await $services.sarvREST.getResourceList('doi', {
         defaultParams: {
@@ -255,66 +241,13 @@ export default {
         reference: doiResponse.items?.[0]?.reference?.reference,
       }
 
-      const localityGroupedResponse = await $services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          useRawSolr: true,
-          defaultParams: {
-            fq: `dataset_id:${dataset.id}`,
-            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-            group: true,
-            'group.field': ['locality_id', 'site_id'],
-            rows: 10000,
-          },
-        }
-      )
-
-      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.locality_id)
-      const sites = localityGroupedResponse?.grouped?.site_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.site_id)
-      const locations = localities.concat(sites)
-
-      const tabsObject = TABS_DATASET
-
-      tabsObject.byIds.dataset_analysis.props.parameters = selectedParameters
-
-      tabsObject.byIds.graphs.count =
-        locations.length === 1 ? locations.length : 0
-
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(async (tab) =>
-          tab.id !== 'analysis_results'
-            ? await $hydrateTab(tab, {
-                countParams: {
-                  api: {
-                    default: { dataset: dataset.id },
-                  },
-                },
-              })
-            : tab
-        )
-      )
-      const slugRoute = $createSlugRoute(route, dataset.title)
-
-      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
-
       return {
         dataset,
         ids,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
         parameters: parsedParameters,
-        selectedParameterValues,
+        selectedParameters,
         doi,
         reference,
-        localities,
-        locations,
       }
     } catch (err) {
       error({
@@ -322,6 +255,68 @@ export default {
         path: route.path,
       })
     }
+  },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      localities: [],
+      locations: [],
+    }
+  },
+  async fetch() {
+    const localityGroupedResponse =
+      await this.$services.sarvSolr.getResourceList('analysis', {
+        useRawSolr: true,
+        defaultParams: {
+          fq: `dataset_id:${this.dataset.id}`,
+          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+          group: true,
+          'group.field': ['locality_id', 'site_id'],
+          rows: 10000,
+        },
+      })
+
+    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.locality_id)
+    const sites = localityGroupedResponse?.grouped?.site_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.site_id)
+    const locations = localities.concat(sites)
+
+    const tabsObject = TABS_DATASET
+
+    tabsObject.byIds.dataset_analysis.props.parameters = this.selectedParameters
+
+    tabsObject.byIds.graphs.count =
+      locations.length === 1 ? locations.length : 0
+
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(async (tab) =>
+        tab.id !== 'analysis_results'
+          ? await this.$hydrateTab(tab, {
+              countParams: {
+                api: {
+                  default: { dataset: this.dataset.id },
+                },
+              },
+            })
+          : tab
+      )
+    )
+    const slugRoute = this.$createSlugRoute(this.$route, this.dataset.title)
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.localities = localities
+    this.locations = locations
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
   },
   head() {
     return {
@@ -378,6 +373,10 @@ export default {
         }
         return filtered
       }, [])
+    },
+
+    selectedParameterValues() {
+      return this.selectedParameters?.map((param) => param.value)
     },
   },
   methods: {
