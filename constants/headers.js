@@ -1010,3 +1010,62 @@ export const HEADERS_SITE = {
   },
   allIds: ['id', 'name', 'area', 'latitude', 'longitude', 'z', 'depth'],
 }
+
+export const HEADERS_SPECIMEN_IDENTIFICATION = {
+  byIds: {
+    name: {
+      text: 'specimenIdentification.name',
+      value: 'name',
+      show: true,
+      sortValue: 'taxon__taxon',
+    },
+    agent: {
+      text: 'specimenIdentification.agent',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent__agent',
+    },
+    dateIdentified: {
+      text: 'specimenIdentification.dateIdentified',
+      value: 'dateIdentified',
+      show: true,
+      sortValue: 'date_identified',
+    },
+    reference: {
+      text: 'specimenIdentification.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    type: {
+      text: 'specimenIdentification.type',
+      value: 'type',
+      show: true,
+      sortValue: {
+        et: 'identification_type__value',
+        en: 'identification_type__value_en',
+      },
+    },
+    remarks: {
+      text: 'specimenIdentification.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+    current: {
+      text: 'specimenIdentification.current',
+      value: 'current',
+      show: true,
+      sortValue: 'current',
+    },
+  },
+  allIds: [
+    'name',
+    'agent',
+    'dateIdentified',
+    'reference',
+    'type',
+    'remarks',
+    'current',
+  ],
+}

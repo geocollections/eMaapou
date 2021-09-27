@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.name="{ item }">
       <external-link
@@ -46,21 +48,21 @@
     <template #item.current="{ item }">
       <boolean-indicator :value="item.current" />
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import BooleanIndicator from '../BooleanIndicator.vue'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   name: 'SpecimenIdentificationTable',
-  components: { TableWrapper, ExternalLink, BooleanIndicator },
+  components: { TableWrapperTest, ExternalLink, BooleanIndicator },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -81,29 +83,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('specimenIdentification.name'),
-          value: 'name',
-        },
-        {
-          text: this.$t('specimenIdentification.agent'),
-          value: 'agent',
-        },
-        {
-          text: this.$t('specimenIdentification.dateIdentified'),
-          value: 'dateIdentified',
-        },
-        {
-          text: this.$t('specimenIdentification.reference'),
-          value: 'reference',
-        },
-        { text: this.$t('specimenIdentification.type'), value: 'type' },
-        { text: this.$t('specimenIdentification.remarks'), value: 'remarks' },
-        { text: this.$t('specimenIdentification.current'), value: 'current' },
-        // { text: this.$t('stratigraphyReference.pages'), value: 'pages' },
-        // { text: this.$t('stratigraphyReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SPECIMEN_IDENTIFICATION),
     }
   },
 }
