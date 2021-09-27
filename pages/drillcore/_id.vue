@@ -323,6 +323,7 @@ export default {
 
     if (validPath !== this.$route.path) await this.$router.replace(validPath)
   },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
