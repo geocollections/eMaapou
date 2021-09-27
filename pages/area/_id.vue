@@ -208,13 +208,16 @@ export default {
       )
       const ids = detailViewResponse?.ids
       const area = detailViewResponse
-      const sitesResponse = await $services.sarvSolr.getResourceList('site', {
-        defaultParams: {
-          fq: `area_id:${params.id}`,
-        },
-      })
+      const sitesForMapResponse = await $services.sarvSolr.getResourceList(
+        'site',
+        {
+          defaultParams: {
+            fq: `area_id:${params.id}`,
+          },
+        }
+      )
 
-      const sites = sitesResponse.items
+      const sites = sitesForMapResponse.items
 
       return {
         area,
