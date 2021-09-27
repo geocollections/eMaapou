@@ -1202,3 +1202,55 @@ export const HEADERS_STRATIGRAPHY_REFERENCE = {
   },
   allIds: ['reference', 'content', 'year', 'pages', 'remarks'],
 }
+
+export const HEADERS_STRATIGRAPHY_STRATOTYPE = {
+  byIds: {
+    locality: {
+      text: 'stratotype.locality',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality__locality', en: 'locality_locality_en' },
+    },
+    type: {
+      text: 'stratotype.type',
+      value: 'type',
+      show: true,
+      sortValue: {
+        et: 'stratotype_type__value',
+        en: 'stratotype_type__value_en',
+      },
+    },
+    depth_top: {
+      text: 'stratotype.depthTop',
+      value: 'depth_top',
+      show: true,
+      sortValue: 'depth_top',
+    },
+    depth_base: {
+      text: 'stratotype.depthBase',
+      value: 'depth_base',
+      show: true,
+      sortValue: 'depth_base',
+    },
+    reference: {
+      text: 'stratotype.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    remarks: {
+      text: 'stratotype.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: [
+    'locality',
+    'type',
+    'depth_top',
+    'depth_base',
+    'reference',
+    'remarks',
+  ],
+}
