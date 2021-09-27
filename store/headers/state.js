@@ -9,6 +9,7 @@ import {
   HEADERS_SITE,
   HEADERS_SPECIMEN,
   HEADERS_STRATIGRAPHY,
+  HEADERS_TAXON,
 } from '~/constants'
 
 export const initState = () => {
@@ -23,6 +24,7 @@ export const initState = () => {
     site: HEADERS_SITE,
     specimen: HEADERS_SPECIMEN,
     stratigraphy: HEADERS_STRATIGRAPHY,
+    taxon: HEADERS_TAXON,
   }
 }
 

@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.taxon="{ item }">
       <external-link
@@ -72,22 +74,21 @@
         {{ $translate({ et: item.lad, en: item.lad_en }) }}
       </nuxt-link>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { round, cloneDeep } from 'lodash'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_TAXON } from '~/constants'
 export default {
   name: 'TaxonTable',
-  components: { ExternalLink, TableWrapper },
+  components: { ExternalLink, TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -105,39 +106,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('taxon.id'), value: 'id' },
-        { text: this.$t('taxon.taxon'), value: 'taxon' },
-        { text: this.$t('taxon.parentTaxon'), value: 'parent_taxon' },
-        {
-          text: this.$t('taxon.fossilGroup'),
-          value: 'fossil_group',
-        },
-      ],
+      localHeaders: cloneDeep(HEADERS_TAXON),
+      module: 'taxon',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.taxon.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'taxon' }),
   },
   methods: {
     round,

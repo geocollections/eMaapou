@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.taxon="{ item }">
       <external-link
@@ -26,21 +28,21 @@
       <v-icon v-if="item.extra">mdi-plus</v-icon>
       <v-icon v-else>mdi-minus</v-icon>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { round, cloneDeep } from 'lodash'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_TAXON_LIST } from '~/constants'
+
 export default {
   name: 'TaxonListTable',
-  components: { ExternalLink, TableWrapper },
+  components: { ExternalLink, TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -61,21 +63,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('taxon.taxon'), value: 'taxon' },
-        {
-          text: this.$t('taxon.name'),
-          value: 'name',
-        },
-        { text: this.$t('taxon.frequency'), value: 'frequency' },
-        {
-          text: this.$t('taxon.agent_identified'),
-          value: 'agent',
-        },
-        { text: this.$t('taxon.date_identified'), value: 'date_identified' },
-        { text: this.$t('taxon.extra'), value: 'extra' },
-        { text: this.$t('taxon.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_TAXON_LIST),
     }
   },
   methods: {

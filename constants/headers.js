@@ -1449,3 +1449,84 @@ export const HEADERS_SYNONYM = {
   },
   allIds: ['synonym', 'pages', 'reference', 'remarks'],
 }
+
+export const HEADERS_TAXON_LIST = {
+  byIds: {
+    taxon: {
+      text: 'taxon.taxon',
+      value: 'taxon',
+      show: true,
+      sortValue: 'taxon__taxon',
+    },
+    name: {
+      text: 'taxon.name',
+      value: 'name',
+      show: true,
+      sortValue: 'name',
+    },
+    frequency: {
+      text: 'taxon.frequency',
+      value: 'frequency',
+      show: true,
+      sortValue: 'frequency',
+    },
+    agent: {
+      text: 'taxon.agent_identified',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent_identified__agent,agent_identified_txt',
+    },
+    date_identified: {
+      text: 'taxon.date_identified',
+      value: 'date_identified',
+      show: true,
+      sortValue: 'date_identified,date_identified_free',
+    },
+    extra: {
+      text: 'taxon.extra',
+      value: 'extra',
+      show: true,
+      sortValue: 'extra',
+    },
+    remarks: {
+      text: 'taxon.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: [
+    'taxon',
+    'name',
+    'frequency',
+    'agent',
+    'date_identified',
+    'extra',
+    'remarks',
+  ],
+}
+
+export const HEADERS_TAXON = {
+  byIds: {
+    id: { text: 'taxon.id', value: 'id', show: true, sortValue: 'id' },
+    taxon: {
+      text: 'taxon.taxon',
+      value: 'taxon',
+      show: true,
+      sortValue: 'taxon',
+    },
+    parent_taxon: {
+      text: 'taxon.parentTaxon',
+      value: 'parent_taxon',
+      show: true,
+      sortValue: 'parent_taxon',
+    },
+    fossil_group: {
+      text: 'taxon.fossilGroup',
+      value: 'fossil_group',
+      show: true,
+      sortValue: 'fossil_group',
+    },
+  },
+  allIds: ['id', 'taxon', 'parent_taxon', 'fossil_group'],
+}

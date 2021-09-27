@@ -1,4 +1,4 @@
-import { TAXON } from '~/constants'
+import { HEADERS_TAXON, TAXON } from '~/constants'
 
 export default {
   async searchTaxa({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'taxon',
         resource: 'taxon_search',
-        resourceDefaults: TAXON,
+        resourceDefaults: { ...TAXON, headers: HEADERS_TAXON },
       },
       { root: true }
     )
