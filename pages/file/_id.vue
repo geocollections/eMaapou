@@ -617,7 +617,117 @@ export default {
         })
       const attachmentKeywords = attachmentKeywordsResponse.items
 
-      const tabs = [
+      const text = () => {
+        switch (file?.specimen_image_attachment) {
+          case 1:
+            return `${file?.specimen?.coll?.number}-${
+              file?.specimen?.specimen_id?.split('-')?.[1]
+            } (ID-${file.specimen.id})`
+          case 2:
+            return file.image_number
+          case 4:
+            return file?.reference?.reference
+          default:
+            return `${$translate({
+              et: file?.description,
+              en: file?.description_en,
+            })}`
+        }
+      }
+
+      const slugRoute = $createSlugRoute(route, text())
+      if (slugRoute.path !== route.path) redirect(slugRoute.path)
+
+      return {
+        file,
+        fileContent,
+        rawFileContent,
+        specimenIdentification,
+        specimenIdentificationGeology,
+        attachmentKeywords,
+        ids,
+      }
+    } catch (err) {
+      error({
+        message: `Cannot find file ${route.params.id}`,
+        path: route.path,
+      })
+    }
+  },
+  data() {
+    return {
+      expansionPanel: [0],
+      nameFields: {
+        collection: {
+          et: 'collection_name',
+          en: 'collection_name_en',
+        },
+        specimen: {
+          et: 'number',
+          en: 'number',
+        },
+        sample: {
+          et: 'number',
+          en: 'number',
+        },
+        sample_series: {
+          et: 'name',
+          en: 'name',
+        },
+        analysis: {
+          et: 'number',
+          en: 'number',
+        },
+        dataset: {
+          et: 'name',
+          en: 'name_en',
+        },
+        doi: {
+          et: 'identifier',
+          en: 'identifier',
+        },
+        locality: {
+          et: 'locality',
+          en: 'locality_en',
+        },
+        drillcore: {
+          et: 'drillcore',
+          en: 'drillcore_en',
+        },
+        drillcore_box: {
+          et: 'number',
+          en: 'number',
+        },
+        preparation: {
+          et: 'preparation_number',
+          en: 'preparation_number',
+        },
+        reference: {
+          et: 'reference',
+          en: 'reference',
+        },
+        storage: {
+          et: 'location',
+          en: 'location',
+        },
+        project: {
+          et: 'name',
+          en: 'name_en',
+        },
+        site: {
+          et: 'name',
+          en: 'name_en',
+        },
+        locality_description: {
+          et: 'description',
+          en: 'description',
+        },
+        taxon: {
+          et: 'taxon',
+          en: 'taxon',
+        },
+      },
+      tabs: [
         {
           id: 'collection',
           title: 'related.collection',
@@ -749,140 +859,30 @@ export default {
           isLink: true,
           href: 'https://fossiilid.info/',
         },
-      ]
-
-      const forLoop = async () => {
-        for (const tab of tabs) {
-          const response = await app.$services.sarvREST.getResourceList(
-            'attachment_link',
-            {
-              isValid: isNil(file.id),
-              defaultParams: {
-                [`${tab.id}__isnull`]: false,
-                attachment: file.id,
-                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-              },
-            }
-          )
-          tab.count = response.count || 0
-          tab.items = response.items || []
-        }
-      }
-      await forLoop()
-
-      const text = () => {
-        switch (file?.specimen_image_attachment) {
-          case 1:
-            return `${file?.specimen?.coll?.number}-${
-              file?.specimen?.specimen_id?.split('-')?.[1]
-            } (ID-${file.specimen.id})`
-          case 2:
-            return file.image_number
-          case 4:
-            return file?.reference?.reference
-          default:
-            return `${$translate({
-              et: file?.description,
-              en: file?.description_en,
-            })}`
-        }
-      }
-
-      const slugRoute = $createSlugRoute(route, text())
-      if (slugRoute.path !== route.path) redirect(slugRoute.path)
-
-      return {
-        file,
-        fileContent,
-        rawFileContent,
-        specimenIdentification,
-        specimenIdentificationGeology,
-        attachmentKeywords,
-        tabs,
-        ids,
-      }
-    } catch (err) {
-      error({
-        message: `Cannot find file ${route.params.id}`,
-        path: route.path,
-      })
+      ],
     }
   },
-  data() {
-    return {
-      expansionPanel: [0],
-      nameFields: {
-        collection: {
-          et: 'collection_name',
-          en: 'collection_name_en',
-        },
-        specimen: {
-          et: 'number',
-          en: 'number',
-        },
-        sample: {
-          et: 'number',
-          en: 'number',
-        },
-        sample_series: {
-          et: 'name',
-          en: 'name',
-        },
-        analysis: {
-          et: 'number',
-          en: 'number',
-        },
-        dataset: {
-          et: 'name',
-          en: 'name_en',
-        },
-        doi: {
-          et: 'identifier',
-          en: 'identifier',
-        },
-        locality: {
-          et: 'locality',
-          en: 'locality_en',
-        },
-        drillcore: {
-          et: 'drillcore',
-          en: 'drillcore_en',
-        },
-        drillcore_box: {
-          et: 'number',
-          en: 'number',
-        },
-        preparation: {
-          et: 'preparation_number',
-          en: 'preparation_number',
-        },
-        reference: {
-          et: 'reference',
-          en: 'reference',
-        },
-        storage: {
-          et: 'location',
-          en: 'location',
-        },
-        project: {
-          et: 'name',
-          en: 'name_en',
-        },
-        site: {
-          et: 'name',
-          en: 'name_en',
-        },
-        locality_description: {
-          et: 'description',
-          en: 'description',
-        },
-        taxon: {
-          et: 'taxon',
-          en: 'taxon',
-        },
-      },
+  async fetch() {
+    const forLoop = async () => {
+      for (const tab of this.tabs) {
+        const response = await this.$services.sarvREST.getResourceList(
+          'attachment_link',
+          {
+            isValid: isNil(this.file.id),
+            defaultParams: {
+              [`${tab.id}__isnull`]: false,
+              attachment: this.file.id,
+              nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+            },
+          }
+        )
+        tab.count = response.count || 0
+        tab.items = response.items || []
+      }
     }
+    await forLoop()
   },
+  fetchOnServer: false,
   head() {
     return {
       title: this.fileTitle,
