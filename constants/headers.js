@@ -1167,6 +1167,86 @@ export const HEADERS_SPECIMEN_REFERENCE = {
   allIds: ['reference', 'pages', 'figures', 'remarks'],
 }
 
+export const HEADERS_STRATIGRAPHY = {
+  byIds: {
+    id: { text: 'stratigraphy.id', value: 'id', show: true, sortValue: 'id' },
+    stratigraphy: {
+      text: 'stratigraphy.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
+    },
+    index_main: {
+      text: 'stratigraphy.index_main',
+      value: 'index_main',
+      show: true,
+      sortValue: 'index_main',
+    },
+    index_additional: {
+      text: 'stratigraphy.index_additional',
+      value: 'index_additional',
+      show: true,
+      sortValue: 'index_additional',
+    },
+    stratigraphy_type: {
+      text: 'stratigraphy.stratigraphy_type',
+      value: 'stratigraphy_type',
+      show: true,
+      sortValue: { et: 'stratigraphy_type', en: 'stratigraphy_type_en' },
+    },
+    stratigraphy_rank: {
+      text: 'stratigraphy.stratigraphy_rank',
+      value: 'stratigraphy_rank',
+      show: true,
+      sortValue: { et: 'stratigraphy_rank', en: 'stratigraphy_rank_en' },
+    },
+    stratigraphy_scope: {
+      text: 'stratigraphy.stratigraphy_scope',
+      value: 'stratigraphy_scope',
+      show: true,
+      sortValue: { et: 'stratigraphy_scope', en: 'stratigraphy_scope_en' },
+    },
+    parent_stratigraphy: {
+      text: 'stratigraphy.parent_stratigraphy',
+      value: 'parent_stratigraphy',
+      show: true,
+      sortValue: { et: 'parent_stratigraphy', en: 'parent_stratigraphy_en' },
+    },
+
+    ageBase: {
+      text: 'stratigraphy.ageBase',
+      value: 'ageBase',
+      show: true,
+      sortValue: 'age_base',
+    },
+    ageTop: {
+      text: 'stratigraphy.ageTop',
+      value: 'ageTop',
+      show: true,
+      sortValue: 'age_top',
+    },
+    age_stratigraphy: {
+      text: 'stratigraphy.age_stratigraphy',
+      value: 'age_stratigraphy',
+      show: true,
+      sortValue: { et: 'age_stratigraphy', en: 'age_stratigraphy_en' },
+    },
+  },
+  allIds: [
+    'id',
+    'stratigraphy',
+    'index_main',
+    'index_additional',
+    'stratigraphy_type',
+    'stratigraphy_rank',
+    'stratigraphy_scope',
+    'parent_stratigraphy',
+    'ageBase',
+    'ageTop',
+    'age_stratigraphy',
+  ],
+}
+
 export const HEADERS_STRATIGRAPHY_REFERENCE = {
   byIds: {
     reference: {

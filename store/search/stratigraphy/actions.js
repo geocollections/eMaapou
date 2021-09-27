@@ -1,4 +1,4 @@
-import { STRATIGRAPHY } from '~/constants'
+import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
 
 export default {
   async searchStratigraphies({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'stratigraphy',
         resource: 'stratigraphy',
-        resourceDefaults: STRATIGRAPHY,
+        resourceDefaults: { ...STRATIGRAPHY, headers: HEADERS_STRATIGRAPHY },
       },
       { root: true }
     )
