@@ -1166,3 +1166,39 @@ export const HEADERS_SPECIMEN_REFERENCE = {
   },
   allIds: ['reference', 'pages', 'figures', 'remarks'],
 }
+
+export const HEADERS_STRATIGRAPHY_REFERENCE = {
+  byIds: {
+    reference: {
+      text: 'stratigraphyReference.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    content: {
+      text: 'stratigraphyReference.content',
+      value: 'content',
+      show: true,
+      sortValue: 'reference__year',
+    },
+    year: {
+      text: 'stratigraphyReference.year',
+      value: 'year',
+      show: true,
+      sortValue: 'pages',
+    },
+    pages: {
+      text: 'stratigraphyReference.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'remarks',
+    },
+    remarks: {
+      text: 'stratigraphyReference.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: { et: 'content', en: 'content_en' },
+    },
+  },
+  allIds: ['reference', 'content', 'year', 'pages', 'remarks'],
+}
