@@ -1254,3 +1254,33 @@ export const HEADERS_STRATIGRAPHY_STRATOTYPE = {
     'remarks',
   ],
 }
+
+export const HEADERS_STRATIGRAPHY_SYNONYM = {
+  byIds: {
+    synonym: {
+      text: 'stratigraphySynonym.synonym',
+      value: 'synonym',
+      show: true,
+      sortValue: 'synonym',
+    },
+    language: {
+      text: 'stratigraphySynonym.language',
+      value: 'language',
+      show: true,
+      sortValue: { et: 'language__value', en: 'language__value_en' },
+    },
+    reference: {
+      text: 'stratigraphySynonym.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    remarks: {
+      text: 'stratigraphySynonym.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: ['synonym', 'language', 'reference', 'remarks'],
+}
