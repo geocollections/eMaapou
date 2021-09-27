@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
@@ -15,21 +17,18 @@
         {{ item.reference.reference }}
       </external-link>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { round, cloneDeep } from 'lodash'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import ExternalLink from '~/components/ExternalLink.vue'
+import { HEADERS_SPECIMEN_REFERENCE } from '~/constants'
 export default {
   name: 'SpecimenReferenceTable',
-  components: { TableWrapper, ExternalLink },
+  components: { TableWrapperTest, ExternalLink },
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -50,12 +49,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('specimenReference.reference'), value: 'reference' },
-        { text: this.$t('specimenReference.pages'), value: 'pages' },
-        { text: this.$t('specimenReference.figures'), value: 'figures' },
-        { text: this.$t('specimenReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SPECIMEN_REFERENCE),
     }
   },
   methods: {

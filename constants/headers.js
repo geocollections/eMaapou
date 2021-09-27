@@ -1069,3 +1069,33 @@ export const HEADERS_SPECIMEN_IDENTIFICATION = {
     'current',
   ],
 }
+
+export const HEADERS_SPECIMEN_REFERENCE = {
+  byIds: {
+    reference: {
+      text: 'specimenReference.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    pages: {
+      text: 'specimenReference.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'pages',
+    },
+    figures: {
+      text: 'specimenReference.figures',
+      value: 'figures',
+      show: true,
+      sortValue: 'figures',
+    },
+    remarks: {
+      text: 'specimenReference.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: ['reference', 'pages', 'figures', 'remarks'],
+}
