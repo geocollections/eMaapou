@@ -797,7 +797,7 @@ export default {
     id: 'ID',
     taxon: 'Taxon',
     name: 'Taxon, txt',
-    frequency: 'Abundande',
+    frequency: 'Abundance',
     agent_identified: 'Det.',
     date_identified: 'Det. date',
     extra: 'Extra',
