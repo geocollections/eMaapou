@@ -521,15 +521,7 @@ export default {
     LinkDataRow,
     Detail,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    app,
-    redirect,
-    $createSlugRoute,
-    $translate,
-  }) {
+  async asyncData({ params, route, error, app }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
         'attachment',
@@ -543,27 +535,6 @@ export default {
       )
       const ids = fileResponse?.ids
       const file = fileResponse
-
-      const text = () => {
-        switch (file?.specimen_image_attachment) {
-          case 1:
-            return `${file?.specimen?.coll?.number}-${
-              file?.specimen?.specimen_id?.split('-')?.[1]
-            } (ID-${file.specimen.id})`
-          case 2:
-            return file.image_number
-          case 4:
-            return file?.reference?.reference
-          default:
-            return `${$translate({
-              et: file?.description,
-              en: file?.description_en,
-            })}`
-        }
-      }
-
-      const slugRoute = $createSlugRoute(route, text())
-      if (slugRoute.path !== route.path) redirect(slugRoute.path)
 
       return {
         file,
@@ -790,6 +761,28 @@ export default {
     }
   },
   async fetch() {
+    const text = () => {
+      switch (this.file?.specimen_image_attachment) {
+        case 1:
+          return `${this.file?.specimen?.coll?.number}-${
+            this.file?.specimen?.specimen_id?.split('-')?.[1]
+          } (ID-${this.file.specimen.id})`
+        case 2:
+          return this.file.image_number
+        case 4:
+          return this.file?.reference?.reference
+        default:
+          return `${this.$translate({
+            et: this.file?.description,
+            en: this.file?.description_en,
+          })}`
+      }
+    }
+
+    const slugRoute = this.$createSlugRoute(this.$route, text())
+    if (slugRoute.path !== this.$route.path)
+      await this.$router.replace(slugRoute.path)
+
     // Specimen data START
     if (this.file?.specimen) {
       const specimenIdentificationResponse =
