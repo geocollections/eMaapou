@@ -787,3 +787,62 @@ export const HEADERS_PREPARATION = {
     'mass',
   ],
 }
+
+export const HEADERS_REFERENCE = {
+  byIds: {
+    id: { text: 'reference.id', value: 'id', show: true, sortValue: 'id' },
+    reference: {
+      text: 'reference.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference',
+    },
+    author: {
+      text: 'reference.author',
+      value: 'author',
+      show: true,
+      sortValue: 'author',
+    },
+    year: {
+      text: 'reference.year',
+      value: 'year',
+      show: true,
+      sortValue: 'year',
+    },
+    title: {
+      text: 'reference.title',
+      value: 'title',
+      show: true,
+      sortValue: 'title',
+    },
+    journal: {
+      text: 'reference.journalBook',
+      value: 'journal',
+      show: true,
+      sortValue: 'journal__journal_name,book',
+    },
+    pages: {
+      text: 'reference.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'pages',
+    },
+    doi: { text: 'reference.doi', value: 'doi', show: true, sortValue: 'doi' },
+    remarks: {
+      text: 'reference.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: [
+    'id',
+    'reference',
+    'author',
+    'year',
+    'title',
+    'journal',
+    'doi',
+    'remarks',
+  ],
+}
