@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { TAXON } from '~/constants'
+import { HEADERS_TAXON, TAXON } from '~/constants'
 import TaxonTable from '~/components/tables/TaxonTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(TAXON.queryFields),
+          queryFields: this.$getSortValues(HEADERS_TAXON),
           searchFilters: {},
         }
       )

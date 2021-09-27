@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { STRATIGRAPHY } from '~/constants'
+import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
 import StratigraphyTable from '~/components/tables/StratigraphyTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(STRATIGRAPHY.queryFields),
+          queryFields: this.$getSortValues(HEADERS_STRATIGRAPHY),
           searchFilters: {},
         }
       )
