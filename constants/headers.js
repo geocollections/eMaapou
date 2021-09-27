@@ -1419,3 +1419,33 @@ export const HEADERS_STRATOTYPE = {
     'remarks',
   ],
 }
+
+export const HEADERS_SYNONYM = {
+  byIds: {
+    synonym: {
+      text: 'localitySynonym.synonym',
+      value: 'synonym',
+      show: true,
+      sortValue: 'synonym',
+    },
+    pages: {
+      text: 'localitySynonym.pages',
+      value: 'pages',
+      show: true,
+      sortValue: 'pages',
+    },
+    reference: {
+      text: 'localitySynonym.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    remarks: {
+      text: 'localitySynonym.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+  },
+  allIds: ['synonym', 'pages', 'reference', 'remarks'],
+}
