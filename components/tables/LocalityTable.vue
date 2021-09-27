@@ -36,9 +36,11 @@ import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import { HEADERS_LOCALITY } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'LocalityTable',
   components: { TableWrapperTest },
+  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
