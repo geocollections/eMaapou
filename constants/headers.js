@@ -1011,6 +1011,73 @@ export const HEADERS_SITE = {
   allIds: ['id', 'name', 'area', 'latitude', 'longitude', 'z', 'depth'],
 }
 
+export const HEADERS_SPECIMEN = {
+  byIds: {
+    id: { text: 'specimen.id', value: 'id', show: true, sortValue: 'id' },
+    specimen_full_name: {
+      text: 'specimen.number',
+      value: 'specimen_full_name',
+      show: true,
+      sortValue: 'specimen_full_name',
+    },
+    locality: {
+      text: 'specimen.locality',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality', en: 'locality_en' },
+    },
+    depth: {
+      text: 'specimen.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+    depth_interval: {
+      text: 'specimen.depthInterval',
+      value: 'depth_interval',
+      show: true,
+      sortValue: 'depth_interval',
+    },
+    stratigraphy: {
+      text: 'specimen.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
+    },
+    lithostratigraphy: {
+      text: 'sample.lithostratigraphy',
+      value: 'lithostratigraphy',
+      show: true,
+      sortValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
+    },
+    rock: {
+      text: 'specimen.name',
+      value: 'name',
+      show: true,
+      sortable: false,
+      class: 'static-cell-header',
+      sortValue: { et: 'rock', en: 'rock_en' },
+    },
+    image: {
+      text: 'specimen.image',
+      value: 'image',
+      show: true,
+      sortValue: 'image',
+    },
+  },
+  allIds: [
+    'id',
+    'specimen_full_name',
+    'locality',
+    'depth',
+    'depth_interval',
+    'stratigraphy',
+    'lithostratigraphy',
+    'rock',
+    'image',
+  ],
+}
+
 export const HEADERS_SPECIMEN_IDENTIFICATION = {
   byIds: {
     name: {

@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -133,24 +135,23 @@
         {{ item.taxon }}
       </external-link>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 
-import TableWrapper from '@/components/tables/TableWrapper.vue'
-import ImageCell from '@/components/ImageCell'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import ImageCell from '~/components/ImageCell'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SPECIMEN } from '~/constants'
 export default {
   name: 'SpecimenTable',
-  components: { ExternalLink, TableWrapper, ImageCell },
+  components: { ExternalLink, TableWrapperTest, ImageCell },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -175,46 +176,12 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('specimen.id'), value: 'id' },
-        { text: this.$t('specimen.number'), value: 'specimen_full_name' },
-        { text: this.$t('specimen.locality'), value: 'locality' },
-        { text: this.$t('specimen.depth'), value: 'depth' },
-        { text: this.$t('specimen.depthInterval'), value: 'depth_interval' },
-        { text: this.$t('specimen.stratigraphy'), value: 'stratigraphy' },
-        {
-          text: this.$t('sample.lithostratigraphy'),
-          value: 'lithostratigraphy',
-        },
-        // { text: this.$t('specimen.kind'), value: 'kind' },
-        // { text: this.$t('specimen.fossilGroup'), value: 'fossilgroup' },
-        // { text: this.$t('specimen.taxon'), value: 'taxon' },
-        // { text: this.$t('specimen.rock'), value: 'rock' },
-        {
-          text: this.$t('specimen.name'),
-          value: 'name',
-          sortable: false,
-          class: 'static-cell-header',
-        },
-        { text: this.$t('specimen.image'), value: 'image' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SPECIMEN),
+      module: 'specimen',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.specimen.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'specimen' }),
   },
   methods: {
     round,

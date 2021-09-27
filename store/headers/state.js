@@ -7,6 +7,7 @@ import {
   HEADERS_PHOTO,
   HEADERS_SAMPLE,
   HEADERS_SITE,
+  HEADERS_SPECIMEN,
 } from '~/constants'
 
 export const initState = () => {
@@ -19,6 +20,7 @@ export const initState = () => {
     photo: HEADERS_PHOTO,
     sample: HEADERS_SAMPLE,
     site: HEADERS_SITE,
+    specimen: HEADERS_SPECIMEN,
   }
 }
 
