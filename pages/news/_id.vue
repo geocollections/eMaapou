@@ -38,19 +38,20 @@ export default {
       params.id
     )
 
-    const text = $translate({
-      et: newsResponse.title_et,
-      en: newsResponse.title_en,
-    })
-
-    const slugRoute = $createSlugRoute(route, text)
-    if (slugRoute.path !== route.path) redirect(slugRoute.path)
-
     return {
       news: newsResponse,
     }
   },
+  async fetch() {
+    const text = this.$translate({
+      et: this.newsResponse.title_et,
+      en: this.newsResponse.title_en,
+    })
 
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+    if (slugRoute.path !== this.$route.path)
+      await this.$router.replace(slugRoute.path)
+  },
   head() {
     return {
       title: this.title,
