@@ -846,3 +846,35 @@ export const HEADERS_REFERENCE = {
     'remarks',
   ],
 }
+
+export const HEADERS_ROCK = {
+  byIds: {
+    id: { text: 'rock.id', value: 'id', show: true, sortValue: 'id' },
+    name: { text: 'rock.name', value: 'name', show: true, sortValue: 'name' },
+    name_en: {
+      text: 'rock.name_en',
+      value: 'name_en',
+      show: true,
+      sortValue: 'name_en',
+    },
+    formula: {
+      text: 'rock.formula',
+      value: 'formula',
+      show: true,
+      sortValue: 'formula,formula_html',
+    },
+    in_estonia: {
+      text: 'rock.in_estonia',
+      value: 'in_estonia',
+      show: true,
+      sortValue: 'in_estonia',
+    },
+    mindat_id: {
+      text: 'rock.mindat',
+      value: 'mindat_id',
+      show: true,
+      sortValue: 'mindat_id',
+    },
+  },
+  allIds: ['id', 'name', 'name_en', 'formula', 'in_estonia', 'mindat_id'],
+}

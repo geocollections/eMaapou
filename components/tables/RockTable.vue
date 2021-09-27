@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <external-link
@@ -36,21 +38,21 @@
         {{ item.mindat_id }}
       </external-link>
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
 import BooleanIndicator from '../BooleanIndicator.vue'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_ROCK } from '~/constants'
 export default {
   name: 'RockTable',
-  components: { ExternalLink, TableWrapper, BooleanIndicator },
+  components: { ExternalLink, TableWrapperTest, BooleanIndicator },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -71,14 +73,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('rock.id'), value: 'id' },
-        { text: this.$t('rock.name'), value: 'name' },
-        { text: this.$t('rock.name_en'), value: 'name_en' },
-        { text: this.$t('rock.formula'), value: 'formula' },
-        { text: this.$t('rock.in_estonia'), value: 'in_estonia' },
-        { text: this.$t('rock.mindat'), value: 'mindat_id' },
-      ],
+      localHeaders: cloneDeep(HEADERS_ROCK),
     }
   },
 }
