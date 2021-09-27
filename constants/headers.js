@@ -972,3 +972,41 @@ export const HEADERS_SAMPLE_REFERENCE = {
   },
   allIds: ['reference', 'reference__title', 'pages', 'remarks'],
 }
+
+export const HEADERS_SITE = {
+  byIds: {
+    id: { text: 'site.id', value: 'id', show: true, sortValue: 'id_l' },
+    name: { text: 'site.name', value: 'name', show: true, sortValue: 'name' },
+    area: {
+      text: 'site.area',
+      value: 'area',
+      show: true,
+      sortValue: 'latitude',
+    },
+    latitude: {
+      text: 'site.latitude',
+      value: 'latitude',
+      show: true,
+      sortValue: 'longitude',
+    },
+    longitude: {
+      text: 'site.longitude',
+      value: 'longitude',
+      show: true,
+      sortValue: { et: 'area_name', en: 'area_name_en' },
+    },
+    z: {
+      text: 'site.elevation',
+      value: 'z',
+      show: true,
+      sortValue: 'z',
+    },
+    depth: {
+      text: 'site.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+  },
+  allIds: ['id', 'name', 'area', 'latitude', 'longitude', 'z', 'depth'],
+}

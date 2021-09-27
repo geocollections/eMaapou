@@ -6,6 +6,7 @@ import {
   HEADERS_LOCALITY,
   HEADERS_PHOTO,
   HEADERS_SAMPLE,
+  HEADERS_SITE,
 } from '~/constants'
 
 export const initState = () => {
@@ -17,6 +18,7 @@ export const initState = () => {
     locality: HEADERS_LOCALITY,
     photo: HEADERS_PHOTO,
     sample: HEADERS_SAMPLE,
+    site: HEADERS_SITE,
   }
 }
 
