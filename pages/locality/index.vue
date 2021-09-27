@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import LocalitySearchForm from '@/components/search/forms/LocalitySearchForm'
 import LocalityTable from '~/components/tables/LocalityTable.vue'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -44,7 +43,6 @@ export default {
     LocalitySearchForm,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('locality.pageTitle'),

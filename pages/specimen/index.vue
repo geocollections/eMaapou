@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import SpecimenSearchForm from '~/components/search/forms/SpecimenSearchForm.vue'
 import SpecimenTable from '~/components/tables/SpecimenTable.vue'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -44,7 +43,6 @@ export default {
     SpecimenTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('specimen.pageTitle'),

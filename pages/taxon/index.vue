@@ -35,7 +35,6 @@ import { mapState, mapActions } from 'vuex'
 import Search from '@/components/templates/Search'
 import TaxonSearchForm from '@/components/search/forms/TaxonSearchForm.vue'
 import TaxonTable from '@/components/tables/TaxonTable'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -45,7 +44,6 @@ export default {
     TaxonTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('taxon.pageTitle'),

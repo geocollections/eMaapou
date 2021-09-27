@@ -25,8 +25,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -40,13 +38,11 @@ import SearchActions from '../SearchActions.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeSliderField from '~/components/fields/RangeSliderField.vue'
 import TextField from '~/components/fields/TextField.vue'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 export default {
   name: 'AnalysisSearchForm',
   components: {
-    ExtraOptions,
     InstitutionSearchFilter,
     TextField,
     RangeSliderField,

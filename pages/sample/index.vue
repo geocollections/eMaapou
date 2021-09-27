@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/forms/SampleSearchForm.vue'
 import SampleTable from '~/components/tables/SampleTable.vue'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -44,7 +43,6 @@ export default {
     SampleTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('sample.pageTitle'),

@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '~/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm.vue'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -45,7 +44,6 @@ export default {
     AnalysisTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('analysis.pageTitle'),

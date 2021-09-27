@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm.vue'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import Search from '~/components/templates/Search.vue'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -44,7 +43,6 @@ export default {
     DrillcoreTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('drillcore.pageTitle'),

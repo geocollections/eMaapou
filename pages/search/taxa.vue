@@ -4,6 +4,7 @@
     :items="items"
     :count="count"
     :options="options"
+    dynamic-headers
     @update="handleUpdate"
   />
 </template>

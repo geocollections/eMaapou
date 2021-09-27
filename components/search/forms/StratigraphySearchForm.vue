@@ -18,8 +18,6 @@
 
       <text-field v-model="age" :label="$t(filters.byIds.age.label)" />
     </search-fields-wrapper>
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -32,13 +30,11 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'StratigraphySearchForm',
   components: {
-    ExtraOptions,
     TextField,
     AutocompleteField,
     SearchFieldsWrapper,

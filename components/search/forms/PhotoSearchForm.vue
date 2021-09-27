@@ -46,8 +46,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -61,14 +59,12 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeTextField from '~/components/fields/RangeTextField'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'PhotoSearchForm',
   components: {
-    ExtraOptions,
     RangeTextField,
     InstitutionSearchFilter,
     TextField,

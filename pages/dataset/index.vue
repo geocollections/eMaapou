@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import DatasetTable from '~/components/tables/DatasetTable'
 import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -44,7 +43,6 @@ export default {
     DatasetTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('dataset.pageTitle'),

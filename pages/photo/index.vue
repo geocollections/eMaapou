@@ -74,7 +74,6 @@ import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
 import ImageViewWrapper from '~/components/ImageViewWrapper'
 import GalleryViewWrapper from '~/components/GalleryViewWrapper'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 
 export default {
   components: {
@@ -85,7 +84,6 @@ export default {
     Search,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('photo.pageTitle'),

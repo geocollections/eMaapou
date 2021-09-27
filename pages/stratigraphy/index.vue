@@ -34,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import Search from '@/components/templates/Search'
 import StratigraphySearchForm from '@/components/search/forms/StratigraphySearchForm.vue'
 import StratigraphyTable from '@/components/tables/StratigraphyTable'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -44,7 +43,6 @@ export default {
     StratigraphyTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('stratigraphy.pageTitle'),

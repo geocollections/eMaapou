@@ -31,7 +31,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -46,13 +45,11 @@ import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SpecimenSearchForm',
   components: {
-    ExtraOptions,
     InstitutionSearchFilter,
     AutocompleteField,
     TextField,
