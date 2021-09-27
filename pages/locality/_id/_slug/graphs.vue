@@ -36,7 +36,7 @@ export default {
     },
     analysisResultsCount: {
       type: Number,
-      required: true,
+      required: false,
       default: 0,
     },
   },
