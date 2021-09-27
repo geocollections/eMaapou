@@ -23,6 +23,22 @@
 import deepmerge from 'deepmerge'
 import { mapFields } from 'vuex-map-fields'
 import RendererSwitch from '~/components/chart/RendererSwitch'
+import {
+  DATAZOOM_Y_SLIDER_LEFT,
+  DATAZOOM_Y_SLIDER_LEFT_SMALL,
+  GRID_BOTTOM,
+  GRID_LEFT,
+  GRID_LEFT_SMALL,
+  GRID_TOP,
+  GRID_WIDTH,
+  GRID_WIDTH_SMALL,
+  LEGEND_TOP,
+  TITLE_FONT_SIZE,
+  TITLE_FONT_SIZE_SMALL,
+  TITLE_TOP,
+  TITLE_TOP_SMALL,
+  TOOLBOX_RIGHT,
+} from '~/constants'
 export default {
   name: 'ChartWrapper',
   components: { RendererSwitch },
@@ -41,29 +57,35 @@ export default {
   data() {
     return {
       defaultOptions: {
+        // title also gets updated in watcher
         title: {
           text: 'Chart title',
           left: 'center',
-          top: 45,
+          top: this.$vuetify.breakpoint.xsOnly ? TITLE_TOP_SMALL : TITLE_TOP,
           textStyle: {
-            fontSize: 24,
+            fontSize: this.$vuetify.breakpoint.xsOnly
+              ? TITLE_FONT_SIZE_SMALL
+              : TITLE_FONT_SIZE,
           },
         },
 
         legend: {
           type: 'scroll',
-          top: '90',
+          top: LEGEND_TOP,
           padding: [5, 50],
           animationDurationUpdate: 400,
         },
 
+        // grid also gets updated in watcher
         grid: {
           show: true,
-          top: 135,
-          bottom: 90,
-          left: 100,
+          top: GRID_TOP,
+          bottom: GRID_BOTTOM,
+          left: this.$vuetify.breakpoint.xsOnly ? GRID_LEFT_SMALL : GRID_LEFT,
           containLabel: true,
-          width: 300,
+          width: this.$vuetify.breakpoint.xsOnly
+            ? GRID_WIDTH_SMALL
+            : GRID_WIDTH,
         },
 
         tooltip: {
@@ -75,7 +97,7 @@ export default {
         },
 
         toolbox: {
-          right: 35,
+          right: TOOLBOX_RIGHT,
           feature: {
             saveAsImage: {},
             restore: {},
@@ -87,6 +109,7 @@ export default {
           },
         },
 
+        // dataZoom also gets updated in watcher
         dataZoom: [
           {
             type: 'slider',
@@ -97,7 +120,9 @@ export default {
             type: 'slider',
             show: true,
             yAxisIndex: 0,
-            left: 475,
+            left: this.$vuetify.breakpoint.xsOnly
+              ? DATAZOOM_Y_SLIDER_LEFT_SMALL
+              : DATAZOOM_Y_SLIDER_LEFT,
             filterMode: 'filter',
           },
           {
@@ -122,6 +147,52 @@ export default {
     initOptions() {
       return {
         renderer: this.renderer,
+      }
+    },
+  },
+  watch: {
+    '$vuetify.breakpoint.xsOnly'(newVal) {
+      this.updateChartDimensions(newVal)
+    },
+  },
+  methods: {
+    updateChartDimensions(isSmallChart) {
+      this.defaultOptions = {
+        ...this.defaultOptions,
+        title: {
+          ...this.defaultOptions.title,
+          top: isSmallChart ? TITLE_TOP_SMALL : TITLE_TOP,
+          textStyle: {
+            fontSize: isSmallChart ? TITLE_FONT_SIZE_SMALL : TITLE_FONT_SIZE,
+          },
+        },
+        grid: {
+          ...this.defaultOptions.grid,
+          left: isSmallChart ? GRID_LEFT_SMALL : GRID_LEFT,
+          width: isSmallChart ? GRID_WIDTH_SMALL : GRID_WIDTH,
+        },
+        dataZoom: [
+          {
+            type: 'slider',
+            show: true,
+            filterMode: 'empty',
+          },
+          {
+            type: 'slider',
+            show: true,
+            yAxisIndex: 0,
+            left: isSmallChart
+              ? DATAZOOM_Y_SLIDER_LEFT_SMALL
+              : DATAZOOM_Y_SLIDER_LEFT,
+            filterMode: 'filter',
+          },
+          {
+            type: 'inside',
+            // xAxisIndex: [0],
+            yAxisIndex: 0,
+            filterMode: 'filter',
+          },
+        ],
       }
     },
   },

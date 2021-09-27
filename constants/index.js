@@ -1,4 +1,5 @@
 export * from './tabs'
+export * from './chart'
 
 export const ANALYSIS = {
   options: {
