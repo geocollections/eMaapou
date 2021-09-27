@@ -12,7 +12,7 @@
 import { isNil } from 'lodash'
 import DatasetGeolocationTable from '@/components/tables/DatasetGeolocationTable'
 
-import { DATASET_GEOLOCATIONS } from '~/constants'
+import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {
   components: { DatasetGeolocationTable },
   data() {
@@ -38,7 +38,7 @@ export default {
             dataset: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(DATASET_GEOLOCATIONS.queryFields),
+          queryFields: this.$getSortValues(HEADERS_DATASET_GEOLOCATION),
         })
       this.geolocations = geolocationsResponse.items
       this.count = geolocationsResponse.count

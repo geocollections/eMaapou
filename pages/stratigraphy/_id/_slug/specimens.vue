@@ -11,7 +11,7 @@
 import SpecimenTable from '@/components/tables/SpecimenTable'
 import { isNil } from 'lodash'
 
-import { SPECIMEN } from '~/constants'
+import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 export default {
   components: { SpecimenTable },
   props: {
@@ -39,7 +39,7 @@ export default {
             fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
             // fq: `stratigraphy_id:${this.stratigraphy}`,
           },
-          queryFields: this.$getQueryFields(SPECIMEN.queryFields),
+          queryFields: this.$getSortValues(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

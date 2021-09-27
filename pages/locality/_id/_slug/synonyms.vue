@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import SynonymTable from '~/components/tables/SynonymTable.vue'
-import { SYNONYM } from '~/constants'
+import { HEADERS_SYNONYM, SYNONYM } from '~/constants'
 export default {
   components: { SynonymTable },
   data() {
@@ -32,7 +32,7 @@ export default {
             locality: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(SYNONYM.queryFields),
+          queryFields: this.$getSortValues(HEADERS_SYNONYM),
         }
       )
       this.synonyms = synonymResponse.items

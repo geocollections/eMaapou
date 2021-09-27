@@ -9,7 +9,7 @@
 
 <script>
 import { debounce, isNil } from 'lodash'
-import { STRATIGRAPHY } from '~/constants'
+import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
 import StratigraphyTable from '~/components/tables/StratigraphyTable'
 
 export default {
@@ -40,7 +40,7 @@ export default {
           defaultParams: {
             fq: `age_chronostratigraphy:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(STRATIGRAPHY.queryFields),
+          queryFields: this.$getSortValues(HEADERS_STRATIGRAPHY),
         }
       )
       this.items = analysisResponse.items

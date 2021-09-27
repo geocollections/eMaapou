@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import LocalityReferenceTable from '~/components/tables/LocalityReferenceTable.vue'
-import { LOCALITY_REFERENCE } from '~/constants'
+import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from '~/constants'
 export default {
   components: { LocalityReferenceTable },
   data() {
@@ -32,7 +32,7 @@ export default {
             site: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(LOCALITY_REFERENCE.queryFields),
+          queryFields: this.$getSortValues(HEADERS_LOCALITY_REFERENCE),
         }
       )
       this.references = referenceResponse.items

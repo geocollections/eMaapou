@@ -9,7 +9,10 @@
 
 <script>
 import { debounce, isNil } from 'lodash'
-import { STRATIGRAPHY_REFERENCE } from '~/constants'
+import {
+  HEADERS_STRATIGRAPHY_REFERENCE,
+  STRATIGRAPHY_REFERENCE,
+} from '~/constants'
 import StratigraphyReferenceTable from '~/components/tables/StratigraphyReferenceTable'
 
 export default {
@@ -41,7 +44,7 @@ export default {
             stratigraphy: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(STRATIGRAPHY_REFERENCE.queryFields),
+          queryFields: this.$getSortValues(HEADERS_STRATIGRAPHY_REFERENCE),
         }
       )
 

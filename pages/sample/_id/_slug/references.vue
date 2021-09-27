@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import SampleReferenceTable from '@/components/tables/SampleReferenceTable'
-import { SAMPLE_REFERENCE } from '~/constants'
+import { HEADERS_SAMPLE_REFERENCE, SAMPLE_REFERENCE } from '~/constants'
 export default {
   components: { SampleReferenceTable },
   data() {
@@ -31,7 +31,7 @@ export default {
           defaultParams: {
             sample: this.$route.params.id,
           },
-          queryFields: this.$getQueryFields(SAMPLE_REFERENCE.queryFields),
+          queryFields: this.$getSortValues(HEADERS_SAMPLE_REFERENCE),
         }
       )
       this.references = referenceResponse.items

@@ -236,7 +236,7 @@
 
 <script>
 import { isEmpty, isNull, isNil } from 'lodash'
-import { STRATOTYPE, TABS_STRATIGRAPHY } from '~/constants'
+import { STRATOTYPE, TABS_STRATIGRAPHY, HEADERS_STRATOTYPE } from '~/constants'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -264,7 +264,7 @@ export default {
     $hydrateTab,
     $translate,
     $createSlugRoute,
-    $getQueryFields,
+    $getSortValues,
   }) {
     try {
       const stratigraphyResponse = await $services.sarvREST.getResource(
@@ -290,7 +290,7 @@ export default {
             stratigraphy: stratigraphy.id,
             nest: 2,
           },
-          queryFields: $getQueryFields(STRATOTYPE.queryFields),
+          queryFields: $getSortValues(HEADERS_STRATOTYPE),
         }
       )
       const stratotypes = stratotypeResponse.items

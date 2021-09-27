@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import SpecimenIdentificationTable from '~/components/tables/SpecimenIdentificationTable.vue'
-import { SPECIMEN_IDENTIFICATION } from '~/constants'
+import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   components: { SpecimenIdentificationTable },
   data() {
@@ -38,9 +38,7 @@ export default {
               specimen: this.$route.params.id,
               nest: 1,
             },
-            queryFields: this.$getQueryFields(
-              SPECIMEN_IDENTIFICATION.queryFields
-            ),
+            queryFields: this.$getSortValues(HEADERS_SPECIMEN_IDENTIFICATION),
           }
         )
       this.identifications = identificationResponse.items

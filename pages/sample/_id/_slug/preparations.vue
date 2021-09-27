@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import PreparationTable from '~/components/tables/PreparationTable.vue'
-import { PREPARATION } from '~/constants'
+import { HEADERS_PREPARATION } from '~/constants'
 export default {
   components: { PreparationTable },
   data() {
@@ -36,7 +36,7 @@ export default {
           defaultParams: {
             fq: `sample_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(PREPARATION.queryFields),
+          queryFields: this.$getSortValues(HEADERS_PREPARATION),
         }
       )
       this.preparations = preparationResponse.items

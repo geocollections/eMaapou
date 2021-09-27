@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import SpecimenReferenceTable from '~/components/tables/SpecimenReferenceTable.vue'
-import { SPECIMEN_REFERENCE } from '~/constants'
+import { HEADERS_SPECIMEN_REFERENCE, SPECIMEN_REFERENCE } from '~/constants'
 export default {
   components: { SpecimenReferenceTable },
   data() {
@@ -32,7 +32,7 @@ export default {
             specimen: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(SPECIMEN_REFERENCE.queryFields),
+          queryFields: this.$getSortValues(HEADERS_SPECIMEN_REFERENCE),
         }
       )
       this.references = referenceResponse.items
