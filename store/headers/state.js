@@ -5,6 +5,7 @@ import {
   HEADERS_DRILLCORE,
   HEADERS_LOCALITY,
   HEADERS_PHOTO,
+  HEADERS_SAMPLE,
 } from '~/constants'
 
 export const initState = () => {
@@ -15,6 +16,7 @@ export const initState = () => {
     drillcore: HEADERS_DRILLCORE,
     locality: HEADERS_LOCALITY,
     photo: HEADERS_PHOTO,
+    sample: HEADERS_SAMPLE,
   }
 }
 

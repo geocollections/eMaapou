@@ -1,11 +1,13 @@
 <template>
-  <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+  <table-wrapper-test
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -83,22 +85,21 @@
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
-  </table-wrapper>
+  </table-wrapper-test>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import TableWrapperTest from '~/components/tables/TableWrapperTest.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SAMPLE } from '~/constants'
 
 export default {
   name: 'SampleTable',
-  components: { TableWrapper },
+  components: { TableWrapperTest },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -116,44 +117,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('sample.id'), value: 'id' },
-        { text: this.$t('sample.number'), value: 'number' },
-        { text: this.$t('sample.locality'), value: 'locality' },
-        { text: this.$t('sample.depth'), value: 'depth' },
-        { text: this.$t('sample.depthInterval'), value: 'depth_interval' },
-        { text: this.$t('sample.stratigraphy'), value: 'stratigraphy' },
-        {
-          text: this.$t('sample.lithostratigraphy'),
-          value: 'lithostratigraphy',
-        },
-        { text: this.$t('sample.collector'), value: 'collector' },
-        { text: this.$t('sample.dateCollected'), value: 'date_collected' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SAMPLE),
+      module: 'sample',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.sample.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'sample' }),
   },
   methods: {
     round,

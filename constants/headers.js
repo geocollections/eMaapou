@@ -878,6 +878,70 @@ export const HEADERS_ROCK = {
   },
   allIds: ['id', 'name', 'name_en', 'formula', 'in_estonia', 'mindat_id'],
 }
+export const HEADERS_SAMPLE = {
+  byIds: {
+    id: { text: 'sample.id', value: 'id', show: true, sortValue: 'id_l' },
+    number: {
+      text: 'sample.number',
+      value: 'number',
+      show: true,
+      sortValue: 'number',
+    },
+    locality: {
+      text: 'sample.locality',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality,site_name', en: 'locality_en,site_name_en' },
+    },
+    depth: {
+      text: 'sample.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth',
+    },
+    depth_interval: {
+      text: 'sample.depthInterval',
+      value: 'depth_interval',
+      show: true,
+      sortValue: 'depth_interval',
+    },
+    stratigraphy: {
+      text: 'sample.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
+    },
+    lithostratigraphy: {
+      text: 'sample.lithostratigraphy',
+      value: 'lithostratigraphy',
+      show: true,
+      sortValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
+    },
+    collector: {
+      text: 'sample.collector',
+      value: 'collector',
+      show: true,
+      sortValue: 'collector',
+    },
+    date_collected: {
+      text: 'sample.dateCollected',
+      value: 'date_collected',
+      show: true,
+      sortValue: 'date_collected',
+    },
+  },
+  allIds: [
+    'id',
+    'number',
+    'locality',
+    'depth',
+    'depth_interval',
+    'stratigraphy',
+    'lithostratigraphy',
+    'collector',
+    'date_collected',
+  ],
+}
 
 export const HEADERS_SAMPLE_REFERENCE = {
   byIds: {

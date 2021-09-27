@@ -1,4 +1,4 @@
-import { SAMPLE } from '~/constants'
+import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 
 export default {
   async searchSamples({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'sample',
         resource: 'sample',
-        resourceDefaults: SAMPLE,
+        resourceDefaults: { ...SAMPLE, headers: HEADERS_SAMPLE },
       },
       { root: true }
     )
