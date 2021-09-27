@@ -733,3 +733,57 @@ export const HEADERS_PHOTO = {
     'tags',
   ],
 }
+
+export const HEADERS_PREPARATION = {
+  byIds: {
+    id: { text: 'preparation.id', value: 'id', show: true, sortValue: 'id' },
+    preparation_number: {
+      text: 'preparation.preparation_number',
+      value: 'preparation_number',
+      show: true,
+      sortValue: 'preparation_number',
+    },
+    locality: {
+      text: 'preparation.locality',
+      value: 'locality',
+      show: true,
+      sortValue: { et: 'locality', en: 'locality_en' },
+    },
+    depth: {
+      text: 'preparation.depth',
+      value: 'depth',
+      show: true,
+      sortValue: 'depth,depth_interval',
+    },
+    stratigraphy: {
+      text: 'preparation.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      sortValue: {
+        et: 'stratigraphy,lithostratigraphy',
+        en: 'stratigraphy_en,lithostratigraphy_en',
+      },
+    },
+    agent: {
+      text: 'preparation.agent',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent',
+    },
+    mass: {
+      text: 'preparation.mass',
+      value: 'mass',
+      show: true,
+      sortValue: 'mass',
+    },
+  },
+  allIds: [
+    'id',
+    'preparation_number',
+    'locality',
+    'depth',
+    'stratigraphy',
+    'agent',
+    'mass',
+  ],
+}
