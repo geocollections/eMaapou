@@ -193,17 +193,7 @@ import { TABS_ANALYSIS } from '~/constants'
 export default {
   components: { TitleCardDetail, DataRow, LinkDataRow, Tabs, Detail },
 
-  async asyncData({
-    params,
-    route,
-    error,
-    redirect,
-    $validateTabRoute,
-    $services,
-    $hydrateTab,
-    $translate,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const analysisResponse = await $services.sarvREST.getResource(
         'analysis',
