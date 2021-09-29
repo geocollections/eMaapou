@@ -9,6 +9,15 @@
       @update:selectedItems="selectedParameters = $event"
     />
 
+    <div v-if="!isLoading" class="charts d-flex flex-row">
+      <multi-chart-wrapper
+        v-for="(item, index) in selectedParameters"
+        :key="index"
+        :options="optionsUsingParameter(item)"
+        :hide-renderer-switch="index > 0"
+      />
+    </div>
+
     <chart-wrapper v-if="!isLoading" :options="chartOptions" />
   </div>
 </template>
@@ -17,9 +26,10 @@
 import { isNil } from 'lodash'
 import ChartWrapper from '~/components/chart/ChartWrapper'
 import ExternalLegendOptions from '~/components/chart/ExternalLegendOptions'
+import MultiChartWrapper from '~/components/chart/MultiChartWrapper'
 
 export default {
-  components: { ExternalLegendOptions, ChartWrapper },
+  components: { MultiChartWrapper, ExternalLegendOptions, ChartWrapper },
   props: {
     tableKey: {
       type: String,
@@ -165,18 +175,16 @@ export default {
       }
     },
 
-    buildXAxis() {
-      // Tried to use activeUnits but then sometimes chart xAxis is not updated
-      //  and some overlapping happens (data object is correct but visually overlaps)
-      return this.units.map((item, index) => {
+    buildXAxis(param) {
+      if (param) {
         return {
           // If unit in selectedParams then show xAxis otherwise it is just hidden
-          show: this.selectedParameters.some((param) => param.includes(item)),
+          show: true,
           position: 'bottom',
           // Calculates axisLabel offset, adds +25 after every axis
-          offset: index * 25,
+          // offset: index * 25,
           type: 'value',
-          name: item,
+          name: param.substring(param.indexOf('[') + 1, param.indexOf(']')),
           nameTextStyle: {
             fontWeight: 'bold',
           },
@@ -193,7 +201,36 @@ export default {
             symbolSize: [5, 5],
           },
         }
-      })
+      } else {
+        // Tried to use activeUnits but then sometimes chart xAxis is not updated
+        //  and some overlapping happens (data object is correct but visually overlaps)
+        return this.units.map((item, index) => {
+          return {
+            // If unit in selectedParams then show xAxis otherwise it is just hidden
+            show: this.selectedParameters.some((param) => param.includes(item)),
+            position: 'bottom',
+            // Calculates axisLabel offset, adds +25 after every axis
+            offset: index * 25,
+            type: 'value',
+            name: item,
+            nameTextStyle: {
+              fontWeight: 'bold',
+            },
+            min(value) {
+              return (value.min - 0.1).toFixed(2) * 1
+            },
+            max(value) {
+              return (value.max + 0.1).toFixed(2) * 1
+            },
+            splitNumber: 2,
+            axisLine: {
+              show: true,
+              symbol: ['none', 'arrow'],
+              symbolSize: [5, 5],
+            },
+          }
+        })
+      }
     },
 
     buildYAxis() {
@@ -222,23 +259,63 @@ export default {
       }
     },
 
-    buildChartSeries() {
-      return this.selectedParameters.map((item) => {
-        return {
-          name: item,
-          type: 'line',
-          // Setting data to corresponding xAxis (units order is defined
-          //  which means xAxis order is the same)
-          xAxisIndex: this.units.findIndex((unit) => item.includes(unit)),
-          data: this.analysisResults
-            .filter((result) => result.parameter === item)
-            .map((t) => [t.value, t.depth]),
-          emphasis: {
-            focus: 'series',
+    buildChartSeries(param) {
+      if (param) {
+        return [
+          {
+            name: param,
+            type: 'line',
+            // Setting data to corresponding xAxis (units order is defined
+            //  which means xAxis order is the same)
+            xAxisIndex: 0,
+            data: this.analysisResults
+              .filter((result) => result.parameter === param)
+              .map((t) => [t.value, t.depth]),
+            emphasis: {
+              focus: 'series',
+            },
           },
-        }
-      })
+        ]
+      } else {
+        return this.selectedParameters.map((item) => {
+          return {
+            name: item,
+            type: 'line',
+            // Setting data to corresponding xAxis (units order is defined
+            //  which means xAxis order is the same)
+            xAxisIndex: this.units.findIndex((unit) => item.includes(unit)),
+            data: this.analysisResults
+              .filter((result) => result.parameter === item)
+              .map((t) => [t.value, t.depth]),
+            emphasis: {
+              focus: 'series',
+            },
+          }
+        })
+      }
+    },
+
+    optionsUsingParameter(param) {
+      return {
+        animation: false,
+
+        title: {
+          text: param,
+        },
+
+        yAxis: this.buildYAxis(),
+
+        xAxis: this.buildXAxis(param),
+
+        series: this.buildChartSeries(param),
+      }
     },
   },
 }
 </script>
+
+<style lang="scss">
+.charts {
+  overflow: auto;
+}
+</style>
