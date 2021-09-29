@@ -27,10 +27,12 @@
           icon
           :disabled="!computedFirstId"
           :title="$t('common.first', { id: computedFirstId })"
-          :to="
-            localePath({
-              params: { id: computedFirstId },
-            })
+          @click="
+            debouncedNavigation(
+              localePath({
+                params: { id: computedFirstId },
+              })
+            )
           "
         >
           <v-icon>mdi-page-first</v-icon>
@@ -45,10 +47,12 @@
           icon
           :disabled="!computedPrevId"
           :title="$t('common.previous', { id: computedPrevId })"
-          :to="
-            localePath({
-              params: { id: computedPrevId },
-            })
+          @click="
+            debouncedNavigation(
+              localePath({
+                params: { id: computedPrevId },
+              })
+            )
           "
         >
           <v-icon>mdi-chevron-left</v-icon>
@@ -76,10 +80,12 @@
           icon
           :disabled="!computedNextId"
           :title="$t('common.next', { id: computedNextId })"
-          :to="
-            localePath({
-              params: { id: computedNextId },
-            })
+          @click="
+            debouncedNavigation(
+              localePath({
+                params: { id: computedNextId },
+              })
+            )
           "
         >
           <v-icon>mdi-chevron-right</v-icon>
@@ -93,10 +99,12 @@
           icon
           :disabled="!computedLastId"
           :title="$t('common.last', { id: computedLastId })"
-          :to="
-            localePath({
-              params: { id: computedLastId },
-            })
+          @click="
+            debouncedNavigation(
+              localePath({
+                params: { id: computedLastId },
+              })
+            )
           "
         >
           <v-icon>mdi-page-last</v-icon>
@@ -110,6 +118,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
 import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
 import TitleCard from './TitleCard.vue'
@@ -171,7 +180,7 @@ export default {
     if (this.arrowKeys) window.removeEventListener('keyup', this.handleKeyup)
   },
   methods: {
-    handleKeyup(e) {
+    handleKeyup: debounce(function (e) {
       if (e.keyCode === 37) {
         // ArrowLeft
         if (this.computedPrevId) {
@@ -191,7 +200,7 @@ export default {
           )
         }
       }
-    },
+    }, 200),
 
     calculatePreviousId(listOfIds, currentId) {
       if (listOfIds && listOfIds.length > 0 && currentId) {
@@ -213,6 +222,10 @@ export default {
         else return null
       }
     },
+
+    debouncedNavigation: debounce(function (path) {
+      this.$router.push(path)
+    }, 200),
   },
 }
 </script>
