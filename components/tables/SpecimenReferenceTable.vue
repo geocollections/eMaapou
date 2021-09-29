@@ -24,10 +24,12 @@
 import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink.vue'
+import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_REFERENCE } from '~/constants'
 export default {
   name: 'SpecimenReferenceTable',
   components: { TableWrapper, ExternalLink },
+  mixins: [headersMixin],
   props: {
     items: {
       type: Array,

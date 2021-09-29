@@ -54,9 +54,11 @@ import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
 import { HEADERS_STRATOTYPE } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'StratotypeTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
     items: {
       type: Array,

@@ -27,9 +27,11 @@
 import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import { HEADERS_LOCALITY_REFERENCE } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'LocalityReferenceTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
