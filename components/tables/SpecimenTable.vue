@@ -95,19 +95,6 @@
         {{ item.taxon }}
       </external-link>
     </template>
-    <template #item.rock="{ item }">
-      <external-link
-        v-if="item.rock_id"
-        @click.native="$openWindow(`https://kivid.info/${item.rock_id}`)"
-      >
-        {{
-          $translate({
-            et: item.rock,
-            en: item.rock_en,
-          })
-        }}
-      </external-link>
-    </template>
     <template #item.image="{ item }">
       <image-cell
         v-if="item.image_preview_url"
