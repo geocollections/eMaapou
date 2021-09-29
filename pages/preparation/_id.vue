@@ -119,7 +119,10 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 pb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>

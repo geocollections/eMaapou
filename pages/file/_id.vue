@@ -372,7 +372,10 @@
     </template>
 
     <template #bottom>
-      <v-row v-if="filteredTabs.length > 0" class="mt-2">
+      <v-row
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-2"
+      >
         <v-col
           v-for="(item, index) in filteredTabs"
           :key="index"

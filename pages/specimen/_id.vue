@@ -192,7 +192,10 @@
     </template>
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
