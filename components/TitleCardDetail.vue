@@ -30,7 +30,7 @@
           @click="
             debouncedNavigation(
               localePath({
-                params: { id: computedFirstId },
+                params: { ...$route.params, id: computedFirstId },
               })
             )
           "
@@ -50,7 +50,7 @@
           @click="
             debouncedNavigation(
               localePath({
-                params: { id: computedPrevId },
+                params: { ...$route.params, id: computedPrevId },
               })
             )
           "
@@ -83,7 +83,7 @@
           @click="
             debouncedNavigation(
               localePath({
-                params: { id: computedNextId },
+                params: { ...$route.params, id: computedNextId },
               })
             )
           "
@@ -102,7 +102,7 @@
           @click="
             debouncedNavigation(
               localePath({
-                params: { id: computedLastId },
+                params: { ...$route.params, id: computedLastId },
               })
             )
           "
@@ -186,7 +186,7 @@ export default {
         if (this.computedPrevId) {
           this.$router.push(
             this.localePath({
-              params: { id: this.computedPrevId },
+              params: { ...this.$route.params, id: this.computedPrevId },
             })
           )
         }
@@ -195,7 +195,7 @@ export default {
         if (this.computedNextId) {
           this.$router.push(
             this.localePath({
-              params: { id: this.computedNextId },
+              params: { ...this.$route.params, id: this.computedNextId },
             })
           )
         }
