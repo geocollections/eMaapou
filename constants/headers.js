@@ -1137,6 +1137,81 @@ export const HEADERS_SPECIMEN_IDENTIFICATION = {
   ],
 }
 
+export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY = {
+  byIds: {
+    rock: {
+      text: 'specimenIdentification.rock',
+      value: 'rock',
+      show: true,
+      sortValue: 'rock__name,rock__name_en',
+    },
+    name: {
+      text: 'specimenIdentification.name',
+      value: 'name',
+      show: true,
+      sortValue: 'name',
+    },
+    name_en: {
+      text: 'specimenIdentification.name_en',
+      value: 'name_en',
+      show: true,
+      sortValue: 'name_en',
+    },
+    agent: {
+      text: 'specimenIdentification.agent',
+      value: 'agent',
+      show: true,
+      sortValue: 'agent__agent',
+    },
+    dateIdentified: {
+      text: 'specimenIdentification.dateIdentified',
+      value: 'dateIdentified',
+      show: true,
+      sortValue: 'date_identified',
+    },
+    reference: {
+      text: 'specimenIdentification.reference',
+      value: 'reference',
+      show: true,
+      sortValue: 'reference__reference',
+    },
+    type: {
+      text: 'specimenIdentification.type',
+      value: 'type',
+      show: true,
+      sortValue: { et: 'type__value', en: 'type__value_en' },
+    },
+    remarks: {
+      text: 'specimenIdentification.remarks',
+      value: 'remarks',
+      show: true,
+      sortValue: 'remarks',
+    },
+    current: {
+      text: 'specimenIdentification.current',
+      value: 'current',
+      show: true,
+      sortValue: 'current',
+    },
+    // pages: {
+    //   text: 'stratigraphyReference.pages',
+    //   value: 'pages',
+    //   show: true,
+    // },
+  },
+  allIds: [
+    'rock',
+    'name',
+    'name_en',
+    'agent',
+    'date_identified',
+    'reference',
+    'type',
+    'remarks',
+    'current',
+  ],
+}
+
 export const HEADERS_SPECIMEN_REFERENCE = {
   byIds: {
     reference: {

@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.rock="{ item }">
       <external-link
@@ -53,12 +55,16 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import BooleanIndicator from '../BooleanIndicator.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
 export default {
   name: 'SpecimenIdentificationGeologyTable',
   components: { TableWrapper, ExternalLink, BooleanIndicator },
+  mixins: [headersMixin],
   props: {
     showSearch: {
       type: Boolean,
@@ -84,37 +90,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('specimenIdentification.rock'),
-          value: 'rock',
-        },
-        {
-          text: this.$t('specimenIdentification.name'),
-          value: 'name',
-        },
-        {
-          text: this.$t('specimenIdentification.name_en'),
-          value: 'name_en',
-        },
-        {
-          text: this.$t('specimenIdentification.agent'),
-          value: 'agent',
-        },
-        {
-          text: this.$t('specimenIdentification.dateIdentified'),
-          value: 'dateIdentified',
-        },
-        {
-          text: this.$t('specimenIdentification.reference'),
-          value: 'reference',
-        },
-        { text: this.$t('specimenIdentification.type'), value: 'type' },
-        { text: this.$t('specimenIdentification.remarks'), value: 'remarks' },
-        { text: this.$t('specimenIdentification.current'), value: 'current' },
-        // { text: this.$t('stratigraphyReference.pages'), value: 'pages' },
-        // { text: this.$t('stratigraphyReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY),
     }
   },
 }

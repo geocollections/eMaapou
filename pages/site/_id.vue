@@ -403,7 +403,7 @@ export default {
           attachment__attachment_format__value__istartswith: 'image',
           nest: 1,
         },
-        queryFields: {},
+        fields: {},
       }
     )
     this.attachments = attachmentResponse.items ?? []

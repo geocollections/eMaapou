@@ -287,17 +287,6 @@ export const SPECIMEN_IDENTIFICATION_GEOLOGY = {
     sortBy: [],
     sortDesc: [],
   },
-  queryFields: {
-    rock: (locale) => 'rock__name,rock__name_en',
-    name: (locale) => 'name',
-    name_en: (locale) => 'name_en',
-    agent: (locale) => 'agent__agent',
-    dateIdentified: (locale) => 'date_identified',
-    reference: (locale) => 'reference__reference',
-    type: (locale) => (locale === 'et' ? 'type__value' : 'type__value_en'),
-    remarks: (locale) => 'remarks',
-    current: (locale) => 'current',
-  },
 }
 
 export const SPECIMEN_REFERENCE = {

@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import SpecimenIdentificationGeologyTable from '~/components/tables/SpecimenIdentificationGeologyTable.vue'
-import { SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
+import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
 export default {
   components: { SpecimenIdentificationGeologyTable },
   data() {
@@ -38,9 +38,7 @@ export default {
               specimen: this.$route.params.id,
               nest: 1,
             },
-            queryFields: this.$getQueryFields(
-              SPECIMEN_IDENTIFICATION_GEOLOGY.queryFields
-            ),
+            fields: this.$getFields(HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY),
           }
         )
       this.identifications = identificationResponse.items
