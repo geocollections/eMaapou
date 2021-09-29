@@ -8,6 +8,7 @@
     extension-height="40"
     :elevation="4"
     class="gradient-background"
+    style="z-index: 2060"
   >
     <v-app-bar-title class="ml-3 align-self-center">
       <!--
