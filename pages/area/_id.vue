@@ -190,17 +190,7 @@ export default {
     LinkDataRow,
     Detail,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    redirect,
-    $services,
-    $validateTabRoute,
-    $hydrateTab,
-    $translate,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'area',
@@ -208,45 +198,21 @@ export default {
       )
       const ids = detailViewResponse?.ids
       const area = detailViewResponse
-      const sitesResponse = await $services.sarvSolr.getResourceList('site', {
-        defaultParams: {
-          fq: `area_id:${params.id}`,
-        },
-      })
-
-      const sites = sitesResponse.items
-
-      const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `area_id:${area.id}` },
-                },
-                api: {
-                  default: { area: area.id },
-                },
-              },
-            })
-        )
+      const sitesForMapResponse = await $services.sarvSolr.getResourceList(
+        'site',
+        {
+          defaultParams: {
+            fq: `area_id:${params.id}`,
+          },
+        }
       )
 
-      const text = $translate({ et: area.name, en: area.name_en })
-
-      const slugRoute = $createSlugRoute(route, text)
-
-      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
+      const sites = sitesForMapResponse.items
 
       return {
         area,
         ids,
         sites,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
@@ -255,6 +221,43 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+    }
+  },
+  async fetch() {
+    const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `area_id:${this.area.id}` },
+              },
+              api: {
+                default: { area: this.area.id },
+              },
+            },
+          })
+      )
+    )
+
+    const text = this.$translate({ et: this.area.name, en: this.area.name_en })
+
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.$translate({

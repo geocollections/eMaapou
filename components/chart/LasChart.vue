@@ -1,5 +1,8 @@
 <template>
-  <chart-wrapper :options="chartOptions" />
+  <chart-wrapper
+    :options="chartOptions"
+    :hide-renderer-switch="hideRendererSwitch"
+  />
 </template>
 
 <script>
@@ -17,6 +20,11 @@ export default {
       type: String,
       required: false,
       default: 'Chart title',
+    },
+    hideRendererSwitch: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   data() {
@@ -69,12 +77,12 @@ export default {
               nameTextStyle: {
                 fontWeight: 'bold',
               },
-              // min(value) {
-              //   return (value.min - 0.1).toFixed(2) * 1
-              // },
-              // max(value) {
-              //   return (value.max + 0.1).toFixed(2) * 1
-              // },
+              min(value) {
+                return (value.min - 0.1).toFixed(2) * 1
+              },
+              max(value) {
+                return (value.max + 0.1).toFixed(2) * 1
+              },
               splitNumber: 2,
               axisLine: {
                 show: true,
@@ -112,12 +120,12 @@ export default {
         axisTick: {
           alignWithLabel: true,
         },
-        // min(value) {
-        //   return (value.min - 0.1).toFixed(2) * 1
-        // },
-        // max(value) {
-        //   return (value.max + 0.1).toFixed(2) * 1
-        // },
+        min(value) {
+          return (value.min - 0.1).toFixed(2) * 1
+        },
+        max(value) {
+          return (value.max + 0.1).toFixed(2) * 1
+        },
         data: this.fileData?.data?.DEPTH,
       }
     },

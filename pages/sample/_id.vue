@@ -341,17 +341,7 @@ export default {
     LeafletMap,
     Detail,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    app,
-    redirect,
-    $validateTabRoute,
-    $services,
-    $hydrateTab,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'sample',
@@ -365,121 +355,9 @@ export default {
       const ids = detailViewResponse?.ids
       const sample = detailViewResponse
 
-      const localityGroupedResponse = await $services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          useRawSolr: true,
-          defaultParams: {
-            fq: `sample_id:${sample?.id}`,
-            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-            group: true,
-            'group.field': ['locality_id', 'site_id'],
-            rows: 10000,
-          },
-        }
-      )
-
-      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.locality_id)
-      const sites = localityGroupedResponse?.grouped?.site_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.site_id)
-      const locations = localities.concat(sites)
-
-      // const tabs = [
-      //   {
-      //     id: 'analysis',
-      //     isSolr: true,
-      //     routeName: 'sample-id-slug',
-      //     title: 'sample.analyses',
-      //     count: 0,
-      //     props: { sample: sample.id },
-      //   },
-      //   {
-      //     id: 'preparation',
-      //     isSolr: true,
-      //     routeName: 'sample-id-slug-preparations',
-      //     title: 'sample.preparations',
-      //     count: 0,
-      //     props: { sample: sample.id },
-      //   },
-      //   {
-      //     id: 'taxon_list',
-      //     routeName: 'sample-id-slug-taxa',
-      //     title: 'sample.taxa',
-      //     count: 0,
-      //     props: { sample: sample.id },
-      //   },
-      //   {
-      //     id: 'attachment_link',
-      //     routeName: 'sample-id-slug-attachments',
-      //     title: 'sample.attachments',
-      //     count: 0,
-      //     props: { sample: sample.id },
-      //   },
-      //   {
-      //     id: 'sample_reference',
-      //     routeName: 'sample-id-slug-references',
-      //     title: 'sample.sampleReferences',
-      //     count: 0,
-      //     props: { sample: sample.id },
-      //   },
-      //   {
-      //     id: 'analysis_results',
-      //     isSolr: true,
-      //     routeName: 'sample-id-slug-analysis-results',
-      //     title: 'sample.analysisResults',
-      //     count: 0,
-      //     props: { sample: sample.id },
-      //   },
-      //   {
-      //     table: 'taxon_list',
-      //     id: 'graphs',
-      //     routeName: 'sample-id-slug-graphs',
-      //     title: 'locality.graphs',
-      //     count: 0,
-      //     props: {
-      //       sample: sample.id,
-      //       sampleObject: { ...sample },
-      //     },
-      //   },
-      // ]
-
-      const tabsObject = TABS_SAMPLE
-
-      tabsObject.byIds.graphs.props.sampleObject = sample
-
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: { default: { fq: `sample_id:${sample.id}` } },
-                api: { default: { sample: sample.id } },
-              },
-            })
-        )
-      )
-      const name = `${
-        sample.number || sample.number_additional || sample.number_field
-      }`.trim()
-      // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
-      const slugRoute = $createSlugRoute(
-        route,
-        `${isEmpty(name) ? sample.id : name}`
-      )
-
-      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
-
       return {
         sample,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
-        locations,
       }
     } catch (err) {
       error({
@@ -488,6 +366,69 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      locations: [],
+    }
+  },
+  async fetch() {
+    const localityGroupedResponse =
+      await this.$services.sarvSolr.getResourceList('analysis', {
+        useRawSolr: true,
+        defaultParams: {
+          fq: `sample_id:${this.sample?.id}`,
+          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+          group: true,
+          'group.field': ['locality_id', 'site_id'],
+          rows: 10000,
+        },
+      })
+
+    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.locality_id)
+    const sites = localityGroupedResponse?.grouped?.site_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.site_id)
+    this.locations = localities.concat(sites)
+
+    const tabsObject = TABS_SAMPLE
+
+    tabsObject.byIds.graphs.props.sampleObject = this.sample
+
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `sample_id:${this.sample?.id}` } },
+              api: { default: { sample: this.sample?.id } },
+            },
+          })
+      )
+    )
+    const name = `${
+      this.sample?.number ||
+      this.sample?.number_additional ||
+      this.sample?.number_field
+    }`.trim()
+    // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      `${isEmpty(name) ? this.sample?.id : name}`
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,

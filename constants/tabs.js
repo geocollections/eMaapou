@@ -581,6 +581,15 @@ export const TABS_SPECIMEN = {
       count: 0,
       props: {},
     },
+    specimen_identification_geology: {
+      id: 'specimen_identification_geology',
+      table: 'specimen_identification_geology',
+      isSolr: false,
+      routeName: 'specimen-id-slug-rock-identifications',
+      title: 'specimen.rockIdentifications',
+      count: 0,
+      props: {},
+    },
     specimen_reference: {
       id: 'specimen_reference',
       table: 'specimen_reference',
@@ -591,7 +600,11 @@ export const TABS_SPECIMEN = {
       props: {},
     },
   },
-  allIds: ['specimen_identification', 'specimen_reference'],
+  allIds: [
+    'specimen_identification',
+    'specimen_identification_geology',
+    'specimen_reference',
+  ],
 }
 
 export const TABS_STRATIGRAPHY = {

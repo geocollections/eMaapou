@@ -371,48 +371,10 @@ export default {
       )
       const ids = detailViewResponse?.ids
       const site = detailViewResponse
-      const attachmentResponse = await $services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          isValid: isNil(site.id),
-          defaultParams: {
-            site: site.id,
-            attachment__attachment_format__value__istartswith: 'image',
-            nest: 1,
-          },
-          fields: {},
-        }
-      )
-      const attachments = attachmentResponse.items ?? []
-
-      const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: { default: { fq: `site_id:${site.id}` } },
-                api: { default: { site: site.id } },
-              },
-            })
-        )
-      )
-
-      const slugRoute = $createSlugRoute(
-        route,
-        $translate({ et: site.name, en: site.name_en })
-      )
-
-      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
 
       return {
         site,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
-        images: attachments,
       }
     } catch (err) {
       error({
@@ -421,6 +383,55 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      images: [],
+    }
+  },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        isValid: isNil(this.site?.id),
+        defaultParams: {
+          site: this.site?.id,
+          attachment__attachment_format__value__istartswith: 'image',
+          nest: 1,
+        },
+        queryFields: {},
+      }
+    )
+    this.attachments = attachmentResponse.items ?? []
+
+    const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `site_id:${this.site?.id}` } },
+              api: { default: { site: this.site?.id } },
+            },
+          })
+      )
+    )
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({ et: this.site?.name, en: this.site?.name_en })
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,

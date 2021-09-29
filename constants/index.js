@@ -1,5 +1,7 @@
 export * from './tabs'
 export * from './headers'
+export * from './chart'
+
 export const ANALYSIS = {
   options: {
     page: 1,
@@ -275,6 +277,26 @@ export const SPECIMEN_IDENTIFICATION = {
     itemsPerPage: 25,
     sortBy: [],
     sortDesc: [],
+  },
+}
+
+export const SPECIMEN_IDENTIFICATION_GEOLOGY = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+  queryFields: {
+    rock: (locale) => 'rock__name,rock__name_en',
+    name: (locale) => 'name',
+    name_en: (locale) => 'name_en',
+    agent: (locale) => 'agent__agent',
+    dateIdentified: (locale) => 'date_identified',
+    reference: (locale) => 'reference__reference',
+    type: (locale) => (locale === 'et' ? 'type__value' : 'type__value_en'),
+    remarks: (locale) => 'remarks',
+    current: (locale) => 'current',
   },
 }
 

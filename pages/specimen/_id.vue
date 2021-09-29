@@ -218,16 +218,7 @@ export default {
     Tabs,
     ImageBar,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    redirect,
-    $validateTabRoute,
-    $services,
-    $hydrateTab,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'specimen',
@@ -244,50 +235,10 @@ export default {
 
       const specimenAlt = specimenNameResponse?.[0]
 
-      const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: { default: { fq: `specimen_id:${specimen.id}` } },
-                api: {
-                  default: { specimen: specimen.id },
-                  specimen_reference: { specimen: specimen.id },
-                },
-              },
-            })
-        )
-      )
-
-      const slugRoute = $createSlugRoute(
-        route,
-        `${specimen.database.acronym} ${specimen.specimen_id}`
-      )
-
-      const validPath = $validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
-
-      const attachmentResponse = await $services.sarvSolr.getResourceList(
-        'attachment',
-        {
-          defaultParams: {
-            fq: `specimen_id:${specimen.id} AND specimen_image_attachment:1`,
-            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-          },
-        }
-      )
-
-      const images = attachmentResponse.items ?? []
-
       return {
         specimen,
         specimenAlt,
         ids,
-        images,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
@@ -295,6 +246,55 @@ export default {
         path: route.path,
       })
     }
+  },
+  data() {
+    return {
+      images: [],
+      initActiveTab: '',
+      tabs: [],
+    }
+  },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvSolr.getResourceList(
+      'attachment',
+      {
+        defaultParams: {
+          fq: `specimen_id:${this.specimen?.id} AND specimen_image_attachment:1`,
+          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+        },
+      }
+    )
+
+    this.images = attachmentResponse.items ?? []
+
+    const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `specimen_id:${this.specimen?.id}` } },
+              api: {
+                default: { specimen: this.specimen?.id },
+                specimen_reference: { specimen: this.specimen?.id },
+              },
+            },
+          })
+      )
+    )
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
   },
 
   head() {
@@ -314,7 +314,7 @@ export default {
       return `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
     },
     titleAlt() {
-      if (this.specimenAlt.rock) {
+      if (this.specimenAlt?.rock) {
         const defaultName = this.$translate({
           et: this.specimenAlt.rock,
           en: this.specimenAlt.rock_en,
@@ -323,7 +323,7 @@ export default {
           ? this.specimenAlt.rock_txt[0]
           : defaultName
       }
-      if (this.specimenAlt.taxon) {
+      if (this.specimenAlt?.taxon) {
         return this.specimenAlt.taxon
       }
       return null

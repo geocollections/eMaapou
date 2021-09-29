@@ -3,7 +3,7 @@ import ECharts from 'vue-echarts'
 import { use } from 'echarts/core'
 
 // import ECharts modules manually to reduce bundle size
-import { CanvasRenderer } from 'echarts/renderers'
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers'
 import { BarChart, LineChart, ScatterChart, PieChart } from 'echarts/charts'
 import {
   LegendComponent,
@@ -19,7 +19,7 @@ import {
 use([
   // renderers
   CanvasRenderer,
-  // SVGRenderer,
+  SVGRenderer,
 
   // charts
   LineChart,
