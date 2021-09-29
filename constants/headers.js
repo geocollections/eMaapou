@@ -1050,7 +1050,7 @@ export const HEADERS_SPECIMEN = {
       show: true,
       sortValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
     },
-    rock: {
+    name: {
       text: 'specimen.name',
       value: 'name',
       show: true,
@@ -1073,7 +1073,7 @@ export const HEADERS_SPECIMEN = {
     'depth_interval',
     'stratigraphy',
     'lithostratigraphy',
-    'rock',
+    'name',
     'image',
   ],
 }
