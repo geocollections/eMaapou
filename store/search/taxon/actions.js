@@ -7,7 +7,7 @@ export default {
       {
         ...(options && { options }),
         module: 'taxon',
-        resource: 'taxon_search',
+        resource: 'taxon',
         resourceDefaults: { ...TAXON, headers: HEADERS_TAXON },
       },
       { root: true }
