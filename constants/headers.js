@@ -503,7 +503,7 @@ export const HEADERS_DESCRIPTION = {
     },
     expand: {
       text: 'localityDescription.details',
-      value: 'data-table-expand',
+      value: 'expand',
       align: 'center',
       sortable: false,
       show: true,
