@@ -341,16 +341,7 @@ export default {
     LeafletMap,
     Detail,
   },
-  async asyncData({
-    params,
-    route,
-    error,
-    redirect,
-    $validateTabRoute,
-    $services,
-    $hydrateTab,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'sample',
