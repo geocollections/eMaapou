@@ -9,7 +9,7 @@ export default ($axios) => ({
     {
       useRawSolr,
       defaultParams,
-      queryFields,
+      fields,
       search,
       options,
       isValid,
@@ -28,7 +28,7 @@ export default ($axios) => ({
       ...buildSolrQueryParameter(search),
       ...buildSolrParameters(searchFilters),
       ...buildSolrPaginationParameters(options),
-      ...buildSolrSortParameter(options, queryFields),
+      ...buildSolrSortParameter(options, fields),
     }
 
     const response = await $axios.$get(`solr/${resource}`, {
@@ -107,14 +107,14 @@ const buildSolrPaginationParameters = (options) => {
   return null
 }
 
-const buildSolrSortParameter = (options, queryFields) => {
+const buildSolrSortParameter = (options, fields) => {
   if (options?.sortBy && options?.sortDesc) {
     if (!isEmpty(options.sortBy)) {
       const orderBy = options.sortBy
         .map((field, i) => {
           // Support for multivalue fields #219
-          if (queryFields?.[field]) {
-            return queryFields[field]
+          if (fields?.[field]) {
+            return fields[field]
               .split(',')
               .map((item) =>
                 options.sortDesc[i] ? `${item} desc` : `${item} asc`

@@ -40,7 +40,7 @@ export default {
           defaultParams: {
             fq: `age_chronostratigraphy:${this.$route.params.id}`,
           },
-          queryFields: this.$getSortValues(HEADERS_STRATIGRAPHY),
+          fields: this.$getFields(HEADERS_STRATIGRAPHY),
         }
       )
       this.items = analysisResponse.items

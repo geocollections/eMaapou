@@ -31,7 +31,7 @@ export default {
           defaultParams: {
             area: this.$route.params.id,
           },
-          queryFields: this.$getSortValues(HEADERS_LOCALITY_REFERENCE),
+          fields: this.$getFields(HEADERS_LOCALITY_REFERENCE),
         }
       )
       this.references = referenceResponse.items

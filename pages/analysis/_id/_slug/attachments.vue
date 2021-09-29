@@ -38,7 +38,7 @@ export default {
             analysis: this.$route.params.id,
             nest: 2,
           },
-          queryFields: this.$getSortValues(HEADERS_ATTACHMENT),
+          fields: this.$getFields(HEADERS_ATTACHMENT),
         }
       )
       this.attachments = attachmentResponse.items

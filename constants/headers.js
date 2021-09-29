@@ -483,7 +483,7 @@ export const HEADERS_DESCRIPTION = {
       text: 'localityDescription.rock',
       value: 'rock',
       show: true,
-      sortValue: { et: 'rock_name', en: 'rock_name_en' },
+      sortValue: { et: 'rock__name', en: 'rock__name_en' },
     },
     stratigraphy: {
       text: 'localityDescription.stratigraphy',

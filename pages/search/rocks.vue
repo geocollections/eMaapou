@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getSortValues(HEADERS_ROCK),
+          fields: this.$getFields(HEADERS_ROCK),
           searchFilters: {},
         }
       )

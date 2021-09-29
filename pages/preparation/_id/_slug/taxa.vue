@@ -32,7 +32,7 @@ export default {
           defaultParams: {
             preparation: this.$route.params.id,
           },
-          queryFields: this.$getSortValues(HEADERS_TAXON_LIST),
+          fields: this.$getFields(HEADERS_TAXON_LIST),
         }
       )
       this.taxa = taxonResponse.items

@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getSortValues(HEADERS_PHOTO),
+          fields: this.$getFields(HEADERS_PHOTO),
           searchFilters: {
             specimenImageAttachment: {
               value: '2',

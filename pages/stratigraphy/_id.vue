@@ -264,7 +264,7 @@ export default {
     $hydrateTab,
     $translate,
     $createSlugRoute,
-    $getSortValues,
+    $getFields,
   }) {
     try {
       const stratigraphyResponse = await $services.sarvREST.getResource(
@@ -290,7 +290,7 @@ export default {
             stratigraphy: stratigraphy.id,
             nest: 2,
           },
-          queryFields: $getSortValues(HEADERS_STRATOTYPE),
+          fields: $getFields(HEADERS_STRATOTYPE),
         }
       )
       const stratotypes = stratotypeResponse.items

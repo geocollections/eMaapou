@@ -45,7 +45,7 @@ export default {
             nest: 2,
             or_search: `drillcore:${this.$route.params.id} OR locality:${this.locality}`,
           },
-          queryFields: this.$getSortValues(HEADERS_ATTACHMENT),
+          fields: this.$getFields(HEADERS_ATTACHMENT),
         }
       )
       this.attachments = attachmentResponse.items

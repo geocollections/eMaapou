@@ -38,7 +38,7 @@ export default {
             stratigraphy: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getSortValues(HEADERS_STRATIGRAPHY_SYNONYM),
+          fields: this.$getFields(HEADERS_STRATIGRAPHY_SYNONYM),
         }
       )
       this.synonyms = synonymResponse.items

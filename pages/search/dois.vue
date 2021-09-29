@@ -42,7 +42,7 @@ export default {
       const response = await this.$services.sarvSolr.getResourceList('doi', {
         options: tableState.options,
         search: this.query,
-        queryFields: this.$getSortValues(HEADERS_DOI),
+        fields: this.$getFields(HEADERS_DOI),
         searchFilters: {},
       })
       this.items = response.items

@@ -46,7 +46,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           },
-          queryFields: this.$getSortValues(HEADERS_SPECIMEN),
+          fields: this.$getFields(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

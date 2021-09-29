@@ -32,7 +32,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getSortValues(HEADERS_SPECIMEN),
+          fields: this.$getFields(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

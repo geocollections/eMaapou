@@ -32,7 +32,7 @@ export default {
             specimen: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getSortValues(HEADERS_SPECIMEN_REFERENCE),
+          fields: this.$getFields(HEADERS_SPECIMEN_REFERENCE),
         }
       )
       this.references = referenceResponse.items

@@ -39,7 +39,7 @@ export default {
             fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
             // fq: `stratigraphy_id:${this.stratigraphy}`,
           },
-          queryFields: this.$getSortValues(HEADERS_SPECIMEN),
+          fields: this.$getFields(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

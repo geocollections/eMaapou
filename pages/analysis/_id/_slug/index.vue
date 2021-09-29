@@ -34,7 +34,7 @@ export default {
           defaultParams: {
             fq: `analysis_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getSortValues(HEADERS_ANALYSIS_RESULT),
+          fields: this.$getFields(HEADERS_ANALYSIS_RESULT),
         })
 
       this.analysisResults = analysisResultResponse.items

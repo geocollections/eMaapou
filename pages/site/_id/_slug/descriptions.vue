@@ -34,7 +34,7 @@ export default {
             site: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getSortValues(HEADERS_DESCRIPTION),
+          fields: this.$getFields(HEADERS_DESCRIPTION),
         }
       )
       this.descriptions = descriptionResponse.items.map((item) => {

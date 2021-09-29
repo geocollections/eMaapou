@@ -44,7 +44,7 @@ export default {
             stratigraphy: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getSortValues(HEADERS_STRATIGRAPHY_REFERENCE),
+          fields: this.$getFields(HEADERS_STRATIGRAPHY_REFERENCE),
         }
       )
 

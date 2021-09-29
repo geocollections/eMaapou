@@ -38,7 +38,7 @@ export default {
               specimen: this.$route.params.id,
               nest: 1,
             },
-            queryFields: this.$getSortValues(HEADERS_SPECIMEN_IDENTIFICATION),
+            fields: this.$getFields(HEADERS_SPECIMEN_IDENTIFICATION),
           }
         )
       this.identifications = identificationResponse.items

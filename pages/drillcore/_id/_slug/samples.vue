@@ -39,7 +39,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality}`,
           },
-          queryFields: this.$getSortValues(HEADERS_SAMPLE),
+          fields: this.$getFields(HEADERS_SAMPLE),
         }
       )
       this.samples = sampleResponse.items

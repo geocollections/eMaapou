@@ -32,7 +32,7 @@ export default {
             locality: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getSortValues(HEADERS_LOCALITY_REFERENCE),
+          fields: this.$getFields(HEADERS_LOCALITY_REFERENCE),
         }
       )
       this.references = referenceResponse.items

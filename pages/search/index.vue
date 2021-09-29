@@ -43,7 +43,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getSortValues(HEADERS_DRILLCORE),
+          fields: this.$getFields(HEADERS_DRILLCORE),
           searchFilters: {},
         }
       )

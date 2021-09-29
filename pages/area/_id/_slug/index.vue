@@ -32,7 +32,7 @@ export default {
           defaultParams: {
             fq: `area_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getSortValues(HEADERS_SITE),
+          fields: this.$getFields(HEADERS_SITE),
         }
       )
 

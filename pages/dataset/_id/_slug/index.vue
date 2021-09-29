@@ -29,14 +29,14 @@ export default {
     }
   },
   computed: {
-    mergedQueryFields() {
-      const parameterQueryFields = this.parameters.reduce(
+    mergedFields() {
+      const parameterFields = this.parameters.reduce(
         (obj, item) => ({ ...obj, [item.value]: item.value }),
         {}
       )
       return {
-        ...this.$getSortValues(HEADERS_DATASET_ANALYSIS),
-        ...parameterQueryFields,
+        ...this.$getFields(HEADERS_DATASET_ANALYSIS),
+        ...parameterFields,
       }
     },
   },
@@ -51,7 +51,7 @@ export default {
           defaultParams: {
             fq: `dataset_id:${this.$route.params.id}`,
           },
-          queryFields: this.mergedQueryFields,
+          fields: this.mergedFields,
         }
       )
       this.analyses = analysisResponse.items
