@@ -114,6 +114,8 @@ export default {
     goToBtn: 'Go',
     pageSelect: '{current} / {count}',
     selectModule: 'Select module',
+    headerSelectDisabled: 'Sorting enabled',
+    headers: 'Columns',
   },
   link: {
     sarvAPI: 'Public API',

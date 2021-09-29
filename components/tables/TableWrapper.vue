@@ -80,26 +80,14 @@
                 </v-menu>
               </v-btn>
             </v-col>
-            <v-col v-if="dynamicHeaders">
-              <v-autocomplete
-                :items="headers"
-                :value="visibleHeaders"
-                chips
-                small-chips
-                deletable-chips
-                multiple
-                hide-details
-                cache-items
-                :label="$t('common.tableHeaders')"
-                @change="$emit('change:headers', $event)"
-              >
-                <template #item="{ item }">
-                  <v-list-item-content>
-                    {{ item.text }}
-                  </v-list-item-content>
-                </template>
-              </v-autocomplete>
-              <v-btn @click="$emit('reset:headers')">RESET HEADERS</v-btn>
+            <v-col v-if="dynamicHeaders" align-self="center">
+              <header-controls
+                :headers="headers"
+                :visible-headers="visibleHeaders"
+                :sort-by="options.sortBy"
+                @change="handleHeadersChange"
+                @reset="$emit('reset:headers')"
+              />
             </v-col>
             <v-col>
               <pagination-controls
@@ -174,11 +162,12 @@
 
 <script>
 import { debounce } from 'lodash'
+import HeaderControls from './controls/HeaderControls.vue'
 import exportMixin from '~/mixins/exportMixin'
-import PaginationControls from '~/components/PaginationControls.vue'
+import PaginationControls from '~/components/tables/controls/PaginationControls.vue'
 export default {
   name: 'TableWrapper',
-  components: { PaginationControls },
+  components: { PaginationControls, HeaderControls },
   mixins: [exportMixin],
   props: {
     onlyTable: {
@@ -215,7 +204,7 @@ export default {
     },
     dynamicHeaders: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   data() {
@@ -253,7 +242,10 @@ export default {
       })
     }, 500),
     handleHeadersChange(e) {
-      this.$emit('change:headers', e)
+      this.$emit(
+        'change:headers',
+        e.map((header) => header.value)
+      )
     },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,
@@ -264,6 +256,9 @@ export default {
       // Workaround found from: https://github.com/vuetifyjs/vuetify/issues/1538
       if (event.target.classList.contains('text-link')) return
       slot.expand(!slot.isExpanded)
+    },
+    handleTest(e) {
+      console.log(e)
     },
   },
 }

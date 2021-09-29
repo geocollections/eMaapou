@@ -114,6 +114,8 @@ export default {
     goToBtn: 'Mine',
     pageSelect: '{current} / {count}',
     selectModule: 'Moodulid',
+    headerSelectDisabled: 'Veergu sorteeritakse',
+    headers: 'Veerud',
   },
   link: {
     sarvAPI: 'Avalik API',
