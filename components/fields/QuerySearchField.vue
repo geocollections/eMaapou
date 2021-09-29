@@ -2,14 +2,16 @@
   <v-text-field
     :value="value"
     color="accent"
-    :placeholder="$t('common.searchAlt')"
+    light
+    :placeholder="placeholder"
     single-line
     hide-details
     solo
-    height="48px"
     clearable
     autofocus
+    v-bind="$props"
     @input="$emit('input', $event)"
+    @keyup.enter="$emit('enter', $event)"
   >
   </v-text-field>
 </template>
@@ -33,6 +35,12 @@ export default {
     value: {
       type: String,
       default: '',
+    },
+    placeholder: {
+      type: String,
+      default() {
+        return this.$t('common.searchAlt')
+      },
     },
   },
 }

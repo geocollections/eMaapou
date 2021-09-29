@@ -40,15 +40,6 @@
     <v-toolbar-items v-show="$vuetify.breakpoint.smAndUp" class="ml-3">
       <v-btn
         nuxt
-        aria-label="search"
-        text
-        class="montserrat"
-        :to="localePath({ name: 'search' })"
-      >
-        {{ $t('common.search') }}
-      </v-btn>
-      <v-btn
-        nuxt
         aria-label="about page"
         text
         class="montserrat"
@@ -68,7 +59,15 @@
       </v-btn>
     </v-toolbar-items>
     <v-spacer />
-    <v-toolbar-items>
+    <v-toolbar-items class="align-center">
+      <query-search-field
+        v-if="!$route.name.startsWith('search')"
+        v-model="query"
+        class="pr-2"
+        dense
+        :placeholder="$t('common.search')"
+        @enter="test"
+      />
       <lang-switcher />
       <v-btn
         text
@@ -120,10 +119,13 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
+
+import QuerySearchField from './fields/QuerySearchField.vue'
 import LangSwitcher from '~/components/lang_switcher/LangSwitcher.vue'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcher },
+  components: { LangSwitcher, QuerySearchField },
   props: {
     drawer: Boolean,
   },
@@ -162,6 +164,7 @@ export default {
     }
   },
   computed: {
+    ...mapFields('search', ['query']),
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path
@@ -169,6 +172,12 @@ export default {
       return path[path.length - 1] !== '/'
         ? `${path}/${full.substring(path.length)}`
         : `${full}/`
+    },
+  },
+  methods: {
+    test(e) {
+      console.log(e)
+      this.$router.push(this.localePath({ name: 'search' }))
     },
   },
 }
