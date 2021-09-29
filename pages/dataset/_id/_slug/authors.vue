@@ -12,7 +12,7 @@
 import { isNil } from 'lodash'
 import DatasetAuthorTable from '@/components/tables/DatasetAuthorTable'
 
-import { DATASET_AUTHORS } from '~/constants'
+import { HEADERS_DATASET_AUTHOR } from '~/constants'
 export default {
   components: { DatasetAuthorTable },
   data() {
@@ -39,7 +39,7 @@ export default {
             dataset: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(DATASET_AUTHORS.queryFields),
+          fields: this.$getFields(HEADERS_DATASET_AUTHOR),
         }
       )
       this.authors = authorsResponse.items

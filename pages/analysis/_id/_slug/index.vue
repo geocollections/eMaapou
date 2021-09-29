@@ -5,13 +5,14 @@
     :options="options"
     hide-depth
     hide-method
+    dynamic-headers
     @update="handleUpdate"
   />
 </template>
 
 <script>
 import { round, isNil } from 'lodash'
-import { ANALYSIS_RESULT } from '~/constants'
+import { ANALYSIS_RESULT, HEADERS_ANALYSIS_RESULT } from '~/constants'
 import AnalysisResultTable from '~/components/tables/AnalysisResultTable.vue'
 export default {
   components: { AnalysisResultTable },
@@ -33,7 +34,7 @@ export default {
           defaultParams: {
             fq: `analysis_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(ANALYSIS_RESULT.queryFields),
+          fields: this.$getFields(HEADERS_ANALYSIS_RESULT),
         })
 
       this.analysisResults = analysisResultResponse.items

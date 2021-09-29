@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -63,18 +65,17 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import ImageCell from '@/components/ImageCell'
 import ExternalLink from '~/components/ExternalLink'
-// import AttachmentCell from '~/components/AttachmentCell'
+import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'AttachmentSolrTable',
   components: { ExternalLink, TableWrapper, ImageCell },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -95,16 +96,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('attachment.id'), value: 'id' },
-        { text: this.$t('attachment.format'), value: 'format_value' },
-        { text: this.$t('attachment.image_number'), value: 'image_number' },
-        { text: this.$t('attachment.author'), value: 'agent' },
-        { text: this.$t('attachment.date'), value: 'date' },
-        { text: this.$t('attachment.reference'), value: 'reference' },
-        { text: this.$t('attachment.type'), value: 'type' },
-        { text: this.$t('attachment.image'), value: 'image', sortable: false },
-      ],
+      localHeaders: cloneDeep(HEADERS_ATTACHMENT_SOLR),
     }
   },
   methods: {

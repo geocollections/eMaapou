@@ -227,7 +227,7 @@
 
 <script>
 import { isNull, debounce } from 'lodash'
-import { DRILLCORE_BOX } from '~/constants'
+import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
   props: {
     drillcore: {
@@ -259,7 +259,7 @@ export default {
             itemsPerPage: this.paginateBy,
           },
           search: this.search,
-          queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
+          fields: this.$getFields(HEADERS_ATTACHMENT),
         })
         .then((res) => {
           if (!res.next) {

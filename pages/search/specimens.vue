@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { SPECIMEN } from '~/constants'
+import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 import SpecimenTable from '~/components/tables/SpecimenTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(SPECIMEN.queryFields),
+          fields: this.$getFields(HEADERS_SPECIMEN),
           searchFilters: {},
         }
       )

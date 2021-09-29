@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <site-table
@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        dynamic-headers
+        stateful-headers
         @update="handleUpdate"
       />
     </template>
@@ -33,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '@/components/search/forms/SiteSearchForm'
 import SiteTable from '~/components/tables/SiteTable.vue'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -43,7 +43,6 @@ export default {
     SiteTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('site.pageTitle'),

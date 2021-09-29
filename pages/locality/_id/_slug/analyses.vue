@@ -10,7 +10,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import { ANALYSIS } from '~/constants'
+import { HEADERS_ANALYSIS } from '~/constants'
 import AnalysisTable from '~/components/tables/AnalysisTable'
 export default {
   components: { AnalysisTable },
@@ -37,7 +37,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(ANALYSIS.queryFields),
+          fields: this.$getFields(HEADERS_ANALYSIS),
         }
       )
       this.analyses = response.items

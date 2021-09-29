@@ -11,7 +11,7 @@
 import SpecimenTable from '@/components/tables/SpecimenTable'
 import { isNil } from 'lodash'
 
-import { SPECIMEN } from '~/constants'
+import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 export default {
   components: { SpecimenTable },
   data() {
@@ -32,7 +32,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(SPECIMEN.queryFields),
+          fields: this.$getFields(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

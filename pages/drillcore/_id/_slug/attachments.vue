@@ -12,7 +12,7 @@
 import { isNil } from 'lodash'
 import AttachmentTable from '@/components/tables/AttachmentTable'
 
-import { ATTACHMENT_LINK } from '~/constants'
+import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
   components: { AttachmentTable },
   props: {
@@ -45,7 +45,7 @@ export default {
             nest: 2,
             or_search: `drillcore:${this.$route.params.id} OR locality:${this.locality}`,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
+          fields: this.$getFields(HEADERS_ATTACHMENT),
         }
       )
       this.attachments = attachmentResponse.items

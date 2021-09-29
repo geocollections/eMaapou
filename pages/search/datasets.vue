@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { DATASET } from '~/constants'
+import { DATASET, HEADERS_DATASET } from '~/constants'
 import DatasetTable from '~/components/tables/DatasetTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(DATASET.queryFields),
+          fields: this.$getFields(HEADERS_DATASET),
           searchFilters: {},
         }
       )

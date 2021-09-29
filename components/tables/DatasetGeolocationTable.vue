@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.name="{ item }">
       <nuxt-link
@@ -33,16 +35,15 @@
 </template>
 
 <script>
-import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { round, cloneDeep } from 'lodash'
+import TableWrapper from './TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {
   name: 'DatasetGeolocationTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -63,16 +64,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('datasetGeolocation.name'), value: 'name' },
-        { text: this.$t('datasetGeolocation.longitude'), value: 'longitude' },
-        { text: this.$t('datasetGeolocation.latitude'), value: 'latitude' },
-        {
-          text: this.$t('datasetGeolocation.isPolygon'),
-          value: 'is_polygon',
-          sortable: false,
-        },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_GEOLOCATION),
     }
   },
   methods: {

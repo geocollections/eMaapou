@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import SiteTable from '@/components/tables/SiteTable'
-import { SITE } from '~/constants'
+import { HEADERS_SITE, SITE } from '~/constants'
 
 export default {
   components: { SiteTable },
@@ -32,7 +32,7 @@ export default {
           defaultParams: {
             fq: `area_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(SITE.queryFields),
+          fields: this.$getFields(HEADERS_SITE),
         }
       )
 

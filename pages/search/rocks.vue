@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { ROCK } from '~/constants'
+import { HEADERS_ROCK, ROCK } from '~/constants'
 import RockTable from '~/components/tables/RockTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(ROCK.queryFields),
+          fields: this.$getFields(HEADERS_ROCK),
           searchFilters: {},
         }
       )

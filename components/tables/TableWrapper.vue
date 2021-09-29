@@ -15,7 +15,7 @@
       calculate-widths
       multi-sort
       :loading="isLoading"
-      :headers="headers"
+      :headers="visibleHeaders"
       :items="items"
       :options="options"
       :server-items-length="count"
@@ -79,6 +79,15 @@
                   </v-list>
                 </v-menu>
               </v-btn>
+            </v-col>
+            <v-col v-if="dynamicHeaders" align-self="center">
+              <header-controls
+                :headers="headers"
+                :visible-headers="visibleHeaders"
+                :sort-by="options.sortBy"
+                @change="handleHeadersChange"
+                @reset="$emit('reset:headers')"
+              />
             </v-col>
             <v-col>
               <pagination-controls
@@ -153,11 +162,12 @@
 
 <script>
 import { debounce } from 'lodash'
+import HeaderControls from './controls/HeaderControls.vue'
 import exportMixin from '~/mixins/exportMixin'
-import PaginationControls from '~/components/PaginationControls.vue'
+import PaginationControls from '~/components/tables/controls/PaginationControls.vue'
 export default {
   name: 'TableWrapper',
-  components: { PaginationControls },
+  components: { PaginationControls, HeaderControls },
   mixins: [exportMixin],
   props: {
     onlyTable: {
@@ -192,6 +202,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    dynamicHeaders: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -204,6 +218,11 @@ export default {
       expanded: [],
       isLoading: false,
     }
+  },
+  computed: {
+    visibleHeaders() {
+      return this.headers.filter((header) => header.show)
+    },
   },
   watch: {
     items() {
@@ -222,6 +241,12 @@ export default {
         search: this.search,
       })
     }, 500),
+    handleHeadersChange(e) {
+      this.$emit(
+        'change:headers',
+        e.map((header) => header.value)
+      )
+    },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,
       // as this function does not have a event argument (https://vuetifyjs.com/en/api/v-data-table/#api-events)
@@ -231,6 +256,9 @@ export default {
       // Workaround found from: https://github.com/vuetifyjs/vuetify/issues/1538
       if (event.target.classList.contains('text-link')) return
       slot.expand(!slot.isExpanded)
+    },
+    handleTest(e) {
+      console.log(e)
     },
   },
 }

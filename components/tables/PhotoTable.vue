@@ -1,12 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :flat="$attrs.flat"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -43,17 +44,16 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_PHOTO } from '~/constants'
 export default {
   name: 'PhotoTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -71,39 +71,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('photo.id'), value: 'id' },
-        { text: this.$t('photo.number'), value: 'image_number' },
-        { text: this.$t('photo.agent'), value: 'agent' },
-        { text: this.$t('photo.date'), value: 'date' },
-        { text: this.$t('photo.locality'), value: 'locality' },
-        { text: this.$t('photo.imageObject'), value: 'image_object' },
-        { text: this.$t('photo.tags'), value: 'tags' },
-      ],
+      localHeaders: cloneDeep(HEADERS_PHOTO),
+      module: 'photo',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.photo.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'photo' }),
   },
   methods: {
     round,

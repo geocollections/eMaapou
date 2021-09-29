@@ -10,7 +10,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import { ANALYSIS_RESULT } from '~/constants'
+import { HEADERS_ANALYSIS_RESULT } from '~/constants'
 import AnalysisResultTable from '~/components/tables/AnalysisResultTable'
 export default {
   components: { AnalysisResultTable },
@@ -37,7 +37,7 @@ export default {
           defaultParams: {
             fq: `sample_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(ANALYSIS_RESULT.queryFields),
+          fields: this.$getFields(HEADERS_ANALYSIS_RESULT),
         }
       )
       this.analysisResults = response.items

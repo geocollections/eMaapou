@@ -11,7 +11,7 @@
 <script>
 import { debounce } from 'lodash'
 import SampleTable from '~/components/tables/SampleTable.vue'
-import { SAMPLE } from '~/constants'
+import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 
 export default {
   components: { SampleTable },
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(SAMPLE.queryFields),
+          fields: this.$getFields(HEADERS_SAMPLE),
           searchFilters: {},
         }
       )

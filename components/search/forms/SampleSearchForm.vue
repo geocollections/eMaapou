@@ -44,8 +44,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -61,14 +59,12 @@ import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SampleSearchForm',
   components: {
-    ExtraOptions,
     InstitutionSearchFilter,
     AutocompleteField,
     TextField,

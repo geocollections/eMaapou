@@ -1,4 +1,4 @@
-import { SPECIMEN } from '~/constants'
+import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 
 export default {
   async searchSpecimens({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'specimen',
         resource: 'specimen',
-        resourceDefaults: SPECIMEN,
+        resourceDefaults: { ...SPECIMEN, headers: HEADERS_SPECIMEN },
       },
       { root: true }
     )

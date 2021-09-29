@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="translatedHeaders"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id_l="{ item }">
       <nuxt-link
@@ -121,18 +123,17 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_ANALYTICAL_DATA } from '~/constants'
 export default {
   name: 'AnalyticalDataTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -151,20 +152,14 @@ export default {
       }),
     },
   },
+  data() {
+    return {
+      localHeaders: cloneDeep(HEADERS_ANALYTICAL_DATA),
+      module: 'analytical_data',
+    }
+  },
   computed: {
-    ...mapState('search/analytical_data', {
-      tableHeaders(state) {
-        return state.tableHeaders
-      },
-    }),
-    translatedHeaders() {
-      return this.tableHeaders.map((header) => {
-        return {
-          ...header,
-          text: header.translate ? this.$t(header.text) : header.text,
-        }
-      })
-    },
+    ...mapState('headers', { stateHeaders: 'analytical_data' }),
   },
   methods: {
     round,

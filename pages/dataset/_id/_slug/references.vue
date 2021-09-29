@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import DatasetReferenceTable from '~/components/tables/DatasetReferenceTable.vue'
-import { DATASET_REFERENCE } from '~/constants'
+import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
   components: { DatasetReferenceTable },
   data() {
@@ -32,7 +32,7 @@ export default {
             dataset: this.$route.params.id,
             nest: 2,
           },
-          queryFields: this.$getQueryFields(DATASET_REFERENCE.queryFields),
+          fields: this.$getFields(HEADERS_DATASET_REFERENCE),
         }
       )
       this.references = referenceResponse.items

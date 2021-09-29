@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { DOI } from '~/constants'
+import { DOI, HEADERS_DOI } from '~/constants'
 import DoiTable from '~/components/tables/DoiTable'
 
 export default {
@@ -42,7 +42,7 @@ export default {
       const response = await this.$services.sarvSolr.getResourceList('doi', {
         options: tableState.options,
         search: this.query,
-        queryFields: this.$getQueryFields(DOI.queryFields),
+        fields: this.$getFields(HEADERS_DOI),
         searchFilters: {},
       })
       this.items = response.items

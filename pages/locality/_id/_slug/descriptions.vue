@@ -9,7 +9,7 @@
 
 <script>
 import { round, isNil, isEmpty } from 'lodash'
-import { DESCRIPTION } from '~/constants'
+import { DESCRIPTION, HEADERS_DESCRIPTION } from '~/constants'
 import DescriptionTable from '~/components/tables/DescriptionTable.vue'
 
 export default {
@@ -35,7 +35,7 @@ export default {
             locality: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(DESCRIPTION.queryFields),
+          fields: this.$getFields(HEADERS_DESCRIPTION),
         }
       )
       this.descriptions = descriptionResponse.items.map((item) => {

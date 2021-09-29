@@ -29,8 +29,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -44,13 +42,11 @@ import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'DatasetSearchForm',
   components: {
-    ExtraOptions,
     InstitutionSearchFilter,
     TextField,
     SearchActions,

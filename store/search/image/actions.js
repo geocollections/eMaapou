@@ -1,4 +1,4 @@
-import { IMAGE } from '~/constants'
+import { HEADERS_PHOTO, IMAGE } from '~/constants'
 
 export default {
   async searchImages({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'image',
         resource: 'attachment',
-        resourceDefaults: IMAGE,
+        resourceDefaults: { ...IMAGE, headers: HEADERS_PHOTO },
       },
       { root: true }
     )

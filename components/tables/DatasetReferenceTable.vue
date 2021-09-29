@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
@@ -34,16 +36,16 @@
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
   name: 'DatasetReferenceTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -64,12 +66,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('reference.reference'), value: 'reference' },
-        { text: this.$t('reference.title'), value: 'title' },
-        { text: this.$t('reference.journalBook'), value: 'journal' },
-        { text: this.$t('reference.pages'), value: 'pages' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_REFERENCE),
     }
   },
 }

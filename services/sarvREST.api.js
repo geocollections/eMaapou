@@ -10,12 +10,12 @@ const getPaginationParams = (options) => {
   return null
 }
 
-const getSortByParams = (options, queryFields) => {
+const getSortByParams = (options, fields) => {
   if (options?.sortBy && options?.sortDesc) {
     if (!isEmpty(options.sortBy)) {
-      const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `-${queryFields[field]}`
-        return queryFields[field]
+      const orderBy = options.sortBy.map((value, i) => {
+        if (options.sortDesc[i]) return `-${fields[value]}`
+        return fields[value]
       })
 
       return { ordering: orderBy.join(',') }
@@ -31,7 +31,7 @@ export default ($axios) => ({
   },
   async getResourceList(
     resource,
-    { defaultParams, queryFields, search, options, isValid }
+    { defaultParams, fields, search, options, isValid }
   ) {
     if (isValid) {
       return { items: [], count: 0 }
@@ -41,7 +41,7 @@ export default ($axios) => ({
     let multiSearchFields
     if (!isEmpty(search)) {
       multiSearch = search
-      multiSearchFields = Object.values(queryFields)
+      multiSearchFields = Object.values(fields)
         .map((field) => field)
         .join()
     }
@@ -51,7 +51,7 @@ export default ($axios) => ({
       search: multiSearch,
       search_fields: multiSearchFields,
       ...getPaginationParams(options),
-      ...getSortByParams(options, queryFields),
+      ...getSortByParams(options, fields),
     }
 
     const response = await $axios.$get(`${resource}/`, { params })

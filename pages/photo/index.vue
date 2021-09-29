@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <v-card class="mt-0">
@@ -21,7 +21,7 @@
           v-model="currentView"
           row
           hide-details
-          class="pa-4 mt-0"
+          class="mt-0 pa-4"
           mandatory
         >
           <v-radio
@@ -40,7 +40,8 @@
           :items="items"
           :count="count"
           :options="options"
-          use-dynamic-headers
+          dynamic-headers
+          stateful-headers
           @update="handleUpdate"
         />
 
@@ -73,7 +74,6 @@ import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
 import ImageViewWrapper from '~/components/ImageViewWrapper'
 import GalleryViewWrapper from '~/components/GalleryViewWrapper'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 
 export default {
   components: {
@@ -84,7 +84,6 @@ export default {
     Search,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('photo.pageTitle'),

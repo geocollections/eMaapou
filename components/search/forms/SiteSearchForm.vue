@@ -14,7 +14,6 @@
       :active="geoJSON != null"
       @update="handleMapUpdate"
     />
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -25,14 +24,12 @@ import { mapFields } from 'vuex-map-fields'
 import TextField from '../../fields/TextField.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SiteSearchForm',
   components: {
-    ExtraOptions,
     TextField,
     SearchFieldsWrapper,
     SearchActions,

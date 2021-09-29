@@ -37,7 +37,6 @@
       :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -50,14 +49,12 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'TaxonSearchForm',
   components: {
-    ExtraOptions,
     AutocompleteField,
     TextField,
     SearchFieldsWrapper,

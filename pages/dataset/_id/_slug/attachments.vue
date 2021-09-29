@@ -12,7 +12,7 @@
 import { isNil } from 'lodash'
 import AttachmentTable from '@/components/tables/AttachmentTable'
 
-import { ATTACHMENT_LINK } from '~/constants'
+import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
   components: { AttachmentTable },
   data() {
@@ -39,7 +39,7 @@ export default {
             dataset: this.$route.params.id,
             nest: 2,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
+          fields: this.$getFields(HEADERS_ATTACHMENT),
         }
       )
       this.attachments = attachmentResponse.items

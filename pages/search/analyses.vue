@@ -11,7 +11,7 @@
 <script>
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import { debounce } from 'lodash'
-import { ANALYSIS } from '~/constants'
+import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {
   components: { AnalysisTable },
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(ANALYSIS.queryFields),
+          fields: this.$getFields(HEADERS_ANALYSIS),
           searchFilters: {},
         }
       )

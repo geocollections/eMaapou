@@ -30,8 +30,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -45,14 +43,12 @@ import SearchActions from '../SearchActions.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
-import ExtraOptions from '~/components/search/ExtraOptions.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'DrillcoreSearchForm',
   components: {
-    ExtraOptions,
     InstitutionSearchFilter,
     TextField,
     RangeTextField,

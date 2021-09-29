@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { REFERENCE } from '~/constants'
+import { HEADERS_REFERENCE, REFERENCE } from '~/constants'
 import ReferenceTable from '~/components/tables/ReferenceTable'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(REFERENCE.queryFields),
+          fields: this.$getFields(HEADERS_REFERENCE),
           searchFilters: {},
         }
       )

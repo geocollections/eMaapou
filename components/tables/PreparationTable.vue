@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.preparation_number="{ item }">
       <nuxt-link
@@ -78,17 +80,16 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_PREPARATION } from '~/constants'
 export default {
   name: 'PreparationTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -109,21 +110,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('preparation.id'), value: 'id' },
-        {
-          text: this.$t('preparation.preparation_number'),
-          value: 'preparation_number',
-        },
-        { text: this.$t('preparation.locality'), value: 'locality' },
-        { text: this.$t('preparation.depth'), value: 'depth' },
-        {
-          text: this.$t('preparation.stratigraphy'),
-          value: 'stratigraphy',
-        },
-        { text: this.$t('preparation.agent'), value: 'agent' },
-        { text: this.$t('preparation.mass'), value: 'mass' },
-      ],
+      localHeaders: cloneDeep(HEADERS_PREPARATION),
     }
   },
   methods: {

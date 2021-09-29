@@ -11,7 +11,7 @@
 import SampleTable from '@/components/tables/SampleTable'
 import { isNil } from 'lodash'
 
-import { SAMPLE } from '~/constants'
+import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 export default {
   components: { SampleTable },
   props: {
@@ -39,7 +39,7 @@ export default {
             // fq: `stratigraphy_id:${this.stratigraphy}`,
             fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
           },
-          queryFields: this.$getQueryFields(SAMPLE.queryFields),
+          fields: this.$getFields(HEADERS_SAMPLE),
         }
       )
       this.samples = sampleResponse.items

@@ -35,41 +35,45 @@
       <v-btn :disabled="options.page === 1" icon @click="previous">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-
-      <v-btn :id="selectPageId" small text class="text-no-wrap text-caption">
-        {{ pageSelectText }}
-        <v-menu
-          :activator="`#${selectPageId}`"
-          offset-y
-          :close-on-content-click="false"
-        >
-          <v-card class="px-2 py-2 d-flex align-center">
-            <div class="mr-2 text-no-wrap text-caption">{{ goToText }}</div>
-            <v-text-field
-              ref="go-to-field"
-              class="mt-0 text-caption"
-              style="width: 64px"
-              dense
-              hide-details
-              :value="goToValue"
-              type="number"
-              :rules="[pageLimitRule]"
-              @keyup.enter="selectPage"
-              @input="setGoToValue"
-            >
-            </v-text-field>
-            <v-btn
-              :disabled="!pageLimitRule(goToValue)"
-              class="px-2 ml-2"
-              small
-              text
-              @click="selectPage"
-            >
-              {{ goToButtonText }} <v-icon small>mdi-chevron-right</v-icon>
-            </v-btn>
-          </v-card>
-        </v-menu>
-      </v-btn>
+      <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in HeaderControls.vue -->
+      <v-menu offset-y :close-on-content-click="false">
+        <template #activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            small
+            text
+            class="text-no-wrap text-caption"
+            v-on="on"
+          >
+            {{ pageSelectText }}
+          </v-btn>
+        </template>
+        <v-card class="px-2 py-2 d-flex align-center">
+          <div class="mr-2 text-no-wrap text-caption">{{ goToText }}</div>
+          <v-text-field
+            ref="go-to-field"
+            class="mt-0 text-caption"
+            style="width: 64px"
+            dense
+            hide-details
+            :value="goToValue"
+            type="number"
+            :rules="[pageLimitRule]"
+            @keyup.enter="selectPage"
+            @input="setGoToValue"
+          >
+          </v-text-field>
+          <v-btn
+            :disabled="!pageLimitRule(goToValue)"
+            class="px-2 ml-2"
+            small
+            text
+            @click="selectPage"
+          >
+            {{ goToButtonText }} <v-icon small>mdi-chevron-right</v-icon>
+          </v-btn>
+        </v-card>
+      </v-menu>
       <v-btn
         :disabled="options.page === pagination.pageCount"
         icon
