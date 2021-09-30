@@ -66,6 +66,7 @@
         v-model="query"
         class="pr-2"
         dense
+        :autofocus="false"
         :placeholder="$t('common.search')"
         @enter="test"
       />

@@ -8,7 +8,7 @@
     hide-details
     solo
     clearable
-    autofocus
+    :autofocus="autofocus"
     v-bind="$props"
     @input="$emit('input', $event)"
     @keyup.enter="$emit('enter', $event)"
@@ -41,6 +41,10 @@ export default {
       default() {
         return this.$t('common.searchAlt')
       },
+    },
+    autofocus: {
+      type: Boolean,
+      default: true,
     },
   },
 }
