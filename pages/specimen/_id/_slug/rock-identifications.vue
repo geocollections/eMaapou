@@ -38,7 +38,9 @@ export default {
               specimen: this.$route.params.id,
               nest: 1,
             },
-            fields: this.$getAPIFieldValues(HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY),
+            fields: this.$getAPIFieldValues(
+              HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY
+            ),
           }
         )
       this.identifications = identificationResponse.items
