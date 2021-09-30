@@ -539,6 +539,8 @@ export default {
   table: {
     itemsPerPage: 'Ridade arv:',
     noData: 'Andmeid ei leitud',
+    tooltipExport: 'Faili eksport',
+    tooltipConfig: 'Tabeli konfiguratsioon',
   },
   footerPreliminary: '2021 | e·Maapõu',
   footer:

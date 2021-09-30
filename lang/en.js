@@ -539,6 +539,8 @@ export default {
   table: {
     itemsPerPage: 'Rows per page:',
     noData: 'No data found',
+    tooltipExport: 'File export',
+    tooltipConfig: 'Table configuration',
   },
   footerPreliminary: '2021 | e·Maapõu',
   footer:

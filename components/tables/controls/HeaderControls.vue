@@ -4,11 +4,24 @@
     Right now the button does not appear immediately when page is loading.
     This is something to do with transitions. https://github.com/vuetifyjs/vuetify/issues/10578
   -->
-  <v-menu offset-y :close-on-content-click="false">
-    <template #activator="{ on, attrs }">
-      <v-btn v-bind="attrs" icon v-on="on">
-        <v-icon>mdi-table-cog</v-icon></v-btn
-      >
+  <v-menu
+    transition="slide-y-transition"
+    offset-y
+    :close-on-content-click="false"
+  >
+    <template #activator="menu">
+      <v-tooltip bottom open-delay="500">
+        <template #activator="tooltip">
+          <v-btn
+            icon
+            v-bind="{ ...menu.attrs, ...tooltip.attrs }"
+            v-on="{ ...menu.on, ...tooltip.on }"
+          >
+            <v-icon>mdi-table-cog</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t('table.tooltipConfig') }}</span>
+      </v-tooltip>
     </template>
     <v-card max-height="500">
       <v-list flat class="">

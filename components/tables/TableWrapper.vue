@@ -50,35 +50,7 @@
 
           <v-row no-gutters>
             <v-col cols="12" sm="auto" class="px-3 my-3" align-self="center">
-              <v-btn
-                id="export-btn"
-                color="primary"
-                aria-label="export table"
-                class="d-block montserrat"
-              >
-                {{ $t('common.export') }}
-                <v-menu
-                  activator="#export-btn"
-                  transition="slide-y-transition"
-                  offset-y
-                  bottom
-                  right
-                >
-                  <v-list>
-                    <v-list-item @click="handleExportCsv()">
-                      <v-list-item-title>CSV</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="handleExportExcel()">
-                      <v-list-item-title>XLSX (Excel)</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="handleClipboard()">
-                      <v-list-item-title>
-                        {{ $t('common.clipboard') }}
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-btn>
+              <export-controls />
             </v-col>
             <v-col v-if="dynamicHeaders" align-self="center">
               <header-controls
@@ -163,12 +135,11 @@
 <script>
 import { debounce } from 'lodash'
 import HeaderControls from './controls/HeaderControls.vue'
-import exportMixin from '~/mixins/exportMixin'
+import ExportControls from './controls/ExportControls.vue'
 import PaginationControls from '~/components/tables/controls/PaginationControls.vue'
 export default {
   name: 'TableWrapper',
-  components: { PaginationControls, HeaderControls },
-  mixins: [exportMixin],
+  components: { PaginationControls, HeaderControls, ExportControls },
   props: {
     onlyTable: {
       type: Boolean,
@@ -256,9 +227,6 @@ export default {
       // Workaround found from: https://github.com/vuetifyjs/vuetify/issues/1538
       if (event.target.classList.contains('text-link')) return
       slot.expand(!slot.isExpanded)
-    },
-    handleTest(e) {
-      console.log(e)
     },
   },
 }
