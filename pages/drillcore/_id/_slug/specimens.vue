@@ -38,7 +38,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality}`,
           },
-          fields: this.$getFields(HEADERS_SPECIMEN),
+          fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

@@ -45,7 +45,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          fields: this.$getFields(HEADERS_TAXON),
+          fields: this.$getAPIFieldValues(HEADERS_TAXON),
           searchFilters: {},
         }
       )

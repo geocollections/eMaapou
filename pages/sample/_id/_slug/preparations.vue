@@ -36,7 +36,7 @@ export default {
           defaultParams: {
             fq: `sample_id:${this.$route.params.id}`,
           },
-          fields: this.$getFields(HEADERS_PREPARATION),
+          fields: this.$getAPIFieldValues(HEADERS_PREPARATION),
         }
       )
       this.preparations = preparationResponse.items

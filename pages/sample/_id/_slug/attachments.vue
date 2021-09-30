@@ -32,7 +32,7 @@ export default {
             sample: `${this.$route.params.id}`,
             nest: 2,
           },
-          fields: this.$getFields(HEADERS_ATTACHMENT),
+          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
         }
       )
       this.attachments = attachmentResponse.items

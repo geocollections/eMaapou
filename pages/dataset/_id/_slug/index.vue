@@ -35,7 +35,7 @@ export default {
         {}
       )
       return {
-        ...this.$getFields(HEADERS_DATASET_ANALYSIS),
+        ...this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
         ...parameterFields,
       }
     },

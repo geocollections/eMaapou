@@ -38,7 +38,7 @@ export default {
             dataset: this.$route.params.id,
             nest: 1,
           },
-          fields: this.$getFields(HEADERS_DATASET_GEOLOCATION),
+          fields: this.$getAPIFieldValues(HEADERS_DATASET_GEOLOCATION),
         })
       this.geolocations = geolocationsResponse.items
       this.count = geolocationsResponse.count

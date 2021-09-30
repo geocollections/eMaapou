@@ -35,7 +35,7 @@ export default {
             locality: this.$route.params.id,
             nest: 1,
           },
-          fields: this.$getFields(HEADERS_DESCRIPTION),
+          fields: this.$getAPIFieldValues(HEADERS_DESCRIPTION),
         }
       )
       this.descriptions = descriptionResponse.items.map((item) => {

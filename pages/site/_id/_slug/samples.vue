@@ -32,7 +32,7 @@ export default {
           defaultParams: {
             fq: `site_id:${this.$route.params.id}`,
           },
-          fields: this.$getFields(HEADERS_SAMPLE),
+          fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
         }
       )
       this.samples = sampleResponse.items

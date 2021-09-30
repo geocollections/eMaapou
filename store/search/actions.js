@@ -53,7 +53,7 @@ export default {
     const response = await this.$services.sarvSolr.getResourceList(resource, {
       options,
       search: state[module].query,
-      fields: this.$getFields(resourceDefaults.headers),
+      fields: this.$getAPIFieldValues(resourceDefaults.headers),
       searchFilters: {
         ...moduleFilters,
         ...state[module].persistantFilters,

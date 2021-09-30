@@ -39,7 +39,7 @@ export default {
             dataset: this.$route.params.id,
             nest: 1,
           },
-          fields: this.$getFields(HEADERS_DATASET_AUTHOR),
+          fields: this.$getAPIFieldValues(HEADERS_DATASET_AUTHOR),
         }
       )
       this.authors = authorsResponse.items

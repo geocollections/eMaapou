@@ -31,7 +31,7 @@ export default {
           defaultParams: {
             sample: this.$route.params.id,
           },
-          fields: this.$getFields(HEADERS_SAMPLE_REFERENCE),
+          fields: this.$getAPIFieldValues(HEADERS_SAMPLE_REFERENCE),
         }
       )
       this.references = referenceResponse.items

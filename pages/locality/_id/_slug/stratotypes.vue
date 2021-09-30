@@ -33,7 +33,7 @@ export default {
             locality: this.$route.params.id,
             nest: 1,
           },
-          fields: this.$getFields(HEADERS_STRATOTYPE),
+          fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
         }
       )
       this.stratotypes = stratotypeResponse.items

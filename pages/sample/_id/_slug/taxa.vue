@@ -33,7 +33,7 @@ export default {
             sample: this.$route.params.id,
             nest: 1,
           },
-          fields: this.$getFields(HEADERS_TAXON_LIST),
+          fields: this.$getAPIFieldValues(HEADERS_TAXON_LIST),
         }
       )
       this.taxa = taxonResponse.items

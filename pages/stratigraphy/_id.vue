@@ -301,7 +301,7 @@ export default {
           stratigraphy: this.stratigraphy?.id,
           nest: 2,
         },
-        fields: this.$getFields(HEADERS_STRATOTYPE),
+        fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
       }
     )
     this.stratotypes = stratotypeResponse.items

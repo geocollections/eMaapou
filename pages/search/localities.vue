@@ -47,7 +47,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          fields: this.$getFields(HEADERS_LOCALITY),
+          fields: this.$getAPIFieldValues(HEADERS_LOCALITY),
           searchFilters: {},
         }
       )

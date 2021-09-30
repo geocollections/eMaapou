@@ -50,7 +50,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           },
-          fields: this.$getFields(HEADERS_ANALYSIS),
+          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
         }
       )
       this.analyses = analysisResponse.items

@@ -31,7 +31,7 @@ export default {
           defaultParams: {
             area: this.$route.params.id,
           },
-          fields: this.$getFields(HEADERS_LOCALITY_REFERENCE),
+          fields: this.$getAPIFieldValues(HEADERS_LOCALITY_REFERENCE),
         }
       )
       this.references = referenceResponse.items

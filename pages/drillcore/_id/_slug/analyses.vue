@@ -44,7 +44,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality}`,
           },
-          fields: this.$getFields(HEADERS_ANALYSIS),
+          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
         }
       )
       this.analyses = analysisResponse.items

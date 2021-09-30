@@ -219,7 +219,7 @@ export default {
             itemsPerPage: this.paginateBy,
           },
           search: this.search,
-          fields: this.$getFields(HEADERS_ATTACHMENT),
+          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
         })
         .then((res) => {
           if (!res.next) {

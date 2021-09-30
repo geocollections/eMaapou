@@ -61,7 +61,7 @@ export default {
     { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.js',
     '~plugins/hydrateTabs.js',
-    '~plugins/getFields.js',
+    '~plugins/getAPIFieldValues.js',
     { src: '~plugins/gtag.js', mode: 'client' },
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.js', mode: 'client' },
