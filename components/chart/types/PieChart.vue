@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import ChartWrapper from '@/components/chart/ChartWrapper'
 import { isNil } from 'lodash'
+import ChartWrapper from '~/components/chart/ChartWrapper'
 export default {
   components: { ChartWrapper },
   props: {
