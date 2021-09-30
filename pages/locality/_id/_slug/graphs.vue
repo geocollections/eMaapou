@@ -1,6 +1,6 @@
 <template>
   <div>
-    <scatter-chart
+    <line-chart-multi
       v-if="analysisResultsCount > 0"
       table-key="locality_id"
       :table-id="$route.params.id.toString()"
@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import ScatterChart from '~/components/chart/ScatterChart'
-import LasChart from '~/components/chart/LasChart'
+import LineChartMulti from '~/components/chart/types/LineChartMulti'
+import LasChart from '~/components/chart/types/LasChart'
 
 export default {
-  components: { LasChart, ScatterChart },
+  components: { LasChart, LineChartMulti },
   props: {
     localityObject: {
       type: Object,

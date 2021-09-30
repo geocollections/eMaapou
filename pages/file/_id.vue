@@ -513,7 +513,7 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import Detail from '~/components/templates/Detail'
-import LasChart from '~/components/chart/LasChart'
+import LasChart from '~/components/chart/types/LasChart'
 
 export default {
   components: {

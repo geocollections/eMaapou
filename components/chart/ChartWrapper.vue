@@ -22,7 +22,7 @@
 <script>
 import deepmerge from 'deepmerge'
 import { mapFields } from 'vuex-map-fields'
-import RendererSwitch from '~/components/chart/RendererSwitch'
+import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import {
   DATAZOOM_Y_SLIDER_LEFT,
   DATAZOOM_Y_SLIDER_LEFT_SMALL,
