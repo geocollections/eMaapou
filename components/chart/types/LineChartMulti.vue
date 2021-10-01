@@ -188,6 +188,9 @@ export default {
     },
 
     buildYAxis() {
+      const MIN = Math.min(...this.depth)
+      const MAX = Math.max(...this.depth)
+
       return {
         type: 'value',
         boundaryGap: false,
@@ -201,12 +204,15 @@ export default {
         axisTick: {
           alignWithLabel: true,
         },
-        min(value) {
-          return (value.min - 0.1).toFixed(2) * 1
-        },
-        max(value) {
-          return (value.max + 0.1).toFixed(2) * 1
-        },
+        // min(value) {
+        //   return (value.min - 0.1).toFixed(2) * 1
+        // },
+        // max(value) {
+        //   return (value.max + 0.1).toFixed(2) * 1
+        // },
+        // Todo: Maybe review that logic
+        max: MAX > 0 && MAX > MIN ? MIN * -1 : MAX,
+        min: MIN > 0 && MIN < MAX ? MAX * -1 : MIN,
       }
     },
 
