@@ -23,48 +23,65 @@
         <span>{{ $t('table.tooltipConfig') }}</span>
       </v-tooltip>
     </template>
-    <v-card max-height="500">
+    <v-card>
       <v-list flat class="">
-        <v-list-item-title class="pl-2 montserrat align-center">
+        <v-list-item-title class="px-2 montserrat align-center">
           {{ $t('common.headers') }}
           <v-btn icon @click="$emit('reset')">
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
+
+          <v-btn icon @click="onlyVisible = !onlyVisible">
+            <v-icon v-if="!onlyVisible">mdi-eye</v-icon>
+            <v-icon v-else>mdi-eye-off</v-icon>
+          </v-btn>
+          <v-text-field
+            v-model="filter"
+            class="py-2"
+            dense
+            hide-details
+            :label="$t('common.filter')"
+          />
         </v-list-item-title>
         <v-list-item-group :value="visibleHeaders" multiple>
-          <template v-for="(header, i) in headers">
-            <div :id="`header-${i}-checkbox`" :key="`header-${i}`">
-              <v-list-item
-                dense
-                :disabled="sortBy.includes(header.value)"
-                :value="header"
-                @click="$emit('change', header)"
-              >
-                <template #default="{ active }">
-                  <v-list-item-action class="my-2 mr-1">
-                    <v-checkbox
-                      dense
-                      :disabled="sortBy.includes(header.value)"
-                      :input-value="active"
-                      color="accent lighten-2"
-                    >
-                    </v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title v-text="header.text"></v-list-item-title>
-                  </v-list-item-content>
-                  <v-tooltip
-                    right
-                    :open-delay="200"
-                    :disabled="!sortBy.includes(header.value)"
-                    :activator="`#header-${i}-checkbox`"
+          <v-virtual-scroll
+            :items="
+              (onlyVisible ? visibleHeaders : headers) | filterHeaders(filter)
+            "
+            height="500"
+            item-height="35"
+            width="300"
+            :bench="20"
+            multiple
+          >
+            <template #default="{ item }">
+              <v-tooltip left :disabled="!sortBy.includes(item.value)">
+                <template #activator="{ on, attrs }">
+                  <v-list-item
+                    v-bind="attrs"
+                    dense
+                    :disabled="sortBy.includes(item.value)"
+                    :value="item"
+                    v-on="on"
+                    @click="$emit('change', item)"
                   >
-                    {{ $t('common.headerSelectDisabled') }}
-                  </v-tooltip>
+                    <v-list-item-action class="my-2 mr-2">
+                      <v-checkbox
+                        dense
+                        :disabled="sortBy.includes(item.value)"
+                        :input-value="item.show"
+                        color="accent lighten-2"
+                      />
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item.text" />
+                    </v-list-item-content>
+                  </v-list-item>
                 </template>
-              </v-list-item>
-            </div>
-          </template>
+                {{ $t('common.headerSelectDisabled') }}
+              </v-tooltip>
+            </template>
+          </v-virtual-scroll>
         </v-list-item-group>
       </v-list>
     </v-card>
@@ -74,6 +91,13 @@
 <script>
 export default {
   name: 'HeaderControls',
+  filters: {
+    filterHeaders(headers, filter) {
+      return headers.filter((header) =>
+        header.text.toLowerCase().includes(filter.toLowerCase())
+      )
+    },
+  },
   props: {
     headers: {
       type: Array,
@@ -87,6 +111,12 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  data() {
+    return {
+      onlyVisible: false,
+      filter: '',
+    }
   },
 }
 </script>
