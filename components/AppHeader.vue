@@ -68,7 +68,7 @@
         dense
         :autofocus="false"
         :placeholder="$t('common.search')"
-        @enter="test"
+        @enter="$router.push(localePath({ name: 'search' }))"
       />
       <lang-switcher />
       <v-btn
@@ -174,12 +174,6 @@ export default {
       return path[path.length - 1] !== '/'
         ? `${path}/${full.substring(path.length)}`
         : `${full}/`
-    },
-  },
-  methods: {
-    test(e) {
-      console.log(e)
-      this.$router.push(this.localePath({ name: 'search' }))
     },
   },
 }
