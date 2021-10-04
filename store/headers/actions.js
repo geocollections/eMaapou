@@ -1,8 +1,8 @@
-import { RESET_HEADERS, UPDATE_HEADERS } from '../mutation_types'
+import { RESET_HEADERS, TOGGLE_HEADER } from '../mutation_types'
 
 export default {
-  updateHeaders({ commit }, { module, headers }) {
-    commit(UPDATE_HEADERS, { module, headers })
+  toggleHeader({ commit }, { module, headerId }) {
+    commit(TOGGLE_HEADER, { module, headerId })
   },
   async resetHeaders({ commit }, { module }) {
     const { initState } = await import(`./state.js`)

@@ -1,8 +1,8 @@
-import { UPDATE_HEADERS, RESET_HEADERS } from '../mutation_types'
+import { TOGGLE_HEADER, RESET_HEADERS } from '../mutation_types'
 
 export default {
-  [UPDATE_HEADERS](state, { module, headers }) {
-    state[module] = headers
+  [TOGGLE_HEADER](state, { module, headerId }) {
+    state[module].byIds[headerId].show = !state[module].byIds[headerId].show
   },
   [RESET_HEADERS](state, { module, initHeaders }) {
     state[module] = initHeaders

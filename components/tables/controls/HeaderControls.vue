@@ -31,17 +31,14 @@
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
         </v-list-item-title>
-        <v-list-item-group
-          :value="visibleHeaders"
-          multiple
-          @change="$emit('change', $event)"
-        >
+        <v-list-item-group :value="visibleHeaders" multiple>
           <template v-for="(header, i) in headers">
             <div :id="`header-${i}-checkbox`" :key="`header-${i}`">
               <v-list-item
                 dense
                 :disabled="sortBy.includes(header.value)"
                 :value="header"
+                @click="$emit('change', header)"
               >
                 <template #default="{ active }">
                   <v-list-item-action class="my-2 mr-1">
