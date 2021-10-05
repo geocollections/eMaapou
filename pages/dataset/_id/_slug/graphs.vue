@@ -1,5 +1,5 @@
 <template>
-  <line-chart-multi
+  <flog
     table-key="dataset_id"
     :table-id="$route.params.id.toString()"
     :chart-title="chartTitle"
@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import LineChartMulti from '~/components/chart/types/LineChartMulti'
+import Flog from '~/components/chart/Flog'
 
 export default {
-  components: { LineChartMulti },
+  components: { Flog },
   props: {
     datasetObject: {
       type: Object,

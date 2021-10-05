@@ -1,28 +1,14 @@
 <template>
-  <sample-chart-wrapper
-    v-if="!isLoading"
-    :options="chartOptions"
-    hide-renderer-switch
-  />
+  <sample-chart-wrapper :options="chartOptions" />
 </template>
 
 <script>
-import { isNil } from 'lodash'
-import SampleChartWrapper from '~/components/chart/SampleChartWrapper'
+import SampleChartWrapper from '~/components/chart/wrappers/SampleChartWrapper'
 
 export default {
   name: 'SampleChart',
   components: { SampleChartWrapper },
   props: {
-    tableKey: {
-      type: String,
-      required: true,
-      default: 'locality_id',
-    },
-    tableId: {
-      type: String,
-      default: '',
-    },
     chartTitle: {
       type: String,
       required: false,
@@ -38,25 +24,15 @@ export default {
       required: true,
       default: 0,
     },
-  },
-  data() {
-    return {
-      isLoading: false,
-      sampleResults: [],
-      depth: [],
-    }
-  },
-  async fetch() {
-    this.isLoading = true
-    if (this.sampleResults.length === 0) {
-      const { resultsResponse } = await this.fetchChartData()
-      this.sampleResults = resultsResponse?.items
-    }
-    this.isLoading = false
+    results: {
+      type: Array,
+      required: true,
+      default: () => {},
+    },
   },
   computed: {
     chartOptions() {
-      if (this.sampleResults?.length > 0) {
+      if (this.results?.length > 0) {
         return {
           animation: false,
 
@@ -74,24 +50,6 @@ export default {
     },
   },
   methods: {
-    async fetchChartData() {
-      const resultsResponse = await this.$services.sarvSolr.getResourceList(
-        'sample',
-        {
-          isValid: isNil(this.tableId),
-          defaultParams: {
-            fq: `${this.tableKey}:${this.tableId} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
-            start: 0,
-            rows: 50000,
-            fl: 'id,number,depth,depth_interval,',
-            sort: 'depth asc',
-          },
-        }
-      )
-
-      return { resultsResponse }
-    },
-
     buildXAxis() {
       return {
         type: 'category',
@@ -126,8 +84,8 @@ export default {
     },
 
     buildChartSeries() {
-      console.log(this.sampleResults)
-      return this.sampleResults.map((item) => {
+      console.log(this.results)
+      return this.results.map((item) => {
         return {
           type: 'line',
           name: item.number || item.id,

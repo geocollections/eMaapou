@@ -15,7 +15,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import ChartWrapper from '~/components/chart/ChartWrapper'
+import ChartWrapper from '~/components/chart/wrappers/ChartWrapper'
 import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
 
 export default {

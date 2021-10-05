@@ -23,11 +23,15 @@
       />
     </div>
 
+    <!-- Todo: Review all chart wrappers and limit it to only one wrapper -->
+
     <div v-if="!isLoading" class="charts d-flex flex-row">
+      <!-- Todo: Stratigraphy chart -->
+      <!-- Todo: depth chart -->
+
       <sample-chart
-        v-if="minDepth && maxDepth"
-        :table-id="$route.params.id"
-        table-key="locality_id"
+        v-if="sampleResults.length > 0 && minDepth && maxDepth"
+        :results="sampleResults"
         :min-depth="minDepth"
         :max-depth="maxDepth"
       />
@@ -37,6 +41,8 @@
         :key="index"
         :options="optionsUsingParameter(item)"
       />
+
+      <!-- Todo: Taxa chart -->
     </div>
   </div>
 </template>
@@ -45,7 +51,7 @@
 import { isNil } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
 import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
-import MultiChartWrapper from '~/components/chart/MultiChartWrapper'
+import MultiChartWrapper from '~/components/chart/wrappers/MultiChartWrapper'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
 import SampleChart from '~/components/chart/types/SampleChart'
@@ -85,14 +91,17 @@ export default {
       initSelectedParameters: [],
       minDepth: null,
       maxDepth: null,
+      sampleResults: [],
     }
   },
   async fetch() {
     this.isLoading = true
     if (this.analysisResults.length === 0) {
-      const { resultsResponse, statsResponse } = await this.fetchChartData()
+      const { resultsResponse, statsResponse, sampleResponse } =
+        await this.fetchChartData()
 
       this.analysisResults = resultsResponse?.items
+
       this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
       this.parameters =
         statsResponse?.stats?.stats_fields?.parameter?.distinctValues
@@ -117,6 +126,10 @@ export default {
         this.parameters.length > 3 ? 3 : this.parameters.length
       )
       this.initSelectedParameters = this.selectedParameters
+      this.minDepth = Math.min(...this.depth)
+      this.maxDepth = Math.max(...this.depth)
+
+      this.sampleResults = sampleResponse?.items
     }
     this.isLoading = false
   },
@@ -160,7 +173,21 @@ export default {
         }
       )
 
-      return { resultsResponse, statsResponse }
+      const sampleResponse = await this.$services.sarvSolr.getResourceList(
+        'sample',
+        {
+          isValid: isNil(this.tableId),
+          defaultParams: {
+            fq: `${this.tableKey}:${this.tableId} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
+            start: 0,
+            rows: 50000,
+            fl: 'id,number,depth,depth_interval,',
+            sort: 'depth asc',
+          },
+        }
+      )
+
+      return { resultsResponse, statsResponse, sampleResponse }
     },
 
     buildChartLegend() {
@@ -200,9 +227,6 @@ export default {
     },
 
     buildYAxis() {
-      this.minDepth = Math.min(...this.depth)
-      this.maxDepth = Math.max(...this.depth)
-
       return {
         type: 'value',
         boundaryGap: false,

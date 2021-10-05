@@ -5,7 +5,7 @@
         class="chart"
         v-bind="$attrs"
         autoresize
-        group="multi"
+        group="flog"
         :init-options="initOptions"
         :option="computedOptions"
         v-on="$listeners"
@@ -19,7 +19,7 @@ import deepmerge from 'deepmerge'
 import { mapState } from 'vuex'
 import { connect, disconnect } from 'echarts/core'
 export default {
-  name: 'SampleChartWrapper',
+  name: 'MultiChartWrapper',
   props: {
     options: {
       type: Object,
@@ -31,7 +31,7 @@ export default {
     return {
       defaultOptions: {
         title: {
-          text: 'Samples',
+          text: 'Chart title',
           left: 'center',
           textStyle: {
             fontSize: 14,
@@ -39,12 +39,33 @@ export default {
         },
 
         grid: {
-          // show: true,
+          show: true,
           top: 50,
           bottom: 140,
           left: '20px',
           containLabel: true,
           width: '200px',
+        },
+
+        tooltip: {
+          trigger: 'item',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#ff5252',
+            },
+            crossStyle: {
+              color: '#ff5252',
+              width: 1,
+              type: 'solid',
+            },
+          },
+          formatter(params) {
+            return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.seriesName}
+              <br />Depth: <b>${params.data[1]}</b></span>
+              <br /><span>Value: <b>${params.data[0]}</b></span>`
+          },
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
 
         toolbox: {
@@ -85,9 +106,9 @@ export default {
     connected: {
       handler(value) {
         if (value) {
-          connect('multi')
+          connect('flog')
         } else {
-          disconnect('multi')
+          disconnect('flog')
         }
       },
       immediate: true,
@@ -95,7 +116,7 @@ export default {
   },
 
   mounted() {
-    connect('multi')
+    connect('flog')
   },
 }
 </script>
