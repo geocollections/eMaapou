@@ -24,6 +24,14 @@
     </div>
 
     <div v-if="!isLoading" class="charts d-flex flex-row">
+      <sample-chart
+        v-if="minDepth && maxDepth"
+        :table-id="$route.params.id"
+        table-key="locality_id"
+        :min-depth="minDepth"
+        :max-depth="maxDepth"
+      />
+
       <multi-chart-wrapper
         v-for="(item, index) in selectedParameters"
         :key="index"
@@ -40,9 +48,11 @@ import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOpti
 import MultiChartWrapper from '~/components/chart/MultiChartWrapper'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
+import SampleChart from '~/components/chart/types/SampleChart'
 
 export default {
   components: {
+    SampleChart,
     ConnectionSwitch,
     RendererSwitch,
     MultiChartWrapper,
@@ -73,6 +83,8 @@ export default {
       selectedParameters: [],
       methods: {},
       initSelectedParameters: [],
+      minDepth: null,
+      maxDepth: null,
     }
   },
   async fetch() {
@@ -188,8 +200,8 @@ export default {
     },
 
     buildYAxis() {
-      const MIN = Math.min(...this.depth)
-      const MAX = Math.max(...this.depth)
+      this.minDepth = Math.min(...this.depth)
+      this.maxDepth = Math.max(...this.depth)
 
       return {
         type: 'value',
@@ -211,8 +223,14 @@ export default {
         //   return (value.max + 0.1).toFixed(2) * 1
         // },
         // Todo: Maybe review that logic
-        max: MAX > 0 && MAX > MIN ? MIN * -1 : MAX,
-        min: MIN > 0 && MIN < MAX ? MAX * -1 : MIN,
+        max:
+          this.maxDepth > 0 && this.maxDepth > this.minDepth
+            ? this.minDepth * -1
+            : this.maxDepth,
+        min:
+          this.minDepth > 0 && this.minDepth < this.maxDepth
+            ? this.maxDepth * -1
+            : this.minDepth,
       }
     },
 
