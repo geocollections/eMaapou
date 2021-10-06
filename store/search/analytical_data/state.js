@@ -137,6 +137,7 @@ export const initState = () => {
       ],
     },
 
+    defaultParameters: ['CaO_pct', 'MgO_pct', 'SiO2_pct', 'Al2O3_pct'],
     parameters: {},
     parameterFilters: {
       byIds: {},

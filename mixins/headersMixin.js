@@ -36,7 +36,8 @@ export default {
       else this.localHeaders.byIds[e].show = !this.localHeaders.byIds[e].show
     },
     $_handleHeadersReset() {
-      if (this.statefulHeaders) this.resetHeaders({ module: this.module })
+      if (this.statefulHeaders)
+        this.resetHeaders({ module: this.module, options: this.options })
       else this.localHeaders = this.$options.data().localHeaders
     },
   },

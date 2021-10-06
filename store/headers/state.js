@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import {
   HEADERS_ANALYSIS,
   // HEADERS_ANALYTICAL_DATA,
@@ -11,20 +12,19 @@ import {
   HEADERS_STRATIGRAPHY,
   HEADERS_TAXON,
 } from '~/constants'
-
 export const initState = () => {
   return {
-    analysis: HEADERS_ANALYSIS,
-    // analytical_data: HEADERS_ANALYTICAL_DATA,
-    dataset: HEADERS_DATASET,
-    drillcore: HEADERS_DRILLCORE,
-    locality: HEADERS_LOCALITY,
-    photo: HEADERS_PHOTO,
-    sample: HEADERS_SAMPLE,
-    site: HEADERS_SITE,
-    specimen: HEADERS_SPECIMEN,
-    stratigraphy: HEADERS_STRATIGRAPHY,
-    taxon: HEADERS_TAXON,
+    analysis: cloneDeep(HEADERS_ANALYSIS),
+    // analytical_data: cloneDeep(HEADERS_ANALYTICAL_DATA),
+    dataset: cloneDeep(HEADERS_DATASET),
+    drillcore: cloneDeep(HEADERS_DRILLCORE),
+    locality: cloneDeep(HEADERS_LOCALITY),
+    photo: cloneDeep(HEADERS_PHOTO),
+    sample: cloneDeep(HEADERS_SAMPLE),
+    site: cloneDeep(HEADERS_SITE),
+    specimen: cloneDeep(HEADERS_SPECIMEN),
+    stratigraphy: cloneDeep(HEADERS_STRATIGRAPHY),
+    taxon: cloneDeep(HEADERS_TAXON),
   }
 }
 

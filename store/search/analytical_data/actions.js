@@ -86,12 +86,10 @@ export default {
     dispatch('initDefaultParameters')
   },
   initDefaultParameters({ commit, state, dispatch }) {
-    const defaultParameters = ['CaO_pct', 'MgO_pct', 'SiO2_pct', 'Al2O3_pct']
-
-    defaultParameters.forEach((parameterId) => {
+    state.defaultParameters.forEach((parameterId) => {
       const id = _.uniqueId('parameter_')
       const parameter = state.parameters[parameterId]
-      const test = {
+      const filter = {
         id,
         type: 'range',
         lookUpType: 'range',
@@ -101,7 +99,7 @@ export default {
         fields: [parameter.id],
         isText: false,
       }
-      commit('ADD_PARAMETER_FILTER', test)
+      commit('ADD_PARAMETER_FILTER', filter)
       dispatch(
         'headers/toggleHeader',
         {
