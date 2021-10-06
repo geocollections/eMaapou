@@ -116,6 +116,7 @@ export default {
     selectModule: 'Moodulid',
     headerSelectDisabled: 'Veergu sorteeritakse',
     headers: 'Veerud',
+    filter: 'Filter',
   },
   link: {
     sarvAPI: 'Avalik API',

@@ -1,14 +1,60 @@
-import { RESET_HEADERS, UPDATE_HEADERS } from '../mutation_types'
+import {
+  ADD_PARAMETER_HEADERS,
+  RESET_HEADERS,
+  SHOW_HEADER,
+  TOGGLE_HEADER,
+} from '../mutation_types'
 
 export default {
-  updateHeaders({ commit }, { module, headers }) {
-    commit(UPDATE_HEADERS, { module, headers })
+  toggleHeader({ commit }, { module, headerId }) {
+    commit(TOGGLE_HEADER, { module, headerId })
   },
-  async resetHeaders({ commit }, { module }) {
+  showHeader({ commit }, { module, headerId }) {
+    commit(SHOW_HEADER, { module, headerId })
+  },
+  async resetHeaders({ commit, dispatch, rootState }, { module, options }) {
     const { initState } = await import(`./state.js`)
 
     const initHeaders = initState()[module]
 
     commit(RESET_HEADERS, { module, initHeaders })
+
+    if (module === 'analytical_data') {
+      dispatch('addParameterHeaders', {
+        parameters: rootState.search.analytical_data.parameters,
+      })
+
+      rootState.search.analytical_data.defaultParameters.forEach(
+        (parameterId) => {
+          dispatch('showHeader', { module, headerId: parameterId })
+        }
+      )
+    }
+
+    options.sortBy.forEach((headerId) => {
+      dispatch('showHeader', { module, headerId })
+    })
+  },
+  addParameterHeaders({ commit }, { parameters }) {
+    const parameterHeaders = Object.entries(parameters).reduce(
+      (prev, [key, parameter]) => {
+        return {
+          ...prev,
+          [key]: {
+            text: parameter.label,
+            value: parameter.id,
+            align: 'center',
+            translate: false,
+            apiFieldValue: parameter.id,
+            show: false,
+          },
+        }
+      },
+      {}
+    )
+    commit(ADD_PARAMETER_HEADERS, {
+      parameters: parameterHeaders,
+      ids: Object.keys(parameters),
+    })
   },
 }

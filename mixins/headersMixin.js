@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash'
 import { mapActions } from 'vuex'
 
 export default {
@@ -13,7 +12,10 @@ export default {
       const translateHeader = (header) => {
         return {
           ...header,
-          text: this.$t(header.text),
+          text:
+            header.translate === undefined || header.translate
+              ? this.$t(header.text)
+              : header.text,
         }
       }
 
@@ -27,27 +29,22 @@ export default {
     },
   },
   methods: {
-    ...mapActions('headers', ['updateHeaders', 'resetHeaders']),
+    ...mapActions('headers', ['resetHeaders', 'toggleHeader']),
     $_handleHeadersChange(e) {
-      const tempHeaders = this.statefulHeaders
-        ? cloneDeep(this.stateHeaders)
-        : this.localHeaders
-
-      Object.keys(tempHeaders.byIds).forEach((id) => {
-        tempHeaders.byIds[id].show = false
-      })
-
-      e.forEach((id) => {
-        tempHeaders.byIds[id].show = true
-      })
-
       if (this.statefulHeaders)
-        this.updateHeaders({ module: this.module, headers: tempHeaders })
-      else this.localHeaders = tempHeaders
+        this.toggleHeader({ module: this.module, headerId: e })
+      else this.localHeaders.byIds[e].show = !this.localHeaders.byIds[e].show
     },
     $_handleHeadersReset() {
-      if (this.statefulHeaders) this.resetHeaders({ module: this.module })
-      else this.localHeaders = this.$options.data().localHeaders
+      if (this.statefulHeaders)
+        this.resetHeaders({ module: this.module, options: this.options })
+      else {
+        this.localHeaders = this.$options.data().localHeaders
+
+        this.options.sortBy.forEach((headerId) => {
+          this.localHeaders.byIds[headerId].show = true
+        })
+      }
     },
   },
 }

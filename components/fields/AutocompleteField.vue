@@ -1,24 +1,27 @@
 <template>
-  <v-autocomplete
-    class="pt-4"
-    v-bind="$attrs"
-    hide-details
-    hide-no-data
-    autocomplete="off"
-    :search-input.sync="search"
-    :clearable="!removeClearable"
-    :cache-items="!doNotCache"
-    :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
-    :return-object="!$attrs['item-value']"
-    v-on="$listeners"
-    @change="resetSearchInput"
-  >
-    <template #item="{ item }">
-      <v-list-item-content>
-        {{ item[$attrs['item-text']] }}
-      </v-list-item-content>
-    </template>
-  </v-autocomplete>
+  <div>
+    <!-- {{ $attrs.value }} -->
+    <v-autocomplete
+      class="pt-4"
+      v-bind="$attrs"
+      hide-details
+      hide-no-data
+      autocomplete="off"
+      :search-input.sync="search"
+      :clearable="!removeClearable"
+      :cache-items="!doNotCache"
+      :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
+      :return-object="returnObject"
+      v-on="$listeners"
+      @change="resetSearchInput"
+    >
+      <template #item="{ item }">
+        <v-list-item-content>
+          {{ item[$attrs['item-text']] }}
+        </v-list-item-content>
+      </template>
+    </v-autocomplete>
+  </div>
 </template>
 
 <script>
@@ -27,6 +30,12 @@ export default {
   props: {
     removeClearable: Boolean,
     doNotCache: Boolean,
+    returnObject: {
+      type: Boolean,
+      default() {
+        return !this.$attrs['item-value']
+      },
+    },
   },
   data() {
     return {

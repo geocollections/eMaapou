@@ -213,10 +213,7 @@ export default {
       })
     }, 500),
     handleHeadersChange(e) {
-      this.$emit(
-        'change:headers',
-        e.map((header) => header.value)
-      )
+      this.$emit('change:headers', e.value)
     },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,

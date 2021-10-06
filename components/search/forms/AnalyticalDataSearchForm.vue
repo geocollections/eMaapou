@@ -112,25 +112,23 @@
       </v-row>
       <v-row no-gutters>
         <v-col
-          v-for="(entity, index) in activeListParameters"
+          v-for="(id, index) in parameterFilters.allIds"
           :key="index"
           cols="12"
         >
           <parameter-field
-            :value="entity"
-            :parameters="distinctListParameters(entity)"
-            :disable-remove="activeListParameters.length <= 1"
-            :disable-add="activeListParameters.length !== index + 1"
-            @input="handleParameterUpdate($event, index)"
-            @add:parameter="addActiveListParameter"
-            @remove:parameter="
-              removeActiveListParameter({ filterName: entity.id, index })
-            "
+            :value="parameterFilters.byIds[id]"
+            :parameters="parameterList(parameterFilters.byIds[id])"
+            :disable-remove="parameterFilters.allIds.length <= 1"
+            :disable-add="parameterFilters.allIds.length !== index + 1"
+            @input="handleParameterUpdate($event, id)"
+            @add:parameter="addParameterFilter"
+            @remove:parameter="handleRemoveParameter(id)"
           />
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <!-- <v-row no-gutters>
         <v-col cols="12">
           <autocomplete-field
             :label="$t('analyticalData.columns')"
@@ -146,7 +144,7 @@
             @input="updateAnalyticalDataHeaders"
           />
         </v-col>
-      </v-row>
+      </v-row> -->
     </search-fields-wrapper>
     <search-view-map-wrapper
       site-overlay
@@ -187,6 +185,7 @@ import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 export default {
   name: 'AnalyticalDataSearchForm',
+  fetchOnServer: false,
   components: {
     InstitutionSearchFilter,
     RangeTextField,
@@ -212,7 +211,7 @@ export default {
     }
   },
   async fetch() {
-    if (this.listParameters.length === 0) {
+    if (isEmpty(this.parameters)) {
       const listParametersResponse =
         await this.$services.sarvSolr.getResourceList('analysis_parameter', {
           defaultParams: {
@@ -223,20 +222,19 @@ export default {
             itemsPerPage: 1000,
           },
         })
-      this.setListParameters({ parameters: listParametersResponse?.items })
+      this.setParameters({ parameters: listParametersResponse?.items })
     }
   },
   computed: {
     ...mapState('search/analytical_data', [
       'filters',
-      'listParameters',
-      'activeListParameters',
-      'shownActiveListParameters',
       'count',
       'items',
+      'parameters',
+      'parameterFilters',
     ]),
+    ...mapGetters('search/analytical_data', ['parameterList']),
     ...mapGetters('search', ['hasActiveFilters']),
-    ...mapGetters('search/analytical_data', ['distinctListParameters']),
     ...mapFields('search/analytical_data', {
       locality: 'filters.byIds.locality.value',
       depth: 'filters.byIds.depth.value',
@@ -267,13 +265,12 @@ export default {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/analytical_data', [
       'searchAnalyticalData',
-      'resetAnalyticalDataFilters',
-      'setListParameters',
-      'updateAnalyticalDataHeaders',
-      'addActiveListParameter',
-      'removeActiveListParameter',
-      'updateParameter',
+      'setParameters',
+      'addParameterFilter',
+      'updateParameterFilter',
+      'removeParameterFilter',
     ]),
+    ...mapActions('headers/analytical_data', ['removeHeader']),
     async handleReset(e) {
       await this.resetFilters('analytical_data')
       this.searchAnalyticalData()
@@ -290,8 +287,13 @@ export default {
       if (this.lithostratigraphy)
         this.autocomplete.lithostratigraphy.push(this.lithostratigraphy)
     },
-    handleParameterUpdate(e, index) {
-      this.updateParameter({ index, parameter: e })
+    handleParameterUpdate(e, id) {
+      this.updateParameterFilter({ id, filter: e })
+    },
+    handleRemoveParameter(id) {
+      this.removeParameterFilter(id)
+      // OLD
+      // removeActiveListParameter({ filterName: entity.id, index })
     },
   },
 }

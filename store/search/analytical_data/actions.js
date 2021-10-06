@@ -1,26 +1,56 @@
+import _ from 'lodash'
 import { ANALYTICAL_DATA, HEADERS_ANALYTICAL_DATA } from '~/constants'
-
 import {
-  SET_LIST_PARAMETERS,
-  UPDATE_ANALYTICAL_DATA_HEADERS,
-  SET_SHOWN_ACTIVE_LIST_PARAMETERS,
-  INIT_ACTIVE_LIST_PARAMETERS,
-  ADD_ACTIVE_LIST_PARAMETER,
-  REMOVE_ACTIVE_LIST_PARAMETER,
-  UPDATE_ACTIVE_LIST_PARAMETERS,
-  UPDATE_ACTIVE_PARAM,
-  UPDATE_ACTIVE_LIST_PARAMETERS_FILTERS,
-  REMOVE_ACTIVE_LIST_PARAMETER_FILTER,
+  ADD_PARAMETER_FILTER,
+  REMOVE_PARAMETER_FILTER,
+  SET_PARAMETERS,
+  UPDATE_PARAMETER_FILTER,
 } from '~/store/mutation_types'
 
 export default {
-  updateParameter({ commit, state, dispatch }, payload) {
-    const oldParam = state.activeListParameters[payload.index]
-    dispatch('updateActiveListParameters', {
-      ...payload,
-      keyToReplace: oldParam.id,
-    })
+  addParameterFilter({ commit, dispatch, getters }) {
+    const initParameter = getters.parameterList()[0]
+
+    const id = _.uniqueId('parameter_')
+
+    const filter = {
+      id,
+      type: 'range',
+      lookUpType: 'range',
+      value: [null, null],
+      label: initParameter.label,
+      placeholders: ['common.from', 'common.to'],
+      fields: [initParameter.id],
+      isText: false,
+    }
+
+    commit(ADD_PARAMETER_FILTER, filter)
+
+    dispatch(
+      'headers/toggleHeader',
+      {
+        module: 'analytical_data',
+        headerId: initParameter.id,
+      },
+      { root: true }
+    )
   },
+  updateParameterFilter({ commit, dispatch }, { id, filter }) {
+    commit(UPDATE_PARAMETER_FILTER, { id, filter })
+
+    dispatch(
+      'headers/toggleHeader',
+      {
+        module: 'analytical_data',
+        headerId: filter.fields[0],
+      },
+      { root: true }
+    )
+  },
+  removeParameterFilter({ commit }, id) {
+    commit(REMOVE_PARAMETER_FILTER, id)
+  },
+
   async searchAnalyticalData({ dispatch }, options = null) {
     await dispatch(
       'search/searchResource',
@@ -36,83 +66,54 @@ export default {
       { root: true }
     )
   },
-  setListParameters({ commit, dispatch }, { parameters, reset }) {
-    if (reset) {
-      parameters = parameters.map((item) => {
-        return { ...item, value: [null, null] }
-      })
-    } else if (parameters && parameters.length > 0) {
-      parameters = parameters.map((item) => {
-        // Todo: Check if text field or not
-        // Todo: Check: '/' -> 31, '%' -> 199, 'ppm' -> 61, '‰' -> 6, '[grains]' -> 2; TOTAL: 299/347
+  setParameters({ commit, dispatch }, { parameters }) {
+    let parametersNew = {}
+    if (parameters && parameters.length > 0) {
+      parametersNew = parameters.reduce((prev, parameter) => {
         return {
-          id: item.parameter_index,
-          type: 'range',
-          lookUpType: 'range',
-          value: [null, null],
-          label: item.parameter,
-          placeholders: ['common.from', 'common.to'],
-          fields: [item.parameter_index],
-          isText: false,
+          ...prev,
+          [parameter.parameter_index]: {
+            id: parameter.parameter_index,
+            label: parameter.parameter,
+          },
         }
-      })
+      }, {})
     }
-    commit(SET_LIST_PARAMETERS, parameters)
-    dispatch('initActiveListParameters', parameters)
-  },
-  updateAnalyticalDataHeaders({ commit, dispatch }, value) {
-    commit(UPDATE_ANALYTICAL_DATA_HEADERS, value)
-    dispatch('setShownActiveListParameters', value)
-  },
-  setShownActiveListParameters({ commit }, list) {
-    commit(SET_SHOWN_ACTIVE_LIST_PARAMETERS, list)
-  },
-  initActiveListParameters({ commit, dispatch }, parameters) {
-    // CaO, MgO, SiO2, Al2O3
-    const DEFAULT_PARAMETERS = [
-      parameters.find((param) => param.id === 'CaO_pct'),
-      parameters.find((param) => param.id === 'MgO_pct'),
-      parameters.find((param) => param.id === 'SiO2_pct'),
-      parameters.find((param) => param.id === 'Al2O3_pct'),
-    ]
 
-    commit(INIT_ACTIVE_LIST_PARAMETERS, DEFAULT_PARAMETERS)
-    dispatch('updateAnalyticalDataHeaders', DEFAULT_PARAMETERS)
-    dispatch('addActiveListParameterToFilters', DEFAULT_PARAMETERS)
-  },
-  updateActiveListParameters({ state, commit, dispatch }, payload) {
-    if (payload.parameter && payload.keyToReplace !== payload.parameter.id) {
-      commit(UPDATE_ACTIVE_LIST_PARAMETERS, payload)
-      dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
+    commit(SET_PARAMETERS, parametersNew)
 
-      dispatch('addActiveListParameterToFilters', state.activeListParameters)
-      dispatch('removeActiveListParameterFromFilters', payload.keyToReplace)
-    }
-    if (payload.keyToReplace === payload.parameter.id) {
-      dispatch('updateActiveParam', payload)
-    }
+    dispatch(
+      'headers/addParameterHeaders',
+      {
+        parameters: parametersNew,
+      },
+      { root: true }
+    )
+    dispatch('initDefaultParameters')
   },
-  addActiveListParameter({ state, commit, dispatch }) {
-    commit(ADD_ACTIVE_LIST_PARAMETER)
-    dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
-    dispatch('addActiveListParameterToFilters', state.activeListParameters)
-  },
-  removeActiveListParameter({ state, commit, dispatch }, payload) {
-    commit(REMOVE_ACTIVE_LIST_PARAMETER, payload.index)
-    dispatch('updateAnalyticalDataHeaders', state.activeListParameters)
-    dispatch('removeActiveListParameterFromFilters', payload.filterName)
-  },
-  addActiveListParameterToFilters({ state, commit }, parameters) {
-    const newFilters = Object.entries(parameters).reduce((prev, [k, v]) => {
-      if (!state.filters.allIds.includes(v.id)) return { ...prev, [v.id]: v }
-      else return prev
-    }, {})
-    commit(UPDATE_ACTIVE_LIST_PARAMETERS_FILTERS, newFilters)
-  },
-  removeActiveListParameterFromFilters({ commit }, filterName) {
-    commit(REMOVE_ACTIVE_LIST_PARAMETER_FILTER, filterName)
-  },
-  updateActiveParam({ commit }, payload) {
-    commit(UPDATE_ACTIVE_PARAM, payload)
+  initDefaultParameters({ commit, state, dispatch }) {
+    state.defaultParameters.forEach((parameterId) => {
+      const id = _.uniqueId('parameter_')
+      const parameter = state.parameters[parameterId]
+      const filter = {
+        id,
+        type: 'range',
+        lookUpType: 'range',
+        value: [null, null],
+        label: parameter.label,
+        placeholders: ['common.from', 'common.to'],
+        fields: [parameter.id],
+        isText: false,
+      }
+      commit(ADD_PARAMETER_FILTER, filter)
+      dispatch(
+        'headers/toggleHeader',
+        {
+          module: 'analytical_data',
+          headerId: parameter.id,
+        },
+        { root: true }
+      )
+    })
   },
 }

@@ -57,6 +57,7 @@ export default {
       searchFilters: {
         ...moduleFilters,
         ...state[module].persistantFilters,
+        ...state[module].parameterFilters?.byIds,
         ...globalFilters,
       },
     })

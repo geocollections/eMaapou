@@ -116,6 +116,7 @@ export default {
     selectModule: 'Select module',
     headerSelectDisabled: 'Sorting enabled',
     headers: 'Columns',
+    filter: 'Filter',
   },
   link: {
     sarvAPI: 'Public API',

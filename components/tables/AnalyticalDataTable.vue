@@ -159,7 +159,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('headers', { stateHeaders: 'analytical_data' }),
+    ...mapState('headers', {
+      stateHeaders: 'analytical_data',
+    }),
   },
   methods: {
     round,

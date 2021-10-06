@@ -136,64 +136,13 @@ export const initState = () => {
         'sample',
       ],
     },
-    listParameters: [],
-    activeListParameters: [],
-    shownActiveListParameters: [],
-    tableHeaders: [
-      {
-        text: 'analyticalData.id',
-        value: 'id_l',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.analysisMethod',
-        value: 'analysis_method',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.sample',
-        value: 'sample_number',
-        translate: true,
-      },
-      { text: 'analyticalData.locality', value: 'locality', translate: true },
-      {
-        text: 'analyticalData.stratigraphy',
-        value: 'stratigraphy',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.lithostratigraphy',
-        value: 'lithostratigraphy',
-        translate: true,
-      },
 
-      { text: 'analyticalData.depth', value: 'depth', translate: true },
-      {
-        text: 'analyticalData.depthInterval',
-        value: 'depth_interval',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.rock',
-        value: 'rock',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.reference',
-        value: 'reference',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.dataset',
-        value: 'dataset_id',
-        translate: true,
-      },
-      {
-        text: 'analyticalData.analysis',
-        value: 'analysis_id',
-        translate: true,
-      },
-    ],
+    defaultParameters: ['CaO_pct', 'MgO_pct', 'SiO2_pct', 'Al2O3_pct'],
+    parameters: {},
+    parameterFilters: {
+      byIds: {},
+      allIds: [],
+    },
   }
 }
 

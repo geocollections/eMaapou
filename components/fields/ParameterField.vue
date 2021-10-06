@@ -7,6 +7,7 @@
         return-object
         item-text="label"
         :value="value"
+        :item-value="value.fields[0]"
         remove-clearable
         do-not-cache
         @input="handleParameter($event)"
@@ -119,7 +120,6 @@ export default {
       if (parameter) {
         this.$emit('input', {
           ...this.value,
-          id: parameter.id,
           label: parameter.label,
           fields: [parameter.id],
         })
