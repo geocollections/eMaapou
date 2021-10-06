@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.datasetCount')"
+        :title="$t('dataset.pageTitle')"
         icon="mdi-database-outline"
         class="title-dataset"
       />

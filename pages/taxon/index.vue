@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.taxa')"
+        :title="$t('taxon.pageTitle')"
         :subtitle="$t('common.count', { count: count })"
         icon="mdi-family-tree"
         class="title-main"

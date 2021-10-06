@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.analysesCount')"
+        :title="$t('analysis.pageTitle')"
         icon="mdi-chart-scatter-plot"
         class="title-analysis"
       />

@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.sitesCount')"
+        :title="$t('site.pageTitle')"
         icon="mdi-map-marker-star-outline"
         class="title-site"
       />

@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.samplesCount')"
+        :title="$t('sample.pageTitle')"
         icon="mdi-test-tube"
         class="title-sample"
       />

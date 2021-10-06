@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.stratigraphy')"
+        :title="$t('stratigraphy.pageTitle')"
         icon="mdi-layers-triple"
         class="title-stratigraphy"
       />

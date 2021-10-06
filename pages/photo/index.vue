@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.photosCount')"
+        :title="$t('photo.pageTitle')"
         icon="mdi-file-image-outline"
         class="title-photo"
       />

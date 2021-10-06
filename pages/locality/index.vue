@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.localitiesCount')"
+        :title="$t('locality.pageTitle')"
         icon="mdi-map-marker-outline"
         class="title-locality"
       />

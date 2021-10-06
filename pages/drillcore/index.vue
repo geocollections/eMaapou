@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.drillcoresCount')"
+        :title="$t('drillcore.pageTitle')"
         icon="mdi-screw-machine-flat-top"
         class="title-drillcore"
       />

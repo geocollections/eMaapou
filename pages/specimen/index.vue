@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.specimenCount')"
+        :title="$t('specimen.pageTitle')"
         icon="mdi-microscope"
         class="title-specimen"
       />
