@@ -8,7 +8,7 @@
     <v-row class="px-sm-3" no-gutters>
       <v-col cols="12" md="4" lg="3" class="pr-md-3">
         <v-card flat color="transparent">
-          <v-card-title class="montserrat pl-2 py-1">
+          <v-card-title class="py-1 pl-2 montserrat">
             {{ $t('common.showSearch') }}
           </v-card-title>
           <query-search-field v-model="query" @input="handleSearch" />
@@ -16,7 +16,7 @@
       </v-col>
       <v-col class="pt-2 pt-md-0">
         <v-card flat color="transparent">
-          <v-card-title class="montserrat pl-2 py-1">
+          <v-card-title class="py-1 pl-2 montserrat">
             {{ $t('common.selectModule') }}
           </v-card-title>
           <v-card-actions class="pt-0">
@@ -50,7 +50,7 @@ export default {
   name: 'QuickSearch',
   components: { ButtonTabs, TitleCard, QuerySearchField },
   // layout: 'search',
-  async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab }) {
+  async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab, from }) {
     try {
       const tabs = TABS_QUICK_SEARCH.allIds.map(
         (id) => TABS_QUICK_SEARCH.byIds[id]
@@ -78,9 +78,12 @@ export default {
             })
         )
       )
-      const validPath = $getMaxTab(route, hydratedTabs)
 
-      if (validPath !== route.path) redirect(validPath)
+      if (from) {
+        const validPath = $getMaxTab(route, hydratedTabs)
+        if (validPath !== route.path) redirect(validPath)
+      }
+
       return {
         tabs: hydratedTabs,
       }
