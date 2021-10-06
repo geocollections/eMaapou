@@ -1,5 +1,11 @@
 import _ from 'lodash'
 import { ANALYTICAL_DATA, HEADERS_ANALYTICAL_DATA } from '~/constants'
+import {
+  ADD_PARAMETER_FILTER,
+  REMOVE_PARAMETER_FILTER,
+  SET_PARAMETERS,
+  UPDATE_PARAMETER_FILTER,
+} from '~/store/mutation_types'
 
 export default {
   addParameterFilter({ commit, dispatch, getters }) {
@@ -18,7 +24,7 @@ export default {
       isText: false,
     }
 
-    commit('ADD_PARAMETER_FILTER', filter)
+    commit(ADD_PARAMETER_FILTER, filter)
 
     dispatch(
       'headers/toggleHeader',
@@ -30,7 +36,7 @@ export default {
     )
   },
   updateParameterFilter({ commit, dispatch }, { id, filter }) {
-    commit('UPDATE_PARAMETER_FILTER', { id, filter })
+    commit(UPDATE_PARAMETER_FILTER, { id, filter })
 
     dispatch(
       'headers/toggleHeader',
@@ -42,7 +48,7 @@ export default {
     )
   },
   removeParameterFilter({ commit }, id) {
-    commit('REMOVE_PARAMETER_FILTER', id)
+    commit(REMOVE_PARAMETER_FILTER, id)
   },
 
   async searchAnalyticalData({ dispatch }, options = null) {
@@ -74,10 +80,10 @@ export default {
       }, {})
     }
 
-    commit('SET_PARAMETERS', parametersNew)
+    commit(SET_PARAMETERS, parametersNew)
 
     dispatch(
-      'headers/analytical_data/addParameterHeaders',
+      'headers/addParameterHeaders',
       {
         parameters: parametersNew,
       },
@@ -99,7 +105,7 @@ export default {
         fields: [parameter.id],
         isText: false,
       }
-      commit('ADD_PARAMETER_FILTER', filter)
+      commit(ADD_PARAMETER_FILTER, filter)
       dispatch(
         'headers/toggleHeader',
         {

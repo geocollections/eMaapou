@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash'
 import {
   HEADERS_ANALYSIS,
-  // HEADERS_ANALYTICAL_DATA,
+  HEADERS_ANALYTICAL_DATA,
   HEADERS_DATASET,
   HEADERS_DRILLCORE,
   HEADERS_LOCALITY,
@@ -15,7 +15,7 @@ import {
 export const initState = () => {
   return {
     analysis: cloneDeep(HEADERS_ANALYSIS),
-    // analytical_data: cloneDeep(HEADERS_ANALYTICAL_DATA),
+    analytical_data: cloneDeep(HEADERS_ANALYTICAL_DATA),
     dataset: cloneDeep(HEADERS_DATASET),
     drillcore: cloneDeep(HEADERS_DRILLCORE),
     locality: cloneDeep(HEADERS_LOCALITY),
