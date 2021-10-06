@@ -10,6 +10,7 @@
         <v-icon class="pb-1">mdi-warehouse</v-icon>
       </div>
     </template>
+
     <div
       class="
         flex-wrap
@@ -20,7 +21,8 @@
     >
       <div v-for="(entity, key) in institutions" :key="key">
         <v-tooltip
-          bottom
+          right
+          open-delay="200"
           :nudge-left="
             $vuetify.breakpoint.xs || $vuetify.breakpoint.mdAndUp ? '200' : '0'
           "
@@ -32,6 +34,7 @@
                 :value="entity.id"
                 color="accent lighten-2"
                 hide-details
+                dense
                 :label="entity.acronym"
                 :input-value="institution"
                 @change="$emit('change:institution', $event)"
