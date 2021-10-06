@@ -111,6 +111,9 @@
         </v-col>
       </v-row>
       <v-row no-gutters>
+        <v-col cols="12" class="pt-5 d-flex flex-column">
+          <span class="montserrat">{{ $t('common.parameters') }}</span>
+        </v-col>
         <v-col
           v-for="(id, index) in parameterFilters.allIds"
           :key="index"

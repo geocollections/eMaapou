@@ -117,6 +117,7 @@ export default {
     headerSelectDisabled: 'Sorting enabled',
     headers: 'Columns',
     filter: 'Filter',
+    parameters: 'Parameters',
   },
   link: {
     sarvAPI: 'Public API',

@@ -117,6 +117,7 @@ export default {
     headerSelectDisabled: 'Veergu sorteeritakse',
     headers: 'Veerud',
     filter: 'Filter',
+    parameters: 'Parameetrid',
   },
   link: {
     sarvAPI: 'Avalik API',
