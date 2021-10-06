@@ -17,16 +17,16 @@
         height="190px"
         content-class=""
       >
-        <div style="background-color: rgba(0, 74, 99, 0.7)">
+        <div class="rounded-t" style="background-color: rgba(0, 119, 154, 0.9)">
           <v-card-title style="word-break: keep-all" class="montserrat text-h6"
             >{{ title }}
-            <v-icon right small class="align-self-start">
+            <v-icon right x-small class="align-self-start">
               mdi-open-in-new
             </v-icon>
           </v-card-title>
           <v-expand-transition>
             <div v-show="hover">
-              <v-card-text class="text-shadow montserrat pt-0">
+              <v-card-text class="pt-0 montserrat">
                 {{ description }}
               </v-card-text>
             </div>
@@ -63,11 +63,6 @@ export default {
     },
     grayscale: Boolean,
   },
-  computed: {
-    image() {
-      return `${require(this.background)}`
-    },
-  },
 }
 </script>
 
@@ -76,16 +71,9 @@ export default {
   transition: opacity 0.6s ease-in-out;
 }
 
-.v-card:not(.on-hover) {
-  opacity: 0.9;
-}
-
 .v-card.on-hover {
   cursor: pointer;
-}
-
-.v-card__title {
-  text-shadow: black 0 0 6px;
+  opacity: 0.9;
 }
 
 .grayscale {
@@ -96,8 +84,5 @@ export default {
 .grayscale:hover {
   -webkit-filter: grayscale(0%);
   filter: grayscale(0%);
-}
-.text-shadow {
-  text-shadow: black 0 0 6px;
 }
 </style>
