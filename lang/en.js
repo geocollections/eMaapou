@@ -115,7 +115,7 @@ export default {
     pageSelect: '{current} / {count}',
     selectModule: 'Select module',
     headerSelectDisabled: 'Sorting enabled',
-    headers: 'Columns',
+    headers: 'Headers',
     filter: 'Filter',
     parameters: 'Parameters',
   },
@@ -543,6 +543,9 @@ export default {
     noData: 'No data found',
     tooltipExport: 'File export',
     tooltipConfig: 'Table configuration',
+    tooltipResetHeaders: 'Reset headers',
+    tooltipShowActiveHeaders: 'Show active headers',
+    tooltipShowAllHeaders: 'Show all headers',
   },
   footerPreliminary: '2021 | e·Maapõu',
   footer:

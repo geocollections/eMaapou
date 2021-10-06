@@ -115,7 +115,7 @@ export default {
     pageSelect: '{current} / {count}',
     selectModule: 'Moodulid',
     headerSelectDisabled: 'Veergu sorteeritakse',
-    headers: 'Veerud',
+    headers: 'Päised',
     filter: 'Filter',
     parameters: 'Parameetrid',
   },
@@ -543,6 +543,9 @@ export default {
     noData: 'Andmeid ei leitud',
     tooltipExport: 'Faili eksport',
     tooltipConfig: 'Tabeli konfiguratsioon',
+    tooltipResetHeaders: 'Lähtesta päised',
+    tooltipShowActiveHeaders: 'Vaata aktiveeritud päiseid',
+    tooltipShowAllHeaders: 'Vaata kõiki päiseid',
   },
   footerPreliminary: '2021 | e·Maapõu',
   footer:

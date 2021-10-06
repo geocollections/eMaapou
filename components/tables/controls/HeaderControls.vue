@@ -27,14 +27,32 @@
       <v-list flat class="">
         <v-list-item-title class="px-2 montserrat align-center">
           {{ $t('common.headers') }}
-          <v-btn icon @click="$emit('reset')">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
+          <v-tooltip bottom open-delay="500">
+            <template #activator="{ on, attrs }">
+              <v-btn v-bind="attrs" icon v-on="on" @click="$emit('reset')">
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            {{ $t('table.tooltipResetHeaders') }}
+          </v-tooltip>
 
-          <v-btn icon @click="onlyVisible = !onlyVisible">
-            <v-icon v-if="!onlyVisible">mdi-eye</v-icon>
-            <v-icon v-else>mdi-eye-off</v-icon>
-          </v-btn>
+          <v-tooltip open-delay="500" bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                icon
+                v-on="on"
+                @click="onlyVisible = !onlyVisible"
+              >
+                <v-icon v-if="!onlyVisible">mdi-eye</v-icon>
+                <v-icon v-else>mdi-eye-off</v-icon>
+              </v-btn>
+            </template>
+            <span v-if="!onlyVisible">
+              {{ $t('table.tooltipShowActiveHeaders') }}
+            </span>
+            <span v-else>{{ $t('table.tooltipShowAllHeaders') }}</span>
+          </v-tooltip>
           <v-text-field
             v-model="filter"
             class="py-2"
@@ -57,26 +75,26 @@
             <template #default="{ item }">
               <v-tooltip left :disabled="!sortBy.includes(item.value)">
                 <template #activator="{ on, attrs }">
-                  <v-list-item
-                    v-bind="attrs"
-                    dense
-                    :disabled="sortBy.includes(item.value)"
-                    :value="item"
-                    v-on="on"
-                    @click="$emit('change', item)"
-                  >
-                    <v-list-item-action class="my-2 mr-2">
-                      <v-checkbox
-                        dense
-                        :disabled="sortBy.includes(item.value)"
-                        :input-value="item.show"
-                        color="accent lighten-2"
-                      />
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title v-text="item.text" />
-                    </v-list-item-content>
-                  </v-list-item>
+                  <div v-bind="attrs" v-on="on">
+                    <v-list-item
+                      dense
+                      :disabled="sortBy.includes(item.value)"
+                      :value="item"
+                      @click="$emit('change', item)"
+                    >
+                      <v-list-item-action class="my-2 mr-2">
+                        <v-checkbox
+                          dense
+                          :disabled="sortBy.includes(item.value)"
+                          :input-value="item.show"
+                          color="accent lighten-2"
+                        />
+                      </v-list-item-action>
+                      <v-list-item-content>
+                        <v-list-item-title v-text="item.text" />
+                      </v-list-item-content>
+                    </v-list-item>
+                  </div>
                 </template>
                 {{ $t('common.headerSelectDisabled') }}
               </v-tooltip>
