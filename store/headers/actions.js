@@ -24,11 +24,11 @@ export default {
         parameters: rootState.search.analytical_data.parameters,
       })
 
-      rootState.search.analytical_data.defaultParameters.forEach(
-        (parameterId) => {
-          dispatch('showHeader', { module, headerId: parameterId })
-        }
-      )
+      Object.values(
+        rootState.search.analytical_data.parameterFilters.byIds
+      ).forEach((filter) => {
+        dispatch('showHeader', { module, headerId: filter.fields[0] })
+      })
     }
 
     options.sortBy.forEach((headerId) => {
