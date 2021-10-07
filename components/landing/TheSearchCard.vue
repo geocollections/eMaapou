@@ -163,7 +163,7 @@ export default {
         {
           routeName: 'preparation',
           text: 'preparation.pageTitle',
-          class: 'search-card',
+          class: 'preparation-search-card',
         },
       ],
     }

@@ -166,6 +166,7 @@ export default {
           'emp-site': '#7bbc9a',
           'emp-photo': '#ab9f93',
           'emp-specimen': '#bc7b7b',
+          'emp-preparation': '#bc7b7b',
         },
         light: {
           primary: '#7c8996',
@@ -187,6 +188,7 @@ export default {
           'emp-site': '#7bbc9a',
           'emp-photo': '#ab9f93',
           'emp-specimen': '#bc7b7b',
+          'emp-preparation': '#bc7b7b',
         },
       },
     },

@@ -299,6 +299,12 @@ th {
   border-color: var(--v-emp-dataset-base) !important;
 }
 
+.preparation-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-preparation-base) !important;
+}
+
 .title-border {
   // border-bottom-width: 2px !important;
   // border-bottom-style: solid !important;
@@ -431,6 +437,17 @@ th {
       to left,
       var(--v-emp-specimen-darken2),
       var(--v-emp-specimen-base)
+    );
+  }
+}
+
+.title-preparation {
+  @extend .title-border;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-preparation-darken2),
+      var(--v-emp-preparation-base)
     );
   }
 }
