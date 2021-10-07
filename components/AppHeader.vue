@@ -137,30 +137,26 @@ export default {
         {
           routeName: 'locality',
 
-          text: 'common.localities',
+          text: 'locality.pageTitle',
         },
         {
           routeName: 'site',
-          text: 'common.sites',
+          text: 'site.pageTitle',
         },
         {
           routeName: 'drillcore',
-          text: 'common.drillcores',
+          text: 'drillcore.pageTitle',
         },
         {
           routeName: 'sample',
-          text: 'common.samples',
+          text: 'sample.pageTitle',
         },
         {
           routeName: 'analytical-data',
-          text: 'common.analyticalData',
+          text: 'analyticalData.pageTitle',
         },
-        { routeName: 'dataset', text: 'common.datasets' },
-        // {
-        //   routeName: 'taxon',
-        //   text: this.$t('common.taxa'),
-        // },
-        { routeName: 'photo', text: 'common.photo' },
+        { routeName: 'dataset', text: 'dataset.pageTitle' },
+        { routeName: 'photo', text: 'photo.pageTitle' },
       ],
       logo: '/logos/emaapou5white.svg',
     }
