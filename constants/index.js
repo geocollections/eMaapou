@@ -20,6 +20,15 @@ export const ANALYTICAL_DATA = {
   },
 }
 
+export const AREA = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+}
+
 export const DATASET_ANALYSIS = {
   options: {
     page: 1,

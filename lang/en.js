@@ -356,10 +356,11 @@ export default {
     locality: 'Locality',
   },
   area: {
+    pageTitle: 'Areas',
     id: 'ID',
     name: 'Name',
     areaType: 'Area type',
-    maakond: 'Country',
+    county: 'County',
     areaHa: 'Area (ha)',
     depositAreaHa: 'Deposit (ha)',
     description: 'Description',

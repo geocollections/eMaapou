@@ -356,10 +356,11 @@ export default {
     locality: 'Lokaliteet',
   },
   area: {
+    pageTitle: 'Areas',
     id: 'ID',
     name: 'Nimi',
     areaType: 'Ala tüüp',
-    maakond: 'Maakond',
+    county: 'Maakond',
     areaHa: 'Ala (ha)',
     depositAreaHa: 'Maardla (ha)',
     description: 'Iseloomustus',

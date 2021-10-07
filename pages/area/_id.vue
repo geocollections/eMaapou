@@ -44,7 +44,7 @@
                     "
                   />
                   <data-row
-                    :title="$t('area.maakond')"
+                    :title="$t('area.county')"
                     :value="
                       $translate({
                         et: area.maakond__maakond,
