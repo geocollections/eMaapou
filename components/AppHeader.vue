@@ -62,7 +62,7 @@
     <v-spacer />
     <v-toolbar-items class="align-center">
       <query-search-field
-        v-if="!$route.name.startsWith('search')"
+        v-if="!$route.name.startsWith('search') && $vuetify.breakpoint.smAndUp"
         v-model="query"
         class="pr-2"
         dense
