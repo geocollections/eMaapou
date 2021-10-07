@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
@@ -111,7 +112,11 @@ export default {
   data() {
     return {
       localHeaders: cloneDeep(HEADERS_PREPARATION),
+      module: 'preparation',
     }
+  },
+  computed: {
+    ...mapState('headers', { stateHeaders: 'preparation' }),
   },
   methods: {
     round,

@@ -11,6 +11,7 @@ import {
   HEADERS_SPECIMEN,
   HEADERS_STRATIGRAPHY,
   HEADERS_TAXON,
+  HEADERS_PREPARATION,
 } from '~/constants'
 export const initState = () => {
   return {
@@ -20,6 +21,7 @@ export const initState = () => {
     drillcore: cloneDeep(HEADERS_DRILLCORE),
     locality: cloneDeep(HEADERS_LOCALITY),
     photo: cloneDeep(HEADERS_PHOTO),
+    preparation: cloneDeep(HEADERS_PREPARATION),
     sample: cloneDeep(HEADERS_SAMPLE),
     site: cloneDeep(HEADERS_SITE),
     specimen: cloneDeep(HEADERS_SPECIMEN),

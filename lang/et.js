@@ -473,7 +473,9 @@ export default {
     igsn: 'IGSN',
   },
   preparation: {
+    pageTitle: 'Preparaadid',
     id: 'ID',
+    number: 'Number',
     preparation_number: 'Prep. number',
     locality: 'Lokaliteet',
     depth: 'Sügavus',

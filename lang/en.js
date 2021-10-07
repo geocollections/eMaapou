@@ -473,7 +473,9 @@ export default {
     igsn: 'IGSN',
   },
   preparation: {
+    pageTitle: 'Preparations',
     id: 'ID',
+    number: 'Number',
     preparation_number: 'Prep. number',
     locality: 'Locality',
     depth: 'Depth',
