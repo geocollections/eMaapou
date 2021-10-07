@@ -1,27 +1,23 @@
 <template>
-  <div>
-    <!-- {{ $attrs.value }} -->
-    <v-autocomplete
-      class="pt-4"
-      v-bind="$attrs"
-      hide-details
-      hide-no-data
-      autocomplete="off"
-      :search-input.sync="search"
-      :clearable="!removeClearable"
-      :cache-items="!doNotCache"
-      :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
-      :return-object="returnObject"
-      v-on="$listeners"
-      @change="resetSearchInput"
-    >
-      <template #item="{ item }">
-        <v-list-item-content>
-          {{ item[$attrs['item-text']] }}
-        </v-list-item-content>
-      </template>
-    </v-autocomplete>
-  </div>
+  <v-autocomplete
+    class="pt-4"
+    v-bind="$attrs"
+    hide-details
+    hide-no-data
+    autocomplete="off"
+    :search-input.sync="search"
+    :clearable="!removeClearable"
+    :cache-items="!doNotCache"
+    :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
+    :return-object="returnObject"
+    v-on="$listeners"
+  >
+    <template #item="{ item }">
+      <v-list-item-content>
+        {{ item[$attrs['item-text']] }}
+      </v-list-item-content>
+    </template>
+  </v-autocomplete>
 </template>
 
 <script>
@@ -54,13 +50,6 @@ export default {
         newVal !== oldVal
       ) {
         this.$emit('search:items', newVal)
-      }
-    },
-  },
-  methods: {
-    resetSearchInput() {
-      if (this.search && this.search.length > 0) {
-        this.search = null
       }
     },
   },

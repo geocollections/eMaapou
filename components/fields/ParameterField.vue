@@ -5,8 +5,8 @@
         :items="parameters"
         return-object
         item-text="label"
-        :value="value"
-        :item-value="value.fields[0]"
+        :value="parameter"
+        item-value="id"
         remove-clearable
         do-not-cache
         @input="handleParameter($event)"
@@ -81,8 +81,8 @@
 
 <script>
 import { isEmpty } from 'lodash'
-import NumberField from '~/components/fields/NumberField'
-import AutocompleteField from '~/components/fields/AutocompleteField'
+import NumberField from '~/components/fields/NumberField.vue'
+import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 export default {
   name: 'ParameterField',
   components: { NumberField, AutocompleteField },
@@ -99,10 +99,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    parameter: {
-      type: Object,
-      default: () => {},
-    },
     value: {
       type: Object,
       default: () => {
@@ -110,17 +106,27 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      parameter: {
+        id: this.value.fields[0],
+        label: this.value.label,
+      },
+    }
+  },
   methods: {
     parseInput(input) {
       if (isEmpty(input)) return null
       else return parseFloat(input)
     },
-    handleParameter(parameter) {
-      if (parameter) {
+    handleParameter(newParameter) {
+      if (newParameter) {
+        this.parameter = newParameter
+
         this.$emit('input', {
           ...this.value,
-          label: parameter.label,
-          fields: [parameter.id],
+          label: newParameter.label,
+          fields: [newParameter.id],
         })
       }
     },
