@@ -185,6 +185,7 @@ export default {
         },
         { name: 'photo', lang: 'photo', icon: 'mdi-file-image-outline' },
         { name: 'specimen', lang: 'specimen', icon: 'mdi-microscope' },
+        { name: 'preparation', lang: 'preparation' },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },

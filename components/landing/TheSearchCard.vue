@@ -71,7 +71,7 @@
                   height="50px"
                   :title="$t(item.title)"
                   :card-class="item.class"
-                  :to="localePath({ name: item.localeName })"
+                  :to="localePath({ name: item.routeName })"
                 ></search-card>
               </div>
             </div>
@@ -106,59 +106,64 @@ export default {
     return {
       tabs: [
         {
-          localeName: 'locality',
+          routeName: 'locality',
           title: 'common.localities',
           class: 'locality-search-card',
         },
         {
-          localeName: 'site',
+          routeName: 'site',
           title: 'common.sites',
           class: 'site-search-card',
         },
         {
-          localeName: 'drillcore',
+          routeName: 'drillcore',
           title: 'common.drillcores',
           class: 'drillcore-search-card',
         },
         {
-          localeName: 'sample',
+          routeName: 'sample',
           title: 'common.samples',
           class: 'sample-search-card',
         },
         {
-          localeName: 'analytical-data',
+          routeName: 'analytical-data',
           title: 'common.analyticalData',
           class: 'analysis-search-card',
         },
         {
-          localeName: 'dataset',
+          routeName: 'dataset',
           title: 'common.datasets',
           class: 'dataset-search-card',
         },
         // {
-        //   localeName: 'taxon',
+        //   routeName: 'taxon',
         //   title: 'common.taxa',
         //   class: 'search-card',
         // },
         {
-          localeName: 'photo',
+          routeName: 'photo',
           title: 'common.photo',
           class: 'photo-search-card',
         },
         {
-          localeName: 'analysis',
+          routeName: 'analysis',
           title: 'common.analyses',
           class: 'analysis-search-card',
         },
         {
-          localeName: 'stratigraphy',
+          routeName: 'stratigraphy',
           title: 'common.stratigraphy',
           class: 'stratigraphy-search-card',
         },
         {
-          localeName: 'specimen',
+          routeName: 'specimen',
           title: 'common.specimen',
           class: 'specimen-search-card',
+        },
+        {
+          routeName: 'preparation',
+          title: 'preparation.pageTitle',
+          class: 'search-card',
         },
       ],
     }
