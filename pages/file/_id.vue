@@ -915,11 +915,16 @@ export default {
           return `${this.$t('file.referenceTitle')}: ${
             this.file?.reference?.reference
           }`
-        default:
-          return `${this.$t('file.fileTitle')}: ${this.$translate({
+        default: {
+          const description = this.$translate({
             et: this?.file?.description,
             en: this?.file?.description_en,
-          })}`
+          })
+
+          return `${this.$t('file.fileTitle')}: ${
+            description ?? this?.file?.id
+          }`
+        }
       }
     },
 
