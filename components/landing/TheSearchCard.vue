@@ -165,6 +165,11 @@ export default {
           text: 'preparation.pageTitle',
           class: 'preparation-search-card',
         },
+        {
+          routeName: 'area',
+          text: 'area.pageTitle',
+          class: 'area-search-card',
+        },
       ],
     }
   },

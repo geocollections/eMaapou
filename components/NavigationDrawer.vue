@@ -194,6 +194,7 @@ export default {
           icon: 'mdi-microscope',
         },
         { routeName: 'preparation', text: 'preparation.pageTitle' },
+        { routeName: 'area', text: 'area.pageTitle' },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },
