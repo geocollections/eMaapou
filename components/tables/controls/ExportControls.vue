@@ -5,7 +5,7 @@
         <template #activator="tooltip">
           <v-btn
             aria-label="export table"
-            class="d-block montserrat"
+            class="montserrat"
             v-bind="{ ...menu.attrs, ...tooltip.attrs }"
             icon
             v-on="{ ...menu.on, ...tooltip.on }"

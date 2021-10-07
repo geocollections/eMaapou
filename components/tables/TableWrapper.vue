@@ -51,9 +51,8 @@
           <v-row no-gutters>
             <v-col cols="12" sm="auto" class="px-3 my-3" align-self="center">
               <export-controls />
-            </v-col>
-            <v-col v-if="dynamicHeaders" align-self="center">
               <header-controls
+                v-if="dynamicHeaders"
                 :headers="headers"
                 :visible-headers="visibleHeaders"
                 :sort-by="options.sortBy"
