@@ -1,20 +1,10 @@
 <template>
-  <div
-    class="align-center fill-height"
-    :class="{
-      'd-flex mr-3': $vuetify.breakpoint.smAndUp,
-      'flex-column': $vuetify.breakpoint.xsOnly,
-    }"
-  >
-    <div
-      class="d-flex align-center"
-      :class="{
-        'justify-end mr-2': $vuetify.breakpoint.xsOnly,
-        'ml-auto mr-7': $vuetify.breakpoint.smAndUp,
-      }"
-      style="flex: 0 0 0"
-    >
-      <div class="mr-3 text-no-wrap text-caption">
+  <div class="align-center justify-space-around fill-height d-flex mr-sm-3">
+    <div class="d-flex align-center ml-sm-auto mr-sm-7" style="flex: 0 0 0">
+      <div
+        v-show="$vuetify.breakpoint.smAndUp"
+        class="mr-3 text-no-wrap text-caption"
+      >
         {{ itemsPerPageText }}
       </div>
       <v-select

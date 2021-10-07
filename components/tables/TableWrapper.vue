@@ -49,7 +49,12 @@
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="12" sm="auto" class="px-3 my-3" align-self="center">
+            <v-col
+              cols="12"
+              sm="auto"
+              class="px-3 my-1 my-sm-3"
+              align-self="center"
+            >
               <export-controls />
               <header-controls
                 v-if="dynamicHeaders"
