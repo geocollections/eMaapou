@@ -113,8 +113,37 @@
           active-class="active-tab font-weight-bold"
           :to="localePath({ name: tab.routeName })"
           class="montserrat font-weight-bold"
-          >{{ $t(tab.text) }}</v-tab
         >
+          {{ $t(tab.text) }}
+        </v-tab>
+        <v-menu tile transition="slide-y-transition" offset-y bottom>
+          <template #activator="{ on }">
+            <v-btn
+              tile
+              height="auto"
+              elevation="0"
+              color="transparent"
+              class="px-0"
+              v-on="on"
+            >
+              <v-icon color="primary">mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list class="py-0">
+            <v-list-item
+              v-for="(tab, index) in hiddenTabs"
+              :key="`hidden-tab-${index}`"
+              class="montserrat"
+              active-class="active-tab font-weight-bold"
+              nuxt
+              :to="localePath({ name: tab.routeName })"
+            >
+              <v-list-item-content>
+                {{ $t(tab.text) }}
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-tabs>
     </template>
   </v-app-bar>
@@ -136,7 +165,6 @@ export default {
       tabs: [
         {
           routeName: 'locality',
-
           text: 'locality.pageTitle',
         },
         {
@@ -157,6 +185,32 @@ export default {
         },
         { routeName: 'dataset', text: 'dataset.pageTitle' },
         { routeName: 'photo', text: 'photo.pageTitle' },
+      ],
+      hiddenTabs: [
+        {
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
+        },
+        {
+          routeName: 'preparation',
+          text: 'preparation.pageTitle',
+        },
+        {
+          routeName: 'area',
+          text: 'area.pageTitle',
+        },
+        {
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
+        },
+        {
+          routeName: 'taxon',
+          text: 'taxon.pageTitle',
+        },
+        {
+          routeName: 'stratigraphy',
+          text: 'stratigraphy.pageTitle',
+        },
       ],
       logo: '/logos/emaapou5white.svg',
     }
