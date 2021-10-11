@@ -1,9 +1,9 @@
 <template>
   <div v-if="history.length > 0" class="flex-row d-flex align-center">
-    <v-subheader class="pl-0 text-no-wrap">{{
+    <v-subheader class="pl-3 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
-    <span class="pb-1 history-viewer d-flex">
+    <span class="pb-1 pt-2 history-viewer d-flex">
       <span
         v-for="(item, index) in history"
         :key="index"
