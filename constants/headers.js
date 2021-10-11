@@ -796,7 +796,7 @@ export const HEADERS_PREPARATION = {
       text: 'preparation.id',
       value: 'id',
       show: true,
-      apiFieldValue: 'id',
+      apiFieldValue: 'id_l',
     },
     preparation_number: {
       text: 'preparation.preparation_number',
