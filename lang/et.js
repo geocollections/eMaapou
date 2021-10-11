@@ -91,6 +91,7 @@ export default {
     headers: 'Päised',
     filter: 'Filter',
     parameters: 'Parameetrid',
+    image: 'Pildid',
   },
   link: {
     sarvAPI: 'Avalik API',
