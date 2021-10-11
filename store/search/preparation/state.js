@@ -15,8 +15,7 @@ export const initState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'preparation.number',
-          // ??? Should sample_no be included also
-          fields: ['sample_number'],
+          fields: ['preparation_number'],
         },
         locality: {
           value: '',
@@ -24,6 +23,18 @@ export const initState = () => {
           lookUpType: 'contains',
           label: 'preparation.locality',
           fields: ['locality', 'locality_en'],
+        },
+        hierarchy: {
+          value: null,
+          type: 'object',
+          searchField: 'hierarchy_string',
+          lookUpType: 'startsWith',
+          label: 'preparation.hierarchy',
+          fields: [
+            'stratigraphy_hierarchy',
+            'lithostratigraphy_hierarchy',
+            'age_hierarchy',
+          ],
         },
         depth: {
           value: [null, null],
@@ -34,7 +45,7 @@ export const initState = () => {
           fields: ['depth'],
         },
       },
-      allIds: ['number', 'locality', 'depth'],
+      allIds: ['number', 'locality', 'depth', 'hierarchy'],
     },
   }
 }

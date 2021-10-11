@@ -483,6 +483,7 @@ export default {
     taxa: 'Taxa ({number})',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    hierarchy: 'Startigraphy',
   },
   taxon: {
     id: 'ID',

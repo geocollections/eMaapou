@@ -483,6 +483,7 @@ export default {
     taxa: 'Taksonid ({number})',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    hierarchy: 'Stratigraafia',
   },
   taxon: {
     id: 'ID',
