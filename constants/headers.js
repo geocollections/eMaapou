@@ -1283,7 +1283,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY = {
     'name',
     'name_en',
     'agent',
-    'date_identified',
+    'dateIdentified',
     'reference',
     'type',
     'remarks',
