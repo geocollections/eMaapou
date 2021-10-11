@@ -16,8 +16,10 @@
     </v-card-title>
     <v-expand-transition>
       <slot name="body" :showBody="showBody">
-        <div v-show="showBody" class="px-3 pb-3 pt-1">
-          <slot></slot>
+        <div v-show="showBody">
+          <div class="px-3 pb-3 pt-1">
+            <slot></slot>
+          </div>
         </div>
       </slot>
     </v-expand-transition>

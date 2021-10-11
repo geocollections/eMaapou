@@ -9,17 +9,14 @@
 
 <script>
 import { debounce, isNil } from 'lodash'
-import { STRATIGRAPHY_REFERENCE } from '~/constants'
+import {
+  HEADERS_STRATIGRAPHY_REFERENCE,
+  STRATIGRAPHY_REFERENCE,
+} from '~/constants'
 import StratigraphyReferenceTable from '~/components/tables/StratigraphyReferenceTable'
 
 export default {
   components: { StratigraphyReferenceTable },
-  props: {
-    stratigraphy: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       options: STRATIGRAPHY_REFERENCE.options,
@@ -42,12 +39,12 @@ export default {
         'stratigraphy_reference',
         {
           ...tableState,
-          isValid: isNil(this.stratigraphy),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            stratigraphy: this.stratigraphy,
+            stratigraphy: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(STRATIGRAPHY_REFERENCE.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY_REFERENCE),
         }
       )
 

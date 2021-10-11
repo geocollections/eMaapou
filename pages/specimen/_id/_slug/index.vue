@@ -10,15 +10,9 @@
 <script>
 import { isNil } from 'lodash'
 import SpecimenIdentificationTable from '~/components/tables/SpecimenIdentificationTable.vue'
-import { SPECIMEN_IDENTIFICATION } from '~/constants'
+import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   components: { SpecimenIdentificationTable },
-  props: {
-    specimen: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       identifications: [],
@@ -39,14 +33,12 @@ export default {
           'specimen_identification',
           {
             ...tableState,
-            isValid: isNil(this.specimen),
+            isValid: isNil(this.$route.params.id),
             defaultParams: {
-              specimen: this.specimen,
+              specimen: this.$route.params.id,
               nest: 1,
             },
-            queryFields: this.$getQueryFields(
-              SPECIMEN_IDENTIFICATION.queryFields
-            ),
+            fields: this.$getAPIFieldValues(HEADERS_SPECIMEN_IDENTIFICATION),
           }
         )
       this.identifications = identificationResponse.items

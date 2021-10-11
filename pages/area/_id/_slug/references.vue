@@ -10,15 +10,9 @@
 <script>
 import { isNil } from 'lodash'
 import LocalityReferenceTable from '~/components/tables/LocalityReferenceTable.vue'
-import { LOCALITY_REFERENCE } from '~/constants'
+import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from '~/constants'
 export default {
   components: { LocalityReferenceTable },
-  props: {
-    area: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       references: [],
@@ -33,11 +27,11 @@ export default {
         'locality_reference',
         {
           ...tableState,
-          isValid: isNil(this.area),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            area: this.area,
+            area: this.$route.params.id,
           },
-          queryFields: this.$getQueryFields(LOCALITY_REFERENCE.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_LOCALITY_REFERENCE),
         }
       )
       this.references = referenceResponse.items

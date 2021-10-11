@@ -4,13 +4,14 @@
     :items="items"
     :count="count"
     :options="options"
+    dynamic-headers
     @update="handleUpdate"
   />
 </template>
 
 <script>
 import { debounce } from 'lodash'
-import { TAXON } from '~/constants'
+import { HEADERS_TAXON, TAXON } from '~/constants'
 import TaxonTable from '~/components/tables/TaxonTable'
 
 export default {
@@ -44,7 +45,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(TAXON.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_TAXON),
           searchFilters: {},
         }
       )

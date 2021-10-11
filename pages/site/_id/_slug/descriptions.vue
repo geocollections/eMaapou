@@ -9,17 +9,11 @@
 
 <script>
 import { round, isNil, isEmpty } from 'lodash'
-import { DESCRIPTION } from '~/constants'
+import { DESCRIPTION, HEADERS_DESCRIPTION } from '~/constants'
 import DescriptionTable from '~/components/tables/DescriptionTable.vue'
 
 export default {
   components: { DescriptionTable },
-  props: {
-    site: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       descriptions: [],
@@ -35,12 +29,12 @@ export default {
         'locality_description',
         {
           ...tableState,
-          isValid: isNil(this.site),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            site: this.site,
+            site: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(DESCRIPTION.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_DESCRIPTION),
         }
       )
       this.descriptions = descriptionResponse.items.map((item) => {

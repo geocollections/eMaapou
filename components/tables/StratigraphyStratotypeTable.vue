@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch, onlyTable }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.locality="{ item }">
       <nuxt-link
@@ -45,21 +47,16 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_STRATIGRAPHY_STRATOTYPE } from '~/constants'
 export default {
   name: 'StratigraphyStratotypeTable',
   components: { TableWrapper, ExternalLink },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
-    onlyTable: {
-      type: Boolean,
-      default: false,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -80,14 +77,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('stratotype.locality'), value: 'locality' },
-        { text: this.$t('stratotype.type'), value: 'type' },
-        { text: this.$t('stratotype.depthTop'), value: 'depth_top' },
-        { text: this.$t('stratotype.depthBase'), value: 'depth_base' },
-        { text: this.$t('stratotype.reference'), value: 'reference' },
-        { text: this.$t('stratotype.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_STRATIGRAPHY_STRATOTYPE),
     }
   },
   methods: {

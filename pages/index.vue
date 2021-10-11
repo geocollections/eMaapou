@@ -193,7 +193,6 @@
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import TitleCard from '~/components/TitleCard.vue'
@@ -407,7 +406,6 @@ export default {
     }
   },
   computed: {
-    ...mapFields('search', ['searchQuery']),
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path

@@ -11,15 +11,9 @@
 import { isNil } from 'lodash'
 import AttachmentTable from '@/components/tables/AttachmentTable'
 
-import { ATTACHMENT_LINK } from '~/constants'
+import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
   components: { AttachmentTable },
-  props: {
-    analysis: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       attachments: [],
@@ -39,12 +33,12 @@ export default {
         'attachment_link',
         {
           ...tableState,
-          isValid: isNil(this.analysis),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
             analysis: this.$route.params.id,
             nest: 2,
           },
-          queryFields: this.$getQueryFields(ATTACHMENT_LINK.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
         }
       )
       this.attachments = attachmentResponse.items

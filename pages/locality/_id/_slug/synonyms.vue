@@ -10,15 +10,9 @@
 <script>
 import { isNil } from 'lodash'
 import SynonymTable from '~/components/tables/SynonymTable.vue'
-import { SYNONYM } from '~/constants'
+import { HEADERS_SYNONYM, SYNONYM } from '~/constants'
 export default {
   components: { SynonymTable },
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       synonyms: [],
@@ -33,12 +27,12 @@ export default {
         'locality_synonym',
         {
           ...tableState,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            locality: this.locality,
+            locality: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(SYNONYM.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_SYNONYM),
         }
       )
       this.synonyms = synonymResponse.items

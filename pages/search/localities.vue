@@ -11,7 +11,7 @@
 <script>
 import { debounce } from 'lodash'
 import LocalityTable from '~/components/tables/LocalityTable.vue'
-import { LOCALITY } from '~/constants'
+import { HEADERS_LOCALITY, LOCALITY } from '~/constants'
 
 export default {
   components: { LocalityTable },
@@ -47,7 +47,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(LOCALITY.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_LOCALITY),
           searchFilters: {},
         }
       )

@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
@@ -19,17 +21,16 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SYNONYM } from '~/constants'
 export default {
   name: 'SynonymTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -50,15 +51,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('localitySynonym.synonym'), value: 'synonym' },
-        { text: this.$t('localitySynonym.pages'), value: 'pages' },
-        {
-          text: this.$t('localitySynonym.reference'),
-          value: 'reference',
-        },
-        { text: this.$t('localitySynonym.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SYNONYM),
     }
   },
   methods: {

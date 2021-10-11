@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('locality')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
@@ -29,8 +30,6 @@
       :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -43,18 +42,18 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'LocalitySearchForm',
   components: {
-    ExtraOptions,
     TextField,
     AutocompleteField,
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
 
@@ -77,6 +76,7 @@ export default {
       country: 'filters.byIds.country.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
       reference: 'filters.byIds.reference.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',

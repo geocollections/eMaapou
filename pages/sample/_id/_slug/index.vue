@@ -12,15 +12,9 @@
 <script>
 import { isNil } from 'lodash'
 import AnalysisTable from '@/components/tables/AnalysisTable'
-import { ANALYSIS } from '~/constants'
+import { HEADERS_ANALYSIS } from '~/constants'
 export default {
   components: { AnalysisTable },
-  props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       analyses: [],
@@ -40,11 +34,11 @@ export default {
         'analysis',
         {
           ...tableState,
-          isValid: isNil(this.sample),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `sample_id:${this.sample}`,
+            fq: `sample_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(ANALYSIS.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
         }
       )
       this.analyses = analysisResponse.items

@@ -15,7 +15,7 @@
       calculate-widths
       multi-sort
       :loading="isLoading"
-      :headers="headers"
+      :headers="visibleHeaders"
       :items="items"
       :options="options"
       :server-items-length="count"
@@ -49,36 +49,21 @@
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="12" sm="auto" class="px-3 my-3" align-self="center">
-              <v-btn
-                id="export-btn"
-                color="primary"
-                aria-label="export table"
-                class="d-block montserrat"
-              >
-                {{ $t('common.export') }}
-                <v-menu
-                  activator="#export-btn"
-                  transition="slide-y-transition"
-                  offset-y
-                  bottom
-                  right
-                >
-                  <v-list>
-                    <v-list-item @click="handleExportCsv()">
-                      <v-list-item-title>CSV</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="handleExportExcel()">
-                      <v-list-item-title>XLSX (Excel)</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="handleClipboard()">
-                      <v-list-item-title>
-                        {{ $t('common.clipboard') }}
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-btn>
+            <v-col
+              cols="12"
+              sm="auto"
+              class="px-3 my-1 my-sm-3"
+              align-self="center"
+            >
+              <export-controls />
+              <header-controls
+                v-if="dynamicHeaders"
+                :headers="headers"
+                :visible-headers="visibleHeaders"
+                :sort-by="options.sortBy"
+                @change="handleHeadersChange"
+                @reset="$emit('reset:headers')"
+              />
             </v-col>
             <v-col>
               <pagination-controls
@@ -153,12 +138,12 @@
 
 <script>
 import { debounce } from 'lodash'
-import exportMixin from '~/mixins/exportMixin'
-import PaginationControls from '~/components/PaginationControls.vue'
+import HeaderControls from './controls/HeaderControls.vue'
+import ExportControls from './controls/ExportControls.vue'
+import PaginationControls from '~/components/tables/controls/PaginationControls.vue'
 export default {
   name: 'TableWrapper',
-  components: { PaginationControls },
-  mixins: [exportMixin],
+  components: { PaginationControls, HeaderControls, ExportControls },
   props: {
     onlyTable: {
       type: Boolean,
@@ -192,6 +177,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    dynamicHeaders: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -204,6 +193,11 @@ export default {
       expanded: [],
       isLoading: false,
     }
+  },
+  computed: {
+    visibleHeaders() {
+      return this.headers.filter((header) => header.show)
+    },
   },
   watch: {
     items() {
@@ -222,6 +216,9 @@ export default {
         search: this.search,
       })
     }, 500),
+    handleHeadersChange(e) {
+      this.$emit('change:headers', e.value)
+    },
     handleRowClick(item, slot) {
       // HACK: This is added to handle propagation,
       // as this function does not have a event argument (https://vuetifyjs.com/en/api/v-data-table/#api-events)

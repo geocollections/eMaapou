@@ -1,43 +1,24 @@
 <template>
   <v-text-field
-    v-model="searchQuery"
+    :value="value"
     color="accent"
-    :placeholder="$t('common.searchAlt')"
+    light
+    :placeholder="placeholder"
     single-line
     hide-details
     solo
-    height="48px"
     clearable
-    autofocus
-    @input="$emit('input')"
+    :autofocus="autofocus"
+    v-bind="{ ...$props, ...$attrs }"
+    @input="$emit('input', $event)"
+    @keyup.enter="$emit('enter', $event)"
   >
-    <!-- <template v-if="showButton" #append>
-      <v-btn type="submit" color="accent darken-1" dark elevation="0">
-        <v-icon>mdi-magnify</v-icon>
-        <div v-if="!iconButton" class="pl-2 montserrat">
-          {{ $t('common.searchCommand') }}
-        </div>
-      </v-btn>
-    </template> -->
-    <!-- <template #message>
-      <div class="montserrat" :class="{ 'white--text': dark }">
-        {{ $t('common.searchAlt') }}
-      </div>
-    </template> -->
   </v-text-field>
-  <!-- <v-btn class="mx-3" type="submit" color="accent darken-1" dark>
-      <v-icon>mdi-magnify</v-icon>
-      <div v-if="!iconButton" class="pl-2 montserrat">
-        {{ $t('common.searchCommand') }}
-      </div>
-    </v-btn> -->
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields'
-
 export default {
-  name: 'GlobalSearch',
+  name: 'QuerySearchField',
   props: {
     showButton: {
       type: Boolean,
@@ -51,9 +32,20 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  computed: {
-    ...mapFields('search', ['searchQuery']),
+    value: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default() {
+        return this.$t('common.searchAlt')
+      },
+    },
+    autofocus: {
+      type: Boolean,
+      default: true,
+    },
   },
 }
 </script>

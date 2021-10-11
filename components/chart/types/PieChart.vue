@@ -1,16 +1,12 @@
 <template>
   <div class="pa-2">
-    <chart-wrapper
-      v-if="!isLoading"
-      :options="chartOptions"
-      :use-deep-merge="false"
-    />
+    <chart-wrapper v-if="!isLoading" :options="chartOptions" />
   </div>
 </template>
 
 <script>
-import ChartWrapper from '@/components/chart/ChartWrapper'
 import { isNil } from 'lodash'
+import ChartWrapper from '~/components/chart/ChartWrapper'
 export default {
   components: { ChartWrapper },
   props: {
@@ -20,8 +16,8 @@ export default {
       default: 'locality_id',
     },
     tableId: {
-      type: Number,
-      default: null,
+      type: String,
+      default: '',
     },
     tableObject: {
       type: Object,
@@ -90,15 +86,6 @@ export default {
       )
 
       return { resultsResponse }
-    },
-
-    buildChartTitle() {
-      return {
-        text: this.$translate({
-          et: this?.localityObject?.locality,
-          en: this?.localityObject?.locality_en,
-        }),
-      }
     },
 
     buildChartSeries() {

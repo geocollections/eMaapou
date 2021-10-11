@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('image')">
       <text-field
@@ -45,8 +46,6 @@
       :institution="institution"
       @change:institution="institution = $event"
     />
-
-    <extra-options class="mt-2" />
   </v-form>
 </template>
 
@@ -60,19 +59,19 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
 import RangeTextField from '~/components/fields/RangeTextField'
-import ExtraOptions from '~/components/search/ExtraOptions'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'PhotoSearchForm',
   components: {
-    ExtraOptions,
     RangeTextField,
     InstitutionSearchFilter,
     TextField,
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
+    QuerySearchField,
   },
   props: {
     markers: {
@@ -93,6 +92,7 @@ export default {
       imageNumber: 'filters.byIds.imageNumber.value',
       author: 'filters.byIds.author.value',
       imageSize: 'filters.byIds.imageSize.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

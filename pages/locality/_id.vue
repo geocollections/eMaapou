@@ -252,7 +252,10 @@
 
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -262,7 +265,6 @@
 <script>
 import { isNil, isEmpty } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
-import slugify from 'slugify'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import DataRow from '~/components/DataRow.vue'
@@ -270,6 +272,7 @@ import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
+import { TABS_LOCALITY } from '~/constants'
 
 export default {
   components: {
@@ -281,9 +284,9 @@ export default {
     Detail,
     ImageBar,
   },
-  async asyncData({ params, route, app, error, redirect }) {
+  async asyncData({ params, route, error, $services }) {
     try {
-      const localityResponse = await app.$services.sarvREST.getResource(
+      const localityResponse = await $services.sarvREST.getResource(
         'locality',
         params.id,
         {
@@ -295,7 +298,7 @@ export default {
       const ids = localityResponse?.ids
       const locality = localityResponse
 
-      const drillcoreResponse = await app.$services.sarvREST.getResourceList(
+      const drillcoreResponse = await $services.sarvREST.getResourceList(
         'drillcore',
         {
           defaultParams: {
@@ -308,159 +311,10 @@ export default {
         ? drillcoreResponse.items[0]
         : null
 
-      // const attachmentOutcropResponse = await app.$services.sarvSolr.getResourceList(
-      //   'attachment',
-      //   {
-      //     defaultParams: {
-      //       fq: `locality_id:${locality.id} AND locality_type:[3 TO 5] AND specimen_image_attachment:2`,
-      //       sort: 'date_created desc,date_created_free desc,stars desc,id desc',
-      //     },
-      //   }
-      // )
-      //
-      // const attachmentsOutcrop = attachmentOutcropResponse.items ?? []
-
-      const attachmentResponse = await app.$services.sarvSolr.getResourceList(
-        'attachment',
-        {
-          defaultParams: {
-            fq: `locality_id:${locality.id} AND specimen_image_attachment:2`,
-            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-          },
-        }
-      )
-
-      const attachments = attachmentResponse.items ?? []
-
-      const tabs = [
-        {
-          id: 'locality_reference',
-          routeName: 'locality-id-slug',
-          title: 'locality.references',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_description',
-          routeName: 'locality-id-slug-descriptions',
-          title: 'locality.descriptions',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'locality-id-slug-attachments',
-          title: 'locality.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          routeName: 'locality-id-slug-samples',
-          title: 'locality.samples',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          routeName: 'locality-id-slug-specimens',
-          title: 'locality.specimens',
-          isSolr: true,
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_synonym',
-          routeName: 'locality-id-slug-synonyms',
-          title: 'locality.synonyms',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'stratigraphy_stratotype',
-          routeName: 'locality-id-slug-stratotypes',
-          title: 'locality.stratotypes',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'locality-id-slug-analyses',
-          title: 'locality.analyses',
-          count: 0,
-          props: {},
-        },
-        {
-          table: 'analysis_results',
-          id: 'graphs',
-          isSolr: true,
-          routeName: 'locality-id-slug-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: { localityObject: locality },
-        },
-      ]
-
-      if (drillcore) {
-        tabs.splice(3, 0, {
-          routeName: 'locality-id-drillcore-boxes',
-          title: 'locality.drillcoreBoxes',
-          count: drillcore.boxes,
-          props: { drillcore: drillcore.id },
-        })
-        tabs.join()
-      }
-
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: {
-                  default: {
-                    fq: `locality_id:${params.id}`,
-                  },
-                },
-                api: { default: { locality: locality.id } },
-              })
-          )
-        )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          locality: locality.id,
-        })
-      )
-
-      const slug = slugify(
-        app.$translate({ et: locality.locality, en: locality.locality_en }),
-        { lower: true }
-      )
-
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
-
       return {
         locality,
         ids,
-        tabs: hydratedTabs,
         drillcore,
-        initActiveTab: validPath,
-        // attachmentsOutcrop,
-        attachments,
       }
     } catch (err) {
       error({
@@ -469,6 +323,106 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      attachments: [],
+    }
+  },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvSolr.getResourceList(
+      'attachment',
+      {
+        defaultParams: {
+          fq: `locality_id:${this.locality?.id} AND specimen_image_attachment:2`,
+          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+        },
+      }
+    )
+
+    this.attachments = attachmentResponse?.items ?? []
+
+    // Checking if locality has a related .las file to show in graph tab
+    const lasFileResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        defaultParams: {
+          attachment__uuid_filename__iendswith: '.las',
+          locality: this.locality?.id,
+          fields: 'attachment',
+        },
+      }
+    )
+
+    const tabsObject = TABS_LOCALITY
+
+    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
+    tabsObject.byIds.boxes.props.drillcore = this.drillcore
+      ? this.drillcore.id
+      : null
+
+    tabsObject.byIds.analysis_results.props = {
+      localityObject: this.locality,
+      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+    }
+
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+    let hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            props: {
+              locality: this.locality.id,
+            },
+            countParams: {
+              solr: {
+                default: {
+                  fq:
+                    tab.id === 'graphs'
+                      ? `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
+                      : `locality_id:${this.$route.params.id}`,
+                },
+              },
+              api: { default: { locality: this.locality.id } },
+            },
+          })
+      )
+    )
+    // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
+    hydratedTabs = hydratedTabs.map((item) => {
+      if (item.id === 'graphs') {
+        const count = lasFileResponse?.items?.[0]?.attachment
+          ? item.count + 1
+          : item.count
+        return {
+          ...item,
+          count,
+          props: {
+            ...item.props,
+            analysisResultsCount: item.count,
+          },
+        }
+      } else return item
+    })
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      })
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.$translate({
@@ -492,7 +446,11 @@ export default {
       analyticalDataLocality: 'filters.byIds.locality.value',
     }),
     filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
+      return this.tabs.filter((item) => {
+        if (item.id === 'graphs') {
+          return item.props.attachment || item.props.analysisResultsCount > 0
+        } else return item.count > 0
+      })
     },
 
     images() {

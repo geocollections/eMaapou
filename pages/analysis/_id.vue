@@ -173,7 +173,10 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -182,20 +185,20 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import slugify from 'slugify'
 
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/components/templates/Detail.vue'
+import { TABS_ANALYSIS } from '~/constants'
 
 export default {
   components: { TitleCardDetail, DataRow, LinkDataRow, Tabs, Detail },
 
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({ params, route, error, $services }) {
     try {
-      const analysisResponse = await app.$services.sarvREST.getResource(
+      const analysisResponse = await $services.sarvREST.getResource(
         'analysis',
         params.id,
         {
@@ -207,96 +210,9 @@ export default {
       const ids = analysisResponse?.ids
       const analysis = analysisResponse
 
-      const tabs = [
-        {
-          id: 'analysis_results',
-          isSolr: true,
-          routeName: 'analysis-id-slug',
-          title: 'analysis.results',
-          count: 0,
-          props: { analysis: analysis.id },
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'analysis-id-slug-attachments',
-          title: 'analysis.attachments',
-          count: 0,
-          props: { analysis: analysis.id },
-        },
-      ]
-
-      const solrParams = { fq: `analysis_id:${analysis.id}` }
-      const apiParams = { analysis: analysis.id }
-
-      const forLoop = async () => {
-        const filteredTabs = tabs.filter((item) => !!item.id)
-        for (const item of filteredTabs) {
-          let countResponse
-          if (item?.isSolr)
-            countResponse = await app.$services.sarvSolr.getResourceCount(
-              item.id,
-              solrParams
-            )
-          else
-            countResponse = await app.$services.sarvREST.getResourceCount(
-              item.id,
-              apiParams
-            )
-          item.count = countResponse?.count ?? 0
-          item.props = {
-            analysis: analysis.id,
-          }
-        }
-      }
-      await forLoop()
-
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: {
-                  default: { fq: `analysis_id:${analysis.id}` },
-                },
-                api: {
-                  default: { analysis: analysis.id },
-                },
-              })
-          )
-        )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          analysis: analysis.id,
-        })
-      )
-
-      const slug = slugify(
-        `${app.$translate({
-          et: analysis?.analysis_method.analysis_method,
-          en: analysis?.analysis_method.method_en,
-        })}-${analysis?.sample.number}`,
-        { lower: true }
-      )
-
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
       return {
         analysis,
         ids,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -305,6 +221,46 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+    }
+  },
+  async fetch() {
+    const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `analysis_id:${this.analysis.id}` },
+              },
+              api: {
+                default: { analysis: this.analysis.id },
+              },
+            },
+          })
+      )
+    )
+
+    const text = `${this.$translate({
+      et: this.analysis?.analysis_method.analysis_method,
+      en: this.analysis?.analysis_method.method_en,
+    })}-${this.analysis?.sample.number}`
+
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,

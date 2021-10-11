@@ -9,17 +9,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import { TAXON_LIST } from '~/constants'
+import { HEADERS_TAXON_LIST, TAXON_LIST } from '~/constants'
 import TaxonListTable from '~/components/tables/TaxonListTable'
 
 export default {
   components: { TaxonListTable },
-  props: {
-    preparation: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       taxa: [],
@@ -34,11 +28,11 @@ export default {
         'taxon_list',
         {
           ...tableState,
-          isValid: isNil(this.preparation),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            preparation: this.preparation,
+            preparation: this.$route.params.id,
           },
-          queryFields: this.$getQueryFields(TAXON_LIST.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_TAXON_LIST),
         }
       )
       this.taxa = taxonResponse.items

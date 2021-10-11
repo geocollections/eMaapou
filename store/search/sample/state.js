@@ -7,6 +7,7 @@ export const initState = () => {
     options: SAMPLE.options,
     useMap: true,
     useInstitutions: true,
+    query: '',
     filters: {
       byIds: {
         number: {

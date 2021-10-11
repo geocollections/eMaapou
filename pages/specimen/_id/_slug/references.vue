@@ -10,15 +10,9 @@
 <script>
 import { isNil } from 'lodash'
 import SpecimenReferenceTable from '~/components/tables/SpecimenReferenceTable.vue'
-import { SPECIMEN_REFERENCE } from '~/constants'
+import { HEADERS_SPECIMEN_REFERENCE, SPECIMEN_REFERENCE } from '~/constants'
 export default {
   components: { SpecimenReferenceTable },
-  props: {
-    specimen: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       references: [],
@@ -33,12 +27,12 @@ export default {
         'specimen_reference',
         {
           ...tableState,
-          isValid: isNil(this.specimen),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            specimen: this.specimen,
+            specimen: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(SPECIMEN_REFERENCE.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_SPECIMEN_REFERENCE),
         }
       )
       this.references = referenceResponse.items

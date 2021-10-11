@@ -11,15 +11,11 @@
 <script>
 import { isNil } from 'lodash'
 import DatasetAnalysisTable from '@/components/tables/DatasetAnalysisTable'
-import { DATASET_ANALYSIS } from '~/constants'
+import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
 
 export default {
   components: { DatasetAnalysisTable },
   props: {
-    dataset: {
-      type: Number,
-      default: null,
-    },
     parameters: {
       type: Array,
       default: () => [],
@@ -33,14 +29,14 @@ export default {
     }
   },
   computed: {
-    mergedQueryFields() {
-      const parameterQueryFields = this.parameters.reduce(
+    mergedFields() {
+      const parameterFields = this.parameters.reduce(
         (obj, item) => ({ ...obj, [item.value]: item.value }),
         {}
       )
       return {
-        ...this.$getQueryFields(DATASET_ANALYSIS.queryFields),
-        ...parameterQueryFields,
+        ...this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
+        ...parameterFields,
       }
     },
   },
@@ -51,11 +47,11 @@ export default {
         'analytical_data',
         {
           ...tableState,
-          isValid: isNil(this.dataset),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `dataset_id:${this.dataset}`,
+            fq: `dataset_id:${this.$route.params.id}`,
           },
-          queryFields: this.mergedQueryFields,
+          fields: this.mergedFields,
         }
       )
       this.analyses = analysisResponse.items

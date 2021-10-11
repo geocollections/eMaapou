@@ -1,17 +1,17 @@
 <template>
-  <pie-chart table-key="sample" :table-id="sample" :chart-title="chartTitle" />
+  <pie-chart
+    table-key="sample"
+    :table-id="$route.params.id.toString()"
+    :chart-title="chartTitle"
+  />
 </template>
 
 <script>
-import PieChart from '@/components/chart/PieChart'
+import PieChart from '~/components/chart/types/PieChart'
 
 export default {
   components: { PieChart },
   props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
     sampleObject: {
       type: Object,
       default: () => {},

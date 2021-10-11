@@ -62,16 +62,16 @@
             </v-card-title>
             <div class="mx-3 mx-sm-5 mt-2 d-flex flex-wrap">
               <div
-                v-for="(item, index) in tabs"
+                v-for="(route, index) in searchRoutes"
                 :key="`tab-mobile-${index}`"
                 class="px-1 pb-2 white--text"
               >
                 <search-card
                   class="text--h6"
                   height="50px"
-                  :title="$t(item.title)"
-                  :card-class="item.class"
-                  :to="localePath({ name: item.localeName })"
+                  :title="$t(route.text)"
+                  :card-class="route.class"
+                  :to="localePath({ name: route.routeName })"
                 ></search-card>
               </div>
             </div>
@@ -104,61 +104,71 @@ export default {
   },
   data() {
     return {
-      tabs: [
+      searchRoutes: [
         {
-          localeName: 'locality',
-          title: 'common.localities',
+          routeName: 'locality',
+          text: 'locality.pageTitle',
           class: 'locality-search-card',
         },
         {
-          localeName: 'site',
-          title: 'common.sites',
+          routeName: 'site',
+          text: 'site.pageTitle',
           class: 'site-search-card',
         },
         {
-          localeName: 'drillcore',
-          title: 'common.drillcores',
+          routeName: 'drillcore',
+          text: 'drillcore.pageTitle',
           class: 'drillcore-search-card',
         },
         {
-          localeName: 'sample',
-          title: 'common.samples',
+          routeName: 'sample',
+          text: 'sample.pageTitle',
           class: 'sample-search-card',
         },
         {
-          localeName: 'analytical-data',
-          title: 'common.analyticalData',
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
           class: 'analysis-search-card',
         },
         {
-          localeName: 'dataset',
-          title: 'common.datasets',
+          routeName: 'dataset',
+          text: 'dataset.pageTitle',
           class: 'dataset-search-card',
         },
-        // {
-        //   localeName: 'taxon',
-        //   title: 'common.taxa',
-        //   class: 'search-card',
-        // },
         {
-          localeName: 'photo',
-          title: 'common.photo',
+          routeName: 'taxon',
+          text: 'taxon.pageTitle',
+          class: 'search-card',
+        },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
           class: 'photo-search-card',
         },
         {
-          localeName: 'analysis',
-          title: 'common.analyses',
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
           class: 'analysis-search-card',
         },
         {
-          localeName: 'stratigraphy',
-          title: 'common.stratigraphy',
+          routeName: 'stratigraphy',
+          text: 'stratigraphy.pageTitle',
           class: 'stratigraphy-search-card',
         },
         {
-          localeName: 'specimen',
-          title: 'common.specimen',
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
           class: 'specimen-search-card',
+        },
+        {
+          routeName: 'preparation',
+          text: 'preparation.pageTitle',
+          class: 'preparation-search-card',
+        },
+        {
+          routeName: 'area',
+          text: 'area.pageTitle',
+          class: 'area-search-card',
         },
       ],
     }

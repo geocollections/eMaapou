@@ -9,17 +9,45 @@
       @update:selectedItems="selectedParameters = $event"
     />
 
-    <chart-wrapper v-if="!isLoading" :options="chartOptions" />
+    <div class="mb-2 d-flex flex-row flex-wrap">
+      <renderer-switch
+        class="mr-4"
+        :renderer="renderer"
+        @update="renderer = $event"
+      />
+
+      <connection-switch
+        v-if="parameters.length > 1"
+        :input-value="connected"
+        @change="connected = $event"
+      />
+    </div>
+
+    <div v-if="!isLoading" class="charts d-flex flex-row">
+      <multi-chart-wrapper
+        v-for="(item, index) in selectedParameters"
+        :key="index"
+        :options="optionsUsingParameter(item)"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import { isNil } from 'lodash'
-import ChartWrapper from '~/components/chart/ChartWrapper'
-import ExternalLegendOptions from '~/components/chart/ExternalLegendOptions'
+import { mapFields } from 'vuex-map-fields'
+import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
+import MultiChartWrapper from '~/components/chart/MultiChartWrapper'
+import RendererSwitch from '~/components/chart/options/RendererSwitch'
+import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
 
 export default {
-  components: { ExternalLegendOptions, ChartWrapper },
+  components: {
+    ConnectionSwitch,
+    RendererSwitch,
+    MultiChartWrapper,
+    ExternalLegendOptions,
+  },
   props: {
     tableKey: {
       type: String,
@@ -27,12 +55,8 @@ export default {
       default: 'locality_id',
     },
     tableId: {
-      type: Number,
-      default: null,
-    },
-    tableObject: {
-      type: Object,
-      default: () => {},
+      type: String,
+      default: '',
     },
     chartTitle: {
       type: String,
@@ -60,8 +84,6 @@ export default {
       this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
       this.parameters =
         statsResponse?.stats?.stats_fields?.parameter?.distinctValues
-      this.resultValues =
-        statsResponse?.stats?.stats_fields?.value?.distinctValues
 
       const methodKey =
         this.$i18n.locale === 'en' ? 'analysis_method_en' : 'analysis_method'
@@ -87,54 +109,13 @@ export default {
     this.isLoading = false
   },
   computed: {
-    chartOptions() {
-      if (
-        this?.analysisResults?.length > 0 &&
-        (this?.depth?.length > 0 || this?.resultValues?.length > 0) &&
-        this?.parameters?.length > 0
-      ) {
-        return {
-          animation: false,
-
-          title: {
-            text: this.chartTitle,
-          },
-
-          legend: this.buildChartLegend(),
-
-          xAxis: {
-            type: 'value',
-            boundaryGap: false,
-            name: this?.depth?.length > 0 ? 'Depth' : 'Result values',
-            nameLocation: 'center',
-            nameTextStyle: {
-              fontWeight: 'bold',
-              fontSize: 16,
-            },
-            nameGap: 25,
-            splitNumber: 7,
-            min(value) {
-              return (value.min - 0.1).toFixed(2) * 1
-            },
-            max(value) {
-              return (value.max + 0.1).toFixed(2) * 1
-            },
-            data: this?.depth?.length > 0 ? this.depth : this.resultValues,
-          },
-
-          yAxis: this.buildYAxis(),
-
-          series: this.buildChartSeries(),
-        }
-      } else return {}
-    },
+    ...mapFields('chart', ['renderer', 'connected']),
   },
   methods: {
     async fetchChartData() {
       const resultsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId}`,
@@ -149,7 +130,6 @@ export default {
       const statsResponse = await this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          useRawSolr: true,
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId}`,
@@ -162,7 +142,6 @@ export default {
               'parameter',
               'analysis_method',
               'analysis_method_en',
-              'value',
             ],
             'stats.calcdistinct': true,
           },
@@ -170,15 +149,6 @@ export default {
       )
 
       return { resultsResponse, statsResponse }
-    },
-
-    buildChartTitle() {
-      return {
-        text: this.$translate({
-          et: this?.localityObject?.locality,
-          en: this?.localityObject?.locality_en,
-        }),
-      }
     },
 
     buildChartLegend() {
@@ -191,63 +161,99 @@ export default {
       }
     },
 
-    buildChartSeries() {
-      return this.parameters.map((item) => {
-        return {
-          name: item,
-          type: 'line',
-          yAxisIndex: item.includes('ppm') ? 1 : 0,
-          data: this.analysisResults
-            .filter((result) => result.parameter === item)
-            .map((t) => [t.depth ?? t.value, t.value]),
-          // symbolSize: 8,
-          emphasis: {
-            focus: 'series',
-          },
-        }
-      })
+    buildXAxis(param) {
+      return {
+        show: true,
+        position: 'bottom',
+        type: 'value',
+        name: param.substring(param.indexOf('[') + 1, param.indexOf(']')),
+        nameLocation: 'center',
+        nameTextStyle: {
+          fontWeight: 'bold',
+          padding: [7, 0, 0, 0],
+        },
+        min(value) {
+          return (value.min - 0.1).toFixed(2) * 1
+        },
+        max(value) {
+          return (value.max + 0.1).toFixed(2) * 1
+        },
+        splitNumber: 2,
+        axisLine: {
+          show: true,
+          symbol: ['none', 'arrow'],
+          symbolSize: [5, 5],
+        },
+      }
     },
 
     buildYAxis() {
-      const yAxis = [
-        {
-          type: 'value',
-          name: 'Value',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 55,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
+      const MIN = Math.min(...this.depth)
+      const MAX = Math.max(...this.depth)
+
+      return {
+        type: 'value',
+        boundaryGap: false,
+        name: 'Depth',
+        nameLocation: 'end',
+        nameTextStyle: {
+          fontWeight: 'bold',
         },
+        nameGap: 10,
+        splitNumber: 7,
+        axisTick: {
+          alignWithLabel: true,
+        },
+        // min(value) {
+        //   return (value.min - 0.1).toFixed(2) * 1
+        // },
+        // max(value) {
+        //   return (value.max + 0.1).toFixed(2) * 1
+        // },
+        // Todo: Maybe review that logic
+        max: MAX > 0 && MAX > MIN ? MIN * -1 : MAX,
+        min: MIN > 0 && MIN < MAX ? MAX * -1 : MIN,
+      }
+    },
+
+    buildChartSeries(param) {
+      return [
         {
-          type: 'value',
-          name: 'ppm',
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-            fontSize: 16,
-          },
-          nameGap: 30,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
+          name: param,
+          type: 'line',
+          smooth: false,
+          xAxisIndex: 0,
+          data: this.analysisResults
+            .filter((result) => result.parameter === param)
+            .map((t) => [t.value, t.depth * -1]),
+          emphasis: {
+            focus: 'series',
           },
         },
       ]
-      if (this.selectedParameters.some((item) => item.includes('ppm')))
-        yAxis[1].name = 'ppm'
-      else yAxis[1].name = ''
-      return yAxis
+    },
+
+    optionsUsingParameter(param) {
+      return {
+        animation: false,
+
+        title: {
+          text: param,
+        },
+
+        yAxis: this.buildYAxis(),
+
+        xAxis: this.buildXAxis(param),
+
+        series: this.buildChartSeries(param),
+      }
     },
   },
 }
 </script>
+
+<style lang="scss">
+.charts {
+  overflow-x: auto;
+}
+</style>

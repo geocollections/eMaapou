@@ -47,7 +47,7 @@ export default {
           sortBy: ['date_added'],
           sortDesc: [true],
         },
-        queryFields: { date_added: 'date_added' },
+        fields: { date_added: 'date_added' },
       }
     )
     this.newsList = newsResponse.items

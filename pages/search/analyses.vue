@@ -11,8 +11,7 @@
 <script>
 import AnalysisTable from '@/components/tables/AnalysisTable'
 import { debounce } from 'lodash'
-import { mapState } from 'vuex'
-import { ANALYSIS } from '~/constants'
+import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {
   components: { AnalysisTable },
@@ -24,13 +23,10 @@ export default {
   },
   data() {
     return {
-      options: ANALYSIS.options,
+      options: ANALYSIS,
       items: [],
       count: 0,
     }
-  },
-  computed: {
-    ...mapState('search', { search: 'searchQuery' }),
   },
   watch: {
     query: {
@@ -48,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(ANALYSIS.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
           searchFilters: {},
         }
       )

@@ -10,7 +10,7 @@
 <script>
 import { isNil } from 'lodash'
 import StratigraphySynonymTable from '~/components/tables/StratigraphySynonymTable.vue'
-import { STRATIGRAPHY_SYNONYM } from '~/constants'
+import { HEADERS_STRATIGRAPHY_SYNONYM, STRATIGRAPHY_SYNONYM } from '~/constants'
 export default {
   components: { StratigraphySynonymTable },
   props: {
@@ -33,12 +33,12 @@ export default {
         'stratigraphy_synonym',
         {
           ...tableState,
-          isValid: isNil(this.stratigraphy),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            stratigraphy: this.stratigraphy,
+            stratigraphy: this.$route.params.id,
             nest: 1,
           },
-          queryFields: this.$getQueryFields(STRATIGRAPHY_SYNONYM.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY_SYNONYM),
         }
       )
       this.synonyms = synonymResponse.items

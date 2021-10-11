@@ -10,15 +10,9 @@
 <script>
 import { isNil } from 'lodash'
 import PreparationTable from '~/components/tables/PreparationTable.vue'
-import { PREPARATION } from '~/constants'
+import { HEADERS_PREPARATION } from '~/constants'
 export default {
   components: { PreparationTable },
-  props: {
-    sample: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       preparations: [],
@@ -38,11 +32,11 @@ export default {
         'preparation',
         {
           ...tableState,
-          isValid: isNil(this.sample),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `sample_id:${this.sample}`,
+            fq: `sample_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(PREPARATION.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_PREPARATION),
         }
       )
       this.preparations = preparationResponse.items

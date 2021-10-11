@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.stratigraphy="{ item }">
       <nuxt-link
@@ -113,16 +115,16 @@
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_STRATIGRAPHY } from '~/constants'
 export default {
   name: 'StratigraphyTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -140,62 +142,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('stratigraphy.id'), value: 'id' },
-        { text: this.$t('stratigraphy.stratigraphy'), value: 'stratigraphy' },
-        { text: this.$t('stratigraphy.index_main'), value: 'index_main' },
-        {
-          text: this.$t('stratigraphy.index_additional'),
-          value: 'index_additional',
-        },
-        {
-          text: this.$t('stratigraphy.stratigraphy_type'),
-          value: 'stratigraphy_type',
-        },
-        {
-          text: this.$t('stratigraphy.stratigraphy_rank'),
-          value: 'stratigraphy_rank',
-        },
-        {
-          text: this.$t('stratigraphy.stratigraphy_scope'),
-          value: 'stratigraphy_scope',
-        },
-        {
-          text: this.$t('stratigraphy.parent_stratigraphy'),
-          value: 'parent_stratigraphy',
-        },
-
-        { text: this.$t('stratigraphy.ageBase'), value: 'ageBase' },
-        { text: this.$t('stratigraphy.ageTop'), value: 'ageTop' },
-        {
-          text: this.$t('stratigraphy.age_stratigraphy'),
-          value: 'age_stratigraphy',
-        },
-      ],
+      localHeaders: cloneDeep(HEADERS_STRATIGRAPHY),
+      module: 'stratigraphy',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.stratigraphy.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'stratigraphy' }),
   },
 }
 </script>

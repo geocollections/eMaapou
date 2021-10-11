@@ -121,9 +121,13 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                $openGeoDetail(
-                                  'stratigraphy',
-                                  box.drillcore_box.stratigraphy_top.id
+                                $router.push(
+                                  localePath({
+                                    name: 'stratigraphy-id',
+                                    params: {
+                                      id: box.drillcore_box.stratigraphy_top.id,
+                                    },
+                                  })
                                 )
                               "
                             >
@@ -152,9 +156,14 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                $openGeoDetail(
-                                  'stratigraphy',
-                                  box.drillcore_box.stratigraphy_base.id
+                                $router.push(
+                                  localePath({
+                                    name: 'stratigraphy-id',
+                                    params: {
+                                      id: box.drillcore_box.stratigraphy_base
+                                        .id,
+                                    },
+                                  })
                                 )
                               "
                             >
@@ -227,7 +236,7 @@
 
 <script>
 import { isNull, debounce } from 'lodash'
-import { DRILLCORE_BOX } from '~/constants'
+import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
   props: {
     drillcore: {
@@ -240,12 +249,12 @@ export default {
       page: 1,
       boxes: [],
       search: '',
+      paginateBy: 5,
     }
   },
   methods: {
     isNull,
     infiniteHandler($state) {
-      const paginateBy = 5
       this.$services.sarvREST
         .getResourceList('attachment_link', {
           defaultParams: {
@@ -256,22 +265,20 @@ export default {
           },
           options: {
             page: this.page,
-            itemsPerPage: paginateBy,
+            itemsPerPage: this.paginateBy,
           },
           search: this.search,
-          queryFields: this.$getQueryFields(DRILLCORE_BOX.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
         })
         .then((res) => {
-          if (!res.page) {
+          if (!res.next) {
             this.boxes.push(...res.items)
             $state.loaded()
             $state.complete()
-          } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
+          } else {
             this.page += 1
             this.boxes.push(...res.items)
             $state.loaded()
-          } else {
-            $state.complete()
           }
         })
         .catch(() => {

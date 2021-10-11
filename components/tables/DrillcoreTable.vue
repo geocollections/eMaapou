@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.drillcore="{ item }">
       <nuxt-link
@@ -19,17 +21,16 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import TableWrapper from './TableWrapper.vue'
+import { HEADERS_DRILLCORE } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'DrillcoreTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -47,40 +48,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('drillcore.id'), value: 'id' },
-        { text: this.$t('drillcore.name'), value: 'drillcore' },
-        { text: this.$t('drillcore.depth'), value: 'depth' },
-        { text: this.$t('drillcore.boxes'), value: 'boxes' },
-        { text: this.$t('drillcore.boxNumbers'), value: 'box_numbers' },
-        { text: this.$t('drillcore.year'), value: 'year' },
-        { text: this.$t('drillcore.storage'), value: 'core_repository' },
-        { text: this.$t('drillcore.acronym'), value: 'acronym' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DRILLCORE),
+      module: 'drillcore',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.drillcore.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'drillcore' }),
   },
   methods: {
     round,

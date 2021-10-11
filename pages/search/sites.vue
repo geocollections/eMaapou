@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import { SITE } from '~/constants'
+import { HEADERS_SITE, SITE } from '~/constants'
 import SiteTable from '~/components/tables/SiteTable.vue'
 
 export default {
@@ -44,7 +44,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(SITE.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_SITE),
           searchFilters: {},
         }
       )

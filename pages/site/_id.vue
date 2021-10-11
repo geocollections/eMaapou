@@ -320,7 +320,10 @@
           <div v-else>{{ $t('common.clickToOpen') }}</div>
         </template>
       </image-bar>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -331,12 +334,12 @@
 import { isNil } from 'lodash'
 import LeafletMap from '@/components/map/LeafletMap'
 import TitleCardDetail from '@/components/TitleCardDetail'
-import slugify from 'slugify'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
+import { TABS_SITE } from '~/constants'
 
 export default {
   components: {
@@ -348,9 +351,19 @@ export default {
     Detail,
     ImageBar,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $translate,
+    $createSlugRoute,
+  }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'site',
         params.id,
         {
@@ -362,94 +375,9 @@ export default {
       const ids = detailViewResponse?.ids
       const site = detailViewResponse
 
-      const tabs = [
-        {
-          id: 'attachment_link',
-          routeName: 'site-id-slug',
-          title: 'site.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          isSolr: true,
-          routeName: 'site-id-slug-samples',
-          title: 'site.samples',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_description',
-          routeName: 'site-id-slug-descriptions',
-          title: 'site.localityDescriptions',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_reference',
-          routeName: 'site-id-slug-references',
-          title: 'site.localityReferences',
-          count: 0,
-          props: {},
-        },
-      ]
-
-      const attachmentResponse = await app.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          isValid: isNil(site.id),
-          defaultParams: {
-            site: site.id,
-            attachment__attachment_format__value__istartswith: 'image',
-            nest: 1,
-          },
-          queryFields: {},
-        }
-      )
-      const attachments = attachmentResponse.items ?? []
-
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: { default: { fq: `site_id:${site.id}` } },
-                api: { default: { site: site.id } },
-              })
-          )
-        )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          site: site.id,
-        })
-      )
-
-      const slug = slugify(
-        app.$translate({ et: site.name, en: site.name_en }),
-        { lower: true }
-      )
-
-      const slugRoute = app.localeRoute({
-        ...route,
-        name: app.getRouteBaseName().includes('-slug')
-          ? app.getRouteBaseName()
-          : `${app.getRouteBaseName()}-slug`,
-        params: {
-          ...route.params,
-          slug,
-        },
-      })
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
-
       return {
         site,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
-        images: attachments,
       }
     } catch (err) {
       error({
@@ -458,6 +386,55 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      images: [],
+    }
+  },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        isValid: isNil(this.site?.id),
+        defaultParams: {
+          site: this.site?.id,
+          attachment__attachment_format__value__istartswith: 'image',
+          nest: 1,
+        },
+        fields: {},
+      }
+    )
+    this.attachments = attachmentResponse.items ?? []
+
+    const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `site_id:${this.site?.id}` } },
+              api: { default: { site: this.site?.id } },
+            },
+          })
+      )
+    )
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({ et: this.site?.name, en: this.site?.name_en })
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,

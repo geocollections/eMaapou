@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
@@ -27,16 +29,16 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_STRATIGRAPHY_REFERENCE } from '~/constants'
 export default {
   name: 'StratigraphyReferenceTable',
   components: { TableWrapper, ExternalLink },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -57,16 +59,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('stratigraphyReference.reference'),
-          value: 'reference',
-        },
-        { text: this.$t('stratigraphyReference.content'), value: 'content' },
-        { text: this.$t('stratigraphyReference.year'), value: 'year' },
-        { text: this.$t('stratigraphyReference.pages'), value: 'pages' },
-        { text: this.$t('stratigraphyReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_STRATIGRAPHY_REFERENCE),
     }
   },
 }

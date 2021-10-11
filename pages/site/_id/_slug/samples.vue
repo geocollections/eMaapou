@@ -11,15 +11,9 @@
 import SampleTable from '@/components/tables/SampleTable'
 import { isNil } from 'lodash'
 
-import { SAMPLE } from '~/constants'
+import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 export default {
   components: { SampleTable },
-  props: {
-    site: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       samples: [],
@@ -34,11 +28,11 @@ export default {
         'sample',
         {
           ...tableState,
-          isValid: isNil(this.site),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `site_id:${this.site}`,
+            fq: `site_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(SAMPLE.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
         }
       )
       this.samples = sampleResponse.items

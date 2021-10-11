@@ -1,4 +1,4 @@
-import { DATASET } from '~/constants'
+import { DATASET, HEADERS_DATASET } from '~/constants'
 
 export default {
   async searchDatasets({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'dataset',
         resource: 'dataset',
-        resourceDefaults: DATASET,
+        resourceDefaults: { ...DATASET, headers: HEADERS_DATASET },
       },
       { root: true }
     )

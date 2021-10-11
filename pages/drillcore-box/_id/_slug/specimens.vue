@@ -11,7 +11,7 @@
 import SpecimenTable from '@/components/tables/SpecimenTable'
 import { isNil } from 'lodash'
 
-import { SPECIMEN } from '~/constants'
+import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 export default {
   components: { SpecimenTable },
   props: {
@@ -46,7 +46,7 @@ export default {
           defaultParams: {
             fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
           },
-          queryFields: this.$getQueryFields(SPECIMEN.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

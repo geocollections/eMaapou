@@ -11,15 +11,9 @@
 import SpecimenTable from '@/components/tables/SpecimenTable'
 import { isNil } from 'lodash'
 
-import { SPECIMEN } from '~/constants'
+import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 export default {
   components: { SpecimenTable },
-  props: {
-    locality: {
-      type: Number,
-      default: null,
-    },
-  },
   data() {
     return {
       specimens: [],
@@ -34,11 +28,11 @@ export default {
         'specimen',
         {
           ...tableState,
-          isValid: isNil(this.locality),
+          isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `locality_id:${this.locality}`,
+            fq: `locality_id:${this.$route.params.id}`,
           },
-          queryFields: this.$getQueryFields(SPECIMEN.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
         }
       )
       this.specimens = specimenResponse.items

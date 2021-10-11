@@ -7,6 +7,7 @@ export const initState = () => {
     options: DATASET.options,
     useMap: false,
     useInstitutions: true,
+    query: '',
     filters: {
       byIds: {
         name: {

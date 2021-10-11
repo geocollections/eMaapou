@@ -1,21 +1,17 @@
 <template>
-  <scatter-chart
+  <line-chart-multi
     table-key="dataset_id"
-    :table-id="dataset"
+    :table-id="$route.params.id.toString()"
     :chart-title="chartTitle"
   />
 </template>
 
 <script>
-import ScatterChart from '~/components/chart/ScatterChart'
+import LineChartMulti from '~/components/chart/types/LineChartMulti'
 
 export default {
-  components: { ScatterChart },
+  components: { LineChartMulti },
   props: {
-    dataset: {
-      type: Number,
-      default: null,
-    },
     datasetObject: {
       type: Object,
       default: () => {},

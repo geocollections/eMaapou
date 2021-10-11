@@ -24,14 +24,14 @@
 
           <div class="d-flex flex-column align-start">
             <nuxt-link
-              v-for="item in routes"
-              :key="item.name"
+              v-for="route in routes"
+              :key="route.name"
               exact
-              :to="localePath({ name: item.name })"
+              :to="localePath({ name: route.routeName })"
               class="mb-1 menu-link"
               active-class="menu-link-active"
-              ><v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
-              {{ $t(`common.${item.lang}`) }}
+              ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
+              {{ $t(route.text) }}
             </nuxt-link>
           </div>
           <div class="section-title montserrat">
@@ -42,14 +42,14 @@
 
           <div class="d-flex flex-column align-start">
             <nuxt-link
-              v-for="item in searchRoutes"
-              :key="item.name"
+              v-for="route in searchRoutes"
+              :key="route.name"
               exact
-              :to="localePath({ name: item.name })"
+              :to="localePath({ name: route.routeName })"
               class="mb-1 menu-link"
               active-class="menu-link-active"
-              ><v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
-              {{ $t(`common.${item.lang}`) }}
+              ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
+              {{ $t(route.text) }}
             </nuxt-link>
           </div>
         </v-col>
@@ -61,13 +61,13 @@
 
           <div class="d-flex flex-column align-start">
             <a
-              v-for="item in links"
-              :key="item.name"
-              :href="item.url"
+              v-for="link in links"
+              :key="link.name"
+              :href="link.url"
               class="mb-1 menu-link"
             >
-              <v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
-              {{ $t(item.name) }}
+              <v-icon v-if="link.icon" small left>{{ link.icon }}</v-icon>
+              {{ $t(link.name) }}
             </a>
           </div>
         </v-col>
@@ -117,60 +117,60 @@ export default {
     return {
       routes: [
         {
-          name: 'search',
-          lang: 'search',
+          routeName: 'search',
+          text: 'common.search',
           icon: 'mdi-magnify',
         },
         {
-          name: 'about',
-          lang: 'about',
+          routeName: 'about',
+          text: 'common.about',
           icon: 'mdi-information-outline',
         },
         {
-          name: 'news',
-          lang: 'news',
+          routeName: 'news',
+          text: 'common.news',
           icon: 'mdi-newspaper-variant-outline',
         },
       ],
       searchRoutes: [
         {
-          name: 'locality',
-          lang: 'localities',
+          routeName: 'locality',
+          text: 'locality.pageTitle',
           icon: 'mdi-map-marker-outline',
         },
         {
-          name: 'site',
-          lang: 'sites',
+          routeName: 'site',
+          text: 'site.pageTitle',
           icon: 'mdi-binoculars',
         },
         {
-          name: 'drillcore',
-          lang: 'drillcores',
+          routeName: 'drillcore',
+          text: 'drillcore.pageTitle',
           icon: 'mdi-screw-machine-flat-top',
         },
         {
-          name: 'sample',
-          lang: 'samples',
+          routeName: 'sample',
+          text: 'sample.pageTitle',
           icon: 'mdi-test-tube',
         },
         {
-          name: 'analysis',
-          lang: 'analyses',
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
           icon: 'mdi-chart-scatter-plot',
         },
         {
-          name: 'analytical-data',
-          lang: 'analyticalData',
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
           icon: 'mdi-chart-line',
         },
         {
-          name: 'dataset',
-          lang: 'datasets',
+          routeName: 'dataset',
+          text: 'dataset.pageTitle',
           icon: 'mdi-database-outline',
         },
         {
-          name: 'taxon',
-          lang: 'taxa',
+          routeName: 'taxon',
+          text: 'taxon.pageTitle',
           icon: 'mdi-family-tree',
         },
         // {
@@ -179,12 +179,22 @@ export default {
         //   icon: 'mdi-folder-open-outline',
         // },
         {
-          name: 'stratigraphy',
-          lang: 'stratigraphy',
+          routeName: 'stratigraphy',
+          text: 'stratigraphy.pageTitle',
           icon: 'mdi-layers-triple',
         },
-        { name: 'photo', lang: 'photo', icon: 'mdi-file-image-outline' },
-        { name: 'specimen', lang: 'specimen', icon: 'mdi-microscope' },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
+          icon: 'mdi-file-image-outline',
+        },
+        {
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
+          icon: 'mdi-microscope',
+        },
+        { routeName: 'preparation', text: 'preparation.pageTitle' },
+        { routeName: 'area', text: 'area.pageTitle' },
       ],
       links: [
         { name: 'geocollections.title', url: 'https://geocollections.info' },
@@ -223,11 +233,6 @@ export default {
         { name: 'institutions.steiger', url: 'https://steiger.ee' },
       ],
     }
-  },
-  computed: {
-    availableLocales() {
-      return this.$i18n.locales
-    },
   },
 }
 </script>
