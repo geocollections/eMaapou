@@ -893,6 +893,21 @@ export default {
           hid: 'og:title',
           content: this.fileTitle,
         },
+        ...[
+          this.isImage
+            ? {
+                property: 'og:image',
+                hid: 'og:image',
+                content: this.$img(
+                  `${this.file.filename}`,
+                  { size: 'small', height: 700 },
+                  {
+                    provider: 'geocollections',
+                  }
+                ),
+              }
+            : [],
+        ],
       ],
     }
   },
