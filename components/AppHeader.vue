@@ -64,8 +64,9 @@
       <query-search-field
         v-if="!$route.name.startsWith('search') && $vuetify.breakpoint.smAndUp"
         v-model="query"
-        class="pr-2"
-        dense
+        class="pr-2 rounded-0"
+        background-color="grey lighten-5"
+        height="56"
         :autofocus="false"
         :placeholder="$t('common.search')"
         @enter="$router.push(localePath({ name: 'search' }))"
@@ -242,6 +243,8 @@ export default {
 .v-app-bar ::v-deep .v-toolbar__content {
   padding-right: 0;
   padding-left: 0;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 $gradient-col: var(--v-primary-base);

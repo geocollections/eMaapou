@@ -9,7 +9,7 @@
     solo
     clearable
     :autofocus="autofocus"
-    v-bind="$props"
+    v-bind="{ ...$props, ...$attrs }"
     @input="$emit('input', $event)"
     @keyup.enter="$emit('enter', $event)"
   >
