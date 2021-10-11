@@ -4,7 +4,7 @@
       <title-card-detail
         :ids="ids"
         :title="preparation.preparation_number"
-        class="title-main"
+        class="title-preparation"
       />
     </template>
 

@@ -1,11 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
-        :title="$t('area.pageTitle')"
-        icon="mdi-map-marker-outline"
-        class="title-area"
-      />
+      <title-card :title="$t('area.pageTitle')" class="title-area" />
     </template>
 
     <template #form>

@@ -3,7 +3,6 @@
     <template #title>
       <title-card
         :title="$t('preparation.pageTitle')"
-        icon="mdi-chart-scatter-plot"
         class="title-preparation"
       />
     </template>
