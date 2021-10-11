@@ -100,7 +100,14 @@
         v-if="item.image_preview_url"
         :src="item.image_preview_url"
         class="ma-2"
-        @click="$openGeoDetail('specimen', item.id)"
+        @click="
+          $router.push(
+            localePath({
+              name: 'photo-id',
+              params: { id: item.attachment_id },
+            })
+          )
+        "
       />
     </template>
     <template #item.name="{ item }">
