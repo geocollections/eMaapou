@@ -356,7 +356,7 @@ export default {
     locality: 'Lokaliteet',
   },
   area: {
-    pageTitle: 'Areas',
+    pageTitle: 'Alad',
     id: 'ID',
     name: 'Nimi',
     areaType: 'Ala tüüp',
