@@ -121,9 +121,13 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                $openGeoDetail(
-                                  'stratigraphy',
-                                  box.drillcore_box.stratigraphy_top.id
+                                $router.push(
+                                  localePath({
+                                    name: 'stratigraphy-id',
+                                    params: {
+                                      id: box.drillcore_box.stratigraphy_top.id,
+                                    },
+                                  })
                                 )
                               "
                             >
@@ -152,9 +156,14 @@
                             <a
                               class="text-link"
                               @click.stop="
-                                $openGeoDetail(
-                                  'stratigraphy',
-                                  box.drillcore_box.stratigraphy_base.id
+                                $router.push(
+                                  localePath({
+                                    name: 'stratigraphy-id',
+                                    params: {
+                                      id: box.drillcore_box.stratigraphy_base
+                                        .id,
+                                    },
+                                  })
                                 )
                               "
                             >
