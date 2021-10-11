@@ -230,6 +230,35 @@ export const HEADERS_ANALYTICAL_DATA = {
     'analysis_id',
   ],
 }
+export const HEADERS_AREA = {
+  byIds: {
+    id: {
+      text: 'area.id',
+      value: 'id',
+      show: true,
+      apiFieldValue: 'id',
+    },
+    name: {
+      text: 'area.name',
+      value: 'name',
+      show: true,
+      apiFieldValue: { et: 'name', en: 'name_en' },
+    },
+    county: {
+      text: 'area.county',
+      value: 'county',
+      show: true,
+      apiFieldValue: { et: 'maakond', en: 'maakond_en' },
+    },
+    type: {
+      text: 'area.areaType',
+      value: 'type',
+      show: true,
+      apiFieldValue: { et: 'area_type', en: 'area_type_en' },
+    },
+  },
+  allIds: ['id', 'name', 'county', 'type'],
+}
 
 export const HEADERS_ATTACHMENT_SOLR = {
   byIds: {
@@ -1254,7 +1283,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY = {
     'name',
     'name_en',
     'agent',
-    'date_identified',
+    'dateIdentified',
     'reference',
     'type',
     'remarks',

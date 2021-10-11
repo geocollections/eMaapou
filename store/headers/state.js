@@ -12,11 +12,13 @@ import {
   HEADERS_STRATIGRAPHY,
   HEADERS_TAXON,
   HEADERS_PREPARATION,
+  HEADERS_AREA,
 } from '~/constants'
 export const initState = () => {
   return {
     analysis: cloneDeep(HEADERS_ANALYSIS),
     analytical_data: cloneDeep(HEADERS_ANALYTICAL_DATA),
+    area: cloneDeep(HEADERS_AREA),
     dataset: cloneDeep(HEADERS_DATASET),
     drillcore: cloneDeep(HEADERS_DRILLCORE),
     locality: cloneDeep(HEADERS_LOCALITY),

@@ -305,6 +305,12 @@ th {
   border-color: var(--v-emp-preparation-base) !important;
 }
 
+.area-search-card {
+  @extend .search-card-border;
+
+  border-color: var(--v-emp-area-base) !important;
+}
+
 .title-border {
   // border-bottom-width: 2px !important;
   // border-bottom-style: solid !important;
@@ -448,6 +454,17 @@ th {
       to left,
       var(--v-emp-preparation-darken2),
       var(--v-emp-preparation-base)
+    );
+  }
+}
+
+.title-area {
+  @extend .title-border;
+  &:after {
+    background: linear-gradient(
+      to left,
+      var(--v-emp-area-darken2),
+      var(--v-emp-area-base)
     );
   }
 }
