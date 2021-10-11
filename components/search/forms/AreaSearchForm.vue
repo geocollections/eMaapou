@@ -5,25 +5,25 @@
     <search-fields-wrapper :active="hasActiveFilters('area')">
       <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
       <!--
-        NOTE: item-value should probably be the id or mkood of the county.
-        Right now the filter does not work correctly because of how we parse string filters.
+        NOTE: Search on estonian county names. These don't contain spaces and therefore don't break the search.
+        This probably won't be a problem in the future.
        -->
       <autocomplete-field
         v-model="county"
         :items="counties"
         :return-object="false"
         :item-text="$i18n.locale === 'et' ? 'maakond' : 'maakond_en'"
-        :item-value="$i18n.locale === 'et' ? 'maakond' : 'maakond_en'"
+        :item-value="'maakond'"
         do-not-cache
         :label="$t(filters.byIds.county.label)"
       />
-      <!-- NOTE: same as above should use id of area_type. -->
+      <!-- NOTE: Same as with counties above. But this might be a problem when new types are added. -->
       <autocomplete-field
         v-model="type"
         :items="types"
         :return-object="false"
         :item-text="$i18n.locale === 'et' ? 'name' : 'name_en'"
-        :item-value="$i18n.locale === 'et' ? 'name' : 'name_en'"
+        :item-value="'name'"
         do-not-cache
         :label="$t(filters.byIds.type.label)"
       />
