@@ -21,7 +21,7 @@
         :to="
           localePath({
             name: item.routeName,
-            params: { id: $route.params.id },
+            params: $route.params,
           })
         "
         >{{ $t(item.title, { number: item.count }) }}</v-tab
@@ -35,11 +35,13 @@
         :value="
           localePath({
             name: item.routeName,
-            params: { id: $route.params.id },
+            params: $route.params,
           })
         "
         :height="$vuetify.breakpoint.xsOnly ? 38 : 'unset'"
       >
+        <!-- Todo: Removing keep-alive fixes empty tab problem when navigating but breaks tab data (weird problem have to look into it) -->
+        <!-- Todo: Even if keep-alive is on then navigating between tabs is not updating nuxt-child??? example preparation/9981 -> 9980. -->
         <nuxt-child :key="index" keep-alive v-bind="item.props" />
       </v-tab-item>
     </v-tabs-items>

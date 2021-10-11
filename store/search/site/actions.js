@@ -1,4 +1,4 @@
-import { SITE } from '~/constants'
+import { HEADERS_SITE, SITE } from '~/constants'
 
 export default {
   async searchSites({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'site',
         resource: 'site',
-        resourceDefaults: SITE,
+        resourceDefaults: { ...SITE, headers: HEADERS_SITE },
       },
       { root: true }
     )

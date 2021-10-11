@@ -26,47 +26,53 @@
                 :value="sample.number_field"
               />
               <link-data-row
+                v-if="locality"
                 :title="$t('sample.locality')"
                 :value="
                   $translate({
-                    et: sample.locality__locality,
-                    en: sample.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: sample.locality_id },
+                    params: { id: sample.locality.id },
                   })
                 "
               />
               <data-row
+                v-if="locality"
                 :title="$t('sample.latitude')"
-                :value="sample.locality__latitude"
+                :value="locality.latitude"
               />
               <data-row
+                v-if="locality"
                 :title="$t('sample.longitude')"
-                :value="sample.locality__longitude"
+                :value="locality.longitude"
               />
               <link-data-row
+                v-if="site"
                 :title="$t('sample.site')"
-                :value="sample.site__name"
+                :value="site.name"
                 nuxt
                 :href="
                   localePath({
                     name: 'site-id',
-                    params: { id: sample.site },
+                    params: { id: site.id },
                   })
                 "
               />
               <data-row
+                v-if="site"
                 :title="$t('sample.latitude')"
-                :value="sample.site__latitude"
+                :value="site.latitude"
               />
               <data-row
+                v-if="site"
                 :title="$t('sample.longitude')"
-                :value="sample.site__longitude"
+                :value="site.longitude"
               />
               <data-row :title="$t('sample.depth')" :value="sample.depth" />
               <data-row
@@ -74,34 +80,36 @@
                 :value="sample.depth_interval"
               />
               <link-data-row
+                v-if="stratigraphy"
                 :title="$t('sample.stratigraphy')"
                 :value="
                   $translate({
-                    et: sample.stratigraphy__stratigraphy,
-                    en: sample.stratigraphy__stratigraphy_en,
+                    et: stratigraphy.stratigraphy,
+                    en: stratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: sample.stratigraphy__id },
+                    params: { id: sample.stratigraphy.id },
                   })
                 "
               />
               <link-data-row
+                v-if="lithostratigraphy"
                 :title="$t('sample.lithostratigraphy')"
                 :value="
                   $translate({
-                    et: sample.lithostratigraphy__stratigraphy,
-                    en: sample.lithostratigraphy__stratigraphy_en,
+                    et: lithostratigraphy.stratigraphy,
+                    en: lithostratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: sample.lithostratigraphy },
+                    params: { id: sample.lithostratigraphy.id },
                   })
                 "
               />
@@ -118,18 +126,18 @@
                 :value="sample.date_collected || sample.date_collected_free"
               />
               <data-row
+                v-if="agent_collected || sample.agent_collected_txt"
                 :title="$t('sample.agentCollected')"
-                :value="
-                  sample.agent_collected__agent || sample.agent_collected_txt
-                "
+                :value="agent_collected.agent || sample.agent_collected_txt"
               />
               <data-row :title="$t('sample.mass')" :value="sample.mass" />
               <data-row
+                v-if="sample_purpose"
                 :title="$t('sample.samplePurpose')"
                 :value="
                   $translate({
-                    et: sample.sample_purpose__value,
-                    en: sample.sample_purpose__value_en,
+                    et: sample_purpose.value,
+                    en: sample_purpose.value_en,
                   })
                 "
               />
@@ -143,11 +151,12 @@
                 "
               />
               <data-row
+                v-if="classification_rock"
                 :title="$t('sample.classificationRock')"
                 :value="
                   $translate({
-                    et: sample.classification_rock__name,
-                    en: sample.classification_rock__name_en,
+                    et: classification_rock.name,
+                    en: classification_rock.name_en,
                   })
                 "
               />
@@ -158,24 +167,33 @@
               <data-row :title="$t('sample.fossils')" :value="sample.fossils" />
               <data-row :title="$t('sample.remarks')" :value="sample.remarks" />
               <data-row
+                v-if="owner"
                 :title="$t('sample.owner')"
-                :value="sample.owner__agent"
+                :value="owner.agent"
               />
-              <data-row
+              <link-data-row
+                v-if="database"
                 :title="$t('sample.database')"
                 :value="
                   $translate({
-                    et: sample.database__name,
-                    en: sample.database__name_en,
+                    et: database.name,
+                    en: database.name_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: `institution-${sample.database.acronym.toLowerCase()}`,
                   })
                 "
               />
               <data-row
+                v-if="project"
                 :title="$t('sample.project')"
                 :value="
                   $translate({
-                    et: sample.project__name,
-                    en: sample.project__name_en,
+                    et: sample.project.name,
+                    en: sample.project.name_en,
                   })
                 "
               />
@@ -195,7 +213,7 @@
       </v-card-text>
     </template>
 
-    <template v-if="sample.locality_id" #column-right>
+    <template v-if="locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.locality')
       }}</v-card-title>
@@ -207,15 +225,15 @@
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
-                    et: sample.locality__locality,
-                    en: sample.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: sample.locality_id },
+                    params: { id: sample.locality.id },
                   })
                 "
               >
@@ -225,64 +243,54 @@
                 :value="sample.locality_free"
               />
               <data-row
-                v-if="
-                  $translate({
-                    et: sample.locality__country__value,
-                    en: sample.locality__country__value_en,
-                  })
-                "
+                v-if="locality.country"
                 :title="$t('locality.country')"
                 :value="
                   $translate({
-                    et: sample.locality__country__value,
-                    en: sample.locality__country__value_en,
+                    et: locality.country.value,
+                    en: locality.country.value_en,
                   })
                 "
               />
               <data-row
-                v-if="sample.locality__latitude"
                 :title="$t('locality.latitude')"
-                :value="sample.locality__latitude"
+                :value="locality.latitude"
               />
               <data-row
-                v-if="sample.locality__longitude"
                 :title="$t('locality.longitude')"
-                :value="sample.locality__longitude"
+                :value="locality.longitude"
               />
               <data-row
-                v-if="sample.locality__elevation"
                 :title="$t('locality.elevation')"
-                :value="sample.locality__elevation"
+                :value="locality.elevation"
               />
-              <data-row
-                v-if="sample.locality__depth"
-                :title="$t('locality.depth')"
-                :value="sample.locality__depth"
-              />
+              <data-row :title="$t('locality.depth')" :value="locality.depth" />
             </tbody>
           </template>
         </v-simple-table>
         <v-card
-          v-if="sample.locality__latitude && sample.locality__longitude"
+          v-if="locality.latitude && locality.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
             rounded
-            :estonian-map="sample.locality__country__value === 'Eesti'"
+            :estonian-map="
+              locality.country ? locality.country.value === 'Eesti' : false
+            "
             :estonian-bedrock-overlay="
-              sample.locality__country__value === 'Eesti'
+              locality.country ? locality.country.value === 'Eesti' : false
             "
             height="300px"
             :center="{
-              latitude: sample.locality__latitude,
-              longitude: sample.locality__longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
             }"
             sample-overlay
             :markers="[
               {
-                latitude: sample.locality__latitude,
-                longitude: sample.locality__longitude,
+                latitude: locality.latitude,
+                longitude: locality.longitude,
                 text: $translate({
                   et: sample.drillcore,
                   en: sample.drillcore_en,
@@ -306,7 +314,10 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -315,12 +326,14 @@
 
 <script>
 import { isEmpty, isNil } from 'lodash'
-import DataRow from '@/components/DataRow.vue'
-import LinkDataRow from '@/components/LinkDataRow.vue'
-import Tabs from '@/components/Tabs.vue'
-import LeafletMap from '@/components/map/LeafletMap.vue'
-import TitleCardDetail from '@/components/TitleCardDetail.vue'
-import Detail from '@/components/templates/Detail.vue'
+
+import DataRow from '~/components/DataRow.vue'
+import LinkDataRow from '~/components/LinkDataRow.vue'
+import Tabs from '~/components/Tabs.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import Detail from '~/components/templates/Detail.vue'
+import { TABS_SAMPLE } from '~/constants'
 
 export default {
   components: {
@@ -331,112 +344,23 @@ export default {
     LeafletMap,
     Detail,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({ params, route, error, $services }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'sample',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 2,
+          },
+        }
       )
       const ids = detailViewResponse?.ids
-      const sample = detailViewResponse.results[0]
-
-      const localityGroupedResponse =
-        await app.$services.sarvSolr.getResourceList('analysis', {
-          useRawSolr: true,
-          defaultParams: {
-            fq: `sample_id:${sample?.id}`,
-            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-            group: true,
-            'group.field': ['locality_id', 'site_id'],
-            rows: 10000,
-          },
-        })
-
-      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.locality_id)
-      const sites = localityGroupedResponse?.grouped?.site_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.site_id)
-      const locations = localities.concat(sites)
-
-      const tabs = [
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'sample-id',
-          title: 'sample.analyses',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'preparation',
-          routeName: 'sample-id-preparations',
-          title: 'sample.preparations',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'taxon_list',
-          routeName: 'sample-id-taxa',
-          title: 'sample.taxa',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'sample-id-attachments',
-          title: 'sample.attachments',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'sample_reference',
-          routeName: 'sample-id-references',
-          title: 'sample.sampleReferences',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          id: 'analysis_results',
-          isSolr: true,
-          routeName: 'sample-id-analysis-results',
-          title: 'sample.analysisResults',
-          count: 0,
-          props: { sample: sample.id },
-        },
-        {
-          table: 'taxon_list',
-          id: 'graphs',
-          routeName: 'sample-id-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: {
-            sample: sample.id,
-            sampleObject: { ...sample },
-          },
-        },
-      ]
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateCount(tab, {
-              solr: { default: { fq: `sample_id:${sample.id}` } },
-              api: { default: { sample: sample.id } },
-            })
-        )
-      )
-
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
+      const sample = detailViewResponse
 
       return {
         sample,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
-        locations,
       }
     } catch (err) {
       error({
@@ -445,6 +369,69 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      locations: [],
+    }
+  },
+  async fetch() {
+    const localityGroupedResponse =
+      await this.$services.sarvSolr.getResourceList('analysis', {
+        useRawSolr: true,
+        defaultParams: {
+          fq: `sample_id:${this.sample?.id}`,
+          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+          group: true,
+          'group.field': ['locality_id', 'site_id'],
+          rows: 10000,
+        },
+      })
+
+    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.locality_id)
+    const sites = localityGroupedResponse?.grouped?.site_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.site_id)
+    this.locations = localities.concat(sites)
+
+    const tabsObject = TABS_SAMPLE
+
+    tabsObject.byIds.graphs.props.sampleObject = this.sample
+
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `sample_id:${this.sample?.id}` } },
+              api: { default: { sample: this.sample?.id } },
+            },
+          })
+      )
+    )
+    const name = `${
+      this.sample?.number ||
+      this.sample?.number_additional ||
+      this.sample?.number_field
+    }`.trim()
+    // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      `${isEmpty(name) ? this.sample?.id : name}`
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
@@ -503,15 +490,45 @@ export default {
 
       if (this.sample.site) {
         locations.push({
-          latitude: this.sample.site__latitude,
-          longitude: this.sample.site__longitude,
-          text: this.sample.site__name,
+          latitude: this.sample?.site?.latitude,
+          longitude: this.sample?.site?.longitude,
+          text: this.sample?.site?.name,
           routeName: 'site',
           id: this.sample.site_id,
         })
       }
 
       return locations
+    },
+    locality() {
+      return this.sample?.locality
+    },
+    site() {
+      return this.sample?.site
+    },
+    stratigraphy() {
+      return this.sample?.stratigraphy
+    },
+    lithostratigraphy() {
+      return this.sample?.lithostratigraphy
+    },
+    agent_collected() {
+      return this.sample?.agent_collected
+    },
+    sample_purpose() {
+      return this.sample?.sample_purpose
+    },
+    classification_rock() {
+      return this.sample?.classification_rock
+    },
+    owner() {
+      return this.sample?.owner
+    },
+    database() {
+      return this.sample?.database
+    },
+    project() {
+      return this.sample?.project
     },
   },
   methods: {

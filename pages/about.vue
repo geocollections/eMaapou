@@ -2,7 +2,7 @@
   <div>
     <title-card
       :title="$t('about.title')"
-      class="title-border"
+      class="title-heading"
       style="border-color: var(--v-header-darken1)"
     />
     <v-card
@@ -28,8 +28,8 @@ export default {
   components: { TitleCard },
   async asyncData({ route, error, app }) {
     try {
-      const data = await app.$services.sarvREST.getResource('page', 78)
-      return { page: data.results[0] }
+      const data = await app.$services.sarvREST.getResource('web_pages', 78)
+      return { page: data }
     } catch (err) {
       error({
         message: `Could not find about page`,

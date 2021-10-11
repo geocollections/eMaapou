@@ -1,4 +1,4 @@
-import { DRILLCORE } from '~/constants'
+import { DRILLCORE, HEADERS_DRILLCORE } from '~/constants'
 
 export default {
   async searchDrillcores({ dispatch }, options = null) {
@@ -8,7 +8,7 @@ export default {
         ...(options && { options }),
         module: 'drillcore',
         resource: 'drillcore',
-        resourceDefaults: DRILLCORE,
+        resourceDefaults: { ...DRILLCORE, headers: HEADERS_DRILLCORE },
       },
       { root: true }
     )

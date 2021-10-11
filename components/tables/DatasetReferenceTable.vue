@@ -1,49 +1,51 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference__id"
-        @click.native="$openGeology('reference', item.reference__id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
     <template #item.title="{ item }">
-      <div>{{ item.reference__title }}</div>
+      <div v-if="item.reference">{{ item.reference.title }}</div>
     </template>
 
     <template #item.journal="{ item }">
-      <div v-if="item.reference__journal__journal_name">
-        {{ item.reference__journal__journal_name }}
+      <div v-if="item.reference && item.reference.journal">
+        {{ item.reference.journal.journal_name }}
       </div>
-      <div v-else-if="item.book">{{ item.reference__book }}</div>
+      <div v-else-if="item.reference.book">{{ item.reference.book }}</div>
     </template>
     <template #item.pages="{ item }">
-      <div>
-        {{ item.reference__pages }}
+      <div v-if="item.reference">
+        {{ item.reference.pages }}
       </div>
     </template>
   </table-wrapper>
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
   name: 'DatasetReferenceTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -64,12 +66,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('reference.reference'), value: 'reference' },
-        { text: this.$t('reference.title'), value: 'title' },
-        { text: this.$t('reference.journalBook'), value: 'journal' },
-        { text: this.$t('reference.pages'), value: 'pages' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_REFERENCE),
     }
   },
 }

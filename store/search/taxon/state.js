@@ -7,6 +7,7 @@ export const initState = () => {
     options: TAXON.options,
     useMap: true,
     useInstitutions: false,
+    query: '',
     filters: {
       byIds: {
         species: {

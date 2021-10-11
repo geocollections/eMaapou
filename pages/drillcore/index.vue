@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.drillcoresCount')"
+        :title="$t('drillcore.pageTitle')"
         icon="mdi-screw-machine-flat-top"
         class="title-drillcore"
       />
@@ -10,16 +10,10 @@
 
     <template #form>
       <drillcore-search-form />
-      <!-- <search-view-map-wrapper
-        borehole-overlay
-        :items="items"
-        class="mb-6 mt-2"
-        @update="handleUpdate"
-      /> -->
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <drillcore-table
@@ -27,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        dynamic-headers
+        stateful-headers
         @update="handleUpdate"
       />
     </template>
@@ -39,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm.vue'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
 import Search from '~/components/templates/Search.vue'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -49,7 +43,6 @@ export default {
     DrillcoreTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('drillcore.pageTitle'),

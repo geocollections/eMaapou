@@ -11,7 +11,7 @@
 <script>
 import { debounce } from 'lodash'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
-import { DRILLCORE } from '~/constants'
+import { DRILLCORE, HEADERS_DRILLCORE } from '~/constants'
 export default {
   components: { DrillcoreTable },
   props: {
@@ -43,7 +43,7 @@ export default {
         {
           options: tableState.options,
           search: this.query,
-          queryFields: this.$getQueryFields(DRILLCORE.queryFields),
+          fields: this.$getAPIFieldValues(HEADERS_DRILLCORE),
           searchFilters: {},
         }
       )

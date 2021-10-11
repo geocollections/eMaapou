@@ -3,22 +3,22 @@ import { isEmpty } from 'lodash'
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {
     return {
-      paginate_by: options.itemsPerPage,
-      page: options.page,
+      limit: options.itemsPerPage,
+      offset: (options.page - 1) * options.itemsPerPage,
     }
   }
   return null
 }
 
-const getSortByParams = (options, queryFields) => {
+const getSortByParams = (options, fields) => {
   if (options?.sortBy && options?.sortDesc) {
     if (!isEmpty(options.sortBy)) {
-      const orderBy = options.sortBy.map((field, i) => {
-        if (options.sortDesc[i]) return `-${queryFields[field]}`
-        return queryFields[field]
+      const orderBy = options.sortBy.map((value, i) => {
+        if (options.sortDesc[i]) return `-${fields[value]}`
+        return fields[value]
       })
 
-      return { order_by: orderBy.join(',') }
+      return { ordering: orderBy.join(',') }
     }
   }
   return null
@@ -26,34 +26,39 @@ const getSortByParams = (options, queryFields) => {
 
 export default ($axios) => ({
   async getResource(resource, id, options = {}) {
-    const response = await $axios.get(`${resource}/${id}`, options)
+    const response = await $axios.get(`${resource}/${id}/`, options)
     return response.data
   },
   async getResourceList(
     resource,
-    { defaultParams, queryFields, search, options, isValid }
+    { defaultParams, fields, search, options, isValid }
   ) {
     if (isValid) {
       return { items: [], count: 0 }
     }
 
     let multiSearch
-    if (!isEmpty(search))
-      multiSearch = `value:${search};fields:${Object.values(queryFields)
+    let multiSearchFields
+    if (!isEmpty(search)) {
+      multiSearch = search
+      multiSearchFields = Object.values(fields)
         .map((field) => field)
-        .join()};lookuptype:icontains`
+        .join()
+    }
 
     const params = {
       ...defaultParams,
-      multi_search: multiSearch,
+      search: multiSearch,
+      search_fields: multiSearchFields,
       ...getPaginationParams(options),
-      ...getSortByParams(options, queryFields),
+      ...getSortByParams(options, fields),
     }
 
     const response = await $axios.$get(`${resource}/`, { params })
 
     return {
-      page: response.page,
+      next: response.next,
+      previous: response.previous,
       items: response.results,
       count: response.count,
     }

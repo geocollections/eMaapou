@@ -4,8 +4,7 @@
       <v-col>
         <title-card
           :title="$t('common.news')"
-          class="title-border"
-          style="border-color: var(--v-header-darken1)"
+          class="title-heading"
         ></title-card>
       </v-col>
     </v-row>
@@ -74,29 +73,28 @@ export default {
   methods: {
     infiniteHandler($state) {
       this.$services.sarvREST
-        .getResourceList('webnews', {
+        .getResourceList('web_news', {
           options: {
             page: this.page,
             itemsPerPage: 5,
             sortBy: ['date_added'],
             sortDesc: [true],
           },
-          queryFields: { date_added: 'date_added' },
+          fields: { date_added: 'date_added' },
         })
         .then((res) => {
-          if (!res.page) {
+          if (!res.next) {
             this.newsList.push(...res.items)
+
             $state.loaded()
             $state.complete()
-          } else if (parseInt(res.page.split(' ').pop()) >= this.page) {
+          } else {
             this.page += 1
             this.newsList.push(...res.items)
             $state.loaded()
-          } else {
-            $state.complete()
           }
         })
-        .catch(() => {
+        .catch((e) => {
           $state.error()
         })
     },

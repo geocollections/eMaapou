@@ -1,18 +1,30 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
-    <template #item.name="{ item }">{{
-      $translate({
-        et: item.locality__locality,
-        en: item.locality__locality_en,
-      })
-    }}</template>
+    <template #item.name="{ item }">
+      <nuxt-link
+        v-if="item.locality"
+        class="text-link"
+        :to="
+          localePath({ name: 'locality-id', params: { id: item.locality.id } })
+        "
+      >
+        {{
+          $translate({
+            et: item.locality.locality,
+            en: item.locality.locality_en,
+          })
+        }}
+      </nuxt-link></template
+    >
     <template #item.longitude="{ item }">{{ item.point_longitude }}</template>
     <template #item.latitude="{ item }">{{ item.point_latitude }}</template>
     <template #item.is_polygon="{ item }">
@@ -23,16 +35,15 @@
 </template>
 
 <script>
-import { round } from 'lodash'
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { round, cloneDeep } from 'lodash'
+import TableWrapper from './TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {
   name: 'DatasetGeolocationTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -53,16 +64,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('datasetGeolocation.name'), value: 'name' },
-        { text: this.$t('datasetGeolocation.longitude'), value: 'longitude' },
-        { text: this.$t('datasetGeolocation.latitude'), value: 'latitude' },
-        {
-          text: this.$t('datasetGeolocation.isPolygon'),
-          value: 'is_polygon',
-          sortable: false,
-        },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_GEOLOCATION),
     }
   },
   methods: {

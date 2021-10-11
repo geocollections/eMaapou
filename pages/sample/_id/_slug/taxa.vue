@@ -1,0 +1,44 @@
+<template>
+  <taxon-list-table
+    :items="taxa"
+    :count="count"
+    :options="options"
+    @update="handleUpdate"
+  />
+</template>
+
+<script>
+import { isNil } from 'lodash'
+import { HEADERS_TAXON_LIST, TAXON_LIST } from '~/constants'
+import TaxonListTable from '~/components/tables/TaxonListTable'
+
+export default {
+  components: { TaxonListTable },
+  data() {
+    return {
+      taxa: [],
+      count: 0,
+      options: TAXON_LIST.options,
+    }
+  },
+  methods: {
+    async handleUpdate(tableState) {
+      this.options = tableState.options
+      const taxonResponse = await this.$services.sarvREST.getResourceList(
+        'taxon_list',
+        {
+          ...tableState,
+          isValid: isNil(this.$route.params.id),
+          defaultParams: {
+            sample: this.$route.params.id,
+            nest: 1,
+          },
+          fields: this.$getAPIFieldValues(HEADERS_TAXON_LIST),
+        }
+      )
+      this.taxa = taxonResponse.items
+      this.count = taxonResponse.count
+    },
+  },
+}
+</script>

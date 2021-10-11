@@ -1,63 +1,62 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch, onlyTable }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.locality="{ item }">
       <nuxt-link
-        v-if="item.locality_id"
+        v-if="item.locality"
         class="text-link"
         :to="
-          localePath({ name: 'locality-id', params: { id: item.locality__id } })
+          localePath({ name: 'locality-id', params: { id: item.locality.id } })
         "
       >
         {{
           $translate({
-            et: item.locality__locality,
-            en: item.locality__locality_en,
+            et: item.locality.locality,
+            en: item.locality.locality_en,
           })
         }}
       </nuxt-link>
     </template>
     <template #item.type="{ item }">
-      {{
-        $translate({
-          et: item.stratotype_type__value,
-          en: item.stratotype_type__value_en,
-        })
-      }}
+      <div v-if="item.stratotype_type">
+        {{
+          $translate({
+            et: item.stratotype_type.value,
+            en: item.stratotype_type.value_en,
+          })
+        }}
+      </div>
     </template>
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference__id"
-        @click.native="$openGeology('reference', item.reference__id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_STRATIGRAPHY_STRATOTYPE } from '~/constants'
 export default {
   name: 'StratigraphyStratotypeTable',
   components: { TableWrapper, ExternalLink },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
-    onlyTable: {
-      type: Boolean,
-      default: false,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -78,14 +77,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('stratotype.locality'), value: 'locality' },
-        { text: this.$t('stratotype.type'), value: 'type' },
-        { text: this.$t('stratotype.depthTop'), value: 'depth_top' },
-        { text: this.$t('stratotype.depthBase'), value: 'depth_base' },
-        { text: this.$t('stratotype.reference'), value: 'reference' },
-        { text: this.$t('stratotype.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_STRATIGRAPHY_STRATOTYPE),
     }
   },
   methods: {

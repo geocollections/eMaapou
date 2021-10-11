@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="handleSearch">
+    <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('specimen')">
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
@@ -24,23 +25,12 @@
       <text-field v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
     </search-fields-wrapper>
 
-    <!-- NOTE: Gives error: undefined field latlong -->
-    <!-- <search-view-map-wrapper
-      sample-overlay
-      :items="items"
-      class="mt-2"
-      :active="geoJSON != null"
-      @update="handleMapUpdate"
-    /> -->
-    <!-- NOTE: Gives errorL undefined field database_id -->
-    <!-- <institution-search-filter
+    <institution-search-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
       @change:institution="institution = $event"
-    /> -->
-
-    <extra-options class="mt-2" />
+    />
   </v-form>
 </template>
 
@@ -51,24 +41,21 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-// import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
-
+import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import ExtraOptions from '~/components/search/ExtraOptions.vue'
-// import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
   name: 'SpecimenSearchForm',
   components: {
-    ExtraOptions,
-    // InstitutionSearchFilter,
+    InstitutionSearchFilter,
     AutocompleteField,
     TextField,
     SearchFieldsWrapper,
     SearchActions,
-    // SearchViewMapWrapper,
+    QuerySearchField,
   },
   mixins: [autocompleteMixin],
   data() {
@@ -89,6 +76,7 @@ export default {
       locality: 'filters.byIds.locality.value',
       fossil: 'filters.byIds.fossil.value',
       hierarchy: 'filters.byIds.hierarchy.value',
+      query: 'query',
     }),
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',

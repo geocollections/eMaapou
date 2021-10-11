@@ -1,25 +1,28 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
-    :headers="headers"
-    :count="count"
     :options="options"
+    :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.file="{ item }">
       <attachment-cell
+        v-if="item.attachment"
         :src="
           $img(
-            `${item.attachment__filename}`,
+            `${item.attachment.filename}`,
             { size: 'small' },
             { provider: 'geocollections' }
           )
         "
-        :type="item.attachment__attachment_format__value"
+        :type="item.attachment.attachment_format.value"
         @click="
           $router.push(
-            localePath({ name: 'file-id', params: { id: item.attachment } })
+            localePath({ name: 'file-id', params: { id: item.attachment.id } })
           )
         "
       />
@@ -28,31 +31,38 @@
       <nuxt-link
         v-if="item.attachment"
         class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item.attachment } })"
+        :to="
+          localePath({ name: 'file-id', params: { id: item.attachment.id } })
+        "
       >
         {{
           $translate({
-            et: item.attachment__description,
-            en: item.attachment__description_en,
+            et: item.attachment.description,
+            en: item.attachment.description_en,
           })
         }}
       </nuxt-link>
+    </template>
+    <template #item.agent="{ item }">
+      <div v-if="item.attachment && item.attachment.author">
+        {{ item.attachment.author.agent }}
+      </div>
     </template>
   </table-wrapper>
 </template>
 
 <script>
-import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapper from './TableWrapper.vue'
 import AttachmentCell from '~/components/AttachmentCell.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_ATTACHMENT } from '~/constants'
 
 export default {
   name: 'AttachmentTable',
   components: { TableWrapper, AttachmentCell },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -70,35 +80,10 @@ export default {
         sortDesc: [],
       }),
     },
-    // ??? Why is this needed
-    idField: {
-      type: String,
-      required: false,
-      default: 'id',
-    },
   },
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('attachment.file'),
-          value: 'file',
-          width: '120px',
-          sortable: false,
-        },
-        { text: this.$t('attachment.description'), value: 'description' },
-        {
-          text: this.$t('attachment.author'),
-          value: 'attachment__author__agent',
-        },
-      ],
-      queryFields: {
-        description: () =>
-          this.$i18n.locale === 'et'
-            ? 'attachment__description'
-            : 'attachment__description_en',
-        attachment__author__agent: () => 'attachment__author__agent',
-      },
+      localHeaders: cloneDeep(HEADERS_ATTACHMENT),
     }
   },
 }

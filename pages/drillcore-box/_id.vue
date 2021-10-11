@@ -8,7 +8,7 @@
       />
     </template>
     <template #top>
-      <v-card v-if="activeImage" class="mx-4 my-2">
+      <v-card v-if="activeImage" class="my-2">
         <v-card-text>
           <v-hover v-slot="{ hover }">
             <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
@@ -21,21 +21,21 @@
               }"
               :lazy-src="
                 $img(
-                  activeImage.attachment__uuid_filename,
+                  activeImage.attachment.uuid_filename,
                   { size: 'small' },
                   { provider: 'geocollections' }
                 )
               "
               :src="
                 $img(
-                  activeImage.attachment__uuid_filename,
+                  activeImage.attachment.uuid_filename,
                   { size: 'large' },
                   { provider: 'geocollections' }
                 )
               "
               max-width="2000"
               max-height="1000"
-              @click="$openImage(activeImage.attachment__uuid_filename)"
+              @click="$openImage(activeImage.attachment.uuid_filename)"
             >
               <template #placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -48,6 +48,7 @@
             </v-img>
           </v-hover>
 
+          <!-- eslint-disable prettier/prettier -->
           <div
             class="
               justify-center
@@ -58,35 +59,36 @@
               flex-md-row
             "
           >
+            <!-- eslint-enable prettier/prettier -->
             <div class="text-center text-md-left">
               <div
                 v-if="
-                  activeImage.attachment__author__agent ||
-                  activeImage.attachment__author_free
+                  activeImage.attachment.author ||
+                  activeImage.attachment.author_free
                 "
               >
                 <span class="font-weight-bold"
                   >{{ $t('drillcoreBox.author') }}:
                 </span>
-                <span v-if="activeImage.attachment__author__agent">{{
-                  activeImage.attachment__author__agent
+                <span v-if="activeImage.attachment.author.agent">{{
+                  activeImage.attachment.author.agent
                 }}</span>
-                <span v-else>{{ activeImage.attachment__author_free }}</span>
+                <span v-else>{{ activeImage.attachment.author_free }}</span>
               </div>
               <div
                 v-if="
-                  activeImage.attachment__date_created ||
-                  activeImage.attachment__date_created_free
+                  activeImage.attachment.date_created ||
+                  activeImage.attachment.date_created_free
                 "
               >
                 <span class="font-weight-bold"
                   >{{ $t('drillcoreBox.date') }}:
                 </span>
-                <span v-if="activeImage.attachment__date_created">{{
-                  activeImage.attachment__date_created
+                <span v-if="activeImage.attachment.date_created">{{
+                  activeImage.attachment.date_created
                 }}</span>
                 <span v-else>{{
-                  activeImage.attachment__date_created_free
+                  activeImage.attachment.date_created_free
                 }}</span>
               </div>
             </div>
@@ -96,7 +98,7 @@
                 <a
                   class="text-link"
                   @click="
-                    $openImage(activeImage.attachment__uuid_filename, size)
+                    $openImage(activeImage.attachment.uuid_filename, size)
                   "
                 >
                   {{ $t(`common.${size}`) }}
@@ -121,14 +123,14 @@
                 <v-img
                   :src="
                     $img(
-                      item.attachment__uuid_filename,
+                      item.attachment.uuid_filename,
                       { size: 'small' },
                       { provider: 'geocollections' }
                     )
                   "
                   :lazy-src="
                     $img(
-                      item.attachment__uuid_filename,
+                      item.attachment.uuid_filename,
                       { size: 'small' },
                       { provider: 'geocollections' }
                     )
@@ -162,7 +164,7 @@
       </v-card>
     </template>
     <template #default>
-      <v-card flat tile>
+      <v-card>
         <v-card-title class="subsection-title">{{
           $t('common.general')
         }}</v-card-title>
@@ -171,18 +173,19 @@
             <template #default>
               <tbody>
                 <link-data-row
+                  v-if="drillcoreBox.drillcore"
                   nuxt
                   :title="$t('drillcoreBox.drillcore')"
                   :value="
                     $translate({
-                      et: drillcoreBox.drillcore__drillcore,
-                      en: drillcoreBox.drillcore__drillcore_en,
+                      et: drillcoreBox.drillcore.drillcore,
+                      en: drillcoreBox.drillcore.drillcore_en,
                     })
                   "
                   :href="
                     localePath({
                       name: 'drillcore-id',
-                      params: { id: drillcoreBox.drillcore__id },
+                      params: { id: drillcoreBox.drillcore.id },
                     })
                   "
                 />
@@ -203,18 +206,19 @@
                   :value="drillcoreBox.diameter"
                 />
                 <link-data-row
+                  v-if="drillcoreBox.stratigraphy_top"
                   :title="$t('drillcoreBox.stratigraphyTop')"
                   :value="
                     $translate({
-                      et: drillcoreBox.stratigraphy_top__stratigraphy,
-                      en: drillcoreBox.stratigraphy_top__stratigraphy_en,
+                      et: drillcoreBox.stratigraphy_top.stratigraphy,
+                      en: drillcoreBox.stratigraphy_top.stratigraphy_en,
                     })
                   "
                   nuxt
                   :href="
                     localePath({
                       name: 'stratigraphy-id',
-                      params: { id: drillcoreBox.stratigraphy_top_id },
+                      params: { id: drillcoreBox.stratigraphy_top.id },
                     })
                   "
                 />
@@ -223,11 +227,12 @@
                   :value="drillcoreBox.stratigraphy_top_free"
                 />
                 <link-data-row
+                  v-if="drillcoreBox.stratigraphy_base"
                   :title="$t('drillcoreBox.stratigraphyBase')"
                   :value="
                     $translate({
-                      et: drillcoreBox.stratigraphy_base__stratigraphy,
-                      en: drillcoreBox.stratigraphy_base__stratigraphy_en,
+                      et: drillcoreBox.stratigraphy_base.stratigraphy,
+                      en: drillcoreBox.stratigraphy_base.stratigraphy_en,
                     })
                   "
                   nuxt
@@ -264,7 +269,10 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -273,11 +281,13 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import Tabs from '@/components/Tabs'
-import TitleCardDetail from '@/components/TitleCardDetail.vue'
+
+import Tabs from '~/components/Tabs.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
+import { TABS_DRILLCORE_BOX } from '~/constants'
 
 export default {
   components: {
@@ -287,89 +297,39 @@ export default {
     TitleCardDetail,
     Detail,
   },
-  async asyncData({ $axios, params, route, error, app, redirect }) {
+  async asyncData({ params, route, error, $services }) {
     try {
-      const drillcoreBoxResponse = await app.$services.sarvREST.getResource(
+      const drillcoreBoxResponse = await $services.sarvREST.getResource(
         'drillcore_box',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
       const ids = drillcoreBoxResponse?.ids
-      const drillcoreBox = drillcoreBoxResponse.results[0]
+      const drillcoreBox = drillcoreBoxResponse
 
-      const attachmentLinkResponse = await $axios.$get(
-        `https://api.geocollections.info/attachment_link/?drillcore_box=${params.id}&order_by=-attachment__is_preferred&fields=attachment__author__agent,attachment__author_free,attachment__date_created,attachment__date_created_free,attachment__uuid_filename,attachment__is_preferred`
+      const attachmentLinkResponse = await $services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            drillcore_box: params.id,
+            nest: 2,
+            ordering: '-attachment__is_preferred',
+          },
+        }
       )
-      const drillcoreBoxImages = attachmentLinkResponse.results
+
+      const drillcoreBoxImages = attachmentLinkResponse.items
       const activeImage = drillcoreBoxImages?.[0]
-
-      const tabs = [
-        {
-          id: 'sample',
-          routeName: 'drillcore-box-id',
-          isSolr: true,
-          title: 'drillcore.samples',
-          count: 0,
-          props: {
-            locality: drillcoreBox.drillcore__locality,
-            depthStart: drillcoreBox.depth_start,
-            depthEnd: drillcoreBox.depth_end,
-          },
-        },
-        {
-          id: 'analysis',
-          routeName: 'drillcore-box-id-analyses',
-          title: 'drillcore.analyses',
-          isSolr: true,
-          count: 0,
-          props: {
-            locality: drillcoreBox.drillcore__locality,
-            depthStart: drillcoreBox.depth_start,
-            depthEnd: drillcoreBox.depth_end,
-          },
-        },
-        {
-          id: 'specimen',
-          routeName: 'drillcore-box-id-specimens',
-          title: 'drillcore.specimens',
-          isSolr: true,
-          count: 0,
-          props: {
-            locality: drillcoreBox.drillcore__locality,
-            depthStart: drillcoreBox.depth_start,
-            depthEnd: drillcoreBox.depth_end,
-          },
-        },
-      ]
-
-      const hydratedTabs =
-        !isNil(drillcoreBox?.drillcore__locality) &&
-        !isNil(drillcoreBox?.depth_start) &&
-        !isNil(drillcoreBox?.depth_end)
-          ? await Promise.all(
-              tabs.map(
-                async (tab) =>
-                  await app.$hydrateCount(tab, {
-                    solr: {
-                      default: {
-                        fq: `locality_id:${drillcoreBox.drillcore__locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
-                      },
-                    },
-                    api: {},
-                  })
-              )
-            )
-          : tabs
-
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
 
       return {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
@@ -381,8 +341,55 @@ export default {
   data() {
     return {
       imageSizes: ['small', 'medium', 'large', 'original'],
+      tabs: [],
+      initActiveTab: '',
     }
   },
+  async fetch() {
+    const tabs = TABS_DRILLCORE_BOX.allIds.map(
+      (id) => TABS_DRILLCORE_BOX.byIds[id]
+    )
+
+    const hydratedTabs =
+      !isNil(this.drillcoreBox?.drillcore?.locality) &&
+      !isNil(this.drillcoreBox?.depth_start) &&
+      !isNil(this.drillcoreBox?.depth_end)
+        ? await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await this.$hydrateTab(tab, {
+                  props: {
+                    locality: this.drillcoreBox.drillcore?.locality,
+                    depthStart: this.drillcoreBox.depth_start,
+                    depthEnd: this.drillcoreBox.depth_end,
+                  },
+                  countParams: {
+                    solr: {
+                      default: {
+                        fq: `locality_id:${this.drillcoreBox.drillcore?.locality} AND (depth:[${this.drillcoreBox.depth_start} TO ${this.drillcoreBox.depth_end}] OR depth_interval:[${this.drillcoreBox.depth_start} TO ${this.drillcoreBox.depth_end}])`,
+                      },
+                    },
+                    api: {},
+                  },
+                })
+            )
+          )
+        : tabs
+
+    const text = `${this.$translate({
+      et: this.drillcoreBox.drillcore?.drillcore,
+      en: this.drillcoreBox.drillcore?.drillcore_en,
+    })}-${this.drillcoreBox.number}`
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
@@ -400,8 +407,8 @@ export default {
       return `${this.$t('drillcoreBox.nr', {
         number: this.drillcoreBox.number,
       })} - ${this.$translate({
-        et: this.drillcoreBox.drillcore__drillcore,
-        en: this.drillcoreBox.drillcore__drillcore_en,
+        et: this.drillcoreBox.drillcore?.drillcore,
+        en: this.drillcoreBox.drillcore?.drillcore_en,
       })}`
     },
     filteredTabs() {
@@ -410,8 +417,8 @@ export default {
 
     drillcoreBoxTitle() {
       let title = this.$translate({
-        et: this.drillcoreBox.drillcore__drillcore,
-        en: this.drillcoreBox.drillcore__drillcore_en,
+        et: this.drillcoreBox.drillcore?.drillcore,
+        en: this.drillcoreBox.drillcore?.drillcore_en,
       })
       if (this.drillcoreBox.number)
         title += `, ${this.$t('drillcoreBox.nr', {

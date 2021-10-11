@@ -70,8 +70,8 @@
           "
         >
           <v-icon large color="primary darken-2"
-            >mdi-file-download-outline</v-icon
-          >
+            >mdi-file-download-outline
+          </v-icon>
           {{ $t('file.download') }}
         </div>
 
@@ -86,9 +86,9 @@
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
-            <div v-if="file.author__agent || file.author_free">
+            <div v-if="file.author || file.author_free">
               <span class="font-weight-bold">{{ $t('file.author') }}: </span>
-              <span v-if="file.author__agent">{{ file.author__agent }}</span>
+              <span v-if="file.author">{{ file.author }}</span>
               <span v-else>{{ file.author_free }}</span>
             </div>
             <div v-if="file.date_created || file.date_created_free">
@@ -125,78 +125,84 @@
           <template #default>
             <tbody>
               <link-data-row
+                v-if="specimen && specimen.coll"
                 :title="$t('file.collectionNr')"
-                :value="file.specimen__coll__number"
+                :value="specimen.coll.number"
                 nuxt
                 :href="
                   localePath({
                     name: 'specimen-id',
-                    params: { id: file.specimen },
+                    params: { id: file.specimen.id },
                   })
                 "
               />
               <link-data-row
+                v-if="specimen"
                 :title="$t('file.specimenNr')"
-                :value="file.specimen__specimen_id"
+                :value="file.specimen.specimen_id"
                 nuxt
                 :href="
                   localePath({
                     name: 'specimen-id',
-                    params: { id: file.specimen },
+                    params: { id: file.specimen.id },
                   })
                 "
               />
               <template v-for="(item, index) in specimenIdentification">
                 <link-data-row
+                  v-if="item.taxon"
                   :key="index"
                   :title="$t('file.name')"
-                  :value="item.taxon__taxon"
+                  :value="item.taxon.taxon"
                   :suffix="item.name ? `| ${item.name}` : ''"
                   @link-click="
-                    $openWindow(`https://fossiilid.info/${item.taxon_id}`)
+                    $openWindow(`https://fossiilid.info/${item.taxon.id}`)
                   "
                 />
               </template>
               <template v-for="(item, index) in specimenIdentificationGeology">
                 <link-data-row
+                  v-if="item.taxon"
                   :key="index"
                   :title="$t('file.name')"
-                  :value="item.taxon__taxon"
+                  :value="item.taxon.taxon"
                   :suffix="item.name ? `| ${item.name}` : ''"
                   @link-click="
-                    $openWindow(`https://fossiilid.info/${item.taxon_id}`)
+                    $openWindow(`https://fossiilid.info/${item.taxon.id}`)
                   "
                 />
               </template>
               <link-data-row
+                v-if="specimen && specimen.locality"
                 :title="$t('file.locality')"
                 :value="
                   $translate({
-                    et: file.specimen__locality__locality,
-                    en: file.specimen__locality__locality_en,
+                    et: specimen.locality.locality,
+                    en: specimen.locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: file.specimen__locality },
+                    params: { id: specimen.locality.id },
                   })
                 "
               />
               <link-data-row
+                v-if="specimen && specimen.stratigraphy"
                 :title="$t('file.stratigraphy')"
                 :value="
                   $translate({
-                    et: file.specimen__stratigraphy__stratigraphy,
-                    en: file.specimen__stratigraphy__stratigraphy_en,
+                    et: specimen.stratigraphy.stratigraphy,
+                    en: specimen.stratigraphy.stratigraphy_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'stratigraphy-id',
-                    params: { id: file.specimen__stratigraphy },
+                    params: { id: specimen.stratigraphy.id },
                   })
                 "
               />
@@ -218,17 +224,16 @@
                 :value="file.image_number"
               />
               <data-row
+                v-if="imageset"
                 :title="$t('file.imagesetNumber')"
-                :value="file.imageset__imageset_number"
+                :value="imageset.imageset_number"
               />
               <data-row
+                v-if="imageset"
                 :title="$t('file.imagesetDescription')"
-                :value="file.imageset__description"
+                :value="imageset.description"
               />
-              <data-row
-                :title="$t('file.author')"
-                :value="file.author__agent"
-              />
+              <data-row :title="$t('file.author')" :value="file.author" />
               <data-row :title="$t('file.author')" :value="file.author_free" />
               <data-row
                 :title="$t('file.imagePeople')"
@@ -243,18 +248,19 @@
                 :value="file.image_place"
               />
               <link-data-row
+                v-if="locality"
                 :title="$t('file.locality')"
                 :value="
                   $translate({
-                    et: file.locality__locality,
-                    en: file.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: file.locality },
+                    params: { id: locality.id },
                   })
                 "
               />
@@ -267,31 +273,34 @@
                 :value="file.image_longitude"
               />
               <data-row
+                v-if="type"
                 :title="$t('file.type')"
                 :value="
                   $translate({
-                    et: file.type__value,
-                    en: file.type__value_en,
+                    et: type.value,
+                    en: type.value_en,
                   })
                 "
               />
               <data-row
                 :title="$t('file.format')"
-                :value="file.attachment_format__value"
+                :value="file.attachment_format"
               />
               <data-row
+                v-if="attachmentKeywords.length > 0"
                 :title="$t('file.keywords')"
                 :value="attachmentKeywords"
               >
                 <template #value>
                   <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                    <li>{{ item.keyword__keyword }}</li>
+                    <li v-if="item.keyword">{{ item.keyword.keyword }}</li>
                   </ul>
                 </template>
               </data-row>
               <data-row
+                v-if="agent_digitised"
                 :title="$t('file.personDigitised')"
-                :value="file.agent_digitised__agent"
+                :value="agent_digitised.agent"
               />
               <data-row
                 :title="$t('file.dateDigitised')"
@@ -299,23 +308,25 @@
               />
               <data-row :title="$t('file.imageSize')" :value="imageSize" />
               <link-data-row
+                v-if="database"
                 :title="$t('file.institution')"
                 :value="
                   $translate({
-                    et: file.database__name,
-                    en: file.database__name_en,
+                    et: database.name,
+                    en: database.name_en,
                   })
                 "
                 @link-click="
                   $openWindow(
-                    `https://geocollections.info/${file.database__acronym.toLowerCase()}`
+                    `https://geocollections.info/${file.database.acronym.toLowerCase()}`
                   )
                 "
               />
               <link-data-row
+                v-if="licence"
                 :title="$t('file.licence')"
-                :value="file.licence__licence_en"
-                @link-click="$openWindow(file.licence__licence_url_en)"
+                :value="licence.licence_en"
+                @link-click="$openWindow(licence.licence_url_en)"
               />
               <data-row :title="$t('file.remarks')" :value="file.remarks" />
               <data-row
@@ -333,9 +344,9 @@
         </v-simple-table>
 
         <v-card v-if="showMap" id="map-wrap" elevation="0">
-          <v-card-title class="pl-0 subsection-title">{{
-            $t('locality.map')
-          }}</v-card-title>
+          <v-card-title class="pl-0 subsection-title"
+            >{{ $t('locality.map') }}
+          </v-card-title>
           <leaflet-map
             rounded
             :estonian-map="mapIsEstonian"
@@ -361,7 +372,10 @@
     </template>
 
     <template #bottom>
-      <v-row v-if="filteredTabs.length > 0" class="mt-2">
+      <v-row
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-2"
+      >
         <v-col
           v-for="(item, index) in filteredTabs"
           :key="index"
@@ -369,9 +383,9 @@
           md="6"
         >
           <v-card>
-            <v-card-title class="subsection-title">{{
-              $t(item.title)
-            }}</v-card-title>
+            <v-card-title class="subsection-title"
+              >{{ $t(item.title) }}
+            </v-card-title>
 
             <v-card-text>
               <v-simple-table>
@@ -392,20 +406,11 @@
                             :to="
                               localePath({
                                 name: `${item.route ? item.route : item.id}-id`,
-                                params: { id: row[item.id] },
+                                params: { id: row[item.id].id },
                               })
                             "
-                            >{{ row[item.id] }}</nuxt-link
-                          >
-                          <a
-                            v-else-if="item.isGeoLink"
-                            class="text-link"
-                            @click="$openGeoDetail(item.id, row[item.id])"
-                            >{{ row[item.id] }}
-                            <v-icon small color="primary darken-2"
-                              >mdi-open-in-new</v-icon
-                            >
-                          </a>
+                            >{{ row[item.id].id }}
+                          </nuxt-link>
                           <a
                             v-else
                             class="text-link"
@@ -413,19 +418,23 @@
                               $openWindow(
                                 `${item.href}${
                                   item.id === 'doi'
-                                    ? row.doi__identifier
-                                    : row[item.id]
+                                    ? row.doi.identifier
+                                    : row[item.id].id
                                 }`
                               )
                             "
-                            >{{ row[item.id] }}
+                            >{{
+                              item.id === 'doi'
+                                ? row.doi.identifier
+                                : row[item.id].id
+                            }}
                             <v-icon small color="primary darken-2"
-                              >mdi-open-in-new</v-icon
-                            ></a
-                          >
+                              >mdi-open-in-new
+                            </v-icon>
+                          </a>
                         </template>
                         <template v-else>
-                          {{ row[item.id] }}
+                          {{ row[item.id].id }}
                         </template>
                       </td>
                       <td>{{ buildData(item.id, row) }}</td>
@@ -433,6 +442,62 @@
                   </tbody>
                 </template>
               </v-simple-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-row v-if="fileContent" class="mt-2">
+        <v-col cols="12">
+          <v-card>
+            <v-card-title class="subsection-title">{{
+              $t('file.fileContents')
+            }}</v-card-title>
+
+            <v-card-text>
+              <v-expansion-panels v-model="expansionPanel" multiple>
+                <v-expansion-panel
+                  v-if="rawFileContent && file.uuid_filename.endsWith('.las')"
+                >
+                  <v-expansion-panel-header>{{
+                    $t('file.lasGraph')
+                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <las-chart
+                      :chart-title="fileTitle"
+                      :file-data="rawFileContent"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-expansion-panel
+                  v-else-if="
+                    rawFileContent && file.uuid_filename.endsWith('.txt')
+                  "
+                >
+                  <v-expansion-panel-header>{{
+                    $t('file.textTable')
+                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-data-table
+                      :headers="rawFileContent.headers"
+                      :items="rawFileContent.items"
+                    />
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-expansion-panel>
+                  <v-expansion-panel-header>
+                    {{ $t('file.lasText') }}</v-expansion-panel-header
+                  >
+                  <v-expansion-panel-content>
+                    <pre>
+                {{ fileContent }}
+              </pre
+                    >
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-card-text>
           </v-card>
         </v-col>
@@ -448,8 +513,11 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import Detail from '~/components/templates/Detail'
+import LasChart from '~/components/chart/types/LasChart'
+
 export default {
   components: {
+    LasChart,
     TitleCardDetail,
     LeafletMap,
     DataRow,
@@ -463,226 +531,16 @@ export default {
         params.id,
         {
           params: {
+            nest: 2,
             only_photo_ids: route.name.startsWith('photo'),
           },
         }
       )
       const ids = fileResponse?.ids
-      const file = fileResponse.results[0]
-      let specimenIdentification
-      let specimenIdentificationGeology
-      if (file.specimen) {
-        const specimenIdentificationResponse =
-          await app.$services.sarvREST.getResourceList(
-            'specimen_identification',
-            {
-              isValid: isNil(file.id),
-              defaultParams: {
-                current: true,
-                specimen_id: file.specimen,
-              },
-            }
-          )
-        specimenIdentification = specimenIdentificationResponse.items
-        const specimenIdentificationGeologyResponse =
-          await app.$services.sarvREST.getResourceList(
-            'specimen_identification_geology',
-            {
-              isValid: isNil(file.id),
-              defaultParams: {
-                current: true,
-                specimen_id: file.specimen,
-              },
-            }
-          )
-        specimenIdentificationGeology =
-          specimenIdentificationGeologyResponse.items
-      }
-      const attachmentKeywordsResponse =
-        await app.$services.sarvREST.getResourceList('attachment_keyword', {
-          isValid: isNil(file.id),
-          defaultParams: {
-            attachment: file.id,
-          },
-        })
-      const attachmentKeywords = attachmentKeywordsResponse.items
-
-      const tabs = [
-        {
-          id: 'collection',
-          fields: 'collection,collection__name,collection__name_en',
-          title: 'related.collection',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'specimen',
-          fields: 'specimen,specimen__coll__number,specimen__specimen_id',
-          title: 'related.specimen',
-          count: 0,
-          items: [],
-          isLink: true,
-          isGeoLink: true,
-        },
-        {
-          id: 'sample',
-          fields: 'sample,sample__number',
-          title: 'related.sample',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'sample_series',
-          fields: 'sample_series,sample_series__name',
-          title: 'related.sample_series',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'analysis',
-          fields: 'analysis,analysis__sample__number',
-          title: 'related.analysis',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'dataset',
-          fields: 'dataset,dataset__name,dataset__name_en',
-          title: 'related.dataset',
-          count: 0,
-          items: [],
-          isLink: true,
-          isGeoLink: true,
-        },
-        {
-          id: 'doi',
-          fields: 'doi,doi__identifier',
-          title: 'related.doi',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://doi.geocollections.info/',
-        },
-        {
-          id: 'locality',
-          fields: 'locality,locality__locality,locality__locality_en',
-          title: 'related.locality',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'drillcore',
-          fields: 'drillcore,drillcore__drillcore,drillcore__drillcore_en',
-          title: 'related.drillcore',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'drillcore_box',
-          route: 'drillcore-box',
-          fields: 'drillcore_box,drillcore_box__number',
-          title: 'related.drillcore_box',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'preparation',
-          fields: 'preparation,preparation__preparation_number',
-          title: 'related.preparation',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'reference',
-          fields: 'reference,reference__reference',
-          title: 'related.reference',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://kirjandus.geoloogia.info/reference/',
-        },
-        {
-          id: 'storage',
-          fields: 'storage,storage__location',
-          title: 'related.storage',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'project',
-          fields: 'project,project__name,project__name_en',
-          title: 'related.project',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'site',
-          fields: 'site,site__name,site__name_en',
-          title: 'related.site',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'locality_description',
-          fields: 'locality_description,locality_description__description',
-          title: 'related.locality_description',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'taxon',
-          fields: 'taxon,taxon__taxon',
-          title: 'related.taxon',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://fossiilid.info/',
-        },
-      ]
-
-      const forLoop = async () => {
-        for (const tab of tabs) {
-          const response = await app.$services.sarvREST.getResourceList(
-            'attachment_link',
-            {
-              isValid: isNil(file.id),
-              defaultParams: {
-                [`${tab.id}__isnull`]: false,
-                attachment: file.id,
-                fields: tab.fields,
-              },
-            }
-          )
-          tab.count = response.count || 0
-          tab.items = response.items || []
-        }
-      }
-      await forLoop()
+      const file = fileResponse
 
       return {
         file,
-        specimenIdentification,
-        specimenIdentificationGeology,
-        attachmentKeywords,
-        tabs,
         ids,
       }
     } catch (err) {
@@ -692,6 +550,340 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      expansionPanel: [1],
+      nameFields: {
+        collection: {
+          et: 'collection_name',
+          en: 'collection_name_en',
+        },
+        specimen: {
+          et: 'number',
+          en: 'number',
+        },
+        sample: {
+          et: 'number',
+          en: 'number',
+        },
+        sample_series: {
+          et: 'name',
+          en: 'name',
+        },
+        analysis: {
+          et: 'number',
+          en: 'number',
+        },
+        dataset: {
+          et: 'name',
+          en: 'name_en',
+        },
+        doi: {
+          et: 'identifier',
+          en: 'identifier',
+        },
+        locality: {
+          et: 'locality',
+          en: 'locality_en',
+        },
+        drillcore: {
+          et: 'drillcore',
+          en: 'drillcore_en',
+        },
+        drillcore_box: {
+          et: 'number',
+          en: 'number',
+        },
+        preparation: {
+          et: 'preparation_number',
+          en: 'preparation_number',
+        },
+        reference: {
+          et: 'reference',
+          en: 'reference',
+        },
+        storage: {
+          et: 'location',
+          en: 'location',
+        },
+        project: {
+          et: 'name',
+          en: 'name_en',
+        },
+        site: {
+          et: 'name',
+          en: 'name_en',
+        },
+        locality_description: {
+          et: 'description',
+          en: 'description',
+        },
+        taxon: {
+          et: 'taxon',
+          en: 'taxon',
+        },
+      },
+      specimenIdentification: [],
+      specimenIdentificationGeology: [],
+      attachmentKeywords: [],
+      fileContent: '',
+      rawFileContent: '',
+      tabs: [
+        {
+          id: 'collection',
+          title: 'related.collection',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'specimen',
+          title: 'related.specimen',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'sample',
+          title: 'related.sample',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'sample_series',
+          title: 'related.sample_series',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'analysis',
+          title: 'related.analysis',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'dataset',
+          title: 'related.dataset',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'doi',
+          title: 'related.doi',
+          count: 0,
+          items: [],
+          isLink: true,
+          href: 'https://doi.geocollections.info/',
+        },
+        {
+          id: 'locality',
+          title: 'related.locality',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'drillcore',
+          title: 'related.drillcore',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'drillcore_box',
+          route: 'drillcore-box',
+          title: 'related.drillcore_box',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'preparation',
+          title: 'related.preparation',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'reference',
+          title: 'related.reference',
+          count: 0,
+          items: [],
+          isLink: true,
+          href: 'https://kirjandus.geoloogia.info/reference/',
+        },
+        {
+          id: 'storage',
+          title: 'related.storage',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'project',
+          title: 'related.project',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'site',
+          title: 'related.site',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'locality_description',
+          title: 'related.locality_description',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'taxon',
+          title: 'related.taxon',
+          count: 0,
+          items: [],
+          isLink: true,
+          href: 'https://fossiilid.info/',
+        },
+      ],
+    }
+  },
+  async fetch() {
+    const text = () => {
+      switch (this.file?.specimen_image_attachment) {
+        case 1:
+          return `${this.file?.specimen?.coll?.number}-${
+            this.file?.specimen?.specimen_id?.split('-')?.[1]
+          } (ID-${this.file.specimen.id})`
+        case 2:
+          return this.file.image_number
+        case 4:
+          return this.file?.reference?.reference
+        default:
+          return `${this.$translate({
+            et: this.file?.description,
+            en: this.file?.description_en,
+          })}`
+      }
+    }
+
+    const slugRoute = this.$createSlugRoute(this.$route, text())
+    if (slugRoute.path !== this.$route.path)
+      await this.$router.replace(slugRoute.path)
+
+    // Specimen data START
+    if (this.file?.specimen) {
+      const specimenIdentificationResponse =
+        await this.$services.sarvREST.getResourceList(
+          'specimen_identification',
+          {
+            isValid: isNil(this.file?.id),
+            defaultParams: {
+              current: true,
+              specimen: this.file?.specimen?.id,
+              nest: 1,
+            },
+          }
+        )
+      this.specimenIdentification = specimenIdentificationResponse.items
+      const specimenIdentificationGeologyResponse =
+        await this.$services.sarvREST.getResourceList(
+          'specimen_identification_geology',
+          {
+            isValid: isNil(this.file?.id),
+            defaultParams: {
+              current: true,
+              specimen: this.file?.specimen?.id,
+              nest: 1,
+            },
+          }
+        )
+      this.specimenIdentificationGeology =
+        specimenIdentificationGeologyResponse.items
+    }
+    // Specimen data END
+
+    // Attachment keywords START
+    const attachmentKeywordsResponse =
+      await this.$services.sarvREST.getResourceList('attachment_keyword', {
+        isValid: isNil(this.file?.id),
+        defaultParams: {
+          attachment: this.file?.id,
+          nest: 1,
+        },
+      })
+    this.attachmentKeywords = attachmentKeywordsResponse.items
+    // Attachment keywords END
+
+    // Raw file content data START
+    if (
+      this.file?.uuid_filename?.endsWith('.txt') ||
+      this.file?.uuid_filename?.endsWith('.las')
+    ) {
+      // File content (e.g., .las in json format)
+      const fileContentResponse = await this.$services.sarvREST.getResource(
+        'file',
+        this.$route.params.id
+      )
+      this.fileContent = fileContentResponse
+      if (fileContentResponse.startsWith('Error: ')) this.fileContent = ''
+
+      // Raw file content in text format
+      const rawFileContentResponse = await this.$services.sarvREST.getResource(
+        'file',
+        this.$route.params.id,
+        {
+          params: {
+            raw_content: 'true',
+          },
+        }
+      )
+      this.rawFileContent = rawFileContentResponse
+      if (
+        typeof rawFileContentResponse === 'string' &&
+        rawFileContentResponse.startsWith('Error: ')
+      )
+        this.rawFileContent = ''
+    }
+    // Raw file content data END
+
+    // Related data START
+    const forLoop = async () => {
+      for (const tab of this.tabs) {
+        const response = await this.$services.sarvREST.getResourceList(
+          'attachment_link',
+          {
+            isValid: isNil(this.file?.id),
+            defaultParams: {
+              [`${tab.id}__isnull`]: false,
+              attachment: this.file?.id,
+              nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+            },
+          }
+        )
+        tab.count = response.count || 0
+        tab.items = response.items || []
+      }
+    }
+    await forLoop()
+    // Related data END
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.fileTitle,
@@ -710,87 +902,96 @@ export default {
     },
 
     fileTitle() {
-      switch (this?.file?.specimen_image_attachment) {
+      switch (this.file?.specimen_image_attachment) {
         case 1:
           return `${this.$t('file.specimenTitle')}: ${
-            this.file?.specimen__coll__number
-          }-${this.file?.specimen__specimen_id?.split('-')?.[1]} (ID: ${
-            this.file.specimen
+            this.file?.specimen?.coll?.number
+          }-${this.file?.specimen?.specimen_id?.split('-')?.[1]} (ID: ${
+            this.file.specimen.id
           })`
         case 2:
           return `${this.$t('file.imageTitle')}: ${this.file.image_number}`
         case 4:
           return `${this.$t('file.referenceTitle')}: ${
-            this.file.reference__reference
+            this.file?.reference?.reference
           }`
-        default:
-          return `${this.$t('file.fileTitle')}: ${this.$translate({
+        default: {
+          const description = this.$translate({
             et: this?.file?.description,
             en: this?.file?.description_en,
-          })}`
+          })
+
+          return `${this.$t('file.fileTitle')}: ${
+            description ?? this?.file?.id
+          }`
+        }
       }
     },
 
     imageSize() {
       if (this.file.image_width && this.file.image_height) {
         return `${this.file.image_width} × ${this.file.image_height} px`
-      } else return null
+      } else {
+        return null
+      }
     },
 
     isImage() {
-      return this.file.attachment_format__value.includes('image')
+      return this.file?.attachment_format.includes('image')
     },
 
     isAudio() {
-      return this.file.attachment_format__value.includes('audio')
+      return this.file?.attachment_format?.includes('audio')
     },
 
     isVideo() {
-      return this.file.attachment_format__value.includes('video')
+      return this.file?.attachment_format?.includes('video')
     },
 
     imageSizes() {
       let sizes = ['small', 'medium', 'large', 'original']
-      if (!this.isImage) sizes = ['original']
+      if (!this.isImage) {
+        sizes = ['original']
+      }
       return sizes
     },
 
     showMap() {
       return (
-        (this.file.locality__latitude && this.file.locality__longitude) ||
+        (this.file?.locality?.latitude && this.file?.locality?.longitude) ||
         (this.file.image_latitude && this.file.image_longitude) ||
-        (this.file.specimen__locality__latitude &&
-          this.file.specimen__locality__longitude)
+        (this.file?.specimen?.locality?.latitude &&
+          this.file?.specimen?.locality?.longitude)
       )
     },
 
     mapIsEstonian() {
       return (
-        this.file.locality__country__value === 'Eesti' ||
-        this.file.specimen__locality__country__value === 'Eesti'
+        this.file?.locality?.country?.value === 'Eesti' ||
+        this.file?.specimen?.locality?.country?.value === 'Eesti'
       )
     },
 
     mapLatitude() {
       return (
-        this.file.locality__latitude ||
-        this.file.specimen__locality__latitude ||
+        this.file?.locality?.latitude ||
+        this.file?.specimen?.locality?.latitude ||
         this.file.image_latitude
       )
     },
 
     mapLongitude() {
       return (
-        this.file.locality__longitude ||
-        this.file.specimen__locality__longitude ||
+        this.file?.locality?.longitude ||
+        this.file?.specimen?.locality?.longitude ||
         this.file.image_longitude
       )
     },
 
     mapLocality() {
       return (
-        this.file.locality__locality ||
-        this.file.specimen__locality__locality ||
+        this.file?.locality?.locality ||
+        this.file?.specimen?.locality?.locality ||
         this.file.image_place ||
         this.file.description
       )
@@ -798,30 +999,57 @@ export default {
 
     mapLocalityEn() {
       return (
-        this.file.locality__locality_en ||
-        this.file.specimen__locality__locality_en ||
+        this.file?.locality?.locality_en ||
+        this.file?.specimen?.locality?.locality_en ||
         this.file.image_place ||
         this.file.description_en
       )
+    },
+
+    specimen() {
+      return this?.file?.specimen
+    },
+
+    imageset() {
+      return this?.file?.imageset
+    },
+
+    locality() {
+      return this?.file?.locality
+    },
+
+    type() {
+      return this?.file?.type
+    },
+
+    agent_digitised() {
+      return this?.file?.agent_digitised
+    },
+
+    database() {
+      return this?.file?.database
+    },
+
+    licence() {
+      return this?.file?.licence
     },
   },
   methods: {
     isNull,
     isNil,
     buildData(type, data) {
-      const listOfIds = Object.keys(data)
-      listOfIds.splice(listOfIds.indexOf(type), 1)
-
-      if (listOfIds.length === 1) return data[listOfIds[0]]
-      else if (listOfIds.length === 2) {
-        if (type === 'specimen')
-          return `${data[listOfIds[0]].split(' ')[0]} ${data[listOfIds[1]]}`
-        else {
-          return this.$translate({
-            et: data[listOfIds[0]],
-            en: data[listOfIds[1]],
-          })
-        }
+      if (type === 'specimen') {
+        return `${data[type].coll.number.split(' ')[0]} ${
+          data[type].specimen_id
+        }`
+      }
+      if (type === 'analysis') {
+        return data[type].sample.number
+      } else {
+        return this.$translate({
+          et: data[type][this.nameFields[type].et],
+          en: data[type][this.nameFields[type].en],
+        })
       }
     },
   },

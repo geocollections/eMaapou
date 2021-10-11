@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -35,36 +37,31 @@
     </template>
 
     <template #item.database_acronym="{ item }">
-      <external-link
-        v-if="
-          item.database_acronym === 'GIT' ||
-          item.database_acronym === 'TUG' ||
-          item.database_acronym === 'ELM'
+      <nuxt-link
+        class="text-link"
+        :to="
+          localePath({
+            name: `institution-${item.database_acronym.toLowerCase()}`,
+          })
         "
-        @click.native="
-          $openWindow(
-            `https://geocollections.info/${item.database_acronym.toLowerCase()}`
-          )
-        "
-        >{{ item.database_acronym }}</external-link
       >
-      <div v-else>{{ item.database_acronym }}</div>
+        {{ item.database_acronym }}
+      </nuxt-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import TableWrapper from '@/components/tables/TableWrapper.vue'
 import { mapState } from 'vuex'
-import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET } from '~/constants'
 export default {
   name: 'DatasetTable',
-  components: { ExternalLink, TableWrapper },
+  components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -82,36 +79,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('dataset.id'), value: 'id' },
-        { text: this.$t('dataset.name'), value: 'name' },
-        { text: this.$t('dataset.date'), value: 'date' },
-        { text: this.$t('dataset.database'), value: 'database_acronym' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET),
+      module: 'dataset',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.dataset.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'dataset' }),
   },
 }
 </script>

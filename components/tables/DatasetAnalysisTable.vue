@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
+    v-bind="$attrs"
     :headers="mergedHeaders"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.analysis="{ item }">
       <nuxt-link
@@ -88,16 +90,15 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DATASET_ANALYSIS } from '~/constants'
 export default {
   name: 'DatasetAnalysisTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -122,31 +123,12 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('datasetAnalysis.analysis'), value: 'analysis' },
-        {
-          text: this.$t('datasetAnalysis.sampleNumber'),
-          value: 'sample',
-        },
-        { text: this.$t('datasetAnalysis.locality'), value: 'locality' },
-        {
-          text: this.$t('datasetAnalysis.stratigraphy'),
-          value: 'stratigraphy',
-        },
-        {
-          text: this.$t('datasetAnalysis.lithostratigraphy'),
-          value: 'lithostratigraphy',
-        },
-        {
-          text: this.$t('datasetAnalysis.depth'),
-          value: 'depth',
-        },
-      ],
+      localHeaders: cloneDeep(HEADERS_DATASET_ANALYSIS),
     }
   },
   computed: {
     mergedHeaders() {
-      return this.headers.concat(this.additionalHeaders)
+      return this.$_headers.concat(this.additionalHeaders)
     },
   },
   methods: {

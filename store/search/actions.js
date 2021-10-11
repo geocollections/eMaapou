@@ -1,8 +1,9 @@
 import {
   RESET_GEOJSON,
   RESET_INSTITUTIONS,
+  RESET_MODULE_OPTIONS,
   RESET_MODULE_FILTERS,
-  RESET_SEARCH_QUERY,
+  RESET_MODULE_QUERY,
   SET_MODULE_COUNT,
   SET_MODULE_ITEMS,
   SET_MODULE_OPTIONS,
@@ -11,9 +12,13 @@ import {
 export default {
   async resetFilters({ commit }, module) {
     const { initState } = await import(`/${module}/state.js`)
-    commit(RESET_MODULE_FILTERS, { module, initState: initState() })
 
-    commit(RESET_SEARCH_QUERY)
+    const initStateObj = initState()
+
+    commit(RESET_MODULE_QUERY, { module, initQuery: initStateObj.query })
+    commit(RESET_MODULE_FILTERS, { module, initFilters: initStateObj.filters })
+    commit(RESET_MODULE_OPTIONS, { module, initOptions: initStateObj.options })
+
     commit(RESET_GEOJSON)
     commit(RESET_INSTITUTIONS)
   },
@@ -47,11 +52,12 @@ export default {
     // The result should not depend on the order of the filters.
     const response = await this.$services.sarvSolr.getResourceList(resource, {
       options,
-      search: state.searchQuery,
-      queryFields: this.$getQueryFields(resourceDefaults.queryFields),
+      search: state[module].query,
+      fields: this.$getAPIFieldValues(resourceDefaults.headers),
       searchFilters: {
         ...moduleFilters,
         ...state[module].persistantFilters,
+        ...state[module].parameterFilters?.byIds,
         ...globalFilters,
       },
     })

@@ -1,34 +1,38 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <a
         v-if="item.reference"
         class="text-link"
-        @click="$openGeology('reference', item.reference)"
-        >{{ item.reference__reference }}</a
+        @click="$openGeology('reference', item.reference.id)"
+        >{{ item.reference.reference }}</a
       >
+    </template>
+    <template #item.title="{ item }">
+      <div v-if="item.reference">{{ item.reference.title }}</div>
     </template>
   </table-wrapper>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { HEADERS_LOCALITY_REFERENCE } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'LocalityReferenceTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -49,15 +53,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('localityReference.reference'), value: 'reference' },
-        {
-          text: this.$t('localityReference.referenceTitle'),
-          value: 'reference__title',
-        },
-        { text: this.$t('localityReference.pages'), value: 'pages' },
-        { text: this.$t('localityReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_LOCALITY_REFERENCE),
     }
   },
   methods: {

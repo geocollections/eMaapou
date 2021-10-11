@@ -14,11 +14,10 @@
       >
         {{ $t('cookiePolicy.introduction') }}
 
-        <!-- TODO:  Terms of use page is missing -->
         <nuxt-link
           class="text-link text-decoration-none"
           :title="$t('cookiePolicy.readMoreButton')"
-          :to="localePath({ name: 'terms_of_use' })"
+          :to="localePath({ name: 'terms' })"
         >
           {{ $t('cookiePolicy.readMoreButton') }}
           <v-icon small color="primary darken-2">mdi-cookie</v-icon>

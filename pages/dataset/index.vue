@@ -2,8 +2,8 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.datasetCount')"
-        icon="mdi-screw-machine-flat-top"
+        :title="$t('dataset.pageTitle')"
+        icon="mdi-database-outline"
         class="title-dataset"
       />
     </template>
@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <dataset-table
@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        stateful-headers
+        dynamic-headers
         @update="handleUpdate"
       />
     </template>
@@ -33,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import DatasetTable from '~/components/tables/DatasetTable'
 import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -43,7 +43,6 @@ export default {
     DatasetTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('dataset.pageTitle'),

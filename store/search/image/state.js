@@ -8,6 +8,7 @@ export const initState = () => {
     currentView: 'image',
     useMap: true,
     useInstitutions: true,
+    query: '',
     filters: {
       byIds: {
         locality: {

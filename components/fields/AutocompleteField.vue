@@ -9,9 +9,8 @@
     :clearable="!removeClearable"
     :cache-items="!doNotCache"
     :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
-    :return-object="!$attrs['item-value']"
+    :return-object="returnObject"
     v-on="$listeners"
-    @change="resetSearchInput"
   >
     <template #item="{ item }">
       <v-list-item-content>
@@ -27,6 +26,12 @@ export default {
   props: {
     removeClearable: Boolean,
     doNotCache: Boolean,
+    returnObject: {
+      type: Boolean,
+      default() {
+        return !this.$attrs['item-value']
+      },
+    },
   },
   data() {
     return {
@@ -45,13 +50,6 @@ export default {
         newVal !== oldVal
       ) {
         this.$emit('search:items', newVal)
-      }
-    },
-  },
-  methods: {
-    resetSearchInput() {
-      if (this.search && this.search.length > 0) {
-        this.search = null
       }
     },
   },

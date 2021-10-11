@@ -10,16 +10,19 @@
         <v-icon class="pb-1">mdi-warehouse</v-icon>
       </div>
     </template>
+
     <div
       class="
+        flex-wrap
         d-flex
-        flex-column flex-sm-row flex-md-column flex-wrap
+        flex-column flex-sm-row flex-md-column
         justify-space-between
       "
     >
       <div v-for="(entity, key) in institutions" :key="key">
         <v-tooltip
-          bottom
+          right
+          open-delay="200"
           :nudge-left="
             $vuetify.breakpoint.xs || $vuetify.breakpoint.mdAndUp ? '200' : '0'
           "
@@ -29,7 +32,9 @@
               <v-checkbox
                 multiple
                 :value="entity.id"
+                color="accent lighten-2"
                 hide-details
+                dense
                 :label="entity.acronym"
                 :input-value="institution"
                 @change="$emit('change:institution', $event)"
@@ -42,8 +47,8 @@
       </div>
     </div>
   </card-expandable>
-  <!-- <v-card class="mt-1 px-2">
-    <v-card-title class="py-1 px-0">
+  <!-- <v-card class="px-2 mt-1">
+    <v-card-title class="px-0 py-1">
       <div
         class="card-title--clickable"
         @click="showInstitutions = !showInstitutions"
@@ -60,7 +65,7 @@
     </v-card-title>
     <v-card-text v-show="showInstitutions" class="px-0 pb-3">
       <div
-        class="d-flex flex-column flex-sm-row flex-md-column flex-wrap justify-space-between"
+        class="flex-wrap d-flex flex-column flex-sm-row flex-md-column justify-space-between"
       >
         <div v-for="(entity, key) in institutions" :key="key">
           <v-tooltip

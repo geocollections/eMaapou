@@ -7,6 +7,7 @@ export const initState = () => {
     options: STRATIGRAPHY.options,
     useMap: false,
     useInstitutions: false,
+    query: '',
     filters: {
       byIds: {
         id: {

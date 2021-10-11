@@ -4,7 +4,7 @@
       <title-card-detail
         :ids="ids"
         :title="preparation.preparation_number"
-        class="title-main"
+        class="title-preparation"
       />
     </template>
 
@@ -21,18 +21,19 @@
                 :value="preparation.preparation_number"
               />
               <link-data-row
+                v-if="sample"
                 :title="$t('preparation.sample')"
                 :value="
-                  preparation.sample__number ||
-                  preparation.sample__number_additional ||
-                  preparation.sample__number_field ||
-                  preparation.sample_id
+                  sample.number ||
+                  sample.number_additional ||
+                  sample.number_field ||
+                  sample.id
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'sample-id',
-                    params: { id: preparation.sample_id },
+                    params: { id: sample.id },
                   })
                 "
               />
@@ -41,30 +42,34 @@
                 :value="preparation.sample_number"
               />
               <link-data-row
+                v-if="analysis"
                 :title="$t('preparation.analysis')"
-                :value="preparation.analysis_id"
+                :value="analysis.id"
                 nuxt
                 :href="
                   localePath({
                     name: 'analysis-id',
-                    params: { id: preparation.analysis_id },
+                    params: { id: analysis.id },
                   })
                 "
               />
               <link-data-row
+                v-if="taxon"
                 :title="$t('preparation.taxon')"
-                :value="preparation.taxon__taxon"
+                :value="taxon.taxon"
                 @link-click="
-                  $openWindow(`https://fossiilid.info/${preparation.taxon}`)
+                  $openWindow(`https://fossiilid.info/${preparation.taxon.id}`)
                 "
               />
               <data-row
+                v-if="agent"
                 :title="$t('preparation.agent')"
-                :value="preparation.agent__agent || preparation.agent_txt"
+                :value="agent.agent || preparation.agent_txt"
               />
               <data-row
+                v-if="identification_agent"
                 :title="$t('preparation.identification_agent')"
-                :value="preparation.identification_agent__agent"
+                :value="identification_agent.agent"
               />
               <data-row
                 :title="$t('preparation.date_prepared')"
@@ -85,12 +90,14 @@
                 :value="preparation.location"
               />
               <data-row
+                v-if="storage"
                 :title="$t('preparation.storage')"
-                :value="preparation.storage__location"
+                :value="storage.location"
               />
               <data-row
+                v-if="owner"
                 :title="$t('preparation.owner')"
-                :value="preparation.owner__agent"
+                :value="owner.agent"
               />
               <data-row
                 v-if="preparation.date_added"
@@ -112,7 +119,10 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 pb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -126,62 +136,28 @@ import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow'
 import LinkDataRow from '~/components/LinkDataRow'
 import Detail from '~/components/templates/Detail.vue'
+import { TABS_PREPARATION } from '~/constants'
 
 export default {
   components: { LinkDataRow, DataRow, TitleCardDetail, Tabs, Detail },
 
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({ params, route, error, $services }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'preparation',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
       const ids = detailViewResponse?.ids
-      const preparation = detailViewResponse.results[0]
-
-      const tabs = [
-        {
-          id: 'attachment_link',
-          routeName: 'preparation-id',
-          title: 'preparation.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'taxon_list',
-          isSolr: false,
-          routeName: 'preparation-id-taxa',
-          title: 'preparation.taxa',
-          count: 0,
-          props: {},
-        },
-      ]
-
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: { default: { fq: `preparation_id:${preparation.id}` } },
-                api: { default: { preparation: preparation.id } },
-              })
-          )
-        )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          preparation: preparation.id,
-        })
-      )
-
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
+      const preparation = detailViewResponse
 
       return {
         preparation,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
@@ -190,6 +166,42 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+    }
+  },
+  async fetch() {
+    const tabs = TABS_PREPARATION.allIds.map((id) => TABS_PREPARATION.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `preparation_id:${this.preparation?.id}` },
+              },
+              api: { default: { preparation: this.preparation?.id } },
+            },
+          })
+      )
+    )
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.preparation?.preparation_number
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.preparation.preparation_number,
@@ -205,6 +217,27 @@ export default {
   computed: {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
+    },
+    sample() {
+      return this.preparation?.sample
+    },
+    analysis() {
+      return this.preparation?.analysis
+    },
+    taxon() {
+      return this.preparation?.taxon
+    },
+    agent() {
+      return this.preparation?.agent
+    },
+    identification_agent() {
+      return this.preparation?.identification_agent
+    },
+    storage() {
+      return this.preparation?.storage
+    },
+    owner() {
+      return this.preparation?.owner
     },
   },
   methods: {

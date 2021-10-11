@@ -7,6 +7,7 @@ export const initState = () => {
     options: ANALYSIS.options,
     useMap: true,
     useInstitutions: true,
+    query: '',
     filters: {
       byIds: {
         id: {

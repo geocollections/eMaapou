@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="useDynamicHeaders ? dynamicHeaders : headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -30,17 +32,16 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import { HEADERS_LOCALITY } from '~/constants'
+import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'LocalityTable',
   components: { TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -58,37 +59,15 @@ export default {
         sortDesc: [],
       }),
     },
-    useDynamicHeaders: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('locality.id'), value: 'id' },
-        { text: this.$t('locality.name'), value: 'locality' },
-        { text: this.$t('locality.country'), value: 'country' },
-        { text: this.$t('locality.latitude'), value: 'latitude' },
-        { text: this.$t('locality.longitude'), value: 'longitude' },
-      ],
+      localHeaders: cloneDeep(HEADERS_LOCALITY),
+      module: 'locality',
     }
   },
   computed: {
-    ...mapState('table_headers', {
-      tableHeaders(state) {
-        return state.locality.tableHeaders
-      },
-    }),
-
-    dynamicHeaders() {
-      return this.tableHeaders.reduce((prev, item) => {
-        if (item.show) {
-          prev.push({ ...item, text: this.$t(item.text) })
-        }
-        return prev
-      }, [])
-    },
+    ...mapState('headers', { stateHeaders: 'locality' }),
   },
   methods: {
     round,

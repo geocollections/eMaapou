@@ -1,12 +1,19 @@
+const EXCLUDED_PAGES = ['index', 'about', 'news', 'news-id', 'search']
+
 export default ({ app, store }, inject) => {
   app.router.afterEach((to, from) => {
-    const name = serializeName(from)
+    if (EXCLUDED_PAGES.some((page) => from.name?.startsWith(page))) return
 
+    const name = serializeName(from)
     const id = from.params?.id ?? null
+    const title = document.title
+
+    const parsedTitle = title.substring(0, title.lastIndexOf('|')).trim()
 
     const historyObject = {
-      text: `breadcrumbs.${name}`,
+      text: parsedTitle,
       id,
+      name: app.getRouteBaseName(from),
       to: from.path,
       uniqueIdentifier: `${name}.${id}`,
     }

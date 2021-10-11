@@ -1,6 +1,6 @@
 export const initState = () => {
   return {
-    searchQuery: '',
+    query: '',
     globalFilters: {
       byIds: {
         institutions: {

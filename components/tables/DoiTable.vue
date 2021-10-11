@@ -1,11 +1,13 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.identifier="{ item }">
       <external-link
@@ -36,16 +38,16 @@
 </template>
 
 <script>
-import TableWrapper from '@/components/tables/TableWrapper.vue'
+import { cloneDeep } from 'lodash'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_DOI } from '~/constants'
 export default {
   name: 'DoiTable',
   components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -66,14 +68,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('doi.identifier'), value: 'identifier' },
-        { text: this.$t('doi.creators'), value: 'creators' },
-        { text: this.$t('doi.reference_year'), value: 'reference_year' },
-        { text: this.$t('doi.table_title'), value: 'title' },
-        { text: this.$t('doi.resource'), value: 'resource' },
-        { text: this.$t('doi.datacite_created'), value: 'datacite_created' },
-      ],
+      localHeaders: cloneDeep(HEADERS_DOI),
     }
   },
 }

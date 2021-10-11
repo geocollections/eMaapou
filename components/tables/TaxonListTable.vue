@@ -1,19 +1,27 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.taxon="{ item }">
-      <a
-        class="text-link"
-        @click="$openWindow(`https://fossiilid.info/${item.taxon}`)"
+      <external-link
+        v-if="item.taxon"
+        @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
-        {{ item.taxon__taxon }}
-      </a>
+        {{ item.taxon.taxon }}
+      </external-link>
+    </template>
+
+    <template #item.agent="{ item }">
+      <div v-if="item.agent_identified">
+        {{ item.agent_identified.agent }}
+      </div>
     </template>
 
     <template #item.extra="{ item }">
@@ -24,16 +32,17 @@
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import ExternalLink from '~/components/ExternalLink'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_TAXON_LIST } from '~/constants'
+
 export default {
   name: 'TaxonListTable',
-  components: { TableWrapper },
+  components: { ExternalLink, TableWrapper },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -54,21 +63,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('taxon.taxon'), value: 'taxon' },
-        {
-          text: this.$t('taxon.name'),
-          value: 'name',
-        },
-        { text: this.$t('taxon.frequency'), value: 'frequency' },
-        {
-          text: this.$t('taxon.agent_identified'),
-          value: 'agent_identified__agent',
-        },
-        { text: this.$t('taxon.date_identified'), value: 'date_identified' },
-        { text: this.$t('taxon.extra'), value: 'extra' },
-        { text: this.$t('taxon.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_TAXON_LIST),
     }
   },
   methods: {

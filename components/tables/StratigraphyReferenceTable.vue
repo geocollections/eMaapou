@@ -1,22 +1,26 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference_id"
-        @click.native="$openGeology('reference', item.reference_id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
     <template #item.year="{ item }">
-      {{ item.reference__year }}
+      <div v-if="item.reference">
+        {{ item.reference.year }}
+      </div>
     </template>
     <template #item.content="{ item }">
       {{ $translate({ et: item.content, en: item.content_en }) }}
@@ -25,16 +29,16 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_STRATIGRAPHY_REFERENCE } from '~/constants'
 export default {
   name: 'StratigraphyReferenceTable',
   components: { TableWrapper, ExternalLink },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -55,16 +59,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        {
-          text: this.$t('stratigraphyReference.reference'),
-          value: 'reference',
-        },
-        { text: this.$t('stratigraphyReference.content'), value: 'content' },
-        { text: this.$t('stratigraphyReference.year'), value: 'year' },
-        { text: this.$t('stratigraphyReference.pages'), value: 'pages' },
-        { text: this.$t('stratigraphyReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_STRATIGRAPHY_REFERENCE),
     }
   },
 }

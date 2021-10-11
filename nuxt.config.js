@@ -61,12 +61,13 @@ export default {
     { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.js',
     '~plugins/hydrateTabs.js',
-    '~plugins/getQueryFields.js',
+    '~plugins/getAPIFieldValues.js',
     { src: '~plugins/gtag.js', mode: 'client' },
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.js', mode: 'client' },
     { src: '~plugins/vueECharts.js', mode: 'client' },
     '~/plugins/formatDate.js',
+    '~/plugins/slug.js', // this might be only called on server-side
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -105,7 +106,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://api.geocollections.info',
+    baseURL: 'https://api.geoloogia.info',
   },
 
   // i18n module configuration
@@ -165,6 +166,8 @@ export default {
           'emp-site': '#7bbc9a',
           'emp-photo': '#ab9f93',
           'emp-specimen': '#bc7b7b',
+          'emp-preparation': '#bc7b7b',
+          'emp-area': '#bc7b7b',
         },
         light: {
           primary: '#7c8996',
@@ -186,6 +189,8 @@ export default {
           'emp-site': '#7bbc9a',
           'emp-photo': '#ab9f93',
           'emp-specimen': '#bc7b7b',
+          'emp-preparation': '#bc7b7b',
+          'emp-area': '#bc7b7b',
         },
       },
     },

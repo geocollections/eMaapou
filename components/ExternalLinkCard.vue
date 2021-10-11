@@ -10,33 +10,28 @@
     >
       <v-img
         :src="background"
-        class="white--text align-end transition-swing"
-        :class="{ grayscale: grayscale }"
+        class="white--text transition-swing d-flex align-end"
         :gradient="`to bottom, rgba(0,0,0,.3), rgba(0,0,0,${
           grayscale ? '.3' : '.3'
         })`"
-        height="175px"
-        content-class="my-auto"
+        height="190px"
+        content-class=""
       >
-        <v-card-title style="word-break: keep-all" class="montserrat text-h5"
-          >{{ title }}
-          <v-icon right small>mdi-open-in-new</v-icon>
-        </v-card-title>
-        <v-card-text class="text-shadow montserrat">{{
-          description
-        }}</v-card-text>
-        <!-- Todo: remove buttons -->
-        <!-- <v-card-actions class="justify-center mb-2">
-          <v-btn
-            outlined
-            small
-            :target="!innerLink ? '_blank' : ''"
-            :nuxt="innerLink"
-            @click="innerLink ? $router.push(localePath({ name: link })) : ''"
-            >{{ $t('landing.visit_site') }}
-            <v-icon right small>mdi-open-in-new</v-icon>
-          </v-btn>
-        </v-card-actions> -->
+        <div class="rounded-t" style="background-color: rgba(0, 119, 154, 0.9)">
+          <v-card-title style="word-break: keep-all" class="montserrat text-h6"
+            >{{ title }}
+            <v-icon right x-small class="align-self-start">
+              mdi-open-in-new
+            </v-icon>
+          </v-card-title>
+          <v-expand-transition>
+            <div v-show="hover">
+              <v-card-text class="pt-0 montserrat">
+                {{ description }}
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+        </div>
       </v-img>
     </v-card>
   </v-hover>
@@ -68,11 +63,6 @@ export default {
     },
     grayscale: Boolean,
   },
-  computed: {
-    image() {
-      return `${require(this.background)}`
-    },
-  },
 }
 </script>
 
@@ -81,16 +71,9 @@ export default {
   transition: opacity 0.6s ease-in-out;
 }
 
-.v-card:not(.on-hover) {
-  opacity: 0.9;
-}
-
 .v-card.on-hover {
   cursor: pointer;
-}
-
-.v-card__title {
-  text-shadow: black 0 0 6px;
+  opacity: 0.9;
 }
 
 .grayscale {
@@ -101,8 +84,5 @@ export default {
 .grayscale:hover {
   -webkit-filter: grayscale(0%);
   filter: grayscale(0%);
-}
-.text-shadow {
-  text-shadow: black 0 0 6px;
 }
 </style>

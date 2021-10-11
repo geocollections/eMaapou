@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.samplesCount')"
+        :title="$t('sample.pageTitle')"
         icon="mdi-test-tube"
         class="title-sample"
       />
@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <sample-table
@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        dynamic-headers
+        stateful-headers
         @update="handleUpdate"
       />
     </template>
@@ -33,7 +34,6 @@ import { mapState, mapActions } from 'vuex'
 import SampleSearchForm from '@/components/search/forms/SampleSearchForm.vue'
 import SampleTable from '~/components/tables/SampleTable.vue'
 import Search from '~/components/templates/Search'
-import dynamicTableHeaders from '~/mixins/dynamicTableHeaders'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -43,7 +43,6 @@ export default {
     SampleTable,
     TitleCard,
   },
-  mixins: [dynamicTableHeaders],
   head() {
     return {
       title: this.$t('sample.pageTitle'),

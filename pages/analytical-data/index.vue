@@ -2,8 +2,8 @@
   <search>
     <template #title>
       <title-card
-        :title="$t('common.analyticalDataCount')"
-        icon="mdi-chart-scatter-plot"
+        :title="$t('analyticalData.pageTitle')"
+        icon="mdi-chart-line"
         class="title-analysis"
       />
     </template>
@@ -13,7 +13,7 @@
     </template>
 
     <template #result>
-      <div class="text-h6 pl-2 py-1">
+      <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
       <analytical-data-table
@@ -21,7 +21,8 @@
         :items="items"
         :count="count"
         :options="options"
-        use-dynamic-headers
+        dynamic-headers
+        stateful-headers
         @update="handleUpdate"
       />
     </template>

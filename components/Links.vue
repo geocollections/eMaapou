@@ -46,6 +46,7 @@ export default {
         { name: 'link.chitinozoa', url: 'https://chitinozoa.net/' },
         { name: 'link.eurocore', url: 'https://eurocore.rocks/' },
         { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
+        { name: 'link.geologyAPI', url: 'https://api.geoloogia.info' },
         { name: 'link.github', url: 'https://github.com/geocollections/' },
       ],
     }

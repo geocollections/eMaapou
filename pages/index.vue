@@ -113,9 +113,6 @@
             <v-col v-if="showMap" key="map" md="5" lg="6" class="pa-0">
               <the-map-card :show-map="showMap" />
             </v-col>
-            <v-col v-else key="news" md="5" lg="6" class="pa-0">
-              <the-news-card />
-            </v-col>
           </v-slide-x-transition>
         </v-row>
         <!-- SCROLL INDICATOR -->
@@ -176,7 +173,12 @@
         </v-col>
       </v-row>
       <v-row justify="center" class="my-2 my-sm-10">
-        <v-col cols="12">
+        <v-col cols="12" lg="6">
+          <client-only>
+            <the-news-card />
+          </client-only>
+        </v-col>
+        <v-col cols="12" lg="6">
           <title-card :title="$t('about.title')" class="title-heading" />
 
           <div
@@ -191,7 +193,6 @@
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields'
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import TitleCard from '~/components/TitleCard.vue'
@@ -208,8 +209,8 @@ export default {
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {
-    const data = await app.$services.sarvREST.getResource('page', 87)
-    return { page: data.results[0] }
+    const data = await app.$services.sarvREST.getResource('web_pages', 87)
+    return { page: data }
   },
   data() {
     return {
@@ -405,7 +406,6 @@ export default {
     }
   },
   computed: {
-    ...mapFields('search', ['searchQuery']),
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path
@@ -415,7 +415,7 @@ export default {
         : `${full}/`
     },
     aboutTextColumns() {
-      if (this.$vuetify.breakpoint.lgAndUp) return 3
+      if (this.$vuetify.breakpoint.lgAndUp) return 1
       if (this.$vuetify.breakpoint.mdOnly) return 2
       return 1
     },

@@ -54,14 +54,12 @@ export default {
           if (query.length === 0) return
 
           this.autocomplete.loaders[options] = true
-          const autocompleteResponse = await this.$services.sarvSolr.getResourceList(
-            table,
-            {
+          const autocompleteResponse =
+            await this.$services.sarvSolr.getResourceList(table, {
               defaultParams: {
                 fq: query,
               },
-            }
-          )
+            })
           this.autocomplete.loaders[options] = false
           this.autocomplete[options] = autocompleteResponse.items
         }

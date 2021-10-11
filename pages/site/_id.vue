@@ -32,14 +32,14 @@
               >
                 <template #value>
                   <a
-                    v-if="site.area__area_type === 2"
+                    v-if="site.area.area_type === 2"
                     class="text-link"
                     @click="$openTurba('turbaala', site.area)"
                   >
                     {{
                       $translate({
-                        et: site.area__name,
-                        en: site.area__name_en,
+                        et: site.area.name,
+                        en: site.area.name_en,
                       })
                     }}
                     <v-icon small color="primary darken-2"
@@ -49,8 +49,8 @@
                   <div v-else>
                     {{
                       $translate({
-                        et: site.area__name,
-                        en: site.area__name_en,
+                        et: site.area.name,
+                        en: site.area.name_en,
                       })
                     }}
                   </div>
@@ -58,7 +58,7 @@
               </data-row>
 
               <data-row
-                v-if="site.area__area_type === 2"
+                v-if="site.area && site.area.area_type === 2"
                 :value="site.area"
                 :title="$t('site.areaText1')"
               >
@@ -81,11 +81,12 @@
                 </template>
               </data-row>
               <data-row
+                v-if="site.project"
                 :title="$t('site.project')"
                 :value="
                   $translate({
-                    et: site.project__name,
-                    en: site.project__name_en,
+                    et: site.project.name,
+                    en: site.project.name_en,
                   })
                 "
               />
@@ -95,30 +96,30 @@
               <data-row :title="$t('site.depth')" :value="site.depth" />
 
               <link-data-row
-                v-if="(site.latitude && site.longitude) || site.locality_id"
+                v-if="locality"
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
-                    et: site.locality__locality,
-                    en: site.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: site.locality_id },
+                    params: { id: locality.id },
                   })
                 "
               />
               <data-row
-                v-if="site.locality_id"
+                v-if="locality && locality.country"
                 :title="$t('locality.country')"
                 :value="
                   isNil(
                     $translate({
-                      et: site.locality__country__value,
-                      en: site.locality__country__value_en,
+                      et: locality.country.value,
+                      en: locality.country.value_en,
                     })
                   )
                 "
@@ -127,22 +128,22 @@
                   {{
                     $t('locality.countryFormat', {
                       name: $translate({
-                        et: site.locality__country__value,
-                        en: site.locality__country__value_en,
+                        et: locality.country.value,
+                        en: locality.country.value_en,
                       }),
-                      iso: site.locality__country__iso_code,
+                      iso: locality.country.iso_code,
                     })
                   }}
                 </template>
               </data-row>
               <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
               <data-row
-                v-if="(site.latitude && site.longitude) || site.locality_id"
+                v-if="(site.latitude && site.longitude) || locality"
                 :title="$t('locality.latitude')"
                 :value="site.latitude"
               />
               <data-row
-                v-if="(site.latitude && site.longitude) || site.locality_id"
+                v-if="(site.latitude && site.longitude) || locality"
                 :title="$t('locality.longitude')"
                 :value="site.longitude"
               />
@@ -152,9 +153,9 @@
                 :value="elevation"
               />
               <data-row
-                v-if="site.locality__depth"
+                v-if="locality"
                 :title="$t('locality.depth')"
-                :value="site.locality__depth"
+                :value="locality.depth"
               />
               <data-row
                 v-if="site.location_accuracy"
@@ -166,8 +167,8 @@
                 :title="$t('site.coordDetMethod')"
                 :value="
                   $translate({
-                    et: site.coord_det_method__value,
-                    en: site.coord_det_method__value_en,
+                    et: site.coord_det_method.value,
+                    en: site.coord_det_method.value_en,
                   })
                 "
               />
@@ -218,9 +219,15 @@
         >
           <leaflet-map
             rounded
-            :estonian-map="site.locality__country__value === 'Eesti'"
+            :estonian-map="
+              locality && locality.country
+                ? locality.country.value === 'Eesti'
+                : false
+            "
             :estonian-bedrock-overlay="
-              site.locality__country__value === 'Eesti'
+              locality && locality.country
+                ? locality.country.value === 'Eesti'
+                : false
             "
             site-overlay
             :center="{
@@ -250,14 +257,14 @@
               v-bind="attrs"
               :src="
                 $img(
-                  `${item.attachment__uuid_filename}`,
+                  `${item.attachment.uuid_filename}`,
                   { size: 'small' },
                   { provider: 'geocollections' }
                 )
               "
               :lazy-src="
                 $img(
-                  `${item.attachment__uuid_filename}`,
+                  `${item.attachment.uuid_filename}`,
                   { size: 'small' },
                   { provider: 'geocollections' }
                 )
@@ -270,13 +277,13 @@
                 'elevation-4': hover,
                 'elevation-2': !hover,
               }"
-              class="grey lighten-2 rounded transition-swing cursor-pointer"
+              class="rounded cursor-pointer grey lighten-2 transition-swing"
               v-on="on"
               @click="
                 $router.push(
                   localePath({
                     name: 'file-id',
-                    params: { id: item.attachment },
+                    params: { id: item.attachment.id },
                   })
                 )
               "
@@ -293,28 +300,30 @@
           </v-hover>
         </template>
         <template #info="{ item }">
-          <div v-if="item.attachment__author__agent">
+          <div v-if="item.attachment.author">
             <span class="font-weight-bold"
               >{{ $t('attachment.author') }}:
             </span>
-            <span>{{ item.attachment__author__agent }}</span>
+            <span>{{ item.attachment.author.agent }}</span>
           </div>
           <div
             v-if="
-              item.attachment__date_created ||
-              item.attachment__date_created_free
+              item.attachment.date_created || item.attachment.date_created_free
             "
           >
             <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
-            <span v-if="item.attachment__date_created">
-              {{ $formatDate(item.attachment__date_created) }}
+            <span v-if="item.attachment.date_created">
+              {{ $formatDate(item.attachment.date_created) }}
             </span>
-            <span v-else>{{ item.attachment__date_created_free }}</span>
+            <span v-else>{{ item.attachment.date_created_free }}</span>
           </div>
           <div v-else>{{ $t('common.clickToOpen') }}</div>
         </template>
       </image-bar>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -330,6 +339,7 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
+import { TABS_SITE } from '~/constants'
 
 export default {
   components: {
@@ -341,87 +351,33 @@ export default {
     Detail,
     ImageBar,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({
+    params,
+    route,
+    error,
+    redirect,
+    $validateTabRoute,
+    $services,
+    $hydrateTab,
+    $translate,
+    $createSlugRoute,
+  }) {
     try {
-      const detailViewResponse = await app.$services.sarvREST.getResource(
+      const detailViewResponse = await $services.sarvREST.getResource(
         'site',
-        params.id
-      )
-      const ids = detailViewResponse?.ids
-      const site = detailViewResponse.results[0]
-
-      const tabs = [
+        params.id,
         {
-          id: 'attachment_link',
-          routeName: 'site-id',
-          title: 'site.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          isSolr: true,
-          routeName: 'site-id-samples',
-          title: 'site.samples',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_description',
-          routeName: 'site-id-descriptions',
-          title: 'site.localityDescriptions',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_reference',
-          routeName: 'site-id-references',
-          title: 'site.localityReferences',
-          count: 0,
-          props: {},
-        },
-      ]
-
-      const attachmentResponse = await app.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          isValid: isNil(site.id),
-          defaultParams: {
-            site: site.id,
-            or_search:
-              'attachment__attachment_format__value__startswith:image;attachment__uuid_filename__endswith:jpg;attachment__uuid_filename__endswith:png',
+          params: {
+            nest: 2,
           },
-          queryFields: {},
         }
       )
-      const attachments = attachmentResponse.items ?? []
-
-      const hydratedTabs = (
-        await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await app.$hydrateCount(tab, {
-                solr: { default: { fq: `site_id:${site.id}` } },
-                api: { default: { site: site.id } },
-              })
-          )
-        )
-      ).map((tab) =>
-        app.$populateProps(tab, {
-          ...tab.props,
-          site: site.id,
-        })
-      )
-
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
+      const ids = detailViewResponse?.ids
+      const site = detailViewResponse
 
       return {
         site,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
-        images: attachments,
       }
     } catch (err) {
       error({
@@ -430,6 +386,55 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+      images: [],
+    }
+  },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        isValid: isNil(this.site?.id),
+        defaultParams: {
+          site: this.site?.id,
+          attachment__attachment_format__value__istartswith: 'image',
+          nest: 1,
+        },
+        fields: {},
+      }
+    )
+    this.attachments = attachmentResponse.items ?? []
+
+    const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `site_id:${this.site?.id}` } },
+              api: { default: { site: this.site?.id } },
+            },
+          })
+      )
+    )
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({ et: this.site?.name, en: this.site?.name_en })
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
@@ -450,10 +455,10 @@ export default {
       return this.tabs.filter((item) => item.count > 0)
     },
     planArray() {
-      if (this.site.area__text1) {
-        if (this.site.area__text1.includes(',')) {
-          return this.site.area__text1.split(',')
-        } else return [this.site.area__text1]
+      if (this.site?.area?.text1) {
+        if (this.site?.area?.text1.includes(',')) {
+          return this.site?.area?.text1.split(',')
+        } else return [this.site?.area?.text1]
       } else return []
     },
     routeName() {
@@ -468,6 +473,9 @@ export default {
     studied() {
       if (this.site.date_start) return this.$formatDate(this.site.date_start)
       return this.site.date_free
+    },
+    locality() {
+      return this.site?.locality
     },
   },
   methods: {

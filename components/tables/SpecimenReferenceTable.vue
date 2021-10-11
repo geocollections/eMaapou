@@ -1,35 +1,36 @@
 <template>
   <table-wrapper
-    v-bind="{ showSearch }"
-    :headers="headers"
+    v-bind="$attrs"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
+    @change:headers="$_handleHeadersChange"
+    @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
       <external-link
-        v-if="item.reference_id"
-        @click.native="$openGeology('reference', item.reference_id)"
+        v-if="item.reference"
+        @click.native="$openGeology('reference', item.reference.id)"
       >
-        {{ item.reference__reference }}
+        {{ item.reference.reference }}
       </external-link>
     </template>
   </table-wrapper>
 </template>
 
 <script>
-import { round } from 'lodash'
+import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
 import ExternalLink from '~/components/ExternalLink.vue'
+import headersMixin from '~/mixins/headersMixin'
+import { HEADERS_SPECIMEN_REFERENCE } from '~/constants'
 export default {
   name: 'SpecimenReferenceTable',
   components: { TableWrapper, ExternalLink },
+  mixins: [headersMixin],
   props: {
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
     items: {
       type: Array,
       default: () => [],
@@ -50,12 +51,7 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: this.$t('specimenReference.reference'), value: 'reference' },
-        { text: this.$t('specimenReference.pages'), value: 'pages' },
-        { text: this.$t('specimenReference.figures'), value: 'figures' },
-        { text: this.$t('specimenReference.remarks'), value: 'remarks' },
-      ],
+      localHeaders: cloneDeep(HEADERS_SPECIMEN_REFERENCE),
     }
   },
   methods: {

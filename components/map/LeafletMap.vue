@@ -6,7 +6,6 @@
         ref="map"
         :class="{
           rounded: rounded,
-          [mapClass]: true,
         }"
         :style="{
           height: `${height}`,
@@ -30,7 +29,7 @@
           :imperial="false"
         />
         <l-tile-layer
-          v-for="layer in layers.base"
+          v-for="layer in computedBaseLayers"
           :key="layer.id"
           layer-type="base"
           :visible="layer.visible"
@@ -127,6 +126,7 @@
 // import MapLegend from '~/components/map/MapLegend'
 import { debounce } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
+import { mapActions, mapGetters } from 'vuex'
 import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
@@ -212,10 +212,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    mapClass: {
-      type: String,
-      default: '',
-    },
   },
   data() {
     return {
@@ -241,7 +237,6 @@ export default {
           duration: 1000,
         },
       },
-      activeBaseLayer: this.estonianMap ? 'Estonian map' : 'CartoDB',
       activeOverlays: [],
       layers: {
         base: [
@@ -482,14 +477,13 @@ export default {
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
+    ...mapGetters('map', ['isBaseLayerEstonian', 'getBaseLayer']),
     mapZoom() {
       return this.zoom ?? (this.estonianBedrockOverlay ? 9 : 11)
     },
-
     tileOverlays() {
       return this.layers.overlay.filter((item) => !item.isWMS)
     },
-
     wmsOverlays() {
       return this.layers.overlay.filter((item) => item.isWMS)
     },
@@ -531,6 +525,19 @@ export default {
         },
         {}
       )
+    },
+
+    isDetailView() {
+      return this.$route.name.includes('-id-')
+    },
+
+    computedBaseLayers() {
+      return this.layers.base.map((layer) => {
+        return {
+          ...layer,
+          visible: layer.name === this.getBaseLayer,
+        }
+      })
     },
   },
   // Todo: watch language update for leaflet geoman, this means pull request for et.json file should be made
@@ -591,6 +598,14 @@ export default {
         this.map.mapObject.on('click', this.handleMapClick)
         document.getElementById('map').classList.add('cursor-crosshair')
       }
+
+      // Setting initial base layer for detail view
+      if (this.isDetailView) {
+        if (!this.estonianMap && this.isBaseLayerEstonian)
+          this.setBaseLayer('CartoDB')
+        if (this.estonianMap && !this.isBaseLayerEstonian)
+          this.setBaseLayer('Estonian map')
+      }
     })
   },
   beforeDestroy() {
@@ -604,11 +619,12 @@ export default {
     if (this.map) this.map.mapObject.off('click', this.handleMapClick)
   },
   methods: {
+    ...mapActions('map', ['setBaseLayer']),
     updateCenter(center) {
       this.currentCenter = center
     },
     handleBaseLayerChange(event) {
-      this.activeBaseLayer = event.name
+      this.setBaseLayer(event.name)
     },
 
     handleOverlayAdd(event) {

@@ -18,8 +18,17 @@ export default ({ app }, inject) => {
     }
   }
 
-  const populateProps = (tab, props) => {
-    return { ...tab, props }
+  const hydrateProps = (tab, props) => {
+    return {
+      ...tab,
+      props: { ...tab.props, ...props },
+    }
+  }
+
+  const hydrateTab = async (tab, options = { props: {}, countParams: {} }) => {
+    tab = hydrateProps(tab, options.props)
+
+    return await hydrateCount(tab, options.countParams)
   }
 
   const validateTabRoute = (route, tabs) => {
@@ -59,7 +68,8 @@ export default ({ app }, inject) => {
     return path
   }
   inject('hydrateCount', hydrateCount)
-  inject('populateProps', populateProps)
+  inject('hydrateProps', hydrateProps)
+  inject('hydrateTab', hydrateTab)
   inject('validateTabRoute', validateTabRoute)
   inject('getMaxTab', getMaxTab)
 }

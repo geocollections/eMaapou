@@ -36,26 +36,46 @@
                 :value="drillcore.box_numbers"
               />
               <data-row
+                v-if="depository"
                 :title="$t('drillcore.repository')"
                 :value="
                   $translate({
-                    et: drillcore.depository__value,
-                    en: drillcore.depository__value_en,
+                    et: depository.value,
+                    en: depository.value_en,
                   })
                 "
               />
               <data-row
+                v-if="storage"
                 :title="$t('drillcore.storage')"
-                :value="drillcore.storage__location"
+                :value="storage.location"
               />
               <data-row
+                v-if="agent"
                 :title="$t('drillcore.driller')"
-                :value="drillcore.agent__agent"
+                :value="agent.agent"
               />
               <data-row :title="$t('drillcore.year')" :value="drillcore.year" />
               <data-row
                 :title="$t('drillcore.metersInBox')"
                 :value="drillcore.number_meters"
+              />
+
+              <link-data-row
+                v-if="database"
+                :title="$t('drillcore.database')"
+                :value="
+                  $translate({
+                    et: database.name,
+                    en: database.name_en,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: `institution-${database.acronym.toLowerCase()}`,
+                  })
+                "
               />
               <data-row
                 v-if="drillcore.date_added"
@@ -79,7 +99,7 @@
       </div>
     </template>
 
-    <template v-if="drillcore.locality_id" #column-right>
+    <template v-if="drillcore.locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.locality')
       }}</v-card-title>
@@ -91,70 +111,70 @@
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
-                    et: drillcore.locality__locality,
-                    en: drillcore.locality__locality_en,
+                    et: locality.locality,
+                    en: locality.locality_en,
                   })
                 "
                 nuxt
                 :href="
                   localePath({
                     name: 'locality-id',
-                    params: { id: drillcore.locality_id },
+                    params: { id: drillcore.locality.id },
                   })
                 "
               />
               <data-row
+                v-if="locality.country"
                 :title="$t('locality.country')"
                 :value="
                   $translate({
-                    et: drillcore.locality__country__value,
-                    en: drillcore.locality__country__value_en,
+                    et: locality.country.value,
+                    en: locality.country.value_en,
                   })
                 "
               />
               <data-row
                 :title="$t('locality.latitude')"
-                :value="drillcore.locality__latitude"
+                :value="locality.latitude"
               />
               <data-row
                 :title="$t('locality.longitude')"
-                :value="drillcore.locality__longitude"
+                :value="locality.longitude"
               />
               <data-row
                 :title="$t('locality.elevation')"
-                :value="drillcore.locality__elevation"
+                :value="locality.elevation"
               />
-              <data-row
-                :title="$t('locality.depth')"
-                :value="drillcore.locality__depth"
-              />
+              <data-row :title="$t('locality.depth')" :value="locality.depth" />
             </tbody>
           </template>
         </v-simple-table>
         <v-card
-          v-if="drillcore.locality__latitude && drillcore.locality__longitude"
+          v-if="locality.latitude && locality.longitude"
           id="map-wrap"
           elevation="0"
         >
           <leaflet-map
-            :estonian-map="drillcore.locality__country__value === 'Eesti'"
+            :estonian-map="
+              locality.country ? locality.country.value === 'Eesti' : false
+            "
             :estonian-bedrock-overlay="
-              drillcore.locality__country__value === 'Eesti'
+              locality.country ? locality.country.value === 'Eesti' : false
             "
             rounded
             borehole-overlay
             height="300px"
             :center="{
-              latitude: drillcore.locality__latitude,
-              longitude: drillcore.locality__longitude,
+              latitude: locality.latitude,
+              longitude: locality.longitude,
             }"
             :markers="[
               {
-                latitude: drillcore.locality__latitude,
-                longitude: drillcore.locality__longitude,
+                latitude: locality.latitude,
+                longitude: locality.longitude,
                 text: $translate({
-                  et: drillcore.locality__locality,
-                  en: drillcore.locality__locality_en,
+                  et: locality.locality,
+                  en: locality.locality_en,
                 }),
               },
             ]"
@@ -163,7 +183,10 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
+      <v-card
+        v-if="filteredTabs.length > 0 && !$fetchState.pending"
+        class="mt-4 mb-4"
+      >
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -172,12 +195,13 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
-import LeafletMap from '@/components/map/LeafletMap'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
+import { TABS_DRILLCORE } from '~/constants'
 
 export default {
   components: {
@@ -188,114 +212,23 @@ export default {
     LinkDataRow,
     Detail,
   },
-  async asyncData({ params, route, error, app, redirect }) {
+  async asyncData({ params, route, error, $services }) {
     try {
-      const drillcoreResponse = await app.$services.sarvREST.getResource(
+      const drillcoreResponse = await $services.sarvREST.getResource(
         'drillcore',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 2,
+          },
+        }
       )
       const ids = drillcoreResponse?.ids
-      const drillcore = drillcoreResponse.results[0]
-
-      const tabs = [
-        {
-          routeName: 'drillcore-id',
-          title: 'drillcore.drillcoreBoxesTitle',
-          count: drillcore?.boxes || 0,
-          props: { drillcore: drillcore.id },
-        },
-        {
-          id: 'locality_description',
-          routeName: 'drillcore-id-descriptions',
-          title: 'drillcore.localityDescriptions',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'locality_reference',
-          routeName: 'drillcore-id-references',
-          title: 'drillcore.localityReferences',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'attachment_link',
-          routeName: 'drillcore-id-attachments',
-          title: 'drillcore.attachments',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'sample',
-          isSolr: true,
-          routeName: 'drillcore-id-samples',
-          title: 'drillcore.samples',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'analysis',
-          isSolr: true,
-          routeName: 'drillcore-id-analyses',
-          title: 'drillcore.analyses',
-          count: 0,
-          props: {},
-        },
-        {
-          id: 'specimen',
-          isSolr: true,
-          routeName: 'drillcore-id-specimens',
-          title: 'drillcore.specimens',
-          count: 0,
-          props: {},
-        },
-        {
-          table: 'analysis_results',
-          id: 'graphs',
-          isSolr: true,
-          routeName: 'drillcore-id-graphs',
-          title: 'locality.graphs',
-          count: 0,
-          props: { drillcoreObject: drillcore },
-        },
-      ]
-
-      const hydratedTabs = drillcore?.locality_id
-        ? (
-            await Promise.all(
-              tabs.map(
-                async (tab) =>
-                  await app.$hydrateCount(tab, {
-                    solr: {
-                      default: {
-                        fq: `locality_id :${drillcore.locality_id}`,
-                      },
-                    },
-                    api: {
-                      default: { locality: drillcore.locality_id },
-                      attachment_link: {
-                        or_search: `drillcore:${drillcore.id};locality:${drillcore.locality_id}`,
-                      },
-                    },
-                  })
-              )
-            )
-          ).map((tab) =>
-            app.$populateProps(tab, {
-              ...tab.props,
-              locality: drillcore.locality_id,
-            })
-          )
-        : tabs
-
-      const validPath = app.$validateTabRoute(route, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
+      const drillcore = drillcoreResponse
 
       return {
         drillcore,
         ids,
-        initActiveTab: validPath,
-        tabs: hydratedTabs,
       }
     } catch (err) {
       error({
@@ -304,6 +237,96 @@ export default {
       })
     }
   },
+  data() {
+    return {
+      tabs: [],
+      initActiveTab: '',
+    }
+  },
+  async fetch() {
+    // Checking if drillcore has a related .las file to show in graph tab (through locality)
+    let lasFileResponse
+    if (this.drillcore?.locality) {
+      lasFileResponse = await this.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            attachment__uuid_filename__iendswith: '.las',
+            locality: this.drillcore.locality.id,
+            fields: 'attachment',
+          },
+        }
+      )
+    }
+
+    const tabsObject = TABS_DRILLCORE
+
+    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
+    tabsObject.byIds.analysis_results.props = {
+      drillcoreObject: this.drillcore,
+      locality: this.drillcore?.locality?.id,
+      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+    }
+
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+    let hydratedTabs = this.drillcore?.locality?.id
+      ? await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await this.$hydrateTab(tab, {
+                props: { locality: this.drillcore?.locality?.id },
+                countParams: {
+                  solr: {
+                    default: {
+                      fq: `locality_id :${this.drillcore?.locality?.id}`,
+                    },
+                  },
+                  api: {
+                    default: { locality: this.drillcore?.locality?.id },
+                    attachment_link: {
+                      or_search: `drillcore:${this.drillcore.id} OR locality:${this.drillcore.locality.id}`,
+                    },
+                  },
+                },
+              })
+          )
+        )
+      : tabs
+
+    // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
+    hydratedTabs = hydratedTabs.map((item) => {
+      if (item.id === 'graphs') {
+        const count = lasFileResponse?.items?.[0]?.attachment
+          ? item.count + 1
+          : item.count
+        return {
+          ...item,
+          count,
+          props: {
+            ...item.props,
+            analysisResultsCount: item.count,
+          },
+        }
+      } else return item
+    })
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({
+        et: this.drillcore.drillcore,
+        en: this.drillcore.drillcore_en,
+      })
+    )
+
+    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    this.tabs = hydratedTabs
+    this.initActiveTab = validPath
+
+    if (validPath !== this.$route.path) await this.$router.replace(validPath)
+  },
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
@@ -324,7 +347,26 @@ export default {
       })
     },
     filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
+      return this.tabs.filter((item) => {
+        if (item.id === 'graphs') {
+          return item.props.attachment || item.props.analysisResultsCount > 0
+        } else return item.count > 0
+      })
+    },
+    depository() {
+      return this.drillcore?.depository
+    },
+    storage() {
+      return this.drillcore?.storage
+    },
+    agent() {
+      return this.drillcore?.agent
+    },
+    database() {
+      return this.drillcore?.database
+    },
+    locality() {
+      return this.drillcore?.locality
     },
   },
   methods: {
