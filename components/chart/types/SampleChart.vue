@@ -100,7 +100,7 @@ export default {
           type: 'scatter',
           color: 'black',
           tooltip: {
-            position: 'right',
+            position: 'bottom',
             formatter(params) {
               return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.data.name}
                     <br />Depth: <b>${params.data.sampleDepth}</b></span>
