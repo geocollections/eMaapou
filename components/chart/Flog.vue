@@ -27,7 +27,11 @@
 
     <div v-if="!isLoading" class="charts d-flex flex-row">
       <!-- Todo: Stratigraphy chart -->
-      <!-- Todo: depth chart -->
+      <!-- Disabled as it's not ready yet -->
+      <stratigraphy-chart
+        v-if="stratigraphyResults.length > 0 && false"
+        :results="stratigraphyResults"
+      />
 
       <sample-chart
         v-if="sampleResults.length > 0 && minDepth && maxDepth"
@@ -43,6 +47,14 @@
       />
 
       <!-- Todo: Taxa chart -->
+      <!-- Could be category chart where taxon names are categories and item size is taxon frequency-->
+      <taxa-chart
+        v-if="taxaResults.length > 0 && taxa.length > 0"
+        :results="taxaResults"
+        :taxa="taxa"
+        :min-depth="minDepth"
+        :max-depth="maxDepth"
+      />
     </div>
   </div>
 </template>
@@ -55,9 +67,13 @@ import MultiChartWrapper from '~/components/chart/wrappers/MultiChartWrapper'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
 import SampleChart from '~/components/chart/types/SampleChart'
+import StratigraphyChart from '~/components/chart/types/StratigraphyChart'
+import TaxaChart from '~/components/chart/types/TaxaChart'
 
 export default {
   components: {
+    TaxaChart,
+    StratigraphyChart,
     SampleChart,
     ConnectionSwitch,
     RendererSwitch,
@@ -92,13 +108,21 @@ export default {
       minDepth: null,
       maxDepth: null,
       sampleResults: [],
+      stratigraphyResults: [],
+      taxaResults: [],
+      taxa: [],
     }
   },
   async fetch() {
     this.isLoading = true
     if (this.analysisResults.length === 0) {
-      const { resultsResponse, statsResponse, sampleResponse } =
-        await this.fetchChartData()
+      const {
+        resultsResponse,
+        statsResponse,
+        sampleResponse,
+        taxaResponse,
+        taxaStatsResponse,
+      } = await this.fetchChartData()
 
       this.analysisResults = resultsResponse?.items
 
@@ -130,6 +154,11 @@ export default {
       this.maxDepth = Math.max(...this.depth)
 
       this.sampleResults = sampleResponse?.items
+      this.taxaResults = taxaResponse?.items
+      this.taxa = taxaStatsResponse?.stats?.stats_fields?.taxon?.distinctValues
+
+      console.log(this.taxaResults)
+      console.log(this.taxa)
     }
     this.isLoading = false
   },
@@ -187,7 +216,43 @@ export default {
         }
       )
 
-      return { resultsResponse, statsResponse, sampleResponse }
+      const taxaResponse = await this.$services.sarvSolr.getResourceList(
+        'taxon_frequency',
+        {
+          isValid: isNil(this.tableId),
+          defaultParams: {
+            fq: `${this.tableKey}:${this.tableId} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
+            start: 0,
+            rows: 50000,
+            fl: 'depth,depth_interval,frequency,taxon,taxon_id,',
+            sort: 'depth asc',
+          },
+        }
+      )
+
+      const taxaStatsResponse = await this.$services.sarvSolr.getResourceList(
+        'taxon_frequency',
+        {
+          isValid: isNil(this.tableId),
+          defaultParams: {
+            fq: `${this.tableKey}:${this.tableId}`,
+            rows: 0,
+            fl: 'depth',
+            sort: 'depth asc',
+            stats: 'on',
+            'stats.field': ['taxon'],
+            'stats.calcdistinct': true,
+          },
+        }
+      )
+
+      return {
+        resultsResponse,
+        statsResponse,
+        sampleResponse,
+        taxaResponse,
+        taxaStatsResponse,
+      }
     },
 
     buildChartLegend() {
