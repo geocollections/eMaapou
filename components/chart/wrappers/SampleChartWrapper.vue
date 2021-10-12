@@ -9,6 +9,7 @@
         :init-options="initOptions"
         :option="computedOptions"
         v-on="$listeners"
+        @click="handleClick"
       />
     </div>
   </client-only>
@@ -44,7 +45,12 @@ export default {
           bottom: 140,
           left: '20px',
           containLabel: true,
-          width: '200px',
+          width: '100px',
+        },
+
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
 
         toolbox: {
@@ -97,13 +103,21 @@ export default {
   mounted() {
     connect('flog')
   },
+
+  methods: {
+    // Click event opens sample detail view
+    handleClick(event) {
+      if (event?.data?.sampleId)
+        this.$openNuxtWindow('sample-id', { id: event.data.sampleId })
+    },
+  },
 }
 </script>
 
 <style scoped>
 .chart {
   height: 90vh;
-  width: 250px;
+  width: 230px;
   min-height: 600px;
   max-height: 2000px;
 }

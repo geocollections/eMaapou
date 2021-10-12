@@ -12,7 +12,7 @@ export default {
     chartTitle: {
       type: String,
       required: false,
-      default: 'Chart title',
+      default: 'Samples',
     },
     minDepth: {
       type: Number,
@@ -54,6 +54,10 @@ export default {
       return {
         type: 'category',
         data: ['Sample'],
+        axisLabel: {
+          fontWeight: 'bold',
+          padding: [13, 0, 0, 0],
+        },
       }
     },
 
@@ -70,7 +74,14 @@ export default {
         nameGap: 10,
         splitNumber: 7,
         axisTick: {
+          show: true,
           alignWithLabel: true,
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            // width: 15,
+          },
         },
         max:
           this.maxDepth > 0 && this.maxDepth > this.minDepth
@@ -84,34 +95,45 @@ export default {
     },
 
     buildChartSeries() {
-      console.log(this.results)
-      return this.results.map((item) => {
-        return {
-          type: 'line',
-          name: item.number || item.id,
+      return [
+        {
+          type: 'scatter',
           color: 'black',
-          data:
-            item?.depth && item?.depth_interval
-              ? [item.depth, item.depth_interval]
-              : item?.depth
-              ? [item.depth]
-              : [item.depth_interval],
-          lineStyle: {
-            width: 30,
-          },
-          symbol: 'rect',
-          symbolSize: 0,
-          showAllSymbol: false,
-          label: {
-            show: true,
+          tooltip: {
             position: 'right',
-            distance: 25,
             formatter(params) {
-              return `${params.seriesName}`
+              return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.data.name}
+                    <br />Depth: <b>${params.data.sampleDepth}</b></span>
+                    <br /><span>Depth interval: <b>${params.data.sampleDepthInterval}</b></span>`
             },
           },
-        }
-      })
+          data: this.results.map((item) => {
+            const depth =
+              item?.depth && item?.depth_interval
+                ? ((item.depth + item.depth_interval) / 2).toFixed(2)
+                : item?.depth
+                ? item.depth
+                : item.depth_interval
+            return {
+              sampleDepth: -item.depth,
+              sampleDepthInterval: -item.depth_interval,
+              sampleId: item.id,
+              name: item.number || item.id,
+              value: [0, -depth],
+              symbol: 'rect',
+              symbolSize: 3,
+              label: {
+                show: true,
+                position: 'right',
+                // distance: 15,
+                formatter(params) {
+                  return `${params.data.name}`
+                },
+              },
+            }
+          }),
+        },
+      ]
     },
   },
 }
