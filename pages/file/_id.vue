@@ -893,6 +893,11 @@ export default {
           hid: 'og:title',
           content: this.fileTitle,
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
         ...[
           this.isImage
             ? {

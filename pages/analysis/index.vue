@@ -53,6 +53,11 @@ export default {
           content: this.$t('analysis.pageTitle'),
           hid: 'og:title',
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

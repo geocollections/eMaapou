@@ -61,6 +61,11 @@ export default {
           hid: 'og:title',
           content: this.title,
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

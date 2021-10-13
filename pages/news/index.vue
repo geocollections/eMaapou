@@ -67,6 +67,11 @@ export default {
           hid: 'og:title',
           content: this.$t('news.pageTitle'),
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

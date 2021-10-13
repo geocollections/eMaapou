@@ -381,6 +381,11 @@ export default {
             en: this.stratigraphy.stratigraphy_en,
           }),
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

@@ -438,6 +438,11 @@ export default {
             en: this.locality.locality_en,
           }),
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

@@ -52,6 +52,11 @@ export default {
           hid: 'og:title',
           content: this.$t('sample.pageTitle'),
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

@@ -52,6 +52,11 @@ export default {
           content: this.$t('preparation.pageTitle'),
           hid: 'og:title',
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },

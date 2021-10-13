@@ -93,6 +93,11 @@ export default {
           hid: 'og:title',
           content: this.$t('photo.pageTitle'),
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },
