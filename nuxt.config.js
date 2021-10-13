@@ -47,6 +47,11 @@ export default {
       },
       { hid: 'og:site_name', property: 'og:site_name', content: 'e-Maapõu' },
       { hid: 'og:url', property: 'og:url', content: 'https://geoloogia.info' },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'https://dev.geoloogia.info/logos/emaapou_short.png',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
