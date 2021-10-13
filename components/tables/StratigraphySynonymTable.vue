@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      localHeader: cloneDeep(HEADERS_STRATIGRAPHY_SYNONYM),
+      localHeaders: cloneDeep(HEADERS_STRATIGRAPHY_SYNONYM),
     }
   },
   methods: {
