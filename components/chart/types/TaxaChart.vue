@@ -150,7 +150,7 @@ export default {
 
               const maxSymbolSize = 30
               const minSymbolSize = 7
-              const maxFrequency = 1856 // Number from solr index
+              const maxFrequency = 1856 // Highest number from solr index
 
               const symbolSizeInPercent = (
                 (curr.frequency * 100) /
