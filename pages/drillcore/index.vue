@@ -52,6 +52,11 @@ export default {
           property: 'og:title',
           content: this.$t('drillcore.pageTitle'),
         },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: this.$route.path,
+        },
       ],
     }
   },
