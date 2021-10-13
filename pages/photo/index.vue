@@ -20,13 +20,15 @@
         <v-radio-group
           v-model="currentView"
           row
+          dense
           hide-details
-          class="mt-0 pa-4"
+          class="mt-0 px-4 pt-3 pb-2"
           mandatory
         >
           <v-radio
             v-for="entity in listOfViews"
             :key="entity"
+            class="montserrat"
             :label="$t(`common.${entity}`)"
             :value="entity"
             color="header"

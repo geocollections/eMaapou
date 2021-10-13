@@ -71,7 +71,7 @@ export default {
     resetSearchLong: 'Clear search fields',
     table: 'Table',
     gallery: 'Gallery',
-    containImages: 'Prevent image cropping',
+    containImages: 'Crop images',
     pagination: 'Paginate by {value}',
     goBack: 'Back to search',
     extraOptions: 'Extra options',

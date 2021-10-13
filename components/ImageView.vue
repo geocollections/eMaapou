@@ -1,15 +1,5 @@
 <template>
   <v-card flat>
-    <div class="px-4 pb-4">
-      <v-switch
-        v-model="containImages"
-        class="mt-0"
-        hide-details
-        color="header"
-        :label="$t('common.containImages')"
-      />
-    </div>
-
     <v-row v-if="count > 0" no-gutters class="px-2">
       <v-col
         v-for="(image, index) in items"
@@ -115,11 +105,10 @@ export default {
       type: Number,
       default: 0,
     },
-  },
-  data() {
-    return {
-      containImages: false,
-    }
+    containImages: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
