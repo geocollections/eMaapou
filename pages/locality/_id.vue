@@ -443,6 +443,19 @@ export default {
           hid: 'og:url',
           content: this.$route.path,
         },
+        {
+          property: 'og:image',
+          hid: 'og:image',
+          content: this.images[0]?.filename
+            ? this.$img(
+                `${this.images[0]?.filename}`,
+                { size: 'small', height: 700 },
+                {
+                  provider: 'geocollections',
+                }
+              )
+            : undefined,
+        },
       ],
     }
   },

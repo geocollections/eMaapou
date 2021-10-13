@@ -309,6 +309,19 @@ export default {
           hid: 'og:title',
           content: this.title,
         },
+        {
+          property: 'og:image',
+          hid: 'og:image',
+          content: this.images[0]?.filename
+            ? this.$img(
+                `${this.images[0]?.filename}`,
+                { size: 'small', height: 700 },
+                {
+                  provider: 'geocollections',
+                }
+              )
+            : undefined,
+        },
       ],
     }
   },

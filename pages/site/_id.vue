@@ -406,7 +406,7 @@ export default {
         fields: {},
       }
     )
-    this.attachments = attachmentResponse.items ?? []
+    this.images = attachmentResponse.items ?? []
 
     const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
 
@@ -443,6 +443,19 @@ export default {
           property: 'og:title',
           hid: 'og:title',
           content: this.title,
+        },
+        {
+          property: 'og:image',
+          hid: 'og:image',
+          content: this.images[0]?.attachment.filename
+            ? this.$img(
+                `${this.images[0]?.attachment.filename}`,
+                { size: 'small', height: 700 },
+                {
+                  provider: 'geocollections',
+                }
+              )
+            : undefined,
         },
       ],
     }
