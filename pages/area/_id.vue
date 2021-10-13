@@ -278,18 +278,12 @@ export default {
         },
         {
           property: 'og:description',
-          content: this.$translate({
-            et: this.area.description,
-            en: this.area.description_en,
-          }),
+          content: this.truncatedDescription ?? undefined,
           hid: 'og:description',
         },
         {
           property: 'description',
-          content: this.$translate({
-            et: this.area.description,
-            en: this.area.description_en,
-          }),
+          content: this.truncatedDescription ?? undefined,
           hid: 'description',
         },
       ],
@@ -348,9 +342,26 @@ export default {
         }, [])
       } else return []
     },
+    truncatedDescription() {
+      const description = this.$translate({
+        et: this.area.description,
+        en: this.area.description_en,
+      })
+
+      return description ? this.truncate(description, 200) : null
+    },
   },
   methods: {
     isNil,
+    truncate(value, length) {
+      if (!value) return ''
+      value = value.toString()
+      if (value.length > length) {
+        return value.substring(0, length) + '...'
+      } else {
+        return value
+      }
+    },
   },
 }
 </script>

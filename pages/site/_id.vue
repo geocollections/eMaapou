@@ -445,6 +445,16 @@ export default {
           content: this.title,
         },
         {
+          property: 'description',
+          hid: 'description',
+          content: this.truncatedDescription ?? undefined,
+        },
+        {
+          property: 'og:description',
+          hid: 'og:description',
+          content: this.truncatedDescription ?? undefined,
+        },
+        {
           property: 'og:image',
           hid: 'og:image',
           content: this.images[0]?.attachment.filename
@@ -490,9 +500,23 @@ export default {
     locality() {
       return this.site?.locality
     },
+    truncatedDescription() {
+      return this.site.description
+        ? this.truncate(this.site.description, 200)
+        : null
+    },
   },
   methods: {
     isNil,
+    truncate(value, length) {
+      if (!value) return ''
+      value = value.toString()
+      if (value.length > length) {
+        return value.substring(0, length) + '...'
+      } else {
+        return value
+      }
+    },
   },
 }
 </script>
