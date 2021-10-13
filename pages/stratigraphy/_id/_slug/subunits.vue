@@ -10,7 +10,7 @@
 <script>
 import { debounce, isNil } from 'lodash'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
-import StratigraphyTable from '~/components/tables/StratigraphyTable'
+import StratigraphyTable from '~/components/tables/StratigraphyTable.vue'
 
 export default {
   components: { StratigraphyTable },

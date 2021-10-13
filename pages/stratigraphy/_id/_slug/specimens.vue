@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import SpecimenTable from '@/components/tables/SpecimenTable'
 import { isNil } from 'lodash'
+import SpecimenTable from '~/components/tables/SpecimenTable.vue'
 
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 export default {
