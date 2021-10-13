@@ -1,7 +1,14 @@
 <template>
   <div
     v-if="count > 0"
-    class="px-4 d-flex flex-column flex-sm-row flex-nowrap justify-space-between align-center pagination"
+    class="
+      px-4
+      d-flex
+      flex-column flex-sm-row flex-nowrap
+      justify-space-between
+      align-center
+      pagination
+    "
   >
     <div class="mb-2">
       <paginate-by-field
