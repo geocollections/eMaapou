@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ChartWrapper from '~/components/chart/ChartWrapper'
+import ChartWrapper from '~/components/chart/wrappers/ChartWrapper'
 
 export default {
   name: 'LasChart',

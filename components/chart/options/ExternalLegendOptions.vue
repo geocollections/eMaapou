@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="!isLoading || true" flat tile>
-    <v-card-text class="pb-0">
+    <v-card-text class="pb-0" :class="{ 'pt-0': paddingTopZero }">
       <div v-if="enableCheckboxes">
         <div v-if="checkboxesTitle" class="text-body-1 font-weight-bold">
           {{ $t(checkboxesTitle) }}
@@ -22,7 +22,8 @@
       <div v-if="enableSelectField">
         <div
           v-if="selectFieldTitle"
-          class="text-body-1 font-weight-bold pt-4 pb-2"
+          class="text-body-1 font-weight-bold pb-2"
+          :class="{ 'pt-0': paddingTopZero, 'pt-4': !paddingTopZero }"
         >
           {{ $t(selectFieldTitle) }}
         </div>
@@ -86,6 +87,11 @@ export default {
       default: () => ['tere'],
     },
     isLoading: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    paddingTopZero: {
       type: Boolean,
       default: false,
       required: false,

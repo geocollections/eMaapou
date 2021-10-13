@@ -881,6 +881,7 @@ export default {
   statistics: {
     analysisMethods: 'Analysis methods',
     activeParameters: 'Active parameters',
+    activeTaxa: 'Active taxa',
     isEmptyMessage: 'Nothing to show, please select an option.',
   },
   photo: {

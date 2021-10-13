@@ -1,22 +1,20 @@
 <template>
-  <client-only>
-    <div>
-      <renderer-switch
-        v-if="!hideRendererSwitch"
-        :renderer="renderer"
-        @update="renderer = $event"
-      />
+  <div>
+    <renderer-switch
+      v-if="!hideRendererSwitch"
+      :renderer="renderer"
+      @update="renderer = $event"
+    />
 
-      <v-chart
-        class="chart"
-        v-bind="$attrs"
-        autoresize
-        :init-options="initOptions"
-        :option="computedOptions"
-        v-on="$listeners"
-      />
-    </div>
-  </client-only>
+    <v-chart
+      class="chart"
+      v-bind="$attrs"
+      autoresize
+      :init-options="initOptions"
+      :option="computedOptions"
+      v-on="$listeners"
+    />
+  </div>
 </template>
 
 <script>

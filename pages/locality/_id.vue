@@ -355,6 +355,7 @@ export default {
       }
     )
 
+    // Todo: Add taxa tab?
     const tabsObject = TABS_LOCALITY
 
     tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
@@ -393,15 +394,29 @@ export default {
     // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
     hydratedTabs = hydratedTabs.map((item) => {
       if (item.id === 'graphs') {
+        // Todo: Also add taxa check
+        const localityDescriptionCount = hydratedTabs.find(
+          (item) => item.id === 'locality_description'
+        ).count
+        const sampleCount = hydratedTabs.find(
+          (item) => item.id === 'sample'
+        ).count
+
+        const combinedCount =
+          item.count + localityDescriptionCount + sampleCount
+
         const count = lasFileResponse?.items?.[0]?.attachment
-          ? item.count + 1
-          : item.count
+          ? combinedCount + 1
+          : combinedCount
+
         return {
           ...item,
           count,
           props: {
             ...item.props,
             analysisResultsCount: item.count,
+            localityDescriptionCount,
+            sampleCount,
           },
         }
       } else return item
@@ -419,6 +434,7 @@ export default {
 
     this.tabs = hydratedTabs
     this.initActiveTab = validPath
+    console.log(this.tabs)
 
     if (validPath !== this.$route.path) this.$router.replace(validPath)
   },
@@ -466,7 +482,13 @@ export default {
     filteredTabs() {
       return this.tabs.filter((item) => {
         if (item.id === 'graphs') {
-          return item.props.attachment || item.props.analysisResultsCount > 0
+          // Todo: also add taxa check
+          return (
+            item.props.attachment ||
+            item.props.analysisResultsCount > 0 ||
+            item.props.sampleCount > 0 ||
+            item.props.localityDescriptionCount > 0
+          )
         } else return item.count > 0
       })
     },

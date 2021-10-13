@@ -6,7 +6,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import ChartWrapper from '~/components/chart/ChartWrapper'
+import ChartWrapper from '~/components/chart/wrappers/ChartWrapper'
 export default {
   components: { ChartWrapper },
   props: {

@@ -1,17 +1,16 @@
 <template>
-  <client-only>
-    <div>
-      <v-chart
-        class="chart"
-        v-bind="$attrs"
-        autoresize
-        group="multi"
-        :init-options="initOptions"
-        :option="computedOptions"
-        v-on="$listeners"
-      />
-    </div>
-  </client-only>
+  <div>
+    <v-chart
+      class="chart"
+      v-bind="$attrs"
+      autoresize
+      group="flog"
+      :init-options="initOptions"
+      :option="computedOptions"
+      v-on="$listeners"
+      @click="handleClick"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,7 +18,7 @@ import deepmerge from 'deepmerge'
 import { mapState } from 'vuex'
 import { connect, disconnect } from 'echarts/core'
 export default {
-  name: 'MultiChartWrapper',
+  name: 'SampleChartWrapper',
   props: {
     options: {
       type: Object,
@@ -30,30 +29,25 @@ export default {
   data() {
     return {
       defaultOptions: {
-        // title also gets updated in watcher
         title: {
-          text: 'Chart title',
+          text: 'Samples',
           left: 'center',
           textStyle: {
             fontSize: 14,
           },
         },
 
-        // grid also gets updated in watcher
         grid: {
-          show: true,
+          // show: true,
           top: 50,
           bottom: 140,
           left: '20px',
           containLabel: true,
-          width: '200px',
+          width: '100px',
         },
 
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-          },
+          trigger: 'item',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
 
@@ -62,34 +56,12 @@ export default {
           right: 30,
           feature: {
             saveAsImage: {},
-            // restore: {},
-            // dataView: {},
-            // dataZoom: {},
-            // brush: {
-            //   type: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
-            // },
           },
         },
 
-        // dataZoom also gets updated in watcher
         dataZoom: [
-          // {
-          //   type: 'slider',
-          //   show: true,
-          //   filterMode: 'empty',
-          // },
-          // {
-          //   type: 'slider',
-          //   show: true,
-          //   yAxisIndex: 0,
-          //   left: this.$vuetify.breakpoint.xsOnly
-          //     ? DATAZOOM_Y_SLIDER_LEFT_SMALL
-          //     : DATAZOOM_Y_SLIDER_LEFT,
-          //   filterMode: 'filter',
-          // },
           {
             type: 'inside',
-            // xAxisIndex: [0],
             yAxisIndex: 0,
             filterMode: 'filter',
           },
@@ -117,9 +89,9 @@ export default {
     connected: {
       handler(value) {
         if (value) {
-          connect('multi')
+          connect('flog')
         } else {
-          disconnect('multi')
+          disconnect('flog')
         }
       },
       immediate: true,
@@ -127,7 +99,15 @@ export default {
   },
 
   mounted() {
-    connect('multi')
+    connect('flog')
+  },
+
+  methods: {
+    // Click event opens sample detail view
+    handleClick(event) {
+      if (event?.data?.sampleId)
+        this.$openNuxtWindow('sample-id', { id: event.data.sampleId })
+    },
   },
 }
 </script>
@@ -135,7 +115,7 @@ export default {
 <style scoped>
 .chart {
   height: 90vh;
-  width: 250px;
+  width: 230px;
   min-height: 600px;
   max-height: 2000px;
 }

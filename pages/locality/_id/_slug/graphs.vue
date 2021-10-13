@@ -1,7 +1,6 @@
 <template>
   <div>
-    <line-chart-multi
-      v-if="analysisResultsCount > 0"
+    <flog
       table-key="locality_id"
       :table-id="$route.params.id.toString()"
       :chart-title="chartTitle"
@@ -19,11 +18,11 @@
 </template>
 
 <script>
-import LineChartMulti from '~/components/chart/types/LineChartMulti'
+import Flog from '~/components/chart/Flog'
 import LasChart from '~/components/chart/types/LasChart'
 
 export default {
-  components: { LasChart, LineChartMulti },
+  components: { LasChart, Flog },
   props: {
     localityObject: {
       type: Object,
