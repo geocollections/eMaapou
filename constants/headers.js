@@ -470,7 +470,7 @@ export const HEADERS_DATASET_GEOLOCATION = {
       show: true,
     },
   },
-  allIds: [],
+  allIds: ['name', 'longitude', 'latitude', 'is_polygon'],
 }
 
 export const HEADERS_DATASET_REFERENCE = {
@@ -1374,7 +1374,6 @@ export const HEADERS_STRATIGRAPHY = {
         en: 'parent_stratigraphy_en',
       },
     },
-
     ageBase: {
       text: 'stratigraphy.ageBase',
       value: 'ageBase',
