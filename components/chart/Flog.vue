@@ -40,6 +40,7 @@
         :max-depth="maxDepth"
       />
 
+      <!-- Todo: Put it into separate component (param chart etc.) -->
       <multi-chart-wrapper
         v-for="(item, index) in selectedParameters"
         :key="index"
@@ -50,6 +51,7 @@
       <!-- Could be category chart where taxon names are categories and item size is taxon frequency-->
       <taxa-chart
         v-if="taxaResults.length > 0 && taxa.length > 0"
+        class="d-flex flex-row"
         :results="taxaResults"
         :taxa="taxa"
         :min-depth="minDepth"
@@ -156,9 +158,6 @@ export default {
       this.sampleResults = sampleResponse?.items
       this.taxaResults = taxaResponse?.items
       this.taxa = taxaStatsResponse?.stats?.stats_fields?.taxon?.distinctValues
-
-      console.log(this.taxaResults)
-      console.log(this.taxa)
     }
     this.isLoading = false
   },

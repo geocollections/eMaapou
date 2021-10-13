@@ -9,6 +9,7 @@
         :init-options="initOptions"
         :option="computedOptions"
         v-on="$listeners"
+        @click="handleClick"
       />
     </div>
   </client-only>
@@ -49,22 +50,6 @@ export default {
 
         tooltip: {
           trigger: 'item',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#ff5252',
-            },
-            crossStyle: {
-              color: '#ff5252',
-              width: 1,
-              type: 'solid',
-            },
-          },
-          formatter(params) {
-            return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.seriesName}
-              <br />Depth: <b>${params.data[1]}</b></span>
-              <br /><span>Value: <b>${params.data[0]}</b></span>`
-          },
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
 
@@ -118,13 +103,20 @@ export default {
   mounted() {
     connect('flog')
   },
+
+  methods: {
+    handleClick(event) {
+      if (event?.data?.taxonId)
+        this.$openWindow(`https://fossiilid.info/${event.data.taxonId}`)
+    },
+  },
 }
 </script>
 
 <style scoped>
 .chart {
   height: 90vh;
-  width: 250px;
+  width: 200px;
   min-height: 600px;
   max-height: 2000px;
 }

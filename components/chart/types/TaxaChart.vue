@@ -1,5 +1,11 @@
 <template>
-  <taxa-chart-wrapper :options="chartOptions" />
+  <div>
+    <taxa-chart-wrapper
+      v-for="(item, index) in filteredTaxa"
+      :key="index"
+      :options="optionsUsingTaxon(item)"
+    />
+  </div>
 </template>
 
 <script>
@@ -12,8 +18,9 @@ export default {
     chartTitle: {
       type: String,
       required: false,
-      default: 'Samples',
+      default: 'Taxa',
     },
+    // Todo: If minDepth and maxDepth are 0 use depth from results
     minDepth: {
       type: Number,
       required: true,
@@ -36,6 +43,13 @@ export default {
     },
   },
   computed: {
+    filteredTaxa() {
+      return this.results.reduce((prev, curr) => {
+        if (!prev.includes(curr.taxon)) prev.push(curr.taxon)
+        return prev
+      }, [])
+    },
+
     chartOptions() {
       if (this.results?.length > 0) {
         return {
@@ -55,10 +69,26 @@ export default {
     },
   },
   methods: {
-    buildXAxis() {
+    optionsUsingTaxon(taxon) {
+      return {
+        animation: false,
+
+        title: {
+          text: taxon,
+        },
+
+        yAxis: this.buildYAxis(),
+
+        xAxis: this.buildXAxis(taxon),
+
+        series: this.buildChartSeries(taxon),
+      }
+    },
+
+    buildXAxis(param) {
       return {
         type: 'category',
-        data: this.taxa,
+        data: [param],
         axisLabel: {
           fontWeight: 'bold',
           padding: [13, 0, 0, 0],
@@ -68,7 +98,6 @@ export default {
 
     buildYAxis() {
       return {
-        show: true,
         type: 'value',
         boundaryGap: false,
         name: 'Depth',
@@ -79,14 +108,10 @@ export default {
         nameGap: 10,
         splitNumber: 7,
         axisTick: {
-          show: true,
           alignWithLabel: true,
         },
         axisLine: {
           show: true,
-          lineStyle: {
-            // width: 15,
-          },
         },
         max:
           this.maxDepth > 0 && this.maxDepth > this.minDepth
@@ -99,8 +124,7 @@ export default {
       }
     },
 
-    buildChartSeries() {
-      console.log('hi')
+    buildChartSeries(taxon) {
       return [
         {
           type: 'scatter',
@@ -109,37 +133,82 @@ export default {
             position: 'bottom',
             formatter(params) {
               return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.data.name}
+                    <br />Frequency: <b>${params.data.name}</b></span>\
                     <br />Depth: <b>${params.data.sampleDepth}</b></span>
-                    <br /><span>Depth interval: <b>${params.data.sampleDepthInterval}</b></span>`
+                    <br /><span>Depth interval: <b>${params.data.sampleDepthInterval}</b></span>
+                    <br /><span>Symbol size: <b>${params.data.size}</b></span>`
             },
           },
-          data: this.results.map((item) => {
-            const depth =
-              item?.depth && item?.depth_interval
-                ? ((item.depth + item.depth_interval) / 2).toFixed(2)
-                : item?.depth
-                ? item.depth
-                : item.depth_interval
-            return {
-              sampleDepth: -item.depth,
-              sampleDepthInterval: -item.depth_interval,
-              sampleId: item.id,
-              name: item.number || item.id,
-              value: [0, -depth],
-              symbol: 'rect',
-              symbolSize: 3,
-              label: {
-                show: true,
-                position: 'right',
-                // distance: 15,
-                formatter(params) {
-                  return `${params.data.name}`
+          data: this.results.reduce((prev, curr) => {
+            if (curr.taxon === taxon) {
+              const depth =
+                curr?.depth && curr?.depth_interval
+                  ? ((curr.depth + curr.depth_interval) / 2).toFixed(2)
+                  : curr?.depth
+                  ? curr.depth
+                  : curr.depth_interval
+
+              const maxSymbolSize = 30
+              const minSymbolSize = 7
+              const maxFrequency = 1856 // Number from solr index
+
+              const symbolSizeInPercent = (
+                (curr.frequency * 100) /
+                maxFrequency
+              ).toFixed(2)
+              const symbolSize = (
+                (maxSymbolSize * symbolSizeInPercent) / 100 +
+                minSymbolSize
+              ).toFixed(2)
+              console.log(symbolSize)
+
+              prev.push({
+                sampleDepth: -curr.depth,
+                sampleDepthInterval: -curr.depth_interval,
+                taxonId: curr.taxon_id,
+                size: symbolSize,
+                name: curr.frequency,
+                symbol: 'rect',
+                symbolSize,
+                value: [0, -depth],
+                label: {
+                  show: true,
+                  position: 'right',
+                  // distance: 15,
+                  formatter(params) {
+                    return `${params.data.name}`
+                  },
                 },
-              },
+              })
             }
-          }),
+            return prev
+          }, []),
         },
       ]
+      // return [
+      //   {
+      //     name: taxon,
+      //     type: 'line',
+      //     smooth: false,
+      //     xAxisIndex: 0,
+      //     data: this.results.reduce((prev, curr) => {
+      //       if (curr.taxon === taxon) {
+      //         const depth =
+      //           curr?.depth && curr?.depth_interval
+      //             ? ((curr.depth + curr.depth_interval) / 2).toFixed(2)
+      //             : curr?.depth
+      //             ? curr.depth
+      //             : curr.depth_interval
+      //
+      //         prev.push([0, -depth])
+      //       }
+      //       return prev
+      //     }, []),
+      //     emphasis: {
+      //       focus: 'series',
+      //     },
+      //   },
+      // ]
     },
   },
 }
