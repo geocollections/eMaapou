@@ -50,7 +50,8 @@ export default {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: 'https://dev.geoloogia.info/logos/emaapou_short.png',
+        // https://stackoverflow.com/a/15553994
+        content: 'https://dev.geoloogia.info/logos/emaapou_short.png?t=12345?',
       },
     ],
     link: [
