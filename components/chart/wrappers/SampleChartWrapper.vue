@@ -1,18 +1,16 @@
 <template>
-  <client-only>
-    <div>
-      <v-chart
-        class="chart"
-        v-bind="$attrs"
-        autoresize
-        group="flog"
-        :init-options="initOptions"
-        :option="computedOptions"
-        v-on="$listeners"
-        @click="handleClick"
-      />
-    </div>
-  </client-only>
+  <div>
+    <v-chart
+      class="chart"
+      v-bind="$attrs"
+      autoresize
+      group="flog"
+      :init-options="initOptions"
+      :option="computedOptions"
+      v-on="$listeners"
+      @click="handleClick"
+    />
+  </div>
 </template>
 
 <script>

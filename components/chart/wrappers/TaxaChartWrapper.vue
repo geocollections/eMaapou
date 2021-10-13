@@ -1,18 +1,16 @@
 <template>
-  <client-only>
-    <div>
-      <v-chart
-        class="chart"
-        v-bind="$attrs"
-        autoresize
-        group="flog"
-        :init-options="initOptions"
-        :option="computedOptions"
-        v-on="$listeners"
-        @click="handleClick"
-      />
-    </div>
-  </client-only>
+  <div>
+    <v-chart
+      class="chart"
+      v-bind="$attrs"
+      autoresize
+      group="flog"
+      :init-options="initOptions"
+      :option="computedOptions"
+      v-on="$listeners"
+      @click="handleClick"
+    />
+  </div>
 </template>
 
 <script>
@@ -32,20 +30,20 @@ export default {
     return {
       defaultOptions: {
         title: {
-          text: 'Chart title',
+          text: 'Taxa',
           left: 'center',
           textStyle: {
-            fontSize: 14,
+            fontSize: 10,
           },
         },
 
         grid: {
-          show: true,
+          show: false,
           top: 50,
           bottom: 140,
           left: '20px',
           containLabel: true,
-          width: '200px',
+          width: '100px',
         },
 
         tooltip: {
@@ -116,7 +114,7 @@ export default {
 <style scoped>
 .chart {
   height: 90vh;
-  width: 200px;
+  width: 150px;
   min-height: 600px;
   max-height: 2000px;
 }

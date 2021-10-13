@@ -898,6 +898,7 @@ export default {
   statistics: {
     analysisMethods: 'Analüüsimeetodid',
     activeParameters: 'Aktiivsed parameetrid',
+    activeTaxa: 'Aktiivsed taksonid',
     isEmptyMessage: 'Palun valige mõni parameeter, et andmeid kuvada.',
   },
   photo: {

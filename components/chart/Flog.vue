@@ -1,85 +1,98 @@
 <template>
-  <div class="pa-2">
-    <external-legend-options
-      v-if="initSelectedParameters.length > 0"
-      :is-loading="isLoading"
-      :checkboxes-object="methods"
-      :all-items="parameters"
-      :init-selected-items="initSelectedParameters"
-      @update:selectedItems="selectedParameters = $event"
-    />
-
-    <div class="mb-2 d-flex flex-row flex-wrap">
-      <renderer-switch
-        class="mr-4"
-        :renderer="renderer"
-        @update="renderer = $event"
+  <client-only>
+    <div class="pa-2">
+      <external-legend-options
+        v-if="initSelectedParameters.length > 0"
+        :is-loading="isLoading"
+        :checkboxes-object="methods"
+        :all-items="parameters"
+        :init-selected-items="initSelectedParameters"
+        @update:selectedItems="selectedParameters = $event"
       />
 
-      <connection-switch
-        v-if="parameters.length > 1"
-        :input-value="connected"
-        @change="connected = $event"
+      <external-legend-options
+        v-if="initSelectedTaxa.length > 0"
+        :enable-checkboxes="false"
+        :is-loading="isLoading"
+        :all-items="taxa"
+        :init-selected-items="initSelectedTaxa"
+        select-field-title="statistics.activeTaxa"
+        padding-top-zero
+        @update:selectedItems="selectedTaxa = $event"
       />
+
+      <div class="mb-2 d-flex flex-row flex-wrap">
+        <renderer-switch
+          class="mr-4"
+          :renderer="renderer"
+          @update="renderer = $event"
+        />
+
+        <connection-switch
+          v-if="parameters.length > 1"
+          :input-value="connected"
+          @change="connected = $event"
+        />
+      </div>
+
+      <!-- Todo: Review all chart wrappers and limit it to only one wrapper -->
+
+      <div v-if="!isLoading" class="charts d-flex flex-row">
+        <!-- Todo: Stratigraphy chart -->
+        <!-- Disabled as it's not ready yet -->
+        <stratigraphy-chart
+          v-if="stratigraphyResults.length > 0 && false"
+          :results="stratigraphyResults"
+        />
+
+        <sample-chart
+          v-if="sampleResults.length > 0 && minDepth && maxDepth"
+          :results="sampleResults"
+          :min-depth="minDepth"
+          :max-depth="maxDepth"
+        />
+
+        <params-chart
+          v-if="analysisResults.length > 0 && selectedParameters.length > 0"
+          class="d-flex flex-row"
+          :results="analysisResults"
+          :params="selectedParameters"
+          :min-depth="minDepth"
+          :max-depth="maxDepth"
+        />
+
+        <taxa-chart
+          v-if="taxaResults.length > 0 && selectedTaxa.length > 0"
+          class="d-flex flex-row"
+          :results="taxaResults"
+          :taxa="selectedTaxa"
+          :min-depth="minDepth"
+          :max-depth="maxDepth"
+        />
+      </div>
     </div>
-
-    <!-- Todo: Review all chart wrappers and limit it to only one wrapper -->
-
-    <div v-if="!isLoading" class="charts d-flex flex-row">
-      <!-- Todo: Stratigraphy chart -->
-      <!-- Disabled as it's not ready yet -->
-      <stratigraphy-chart
-        v-if="stratigraphyResults.length > 0 && false"
-        :results="stratigraphyResults"
-      />
-
-      <sample-chart
-        v-if="sampleResults.length > 0 && minDepth && maxDepth"
-        :results="sampleResults"
-        :min-depth="minDepth"
-        :max-depth="maxDepth"
-      />
-
-      <!-- Todo: Put it into separate component (param chart etc.) -->
-      <multi-chart-wrapper
-        v-for="(item, index) in selectedParameters"
-        :key="index"
-        :options="optionsUsingParameter(item)"
-      />
-
-      <!-- Todo: Taxa chart -->
-      <!-- Could be category chart where taxon names are categories and item size is taxon frequency-->
-      <taxa-chart
-        v-if="taxaResults.length > 0 && taxa.length > 0"
-        class="d-flex flex-row"
-        :results="taxaResults"
-        :taxa="taxa"
-        :min-depth="minDepth"
-        :max-depth="maxDepth"
-      />
-    </div>
-  </div>
+  </client-only>
 </template>
 
 <script>
 import { isNil } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
 import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
-import MultiChartWrapper from '~/components/chart/wrappers/MultiChartWrapper'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
 import SampleChart from '~/components/chart/types/SampleChart'
 import StratigraphyChart from '~/components/chart/types/StratigraphyChart'
 import TaxaChart from '~/components/chart/types/TaxaChart'
+import ParamsChart from '~/components/chart/types/ParamsChart'
 
 export default {
   components: {
+    ParamsChart,
     TaxaChart,
     StratigraphyChart,
     SampleChart,
     ConnectionSwitch,
     RendererSwitch,
-    MultiChartWrapper,
     ExternalLegendOptions,
   },
   props: {
@@ -101,37 +114,62 @@ export default {
   data() {
     return {
       isLoading: false,
-      analysisResults: [],
+      // Depth
       depth: [],
-      parameters: [],
-      selectedParameters: [],
-      methods: {},
-      initSelectedParameters: [],
       minDepth: null,
       maxDepth: null,
-      sampleResults: [],
+      // Results
       stratigraphyResults: [],
+      analysisResults: [],
+      sampleResults: [],
       taxaResults: [],
+      // Analysis
+      methods: {},
+      parameters: [],
+      selectedParameters: [],
+      initSelectedParameters: [],
+      // Taxa
       taxa: [],
+      selectedTaxa: [],
+      initSelectedTaxa: [],
     }
   },
   async fetch() {
     this.isLoading = true
-    if (this.analysisResults.length === 0) {
+    if (
+      this.stratigraphyResults === 0 ||
+      this.analysisResults.length === 0 ||
+      this.sampleResults === 0 ||
+      this.taxaResults === 0
+    ) {
       const {
+        // stratigraphyResponse,
+        // stratigraphyStatsResponse,
         resultsResponse,
         statsResponse,
         sampleResponse,
+        sampleStatsResponse,
         taxaResponse,
         taxaStatsResponse,
       } = await this.fetchChartData()
 
+      // Results
       this.analysisResults = resultsResponse?.items
+      this.sampleResults = sampleResponse?.items
+      this.taxaResults = taxaResponse?.items
 
-      this.depth = statsResponse?.stats?.stats_fields?.depth?.distinctValues
-      this.parameters =
-        statsResponse?.stats?.stats_fields?.parameter?.distinctValues
+      // Depth
+      // Depth may come from stratigraphy, samples, analyses or taxa
+      this.depth = new Set([
+        // Todo: Add depth from stratigraphyStatsResponse? (locality_description table is not in solr index)
+        ...statsResponse?.stats?.stats_fields?.depth?.distinctValues,
+        ...sampleStatsResponse?.stats?.stats_fields?.depth?.distinctValues,
+        ...taxaStatsResponse?.stats?.stats_fields?.depth?.distinctValues,
+      ])
+      this.minDepth = Math.min(...this.depth)
+      this.maxDepth = Math.max(...this.depth)
 
+      // Analysis
       const methodKey =
         this.$i18n.locale === 'en' ? 'analysis_method_en' : 'analysis_method'
       this.methods =
@@ -146,18 +184,25 @@ export default {
         ]
         return prev
       }, {})
-
+      this.parameters =
+        statsResponse?.stats?.stats_fields?.parameter?.distinctValues
       this.selectedParameters = this.parameters.slice(
         0,
         this.parameters.length > 3 ? 3 : this.parameters.length
       )
       this.initSelectedParameters = this.selectedParameters
-      this.minDepth = Math.min(...this.depth)
-      this.maxDepth = Math.max(...this.depth)
 
-      this.sampleResults = sampleResponse?.items
-      this.taxaResults = taxaResponse?.items
-      this.taxa = taxaStatsResponse?.stats?.stats_fields?.taxon?.distinctValues
+      // Taxa
+      // this.taxa = taxaStatsResponse?.stats?.stats_fields?.taxon?.distinctValues
+      this.taxa = this.taxaResults.reduce((prev, curr) => {
+        if (!prev.includes(curr.taxon)) prev.push(curr.taxon)
+        return prev
+      }, [])
+      this.selectedTaxa = this.taxa.slice(
+        0,
+        this.taxa.length > 3 ? 3 : this.taxa.length
+      )
+      this.initSelectedTaxa = this.selectedTaxa
     }
     this.isLoading = false
   },
@@ -215,6 +260,22 @@ export default {
         }
       )
 
+      const sampleStatsResponse = await this.$services.sarvSolr.getResourceList(
+        'sample',
+        {
+          isValid: isNil(this.tableId),
+          defaultParams: {
+            fq: `${this.tableKey}:${this.tableId}`,
+            rows: 0,
+            fl: 'depth',
+            sort: 'depth asc',
+            stats: 'on',
+            'stats.field': ['depth'],
+            'stats.calcdistinct': true,
+          },
+        }
+      )
+
       const taxaResponse = await this.$services.sarvSolr.getResourceList(
         'taxon_frequency',
         {
@@ -239,7 +300,7 @@ export default {
             fl: 'depth',
             sort: 'depth asc',
             stats: 'on',
-            'stats.field': ['taxon'],
+            'stats.field': ['taxon', 'depth'],
             'stats.calcdistinct': true,
           },
         }
@@ -249,109 +310,9 @@ export default {
         resultsResponse,
         statsResponse,
         sampleResponse,
+        sampleStatsResponse,
         taxaResponse,
         taxaStatsResponse,
-      }
-    },
-
-    buildChartLegend() {
-      return {
-        data: this.selectedParameters,
-        selected: this.parameters.reduce((prev, curr) => {
-          prev[curr] = this.selectedParameters.includes(curr)
-          return prev
-        }, {}),
-      }
-    },
-
-    buildXAxis(param) {
-      return {
-        show: true,
-        position: 'bottom',
-        type: 'value',
-        name: param.substring(param.indexOf('[') + 1, param.indexOf(']')),
-        nameLocation: 'center',
-        nameTextStyle: {
-          fontWeight: 'bold',
-          padding: [7, 0, 0, 0],
-        },
-        min(value) {
-          return (value.min - 0.1).toFixed(2) * 1
-        },
-        max(value) {
-          return (value.max + 0.1).toFixed(2) * 1
-        },
-        splitNumber: 2,
-        axisLine: {
-          show: true,
-          symbol: ['none', 'arrow'],
-          symbolSize: [5, 5],
-        },
-      }
-    },
-
-    buildYAxis() {
-      return {
-        type: 'value',
-        boundaryGap: false,
-        name: 'Depth',
-        nameLocation: 'end',
-        nameTextStyle: {
-          fontWeight: 'bold',
-        },
-        nameGap: 10,
-        splitNumber: 7,
-        axisTick: {
-          alignWithLabel: true,
-        },
-        // min(value) {
-        //   return (value.min - 0.1).toFixed(2) * 1
-        // },
-        // max(value) {
-        //   return (value.max + 0.1).toFixed(2) * 1
-        // },
-        // Todo: Maybe review that logic
-        max:
-          this.maxDepth > 0 && this.maxDepth > this.minDepth
-            ? this.minDepth * -1
-            : this.maxDepth,
-        min:
-          this.minDepth > 0 && this.minDepth < this.maxDepth
-            ? this.maxDepth * -1
-            : this.minDepth,
-      }
-    },
-
-    buildChartSeries(param) {
-      return [
-        {
-          name: param,
-          type: 'line',
-          smooth: false,
-          xAxisIndex: 0,
-          data: this.analysisResults
-            .filter((result) => result.parameter === param)
-            .map((t) => [t.value, t.depth * -1]),
-          emphasis: {
-            focus: 'series',
-          },
-        },
-      ]
-    },
-
-    optionsUsingParameter(param) {
-      return {
-        animation: false,
-
-        title: {
-          text: param,
-        },
-
-        yAxis: this.buildYAxis(),
-
-        xAxis: this.buildXAxis(param),
-
-        series: this.buildChartSeries(param),
       }
     },
   },

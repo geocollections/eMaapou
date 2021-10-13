@@ -1,17 +1,15 @@
 <template>
-  <client-only>
-    <div>
-      <v-chart
-        class="chart"
-        v-bind="$attrs"
-        autoresize
-        group="flog"
-        :init-options="initOptions"
-        :option="computedOptions"
-        v-on="$listeners"
-      />
-    </div>
-  </client-only>
+  <div>
+    <v-chart
+      class="chart"
+      v-bind="$attrs"
+      autoresize
+      group="flog"
+      :init-options="initOptions"
+      :option="computedOptions"
+      v-on="$listeners"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,7 +17,7 @@ import deepmerge from 'deepmerge'
 import { mapState } from 'vuex'
 import { connect, disconnect } from 'echarts/core'
 export default {
-  name: 'MultiChartWrapper',
+  name: 'ParamsChartWrapper',
   props: {
     options: {
       type: Object,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <taxa-chart-wrapper
-      v-for="(item, index) in filteredTaxa"
+      v-for="(item, index) in taxa"
       :key="index"
       :options="optionsUsingTaxon(item)"
     />
@@ -20,7 +20,6 @@ export default {
       required: false,
       default: 'Taxa',
     },
-    // Todo: If minDepth and maxDepth are 0 use depth from results
     minDepth: {
       type: Number,
       required: true,
@@ -40,32 +39,6 @@ export default {
       type: Array,
       required: true,
       default: () => {},
-    },
-  },
-  computed: {
-    filteredTaxa() {
-      return this.results.reduce((prev, curr) => {
-        if (!prev.includes(curr.taxon)) prev.push(curr.taxon)
-        return prev
-      }, [])
-    },
-
-    chartOptions() {
-      if (this.results?.length > 0) {
-        return {
-          animation: false,
-
-          title: {
-            text: this.chartTitle,
-          },
-
-          xAxis: this.buildXAxis(),
-
-          yAxis: this.buildYAxis(),
-
-          series: this.buildChartSeries(),
-        }
-      } else return {}
     },
   },
   methods: {
@@ -91,7 +64,16 @@ export default {
         data: [param],
         axisLabel: {
           fontWeight: 'bold',
+          fontSize: 10,
+          // margin: 13,
           padding: [13, 0, 0, 0],
+          // rotate: 90,
+          // inside: true,
+          // align: 'right',
+          // margin: 17,
+        },
+        axisLine: {
+          show: true,
         },
       }
     },
@@ -132,11 +114,10 @@ export default {
           tooltip: {
             position: 'bottom',
             formatter(params) {
-              return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.data.name}
+              return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.data.taxon}
                     <br />Frequency: <b>${params.data.name}</b></span>\
                     <br />Depth: <b>${params.data.sampleDepth}</b></span>
-                    <br /><span>Depth interval: <b>${params.data.sampleDepthInterval}</b></span>
-                    <br /><span>Symbol size: <b>${params.data.size}</b></span>`
+                    <br /><span>Depth interval: <b>${params.data.sampleDepthInterval}</b></span>`
             },
           },
           data: this.results.reduce((prev, curr) => {
@@ -148,25 +129,23 @@ export default {
                   ? curr.depth
                   : curr.depth_interval
 
-              const maxSymbolSize = 30
-              const minSymbolSize = 7
-              const maxFrequency = 1856 // Highest number from solr index
+              const maxSymbolSize = 20
+              const minSymbolSize = 5
+              const maxFrequency = 404 // Highest number from solr index (one is 1856 but this is an exception)
 
-              const symbolSizeInPercent = (
-                (curr.frequency * 100) /
-                maxFrequency
-              ).toFixed(2)
-              const symbolSize = (
-                (maxSymbolSize * symbolSizeInPercent) / 100 +
-                minSymbolSize
-              ).toFixed(2)
-              console.log(symbolSize)
+              const symbolSizeInPercent = (curr.frequency * 100) / maxFrequency
+              let symbolSize = Math.round(
+                (maxSymbolSize * symbolSizeInPercent) / 100 + minSymbolSize
+              )
+              symbolSize =
+                symbolSize > 20 ? 20 : symbolSize < 7 ? 7 : symbolSize
 
               prev.push({
                 sampleDepth: -curr.depth,
                 sampleDepthInterval: -curr.depth_interval,
+                taxon: curr.taxon,
                 taxonId: curr.taxon_id,
-                size: symbolSize,
+                mySize: symbolSize,
                 name: curr.frequency,
                 symbol: 'rect',
                 symbolSize,
@@ -174,7 +153,6 @@ export default {
                 label: {
                   show: true,
                   position: 'right',
-                  // distance: 15,
                   formatter(params) {
                     return `${params.data.name}`
                   },
@@ -185,30 +163,6 @@ export default {
           }, []),
         },
       ]
-      // return [
-      //   {
-      //     name: taxon,
-      //     type: 'line',
-      //     smooth: false,
-      //     xAxisIndex: 0,
-      //     data: this.results.reduce((prev, curr) => {
-      //       if (curr.taxon === taxon) {
-      //         const depth =
-      //           curr?.depth && curr?.depth_interval
-      //             ? ((curr.depth + curr.depth_interval) / 2).toFixed(2)
-      //             : curr?.depth
-      //             ? curr.depth
-      //             : curr.depth_interval
-      //
-      //         prev.push([0, -depth])
-      //       }
-      //       return prev
-      //     }, []),
-      //     emphasis: {
-      //       focus: 'series',
-      //     },
-      //   },
-      // ]
     },
   },
 }
