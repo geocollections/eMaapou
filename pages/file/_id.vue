@@ -899,33 +899,33 @@ export default {
           content: this.$route.path,
         },
         ...[
-          this.isImage
-            ? {
-                property: 'og:image',
-                hid: 'og:image',
-                content: this.$img(
+          {
+            property: 'og:image',
+            hid: 'og:image',
+            content: this.isImage
+              ? this.$img(
                   `${this.file.filename}`,
                   { size: 'small', height: 700 },
                   {
                     provider: 'geocollections',
                   }
-                ),
-              }
-            : [],
-          this.isVideo
-            ? {
-                property: 'og:video',
-                hid: 'og:video',
-                content: `https://files.geocollections.info/${this.file.uuid_filename}`,
-              }
-            : [],
-          this.isAudio
-            ? {
-                property: 'og:audio',
-                hid: 'og:audio',
-                content: `https://files.geocollections.info/${this.file.uuid_filename}`,
-              }
-            : [],
+                )
+              : undefined,
+          },
+          {
+            property: 'og:video',
+            hid: 'og:video',
+            content: this.isVideo
+              ? `https://files.geocollections.info/${this.file.uuid_filename}`
+              : undefined,
+          },
+          {
+            property: 'og:audio',
+            hid: 'og:audio',
+            content: this.isAudio
+              ? `https://files.geocollections.info/${this.file.uuid_filename}`
+              : undefined,
+          },
         ],
       ],
     }
