@@ -94,10 +94,12 @@ export default {
           padding: [7, 0, 0, 0],
         },
         min(value) {
-          return (value.min - 0.1).toFixed(2) * 1
+          // return (value.min - 0.1).toFixed(2) * 1
+          return Math.floor(((value.min - 0.1).toFixed(2) * 1) / 10) * 10
         },
         max(value) {
-          return (value.max + 0.1).toFixed(2) * 1
+          // return (value.max + 0.1).toFixed(2) * 1
+          return Math.ceil(((value.max + 0.1).toFixed(2) * 1) / 10) * 10
         },
         splitNumber: 2,
         axisLine: {

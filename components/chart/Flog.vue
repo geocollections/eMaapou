@@ -166,8 +166,9 @@ export default {
         ...sampleStatsResponse?.stats?.stats_fields?.depth?.distinctValues,
         ...taxaStatsResponse?.stats?.stats_fields?.depth?.distinctValues,
       ])
-      this.minDepth = Math.min(...this.depth)
-      this.maxDepth = Math.max(...this.depth)
+      // Floor or Ceil to next tenth
+      this.minDepth = Math.floor(Math.min(...this.depth) / 10) * 10
+      this.maxDepth = Math.ceil(Math.max(...this.depth) / 10) * 10
 
       // Analysis
       const methodKey =
