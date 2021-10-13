@@ -907,6 +907,20 @@ export default {
                 ),
               }
             : [],
+          this.isVideo
+            ? {
+                property: 'og:video',
+                hid: 'og:video',
+                content: `https://files.geocollections.info/${this.file.uuid_filename}`,
+              }
+            : [],
+          this.isAudio
+            ? {
+                property: 'og:audio',
+                hid: 'og:audio',
+                content: `https://files.geocollections.info/${this.file.uuid_filename}`,
+              }
+            : [],
         ],
       ],
     }
