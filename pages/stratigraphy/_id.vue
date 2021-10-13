@@ -211,8 +211,6 @@
             en: stratigraphy.description_en,
           })
         "
-        flat
-        tile
       >
         <v-row no-gutters>
           <v-col cols="12">
