@@ -44,8 +44,8 @@ export default {
   },
   async fetch() {
     const text = this.$translate({
-      et: this.newsResponse.title_et,
-      en: this.newsResponse.title_en,
+      et: this.news.title_et,
+      en: this.news.title_en,
     })
 
     const slugRoute = this.$createSlugRoute(this.$route, text)
