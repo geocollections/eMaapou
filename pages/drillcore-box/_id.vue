@@ -409,7 +409,7 @@ export default {
           hid: 'og:image',
           content: this.$img(
             `${this.activeImage.attachment.uuid_filename}`,
-            { size: 'small', height: 700 },
+            { size: 'medium' },
             {
               provider: 'geocollections',
             }
