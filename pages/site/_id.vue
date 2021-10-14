@@ -460,7 +460,7 @@ export default {
           content: this.images[0]?.attachment.filename
             ? this.$img(
                 `${this.images[0]?.attachment.filename}`,
-                { size: 'small', height: 700 },
+                { size: 'small' },
                 {
                   provider: 'geocollections',
                 }

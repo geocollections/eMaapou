@@ -89,14 +89,14 @@
                   :src="
                     $img(
                       `${item.uuid_filename}`,
-                      { size: 'small', width: 100 },
+                      { size: 'small' },
                       { provider: 'geocollections' }
                     )
                   "
                   :lazy-src="
                     $img(
                       `${item.uuid_filename}`,
-                      { size: 'small', width: 100 },
+                      { size: 'small' },
                       { provider: 'geocollections' }
                     )
                   "

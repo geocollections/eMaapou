@@ -315,7 +315,7 @@ export default {
           content: this.images[0]?.filename
             ? this.$img(
                 `${this.images[0]?.filename}`,
-                { size: 'small', height: 700 },
+                { size: 'small' },
                 {
                   provider: 'geocollections',
                 }

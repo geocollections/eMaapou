@@ -17,14 +17,14 @@
                 :src="
                   $img(
                     `${item.uuid_filename}`,
-                    { size: 'small', width: 200, height: 200 },
+                    { size: 'small' },
                     { provider: 'geocollections' }
                   )
                 "
                 :lazy-src="
                   $img(
                     `${item.uuid_filename}`,
-                    { size: 'small', width: 200, height: 200 },
+                    { size: 'small' },
                     { provider: 'geocollections' }
                   )
                 "

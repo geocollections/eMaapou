@@ -31,14 +31,14 @@
                 :lazy-src="
                   $img(
                     `${image.uuid_filename}`,
-                    { size: 'small', height: 400 },
+                    { size: 'small' },
                     { provider: 'geocollections' }
                   )
                 "
                 :src="
                   $img(
                     `${image.uuid_filename}`,
-                    { size: 'small', height: 400 },
+                    { size: 'small' },
                     { provider: 'geocollections' }
                   )
                 "

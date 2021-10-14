@@ -15,7 +15,7 @@
           :lazy-src="
             $img(
               `${file.filename}`,
-              { size: 'small', height: 700 },
+              { size: 'small' },
               {
                 provider: 'geocollections',
               }
@@ -24,7 +24,7 @@
           :src="
             $img(
               `${file.filename}`,
-              { size: 'medium', height: 700 },
+              { size: 'medium' },
               {
                 provider: 'geocollections',
               }
@@ -905,7 +905,7 @@ export default {
             content: this.isImage
               ? this.$img(
                   `${this.file.filename}`,
-                  { size: 'small', height: 700 },
+                  { size: 'small' },
                   {
                     provider: 'geocollections',
                   }
