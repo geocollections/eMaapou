@@ -239,7 +239,7 @@
                   :href="
                     localePath({
                       name: 'stratigraphy-id',
-                      params: { id: drillcoreBox.stratigraphy_base_id },
+                      params: { id: drillcoreBox.stratigraphy_base.id },
                     })
                   "
                 />
