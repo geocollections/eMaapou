@@ -434,7 +434,6 @@ export default {
 
     this.tabs = hydratedTabs
     this.initActiveTab = validPath
-    console.log(this.tabs)
 
     if (validPath !== this.$route.path) this.$router.replace(validPath)
   },
