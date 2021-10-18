@@ -18,7 +18,7 @@ export const initState = () => {
           fields: ['id'],
         },
         depth: {
-          value: [-20, 5000],
+          value: [null, null],
           type: 'range',
           lookUpType: 'range',
           label: 'analysis.depth',

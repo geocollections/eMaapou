@@ -4,11 +4,8 @@
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('analysis')">
       <text-field v-model="id" :label="$t(filters.byIds.id.label)" />
-      <!-- TODO: Get min and max dynamically -->
-      <range-slider-field
+      <range-text-field
         v-model="depth"
-        :min="-20"
-        :max="5000"
         :label="$t(filters.byIds.depth.label)"
       />
     </search-fields-wrapper>
@@ -36,20 +33,20 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
-import RangeSliderField from '~/components/fields/RangeSliderField.vue'
 import TextField from '~/components/fields/TextField.vue'
 import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import RangeTextField from '~/components/fields/RangeTextField.vue'
 export default {
   name: 'AnalysisSearchForm',
   components: {
     InstitutionSearchFilter,
     TextField,
-    RangeSliderField,
     SearchFieldsWrapper,
     SearchActions,
     SearchViewMapWrapper,
     QuerySearchField,
+    RangeTextField,
   },
   computed: {
     ...mapState('search/analysis', ['filters', 'count', 'items']),
