@@ -29,16 +29,16 @@
       </nuxt-link>
     </v-app-bar-title>
     <v-divider
-      v-if="$vuetify.breakpoint.mdAndUp"
+      v-show="$vuetify.breakpoint.lgAndUp"
       vertical
       inset
       class="mx-3 white"
     />
-    <div v-if="$vuetify.breakpoint.mdAndUp" class="montserrat">
+    <div v-show="$vuetify.breakpoint.lgAndUp" class="montserrat">
       {{ $t('slogan') }}
     </div>
 
-    <v-toolbar-items v-show="$vuetify.breakpoint.smAndUp" class="ml-3">
+    <v-toolbar-items v-show="$vuetify.breakpoint.mdAndUp" class="ml-3">
       <v-btn
         nuxt
         aria-label="about page"
@@ -61,20 +61,31 @@
     </v-toolbar-items>
     <v-spacer />
     <v-toolbar-items class="align-center">
-      <query-search-field
-        v-if="
-          $route.name &&
-          !$route.name.startsWith('search') &&
-          $vuetify.breakpoint.smAndUp
-        "
-        v-model="query"
-        class="pr-2 rounded-0 montserrat"
-        background-color="grey lighten-5"
-        height="56"
-        :autofocus="false"
-        :placeholder="$t('common.search')"
-        @enter="$router.push(localePath({ name: 'search' }))"
-      />
+      <div
+        v-if="$vuetify.breakpoint.smAndUp"
+        class="d-flex mr-2"
+        style="width: 232px"
+      >
+        <query-search-field
+          v-model="query"
+          class="rounded-0 montserrat"
+          background-color="grey lighten-5"
+          dense
+          :autofocus="false"
+          :placeholder="$t('common.search')"
+          @enter="$router.push(localePath({ name: 'search' }))"
+        />
+        <v-btn
+          id="quick-search-btn"
+          height="38"
+          width="48"
+          color="header"
+          class="rounded-0"
+          @click="$router.push(localePath({ name: 'search' }))"
+        >
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </div>
       <lang-switcher />
       <v-btn
         text
@@ -249,6 +260,9 @@ export default {
   padding-left: 0;
   padding-top: 0;
   padding-bottom: 0;
+}
+#quick-search-btn {
+  min-width: 0 !important;
 }
 
 $gradient-col: var(--v-primary-base);
