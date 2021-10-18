@@ -25,7 +25,7 @@ export default {
     goToFrontpage: 'Pealehele',
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
-    searchRoutes: 'Otsing',
+    searchRoutes: 'Otsi',
     eMaapouPages: 'e·Maapõu ökosüsteem',
     map: 'Andmed kaardil',
     quickSearch: 'Leia kiirelt',
