@@ -62,7 +62,7 @@
         />
 
         <taxa-chart
-          v-if="taxaResults.length > 0 && selectedTaxa.length > 0"
+          v-if="taxaResults.length > 0 && selectedTaxa.length > 0 && false"
           class="d-flex flex-row"
           :results="taxaResults"
           :taxa="selectedTaxa"
