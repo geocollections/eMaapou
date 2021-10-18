@@ -617,7 +617,7 @@ export default {
     specimens: 'Specimens ({number})',
     samples: 'Samples ({number})',
     subUnits: 'Sub units ({number})',
-    pageTitle: 'Stratigraphies',
+    pageTitle: 'Stratigraphy',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
   },

@@ -617,7 +617,7 @@ export default {
     specimens: 'Eksemplarid ({number})',
     samples: 'Proovid ({number})',
     subUnits: 'Alamüksused ({number})',
-    pageTitle: 'Stratigraafiad',
+    pageTitle: 'Stratigraafia',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
   },
