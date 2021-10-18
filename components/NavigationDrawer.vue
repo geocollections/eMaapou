@@ -16,13 +16,13 @@
     <v-container class="more-menu py-4 mb-6">
       <v-row>
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title montserrat">
+          <div class="section-title montserrat pl-2">
             {{ $t('landing.routes') }}
           </div>
 
           <hr />
 
-          <div class="d-flex flex-column align-start">
+          <div class="d-flex flex-column align-start pl-2">
             <nuxt-link
               v-for="route in routes"
               :key="route.name"
@@ -34,13 +34,13 @@
               {{ $t(route.text) }}
             </nuxt-link>
           </div>
-          <div class="section-title montserrat">
+          <div class="section-title montserrat pl-2">
             {{ $t('landing.searchRoutes') }}
           </div>
 
           <hr />
 
-          <div class="d-flex flex-column align-start">
+          <div class="d-flex flex-column align-start pl-2">
             <nuxt-link
               v-for="route in searchRoutes"
               :key="route.name"
@@ -55,11 +55,13 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title montserrat">{{ $t('common.links') }}</div>
+          <div class="section-title montserrat pl-2">
+            {{ $t('common.links') }}
+          </div>
 
           <hr />
 
-          <div class="d-flex flex-column align-start">
+          <div class="d-flex flex-column align-start pl-2">
             <a
               v-for="link in links"
               :key="link.name"
@@ -73,13 +75,13 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title montserrat">
+          <div class="section-title montserrat pl-2">
             {{ $t('common.institutions') }}
           </div>
 
           <hr />
 
-          <div class="d-flex flex-column align-start">
+          <div class="d-flex flex-column align-start pl-2">
             <a
               v-for="item in institutions"
               :key="item.name"
@@ -91,7 +93,9 @@
             </a>
           </div>
 
-          <div class="section-title montserrat">{{ $t('common.lang') }}</div>
+          <div class="section-title montserrat pl-2">
+            {{ $t('common.lang') }}
+          </div>
 
           <hr />
 
