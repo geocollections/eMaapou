@@ -145,16 +145,17 @@
               <v-icon color="primary">mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
-          <v-list class="py-0">
+          <v-list class="py-0 dots-vertical-list" dense>
             <v-list-item
               v-for="(tab, index) in hiddenTabs"
               :key="`hidden-tab-${index}`"
-              class="montserrat"
-              active-class="active-tab font-weight-bold"
+              class="montserrat font-weight-bold"
+              style="text-transform: uppercase; font-size: 14px"
+              active-class="active-tab"
               nuxt
               :to="localePath({ name: tab.routeName })"
             >
-              <v-list-item-content>
+              <v-list-item-content class="justify-center">
                 {{ $t(tab.text) }}
               </v-list-item-content>
             </v-list-item>
@@ -274,5 +275,11 @@ $gradient-col-sec: var(--v-header-darken1);
     $gradient-col,
     $gradient-col-sec
   ) !important;
+}
+
+/* Overwrites vuetify list item color (https://github.com/vuetifyjs/vuetify/issues/9285) */
+.dots-vertical-list
+  > .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 </style>
