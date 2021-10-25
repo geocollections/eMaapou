@@ -20,7 +20,7 @@
     "earcut": "^2.2.3",
     "echarts": "^5.1.2",
     "leaflet": "^1.7.1",
-    "leaflet-gesture-handling": "^1.2.1",
+    "leaflet-gesture-handling": "^1.2.2",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.8",
     "nuxt-i18n": "^6.28.1",
