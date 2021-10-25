@@ -7,7 +7,7 @@
     <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
 
     <v-main>
-      <v-container class="pt-0" :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <client-only>
           <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
         </client-only>
