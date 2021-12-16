@@ -10,14 +10,14 @@
           v-if="isRock && titleAlt"
           target="_blank"
           style="text-decoration: none"
-          :href="`https://kivid.info/${specimenAlt.rock.id}`"
+          :href="`https://kivid.info/${specimenAlt.rock_id}`"
           >{{ titleAlt }}</a
         >
         <a
           v-if="isTaxon && titleAlt"
           target="_blank"
           style="text-decoration: none"
-          :href="`https://fossiilid.info/${specimenAlt.taxon.id}`"
+          :href="`https://fossiilid.info/${specimenAlt.taxon_id}`"
           >{{ titleAlt }}</a
         >
       </title-card-detail>
@@ -291,15 +291,15 @@ export default {
       this.$route,
       `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
     )
-
+    console.log(slugRoute)
     const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
 
     this.tabs = hydratedTabs
     this.initActiveTab = validPath
-
+    console.log(validPath, this.$route.path)
     if (validPath !== this.$route.path) await this.$router.replace(validPath)
   },
-
+  fetchOnServer: false,
   head() {
     return {
       title: this.title,
