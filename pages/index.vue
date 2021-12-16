@@ -1,18 +1,8 @@
 <template>
   <div>
     <v-img
-      :height="
-        ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
-        ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
-          ? '800px'
-          : '100vh'
-      "
-      :max-height="
-        ($vuetify.breakpoint.xsOnly && $vuetify.breakpoint.height < 700) ||
-        ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
-          ? '800px'
-          : '100vh'
-      "
+      :height="$vuetify.breakpoint.height < 800 ? 'unset' : '100vh'"
+      :max-height="$vuetify.breakpoint.height < 800 ? 'none' : '100vh'"
       width="100%"
       class="elevation-4 background-image"
       position="center 20%"
@@ -26,6 +16,7 @@
           d-flex
           flex-column
           align-sm-content-start align-sm-content-center
+          pb-10
         "
         style="height: 100%; margin-top: 64px"
       >
