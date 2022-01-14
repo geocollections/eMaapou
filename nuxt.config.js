@@ -92,6 +92,7 @@ export default {
     { src: '~plugins/vueECharts.js', mode: 'client' },
     '~/plugins/formatDate.js',
     '~/plugins/slug.js', // this might be only called on server-side
+    { src: '~/plugins/vueMatomo.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
