@@ -34,7 +34,7 @@
                 v-if="coll"
                 :title="$t('specimen.collectionNr')"
                 :value="coll.number"
-                @link-click="$openGeoDetail('collection', coll)"
+                @link-click="$openGeoDetail('collection', coll.id)"
               />
 
               <data-row
