@@ -11,7 +11,7 @@
       />
 
       <external-legend-options
-        v-if="initSelectedTaxa.length > 0"
+        v-if="initSelectedTaxa.length > 0 && false"
         :enable-checkboxes="false"
         :is-loading="isLoading"
         :all-items="taxa"
