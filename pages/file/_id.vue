@@ -767,8 +767,8 @@ export default {
     const text = () => {
       switch (this.file?.specimen_image_attachment) {
         case 1:
-          return `${this.file?.specimen?.coll?.number}-${
-            this.file?.specimen?.specimen_id?.split('-')?.[1]
+          return `${this.file?.specimen?.coll?.number?.split(' ')?.[0]} ${
+            this.file?.specimen?.specimen_id
           } (ID-${this.file.specimen.id})`
         case 2:
           return this.file.image_number
@@ -939,10 +939,8 @@ export default {
       switch (this.file?.specimen_image_attachment) {
         case 1:
           return `${this.$t('file.specimenTitle')}: ${
-            this.file?.specimen?.coll?.number
-          }-${this.file?.specimen?.specimen_id?.split('-')?.[1]} (ID: ${
-            this.file.specimen.id
-          })`
+            this.file?.specimen?.coll?.number?.split(' ')[0]
+          } ${this.file?.specimen?.specimen_id} (ID: ${this.file.specimen.id})`
         case 2:
           return `${this.$t('file.imageTitle')}: ${this.file.image_number}`
         case 4:
