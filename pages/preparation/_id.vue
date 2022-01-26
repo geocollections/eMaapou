@@ -20,23 +20,7 @@
                 :title="$t('preparation.preparation_number')"
                 :value="preparation.preparation_number"
               />
-              <link-data-row
-                v-if="sample"
-                :title="$t('preparation.sample')"
-                :value="
-                  sample.number ||
-                  sample.number_additional ||
-                  sample.number_field ||
-                  sample.id
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'sample-id',
-                    params: { id: sample.id },
-                  })
-                "
-              />
+
               <data-row
                 :title="$t('preparation.sample_number')"
                 :value="preparation.sample_number"
@@ -112,6 +96,45 @@
               <data-row
                 :title="$t('preparation.remarks')"
                 :value="preparation.remarks"
+              />
+            </tbody>
+          </template>
+        </v-simple-table>
+      </v-card-text>
+    </template>
+    <template #column-right>
+      <v-card-title class="subsection-title">
+        {{ $t('sample.sample') }}
+      </v-card-title>
+      <v-card-text>
+        <v-simple-table dense class="custom-table">
+          <template #default>
+            <tbody>
+              <link-data-row
+                v-if="sample"
+                :title="$t('sample.number')"
+                :value="
+                  sample.number ||
+                  sample.number_additional ||
+                  sample.number_field ||
+                  sample.id
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'sample-id',
+                    params: { id: sample.id },
+                  })
+                "
+              />
+              <data-row :title="$t('sample.depth')" :value="sample.depth" />
+              <data-row
+                :title="$t('sample.depthInterval')"
+                :value="sample.depth_interval"
+              />
+              <data-row
+                :title="$t('sample.dateCollected')"
+                :value="sample.date_collected || sample.date_collected_free"
               />
             </tbody>
           </template>
