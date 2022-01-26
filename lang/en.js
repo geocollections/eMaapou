@@ -16,6 +16,7 @@ export default {
     rocks: 'Minerals & rocks',
     dois: 'DOIs',
     datasets: 'Datasets',
+    areas: 'Areas',
     attachments: 'Files',
     photos: 'Photos',
     stratigraphy: 'Stratigraphy',

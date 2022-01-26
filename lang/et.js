@@ -16,6 +16,7 @@ export default {
     rocks: 'Mineraalid ja kivimid',
     dois: 'DOI',
     datasets: 'Andmesetid',
+    areas: 'Alad',
     attachments: 'Failid',
     photos: 'Pildid',
     stratigraphy: 'Stratigraafia',

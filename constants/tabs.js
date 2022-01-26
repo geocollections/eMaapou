@@ -122,6 +122,14 @@ export const TABS_QUICK_SEARCH = {
       count: 0,
       props: {},
     },
+    area: {
+      id: 'area',
+      routeName: 'search-areas',
+      title: 'landing.areas',
+      isSolr: true,
+      count: 0,
+      props: {},
+    },
   },
   allIds: [
     'locality',
@@ -139,6 +147,7 @@ export const TABS_QUICK_SEARCH = {
     'taxon',
     'rock',
     'stratigraphy',
+    'area',
   ],
 }
 
