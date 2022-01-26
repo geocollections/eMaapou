@@ -32,10 +32,7 @@
       </nuxt-link>
     </template>
     <template #item.depth="{ item }">
-      <div>
-        <span>{{ item.depth }}</span>
-        <span v-if="item.depth_interval">({{ item.depth_interval }})</span>
-      </div>
+      <span>{{ item.depth }}</span>
     </template>
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
