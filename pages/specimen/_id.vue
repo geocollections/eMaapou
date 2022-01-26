@@ -39,7 +39,11 @@
 
               <data-row
                 :title="$t('specimen.number')"
-                :value="specimen.specimen_id"
+                :value="`${specimen.specimen_id}`"
+              />
+              <data-row
+                :title="$t('specimen.oldNumber')"
+                :value="`${specimen.specimen_nr}`"
               />
               <data-row
                 v-if="type"
@@ -131,6 +135,23 @@
                 v-if="agent_collected"
                 :title="$t('specimen.collector')"
                 :value="agent_collected.agent"
+              />
+              <link-data-row
+                v-if="sample"
+                :title="$t('specimen.sample')"
+                :value="
+                  $translate({
+                    et: sample.number,
+                    en: sample.number,
+                  })
+                "
+                nuxt
+                :href="
+                  localePath({
+                    name: 'sample-id',
+                    params: { id: sample.id },
+                  })
+                "
               />
               <link-data-row
                 v-if="database"
@@ -291,12 +312,10 @@ export default {
       this.$route,
       `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
     )
-    console.log(slugRoute)
     const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
 
     this.tabs = hydratedTabs
     this.initActiveTab = validPath
-    console.log(validPath, this.$route.path)
     if (validPath !== this.$route.path) await this.$router.replace(validPath)
   },
   fetchOnServer: false,
@@ -380,6 +399,9 @@ export default {
     },
     database() {
       return this.specimen?.database
+    },
+    sample() {
+      return this.specimen?.sample
     },
   },
 }

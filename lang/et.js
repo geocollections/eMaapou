@@ -302,6 +302,7 @@ export default {
   specimen: {
     id: 'ID',
     number: 'Eksemplari nr.',
+    oldNumber: 'Vana nr.',
     depth: 'Sügavus (m)',
     depthInterval: 'Süg. kuni (m)',
     fossilGroup: 'Fossiilirühm',
@@ -330,6 +331,7 @@ export default {
     lithostratigraphy: 'Litostratigraafia',
     references: 'Viited ({number})',
     name: 'Nimi',
+    sample: 'Proov',
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',

@@ -302,6 +302,7 @@ export default {
   specimen: {
     id: 'ID',
     number: 'Specimen number',
+    oldNumber: 'Old number',
     depth: 'Depth (m)',
     depthInterval: 'Depth to (m)',
     fossilGroup: 'Fossil group',
@@ -330,6 +331,7 @@ export default {
     lithostratigraphy: 'Lithostratigraphy',
     references: 'References ({number})',
     name: 'Name',
+    sample: 'Sample',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',
