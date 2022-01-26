@@ -58,13 +58,14 @@
         </nuxt-link>
 
         <span v-if="item.lithostratigraphy_id"> | </span>
-        <external-link
+        <nuxt-link
           v-if="item.lithostratigraphy_id"
-          class="font-italic"
-          @click.native="
-            $openWindow(
-              `http://stratigraafia.info/term/${item.lithostratigraphy_id}`
-            )
+          class="text-link"
+          :to="
+            localePath({
+              name: 'stratigraphy-id',
+              params: { id: item.lithostratigraphy_id },
+            })
           "
         >
           {{
@@ -73,7 +74,7 @@
               en: item.lithostratigraphy_en,
             })
           }}
-        </external-link>
+        </nuxt-link>
       </span>
     </template>
   </table-wrapper>
@@ -83,12 +84,11 @@
 import { mapState } from 'vuex'
 import { round, cloneDeep } from 'lodash'
 import TableWrapper from '~/components/tables/TableWrapper.vue'
-import ExternalLink from '~/components/ExternalLink'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_PREPARATION } from '~/constants'
 export default {
   name: 'PreparationTable',
-  components: { ExternalLink, TableWrapper },
+  components: { TableWrapper },
   mixins: [headersMixin],
   props: {
     items: {
