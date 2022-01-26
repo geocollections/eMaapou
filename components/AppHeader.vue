@@ -68,9 +68,10 @@
       >
         <query-search-field
           v-model="query"
-          class="rounded-0 montserrat"
+          class="rounded-r-0 montserrat elevation-1"
           background-color="grey lighten-5"
           dense
+          flat
           :autofocus="false"
           :placeholder="$t('common.search')"
           @enter="$router.push(localePath({ name: 'search' }))"
@@ -79,8 +80,9 @@
           id="quick-search-btn"
           height="38"
           width="48"
+          elevation="1"
           color="header"
-          class="rounded-0"
+          class="rounded-l-0"
           @click="$router.push(localePath({ name: 'search' }))"
         >
           <v-icon>mdi-magnify</v-icon>
