@@ -938,24 +938,24 @@ export default {
     fileTitle() {
       switch (this.file?.specimen_image_attachment) {
         case 1:
-          return `${this.$t('file.specimenTitle')}: ${
-            this.file?.specimen?.coll?.number?.split(' ')[0]
-          } ${this.file?.specimen?.specimen_id} (ID: ${this.file.specimen.id})`
+          return `${this.file?.specimen?.coll?.number?.split(' ')[0]} ${
+            this.file?.specimen?.specimen_id
+          } (ID: ${this.file.specimen.id}) | ${this.$t('file.specimenTitle')}`
         case 2:
-          return `${this.$t('file.imageTitle')}: ${this.file.image_number}`
+          return `${this.file.image_number} | ${this.$t('file.imageTitle')}`
         case 4:
-          return `${this.$t('file.referenceTitle')}: ${
-            this.file?.reference?.reference
-          }`
+          return `${this.file?.reference?.reference} | ${this.$t(
+            'file.referenceTitle'
+          )}`
         default: {
           const description = this.$translate({
             et: this?.file?.description,
             en: this?.file?.description_en,
           })
 
-          return `${this.$t('file.fileTitle')}: ${
-            description ?? this?.file?.id
-          }`
+          return `${description ?? this?.file?.id} | ${this.$t(
+            'file.fileTitle'
+          )}`
         }
       }
     },

@@ -54,12 +54,12 @@ export default {
   },
   head() {
     return {
-      title: this.title,
+      title: `${this.title} | ${this.$t('news.pageTitle')}}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.title,
+          content: `${this.title} | ${this.$t('news.pageTitle')}}`,
         },
         {
           property: 'og:url',

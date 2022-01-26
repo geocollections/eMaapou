@@ -366,18 +366,18 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.$translate({
+      title: `${this.$translate({
         et: this.stratigraphy.stratigraphy,
         en: this.stratigraphy.stratigraphy_en,
-      }),
+      })} | ${this.$t('stratigraphy.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.$translate({
+          content: `${this.$translate({
             et: this.stratigraphy.stratigraphy,
             en: this.stratigraphy.stratigraphy_en,
-          }),
+          })} | ${this.$t('stratigraphy.pageTitle')}`,
         },
         {
           property: 'og:url',

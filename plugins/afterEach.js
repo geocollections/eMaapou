@@ -2,13 +2,14 @@ const EXCLUDED_PAGES = ['index', 'about', 'news', 'news-id', 'search']
 
 export default ({ app, store }, inject) => {
   app.router.afterEach((to, from) => {
+    if (app.nuxt.err) return
     if (EXCLUDED_PAGES.some((page) => from.name?.startsWith(page))) return
 
     const name = serializeName(from)
     const id = from.params?.id ?? null
     const title = document.title
 
-    const parsedTitle = title.substring(0, title.lastIndexOf('|')).trim()
+    const parsedTitle = title.substring(0, title.indexOf('|')).trim()
 
     const historyObject = {
       text: parsedTitle,

@@ -440,18 +440,18 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.$translate({
+      title: `${this.$translate({
         et: this.locality.locality,
         en: this.locality.locality_en,
-      }),
+      })} | ${this.$t('locality.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.$translate({
+          content: `${this.$translate({
             et: this.locality.locality,
             en: this.locality.locality_en,
-          }),
+          })} | ${this.$t('locality.pageTitle')}`,
         },
         {
           property: 'og:url',

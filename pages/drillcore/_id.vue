@@ -329,11 +329,11 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.title,
+      title: `${this.title} | ${this.$t('drillcore.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
-          content: this.title,
+          content: `${this.title} | ${this.$t('drillcore.pageTitle')}`,
           hid: 'og:title',
         },
         {

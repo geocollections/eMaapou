@@ -227,12 +227,16 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.preparation.preparation_number,
+      title: `${this.preparation.preparation_number} | ${this.$t(
+        'preparation.pageTitle'
+      )}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.preparation.preparation_number,
+          content: `${this.preparation.preparation_number} | ${this.$t(
+            'preparation.pageTitle'
+          )}`,
         },
         {
           property: 'og:url',

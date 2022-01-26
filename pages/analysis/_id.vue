@@ -263,11 +263,11 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.title,
+      title: `${this.title} | ${this.$t('analysis.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
-          content: this.title,
+          content: `${this.title} | ${this.$t('analysis.pageTitle')}`,
           hid: 'og:title',
         },
         {

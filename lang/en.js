@@ -193,6 +193,7 @@ export default {
   },
   drillcoreBox: {
     id: 'ID',
+    pageTitle: 'Drillcore boxes',
     drillcore: 'Drillcore',
     nr: 'Box {number}',
     depthStart: 'Start (m)',
@@ -688,6 +689,7 @@ export default {
     noResults: 'No results',
   },
   file: {
+    pageTitle: 'Files',
     specimenTitle: 'Image of specimen',
     imageTitle: 'Photo',
     fileTitle: 'File',

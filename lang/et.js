@@ -193,6 +193,7 @@ export default {
   },
   drillcoreBox: {
     id: 'ID',
+    pageTitle: 'Puursüdamiku kast',
     drillcore: 'Puursüdamik',
     nr: 'kast {number}',
     depthStart: 'Algus (m)',
@@ -688,6 +689,7 @@ export default {
     noResults: 'Tulemused puuduvad',
   },
   file: {
+    pageTitle: 'Failid',
     specimenTitle: 'Säiliku foto',
     imageTitle: 'Foto',
     fileTitle: 'Fail',
@@ -759,7 +761,7 @@ export default {
     sample_series: 'Prooviseeria',
   },
   drillcore_box: {
-    drillcore_box: 'Puursüdamiku kast',
+    drillcore_box: 'Puursüdamiku kastid',
   },
   dataset: {
     pageTitle: 'Andmesetid',

@@ -434,12 +434,12 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.title,
+      title: `${this.title} | ${this.$t('sample.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.title,
+          content: `${this.title} | ${this.$t('sample.pageTitle')}`,
         },
         {
           property: 'og:url',

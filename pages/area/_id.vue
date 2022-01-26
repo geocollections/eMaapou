@@ -263,17 +263,17 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.$translate({
+      title: `${this.$translate({
         et: this.area.name,
         en: this.area.name_en,
-      }),
+      })} | ${this.$t('area.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
-          content: this.$translate({
+          content: `${this.$translate({
             et: this.area.name,
             en: this.area.name_en,
-          }),
+          })} | ${this.$t('area.pageTitle')}`,
           hid: 'og:title',
         },
       ],

@@ -321,12 +321,12 @@ export default {
   fetchOnServer: false,
   head() {
     return {
-      title: this.title,
+      title: `${this.title} | ${this.$t('specimen.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.title,
+          content: `${this.title} | ${this.$t('specimen.pageTitle')}`,
         },
         {
           property: 'og:image',
