@@ -118,7 +118,8 @@
           :class="{ active: isExpanded }"
           @click.stop="expand(!isExpanded)"
         >
-          <v-icon>mdi-chevron-down</v-icon>
+          <v-icon v-if="!isExpanded">mdi-chevron-down</v-icon>
+          <v-icon v-else>mdi-chevron-up</v-icon>
         </v-btn>
       </template>
       <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
