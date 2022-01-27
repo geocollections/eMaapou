@@ -15,7 +15,12 @@
       <td class="py-2" :colspan="headers.length">
         <v-row no-gutters>
           <v-col class="pt-2 pb-4 pr-2">
-            {{ item.description }}
+            <div class="font-weight-bold">
+              {{ $t('drillcore.description') }}
+            </div>
+            <div>
+              {{ item.description }}
+            </div>
           </v-col>
           <v-col cols="12" md="6">
             <v-simple-table dense class="custom-table">

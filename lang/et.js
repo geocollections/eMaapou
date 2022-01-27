@@ -190,6 +190,7 @@ export default {
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
     database: 'Institutsioon',
+    description: 'Kirjeldus',
   },
   drillcoreBox: {
     id: 'ID',

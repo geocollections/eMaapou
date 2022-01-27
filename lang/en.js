@@ -190,6 +190,7 @@ export default {
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
     database: 'Institution',
+    description: 'Description',
   },
   drillcoreBox: {
     id: 'ID',

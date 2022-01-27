@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-img
-      :style="{
-        height:
-          $vuetify.breakpoint.height < 800 ? 'unset' : 'calc(100vh + 50px)',
-        'max-height':
-          $vuetify.breakpoint.height < 800 ? 'none' : 'calc(100vh + 50px)',
-      }"
+      :height="
+        $vuetify.breakpoint.height < 800 ? 'unset' : 'calc(100vh + 50px)'
+      "
+      :max-height="
+        $vuetify.breakpoint.height < 800 ? 'none' : 'calc(100vh + 50px)'
+      "
       width="100%"
       class="background-image"
       position="center 20%"
