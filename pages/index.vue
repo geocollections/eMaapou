@@ -1,11 +1,16 @@
 <template>
   <div>
     <v-img
-      :height="$vuetify.breakpoint.height < 800 ? 'unset' : '100vh'"
-      :max-height="$vuetify.breakpoint.height < 800 ? 'none' : '100vh'"
+      :style="{
+        height:
+          $vuetify.breakpoint.height < 800 ? 'unset' : 'calc(100vh + 50px)',
+        'max-height':
+          $vuetify.breakpoint.height < 800 ? 'none' : 'calc(100vh + 50px)',
+      }"
       width="100%"
-      class="elevation-4 background-image"
+      class="background-image"
       position="center 20%"
+      :gradient="`to bottom, rgba(0,34,51,.3), rgba(0,34,51,.3)`"
       :src="$img('/frontpage/header_img.jpg', null, { provider: 'static' })"
       :lazy-src="
         $img('/frontpage/header_img_medium.jpg', null, { provider: 'static' })
@@ -113,7 +118,7 @@
             class="d-flex justify-center"
             style="
               position: absolute;
-              bottom: 0;
+              bottom: 60px;
               width: 100%;
               pointer-events: none;
             "
@@ -131,6 +136,19 @@
             </v-btn>
           </div>
         </v-fade-transition>
+      </div>
+      <div class="shape-divider">
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M892.25 114.72L0 0 0 120 1200 120 1200 0 892.25 114.72z"
+            class="shape-fill"
+          ></path>
+        </svg>
       </div>
     </v-img>
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
@@ -474,5 +492,24 @@ export default {
       opacity: 0;
     }
   }
+}
+.shape-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.shape-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 50px;
+}
+
+.shape-divider .shape-fill {
+  fill: #f7f6f4;
 }
 </style>
