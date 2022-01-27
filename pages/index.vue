@@ -52,7 +52,7 @@
                 vertical
                 class="white my-5"
               />
-              <div class="ml-sm-4 font-weight-bold">
+              <div class="ml-sm-4 font-weight-medium">
                 {{ $t('slogan') }}
               </div>
             </div>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="history.length > 0" class="flex-row d-flex align-center">
+  <div v-if="history.length > 0" class="d-flex align-center">
     <v-subheader style="height: 32px !important" class="pl-3 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>

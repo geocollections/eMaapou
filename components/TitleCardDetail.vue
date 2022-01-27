@@ -5,7 +5,7 @@
         d-flex
         align-start
         text-sm-h3
-        font-weight-bold
+        font-weight-medium
         text-h4
         pt-1
         px-0 px-sm-3

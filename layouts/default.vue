@@ -7,10 +7,14 @@
     <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
 
     <v-main>
-      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-        <client-only>
-          <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
-        </client-only>
+      <v-container class="pt-1" :fluid="$vuetify.breakpoint.lgAndDown">
+        <v-row no-gutters>
+          <v-col>
+            <client-only>
+              <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
+            </client-only>
+          </v-col>
+        </v-row>
         <nuxt />
         <scroll-top-fab />
       </v-container>

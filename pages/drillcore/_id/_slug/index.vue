@@ -35,8 +35,8 @@
                     <v-img
                       class="mx-auto rounded transition-swing"
                       :class="{
-                        'elevation-8': hover,
-                        'elevation-4': !hover,
+                        'elevation-5': hover,
+                        'elevation-2': !hover,
                       }"
                       contain
                       max-width="1000"
@@ -73,7 +73,7 @@
                   </client-only>
                 </v-col>
                 <v-col cols="12" sm="4">
-                  <v-card-title class="px-0 pt-0">
+                  <v-card-title class="px-0 pt-0 montserrat">
                     {{
                       $t('drillcoreBox.nr', {
                         number: box.drillcore_box.number,

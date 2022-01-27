@@ -8,7 +8,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        <span :class="classObject" />
+        <span class="elevation-1" :class="classObject" />
       </v-btn>
     </template>
 

@@ -1,6 +1,6 @@
 <template>
-  <v-row>
-    <v-col>
+  <v-row no-gutters>
+    <v-col class="pt-5">
       <slot name="title"></slot>
       <v-row class="px-0 px-sm-3">
         <v-col cols="12" md="3">

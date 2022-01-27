@@ -6,7 +6,7 @@
     absolute
     height="56"
     extension-height="40"
-    :elevation="4"
+    :elevation="0"
     class="gradient-background"
     style="z-index: 2060"
   >
@@ -117,7 +117,6 @@
       <v-tabs
         :value="tabValue"
         align-with-title
-        class="header-tabs white"
         optional
         show-arrows
         center-active
@@ -128,13 +127,20 @@
           v-for="(tab, index) in tabs"
           :key="index"
           nuxt
-          active-class="active-tab font-weight-bold"
+          active-class="active-tab"
           :to="localePath({ name: tab.routeName })"
-          class="montserrat font-weight-bold"
+          class="tab montserrat font-weight-medium text-capitalize"
+          style="font-size: 0.875rem !important"
         >
           {{ $t(tab.text) }}
         </v-tab>
-        <v-menu tile transition="slide-y-transition" offset-y bottom>
+        <v-menu
+          transition="slide-y-transition"
+          offset-y
+          bottom
+          elevation="2"
+          content-class="elevation-2 rounded-t-0"
+        >
           <template #activator="{ on }">
             <v-btn
               tile
@@ -144,15 +150,15 @@
               class="px-0"
               v-on="on"
             >
-              <v-icon color="primary">mdi-dots-vertical</v-icon>
+              <v-icon color="grey darken-3">mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
           <v-list class="py-0 dots-vertical-list" dense>
             <v-list-item
               v-for="(tab, index) in hiddenTabs"
               :key="`hidden-tab-${index}`"
-              class="montserrat font-weight-bold"
-              style="text-transform: uppercase; font-size: 14px"
+              class="tab montserrat font-weight-medium text-capitalize"
+              style="font-size: 0.875rem"
               active-class="active-tab"
               nuxt
               :to="localePath({ name: tab.routeName })"
@@ -249,13 +255,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.header-tabs {
-  background-color: var(--v-secondary-base);
+.tab {
+  color: #424242 !important;
 }
 
 .active-tab {
-  background-color: var(--v-quaternary-base) !important;
   color: var(--v-accent-darken1) !important;
+  font-weight: 600 !important;
 }
 
 .v-app-bar ::v-deep .v-toolbar__content {
@@ -264,6 +270,12 @@ export default {
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.v-app-bar ::v-deep .v-toolbar__extension {
+  background-color: #f7f6f4;
+  border-bottom: lightgray solid 1px;
+}
+
 #quick-search-btn {
   min-width: 0 !important;
 }
@@ -282,6 +294,6 @@ $gradient-col-sec: var(--v-header-darken1);
 /* Overwrites vuetify list item color (https://github.com/vuetifyjs/vuetify/issues/9285) */
 .dots-vertical-list
   > .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  color: rgba(0, 0, 0, 0.54) !important;
+  color: #424242 !important;
 }
 </style>

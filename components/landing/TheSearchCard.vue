@@ -9,7 +9,7 @@
     "
     class="pt-0 pt-sm-0"
     outlines
-    elevation="15"
+    elevation="5"
   >
     <v-row no-gutters>
       <!-- QUICK SEARCH -->
