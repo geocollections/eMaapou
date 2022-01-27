@@ -63,12 +63,12 @@
     <v-toolbar-items class="align-center">
       <div
         v-if="$vuetify.breakpoint.smAndUp"
-        class="d-flex mr-2"
+        class="d-flex mr-2 elevation-1 rounded"
         style="width: 232px"
       >
         <query-search-field
           v-model="query"
-          class="rounded-r-0 montserrat elevation-1"
+          class="rounded-r-0 montserrat"
           background-color="grey lighten-5"
           dense
           flat
@@ -76,17 +76,19 @@
           :placeholder="$t('common.search')"
           @enter="$router.push(localePath({ name: 'search' }))"
         />
-        <v-btn
-          id="quick-search-btn"
-          height="38"
-          width="48"
-          elevation="1"
-          color="header"
-          class="rounded-l-0"
-          @click="$router.push(localePath({ name: 'search' }))"
-        >
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
+        <v-hover v-slot="{ hover }">
+          <v-btn
+            id="quick-search-btn"
+            height="38"
+            width="48"
+            elevation="0"
+            :color="hover ? 'warning' : 'grey lighten-5'"
+            class="rounded-l-0"
+            @click="$router.push(localePath({ name: 'search' }))"
+          >
+            <v-icon color="accent darken-2">mdi-magnify</v-icon>
+          </v-btn>
+        </v-hover>
       </div>
       <lang-switcher />
       <v-btn
