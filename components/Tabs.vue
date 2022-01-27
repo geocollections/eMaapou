@@ -28,7 +28,7 @@
         >{{ $t(item.title, { number: item.count }) }}</v-tab
       >
     </v-tabs>
-    <v-tabs-items v-model="activeTab" touchless>
+    <v-tabs-items v-model="activeTab" touchless class="rounded">
       <v-tab-item
         v-for="(item, index) in tabs"
         :key="index"
