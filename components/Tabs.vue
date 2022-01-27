@@ -2,6 +2,7 @@
   <div>
     <v-tabs
       v-model="activeTab"
+      style="border-bottom: lightgrey solid 1px"
       class="tabs"
       light
       background-color="grey lighten-4"
@@ -15,7 +16,7 @@
         :key="index"
         :disabled="item.count === 0"
         nuxt
-        class="montserrat"
+        class="montserrat tab"
         exact-active-class="active-tab"
         exact
         :to="
@@ -80,6 +81,10 @@ export default {
 .tabs {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+}
+
+.tab {
+  color: #424242 !important;
 }
 
 .active-tab {
