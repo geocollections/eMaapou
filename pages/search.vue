@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row no-gutters justify="center" align="center">
-      <v-col>
+      <v-col class="pt-5">
         <title-card :title="$t('landing.searchTitle')" class="title-heading" />
       </v-col>
     </v-row>
