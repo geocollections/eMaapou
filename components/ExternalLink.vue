@@ -1,10 +1,9 @@
 <template>
   <a class="text-link">
-    <slot></slot>
-    <span style="white-space: nowrap"
-      >&#xfeff;
+    <slot> </slot>
+    <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
-        <v-icon small>mdi-open-in-new</v-icon>
+        <v-icon class="open-new-icon" x-small>mdi-open-in-new</v-icon>
       </slot>
     </span>
   </a>
@@ -16,4 +15,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.open-new-icon {
+  vertical-align: text-top !important;
+}
+
+.open-new-icon:hover {
+  text-decoration: none !important;
+}
+</style>
