@@ -67,7 +67,6 @@
                 class="px-1 pb-2 white--text"
               >
                 <search-card
-                  class="text--h6"
                   height="50px"
                   :title="$t(route.text)"
                   :card-class="route.class"

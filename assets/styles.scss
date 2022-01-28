@@ -1,6 +1,6 @@
 @import '~vuetify/src/styles/styles.sass';
 
-$font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+$font: 'Lato', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
 // .page-enter-active,
 // .page-leave-active {
@@ -52,8 +52,9 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .text-link {
-  @extend .underline;
+  // @extend .underline;
   cursor: pointer;
+  display: inline-block;
   text-decoration: none;
   color: var(--v-accent-base) !important;
   /* color: var(--v-primary-lighten1) !important;*/
@@ -67,7 +68,7 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   &:hover {
     /*color: var(--v-primary-lighten3) !important;*/
     color: var(--v-accent-darken3) !important;
-
+    text-decoration: underline;
     .v-icon {
       color: var(--v-accent-darken3) !important;
     }

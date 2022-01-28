@@ -833,6 +833,6 @@ export default {
   padding-left: unset;
 }
 .leaflet-container {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Lato', 'Open Sans', sans-serif;
 }
 </style>
