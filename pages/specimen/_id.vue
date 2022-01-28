@@ -34,7 +34,13 @@
                 v-if="coll"
                 :title="$t('specimen.collectionNr')"
                 :value="coll.number"
-                @link-click="$openGeoDetail('collection', coll.id)"
+                nuxt
+                :href="
+                  localePath({
+                    name: 'collection-id',
+                    params: { id: coll.id },
+                  })
+                "
               />
 
               <data-row

@@ -193,6 +193,20 @@ export const TABS_AREA = {
   allIds: ['site', 'locality_reference'],
 }
 
+export const TABS_COLLECTION = {
+  byIds: {
+    specimen: {
+      id: 'specimen',
+      isSolr: true,
+      routeName: 'collection-id-slug',
+      title: 'collection.specimens',
+      count: 0,
+      props: {},
+    },
+  },
+  allIds: ['specimen'],
+}
+
 export const TABS_DATASET = {
   byIds: {
     dataset_analysis: {

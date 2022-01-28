@@ -757,6 +757,18 @@ export default {
   },
   collection: {
     collection: 'Kollektsioon',
+    pageTitle: 'Kollektsioonid',
+    number: 'Number',
+    name: 'Nimi',
+    nameLong: 'Pikk nimi',
+    classification: 'Rühm',
+    reference: 'Viide',
+    numberObjects: 'Säilikute arv',
+    database: 'Kuulub',
+    specimens: 'Eksemplaarid ({number})',
+    remarks: 'Lisainfo',
+    dateAdded: 'Kirje lisatud',
+    dateChanged: 'Kirje muudetud',
   },
   sample_series: {
     sample_series: 'Prooviseeria',
@@ -852,6 +864,7 @@ export default {
     'dataset-id': 'Dataset ID: {id}',
     'news-id': 'Uudis: {id}',
     'specimen-id': 'Eksemplar ID: {id}',
+    'collection-id': 'Kollektsioon ID: {id}',
   },
   institutions: {
     ttu: 'TTÜ geoloogia instituut',

@@ -757,6 +757,18 @@ export default {
   },
   collection: {
     collection: 'Collection',
+    pageTitle: 'Collections',
+    number: 'Number',
+    name: 'Name',
+    nameLong: 'Longer name',
+    classification: 'Group',
+    reference: 'Reference',
+    numberObjects: 'Specimen count',
+    database: 'Belongs to',
+    specimens: 'Specimens ({number})',
+    remarks: 'Remarks',
+    dateAdded: 'Date added',
+    dateChanged: 'Date changed',
   },
   sample_series: {
     sample_series: 'Sample series',
@@ -852,6 +864,7 @@ export default {
     'dataset-id': 'Dataset ID: {id}',
     'news-id': 'News: {id}',
     'specimen-id': 'Specimen ID: {id}',
+    'collection-id': 'Collection ID: {id}',
   },
   institutions: {
     ttu: 'TalTech Department of Geology',
