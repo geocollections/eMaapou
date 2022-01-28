@@ -314,7 +314,7 @@ export default {
     thickness: 'Paksus',
     image: 'Pilt',
     specimen: 'Eksemplar',
-    locality: 'Loc.',
+    locality: 'Lokaliteet',
     rock: 'Kivim',
     collectionNr: 'Kollektsiooni nr.',
     type: 'Tüüp',
