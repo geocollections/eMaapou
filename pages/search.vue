@@ -31,9 +31,7 @@
           <button-tabs ref="tabs" :tabs="computedTabs" />
         </div> -->
 
-        <v-card>
-          <nuxt-child :query="query" keep-alive />
-        </v-card>
+        <nuxt-child :query="query" keep-alive />
       </v-col>
     </v-row>
   </div>
