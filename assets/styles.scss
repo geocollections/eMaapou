@@ -1,6 +1,6 @@
 @import '~vuetify/src/styles/styles.sass';
 
-$font: 'Lato', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+$font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 
 // .page-enter-active,
 // .page-leave-active {
@@ -171,22 +171,23 @@ $font: 'Lato', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 .header-menu-item {
   @include transition(all 350ms ease);
 
-  border-left: 4px solid transparent;
   &.header-menu-item-active {
-    border-left: 4px solid var(--v-primary-darken2);
+    // border-left: 4px solid var(--v-primary-darken2);
+
+    background-color: rgba(9, 98, 124, 0.12) !important;
   }
 
-  &:hover {
-    border-left: 4px solid var(--v-primary-base);
-    div {
-      @include transition(all 350ms ease);
-      color: var(--v-primary-base);
-    }
-  }
+  // &:hover {
+  //   border-left: 4px solid var(--v-primary-base);
+  //   div {
+  //     @include transition(all 350ms ease);
+  //     color: var(--v-primary-base);
+  //   }
+  // }
 
-  div {
-    font-weight: 400;
-  }
+  // div {
+  //   font-weight: 400;
+  // }
 }
 
 .drillcore-box__card {
