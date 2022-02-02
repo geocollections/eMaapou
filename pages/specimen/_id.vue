@@ -291,6 +291,7 @@ export default {
         defaultParams: {
           fq: `specimen_id:${this.specimen?.id} AND specimen_image_attachment:1`,
           sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+          rows: 25,
         },
       }
     )

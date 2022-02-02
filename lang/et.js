@@ -93,6 +93,7 @@ export default {
     filter: 'Filter',
     parameters: 'Parameetrid',
     image: 'Pildid',
+    images: 'Pildid',
   },
   link: {
     sarvAPI: 'Avalik API',

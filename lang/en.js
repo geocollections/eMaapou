@@ -93,6 +93,7 @@ export default {
     filter: 'Filter',
     parameters: 'Parameters',
     image: 'Images',
+    images: 'Images',
   },
   link: {
     sarvAPI: 'Public API',

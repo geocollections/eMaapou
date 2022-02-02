@@ -6,81 +6,90 @@
     (ex. attachment -> uuid_filename and attachment_link -> attachment__uuid_filename).
     NOTE: Currently these field names can be overwritten by using scoped slots.
   -->
-  <v-card class="d-flex align-center" style="overflow-x: auto">
-    <div v-for="(item, index) in images" :key="index" class="mx-3 my-3">
-      <v-tooltip bottom color="header">
-        <template #activator="{ on, attrs }">
-          <slot name="image" :item="item" :on="on" :attrs="attrs">
-            <v-hover v-slot="{ hover }">
-              <v-img
-                v-bind="attrs"
-                :src="
-                  $img(
-                    `${item.uuid_filename}`,
-                    { size: 'small' },
-                    { provider: 'geocollections' }
-                  )
-                "
-                :lazy-src="
-                  $img(
-                    `${item.uuid_filename}`,
-                    { size: 'small' },
-                    { provider: 'geocollections' }
-                  )
-                "
-                max-width="200"
-                max-height="200"
-                :class="{
-                  'elevation-4': hover,
-                  'elevation-2': !hover,
-                }"
-                class="grey lighten-2 rounded transition-swing cursor-pointer"
-                v-on="on"
-                @click="
-                  $router.push(
-                    localePath({
-                      name: 'file-id',
-                      params: { id: item.attachment_id },
-                    })
-                  )
-                "
-              >
-                <template #placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
-            </v-hover>
+  <v-card>
+    <v-card-title class="subsection-title pb-0">
+      {{ $t('common.images') }}
+    </v-card-title>
+    <v-card-text class="d-flex align-center pb-0" style="overflow-x: auto">
+      <div v-for="(item, index) in images" :key="index" class="mx-3 my-3">
+        <v-tooltip bottom color="header">
+          <template #activator="{ on, attrs }">
+            <slot name="image" :item="item" :on="on" :attrs="attrs">
+              <v-hover v-slot="{ hover }">
+                <v-img
+                  v-bind="attrs"
+                  :src="
+                    $img(
+                      `${item.uuid_filename}`,
+                      { size: 'small' },
+                      { provider: 'geocollections' }
+                    )
+                  "
+                  :lazy-src="
+                    $img(
+                      `${item.uuid_filename}`,
+                      { size: 'small' },
+                      { provider: 'geocollections' }
+                    )
+                  "
+                  max-width="200"
+                  max-height="200"
+                  :class="{
+                    'elevation-4': hover,
+                    'elevation-2': !hover,
+                  }"
+                  class="grey lighten-2 rounded transition-swing cursor-pointer"
+                  v-on="on"
+                  @click="
+                    $router.push(
+                      localePath({
+                        name: 'file-id',
+                        params: { id: item.attachment_id },
+                      })
+                    )
+                  "
+                >
+                  <template #placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-hover>
+            </slot>
+          </template>
+          <slot name="info" :item="item">
+            <div
+              v-if="item.agent || item.date_created || item.date_created_free"
+            >
+              <div v-if="item.agent">
+                <span class="font-weight-bold"
+                  >{{ $t('locality.author') }}:
+                </span>
+                <span>{{ item.agent }}</span>
+              </div>
+              <div v-if="item.date_created || item.date_created_free">
+                <span class="font-weight-bold"
+                  >{{ $t('locality.date') }}:
+                </span>
+                <span v-if="item.date_created">
+                  {{ $formatDate(item.date_created) }}
+                </span>
+                <span v-else>{{ item.date_created_free }}</span>
+              </div>
+            </div>
+            <div v-else>{{ $t('common.clickToOpen') }}</div>
           </slot>
-        </template>
-        <slot name="info" :item="item">
-          <div v-if="item.agent || item.date_created || item.date_created_free">
-            <div v-if="item.agent">
-              <span class="font-weight-bold"
-                >{{ $t('locality.author') }}:
-              </span>
-              <span>{{ item.agent }}</span>
-            </div>
-            <div v-if="item.date_created || item.date_created_free">
-              <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
-              <span v-if="item.date_created">
-                {{ $formatDate(item.date_created) }}
-              </span>
-              <span v-else>{{ item.date_created_free }}</span>
-            </div>
-          </div>
-          <div v-else>{{ $t('common.clickToOpen') }}</div>
-        </slot>
-      </v-tooltip>
-    </div>
+        </v-tooltip>
+      </div>
+    </v-card-text>
   </v-card>
 </template>
 
