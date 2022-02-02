@@ -766,7 +766,7 @@ export default {
     reference: 'Viide',
     numberObjects: 'Säilikute arv',
     database: 'Kuulub',
-    specimens: 'Eksemplaarid ({number})',
+    specimens: 'Eksemplarid ({number})',
     remarks: 'Lisainfo',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
