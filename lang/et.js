@@ -108,7 +108,7 @@ export default {
     geologyAPI: 'Eesti Geoloogia API',
   },
   locality: {
-    pageTitle: 'Lokaliteetid',
+    pageTitle: 'Lokaliteedid',
     id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
