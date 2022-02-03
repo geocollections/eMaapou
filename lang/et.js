@@ -26,7 +26,7 @@ export default {
     goToFrontpage: 'Pealehele',
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
-    searchRoutes: 'Otsi',
+    searchRoutes: 'Sirvi',
     eMaapouPages: 'e·Maapõu ökosüsteem',
     map: 'Andmed kaardil',
     quickSearch: 'Leia kiirelt',

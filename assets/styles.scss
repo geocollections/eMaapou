@@ -75,6 +75,32 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   }
 }
 
+.text-link-footer {
+  // @extend .underline;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  color: white !important;
+  /* color: var(--v-primary-lighten1) !important;*/
+
+  .v-icon {
+    color: white !important;
+    text-decoration: none;
+  }
+
+  @include transition(color 200ms ease);
+
+  &:hover {
+    /*color: var(--v-primary-lighten3) !important;*/
+    color: white !important;
+    text-decoration: underline;
+    .v-icon {
+      color: white !important;
+      text-decoration: none !important;
+    }
+  }
+}
+
 .text-link-grey {
   @extend .underline;
 
