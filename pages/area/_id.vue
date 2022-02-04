@@ -22,6 +22,12 @@
                     :title="$t('area.name')"
                     :value="$translate({ et: area.name, en: area.name_en })"
                   />
+                  <data-row
+                    :title="$t('area.areaType')"
+                    :value="
+                      $translate({ et: area.area_type, en: area.area_type })
+                    "
+                  />
                   <link-data-row
                     v-if="area.area_type === 2"
                     :title="$t('area.areaType')"
