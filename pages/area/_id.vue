@@ -57,7 +57,15 @@
                     :title="$t('area.depositAreaHa')"
                     :value="area.deposit_area_ha"
                   />
-                  <data-row :title="$t('area.description')">
+                  <data-row
+                    v-if="
+                      $translate({
+                        et: area.description,
+                        en: area.description_en,
+                      })
+                    "
+                    :title="$t('area.description')"
+                  >
                     <template #value>
                       <!-- eslint-disable vue/no-v-html -->
                       <div
