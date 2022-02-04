@@ -174,6 +174,12 @@
                   />
                   <data-row
                     :title="$t('deposit.name')"
+                    :value="`${deposit.nimetus} ${
+                      deposit.maardla_os ? `(${deposit.maardla_os})` : ''
+                    }`"
+                  />
+                  <data-row
+                    :title="$t('deposit.name')"
                     :value="deposit.maardla_os"
                   />
                   <data-row
@@ -209,6 +215,100 @@
                   <data-row
                     :title="$t('deposit.dataExportDate')"
                     :value="deposit.eksporditi"
+                  />
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-col>
+      </v-row>
+      <v-row v-if="miningClaim" no-gutters justify="center">
+        <v-col cols="12">
+          <v-card-title class="subsection-title">{{
+            $t('area.miningClaim')
+          }}</v-card-title>
+          <v-card-text>
+            <v-alert
+              dense
+              type="info"
+              color="accent"
+              outlined
+              class="text-body-2"
+            >
+              {{ $t('alert.estonianLandBoardDatabase') }}
+            </v-alert>
+            <v-simple-table dense class="custom-table">
+              <template #default>
+                <tbody>
+                  <data-row
+                    :title="$t('miningClaim.id')"
+                    :value="area.maaamet_maeeraldis"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.number')"
+                    :value="miningClaim.me_kood"
+                  />
+                  <link-data-row
+                    :title="$t('miningClaim.registrationNo')"
+                    :value="miningClaim.reg_kaart"
+                    :href="`https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.name')"
+                    :value="`${miningClaim.nimetus} ${
+                      miningClaim.maardla_os
+                        ? `(${miningClaim.maardla_os})`
+                        : ''
+                    }`"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.area')"
+                    :value="miningClaim.pindala"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.reserve')"
+                    :value="miningClaim.erald_varu"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.usage')"
+                    :value="miningClaim.kas_eesm"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.reclamation')"
+                    :value="miningClaim.rekult"
+                  />
+
+                  <data-row
+                    :title="$t('miningClaim.status')"
+                    :value="miningClaim.me_olek"
+                  />
+                  <data-row
+                    v-if="miningClaim.loa_number"
+                    :title="$t('miningClaim.extractionPermit')"
+                  >
+                    <template #value>
+                      <external-link
+                        :href="`https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`"
+                      >
+                        {{ miningClaim.loa_number }}
+                      </external-link>
+                      {{
+                        ` (${miningClaim.loa_algus} - ${miningClaim.loa_lopp})`
+                      }}
+                    </template>
+                  </data-row>
+                  <data-row
+                    :title="$t('miningClaim.permitOwner')"
+                    :value="miningClaim.loa_omanik"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.miningCompany')"
+                    :value="miningClaim.kaevandaja"
+                  />
+
+                  <data-row
+                    :title="$t('miningClaim.dataExportDate')"
+                    :value="miningClaim.eksporditi"
                   />
                 </tbody>
               </template>
@@ -255,6 +355,7 @@ import Detail from '~/components/templates/Detail.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import { TABS_AREA } from '~/constants'
 import BooleanIndicator from '~/components/BooleanIndicator.vue'
+import ExternalLink from '~/components/ExternalLink.vue'
 
 export default {
   components: {
@@ -265,6 +366,7 @@ export default {
     LinkDataRow,
     Detail,
     BooleanIndicator,
+    ExternalLink,
   },
   async asyncData({ params, route, error, $services }) {
     try {
@@ -291,6 +393,14 @@ export default {
             )
           : null
 
+      const miningClaim =
+        area.maaamet_maeeraldis && area.maaamet_maeeraldis > 0
+          ? await $services.sarvREST.getResource(
+              'maaamet_maeeraldis',
+              area.maaamet_maeeraldis
+            )
+          : null
+
       const sites = sitesForMapResponse.items
 
       return {
@@ -298,6 +408,7 @@ export default {
         ids,
         sites,
         deposit,
+        miningClaim,
       }
     } catch (err) {
       error({
