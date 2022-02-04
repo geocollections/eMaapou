@@ -178,7 +178,11 @@
                   <link-data-row
                     :title="$t('deposit.registrationNo')"
                     :value="deposit.reg_kaart"
-                    :href="`https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.reg_kaart}`"
+                    @link-click="
+                      $openWindow(
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.reg_kaart}`
+                      )
+                    "
                   />
                   <data-row
                     :title="$t('deposit.name')"
@@ -259,7 +263,11 @@
                   <link-data-row
                     :title="$t('miningClaim.registrationNo')"
                     :value="miningClaim.reg_kaart"
-                    :href="`https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`"
+                    @link-click="
+                      $openWindow(
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`
+                      )
+                    "
                   />
                   <data-row
                     :title="$t('miningClaim.name')"
@@ -296,7 +304,11 @@
                   >
                     <template #value>
                       <external-link
-                        :href="`https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`"
+                        @click.native="
+                          $openWindow(
+                            `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
+                          )
+                        "
                       >
                         {{ miningClaim.loa_number }}
                       </external-link>
@@ -343,7 +355,7 @@
                     type: 'Feature',
                     geometry: {
                       type: 'Polygon',
-                      coordinates: JSON.parse(area.polygon),
+                      coordinates: JSON.parse(`${area.polygon}`),
                     },
                   }
                 : null
