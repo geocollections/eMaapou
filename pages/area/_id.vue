@@ -145,6 +145,77 @@
           </v-card-text>
         </v-col>
       </v-row>
+      <v-row v-if="deposit" no-gutters justify="center">
+        <v-col cols="12">
+          <v-card-title class="subsection-title">{{
+            $t('area.deposit')
+          }}</v-card-title>
+          <v-card-text>
+            <v-alert
+              dense
+              type="info"
+              color="accent"
+              outlined
+              class="text-body-2"
+            >
+              {{ $t('alert.estonianLandBoardDatabase') }}
+            </v-alert>
+            <v-simple-table dense class="custom-table">
+              <template #default>
+                <tbody>
+                  <data-row
+                    :title="$t('deposit.id')"
+                    :value="area.maaamet_maardla"
+                  />
+                  <link-data-row
+                    :title="$t('deposit.registrationNo')"
+                    :value="deposit.reg_kaart"
+                    :href="`https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.reg_kaart}`"
+                  />
+                  <data-row
+                    :title="$t('deposit.name')"
+                    :value="deposit.maardla_os"
+                  />
+                  <data-row
+                    :title="$t('deposit.area')"
+                    :value="deposit.pindala"
+                  />
+                  <data-row :title="$t('deposit.isBedrock')">
+                    <template #value>
+                      <boolean-indicator :value="deposit.aluspohja" />
+                    </template>
+                  </data-row>
+                  <data-row
+                    :title="$t('deposit.commodity')"
+                    :value="deposit.maavara"
+                  />
+                  <data-row
+                    :title="$t('deposit.usage')"
+                    :value="deposit.pohimaavar"
+                  />
+                  <data-row
+                    :title="$t('deposit.additionalCommodity')"
+                    :value="deposit.kaasmaavar"
+                  />
+
+                  <data-row
+                    :title="$t('deposit.miningConditions')"
+                    :value="deposit.maeteh_ti"
+                  />
+                  <data-row
+                    :title="$t('deposit.enviromentalRestrictions')"
+                    :value="deposit.geookol_ti"
+                  />
+                  <data-row
+                    :title="$t('deposit.dataExportDate')"
+                    :value="deposit.eksporditi"
+                  />
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-col>
+      </v-row>
     </template>
 
     <template v-if="computedSites" #column-right>
@@ -183,6 +254,7 @@ import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/components/templates/Detail.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import { TABS_AREA } from '~/constants'
+import BooleanIndicator from '~/components/BooleanIndicator.vue'
 
 export default {
   components: {
@@ -192,6 +264,7 @@ export default {
     DataRow,
     LinkDataRow,
     Detail,
+    BooleanIndicator,
   },
   async asyncData({ params, route, error, $services }) {
     try {
@@ -210,12 +283,21 @@ export default {
         }
       )
 
+      const deposit =
+        area.maaamet_maardla && area.maaamet_maardla > 0
+          ? await $services.sarvREST.getResource(
+              'maaamet_maardla',
+              area.maaamet_maardla
+            )
+          : null
+
       const sites = sitesForMapResponse.items
 
       return {
         area,
         ids,
         sites,
+        deposit,
       }
     } catch (err) {
       error({

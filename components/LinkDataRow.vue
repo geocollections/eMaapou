@@ -13,6 +13,11 @@
           <slot name="value">
             {{ value }}
           </slot>
+          <span style="white-space: nowrap; display: inline-block">
+            <slot name="icon">
+              <v-icon class="open-new-icon" x-small>mdi-open-in-new</v-icon>
+            </slot>
+          </span>
         </a>
         <external-link v-else @click.native="$emit('link-click')">
           {{ value }}
@@ -25,7 +30,7 @@
 
 <script>
 import DataRow from '@/components/DataRow'
-import ExternalLink from '~/components/ExternalLink'
+import ExternalLink from '~/components/ExternalLink.vue'
 
 export default {
   name: 'LinkDataRow',
@@ -39,3 +44,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.open-new-icon {
+  vertical-align: text-top !important;
+}
+</style>

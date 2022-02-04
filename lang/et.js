@@ -380,6 +380,7 @@ export default {
     localityReferences: 'Kirjandus ({number})',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    deposit: 'Maardla',
   },
   site: {
     pageTitle: 'Uuringupunktid',
@@ -922,5 +923,21 @@ export default {
   },
   news: {
     pageTitle: 'Uudised',
+  },
+  alert: {
+    estonianLandBoardDatabase: 'Andmed on pärit Maa-ameti maardlate nimistust',
+  },
+  deposit: {
+    id: 'Maardla ID',
+    registrationNo: 'Registrikaardi Nr',
+    name: 'Nimi',
+    area: 'Pindala (ha)',
+    isBedrock: 'Aluspõhi',
+    commodity: 'Maavara',
+    usage: 'Kasutuskohad',
+    additionalCommodity: 'Kaasnevad maavarad',
+    miningConditions: 'Mäenduslikud tingimused:',
+    enviromentalRestrictions: 'Keskkonnakaitselised piirangud',
+    dataExportDate: 'Andmed eksporditud',
   },
 }

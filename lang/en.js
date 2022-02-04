@@ -380,6 +380,7 @@ export default {
     localityReferences: 'References ({number})',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    deposit: 'Deposit',
   },
   site: {
     pageTitle: 'Sites',
@@ -922,5 +923,21 @@ export default {
   },
   news: {
     pageTitle: 'News',
+  },
+  alert: {
+    estonianLandBoardDatabase: 'Data from Estonian Land Board database',
+  },
+  deposit: {
+    id: 'Deposit ID',
+    registrationNo: 'Registration No.',
+    name: 'Name',
+    area: 'Area (ha)',
+    isBedrock: 'Bedrock',
+    commodity: 'Commodity',
+    usage: 'Usage',
+    additionalCommodity: 'Additional commodity',
+    miningConditions: 'Mining conditions',
+    enviromentalRestrictions: 'Enviromental restrictions',
+    dataExportDate: 'Data export date',
   },
 }
