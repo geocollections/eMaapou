@@ -349,17 +349,7 @@
             estonian-map
             estonian-bedrock-overlay
             :markers="computedSites"
-            :geojson="
-              parsedPolygon
-                ? {
-                    type: 'Feature',
-                    geometry: {
-                      type: 'Polygon',
-                      coordinates: parsedPolygon,
-                    },
-                  }
-                : null
-            "
+            :geojson="geojson"
           />
         </v-card>
       </v-card-text>
@@ -526,10 +516,26 @@ export default {
     },
     parsedPolygon() {
       try {
-        return JSON.parse(this.area.polygon)
+        // NOTE: Remove trailing commas from JSON object string
+        // eslint-disable-next-line no-useless-escape
+        const regex = /\,(?!\s*?[\{\[\"\'\w])/g
+        return JSON.parse(this.area.polygon.replace(regex, ''))
       } catch (e) {
         return null
       }
+    },
+    geojson() {
+      if (this.parsedPolygon === null) return null
+
+      if (!(this.parsedPolygon instanceof Array)) return this.parsedPolygon
+      else
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: this.parsedPolygon,
+          },
+        }
     },
     computedSites() {
       if (this.sites) {
