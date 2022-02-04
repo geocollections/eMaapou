@@ -350,12 +350,12 @@
             estonian-bedrock-overlay
             :markers="computedSites"
             :geojson="
-              area.polygon
+              parsedPolygon
                 ? {
                     type: 'Feature',
                     geometry: {
                       type: 'Polygon',
-                      coordinates: JSON.parse(`${area.polygon}`),
+                      coordinates: parsedPolygon,
                     },
                   }
                 : null
@@ -524,7 +524,13 @@ export default {
         } else return [this.area.text1]
       } else return []
     },
-
+    parsedPolygon() {
+      try {
+        return JSON.parse(this.area.polygon)
+      } catch (e) {
+        return null
+      }
+    },
     computedSites() {
       if (this.sites) {
         return this.sites.reduce((filtered, item) => {
