@@ -171,16 +171,12 @@
             <v-simple-table dense class="custom-table">
               <template #default>
                 <tbody>
-                  <data-row
-                    :title="$t('deposit.id')"
-                    :value="area.maaamet_maardla.id"
-                  />
                   <link-data-row
                     :title="$t('deposit.registrationNo')"
-                    :value="deposit.reg_kaart"
+                    :value="deposit.id"
                     @link-click="
                       $openWindow(
-                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.reg_kaart}`
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.id}`
                       )
                     "
                   />
@@ -253,12 +249,8 @@
               <template #default>
                 <tbody>
                   <data-row
-                    :title="$t('miningClaim.id')"
-                    :value="area.maaamet_maeeraldis.id"
-                  />
-                  <data-row
                     :title="$t('miningClaim.number')"
-                    :value="miningClaim.me_kood"
+                    :value="area.maaamet_maeeraldis.id"
                   />
                   <link-data-row
                     :title="$t('miningClaim.registrationNo')"
