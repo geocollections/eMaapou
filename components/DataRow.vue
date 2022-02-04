@@ -1,6 +1,6 @@
 <template>
   <tr v-if="value || hasValueSlot">
-    <td>{{ title }}</td>
+    <td class="font-weight-medium">{{ title }}</td>
     <td>
       <slot name="value">
         {{ value }}

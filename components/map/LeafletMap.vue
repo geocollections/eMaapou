@@ -613,10 +613,6 @@ export default {
         if (this.estonianMap && !this.isBaseLayerEstonian)
           this.setBaseLayer('Estonian map')
       }
-
-      if (this.geojson) {
-        console.log(this.$L)
-      }
     })
   },
   beforeDestroy() {

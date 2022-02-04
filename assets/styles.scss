@@ -135,8 +135,8 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
       &:first-child {
         // background-color: map-get($map: $grey, $key: 'lighten-3') !important;
         border-right: 2px solid map-get($map: $grey, $key: 'lighten-2');
-        font-weight: 700;
-        font-size: small !important;
+        // font-weight: 700;
+        // font-size: small !important;
         width: 200px;
       }
     }

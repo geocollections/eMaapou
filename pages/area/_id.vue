@@ -22,12 +22,6 @@
                     :title="$t('area.name')"
                     :value="$translate({ et: area.name, en: area.name_en })"
                   />
-                  <data-row
-                    :title="$t('area.areaType')"
-                    :value="
-                      $translate({ et: area.area_type, en: area.area_type })
-                    "
-                  />
                   <link-data-row
                     v-if="area.area_type === 2"
                     :title="$t('area.areaType')"
@@ -41,11 +35,11 @@
                   />
                   <data-row
                     v-else
-                    :title="$t('area.name')"
+                    :title="$t('area.areaType')"
                     :value="
                       $translate({
-                        et: area.area_type__name,
-                        en: area.area_type__name_en,
+                        et: area.area_type.name,
+                        en: area.area_type.name_en,
                       })
                     "
                   />
@@ -171,7 +165,7 @@
                 <tbody>
                   <data-row
                     :title="$t('deposit.id')"
-                    :value="area.maaamet_maardla"
+                    :value="area.maaamet_maardla.id"
                   />
                   <link-data-row
                     :title="$t('deposit.registrationNo')"
@@ -248,7 +242,7 @@
                 <tbody>
                   <data-row
                     :title="$t('miningClaim.id')"
-                    :value="area.maaamet_maeeraldis"
+                    :value="area.maaamet_maeeraldis.id"
                   />
                   <data-row
                     :title="$t('miningClaim.number')"
@@ -335,13 +329,17 @@
             estonian-map
             estonian-bedrock-overlay
             :markers="computedSites"
-            :geojson="{
-              type: 'Feature',
-              geometry: {
-                type: 'Polygon',
-                coordinates: JSON.parse(area.polygon),
-              },
-            }"
+            :geojson="
+              area.polygon
+                ? {
+                    type: 'Feature',
+                    geometry: {
+                      type: 'Polygon',
+                      coordinates: JSON.parse(area.polygon),
+                    },
+                  }
+                : null
+            "
           />
         </v-card>
       </v-card-text>
@@ -385,7 +383,12 @@ export default {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'area',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
       const ids = detailViewResponse?.ids
       const area = detailViewResponse
@@ -398,21 +401,9 @@ export default {
         }
       )
 
-      const deposit =
-        area.maaamet_maardla && area.maaamet_maardla > 0
-          ? await $services.sarvREST.getResource(
-              'maaamet_maardla',
-              area.maaamet_maardla
-            )
-          : null
+      const deposit = area.maaamet_maardla
 
-      const miningClaim =
-        area.maaamet_maeeraldis && area.maaamet_maeeraldis > 0
-          ? await $services.sarvREST.getResource(
-              'maaamet_maeeraldis',
-              area.maaamet_maeeraldis
-            )
-          : null
+      const miningClaim = area.maaamet_maeeraldis
 
       const sites = sitesForMapResponse.items
 
