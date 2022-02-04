@@ -62,7 +62,7 @@
           :markers="markers"
         />
         <l-circle-marker-wrapper v-else :markers="markers" />
-
+        <l-geo-json v-if="geojson" :geojson="geojson" color="red" />
         <l-marker
           v-if="gpsEnabled && gpsLocation"
           :lat-lng="gpsLocation"
@@ -131,7 +131,6 @@ import MapLinks from '~/components/map/MapLinks'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
 import MapClickPopup from '~/components/map/MapClickPopup'
-
 export default {
   name: 'LeafletMap',
   components: {
@@ -211,6 +210,11 @@ export default {
     showLinks: {
       type: Boolean,
       default: true,
+    },
+    geojson: {
+      type: Object,
+      required: false,
+      default: () => {},
     },
   },
   data() {
@@ -539,6 +543,9 @@ export default {
         }
       })
     },
+    isPolygonSet() {
+      return this.polygon && this.polygon.length > 0
+    },
   },
   // Todo: watch language update for leaflet geoman, this means pull request for et.json file should be made
   watch: {
@@ -606,6 +613,10 @@ export default {
         if (this.estonianMap && !this.isBaseLayerEstonian)
           this.setBaseLayer('Estonian map')
       }
+
+      if (this.geojson) {
+        console.log(this.$L)
+      }
     })
   },
   beforeDestroy() {
@@ -646,6 +657,18 @@ export default {
           this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
             padding: [50, 50],
             maxZoom: this.mapZoom,
+          })
+        })
+      }
+      if (this.geojson) {
+        this.$nextTick(() => {
+          const group = this.$L.featureGroup()
+
+          this.$refs.map.mapObject.eachLayer(function (layer) {
+            if (layer.feature !== undefined) group.addLayer(layer)
+          })
+          this.$refs.map.mapObject.fitBounds(group.getBounds(), {
+            padding: [50, 50],
           })
         })
       }

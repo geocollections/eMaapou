@@ -335,6 +335,13 @@
             estonian-map
             estonian-bedrock-overlay
             :markers="computedSites"
+            :geojson="{
+              type: 'Feature',
+              geometry: {
+                type: 'Polygon',
+                coordinates: JSON.parse(area.polygon),
+              },
+            }"
           />
         </v-card>
       </v-card-text>
