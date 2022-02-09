@@ -1,11 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
-        :title="$t('analysis.pageTitle')"
-        icon="mdi-chart-scatter-plot"
-        class="title-analysis"
-      />
+      <title-card :title="$t('analysis.pageTitle')" class="title-analysis" />
     </template>
 
     <template #form>

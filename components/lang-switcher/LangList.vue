@@ -1,10 +1,9 @@
 <template>
-  <v-list class="py-0">
+  <v-list class="py-1 px-2">
     <v-list-item
       v-for="(locale, i) in availableLocales"
       :key="i"
-      dense
-      class="header-menu-item"
+      class="header-menu-item rounded my-1"
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       @click="$i18n.setLocale(locale.code)"
     >
@@ -17,7 +16,7 @@
           v-if="locale.code === 'en'"
           class="flag flag-en mr-2 lang-icon elevation-1"
         />
-        <span class="align-self-center">{{ locale.name }}</span>
+        <span class="align-self-center montserrat">{{ locale.name }}</span>
       </v-list-item-title>
     </v-list-item>
   </v-list>
@@ -36,8 +35,8 @@ export default {
 
 <style scoped>
 .lang-icon {
-  height: 20px;
-  width: 20px !important;
+  height: 24px;
+  width: 24px !important;
 }
 
 .flag {

@@ -10,7 +10,7 @@
     class="gradient-background"
     style="z-index: 2060"
   >
-    <v-app-bar-title class="ml-3 align-self-center">
+    <v-app-bar-title class="align-self-center">
       <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
           Using v-slot:activator added a transition that made the title disappear when clicked.
@@ -18,32 +18,107 @@
          -->
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
         <v-img
+          v-if="$vuetify.breakpoint.mdAndUp"
           :height="40"
           :width="80"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
+        <v-img
+          v-else
+          :height="32"
+          :width="32"
+          contain
+          :src="$img(logoCompact, null, { provider: 'static' })"
+        />
         <v-tooltip bottom activator="#app-bar-title">
           <span>{{ $t('landing.goToFrontpage') }}</span>
         </v-tooltip>
       </nuxt-link>
+
+      <!-- <v-icon color="white" size="80">$logo</v-icon> -->
     </v-app-bar-title>
-    <v-divider
+    <!-- <v-divider
       v-show="$vuetify.breakpoint.lgAndUp"
       vertical
       inset
       class="mx-3 white"
-    />
-    <div v-show="$vuetify.breakpoint.lgAndUp" class="montserrat">
+    /> -->
+    <!-- <div v-show="$vuetify.breakpoint.lgAndUp" class="montserrat">
       {{ $t('slogan') }}
-    </div>
+    </div> -->
 
-    <v-toolbar-items v-show="$vuetify.breakpoint.mdAndUp" class="ml-3">
+    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
+      <v-menu
+        content-class="elevation-2 mt-1"
+        transition="slide-y-transition"
+        offset-y
+        bottom
+        right
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            aria-label="browse"
+            text
+            class="montserrat"
+            style="text-transform: capitalize"
+            v-on="on"
+          >
+            Browse
+            <v-icon class="ml-1" small>mdi-chevron-down</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card width="550">
+          <v-card-actions class="d-block">
+            <div
+              v-for="(tab, index) in tabsAll"
+              :key="`browse-${index}`"
+              class="d-inline-block"
+            >
+              <v-hover v-slot="{ hover }">
+                <v-card
+                  elevation="0"
+                  nuxt
+                  class="align-center ma-1 px-2 py-3"
+                  :class="{ 'on-hover': hover }"
+                  active-class="active-card"
+                  width="250"
+                  :to="localePath({ name: tab.routeName })"
+                >
+                  <div
+                    class="
+                      font-weight-medium
+                      text-button
+                      d-flex
+                      ml-2
+                      align-center
+                    "
+                    style="text-transform: capitalize !important"
+                  >
+                    <v-icon v-if="tab.icon">{{ tab.icon }}</v-icon>
+                    <v-icon v-else style="height: 24px; width: 24px"></v-icon>
+                    <div class="ml-3 montserrat tab" style="">
+                      {{ $t(tab.text) }}
+                    </div>
+                    <v-icon v-show="hover" class="ml-auto mr-2">
+                      mdi-arrow-right
+                    </v-icon>
+                  </div>
+                </v-card>
+              </v-hover>
+            </div>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+
       <v-btn
         nuxt
         aria-label="about page"
         text
         class="montserrat"
+        style="text-transform: capitalize"
         :to="localePath({ name: 'about' })"
       >
         {{ $t('common.about') }}
@@ -54,17 +129,20 @@
         aria-label="news page"
         text
         class="montserrat"
+        style="text-transform: capitalize"
         :to="localePath({ name: 'news' })"
       >
         {{ $t('common.news') }}
       </v-btn>
     </v-toolbar-items>
-    <v-spacer />
-    <v-toolbar-items class="align-center">
+    <v-spacer v-if="$vuetify.breakpoint.mdAndUp" />
+    <v-toolbar-items
+      class="align-center"
+      :style="{ width: !$vuetify.breakpoint.mdAndUp ? '100%' : 'inherit' }"
+    >
       <div
-        v-if="$vuetify.breakpoint.smAndUp"
-        class="d-flex mr-2 elevation-1 rounded"
-        style="width: 232px"
+        class="d-flex elevation-1 rounded mr-2"
+        :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
       >
         <query-search-field
           v-model="query"
@@ -90,32 +168,20 @@
           </v-btn>
         </v-hover>
       </div>
-      <lang-switcher />
+      <lang-switcher v-if="$vuetify.breakpoint.mdAndUp" />
       <v-btn
+        v-if="!$vuetify.breakpoint.mdAndUp"
         text
         class="montserrat"
         aria-label="Open navigation drawer"
+        style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <div v-if="drawer">
-          <span
-            v-show="$vuetify.breakpoint.smAndUp"
-            style="vertical-align: middle"
-            >{{ $t('common.close') }}</span
-          ><v-icon size="font-size: 24px">mdi-close</v-icon>
-        </div>
-        <div v-else>
-          <span
-            v-show="$vuetify.breakpoint.smAndUp"
-            style="vertical-align: middle"
-            >{{ $t('common.more') }}</span
-          >
-          <v-icon size="font-size: 24px">mdi-menu</v-icon>
-        </div>
+        <v-icon size="font-size: 24px">mdi-menu</v-icon>
       </v-btn>
     </v-toolbar-items>
 
-    <template #extension>
+    <!-- <template #extension>
       <v-tabs
         :value="tabValue"
         align-with-title
@@ -172,7 +238,7 @@
           </v-list>
         </v-menu>
       </v-tabs>
-    </template>
+    </template> -->
   </v-app-bar>
 </template>
 
@@ -239,7 +305,72 @@ export default {
           text: 'stratigraphy.pageTitle',
         },
       ],
+      tabsAll: [
+        {
+          routeName: 'locality',
+          text: 'locality.pageTitle',
+          icon: 'mdi-map-marker-outline',
+        },
+        {
+          routeName: 'site',
+          text: 'site.pageTitle',
+          icon: 'mdi-binoculars',
+        },
+        {
+          routeName: 'drillcore',
+          text: 'drillcore.pageTitle',
+          icon: 'mdi-screw-machine-flat-top',
+        },
+        {
+          routeName: 'sample',
+          text: 'sample.pageTitle',
+          icon: 'mdi-test-tube',
+        },
+        {
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
+          icon: 'mdi-chart-scatter-plot',
+        },
+        {
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
+          icon: 'mdi-chart-line',
+        },
+        {
+          routeName: 'dataset',
+          text: 'dataset.pageTitle',
+          icon: 'mdi-database-outline',
+        },
+        {
+          routeName: 'taxon',
+          text: 'taxon.pageTitle',
+          icon: 'mdi-family-tree',
+        },
+        // {
+        //   name: 'file',
+        //   lang: 'attachments',
+        //   icon: 'mdi-folder-open-outline',
+        // },
+        {
+          routeName: 'stratigraphy',
+          text: 'stratigraphy.pageTitle',
+          icon: 'mdi-layers-triple',
+        },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
+          icon: 'mdi-file-image-outline',
+        },
+        {
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
+          icon: 'mdi-microscope',
+        },
+        { routeName: 'preparation', text: 'preparation.pageTitle' },
+        { routeName: 'area', text: 'area.pageTitle' },
+      ],
       logo: '/logos/emaapou5white.svg',
+      logoCompact: '/logos/emaapou_short.svg',
     }
   },
   computed: {
@@ -261,6 +392,10 @@ export default {
   color: #424242 !important;
 }
 
+.mobile-search {
+  width: 100%;
+}
+
 .active-tab {
   color: var(--v-accent-darken1) !important;
   font-weight: 600 !important;
@@ -271,6 +406,11 @@ export default {
   padding-left: 0;
   padding-top: 0;
   padding-bottom: 0;
+  max-width: 1785px;
+  margin-left: auto;
+  margin-right: auto;
+  // padding-right: 20px;
+  padding-left: 20px;
 }
 
 .v-app-bar ::v-deep .v-toolbar__extension {
@@ -280,6 +420,18 @@ export default {
 
 #quick-search-btn {
   min-width: 0 !important;
+}
+
+.active-card {
+  background-color: rgba(9, 98, 124, 0.12) !important;
+
+  & div {
+    color: var(--v-accent-darken1) !important;
+  }
+
+  & .v-icon {
+    color: var(--v-accent-darken1) !important;
+  }
 }
 
 $gradient-col: var(--v-primary-base);

@@ -5,103 +5,130 @@
     clipped
     right
     temporary
-    width="100%"
-    color="quaternary"
-    class="elevation-4"
-    :height="$vuetify.breakpoint.smAndUp ? 'unset' : `100%`"
-    :style="`z-index: 2050; margin-top: ${$vuetify.application.top}px; opacity: 0.95`"
+    color="white"
+    class="elevation-2"
+    :style="`z-index: 2050; margin-top: ${$vuetify.application.top}px`"
     :class="{ 'use-padding-bottom': $vuetify.breakpoint.smAndDown }"
     @input="$emit('update:navigationDrawer', $event)"
   >
     <v-container class="more-menu py-4 mb-6">
-      <v-row>
-        <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title montserrat pl-2">
-            {{ $t('landing.routes') }}
-          </div>
+      <!-- <div class="section-title montserrat pl-2">
+        {{ $t('common.home') }}
+      </div>
 
-          <hr />
+      <hr /> -->
 
-          <div class="d-flex flex-column align-start pl-2">
-            <nuxt-link
-              v-for="route in routes"
-              :key="route.name"
-              exact
-              :to="localePath({ name: route.routeName })"
-              class="mb-1 menu-link"
-              active-class="menu-link-active"
-              ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
-              {{ $t(route.text) }}
-            </nuxt-link>
-          </div>
-          <div class="section-title montserrat pl-2">
-            {{ $t('landing.searchRoutes') }}
-          </div>
+      <v-list class="py-1 px-2">
+        <v-list-item
+          v-for="route in routes"
+          :key="route.name"
+          nuxt
+          class="header-menu-item rounded my-1"
+          color="accent darken-1"
+          :to="localePath({ name: route.routeName })"
+        >
+          <v-list-item-title class="d-flex py-1">
+            <v-icon class="mr-1">{{ route.icon }}</v-icon>
+            <span class="align-self-center montserrat">{{
+              $t(route.text)
+            }}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
 
-          <hr />
+      <!-- <div class="d-flex flex-column align-start pl-2">
+        <nuxt-link
+          v-for="route in routes"
+          :key="route.name"
+          exact
+          :to="localePath({ name: route.routeName })"
+          class="mb-1 menu-link"
+          active-class="menu-link-active"
+          ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
+          {{ $t(route.text) }}
+        </nuxt-link>
+      </div> -->
+      <div class="montserrat font-weight-medium pl-2 mt-2">
+        {{ $t('landing.searchRoutes') }}
+      </div>
 
-          <div class="d-flex flex-column align-start pl-2">
-            <nuxt-link
-              v-for="route in searchRoutes"
-              :key="route.name"
-              exact
-              :to="localePath({ name: route.routeName })"
-              class="mb-1 menu-link"
-              active-class="menu-link-active"
-              ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
-              {{ $t(route.text) }}
-            </nuxt-link>
-          </div>
-        </v-col>
+      <v-divider class="primary" />
 
-        <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title montserrat pl-2">
-            {{ $t('common.links') }}
-          </div>
+      <v-list class="py-1 px-2">
+        <v-list-item
+          v-for="route in searchRoutes"
+          :key="route.name"
+          nuxt
+          class="header-menu-item rounded my-1"
+          color="accent darken-1"
+          :to="localePath({ name: route.routeName })"
+        >
+          <v-list-item-title class="d-flex py-1"
+            ><v-icon v-if="route.icon">{{ route.icon }}</v-icon>
+            <v-icon v-else style="height: 24px; width: 24px"></v-icon>
 
-          <hr />
+            <span class="ml-3 align-self-center montserrat">{{
+              $t(route.text)
+            }}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <!-- <div class="d-flex flex-column align-start pl-2">
+        <nuxt-link
+          v-for="route in searchRoutes"
+          :key="route.name"
+          exact
+          :to="localePath({ name: route.routeName })"
+          class="mb-1 menu-link"
+          active-class="menu-link-active"
+          ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
+          {{ $t(route.text) }}
+        </nuxt-link>
+      </div> -->
 
-          <div class="d-flex flex-column align-start pl-2">
-            <a
-              v-for="link in links"
-              :key="link.name"
-              :href="link.url"
-              class="mb-1 menu-link"
-            >
-              <v-icon v-if="link.icon" small left>{{ link.icon }}</v-icon>
-              {{ $t(link.name) }}
-            </a>
-          </div>
-        </v-col>
+      <!-- <div class="section-title montserrat pl-2">
+        {{ $t('common.links') }}
+      </div>
 
-        <v-col cols="12" sm="4" class="px-4 py-0">
-          <div class="section-title montserrat pl-2">
-            {{ $t('common.institutions') }}
-          </div>
+      <hr />
 
-          <hr />
+      <div class="d-flex flex-column align-start pl-2">
+        <a
+          v-for="link in links"
+          :key="link.name"
+          :href="link.url"
+          class="mb-1 menu-link"
+        >
+          <v-icon v-if="link.icon" small left>{{ link.icon }}</v-icon>
+          {{ $t(link.name) }}
+        </a>
+      </div>
 
-          <div class="d-flex flex-column align-start pl-2">
-            <a
-              v-for="item in institutions"
-              :key="item.name"
-              :href="item.url"
-              class="mb-1 menu-link"
-            >
-              <v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
-              {{ $t(item.name) }}
-            </a>
-          </div>
+      <div class="section-title montserrat pl-2">
+        {{ $t('common.institutions') }}
+      </div>
 
-          <div class="section-title montserrat pl-2">
-            {{ $t('common.lang') }}
-          </div>
+      <hr />
 
-          <hr />
+      <div class="d-flex flex-column align-start pl-2">
+        <a
+          v-for="item in institutions"
+          :key="item.name"
+          :href="item.url"
+          class="mb-1 menu-link"
+        >
+          <v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
+          {{ $t(item.name) }}
+        </a>
+      </div> -->
 
-          <lang-list class="py-0" />
-        </v-col>
-      </v-row>
+      <div class="montserrat font-weight-medium pl-2 mt-2">
+        {{ $t('common.lang') }}
+      </div>
+
+      <v-divider class="primary" />
+
+      <lang-list class="py-0" />
     </v-container>
   </v-navigation-drawer>
 </template>
@@ -286,5 +313,9 @@ export default {
 
 .flag-en {
   background-image: url('~assets/en.svg');
+}
+
+.v-list-item::before {
+  border-radius: 4px;
 }
 </style>

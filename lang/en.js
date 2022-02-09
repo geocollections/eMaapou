@@ -26,7 +26,7 @@ export default {
     goToFrontpage: 'To frontpage',
     showMenu: 'Show menu',
     routes: 'Routes',
-    searchRoutes: 'Search',
+    searchRoutes: 'Browse',
     eMaapouPages: 'e·Maapõu ecosystem',
     map: 'Data on map',
     quickSearch: 'Find quickly',

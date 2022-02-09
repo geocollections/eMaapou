@@ -1,6 +1,87 @@
 <template>
   <v-footer padless class="mt-4">
     <v-card width="100%" flat tile color="tertiary">
+      <div
+        v-if="$vuetify.breakpoint.smAndUp"
+        class="d-flex mx-auto"
+        style="max-width: 700px; max-height: 700px"
+      >
+        <v-card-text>
+          <div class="section-title font-weight-bold mb-1">
+            {{ $t('common.home') }}
+            <hr />
+          </div>
+
+          <div v-for="link in routes" :key="link.routeName" class="d-flex mb-1">
+            <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+            <nuxt-link
+              :to="link.routeName"
+              class="text-link-footer d-block ml-1"
+              style="font-weight: 500 !important"
+            >
+              {{ $t(link.text) }}
+            </nuxt-link>
+          </div>
+          <div class="section-title font-weight-bold mb-1 mt-4">
+            {{ $t('landing.searchRoutes') }}
+            <hr />
+          </div>
+
+          <div
+            v-for="link in searchRoutes"
+            :key="link.routeName"
+            class="d-flex mb-1"
+          >
+            <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+            <nuxt-link
+              :to="link.routeName"
+              class="text-link-footer d-block ml-1"
+              style="font-weight: 500 !important"
+            >
+              {{ $t(link.text) }}
+            </nuxt-link>
+          </div>
+        </v-card-text>
+
+        <v-card-text>
+          <div class="section-title font-weight-bold mb-1">
+            {{ $t('common.links') }}
+            <hr />
+          </div>
+
+          <div style="column-count: 2">
+            <div v-for="link in links" :key="link.name" class="d-flex mb-1">
+              <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+              <a
+                :href="link.url"
+                class="text-link-footer d-block ml-1"
+                style="font-weight: 500 !important"
+              >
+                {{ $t(link.name) }}
+              </a>
+            </div>
+          </div>
+          <div class="section-title font-weight-bold mb-1 mt-4">
+            {{ $t('common.institutions') }}
+            <hr />
+          </div>
+
+          <div
+            v-for="link in institutions"
+            :key="link.name"
+            class="d-flex mb-1"
+          >
+            <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+            <a
+              :href="link.url"
+              class="text-link-footer d-block ml-1"
+              style="font-weight: 500 !important"
+            >
+              {{ $t(link.name) }}
+            </a>
+          </div>
+        </v-card-text>
+      </div>
       <v-card-text class="text-center">
         <a
           v-for="(item, index) in imageLinks"
@@ -113,6 +194,114 @@ export default {
           text: 'GitHub',
         },
       ],
+      links: [
+        { name: 'geocollections.title', url: 'https://geocollections.info' },
+        { name: 'kirjandus.title', url: 'https://kirjandus.geoloogia.info' },
+        { name: 'gmre.title', url: 'https://geoloogia.info/geology' },
+        { name: 'fond.title', url: 'https://fond.egt.ee' },
+        { name: 'fossiilid.title', url: 'https://fossiilid.info' },
+        { name: 'kivid.title', url: 'https://kivid.info' },
+        { name: 'stratigraphy.title', url: 'http://stratigraafia.info' },
+        {
+          name: 'maardlad.title',
+          url: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+        },
+        { name: 'doi.title', url: 'https://doi.geocollections.info' },
+        { name: 'turba.title', url: 'https://turba.geoloogia.info' },
+        { name: 'geocase.title', url: 'https://geocase.eu' },
+        { name: 'eurocore.title', url: 'eurocore.description' },
+        { name: 'sarv.title', url: 'https://edit.geocollections.info' },
+        { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
+        { name: 'link.geologyAPI', url: 'https://api.geoloogia.info' },
+        { name: 'link.github', url: 'https://github.com/geocollections/' },
+      ],
+      institutions: [
+        {
+          name: 'institutions.ttu',
+          url: 'https://taltech.ee/geoloogia-instituut',
+        },
+        { name: 'institutions.tu', url: 'https://geoloogia.ut.ee' },
+        { name: 'institutions.egt', url: 'https://egt.ee' },
+        {
+          name: 'institutions.maaamet',
+          url: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+        },
+        { name: 'institutions.egeos', url: 'https://egeos.ee' },
+        { name: 'institutions.maeselts', url: 'http://maeselts.ee' },
+        { name: 'institutions.steiger', url: 'https://steiger.ee' },
+      ],
+      searchRoutes: [
+        {
+          routeName: 'locality',
+          text: 'locality.pageTitle',
+        },
+        {
+          routeName: 'site',
+          text: 'site.pageTitle',
+        },
+        {
+          routeName: 'drillcore',
+          text: 'drillcore.pageTitle',
+          icon: 'mdi-screw-machine-flat-top',
+        },
+        {
+          routeName: 'sample',
+          text: 'sample.pageTitle',
+          icon: 'mdi-test-tube',
+        },
+        {
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
+        },
+        {
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
+        },
+        {
+          routeName: 'dataset',
+          text: 'dataset.pageTitle',
+        },
+        {
+          routeName: 'taxon',
+          text: 'taxon.pageTitle',
+        },
+        // {
+        //   name: 'file',
+        //   lang: 'attachments',
+        //   icon: 'mdi-folder-open-outline',
+        // },
+        {
+          routeName: 'stratigraphy',
+          text: 'stratigraphy.pageTitle',
+        },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
+        },
+        {
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
+        },
+        { routeName: 'preparation', text: 'preparation.pageTitle' },
+        { routeName: 'area', text: 'area.pageTitle' },
+      ],
+      routes: [
+        {
+          routeName: 'search',
+          text: 'common.search',
+          icon: 'mdi-magnify',
+        },
+        {
+          routeName: 'about',
+          text: 'common.about',
+          icon: 'mdi-information-outline',
+        },
+        {
+          routeName: 'news',
+          text: 'common.news',
+          icon: 'mdi-newspaper-variant-outline',
+        },
+      ],
     }
   },
 }
@@ -132,12 +321,12 @@ export default {
   color: white !important;
 }
 
-.v-card__text a:visited,
+/* .v-card__text a:visited,
 .v-card__text a:link,
 .v-card__text a:active {
   color: white !important;
   font-weight: 600;
-}
+} */
 
 .footer-logo {
   height: 50px;

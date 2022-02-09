@@ -1,5 +1,11 @@
 <template>
-  <v-menu transition="slide-y-transition" offset-y bottom right>
+  <v-menu
+    content-class="elevation-2 mt-1"
+    transition="slide-y-transition"
+    offset-y
+    bottom
+    right
+  >
     <template #activator="{ on, attrs }">
       <v-btn
         aria-label="select language"

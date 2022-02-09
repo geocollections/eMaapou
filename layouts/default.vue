@@ -48,5 +48,10 @@ export default {
       drawer: false,
     }
   },
+  watch: {
+    '$vuetify.breakpoint.mdAndUp'(newVal, oldVal) {
+      if (newVal && !oldVal) this.drawer = false
+    },
+  },
 }
 </script>
