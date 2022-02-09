@@ -65,7 +65,7 @@
             style="text-transform: capitalize"
             v-on="on"
           >
-            Browse
+            {{ $t('common.browse') }}
             <v-icon class="ml-1" small>mdi-chevron-down</v-icon>
           </v-btn>
         </template>

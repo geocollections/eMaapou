@@ -94,6 +94,7 @@ export default {
     parameters: 'Parameetrid',
     image: 'Pildid',
     images: 'Pildid',
+    browse: 'Sirvi',
   },
   link: {
     sarvAPI: 'Avalik API',
