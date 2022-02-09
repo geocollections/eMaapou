@@ -33,7 +33,7 @@
 import { mapState, mapActions } from 'vuex'
 import AnalysisTable from '~/components/tables/AnalysisTable'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm.vue'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

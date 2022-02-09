@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import AreaTable from '@/components/tables/AreaTable'
+import AreaTable from '~/components/tables/AreaTable'
 import { AREA, HEADERS_AREA } from '~/constants'
 
 export default {

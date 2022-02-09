@@ -33,7 +33,7 @@
 import { mapState, mapActions } from 'vuex'
 import SpecimenSearchForm from '~/components/search/forms/SpecimenSearchForm.vue'
 import SpecimenTable from '~/components/tables/SpecimenTable.vue'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

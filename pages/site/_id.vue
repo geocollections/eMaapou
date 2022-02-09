@@ -332,12 +332,12 @@
 
 <script>
 import { isNil } from 'lodash'
-import LeafletMap from '@/components/map/LeafletMap'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import LeafletMap from '~/components/map/LeafletMap'
+import TitleCardDetail from '~/components/TitleCardDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { TABS_SITE } from '~/constants'
 

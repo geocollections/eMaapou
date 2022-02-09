@@ -9,7 +9,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import SiteTable from '@/components/tables/SiteTable'
+import SiteTable from '~/components/tables/SiteTable'
 import { HEADERS_SITE, SITE } from '~/constants'
 
 export default {

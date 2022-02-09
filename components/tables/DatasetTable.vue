@@ -53,8 +53,8 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import TableWrapper from '@/components/tables/TableWrapper.vue'
 import { mapState } from 'vuex'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET } from '~/constants'
 export default {

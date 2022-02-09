@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import rangeFieldMixin from '@/mixins/rangeFieldMixin'
+import rangeFieldMixin from '~/mixins/rangeFieldMixin'
 export default {
   name: 'RangeTextField',
   mixins: [rangeFieldMixin],

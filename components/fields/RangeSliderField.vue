@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import rangeFieldMixin from '@/mixins/rangeFieldMixin'
+import rangeFieldMixin from '~/mixins/rangeFieldMixin'
 export default {
   name: 'RangeSliderField',
   mixins: [rangeFieldMixin],

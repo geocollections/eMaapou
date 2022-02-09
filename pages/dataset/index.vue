@@ -33,7 +33,7 @@
 import { mapState, mapActions } from 'vuex'
 import DatasetTable from '~/components/tables/DatasetTable'
 import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

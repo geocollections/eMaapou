@@ -9,7 +9,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import SampleReferenceTable from '@/components/tables/SampleReferenceTable'
+import SampleReferenceTable from '~/components/tables/SampleReferenceTable'
 import { HEADERS_SAMPLE_REFERENCE, SAMPLE_REFERENCE } from '~/constants'
 export default {
   components: { SampleReferenceTable },

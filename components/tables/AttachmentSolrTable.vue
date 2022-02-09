@@ -66,8 +66,8 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import TableWrapper from '@/components/tables/TableWrapper.vue'
-import ImageCell from '@/components/ImageCell'
+import TableWrapper from '~/components/tables/TableWrapper.vue'
+import ImageCell from '~/components/ImageCell'
 import ExternalLink from '~/components/ExternalLink'
 import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'

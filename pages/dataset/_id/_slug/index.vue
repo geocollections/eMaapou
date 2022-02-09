@@ -10,7 +10,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetAnalysisTable from '@/components/tables/DatasetAnalysisTable'
+import DatasetAnalysisTable from '~/components/tables/DatasetAnalysisTable'
 import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
 
 export default {

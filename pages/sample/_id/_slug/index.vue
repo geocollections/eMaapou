@@ -11,7 +11,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import AnalysisTable from '@/components/tables/AnalysisTable'
+import AnalysisTable from '~/components/tables/AnalysisTable'
 import { HEADERS_ANALYSIS } from '~/constants'
 export default {
   components: { AnalysisTable },

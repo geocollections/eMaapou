@@ -10,7 +10,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import AnalysisTable from '@/components/tables/AnalysisTable'
+import AnalysisTable from '~/components/tables/AnalysisTable'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {

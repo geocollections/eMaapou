@@ -32,7 +32,7 @@
 import { mapState, mapActions } from 'vuex'
 import PreparationTable from '~/components/tables/PreparationTable.vue'
 import PreparationSearchForm from '~/components/search/forms/PreparationSearchForm.vue'
-import Search from '~/components/templates/Search.vue'
+import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

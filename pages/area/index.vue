@@ -29,7 +29,7 @@
 import { mapState, mapActions } from 'vuex'
 import AreaSearchForm from '~/components/search/forms/AreaSearchForm.vue'
 import AreaTable from '~/components/tables/AreaTable.vue'
-import Search from '~/components/templates/Search.vue'
+import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

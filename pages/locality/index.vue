@@ -31,9 +31,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import LocalitySearchForm from '@/components/search/forms/LocalitySearchForm'
+import LocalitySearchForm from '~/components/search/forms/LocalitySearchForm'
 import LocalityTable from '~/components/tables/LocalityTable.vue'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

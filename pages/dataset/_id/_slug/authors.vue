@@ -10,7 +10,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetAuthorTable from '@/components/tables/DatasetAuthorTable'
+import DatasetAuthorTable from '~/components/tables/DatasetAuthorTable'
 
 import { HEADERS_DATASET_AUTHOR } from '~/constants'
 export default {

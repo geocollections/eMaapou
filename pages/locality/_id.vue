@@ -270,7 +270,7 @@ import LinkDataRow from '~/components/LinkDataRow.vue'
 import DataRow from '~/components/DataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { TABS_LOCALITY } from '~/constants'
 

@@ -244,7 +244,7 @@ import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 export default {
   components: {
     TitleCardDetail,

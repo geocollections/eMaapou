@@ -154,11 +154,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import TitleCardDetail from '~/components/TitleCardDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow'
 import LinkDataRow from '~/components/LinkDataRow'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import { TABS_PREPARATION } from '~/constants'
 
 export default {

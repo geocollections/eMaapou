@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AttachmentTable from '@/components/tables/AttachmentTable'
+import AttachmentTable from '~/components/tables/AttachmentTable'
 
 import { HEADERS_ATTACHMENT } from '~/constants'
 export default {

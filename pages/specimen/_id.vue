@@ -232,7 +232,7 @@
 <script>
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'

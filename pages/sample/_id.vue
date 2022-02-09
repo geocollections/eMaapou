@@ -332,7 +332,7 @@ import LinkDataRow from '~/components/LinkDataRow.vue'
 import Tabs from '~/components/Tabs.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import TitleCardDetail from '~/components/TitleCardDetail.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import { TABS_SAMPLE } from '~/constants'
 
 export default {

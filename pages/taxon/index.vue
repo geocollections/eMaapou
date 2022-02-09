@@ -32,9 +32,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Search from '@/components/templates/Search'
-import TaxonSearchForm from '@/components/search/forms/TaxonSearchForm.vue'
-import TaxonTable from '@/components/tables/TaxonTable'
+import Search from '~/templates/Search'
+import TaxonSearchForm from '~/components/search/forms/TaxonSearchForm.vue'
+import TaxonTable from '~/components/tables/TaxonTable'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

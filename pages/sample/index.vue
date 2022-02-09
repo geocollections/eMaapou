@@ -31,9 +31,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SampleSearchForm from '@/components/search/forms/SampleSearchForm.vue'
+import SampleSearchForm from '~/components/search/forms/SampleSearchForm.vue'
 import SampleTable from '~/components/tables/SampleTable.vue'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

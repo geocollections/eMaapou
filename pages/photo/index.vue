@@ -71,7 +71,7 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import TitleCard from '~/components/TitleCard.vue'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
 import PhotoTable from '~/components/tables/PhotoTable'
 import ImageViewWrapper from '~/components/ImageViewWrapper'

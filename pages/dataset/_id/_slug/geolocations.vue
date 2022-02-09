@@ -10,7 +10,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetGeolocationTable from '@/components/tables/DatasetGeolocationTable'
+import DatasetGeolocationTable from '~/components/tables/DatasetGeolocationTable'
 
 import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {

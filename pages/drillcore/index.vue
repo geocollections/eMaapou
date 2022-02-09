@@ -31,9 +31,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm.vue'
+import DrillcoreSearchForm from '~/components/search/forms/DrillcoreSearchForm.vue'
 import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
-import Search from '~/components/templates/Search.vue'
+import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import DataRow from '@/components/DataRow'
+import DataRow from '~/components/DataRow'
 import ExternalLink from '~/components/ExternalLink.vue'
 
 export default {

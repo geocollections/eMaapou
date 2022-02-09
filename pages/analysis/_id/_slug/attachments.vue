@@ -9,7 +9,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import AttachmentTable from '@/components/tables/AttachmentTable'
+import AttachmentTable from '~/components/tables/AttachmentTable'
 
 import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
