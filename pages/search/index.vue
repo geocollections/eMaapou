@@ -1,5 +1,5 @@
 <template>
-  <drillcore-table
+  <data-table-drillcore
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,10 +10,10 @@
 
 <script>
 import { debounce } from 'lodash'
-import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
+import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import { DRILLCORE, HEADERS_DRILLCORE } from '~/constants'
 export default {
-  components: { DrillcoreTable },
+  components: { DataTableDrillcore },
   props: {
     query: {
       type: String,

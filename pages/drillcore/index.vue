@@ -16,7 +16,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <drillcore-table
+      <data-table-drillcore
         :show-search="false"
         :items="items"
         :count="count"
@@ -31,16 +31,16 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DrillcoreSearchForm from '@/components/search/forms/DrillcoreSearchForm.vue'
-import DrillcoreTable from '~/components/tables/DrillcoreTable.vue'
-import Search from '~/components/templates/Search.vue'
+import DrillcoreSearchForm from '~/components/search/forms/DrillcoreSearchForm.vue'
+import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
+import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     DrillcoreSearchForm,
-    DrillcoreTable,
+    DataTableDrillcore,
     TitleCard,
   },
   head() {

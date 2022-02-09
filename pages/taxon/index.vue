@@ -17,7 +17,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <taxon-table
+      <data-table-taxon
         :show-search="false"
         :items="items"
         :count="count"
@@ -32,16 +32,16 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Search from '@/components/templates/Search'
-import TaxonSearchForm from '@/components/search/forms/TaxonSearchForm.vue'
-import TaxonTable from '@/components/tables/TaxonTable'
+import Search from '~/templates/Search'
+import TaxonSearchForm from '~/components/search/forms/TaxonSearchForm.vue'
+import DataTableTaxon from '~/components/data-table/DataTableTaxon'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     TaxonSearchForm,
-    TaxonTable,
+    DataTableTaxon,
     TitleCard,
   },
   head() {

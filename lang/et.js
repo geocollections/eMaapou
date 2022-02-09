@@ -108,7 +108,7 @@ export default {
     geologyAPI: 'Eesti Geoloogia API',
   },
   locality: {
-    pageTitle: 'Lokaliteetid',
+    pageTitle: 'Lokaliteedid',
     id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
@@ -380,6 +380,8 @@ export default {
     localityReferences: 'Kirjandus ({number})',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    deposit: 'Maardla',
+    miningClaim: 'Mäeeraldis',
   },
   site: {
     pageTitle: 'Uuringupunktid',
@@ -922,5 +924,37 @@ export default {
   },
   news: {
     pageTitle: 'Uudised',
+  },
+  alert: {
+    estonianLandBoardDatabase:
+      'Andmed maardlate ja mäeeraldiste kohta on pärit Maa-ameti maardlate nimistust',
+  },
+  deposit: {
+    id: 'Maardla ID',
+    registrationNo: 'Maardla registrikaardi nr.',
+    name: 'Nimi',
+    area: 'Pindala (ha)',
+    isBedrock: 'Kas aluspõhjaline?',
+    commodity: 'Maavara',
+    usage: 'Kasutuskohad',
+    additionalCommodity: 'Kaasnevad maavarad',
+    miningConditions: 'Mäenduslikud tingimused:',
+    enviromentalRestrictions: 'Keskkonnakaitselised piirangud',
+    dataExportDate: 'Andmete import',
+  },
+  miningClaim: {
+    id: 'Mäeeraldise ID',
+    number: 'Mäeeraldise Nr',
+    registrationNo: 'Maardla registrikaardi nr.',
+    name: 'Nimi',
+    area: 'Pindala (ha)',
+    reserve: 'Varu',
+    usage: 'Kasutuse eesmärk',
+    reclamation: 'Taastamine',
+    status: 'Mäeeraldise staatus',
+    extractionPermit: 'Kaevandusloa nr.',
+    permitOwner: 'Kaevandusloa omanik',
+    miningCompany: 'Kaevandaja',
+    dataExportDate: 'Andmete import',
   },
 }

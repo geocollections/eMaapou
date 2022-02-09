@@ -16,7 +16,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <sample-table
+      <data-table-sample
         :show-search="false"
         :items="items"
         :count="count"
@@ -31,16 +31,16 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SampleSearchForm from '@/components/search/forms/SampleSearchForm.vue'
-import SampleTable from '~/components/tables/SampleTable.vue'
-import Search from '~/components/templates/Search'
+import SampleSearchForm from '~/components/search/forms/SampleSearchForm.vue'
+import DataTableSample from '~/components/data-table/DataTableSample.vue'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     SampleSearchForm,
-    SampleTable,
+    DataTableSample,
     TitleCard,
   },
   head() {

@@ -1,5 +1,5 @@
 <template>
-  <site-table
+  <data-table-site
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_SITE, SITE } from '~/constants'
-import SiteTable from '~/components/tables/SiteTable.vue'
+import DataTableSite from '~/components/data-table/DataTableSite.vue'
 
 export default {
-  components: { SiteTable },
+  components: { DataTableSite },
   props: {
     query: {
       type: String,

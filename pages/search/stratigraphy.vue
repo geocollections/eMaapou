@@ -1,5 +1,5 @@
 <template>
-  <stratigraphy-table
+  <data-table-stratigraphy
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
-import StratigraphyTable from '~/components/tables/StratigraphyTable'
+import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
 
 export default {
-  components: { StratigraphyTable },
+  components: { DataTableStratigraphy },
   props: {
     query: {
       type: String,

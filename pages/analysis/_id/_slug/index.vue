@@ -1,5 +1,5 @@
 <template>
-  <analysis-result-table
+  <data-table-analysis-result
     :items="analysisResults"
     :count="count"
     :options="options"
@@ -13,9 +13,9 @@
 <script>
 import { round, isNil } from 'lodash'
 import { ANALYSIS_RESULT, HEADERS_ANALYSIS_RESULT } from '~/constants'
-import AnalysisResultTable from '~/components/tables/AnalysisResultTable.vue'
+import DataTableAnalysisResult from '~/components/data-table/DataTableAnalysisResult.vue'
 export default {
-  components: { AnalysisResultTable },
+  components: { DataTableAnalysisResult },
   data() {
     return {
       analysisResults: [],

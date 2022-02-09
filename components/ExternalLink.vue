@@ -1,5 +1,5 @@
 <template>
-  <a class="text-link">
+  <a :href="href" class="text-link">
     <slot> </slot>
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
@@ -12,6 +12,12 @@
 <script>
 export default {
   name: 'ExternalLink',
+  props: {
+    href: {
+      type: String,
+      default: null,
+    },
+  },
 }
 </script>
 

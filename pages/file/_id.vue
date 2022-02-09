@@ -508,11 +508,11 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import TitleCardDetail from '~/components/TitleCardDetail'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
-import Detail from '~/components/templates/Detail'
+import Detail from '~/templates/Detail'
 import LasChart from '~/components/chart/types/LasChart'
 
 export default {

@@ -173,7 +173,7 @@
         $t('stratigraphy.stratotypes')
       }}</v-card-title>
       <v-card-text>
-        <stratigraphy-stratotype-table
+        <data-table-stratigraphy-stratotype
           v-if="stratotypeCount > 0"
           only-table
           :items="stratotypes"
@@ -243,15 +243,15 @@ import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import StratigraphyStratotypeTable from '~/components/tables/StratigraphyStratotypeTable.vue'
-import Detail from '~/components/templates/Detail.vue'
+import DataTableStratigraphyStratotype from '~/components/data-table/DataTableStratigraphyStratotype.vue'
+import Detail from '~/templates/Detail.vue'
 export default {
   components: {
     TitleCardDetail,
     Tabs,
     LinkDataRow,
     DataRow,
-    StratigraphyStratotypeTable,
+    DataTableStratigraphyStratotype,
     LeafletMap,
     Detail,
   },

@@ -1,5 +1,5 @@
 <template>
-  <sample-table
+  <data-table-sample
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,11 +10,11 @@
 
 <script>
 import { debounce } from 'lodash'
-import SampleTable from '~/components/tables/SampleTable.vue'
+import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 
 export default {
-  components: { SampleTable },
+  components: { DataTableSample },
   props: {
     query: {
       type: String,

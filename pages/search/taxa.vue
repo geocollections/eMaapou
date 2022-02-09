@@ -1,5 +1,5 @@
 <template>
-  <taxon-table
+  <data-table-taxon
     :show-search="false"
     :items="items"
     :count="count"
@@ -12,10 +12,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_TAXON, TAXON } from '~/constants'
-import TaxonTable from '~/components/tables/TaxonTable'
+import DataTableTaxon from '~/components/data-table/DataTableTaxon'
 
 export default {
-  components: { TaxonTable },
+  components: { DataTableTaxon },
   props: {
     query: {
       type: String,

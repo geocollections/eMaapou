@@ -1,5 +1,5 @@
 <template>
-  <taxon-list-table
+  <data-table-taxon-list
     :items="taxa"
     :count="count"
     :options="options"
@@ -10,10 +10,10 @@
 <script>
 import { isNil } from 'lodash'
 import { HEADERS_TAXON_LIST, TAXON_LIST } from '~/constants'
-import TaxonListTable from '~/components/tables/TaxonListTable'
+import DataTableTaxonList from '~/components/data-table/DataTableTaxonList'
 
 export default {
-  components: { TaxonListTable },
+  components: { DataTableTaxonList },
   data() {
     return {
       taxa: [],

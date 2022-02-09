@@ -1,5 +1,5 @@
 <template>
-  <analysis-table
+  <data-table-analysis
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,11 +10,11 @@
 
 <script>
 import { debounce } from 'lodash'
-import AnalysisTable from '@/components/tables/AnalysisTable'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {
-  components: { AnalysisTable },
+  components: { DataTableAnalysis },
   props: {
     query: {
       type: String,

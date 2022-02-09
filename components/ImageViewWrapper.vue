@@ -12,7 +12,7 @@
         />
       </v-col>
       <v-col>
-        <pagination-controls
+        <base-data-table-pagination
           :options="options"
           :pagination="pagination"
           :items-per-page-options="footerProps['items-per-page-options']"
@@ -37,10 +37,10 @@
 
 <script>
 import ImageView from '~/components/ImageView.vue'
-import PaginationControls from '~/components/tables/controls/PaginationControls.vue'
+import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 export default {
   name: 'ImageViewWrapper',
-  components: { ImageView, PaginationControls },
+  components: { ImageView, BaseDataTablePagination },
   props: {
     items: {
       type: Array,

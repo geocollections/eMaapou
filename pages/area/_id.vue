@@ -35,11 +35,11 @@
                   />
                   <data-row
                     v-else
-                    :title="$t('area.name')"
+                    :title="$t('area.areaType')"
                     :value="
                       $translate({
-                        et: area.area_type__name,
-                        en: area.area_type__name_en,
+                        et: area.area_type.name,
+                        en: area.area_type.name_en,
                       })
                     "
                   />
@@ -57,7 +57,15 @@
                     :title="$t('area.depositAreaHa')"
                     :value="area.deposit_area_ha"
                   />
-                  <data-row :title="$t('area.description')">
+                  <data-row
+                    v-if="
+                      $translate({
+                        et: area.description,
+                        en: area.description_en,
+                      })
+                    "
+                    :title="$t('area.description')"
+                  >
                     <template #value>
                       <!-- eslint-disable vue/no-v-html -->
                       <div
@@ -145,6 +153,181 @@
           </v-card-text>
         </v-col>
       </v-row>
+      <v-row v-if="deposit" no-gutters justify="center">
+        <v-col cols="12">
+          <v-card-title class="subsection-title">{{
+            $t('area.deposit')
+          }}</v-card-title>
+          <v-card-text>
+            <v-alert
+              dense
+              type="info"
+              color="accent"
+              outlined
+              class="text-body-2"
+            >
+              {{ $t('alert.estonianLandBoardDatabase') }}
+            </v-alert>
+            <v-simple-table dense class="custom-table">
+              <template #default>
+                <tbody>
+                  <link-data-row
+                    :title="$t('deposit.registrationNo')"
+                    :value="deposit.id"
+                    @link-click="
+                      $openWindow(
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.id}`
+                      )
+                    "
+                  />
+                  <data-row
+                    :title="$t('deposit.name')"
+                    :value="`${deposit.nimetus} ${
+                      deposit.maardla_os ? `(${deposit.maardla_os})` : ''
+                    }`"
+                  />
+                  <data-row
+                    :title="$t('deposit.name')"
+                    :value="deposit.maardla_os"
+                  />
+                  <data-row
+                    :title="$t('deposit.area')"
+                    :value="deposit.pindala"
+                  />
+                  <data-row :title="$t('deposit.isBedrock')">
+                    <template #value>
+                      <boolean-indicator :value="deposit.aluspohja" />
+                    </template>
+                  </data-row>
+                  <data-row
+                    :title="$t('deposit.commodity')"
+                    :value="deposit.maavara"
+                  />
+                  <data-row
+                    :title="$t('deposit.usage')"
+                    :value="deposit.pohimaavar"
+                  />
+                  <data-row
+                    :title="$t('deposit.additionalCommodity')"
+                    :value="deposit.kaasmaavar"
+                  />
+
+                  <data-row
+                    :title="$t('deposit.miningConditions')"
+                    :value="deposit.maeteh_ti"
+                  />
+                  <data-row
+                    :title="$t('deposit.enviromentalRestrictions')"
+                    :value="deposit.geookol_ti"
+                  />
+                  <data-row
+                    :title="$t('deposit.dataExportDate')"
+                    :value="deposit.eksporditi"
+                  />
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-col>
+      </v-row>
+      <v-row v-if="miningClaim" no-gutters justify="center">
+        <v-col cols="12">
+          <v-card-title class="subsection-title">{{
+            $t('area.miningClaim')
+          }}</v-card-title>
+          <v-card-text>
+            <v-alert
+              dense
+              type="info"
+              color="accent"
+              outlined
+              class="text-body-2"
+            >
+              {{ $t('alert.estonianLandBoardDatabase') }}
+            </v-alert>
+            <v-simple-table dense class="custom-table">
+              <template #default>
+                <tbody>
+                  <data-row
+                    :title="$t('miningClaim.number')"
+                    :value="area.maaamet_maeeraldis.id"
+                  />
+                  <link-data-row
+                    :title="$t('miningClaim.registrationNo')"
+                    :value="miningClaim.reg_kaart"
+                    @link-click="
+                      $openWindow(
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`
+                      )
+                    "
+                  />
+                  <data-row
+                    :title="$t('miningClaim.name')"
+                    :value="`${miningClaim.nimetus} ${
+                      miningClaim.maardla_os
+                        ? `(${miningClaim.maardla_os})`
+                        : ''
+                    }`"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.area')"
+                    :value="miningClaim.pindala"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.reserve')"
+                    :value="miningClaim.erald_varu"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.usage')"
+                    :value="miningClaim.kas_eesm"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.reclamation')"
+                    :value="miningClaim.rekult"
+                  />
+
+                  <data-row
+                    :title="$t('miningClaim.status')"
+                    :value="miningClaim.me_olek"
+                  />
+                  <data-row
+                    v-if="miningClaim.loa_number"
+                    :title="$t('miningClaim.extractionPermit')"
+                  >
+                    <template #value>
+                      <external-link
+                        @click.native="
+                          $openWindow(
+                            `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
+                          )
+                        "
+                      >
+                        {{ miningClaim.loa_number }}
+                      </external-link>
+                      {{
+                        ` (${miningClaim.loa_algus} - ${miningClaim.loa_lopp})`
+                      }}
+                    </template>
+                  </data-row>
+                  <data-row
+                    :title="$t('miningClaim.permitOwner')"
+                    :value="miningClaim.loa_omanik"
+                  />
+                  <data-row
+                    :title="$t('miningClaim.miningCompany')"
+                    :value="miningClaim.kaevandaja"
+                  />
+
+                  <data-row
+                    :title="$t('miningClaim.dataExportDate')"
+                    :value="miningClaim.eksporditi"
+                  />
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card-text>
+        </v-col>
+      </v-row>
     </template>
 
     <template v-if="computedSites" #column-right>
@@ -158,6 +341,7 @@
             estonian-map
             estonian-bedrock-overlay
             :markers="computedSites"
+            :geojson="geojson"
           />
         </v-card>
       </v-card-text>
@@ -176,13 +360,15 @@
 
 <script>
 import { isNil } from 'lodash'
-import TitleCardDetail from '@/components/TitleCardDetail'
+import TitleCardDetail from '~/components/TitleCardDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import { TABS_AREA } from '~/constants'
+import BooleanIndicator from '~/components/BooleanIndicator.vue'
+import ExternalLink from '~/components/ExternalLink.vue'
 
 export default {
   components: {
@@ -192,12 +378,19 @@ export default {
     DataRow,
     LinkDataRow,
     Detail,
+    BooleanIndicator,
+    ExternalLink,
   },
   async asyncData({ params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'area',
-        params.id
+        params.id,
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
       const ids = detailViewResponse?.ids
       const area = detailViewResponse
@@ -210,12 +403,18 @@ export default {
         }
       )
 
+      const deposit = area.maaamet_maardla
+
+      const miningClaim = area.maaamet_maeeraldis
+
       const sites = sitesForMapResponse.items
 
       return {
         area,
         ids,
         sites,
+        deposit,
+        miningClaim,
       }
     } catch (err) {
       error({
@@ -307,7 +506,29 @@ export default {
         } else return [this.area.text1]
       } else return []
     },
+    parsedPolygon() {
+      try {
+        // NOTE: Remove trailing commas from JSON object string
+        // eslint-disable-next-line no-useless-escape
+        const regex = /\,(?!\s*?[\{\[\"\'\w])/g
+        return JSON.parse(this.area.polygon.replace(regex, ''))
+      } catch (e) {
+        return null
+      }
+    },
+    geojson() {
+      if (this.parsedPolygon === null) return null
 
+      if (!(this.parsedPolygon instanceof Array)) return this.parsedPolygon
+      else
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: this.parsedPolygon,
+          },
+        }
+    },
     computedSites() {
       if (this.sites) {
         return this.sites.reduce((filtered, item) => {

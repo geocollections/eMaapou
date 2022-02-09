@@ -1,5 +1,5 @@
 <template>
-  <dataset-geolocation-table
+  <data-table-dataset-geolocation
     :items="geolocations"
     :count="count"
     :options="options"
@@ -10,11 +10,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetGeolocationTable from '@/components/tables/DatasetGeolocationTable'
+import DataTableDatasetGeolocation from '~/components/data-table/DataTableDatasetGeolocation'
 
 import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {
-  components: { DatasetGeolocationTable },
+  components: { DataTableDatasetGeolocation },
   data() {
     return {
       geolocations: [],

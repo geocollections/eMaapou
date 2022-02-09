@@ -15,7 +15,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <preparation-table
+      <data-table-preparation
         :show-search="false"
         :items="items"
         :count="count"
@@ -30,9 +30,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import PreparationTable from '~/components/tables/PreparationTable.vue'
+import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
 import PreparationSearchForm from '~/components/search/forms/PreparationSearchForm.vue'
-import Search from '~/components/templates/Search.vue'
+import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -40,7 +40,7 @@ export default {
   components: {
     Search,
     PreparationSearchForm,
-    PreparationTable,
+    DataTablePreparation,
     TitleCard,
   },
   head() {

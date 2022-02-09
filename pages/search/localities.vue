@@ -1,5 +1,5 @@
 <template>
-  <locality-table
+  <data-table-locality
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,11 +10,11 @@
 
 <script>
 import { debounce } from 'lodash'
-import LocalityTable from '~/components/tables/LocalityTable.vue'
+import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import { HEADERS_LOCALITY, LOCALITY } from '~/constants'
 
 export default {
-  components: { LocalityTable },
+  components: { DataTableLocality },
   props: {
     query: {
       type: String,

@@ -1,5 +1,5 @@
 <template>
-  <dataset-reference-table
+  <data-table-dataset-reference
     :items="references"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetReferenceTable from '~/components/tables/DatasetReferenceTable.vue'
+import DataTableDatasetReference from '~/components/data-table/DataTableDatasetReference.vue'
 import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
-  components: { DatasetReferenceTable },
+  components: { DataTableDatasetReference },
   data() {
     return {
       references: [],

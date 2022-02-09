@@ -16,7 +16,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <specimen-table
+      <data-table-specimen
         :show-search="false"
         :items="items"
         :count="count"
@@ -32,15 +32,15 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import SpecimenSearchForm from '~/components/search/forms/SpecimenSearchForm.vue'
-import SpecimenTable from '~/components/tables/SpecimenTable.vue'
-import Search from '~/components/templates/Search'
+import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     SpecimenSearchForm,
-    SpecimenTable,
+    DataTableSpecimen,
     TitleCard,
   },
   head() {

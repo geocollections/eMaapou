@@ -1,5 +1,5 @@
 <template>
-  <stratigraphy-synonym-table
+  <data-table-stratigraphy-synonym
     :items="synonyms"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import StratigraphySynonymTable from '~/components/tables/StratigraphySynonymTable.vue'
+import DataTableStratigraphySynonym from '~/components/data-table/DataTableStratigraphySynonym.vue'
 import { HEADERS_STRATIGRAPHY_SYNONYM, STRATIGRAPHY_SYNONYM } from '~/constants'
 export default {
-  components: { StratigraphySynonymTable },
+  components: { DataTableStratigraphySynonym },
   props: {
     stratigraphy: {
       type: Number,

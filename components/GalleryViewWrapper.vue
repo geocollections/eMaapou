@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="items && items.length > 0" flat>
-    <pagination-controls
+    <base-data-table-pagination
       :options="options"
       :pagination="pagination"
       :items-per-page-options="footerProps['items-per-page-options']"
@@ -148,11 +148,11 @@
 </template>
 
 <script>
-import PaginationControls from '~/components/tables/controls/PaginationControls.vue'
+import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 
 export default {
   name: 'GalleryViewWrapper',
-  components: { PaginationControls },
+  components: { BaseDataTablePagination },
   props: {
     items: {
       type: Array,

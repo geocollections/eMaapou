@@ -200,7 +200,7 @@ import TitleCardDetail from '~/components/TitleCardDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
-import Detail from '~/components/templates/Detail.vue'
+import Detail from '~/templates/Detail.vue'
 import { TABS_DRILLCORE } from '~/constants'
 
 export default {

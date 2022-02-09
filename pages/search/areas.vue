@@ -1,5 +1,5 @@
 <template>
-  <area-table
+  <data-table-area
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,11 +10,11 @@
 
 <script>
 import { debounce } from 'lodash'
-import AreaTable from '@/components/tables/AreaTable'
+import DataTableArea from '~/components/data-table/DataTableArea'
 import { AREA, HEADERS_AREA } from '~/constants'
 
 export default {
-  components: { AreaTable },
+  components: { DataTableArea },
   props: {
     query: {
       type: String,

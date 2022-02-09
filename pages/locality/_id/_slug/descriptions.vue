@@ -1,5 +1,5 @@
 <template>
-  <description-table
+  <data-table-description
     :items="descriptions"
     :count="count"
     :options="options"
@@ -10,10 +10,10 @@
 <script>
 import { round, isNil, isEmpty } from 'lodash'
 import { DESCRIPTION, HEADERS_DESCRIPTION } from '~/constants'
-import DescriptionTable from '~/components/tables/DescriptionTable.vue'
+import DataTableDescription from '~/components/data-table/DataTableDescription.vue'
 
 export default {
-  components: { DescriptionTable },
+  components: { DataTableDescription },
 
   data() {
     return {

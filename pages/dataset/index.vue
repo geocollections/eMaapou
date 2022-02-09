@@ -16,7 +16,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <dataset-table
+      <data-table-dataset
         :show-search="false"
         :items="items"
         :count="count"
@@ -31,16 +31,16 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DatasetTable from '~/components/tables/DatasetTable'
+import DataTableDataset from '~/components/data-table/DataTableDataset'
 import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     DatasetSearchForm,
-    DatasetTable,
+    DataTableDataset,
     TitleCard,
   },
   head() {

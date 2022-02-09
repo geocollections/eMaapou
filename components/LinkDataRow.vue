@@ -9,11 +9,9 @@
       <!--        value-->
       <!--      }}</nuxt-link>-->
       <span v-else>
-        <a v-if="href" class="text-link" :href="href">
-          <slot name="value">
-            {{ value }}
-          </slot>
-        </a>
+        <external-link v-if="href" :href="href">
+          {{ value }}
+        </external-link>
         <external-link v-else @click.native="$emit('link-click')">
           {{ value }}
         </external-link>
@@ -24,8 +22,8 @@
 </template>
 
 <script>
-import DataRow from '@/components/DataRow'
-import ExternalLink from '~/components/ExternalLink'
+import DataRow from '~/components/DataRow'
+import ExternalLink from '~/components/ExternalLink.vue'
 
 export default {
   name: 'LinkDataRow',

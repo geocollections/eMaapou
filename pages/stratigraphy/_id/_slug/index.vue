@@ -1,5 +1,5 @@
 <template>
-  <stratigraphy-reference-table
+  <data-table-stratigraphy-reference
     :items="items"
     :count="count"
     :options="options"
@@ -13,10 +13,10 @@ import {
   HEADERS_STRATIGRAPHY_REFERENCE,
   STRATIGRAPHY_REFERENCE,
 } from '~/constants'
-import StratigraphyReferenceTable from '~/components/tables/StratigraphyReferenceTable'
+import DataTableStratigraphyReference from '~/components/data-table/DataTableStratigraphyReference'
 
 export default {
-  components: { StratigraphyReferenceTable },
+  components: { DataTableStratigraphyReference },
   data() {
     return {
       options: STRATIGRAPHY_REFERENCE.options,

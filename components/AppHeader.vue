@@ -246,7 +246,7 @@
 import { mapFields } from 'vuex-map-fields'
 
 import QuerySearchField from './fields/QuerySearchField.vue'
-import LangSwitcher from '~/components/lang_switcher/LangSwitcher.vue'
+import LangSwitcher from '~/components/lang-switcher/LangSwitcher.vue'
 export default {
   name: 'AppHeader',
   components: { LangSwitcher, QuerySearchField },

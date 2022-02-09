@@ -12,7 +12,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <analysis-table
+      <data-table-analysis
         :show-search="false"
         :items="items"
         :count="count"
@@ -27,9 +27,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import AnalysisTable from '~/components/tables/AnalysisTable'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import AnalysisSearchForm from '~/components/search/forms/AnalysisSearchForm.vue'
-import Search from '~/components/templates/Search'
+import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
@@ -37,7 +37,7 @@ export default {
   components: {
     Search,
     AnalysisSearchForm,
-    AnalysisTable,
+    DataTableAnalysis,
     TitleCard,
   },
   head() {

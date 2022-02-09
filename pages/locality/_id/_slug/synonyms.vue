@@ -1,5 +1,5 @@
 <template>
-  <synonym-table
+  <data-table-synonym
     :items="synonyms"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import SynonymTable from '~/components/tables/SynonymTable.vue'
+import DataTableSynonym from '~/components/data-table/DataTableSynonym.vue'
 import { HEADERS_SYNONYM, SYNONYM } from '~/constants'
 export default {
-  components: { SynonymTable },
+  components: { DataTableSynonym },
   data() {
     return {
       synonyms: [],

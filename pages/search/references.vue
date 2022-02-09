@@ -1,5 +1,5 @@
 <template>
-  <reference-table
+  <data-table-reference
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_REFERENCE, REFERENCE } from '~/constants'
-import ReferenceTable from '~/components/tables/ReferenceTable'
+import DataTableReference from '~/components/data-table/DataTableReference'
 
 export default {
-  components: { ReferenceTable },
+  components: { DataTableReference },
   props: {
     query: {
       type: String,
