@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import SampleTable from '@/components/tables/SampleTable'
 import { isNil } from 'lodash'
+import SampleTable from '@/components/tables/SampleTable'
 
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 export default {
