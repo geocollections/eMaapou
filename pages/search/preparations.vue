@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import PreparationTable from '@/components/tables/PreparationTable'
 import { debounce } from 'lodash'
+import PreparationTable from '@/components/tables/PreparationTable'
 import { HEADERS_PREPARATION, PREPARATION } from '~/constants'
 
 export default {
