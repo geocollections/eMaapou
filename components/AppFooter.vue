@@ -15,7 +15,7 @@
           <div v-for="link in routes" :key="link.routeName" class="d-flex mb-1">
             <v-icon color="white" x-small>mdi-chevron-right</v-icon>
             <nuxt-link
-              :to="link.routeName"
+              :to="localePath(link.routeName)"
               class="text-link-footer d-block ml-1"
               style="font-weight: 500 !important"
             >
@@ -34,7 +34,7 @@
           >
             <v-icon color="white" x-small>mdi-chevron-right</v-icon>
             <nuxt-link
-              :to="link.routeName"
+              :to="localePath(link.routeName)"
               class="text-link-footer d-block ml-1"
               style="font-weight: 500 !important"
             >
