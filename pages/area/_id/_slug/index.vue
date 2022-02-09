@@ -1,5 +1,5 @@
 <template>
-  <site-table
+  <data-table-site
     :items="sites"
     :count="count"
     :options="options"
@@ -9,11 +9,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import SiteTable from '~/components/tables/SiteTable'
+import DataTableSite from '~/components/data-table/DataTableSite'
 import { HEADERS_SITE, SITE } from '~/constants'
 
 export default {
-  components: { SiteTable },
+  components: { DataTableSite },
   data() {
     return {
       sites: [],

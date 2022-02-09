@@ -1,5 +1,5 @@
 <template>
-  <dataset-author-table
+  <data-table-dataset-author
     :items="authors"
     :count="count"
     :options="options"
@@ -10,11 +10,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetAuthorTable from '~/components/tables/DatasetAuthorTable'
+import DataTableDatasetAuthor from '~/components/data-table/DataTableDatasetAuthor'
 
 import { HEADERS_DATASET_AUTHOR } from '~/constants'
 export default {
-  components: { DatasetAuthorTable },
+  components: { DataTableDatasetAuthor },
   data() {
     return {
       authors: [],

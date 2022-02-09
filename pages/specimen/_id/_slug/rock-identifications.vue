@@ -1,5 +1,5 @@
 <template>
-  <specimen-identification-geology-table
+  <data-table-specimen-identification-geology
     :items="identifications"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import SpecimenIdentificationGeologyTable from '~/components/tables/SpecimenIdentificationGeologyTable.vue'
+import DataTableSpecimenIdentificationGeology from '~/components/data-table/DataTableSpecimenIdentificationGeology.vue'
 import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
 export default {
-  components: { SpecimenIdentificationGeologyTable },
+  components: { DataTableSpecimenIdentificationGeology },
   data() {
     return {
       identifications: [],

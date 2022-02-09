@@ -16,7 +16,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <site-table
+      <data-table-site
         :show-search="false"
         :items="items"
         :count="count"
@@ -32,7 +32,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import SiteSearchForm from '~/components/search/forms/SiteSearchForm'
-import SiteTable from '~/components/tables/SiteTable.vue'
+import DataTableSite from '~/components/data-table/DataTableSite.vue'
 import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
@@ -40,7 +40,7 @@ export default {
   components: {
     Search,
     SiteSearchForm,
-    SiteTable,
+    DataTableSite,
     TitleCard,
   },
   head() {

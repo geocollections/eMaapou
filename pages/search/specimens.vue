@@ -1,5 +1,5 @@
 <template>
-  <specimen-table
+  <data-table-specimen
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
-import SpecimenTable from '~/components/tables/SpecimenTable'
+import DataTableSpecimen from '~/components/data-table/DataTableSpecimen'
 
 export default {
-  components: { SpecimenTable },
+  components: { DataTableSpecimen },
   props: {
     query: {
       type: String,

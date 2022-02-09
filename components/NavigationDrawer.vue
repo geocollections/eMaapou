@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import LangList from '~/components/lang_switcher/LangList'
+import LangList from '~/components/lang-switcher/LangList'
 export default {
   name: 'NavigationDrawer',
   components: { LangList },

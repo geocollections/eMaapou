@@ -1,5 +1,5 @@
 <template>
-  <preparation-table
+  <data-table-preparation
     :show-search="false"
     :items="items"
     :count="count"
@@ -10,11 +10,11 @@
 
 <script>
 import { debounce } from 'lodash'
-import PreparationTable from '~/components/tables/PreparationTable'
+import DataTablePreparation from '~/components/data-table/DataTablePreparation'
 import { HEADERS_PREPARATION, PREPARATION } from '~/constants'
 
 export default {
-  components: { PreparationTable },
+  components: { DataTablePreparation },
   props: {
     query: {
       type: String,

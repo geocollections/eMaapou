@@ -1,5 +1,5 @@
 <template>
-  <locality-reference-table
+  <data-table-locality-reference
     :items="references"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import LocalityReferenceTable from '~/components/tables/LocalityReferenceTable.vue'
+import DataTableLocalityReference from '~/components/data-table/DataTableLocalityReference.vue'
 import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from '~/constants'
 export default {
-  components: { LocalityReferenceTable },
+  components: { DataTableLocalityReference },
   data() {
     return {
       references: [],

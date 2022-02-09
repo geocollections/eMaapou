@@ -12,7 +12,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <area-table
+      <data-table-area
         :show-search="false"
         :items="items"
         :count="count"
@@ -28,14 +28,14 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import AreaSearchForm from '~/components/search/forms/AreaSearchForm.vue'
-import AreaTable from '~/components/tables/AreaTable.vue'
+import DataTableArea from '~/components/data-table/DataTableArea.vue'
 import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
-    AreaTable,
+    DataTableArea,
     AreaSearchForm,
     TitleCard,
   },

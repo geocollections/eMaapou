@@ -1,5 +1,5 @@
 <template>
-  <dataset-analysis-table
+  <data-table-dataset-analysis
     :items="analyses"
     :count="count"
     :options="options"
@@ -10,11 +10,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import DatasetAnalysisTable from '~/components/tables/DatasetAnalysisTable'
+import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis'
 import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
 
 export default {
-  components: { DatasetAnalysisTable },
+  components: { DataTableDatasetAnalysis },
   props: {
     parameters: {
       type: Array,

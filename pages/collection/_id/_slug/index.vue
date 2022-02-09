@@ -1,5 +1,5 @@
 <template>
-  <specimen-table
+  <data-table-specimen
     :items="specimens"
     :count="count"
     :options="options"
@@ -9,11 +9,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import SpecimenTable from '~/components/tables/SpecimenTable.vue'
+import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 export default {
-  components: { SpecimenTable },
+  components: { DataTableSpecimen },
   props: {
     collection: {
       type: Object,

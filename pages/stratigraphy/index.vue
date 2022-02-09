@@ -16,7 +16,7 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <stratigraphy-table
+      <data-table-stratigraphy
         :show-search="false"
         :items="items"
         :count="count"
@@ -33,14 +33,14 @@
 import { mapState, mapActions } from 'vuex'
 import Search from '~/templates/Search'
 import StratigraphySearchForm from '~/components/search/forms/StratigraphySearchForm.vue'
-import StratigraphyTable from '~/components/tables/StratigraphyTable'
+import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
     StratigraphySearchForm,
-    StratigraphyTable,
+    DataTableStratigraphy,
     TitleCard,
   },
   head() {

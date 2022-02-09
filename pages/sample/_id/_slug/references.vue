@@ -1,5 +1,5 @@
 <template>
-  <sample-reference-table
+  <data-table-sample-reference
     :items="references"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import SampleReferenceTable from '~/components/tables/SampleReferenceTable'
+import DataTableSampleReference from '~/components/data-table/DataTableSampleReference'
 import { HEADERS_SAMPLE_REFERENCE, SAMPLE_REFERENCE } from '~/constants'
 export default {
-  components: { SampleReferenceTable },
+  components: { DataTableSampleReference },
   data() {
     return {
       references: [],

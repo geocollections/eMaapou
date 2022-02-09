@@ -1,5 +1,5 @@
 <template>
-  <rock-table
+  <data-table-rock
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_ROCK, ROCK } from '~/constants'
-import RockTable from '~/components/tables/RockTable'
+import DataTableRock from '~/components/data-table/DataTableRock'
 
 export default {
-  components: { RockTable },
+  components: { DataTableRock },
   props: {
     query: {
       type: String,

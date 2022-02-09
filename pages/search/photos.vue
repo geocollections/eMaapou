@@ -1,5 +1,5 @@
 <template>
-  <attachment-solr-table
+  <data-table-attachment-solr
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { HEADERS_PHOTO, IMAGE } from '~/constants'
-import AttachmentSolrTable from '~/components/tables/AttachmentSolrTable'
+import DataTableAttachmentSolr from '~/components/data-table/DataTableAttachmentSolr'
 
 export default {
-  components: { AttachmentSolrTable },
+  components: { DataTableAttachmentSolr },
   props: {
     query: {
       type: String,

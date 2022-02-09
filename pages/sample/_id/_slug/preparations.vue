@@ -1,5 +1,5 @@
 <template>
-  <preparation-table
+  <data-table-preparation
     :items="preparations"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import PreparationTable from '~/components/tables/PreparationTable.vue'
+import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
 import { HEADERS_PREPARATION } from '~/constants'
 export default {
-  components: { PreparationTable },
+  components: { DataTablePreparation },
   data() {
     return {
       preparations: [],

@@ -1,5 +1,5 @@
 <template>
-  <doi-table
+  <data-table-doi
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { DOI, HEADERS_DOI } from '~/constants'
-import DoiTable from '~/components/tables/DoiTable'
+import DataTableDoi from '~/components/data-table/DataTableDoi'
 
 export default {
-  components: { DoiTable },
+  components: { DataTableDoi },
   props: {
     query: {
       type: String,

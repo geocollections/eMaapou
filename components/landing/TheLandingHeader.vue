@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import LangSwitcher from '~/components/lang_switcher/LangSwitcher.vue'
+import LangSwitcher from '~/components/lang-switcher/LangSwitcher.vue'
 export default {
   name: 'AppHeader',
   components: { LangSwitcher },

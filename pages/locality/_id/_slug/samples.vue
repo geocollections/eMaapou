@@ -1,5 +1,5 @@
 <template>
-  <sample-table
+  <data-table-sample
     :items="samples"
     :count="count"
     :options="options"
@@ -9,12 +9,12 @@
 
 <script>
 import { isNil } from 'lodash'
-import SampleTable from '~/components/tables/SampleTable'
+import DataTableSample from '~/components/data-table/DataTableSample'
 
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 
 export default {
-  components: { SampleTable },
+  components: { DataTableSample },
   data() {
     return {
       samples: [],

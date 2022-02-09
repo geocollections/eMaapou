@@ -1,5 +1,5 @@
 <template>
-  <analysis-table
+  <data-table-analysis
     :items="analyses"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import AnalysisTable from '~/components/tables/AnalysisTable'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import { HEADERS_ANALYSIS } from '~/constants'
 export default {
-  components: { AnalysisTable },
+  components: { DataTableAnalysis },
   props: {
     locality: {
       type: Number,

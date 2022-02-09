@@ -1,5 +1,5 @@
 <template>
-  <attachment-table
+  <data-table-attachment
     :items="attachments"
     :count="count"
     :options="options"
@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import AttachmentTable from '~/components/tables/AttachmentTable'
+import DataTableAttachment from '~/components/data-table/DataTableAttachment'
 
 import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
-  components: { AttachmentTable },
+  components: { DataTableAttachment },
   data() {
     return {
       attachments: [],

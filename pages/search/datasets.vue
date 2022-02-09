@@ -1,5 +1,5 @@
 <template>
-  <dataset-table
+  <data-table-dataset
     :show-search="false"
     :items="items"
     :count="count"
@@ -11,10 +11,10 @@
 <script>
 import { debounce } from 'lodash'
 import { DATASET, HEADERS_DATASET } from '~/constants'
-import DatasetTable from '~/components/tables/DatasetTable'
+import DataTableDataset from '~/components/data-table/DataTableDataset'
 
 export default {
-  components: { DatasetTable },
+  components: { DataTableDataset },
   props: {
     query: {
       type: String,

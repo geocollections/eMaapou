@@ -35,7 +35,7 @@
           ></v-radio>
         </v-radio-group>
 
-        <photo-table
+        <data-table-photo
           v-if="currentView === 'table'"
           flat
           :show-search="false"
@@ -73,7 +73,7 @@ import { mapFields } from 'vuex-map-fields'
 import TitleCard from '~/components/TitleCard.vue'
 import Search from '~/templates/Search'
 import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
-import PhotoTable from '~/components/tables/PhotoTable'
+import DataTablePhoto from '~/components/data-table/DataTablePhoto'
 import ImageViewWrapper from '~/components/ImageViewWrapper'
 import GalleryViewWrapper from '~/components/GalleryViewWrapper'
 
@@ -81,7 +81,7 @@ export default {
   components: {
     GalleryViewWrapper,
     ImageViewWrapper,
-    PhotoTable,
+    DataTablePhoto,
     PhotoSearchForm,
     Search,
     TitleCard,

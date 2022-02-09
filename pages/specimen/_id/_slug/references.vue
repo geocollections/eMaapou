@@ -1,5 +1,5 @@
 <template>
-  <specimen-reference-table
+  <data-table-specimen-reference
     :items="references"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import SpecimenReferenceTable from '~/components/tables/SpecimenReferenceTable.vue'
+import DataTableSpecimenReference from '~/components/data-table/DataTableSpecimenReference.vue'
 import { HEADERS_SPECIMEN_REFERENCE, SPECIMEN_REFERENCE } from '~/constants'
 export default {
-  components: { SpecimenReferenceTable },
+  components: { DataTableSpecimenReference },
   data() {
     return {
       references: [],

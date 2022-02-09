@@ -1,5 +1,5 @@
 <template>
-  <specimen-identification-table
+  <data-table-specimen-identification
     :items="identifications"
     :count="count"
     :options="options"
@@ -9,10 +9,10 @@
 
 <script>
 import { isNil } from 'lodash'
-import SpecimenIdentificationTable from '~/components/tables/SpecimenIdentificationTable.vue'
+import DataTableSpecimenIdentification from '~/components/data-table/DataTableSpecimenIdentification.vue'
 import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
-  components: { SpecimenIdentificationTable },
+  components: { DataTableSpecimenIdentification },
   data() {
     return {
       identifications: [],

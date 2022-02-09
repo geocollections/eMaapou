@@ -1,5 +1,5 @@
 <template>
-  <stratotype-table
+  <data-table-stratotype
     :items="stratotypes"
     :count="count"
     :options="options"
@@ -9,11 +9,11 @@
 
 <script>
 import { isNil } from 'lodash'
-import StratotypeTable from '~/components/tables/StratotypeTable'
+import DataTableStratotype from '~/components/data-table/DataTableStratotype'
 import { HEADERS_STRATOTYPE, STRATOTYPE } from '~/constants'
 
 export default {
-  components: { StratotypeTable },
+  components: { DataTableStratotype },
   data() {
     return {
       stratotypes: [],

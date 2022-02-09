@@ -1,5 +1,5 @@
 <template>
-  <stratigraphy-table
+  <data-table-stratigraphy
     :items="items"
     :count="count"
     :options="options"
@@ -10,10 +10,10 @@
 <script>
 import { debounce, isNil } from 'lodash'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
-import StratigraphyTable from '~/components/tables/StratigraphyTable.vue'
+import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
 
 export default {
-  components: { StratigraphyTable },
+  components: { DataTableStratigraphy },
   data() {
     return {
       options: STRATIGRAPHY.options,
