@@ -105,7 +105,7 @@ import { mapState } from 'vuex'
 import CardExpandable from '../CardExpandable.vue'
 
 export default {
-  name: 'InstitutionSearchFilter',
+  name: 'SearchInstitutionFilter',
   components: { CardExpandable },
   props: {
     institution: {

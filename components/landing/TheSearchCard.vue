@@ -26,7 +26,7 @@
               {{ $t('landing.quickSearch') }}
             </v-card-title>
             <v-card-actions class="mx-3 mx-sm-5 pa-0">
-              <quick-search-form
+              <search-from-quick
                 style="width: 100%"
                 :only-icon="$vuetify.breakpoint.smAndDown"
                 @submit="handleSearch"
@@ -84,12 +84,12 @@
 <script>
 import { isEmpty } from 'lodash'
 import SearchCard from '~/components/SearchCard.vue'
-import QuickSearchForm from '~/components/search/forms/QuickSearchForm.vue'
+import SearchFromQuick from '~/components/search/forms/SearchFormQuick.vue'
 export default {
   name: 'TheSearchCard',
   components: {
     SearchCard,
-    QuickSearchForm,
+    SearchFromQuick,
   },
   props: {
     showMap: {

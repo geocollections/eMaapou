@@ -26,7 +26,7 @@
 </template>
 <script>
 export default {
-  name: 'ResetSearchButton',
+  name: 'SearchResetButton',
 }
 </script>
 

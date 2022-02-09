@@ -23,7 +23,7 @@
       />
     </search-fields-wrapper>
 
-    <institution-search-filter
+    <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
@@ -39,15 +39,15 @@ import { isEmpty } from 'lodash'
 
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'DatasetSearchForm',
+  name: 'SearchFormDataset',
   components: {
-    InstitutionSearchFilter,
+    SearchInstitutionFilter,
     TextField,
     SearchActions,
     AutocompleteField,

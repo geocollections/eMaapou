@@ -23,7 +23,7 @@
       />
     </search-fields-wrapper>
 
-    <search-view-map-wrapper
+    <search-map
       locality-overlay
       :items="items"
       class="mt-2"
@@ -42,17 +42,17 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import SearchMap from '~/components/search/SearchMap.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'LocalitySearchForm',
+  name: 'SearchFormLocality',
   components: {
     TextField,
     AutocompleteField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   mixins: [autocompleteMixin],

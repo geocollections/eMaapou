@@ -8,7 +8,7 @@
     </template>
 
     <template #form>
-      <preparation-search-form />
+      <search-form-preparation />
     </template>
 
     <template #result>
@@ -31,7 +31,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
-import PreparationSearchForm from '~/components/search/forms/PreparationSearchForm.vue'
+import SearchFormPreparation from '~/components/search/forms/SearchFormPreparation.vue'
 import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
 
@@ -39,7 +39,7 @@ export default {
   name: 'PreparationSearch',
   components: {
     Search,
-    PreparationSearchForm,
+    SearchFormPreparation,
     DataTablePreparation,
     TitleCard,
   },

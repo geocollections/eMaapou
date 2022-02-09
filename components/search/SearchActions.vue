@@ -5,19 +5,19 @@
     color="transparent"
     class="mt-2 d-flex justify-end align-center"
   >
-    <reset-search-button @click="$emit('click')" />
+    <search-reset-button @click="$emit('click')" />
     <search-button />
   </v-card>
 </template>
 
 <script>
-import ResetSearchButton from '~/components/search/ResetSearchButton.vue'
+import SearchResetButton from '~/components/search/SearchResetButton.vue'
 import SearchButton from '~/components/search/SearchButton.vue'
 
 export default {
   name: 'SearchActions',
   components: {
-    ResetSearchButton,
+    SearchResetButton,
     SearchButton,
   },
   props: {

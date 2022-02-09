@@ -7,7 +7,7 @@
       <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
       <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
     </search-fields-wrapper>
-    <search-view-map-wrapper
+    <search-map
       site-overlay
       :items="items"
       class="mt-2"
@@ -24,16 +24,16 @@ import { mapFields } from 'vuex-map-fields'
 import TextField from '../../fields/TextField.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import SearchMap from '~/components/search/SearchMap.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'SiteSearchForm',
+  name: 'SearchFormSite',
   components: {
     TextField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   computed: {

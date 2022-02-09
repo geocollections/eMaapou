@@ -10,13 +10,13 @@
       />
     </search-fields-wrapper>
 
-    <search-view-map-wrapper
+    <search-map
       :items="items"
       class="mt-2"
       :active="geoJSON"
       @update="handleMapUpdate"
     />
-    <institution-search-filter
+    <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
@@ -32,19 +32,19 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
 import TextField from '~/components/fields/TextField.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import SearchMap from '~/components/search/SearchMap'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
 export default {
-  name: 'AnalysisSearchForm',
+  name: 'SearchFormAnalysis',
   components: {
-    InstitutionSearchFilter,
+    SearchInstitutionFilter,
     TextField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
     RangeTextField,
   },

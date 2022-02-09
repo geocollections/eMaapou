@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <dataset-search-form />
+      <search-form-dataset />
     </template>
 
     <template #result>
@@ -32,14 +32,14 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import DataTableDataset from '~/components/data-table/DataTableDataset'
-import DatasetSearchForm from '~/components/search/forms/DatasetSearchForm'
+import SearchFormDataset from '~/components/search/forms/SearchFormDataset'
 import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
-    DatasetSearchForm,
+    SearchFormDataset,
     DataTableDataset,
     TitleCard,
   },

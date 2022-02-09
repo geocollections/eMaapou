@@ -30,7 +30,7 @@
 
       <text-field v-model="author" :label="$t(filters.byIds.author.label)" />
     </search-fields-wrapper>
-    <search-view-map-wrapper
+    <search-map
       locality-overlay
       :items="items"
       class="mt-2"
@@ -49,17 +49,17 @@ import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import SearchMap from '~/components/search/SearchMap'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'TaxonSearchForm',
+  name: 'SearchFormTaxon',
   components: {
     AutocompleteField,
     TextField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   mixins: [autocompleteMixin],

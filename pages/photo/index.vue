@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <photo-search-form :markers="mapMarkers" />
+      <search-form-photo :markers="mapMarkers" />
     </template>
 
     <template #result>
@@ -72,7 +72,7 @@ import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import TitleCard from '~/components/TitleCard.vue'
 import Search from '~/templates/Search'
-import PhotoSearchForm from '~/components/search/forms/PhotoSearchForm'
+import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto'
 import DataTablePhoto from '~/components/data-table/DataTablePhoto'
 import ImageViewWrapper from '~/components/ImageViewWrapper'
 import GalleryViewWrapper from '~/components/GalleryViewWrapper'
@@ -82,7 +82,7 @@ export default {
     GalleryViewWrapper,
     ImageViewWrapper,
     DataTablePhoto,
-    PhotoSearchForm,
+    SearchFormPhoto,
     Search,
     TitleCard,
   },

@@ -5,7 +5,7 @@
         {{ title }}
       </h1>
       <div class="montserrat">{{ error.message }}</div>
-      <quick-search-form class="my-4" @submit="handleSearch" />
+      <search-from-quick class="my-4" @submit="handleSearch" />
       <NuxtLink to="/" class="text-link-grey montserrat">
         {{ $t('common.backToLanding') }}
       </NuxtLink>
@@ -15,9 +15,9 @@
 
 <script>
 import { isEmpty } from 'lodash'
-import QuickSearchForm from '~/components/search/forms/QuickSearchForm.vue'
+import SearchFromQuick from '~/components/search/forms/SearchFormQuick.vue'
 export default {
-  components: { QuickSearchForm },
+  components: { SearchFromQuick },
   layout: 'empty',
   props: {
     error: {

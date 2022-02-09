@@ -2,12 +2,14 @@
   <v-form @submit.prevent="handleSearch">
     <query-search-field v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('preparation')">
+    <search-fields-wrapper :active="hasActiveFilters('sample')">
       <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
+
       <text-field
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
+
       <autocomplete-field
         v-model="hierarchy"
         :items="autocomplete.stratigraphy"
@@ -17,19 +19,26 @@
         @search:items="autocompleteStratigraphySearch"
       />
 
+      <text-field
+        v-model="collector"
+        :label="$t(filters.byIds.collector.label)"
+      />
       <range-text-field
         v-model="depth"
         :label="$t(filters.byIds.depth.label)"
       />
-    </search-fields-wrapper>
 
-    <search-view-map-wrapper
+      <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
+      <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+    </search-fields-wrapper>
+    <search-map
+      sample-overlay
       :items="items"
       class="mt-2"
-      :active="!!geoJSON"
+      :active="geoJSON != null"
       @update="handleMapUpdate"
     />
-    <institution-search-filter
+    <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
@@ -45,24 +54,24 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
-import TextField from '~/components/fields/TextField.vue'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import SearchMap from '~/components/search/SearchMap.vue'
+import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'PreparationSearchForm',
+  name: 'SearchFormSample',
   components: {
-    InstitutionSearchFilter,
+    SearchInstitutionFilter,
     AutocompleteField,
     TextField,
     RangeTextField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   mixins: [autocompleteMixin],
@@ -77,12 +86,16 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/preparation', ['filters', 'count', 'items']),
-    ...mapFields('search/preparation', {
+    ...mapState('search/sample', ['filters', 'count', 'items']),
+    ...mapFields('search/sample', {
       number: 'filters.byIds.number.value',
-      depth: 'filters.byIds.depth.value',
       locality: 'filters.byIds.locality.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
+      depth: 'filters.byIds.depth.value',
+      collector: 'filters.byIds.collector.value',
+      mass: 'filters.byIds.mass.value',
+      project: 'filters.byIds.project.value',
       query: 'query',
     }),
     ...mapFields('search', {
@@ -97,19 +110,19 @@ export default {
   methods: {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/preparation', ['searchPreparations']),
-    async handleReset(e) {
-      await this.resetFilters('preparation')
-      this.searchPreparations()
-    },
+    ...mapActions('search/sample', ['searchSamples']),
     handleSearch(e) {
-      this.searchPreparations()
+      this.searchSamples()
     },
-    handleMapUpdate(tableState) {
-      this.searchPreparations(tableState?.options)
+    async handleReset(e) {
+      await this.resetFilters('sample')
+      this.searchSamples()
     },
     fillAutocompleteLists() {
       if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
+    },
+    handleMapUpdate(tableState) {
+      this.searchSamples(tableState?.options)
     },
   },
 }

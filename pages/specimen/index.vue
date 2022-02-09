@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <specimen-search-form />
+      <search-form-specimen />
     </template>
 
     <template #result>
@@ -31,7 +31,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SpecimenSearchForm from '~/components/search/forms/SpecimenSearchForm.vue'
+import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
@@ -39,7 +39,7 @@ import TitleCard from '~/components/TitleCard.vue'
 export default {
   components: {
     Search,
-    SpecimenSearchForm,
+    SearchFormSpecimen,
     DataTableSpecimen,
     TitleCard,
   },

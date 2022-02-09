@@ -149,7 +149,7 @@
         </v-col>
       </v-row> -->
     </search-fields-wrapper>
-    <search-view-map-wrapper
+    <search-map
       site-overlay
       locality-overlay
       :items="items"
@@ -159,7 +159,7 @@
     />
     <v-row no-gutters>
       <v-col cols="12">
-        <institution-search-filter
+        <search-institution-filter
           class="mt-2"
           :active="!isEmpty(institution)"
           :institution="institution"
@@ -178,26 +178,26 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
 import TextField from '~/components/fields/TextField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import RangeTextField from '~/components/fields/RangeTextField'
 import ParameterField from '~/components/fields/ParameterField.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import SearchMap from '~/components/search/SearchMap.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 export default {
-  name: 'AnalyticalDataSearchForm',
+  name: 'SearchFormAnalyticalData',
   fetchOnServer: false,
   components: {
-    InstitutionSearchFilter,
+    SearchInstitutionFilter,
     RangeTextField,
     AutocompleteField,
     TextField,
     ParameterField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   mixins: [autocompleteMixin],

@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <drillcore-search-form />
+      <search-form-drillcore />
     </template>
 
     <template #result>
@@ -31,7 +31,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DrillcoreSearchForm from '~/components/search/forms/DrillcoreSearchForm.vue'
+import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
 import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import Search from '~/templates/Search.vue'
 import TitleCard from '~/components/TitleCard.vue'
@@ -39,7 +39,7 @@ import TitleCard from '~/components/TitleCard.vue'
 export default {
   components: {
     Search,
-    DrillcoreSearchForm,
+    SearchFormDrillcore,
     DataTableDrillcore,
     TitleCard,
   },

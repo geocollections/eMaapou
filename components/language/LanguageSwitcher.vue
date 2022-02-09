@@ -18,15 +18,15 @@
       </v-btn>
     </template>
 
-    <lang-list />
+    <language-list />
   </v-menu>
 </template>
 
 <script>
-import LangList from '~/components/lang-switcher/LangList'
+import LanguageList from '~/components/language/LanguageList'
 export default {
-  name: 'LangSwitcher',
-  components: { LangList },
+  name: 'LanguageSwitcher',
+  components: { LanguageList },
   computed: {
     classObject() {
       return {

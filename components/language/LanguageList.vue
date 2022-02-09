@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: 'LangList',
+  name: 'LanguageList',
   computed: {
     availableLocales() {
       return this.$i18n.locales

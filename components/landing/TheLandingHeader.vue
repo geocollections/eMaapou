@@ -13,7 +13,7 @@
     </v-app-bar-title>
     <v-spacer />
     <v-toolbar-items>
-      <lang-switcher v-show="$vuetify.breakpoint.smAndUp" />
+      <language-switcher v-show="$vuetify.breakpoint.smAndUp" />
       <v-btn
         text
         class="montserrat"
@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import LangSwitcher from '~/components/lang-switcher/LangSwitcher.vue'
+import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcher },
+  components: { LanguageSwitcher },
   props: {
     drawer: Boolean,
   },

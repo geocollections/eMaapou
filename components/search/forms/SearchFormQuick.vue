@@ -23,7 +23,7 @@ import { mapFields } from 'vuex-map-fields'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'QuickSearchForm',
+  name: 'SearchFromQuick',
   components: { QuerySearchField },
   props: {
     onlyIcon: {

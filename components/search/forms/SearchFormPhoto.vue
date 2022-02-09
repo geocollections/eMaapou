@@ -33,14 +33,14 @@
         :label="$t(filters.byIds.imageSize.label)"
       />
     </search-fields-wrapper>
-    <search-view-map-wrapper
+    <search-map
       use-custom-markers
       :items="markers"
       class="mt-2"
       :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
-    <institution-search-filter
+    <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
@@ -57,20 +57,20 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import TextField from '~/components/fields/TextField.vue'
-import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
 import RangeTextField from '~/components/fields/RangeTextField'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper'
+import SearchMap from '~/components/search/SearchMap'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'PhotoSearchForm',
+  name: 'SearchFormPhoto',
   components: {
     RangeTextField,
-    InstitutionSearchFilter,
+    SearchInstitutionFilter,
     TextField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   props: {

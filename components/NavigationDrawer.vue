@@ -128,16 +128,16 @@
 
       <v-divider class="primary" />
 
-      <lang-list class="py-0" />
+      <language-list class="py-0" />
     </v-container>
   </v-navigation-drawer>
 </template>
 
 <script>
-import LangList from '~/components/lang-switcher/LangList'
+import LanguageList from '~/components/language/LanguageList'
 export default {
   name: 'NavigationDrawer',
-  components: { LangList },
+  components: { LanguageList },
   props: {
     drawer: {
       type: Boolean,

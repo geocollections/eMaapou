@@ -16,7 +16,7 @@
       />
     </search-fields-wrapper>
 
-    <search-view-map-wrapper
+    <search-map
       borehole-overlay
       :active="geoJSON !== null"
       :items="items"
@@ -24,7 +24,7 @@
       @update="handleMapUpdate"
     />
 
-    <institution-search-filter
+    <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
@@ -40,21 +40,21 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import InstitutionSearchFilter from '~/components/search/InstitutionSearchFilter.vue'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import RangeTextField from '~/components/fields/RangeTextField.vue'
 import TextField from '~/components/fields/TextField.vue'
-import SearchViewMapWrapper from '~/components/map/SearchViewMapWrapper.vue'
+import SearchMap from '~/components/search/SearchMap.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 
 export default {
-  name: 'DrillcoreSearchForm',
+  name: 'SearchFormDrillcore',
   components: {
-    InstitutionSearchFilter,
+    SearchInstitutionFilter,
     TextField,
     RangeTextField,
     SearchFieldsWrapper,
     SearchActions,
-    SearchViewMapWrapper,
+    SearchMap,
     QuerySearchField,
   },
   computed: {

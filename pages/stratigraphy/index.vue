@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <stratigraphy-search-form />
+      <search-form-stratigraphy />
     </template>
 
     <template #result>
@@ -32,14 +32,14 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import Search from '~/templates/Search'
-import StratigraphySearchForm from '~/components/search/forms/StratigraphySearchForm.vue'
+import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
-    StratigraphySearchForm,
+    SearchFormStratigraphy,
     DataTableStratigraphy,
     TitleCard,
   },

@@ -41,7 +41,7 @@ import TextField from '~/components/fields/TextField.vue'
 import QuerySearchField from '~/components/fields/QuerySearchField.vue'
 import AutocompleteField from '~/components/fields/AutocompleteField.vue'
 export default {
-  name: 'AreaSearchForm',
+  name: 'SearchFormArea',
   components: {
     TextField,
     SearchFieldsWrapper,

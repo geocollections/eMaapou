@@ -168,7 +168,7 @@
           </v-btn>
         </v-hover>
       </div>
-      <lang-switcher v-if="$vuetify.breakpoint.mdAndUp" />
+      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
       <v-btn
         v-if="!$vuetify.breakpoint.mdAndUp"
         text
@@ -246,10 +246,10 @@
 import { mapFields } from 'vuex-map-fields'
 
 import QuerySearchField from './fields/QuerySearchField.vue'
-import LangSwitcher from '~/components/lang-switcher/LangSwitcher.vue'
+import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
 export default {
   name: 'AppHeader',
-  components: { LangSwitcher, QuerySearchField },
+  components: { LanguageSwitcher, QuerySearchField },
   props: {
     drawer: Boolean,
   },

@@ -10,7 +10,7 @@
     </template>
 
     <template #form>
-      <taxon-search-form />
+      <search-form-taxon />
     </template>
 
     <template #result>
@@ -33,14 +33,14 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import Search from '~/templates/Search'
-import TaxonSearchForm from '~/components/search/forms/TaxonSearchForm.vue'
+import SearchFormTaxon from '~/components/search/forms/SearchFormTaxon.vue'
 import DataTableTaxon from '~/components/data-table/DataTableTaxon'
 import TitleCard from '~/components/TitleCard.vue'
 
 export default {
   components: {
     Search,
-    TaxonSearchForm,
+    SearchFormTaxon,
     DataTableTaxon,
     TitleCard,
   },

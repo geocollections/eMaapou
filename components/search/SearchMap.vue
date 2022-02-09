@@ -37,7 +37,7 @@ import { mapFields } from 'vuex-map-fields'
 import CardExpandable from '../CardExpandable.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
-  name: 'SearchViewMapWrapper',
+  name: 'SearchMap',
   components: { LeafletMap, CardExpandable },
   props: {
     items: {

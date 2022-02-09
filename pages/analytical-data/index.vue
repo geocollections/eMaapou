@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <analytical-data-search-form />
+      <search-form-analytical-data />
     </template>
 
     <template #result>
@@ -32,7 +32,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
-import AnalyticalDataSearchForm from '~/components/search/forms/AnalyticalDataSearchForm.vue'
+import SearchFormAnalyticalData from '~/components/search/forms/SearchFormAnalyticalData.vue'
 import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
 
@@ -40,7 +40,7 @@ export default {
   name: 'AnalysisSearch',
   components: {
     Search,
-    AnalyticalDataSearchForm,
+    SearchFormAnalyticalData,
     DataTableAnalyticalData,
     TitleCard,
   },

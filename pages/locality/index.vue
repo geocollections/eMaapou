@@ -9,7 +9,7 @@
     </template>
 
     <template #form>
-      <locality-search-form />
+      <search-form-locality />
     </template>
 
     <template #result>
@@ -31,7 +31,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import LocalitySearchForm from '~/components/search/forms/LocalitySearchForm'
+import SearchFormLocality from '~/components/search/forms/SearchFormLocality'
 import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import Search from '~/templates/Search'
 import TitleCard from '~/components/TitleCard.vue'
@@ -40,7 +40,7 @@ export default {
   components: {
     Search,
     DataTableLocality,
-    LocalitySearchForm,
+    SearchFormLocality,
     TitleCard,
   },
   head() {
