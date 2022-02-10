@@ -47,7 +47,7 @@
           @update="handleUpdate"
         />
 
-        <image-view-wrapper
+        <image-view
           v-if="currentView === 'image'"
           :items="items"
           :count="count"
@@ -55,7 +55,7 @@
           @update="handleUpdate"
         />
 
-        <gallery-view-wrapper
+        <gallery-view
           v-if="currentView === 'gallery'"
           :items="items"
           :count="count"
@@ -74,13 +74,13 @@ import BaseHeader from '~/components/base/BaseHeader.vue'
 import Search from '~/templates/Search'
 import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto'
 import DataTablePhoto from '~/components/data-table/DataTablePhoto'
-import ImageViewWrapper from '~/components/ImageViewWrapper'
-import GalleryViewWrapper from '~/components/GalleryViewWrapper'
+import ImageView from '~/components/ImageView'
+import GalleryView from '~/components/GalleryView'
 
 export default {
   components: {
-    GalleryViewWrapper,
-    ImageViewWrapper,
+    GalleryView,
+    ImageView,
     DataTablePhoto,
     SearchFormPhoto,
     Search,

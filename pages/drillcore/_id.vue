@@ -18,7 +18,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row
+              <table-row
                 :title="$t('drillcore.name')"
                 :value="
                   $translate({
@@ -27,15 +27,15 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('drillcore.boxes')"
                 :value="drillcore.boxes"
               />
-              <data-row
+              <table-row
                 :title="$t('drillcore.boxNumbers')"
                 :value="drillcore.box_numbers"
               />
-              <data-row
+              <table-row
                 v-if="depository"
                 :title="$t('drillcore.repository')"
                 :value="
@@ -45,23 +45,26 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="storage"
                 :title="$t('drillcore.storage')"
                 :value="storage.location"
               />
-              <data-row
+              <table-row
                 v-if="agent"
                 :title="$t('drillcore.driller')"
                 :value="agent.agent"
               />
-              <data-row :title="$t('drillcore.year')" :value="drillcore.year" />
-              <data-row
+              <table-row
+                :title="$t('drillcore.year')"
+                :value="drillcore.year"
+              />
+              <table-row
                 :title="$t('drillcore.metersInBox')"
                 :value="drillcore.number_meters"
               />
 
-              <link-data-row
+              <table-row-link
                 v-if="database"
                 :title="$t('drillcore.database')"
                 :value="
@@ -77,12 +80,12 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="drillcore.date_added"
                 :title="$t('drillcore.dateAdded')"
                 :value="$formatDate(drillcore.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="drillcore.date_changed"
                 :title="$t('drillcore.dateChanged')"
                 :value="$formatDate(drillcore.date_changed)"
@@ -107,7 +110,7 @@
         <v-simple-table dense class="mb-4 custom-table">
           <template #default>
             <tbody>
-              <link-data-row
+              <table-row-link
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
@@ -123,7 +126,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="locality.country"
                 :title="$t('locality.country')"
                 :value="
@@ -133,19 +136,22 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('locality.latitude')"
                 :value="locality.latitude"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.longitude')"
                 :value="locality.longitude"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.elevation')"
                 :value="locality.elevation"
               />
-              <data-row :title="$t('locality.depth')" :value="locality.depth" />
+              <table-row
+                :title="$t('locality.depth')"
+                :value="locality.depth"
+              />
             </tbody>
           </template>
         </v-simple-table>
@@ -198,8 +204,8 @@ import { isEmpty, isNull } from 'lodash'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_DRILLCORE } from '~/constants'
 
@@ -208,8 +214,8 @@ export default {
     HeaderDetail,
     Tabs,
     LeafletMap,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     Detail,
   },
   async asyncData({ params, route, error, $services }) {

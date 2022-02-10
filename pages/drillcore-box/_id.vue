@@ -168,7 +168,7 @@
           <v-simple-table dense class="custom-table">
             <template #default>
               <tbody>
-                <link-data-row
+                <table-row-link
                   v-if="drillcoreBox.drillcore"
                   nuxt
                   :title="$t('drillcoreBox.drillcore')"
@@ -185,23 +185,23 @@
                     })
                   "
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.depthStart')"
                   :value="drillcoreBox.depth_start"
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.depthEnd')"
                   :value="drillcoreBox.depth_end"
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.depthOther')"
                   :value="drillcoreBox.depth_other"
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.diameter')"
                   :value="drillcoreBox.diameter"
                 />
-                <link-data-row
+                <table-row-link
                   v-if="drillcoreBox.stratigraphy_top"
                   :title="$t('drillcoreBox.stratigraphyTop')"
                   :value="
@@ -218,11 +218,11 @@
                     })
                   "
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.stratigraphyTopFree')"
                   :value="drillcoreBox.stratigraphy_top_free"
                 />
-                <link-data-row
+                <table-row-link
                   v-if="drillcoreBox.stratigraphy_base"
                   :title="$t('drillcoreBox.stratigraphyBase')"
                   :value="
@@ -239,22 +239,22 @@
                     })
                   "
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.stratigraphyBaseFree')"
                   :value="drillcoreBox.stratigraphy_base_free"
                 />
 
-                <data-row
+                <table-row
                   v-if="drillcoreBox.date_added"
                   :title="$t('drillcoreBox.dateAdded')"
                   :value="$formatDate(drillcoreBox.date_added)"
                 />
-                <data-row
+                <table-row
                   v-if="drillcoreBox.date_changed"
                   :title="$t('drillcoreBox.dateChanged')"
                   :value="$formatDate(drillcoreBox.date_changed)"
                 />
-                <data-row
+                <table-row
                   :title="$t('drillcoreBox.remarks')"
                   :value="drillcoreBox.remarks"
                 />
@@ -280,16 +280,16 @@ import { isNull, isNil } from 'lodash'
 
 import Tabs from '~/components/Tabs.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_DRILLCORE_BOX } from '~/constants'
 
 export default {
   components: {
     Tabs,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     HeaderDetail,
     Detail,
   },

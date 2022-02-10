@@ -136,7 +136,7 @@
 <script>
 import LanguageList from '~/components/language/LanguageList'
 export default {
-  name: 'NavigationDrawer',
+  name: 'AppDrawer',
   components: { LanguageList },
   props: {
     drawer: {

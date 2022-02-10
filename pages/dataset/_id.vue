@@ -12,40 +12,40 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row :title="$t('dataset.title')" :value="dataset.title" />
-              <data-row
+              <table-row :title="$t('dataset.title')" :value="dataset.title" />
+              <table-row
                 :title="$t('dataset.titleTranslated')"
                 :value="dataset.title_translated"
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.titleAlt')"
                 :value="dataset.title_alternative"
               />
-              <data-row
+              <table-row
                 v-if="dataset.creators || dataset.owner_txt || dataset.owner"
                 :title="$t('dataset.creators')"
                 :value="
                   dataset.creators || dataset.owner_txt || dataset.owner.agent
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.publicationYear')"
                 :value="dataset.publication_year"
               />
-              <data-row :title="$t('dataset.date')" :value="dataset.date" />
-              <data-row
+              <table-row :title="$t('dataset.date')" :value="dataset.date" />
+              <table-row
                 :title="$t('dataset.resourceTopic')"
                 :value="dataset.resource"
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.publisher')"
                 :value="dataset.publisher"
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.subjects')"
                 :value="dataset.subjects"
               />
-              <data-row
+              <table-row
                 v-if="dataset.language"
                 :title="$t('dataset.language')"
                 :value="
@@ -55,31 +55,31 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.abstract')"
                 :value="dataset.abstract"
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.methods')"
                 :value="dataset.methods"
               />
-              <data-row
+              <table-row
                 :title="$t('dataset.version')"
                 :value="dataset.version"
               />
-              <link-data-row
+              <table-row-link
                 v-if="doi"
                 :title="$t('dataset.doi')"
                 :value="doi"
                 :href="`https://doi.geocollections.info/${doi}`"
               />
-              <link-data-row
+              <table-row-link
                 v-if="reference"
                 :title="$t('dataset.reference')"
                 :value="reference.reference"
                 :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
               />
-              <link-data-row
+              <table-row-link
                 v-if="dataset.locality"
                 :title="$t('dataset.locality')"
                 :value="
@@ -96,12 +96,12 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="dataset.copyright_agent"
                 :title="$t('dataset.copyright')"
                 :value="dataset.copyright_agent.agent"
               />
-              <link-data-row
+              <table-row-link
                 v-if="dataset.licence"
                 :title="$t('dataset.licence')"
                 :value="
@@ -117,17 +117,17 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="dataset.date_added"
                 :title="$t('dataset.dateAdded')"
                 :value="$formatDate(dataset.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="dataset.date_changed"
                 :title="$t('dataset.dateChanged')"
                 :value="$formatDate(dataset.date_changed)"
               />
-              <data-row
+              <table-row
                 v-if="parameters"
                 :title="$t('dataset.parameters')"
                 :value="parameters"
@@ -150,7 +150,7 @@
                     </v-chip>
                   </v-chip-group>
                 </template>
-              </data-row>
+              </table-row>
             </tbody>
           </template>
         </v-simple-table>
@@ -185,8 +185,8 @@ import { isEmpty, isNil } from 'lodash'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import { TABS_DATASET } from '~/constants'
 
@@ -196,8 +196,8 @@ export default {
     HeaderDetail,
     Tabs,
     Detail,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
   },
   async asyncData({ params, route, error, $services }) {
     try {

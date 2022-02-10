@@ -16,7 +16,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row
+              <table-row
                 :title="$t('locality.name')"
                 :value="
                   $translate({
@@ -25,7 +25,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="type"
                 :title="$t('locality.type')"
                 :value="
@@ -35,7 +35,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="country"
                 :title="$t('locality.country')"
                 :value="
@@ -45,7 +45,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="vald"
                 :title="$t('locality.parish')"
                 :value="
@@ -55,7 +55,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="asustusyksus"
                 :title="$t('locality.settlement')"
                 :value="
@@ -65,36 +65,36 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('locality.elevation')"
                 :value="locality.elevation"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.latitude')"
                 :value="locality.latitude"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.longitude')"
                 :value="locality.longitude"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.coordinateSystem')"
                 :value="locality.coord_system"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.coordinateX')"
                 :value="locality.coordx"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.coordinateY')"
                 :value="locality.coordy"
               />
-              <data-row
+              <table-row
                 v-if="coord_det_precision"
                 :title="$t('locality.coordinatePrecision')"
                 :value="coord_det_precision.value"
               />
-              <data-row
+              <table-row
                 v-if="coord_det_method"
                 :title="$t('locality.coordinateMethod')"
                 :value="
@@ -104,16 +104,16 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="coord_det_agent"
                 :title="$t('locality.coordinateAgent')"
                 :value="coord_det_agent.agent"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.locationRemarks')"
                 :value="locality.remarks_location"
               />
-              <link-data-row
+              <table-row-link
                 v-if="stratigraphy_top"
                 :title="$t('locality.stratigraphyTop')"
                 :value="
@@ -130,7 +130,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="stratigraphy_base"
                 :title="$t('locality.stratigraphyBase')"
                 :value="
@@ -149,7 +149,7 @@
               />
 
               <!-- NOTE: #466 added same link as a button -->
-              <!--              <link-data-row-->
+              <!--              <table-row-link-->
               <!--                v-if="drillcore"-->
               <!--                nuxt-->
               <!--                :title="$t('locality.drillcore')"-->
@@ -167,17 +167,17 @@
               <!--                "-->
               <!--              />-->
 
-              <data-row
+              <table-row
                 v-if="locality.date_added"
                 :title="$t('locality.dateAdded')"
                 :value="$formatDate(locality.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="locality.date_changed"
                 :title="$t('locality.dateChanged')"
                 :value="$formatDate(locality.date_changed)"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.remarks')"
                 :value="locality.remarks"
               />
@@ -266,8 +266,8 @@
 import { isNil, isEmpty } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
 import HeaderDetail from '~/components/HeaderDetail.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
-import DataRow from '~/components/DataRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import TableRow from '~/components/table/TableRow.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
@@ -277,8 +277,8 @@ import { TABS_LOCALITY } from '~/constants'
 export default {
   components: {
     HeaderDetail,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     LeafletMap,
     Tabs,
     Detail,

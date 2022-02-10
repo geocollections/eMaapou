@@ -1,6 +1,6 @@
 <template>
   <div class="py-2 d-flex justify-center">
-    <image-cell v-if="isImage && src" :src="src" @click="$emit('click')" />
+    <thumbnail-image v-if="isImage && src" :src="src" @click="$emit('click')" />
     <v-icon
       v-else-if="isImage"
       color="primary darken-2"
@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import ImageCell from './ImageCell.vue'
+import ThumbnailImage from './ThumbnailImage.vue'
 export default {
-  name: 'AttachmentCell',
-  components: { ImageCell },
+  name: 'ThumbnailAttachment',
+  components: { ThumbnailImage },
   props: {
     src: {
       type: String,

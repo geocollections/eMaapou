@@ -151,7 +151,7 @@
 import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 
 export default {
-  name: 'GalleryViewWrapper',
+  name: 'GalleryView',
   components: { BaseDataTablePagination },
   props: {
     items: {

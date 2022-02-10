@@ -10,12 +10,12 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.taxon="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.taxon"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
         {{ item.taxon.taxon }}
-      </external-link>
+      </base-link-external>
     </template>
 
     <template #item.agent="{ item }">
@@ -34,13 +34,13 @@
 <script>
 import { round, cloneDeep } from 'lodash'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ExternalLink from '~/components/ExternalLink'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_TAXON_LIST } from '~/constants'
 
 export default {
   name: 'DataTableTaxonList',
-  components: { ExternalLink, BaseDataTable },
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

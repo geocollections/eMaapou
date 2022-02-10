@@ -13,7 +13,7 @@
 import { isNil } from 'lodash'
 
 export default {
-  name: 'DataRow',
+  name: 'TableRow',
   props: {
     title: { type: String, default: null },
     value: {

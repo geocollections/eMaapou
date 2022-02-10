@@ -1,5 +1,5 @@
 <template>
-  <card-expandable
+  <base-card-expand
     :active="active"
     :show-body="showInstitutions"
     @click="showInstitutions = $event"
@@ -46,7 +46,7 @@
         </v-tooltip>
       </div>
     </div>
-  </card-expandable>
+  </base-card-expand>
   <!-- <v-card class="px-2 mt-1">
     <v-card-title class="px-0 py-1">
       <div
@@ -102,11 +102,11 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { mapState } from 'vuex'
-import CardExpandable from '../CardExpandable.vue'
+import BaseCardExpand from '../base/BaseCardExpand.vue'
 
 export default {
   name: 'SearchInstitutionFilter',
-  components: { CardExpandable },
+  components: { BaseCardExpand },
   props: {
     institution: {
       type: Array,

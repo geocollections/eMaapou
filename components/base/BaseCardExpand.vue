@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'CardExpandable',
+  name: 'BaseCardExpand',
   props: {
     showBody: {
       type: Boolean,

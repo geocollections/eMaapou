@@ -26,39 +26,39 @@
             <v-simple-table dense class="custom-table">
               <template #default>
                 <tbody>
-                  <data-row
+                  <table-row
                     :title="$t('localityDescription.zeroLevel')"
                     :value="item.zero_level"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('localityDescription.authorFree')"
                     :value="item.author_free"
                   />
-                  <link-data-row
+                  <table-row-link
                     v-if="item.reference"
                     :title="$t('localityDescription.reference')"
                     :value="item.reference.reference"
                     @link-click="$openGeology('reference', item.reference.id)"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('localityDescription.year')"
                     :value="item.year"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('localityDescription.stratigraphyFree')"
                     :value="item.stratigraphy_free"
                   />
-                  <data-row
+                  <table-row
                     v-if="item.rock"
                     :title="$t('localityDescription.rockEt')"
                     :value="item.rock.name"
                   />
-                  <data-row
+                  <table-row
                     v-if="item.rock"
                     :title="$t('localityDescription.rockEn')"
                     :value="item.rock.name_en"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('localityDescription.remarks')"
                     :value="item.remarks"
                   />
@@ -123,14 +123,14 @@
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import DataRow from '../DataRow.vue'
-import LinkDataRow from '../LinkDataRow.vue'
+import TableRow from '../table/TableRow.vue'
+import TableRowLink from '../table/TableRowLink.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DESCRIPTION } from '~/constants'
 export default {
   name: 'DataTableDescription',
-  components: { BaseDataTable, DataRow, LinkDataRow },
+  components: { BaseDataTable, TableRow, TableRowLink },
   mixins: [headersMixin],
   props: {
     items: {

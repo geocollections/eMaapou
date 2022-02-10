@@ -31,12 +31,12 @@
     </template>
 
     <template #item.reference="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.reference_id"
         @click.native="$openGeology('reference', item.reference_id)"
       >
         {{ item.reference }}
-      </external-link>
+      </base-link-external>
     </template>
 
     <template #item.type="{ item }">
@@ -44,7 +44,7 @@
     </template>
 
     <template #item.image="{ item }">
-      <image-cell
+      <thumbnail-image
         v-if="item.uuid_filename"
         :src="
           $img(
@@ -67,13 +67,13 @@
 <script>
 import { cloneDeep } from 'lodash'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ImageCell from '~/components/ImageCell'
-import ExternalLink from '~/components/ExternalLink'
+import ThumbnailImage from '~/components/thumbnail/ThumbnailImage'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'DataTableAttachmentSolr',
-  components: { ExternalLink, BaseDataTable, ImageCell },
+  components: { BaseLinkExternal, BaseDataTable, ThumbnailImage },
   mixins: [headersMixin],
   props: {
     items: {

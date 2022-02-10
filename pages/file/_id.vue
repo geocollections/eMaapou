@@ -124,7 +124,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <link-data-row
+              <table-row-link
                 v-if="specimen && specimen.coll"
                 :title="$t('file.collectionNr')"
                 :value="specimen.coll.number"
@@ -136,7 +136,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="specimen"
                 :title="$t('file.specimenNr')"
                 :value="file.specimen.specimen_id"
@@ -149,7 +149,7 @@
                 "
               />
               <template v-for="(item, index) in specimenIdentification">
-                <link-data-row
+                <table-row-link
                   v-if="item.taxon"
                   :key="index"
                   :title="$t('file.name')"
@@ -161,7 +161,7 @@
                 />
               </template>
               <template v-for="(item, index) in specimenIdentificationGeology">
-                <link-data-row
+                <table-row-link
                   v-if="item.taxon"
                   :key="index"
                   :title="$t('file.name')"
@@ -172,7 +172,7 @@
                   "
                 />
               </template>
-              <link-data-row
+              <table-row-link
                 v-if="specimen && specimen.locality"
                 :title="$t('file.locality')"
                 :value="
@@ -189,7 +189,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="specimen && specimen.stratigraphy"
                 :title="$t('file.stratigraphy')"
                 :value="
@@ -206,11 +206,11 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('file.scalebar')"
                 :value="file.image_scalebar"
               />
-              <data-row
+              <table-row
                 :title="$t('file.description')"
                 :value="
                   $translate({
@@ -219,35 +219,35 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('file.imageNumber')"
                 :value="file.image_number"
               />
-              <data-row
+              <table-row
                 v-if="imageset"
                 :title="$t('file.imagesetNumber')"
                 :value="imageset.imageset_number"
               />
-              <data-row
+              <table-row
                 v-if="imageset"
                 :title="$t('file.imagesetDescription')"
                 :value="imageset.description"
               />
-              <data-row :title="$t('file.author')" :value="file.author" />
-              <data-row :title="$t('file.author')" :value="file.author_free" />
-              <data-row
+              <table-row :title="$t('file.author')" :value="file.author" />
+              <table-row :title="$t('file.author')" :value="file.author_free" />
+              <table-row
                 :title="$t('file.imagePeople')"
                 :value="file.image_people"
               />
-              <data-row
+              <table-row
                 :title="$t('file.date')"
                 :value="file.date_created || file.date_created_free"
               />
-              <data-row
+              <table-row
                 :title="$t('file.imagePlace')"
                 :value="file.image_place"
               />
-              <link-data-row
+              <table-row-link
                 v-if="locality"
                 :title="$t('file.locality')"
                 :value="
@@ -264,15 +264,15 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('file.imageLatitude')"
                 :value="file.image_latitude"
               />
-              <data-row
+              <table-row
                 :title="$t('file.imageLongitude')"
                 :value="file.image_longitude"
               />
-              <data-row
+              <table-row
                 v-if="type"
                 :title="$t('file.type')"
                 :value="
@@ -282,11 +282,11 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('file.format')"
                 :value="file.attachment_format"
               />
-              <data-row
+              <table-row
                 v-if="attachmentKeywords.length > 0"
                 :title="$t('file.keywords')"
                 :value="attachmentKeywords"
@@ -296,18 +296,18 @@
                     <li v-if="item.keyword">{{ item.keyword.keyword }}</li>
                   </ul>
                 </template>
-              </data-row>
-              <data-row
+              </table-row>
+              <table-row
                 v-if="agent_digitised"
                 :title="$t('file.personDigitised')"
                 :value="agent_digitised.agent"
               />
-              <data-row
+              <table-row
                 :title="$t('file.dateDigitised')"
                 :value="file.date_digitised || file.date_digitised_free"
               />
-              <data-row :title="$t('file.imageSize')" :value="imageSize" />
-              <link-data-row
+              <table-row :title="$t('file.imageSize')" :value="imageSize" />
+              <table-row-link
                 v-if="database"
                 :title="$t('file.institution')"
                 :value="
@@ -322,19 +322,19 @@
                   )
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="licence"
                 :title="$t('file.licence')"
                 :value="licence.licence_en"
                 @link-click="$openWindow(licence.licence_url_en)"
               />
-              <data-row :title="$t('file.remarks')" :value="file.remarks" />
-              <data-row
+              <table-row :title="$t('file.remarks')" :value="file.remarks" />
+              <table-row
                 v-if="file.date_added"
                 :title="$t('file.dateAdded')"
                 :value="$formatDate(file.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="file.date_changed"
                 :title="$t('file.dateChanged')"
                 :value="$formatDate(file.date_changed)"
@@ -509,8 +509,8 @@
 <script>
 import { isNull, isNil } from 'lodash'
 import HeaderDetail from '~/components/HeaderDetail'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import Detail from '~/templates/Detail'
 import LasChart from '~/components/chart/types/LasChart'
@@ -520,8 +520,8 @@ export default {
     LasChart,
     HeaderDetail,
     LeafletMap,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     Detail,
   },
   async asyncData({ params, route, error, app }) {

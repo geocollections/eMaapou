@@ -30,7 +30,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <link-data-row
+              <table-row-link
                 v-if="coll"
                 :title="$t('specimen.collectionNr')"
                 :value="coll.number"
@@ -43,15 +43,15 @@
                 "
               />
 
-              <data-row
+              <table-row
                 :title="$t('specimen.number')"
                 :value="`${specimen.specimen_id}`"
               />
-              <data-row
+              <table-row
                 :title="$t('specimen.oldNumber')"
                 :value="`${specimen.specimen_nr}`"
               />
-              <data-row
+              <table-row
                 v-if="type"
                 :title="$t('specimen.type')"
                 :value="
@@ -61,7 +61,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="classification"
                 :title="$t('specimen.group')"
                 :value="
@@ -71,8 +71,8 @@
                   })
                 "
               />
-              <data-row :title="$t('specimen.part')" :value="specimen.part" />
-              <link-data-row
+              <table-row :title="$t('specimen.part')" :value="specimen.part" />
+              <table-row-link
                 v-if="locality"
                 :title="$t('specimen.locality')"
                 :value="
@@ -89,8 +89,11 @@
                   })
                 "
               />
-              <data-row :title="$t('specimen.depth')" :value="specimen.depth" />
-              <link-data-row
+              <table-row
+                :title="$t('specimen.depth')"
+                :value="specimen.depth"
+              />
+              <table-row-link
                 v-if="stratigraphy"
                 :title="$t('specimen.stratigraphy')"
                 :value="
@@ -107,7 +110,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="lithostratigraphy"
                 :title="$t('specimen.lithostratigraphy')"
                 :value="
@@ -124,25 +127,25 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('specimen.stratigraphyRemarks')"
                 :value="specimen.stratigraphy_free"
               />
 
-              <data-row
+              <table-row
                 :title="$t('specimen.remarks')"
                 :value="specimen.remarks"
               />
-              <data-row
+              <table-row
                 :title="$t('specimen.dateCollected')"
                 :value="dateCollected"
               />
-              <data-row
+              <table-row
                 v-if="agent_collected"
                 :title="$t('specimen.collector')"
                 :value="agent_collected.agent"
               />
-              <link-data-row
+              <table-row-link
                 v-if="sample"
                 :title="$t('specimen.sample')"
                 :value="
@@ -159,7 +162,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="database"
                 :title="$t('specimen.institution')"
                 :value="
@@ -230,8 +233,8 @@
 </template>
 
 <script>
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
@@ -242,8 +245,8 @@ export default {
   components: {
     Detail,
     HeaderDetail,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     LeafletMap,
     Tabs,
     ImageBar,

@@ -1,5 +1,5 @@
 <template>
-  <data-row v-if="value" :title="title">
+  <table-row v-if="value" :title="title">
     <template #value>
       <!-- Changed it into div in order to stop propagation (clicking on boxes in drillcore detail view (stratigraphy link)) -->
       <div v-if="nuxt" class="text-link" @click.stop="$router.push(href)">
@@ -9,25 +9,25 @@
       <!--        value-->
       <!--      }}</nuxt-link>-->
       <span v-else>
-        <external-link v-if="href" :href="href">
+        <base-link-external v-if="href" :href="href">
           {{ value }}
-        </external-link>
-        <external-link v-else @click.native="$emit('link-click')">
+        </base-link-external>
+        <base-link-external v-else @click.native="$emit('link-click')">
           {{ value }}
-        </external-link>
+        </base-link-external>
       </span>
       <span v-if="suffix">{{ suffix }}</span>
     </template>
-  </data-row>
+  </table-row>
 </template>
 
 <script>
-import DataRow from '~/components/DataRow'
-import ExternalLink from '~/components/ExternalLink.vue'
+import TableRow from './TableRow.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 
 export default {
-  name: 'LinkDataRow',
-  components: { ExternalLink, DataRow },
+  name: 'TableRowLink',
+  components: { BaseLinkExternal, TableRow },
   props: {
     nuxt: { type: Boolean, default: false },
     title: { type: String, default: null },

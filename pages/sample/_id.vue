@@ -11,21 +11,21 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row :title="$t('sample.number')" :value="sample.number" />
-              <link-data-row
+              <table-row :title="$t('sample.number')" :value="sample.number" />
+              <table-row-link
                 :title="$t('sample.igsn')"
                 :value="sample.igsn"
                 :href="`http://igsn.org/${sample.igsn}`"
               />
-              <data-row
+              <table-row
                 :title="$t('sample.numberAdditional')"
                 :value="sample.number_additional"
               />
-              <data-row
+              <table-row
                 :title="$t('sample.numberField')"
                 :value="sample.number_field"
               />
-              <link-data-row
+              <table-row-link
                 v-if="locality"
                 :title="$t('sample.locality')"
                 :value="
@@ -42,17 +42,17 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="locality"
                 :title="$t('sample.latitude')"
                 :value="locality.latitude"
               />
-              <data-row
+              <table-row
                 v-if="locality"
                 :title="$t('sample.longitude')"
                 :value="locality.longitude"
               />
-              <link-data-row
+              <table-row-link
                 v-if="site"
                 :title="$t('sample.site')"
                 :value="site.name"
@@ -64,22 +64,22 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="site"
                 :title="$t('sample.latitude')"
                 :value="site.latitude"
               />
-              <data-row
+              <table-row
                 v-if="site"
                 :title="$t('sample.longitude')"
                 :value="site.longitude"
               />
-              <data-row :title="$t('sample.depth')" :value="sample.depth" />
-              <data-row
+              <table-row :title="$t('sample.depth')" :value="sample.depth" />
+              <table-row
                 :title="$t('sample.depthInterval')"
                 :value="sample.depth_interval"
               />
-              <link-data-row
+              <table-row-link
                 v-if="stratigraphy"
                 :title="$t('sample.stratigraphy')"
                 :value="
@@ -96,7 +96,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="lithostratigraphy"
                 :title="$t('sample.lithostratigraphy')"
                 :value="
@@ -113,25 +113,25 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('sample.stratigraphyFree')"
                 :value="sample.stratigraphy_free"
               />
-              <data-row
+              <table-row
                 :title="$t('sample.stratigraphyBed')"
                 :value="sample.stratigraphy_bed"
               />
-              <data-row
+              <table-row
                 :title="$t('sample.dateCollected')"
                 :value="sample.date_collected || sample.date_collected_free"
               />
-              <data-row
+              <table-row
                 v-if="agent_collected || sample.agent_collected_txt"
                 :title="$t('sample.agentCollected')"
                 :value="agent_collected.agent || sample.agent_collected_txt"
               />
-              <data-row :title="$t('sample.mass')" :value="sample.mass" />
-              <data-row
+              <table-row :title="$t('sample.mass')" :value="sample.mass" />
+              <table-row
                 v-if="sample_purpose"
                 :title="$t('sample.samplePurpose')"
                 :value="
@@ -141,7 +141,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('sample.rock')"
                 :value="
                   $translate({
@@ -150,7 +150,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="classification_rock"
                 :title="$t('sample.classificationRock')"
                 :value="
@@ -160,18 +160,24 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('sample.palaeontology')"
                 :value="sample.palaeontology"
               />
-              <data-row :title="$t('sample.fossils')" :value="sample.fossils" />
-              <data-row :title="$t('sample.remarks')" :value="sample.remarks" />
-              <data-row
+              <table-row
+                :title="$t('sample.fossils')"
+                :value="sample.fossils"
+              />
+              <table-row
+                :title="$t('sample.remarks')"
+                :value="sample.remarks"
+              />
+              <table-row
                 v-if="owner"
                 :title="$t('sample.owner')"
                 :value="owner.agent"
               />
-              <link-data-row
+              <table-row-link
                 v-if="database"
                 :title="$t('sample.database')"
                 :value="
@@ -187,7 +193,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="project"
                 :title="$t('sample.project')"
                 :value="
@@ -197,12 +203,12 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="sample.date_added"
                 :title="$t('sample.dateAdded')"
                 :value="$formatDate(sample.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="sample.date_changed"
                 :title="$t('sample.dateChanged')"
                 :value="$formatDate(sample.date_changed)"
@@ -221,7 +227,7 @@
         <v-simple-table dense class="mb-4 custom-table">
           <template #default>
             <tbody>
-              <link-data-row
+              <table-row-link
                 :title="$t('locality.locality')"
                 :value="
                   $translate({
@@ -237,12 +243,12 @@
                   })
                 "
               >
-              </link-data-row>
-              <data-row
+              </table-row-link>
+              <table-row
                 :title="$t('sample.localityFree')"
                 :value="sample.locality_free"
               />
-              <data-row
+              <table-row
                 v-if="locality.country"
                 :title="$t('locality.country')"
                 :value="
@@ -252,19 +258,22 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('locality.latitude')"
                 :value="locality.latitude"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.longitude')"
                 :value="locality.longitude"
               />
-              <data-row
+              <table-row
                 :title="$t('locality.elevation')"
                 :value="locality.elevation"
               />
-              <data-row :title="$t('locality.depth')" :value="locality.depth" />
+              <table-row
+                :title="$t('locality.depth')"
+                :value="locality.depth"
+              />
             </tbody>
           </template>
         </v-simple-table>
@@ -327,8 +336,8 @@
 <script>
 import { isEmpty, isNil } from 'lodash'
 
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Tabs from '~/components/Tabs.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
@@ -338,8 +347,8 @@ import { TABS_SAMPLE } from '~/constants'
 export default {
   components: {
     HeaderDetail,
-    LinkDataRow,
-    DataRow,
+    TableRowLink,
+    TableRow,
     Tabs,
     LeafletMap,
     Detail,

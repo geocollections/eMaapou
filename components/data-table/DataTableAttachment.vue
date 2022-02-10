@@ -10,7 +10,7 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.file="{ item }">
-      <attachment-cell
+      <thumbnail-attachment
         v-if="item.attachment"
         :src="
           $img(
@@ -54,13 +54,13 @@
 <script>
 import { cloneDeep } from 'lodash'
 import BaseDataTable from '../base/BaseDataTable.vue'
-import AttachmentCell from '~/components/AttachmentCell.vue'
+import ThumbnailAttachment from '~/components/thumbnail/ThumbnailAttachment.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ATTACHMENT } from '~/constants'
 
 export default {
   name: 'DataTableAttachment',
-  components: { BaseDataTable, AttachmentCell },
+  components: { BaseDataTable, ThumbnailAttachment },
   mixins: [headersMixin],
   props: {
     items: {

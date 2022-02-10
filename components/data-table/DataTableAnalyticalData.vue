@@ -89,12 +89,12 @@
       </nuxt-link>
     </template>
     <template #item.reference="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.reference_id"
         @click.native="$openGeology('reference', item.reference_id)"
       >
         {{ item.reference }}
-      </external-link>
+      </base-link-external>
       <div v-else>{{ item.reference_str }}</div>
     </template>
     <template #item.dataset_id="{ item }">
@@ -126,12 +126,12 @@
 import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ExternalLink from '~/components/ExternalLink'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ANALYTICAL_DATA } from '~/constants'
 export default {
   name: 'DataTableAnalyticalData',
-  components: { ExternalLink, BaseDataTable },
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

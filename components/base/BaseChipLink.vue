@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'SearchCard',
+  name: 'BaseChipLink',
   props: {
     title: {
       type: String,

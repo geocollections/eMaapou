@@ -88,15 +88,15 @@
       </nuxt-link>
     </template>
     <template #item.taxon="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.taxon_id"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
-      </external-link>
+      </base-link-external>
     </template>
     <template #item.image="{ item }">
-      <image-cell
+      <thumbnail-image
         v-if="item.image_preview_url"
         :src="item.image_preview_url"
         class="ma-2"
@@ -111,7 +111,7 @@
       />
     </template>
     <template #item.name="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.rock_id"
         @click.native="$openWindow(`https://kivid.info/${item.rock_id}`)"
       >
@@ -121,13 +121,13 @@
             en: item.rock_en,
           })
         }}
-      </external-link>
-      <external-link
+      </base-link-external>
+      <base-link-external
         v-if="item.taxon_id"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
-      </external-link>
+      </base-link-external>
     </template>
   </base-data-table>
 </template>
@@ -137,13 +137,13 @@ import { round, cloneDeep } from 'lodash'
 import { mapState } from 'vuex'
 
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ImageCell from '~/components/ImageCell'
-import ExternalLink from '~/components/ExternalLink'
+import ThumbnailImage from '~/components/thumbnail/ThumbnailImage'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN } from '~/constants'
 export default {
   name: 'DataTableSpecimen',
-  components: { ExternalLink, BaseDataTable, ImageCell },
+  components: { BaseLinkExternal, BaseDataTable, ThumbnailImage },
   mixins: [headersMixin],
   props: {
     items: {

@@ -1,7 +1,7 @@
 <template>
   <v-img
     v-ripple="{ class: 'primary--text darken-2' }"
-    class="image-cell rounded"
+    class="thumbnail-image rounded"
     max-height="80px"
     width="90px"
     aspect-ratio="1"
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'ImageCell',
+  name: 'ThumbnailImage',
   props: {
     src: {
       type: String,
@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.image-cell {
+.thumbnail-image {
   transition: all 0.2s ease-in-out;
   &:hover {
     transform: scale(1.1);

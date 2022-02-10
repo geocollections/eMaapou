@@ -16,7 +16,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row
+              <table-row
                 :title="$t('site.name')"
                 :value="
                   $translate({
@@ -25,7 +25,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="site.area"
                 :value="site.area"
                 :title="$t('site.area')"
@@ -55,9 +55,9 @@
                     }}
                   </div>
                 </template>
-              </data-row>
+              </table-row>
 
-              <data-row
+              <table-row
                 v-if="site.area && site.area.area_type === 2"
                 :value="site.area"
                 :title="$t('site.areaText1')"
@@ -79,8 +79,8 @@
                     >
                   </span>
                 </template>
-              </data-row>
-              <data-row
+              </table-row>
+              <table-row
                 v-if="site.project"
                 :title="$t('site.project')"
                 :value="
@@ -90,12 +90,12 @@
                   })
                 "
               />
-              <data-row :title="$t('site.coordx')" :value="site.coordx" />
-              <data-row :title="$t('site.coordy')" :value="site.coordy" />
-              <data-row :title="$t('site.extent')" :value="site.extent" />
-              <data-row :title="$t('site.depth')" :value="site.depth" />
+              <table-row :title="$t('site.coordx')" :value="site.coordx" />
+              <table-row :title="$t('site.coordy')" :value="site.coordy" />
+              <table-row :title="$t('site.extent')" :value="site.extent" />
+              <table-row :title="$t('site.depth')" :value="site.depth" />
 
-              <link-data-row
+              <table-row-link
                 v-if="locality"
                 :title="$t('locality.locality')"
                 :value="
@@ -112,7 +112,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="locality && locality.country"
                 :title="$t('locality.country')"
                 :value="
@@ -135,34 +135,34 @@
                     })
                   }}
                 </template>
-              </data-row>
+              </table-row>
               <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
-              <data-row
+              <table-row
                 v-if="(site.latitude && site.longitude) || locality"
                 :title="$t('locality.latitude')"
                 :value="site.latitude"
               />
-              <data-row
+              <table-row
                 v-if="(site.latitude && site.longitude) || locality"
                 :title="$t('locality.longitude')"
                 :value="site.longitude"
               />
-              <data-row
+              <table-row
                 v-if="elevation"
                 :title="$t('site.elevation')"
                 :value="elevation"
               />
-              <data-row
+              <table-row
                 v-if="locality"
                 :title="$t('locality.depth')"
                 :value="locality.depth"
               />
-              <data-row
+              <table-row
                 v-if="site.location_accuracy"
                 :title="$t('site.locationAccuracy')"
                 :value="site.location_accuracy"
               />
-              <data-row
+              <table-row
                 v-if="site.coord_det_method"
                 :title="$t('site.coordDetMethod')"
                 :value="
@@ -172,31 +172,31 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('site.description')"
                 :value="site.description"
               />
-              <data-row
+              <table-row
                 v-if="site.remarks"
                 :title="$t('site.remarks')"
                 :value="site.remarks"
               />
-              <data-row
+              <table-row
                 v-if="site.remarks_location"
                 :title="$t('site.remarksLocation')"
                 :value="site.remarks_location"
               />
-              <data-row
+              <table-row
                 v-if="studied"
                 :title="$t('site.studied')"
                 :value="studied"
               />
-              <data-row
+              <table-row
                 v-if="site.date_added"
                 :title="$t('site.dateAdded')"
                 :value="$formatDate(site.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="site.date_changed"
                 :title="$t('site.dateChanged')"
                 :value="$formatDate(site.date_changed)"
@@ -335,8 +335,8 @@ import { isNil } from 'lodash'
 import LeafletMap from '~/components/map/LeafletMap'
 import HeaderDetail from '~/components/HeaderDetail'
 import Tabs from '~/components/Tabs.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { TABS_SITE } from '~/constants'
@@ -346,8 +346,8 @@ export default {
     HeaderDetail,
     Tabs,
     LeafletMap,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     Detail,
     ImageBar,
   },

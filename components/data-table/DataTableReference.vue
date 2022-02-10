@@ -10,12 +10,12 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.id"
         @click.native="$openGeology('reference', item.id)"
       >
         {{ item.reference }}
-      </external-link>
+      </base-link-external>
     </template>
 
     <template #item.journal="{ item }">
@@ -26,12 +26,12 @@
     </template>
 
     <template #item.doi="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.doi"
         @click.native="$openWindow(`https://doi.org/${item.doi}`)"
       >
         {{ item.doi }}
-      </external-link>
+      </base-link-external>
     </template>
   </base-data-table>
 </template>
@@ -39,12 +39,12 @@
 <script>
 import { cloneDeep } from 'lodash'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ExternalLink from '~/components/ExternalLink'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_REFERENCE } from '~/constants'
 export default {
   name: 'DataTableReference',
-  components: { ExternalLink, BaseDataTable },
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

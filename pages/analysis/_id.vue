@@ -27,7 +27,7 @@
               <v-simple-table dense class="custom-table">
                 <template #default>
                   <tbody>
-                    <data-row
+                    <table-row
                       v-if="analysis_method"
                       :title="$t('analysis.method')"
                       :value="
@@ -37,13 +37,13 @@
                         })
                       "
                     />
-                    <data-row
+                    <table-row
                       v-if="agent"
                       :title="$t('analysis.analysedBy')"
                       :value="agent.agent"
                     />
 
-                    <link-data-row
+                    <table-row-link
                       v-if="sample"
                       :title="$t('analysis.sampleNumber')"
                       :value="sample.number"
@@ -56,17 +56,17 @@
                       "
                     />
 
-                    <data-row
+                    <table-row
                       :title="$t('analysis.remarks')"
                       :value="analysis.remarks"
                     />
-                    <link-data-row
+                    <table-row-link
                       v-if="reference"
                       :title="$t('analysis.reference')"
                       :value="reference.reference"
                       @link-click="$openGeology('reference', reference.id)"
                     />
-                    <data-row
+                    <table-row
                       v-if="dataset"
                       :title="$t('analysis.dataset')"
                       :value="
@@ -76,7 +76,7 @@
                         })
                       "
                     />
-                    <link-data-row
+                    <table-row-link
                       v-if="sample && sample.locality"
                       :title="$t('analysis.locality')"
                       :value="
@@ -93,17 +93,17 @@
                         })
                       "
                     />
-                    <data-row
+                    <table-row
                       v-if="sample"
                       :title="$t('analysis.depth')"
                       :value="sample.depth"
                     />
-                    <data-row
+                    <table-row
                       v-if="sample"
                       :title="$t('analysis.depthInterval')"
                       :value="sample.depth_interval"
                     />
-                    <link-data-row
+                    <table-row-link
                       v-if="sample && sample.stratigraphy"
                       :title="$t('analysis.stratigraphy')"
                       :value="
@@ -120,7 +120,7 @@
                         })
                       "
                     />
-                    <link-data-row
+                    <table-row-link
                       v-if="sample && sample.lithostratigraphy"
                       :title="$t('analysis.lithostratigraphy')"
                       :value="
@@ -137,7 +137,7 @@
                         })
                       "
                     />
-                    <link-data-row
+                    <table-row-link
                       v-if="database"
                       :title="$t('analysis.institution')"
                       :value="
@@ -154,12 +154,12 @@
                       "
                     />
 
-                    <data-row
+                    <table-row
                       v-if="analysis.date_added"
                       :title="$t('analysis.dateAdded')"
                       :value="$formatDate(analysis.date_added)"
                     />
-                    <data-row
+                    <table-row
                       v-if="analysis.date_changed"
                       :title="$t('analysis.dateChanged')"
                       :value="$formatDate(analysis.date_changed)"
@@ -187,14 +187,14 @@
 import { isEmpty, isNil } from 'lodash'
 
 import HeaderDetail from '~/components/HeaderDetail.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_ANALYSIS } from '~/constants'
 
 export default {
-  components: { HeaderDetail, DataRow, LinkDataRow, Tabs, Detail },
+  components: { HeaderDetail, TableRow, TableRowLink, Tabs, Detail },
 
   async asyncData({ params, route, error, $services }) {
     try {

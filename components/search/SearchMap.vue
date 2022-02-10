@@ -1,5 +1,5 @@
 <template>
-  <card-expandable
+  <base-card-expand
     :active="active"
     :show-body="showMap"
     @click="showMap = $event"
@@ -29,16 +29,16 @@
         @update="$emit('update')"
       />
     </template>
-  </card-expandable>
+  </base-card-expand>
 </template>
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-import CardExpandable from '../CardExpandable.vue'
+import BaseCardExpand from '../base/BaseCardExpand.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   name: 'SearchMap',
-  components: { LeafletMap, CardExpandable },
+  components: { LeafletMap, BaseCardExpand },
   props: {
     items: {
       type: Array,

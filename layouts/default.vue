@@ -1,9 +1,6 @@
 <template>
   <v-app dark>
-    <navigation-drawer
-      :drawer="drawer"
-      @update:navigationDrawer="drawer = $event"
-    />
+    <app-drawer :drawer="drawer" @update:navigationDrawer="drawer = $event" />
     <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
 
     <v-main>
@@ -16,7 +13,7 @@
           </v-col>
         </v-row>
         <nuxt />
-        <scroll-top-fab />
+        <fab-scroll-top />
       </v-container>
       <client-only>
         <cookie-policy />
@@ -29,18 +26,18 @@
 <script>
 import AppFooter from '~/components/AppFooter.vue'
 import AppHeader from '~/components/AppHeader.vue'
-import ScrollTopFab from '~/components/ScrollTopFab.vue'
+import FabScrollTop from '~/components/FabScrollTop.vue'
 import CookiePolicy from '~/components/CookiePolicy.vue'
 import HistoryViewer from '~/components/HistoryViewer.vue'
-import NavigationDrawer from '~/components/NavigationDrawer.vue'
+import AppDrawer from '~/components/AppDrawer.vue'
 
 export default {
   components: {
-    NavigationDrawer,
+    AppDrawer,
     CookiePolicy,
     AppHeader,
     AppFooter,
-    ScrollTopFab,
+    FabScrollTop,
     HistoryViewer,
   },
   data() {

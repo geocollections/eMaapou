@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'ExternalLink',
+  name: 'BaseLinkExternal',
   props: {
     href: {
       type: String,

@@ -10,12 +10,12 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.identifier="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.identifier"
         @click.native="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "
-        >{{ item.identifier }}</external-link
+        >{{ item.identifier }}</base-link-external
       >
     </template>
 
@@ -40,12 +40,12 @@
 <script>
 import { cloneDeep } from 'lodash'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ExternalLink from '~/components/ExternalLink'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DOI } from '~/constants'
 export default {
   name: 'DataTableDoi',
-  components: { ExternalLink, BaseDataTable },
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

@@ -16,16 +16,16 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row
+              <table-row
                 :title="$t('preparation.preparation_number')"
                 :value="preparation.preparation_number"
               />
 
-              <data-row
+              <table-row
                 :title="$t('preparation.sample_number')"
                 :value="preparation.sample_number"
               />
-              <link-data-row
+              <table-row-link
                 v-if="analysis"
                 :title="$t('preparation.analysis')"
                 :value="analysis.id"
@@ -37,7 +37,7 @@
                   })
                 "
               />
-              <link-data-row
+              <table-row-link
                 v-if="taxon"
                 :title="$t('preparation.taxon')"
                 :value="taxon.taxon"
@@ -45,55 +45,55 @@
                   $openWindow(`https://fossiilid.info/${preparation.taxon.id}`)
                 "
               />
-              <data-row
+              <table-row
                 v-if="agent"
                 :title="$t('preparation.agent')"
                 :value="agent.agent || preparation.agent_txt"
               />
-              <data-row
+              <table-row
                 v-if="identification_agent"
                 :title="$t('preparation.identification_agent')"
                 :value="identification_agent.agent"
               />
-              <data-row
+              <table-row
                 :title="$t('preparation.date_prepared')"
                 :value="
                   preparation.date_prepared || preparation.date_prepared_txt
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('preparation.identification_date')"
                 :value="preparation.identification_date"
               />
-              <data-row
+              <table-row
                 :title="$t('preparation.identification_remarks')"
                 :value="preparation.identification_remarks"
               />
-              <data-row
+              <table-row
                 :title="$t('preparation.location')"
                 :value="preparation.location"
               />
-              <data-row
+              <table-row
                 v-if="storage"
                 :title="$t('preparation.storage')"
                 :value="storage.location"
               />
-              <data-row
+              <table-row
                 v-if="owner"
                 :title="$t('preparation.owner')"
                 :value="owner.agent"
               />
-              <data-row
+              <table-row
                 v-if="preparation.date_added"
                 :title="$t('preparation.dateAdded')"
                 :value="$formatDate(preparation.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="preparation.date_changed"
                 :title="$t('preparation.dateChanged')"
                 :value="$formatDate(preparation.date_changed)"
               />
-              <data-row
+              <table-row
                 :title="$t('preparation.remarks')"
                 :value="preparation.remarks"
               />
@@ -110,7 +110,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <link-data-row
+              <table-row-link
                 v-if="sample"
                 :title="$t('sample.number')"
                 :value="
@@ -127,12 +127,12 @@
                   })
                 "
               />
-              <data-row :title="$t('sample.depth')" :value="sample.depth" />
-              <data-row
+              <table-row :title="$t('sample.depth')" :value="sample.depth" />
+              <table-row
                 :title="$t('sample.depthInterval')"
                 :value="sample.depth_interval"
               />
-              <data-row
+              <table-row
                 :title="$t('sample.dateCollected')"
                 :value="sample.date_collected || sample.date_collected_free"
               />
@@ -156,13 +156,13 @@
 import { isNil } from 'lodash'
 import HeaderDetail from '~/components/HeaderDetail'
 import Tabs from '~/components/Tabs.vue'
-import DataRow from '~/components/DataRow'
-import LinkDataRow from '~/components/LinkDataRow'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink'
 import Detail from '~/templates/Detail.vue'
 import { TABS_PREPARATION } from '~/constants'
 
 export default {
-  components: { LinkDataRow, DataRow, HeaderDetail, Tabs, Detail },
+  components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail },
 
   async asyncData({ params, route, error, $services }) {
     try {

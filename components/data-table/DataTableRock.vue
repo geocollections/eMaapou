@@ -10,12 +10,12 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.id="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.id"
         @click.native="$openWindow(`https://kivid.info/${item.id}`)"
       >
         {{ item.id }}
-      </external-link>
+      </base-link-external>
     </template>
 
     <template #item.formula="{ item }">
@@ -29,14 +29,14 @@
     </template>
 
     <template #item.mindat_id="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.mindat_id"
         @click.native="
           $openWindow(`https://www.mindat.org/min-${item.mindat_id}.html`)
         "
       >
         {{ item.mindat_id }}
-      </external-link>
+      </base-link-external>
     </template>
   </base-data-table>
 </template>
@@ -45,12 +45,12 @@
 import { cloneDeep } from 'lodash'
 import BaseBoolean from '../base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ExternalLink from '~/components/ExternalLink'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ROCK } from '~/constants'
 export default {
   name: 'DataTableRock',
-  components: { ExternalLink, BaseDataTable, BaseBoolean },
+  components: { BaseLinkExternal, BaseDataTable, BaseBoolean },
   mixins: [headersMixin],
   props: {
     items: {

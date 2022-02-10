@@ -87,15 +87,15 @@
                   >
                     <template #default>
                       <tbody>
-                        <data-row
+                        <table-row
                           :title="$t('drillcoreBox.depthStart')"
                           :value="box.drillcore_box.depth_start"
                         />
-                        <data-row
+                        <table-row
                           :title="$t('drillcoreBox.depthEnd')"
                           :value="box.drillcore_box.depth_end"
                         />
-                        <link-data-row
+                        <table-row-link
                           v-if="box.drillcore_box.stratigraphy_top"
                           :title="$t('drillcoreBox.stratigraphyTop')"
                           :value="
@@ -116,7 +116,7 @@
                             })
                           "
                         />
-                        <link-data-row
+                        <table-row-link
                           v-if="box.drillcore_box.stratigraphy_base"
                           :title="$t('drillcoreBox.stratigraphyBase')"
                           :value="
@@ -137,11 +137,11 @@
                             })
                           "
                         />
-                        <data-row
+                        <table-row
                           :title="$t('drillcoreBox.depthOther')"
                           :value="box.drillcore_box.depth_other"
                         />
-                        <data-row
+                        <table-row
                           :title="$t('drillcoreBox.remarks')"
                           :value="box.drillcore_box.remarks"
                         />
@@ -179,12 +179,12 @@
 
 <script>
 import { isNull, debounce } from 'lodash'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import { HEADERS_ATTACHMENT } from '~/constants'
 
 export default {
-  components: { DataRow, LinkDataRow },
+  components: { TableRow, TableRowLink },
   data() {
     return {
       page: 1,

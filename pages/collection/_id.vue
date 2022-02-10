@@ -12,11 +12,11 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <data-row
+              <table-row
                 :title="$t('collection.number')"
                 :value="collection.number"
               />
-              <data-row
+              <table-row
                 :title="$t('collection.name')"
                 :value="
                   $translate({
@@ -25,7 +25,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('collection.nameLong')"
                 :value="
                   $translate({
@@ -34,12 +34,12 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="classification"
                 :title="$t('collection.classification')"
                 :value="classification.class_field"
               />
-              <link-data-row
+              <table-row-link
                 v-if="reference"
                 :title="$t('collection.reference')"
                 :value="
@@ -50,11 +50,11 @@
                 "
                 :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
               />
-              <data-row
+              <table-row
                 :title="$t('collection.numberObjects')"
                 :value="`${collection.number_objects}`"
               />
-              <link-data-row
+              <table-row-link
                 v-if="database"
                 :title="$t('collection.database')"
                 :value="
@@ -70,25 +70,25 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="collection.date_added"
                 :title="$t('collection.dateAdded')"
                 :value="$formatDate(collection.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="collection.date_changed"
                 :title="$t('collection.dateChanged')"
                 :value="$formatDate(collection.date_changed)"
               />
-              <!-- <data-row
+              <!-- <table-row
                 :title="$t('drillcore.boxes')"
                 :value="drillcore.boxes"
               />
-              <data-row
+              <table-row
                 :title="$t('drillcore.boxNumbers')"
                 :value="drillcore.box_numbers"
               />
-              <data-row
+              <table-row
                 v-if="depository"
                 :title="$t('drillcore.repository')"
                 :value="
@@ -98,23 +98,23 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="storage"
                 :title="$t('drillcore.storage')"
                 :value="storage.location"
               />
-              <data-row
+              <table-row
                 v-if="agent"
                 :title="$t('drillcore.driller')"
                 :value="agent.agent"
               />
-              <data-row :title="$t('drillcore.year')" :value="drillcore.year" />
-              <data-row
+              <table-row :title="$t('drillcore.year')" :value="drillcore.year" />
+              <table-row
                 :title="$t('drillcore.metersInBox')"
                 :value="drillcore.number_meters"
               />
 
-              <link-data-row
+              <table-row-link
                 v-if="database"
                 :title="$t('drillcore.database')"
                 :value="
@@ -130,12 +130,12 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="drillcore.date_added"
                 :title="$t('drillcore.dateAdded')"
                 :value="$formatDate(drillcore.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="drillcore.date_changed"
                 :title="$t('drillcore.dateChanged')"
                 :value="$formatDate(drillcore.date_changed)"
@@ -165,16 +165,16 @@
 <script>
 import { isEmpty, isNull } from 'lodash'
 import HeaderDetail from '~/components/HeaderDetail.vue'
-import DataRow from '~/components/DataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
 import Tabs from '~/components/Tabs.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_COLLECTION } from '~/constants/tabs'
 export default {
   components: {
     HeaderDetail,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     Detail,
     Tabs,
   },

@@ -21,7 +21,7 @@
         <v-simple-table dense class="custom-table">
           <template #default>
             <tbody>
-              <link-data-row
+              <table-row-link
                 v-if="stratigraphy.parent"
                 :title="$t('stratigraphy.parentStratigraphy')"
                 :value="
@@ -38,7 +38,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="stratigraphy.type"
                 :title="$t('stratigraphy.type')"
                 :value="
@@ -48,7 +48,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="stratigraphy.rank"
                 :title="$t('stratigraphy.rank')"
                 :value="
@@ -58,7 +58,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="stratigraphy.scope"
                 :title="$t('stratigraphy.scope')"
                 :value="
@@ -68,7 +68,7 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="stratigraphy.status"
                 :title="$t('stratigraphy.status')"
                 :value="
@@ -78,15 +78,15 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('stratigraphy.author')"
                 :value="stratigraphy.author_free"
               />
-              <data-row
+              <table-row
                 :title="$t('stratigraphy.year')"
                 :value="stratigraphy.year"
               />
-              <data-row
+              <table-row
                 :title="$t('stratigraphy.etymon')"
                 :value="
                   $translate({
@@ -95,19 +95,19 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 :title="$t('stratigraphy.originalLocality')"
                 :value="stratigraphy.original_locality"
               />
-              <data-row
+              <table-row
                 :title="$t('stratigraphy.ageTop')"
                 :value="stratigraphy.age_top"
               />
-              <data-row
+              <table-row
                 :title="$t('stratigraphy.ageBase')"
                 :value="stratigraphy.age_base"
               />
-              <link-data-row
+              <table-row-link
                 v-if="stratigraphy.age_chronostratigraphy"
                 :title="$t('stratigraphy.age')"
                 :value="
@@ -126,13 +126,13 @@
                   })
                 "
               />
-              <data-row
+              <table-row
                 v-if="stratigraphy.age_reference"
                 :title="$t('stratigraphy.ageReference')"
                 :value="stratigraphy.age_reference.reference"
               />
 
-              <data-row
+              <table-row
                 v-if="stratigraphy.index_main_html"
                 :title="$t('stratigraphy.index')"
               >
@@ -140,8 +140,8 @@
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="stratigraphy.index_main_html" />
                 </template>
-              </data-row>
-              <data-row
+              </table-row>
+              <table-row
                 v-if="stratigraphy.index_additional_html"
                 :title="$t('stratigraphy.indexAlt')"
               >
@@ -149,13 +149,13 @@
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="stratigraphy.index_additional_html" />
                 </template>
-              </data-row>
-              <data-row
+              </table-row>
+              <table-row
                 v-if="stratigraphy.date_added"
                 :title="$t('stratigraphy.dateAdded')"
                 :value="$formatDate(stratigraphy.date_added)"
               />
-              <data-row
+              <table-row
                 v-if="stratigraphy.date_changed"
                 :title="$t('stratigraphy.dateChanged')"
                 :value="$formatDate(stratigraphy.date_changed)"
@@ -241,16 +241,16 @@ import { STRATOTYPE, TABS_STRATIGRAPHY, HEADERS_STRATOTYPE } from '~/constants'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import DataTableStratigraphyStratotype from '~/components/data-table/DataTableStratigraphyStratotype.vue'
 import Detail from '~/templates/Detail.vue'
 export default {
   components: {
     HeaderDetail,
     Tabs,
-    LinkDataRow,
-    DataRow,
+    TableRowLink,
+    TableRow,
     DataTableStratigraphyStratotype,
     LeafletMap,
     Detail,

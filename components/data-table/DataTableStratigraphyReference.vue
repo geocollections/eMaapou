@@ -10,12 +10,12 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.reference="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.reference"
         @click.native="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </external-link>
+      </base-link-external>
     </template>
     <template #item.year="{ item }">
       <div v-if="item.reference">
@@ -30,13 +30,13 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import ExternalLink from '../ExternalLink.vue'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY_REFERENCE } from '~/constants'
 export default {
   name: 'DataTableStratigraphyReference',
-  components: { BaseDataTable, ExternalLink },
+  components: { BaseDataTable, BaseLinkExternal },
   mixins: [headersMixin],
   props: {
     items: {

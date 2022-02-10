@@ -36,25 +36,25 @@
       </div>
     </template>
     <template #item.reference="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.reference"
         @click.native="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </external-link>
+      </base-link-external>
     </template>
   </base-data-table>
 </template>
 
 <script>
 import { round, cloneDeep } from 'lodash'
-import ExternalLink from '../ExternalLink.vue'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY_STRATOTYPE } from '~/constants'
 export default {
   name: 'DataTableStratigraphyStratotype',
-  components: { BaseDataTable, ExternalLink },
+  components: { BaseDataTable, BaseLinkExternal },
   mixins: [headersMixin],
   props: {
     items: {

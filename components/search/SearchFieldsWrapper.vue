@@ -1,5 +1,5 @@
 <template>
-  <card-expandable
+  <base-card-expand
     :active="active"
     :show-body="showSearchViewForm"
     @click="showSearchViewForm = $event"
@@ -11,15 +11,15 @@
       </div>
     </template>
     <slot></slot>
-  </card-expandable>
+  </base-card-expand>
 </template>
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-import CardExpandable from '~/components/CardExpandable.vue'
+import BaseCardExpand from '~/components/base/BaseCardExpand.vue'
 export default {
   name: 'SearchFieldWrapper',
-  components: { CardExpandable },
+  components: { BaseCardExpand },
   props: {
     active: {
       type: Boolean,

@@ -66,12 +66,12 @@
                 :key="`tab-mobile-${index}`"
                 class="px-1 pb-2 white--text"
               >
-                <search-card
+                <base-chip-link
                   height="50px"
                   :title="$t(route.text)"
                   :card-class="route.class"
                   :to="localePath({ name: route.routeName })"
-                ></search-card>
+                ></base-chip-link>
               </div>
             </div>
           </div>
@@ -83,12 +83,12 @@
 
 <script>
 import { isEmpty } from 'lodash'
-import SearchCard from '~/components/SearchCard.vue'
+import BaseChipLink from '~/components/base/BaseChipLink.vue'
 import SearchFromQuick from '~/components/search/forms/SearchFormQuick.vue'
 export default {
   name: 'TheSearchCard',
   components: {
-    SearchCard,
+    BaseChipLink,
     SearchFromQuick,
   },
   props: {

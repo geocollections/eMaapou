@@ -10,33 +10,33 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.taxon="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.id"
         @click.native="$openWindow(`https://fossiilid.info/${item.id}`)"
       >
         {{ `${item.taxon} ${item.author_year ? item.author_year : ''}` }}
-      </external-link>
+      </base-link-external>
     </template>
 
     <template #item.fossil_group="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.fossil_group_id"
         @click.native="
           $openWindow(`https://fossiilid.info/${item.fossil_group_id}`)
         "
       >
         {{ item.fossil_group }}
-      </external-link>
+      </base-link-external>
       <div v-else>{{ item.fossil_group }}</div>
     </template>
 
     <template #item.parent_taxon="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.parent_id"
         @click.native="$openWindow(`https://fossiilid.info/${item.parent_id}`)"
       >
         {{ item.parent_taxon }}
-      </external-link>
+      </base-link-external>
       <div v-else>{{ item.parent_taxon }}</div>
     </template>
 
@@ -81,12 +81,12 @@
 import { mapState } from 'vuex'
 import { round, cloneDeep } from 'lodash'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ExternalLink from '~/components/ExternalLink'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_TAXON } from '~/constants'
 export default {
   name: 'DataTableTaxon',
-  components: { ExternalLink, BaseDataTable },
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

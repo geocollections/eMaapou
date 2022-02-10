@@ -18,11 +18,11 @@
             <v-simple-table dense class="custom-table">
               <template #default>
                 <tbody>
-                  <data-row
+                  <table-row
                     :title="$t('area.name')"
                     :value="$translate({ et: area.name, en: area.name_en })"
                   />
-                  <link-data-row
+                  <table-row-link
                     v-if="area.area_type === 2"
                     :title="$t('area.areaType')"
                     :value="
@@ -33,7 +33,7 @@
                     "
                     @link-click="$openTurba('turbaala', area.id)"
                   />
-                  <data-row
+                  <table-row
                     v-else
                     :title="$t('area.areaType')"
                     :value="
@@ -43,7 +43,7 @@
                       })
                     "
                   />
-                  <data-row
+                  <table-row
                     :title="$t('area.county')"
                     :value="
                       $translate({
@@ -52,12 +52,12 @@
                       })
                     "
                   />
-                  <data-row :title="$t('area.areaHa')" :value="area.area_ha" />
-                  <data-row
+                  <table-row :title="$t('area.areaHa')" :value="area.area_ha" />
+                  <table-row
                     :title="$t('area.depositAreaHa')"
                     :value="area.deposit_area_ha"
                   />
-                  <data-row
+                  <table-row
                     v-if="
                       $translate({
                         et: area.description,
@@ -78,8 +78,8 @@
                       />
                       <!-- eslint-enable -->
                     </template>
-                  </data-row>
-                  <data-row :title="$t('area.egf')">
+                  </table-row>
+                  <table-row :title="$t('area.egf')">
                     <template #value>
                       <span v-for="(item, index) in egfArray" :key="index">
                         <a class="text-link" @click="$openEgf(item)">
@@ -90,16 +90,16 @@
                         >
                       </span>
                     </template>
-                  </data-row>
-                  <link-data-row
+                  </table-row>
+                  <table-row-link
                     :title="$t('area.maardla')"
                     @link-click="$openEelis(item)"
                   >
                     <template #value>
                       {{ $t('area.maardlaLink') }} ({{ area.maardla }})
                     </template>
-                  </link-data-row>
-                  <data-row :title="$t('area.eelis')">
+                  </table-row-link>
+                  <table-row :title="$t('area.eelis')">
                     <template #value>
                       <span v-for="(item, index) in eelisArray" :key="index">
                         <a class="text-link" @click="$openEelis(item)">
@@ -112,9 +112,9 @@
                         >
                       </span>
                     </template>
-                  </data-row>
+                  </table-row>
 
-                  <data-row
+                  <table-row
                     v-if="area.area_type === 2"
                     :title="$t('area.text1')"
                     :value="planArray"
@@ -136,13 +136,13 @@
                         >
                       </span>
                     </template>
-                  </data-row>
-                  <data-row
+                  </table-row>
+                  <table-row
                     v-if="area.date_added"
                     :title="$t('area.dateAdded')"
                     :value="$formatDate(area.date_added)"
                   />
-                  <data-row
+                  <table-row
                     v-if="area.date_changed"
                     :title="$t('area.dateChanged')"
                     :value="$formatDate(area.date_changed)"
@@ -171,7 +171,7 @@
             <v-simple-table dense class="custom-table">
               <template #default>
                 <tbody>
-                  <link-data-row
+                  <table-row-link
                     :title="$t('deposit.registrationNo')"
                     :value="deposit.id"
                     @link-click="
@@ -180,47 +180,47 @@
                       )
                     "
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.name')"
                     :value="`${deposit.nimetus} ${
                       deposit.maardla_os ? `(${deposit.maardla_os})` : ''
                     }`"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.name')"
                     :value="deposit.maardla_os"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.area')"
                     :value="deposit.pindala"
                   />
-                  <data-row :title="$t('deposit.isBedrock')">
+                  <table-row :title="$t('deposit.isBedrock')">
                     <template #value>
                       <base-boolean :value="deposit.aluspohja" />
                     </template>
-                  </data-row>
-                  <data-row
+                  </table-row>
+                  <table-row
                     :title="$t('deposit.commodity')"
                     :value="deposit.maavara"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.usage')"
                     :value="deposit.pohimaavar"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.additionalCommodity')"
                     :value="deposit.kaasmaavar"
                   />
 
-                  <data-row
+                  <table-row
                     :title="$t('deposit.miningConditions')"
                     :value="deposit.maeteh_ti"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.enviromentalRestrictions')"
                     :value="deposit.geookol_ti"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('deposit.dataExportDate')"
                     :value="deposit.eksporditi"
                   />
@@ -248,11 +248,11 @@
             <v-simple-table dense class="custom-table">
               <template #default>
                 <tbody>
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.number')"
                     :value="area.maaamet_maeeraldis.id"
                   />
-                  <link-data-row
+                  <table-row-link
                     :title="$t('miningClaim.registrationNo')"
                     :value="miningClaim.reg_kaart"
                     @link-click="
@@ -261,7 +261,7 @@
                       )
                     "
                   />
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.name')"
                     :value="`${miningClaim.nimetus} ${
                       miningClaim.maardla_os
@@ -269,33 +269,33 @@
                         : ''
                     }`"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.area')"
                     :value="miningClaim.pindala"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.reserve')"
                     :value="miningClaim.erald_varu"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.usage')"
                     :value="miningClaim.kas_eesm"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.reclamation')"
                     :value="miningClaim.rekult"
                   />
 
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.status')"
                     :value="miningClaim.me_olek"
                   />
-                  <data-row
+                  <table-row
                     v-if="miningClaim.loa_number"
                     :title="$t('miningClaim.extractionPermit')"
                   >
                     <template #value>
-                      <external-link
+                      <base-link-external
                         @click.native="
                           $openWindow(
                             `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
@@ -303,22 +303,22 @@
                         "
                       >
                         {{ miningClaim.loa_number }}
-                      </external-link>
+                      </base-link-external>
                       {{
                         ` (${miningClaim.loa_algus} - ${miningClaim.loa_lopp})`
                       }}
                     </template>
-                  </data-row>
-                  <data-row
+                  </table-row>
+                  <table-row
                     :title="$t('miningClaim.permitOwner')"
                     :value="miningClaim.loa_omanik"
                   />
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.miningCompany')"
                     :value="miningClaim.kaevandaja"
                   />
 
-                  <data-row
+                  <table-row
                     :title="$t('miningClaim.dataExportDate')"
                     :value="miningClaim.eksporditi"
                   />
@@ -362,24 +362,24 @@
 import { isNil } from 'lodash'
 import HeaderDetail from '~/components/HeaderDetail'
 import Tabs from '~/components/Tabs.vue'
-import DataRow from '~/components/DataRow.vue'
-import LinkDataRow from '~/components/LinkDataRow.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import { TABS_AREA } from '~/constants'
 import BaseBoolean from '~/components/base/BaseBoolean.vue'
-import ExternalLink from '~/components/ExternalLink.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 
 export default {
   components: {
     LeafletMap,
     HeaderDetail,
     Tabs,
-    DataRow,
-    LinkDataRow,
+    TableRow,
+    TableRowLink,
     Detail,
     BaseBoolean,
-    ExternalLink,
+    BaseLinkExternal,
   },
   async asyncData({ params, route, error, $services }) {
     try {

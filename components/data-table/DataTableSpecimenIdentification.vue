@@ -10,12 +10,12 @@
     @reset:headers="$_handleHeadersReset"
   >
     <template #item.name="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.taxon"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
         {{ item.taxon.taxon }}
-      </external-link>
+      </base-link-external>
 
       <div v-if="item.name">| {{ item.name }}</div>
     </template>
@@ -28,12 +28,12 @@
       {{ item.date_identified }}
     </template>
     <template #item.reference="{ item }">
-      <external-link
+      <base-link-external
         v-if="item.reference"
         @click.native="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </external-link>
+      </base-link-external>
     </template>
     <template #item.type="{ item }">
       <div v-if="item.identification_type">
@@ -53,14 +53,14 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import ExternalLink from '../ExternalLink.vue'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
 import BaseBoolean from '../base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   name: 'DataTableSpecimenIdentification',
-  components: { BaseDataTable, ExternalLink, BaseBoolean },
+  components: { BaseDataTable, BaseLinkExternal, BaseBoolean },
   mixins: [headersMixin],
   props: {
     items: {
