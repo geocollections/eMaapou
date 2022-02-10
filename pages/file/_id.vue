@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail :ids="ids" :title="fileTitle" class="title-main" />
+      <header-detail :ids="ids" :title="fileTitle" class="title-main" />
     </template>
     <template #column-left>
       <v-card-text class="text-center">
@@ -508,7 +508,7 @@
 
 <script>
 import { isNull, isNil } from 'lodash'
-import TitleCardDetail from '~/components/TitleCardDetail'
+import HeaderDetail from '~/components/HeaderDetail'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap'
@@ -518,7 +518,7 @@ import LasChart from '~/components/chart/types/LasChart'
 export default {
   components: {
     LasChart,
-    TitleCardDetail,
+    HeaderDetail,
     LeafletMap,
     DataRow,
     LinkDataRow,

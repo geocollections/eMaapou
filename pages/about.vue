@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title-card
+    <base-header
       :title="$t('about.title')"
       class="title-heading"
       style="border-color: var(--v-header-darken1)"
@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
-  components: { TitleCard },
+  components: { BaseHeader },
   async asyncData({ route, error, app }) {
     try {
       const data = await app.$services.sarvREST.getResource('web_pages', 78)

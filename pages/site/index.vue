@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('site.pageTitle')"
         icon="mdi-map-marker-star-outline"
         class="title-site"
@@ -34,14 +34,14 @@ import { mapState, mapActions } from 'vuex'
 import SearchFormSite from '~/components/search/forms/SearchFormSite'
 import DataTableSite from '~/components/data-table/DataTableSite.vue'
 import Search from '~/templates/Search'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     SearchFormSite,
     DataTableSite,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

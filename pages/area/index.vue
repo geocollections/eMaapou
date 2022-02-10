@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card :title="$t('area.pageTitle')" class="title-area" />
+      <base-header :title="$t('area.pageTitle')" class="title-area" />
     </template>
 
     <template #form>
@@ -30,14 +30,14 @@ import { mapState, mapActions } from 'vuex'
 import SearchFormArea from '~/components/search/forms/SearchFormArea.vue'
 import DataTableArea from '~/components/data-table/DataTableArea.vue'
 import Search from '~/templates/Search.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     DataTableArea,
     SearchFormArea,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

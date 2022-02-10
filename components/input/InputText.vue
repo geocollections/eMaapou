@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'TextField',
+  name: 'InputText',
   props: {
     value: { type: String, default: '' },
     label: { type: String, default: '' },

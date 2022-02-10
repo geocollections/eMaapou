@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'AutocompleteField',
+  name: 'InputAutocomplete',
   props: {
     removeClearable: Boolean,
     doNotCache: Boolean,

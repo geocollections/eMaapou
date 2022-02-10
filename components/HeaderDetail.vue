@@ -1,5 +1,5 @@
 <template>
-  <title-card>
+  <base-header>
     <v-card-title
       class="
         d-flex
@@ -114,20 +114,20 @@
         </v-btn>
       </div>
     </template>
-  </title-card>
+  </base-header>
 </template>
 
 <script>
 import { debounce } from 'lodash'
 import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
-import TitleCard from './TitleCard.vue'
+import BaseHeader from './base/BaseHeader.vue'
 
 export default {
-  name: 'TitleCardDetail',
+  name: 'HeaderDetail',
   components: {
     EditButton,
-    TitleCard,
+    BaseHeader,
     BackButtonDetail,
   },
   props: {

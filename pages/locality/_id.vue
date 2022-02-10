@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="$translate({ et: locality.locality, en: locality.locality_en })"
         class="title-locality"
@@ -265,7 +265,7 @@
 <script>
 import { isNil, isEmpty } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import DataRow from '~/components/DataRow.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
@@ -276,7 +276,7 @@ import { TABS_LOCALITY } from '~/constants'
 
 export default {
   components: {
-    TitleCardDetail,
+    HeaderDetail,
     DataRow,
     LinkDataRow,
     LeafletMap,

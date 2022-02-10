@@ -1,19 +1,19 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('specimen')">
-      <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
+      <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
 
-      <text-field
+      <input-text
         v-model="collectionNr"
         :label="$t(filters.byIds.collectionNr.label)"
       />
-      <text-field
+      <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
-      <autocomplete-field
+      <input-autocomplete
         v-model="hierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
@@ -22,7 +22,7 @@
         @search:items="autocompleteStratigraphySearch"
       />
 
-      <text-field v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
+      <input-text v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
     </search-fields-wrapper>
 
     <search-institution-filter
@@ -42,20 +42,20 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import TextField from '~/components/fields/TextField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormSpecimen',
   components: {
     SearchInstitutionFilter,
-    AutocompleteField,
-    TextField,
+    InputAutocomplete,
+    InputText,
     SearchFieldsWrapper,
     SearchActions,
-    QuerySearchField,
+    InputSearch,
   },
   mixins: [autocompleteMixin],
   data() {

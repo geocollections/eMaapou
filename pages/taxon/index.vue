@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('taxon.pageTitle')"
         :subtitle="$t('common.count', { count: count })"
         icon="mdi-family-tree"
@@ -35,14 +35,14 @@ import { mapState, mapActions } from 'vuex'
 import Search from '~/templates/Search'
 import SearchFormTaxon from '~/components/search/forms/SearchFormTaxon.vue'
 import DataTableTaxon from '~/components/data-table/DataTableTaxon'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     SearchFormTaxon,
     DataTableTaxon,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

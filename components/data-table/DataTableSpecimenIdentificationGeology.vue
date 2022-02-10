@@ -49,7 +49,7 @@
       </div>
     </template>
     <template #item.current="{ item }">
-      <boolean-indicator :value="item.current" />
+      <base-boolean :value="item.current" />
     </template>
   </base-data-table>
 </template>
@@ -57,13 +57,13 @@
 <script>
 import { cloneDeep } from 'lodash'
 import ExternalLink from '../ExternalLink.vue'
-import BooleanIndicator from '../BooleanIndicator.vue'
+import BaseBoolean from '../base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
 export default {
   name: 'DataTableSpecimenIdentificationGeology',
-  components: { BaseDataTable, ExternalLink, BooleanIndicator },
+  components: { BaseDataTable, ExternalLink, BaseBoolean },
   mixins: [headersMixin],
   props: {
     showSearch: {

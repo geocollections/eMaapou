@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'QuerySearchField',
+  name: 'InputSearch',
   props: {
     showButton: {
       type: Boolean,

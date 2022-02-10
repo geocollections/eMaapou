@@ -2,7 +2,7 @@
   <div>
     <v-row no-gutters justify="center" align="center">
       <v-col class="pt-5">
-        <title-card :title="$t('landing.searchTitle')" class="title-heading" />
+        <base-header :title="$t('landing.searchTitle')" class="title-heading" />
       </v-col>
     </v-row>
     <v-row class="px-sm-3" no-gutters>
@@ -11,7 +11,7 @@
           <v-card-title class="py-1 pl-2 montserrat">
             {{ $t('common.showSearch') }}
           </v-card-title>
-          <query-search-field v-model="query" @input="handleSearch" />
+          <input-search v-model="query" @input="handleSearch" />
         </v-card>
       </v-col>
       <v-col class="pt-2 pt-md-0">
@@ -41,12 +41,12 @@
 import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
 import { mapFields } from 'vuex-map-fields'
 import ButtonTabs from '~/components/ButtonTabs.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 import { TABS_QUICK_SEARCH } from '~/constants'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   name: 'QuickSearch',
-  components: { ButtonTabs, TitleCard, QuerySearchField },
+  components: { ButtonTabs, BaseHeader, InputSearch },
   // layout: 'search',
   async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab, from }) {
     try {

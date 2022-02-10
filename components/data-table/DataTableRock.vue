@@ -25,7 +25,7 @@
     </template>
 
     <template #item.in_estonia="{ item }">
-      <boolean-indicator :value="item.is_estonia" />
+      <base-boolean :value="!!item.in_estonia" />
     </template>
 
     <template #item.mindat_id="{ item }">
@@ -43,14 +43,14 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import BooleanIndicator from '../BooleanIndicator.vue'
+import BaseBoolean from '../base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import ExternalLink from '~/components/ExternalLink'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ROCK } from '~/constants'
 export default {
   name: 'DataTableRock',
-  components: { ExternalLink, BaseDataTable, BooleanIndicator },
+  components: { ExternalLink, BaseDataTable, BaseBoolean },
   mixins: [headersMixin],
   props: {
     items: {

@@ -1,11 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
-        :ids="ids"
-        :title="drillcoreBoxTitle"
-        class="title-main"
-      />
+      <header-detail :ids="ids" :title="drillcoreBoxTitle" class="title-main" />
     </template>
     <template #top>
       <v-card v-if="activeImage" class="my-2">
@@ -283,7 +279,7 @@
 import { isNull, isNil } from 'lodash'
 
 import Tabs from '~/components/Tabs.vue'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/templates/Detail.vue'
@@ -294,7 +290,7 @@ export default {
     Tabs,
     DataRow,
     LinkDataRow,
-    TitleCardDetail,
+    HeaderDetail,
     Detail,
   },
   async asyncData({ params, route, error, $services }) {

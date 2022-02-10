@@ -1,16 +1,16 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('sample')">
-      <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
+      <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
 
-      <text-field
+      <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
 
-      <autocomplete-field
+      <input-autocomplete
         v-model="hierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
@@ -19,17 +19,14 @@
         @search:items="autocompleteStratigraphySearch"
       />
 
-      <text-field
+      <input-text
         v-model="collector"
         :label="$t(filters.byIds.collector.label)"
       />
-      <range-text-field
-        v-model="depth"
-        :label="$t(filters.byIds.depth.label)"
-      />
+      <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
 
-      <text-field v-model="mass" :label="$t(filters.byIds.mass.label)" />
-      <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+      <input-text v-model="mass" :label="$t(filters.byIds.mass.label)" />
+      <input-text v-model="project" :label="$t(filters.byIds.project.label)" />
     </search-fields-wrapper>
     <search-map
       sample-overlay
@@ -55,24 +52,24 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import RangeTextField from '~/components/fields/RangeTextField.vue'
-import TextField from '~/components/fields/TextField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import InputRange from '~/components/input/InputRange.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import SearchMap from '~/components/search/SearchMap.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormSample',
   components: {
     SearchInstitutionFilter,
-    AutocompleteField,
-    TextField,
-    RangeTextField,
+    InputAutocomplete,
+    InputText,
+    InputRange,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   mixins: [autocompleteMixin],
   data() {

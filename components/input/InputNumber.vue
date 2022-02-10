@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'NumberField',
+  name: 'InputNumber',
   props: {
     value: { type: Number, default: 0 },
     label: { type: String, default: '' },

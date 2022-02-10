@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail :ids="ids" :title="title" class="title-drillcore" />
+      <header-detail :ids="ids" :title="title" class="title-drillcore" />
     </template>
 
     <template #column-left>
@@ -164,7 +164,7 @@
 
 <script>
 import { isEmpty, isNull } from 'lodash'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import Tabs from '~/components/Tabs.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -172,7 +172,7 @@ import Detail from '~/templates/Detail.vue'
 import { TABS_COLLECTION } from '~/constants/tabs'
 export default {
   components: {
-    TitleCardDetail,
+    HeaderDetail,
     DataRow,
     LinkDataRow,
     Detail,

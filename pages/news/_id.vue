@@ -5,7 +5,7 @@
         <div class="text-right montserrat pr-4">
           {{ $formatDate(news.date_added) }}
         </div>
-        <title-card
+        <base-header
           :title="$translate({ et: news.title_et, en: news.title_en })"
           class="title-heading"
           style="border-color: var(--v-header-darken1)"
@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
-  components: { TitleCard },
+  components: { BaseHeader },
   async asyncData({
     params,
     route,

@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'TitleCard',
+  name: 'BaseHeader',
   props: {
     title: {
       type: String,

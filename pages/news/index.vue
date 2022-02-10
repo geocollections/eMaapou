@@ -2,10 +2,10 @@
   <div>
     <v-row>
       <v-col>
-        <title-card
+        <base-header
           :title="$t('common.news')"
           class="title-heading"
-        ></title-card>
+        ></base-header>
       </v-col>
     </v-row>
     <v-row no-gutters>
@@ -45,10 +45,10 @@
 
 <script>
 import NewsPreviewCard from '~/components/NewsPreviewCard.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
   components: {
-    TitleCard,
+    BaseHeader,
     NewsPreviewCard,
   },
   data() {

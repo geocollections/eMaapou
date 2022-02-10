@@ -1,34 +1,34 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('image')">
-      <text-field
+      <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
 
-      <text-field v-model="people" :label="$t(filters.byIds.people.label)" />
+      <input-text v-model="people" :label="$t(filters.byIds.people.label)" />
 
-      <text-field v-model="tags" :label="$t(filters.byIds.tags.label)" />
+      <input-text v-model="tags" :label="$t(filters.byIds.tags.label)" />
 
-      <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
+      <input-text v-model="country" :label="$t(filters.byIds.country.label)" />
 
-      <range-text-field v-model="date" :label="$t(filters.byIds.date.label)" />
+      <input-range v-model="date" :label="$t(filters.byIds.date.label)" />
 
-      <text-field
+      <input-text
         v-model="dateFree"
         :label="$t(filters.byIds.dateFree.label)"
       />
 
-      <text-field
+      <input-text
         v-model="imageNumber"
         :label="$t(filters.byIds.imageNumber.label)"
       />
 
-      <text-field v-model="author" :label="$t(filters.byIds.author.label)" />
+      <input-text v-model="author" :label="$t(filters.byIds.author.label)" />
 
-      <text-field
+      <input-text
         v-model="imageSize"
         :label="$t(filters.byIds.imageSize.label)"
       />
@@ -56,22 +56,22 @@ import { isEmpty } from 'lodash'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import TextField from '~/components/fields/TextField.vue'
+import InputText from '~/components/input/InputText.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
-import RangeTextField from '~/components/fields/RangeTextField'
+import InputRange from '~/components/input/InputRange'
 import SearchMap from '~/components/search/SearchMap'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormPhoto',
   components: {
-    RangeTextField,
+    InputRange,
     SearchInstitutionFilter,
-    TextField,
+    InputText,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   props: {
     markers: {

@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('stratigraphy.pageTitle')"
         icon="mdi-layers-triple"
         class="title-stratigraphy"
@@ -34,14 +34,14 @@ import { mapState, mapActions } from 'vuex'
 import Search from '~/templates/Search'
 import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     SearchFormStratigraphy,
     DataTableStratigraphy,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

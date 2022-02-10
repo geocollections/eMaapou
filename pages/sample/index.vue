@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('sample.pageTitle')"
         icon="mdi-test-tube"
         class="title-sample"
@@ -34,14 +34,14 @@ import { mapState, mapActions } from 'vuex'
 import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import Search from '~/templates/Search'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     SearchFormSample,
     DataTableSample,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

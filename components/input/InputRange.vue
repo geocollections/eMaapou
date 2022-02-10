@@ -41,7 +41,7 @@
 <script>
 import rangeFieldMixin from '~/mixins/rangeFieldMixin'
 export default {
-  name: 'RangeTextField',
+  name: 'InputRange',
   mixins: [rangeFieldMixin],
   data() {
     return {

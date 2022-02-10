@@ -1,16 +1,16 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('taxon')">
-      <text-field v-model="species" :label="$t(filters.byIds.species.label)" />
+      <input-text v-model="species" :label="$t(filters.byIds.species.label)" />
 
-      <text-field
+      <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
 
-      <autocomplete-field
+      <input-autocomplete
         v-model="stratigraphyHierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
@@ -19,7 +19,7 @@
         @search:items="autocompleteStratigraphySearch"
       />
 
-      <autocomplete-field
+      <input-autocomplete
         v-model="taxonHierarchy"
         :items="autocomplete.taxon"
         :loading="autocomplete.loaders.taxon"
@@ -28,7 +28,7 @@
         @search:items="autocompleteTaxonSearch"
       />
 
-      <text-field v-model="author" :label="$t(filters.byIds.author.label)" />
+      <input-text v-model="author" :label="$t(filters.byIds.author.label)" />
     </search-fields-wrapper>
     <search-map
       locality-overlay
@@ -46,21 +46,21 @@ import { mapFields } from 'vuex-map-fields'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import TextField from '~/components/fields/TextField'
-import AutocompleteField from '~/components/fields/AutocompleteField'
+import InputText from '~/components/input/InputText'
+import InputAutocomplete from '~/components/input/InputAutocomplete'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import SearchMap from '~/components/search/SearchMap'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormTaxon',
   components: {
-    AutocompleteField,
-    TextField,
+    InputAutocomplete,
+    InputText,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   mixins: [autocompleteMixin],
   data() {

@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
@@ -196,7 +196,7 @@
 <script>
 import { isEmpty, isNull } from 'lodash'
 import LeafletMap from '~/components/map/LeafletMap.vue'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -205,7 +205,7 @@ import { TABS_DRILLCORE } from '~/constants'
 
 export default {
   components: {
-    TitleCardDetail,
+    HeaderDetail,
     Tabs,
     LeafletMap,
     DataRow,

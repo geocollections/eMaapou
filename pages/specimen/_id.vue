@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail :ids="ids" class="title-specimen">
+      <header-detail :ids="ids" class="title-specimen">
         <div>
           {{ title }}
         </div>
@@ -20,7 +20,7 @@
           :href="`https://fossiilid.info/${specimenAlt.taxon_id}`"
           >{{ titleAlt }}</a
         >
-      </title-card-detail>
+      </header-detail>
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">
@@ -233,7 +233,7 @@
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/templates/Detail.vue'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
@@ -241,7 +241,7 @@ import { TABS_SPECIMEN } from '~/constants'
 export default {
   components: {
     Detail,
-    TitleCardDetail,
+    HeaderDetail,
     DataRow,
     LinkDataRow,
     LeafletMap,

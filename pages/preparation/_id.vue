@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="preparation.preparation_number"
         class="title-preparation"
@@ -154,7 +154,7 @@
 
 <script>
 import { isNil } from 'lodash'
-import TitleCardDetail from '~/components/TitleCardDetail'
+import HeaderDetail from '~/components/HeaderDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow'
 import LinkDataRow from '~/components/LinkDataRow'
@@ -162,7 +162,7 @@ import Detail from '~/templates/Detail.vue'
 import { TABS_PREPARATION } from '~/constants'
 
 export default {
-  components: { LinkDataRow, DataRow, TitleCardDetail, Tabs, Detail },
+  components: { LinkDataRow, DataRow, HeaderDetail, Tabs, Detail },
 
   async asyncData({ params, route, error, $services }) {
     try {

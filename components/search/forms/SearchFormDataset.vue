@@ -1,14 +1,14 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('dataset')">
-      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
-      <text-field v-model="owner" :label="$t(filters.byIds.owner.label)" />
-      <text-field v-model="date" :label="$t(filters.byIds.date.label)" />
-      <text-field v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
+      <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
+      <input-text v-model="owner" :label="$t(filters.byIds.owner.label)" />
+      <input-text v-model="date" :label="$t(filters.byIds.date.label)" />
+      <input-text v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
 
-      <autocomplete-field
+      <input-autocomplete
         :label="$t('dataset.parameters')"
         chips
         clearable
@@ -40,19 +40,19 @@ import { isEmpty } from 'lodash'
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
-import TextField from '~/components/fields/TextField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormDataset',
   components: {
     SearchInstitutionFilter,
-    TextField,
+    InputText,
     SearchActions,
-    AutocompleteField,
+    InputAutocomplete,
     SearchFieldsWrapper,
-    QuerySearchField,
+    InputSearch,
   },
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title-card
+    <base-header
       :title="$translate({ et: page.title_et, en: page.title_en })"
       class="title-heading"
     />
@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
-  components: { TitleCard },
+  components: { BaseHeader },
   async asyncData({ route, error, app }) {
     try {
       const data = await app.$services.sarvREST.getResource('web_pages', 90)

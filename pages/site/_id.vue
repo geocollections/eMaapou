@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="$translate({ et: site.name, en: site.name_en })"
         class="title-site"
@@ -333,7 +333,7 @@
 <script>
 import { isNil } from 'lodash'
 import LeafletMap from '~/components/map/LeafletMap'
-import TitleCardDetail from '~/components/TitleCardDetail'
+import HeaderDetail from '~/components/HeaderDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -343,7 +343,7 @@ import { TABS_SITE } from '~/constants'
 
 export default {
   components: {
-    TitleCardDetail,
+    HeaderDetail,
     Tabs,
     LeafletMap,
     DataRow,

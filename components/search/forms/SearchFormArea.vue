@@ -1,14 +1,14 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('area')">
-      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
+      <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <!--
         NOTE: Search on estonian county names. These don't contain spaces and therefore don't break the search.
         This probably won't be a problem in the future.
        -->
-      <autocomplete-field
+      <input-autocomplete
         v-model="county"
         :items="counties"
         :return-object="false"
@@ -18,7 +18,7 @@
         :label="$t(filters.byIds.county.label)"
       />
       <!-- NOTE: Same as with counties above. But this might be a problem when new types are added. -->
-      <autocomplete-field
+      <input-autocomplete
         v-model="type"
         :items="types"
         :return-object="false"
@@ -37,17 +37,17 @@ import { mapFields } from 'vuex-map-fields'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import TextField from '~/components/fields/TextField.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 export default {
   name: 'SearchFormArea',
   components: {
-    TextField,
+    InputText,
     SearchFieldsWrapper,
     SearchActions,
-    QuerySearchField,
-    AutocompleteField,
+    InputSearch,
+    InputAutocomplete,
   },
   data() {
     return {

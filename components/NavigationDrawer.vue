@@ -270,9 +270,9 @@ export default {
 
 <style scoped>
 .more-menu .section-title {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-size: 13px;
+  font-weight: 500;
+  /* letter-spacing: 1.5px; */
   margin-top: 24px;
   text-transform: uppercase;
 }

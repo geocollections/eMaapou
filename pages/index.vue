@@ -154,7 +154,10 @@
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row class="my-2 my-sm-10" justify="center" align="center">
         <v-col id="otherServices" cols="12">
-          <title-card :title="$t('landing.otherPages')" class="title-heading" />
+          <base-header
+            :title="$t('landing.otherPages')"
+            class="title-heading"
+          />
         </v-col>
         <v-col>
           <v-row class="px-2 px-sm-5">
@@ -188,7 +191,7 @@
           </client-only>
         </v-col>
         <v-col cols="12" lg="6">
-          <title-card :title="$t('about.title')" class="title-heading" />
+          <base-header :title="$t('about.title')" class="title-heading" />
 
           <div
             class="aboutpage px-2 px-sm-5"
@@ -204,14 +207,14 @@
 <script>
 import { isEmpty } from 'lodash'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
 import TheSearchCard from '~/components/landing/TheSearchCard.vue'
 import TheMapCard from '~/components/landing/TheMapCard.vue'
 export default {
   components: {
     ExternalLinkCard,
-    TitleCard,
+    BaseHeader,
     TheNewsCard,
     TheSearchCard,
     TheMapCard,

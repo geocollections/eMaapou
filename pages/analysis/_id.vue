@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="
           $t('analysis.title', {
@@ -186,7 +186,7 @@
 <script>
 import { isEmpty, isNil } from 'lodash'
 
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -194,7 +194,7 @@ import Detail from '~/templates/Detail.vue'
 import { TABS_ANALYSIS } from '~/constants'
 
 export default {
-  components: { TitleCardDetail, DataRow, LinkDataRow, Tabs, Detail },
+  components: { HeaderDetail, DataRow, LinkDataRow, Tabs, Detail },
 
   async asyncData({ params, route, error, $services }) {
     try {

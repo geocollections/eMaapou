@@ -1,11 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
-        :ids="ids"
-        :title="dataset.title"
-        class="title-dataset"
-      />
+      <header-detail :ids="ids" :title="dataset.title" class="title-dataset" />
     </template>
 
     <template #column-left>
@@ -186,7 +182,7 @@
 <script>
 import { isEmpty, isNil } from 'lodash'
 
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import DataRow from '~/components/DataRow.vue'
@@ -197,7 +193,7 @@ import { TABS_DATASET } from '~/constants'
 export default {
   components: {
     LeafletMap,
-    TitleCardDetail,
+    HeaderDetail,
     Tabs,
     Detail,
     DataRow,

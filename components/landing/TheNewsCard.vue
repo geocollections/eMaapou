@@ -2,7 +2,7 @@
   <v-card flat color="transparent">
     <v-row no-gutters>
       <v-col>
-        <title-card :title="$t('common.news')" class="title-heading" />
+        <base-header :title="$t('common.news')" class="title-heading" />
         <v-card-text class="d-flex flex-column">
           <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
             <news-preview-card
@@ -28,10 +28,10 @@
 
 <script>
 import NewsPreviewCard from '~/components/NewsPreviewCard.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
   name: 'TheNewsSection',
-  components: { NewsPreviewCard, TitleCard },
+  components: { NewsPreviewCard, BaseHeader },
   data() {
     return {
       newsList: [],

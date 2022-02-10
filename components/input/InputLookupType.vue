@@ -1,4 +1,5 @@
 <template>
+  <!-- NOTE: Component is not currently in use. -->
   <v-select
     v-bind="$attrs"
     hide-details
@@ -19,7 +20,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'LookUpTypeField',
+  name: 'InputLookupType',
   props: {
     customPrependInner: {
       type: String,

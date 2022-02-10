@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="
           $translate({
@@ -239,7 +239,7 @@
 import { isEmpty, isNull, isNil } from 'lodash'
 import { STRATOTYPE, TABS_STRATIGRAPHY, HEADERS_STRATOTYPE } from '~/constants'
 import LeafletMap from '~/components/map/LeafletMap.vue'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
@@ -247,7 +247,7 @@ import DataTableStratigraphyStratotype from '~/components/data-table/DataTableSt
 import Detail from '~/templates/Detail.vue'
 export default {
   components: {
-    TitleCardDetail,
+    HeaderDetail,
     Tabs,
     LinkDataRow,
     DataRow,

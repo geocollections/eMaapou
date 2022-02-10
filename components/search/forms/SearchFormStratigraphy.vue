@@ -1,11 +1,11 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('stratigraphy')">
-      <text-field v-model="number" :label="$t(filters.byIds.id.label)" />
+      <input-text v-model="number" :label="$t(filters.byIds.id.label)" />
 
-      <autocomplete-field
+      <input-autocomplete
         v-model="hierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
@@ -14,9 +14,9 @@
         @search:items="autocompleteStratigraphySearch"
       />
 
-      <text-field v-model="index" :label="$t(filters.byIds.index.label)" />
+      <input-text v-model="index" :label="$t(filters.byIds.index.label)" />
 
-      <text-field v-model="age" :label="$t(filters.byIds.age.label)" />
+      <input-text v-model="age" :label="$t(filters.byIds.age.label)" />
     </search-fields-wrapper>
   </v-form>
 </template>
@@ -27,19 +27,19 @@ import { mapFields } from 'vuex-map-fields'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import TextField from '~/components/fields/TextField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormStratigraphy',
   components: {
-    TextField,
-    AutocompleteField,
+    InputText,
+    InputAutocomplete,
     SearchFieldsWrapper,
     SearchActions,
-    QuerySearchField,
+    InputSearch,
   },
   mixins: [autocompleteMixin],
   data() {

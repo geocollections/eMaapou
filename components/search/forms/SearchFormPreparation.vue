@@ -1,14 +1,14 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('preparation')">
-      <text-field v-model="number" :label="$t(filters.byIds.number.label)" />
-      <text-field
+      <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
+      <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
-      <autocomplete-field
+      <input-autocomplete
         v-model="hierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
@@ -17,10 +17,7 @@
         @search:items="autocompleteStratigraphySearch"
       />
 
-      <range-text-field
-        v-model="depth"
-        :label="$t(filters.byIds.depth.label)"
-      />
+      <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
     </search-fields-wrapper>
 
     <search-map
@@ -46,24 +43,24 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import TextField from '~/components/fields/TextField.vue'
-import RangeTextField from '~/components/fields/RangeTextField.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputRange from '~/components/input/InputRange.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 
 export default {
   name: 'SearchFormPreparation',
   components: {
     SearchInstitutionFilter,
-    AutocompleteField,
-    TextField,
-    RangeTextField,
+    InputAutocomplete,
+    InputText,
+    InputRange,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   mixins: [autocompleteMixin],
   data() {

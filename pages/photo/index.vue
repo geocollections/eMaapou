@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('photo.pageTitle')"
         icon="mdi-file-image-outline"
         class="title-photo"
@@ -70,7 +70,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 import Search from '~/templates/Search'
 import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto'
 import DataTablePhoto from '~/components/data-table/DataTablePhoto'
@@ -84,7 +84,7 @@ export default {
     DataTablePhoto,
     SearchFormPhoto,
     Search,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

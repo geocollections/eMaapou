@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('specimen.pageTitle')"
         icon="mdi-microscope"
         class="title-specimen"
@@ -34,14 +34,14 @@ import { mapState, mapActions } from 'vuex'
 import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 import Search from '~/templates/Search'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     SearchFormSpecimen,
     DataTableSpecimen,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

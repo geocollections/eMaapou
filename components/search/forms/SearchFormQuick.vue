@@ -3,7 +3,7 @@
     class="d-sm-flex text-right text-sm-center"
     @submit.prevent="$emit('submit')"
   >
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <v-btn
       height="48px"
       class="ml-3 mt-2 mt-sm-0"
@@ -20,11 +20,11 @@
 </template>
 <script>
 import { mapFields } from 'vuex-map-fields'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFromQuick',
-  components: { QuerySearchField },
+  components: { InputSearch },
   props: {
     onlyIcon: {
       type: Boolean,

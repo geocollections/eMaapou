@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail
+      <header-detail
         :ids="ids"
         :title="$translate({ et: area.name, en: area.name_en })"
         class="title-area"
@@ -196,7 +196,7 @@
                   />
                   <data-row :title="$t('deposit.isBedrock')">
                     <template #value>
-                      <boolean-indicator :value="deposit.aluspohja" />
+                      <base-boolean :value="deposit.aluspohja" />
                     </template>
                   </data-row>
                   <data-row
@@ -360,25 +360,25 @@
 
 <script>
 import { isNil } from 'lodash'
-import TitleCardDetail from '~/components/TitleCardDetail'
+import HeaderDetail from '~/components/HeaderDetail'
 import Tabs from '~/components/Tabs.vue'
 import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Detail from '~/templates/Detail.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import { TABS_AREA } from '~/constants'
-import BooleanIndicator from '~/components/BooleanIndicator.vue'
+import BaseBoolean from '~/components/base/BaseBoolean.vue'
 import ExternalLink from '~/components/ExternalLink.vue'
 
 export default {
   components: {
     LeafletMap,
-    TitleCardDetail,
+    HeaderDetail,
     Tabs,
     DataRow,
     LinkDataRow,
     Detail,
-    BooleanIndicator,
+    BaseBoolean,
     ExternalLink,
   },
   async asyncData({ params, route, error, $services }) {

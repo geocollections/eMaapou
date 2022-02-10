@@ -1,11 +1,11 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('site')">
-      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
-      <text-field v-model="area" :label="$t(filters.byIds.area.label)" />
-      <text-field v-model="project" :label="$t(filters.byIds.project.label)" />
+      <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
+      <input-text v-model="area" :label="$t(filters.byIds.area.label)" />
+      <input-text v-model="project" :label="$t(filters.byIds.project.label)" />
     </search-fields-wrapper>
     <search-map
       site-overlay
@@ -21,20 +21,20 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import TextField from '../../fields/TextField.vue'
+import InputText from '../../input/InputText.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormSite',
   components: {
-    TextField,
+    InputText,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   computed: {
     ...mapState('search/site', ['filters', 'count', 'items']),

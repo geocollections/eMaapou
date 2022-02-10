@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('drillcore.pageTitle')"
         icon="mdi-screw-machine-flat-top"
         class="title-drillcore"
@@ -34,14 +34,14 @@ import { mapState, mapActions } from 'vuex'
 import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
 import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import Search from '~/templates/Search.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     SearchFormDrillcore,
     DataTableDrillcore,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

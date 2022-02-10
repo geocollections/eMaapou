@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('preparation.pageTitle')"
         class="title-preparation"
       />
@@ -33,7 +33,7 @@ import { mapState, mapActions } from 'vuex'
 import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
 import SearchFormPreparation from '~/components/search/forms/SearchFormPreparation.vue'
 import Search from '~/templates/Search.vue'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   name: 'PreparationSearch',
@@ -41,7 +41,7 @@ export default {
     Search,
     SearchFormPreparation,
     DataTablePreparation,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

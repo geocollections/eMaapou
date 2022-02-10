@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('analyticalData.pageTitle')"
         icon="mdi-chart-line"
         class="title-analysis"
@@ -34,7 +34,7 @@ import { mapState, mapActions } from 'vuex'
 import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
 import SearchFormAnalyticalData from '~/components/search/forms/SearchFormAnalyticalData.vue'
 import Search from '~/templates/Search'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   name: 'AnalysisSearch',
@@ -42,7 +42,7 @@ export default {
     Search,
     SearchFormAnalyticalData,
     DataTableAnalyticalData,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

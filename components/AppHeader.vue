@@ -144,7 +144,7 @@
         class="d-flex elevation-1 rounded mr-2"
         :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
       >
-        <query-search-field
+        <input-search
           v-model="query"
           class="rounded-r-0 montserrat"
           background-color="grey lighten-5"
@@ -245,11 +245,11 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 
-import QuerySearchField from './fields/QuerySearchField.vue'
+import InputSearch from './input/InputSearch.vue'
 import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
 export default {
   name: 'AppHeader',
-  components: { LanguageSwitcher, QuerySearchField },
+  components: { LanguageSwitcher, InputSearch },
   props: {
     drawer: Boolean,
   },

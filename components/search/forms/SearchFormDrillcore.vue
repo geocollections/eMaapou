@@ -1,19 +1,16 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('drillcore')">
-      <text-field v-model="name" :label="$t(filters.byIds.name.label)" />
-      <text-field
+      <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
+      <input-text
         v-model="repository"
         :label="$t(filters.byIds.repository.label)"
       />
-      <text-field v-model="country" :label="$t(filters.byIds.country.label)" />
-      <text-field v-model="storage" :label="$t(filters.byIds.storage.label)" />
-      <range-text-field
-        v-model="boxes"
-        :label="$t(filters.byIds.boxes.label)"
-      />
+      <input-text v-model="country" :label="$t(filters.byIds.country.label)" />
+      <input-text v-model="storage" :label="$t(filters.byIds.storage.label)" />
+      <input-range v-model="boxes" :label="$t(filters.byIds.boxes.label)" />
     </search-fields-wrapper>
 
     <search-map
@@ -41,21 +38,21 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import RangeTextField from '~/components/fields/RangeTextField.vue'
-import TextField from '~/components/fields/TextField.vue'
+import InputRange from '~/components/input/InputRange.vue'
+import InputText from '~/components/input/InputText.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormDrillcore',
   components: {
     SearchInstitutionFilter,
-    TextField,
-    RangeTextField,
+    InputText,
+    InputRange,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   computed: {
     ...mapState('search/drillcore', ['filters', 'count', 'items']),

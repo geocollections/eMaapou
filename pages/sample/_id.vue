@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <title-card-detail :ids="ids" :title="sampleTitle" class="title-sample" />
+      <header-detail :ids="ids" :title="sampleTitle" class="title-sample" />
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">{{
@@ -331,13 +331,13 @@ import DataRow from '~/components/DataRow.vue'
 import LinkDataRow from '~/components/LinkDataRow.vue'
 import Tabs from '~/components/Tabs.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
-import TitleCardDetail from '~/components/TitleCardDetail.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_SAMPLE } from '~/constants'
 
 export default {
   components: {
-    TitleCardDetail,
+    HeaderDetail,
     LinkDataRow,
     DataRow,
     Tabs,

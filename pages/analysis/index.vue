@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card :title="$t('analysis.pageTitle')" class="title-analysis" />
+      <base-header :title="$t('analysis.pageTitle')" class="title-analysis" />
     </template>
 
     <template #form>
@@ -30,7 +30,7 @@ import { mapState, mapActions } from 'vuex'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   name: 'AnalysisSearch',
@@ -38,7 +38,7 @@ export default {
     Search,
     SearchFormAnalysis,
     DataTableAnalysis,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

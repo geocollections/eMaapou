@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters>
     <v-col cols="4" class="pr-1">
-      <autocomplete-field
+      <input-autocomplete
         :items="parameters"
         return-object
         item-text="label"
@@ -16,7 +16,7 @@
     <!-- <v-col v-if="entity.isText" cols="6">
       <v-row no-gutters>
         <v-col cols="12" class="pr-1">
-          <text-field
+          <input-text
             :label="$t('common.textField')"
             :value="entity.text"
             @input="
@@ -34,7 +34,7 @@
     <v-col cols="6">
       <v-row no-gutters>
         <v-col cols="6" class="px-1">
-          <number-field
+          <input-number
             step="0.1"
             :label="$t('common.from')"
             :value="value.value[0]"
@@ -43,7 +43,7 @@
         </v-col>
 
         <v-col cols="6" class="px-1">
-          <number-field
+          <input-number
             step="0.1"
             :label="$t('common.to')"
             :value="value.value[1]"
@@ -81,11 +81,11 @@
 
 <script>
 import { isEmpty } from 'lodash'
-import NumberField from '~/components/fields/NumberField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField.vue'
+import InputNumber from '~/components/input/InputNumber.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 export default {
-  name: 'ParameterField',
-  components: { NumberField, AutocompleteField },
+  name: 'InputParameter',
+  components: { InputNumber, InputAutocomplete },
   props: {
     disableRemove: {
       type: Boolean,

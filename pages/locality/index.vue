@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <title-card
+      <base-header
         :title="$t('locality.pageTitle')"
         icon="mdi-map-marker-outline"
         class="title-locality"
@@ -34,14 +34,14 @@ import { mapState, mapActions } from 'vuex'
 import SearchFormLocality from '~/components/search/forms/SearchFormLocality'
 import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import Search from '~/templates/Search'
-import TitleCard from '~/components/TitleCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: {
     Search,
     DataTableLocality,
     SearchFormLocality,
-    TitleCard,
+    BaseHeader,
   },
   head() {
     return {

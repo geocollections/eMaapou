@@ -1,27 +1,24 @@
 <template>
   <v-form @submit.prevent="handleSearch">
-    <query-search-field v-model="query" />
+    <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
 
     <search-fields-wrapper :active="hasActiveFilters('analytical_data')">
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <text-field
+          <input-text
             v-model="locality"
             :label="$t(filters.byIds.locality.label)"
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <range-text-field
-            v-model="depth"
-            :label="$t(filters.byIds.depth.label)"
-          />
+          <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
         </v-col>
       </v-row>
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <autocomplete-field
+          <input-autocomplete
             v-model="stratigraphy"
             :items="autocomplete.chronostratigraphy"
             :loading="autocomplete.loaders.chronostratigraphy"
@@ -31,7 +28,7 @@
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <autocomplete-field
+          <input-autocomplete
             v-model="lithostratigraphy"
             :items="autocomplete.lithostratigraphy"
             :loading="autocomplete.loaders.lithostratigraphy"
@@ -44,13 +41,13 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <text-field
+          <input-text
             v-model="analysis"
             :label="$t(filters.byIds.analysis.label)"
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <text-field
+          <input-text
             v-model="method"
             :label="$t(filters.byIds.method.label)"
           />
@@ -59,10 +56,10 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <text-field v-model="lab" :label="$t(filters.byIds.lab.label)" />
+          <input-text v-model="lab" :label="$t(filters.byIds.lab.label)" />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <text-field
+          <input-text
             v-model="agentAnalysed"
             :label="$t(filters.byIds.agentAnalysed.label)"
           />
@@ -71,13 +68,13 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <text-field
+          <input-text
             v-model="reference"
             :label="$t(filters.byIds.reference.label)"
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <text-field
+          <input-text
             v-model="dataset"
             :label="$t(filters.byIds.dataset.label)"
           />
@@ -86,25 +83,25 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <text-field
+          <input-text
             v-model="stratigraphyBed"
             :label="$t(filters.byIds.stratigraphyBed.label)"
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <text-field v-model="rock" :label="$t(filters.byIds.rock.label)" />
+          <input-text v-model="rock" :label="$t(filters.byIds.rock.label)" />
         </v-col>
       </v-row>
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <text-field
+          <input-text
             v-model="sample"
             :label="$t(filters.byIds.sample.label)"
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <text-field
+          <input-text
             v-model="project"
             :label="$t(filters.byIds.project.label)"
           />
@@ -119,7 +116,7 @@
           :key="index"
           cols="12"
         >
-          <parameter-field
+          <input-parameter
             :value="parameterFilters.byIds[id]"
             :parameters="parameterList(parameterFilters.byIds[id])"
             :disable-remove="parameterFilters.allIds.length <= 1"
@@ -133,7 +130,7 @@
 
       <!-- <v-row no-gutters>
         <v-col cols="12">
-          <autocomplete-field
+          <input-autocomplete
             :label="$t('analyticalData.columns')"
             chips
             clearable
@@ -179,26 +176,26 @@ import { isEmpty } from 'lodash'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
-import TextField from '~/components/fields/TextField.vue'
-import AutocompleteField from '~/components/fields/AutocompleteField'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
-import RangeTextField from '~/components/fields/RangeTextField'
-import ParameterField from '~/components/fields/ParameterField.vue'
+import InputRange from '~/components/input/InputRange'
+import InputParameter from '~/components/input/InputParameter.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
-import QuerySearchField from '~/components/fields/QuerySearchField.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   name: 'SearchFormAnalyticalData',
   fetchOnServer: false,
   components: {
     SearchInstitutionFilter,
-    RangeTextField,
-    AutocompleteField,
-    TextField,
-    ParameterField,
+    InputRange,
+    InputAutocomplete,
+    InputText,
+    InputParameter,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
-    QuerySearchField,
+    InputSearch,
   },
   mixins: [autocompleteMixin],
   data() {
