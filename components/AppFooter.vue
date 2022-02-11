@@ -1,135 +1,225 @@
 <template>
-  <v-footer padless class="mt-4">
-    <v-card width="100%" flat tile color="tertiary">
-      <div
-        v-if="$vuetify.breakpoint.smAndUp"
-        class="d-flex mx-auto"
-        style="max-width: 700px; max-height: 700px"
-      >
-        <v-card-text>
-          <div class="section-title font-weight-bold mb-1">
-            {{ $t('common.home') }}
-            <hr />
-          </div>
-
-          <div v-for="link in routes" :key="link.routeName" class="d-flex mb-1">
-            <v-icon color="white" x-small>mdi-chevron-right</v-icon>
-            <nuxt-link
-              :to="localePath(link.routeName)"
-              class="text-link-footer d-block ml-1"
-              style="font-weight: 500 !important"
-            >
-              {{ $t(link.text) }}
-            </nuxt-link>
-          </div>
-          <div class="section-title font-weight-bold mb-1 mt-4">
-            {{ $t('landing.searchRoutes') }}
-            <hr />
-          </div>
-
+  <v-footer padless color="tertiary">
+    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-row no-gutters>
+        <v-col cols="12">
           <div
-            v-for="link in searchRoutes"
-            :key="link.routeName"
-            class="d-flex mb-1"
+            class="d-flex flex-row align-center text-h6 white--text mx-3 mb-6"
           >
-            <v-icon color="white" x-small>mdi-chevron-right</v-icon>
-            <nuxt-link
-              :to="localePath(link.routeName)"
-              class="text-link-footer d-block ml-1"
-              style="font-weight: 500 !important"
-            >
-              {{ $t(link.text) }}
-            </nuxt-link>
-          </div>
-        </v-card-text>
-
-        <v-card-text>
-          <div class="section-title font-weight-bold mb-1">
-            {{ $t('common.links') }}
-            <hr />
-          </div>
-
-          <div style="column-count: 2">
-            <div v-for="link in links" :key="link.name" class="d-flex mb-1">
-              <v-icon color="white" x-small>mdi-chevron-right</v-icon>
-              <a
-                :href="link.url"
-                class="text-link-footer d-block ml-1"
-                style="font-weight: 500 !important"
-              >
-                {{ $t(link.name) }}
-              </a>
+            <img
+              v-if="$vuetify.breakpoint.smAndUp"
+              style="height: 50px; width: 100px"
+              :src="$img(logo, null, { provider: 'static' })"
+              class="mt-5 mb-sm-5 mr-4"
+            />
+            <v-divider
+              v-if="$vuetify.breakpoint.smAndUp"
+              vertical
+              class="white my-5"
+            />
+            <div class="ml-sm-4 font-weight-medium">
+              {{ $t('slogan') }}
             </div>
           </div>
-          <div class="section-title font-weight-bold mb-1 mt-4">
-            {{ $t('common.institutions') }}
-            <hr />
-          </div>
+        </v-col>
+        <v-col cols="12" lg="auto">
+          <div class="d-md-flex">
+            <div class="mx-3 mb-6">
+              <div
+                class="
+                  section-title
+                  white--text
+                  font-weight-bold
+                  montserrat
+                  mb-4
+                "
+              >
+                {{ $t('common.home') }}
+              </div>
 
-          <div
-            v-for="link in institutions"
-            :key="link.name"
-            class="d-flex mb-1"
-          >
-            <v-icon color="white" x-small>mdi-chevron-right</v-icon>
-            <a
-              :href="link.url"
-              class="text-link-footer d-block ml-1"
-              style="font-weight: 500 !important"
+              <div
+                v-for="link in routes"
+                :key="link.routeName"
+                class="d-flex mb-1"
+              >
+                <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+                <nuxt-link
+                  :to="localePath(link.routeName)"
+                  class="
+                    text-link text-body-2
+                    grey--text
+                    text--lighten-2
+                    d-block
+                    ml-1
+                  "
+                  style="font-weight: 500 !important"
+                >
+                  {{ $t(link.text) }}
+                </nuxt-link>
+              </div>
+            </div>
+            <div class="mx-3 mb-6">
+              <div
+                class="
+                  section-title
+                  white--text
+                  font-weight-bold
+                  montserrat
+                  mb-4
+                "
+              >
+                {{ $t('landing.searchRoutes') }}
+              </div>
+
+              <div class="d-sm-inline-block" style="column-count: 2">
+                <div
+                  v-for="link in searchRoutes"
+                  :key="link.routeName"
+                  class="d-flex mb-1"
+                >
+                  <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+                  <nuxt-link
+                    :to="localePath(link.routeName)"
+                    class="
+                      text-link text-body-2
+                      grey--text
+                      text--lighten-2
+                      d-block
+                      ml-1
+                    "
+                    style="font-weight: 500 !important"
+                  >
+                    {{ $t(link.text) }}
+                  </nuxt-link>
+                </div>
+              </div>
+            </div>
+            <div class="mx-3 mb-6">
+              <div
+                class="
+                  section-title
+                  white--text
+                  font-weight-bold
+                  montserrat
+                  mb-4
+                "
+              >
+                {{ $t('common.links') }}
+              </div>
+
+              <div class="d-sm-inline-block" style="column-count: 2">
+                <div v-for="link in links" :key="link.name" class="d-flex mb-1">
+                  <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+                  <a
+                    :href="link.url"
+                    class="
+                      text-link text-body-2
+                      grey--text
+                      text--lighten-2
+                      d-block
+                      ml-1
+                    "
+                    style="font-weight: 500 !important"
+                  >
+                    {{ $t(link.name) }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
+        <v-col cols="12" lg="" align-self="center">
+          <!-- <div class="mb-4 mx-4">
+            <div
+              class="section-title white--text font-weight-bold montserrat mb-4"
             >
-              {{ $t(link.name) }}
-            </a>
-          </div>
-        </v-card-text>
-      </div>
-      <v-card-text class="text-center">
-        <a
-          v-for="(item, index) in imageLinks"
-          :key="index"
-          :href="item.href"
-          target="FooterLink"
-          rel="noopener noreferrer"
-        >
-          <v-tooltip top>
-            <template #activator="{ on, attrs }">
-              <nuxt-img
-                v-bind="attrs"
-                :src="item.src"
-                :alt="$t(item.alt)"
-                provider="static"
-                class="footer-logo py-1 py-sm-0 px-3"
-                v-on="on"
+              {{ $t('common.search') }}
+            </div>
+            <div class="d-flex elevation-0 rounded" style="max-width: 400px">
+              <input-search
+                v-model="query"
+                class="rounded-r-0 montserrat"
+                background-color="grey lighten-4"
+                dense
+                flat
+                :autofocus="false"
+                :placeholder="$t('common.search')"
+                @enter="$router.push(localePath({ name: 'search' }))"
               />
-            </template>
+              <v-hover v-slot="{ hover }">
+                <v-btn
+                  id="quick-search-btn"
+                  height="38"
+                  width="48"
+                  elevation="0"
+                  :color="hover ? 'warning' : 'grey lighten-4'"
+                  class="rounded-l-0"
+                  @click="$router.push(localePath({ name: 'search' }))"
+                >
+                  <v-icon color="accent darken-2">mdi-magnify</v-icon>
+                </v-btn>
+              </v-hover>
+            </div>
+          </div>
+          <v-divider style="border-color: lightgrey" /> -->
+          <div class="text-center d-flex justify-center align-center">
+            <div style="max-width: 700px">
+              <a
+                v-for="(item, index) in imageLinks"
+                :key="index"
+                :href="item.href"
+                target="FooterLink"
+                rel="noopener noreferrer"
+              >
+                <v-tooltip top>
+                  <template #activator="{ on, attrs }">
+                    <nuxt-img
+                      v-bind="attrs"
+                      :src="item.src"
+                      :alt="$t(item.alt)"
+                      provider="static"
+                      class="footer-logo py-1 py-sm-0 px-3"
+                      v-on="on"
+                    />
+                  </template>
 
-            <span>{{ $t(item.title) }}</span>
-          </v-tooltip>
-        </a>
-      </v-card-text>
-      <!--      <v-card-text class="text-center">
+                  <span>{{ $t(item.title) }}</span>
+                </v-tooltip>
+              </a>
+              <!--      <v-card-text class="text-center">
         {{ $t('footerPreliminary') }}
       </v-card-text>-->
-      <v-card-text class="text-center mx-auto" style="max-width: 700px">
-        <i18n path="footer" tag="div">
-          <a
-            v-for="(item, index) in textLinks"
-            :key="index"
-            :href="item.href"
-            class="text-link"
-            target="FooterLink"
-            >{{ item.text }}</a
-          >
-        </i18n>
-      </v-card-text>
-    </v-card>
+              <i18n
+                class="mt-2 text-body-2 grey--text text--lighten-1"
+                path="footer"
+                tag="div"
+              >
+                <a
+                  v-for="(item, index) in textLinks"
+                  :key="index"
+                  :href="item.href"
+                  class="text-link font-weight-bold grey--text text--lighten-2"
+                  target="FooterLink"
+                  >{{ item.text }}</a
+                >
+              </i18n>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-footer>
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
+// import InputSearch from './input/InputSearch.vue'
 export default {
   name: 'AppFooter',
+  // components: { InputSearch },
   data() {
     return {
+      logo: '/logos/emaapou5white.svg',
       imageLinks: [
         {
           href: 'https://geocollections.info',
@@ -303,6 +393,9 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    ...mapFields('search', ['query']),
   },
 }
 </script>

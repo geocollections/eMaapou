@@ -11,6 +11,7 @@
         aria-label="select language"
         class="d-block"
         icon
+        :color="color"
         v-bind="attrs"
         v-on="on"
       >
@@ -27,6 +28,12 @@ import LanguageList from '~/components/language/LanguageList'
 export default {
   name: 'LanguageSwitcher',
   components: { LanguageList },
+  props: {
+    color: {
+      type: String,
+      default: 'white',
+    },
+  },
   computed: {
     classObject() {
       return {

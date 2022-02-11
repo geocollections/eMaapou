@@ -1,10 +1,10 @@
 <template>
   <v-app dark>
+    <app-drawer :drawer="drawer" @update:navigationDrawer="drawer = $event" />
     <the-landing-header
       :drawer="drawer"
       @toggle:navigationDrawer="drawer = !drawer"
     />
-    <app-drawer :drawer="drawer" @update:navigationDrawer="drawer = $event" />
     <v-main class="pt-0">
       <nuxt />
       <fab-scroll-top />

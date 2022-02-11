@@ -498,7 +498,7 @@ th {
 }
 
 #app {
-  background-color: #f7f6f4 !important;
+  background-color: map-get($map: $grey, $key: 'lighten-4') !important;
 }
 
 .frontsearch {
@@ -573,7 +573,7 @@ th {
 }
 
 .montserrat {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Montserrat', 'Open Sans', sans-serif !important;
 }
 
 .subsection-title {

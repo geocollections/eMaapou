@@ -4,10 +4,9 @@
     dark
     clipped-right
     absolute
-    height="56"
-    extension-height="40"
     :elevation="0"
     class="gradient-background"
+    color="secondary "
     style="z-index: 2060"
   >
     <v-app-bar-title class="align-self-center">
@@ -18,35 +17,23 @@
          -->
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
         <v-img
-          v-if="$vuetify.breakpoint.mdAndUp"
           :height="40"
           :width="80"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
-        <v-img
+        <!-- <v-img
           v-else
           :height="32"
           :width="32"
           contain
           :src="$img(logoCompact, null, { provider: 'static' })"
-        />
+        /> -->
         <v-tooltip bottom activator="#app-bar-title">
           <span>{{ $t('landing.goToFrontpage') }}</span>
         </v-tooltip>
       </nuxt-link>
-
-      <!-- <v-icon color="white" size="80">$logo</v-icon> -->
     </v-app-bar-title>
-    <!-- <v-divider
-      v-show="$vuetify.breakpoint.lgAndUp"
-      vertical
-      inset
-      class="mx-3 white"
-    /> -->
-    <!-- <div v-show="$vuetify.breakpoint.lgAndUp" class="montserrat">
-      {{ $t('slogan') }}
-    </div> -->
 
     <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
       <v-menu
@@ -61,12 +48,13 @@
             v-bind="attrs"
             aria-label="browse"
             text
-            class="montserrat"
-            style="text-transform: capitalize"
+            class="montserrat font-weight-bold"
+            color="accent darken-2"
+            style="text-transform: capitalize; font-size: 0.875rem"
             v-on="on"
           >
             {{ $t('common.browse') }}
-            <v-icon class="ml-1" small>mdi-chevron-down</v-icon>
+            <v-icon class="ml-1">mdi-chevron-down</v-icon>
           </v-btn>
         </template>
 
@@ -117,7 +105,8 @@
         nuxt
         aria-label="about page"
         text
-        class="montserrat"
+        class="montserrat font-weight-bold"
+        color="accent darken-2"
         style="text-transform: capitalize"
         :to="localePath({ name: 'about' })"
       >
@@ -128,7 +117,8 @@
         nuxt
         aria-label="news page"
         text
-        class="montserrat"
+        class="montserrat font-weight-bold"
+        color="accent darken-2"
         style="text-transform: capitalize"
         :to="localePath({ name: 'news' })"
       >
@@ -141,13 +131,13 @@
       :style="{ width: !$vuetify.breakpoint.mdAndUp ? '100%' : 'inherit' }"
     >
       <div
-        class="d-flex elevation-1 rounded mr-2"
+        class="d-flex elevation-0 rounded mr-2"
         :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
       >
         <input-search
           v-model="query"
           class="rounded-r-0 montserrat"
-          background-color="grey lighten-5"
+          background-color="grey lighten-4"
           dense
           flat
           :autofocus="false"
@@ -160,7 +150,7 @@
             height="38"
             width="48"
             elevation="0"
-            :color="hover ? 'warning' : 'grey lighten-5'"
+            :color="hover ? 'warning' : 'grey lighten-4'"
             class="rounded-l-0"
             @click="$router.push(localePath({ name: 'search' }))"
           >
@@ -168,7 +158,10 @@
           </v-btn>
         </v-hover>
       </div>
-      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
+      <language-switcher
+        v-if="$vuetify.breakpoint.mdAndUp"
+        color="accent darken-2"
+      />
       <v-btn
         v-if="!$vuetify.breakpoint.mdAndUp"
         text
@@ -177,7 +170,7 @@
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <v-icon size="font-size: 24px">mdi-menu</v-icon>
+        <v-icon color="accent darken-2" size="font-size: 24px">mdi-menu</v-icon>
       </v-btn>
     </v-toolbar-items>
 
@@ -369,8 +362,8 @@ export default {
         { routeName: 'preparation', text: 'preparation.pageTitle' },
         { routeName: 'area', text: 'area.pageTitle' },
       ],
-      logo: '/logos/emaapou5white.svg',
-      logoCompact: '/logos/emaapou_short.svg',
+      logo: '/logos/emaapou5blue.svg',
+      logoCompact: '/logos/emaapou_short_blue.svg',
     }
   },
   computed: {
@@ -402,10 +395,6 @@ export default {
 }
 
 .v-app-bar ::v-deep .v-toolbar__content {
-  padding-right: 0;
-  padding-left: 0;
-  padding-top: 0;
-  padding-bottom: 0;
   max-width: 1785px;
   margin-left: auto;
   margin-right: auto;
@@ -415,7 +404,6 @@ export default {
 
 .v-app-bar ::v-deep .v-toolbar__extension {
   background-color: #f7f6f4;
-  border-bottom: lightgray solid 1px;
 }
 
 #quick-search-btn {
@@ -438,11 +426,12 @@ $gradient-col: var(--v-primary-base);
 $gradient-col-sec: var(--v-header-darken1);
 
 .gradient-background {
-  background: linear-gradient(
-    320deg,
-    $gradient-col,
-    $gradient-col-sec
-  ) !important;
+  // background: linear-gradient(
+  //   320deg,
+  //   $gradient-col,
+  //   $gradient-col-sec
+  // ) !important;
+  border-bottom: #f7f6f4 solid 1px !important;
 }
 
 /* Overwrites vuetify list item color (https://github.com/vuetifyjs/vuetify/issues/9285) */
