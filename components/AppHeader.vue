@@ -22,15 +22,15 @@
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
         <v-img
           v-if="$vuetify.breakpoint.mdAndUp"
-          :height="40"
-          :width="80"
+          :height="50"
+          :width="100"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
         <v-img
           v-else
-          :height="32"
-          :width="32"
+          :height="36"
+          :width="36"
           contain
           :src="$img(logoCompact, null, { provider: 'static' })"
         />
