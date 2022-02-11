@@ -385,6 +385,7 @@ export default {
     deposit: 'Deposit',
     miningClaim: 'Mining claim',
     parentArea: 'Belongs to',
+    relatedAreas: 'Related areas ({number})',
   },
   site: {
     pageTitle: 'Sites',

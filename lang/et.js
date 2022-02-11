@@ -385,6 +385,7 @@ export default {
     deposit: 'Maardla',
     miningClaim: 'Mäeeraldis',
     parentArea: 'Kuulub',
+    relatedAreas: 'Seotud alad ({number})',
   },
   site: {
     pageTitle: 'Uuringupunktid',

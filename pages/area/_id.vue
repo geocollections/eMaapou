@@ -458,6 +458,7 @@ export default {
               },
               api: {
                 default: { area: this.area.id },
+                relatedArea: { parent_area: this.area.id },
               },
             },
           })

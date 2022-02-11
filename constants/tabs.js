@@ -189,8 +189,16 @@ export const TABS_AREA = {
       count: 0,
       props: {},
     },
+    relatedArea: {
+      id: 'relatedArea',
+      table: 'area',
+      routeName: 'area-id-slug-related-areas',
+      title: 'area.relatedAreas',
+      count: 0,
+      props: {},
+    },
   },
-  allIds: ['site', 'locality_reference'],
+  allIds: ['site', 'locality_reference', 'relatedArea'],
 }
 
 export const TABS_COLLECTION = {
