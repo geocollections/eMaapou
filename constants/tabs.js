@@ -197,8 +197,16 @@ export const TABS_AREA = {
       count: 0,
       props: {},
     },
+    locality: {
+      id: 'locality',
+      table: 'locality',
+      routeName: 'area-id-slug-localities',
+      title: 'area.localities',
+      count: 0,
+      props: {},
+    },
   },
-  allIds: ['site', 'locality_reference', 'relatedArea'],
+  allIds: ['site', 'locality_reference', 'relatedArea', 'locality'],
 }
 
 export const TABS_COLLECTION = {

@@ -386,6 +386,7 @@ export default {
     miningClaim: 'Mäeeraldis',
     parentArea: 'Kuulub',
     relatedAreas: 'Seotud alad ({number})',
+    localities: 'Seotud lokaliteedid ({number})',
   },
   site: {
     pageTitle: 'Uuringupunktid',
