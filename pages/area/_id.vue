@@ -42,6 +42,23 @@
                       })
                     "
                   />
+                  <table-row-link
+                    v-if="area.parent_area"
+                    nuxt
+                    :href="
+                      localePath({
+                        name: 'area-id',
+                        params: { id: area.parent_area.id },
+                      })
+                    "
+                    :title="$t('area.parentArea')"
+                    :value="
+                      $translate({
+                        et: area.parent_area.name,
+                        en: area.parent_area.name_en,
+                      })
+                    "
+                  />
                   <table-row
                     :title="$t('area.county')"
                     :value="

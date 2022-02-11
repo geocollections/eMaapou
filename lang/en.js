@@ -383,6 +383,7 @@ export default {
     dateChanged: 'Date changed',
     deposit: 'Deposit',
     miningClaim: 'Mining claim',
+    parentArea: 'Belongs to',
   },
   site: {
     pageTitle: 'Sites',

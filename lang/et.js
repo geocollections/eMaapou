@@ -383,6 +383,7 @@ export default {
     dateChanged: 'Kirje muudetud',
     deposit: 'Maardla',
     miningClaim: 'Mäeeraldis',
+    parentArea: 'Kuulub',
   },
   site: {
     pageTitle: 'Uuringupunktid',
