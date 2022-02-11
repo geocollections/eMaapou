@@ -2,7 +2,6 @@
   <div>
     <base-header
       :title="$t('about.title')"
-      class="title-heading"
       style="border-color: var(--v-header-darken1)"
     />
     <v-card

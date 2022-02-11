@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail :ids="ids" :title="sampleTitle" class="title-sample" />
+      <header-detail :ids="ids" :title="sampleTitle" />
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">{{

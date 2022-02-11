@@ -4,7 +4,6 @@
       <base-header
         :title="$t('stratigraphy.pageTitle')"
         icon="mdi-layers-triple"
-        class="title-stratigraphy"
       />
     </template>
 

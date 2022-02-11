@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail :ids="ids" :title="fileTitle" class="title-main" />
+      <header-detail :ids="ids" :title="fileTitle" />
     </template>
     <template #column-left>
       <v-card-text class="text-center">

@@ -2,7 +2,7 @@
   <div>
     <v-row no-gutters justify="center" align="center">
       <v-col class="pt-5">
-        <base-header :title="$t('landing.searchTitle')" class="title-heading" />
+        <base-header :title="$t('landing.searchTitle')" />
       </v-col>
     </v-row>
     <v-row class="px-sm-3" no-gutters>

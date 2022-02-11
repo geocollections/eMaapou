@@ -4,7 +4,6 @@
       <base-header
         :title="$t('dataset.pageTitle')"
         icon="mdi-database-outline"
-        class="title-dataset"
       />
     </template>
 

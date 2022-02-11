@@ -5,7 +5,6 @@
         :title="$t('taxon.pageTitle')"
         :subtitle="$t('common.count', { count: count })"
         icon="mdi-family-tree"
-        class="title-main"
       />
     </template>
 

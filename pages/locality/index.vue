@@ -4,7 +4,6 @@
       <base-header
         :title="$t('locality.pageTitle')"
         icon="mdi-map-marker-outline"
-        class="title-locality"
       />
     </template>
 

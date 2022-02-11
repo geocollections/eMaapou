@@ -1,11 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header
-        :title="$t('sample.pageTitle')"
-        icon="mdi-test-tube"
-        class="title-sample"
-      />
+      <base-header :title="$t('sample.pageTitle')" icon="mdi-test-tube" />
     </template>
 
     <template #form>

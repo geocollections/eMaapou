@@ -12,7 +12,6 @@
             sample: sample.number,
           })
         "
-        class="title-analysis"
       />
     </template>
 

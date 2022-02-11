@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('area.pageTitle')" class="title-area" />
+      <base-header :title="$t('area.pageTitle')" />
     </template>
 
     <template #form>

@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail :ids="ids" :title="dataset.title" class="title-dataset" />
+      <header-detail :ids="ids" :title="dataset.title" />
     </template>
 
     <template #column-left>

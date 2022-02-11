@@ -4,9 +4,9 @@
     dark
     clipped-right
     absolute
+    height="72"
     :elevation="0"
-    class="gradient-background"
-    color="secondary "
+    color="transparent"
     style="z-index: 2060"
   >
     <v-app-bar-title class="align-self-center">
@@ -48,8 +48,8 @@
             v-bind="attrs"
             aria-label="browse"
             text
-            class="montserrat font-weight-bold"
-            color="accent darken-2"
+            class="montserrat font-weight-medium"
+            color="accent darken-3"
             style="text-transform: capitalize; font-size: 0.875rem"
             v-on="on"
           >
@@ -105,8 +105,8 @@
         nuxt
         aria-label="about page"
         text
-        class="montserrat font-weight-bold"
-        color="accent darken-2"
+        class="montserrat font-weight-medium"
+        color="accent darken-3"
         style="text-transform: capitalize"
         :to="localePath({ name: 'about' })"
       >
@@ -117,8 +117,8 @@
         nuxt
         aria-label="news page"
         text
-        class="montserrat font-weight-bold"
-        color="accent darken-2"
+        class="montserrat font-weight-medium"
+        color="accent darken-3"
         style="text-transform: capitalize"
         :to="localePath({ name: 'news' })"
       >
@@ -137,7 +137,7 @@
         <input-search
           v-model="query"
           class="rounded-r-0 montserrat"
-          background-color="grey lighten-4"
+          background-color="grey lighten-2"
           dense
           flat
           :autofocus="false"
@@ -150,7 +150,7 @@
             height="38"
             width="48"
             elevation="0"
-            :color="hover ? 'warning' : 'grey lighten-4'"
+            :color="hover ? 'warning' : 'grey lighten-2'"
             class="rounded-l-0"
             @click="$router.push(localePath({ name: 'search' }))"
           >
@@ -400,6 +400,7 @@ export default {
   margin-right: auto;
   // padding-right: 20px;
   padding-left: 20px;
+  border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 
 .v-app-bar ::v-deep .v-toolbar__extension {
@@ -422,21 +423,15 @@ export default {
   }
 }
 
-$gradient-col: var(--v-primary-base);
-$gradient-col-sec: var(--v-header-darken1);
-
-.gradient-background {
-  // background: linear-gradient(
-  //   320deg,
-  //   $gradient-col,
-  //   $gradient-col-sec
-  // ) !important;
-  border-bottom: #f7f6f4 solid 1px !important;
-}
-
 /* Overwrites vuetify list item color (https://github.com/vuetifyjs/vuetify/issues/9285) */
 .dots-vertical-list
   > .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
   color: #424242 !important;
+}
+.v-app-bar {
+  &:hover {
+    border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
+    background-color: map-get($map: $grey, $key: 'lighten-3') !important;
+  }
 }
 </style>

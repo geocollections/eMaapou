@@ -8,11 +8,14 @@
         font-weight-medium
         text-h4
         pt-1
-        px-0 px-sm-3
+        px-0
+        pb-6
+        px-sm-3
+        title-border
       "
       style="word-break: normal"
     >
-      <back-button-detail />
+      <!-- <back-button-detail /> -->
       <slot>
         {{ title }}
       </slot>
@@ -21,7 +24,7 @@
 
     <template #before>
       <div v-if="$vuetify.breakpoint.smAndUp" class="d-flex px-0 px-sm-3 pb-0">
-        <v-btn
+        <!-- <v-btn
           id="first-id"
           nuxt
           icon
@@ -39,7 +42,7 @@
           <v-tooltip bottom activator="#first-id">
             <span>{{ $t('common.first', { id: computedFirstId }) }}</span>
           </v-tooltip>
-        </v-btn>
+        </v-btn> -->
 
         <v-btn
           id="previous-id"
@@ -93,7 +96,7 @@
             <span>{{ $t('common.next', { id: computedNextId }) }}</span>
           </v-tooltip>
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           id="last-id"
           nuxt
           icon
@@ -111,7 +114,7 @@
           <v-tooltip bottom activator="#last-id">
             <span>{{ $t('common.last', { id: computedLastId }) }}</span>
           </v-tooltip>
-        </v-btn>
+        </v-btn> -->
       </div>
     </template>
   </base-header>
@@ -119,7 +122,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import BackButtonDetail from './BackButtonDetail.vue'
+// import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
 import BaseHeader from './base/BaseHeader.vue'
 
@@ -128,7 +131,7 @@ export default {
   components: {
     EditButton,
     BaseHeader,
-    BackButtonDetail,
+    // BackButtonDetail,
   },
   props: {
     arrowKeys: {

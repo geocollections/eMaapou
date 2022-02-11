@@ -4,7 +4,6 @@
       <base-header
         :title="$t('site.pageTitle')"
         icon="mdi-map-marker-star-outline"
-        class="title-site"
       />
     </template>
 

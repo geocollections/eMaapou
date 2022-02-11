@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail :ids="ids" :title="title" class="title-drillcore" />
+      <header-detail :ids="ids" :title="title" />
     </template>
 
     <template #column-left>

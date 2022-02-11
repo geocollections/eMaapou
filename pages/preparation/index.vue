@@ -1,10 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header
-        :title="$t('preparation.pageTitle')"
-        class="title-preparation"
-      />
+      <base-header :title="$t('preparation.pageTitle')" />
     </template>
 
     <template #form>

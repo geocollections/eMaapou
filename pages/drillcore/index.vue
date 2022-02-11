@@ -4,7 +4,6 @@
       <base-header
         :title="$t('drillcore.pageTitle')"
         icon="mdi-screw-machine-flat-top"
-        class="title-drillcore"
       />
     </template>
 

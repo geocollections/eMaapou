@@ -4,7 +4,6 @@
       <base-header
         :title="$t('analyticalData.pageTitle')"
         icon="mdi-chart-line"
-        class="title-analysis"
       />
     </template>
 

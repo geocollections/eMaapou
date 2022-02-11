@@ -4,7 +4,6 @@
       <header-detail
         :ids="ids"
         :title="$translate({ et: locality.locality, en: locality.locality_en })"
-        class="title-locality"
       />
     </template>
 

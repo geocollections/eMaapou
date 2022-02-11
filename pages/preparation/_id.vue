@@ -1,11 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail
-        :ids="ids"
-        :title="preparation.preparation_number"
-        class="title-preparation"
-      />
+      <header-detail :ids="ids" :title="preparation.preparation_number" />
     </template>
 
     <template #column-left>

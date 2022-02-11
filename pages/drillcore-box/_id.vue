@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail :ids="ids" :title="drillcoreBoxTitle" class="title-main" />
+      <header-detail :ids="ids" :title="drillcoreBoxTitle" />
     </template>
     <template #top>
       <v-card v-if="activeImage" class="my-2">

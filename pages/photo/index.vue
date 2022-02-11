@@ -4,7 +4,6 @@
       <base-header
         :title="$t('photo.pageTitle')"
         icon="mdi-file-image-outline"
-        class="title-photo"
       />
     </template>
 

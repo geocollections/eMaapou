@@ -154,10 +154,7 @@
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row class="my-2 my-sm-10" justify="center" align="center">
         <v-col id="otherServices" cols="12">
-          <base-header
-            :title="$t('landing.otherPages')"
-            class="title-heading"
-          />
+          <base-header :title="$t('landing.otherPages')" />
         </v-col>
         <v-col>
           <v-row class="px-2 px-sm-5">
@@ -191,7 +188,7 @@
           </client-only>
         </v-col>
         <v-col cols="12" lg="6">
-          <base-header :title="$t('about.title')" class="title-heading" />
+          <base-header :title="$t('about.title')" />
 
           <div
             class="aboutpage px-2 px-sm-5"

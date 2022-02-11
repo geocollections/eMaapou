@@ -1,11 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header
-        :title="$t('specimen.pageTitle')"
-        icon="mdi-microscope"
-        class="title-specimen"
-      />
+      <base-header :title="$t('specimen.pageTitle')" icon="mdi-microscope" />
     </template>
 
     <template #form>

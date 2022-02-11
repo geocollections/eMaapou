@@ -1,7 +1,7 @@
 <template>
   <detail>
     <template #title>
-      <header-detail :ids="ids" class="title-specimen">
+      <header-detail :ids="ids">
         <div>
           {{ title }}
         </div>
