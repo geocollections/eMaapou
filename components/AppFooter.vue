@@ -2,41 +2,29 @@
   <v-footer padless color="tertiary">
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row no-gutters>
-        <v-col cols="12">
-          <div
-            class="d-flex flex-row align-center text-h6 white--text mx-3 mb-6"
-          >
-            <img
-              v-if="$vuetify.breakpoint.smAndUp"
-              style="height: 50px; width: 100px"
-              :src="$img(logo, null, { provider: 'static' })"
-              class="mt-5 mb-sm-5 mr-4"
-            />
-            <v-divider
-              v-if="$vuetify.breakpoint.smAndUp"
-              vertical
-              class="white my-5"
-            />
-            <div class="ml-sm-4 font-weight-medium">
-              {{ $t('slogan') }}
-            </div>
-          </div>
-        </v-col>
         <v-col cols="12" lg="auto">
           <div class="d-md-flex">
-            <div class="mx-3 mb-6">
+            <div class="montserrat white--text mx-3 mr-8 mb-6">
+              <img
+                style="height: 50px; width: 100px"
+                :src="$img(logo, null, { provider: 'static' })"
+              />
+              <div class="font-weight-medium" style="white-space: nowrap">
+                {{ $t('slogan') }}
+              </div>
+            </div>
+            <div class="ml-4 ml-md-0 mr-4 mb-6">
               <div
                 class="
                   section-title
                   white--text
-                  font-weight-bold
+                  font-weight-medium
                   montserrat
                   mb-4
                 "
               >
                 {{ $t('common.home') }}
               </div>
-
               <div
                 v-for="link in routes"
                 :key="link.routeName"
@@ -58,12 +46,12 @@
                 </nuxt-link>
               </div>
             </div>
-            <div class="mx-3 mb-6">
+            <div class="mx-4 mb-6">
               <div
                 class="
                   section-title
                   white--text
-                  font-weight-bold
+                  font-weight-medium
                   montserrat
                   mb-4
                 "
@@ -94,12 +82,12 @@
                 </div>
               </div>
             </div>
-            <div class="mx-3 mb-6">
+            <div class="ml-3 mb-6">
               <div
                 class="
                   section-title
                   white--text
-                  font-weight-bold
+                  font-weight-medium
                   montserrat
                   mb-4
                 "
@@ -128,8 +116,73 @@
             </div>
           </div>
         </v-col>
-        <v-col cols="12" lg="" align-self="center">
-          <!-- <div class="mb-4 mx-4">
+        <v-col>
+          <div class="ml-3 mb-6">
+            <div
+              class="
+                section-title
+                white--text
+                font-weight-medium
+                montserrat
+                mb-4
+              "
+            >
+              {{ $t('common.partners') }}
+            </div>
+            <div>
+              <a
+                v-for="(item, index) in imageLinks"
+                :key="index"
+                :href="item.href"
+                target="FooterLink"
+                rel="noopener noreferrer"
+              >
+                <v-tooltip top>
+                  <template #activator="{ on, attrs }">
+                    <nuxt-img
+                      v-bind="attrs"
+                      :src="item.src"
+                      :alt="$t(item.alt)"
+                      provider="static"
+                      class="footer-logo py-1 py-sm-0 px-3"
+                      v-on="on"
+                    />
+                  </template>
+
+                  <span>{{ $t(item.title) }}</span>
+                </v-tooltip>
+              </a>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container fluid style="background: #282828 !important">
+      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+        <v-row no-gutters>
+          <!-- <v-col cols="12">
+          <div
+            class="d-flex flex-row align-center text-h6 white--text mx-3 mb-6"
+          >
+            <img
+              v-if="$vuetify.breakpoint.smAndUp"
+              style="height: 50px; width: 100px"
+              :src="$img(logo, null, { provider: 'static' })"
+              class="mt-5 mb-sm-5 mr-4"
+            />
+            <v-divider
+              v-if="$vuetify.breakpoint.smAndUp"
+              vertical
+              class="white my-5"
+            />
+            <div class="ml-sm-4 font-weight-medium">
+              {{ $t('slogan') }}
+            </div>
+          </div>
+        </v-col> -->
+
+          <v-col cols="12" lg="" align-self="center" class="">
+            <!-- <div class="mb-4 mx-4">
             <div
               class="section-title white--text font-weight-bold montserrat mb-4"
             >
@@ -162,51 +215,32 @@
             </div>
           </div>
           <v-divider style="border-color: lightgrey" /> -->
-          <div class="text-center d-flex justify-center align-center">
-            <div style="max-width: 700px">
-              <a
-                v-for="(item, index) in imageLinks"
-                :key="index"
-                :href="item.href"
-                target="FooterLink"
-                rel="noopener noreferrer"
-              >
-                <v-tooltip top>
-                  <template #activator="{ on, attrs }">
-                    <nuxt-img
-                      v-bind="attrs"
-                      :src="item.src"
-                      :alt="$t(item.alt)"
-                      provider="static"
-                      class="footer-logo py-1 py-sm-0 px-3"
-                      v-on="on"
-                    />
-                  </template>
-
-                  <span>{{ $t(item.title) }}</span>
-                </v-tooltip>
-              </a>
-              <!--      <v-card-text class="text-center">
-        {{ $t('footerPreliminary') }}
-      </v-card-text>-->
-              <i18n
-                class="mt-2 text-body-2 grey--text text--lighten-1"
-                path="footer"
-                tag="div"
-              >
-                <a
-                  v-for="(item, index) in textLinks"
-                  :key="index"
-                  :href="item.href"
-                  class="text-link font-weight-bold grey--text text--lighten-2"
-                  target="FooterLink"
-                  >{{ item.text }}</a
+            <div class="text-center d-flex justify-center align-center">
+              <div style="max-width: 700px">
+                <i18n
+                  class="text-body-2 grey--text text--lighten-1"
+                  path="footer"
+                  tag="div"
                 >
-              </i18n>
+                  <a
+                    v-for="(item, index) in textLinks"
+                    :key="index"
+                    :href="item.href"
+                    class="
+                      text-link
+                      font-weight-bold
+                      grey--text
+                      text--lighten-2
+                    "
+                    target="FooterLink"
+                    >{{ item.text }}</a
+                  >
+                </i18n>
+              </div>
             </div>
-          </div>
-        </v-col>
-      </v-row>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-container>
   </v-footer>
 </template>
@@ -400,7 +434,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .footer {
   -webkit-box-shadow: 0 -2px 4px -1px rgba(0, 0, 0, 0.2),
     0 -4px 5px 0 rgba(0, 0, 0, 0.14), 0 -1px 10px 0 rgba(0, 0, 0, 0.12) !important;
@@ -422,7 +456,7 @@ export default {
 } */
 
 .footer-logo {
-  height: 50px;
+  height: 60px;
   width: auto;
   /*padding: 0 10px;*/
 }

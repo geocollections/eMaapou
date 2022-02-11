@@ -95,6 +95,7 @@ export default {
     image: 'Images',
     images: 'Images',
     browse: 'Browse',
+    partners: 'Partners',
   },
   link: {
     sarvAPI: 'Public API',

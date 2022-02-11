@@ -95,6 +95,7 @@ export default {
     image: 'Pildid',
     images: 'Pildid',
     browse: 'Sirvi',
+    partners: 'Partnerid',
   },
   link: {
     sarvAPI: 'Avalik API',
