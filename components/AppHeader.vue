@@ -4,7 +4,7 @@
     dark
     clipped-right
     absolute
-    height="72"
+    height="64"
     :elevation="0"
     color="transparent"
     :class="{
@@ -13,7 +13,7 @@
     }"
     style="z-index: 2060"
   >
-    <v-app-bar-title class="align-self-center">
+    <v-toolbar-title class="align-self-center">
       <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
           Using v-slot:activator added a transition that made the title disappear when clicked.
@@ -22,15 +22,17 @@
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
         <v-img
           v-if="$vuetify.breakpoint.mdAndUp"
-          :height="50"
-          :width="100"
+          :height="40"
+          :width="80"
+          :eager="true"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
         <v-img
-          v-else
+          v-if="!$vuetify.breakpoint.mdAndUp"
           :height="36"
           :width="36"
+          :eager="true"
           contain
           :src="$img(logoCompact, null, { provider: 'static' })"
         />
@@ -38,7 +40,7 @@
           <span>{{ $t('landing.goToFrontpage') }}</span>
         </v-tooltip>
       </nuxt-link>
-    </v-app-bar-title>
+    </v-toolbar-title>
 
     <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
       <v-menu
