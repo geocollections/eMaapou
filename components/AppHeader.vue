@@ -7,6 +7,10 @@
     height="72"
     :elevation="0"
     color="transparent"
+    :class="{
+      'app-bar-full': $vuetify.breakpoint.mdAndUp,
+      'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
+    }"
     style="z-index: 2060"
   >
     <v-app-bar-title class="align-self-center">
@@ -17,18 +21,19 @@
          -->
       <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
         <v-img
+          v-if="$vuetify.breakpoint.mdAndUp"
           :height="40"
           :width="80"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
-        <!-- <v-img
+        <v-img
           v-else
           :height="32"
           :width="32"
           contain
           :src="$img(logoCompact, null, { provider: 'static' })"
-        /> -->
+        />
         <v-tooltip bottom activator="#app-bar-title">
           <span>{{ $t('landing.goToFrontpage') }}</span>
         </v-tooltip>
@@ -166,6 +171,7 @@
         v-if="!$vuetify.breakpoint.mdAndUp"
         text
         class="montserrat"
+        color="accent darken-2"
         aria-label="Open navigation drawer"
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
@@ -394,17 +400,22 @@ export default {
   font-weight: 600 !important;
 }
 
-.v-app-bar ::v-deep .v-toolbar__content {
+.app-bar-mobile ::v-deep .v-toolbar__content {
   max-width: 1785px;
   margin-left: auto;
   margin-right: auto;
-  // padding-right: 20px;
-  padding-left: 20px;
+  padding-right: 0px;
+  // padding-left: 20px;
   border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 
-.v-app-bar ::v-deep .v-toolbar__extension {
-  background-color: #f7f6f4;
+.app-bar-full ::v-deep .v-toolbar__content {
+  max-width: 1785px;
+  margin-left: auto;
+  margin-right: auto;
+  // padding-right: 0px;
+  // padding-left: 20px;
+  border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 
 #quick-search-btn {
