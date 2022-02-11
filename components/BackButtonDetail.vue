@@ -1,5 +1,5 @@
 <template>
-  <v-btn id="back-btn-detail" icon small text @click="handleClick">
+  <v-btn id="back-btn-detail" icon @click="handleClick">
     <v-icon>mdi-subdirectory-arrow-left mdi-rotate-90</v-icon>
     <v-tooltip bottom activator="#back-btn-detail">
       <span>{{ $t('common.goBack') }}</span>

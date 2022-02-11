@@ -74,7 +74,7 @@ export default {
     gallery: 'Galerii',
     containImages: 'Kärbi pilte',
     pagination: 'Kuva {value} kaupa',
-    goBack: 'Tagasi otsingusse',
+    goBack: 'Detailotsingusse',
     extraOptions: 'Lisavõimalused',
     tableHeaders: 'Tabeli päised',
     clipboard: 'Kopeeri lõikelauale',

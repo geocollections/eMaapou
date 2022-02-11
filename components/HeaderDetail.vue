@@ -15,7 +15,6 @@
       "
       style="word-break: normal"
     >
-      <!-- <back-button-detail /> -->
       <slot>
         {{ title }}
       </slot>
@@ -64,6 +63,7 @@
           </v-tooltip>
         </v-btn>
 
+        <back-button-detail />
         <div
           class="
             d-flex
@@ -122,7 +122,7 @@
 
 <script>
 import { debounce } from 'lodash'
-// import BackButtonDetail from './BackButtonDetail.vue'
+import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
 import BaseHeader from './base/BaseHeader.vue'
 
@@ -131,7 +131,7 @@ export default {
   components: {
     EditButton,
     BaseHeader,
-    // BackButtonDetail,
+    BackButtonDetail,
   },
   props: {
     arrowKeys: {

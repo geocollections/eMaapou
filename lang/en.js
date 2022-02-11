@@ -74,7 +74,7 @@ export default {
     gallery: 'Gallery',
     containImages: 'Crop images',
     pagination: 'Paginate by {value}',
-    goBack: 'Back to search',
+    goBack: 'To detailsearch',
     extraOptions: 'Extra options',
     tableHeaders: 'Table headers',
     clipboard: 'Copy to clipboard',
