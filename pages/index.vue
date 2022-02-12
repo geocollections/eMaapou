@@ -29,36 +29,23 @@
           <v-col
             cols="10"
             sm="8"
-            md="10"
-            lg="12"
+            md="8"
+            lg="8"
             offset-md="1"
             offset-sm="2"
             offset="1"
             class="mb-5"
           >
             <!-- TITLE -->
-            <div
-              class="
-                d-flex
-                flex-row
-                align-center
-                text-h4 text-md-h3 text-sm-h4
-                white--text
-              "
-            >
-              <img
-                v-if="$vuetify.breakpoint.smAndUp"
-                style="height: 100px; width: 200px"
-                :src="$img(logo, null, { provider: 'static' })"
-                class="mt-5 mb-sm-5 mr-4"
-              />
-              <v-divider
-                v-if="$vuetify.breakpoint.smAndUp"
-                vertical
-                class="white my-5"
-              />
-              <div class="ml-sm-4 font-weight-medium">
-                {{ $t('slogan') }}
+            <div class="d-flex flex-row align-center text-h2 white--text">
+              <div class="ml-sm-4 font-weight-bold">
+                {{ $t('title') }}
+              </div>
+            </div>
+            <!-- SUBTITLE -->
+            <div class="d-flex flex-row align-center text-h5 white--text">
+              <div class="ml-sm-4 font-weight-normal">
+                {{ $t('subtitle') }}
               </div>
             </div>
           </v-col>
@@ -71,7 +58,7 @@
           justify-sm="start"
           class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
         >
-          <v-col cols="11" sm="8" :md="5" :lg="4" offset-md="1" offset-sm="2">
+          <v-col cols="10" sm="8" :md="6" :lg="4" offset-md="1" offset-sm="2">
             <!-- MAIN CARD -->
             <the-search-card
               :show-map="showMap"
@@ -94,7 +81,7 @@
                       :src="item.src"
                       :alt="$t(item.alt)"
                       provider="static"
-                      class="footer-logo py-1 py-sm-0 px-3"
+                      class="footer-logo py-1 px-3"
                       v-on="on"
                     />
                   </template>
@@ -104,12 +91,6 @@
               </a>
             </div>
           </v-col>
-          <!-- SIDE CARD -->
-          <v-slide-x-transition v-if="renderSideCard" mode="out-in">
-            <v-col v-if="showMap" key="map" md="5" lg="6" class="pa-0">
-              <the-map-card :show-map="showMap" />
-            </v-col>
-          </v-slide-x-transition>
         </v-row>
         <!-- SCROLL INDICATOR -->
         <v-fade-transition>
@@ -153,7 +134,7 @@
     </v-img>
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row class="my-2 my-sm-10" justify="center" align="center">
-        <v-col id="otherServices" cols="12">
+        <v-col class="text-sm-h3" id="otherServices" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>
         <v-col>
@@ -207,14 +188,15 @@ import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
 import TheSearchCard from '~/components/landing/TheSearchCard.vue'
-import TheMapCard from '~/components/landing/TheMapCard.vue'
+// eslint-disable-next-line no-unused-vars
+// import TheMapCard from '~/components/landing/TheMapCard.vue'
 export default {
   components: {
     ExternalLinkCard,
     BaseHeader,
     TheNewsCard,
     TheSearchCard,
-    TheMapCard,
+    // TheMapCard,
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {
@@ -463,7 +445,7 @@ export default {
 
 <style lang="scss" scoped>
 .background-image ::v-deep > .v-image__image {
-  filter: brightness(0.6) !important;
+  filter: brightness(0.5) !important;
 }
 
 .quick-search-card {
@@ -511,5 +493,10 @@ export default {
 
 .shape-divider .shape-fill {
   fill: #f7f6f4;
+}
+
+.text-sm-h3 {
+  color: #577daf;
+  font-weight: bold !important;
 }
 </style>

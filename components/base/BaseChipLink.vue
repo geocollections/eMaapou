@@ -1,6 +1,6 @@
 <template>
   <v-chip
-    class="pa-4 align-center d-flex font-weight-medium"
+    class="pa-4 align-center d-flex font-weight-bold"
     :class="`${cardClass}`"
     hover
     nuxt

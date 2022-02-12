@@ -1,6 +1,6 @@
 <template>
   <v-card
-    style="background-color: rgba(0, 119, 154, 0.9)"
+    style="background-color: rgba(87, 125, 175, 0.8)"
     :height="
       $vuetify.breakpoint.xsOnly ||
       ($vuetify.breakpoint.smAndUp && $vuetify.breakpoint.height < 400)
@@ -15,13 +15,13 @@
       <!-- QUICK SEARCH -->
       <v-col>
         <div class="d-flex flex-column justify-start fill-height">
-          <div class="my-4 my-sm-7 my-md-12">
+          <div class="my-4 my-sm-4 my-md-6">
             <v-card-title
               style="word-break: break-word"
               :class="{
                 'font-small montserrat': $vuetify.breakpoint.smAndDown,
               }"
-              class="mx-3 mb-4 pa-0 px-sm-2 text-h5 text-sm-h4 white--text"
+              class="mx-3 mb-4 pa-0 px-sm-2 text-sm-h5 white--text"
             >
               {{ $t('landing.quickSearch') }}
             </v-card-title>
@@ -33,33 +33,8 @@
               />
             </v-card-actions>
           </div>
-          <!-- MAP BUTTON -->
-          <div v-if="renderSideCard" class="text-right">
-            <v-btn
-              :ripple="false"
-              plain
-              dark
-              class="montserrat py-6"
-              @click="$emit('toggle:side')"
-            >
-              {{ showMap ? $t('common.closeMap') : $t('common.openMap') }}
-
-              <v-icon>{{ 'mdi-chevron-right' }}</v-icon>
-            </v-btn>
-          </div>
-
-          <v-divider class="white mx-2 mx-sm-5"></v-divider>
           <!-- DETAIL SEARCH CHIPS -->
-          <div class="my-4 my-sm-7 my-md-12">
-            <v-card-title
-              style="word-break: break-word"
-              :class="{
-                'font-small montserrat': $vuetify.breakpoint.smAndDown,
-              }"
-              class="mx-3 mb-4 pa-0 px-sm-2 text-h5 text-sm-h4 white--text"
-            >
-              {{ $t('landing.viewMore') }}
-            </v-card-title>
+          <div class="my-4 my-sm-4 my-md-6">
             <div class="mx-3 mx-sm-5 mt-2 d-flex flex-wrap">
               <div
                 v-for="(route, index) in searchRoutes"
@@ -107,32 +82,47 @@ export default {
         {
           routeName: 'locality',
           text: 'locality.pageTitle',
-          class: 'locality-search-card',
-        },
-        {
-          routeName: 'site',
-          text: 'site.pageTitle',
-          class: 'site-search-card',
+          class: 'search-card',
         },
         {
           routeName: 'drillcore',
           text: 'drillcore.pageTitle',
-          class: 'drillcore-search-card',
+          class: 'search-card',
+        },
+        {
+          routeName: 'area',
+          text: 'area.pageTitle',
+          class: 'search-card',
+        },
+        {
+          routeName: 'site',
+          text: 'site.pageTitle',
+          class: 'search-card',
         },
         {
           routeName: 'sample',
           text: 'sample.pageTitle',
-          class: 'sample-search-card',
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
-          class: 'analysis-search-card',
+          class: 'search-card',
         },
         {
           routeName: 'dataset',
           text: 'dataset.pageTitle',
-          class: 'dataset-search-card',
+          class: 'search-card',
+        },
+        {
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
+          class: 'search-card',
+        },
+        {
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
+          class: 'search-card',
+        },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
+          class: 'search-card',
         },
         {
           routeName: 'taxon',
@@ -140,34 +130,19 @@ export default {
           class: 'search-card',
         },
         {
-          routeName: 'photo',
-          text: 'photo.pageTitle',
-          class: 'photo-search-card',
-        },
-        {
-          routeName: 'analysis',
-          text: 'analysis.pageTitle',
-          class: 'analysis-search-card',
-        },
-        {
           routeName: 'stratigraphy',
           text: 'stratigraphy.pageTitle',
-          class: 'stratigraphy-search-card',
+          class: 'search-card',
         },
         {
           routeName: 'specimen',
           text: 'specimen.pageTitle',
-          class: 'specimen-search-card',
+          class: 'search-card',
         },
         {
           routeName: 'preparation',
           text: 'preparation.pageTitle',
-          class: 'preparation-search-card',
-        },
-        {
-          routeName: 'area',
-          text: 'area.pageTitle',
-          class: 'area-search-card',
+          class: 'search-card',
         },
       ],
     }

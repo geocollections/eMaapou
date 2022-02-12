@@ -56,7 +56,7 @@
             aria-label="browse"
             text
             class="montserrat font-weight-medium"
-            color="accent darken-3"
+            color="#ffffff"
             style="text-transform: capitalize; font-size: 0.875rem"
             v-on="on"
           >
@@ -113,7 +113,6 @@
         aria-label="about page"
         text
         class="montserrat font-weight-medium"
-        color="accent darken-3"
         style="text-transform: capitalize"
         :to="localePath({ name: 'about' })"
       >
@@ -125,7 +124,6 @@
         aria-label="news page"
         text
         class="montserrat font-weight-medium"
-        color="accent darken-3"
         style="text-transform: capitalize"
         :to="localePath({ name: 'news' })"
       >
@@ -144,7 +142,7 @@
         <input-search
           v-model="query"
           class="rounded-r-0 montserrat"
-          background-color="grey lighten-2"
+          background-color="white"
           dense
           flat
           :autofocus="false"
@@ -370,8 +368,8 @@ export default {
         { routeName: 'preparation', text: 'preparation.pageTitle' },
         { routeName: 'area', text: 'area.pageTitle' },
       ],
-      logo: '/logos/emaapou5blue.svg',
-      logoCompact: '/logos/emaapou_short_blue.svg',
+      logo: '/logos/emaapou5white.svg',
+      logoCompact: '/logos/emaapou_short_white.svg',
     }
   },
   computed: {
@@ -417,7 +415,7 @@ export default {
   margin-right: auto;
   // padding-right: 0px;
   // padding-left: 20px;
-  border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
+  // border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 
 #quick-search-btn {
@@ -428,11 +426,11 @@ export default {
   background-color: rgba(9, 98, 124, 0.12) !important;
 
   & div {
-    color: var(--v-accent-darken1) !important;
+    color: var(--v-accent-lighten1) !important;
   }
 
   & .v-icon {
-    color: var(--v-accent-darken1) !important;
+    color: var(--v-accent-lighten1) !important;
   }
 }
 
@@ -442,9 +440,12 @@ export default {
   color: #424242 !important;
 }
 .v-app-bar {
+  background: linear-gradient(320deg, #333333, #577daf) !important;
+  /*
   &:hover {
     border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
     background-color: map-get($map: $grey, $key: 'lighten-3') !important;
   }
+  */
 }
 </style>

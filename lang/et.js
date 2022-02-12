@@ -1,7 +1,7 @@
 export default {
   title: 'e·Maapõu',
-  subtitle: 'Eesti geoloogia infoportaal',
-  slogan: 'Eesti geoloogia andmeportaal',
+  subtitle: 'Maapõue andmed ja e-teenused',
+  slogan: 'Kogu info Eesti maapõuest',
   landing: {
     searchTitle: 'Leia e·Maapõuest',
     drillcores: 'Puursüdamikud',
@@ -18,7 +18,7 @@ export default {
     datasets: 'Andmesetid',
     areas: 'Alad',
     attachments: 'Failid',
-    photos: 'Pildid',
+    photos: 'Fotod',
     stratigraphy: 'Stratigraafia',
     visit_site: 'Vaata',
     title: 'Geoloogilised andmed ja e-teenused',
@@ -34,7 +34,7 @@ export default {
   },
   common: {
     general: 'Üldinfo',
-    pictures: 'Pildid',
+    pictures: 'Fotod',
     noValue: '',
     home: 'e·Maapõu',
     first: 'Esimene ID: {id}',

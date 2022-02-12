@@ -21,7 +21,7 @@
         <v-chip
           small
           :ripple="false"
-          class="primary font-weight-regular lighten-1 ml-1 ma-0"
+          class="primary font-weight-regular lighten-1 ml-1 ma-0 xxx"
         >
           {{ item.count }}
         </v-chip>
@@ -57,10 +57,11 @@ export default {
   touch-action: auto;
 }
 .active-tab {
-  background-color: white !important;
+  background-color: #ffdd3c !important;
+  color: #000000 !important;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: var(--v-accent-lighten2) !important;
+  border-bottom-color: #000000 !important;
 
   &:before {
     background-color: white !important;

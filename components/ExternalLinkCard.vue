@@ -17,7 +17,7 @@
         height="190px"
         content-class=""
       >
-        <div class="rounded-t" style="background-color: rgba(0, 119, 154, 0.9)">
+        <div class="rounded-t" style="background-color: rgba(0, 0, 0, 0.4)">
           <v-card-title style="word-break: keep-all" class="montserrat text-h6"
             >{{ title }}
             <v-icon right x-small class="align-self-start">
