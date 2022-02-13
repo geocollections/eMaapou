@@ -31,6 +31,8 @@ export default {
     map: 'Data on map',
     quickSearch: 'Find quickly',
     viewMore: 'Browse and search',
+    intro:
+      'e-Maapõu is a window to geological information in Estonia, proving direct search functionality to the data hosted in the geoscience data platform SARV, and links to external resources and applications.',
   },
   common: {
     general: 'General info',

@@ -440,7 +440,7 @@ export default {
   color: #424242 !important;
 }
 .v-app-bar {
-  background: linear-gradient(320deg, #333333, #577daf) !important;
+  background: linear-gradient(320deg, #577daf, #333333) !important;
   /*
   &:hover {
     border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;

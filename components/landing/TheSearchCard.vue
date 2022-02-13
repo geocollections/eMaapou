@@ -33,6 +33,14 @@
               />
             </v-card-actions>
           </div>
+          <!-- Text -->
+          <div class="hidden-md-and-down my-2 white--text">
+            <div class="mx-3 mx-sm-5 mt-2 d-flex flex-wrap">
+              <p>
+                {{ $t('landing.intro') }}
+              </p>
+            </div>
+          </div>
           <!-- DETAIL SEARCH CHIPS -->
           <div class="my-4 my-sm-4 my-md-6">
             <div class="mx-3 mx-sm-5 mt-2 d-flex flex-wrap">

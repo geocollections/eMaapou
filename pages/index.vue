@@ -10,7 +10,7 @@
       width="100%"
       class="background-image"
       position="center 20%"
-      :gradient="`to bottom, rgba(0,34,51,.3), rgba(0,34,51,.3)`"
+      :gradient="`to right, rgba(0, 0, 0, .8), rgba(0,34,51,.1)`"
       :src="$img('/frontpage/header_img.jpg', null, { provider: 'static' })"
       :lazy-src="
         $img('/frontpage/header_img_medium.jpg', null, { provider: 'static' })
@@ -58,7 +58,15 @@
           justify-sm="start"
           class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
         >
-          <v-col cols="10" sm="8" :md="6" :lg="4" offset-md="1" offset-sm="2">
+          <v-col
+            cols="10"
+            sm="8"
+            :md="6"
+            :lg="5"
+            :xl="4"
+            offset-md="1"
+            offset-sm="2"
+          >
             <!-- MAIN CARD -->
             <the-search-card
               :show-map="showMap"
@@ -134,7 +142,7 @@
     </v-img>
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row class="my-2 my-sm-10" justify="center" align="center">
-        <v-col class="text-sm-h3" id="otherServices" cols="12">
+        <v-col id="otherServices" class="text-sm-h3" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>
         <v-col>
@@ -445,7 +453,7 @@ export default {
 
 <style lang="scss" scoped>
 .background-image ::v-deep > .v-image__image {
-  filter: brightness(0.5) !important;
+  filter: brightness(0.95) !important;
 }
 
 .quick-search-card {
