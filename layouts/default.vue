@@ -3,7 +3,7 @@
     <app-drawer :drawer="drawer" @update:navigationDrawer="drawer = $event" />
     <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
 
-    <v-main>
+    <v-main style="min-height: 100vh">
       <v-container class="pt-1 pb-10" :fluid="$vuetify.breakpoint.lgAndDown">
         <v-row no-gutters>
           <v-col>
