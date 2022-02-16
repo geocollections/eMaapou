@@ -21,7 +21,7 @@ export default {
     photos: 'Fotod',
     stratigraphy: 'Stratigraafia',
     visit_site: 'Vaata',
-    title: 'Geoloogilised andmed ja e-teenused',
+    title: 'Geoloogilised andmed ja e\u8209teenused',
     otherPages: 'Geoloogilised andmed teistes e-teenustes',
     goToFrontpage: 'Pealehele',
     showMenu: 'Näita menüüd',

@@ -1,16 +1,10 @@
 <template>
   <v-form
-    class="d-sm-flex text-right text-sm-center"
+    class="d-flex text-right text-center"
     @submit.prevent="$emit('submit')"
   >
     <input-search v-model="query" />
-    <v-btn
-      height="48px"
-      class="ml-3 mt-2 mt-sm-0"
-      type="submit"
-      color="warning"
-      dark
-    >
+    <v-btn height="48px" class="ml-3 mt-0" type="submit" color="warning" dark>
       <v-icon>mdi-magnify</v-icon>
       <div class="pl-2 montserrat">
         {{ $t('common.searchCommand') }}

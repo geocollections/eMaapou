@@ -399,7 +399,6 @@ export default {
   margin-right: auto;
   padding-right: 0px;
   // padding-left: 20px;
-  border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 
 .app-bar-full ::v-deep .v-toolbar__content {

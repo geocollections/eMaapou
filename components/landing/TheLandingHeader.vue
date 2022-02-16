@@ -1,18 +1,42 @@
 <template>
-  <v-app-bar app dark absolute clipped-right color="transparent" :elevation="0">
-    <v-app-bar-title
-      v-if="$vuetify.breakpoint.xsOnly"
-      class="ml-3 align-self-center app-title"
-    >
-      <v-img
-        v-if="$vuetify.breakpoint.xsOnly"
-        :height="45"
-        :width="90"
-        contain
-        :src="$img(logo, null, { provider: 'static' })"
-      />
-    </v-app-bar-title>
-    <div v-else style="height: 40px; width: 80px" />
+  <v-app-bar
+    app
+    dark
+    absolute
+    clipped-right
+    color="tertiary"
+    :class="{
+      'app-bar-full': $vuetify.breakpoint.mdAndUp,
+      'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
+    }"
+    :elevation="0"
+  >
+    <v-toolbar-title class="align-self-center">
+      <!--
+          NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
+          Using v-slot:activator added a transition that made the title disappear when clicked.
+          https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
+         -->
+      <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
+        <v-img
+          v-if="$vuetify.breakpoint.mdAndUp"
+          :height="40"
+          :width="80"
+          contain
+          :src="$img(logo, null, { provider: 'static' })"
+        />
+        <v-img
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          :height="36"
+          :width="36"
+          contain
+          :src="$img(logoCompact, null, { provider: 'static' })"
+        />
+        <v-tooltip bottom activator="#app-bar-title">
+          <span>{{ $t('landing.goToFrontpage') }}</span>
+        </v-tooltip>
+      </nuxt-link>
+    </v-toolbar-title>
     <v-toolbar-items>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
         <v-menu
@@ -102,7 +126,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar-items>
-    <v-spacer v-if="$vuetify.breakpoint.mdAndUp" />
+    <v-spacer />
     <v-toolbar-items>
       <language-switcher v-show="$vuetify.breakpoint.smAndUp" />
     </v-toolbar-items>
@@ -184,25 +208,27 @@ export default {
         { routeName: 'area', text: 'area.pageTitle' },
       ],
       logo: '/logos/emaapou5white.svg',
+      logoCompact: '/logos/emaapou_short.svg',
     }
   },
 }
 </script>
 
 <style scoped lang="scss">
-.app-title >>> .v-app-bar-title__content {
-  width: unset !important;
-}
-.v-app-bar ::v-deep .v-toolbar__content {
+.app-bar-mobile ::v-deep .v-toolbar__content {
   max-width: 1785px;
   margin-left: auto;
   margin-right: auto;
-  padding-right: 20px;
-  padding-left: 20px;
+  padding-right: 0px;
+  // padding-left: 20px;
 }
 
-.v-app-bar ::v-deep .v-toolbar__content {
-  padding-right: 0;
-  padding-left: 0;
+.app-bar-full ::v-deep .v-toolbar__content {
+  max-width: 1785px;
+  margin-left: auto;
+  margin-right: auto;
+  // padding-right: 0px;
+  // padding-left: 20px;
+  // border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 </style>

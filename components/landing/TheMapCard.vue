@@ -1,7 +1,7 @@
 <template>
   <leaflet-map
-    class="ml-4 elevation-3"
-    height="70vh"
+    class="elevation-3"
+    height="450px"
     summary-overlay
     :invalidate-size="showMap"
     :zoom="6"
