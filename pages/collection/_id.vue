@@ -9,78 +9,76 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row
-                :title="$t('collection.number')"
-                :value="collection.number"
-              />
-              <table-row
-                :title="$t('collection.name')"
-                :value="
-                  $translate({
-                    et: collection.name,
-                    en: collection.name_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('collection.nameLong')"
-                :value="
-                  $translate({
-                    et: collection.name_long,
-                    en: collection.name_long_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="classification"
-                :title="$t('collection.classification')"
-                :value="classification.class_field"
-              />
-              <table-row-link
-                v-if="reference"
-                :title="$t('collection.reference')"
-                :value="
-                  $translate({
-                    et: reference.reference,
-                    en: reference.reference_en,
-                  })
-                "
-                :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
-              />
-              <table-row
-                :title="$t('collection.numberObjects')"
-                :value="`${collection.number_objects}`"
-              />
-              <table-row-link
-                v-if="database"
-                :title="$t('collection.database')"
-                :value="
-                  $translate({
-                    et: database.name,
-                    en: database.name_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: `institution-${database.acronym.toLowerCase()}`,
-                  })
-                "
-              />
-              <table-row
-                v-if="collection.date_added"
-                :title="$t('collection.dateAdded')"
-                :value="$formatDate(collection.date_added)"
-              />
-              <table-row
-                v-if="collection.date_changed"
-                :title="$t('collection.dateChanged')"
-                :value="$formatDate(collection.date_changed)"
-              />
-              <!-- <table-row
+        <base-table>
+          <table-row
+            :title="$t('collection.number')"
+            :value="collection.number"
+          />
+          <table-row
+            :title="$t('collection.name')"
+            :value="
+              $translate({
+                et: collection.name,
+                en: collection.name_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('collection.nameLong')"
+            :value="
+              $translate({
+                et: collection.name_long,
+                en: collection.name_long_en,
+              })
+            "
+          />
+          <table-row
+            v-if="classification"
+            :title="$t('collection.classification')"
+            :value="classification.class_field"
+          />
+          <table-row-link
+            v-if="reference"
+            :title="$t('collection.reference')"
+            :value="
+              $translate({
+                et: reference.reference,
+                en: reference.reference_en,
+              })
+            "
+            :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
+          />
+          <table-row
+            :title="$t('collection.numberObjects')"
+            :value="`${collection.number_objects}`"
+          />
+          <table-row-link
+            v-if="database"
+            :title="$t('collection.database')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: `institution-${database.acronym.toLowerCase()}`,
+              })
+            "
+          />
+          <table-row
+            v-if="collection.date_added"
+            :title="$t('collection.dateAdded')"
+            :value="$formatDate(collection.date_added)"
+          />
+          <table-row
+            v-if="collection.date_changed"
+            :title="$t('collection.dateChanged')"
+            :value="$formatDate(collection.date_changed)"
+          />
+          <!-- <table-row
                 :title="$t('drillcore.boxes')"
                 :value="drillcore.boxes"
               />
@@ -140,9 +138,7 @@
                 :title="$t('drillcore.dateChanged')"
                 :value="$formatDate(drillcore.date_changed)"
               /> -->
-            </tbody>
-          </template>
-        </v-simple-table>
+        </base-table>
       </v-card-text>
       <div v-if="collection.remarks">
         <v-card-title class="subsection-title">{{
@@ -170,6 +166,7 @@ import Tabs from '~/components/Tabs.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_COLLECTION } from '~/constants/tabs'
+import BaseTable from '~/components/base/BaseTable.vue'
 export default {
   components: {
     HeaderDetail,
@@ -177,6 +174,7 @@ export default {
     TableRowLink,
     Detail,
     Tabs,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

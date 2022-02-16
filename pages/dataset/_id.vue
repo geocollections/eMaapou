@@ -9,151 +9,141 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row :title="$t('dataset.title')" :value="dataset.title" />
-              <table-row
-                :title="$t('dataset.titleTranslated')"
-                :value="dataset.title_translated"
-              />
-              <table-row
-                :title="$t('dataset.titleAlt')"
-                :value="dataset.title_alternative"
-              />
-              <table-row
-                v-if="dataset.creators || dataset.owner_txt || dataset.owner"
-                :title="$t('dataset.creators')"
-                :value="
-                  dataset.creators || dataset.owner_txt || dataset.owner.agent
-                "
-              />
-              <table-row
-                :title="$t('dataset.publicationYear')"
-                :value="dataset.publication_year"
-              />
-              <table-row :title="$t('dataset.date')" :value="dataset.date" />
-              <table-row
-                :title="$t('dataset.resourceTopic')"
-                :value="dataset.resource"
-              />
-              <table-row
-                :title="$t('dataset.publisher')"
-                :value="dataset.publisher"
-              />
-              <table-row
-                :title="$t('dataset.subjects')"
-                :value="dataset.subjects"
-              />
-              <table-row
-                v-if="dataset.language"
-                :title="$t('dataset.language')"
-                :value="
-                  $translate({
-                    et: dataset.language.value,
-                    en: dataset.language.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('dataset.abstract')"
-                :value="dataset.abstract"
-              />
-              <table-row
-                :title="$t('dataset.methods')"
-                :value="dataset.methods"
-              />
-              <table-row
-                :title="$t('dataset.version')"
-                :value="dataset.version"
-              />
-              <table-row-link
-                v-if="doi"
-                :title="$t('dataset.doi')"
-                :value="doi"
-                :href="`https://doi.geocollections.info/${doi}`"
-              />
-              <table-row-link
-                v-if="reference"
-                :title="$t('dataset.reference')"
-                :value="reference.reference"
-                :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
-              />
-              <table-row-link
-                v-if="dataset.locality"
-                :title="$t('dataset.locality')"
-                :value="
-                  $translate({
-                    et: dataset.locality.locality,
-                    en: dataset.locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: dataset.locality },
-                  })
-                "
-              />
-              <table-row
-                v-if="dataset.copyright_agent"
-                :title="$t('dataset.copyright')"
-                :value="dataset.copyright_agent.agent"
-              />
-              <table-row-link
-                v-if="dataset.licence"
-                :title="$t('dataset.licence')"
-                :value="
-                  $translate({
-                    et: dataset.licence.licence,
-                    en: dataset.licence.licence_en,
-                  })
-                "
-                :href="
-                  $translate({
-                    et: dataset.licence.licence_url,
-                    en: dataset.licence.licence_url_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="dataset.date_added"
-                :title="$t('dataset.dateAdded')"
-                :value="$formatDate(dataset.date_added)"
-              />
-              <table-row
-                v-if="dataset.date_changed"
-                :title="$t('dataset.dateChanged')"
-                :value="$formatDate(dataset.date_changed)"
-              />
-              <table-row
-                v-if="parameters"
-                :title="$t('dataset.parameters')"
-                :value="parameters"
+        <base-table>
+          <table-row :title="$t('dataset.title')" :value="dataset.title" />
+          <table-row
+            :title="$t('dataset.titleTranslated')"
+            :value="dataset.title_translated"
+          />
+          <table-row
+            :title="$t('dataset.titleAlt')"
+            :value="dataset.title_alternative"
+          />
+          <table-row
+            v-if="dataset.creators || dataset.owner_txt || dataset.owner"
+            :title="$t('dataset.creators')"
+            :value="
+              dataset.creators || dataset.owner_txt || dataset.owner.agent
+            "
+          />
+          <table-row
+            :title="$t('dataset.publicationYear')"
+            :value="dataset.publication_year"
+          />
+          <table-row :title="$t('dataset.date')" :value="dataset.date" />
+          <table-row
+            :title="$t('dataset.resourceTopic')"
+            :value="dataset.resource"
+          />
+          <table-row
+            :title="$t('dataset.publisher')"
+            :value="dataset.publisher"
+          />
+          <table-row
+            :title="$t('dataset.subjects')"
+            :value="dataset.subjects"
+          />
+          <table-row
+            v-if="dataset.language"
+            :title="$t('dataset.language')"
+            :value="
+              $translate({
+                et: dataset.language.value,
+                en: dataset.language.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('dataset.abstract')"
+            :value="dataset.abstract"
+          />
+          <table-row :title="$t('dataset.methods')" :value="dataset.methods" />
+          <table-row :title="$t('dataset.version')" :value="dataset.version" />
+          <table-row-link
+            v-if="doi"
+            :title="$t('dataset.doi')"
+            :value="doi"
+            :href="`https://doi.geocollections.info/${doi}`"
+          />
+          <table-row-link
+            v-if="reference"
+            :title="$t('dataset.reference')"
+            :value="reference.reference"
+            :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
+          />
+          <table-row-link
+            v-if="dataset.locality"
+            :title="$t('dataset.locality')"
+            :value="
+              $translate({
+                et: dataset.locality.locality,
+                en: dataset.locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: dataset.locality },
+              })
+            "
+          />
+          <table-row
+            v-if="dataset.copyright_agent"
+            :title="$t('dataset.copyright')"
+            :value="dataset.copyright_agent.agent"
+          />
+          <table-row-link
+            v-if="dataset.licence"
+            :title="$t('dataset.licence')"
+            :value="
+              $translate({
+                et: dataset.licence.licence,
+                en: dataset.licence.licence_en,
+              })
+            "
+            :href="
+              $translate({
+                et: dataset.licence.licence_url,
+                en: dataset.licence.licence_url_en,
+              })
+            "
+          />
+          <table-row
+            v-if="dataset.date_added"
+            :title="$t('dataset.dateAdded')"
+            :value="$formatDate(dataset.date_added)"
+          />
+          <table-row
+            v-if="dataset.date_changed"
+            :title="$t('dataset.dateChanged')"
+            :value="$formatDate(dataset.date_changed)"
+          />
+          <table-row
+            v-if="parameters"
+            :title="$t('dataset.parameters')"
+            :value="parameters"
+          >
+            <template #value>
+              <v-chip-group
+                :value="selectedParameterValues"
+                multiple
+                column
+                active-class="active-tab font-weight-bold elevation-1"
+                @change="handleParameterChange"
               >
-                <template #value>
-                  <v-chip-group
-                    :value="selectedParameterValues"
-                    multiple
-                    column
-                    active-class="active-tab font-weight-bold elevation-1"
-                    @change="handleParameterChange"
-                  >
-                    <v-chip
-                      v-for="(parameter, i) in parameters"
-                      :key="i"
-                      :value="parameter.value"
-                      small
-                    >
-                      {{ parameter.text }}
-                    </v-chip>
-                  </v-chip-group>
-                </template>
-              </table-row>
-            </tbody>
-          </template>
-        </v-simple-table>
+                <v-chip
+                  v-for="(parameter, i) in parameters"
+                  :key="i"
+                  :value="parameter.value"
+                  small
+                >
+                  {{ parameter.text }}
+                </v-chip>
+              </v-chip-group>
+            </template>
+          </table-row>
+        </base-table>
       </v-card-text>
     </template>
 
@@ -188,6 +178,7 @@ import Detail from '~/templates/Detail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
+import BaseTable from '~/components/base/BaseTable.vue'
 import { TABS_DATASET } from '~/constants'
 
 export default {
@@ -198,6 +189,7 @@ export default {
     Detail,
     TableRow,
     TableRowLink,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

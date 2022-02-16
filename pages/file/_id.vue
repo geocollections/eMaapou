@@ -121,227 +121,220 @@
 
     <template #column-right>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row-link
-                v-if="specimen && specimen.coll"
-                :title="$t('file.collectionNr')"
-                :value="specimen.coll.number"
-                nuxt
-                :href="
-                  localePath({
-                    name: 'specimen-id',
-                    params: { id: file.specimen.id },
-                  })
-                "
-              />
-              <table-row-link
-                v-if="specimen"
-                :title="$t('file.specimenNr')"
-                :value="file.specimen.specimen_id"
-                nuxt
-                :href="
-                  localePath({
-                    name: 'specimen-id',
-                    params: { id: file.specimen.id },
-                  })
-                "
-              />
-              <template v-for="(item, index) in specimenIdentification">
-                <table-row-link
-                  v-if="item.taxon"
-                  :key="index"
-                  :title="$t('file.name')"
-                  :value="item.taxon.taxon"
-                  :suffix="item.name ? `| ${item.name}` : ''"
-                  @link-click="
-                    $openWindow(`https://fossiilid.info/${item.taxon.id}`)
-                  "
-                />
-              </template>
-              <template v-for="(item, index) in specimenIdentificationGeology">
-                <table-row-link
-                  v-if="item.taxon"
-                  :key="index"
-                  :title="$t('file.name')"
-                  :value="item.taxon.taxon"
-                  :suffix="item.name ? `| ${item.name}` : ''"
-                  @link-click="
-                    $openWindow(`https://fossiilid.info/${item.taxon.id}`)
-                  "
-                />
-              </template>
-              <table-row-link
-                v-if="specimen && specimen.locality"
-                :title="$t('file.locality')"
-                :value="
-                  $translate({
-                    et: specimen.locality.locality,
-                    en: specimen.locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: specimen.locality.id },
-                  })
-                "
-              />
-              <table-row-link
-                v-if="specimen && specimen.stratigraphy"
-                :title="$t('file.stratigraphy')"
-                :value="
-                  $translate({
-                    et: specimen.stratigraphy.stratigraphy,
-                    en: specimen.stratigraphy.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: specimen.stratigraphy.id },
-                  })
-                "
-              />
-              <table-row
-                :title="$t('file.scalebar')"
-                :value="file.image_scalebar"
-              />
-              <table-row
-                :title="$t('file.description')"
-                :value="
-                  $translate({
-                    et: file.description,
-                    en: file.description_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('file.imageNumber')"
-                :value="file.image_number"
-              />
-              <table-row
-                v-if="imageset"
-                :title="$t('file.imagesetNumber')"
-                :value="imageset.imageset_number"
-              />
-              <table-row
-                v-if="imageset"
-                :title="$t('file.imagesetDescription')"
-                :value="imageset.description"
-              />
-              <table-row :title="$t('file.author')" :value="file.author" />
-              <table-row :title="$t('file.author')" :value="file.author_free" />
-              <table-row
-                :title="$t('file.imagePeople')"
-                :value="file.image_people"
-              />
-              <table-row
-                :title="$t('file.date')"
-                :value="file.date_created || file.date_created_free"
-              />
-              <table-row
-                :title="$t('file.imagePlace')"
-                :value="file.image_place"
-              />
-              <table-row-link
-                v-if="locality"
-                :title="$t('file.locality')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: locality.id },
-                  })
-                "
-              />
-              <table-row
-                :title="$t('file.imageLatitude')"
-                :value="file.image_latitude"
-              />
-              <table-row
-                :title="$t('file.imageLongitude')"
-                :value="file.image_longitude"
-              />
-              <table-row
-                v-if="type"
-                :title="$t('file.type')"
-                :value="
-                  $translate({
-                    et: type.value,
-                    en: type.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('file.format')"
-                :value="file.attachment_format"
-              />
-              <table-row
-                v-if="attachmentKeywords.length > 0"
-                :title="$t('file.keywords')"
-                :value="attachmentKeywords"
-              >
-                <template #value>
-                  <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                    <li v-if="item.keyword">{{ item.keyword.keyword }}</li>
-                  </ul>
-                </template>
-              </table-row>
-              <table-row
-                v-if="agent_digitised"
-                :title="$t('file.personDigitised')"
-                :value="agent_digitised.agent"
-              />
-              <table-row
-                :title="$t('file.dateDigitised')"
-                :value="file.date_digitised || file.date_digitised_free"
-              />
-              <table-row :title="$t('file.imageSize')" :value="imageSize" />
-              <table-row-link
-                v-if="database"
-                :title="$t('file.institution')"
-                :value="
-                  $translate({
-                    et: database.name,
-                    en: database.name_en,
-                  })
-                "
-                @link-click="
-                  $openWindow(
-                    `https://geocollections.info/${file.database.acronym.toLowerCase()}`
-                  )
-                "
-              />
-              <table-row-link
-                v-if="licence"
-                :title="$t('file.licence')"
-                :value="licence.licence_en"
-                @link-click="$openWindow(licence.licence_url_en)"
-              />
-              <table-row :title="$t('file.remarks')" :value="file.remarks" />
-              <table-row
-                v-if="file.date_added"
-                :title="$t('file.dateAdded')"
-                :value="$formatDate(file.date_added)"
-              />
-              <table-row
-                v-if="file.date_changed"
-                :title="$t('file.dateChanged')"
-                :value="$formatDate(file.date_changed)"
-              />
-            </tbody>
+        <base-table>
+          <table-row-link
+            v-if="specimen && specimen.coll"
+            :title="$t('file.collectionNr')"
+            :value="specimen.coll.number"
+            nuxt
+            :href="
+              localePath({
+                name: 'specimen-id',
+                params: { id: file.specimen.id },
+              })
+            "
+          />
+          <table-row-link
+            v-if="specimen"
+            :title="$t('file.specimenNr')"
+            :value="file.specimen.specimen_id"
+            nuxt
+            :href="
+              localePath({
+                name: 'specimen-id',
+                params: { id: file.specimen.id },
+              })
+            "
+          />
+          <template v-for="(item, index) in specimenIdentification">
+            <table-row-link
+              v-if="item.taxon"
+              :key="index"
+              :title="$t('file.name')"
+              :value="item.taxon.taxon"
+              :suffix="item.name ? `| ${item.name}` : ''"
+              @link-click="
+                $openWindow(`https://fossiilid.info/${item.taxon.id}`)
+              "
+            />
           </template>
-        </v-simple-table>
+          <template v-for="(item, index) in specimenIdentificationGeology">
+            <table-row-link
+              v-if="item.taxon"
+              :key="index"
+              :title="$t('file.name')"
+              :value="item.taxon.taxon"
+              :suffix="item.name ? `| ${item.name}` : ''"
+              @link-click="
+                $openWindow(`https://fossiilid.info/${item.taxon.id}`)
+              "
+            />
+          </template>
+          <table-row-link
+            v-if="specimen && specimen.locality"
+            :title="$t('file.locality')"
+            :value="
+              $translate({
+                et: specimen.locality.locality,
+                en: specimen.locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: specimen.locality.id },
+              })
+            "
+          />
+          <table-row-link
+            v-if="specimen && specimen.stratigraphy"
+            :title="$t('file.stratigraphy')"
+            :value="
+              $translate({
+                et: specimen.stratigraphy.stratigraphy,
+                en: specimen.stratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: specimen.stratigraphy.id },
+              })
+            "
+          />
+          <table-row
+            :title="$t('file.scalebar')"
+            :value="file.image_scalebar"
+          />
+          <table-row
+            :title="$t('file.description')"
+            :value="
+              $translate({
+                et: file.description,
+                en: file.description_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('file.imageNumber')"
+            :value="file.image_number"
+          />
+          <table-row
+            v-if="imageset"
+            :title="$t('file.imagesetNumber')"
+            :value="imageset.imageset_number"
+          />
+          <table-row
+            v-if="imageset"
+            :title="$t('file.imagesetDescription')"
+            :value="imageset.description"
+          />
+          <table-row :title="$t('file.author')" :value="file.author" />
+          <table-row :title="$t('file.author')" :value="file.author_free" />
+          <table-row
+            :title="$t('file.imagePeople')"
+            :value="file.image_people"
+          />
+          <table-row
+            :title="$t('file.date')"
+            :value="file.date_created || file.date_created_free"
+          />
+          <table-row :title="$t('file.imagePlace')" :value="file.image_place" />
+          <table-row-link
+            v-if="locality"
+            :title="$t('file.locality')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: locality.id },
+              })
+            "
+          />
+          <table-row
+            :title="$t('file.imageLatitude')"
+            :value="file.image_latitude"
+          />
+          <table-row
+            :title="$t('file.imageLongitude')"
+            :value="file.image_longitude"
+          />
+          <table-row
+            v-if="type"
+            :title="$t('file.type')"
+            :value="
+              $translate({
+                et: type.value,
+                en: type.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('file.format')"
+            :value="file.attachment_format"
+          />
+          <table-row
+            v-if="attachmentKeywords.length > 0"
+            :title="$t('file.keywords')"
+            :value="attachmentKeywords"
+          >
+            <template #value>
+              <ul v-for="(item, index) in attachmentKeywords" :key="index">
+                <li v-if="item.keyword">{{ item.keyword.keyword }}</li>
+              </ul>
+            </template>
+          </table-row>
+          <table-row
+            v-if="agent_digitised"
+            :title="$t('file.personDigitised')"
+            :value="agent_digitised.agent"
+          />
+          <table-row
+            :title="$t('file.dateDigitised')"
+            :value="file.date_digitised || file.date_digitised_free"
+          />
+          <table-row :title="$t('file.imageSize')" :value="imageSize" />
+          <table-row-link
+            v-if="database"
+            :title="$t('file.institution')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            @link-click="
+              $openWindow(
+                `https://geocollections.info/${file.database.acronym.toLowerCase()}`
+              )
+            "
+          />
+          <table-row-link
+            v-if="licence"
+            :title="$t('file.licence')"
+            :value="licence.licence_en"
+            @link-click="$openWindow(licence.licence_url_en)"
+          />
+          <table-row :title="$t('file.remarks')" :value="file.remarks" />
+          <table-row
+            v-if="file.date_added"
+            :title="$t('file.dateAdded')"
+            :value="$formatDate(file.date_added)"
+          />
+          <table-row
+            v-if="file.date_changed"
+            :title="$t('file.dateChanged')"
+            :value="$formatDate(file.date_changed)"
+          />
+        </base-table>
 
         <v-card v-if="showMap" id="map-wrap" elevation="0">
           <v-card-title class="pl-0 subsection-title"
@@ -514,6 +507,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import LeafletMap from '~/components/map/LeafletMap'
 import Detail from '~/templates/Detail'
 import LasChart from '~/components/chart/types/LasChart'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: {
@@ -523,6 +517,7 @@ export default {
     TableRow,
     TableRowLink,
     Detail,
+    BaseTable,
   },
   async asyncData({ params, route, error, app }) {
     try {

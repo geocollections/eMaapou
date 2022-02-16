@@ -42,3 +42,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.v-chip {
+  border-bottom-width: 3px !important;
+  border-bottom-style: solid !important;
+
+  border-color: var(--v-primary-base) !important;
+}
+</style>

@@ -456,11 +456,6 @@ export default {
   filter: brightness(0.95) !important;
 }
 
-.quick-search-card {
-  border-left-width: 5px !important;
-  border-left-style: solid !important;
-  border-left-color: var(--v-accent-base) !important;
-}
 .footer-logo {
   height: 60px;
   width: auto;

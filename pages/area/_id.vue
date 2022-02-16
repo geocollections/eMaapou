@@ -14,158 +14,152 @@
             $t('common.general')
           }}</v-card-title>
           <v-card-text>
-            <v-simple-table dense class="custom-table">
-              <template #default>
-                <tbody>
-                  <table-row
-                    :title="$t('area.name')"
-                    :value="$translate({ et: area.name, en: area.name_en })"
-                  />
-                  <table-row-link
-                    v-if="area.area_type === 2"
-                    :title="$t('area.areaType')"
-                    :value="
-                      $translate({
-                        et: area.area_type__name,
-                        en: area.area_type__name_en,
-                      })
-                    "
-                    @link-click="$openTurba('turbaala', area.id)"
-                  />
-                  <table-row
-                    v-else
-                    :title="$t('area.areaType')"
-                    :value="
-                      $translate({
-                        et: area.area_type.name,
-                        en: area.area_type.name_en,
-                      })
-                    "
-                  />
-                  <table-row-link
-                    v-if="area.parent_area"
-                    nuxt
-                    :href="
-                      localePath({
-                        name: 'area-id',
-                        params: { id: area.parent_area.id },
-                      })
-                    "
-                    :title="$t('area.parentArea')"
-                    :value="
-                      $translate({
-                        et: area.parent_area.name,
-                        en: area.parent_area.name_en,
-                      })
-                    "
-                  />
-                  <table-row
-                    :title="$t('area.county')"
-                    :value="
-                      $translate({
-                        et: area.maakond__maakond,
-                        en: area.maakond__maakond_en,
-                      })
-                    "
-                  />
-                  <table-row :title="$t('area.areaHa')" :value="area.area_ha" />
-                  <table-row
-                    :title="$t('area.depositAreaHa')"
-                    :value="area.deposit_area_ha"
-                  />
-                  <table-row
-                    v-if="
+            <base-table>
+              <table-row
+                :title="$t('area.name')"
+                :value="$translate({ et: area.name, en: area.name_en })"
+              />
+              <table-row-link
+                v-if="area.area_type === 2"
+                :title="$t('area.areaType')"
+                :value="
+                  $translate({
+                    et: area.area_type__name,
+                    en: area.area_type__name_en,
+                  })
+                "
+                @link-click="$openTurba('turbaala', area.id)"
+              />
+              <table-row
+                v-else
+                :title="$t('area.areaType')"
+                :value="
+                  $translate({
+                    et: area.area_type.name,
+                    en: area.area_type.name_en,
+                  })
+                "
+              />
+              <table-row-link
+                v-if="area.parent_area"
+                nuxt
+                :href="
+                  localePath({
+                    name: 'area-id',
+                    params: { id: area.parent_area.id },
+                  })
+                "
+                :title="$t('area.parentArea')"
+                :value="
+                  $translate({
+                    et: area.parent_area.name,
+                    en: area.parent_area.name_en,
+                  })
+                "
+              />
+              <table-row
+                :title="$t('area.county')"
+                :value="
+                  $translate({
+                    et: area.maakond__maakond,
+                    en: area.maakond__maakond_en,
+                  })
+                "
+              />
+              <table-row :title="$t('area.areaHa')" :value="area.area_ha" />
+              <table-row
+                :title="$t('area.depositAreaHa')"
+                :value="area.deposit_area_ha"
+              />
+              <table-row
+                v-if="
+                  $translate({
+                    et: area.description,
+                    en: area.description_en,
+                  })
+                "
+                :title="$t('area.description')"
+              >
+                <template #value>
+                  <!-- eslint-disable vue/no-v-html -->
+                  <div
+                    v-html="
                       $translate({
                         et: area.description,
                         en: area.description_en,
                       })
                     "
-                    :title="$t('area.description')"
-                  >
-                    <template #value>
-                      <!-- eslint-disable vue/no-v-html -->
-                      <div
-                        v-html="
-                          $translate({
-                            et: area.description,
-                            en: area.description_en,
-                          })
-                        "
-                      />
-                      <!-- eslint-enable -->
-                    </template>
-                  </table-row>
-                  <table-row :title="$t('area.egf')">
-                    <template #value>
-                      <span v-for="(item, index) in egfArray" :key="index">
-                        <a class="text-link" @click="$openEgf(item)">
-                          {{ item }}
-                        </a>
-                        <span v-if="index !== egfArray.length - 1" class="mr-1"
-                          >|</span
-                        >
-                      </span>
-                    </template>
-                  </table-row>
-                  <table-row-link
-                    :title="$t('area.maardla')"
-                    @link-click="$openEelis(item)"
-                  >
-                    <template #value>
-                      {{ $t('area.maardlaLink') }} ({{ area.maardla }})
-                    </template>
-                  </table-row-link>
-                  <table-row :title="$t('area.eelis')">
-                    <template #value>
-                      <span v-for="(item, index) in eelisArray" :key="index">
-                        <a class="text-link" @click="$openEelis(item)">
-                          {{ item }}
-                        </a>
-                        <span
-                          v-if="index !== eelisArray.length - 1"
-                          class="mr-1"
-                          >|</span
-                        >
-                      </span>
-                    </template>
-                  </table-row>
+                  />
+                  <!-- eslint-enable -->
+                </template>
+              </table-row>
+              <table-row :title="$t('area.egf')">
+                <template #value>
+                  <span v-for="(item, index) in egfArray" :key="index">
+                    <a class="text-link" @click="$openEgf(item)">
+                      {{ item }}
+                    </a>
+                    <span v-if="index !== egfArray.length - 1" class="mr-1"
+                      >|</span
+                    >
+                  </span>
+                </template>
+              </table-row>
+              <table-row-link
+                :title="$t('area.maardla')"
+                @link-click="$openEelis(item)"
+              >
+                <template #value>
+                  {{ $t('area.maardlaLink') }} ({{ area.maardla }})
+                </template>
+              </table-row-link>
+              <table-row :title="$t('area.eelis')">
+                <template #value>
+                  <span v-for="(item, index) in eelisArray" :key="index">
+                    <a class="text-link" @click="$openEelis(item)">
+                      {{ item }}
+                    </a>
+                    <span v-if="index !== eelisArray.length - 1" class="mr-1"
+                      >|</span
+                    >
+                  </span>
+                </template>
+              </table-row>
 
-                  <table-row
-                    v-if="area.area_type === 2"
-                    :title="$t('area.text1')"
-                    :value="planArray"
-                  >
-                    <template #value>
-                      <span v-for="(item, index) in planArray" :key="index">
-                        <a
-                          class="text-link"
-                          :download="item.trim()"
-                          @click="$openTurba('plaanid', item.trim(), false)"
-                        >
-                          {{ item }}
-                          <v-icon small color="primary darken-2"
-                            >mdi-file-download-outline</v-icon
-                          >
-                        </a>
-                        <span v-if="index !== planArray.length - 1" class="mr-1"
-                          >|</span
-                        >
-                      </span>
-                    </template>
-                  </table-row>
-                  <table-row
-                    v-if="area.date_added"
-                    :title="$t('area.dateAdded')"
-                    :value="$formatDate(area.date_added)"
-                  />
-                  <table-row
-                    v-if="area.date_changed"
-                    :title="$t('area.dateChanged')"
-                    :value="$formatDate(area.date_changed)"
-                  />
-                </tbody>
-              </template>
-            </v-simple-table>
+              <table-row
+                v-if="area.area_type === 2"
+                :title="$t('area.text1')"
+                :value="planArray"
+              >
+                <template #value>
+                  <span v-for="(item, index) in planArray" :key="index">
+                    <a
+                      class="text-link"
+                      :download="item.trim()"
+                      @click="$openTurba('plaanid', item.trim(), false)"
+                    >
+                      {{ item }}
+                      <v-icon small color="primary darken-2"
+                        >mdi-file-download-outline</v-icon
+                      >
+                    </a>
+                    <span v-if="index !== planArray.length - 1" class="mr-1"
+                      >|</span
+                    >
+                  </span>
+                </template>
+              </table-row>
+              <table-row
+                v-if="area.date_added"
+                :title="$t('area.dateAdded')"
+                :value="$formatDate(area.date_added)"
+              />
+              <table-row
+                v-if="area.date_changed"
+                :title="$t('area.dateChanged')"
+                :value="$formatDate(area.date_changed)"
+              />
+            </base-table>
           </v-card-text>
         </v-col>
       </v-row>
@@ -184,65 +178,58 @@
             >
               {{ $t('alert.estonianLandBoardDatabase') }}
             </v-alert>
-            <v-simple-table dense class="custom-table">
-              <template #default>
-                <tbody>
-                  <table-row-link
-                    :title="$t('deposit.registrationNo')"
-                    :value="deposit.id"
-                    @link-click="
-                      $openWindow(
-                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.id}`
-                      )
-                    "
-                  />
-                  <table-row
-                    :title="$t('deposit.name')"
-                    :value="`${deposit.nimetus} ${
-                      deposit.maardla_os ? `(${deposit.maardla_os})` : ''
-                    }`"
-                  />
-                  <table-row
-                    :title="$t('deposit.name')"
-                    :value="deposit.maardla_os"
-                  />
-                  <table-row
-                    :title="$t('deposit.area')"
-                    :value="deposit.pindala"
-                  />
-                  <table-row :title="$t('deposit.isBedrock')">
-                    <template #value>
-                      <base-boolean :value="deposit.aluspohja" />
-                    </template>
-                  </table-row>
-                  <table-row
-                    :title="$t('deposit.commodity')"
-                    :value="deposit.maavara"
-                  />
-                  <table-row
-                    :title="$t('deposit.usage')"
-                    :value="deposit.pohimaavar"
-                  />
-                  <table-row
-                    :title="$t('deposit.additionalCommodity')"
-                    :value="deposit.kaasmaavar"
-                  />
+            <base-table>
+              <table-row-link
+                :title="$t('deposit.registrationNo')"
+                :value="deposit.id"
+                @link-click="
+                  $openWindow(
+                    `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.id}`
+                  )
+                "
+              />
+              <table-row
+                :title="$t('deposit.name')"
+                :value="`${deposit.nimetus} ${
+                  deposit.maardla_os ? `(${deposit.maardla_os})` : ''
+                }`"
+              />
+              <table-row
+                :title="$t('deposit.name')"
+                :value="deposit.maardla_os"
+              />
+              <table-row :title="$t('deposit.area')" :value="deposit.pindala" />
+              <table-row :title="$t('deposit.isBedrock')">
+                <template #value>
+                  <base-boolean :value="deposit.aluspohja" />
+                </template>
+              </table-row>
+              <table-row
+                :title="$t('deposit.commodity')"
+                :value="deposit.maavara"
+              />
+              <table-row
+                :title="$t('deposit.usage')"
+                :value="deposit.pohimaavar"
+              />
+              <table-row
+                :title="$t('deposit.additionalCommodity')"
+                :value="deposit.kaasmaavar"
+              />
 
-                  <table-row
-                    :title="$t('deposit.miningConditions')"
-                    :value="deposit.maeteh_ti"
-                  />
-                  <table-row
-                    :title="$t('deposit.enviromentalRestrictions')"
-                    :value="deposit.geookol_ti"
-                  />
-                  <table-row
-                    :title="$t('deposit.dataExportDate')"
-                    :value="deposit.eksporditi"
-                  />
-                </tbody>
-              </template>
-            </v-simple-table>
+              <table-row
+                :title="$t('deposit.miningConditions')"
+                :value="deposit.maeteh_ti"
+              />
+              <table-row
+                :title="$t('deposit.enviromentalRestrictions')"
+                :value="deposit.geookol_ti"
+              />
+              <table-row
+                :title="$t('deposit.dataExportDate')"
+                :value="deposit.eksporditi"
+              />
+            </base-table>
           </v-card-text>
         </v-col>
       </v-row>
@@ -261,86 +248,78 @@
             >
               {{ $t('alert.estonianLandBoardDatabase') }}
             </v-alert>
-            <v-simple-table dense class="custom-table">
-              <template #default>
-                <tbody>
-                  <table-row
-                    :title="$t('miningClaim.number')"
-                    :value="area.maaamet_maeeraldis.id"
-                  />
-                  <table-row-link
-                    :title="$t('miningClaim.registrationNo')"
-                    :value="miningClaim.reg_kaart"
-                    @link-click="
+            <base-table>
+              <table-row
+                :title="$t('miningClaim.number')"
+                :value="area.maaamet_maeeraldis.id"
+              />
+              <table-row-link
+                :title="$t('miningClaim.registrationNo')"
+                :value="miningClaim.reg_kaart"
+                @link-click="
+                  $openWindow(
+                    `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`
+                  )
+                "
+              />
+              <table-row
+                :title="$t('miningClaim.name')"
+                :value="`${miningClaim.nimetus} ${
+                  miningClaim.maardla_os ? `(${miningClaim.maardla_os})` : ''
+                }`"
+              />
+              <table-row
+                :title="$t('miningClaim.area')"
+                :value="miningClaim.pindala"
+              />
+              <table-row
+                :title="$t('miningClaim.reserve')"
+                :value="miningClaim.erald_varu"
+              />
+              <table-row
+                :title="$t('miningClaim.usage')"
+                :value="miningClaim.kas_eesm"
+              />
+              <table-row
+                :title="$t('miningClaim.reclamation')"
+                :value="miningClaim.rekult"
+              />
+
+              <table-row
+                :title="$t('miningClaim.status')"
+                :value="miningClaim.me_olek"
+              />
+              <table-row
+                v-if="miningClaim.loa_number"
+                :title="$t('miningClaim.extractionPermit')"
+              >
+                <template #value>
+                  <base-link-external
+                    @click.native="
                       $openWindow(
-                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
                       )
                     "
-                  />
-                  <table-row
-                    :title="$t('miningClaim.name')"
-                    :value="`${miningClaim.nimetus} ${
-                      miningClaim.maardla_os
-                        ? `(${miningClaim.maardla_os})`
-                        : ''
-                    }`"
-                  />
-                  <table-row
-                    :title="$t('miningClaim.area')"
-                    :value="miningClaim.pindala"
-                  />
-                  <table-row
-                    :title="$t('miningClaim.reserve')"
-                    :value="miningClaim.erald_varu"
-                  />
-                  <table-row
-                    :title="$t('miningClaim.usage')"
-                    :value="miningClaim.kas_eesm"
-                  />
-                  <table-row
-                    :title="$t('miningClaim.reclamation')"
-                    :value="miningClaim.rekult"
-                  />
-
-                  <table-row
-                    :title="$t('miningClaim.status')"
-                    :value="miningClaim.me_olek"
-                  />
-                  <table-row
-                    v-if="miningClaim.loa_number"
-                    :title="$t('miningClaim.extractionPermit')"
                   >
-                    <template #value>
-                      <base-link-external
-                        @click.native="
-                          $openWindow(
-                            `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
-                          )
-                        "
-                      >
-                        {{ miningClaim.loa_number }}
-                      </base-link-external>
-                      {{
-                        ` (${miningClaim.loa_algus} - ${miningClaim.loa_lopp})`
-                      }}
-                    </template>
-                  </table-row>
-                  <table-row
-                    :title="$t('miningClaim.permitOwner')"
-                    :value="miningClaim.loa_omanik"
-                  />
-                  <table-row
-                    :title="$t('miningClaim.miningCompany')"
-                    :value="miningClaim.kaevandaja"
-                  />
+                    {{ miningClaim.loa_number }}
+                  </base-link-external>
+                  {{ ` (${miningClaim.loa_algus} - ${miningClaim.loa_lopp})` }}
+                </template>
+              </table-row>
+              <table-row
+                :title="$t('miningClaim.permitOwner')"
+                :value="miningClaim.loa_omanik"
+              />
+              <table-row
+                :title="$t('miningClaim.miningCompany')"
+                :value="miningClaim.kaevandaja"
+              />
 
-                  <table-row
-                    :title="$t('miningClaim.dataExportDate')"
-                    :value="miningClaim.eksporditi"
-                  />
-                </tbody>
-              </template>
-            </v-simple-table>
+              <table-row
+                :title="$t('miningClaim.dataExportDate')"
+                :value="miningClaim.eksporditi"
+              />
+            </base-table>
           </v-card-text>
         </v-col>
       </v-row>
@@ -376,16 +355,16 @@
 
 <script>
 import { isNil } from 'lodash'
-import HeaderDetail from '~/components/HeaderDetail'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
-import LeafletMap from '~/components/map/LeafletMap'
+import LeafletMap from '~/components/map/LeafletMap.vue'
 import { TABS_AREA } from '~/constants'
 import BaseBoolean from '~/components/base/BaseBoolean.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-
+import BaseTable from '~/components/base/BaseTable.vue'
 export default {
   components: {
     LeafletMap,
@@ -396,6 +375,7 @@ export default {
     Detail,
     BaseBoolean,
     BaseLinkExternal,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

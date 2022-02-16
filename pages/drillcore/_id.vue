@@ -14,84 +14,74 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row
-                :title="$t('drillcore.name')"
-                :value="
-                  $translate({
-                    et: drillcore.drillcore,
-                    en: drillcore.drillcore_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('drillcore.boxes')"
-                :value="drillcore.boxes"
-              />
-              <table-row
-                :title="$t('drillcore.boxNumbers')"
-                :value="drillcore.box_numbers"
-              />
-              <table-row
-                v-if="depository"
-                :title="$t('drillcore.repository')"
-                :value="
-                  $translate({
-                    et: depository.value,
-                    en: depository.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="storage"
-                :title="$t('drillcore.storage')"
-                :value="storage.location"
-              />
-              <table-row
-                v-if="agent"
-                :title="$t('drillcore.driller')"
-                :value="agent.agent"
-              />
-              <table-row
-                :title="$t('drillcore.year')"
-                :value="drillcore.year"
-              />
-              <table-row
-                :title="$t('drillcore.metersInBox')"
-                :value="drillcore.number_meters"
-              />
+        <base-table>
+          <table-row
+            :title="$t('drillcore.name')"
+            :value="
+              $translate({
+                et: drillcore.drillcore,
+                en: drillcore.drillcore_en,
+              })
+            "
+          />
+          <table-row :title="$t('drillcore.boxes')" :value="drillcore.boxes" />
+          <table-row
+            :title="$t('drillcore.boxNumbers')"
+            :value="drillcore.box_numbers"
+          />
+          <table-row
+            v-if="depository"
+            :title="$t('drillcore.repository')"
+            :value="
+              $translate({
+                et: depository.value,
+                en: depository.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="storage"
+            :title="$t('drillcore.storage')"
+            :value="storage.location"
+          />
+          <table-row
+            v-if="agent"
+            :title="$t('drillcore.driller')"
+            :value="agent.agent"
+          />
+          <table-row :title="$t('drillcore.year')" :value="drillcore.year" />
+          <table-row
+            :title="$t('drillcore.metersInBox')"
+            :value="drillcore.number_meters"
+          />
 
-              <table-row-link
-                v-if="database"
-                :title="$t('drillcore.database')"
-                :value="
-                  $translate({
-                    et: database.name,
-                    en: database.name_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: `institution-${database.acronym.toLowerCase()}`,
-                  })
-                "
-              />
-              <table-row
-                v-if="drillcore.date_added"
-                :title="$t('drillcore.dateAdded')"
-                :value="$formatDate(drillcore.date_added)"
-              />
-              <table-row
-                v-if="drillcore.date_changed"
-                :title="$t('drillcore.dateChanged')"
-                :value="$formatDate(drillcore.date_changed)"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+          <table-row-link
+            v-if="database"
+            :title="$t('drillcore.database')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: `institution-${database.acronym.toLowerCase()}`,
+              })
+            "
+          />
+          <table-row
+            v-if="drillcore.date_added"
+            :title="$t('drillcore.dateAdded')"
+            :value="$formatDate(drillcore.date_added)"
+          />
+          <table-row
+            v-if="drillcore.date_changed"
+            :title="$t('drillcore.dateChanged')"
+            :value="$formatDate(drillcore.date_changed)"
+          />
+        </base-table>
       </v-card-text>
       <div v-if="drillcore.remarks">
         <v-card-title class="subsection-title">{{
@@ -106,54 +96,47 @@
         $t('locality.locality')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="mb-4 custom-table">
-          <template #default>
-            <tbody>
-              <table-row-link
-                :title="$t('locality.locality')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: drillcore.locality.id },
-                  })
-                "
-              />
-              <table-row
-                v-if="locality.country"
-                :title="$t('locality.country')"
-                :value="
-                  $translate({
-                    et: locality.country.value,
-                    en: locality.country.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('locality.latitude')"
-                :value="locality.latitude"
-              />
-              <table-row
-                :title="$t('locality.longitude')"
-                :value="locality.longitude"
-              />
-              <table-row
-                :title="$t('locality.elevation')"
-                :value="locality.elevation"
-              />
-              <table-row
-                :title="$t('locality.depth')"
-                :value="locality.depth"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+        <base-table class="mb-4">
+          <table-row-link
+            :title="$t('locality.locality')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: drillcore.locality.id },
+              })
+            "
+          />
+          <table-row
+            v-if="locality.country"
+            :title="$t('locality.country')"
+            :value="
+              $translate({
+                et: locality.country.value,
+                en: locality.country.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('locality.latitude')"
+            :value="locality.latitude"
+          />
+          <table-row
+            :title="$t('locality.longitude')"
+            :value="locality.longitude"
+          />
+          <table-row
+            :title="$t('locality.elevation')"
+            :value="locality.elevation"
+          />
+          <table-row :title="$t('locality.depth')" :value="locality.depth" />
+        </base-table>
         <v-card
           v-if="locality.latitude && locality.longitude"
           id="map-wrap"
@@ -207,6 +190,7 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_DRILLCORE } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: {
@@ -216,6 +200,7 @@ export default {
     TableRow,
     TableRowLink,
     Detail,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

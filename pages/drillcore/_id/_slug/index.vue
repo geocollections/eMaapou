@@ -80,74 +80,64 @@
                       })
                     }}
                   </v-card-title>
-                  <v-simple-table
-                    v-if="boxHasInfo(box)"
-                    dense
-                    class="custom-table"
-                  >
-                    <template #default>
-                      <tbody>
-                        <table-row
-                          :title="$t('drillcoreBox.depthStart')"
-                          :value="box.drillcore_box.depth_start"
-                        />
-                        <table-row
-                          :title="$t('drillcoreBox.depthEnd')"
-                          :value="box.drillcore_box.depth_end"
-                        />
-                        <table-row-link
-                          v-if="box.drillcore_box.stratigraphy_top"
-                          :title="$t('drillcoreBox.stratigraphyTop')"
-                          :value="
-                            $translate({
-                              et: box.drillcore_box.stratigraphy_top
-                                .stratigraphy,
-                              en: box.drillcore_box.stratigraphy_top
-                                .stratigraphy_en,
-                            })
-                          "
-                          nuxt
-                          :href="
-                            localePath({
-                              name: 'stratigraphy-id',
-                              params: {
-                                id: box.drillcore_box.stratigraphy_top.id,
-                              },
-                            })
-                          "
-                        />
-                        <table-row-link
-                          v-if="box.drillcore_box.stratigraphy_base"
-                          :title="$t('drillcoreBox.stratigraphyBase')"
-                          :value="
-                            $translate({
-                              et: box.drillcore_box.stratigraphy_base
-                                .stratigraphy,
-                              en: box.drillcore_box.stratigraphy_base
-                                .stratigraphy_en,
-                            })
-                          "
-                          nuxt
-                          :href="
-                            localePath({
-                              name: 'stratigraphy-id',
-                              params: {
-                                id: box.drillcore_box.stratigraphy_base.id,
-                              },
-                            })
-                          "
-                        />
-                        <table-row
-                          :title="$t('drillcoreBox.depthOther')"
-                          :value="box.drillcore_box.depth_other"
-                        />
-                        <table-row
-                          :title="$t('drillcoreBox.remarks')"
-                          :value="box.drillcore_box.remarks"
-                        />
-                      </tbody>
-                    </template>
-                  </v-simple-table>
+                  <base-table v-if="boxHasInfo(box)">
+                    <table-row
+                      :title="$t('drillcoreBox.depthStart')"
+                      :value="box.drillcore_box.depth_start"
+                    />
+                    <table-row
+                      :title="$t('drillcoreBox.depthEnd')"
+                      :value="box.drillcore_box.depth_end"
+                    />
+                    <table-row-link
+                      v-if="box.drillcore_box.stratigraphy_top"
+                      :title="$t('drillcoreBox.stratigraphyTop')"
+                      :value="
+                        $translate({
+                          et: box.drillcore_box.stratigraphy_top.stratigraphy,
+                          en: box.drillcore_box.stratigraphy_top
+                            .stratigraphy_en,
+                        })
+                      "
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: {
+                            id: box.drillcore_box.stratigraphy_top.id,
+                          },
+                        })
+                      "
+                    />
+                    <table-row-link
+                      v-if="box.drillcore_box.stratigraphy_base"
+                      :title="$t('drillcoreBox.stratigraphyBase')"
+                      :value="
+                        $translate({
+                          et: box.drillcore_box.stratigraphy_base.stratigraphy,
+                          en: box.drillcore_box.stratigraphy_base
+                            .stratigraphy_en,
+                        })
+                      "
+                      nuxt
+                      :href="
+                        localePath({
+                          name: 'stratigraphy-id',
+                          params: {
+                            id: box.drillcore_box.stratigraphy_base.id,
+                          },
+                        })
+                      "
+                    />
+                    <table-row
+                      :title="$t('drillcoreBox.depthOther')"
+                      :value="box.drillcore_box.depth_other"
+                    />
+                    <table-row
+                      :title="$t('drillcoreBox.remarks')"
+                      :value="box.drillcore_box.remarks"
+                    />
+                  </base-table>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -182,9 +172,10 @@ import { isNull, debounce } from 'lodash'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import { HEADERS_ATTACHMENT } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
-  components: { TableRow, TableRowLink },
+  components: { TableRow, TableRowLink, BaseTable },
   data() {
     return {
       page: 1,

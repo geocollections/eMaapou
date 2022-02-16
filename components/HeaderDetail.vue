@@ -11,7 +11,6 @@
         px-0
         pb-6
         px-sm-3
-        title-border
       "
       style="word-break: normal"
     >

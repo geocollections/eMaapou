@@ -12,197 +12,191 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row
-                :title="$t('site.name')"
-                :value="
-                  $translate({
-                    et: site.name,
-                    en: site.name_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="site.area"
-                :value="site.area"
-                :title="$t('site.area')"
+        <base-table>
+          <table-row
+            :title="$t('site.name')"
+            :value="
+              $translate({
+                et: site.name,
+                en: site.name_en,
+              })
+            "
+          />
+          <table-row
+            v-if="site.area"
+            :value="site.area"
+            :title="$t('site.area')"
+          >
+            <template #value>
+              <a
+                v-if="site.area.area_type === 2"
+                class="text-link"
+                @click="$openTurba('turbaala', site.area)"
               >
-                <template #value>
-                  <a
-                    v-if="site.area.area_type === 2"
-                    class="text-link"
-                    @click="$openTurba('turbaala', site.area)"
+                {{
+                  $translate({
+                    et: site.area.name,
+                    en: site.area.name_en,
+                  })
+                }}
+                <v-icon small color="primary darken-2">mdi-open-in-new</v-icon>
+              </a>
+              <div v-else>
+                {{
+                  $translate({
+                    et: site.area.name,
+                    en: site.area.name_en,
+                  })
+                }}
+              </div>
+            </template>
+          </table-row>
+
+          <table-row
+            v-if="site.area && site.area.area_type === 2"
+            :value="site.area"
+            :title="$t('site.areaText1')"
+          >
+            <template #value>
+              <span v-for="(item, index) in planArray" :key="index">
+                <a
+                  class="text-link"
+                  :download="item.trim()"
+                  @click="$openTurba('plaanid', item.trim(), false)"
+                >
+                  {{ item }}
+                  <v-icon small color="primary darken-2"
+                    >mdi-file-download-outline</v-icon
                   >
-                    {{
-                      $translate({
-                        et: site.area.name,
-                        en: site.area.name_en,
-                      })
-                    }}
-                    <v-icon small color="primary darken-2"
-                      >mdi-open-in-new</v-icon
-                    >
-                  </a>
-                  <div v-else>
-                    {{
-                      $translate({
-                        et: site.area.name,
-                        en: site.area.name_en,
-                      })
-                    }}
-                  </div>
-                </template>
-              </table-row>
+                </a>
+                <span v-if="index !== planArray.length - 1" class="mr-1"
+                  >|</span
+                >
+              </span>
+            </template>
+          </table-row>
+          <table-row
+            v-if="site.project"
+            :title="$t('site.project')"
+            :value="
+              $translate({
+                et: site.project.name,
+                en: site.project.name_en,
+              })
+            "
+          />
+          <table-row :title="$t('site.coordx')" :value="site.coordx" />
+          <table-row :title="$t('site.coordy')" :value="site.coordy" />
+          <table-row :title="$t('site.extent')" :value="site.extent" />
+          <table-row :title="$t('site.depth')" :value="site.depth" />
 
-              <table-row
-                v-if="site.area && site.area.area_type === 2"
-                :value="site.area"
-                :title="$t('site.areaText1')"
-              >
-                <template #value>
-                  <span v-for="(item, index) in planArray" :key="index">
-                    <a
-                      class="text-link"
-                      :download="item.trim()"
-                      @click="$openTurba('plaanid', item.trim(), false)"
-                    >
-                      {{ item }}
-                      <v-icon small color="primary darken-2"
-                        >mdi-file-download-outline</v-icon
-                      >
-                    </a>
-                    <span v-if="index !== planArray.length - 1" class="mr-1"
-                      >|</span
-                    >
-                  </span>
-                </template>
-              </table-row>
-              <table-row
-                v-if="site.project"
-                :title="$t('site.project')"
-                :value="
-                  $translate({
-                    et: site.project.name,
-                    en: site.project.name_en,
-                  })
-                "
-              />
-              <table-row :title="$t('site.coordx')" :value="site.coordx" />
-              <table-row :title="$t('site.coordy')" :value="site.coordy" />
-              <table-row :title="$t('site.extent')" :value="site.extent" />
-              <table-row :title="$t('site.depth')" :value="site.depth" />
-
-              <table-row-link
-                v-if="locality"
-                :title="$t('locality.locality')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: locality.id },
-                  })
-                "
-              />
-              <table-row
-                v-if="locality && locality.country"
-                :title="$t('locality.country')"
-                :value="
-                  isNil(
-                    $translate({
-                      et: locality.country.value,
-                      en: locality.country.value_en,
-                    })
-                  )
-                "
-              >
-                <template #value>
-                  {{
-                    $t('locality.countryFormat', {
-                      name: $translate({
-                        et: locality.country.value,
-                        en: locality.country.value_en,
-                      }),
-                      iso: locality.country.iso_code,
-                    })
-                  }}
-                </template>
-              </table-row>
-              <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
-              <table-row
-                v-if="(site.latitude && site.longitude) || locality"
-                :title="$t('locality.latitude')"
-                :value="site.latitude"
-              />
-              <table-row
-                v-if="(site.latitude && site.longitude) || locality"
-                :title="$t('locality.longitude')"
-                :value="site.longitude"
-              />
-              <table-row
-                v-if="elevation"
-                :title="$t('site.elevation')"
-                :value="elevation"
-              />
-              <table-row
-                v-if="locality"
-                :title="$t('locality.depth')"
-                :value="locality.depth"
-              />
-              <table-row
-                v-if="site.location_accuracy"
-                :title="$t('site.locationAccuracy')"
-                :value="site.location_accuracy"
-              />
-              <table-row
-                v-if="site.coord_det_method"
-                :title="$t('site.coordDetMethod')"
-                :value="
-                  $translate({
-                    et: site.coord_det_method.value,
-                    en: site.coord_det_method.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('site.description')"
-                :value="site.description"
-              />
-              <table-row
-                v-if="site.remarks"
-                :title="$t('site.remarks')"
-                :value="site.remarks"
-              />
-              <table-row
-                v-if="site.remarks_location"
-                :title="$t('site.remarksLocation')"
-                :value="site.remarks_location"
-              />
-              <table-row
-                v-if="studied"
-                :title="$t('site.studied')"
-                :value="studied"
-              />
-              <table-row
-                v-if="site.date_added"
-                :title="$t('site.dateAdded')"
-                :value="$formatDate(site.date_added)"
-              />
-              <table-row
-                v-if="site.date_changed"
-                :title="$t('site.dateChanged')"
-                :value="$formatDate(site.date_changed)"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+          <table-row-link
+            v-if="locality"
+            :title="$t('locality.locality')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: locality.id },
+              })
+            "
+          />
+          <table-row
+            v-if="locality && locality.country"
+            :title="$t('locality.country')"
+            :value="
+              isNil(
+                $translate({
+                  et: locality.country.value,
+                  en: locality.country.value_en,
+                })
+              )
+            "
+          >
+            <template #value>
+              {{
+                $t('locality.countryFormat', {
+                  name: $translate({
+                    et: locality.country.value,
+                    en: locality.country.value_en,
+                  }),
+                  iso: locality.country.iso_code,
+                })
+              }}
+            </template>
+          </table-row>
+          <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
+          <table-row
+            v-if="(site.latitude && site.longitude) || locality"
+            :title="$t('locality.latitude')"
+            :value="site.latitude"
+          />
+          <table-row
+            v-if="(site.latitude && site.longitude) || locality"
+            :title="$t('locality.longitude')"
+            :value="site.longitude"
+          />
+          <table-row
+            v-if="elevation"
+            :title="$t('site.elevation')"
+            :value="elevation"
+          />
+          <table-row
+            v-if="locality"
+            :title="$t('locality.depth')"
+            :value="locality.depth"
+          />
+          <table-row
+            v-if="site.location_accuracy"
+            :title="$t('site.locationAccuracy')"
+            :value="site.location_accuracy"
+          />
+          <table-row
+            v-if="site.coord_det_method"
+            :title="$t('site.coordDetMethod')"
+            :value="
+              $translate({
+                et: site.coord_det_method.value,
+                en: site.coord_det_method.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('site.description')"
+            :value="site.description"
+          />
+          <table-row
+            v-if="site.remarks"
+            :title="$t('site.remarks')"
+            :value="site.remarks"
+          />
+          <table-row
+            v-if="site.remarks_location"
+            :title="$t('site.remarksLocation')"
+            :value="site.remarks_location"
+          />
+          <table-row
+            v-if="studied"
+            :title="$t('site.studied')"
+            :value="studied"
+          />
+          <table-row
+            v-if="site.date_added"
+            :title="$t('site.dateAdded')"
+            :value="$formatDate(site.date_added)"
+          />
+          <table-row
+            v-if="site.date_changed"
+            :title="$t('site.dateChanged')"
+            :value="$formatDate(site.date_changed)"
+          />
+        </base-table>
       </v-card-text>
     </template>
 
@@ -331,14 +325,15 @@
 
 <script>
 import { isNil } from 'lodash'
-import LeafletMap from '~/components/map/LeafletMap'
-import HeaderDetail from '~/components/HeaderDetail'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { TABS_SITE } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: {
@@ -349,6 +344,7 @@ export default {
     TableRowLink,
     Detail,
     ImageBar,
+    BaseTable,
   },
   async asyncData({
     params,

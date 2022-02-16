@@ -80,131 +80,126 @@
                       })
                     }}
                   </v-card-title>
-                  <v-simple-table dense class="custom-table">
-                    <template #default>
-                      <tbody>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.depthStart') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box.depth_start)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box.depth_start }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.depthEnd') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box.depth_end)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box.depth_end }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {{ $t('drillcoreBox.stratigraphyTop') }}
-                          </td>
-                          <td
-                            v-if="isNull(box.drillcore_box.stratigraphy_top)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            <a
-                              class="text-link"
-                              @click.stop="
-                                $router.push(
-                                  localePath({
-                                    name: 'stratigraphy-id',
-                                    params: {
-                                      id: box.drillcore_box.stratigraphy_top.id,
-                                    },
-                                  })
-                                )
-                              "
-                            >
-                              {{
-                                $translate({
-                                  et: box.drillcore_box.stratigraphy_top
-                                    .stratigraphy,
-                                  en: box.drillcore_box.stratigraphy_top
-                                    .stratigraphy_en,
-                                })
-                              }}
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            {{ $t('drillcoreBox.stratigraphyBase') }}
-                          </td>
-                          <td
-                            v-if="isNull(box.drillcore_box.stratigraphy_base)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            <a
-                              class="text-link"
-                              @click.stop="
-                                $router.push(
-                                  localePath({
-                                    name: 'stratigraphy-id',
-                                    params: {
-                                      id: box.drillcore_box.stratigraphy_base
-                                        .id,
-                                    },
-                                  })
-                                )
-                              "
-                            >
-                              {{
-                                $translate({
-                                  et: box.drillcore_box.stratigraphy_base
-                                    .stratigraphy,
-                                  en: box.drillcore_box.stratigraphy_base
-                                    .stratigraphy_en,
-                                })
-                              }}
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.depthOther') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box.depth_other)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box.depth_other }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>{{ $t('drillcoreBox.remarks') }}</td>
-                          <td
-                            v-if="isNull(box.drillcore_box.remarks)"
-                            class="no-value"
-                          >
-                            {{ $t('common.noValue') }}
-                          </td>
-                          <td v-else>
-                            {{ box.drillcore_box.remarks }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </template>
-                  </v-simple-table>
+                  <base-table>
+                    <tr>
+                      <td>{{ $t('drillcoreBox.depthStart') }}</td>
+                      <td
+                        v-if="isNull(box.drillcore_box.depth_start)"
+                        class="no-value"
+                      >
+                        {{ $t('common.noValue') }}
+                      </td>
+                      <td v-else>
+                        {{ box.drillcore_box.depth_start }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ $t('drillcoreBox.depthEnd') }}</td>
+                      <td
+                        v-if="isNull(box.drillcore_box.depth_end)"
+                        class="no-value"
+                      >
+                        {{ $t('common.noValue') }}
+                      </td>
+                      <td v-else>
+                        {{ box.drillcore_box.depth_end }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        {{ $t('drillcoreBox.stratigraphyTop') }}
+                      </td>
+                      <td
+                        v-if="isNull(box.drillcore_box.stratigraphy_top)"
+                        class="no-value"
+                      >
+                        {{ $t('common.noValue') }}
+                      </td>
+                      <td v-else>
+                        <a
+                          class="text-link"
+                          @click.stop="
+                            $router.push(
+                              localePath({
+                                name: 'stratigraphy-id',
+                                params: {
+                                  id: box.drillcore_box.stratigraphy_top.id,
+                                },
+                              })
+                            )
+                          "
+                        >
+                          {{
+                            $translate({
+                              et: box.drillcore_box.stratigraphy_top
+                                .stratigraphy,
+                              en: box.drillcore_box.stratigraphy_top
+                                .stratigraphy_en,
+                            })
+                          }}
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        {{ $t('drillcoreBox.stratigraphyBase') }}
+                      </td>
+                      <td
+                        v-if="isNull(box.drillcore_box.stratigraphy_base)"
+                        class="no-value"
+                      >
+                        {{ $t('common.noValue') }}
+                      </td>
+                      <td v-else>
+                        <a
+                          class="text-link"
+                          @click.stop="
+                            $router.push(
+                              localePath({
+                                name: 'stratigraphy-id',
+                                params: {
+                                  id: box.drillcore_box.stratigraphy_base.id,
+                                },
+                              })
+                            )
+                          "
+                        >
+                          {{
+                            $translate({
+                              et: box.drillcore_box.stratigraphy_base
+                                .stratigraphy,
+                              en: box.drillcore_box.stratigraphy_base
+                                .stratigraphy_en,
+                            })
+                          }}
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ $t('drillcoreBox.depthOther') }}</td>
+                      <td
+                        v-if="isNull(box.drillcore_box.depth_other)"
+                        class="no-value"
+                      >
+                        {{ $t('common.noValue') }}
+                      </td>
+                      <td v-else>
+                        {{ box.drillcore_box.depth_other }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>{{ $t('drillcoreBox.remarks') }}</td>
+                      <td
+                        v-if="isNull(box.drillcore_box.remarks)"
+                        class="no-value"
+                      >
+                        {{ $t('common.noValue') }}
+                      </td>
+                      <td v-else>
+                        {{ box.drillcore_box.remarks }}
+                      </td>
+                    </tr>
+                  </base-table>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -237,7 +232,10 @@
 <script>
 import { isNull, debounce } from 'lodash'
 import { HEADERS_ATTACHMENT } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
+
 export default {
+  components: { BaseTable },
   props: {
     drillcore: {
       type: Number,

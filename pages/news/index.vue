@@ -2,10 +2,7 @@
   <div>
     <v-row>
       <v-col>
-        <base-header
-          :title="$t('common.news')"
-          class="title-heading"
-        ></base-header>
+        <base-header :title="$t('common.news')"></base-header>
       </v-col>
     </v-row>
     <v-row no-gutters>

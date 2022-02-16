@@ -27,160 +27,153 @@
         {{ $t('common.general') }}
       </v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row-link
-                v-if="coll"
-                :title="$t('specimen.collectionNr')"
-                :value="coll.number"
-                nuxt
-                :href="
-                  localePath({
-                    name: 'collection-id',
-                    params: { id: coll.id },
-                  })
-                "
-              />
+        <base-table>
+          <table-row-link
+            v-if="coll"
+            :title="$t('specimen.collectionNr')"
+            :value="coll.number"
+            nuxt
+            :href="
+              localePath({
+                name: 'collection-id',
+                params: { id: coll.id },
+              })
+            "
+          />
 
-              <table-row
-                :title="$t('specimen.number')"
-                :value="`${specimen.specimen_id}`"
-              />
-              <table-row
-                :title="$t('specimen.oldNumber')"
-                :value="`${specimen.specimen_nr}`"
-              />
-              <table-row
-                v-if="type"
-                :title="$t('specimen.type')"
-                :value="
-                  $translate({
-                    et: type.value,
-                    en: type.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="classification"
-                :title="$t('specimen.group')"
-                :value="
-                  $translate({
-                    et: classification.class_field,
-                    en: classification.class_en,
-                  })
-                "
-              />
-              <table-row :title="$t('specimen.part')" :value="specimen.part" />
-              <table-row-link
-                v-if="locality"
-                :title="$t('specimen.locality')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: locality.id },
-                  })
-                "
-              />
-              <table-row
-                :title="$t('specimen.depth')"
-                :value="specimen.depth"
-              />
-              <table-row-link
-                v-if="stratigraphy"
-                :title="$t('specimen.stratigraphy')"
-                :value="
-                  $translate({
-                    et: stratigraphy.stratigraphy,
-                    en: stratigraphy.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: stratigraphy.id },
-                  })
-                "
-              />
-              <table-row-link
-                v-if="lithostratigraphy"
-                :title="$t('specimen.lithostratigraphy')"
-                :value="
-                  $translate({
-                    et: lithostratigraphy.stratigraphy,
-                    en: lithostratigraphy.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: lithostratigraphy.id },
-                  })
-                "
-              />
-              <table-row
-                :title="$t('specimen.stratigraphyRemarks')"
-                :value="specimen.stratigraphy_free"
-              />
+          <table-row
+            :title="$t('specimen.number')"
+            :value="`${specimen.specimen_id}`"
+          />
+          <table-row
+            :title="$t('specimen.oldNumber')"
+            :value="`${specimen.specimen_nr}`"
+          />
+          <table-row
+            v-if="type"
+            :title="$t('specimen.type')"
+            :value="
+              $translate({
+                et: type.value,
+                en: type.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="classification"
+            :title="$t('specimen.group')"
+            :value="
+              $translate({
+                et: classification.class_field,
+                en: classification.class_en,
+              })
+            "
+          />
+          <table-row :title="$t('specimen.part')" :value="specimen.part" />
+          <table-row-link
+            v-if="locality"
+            :title="$t('specimen.locality')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: locality.id },
+              })
+            "
+          />
+          <table-row :title="$t('specimen.depth')" :value="specimen.depth" />
+          <table-row-link
+            v-if="stratigraphy"
+            :title="$t('specimen.stratigraphy')"
+            :value="
+              $translate({
+                et: stratigraphy.stratigraphy,
+                en: stratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: stratigraphy.id },
+              })
+            "
+          />
+          <table-row-link
+            v-if="lithostratigraphy"
+            :title="$t('specimen.lithostratigraphy')"
+            :value="
+              $translate({
+                et: lithostratigraphy.stratigraphy,
+                en: lithostratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: lithostratigraphy.id },
+              })
+            "
+          />
+          <table-row
+            :title="$t('specimen.stratigraphyRemarks')"
+            :value="specimen.stratigraphy_free"
+          />
 
-              <table-row
-                :title="$t('specimen.remarks')"
-                :value="specimen.remarks"
-              />
-              <table-row
-                :title="$t('specimen.dateCollected')"
-                :value="dateCollected"
-              />
-              <table-row
-                v-if="agent_collected"
-                :title="$t('specimen.collector')"
-                :value="agent_collected.agent"
-              />
-              <table-row-link
-                v-if="sample"
-                :title="$t('specimen.sample')"
-                :value="
-                  $translate({
-                    et: sample.number,
-                    en: sample.number,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'sample-id',
-                    params: { id: sample.id },
-                  })
-                "
-              />
-              <table-row-link
-                v-if="database"
-                :title="$t('specimen.institution')"
-                :value="
-                  $translate({
-                    et: database.name,
-                    en: database.name_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: `institution-${database.acronym.toLowerCase()}`,
-                  })
-                "
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+          <table-row
+            :title="$t('specimen.remarks')"
+            :value="specimen.remarks"
+          />
+          <table-row
+            :title="$t('specimen.dateCollected')"
+            :value="dateCollected"
+          />
+          <table-row
+            v-if="agent_collected"
+            :title="$t('specimen.collector')"
+            :value="agent_collected.agent"
+          />
+          <table-row-link
+            v-if="sample"
+            :title="$t('specimen.sample')"
+            :value="
+              $translate({
+                et: sample.number,
+                en: sample.number,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'sample-id',
+                params: { id: sample.id },
+              })
+            "
+          />
+          <table-row-link
+            v-if="database"
+            :title="$t('specimen.institution')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: `institution-${database.acronym.toLowerCase()}`,
+              })
+            "
+          />
+        </base-table>
       </v-card-text>
     </template>
     <template v-if="locality" #column-right>
@@ -241,6 +234,8 @@ import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { TABS_SPECIMEN } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
+
 export default {
   components: {
     Detail,
@@ -250,6 +245,7 @@ export default {
     LeafletMap,
     Tabs,
     ImageBar,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

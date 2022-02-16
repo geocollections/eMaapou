@@ -102,25 +102,27 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .text-link-grey {
-  @extend .underline;
+  // @extend .underline;
 
   text-decoration: none;
   color: map-get($map: $grey, $key: 'darken-1') !important;
   @include transition(color 200ms ease);
 
   &:hover {
+    text-decoration: underline;
     color: var(--v-primary-darken3) !important;
   }
 }
 
 .menu-link {
-  @extend .underline;
+  // @extend .underline;
   text-decoration: none;
 
   color: map-get($map: $grey, $key: 'darken-2') !important;
   @include transition(color 200ms ease);
 
   &:hover {
+    text-decoration: underline;
     color: var(--v-primary-darken3) !important;
   }
 }
@@ -149,49 +151,12 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   }
 }
 
-.custom-table {
-  border: 0px solid map-get($map: $grey, $key: 'lighten-2');
-  tr {
-    &:hover {
-      background-color: map-get($map: $grey, $key: 'lighten-5') !important;
-    }
-    td {
-      padding-top: 8px !important;
-      padding-bottom: 8px !important;
-      &:first-child {
-        // background-color: map-get($map: $grey, $key: 'lighten-3') !important;
-        border-right: 2px solid map-get($map: $grey, $key: 'lighten-2');
-        // font-weight: 700;
-        // font-size: small !important;
-        width: 200px;
-      }
-    }
-  }
-}
-
-@media #{map-get($display-breakpoints, 'sm-and-down')} {
-  .custom-table {
-    tr {
-      td {
-        &:first-child {
-          width: auto;
-        }
-      }
-    }
-  }
-}
-
 .no-value {
   color: lightgray;
 }
 
 .on-hover {
   background-color: map-get($map: $grey, $key: 'lighten-4') !important;
-}
-
-.header-text {
-  font-weight: 700;
-  text-transform: uppercase;
 }
 
 .header-menu-item {
@@ -228,31 +193,12 @@ $font: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   cursor: pointer;
 }
 
-th {
-  &.sortable {
-    white-space: nowrap;
-  }
-}
-
 .static-cell-header {
   background-color: map-get($map: $grey, $key: 'lighten-4');
 }
 
 .static-cell {
   color: map-get($map: $grey, $key: 'darken-1');
-}
-
-.reset-search {
-  border-radius: 4px !important;
-}
-
-.emaapou {
-  font-size: 2.5rem !important;
-}
-
-.emaapou-detail {
-  //font-size: 1.5rem !important;
-  letter-spacing: 0.75px;
 }
 
 .header-icon-button {
@@ -264,239 +210,6 @@ th {
   width: inherit !important;
 }
 
-.search-card-border {
-  border-bottom-width: 3px !important;
-  border-bottom-style: solid !important;
-}
-
-.search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-main-base) !important;
-}
-
-.stratigraphy-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-stratigraphy-base) !important;
-}
-
-.specimen-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-specimen-base) !important;
-}
-
-.analysis-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-analysis-base) !important;
-}
-
-.sample-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-sample-base) !important;
-}
-
-.drillcore-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-drillcore-base) !important;
-}
-
-.locality-search-card {
-  @extend .search-card-border;
-
-  border-color: #567cae !important;
-}
-
-.site-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-site-base) !important;
-}
-.photo-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-photo-base) !important;
-}
-.dataset-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-dataset-base) !important;
-}
-
-.preparation-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-preparation-base) !important;
-}
-
-.area-search-card {
-  @extend .search-card-border;
-
-  border-color: var(--v-emp-area-base) !important;
-}
-
-.title-border {
-  // border-bottom-width: 2px !important;
-  // border-bottom-style: solid !important;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--v-accent-base);
-    height: 4px;
-    border-radius: 2px 2px 2px 2px;
-  }
-}
-
-.title-heading {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-header-darken2),
-      var(--v-header-base)
-    );
-  }
-}
-
-.title-main {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-main-darken2),
-      var(--v-emp-main-base)
-    );
-  }
-}
-
-.title-stratigraphy {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-stratigraphy-darken2),
-      var(--v-emp-stratigraphy-base)
-    );
-  }
-}
-
-.title-analysis {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-analysis-darken2),
-      var(--v-emp-analysis-base)
-    );
-  }
-}
-
-.title-sample {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-sample-darken2),
-      var(--v-emp-sample-base)
-    );
-  }
-}
-
-.title-drillcore {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-drillcore-darken2),
-      var(--v-emp-drillcore-base)
-    );
-  }
-}
-
-.title-locality {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-locality-darken2),
-      var(--v-emp-locality-base)
-    );
-  }
-}
-
-.title-site {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-site-darken2),
-      var(--v-emp-site-base)
-    );
-  }
-}
-.title-photo {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-photo-darken2),
-      var(--v-emp-photo-base)
-    );
-  }
-}
-
-.title-dataset {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-dataset-darken2),
-      var(--v-emp-dataset-base)
-    );
-  }
-}
-
-.title-specimen {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-specimen-darken2),
-      var(--v-emp-specimen-base)
-    );
-  }
-}
-
-.title-preparation {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-preparation-darken2),
-      var(--v-emp-preparation-base)
-    );
-  }
-}
-
-.title-area {
-  @extend .title-border;
-  &:after {
-    background: linear-gradient(
-      to left,
-      var(--v-emp-area-darken2),
-      var(--v-emp-area-base)
-    );
-  }
-}
-
 #app {
   background-color: map-get($map: $grey, $key: 'lighten-4') !important;
 }
@@ -506,26 +219,6 @@ th {
   font-weight: bold;
   color: #406451 !important;
   background-color: white;
-}
-
-.theme--light.v-data-table {
-  &.custom-table {
-    tbody > tr {
-      background-color: white !important;
-    }
-  }
-  &:not(.custom-table) {
-    tbody > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
-      background-color: rgba(0, 0, 0, 0.03);
-    }
-  }
-}
-.theme--dark.v-data-table {
-  &:not(.custom-table) {
-    tbody tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-  }
 }
 
 .chip-active {

@@ -90,67 +90,54 @@ export default {
         {
           routeName: 'locality',
           text: 'locality.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'drillcore',
           text: 'drillcore.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'area',
           text: 'area.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'site',
           text: 'site.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'sample',
           text: 'sample.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'dataset',
           text: 'dataset.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'analysis',
           text: 'analysis.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'analytical-data',
           text: 'analyticalData.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'photo',
           text: 'photo.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'taxon',
           text: 'taxon.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'stratigraphy',
           text: 'stratigraphy.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'specimen',
           text: 'specimen.pageTitle',
-          class: 'search-card',
         },
         {
           routeName: 'preparation',
           text: 'preparation.pageTitle',
-          class: 'search-card',
         },
       ],
     }

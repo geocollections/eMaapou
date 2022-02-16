@@ -2,7 +2,6 @@
   <div>
     <base-header
       :title="$translate({ et: page.title_et, en: page.title_en })"
-      class="title-heading"
     />
     <v-row no-gutters>
       <v-col class="pl-4" cols="12" md="8" lg="7">

@@ -8,214 +8,204 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row :title="$t('sample.number')" :value="sample.number" />
-              <table-row-link
-                :title="$t('sample.igsn')"
-                :value="sample.igsn"
-                :href="`http://igsn.org/${sample.igsn}`"
-              />
-              <table-row
-                :title="$t('sample.numberAdditional')"
-                :value="sample.number_additional"
-              />
-              <table-row
-                :title="$t('sample.numberField')"
-                :value="sample.number_field"
-              />
-              <table-row-link
-                v-if="locality"
-                :title="$t('sample.locality')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: sample.locality.id },
-                  })
-                "
-              />
-              <table-row
-                v-if="locality"
-                :title="$t('sample.latitude')"
-                :value="locality.latitude"
-              />
-              <table-row
-                v-if="locality"
-                :title="$t('sample.longitude')"
-                :value="locality.longitude"
-              />
-              <table-row-link
-                v-if="site"
-                :title="$t('sample.site')"
-                :value="site.name"
-                nuxt
-                :href="
-                  localePath({
-                    name: 'site-id',
-                    params: { id: site.id },
-                  })
-                "
-              />
-              <table-row
-                v-if="site"
-                :title="$t('sample.latitude')"
-                :value="site.latitude"
-              />
-              <table-row
-                v-if="site"
-                :title="$t('sample.longitude')"
-                :value="site.longitude"
-              />
-              <table-row :title="$t('sample.depth')" :value="sample.depth" />
-              <table-row
-                :title="$t('sample.depthInterval')"
-                :value="sample.depth_interval"
-              />
-              <table-row-link
-                v-if="stratigraphy"
-                :title="$t('sample.stratigraphy')"
-                :value="
-                  $translate({
-                    et: stratigraphy.stratigraphy,
-                    en: stratigraphy.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: sample.stratigraphy.id },
-                  })
-                "
-              />
-              <table-row-link
-                v-if="lithostratigraphy"
-                :title="$t('sample.lithostratigraphy')"
-                :value="
-                  $translate({
-                    et: lithostratigraphy.stratigraphy,
-                    en: lithostratigraphy.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: sample.lithostratigraphy.id },
-                  })
-                "
-              />
-              <table-row
-                :title="$t('sample.stratigraphyFree')"
-                :value="sample.stratigraphy_free"
-              />
-              <table-row
-                :title="$t('sample.stratigraphyBed')"
-                :value="sample.stratigraphy_bed"
-              />
-              <table-row
-                :title="$t('sample.dateCollected')"
-                :value="sample.date_collected || sample.date_collected_free"
-              />
-              <table-row
-                v-if="agent_collected || sample.agent_collected_txt"
-                :title="$t('sample.agentCollected')"
-                :value="agent_collected.agent || sample.agent_collected_txt"
-              />
-              <table-row :title="$t('sample.mass')" :value="sample.mass" />
-              <table-row
-                v-if="sample_purpose"
-                :title="$t('sample.samplePurpose')"
-                :value="
-                  $translate({
-                    et: sample_purpose.value,
-                    en: sample_purpose.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('sample.rock')"
-                :value="
-                  $translate({
-                    et: sample.rock,
-                    en: sample.rock_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="classification_rock"
-                :title="$t('sample.classificationRock')"
-                :value="
-                  $translate({
-                    et: classification_rock.name,
-                    en: classification_rock.name_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('sample.palaeontology')"
-                :value="sample.palaeontology"
-              />
-              <table-row
-                :title="$t('sample.fossils')"
-                :value="sample.fossils"
-              />
-              <table-row
-                :title="$t('sample.remarks')"
-                :value="sample.remarks"
-              />
-              <table-row
-                v-if="owner"
-                :title="$t('sample.owner')"
-                :value="owner.agent"
-              />
-              <table-row-link
-                v-if="database"
-                :title="$t('sample.database')"
-                :value="
-                  $translate({
-                    et: database.name,
-                    en: database.name_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: `institution-${sample.database.acronym.toLowerCase()}`,
-                  })
-                "
-              />
-              <table-row
-                v-if="project"
-                :title="$t('sample.project')"
-                :value="
-                  $translate({
-                    et: sample.project.name,
-                    en: sample.project.name_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="sample.date_added"
-                :title="$t('sample.dateAdded')"
-                :value="$formatDate(sample.date_added)"
-              />
-              <table-row
-                v-if="sample.date_changed"
-                :title="$t('sample.dateChanged')"
-                :value="$formatDate(sample.date_changed)"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+        <base-table>
+          <table-row :title="$t('sample.number')" :value="sample.number" />
+          <table-row-link
+            :title="$t('sample.igsn')"
+            :value="sample.igsn"
+            :href="`http://igsn.org/${sample.igsn}`"
+          />
+          <table-row
+            :title="$t('sample.numberAdditional')"
+            :value="sample.number_additional"
+          />
+          <table-row
+            :title="$t('sample.numberField')"
+            :value="sample.number_field"
+          />
+          <table-row-link
+            v-if="locality"
+            :title="$t('sample.locality')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: sample.locality.id },
+              })
+            "
+          />
+          <table-row
+            v-if="locality"
+            :title="$t('sample.latitude')"
+            :value="locality.latitude"
+          />
+          <table-row
+            v-if="locality"
+            :title="$t('sample.longitude')"
+            :value="locality.longitude"
+          />
+          <table-row-link
+            v-if="site"
+            :title="$t('sample.site')"
+            :value="site.name"
+            nuxt
+            :href="
+              localePath({
+                name: 'site-id',
+                params: { id: site.id },
+              })
+            "
+          />
+          <table-row
+            v-if="site"
+            :title="$t('sample.latitude')"
+            :value="site.latitude"
+          />
+          <table-row
+            v-if="site"
+            :title="$t('sample.longitude')"
+            :value="site.longitude"
+          />
+          <table-row :title="$t('sample.depth')" :value="sample.depth" />
+          <table-row
+            :title="$t('sample.depthInterval')"
+            :value="sample.depth_interval"
+          />
+          <table-row-link
+            v-if="stratigraphy"
+            :title="$t('sample.stratigraphy')"
+            :value="
+              $translate({
+                et: stratigraphy.stratigraphy,
+                en: stratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: sample.stratigraphy.id },
+              })
+            "
+          />
+          <table-row-link
+            v-if="lithostratigraphy"
+            :title="$t('sample.lithostratigraphy')"
+            :value="
+              $translate({
+                et: lithostratigraphy.stratigraphy,
+                en: lithostratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: sample.lithostratigraphy.id },
+              })
+            "
+          />
+          <table-row
+            :title="$t('sample.stratigraphyFree')"
+            :value="sample.stratigraphy_free"
+          />
+          <table-row
+            :title="$t('sample.stratigraphyBed')"
+            :value="sample.stratigraphy_bed"
+          />
+          <table-row
+            :title="$t('sample.dateCollected')"
+            :value="sample.date_collected || sample.date_collected_free"
+          />
+          <table-row
+            v-if="agent_collected || sample.agent_collected_txt"
+            :title="$t('sample.agentCollected')"
+            :value="agent_collected.agent || sample.agent_collected_txt"
+          />
+          <table-row :title="$t('sample.mass')" :value="sample.mass" />
+          <table-row
+            v-if="sample_purpose"
+            :title="$t('sample.samplePurpose')"
+            :value="
+              $translate({
+                et: sample_purpose.value,
+                en: sample_purpose.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('sample.rock')"
+            :value="
+              $translate({
+                et: sample.rock,
+                en: sample.rock_en,
+              })
+            "
+          />
+          <table-row
+            v-if="classification_rock"
+            :title="$t('sample.classificationRock')"
+            :value="
+              $translate({
+                et: classification_rock.name,
+                en: classification_rock.name_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('sample.palaeontology')"
+            :value="sample.palaeontology"
+          />
+          <table-row :title="$t('sample.fossils')" :value="sample.fossils" />
+          <table-row :title="$t('sample.remarks')" :value="sample.remarks" />
+          <table-row
+            v-if="owner"
+            :title="$t('sample.owner')"
+            :value="owner.agent"
+          />
+          <table-row-link
+            v-if="database"
+            :title="$t('sample.database')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: `institution-${sample.database.acronym.toLowerCase()}`,
+              })
+            "
+          />
+          <table-row
+            v-if="project"
+            :title="$t('sample.project')"
+            :value="
+              $translate({
+                et: sample.project.name,
+                en: sample.project.name_en,
+              })
+            "
+          />
+          <table-row
+            v-if="sample.date_added"
+            :title="$t('sample.dateAdded')"
+            :value="$formatDate(sample.date_added)"
+          />
+          <table-row
+            v-if="sample.date_changed"
+            :title="$t('sample.dateChanged')"
+            :value="$formatDate(sample.date_changed)"
+          />
+        </base-table>
       </v-card-text>
     </template>
 
@@ -224,59 +214,52 @@
         $t('locality.locality')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="mb-4 custom-table">
-          <template #default>
-            <tbody>
-              <table-row-link
-                :title="$t('locality.locality')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: sample.locality.id },
-                  })
-                "
-              >
-              </table-row-link>
-              <table-row
-                :title="$t('sample.localityFree')"
-                :value="sample.locality_free"
-              />
-              <table-row
-                v-if="locality.country"
-                :title="$t('locality.country')"
-                :value="
-                  $translate({
-                    et: locality.country.value,
-                    en: locality.country.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('locality.latitude')"
-                :value="locality.latitude"
-              />
-              <table-row
-                :title="$t('locality.longitude')"
-                :value="locality.longitude"
-              />
-              <table-row
-                :title="$t('locality.elevation')"
-                :value="locality.elevation"
-              />
-              <table-row
-                :title="$t('locality.depth')"
-                :value="locality.depth"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+        <base-table class="mb-4">
+          <table-row-link
+            :title="$t('locality.locality')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: sample.locality.id },
+              })
+            "
+          >
+          </table-row-link>
+          <table-row
+            :title="$t('sample.localityFree')"
+            :value="sample.locality_free"
+          />
+          <table-row
+            v-if="locality.country"
+            :title="$t('locality.country')"
+            :value="
+              $translate({
+                et: locality.country.value,
+                en: locality.country.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('locality.latitude')"
+            :value="locality.latitude"
+          />
+          <table-row
+            :title="$t('locality.longitude')"
+            :value="locality.longitude"
+          />
+          <table-row
+            :title="$t('locality.elevation')"
+            :value="locality.elevation"
+          />
+          <table-row :title="$t('locality.depth')" :value="locality.depth" />
+        </base-table>
         <v-card
           v-if="locality.latitude && locality.longitude"
           id="map-wrap"
@@ -343,6 +326,7 @@ import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_SAMPLE } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: {
@@ -352,6 +336,7 @@ export default {
     Tabs,
     LeafletMap,
     Detail,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

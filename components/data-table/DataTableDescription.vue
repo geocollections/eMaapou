@@ -23,48 +23,44 @@
             </div>
           </v-col>
           <v-col cols="12" md="6">
-            <v-simple-table dense class="custom-table">
-              <template #default>
-                <tbody>
-                  <table-row
-                    :title="$t('localityDescription.zeroLevel')"
-                    :value="item.zero_level"
-                  />
-                  <table-row
-                    :title="$t('localityDescription.authorFree')"
-                    :value="item.author_free"
-                  />
-                  <table-row-link
-                    v-if="item.reference"
-                    :title="$t('localityDescription.reference')"
-                    :value="item.reference.reference"
-                    @link-click="$openGeology('reference', item.reference.id)"
-                  />
-                  <table-row
-                    :title="$t('localityDescription.year')"
-                    :value="item.year"
-                  />
-                  <table-row
-                    :title="$t('localityDescription.stratigraphyFree')"
-                    :value="item.stratigraphy_free"
-                  />
-                  <table-row
-                    v-if="item.rock"
-                    :title="$t('localityDescription.rockEt')"
-                    :value="item.rock.name"
-                  />
-                  <table-row
-                    v-if="item.rock"
-                    :title="$t('localityDescription.rockEn')"
-                    :value="item.rock.name_en"
-                  />
-                  <table-row
-                    :title="$t('localityDescription.remarks')"
-                    :value="item.remarks"
-                  />
-                </tbody>
-              </template>
-            </v-simple-table>
+            <base-table>
+              <table-row
+                :title="$t('localityDescription.zeroLevel')"
+                :value="item.zero_level"
+              />
+              <table-row
+                :title="$t('localityDescription.authorFree')"
+                :value="item.author_free"
+              />
+              <table-row-link
+                v-if="item.reference"
+                :title="$t('localityDescription.reference')"
+                :value="item.reference.reference"
+                @link-click="$openGeology('reference', item.reference.id)"
+              />
+              <table-row
+                :title="$t('localityDescription.year')"
+                :value="item.year"
+              />
+              <table-row
+                :title="$t('localityDescription.stratigraphyFree')"
+                :value="item.stratigraphy_free"
+              />
+              <table-row
+                v-if="item.rock"
+                :title="$t('localityDescription.rockEt')"
+                :value="item.rock.name"
+              />
+              <table-row
+                v-if="item.rock"
+                :title="$t('localityDescription.rockEn')"
+                :value="item.rock.name_en"
+              />
+              <table-row
+                :title="$t('localityDescription.remarks')"
+                :value="item.remarks"
+              />
+            </base-table>
           </v-col>
         </v-row>
       </td>
@@ -125,12 +121,13 @@
 import { round, cloneDeep } from 'lodash'
 import TableRow from '../table/TableRow.vue'
 import TableRowLink from '../table/TableRowLink.vue'
+import BaseTable from '../base/BaseTable.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DESCRIPTION } from '~/constants'
 export default {
   name: 'DataTableDescription',
-  components: { BaseDataTable, TableRow, TableRowLink },
+  components: { BaseDataTable, TableRow, TableRowLink, BaseTable },
   mixins: [headersMixin],
   props: {
     items: {

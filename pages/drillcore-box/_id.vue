@@ -165,102 +165,98 @@
           $t('common.general')
         }}</v-card-title>
         <v-card-text>
-          <v-simple-table dense class="custom-table">
-            <template #default>
-              <tbody>
-                <table-row-link
-                  v-if="drillcoreBox.drillcore"
-                  nuxt
-                  :title="$t('drillcoreBox.drillcore')"
-                  :value="
-                    $translate({
-                      et: drillcoreBox.drillcore.drillcore,
-                      en: drillcoreBox.drillcore.drillcore_en,
-                    })
-                  "
-                  :href="
-                    localePath({
-                      name: 'drillcore-id',
-                      params: { id: drillcoreBox.drillcore.id },
-                    })
-                  "
-                />
-                <table-row
-                  :title="$t('drillcoreBox.depthStart')"
-                  :value="drillcoreBox.depth_start"
-                />
-                <table-row
-                  :title="$t('drillcoreBox.depthEnd')"
-                  :value="drillcoreBox.depth_end"
-                />
-                <table-row
-                  :title="$t('drillcoreBox.depthOther')"
-                  :value="drillcoreBox.depth_other"
-                />
-                <table-row
-                  :title="$t('drillcoreBox.diameter')"
-                  :value="drillcoreBox.diameter"
-                />
-                <table-row-link
-                  v-if="drillcoreBox.stratigraphy_top"
-                  :title="$t('drillcoreBox.stratigraphyTop')"
-                  :value="
-                    $translate({
-                      et: drillcoreBox.stratigraphy_top.stratigraphy,
-                      en: drillcoreBox.stratigraphy_top.stratigraphy_en,
-                    })
-                  "
-                  nuxt
-                  :href="
-                    localePath({
-                      name: 'stratigraphy-id',
-                      params: { id: drillcoreBox.stratigraphy_top.id },
-                    })
-                  "
-                />
-                <table-row
-                  :title="$t('drillcoreBox.stratigraphyTopFree')"
-                  :value="drillcoreBox.stratigraphy_top_free"
-                />
-                <table-row-link
-                  v-if="drillcoreBox.stratigraphy_base"
-                  :title="$t('drillcoreBox.stratigraphyBase')"
-                  :value="
-                    $translate({
-                      et: drillcoreBox.stratigraphy_base.stratigraphy,
-                      en: drillcoreBox.stratigraphy_base.stratigraphy_en,
-                    })
-                  "
-                  nuxt
-                  :href="
-                    localePath({
-                      name: 'stratigraphy-id',
-                      params: { id: drillcoreBox.stratigraphy_base.id },
-                    })
-                  "
-                />
-                <table-row
-                  :title="$t('drillcoreBox.stratigraphyBaseFree')"
-                  :value="drillcoreBox.stratigraphy_base_free"
-                />
+          <base-table>
+            <table-row-link
+              v-if="drillcoreBox.drillcore"
+              nuxt
+              :title="$t('drillcoreBox.drillcore')"
+              :value="
+                $translate({
+                  et: drillcoreBox.drillcore.drillcore,
+                  en: drillcoreBox.drillcore.drillcore_en,
+                })
+              "
+              :href="
+                localePath({
+                  name: 'drillcore-id',
+                  params: { id: drillcoreBox.drillcore.id },
+                })
+              "
+            />
+            <table-row
+              :title="$t('drillcoreBox.depthStart')"
+              :value="drillcoreBox.depth_start"
+            />
+            <table-row
+              :title="$t('drillcoreBox.depthEnd')"
+              :value="drillcoreBox.depth_end"
+            />
+            <table-row
+              :title="$t('drillcoreBox.depthOther')"
+              :value="drillcoreBox.depth_other"
+            />
+            <table-row
+              :title="$t('drillcoreBox.diameter')"
+              :value="drillcoreBox.diameter"
+            />
+            <table-row-link
+              v-if="drillcoreBox.stratigraphy_top"
+              :title="$t('drillcoreBox.stratigraphyTop')"
+              :value="
+                $translate({
+                  et: drillcoreBox.stratigraphy_top.stratigraphy,
+                  en: drillcoreBox.stratigraphy_top.stratigraphy_en,
+                })
+              "
+              nuxt
+              :href="
+                localePath({
+                  name: 'stratigraphy-id',
+                  params: { id: drillcoreBox.stratigraphy_top.id },
+                })
+              "
+            />
+            <table-row
+              :title="$t('drillcoreBox.stratigraphyTopFree')"
+              :value="drillcoreBox.stratigraphy_top_free"
+            />
+            <table-row-link
+              v-if="drillcoreBox.stratigraphy_base"
+              :title="$t('drillcoreBox.stratigraphyBase')"
+              :value="
+                $translate({
+                  et: drillcoreBox.stratigraphy_base.stratigraphy,
+                  en: drillcoreBox.stratigraphy_base.stratigraphy_en,
+                })
+              "
+              nuxt
+              :href="
+                localePath({
+                  name: 'stratigraphy-id',
+                  params: { id: drillcoreBox.stratigraphy_base.id },
+                })
+              "
+            />
+            <table-row
+              :title="$t('drillcoreBox.stratigraphyBaseFree')"
+              :value="drillcoreBox.stratigraphy_base_free"
+            />
 
-                <table-row
-                  v-if="drillcoreBox.date_added"
-                  :title="$t('drillcoreBox.dateAdded')"
-                  :value="$formatDate(drillcoreBox.date_added)"
-                />
-                <table-row
-                  v-if="drillcoreBox.date_changed"
-                  :title="$t('drillcoreBox.dateChanged')"
-                  :value="$formatDate(drillcoreBox.date_changed)"
-                />
-                <table-row
-                  :title="$t('drillcoreBox.remarks')"
-                  :value="drillcoreBox.remarks"
-                />
-              </tbody>
-            </template>
-          </v-simple-table>
+            <table-row
+              v-if="drillcoreBox.date_added"
+              :title="$t('drillcoreBox.dateAdded')"
+              :value="$formatDate(drillcoreBox.date_added)"
+            />
+            <table-row
+              v-if="drillcoreBox.date_changed"
+              :title="$t('drillcoreBox.dateChanged')"
+              :value="$formatDate(drillcoreBox.date_changed)"
+            />
+            <table-row
+              :title="$t('drillcoreBox.remarks')"
+              :value="drillcoreBox.remarks"
+            />
+          </base-table>
         </v-card-text>
       </v-card>
     </template>
@@ -284,6 +280,7 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { TABS_DRILLCORE_BOX } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: {
@@ -292,6 +289,7 @@ export default {
     TableRowLink,
     HeaderDetail,
     Detail,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

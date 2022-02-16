@@ -17,151 +17,147 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row-link
-                v-if="stratigraphy.parent"
-                :title="$t('stratigraphy.parentStratigraphy')"
-                :value="
-                  $translate({
-                    et: stratigraphy.parent.stratigraphy,
-                    en: stratigraphy.parent.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: stratigraphy.parent.id },
-                  })
-                "
-              />
-              <table-row
-                v-if="stratigraphy.type"
-                :title="$t('stratigraphy.type')"
-                :value="
-                  $translate({
-                    et: stratigraphy.type.value,
-                    en: stratigraphy.type.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="stratigraphy.rank"
-                :title="$t('stratigraphy.rank')"
-                :value="
-                  $translate({
-                    et: stratigraphy.rank.value,
-                    en: stratigraphy.rank.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="stratigraphy.scope"
-                :title="$t('stratigraphy.scope')"
-                :value="
-                  $translate({
-                    et: stratigraphy.scope.value,
-                    en: stratigraphy.scope.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="stratigraphy.status"
-                :title="$t('stratigraphy.status')"
-                :value="
-                  $translate({
-                    et: stratigraphy.status.value,
-                    en: stratigraphy.status.value_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('stratigraphy.author')"
-                :value="stratigraphy.author_free"
-              />
-              <table-row
-                :title="$t('stratigraphy.year')"
-                :value="stratigraphy.year"
-              />
-              <table-row
-                :title="$t('stratigraphy.etymon')"
-                :value="
-                  $translate({
-                    et: stratigraphy.etymon,
-                    en: stratigraphy.etymon_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('stratigraphy.originalLocality')"
-                :value="stratigraphy.original_locality"
-              />
-              <table-row
-                :title="$t('stratigraphy.ageTop')"
-                :value="stratigraphy.age_top"
-              />
-              <table-row
-                :title="$t('stratigraphy.ageBase')"
-                :value="stratigraphy.age_base"
-              />
-              <table-row-link
-                v-if="stratigraphy.age_chronostratigraphy"
-                :title="$t('stratigraphy.age')"
-                :value="
-                  $translate({
-                    et: stratigraphy.age_chronostratigraphy.stratigraphy,
-                    en: stratigraphy.age_chronostratigraphy.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: {
-                      id: stratigraphy.age_chronostratigraphy.id,
-                    },
-                  })
-                "
-              />
-              <table-row
-                v-if="stratigraphy.age_reference"
-                :title="$t('stratigraphy.ageReference')"
-                :value="stratigraphy.age_reference.reference"
-              />
+        <base-table>
+          <table-row-link
+            v-if="stratigraphy.parent"
+            :title="$t('stratigraphy.parentStratigraphy')"
+            :value="
+              $translate({
+                et: stratigraphy.parent.stratigraphy,
+                en: stratigraphy.parent.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: stratigraphy.parent.id },
+              })
+            "
+          />
+          <table-row
+            v-if="stratigraphy.type"
+            :title="$t('stratigraphy.type')"
+            :value="
+              $translate({
+                et: stratigraphy.type.value,
+                en: stratigraphy.type.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="stratigraphy.rank"
+            :title="$t('stratigraphy.rank')"
+            :value="
+              $translate({
+                et: stratigraphy.rank.value,
+                en: stratigraphy.rank.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="stratigraphy.scope"
+            :title="$t('stratigraphy.scope')"
+            :value="
+              $translate({
+                et: stratigraphy.scope.value,
+                en: stratigraphy.scope.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="stratigraphy.status"
+            :title="$t('stratigraphy.status')"
+            :value="
+              $translate({
+                et: stratigraphy.status.value,
+                en: stratigraphy.status.value_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('stratigraphy.author')"
+            :value="stratigraphy.author_free"
+          />
+          <table-row
+            :title="$t('stratigraphy.year')"
+            :value="stratigraphy.year"
+          />
+          <table-row
+            :title="$t('stratigraphy.etymon')"
+            :value="
+              $translate({
+                et: stratigraphy.etymon,
+                en: stratigraphy.etymon_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('stratigraphy.originalLocality')"
+            :value="stratigraphy.original_locality"
+          />
+          <table-row
+            :title="$t('stratigraphy.ageTop')"
+            :value="stratigraphy.age_top"
+          />
+          <table-row
+            :title="$t('stratigraphy.ageBase')"
+            :value="stratigraphy.age_base"
+          />
+          <table-row-link
+            v-if="stratigraphy.age_chronostratigraphy"
+            :title="$t('stratigraphy.age')"
+            :value="
+              $translate({
+                et: stratigraphy.age_chronostratigraphy.stratigraphy,
+                en: stratigraphy.age_chronostratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: {
+                  id: stratigraphy.age_chronostratigraphy.id,
+                },
+              })
+            "
+          />
+          <table-row
+            v-if="stratigraphy.age_reference"
+            :title="$t('stratigraphy.ageReference')"
+            :value="stratigraphy.age_reference.reference"
+          />
 
-              <table-row
-                v-if="stratigraphy.index_main_html"
-                :title="$t('stratigraphy.index')"
-              >
-                <template #value>
-                  <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="stratigraphy.index_main_html" />
-                </template>
-              </table-row>
-              <table-row
-                v-if="stratigraphy.index_additional_html"
-                :title="$t('stratigraphy.indexAlt')"
-              >
-                <template #value>
-                  <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="stratigraphy.index_additional_html" />
-                </template>
-              </table-row>
-              <table-row
-                v-if="stratigraphy.date_added"
-                :title="$t('stratigraphy.dateAdded')"
-                :value="$formatDate(stratigraphy.date_added)"
-              />
-              <table-row
-                v-if="stratigraphy.date_changed"
-                :title="$t('stratigraphy.dateChanged')"
-                :value="$formatDate(stratigraphy.date_changed)"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+          <table-row
+            v-if="stratigraphy.index_main_html"
+            :title="$t('stratigraphy.index')"
+          >
+            <template #value>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="stratigraphy.index_main_html" />
+            </template>
+          </table-row>
+          <table-row
+            v-if="stratigraphy.index_additional_html"
+            :title="$t('stratigraphy.indexAlt')"
+          >
+            <template #value>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <div v-html="stratigraphy.index_additional_html" />
+            </template>
+          </table-row>
+          <table-row
+            v-if="stratigraphy.date_added"
+            :title="$t('stratigraphy.dateAdded')"
+            :value="$formatDate(stratigraphy.date_added)"
+          />
+          <table-row
+            v-if="stratigraphy.date_changed"
+            :title="$t('stratigraphy.dateChanged')"
+            :value="$formatDate(stratigraphy.date_changed)"
+          />
+        </base-table>
       </v-card-text>
     </template>
     <template
@@ -244,6 +240,7 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import DataTableStratigraphyStratotype from '~/components/data-table/DataTableStratigraphyStratotype.vue'
 import Detail from '~/templates/Detail.vue'
+import BaseTable from '~/components/base/BaseTable.vue'
 export default {
   components: {
     HeaderDetail,
@@ -253,6 +250,7 @@ export default {
     DataTableStratigraphyStratotype,
     LeafletMap,
     Detail,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {

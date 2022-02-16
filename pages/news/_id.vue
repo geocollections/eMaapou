@@ -7,8 +7,6 @@
         </div>
         <base-header
           :title="$translate({ et: news.title_et, en: news.title_en })"
-          class="title-heading"
-          style="border-color: var(--v-header-darken1)"
         />
       </v-col>
     </v-row>

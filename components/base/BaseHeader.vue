@@ -2,7 +2,7 @@
   <v-card
     flat
     tile
-    class="mb-6 mt-4 mt-md-0 title-border"
+    class="mb-6 mt-4 mt-md-0"
     style="background-color: transparent"
   >
     <slot name="before"> </slot>
@@ -44,3 +44,18 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.v-card {
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--v-accent-base);
+    height: 4px;
+    border-radius: 2px 2px 2px 2px;
+  }
+}
+</style>

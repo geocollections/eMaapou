@@ -12,177 +12,173 @@
         $t('common.general')
       }}</v-card-title>
       <v-card-text>
-        <v-simple-table dense class="custom-table">
-          <template #default>
-            <tbody>
-              <table-row
-                :title="$t('locality.name')"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="type"
-                :title="$t('locality.type')"
-                :value="
-                  $translate({
-                    et: type.value,
-                    en: type.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="country"
-                :title="$t('locality.country')"
-                :value="
-                  $translate({
-                    et: country.value,
-                    en: country.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="vald"
-                :title="$t('locality.parish')"
-                :value="
-                  $translate({
-                    et: vald.vald,
-                    en: vald.vald_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="asustusyksus"
-                :title="$t('locality.settlement')"
-                :value="
-                  $translate({
-                    et: asustusyksus.asustusyksus,
-                    en: asustusyksus.asustusyksus_en,
-                  })
-                "
-              />
-              <table-row
-                :title="$t('locality.elevation')"
-                :value="locality.elevation"
-              />
-              <table-row
-                :title="$t('locality.latitude')"
-                :value="locality.latitude"
-              />
-              <table-row
-                :title="$t('locality.longitude')"
-                :value="locality.longitude"
-              />
-              <table-row
-                :title="$t('locality.coordinateSystem')"
-                :value="locality.coord_system"
-              />
-              <table-row
-                :title="$t('locality.coordinateX')"
-                :value="locality.coordx"
-              />
-              <table-row
-                :title="$t('locality.coordinateY')"
-                :value="locality.coordy"
-              />
-              <table-row
-                v-if="coord_det_precision"
-                :title="$t('locality.coordinatePrecision')"
-                :value="coord_det_precision.value"
-              />
-              <table-row
-                v-if="coord_det_method"
-                :title="$t('locality.coordinateMethod')"
-                :value="
-                  $translate({
-                    et: coord_det_method.value,
-                    en: coord_det_method.value_en,
-                  })
-                "
-              />
-              <table-row
-                v-if="coord_det_agent"
-                :title="$t('locality.coordinateAgent')"
-                :value="coord_det_agent.agent"
-              />
-              <table-row
-                :title="$t('locality.locationRemarks')"
-                :value="locality.remarks_location"
-              />
-              <table-row-link
-                v-if="stratigraphy_top"
-                :title="$t('locality.stratigraphyTop')"
-                :value="
-                  $translate({
-                    et: stratigraphy_top.stratigraphy,
-                    en: stratigraphy_top.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: locality.stratigraphy_top.id },
-                  })
-                "
-              />
-              <table-row-link
-                v-if="stratigraphy_base"
-                :title="$t('locality.stratigraphyBase')"
-                :value="
-                  $translate({
-                    et: stratigraphy_base.stratigraphy,
-                    en: stratigraphy_base.stratigraphy_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'stratigraphy-id',
-                    params: { id: locality.stratigraphy_base.id },
-                  })
-                "
-              />
+        <base-table>
+          <table-row
+            :title="$t('locality.name')"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+          />
+          <table-row
+            v-if="type"
+            :title="$t('locality.type')"
+            :value="
+              $translate({
+                et: type.value,
+                en: type.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="country"
+            :title="$t('locality.country')"
+            :value="
+              $translate({
+                et: country.value,
+                en: country.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="vald"
+            :title="$t('locality.parish')"
+            :value="
+              $translate({
+                et: vald.vald,
+                en: vald.vald_en,
+              })
+            "
+          />
+          <table-row
+            v-if="asustusyksus"
+            :title="$t('locality.settlement')"
+            :value="
+              $translate({
+                et: asustusyksus.asustusyksus,
+                en: asustusyksus.asustusyksus_en,
+              })
+            "
+          />
+          <table-row
+            :title="$t('locality.elevation')"
+            :value="locality.elevation"
+          />
+          <table-row
+            :title="$t('locality.latitude')"
+            :value="locality.latitude"
+          />
+          <table-row
+            :title="$t('locality.longitude')"
+            :value="locality.longitude"
+          />
+          <table-row
+            :title="$t('locality.coordinateSystem')"
+            :value="locality.coord_system"
+          />
+          <table-row
+            :title="$t('locality.coordinateX')"
+            :value="locality.coordx"
+          />
+          <table-row
+            :title="$t('locality.coordinateY')"
+            :value="locality.coordy"
+          />
+          <table-row
+            v-if="coord_det_precision"
+            :title="$t('locality.coordinatePrecision')"
+            :value="coord_det_precision.value"
+          />
+          <table-row
+            v-if="coord_det_method"
+            :title="$t('locality.coordinateMethod')"
+            :value="
+              $translate({
+                et: coord_det_method.value,
+                en: coord_det_method.value_en,
+              })
+            "
+          />
+          <table-row
+            v-if="coord_det_agent"
+            :title="$t('locality.coordinateAgent')"
+            :value="coord_det_agent.agent"
+          />
+          <table-row
+            :title="$t('locality.locationRemarks')"
+            :value="locality.remarks_location"
+          />
+          <table-row-link
+            v-if="stratigraphy_top"
+            :title="$t('locality.stratigraphyTop')"
+            :value="
+              $translate({
+                et: stratigraphy_top.stratigraphy,
+                en: stratigraphy_top.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: locality.stratigraphy_top.id },
+              })
+            "
+          />
+          <table-row-link
+            v-if="stratigraphy_base"
+            :title="$t('locality.stratigraphyBase')"
+            :value="
+              $translate({
+                et: stratigraphy_base.stratigraphy,
+                en: stratigraphy_base.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: locality.stratigraphy_base.id },
+              })
+            "
+          />
 
-              <!-- NOTE: #466 added same link as a button -->
-              <!--              <table-row-link-->
-              <!--                v-if="drillcore"-->
-              <!--                nuxt-->
-              <!--                :title="$t('locality.drillcore')"-->
-              <!--                :value="-->
-              <!--                  $translate({-->
-              <!--                    et: drillcore.drillcore,-->
-              <!--                    en: drillcore.drillcore_en,-->
-              <!--                  })-->
-              <!--                "-->
-              <!--                :href="-->
-              <!--                  localePath({-->
-              <!--                    name: 'drillcore-id',-->
-              <!--                    params: { id: drillcore.id },-->
-              <!--                  })-->
-              <!--                "-->
-              <!--              />-->
+          <!-- NOTE: #466 added same link as a button -->
+          <!--              <table-row-link-->
+          <!--                v-if="drillcore"-->
+          <!--                nuxt-->
+          <!--                :title="$t('locality.drillcore')"-->
+          <!--                :value="-->
+          <!--                  $translate({-->
+          <!--                    et: drillcore.drillcore,-->
+          <!--                    en: drillcore.drillcore_en,-->
+          <!--                  })-->
+          <!--                "-->
+          <!--                :href="-->
+          <!--                  localePath({-->
+          <!--                    name: 'drillcore-id',-->
+          <!--                    params: { id: drillcore.id },-->
+          <!--                  })-->
+          <!--                "-->
+          <!--              />-->
 
-              <table-row
-                v-if="locality.date_added"
-                :title="$t('locality.dateAdded')"
-                :value="$formatDate(locality.date_added)"
-              />
-              <table-row
-                v-if="locality.date_changed"
-                :title="$t('locality.dateChanged')"
-                :value="$formatDate(locality.date_changed)"
-              />
-              <table-row
-                :title="$t('locality.remarks')"
-                :value="locality.remarks"
-              />
-            </tbody>
-          </template>
-        </v-simple-table>
+          <table-row
+            v-if="locality.date_added"
+            :title="$t('locality.dateAdded')"
+            :value="$formatDate(locality.date_added)"
+          />
+          <table-row
+            v-if="locality.date_changed"
+            :title="$t('locality.dateChanged')"
+            :value="$formatDate(locality.date_changed)"
+          />
+          <table-row
+            :title="$t('locality.remarks')"
+            :value="locality.remarks"
+          />
+        </base-table>
 
         <v-btn
           v-if="analysisResultsCount > 0"
@@ -272,6 +268,7 @@ import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { TABS_LOCALITY } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: {
@@ -282,6 +279,7 @@ export default {
     Tabs,
     Detail,
     ImageBar,
+    BaseTable,
   },
   async asyncData({ params, route, error, $services }) {
     try {
