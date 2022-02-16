@@ -6,7 +6,7 @@
     absolute
     height="64"
     :elevation="0"
-    color="transparent"
+    color="tertiary"
     :class="{
       'app-bar-full': $vuetify.breakpoint.mdAndUp,
       'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
@@ -24,7 +24,6 @@
           v-if="$vuetify.breakpoint.mdAndUp"
           :height="40"
           :width="80"
-          :eager="true"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
@@ -32,7 +31,6 @@
           v-if="!$vuetify.breakpoint.mdAndUp"
           :height="36"
           :width="36"
-          :eager="true"
           contain
           :src="$img(logoCompact, null, { provider: 'static' })"
         />
@@ -151,7 +149,6 @@
         />
         <v-hover v-slot="{ hover }">
           <v-btn
-            id="quick-search-btn"
             height="38"
             width="48"
             elevation="0"
@@ -163,20 +160,16 @@
           </v-btn>
         </v-hover>
       </div>
-      <language-switcher
-        v-if="$vuetify.breakpoint.mdAndUp"
-        color="accent darken-2"
-      />
+      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
       <v-btn
         v-if="!$vuetify.breakpoint.mdAndUp"
         text
         class="montserrat"
-        color="accent darken-2"
         aria-label="Open navigation drawer"
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <v-icon color="accent darken-2" size="font-size: 24px">mdi-menu</v-icon>
+        <v-icon size="font-size: 24px">mdi-menu</v-icon>
       </v-btn>
     </v-toolbar-items>
 
@@ -369,7 +362,7 @@ export default {
         { routeName: 'area', text: 'area.pageTitle' },
       ],
       logo: '/logos/emaapou5white.svg',
-      logoCompact: '/logos/emaapou_short_white.svg',
+      logoCompact: '/logos/emaapou_short.svg',
     }
   },
   computed: {
@@ -418,10 +411,6 @@ export default {
   // border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
 }
 
-#quick-search-btn {
-  min-width: 0 !important;
-}
-
 .active-card {
   background-color: rgba(9, 98, 124, 0.12) !important;
 
@@ -432,20 +421,5 @@ export default {
   & .v-icon {
     color: var(--v-accent-lighten1) !important;
   }
-}
-
-/* Overwrites vuetify list item color (https://github.com/vuetifyjs/vuetify/issues/9285) */
-.dots-vertical-list
-  > .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  color: #424242 !important;
-}
-.v-app-bar {
-  background: linear-gradient(320deg, #577daf, #333333) !important;
-  /*
-  &:hover {
-    border-bottom: map-get($map: $grey, $key: 'lighten-2') solid 1px !important;
-    background-color: map-get($map: $grey, $key: 'lighten-3') !important;
-  }
-  */
 }
 </style>
