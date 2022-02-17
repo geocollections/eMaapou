@@ -60,7 +60,7 @@ export default {
     quickSearch: 'Quick search',
     description: 'Description',
     count: 'Found {count} records',
-    map: 'Map | Map: <b>{count}</b> locality | Map: <b>{count}</b> localities',
+    map: 'Map',
     more: 'More',
     close: 'Close',
     institutions: 'Geological institutions, organisations and companies',

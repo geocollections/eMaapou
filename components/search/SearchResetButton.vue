@@ -1,15 +1,18 @@
 <template>
   <v-btn
     outlined
-    tile
     color="grey"
-    class="reset-search mr-2 px-3 montserrat"
+    class="
+      reset-search
+      mr-2
+      px-3
+      montserrat
+      rounded
+      text-body-1 text-capitalize
+    "
     :icon="$vuetify.breakpoint.mdOnly"
     @click="$emit('click')"
   >
-    <span class="hidden-md-only">
-      {{ $t('common.resetSearch') }}
-    </span>
     <v-tooltip v-if="$vuetify.breakpoint.mdOnly" bottom>
       <template #activator="{ on }">
         <v-icon :right="!$vuetify.breakpoint.mdOnly" v-on="on"
@@ -21,7 +24,10 @@
         {{ $t('common.resetSearchLong') }}
       </span>
     </v-tooltip>
-    <v-icon v-else right>mdi-eraser</v-icon>
+    <v-icon v-else left>mdi-eraser</v-icon>
+    <span class="hidden-md-only montserrat">
+      {{ $t('common.resetSearch') }}
+    </span>
   </v-btn>
 </template>
 <script>

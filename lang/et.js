@@ -60,7 +60,7 @@ export default {
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',
     count: 'Leitud {count} kirjet',
-    map: 'Kaart | Kaart: <b>{count}</b> asukoht | Kaart: <b>{count}</b> asukohta',
+    map: 'Kaart',
     more: 'Rohkem',
     close: 'Sulge',
     institutions: 'Geoloogia asutused, organisatsioonid, ettevõtted',

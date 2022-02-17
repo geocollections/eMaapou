@@ -4,15 +4,11 @@
     :show-body="showMap"
     @click="showMap = $event"
   >
-    <template #title="{ showBody }">
-      <div @click="$emit('click', !showBody)">
-        <span
-          class="montserrat"
-          style="font-size: 1rem"
-          v-html="$tc('common.map', mapMarkers.length)"
-        />
-        <v-icon class="pb-1">mdi-earth</v-icon>
-      </div>
+    <template #title>
+      <v-icon left>mdi-earth</v-icon>
+      <span class="montserrat" style="font-size: 1rem">{{
+        $t('common.map')
+      }}</span>
     </template>
 
     <template #body="{ showBody }">

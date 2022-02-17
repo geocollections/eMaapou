@@ -4,11 +4,9 @@
     :show-body="showInstitutions"
     @click="showInstitutions = $event"
   >
-    <template #title="{ showBody }">
-      <div @click="$emit('click', !showBody)">
-        <span>{{ $t('common.showInstitutions') }}</span>
-        <v-icon class="pb-1">mdi-warehouse</v-icon>
-      </div>
+    <template #title>
+      <v-icon left>mdi-warehouse</v-icon>
+      <span>{{ $t('common.showInstitutions') }}</span>
     </template>
 
     <div

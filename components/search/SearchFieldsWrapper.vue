@@ -4,11 +4,9 @@
     :show-body="showSearchViewForm"
     @click="showSearchViewForm = $event"
   >
-    <template #title="{ showBody }">
-      <div @click="$emit('click', !showBody)">
-        <span>{{ $t('common.showSearchFields') }}</span>
-        <v-icon class="pb-1">mdi-magnify</v-icon>
-      </div>
+    <template #title>
+      <v-icon left>mdi-filter-variant</v-icon>
+      <span>{{ $t('common.showSearchFields') }}</span>
     </template>
     <slot></slot>
   </base-card-expand>
