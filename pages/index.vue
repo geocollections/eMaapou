@@ -2,15 +2,16 @@
   <div class="mb-10">
     <div
       class="spacer layer1"
-      :style="{ height: $vuetify.breakpoint.lgAndUp ? '750px' : 'auto' }"
+      style="padding-top: 64px"
+      :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'auto' }"
     >
       <v-container :fluid="$vuetify.breakpoint.smAndDown">
         <v-row class="px-3" justify="space-around">
           <v-col cols="12" lg="6">
             <div class="d-flex flex-column pt-8">
-              <div class="text-h5 text-md-h4 white--text font-weight-regular">
+              <!-- <div class="text-h5 text-md-h4 white--text font-weight-regular">
                 {{ $t('title') }}
-              </div>
+              </div> -->
               <!-- SUBTITLE -->
               <div
                 class="
@@ -118,39 +119,43 @@
               </div>
             </v-row>
           </v-col>
-          <v-col
-            cols="12"
-            lg="6"
-            class="d-flex flex-column justify-space-between"
-          >
-            <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" />
+          <v-col cols="12" lg="6" class="d-flex flex-column justify-end">
+            <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
             <v-card class="mt-5" color="tertiary">
-              <v-card-text class="white--text d-md-flex justify-md-center">
+              <v-card-text
+                class="white--text d-sm-flex justify-sm-space-around"
+              >
                 <div class="px-md-10 py-4">
-                  <div class="text-h6 text-center font-weight-regular pb-3">
-                    Number of records
+                  <div class="text-h5 text-center font-weight-medium">
+                    280k+
                   </div>
-                  <div class="text-h6 text-center">1000000</div>
+                  <div class="text-h6 text-center font-weight-light pb-3">
+                    {{ $t('specimen.pageTitle') }}
+                  </div>
                 </div>
                 <v-divider
                   style="border-color: white !important"
-                  :vertical="$vuetify.breakpoint.mdAndUp"
+                  :vertical="$vuetify.breakpoint.smAndUp"
                 />
                 <div class="px-md-10 py-4">
-                  <div class="text-h6 text-center font-weight-regular pb-3">
-                    Number of records
+                  <div class="text-h5 text-center font-weight-medium">
+                    240k+
                   </div>
-                  <div class="text-h6 text-center">1000000</div>
+                  <div class="text-h6 text-center font-weight-light pb-3">
+                    {{ $t('analysis.pageTitle') }}
+                  </div>
                 </div>
                 <v-divider
                   style="border-color: white !important"
-                  :vertical="$vuetify.breakpoint.mdAndUp"
+                  :vertical="$vuetify.breakpoint.smAndUp"
                 />
                 <div class="px-md-10 py-4">
-                  <div class="text-h6 text-center font-weight-regular pb-3">
-                    Number of records
+                  <div class="text-h5 text-center font-weight-medium">
+                    156k+
                   </div>
-                  <div class="text-h6 text-center">1000000</div>
+                  <div class="text-h6 text-center font-weight-light pb-3">
+                    {{ $t('sample.pageTitle') }}
+                  </div>
                 </div>
               </v-card-text>
             </v-card>
@@ -160,11 +165,6 @@
     </div>
     <v-container class="pt-0" :fluid="$vuetify.breakpoint.smAndDown">
       <v-row justify="center" class="mt-4">
-        <v-col cols="12" lg="6" class="pr-5">
-          <client-only>
-            <the-news-card />
-          </client-only>
-        </v-col>
         <v-col cols="12" lg="6" class="pl-5">
           <base-header :title="$t('about.title')" />
 
@@ -173,6 +173,11 @@
             :style="{ 'column-count': aboutTextColumns }"
             v-html="$translate({ et: page.content_et, en: page.content_en })"
           ></div>
+        </v-col>
+        <v-col cols="12" lg="6" class="pr-5">
+          <client-only>
+            <the-news-card />
+          </client-only>
         </v-col>
       </v-row>
       <v-row no-gutters class="my-2" justify="center" align="center">
@@ -211,7 +216,7 @@
 <script>
 import { isEmpty } from 'lodash'
 import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
-import TheMapCard from '~/components/landing/TheMapCard.vue'
+// import TheMapCard from '~/components/landing/TheMapCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
@@ -219,7 +224,7 @@ import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 export default {
   components: {
     SearchFormQuick,
-    TheMapCard,
+    // TheMapCard,
     BaseHeader,
     TheNewsCard,
     ExternalLinkCard,
@@ -242,11 +247,6 @@ export default {
           icon: 'mdi-map-marker-outline',
         },
         {
-          routeName: 'site',
-          text: 'site.pageTitle',
-          icon: 'mdi-binoculars',
-        },
-        {
           routeName: 'drillcore',
           text: 'drillcore.pageTitle',
           icon: 'mdi-screw-machine-flat-top',
@@ -262,10 +262,25 @@ export default {
           icon: 'mdi-chart-scatter-plot',
         },
         {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
-          icon: 'mdi-chart-line',
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
+          icon: 'mdi-microscope',
         },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
+          icon: 'mdi-file-image-outline',
+        },
+        // {
+        //   routeName: 'analysis',
+        //   text: 'analysis.pageTitle',
+        //   icon: 'mdi-chart-scatter-plot',
+        // },
+        // {
+        //   routeName: 'analytical-data',
+        //   text: 'analyticalData.pageTitle',
+        //   icon: 'mdi-chart-line',
+        // },
       ],
       imageLinks: [
         {
@@ -506,12 +521,14 @@ export default {
   aspect-ratio: 960/540;
   width: 100%;
   background-repeat: no-repeat;
-  background-position: bottom;
+  background-position: bottom, center, center;
   background-size: cover;
 }
 
 .layer1 {
-  background-image: url('~/static/frontpage/layered-waves-haikei.svg');
+  background-image: url('~/static/frontpage/layered-peaks-haikei.svg'),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('~/static/frontpage/header_img.jpg');
 }
 
 .quick-card {

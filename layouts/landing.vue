@@ -5,7 +5,7 @@
       :drawer="drawer"
       @toggle:navigationDrawer="drawer = !drawer"
     />
-    <v-main style="min-height: 100vh">
+    <v-main class="pt-0" style="min-height: 100vh">
       <nuxt />
       <fab-scroll-top />
       <client-only>
