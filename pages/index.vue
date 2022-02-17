@@ -8,14 +8,13 @@
       <v-container :fluid="$vuetify.breakpoint.smAndDown">
         <v-row class="px-3" justify="space-around">
           <v-col cols="12" lg="6">
-            <div class="d-flex flex-column pt-8">
+            <div class="d-flex flex-column pt-4 pt-md-8">
               <!-- <div class="text-h5 text-md-h4 white--text font-weight-regular">
                 {{ $t('title') }}
               </div> -->
               <!-- SUBTITLE -->
               <div
                 class="
-                  mt-3
                   text-h4 text-md-h2
                   font-weight-bold
                   align-center
