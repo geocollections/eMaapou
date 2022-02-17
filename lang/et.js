@@ -33,6 +33,9 @@ export default {
     viewMore: 'Vaata lähemalt',
     intro:
       'e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja e-teenuste juurde. Lihtsaim viis e-Maapõuest andmete otsimiseks või sirvimiseks on kasutada portaali kiirotsingut. Detailotsingu moodulites on võimalik piiritleda täpsemad päringukriteeriumid, kasutada kaardiotsingut, kuvada pildifaile, andmeid eksportida ning analüüsida.',
+    statText1: 'Eksemplari',
+    statText2: 'Analüüsi',
+    statText3: 'Proovi',
   },
   common: {
     general: 'Üldinfo',

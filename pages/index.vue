@@ -130,7 +130,7 @@
                     280k+
                   </div>
                   <div class="text-h6 text-center font-weight-light pb-3">
-                    {{ $t('specimen.pageTitle') }}
+                    {{ $t('landing.statText1') }}
                   </div>
                 </div>
                 <v-divider
@@ -142,7 +142,7 @@
                     240k+
                   </div>
                   <div class="text-h6 text-center font-weight-light pb-3">
-                    {{ $t('analysis.pageTitle') }}
+                    {{ $t('landing.statText2') }}
                   </div>
                 </div>
                 <v-divider
@@ -154,7 +154,7 @@
                     156k+
                   </div>
                   <div class="text-h6 text-center font-weight-light pb-3">
-                    {{ $t('sample.pageTitle') }}
+                    {{ $t('landing.statText3') }}
                   </div>
                 </div>
               </v-card-text>
