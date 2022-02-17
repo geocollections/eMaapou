@@ -1,151 +1,189 @@
 <template>
-  <div>
-    <v-img
-      :height="
-        $vuetify.breakpoint.height < 800 ? 'unset' : 'calc(100vh + 50px)'
-      "
-      :max-height="
-        $vuetify.breakpoint.height < 800 ? 'none' : 'calc(100vh + 50px)'
-      "
-      width="100%"
-      class="background-image"
-      position="center 20%"
-      :gradient="`to right, rgba(0, 0, 0, .8), rgba(0,34,51,.1)`"
-      :src="$img('/frontpage/header_img.jpg', null, { provider: 'static' })"
-      :lazy-src="
-        $img('/frontpage/header_img_medium.jpg', null, { provider: 'static' })
-      "
+  <div class="mb-10">
+    <div
+      class="spacer layer1"
+      style="padding-top: 64px"
+      :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'auto' }"
     >
-      <div
-        class="
-          d-flex
-          flex-column
-          align-sm-content-start align-sm-content-center
-          pb-10
-        "
-        style="height: 100%; margin-top: 64px"
-      >
-        <v-row no-gutters align-content="end" class="flex-grow-0">
-          <v-col
-            cols="10"
-            sm="8"
-            md="8"
-            lg="8"
-            offset-md="1"
-            offset-sm="2"
-            offset="1"
-            class="mb-5"
-          >
-            <!-- TITLE -->
-            <div class="d-flex flex-row align-center text-h2 white--text">
-              <div class="ml-sm-4 font-weight-bold">
+      <v-container :fluid="$vuetify.breakpoint.smAndDown">
+        <v-row class="px-3" justify="space-around">
+          <v-col cols="12" lg="6">
+            <div class="d-flex flex-column pt-4 pt-md-8">
+              <!-- <div class="text-h5 text-md-h4 white--text font-weight-regular">
                 {{ $t('title') }}
-              </div>
-            </div>
-            <!-- SUBTITLE -->
-            <div class="d-flex flex-row align-center text-h5 white--text">
-              <div class="ml-sm-4 font-weight-normal">
+              </div> -->
+              <!-- SUBTITLE -->
+              <div
+                class="
+                  text-h4 text-md-h2
+                  font-weight-bold
+                  align-center
+                  white--text
+                "
+              >
                 {{ $t('subtitle') }}
               </div>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row
-          no-gutters
-          align-content="center"
-          align-content-sm="start"
-          justify="center"
-          justify-sm="start"
-          class="mt-6 mt-sm-2 flex-grow-0 flex-sm-grow-1"
-        >
-          <v-col
-            cols="10"
-            sm="8"
-            :md="6"
-            :lg="5"
-            :xl="4"
-            offset-md="1"
-            offset-sm="2"
-          >
-            <!-- MAIN CARD -->
-            <the-search-card
-              :show-map="showMap"
-              :render-side-card="renderSideCard"
-              @toggle:side="showMap = !showMap"
-            />
-            <!-- INSTITUTION ICONS -->
-            <div v-if="!$vuetify.breakpoint.xsOnly" class="mt-4">
-              <a
-                v-for="(item, index) in imageLinks"
-                :key="index"
-                :href="item.href"
-                target="FooterLink"
-                rel="noopener noreferrer"
-              >
-                <v-tooltip top>
-                  <template #activator="{ on, attrs }">
-                    <nuxt-img
-                      v-bind="attrs"
-                      :src="item.src"
-                      :alt="$t(item.alt)"
-                      provider="static"
-                      class="footer-logo py-1 px-3"
-                      v-on="on"
+              <div>
+                <v-card
+                  :width="$vuetify.breakpoint.lgAndUp ? '660px' : 'unset'"
+                  class="mt-3 mt-md-6"
+                  tile
+                  flat
+                  color="transparent"
+                >
+                  <v-card-title
+                    style="word-break: break-word"
+                    :class="{
+                      'font-small montserrat': $vuetify.breakpoint.smAndDown,
+                    }"
+                    class="px-0 text-sm-h5 white--text"
+                  >
+                    {{ $t('landing.quickSearch') }}
+                  </v-card-title>
+                  <v-card-actions class="pa-0">
+                    <search-form-quick
+                      style="width: 100%"
+                      :only-icon="$vuetify.breakpoint.smAndDown"
+                      @submit="handleSearch"
                     />
-                  </template>
-
-                  <span>{{ $t(item.title) }}</span>
-                </v-tooltip>
-              </a>
+                  </v-card-actions>
+                </v-card>
+              </div>
             </div>
+            <v-row no-gutters class="mt-8">
+              <div
+                class="col-12 col-xl-auto d-flex flex-wrap"
+                :style="{
+                  'max-width': $vuetify.breakpoint.xlOnly ? '660px' : 'unset',
+                }"
+              >
+                <v-col
+                  v-for="(route, index) in searchRoutes"
+                  :key="index"
+                  cols="12"
+                  class="pa-0"
+                  sm="6"
+                  md="4"
+                  lg="6"
+                >
+                  <v-hover v-slot="{ hover }">
+                    <v-card
+                      nuxt
+                      :to="localePath(route.routeName)"
+                      class="ma-1"
+                      :class="{ 'on-hover': hover }"
+                    >
+                      <v-card-title
+                        class=""
+                        :class="{
+                          'text-body-1 font-weight-medium':
+                            $vuetify.breakpoint.smAndDown,
+                        }"
+                      >
+                        <v-icon
+                          :x-large="$vuetify.breakpoint.mdAndUp"
+                          color="accent"
+                          >{{ route.icon }}</v-icon
+                        >
+                        <div class="montserrat ml-3">
+                          {{ $t(route.text) }}
+                        </div>
+                      </v-card-title>
+                    </v-card>
+                    <!-- <v-card
+                      nuxt
+                      :to="localePath(route.routeName)"
+                      :width="$vuetify.breakpoint.lgAndUp ? '210px' : 'auto'"
+                      :height="$vuetify.breakpoint.lgAndUp ? '200px' : 'auto'"
+                      class="ma-1 d-flex flex-column justify-center"
+                      :class="{ 'on-hover': hover }"
+                    >
+                      <v-card-title
+                        class="justify-center pb-0"
+                        :class="{
+                          'text-body-2 font-weight-medium':
+                            $vuetify.breakpoint.smAndDown,
+                        }"
+                      >
+                        <div class="montserrat">
+                          {{ $t(route.text) }}
+                        </div>
+                      </v-card-title>
+                      <v-card-text class="text-center py-6">
+                        <v-icon color="accent" x-large>{{ route.icon }}</v-icon>
+                      </v-card-text>
+                    </v-card> -->
+                  </v-hover>
+                </v-col>
+              </div>
+            </v-row>
+          </v-col>
+          <v-col cols="12" lg="6" class="d-flex flex-column justify-end">
+            <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
+            <v-card class="mt-5" color="tertiary">
+              <v-card-text
+                class="white--text d-sm-flex justify-sm-space-around"
+              >
+                <div class="px-md-10 py-4">
+                  <div class="text-h5 text-center font-weight-medium">
+                    280k+
+                  </div>
+                  <div class="text-h6 text-center font-weight-light pb-3">
+                    {{ $t('landing.statText1') }}
+                  </div>
+                </div>
+                <v-divider
+                  style="border-color: white !important"
+                  :vertical="$vuetify.breakpoint.smAndUp"
+                />
+                <div class="px-md-10 py-4">
+                  <div class="text-h5 text-center font-weight-medium">
+                    240k+
+                  </div>
+                  <div class="text-h6 text-center font-weight-light pb-3">
+                    {{ $t('landing.statText2') }}
+                  </div>
+                </div>
+                <v-divider
+                  style="border-color: white !important"
+                  :vertical="$vuetify.breakpoint.smAndUp"
+                />
+                <div class="px-md-10 py-4">
+                  <div class="text-h5 text-center font-weight-medium">
+                    156k+
+                  </div>
+                  <div class="text-h6 text-center font-weight-light pb-3">
+                    {{ $t('landing.statText3') }}
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
-        <!-- SCROLL INDICATOR -->
-        <v-fade-transition>
+      </v-container>
+    </div>
+    <v-container class="pt-0" :fluid="$vuetify.breakpoint.smAndDown">
+      <v-row justify="center" class="mt-4">
+        <v-col cols="12" lg="6" class="pl-5">
+          <base-header :title="$t('about.title')" />
+
           <div
-            v-if="scrollY === 0"
-            class="d-flex justify-center"
-            style="
-              position: absolute;
-              bottom: 60px;
-              width: 100%;
-              pointer-events: none;
-            "
-          >
-            <v-btn
-              style="pointer-events: auto"
-              :ripple="false"
-              dark
-              small
-              plain
-              icon
-              class="pulse d-flex flex-column px-0"
-              @click="$vuetify.goTo('#otherServices')"
-              ><v-icon x-large>mdi-chevron-down</v-icon>
-            </v-btn>
-          </div>
-        </v-fade-transition>
-      </div>
-      <div class="shape-divider">
-        <svg
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M892.25 114.72L0 0 0 120 1200 120 1200 0 892.25 114.72z"
-            class="shape-fill"
-          ></path>
-        </svg>
-      </div>
-    </v-img>
-    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-      <v-row class="my-2 my-sm-10" justify="center" align="center">
-        <v-col id="otherServices" class="text-sm-h3" cols="12">
+            class="aboutpage px-2 px-sm-5"
+            :style="{ 'column-count': aboutTextColumns }"
+            v-html="$translate({ et: page.content_et, en: page.content_en })"
+          ></div>
+        </v-col>
+        <v-col cols="12" lg="6" class="pr-5">
+          <client-only>
+            <the-news-card />
+          </client-only>
+        </v-col>
+      </v-row>
+      <v-row no-gutters class="my-2" justify="center" align="center">
+        <v-col id="otherServices" class="py-0" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>
-        <v-col>
+        <v-col cols="12">
           <v-row class="px-2 px-sm-5">
             <v-col
               v-for="(item, index) in externalCards.ids.map(
@@ -170,41 +208,25 @@
           </v-row>
         </v-col>
       </v-row>
-      <v-row justify="center" class="my-2 my-sm-10">
-        <v-col cols="12" lg="6">
-          <client-only>
-            <the-news-card />
-          </client-only>
-        </v-col>
-        <v-col cols="12" lg="6">
-          <base-header :title="$t('about.title')" />
-
-          <div
-            class="aboutpage px-2 px-sm-5"
-            :style="{ 'column-count': aboutTextColumns }"
-            v-html="$translate({ et: page.content_et, en: page.content_en })"
-          ></div>
-        </v-col>
-      </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
 import { isEmpty } from 'lodash'
-import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
+import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
+// import TheMapCard from '~/components/landing/TheMapCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
-import TheSearchCard from '~/components/landing/TheSearchCard.vue'
-// eslint-disable-next-line no-unused-vars
-// import TheMapCard from '~/components/landing/TheMapCard.vue'
+import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
+
 export default {
   components: {
-    ExternalLinkCard,
+    SearchFormQuick,
+    // TheMapCard,
     BaseHeader,
     TheNewsCard,
-    TheSearchCard,
-    // TheMapCard,
+    ExternalLinkCard,
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {
@@ -217,6 +239,48 @@ export default {
       drawer: false,
       showMap: false,
       scrollY: 0,
+      searchRoutes: [
+        {
+          routeName: 'locality',
+          text: 'locality.pageTitle',
+          icon: 'mdi-map-marker-outline',
+        },
+        {
+          routeName: 'drillcore',
+          text: 'drillcore.pageTitle',
+          icon: 'mdi-screw-machine-flat-top',
+        },
+        {
+          routeName: 'sample',
+          text: 'sample.pageTitle',
+          icon: 'mdi-test-tube',
+        },
+        {
+          routeName: 'analysis',
+          text: 'analysis.pageTitle',
+          icon: 'mdi-chart-scatter-plot',
+        },
+        {
+          routeName: 'specimen',
+          text: 'specimen.pageTitle',
+          icon: 'mdi-microscope',
+        },
+        {
+          routeName: 'photo',
+          text: 'photo.pageTitle',
+          icon: 'mdi-file-image-outline',
+        },
+        // {
+        //   routeName: 'analysis',
+        //   text: 'analysis.pageTitle',
+        //   icon: 'mdi-chart-scatter-plot',
+        // },
+        // {
+        //   routeName: 'analytical-data',
+        //   text: 'analyticalData.pageTitle',
+        //   icon: 'mdi-chart-line',
+        // },
+      ],
       imageLinks: [
         {
           href: 'https://taltech.ee/geoloogia-instituut',
@@ -452,6 +516,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.spacer {
+  aspect-ratio: 960/540;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: bottom, center, center;
+  background-size: cover;
+}
+
+.layer1 {
+  background-image: url('~/static/frontpage/layered-peaks-haikei.svg'),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('~/static/frontpage/header_img.jpg');
+}
+
+.quick-card {
+  :hover {
+    color: red;
+  }
+}
+
+// OLD
+
 .background-image ::v-deep > .v-image__image {
   filter: brightness(0.95) !important;
 }

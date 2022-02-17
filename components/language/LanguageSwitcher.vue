@@ -1,26 +1,23 @@
 <template>
-  <v-menu
-    content-class="elevation-2 mt-1"
-    transition="slide-y-transition"
-    offset-y
-    bottom
-    right
+  <v-btn
+    id="lang_switch_btn"
+    aria-label="select language"
+    class="d-block"
+    icon
+    :color="color"
   >
-    <template #activator="{ on, attrs }">
-      <v-btn
-        aria-label="select language"
-        class="d-block"
-        icon
-        :color="color"
-        v-bind="attrs"
-        v-on="on"
-      >
-        <span class="elevation-1" :class="classObject" />
-      </v-btn>
-    </template>
-
-    <language-list />
-  </v-menu>
+    <span class="elevation-1" :class="classObject" />
+    <v-menu
+      activator="#lang_switch_btn"
+      content-class="elevation-2 mt-1"
+      transition="slide-y-transition"
+      offset-y
+      bottom
+      right
+    >
+      <language-list />
+    </v-menu>
+  </v-btn>
 </template>
 
 <script>
