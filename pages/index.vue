@@ -2,9 +2,9 @@
   <div>
     <div
       class="spacer layer1"
-      :style="{ height: $vuetify.breakpoint.lgAndUp ? '1000px' : 'auto' }"
+      :style="{ height: $vuetify.breakpoint.lgAndUp ? '750px' : 'auto' }"
     >
-      <v-container :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-container :fluid="$vuetify.breakpoint.smAndDown">
         <v-row class="px-3" justify="space-around">
           <v-col cols="12" lg="6">
             <div class="d-flex flex-column pt-8">
@@ -15,7 +15,7 @@
               <div
                 class="
                   mt-3
-                  text-h4 text-md-h3
+                  text-h4 text-md-h2
                   font-weight-bold
                   align-center
                   white--text
@@ -23,9 +23,9 @@
               >
                 {{ $t('subtitle') }}
               </div>
-              <div class="d-lg-flex justify-lg-center">
+              <div>
                 <v-card
-                  :width="$vuetify.breakpoint.lgAndUp ? '600px' : 'unset'"
+                  :width="$vuetify.breakpoint.lgAndUp ? '660px' : 'unset'"
                   class="mt-3 mt-md-6"
                   tile
                   flat
@@ -50,26 +50,50 @@
                 </v-card>
               </div>
             </div>
-            <v-row justify-lg="center" no-gutters class="mt-8">
+            <v-row no-gutters class="mt-8">
               <div
-                class="col-12 col-lg-auto d-flex flex-wrap"
+                class="col-12 col-xl-auto d-flex flex-wrap"
                 :style="{
-                  'max-width': $vuetify.breakpoint.lgAndUp ? '600px' : 'unset',
+                  'max-width': $vuetify.breakpoint.xlOnly ? '660px' : 'unset',
                 }"
               >
                 <v-col
                   v-for="(route, index) in searchRoutes"
                   :key="index"
-                  cols="6"
+                  cols="12"
                   class="pa-0"
+                  sm="6"
                   md="4"
-                  lg="auto"
+                  lg="6"
                 >
                   <v-hover v-slot="{ hover }">
                     <v-card
                       nuxt
                       :to="localePath(route.routeName)"
-                      :width="$vuetify.breakpoint.lgAndUp ? '190px' : 'auto'"
+                      class="ma-1"
+                      :class="{ 'on-hover': hover }"
+                    >
+                      <v-card-title
+                        class=""
+                        :class="{
+                          'text-body-1 font-weight-medium':
+                            $vuetify.breakpoint.smAndDown,
+                        }"
+                      >
+                        <v-icon
+                          :x-large="$vuetify.breakpoint.mdAndUp"
+                          color="accent"
+                          >{{ route.icon }}</v-icon
+                        >
+                        <div class="montserrat ml-3">
+                          {{ $t(route.text) }}
+                        </div>
+                      </v-card-title>
+                    </v-card>
+                    <!-- <v-card
+                      nuxt
+                      :to="localePath(route.routeName)"
+                      :width="$vuetify.breakpoint.lgAndUp ? '210px' : 'auto'"
                       :height="$vuetify.breakpoint.lgAndUp ? '200px' : 'auto'"
                       class="ma-1 d-flex flex-column justify-center"
                       :class="{ 'on-hover': hover }"
@@ -81,18 +105,14 @@
                             $vuetify.breakpoint.smAndDown,
                         }"
                       >
-                        <div
-                          :class="{
-                            montserrat: $vuetify.breakpoint.smAndDown,
-                          }"
-                        >
+                        <div class="montserrat">
                           {{ $t(route.text) }}
                         </div>
                       </v-card-title>
                       <v-card-text class="text-center py-6">
                         <v-icon color="accent" x-large>{{ route.icon }}</v-icon>
                       </v-card-text>
-                    </v-card>
+                    </v-card> -->
                   </v-hover>
                 </v-col>
               </div>
@@ -104,7 +124,7 @@
             class="d-flex flex-column justify-space-between"
           >
             <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" />
-            <v-card color="tertiary" elevation="0">
+            <v-card class="mt-3" color="tertiary" elevation="0">
               <v-card-text class="white--text d-md-flex justify-md-center">
                 <div class="px-md-10 py-4">
                   <div class="text-h6 text-center font-weight-regular pb-3">
@@ -138,12 +158,28 @@
         </v-row>
       </v-container>
     </div>
-    <v-container :fluid="$vuetify.breakpoint.lgAndDown">
-      <v-row class="my-2" justify="center" align="center">
-        <v-col id="otherServices" class="text-sm-h3" cols="12">
+    <v-container class="pt-0" :fluid="$vuetify.breakpoint.smAndDown">
+      <v-row justify="center" class="mt-4">
+        <v-col cols="12" lg="6">
+          <client-only>
+            <the-news-card />
+          </client-only>
+        </v-col>
+        <v-col cols="12" lg="6">
+          <base-header :title="$t('about.title')" />
+
+          <div
+            class="aboutpage px-2 px-sm-5"
+            :style="{ 'column-count': aboutTextColumns }"
+            v-html="$translate({ et: page.content_et, en: page.content_en })"
+          ></div>
+        </v-col>
+      </v-row>
+      <!-- <v-row no-gutters class="my-2" justify="center" align="center">
+        <v-col id="otherServices" class="py-0" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>
-        <v-col>
+        <v-col cols="12">
           <v-row class="px-2 px-sm-5">
             <v-col
               v-for="(item, index) in externalCards.ids.map(
@@ -167,23 +203,7 @@
             </v-col>
           </v-row>
         </v-col>
-      </v-row>
-      <v-row justify="center" class="my-2 my-sm-10">
-        <v-col cols="12" lg="6">
-          <client-only>
-            <the-news-card />
-          </client-only>
-        </v-col>
-        <v-col cols="12" lg="6">
-          <base-header :title="$t('about.title')" />
-
-          <div
-            class="aboutpage px-2 px-sm-5"
-            :style="{ 'column-count': aboutTextColumns }"
-            v-html="$translate({ et: page.content_et, en: page.content_en })"
-          ></div>
-        </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </div>
 </template>
@@ -194,7 +214,7 @@ import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
 import TheMapCard from '~/components/landing/TheMapCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
-import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
+// import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 
 export default {
   components: {
@@ -202,7 +222,7 @@ export default {
     TheMapCard,
     BaseHeader,
     TheNewsCard,
-    ExternalLinkCard,
+    // ExternalLinkCard,
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {

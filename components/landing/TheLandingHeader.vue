@@ -39,27 +39,25 @@
     </v-toolbar-title>
     <v-toolbar-items>
       <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
+        <v-btn
+          id="browse_menu_btn"
+          aria-label="browse"
+          text
+          class="montserrat"
+          style="text-transform: capitalize; font-size: 0.875rem"
+        >
+          {{ $t('common.browse') }}
+          <v-icon class="ml-1">mdi-chevron-down</v-icon>
+        </v-btn>
         <v-menu
+          activator="#browse_menu_btn"
           content-class="elevation-2 mt-1"
           transition="slide-y-transition"
           offset-y
           bottom
           right
+          attach=""
         >
-          <template #activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              aria-label="browse"
-              text
-              class="montserrat"
-              style="text-transform: capitalize; font-size: 0.875rem"
-              v-on="on"
-            >
-              {{ $t('common.browse') }}
-              <v-icon class="ml-1">mdi-chevron-down</v-icon>
-            </v-btn>
-          </template>
-
           <v-card width="550">
             <v-card-actions class="d-block">
               <div
