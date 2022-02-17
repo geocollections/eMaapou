@@ -1,6 +1,6 @@
 export default {
   title: 'e·Maapõu',
-  subtitle: 'Maapõue andmed ja e-teenused',
+  subtitle: 'Maapõue andmed ja e\u2011teenused',
   slogan: 'Kogu info Eesti maapõuest',
   landing: {
     searchTitle: 'Leia e·Maapõuest',
@@ -21,7 +21,7 @@ export default {
     photos: 'Fotod',
     stratigraphy: 'Stratigraafia',
     visit_site: 'Vaata',
-    title: 'Geoloogilised andmed ja e\u8209teenused',
+    title: 'Geoloogilised andmed ja e-teenused',
     otherPages: 'Geoloogilised andmed teistes e-teenustes',
     goToFrontpage: 'Pealehele',
     showMenu: 'Näita menüüd',

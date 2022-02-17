@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-10">
     <div
       class="spacer layer1"
       :style="{ height: $vuetify.breakpoint.lgAndUp ? '750px' : 'auto' }"
@@ -124,7 +124,7 @@
             class="d-flex flex-column justify-space-between"
           >
             <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" />
-            <v-card class="mt-3" color="tertiary" elevation="0">
+            <v-card class="mt-5" color="tertiary">
               <v-card-text class="white--text d-md-flex justify-md-center">
                 <div class="px-md-10 py-4">
                   <div class="text-h6 text-center font-weight-regular pb-3">
@@ -160,12 +160,12 @@
     </div>
     <v-container class="pt-0" :fluid="$vuetify.breakpoint.smAndDown">
       <v-row justify="center" class="mt-4">
-        <v-col cols="12" lg="6">
+        <v-col cols="12" lg="6" class="pr-5">
           <client-only>
             <the-news-card />
           </client-only>
         </v-col>
-        <v-col cols="12" lg="6">
+        <v-col cols="12" lg="6" class="pl-5">
           <base-header :title="$t('about.title')" />
 
           <div
