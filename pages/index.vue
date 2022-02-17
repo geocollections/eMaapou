@@ -130,10 +130,10 @@
                 class="white--text d-sm-flex justify-sm-space-around"
               >
                 <div class="px-md-10 py-4">
-                  <div class="text-h4 text-center font-weight-medium">
+                  <div class="text-h4 text-center font-weight-bold">
                     280 000
                   </div>
-                  <div class="text-h6 text-center font-weight-light pb-3">
+                  <div class="text-h6 text-center font-weight-medium pb-3">
                     {{ $t('landing.statText1') }}
                   </div>
                 </div>
@@ -142,10 +142,10 @@
                   :vertical="$vuetify.breakpoint.smAndUp"
                 />
                 <div class="px-md-10 py-4">
-                  <div class="text-h4 text-center font-weight-medium">
+                  <div class="text-h4 text-center font-weight-bold">
                     240 000
                   </div>
-                  <div class="text-h6 text-center font-weight-light pb-3">
+                  <div class="text-h6 text-center font-weight-medium pb-3">
                     {{ $t('landing.statText2') }}
                   </div>
                 </div>
@@ -154,10 +154,10 @@
                   :vertical="$vuetify.breakpoint.smAndUp"
                 />
                 <div class="px-md-10 py-4">
-                  <div class="text-h4 text-center font-weight-medium">
+                  <div class="text-h4 text-center font-weight-bold">
                     150 000
                   </div>
-                  <div class="text-h6 text-center font-weight-light pb-3">
+                  <div class="text-h6 text-center font-weight-medium pb-3">
                     {{ $t('landing.statText3') }}
                   </div>
                 </div>
@@ -246,24 +246,25 @@ export default {
       scrollY: 0,
       searchRoutes: [
         {
-          routeName: 'locality',
-          text: 'locality.pageTitle',
-          icon: 'mdi-map-marker-outline',
-        },
-        {
           routeName: 'drillcore',
           text: 'drillcore.pageTitle',
           icon: 'mdi-screw-machine-flat-top',
         },
+        {
+          routeName: 'locality',
+          text: 'locality.pageTitle',
+          icon: 'mdi-map-marker-outline',
+        },
+
         {
           routeName: 'sample',
           text: 'sample.pageTitle',
           icon: 'mdi-test-tube',
         },
         {
-          routeName: 'analysis',
-          text: 'analysis.pageTitle',
-          icon: 'mdi-chart-scatter-plot',
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
+          icon: 'mdi-chart-line',
         },
         {
           routeName: 'specimen',
@@ -346,8 +347,8 @@ export default {
           href: 'https://fond.egt.ee',
           background: '/frontpage/geoloogiafond.jpg',
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 3,
+          lg: 3,
         },
         // Divider
         fossiilid: {
@@ -356,8 +357,8 @@ export default {
           href: 'https://fossiilid.info',
           background: '/frontpage/fossiilid.jpg',
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         kivid: {
           title: 'kivid.title',
@@ -365,8 +366,8 @@ export default {
           href: 'https://kivid.info',
           background: '/frontpage/kivid.jpg',
           sm: 6,
-          md: 6,
-          lg: 6,
+          md: 4,
+          lg: 4,
         },
         stratigraphy: {
           title: 'frontStratigraphy.title',
@@ -374,8 +375,8 @@ export default {
           href: 'https://stratotuup.ut.ee',
           background: '/frontpage/stratigraafia.jpg',
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 3,
+          lg: 3,
         },
         // Divider
         maardlad: {
@@ -384,8 +385,8 @@ export default {
           href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
           background: '/frontpage/maardlad.jpg',
           sm: 6,
-          md: 4,
-          lg: 4,
+          md: 6,
+          lg: 6,
         },
         doi: {
           title: 'doi.title',
@@ -430,16 +431,13 @@ export default {
           href: 'https://edit.geocollections.info',
           background: '/frontpage/sarv-wb.jpg',
           sm: 6,
-          md: 3,
-          lg: 3,
+          md: 4,
+          lg: 4,
         },
         ids: [
           'kirjandus',
-          'doi',
-          'geocollections',
           'fossiilid',
           'kivid',
-          'sarv',
           'fond',
           'maardlad',
           'stratigraphy',
@@ -447,6 +445,9 @@ export default {
           'turba',
           'geocase',
           'eurocore',
+          'geocollections',
+          'doi',
+          'sarv',
         ],
         innerIds: [
           'kirjandus',
@@ -531,8 +532,8 @@ export default {
 
 .layer1 {
   background-image: url('~/static/frontpage/layered-peaks-haikei.svg'),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('~/static/frontpage/header_img.jpg');
+    linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)),
+    url('~/static/frontpage/header_img2.jpg');
 }
 
 .quick-card {
