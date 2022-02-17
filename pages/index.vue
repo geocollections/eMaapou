@@ -175,7 +175,7 @@
           ></div>
         </v-col>
       </v-row>
-      <!-- <v-row no-gutters class="my-2" justify="center" align="center">
+      <v-row no-gutters class="my-2" justify="center" align="center">
         <v-col id="otherServices" class="py-0" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>
@@ -203,7 +203,7 @@
             </v-col>
           </v-row>
         </v-col>
-      </v-row> -->
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -214,7 +214,7 @@ import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
 import TheMapCard from '~/components/landing/TheMapCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
-// import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
+import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 
 export default {
   components: {
@@ -222,7 +222,7 @@ export default {
     TheMapCard,
     BaseHeader,
     TheNewsCard,
-    // ExternalLinkCard,
+    ExternalLinkCard,
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {
