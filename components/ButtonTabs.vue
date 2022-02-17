@@ -1,10 +1,10 @@
 <template>
-  <v-chip-group column active-class="active-tab font-weight-bold elevation-1">
+  <v-chip-group column active-class="active-tab  elevation-1">
     <transition-group name="flip-list">
       <v-chip
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
-        class="mx-1 mb-1 pr-1"
+        class="mx-1 mb-1 pl-1"
         :disabled="item.count === 0"
         nuxt
         rounded
@@ -17,14 +17,14 @@
           })
         "
       >
-        {{ $t(item.title, { number: item.count }) }}
         <v-chip
           small
           :ripple="false"
-          class="primary font-weight-regular lighten-1 ml-1 ma-0 xxx"
+          class="accent darken-2 font-weight-regular mr-1 ma-0"
         >
           {{ item.count }}
         </v-chip>
+        {{ $t(item.title, { number: item.count }) }}
       </v-chip>
     </transition-group>
   </v-chip-group>
@@ -57,11 +57,11 @@ export default {
   touch-action: auto;
 }
 .active-tab {
-  background-color: #ffdd3c !important;
-  color: #000000 !important;
+  background-color: var(--v-accent-darken1) !important;
+  color: #ffffff !important;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #000000 !important;
+  border-bottom-color: var(--v-accent-darken2) !important;
 
   &:before {
     background-color: white !important;
