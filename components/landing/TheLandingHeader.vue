@@ -20,18 +20,10 @@
          -->
         <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
           <v-img
-            v-if="$vuetify.breakpoint.mdAndUp"
             :height="40"
             :width="80"
             contain
             :src="$img(logo, null, { provider: 'static' })"
-          />
-          <v-img
-            v-if="!$vuetify.breakpoint.mdAndUp"
-            :height="36"
-            :width="36"
-            contain
-            :src="$img(logoCompact, null, { provider: 'static' })"
           />
           <v-tooltip bottom activator="#app-bar-title">
             <span>{{ $t('landing.goToFrontpage') }}</span>

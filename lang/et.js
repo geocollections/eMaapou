@@ -26,7 +26,7 @@ export default {
     goToFrontpage: 'Pealehele',
     showMenu: 'Näita menüüd',
     routes: 'Navigatsioon',
-    searchRoutes: 'Sirvi',
+    searchRoutes: 'Sirvi e-Maapõues',
     eMaapouPages: 'e·Maapõu ökosüsteem',
     map: 'Andmed kaardil',
     quickSearch: 'Leia kiirelt',
@@ -46,7 +46,7 @@ export default {
     previous: 'Eelmine ID: {id}',
     next: 'Järgmine ID: {id}',
     last: 'Viimane ID: {id}',
-    links: 'Lingid',
+    links: 'Teised e-teenused',
     search: 'Kiirotsing',
     small: 'Väike',
     medium: 'Keskmine',
@@ -99,7 +99,7 @@ export default {
     parameters: 'Parameetrid',
     image: 'Pildid',
     images: 'Pildid',
-    browse: 'Sirvi',
+    browse: 'Sirvi e-Maapõues',
     partners: 'Partnerid',
   },
   link: {
@@ -112,7 +112,7 @@ export default {
     turvas: 'Turbauuringute andmebaas',
     geokirjandus: 'Eesti maapõue kirjandus',
     geokogud: 'Geokogude portaal',
-    geologyAPI: 'Eesti Geoloogia API',
+    geologyAPI: 'SARV Avalik API',
   },
   locality: {
     pageTitle: 'Lokaliteedid',
@@ -680,7 +680,7 @@ export default {
     description: 'Euroopa puursüdamike andmebaas',
   },
   sarv: {
-    title: 'SARV-WB',
+    title: 'SARV Töölaud',
     description: 'SARV töölaud',
   },
   ema: {

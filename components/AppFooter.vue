@@ -3,18 +3,18 @@
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row no-gutters>
         <v-col cols="12" lg="auto">
-          <div class="d-md-flex">
-            <div class="montserrat white--text mx-3 mr-8 mb-6">
+          <div class="d-md-flex justify-center">
+            <!-- <div class="montserrat white--text mx-3 mr-8 mb-6">
               <img
                 style="height: 50px; width: 100px"
                 :src="$img(logo, null, { provider: 'static' })"
               />
               <div class="font-weight-medium" style="white-space: nowrap">
-                {{ $t('slogan') }}
+                {{ $t('subtitle') }}
               </div>
-            </div>
+            </div> -->
             <div class="ml-4 ml-md-0 mr-4 mb-6">
-              <div
+              <!-- <div
                 class="
                   section-title
                   white--text
@@ -24,7 +24,11 @@
                 "
               >
                 {{ $t('common.home') }}
-              </div>
+              </div> -->
+              <img
+                style="height: 32px; width: 64px"
+                :src="$img(logo, null, { provider: 'static' })"
+              />
               <div
                 v-for="link in routes"
                 :key="link.routeName"
@@ -160,61 +164,7 @@
     <v-container fluid style="background: #282828 !important">
       <v-container :fluid="$vuetify.breakpoint.lgAndDown">
         <v-row no-gutters>
-          <!-- <v-col cols="12">
-          <div
-            class="d-flex flex-row align-center text-h6 white--text mx-3 mb-6"
-          >
-            <img
-              v-if="$vuetify.breakpoint.smAndUp"
-              style="height: 50px; width: 100px"
-              :src="$img(logo, null, { provider: 'static' })"
-              class="mt-5 mb-sm-5 mr-4"
-            />
-            <v-divider
-              v-if="$vuetify.breakpoint.smAndUp"
-              vertical
-              class="white my-5"
-            />
-            <div class="ml-sm-4 font-weight-medium">
-              {{ $t('slogan') }}
-            </div>
-          </div>
-        </v-col> -->
-
-          <v-col cols="12" lg="" align-self="center" class="">
-            <!-- <div class="mb-4 mx-4">
-            <div
-              class="section-title white--text font-weight-bold montserrat mb-4"
-            >
-              {{ $t('common.search') }}
-            </div>
-            <div class="d-flex elevation-0 rounded" style="max-width: 400px">
-              <input-search
-                v-model="query"
-                class="rounded-r-0 montserrat"
-                background-color="grey lighten-4"
-                dense
-                flat
-                :autofocus="false"
-                :placeholder="$t('common.search')"
-                @enter="$router.push(localePath({ name: 'search' }))"
-              />
-              <v-hover v-slot="{ hover }">
-                <v-btn
-                  id="quick-search-btn"
-                  height="38"
-                  width="48"
-                  elevation="0"
-                  :color="hover ? 'warning' : 'grey lighten-4'"
-                  class="rounded-l-0"
-                  @click="$router.push(localePath({ name: 'search' }))"
-                >
-                  <v-icon color="accent darken-2">mdi-magnify</v-icon>
-                </v-btn>
-              </v-hover>
-            </div>
-          </div>
-          <v-divider style="border-color: lightgrey" /> -->
+          <v-col cols="12" align-self="center">
             <div class="text-center d-flex justify-center align-center">
               <div style="max-width: 700px">
                 <i18n
@@ -238,6 +188,16 @@
                 </i18n>
               </div>
             </div>
+          </v-col>
+          <v-col cols="12" align-self="center" class="text-center mt-3">
+            <a href="https://github.com/geocollections/eMaapou">
+              <nuxt-img
+                src="/logos/GitHub-Mark-Light-64px.png"
+                alt="GitHub"
+                provider="static"
+                class="github-logo py-1 py-sm-0 px-3"
+              />
+            </a>
           </v-col>
         </v-row>
       </v-container>
@@ -335,9 +295,7 @@ export default {
         { name: 'geocase.title', url: 'https://geocase.eu' },
         { name: 'eurocore.title', url: 'eurocore.description' },
         { name: 'sarv.title', url: 'https://edit.geocollections.info' },
-        { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
         { name: 'link.geologyAPI', url: 'https://api.geoloogia.info' },
-        { name: 'link.github', url: 'https://github.com/geocollections/' },
       ],
       institutions: [
         {
@@ -457,6 +415,12 @@ export default {
 
 .footer-logo {
   height: 60px;
+  width: auto;
+  /*padding: 0 10px;*/
+}
+
+.github-logo {
+  height: 32px;
   width: auto;
   /*padding: 0 10px;*/
 }

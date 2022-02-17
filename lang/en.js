@@ -1,6 +1,6 @@
 export default {
   title: 'e·Maapõu',
-  subtitle: 'Open geological data and\u00A0services',
+  subtitle: 'Open geological data and\u00A0e\u2011services in Estonia',
   slogan: 'Estonian geology data portal',
   landing: {
     searchTitle: 'Find from e·Maapõu',
@@ -26,7 +26,7 @@ export default {
     goToFrontpage: 'To frontpage',
     showMenu: 'Show menu',
     routes: 'Routes',
-    searchRoutes: 'Browse',
+    searchRoutes: 'Browse e-Maapõu',
     eMaapouPages: 'e·Maapõu ecosystem',
     map: 'Data on map',
     quickSearch: 'Find quickly',
@@ -46,7 +46,7 @@ export default {
     previous: 'Previous ID: {id}',
     next: 'Next ID: {id}',
     last: 'Last ID: {id}',
-    links: 'Links',
+    links: 'Other e-services',
     search: 'Quick search',
     small: 'Small',
     medium: 'Medium',
@@ -103,7 +103,6 @@ export default {
     partners: 'Partners',
   },
   link: {
-    sarvAPI: 'Public API',
     github: 'GitHub',
     fossils: 'Fossils',
     sarvDOI: 'Research data (DOI)',
@@ -112,7 +111,7 @@ export default {
     turvas: 'Peat studies database',
     geokirjandus: 'Geological Literature',
     geokogud: 'Geocollections portal',
-    geologyAPI: 'Estonian Geology API',
+    geologyAPI: 'SARV Public API',
   },
   locality: {
     pageTitle: 'Localities',
@@ -680,7 +679,7 @@ export default {
     description: 'European Drillcore Database for MSc Training',
   },
   sarv: {
-    title: 'SARV-WB',
+    title: 'SARV Workbench',
     description: 'SARV Workbench',
   },
   ema: {

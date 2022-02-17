@@ -3,7 +3,7 @@
     <div
       class="spacer layer1"
       style="padding-top: 64px"
-      :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'auto' }"
+      :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset' }"
     >
       <v-container :fluid="$vuetify.breakpoint.smAndDown">
         <v-row class="px-3" justify="space-around">
@@ -71,7 +71,7 @@
                       nuxt
                       :to="localePath(route.routeName)"
                       class="ma-1"
-                      :class="{ 'on-hover': hover }"
+                      :color="hover ? 'grey lighten-2' : 'grey lighten-3'"
                     >
                       <v-card-title
                         class=""
@@ -118,15 +118,20 @@
               </div>
             </v-row>
           </v-col>
-          <v-col cols="12" lg="6" class="d-flex flex-column justify-end">
+          <v-col
+            v-if="$vuetify.breakpoint.mdAndUp"
+            cols="12"
+            lg="6"
+            class="d-flex flex-column justify-end"
+          >
             <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
-            <v-card class="mt-5" color="tertiary">
+            <v-card class="mb-10 mb-lg-0 elevation-0" color="transparent">
               <v-card-text
                 class="white--text d-sm-flex justify-sm-space-around"
               >
                 <div class="px-md-10 py-4">
-                  <div class="text-h5 text-center font-weight-medium">
-                    280k+
+                  <div class="text-h4 text-center font-weight-medium">
+                    280 000
                   </div>
                   <div class="text-h6 text-center font-weight-light pb-3">
                     {{ $t('landing.statText1') }}
@@ -137,8 +142,8 @@
                   :vertical="$vuetify.breakpoint.smAndUp"
                 />
                 <div class="px-md-10 py-4">
-                  <div class="text-h5 text-center font-weight-medium">
-                    240k+
+                  <div class="text-h4 text-center font-weight-medium">
+                    240 000
                   </div>
                   <div class="text-h6 text-center font-weight-light pb-3">
                     {{ $t('landing.statText2') }}
@@ -149,8 +154,8 @@
                   :vertical="$vuetify.breakpoint.smAndUp"
                 />
                 <div class="px-md-10 py-4">
-                  <div class="text-h5 text-center font-weight-medium">
-                    156k+
+                  <div class="text-h4 text-center font-weight-medium">
+                    150 000
                   </div>
                   <div class="text-h6 text-center font-weight-light pb-3">
                     {{ $t('landing.statText3') }}
