@@ -54,7 +54,7 @@ export default {
     left: 0;
     right: 0;
     background: var(--v-accent-base);
-    height: 4px;
+    height: 2px;
     border-radius: 2px 2px 2px 2px;
   }
 }

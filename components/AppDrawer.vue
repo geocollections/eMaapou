@@ -55,23 +55,55 @@
       <v-divider class="primary" />
 
       <v-list class="py-1 px-2">
-        <v-list-item
-          v-for="route in searchRoutes"
-          :key="route.name"
+        <base-menu-list-item
+          v-for="(item, index) in browseGeography"
+          :key="`browse-geography-item-${index}`"
+          class="my-1"
+          :icon="item.icon"
+          :label="$t(item.label)"
           nuxt
-          class="header-menu-item rounded my-1"
-          color="accent darken-1"
-          :to="localePath({ name: route.routeName })"
-        >
-          <v-list-item-title class="d-flex py-1"
-            ><v-icon v-if="route.icon">{{ route.icon }}</v-icon>
-            <v-icon v-else style="height: 24px; width: 24px"></v-icon>
+          trailing-icon=""
+          :to="localePath({ name: item.routeName })"
+        />
+      </v-list>
+      <v-divider class="mx-3 my-1" />
+      <v-list class="py-1 px-2">
+        <base-menu-list-item
+          v-for="(item, index) in browseLab"
+          :key="`browse-geography-item-${index}`"
+          class="my-1"
+          :icon="item.icon"
+          :label="$t(item.label)"
+          nuxt
+          trailing-icon=""
+          :to="localePath({ name: item.routeName })"
+        />
+      </v-list>
 
-            <span class="ml-3 align-self-center montserrat">{{
-              $t(route.text)
-            }}</span>
-          </v-list-item-title>
-        </v-list-item>
+      <v-divider class="mx-3 my-1" />
+      <v-list class="py-1 px-2">
+        <base-menu-list-item
+          v-for="(item, index) in browseTaxon"
+          :key="`browse-geography-item-${index}`"
+          class="my-1"
+          :icon="item.icon"
+          :label="$t(item.label)"
+          nuxt
+          trailing-icon=""
+          :to="localePath({ name: item.routeName })"
+        />
+      </v-list>
+
+      <v-divider class="mx-3 my-1" />
+      <v-list class="py-1 px-2">
+        <base-menu-list-item
+          class="my-1"
+          icon="mdi-file-image-outline"
+          :label="$t('photo.pageTitle')"
+          nuxt
+          trailing-icon=""
+          :to="localePath({ name: 'photo' })"
+        />
       </v-list>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">Services</div>
@@ -107,9 +139,16 @@
 
 <script>
 import LanguageList from '~/components/language/LanguageList'
+import BaseMenuListItem from '~/components/base/BaseMenuListItem.vue'
+import {
+  BROWSE_GEOLOGY_LIST,
+  BROWSE_LAB_LIST,
+  BROWSE_TAXON_LIST,
+  SERVICES,
+} from '~/constants'
 export default {
   name: 'AppDrawer',
-  components: { LanguageList },
+  components: { LanguageList, BaseMenuListItem },
   props: {
     drawer: {
       type: Boolean,
@@ -118,6 +157,10 @@ export default {
   },
   data() {
     return {
+      browseGeography: BROWSE_GEOLOGY_LIST,
+      browseLab: BROWSE_LAB_LIST,
+      browseTaxon: BROWSE_TAXON_LIST,
+      services: SERVICES,
       routes: [
         {
           routeName: 'search',

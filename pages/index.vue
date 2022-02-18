@@ -1,7 +1,7 @@
 <template>
   <div class="mb-10">
     <div
-      class="spacer layer1 pb-4"
+      class="spacer layer1 pb-15 pd-md-4"
       style="padding-top: 64px"
       :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset' }"
     >
@@ -15,7 +15,7 @@
               <!-- SUBTITLE -->
               <div
                 class="
-                  text-h4 text-md-h2
+                  text-h3 text-md-h2
                   font-weight-bold
                   align-center
                   white--text
@@ -197,7 +197,7 @@
           <base-header :title="$t('about.title')" />
 
           <div
-            class="aboutpage px-2 px-sm-5"
+            class="aboutpage px-2 px-sm-5 text-body-1"
             :style="{ 'column-count': aboutTextColumns }"
             v-html="$translate({ et: page.content_et, en: page.content_en })"
           ></div>
@@ -208,7 +208,7 @@
           </client-only>
         </v-col>
       </v-row>
-      <v-row no-gutters class="my-2" justify="center" align="center">
+      <v-row no-gutters class="my-2 mt-5" justify="center" align="center">
         <v-col id="otherServices" class="py-0" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>

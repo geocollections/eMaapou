@@ -1,6 +1,6 @@
 export default {
   title: 'e·Maapõu',
-  subtitle: 'Open geological data and\u00A0e\u2011services in Estonia',
+  subtitle: 'Geological data and e\u2011services in Estonia',
   slogan: 'Estonian geology data portal',
   landing: {
     searchTitle: 'Find from e·Maapõu',

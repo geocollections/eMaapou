@@ -5,19 +5,18 @@
     v-bind="$attrs"
     @click.stop="$emit('click')"
   >
-    <div class="pl-4 montserrat" :class="{ 'white--text': dark }">
+    <div class="pl-0 montserrat" :class="{ 'white--text': dark }">
       {{ $formatDate(date) }}
     </div>
     <v-card-title
-      class="montserrat pt-0"
+      class="montserrat pl-0 pt-0"
       :class="{ 'white--text': dark }"
       style="word-break: normal"
       >{{ title }}</v-card-title
     >
 
     <v-card-text
-      style="font-size: 1em"
-      class="pb-0"
+      class="pb-0 pl-0 text-body-1 black--text"
       :class="{ 'white--text': dark }"
     >
       {{ extractContent(content) | truncate(previewLenght) }}

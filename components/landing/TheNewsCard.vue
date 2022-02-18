@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col>
         <base-header :title="$t('common.news')" class="title-heading" />
-        <v-card-text class="d-flex flex-column">
+        <v-card-text class="d-flex flex-column pt-0">
           <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
             <news-preview-card
               :preview-lenght="previewLength"

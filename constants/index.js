@@ -1,6 +1,8 @@
 export * from './tabs'
 export * from './headers'
 export * from './chart'
+export * from './browse'
+export * from './services'
 
 export const ANALYSIS = {
   options: {

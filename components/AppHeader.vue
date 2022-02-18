@@ -1,406 +1,260 @@
 <template>
-  <v-app-bar
-    app
-    dark
-    clipped-right
-    absolute
-    height="64"
-    :elevation="0"
-    color="tertiary"
-    :class="{
-      'app-bar-full': $vuetify.breakpoint.mdAndUp,
-      'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
-    }"
-    style="z-index: 2060"
-  >
-    <v-toolbar-title class="align-self-center">
-      <!--
+  <v-hover v-slot="{ hover }">
+    <v-app-bar
+      v-slot="test"
+      app
+      dark
+      clipped-right
+      absolute
+      height="64"
+      :elevation="0"
+      :color="transparent ? (hover ? 'tertiary' : 'transparent') : 'tertiary'"
+      :class="{
+        'app-bar-full': $vuetify.breakpoint.mdAndUp,
+        'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
+      }"
+      style="z-index: 2060"
+    >
+      <v-toolbar-title class="align-self-center">
+        <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-      <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
-        <v-img
-          :height="40"
-          :width="80"
-          contain
-          :src="$img(logo, null, { provider: 'static' })"
-        />
-        <v-tooltip bottom activator="#app-bar-title">
-          <span>{{ $t('landing.goToFrontpage') }}</span>
-        </v-tooltip>
-      </nuxt-link>
-    </v-toolbar-title>
-
-    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
-      <v-btn
-        id="browse_menu_btn"
-        aria-label="browse"
-        text
-        class="montserrat"
-        style="text-transform: capitalize; font-size: 0.875rem"
-      >
-        {{ $t('common.browse') }}
-        <v-icon class="ml-1">mdi-chevron-down</v-icon>
-      </v-btn>
-      <v-menu
-        activator="#browse_menu_btn"
-        content-class="elevation-2 mt-1"
-        transition="slide-y-transition"
-        offset-y
-        bottom
-        right
-        attach=""
-      >
-        <v-card width="550">
-          <v-card-actions class="d-block">
-            <div
-              v-for="(tab, index) in tabsAll"
-              :key="`browse-${index}`"
-              class="d-inline-block"
-            >
-              <v-hover v-slot="{ hover }">
-                <v-card
-                  elevation="0"
+        <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
+          <v-img
+            :height="40"
+            :width="80"
+            contain
+            :src="$img(logo, null, { provider: 'static' })"
+          />
+          <v-tooltip bottom activator="#app-bar-title">
+            <span>{{ $t('landing.goToFrontpage') }}</span>
+          </v-tooltip>
+        </nuxt-link>
+      </v-toolbar-title>
+      <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
+        {{ test }}
+        <v-btn
+          id="browse_menu_btn"
+          aria-label="browse"
+          text
+          class="montserrat"
+          style="text-transform: capitalize; font-size: 0.875rem"
+        >
+          {{ $t('common.browse') }}
+          <v-icon class="ml-1">mdi-chevron-down</v-icon>
+        </v-btn>
+        <v-menu
+          activator="#browse_menu_btn"
+          content-class="elevation-2 mt-1"
+          transition="slide-y-transition"
+          offset-y
+          bottom
+          right
+          attach=""
+        >
+          <v-card max-width="1000">
+            <v-card-actions class="d-flex align-baseline">
+              <v-list class="mx-3" width="250">
+                <base-menu-list-item
+                  v-for="(item, index) in browseGeography"
+                  :key="`browse-geography-item-${index}`"
+                  class="my-1"
+                  :icon="item.icon"
+                  :label="$t(item.label)"
                   nuxt
-                  class="align-center ma-1 px-2 py-3"
-                  :class="{ 'on-hover': hover }"
-                  active-class="active-card"
-                  width="250"
-                  :to="localePath({ name: tab.routeName })"
-                >
-                  <div
-                    class="
-                      font-weight-medium
-                      text-button
-                      d-flex
-                      ml-2
-                      align-center
-                    "
-                    style="text-transform: capitalize !important"
-                  >
-                    <v-icon v-if="tab.icon">{{ tab.icon }}</v-icon>
-                    <v-icon v-else style="height: 24px; width: 24px"></v-icon>
-                    <div class="ml-3 montserrat tab" style="">
-                      {{ $t(tab.text) }}
-                    </div>
-                    <v-icon v-show="hover" class="ml-auto mr-2">
-                      mdi-arrow-right
-                    </v-icon>
-                  </div>
-                </v-card>
-              </v-hover>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
+                  :to="localePath({ name: item.routeName })"
+                />
+              </v-list>
 
-      <v-btn
-        nuxt
-        aria-label="about page"
-        text
-        class="montserrat font-weight-medium"
-        style="text-transform: capitalize"
-        :to="localePath({ name: 'about' })"
-      >
-        {{ $t('common.about') }}
-      </v-btn>
+              <!-- <v-divider class="mx-3" vertical /> -->
+              <v-list class="mx-3" width="250">
+                <base-menu-list-item
+                  v-for="(item, index) in browseLab"
+                  :key="`browse-lab-item-${index}`"
+                  class="my-1"
+                  :icon="item.icon"
+                  :label="$t(item.label)"
+                  nuxt
+                  :to="localePath({ name: item.routeName })"
+                />
+              </v-list>
+              <!-- <v-divider class="mx-3" vertical /> -->
+              <v-list class="mx-3" width="250">
+                <base-menu-list-item
+                  v-for="(item, index) in browseTaxon"
+                  :key="`browse-lab-item-${index}`"
+                  class="my-1"
+                  :icon="item.icon"
+                  :label="$t(item.label)"
+                  nuxt
+                  :to="localePath({ name: item.routeName })"
+                />
+              </v-list>
+            </v-card-actions>
+            <v-divider class="mx-5 mt-3" />
+            <v-card-actions>
+              <v-list class="mx-3" width="250">
+                <base-menu-list-item
+                  class="my-1"
+                  icon="mdi-file-image-outline"
+                  :label="$t('photo.pageTitle')"
+                  nuxt
+                  :to="localePath({ name: 'photo' })"
+                />
+              </v-list>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
 
-      <v-btn
-        nuxt
-        aria-label="news page"
-        text
-        class="montserrat font-weight-medium"
-        style="text-transform: capitalize"
-        :to="localePath({ name: 'news' })"
-      >
-        {{ $t('common.news') }}
-      </v-btn>
-      <v-btn
-        id="services_menu_btn"
-        aria-label="browse"
-        text
-        class="montserrat"
-        style="text-transform: capitalize; font-size: 0.875rem"
-      >
-        Services
-        <v-icon class="ml-1">mdi-chevron-down</v-icon>
-      </v-btn>
-      <v-menu
-        activator="#services_menu_btn"
-        content-class="elevation-2 mt-1"
-        transition="slide-y-transition"
-        offset-y
-        bottom
-        right
-        attach=""
-      >
-        <v-card width="550">
-          <v-card-actions class="d-block">
-            <div
-              v-for="(tabId, index) in externalCards.ids"
-              :key="`service-${index}`"
-              class="d-inline-block"
-            >
-              <v-hover v-slot="{ hover }">
-                <v-card
-                  tag="a"
-                  elevation="0"
-                  class="align-center ma-1 px-2 py-3"
-                  :class="{ 'on-hover': hover }"
-                  active-class="active-card"
-                  width="250"
+        <v-btn
+          nuxt
+          aria-label="about page"
+          text
+          class="montserrat font-weight-medium"
+          style="text-transform: capitalize"
+          :to="localePath({ name: 'about' })"
+        >
+          {{ $t('common.about') }}
+        </v-btn>
+
+        <v-btn
+          nuxt
+          aria-label="news page"
+          text
+          class="montserrat font-weight-medium"
+          style="text-transform: capitalize"
+          :to="localePath({ name: 'news' })"
+        >
+          {{ $t('common.news') }}
+        </v-btn>
+        <v-btn
+          id="services_menu_btn"
+          aria-label="browse"
+          text
+          class="montserrat"
+          style="text-transform: capitalize; font-size: 0.875rem"
+        >
+          Services
+          <v-icon class="ml-1">mdi-chevron-down</v-icon>
+        </v-btn>
+        <v-menu
+          activator="#services_menu_btn"
+          content-class="elevation-2 mt-1"
+          transition="slide-y-transition"
+          offset-y
+          bottom
+          right
+          attach=""
+        >
+          <v-card width="550">
+            <v-card-actions class="d-block">
+              <v-list
+                style="max-height: 450px; flex-flow: column wrap"
+                class="d-flex"
+              >
+                <base-menu-list-item
+                  v-for="(tabId, index) in services.ids"
+                  :key="`service-${index}`"
+                  class="my-1"
                   target="_blank"
-                  :href="externalCards[tabId].href"
-                >
-                  <div
-                    class="
-                      font-weight-medium
-                      text-button
-                      d-flex
-                      ml-2
-                      align-center
-                    "
-                    style="text-transform: capitalize !important"
-                  >
-                    <div class="montserrat tab" style="">
-                      {{ $t(externalCards[tabId].title) }}
-                    </div>
-                    <v-icon v-show="hover" class="ml-auto mr-2">
-                      mdi-arrow-right
-                    </v-icon>
-                  </div>
-                </v-card>
-              </v-hover>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
-    </v-toolbar-items>
-    <v-spacer v-if="$vuetify.breakpoint.mdAndUp" />
-    <v-toolbar-items
-      class="align-center"
-      :style="{ width: !$vuetify.breakpoint.mdAndUp ? '100%' : 'inherit' }"
-    >
-      <div
-        class="d-flex elevation-0 rounded mr-2"
-        :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
+                  style="width: 250px"
+                  :href="services[tabId].href"
+                  :label="$t(services[tabId].title)"
+                  label-only
+                />
+              </v-list>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </v-toolbar-items>
+      <v-spacer />
+      <v-toolbar-items
+        class="align-center"
+        :style="{
+          width:
+            !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : 'inherit',
+        }"
       >
-        <input-search
-          v-model="query"
-          class="rounded-r-0 montserrat"
-          background-color="white"
-          dense
-          flat
-          :autofocus="false"
-          :placeholder="$t('common.search')"
-          @enter="$router.push(localePath({ name: 'search' }))"
-        />
-        <v-hover v-slot="{ hover }">
-          <v-btn
-            height="38"
-            width="48"
-            elevation="0"
-            :color="hover ? 'warning' : 'grey lighten-2'"
-            class="rounded-l-0"
-            @click="$router.push(localePath({ name: 'search' }))"
-          >
-            <v-icon color="accent darken-2">mdi-magnify</v-icon>
-          </v-btn>
-        </v-hover>
-      </div>
-      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
-      <v-btn
-        v-if="!$vuetify.breakpoint.mdAndUp"
-        text
-        class="montserrat"
-        aria-label="Open navigation drawer"
-        style="text-transform: capitalize"
-        @click.stop="$emit('toggle:navigationDrawer')"
-      >
-        <v-icon size="font-size: 24px">mdi-menu</v-icon>
-      </v-btn>
-    </v-toolbar-items>
-  </v-app-bar>
+        <div
+          v-if="showSearch"
+          class="d-flex elevation-0 rounded mr-2"
+          :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
+        >
+          <input-search
+            v-model="query"
+            class="rounded-r-0 montserrat"
+            background-color="white"
+            dense
+            flat
+            :autofocus="false"
+            :placeholder="$t('common.search')"
+            @enter="$router.push(localePath({ name: 'search' }))"
+          />
+          <v-hover v-slot="{ hover }">
+            <v-btn
+              height="38"
+              width="48"
+              elevation="0"
+              :color="hover ? 'warning' : 'grey lighten-2'"
+              class="rounded-l-0"
+              @click="$router.push(localePath({ name: 'search' }))"
+            >
+              <v-icon color="accent darken-2">mdi-magnify</v-icon>
+            </v-btn>
+          </v-hover>
+        </div>
+        <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
+        <v-btn
+          v-if="!$vuetify.breakpoint.mdAndUp"
+          text
+          class="montserrat"
+          aria-label="Open navigation drawer"
+          style="text-transform: capitalize"
+          @click.stop="$emit('toggle:navigationDrawer')"
+        >
+          <v-icon size="font-size: 24px">mdi-menu</v-icon>
+        </v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
+  </v-hover>
 </template>
 
 <script>
 import { mapFields } from 'vuex-map-fields'
 
 import InputSearch from './input/InputSearch.vue'
+import BaseMenuListItem from './base/BaseMenuListItem.vue'
 import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
+import {
+  BROWSE_GEOLOGY_LIST,
+  BROWSE_LAB_LIST,
+  BROWSE_TAXON_LIST,
+  SERVICES,
+} from '~/constants'
 export default {
   name: 'AppHeader',
-  components: { LanguageSwitcher, InputSearch },
+  components: { LanguageSwitcher, InputSearch, BaseMenuListItem },
   props: {
     drawer: Boolean,
+    showSearch: {
+      type: Boolean,
+      default: true,
+    },
+    transparent: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      tabsAll: [
-        {
-          routeName: 'locality',
-          text: 'locality.pageTitle',
-          icon: 'mdi-map-marker-outline',
-        },
-        {
-          routeName: 'site',
-          text: 'site.pageTitle',
-          icon: 'mdi-binoculars',
-        },
-        {
-          routeName: 'drillcore',
-          text: 'drillcore.pageTitle',
-          icon: 'mdi-screw-machine-flat-top',
-        },
-        {
-          routeName: 'sample',
-          text: 'sample.pageTitle',
-          icon: 'mdi-test-tube',
-        },
-        {
-          routeName: 'analysis',
-          text: 'analysis.pageTitle',
-          icon: 'mdi-chart-scatter-plot',
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
-          icon: 'mdi-chart-line',
-        },
-        {
-          routeName: 'dataset',
-          text: 'dataset.pageTitle',
-          icon: 'mdi-database-outline',
-        },
-        {
-          routeName: 'taxon',
-          text: 'taxon.pageTitle',
-          icon: 'mdi-family-tree',
-        },
-        // {
-        //   name: 'file',
-        //   lang: 'attachments',
-        //   icon: 'mdi-folder-open-outline',
-        // },
-        {
-          routeName: 'stratigraphy',
-          text: 'stratigraphy.pageTitle',
-          icon: 'mdi-layers-triple',
-        },
-        {
-          routeName: 'photo',
-          text: 'photo.pageTitle',
-          icon: 'mdi-file-image-outline',
-        },
-        {
-          routeName: 'specimen',
-          text: 'specimen.pageTitle',
-          icon: 'mdi-microscope',
-        },
-        { routeName: 'preparation', text: 'preparation.pageTitle' },
-        { routeName: 'area', text: 'area.pageTitle' },
-      ],
+      browseGeography: BROWSE_GEOLOGY_LIST,
+      browseLab: BROWSE_LAB_LIST,
+      browseTaxon: BROWSE_TAXON_LIST,
       logo: '/logos/emaapou5white.svg',
       logoCompact: '/logos/emaapou_short.svg',
-      externalCards: {
-        geocollections: {
-          title: 'geocollections.title',
-          description: 'geocollections.description',
-          href: 'https://geocollections.info',
-          background: '/frontpage/geokogud.jpg',
-        },
-        kirjandus: {
-          title: 'kirjandus.title',
-          description: 'kirjandus.description',
-          href: 'https://kirjandus.geoloogia.info',
-          background: '/frontpage/geokirjandus.jpg',
-        },
-        gmre: {
-          title: 'gmre.title',
-          description: 'gmre.description',
-          href: 'https://geoloogia.info/geology',
-          background: '/frontpage/gmre.jpg',
-        },
-        fond: {
-          title: 'fond.title',
-          description: 'fond.description',
-          href: 'https://fond.egt.ee',
-          background: '/frontpage/geoloogiafond.jpg',
-        },
-        // Divider
-        fossiilid: {
-          title: 'fossiilid.title',
-          description: 'fossiilid.description',
-          href: 'https://fossiilid.info',
-          background: '/frontpage/fossiilid.jpg',
-        },
-        kivid: {
-          title: 'kivid.title',
-          description: 'kivid.description',
-          href: 'https://kivid.info',
-          background: '/frontpage/kivid.jpg',
-        },
-        stratigraphy: {
-          title: 'frontStratigraphy.title',
-          description: 'frontStratigraphy.description',
-          href: 'https://stratotuup.ut.ee',
-          background: '/frontpage/stratigraafia.jpg',
-        },
-        // Divider
-        maardlad: {
-          title: 'maardlad.title',
-          description: 'maardlad.description',
-          href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
-          background: '/frontpage/maardlad.jpg',
-        },
-        doi: {
-          title: 'doi.title',
-          description: 'doi.description',
-          href: 'https://doi.geocollections.info',
-          background: '/frontpage/sarv-doi.jpg',
-        },
-        turba: {
-          title: 'turba.title',
-          description: 'turba.description',
-          href: 'https://turba.geoloogia.info',
-          background: '/frontpage/turba.jpg',
-        },
-        // Divider
-        geocase: {
-          title: 'geocase.title',
-          description: 'geocase.description',
-          href: 'https://geocase.eu',
-          background: '/frontpage/geocase.jpg',
-        },
-        eurocore: {
-          title: 'eurocore.title',
-          description: 'eurocore.description',
-          href: 'https://eurocore.rocks',
-          background: '/frontpage/eurocore.jpg',
-        },
-        sarv: {
-          title: 'sarv.title',
-          description: 'sarv.description',
-          href: 'https://edit.geocollections.info',
-          background: '/frontpage/sarv-wb.jpg',
-        },
-        ids: [
-          'kirjandus',
-          'fossiilid',
-          'kivid',
-          'fond',
-          'maardlad',
-          'stratigraphy',
-          'gmre',
-          'turba',
-          'geocase',
-          'eurocore',
-          'geocollections',
-          'doi',
-          'sarv',
-        ],
-      },
+      services: SERVICES,
     }
   },
   computed: {

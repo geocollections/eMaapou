@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-5">
     <base-header
       :title="$t('about.title')"
       style="border-color: var(--v-header-darken1)"
@@ -13,8 +13,8 @@
       class="roundedBorder"
     >
       <div
-        :style="{ columns: aboutTextColumns }"
-        class="mx-3 montserrat"
+        class="mx-6 montserrat"
+        style="max-width: 700px"
         v-html="$translate({ et: page.content_et, en: page.content_en })"
       ></div>
     </v-card>

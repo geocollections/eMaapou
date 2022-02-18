@@ -51,48 +51,56 @@
             right
             attach=""
           >
-            <v-card width="550">
-              <v-card-actions class="d-block">
-                <div
-                  v-for="(tab, index) in tabsAll"
-                  :key="`browse-${index}`"
-                  class="d-inline-block"
-                >
-                  <v-hover v-slot="{ hover }">
-                    <v-card
-                      elevation="0"
-                      nuxt
-                      class="align-center ma-1 px-2 py-3"
-                      :class="{ 'on-hover': hover }"
-                      active-class="active-card"
-                      width="250"
-                      :to="localePath({ name: tab.routeName })"
-                    >
-                      <div
-                        class="
-                          font-weight-medium
-                          text-button
-                          d-flex
-                          ml-2
-                          align-center
-                        "
-                        style="text-transform: capitalize !important"
-                      >
-                        <v-icon v-if="tab.icon">{{ tab.icon }}</v-icon>
-                        <v-icon
-                          v-else
-                          style="height: 24px; width: 24px"
-                        ></v-icon>
-                        <div class="ml-3 montserrat tab" style="">
-                          {{ $t(tab.text) }}
-                        </div>
-                        <v-icon v-show="hover" class="ml-auto mr-2">
-                          mdi-arrow-right
-                        </v-icon>
-                      </div>
-                    </v-card>
-                  </v-hover>
-                </div>
+            <v-card max-width="1000">
+              <v-card-actions class="d-flex align-baseline">
+                <v-list class="mx-3" width="250">
+                  <base-menu-list-item
+                    v-for="(item, index) in browseGeography"
+                    :key="`browse-geography-item-${index}`"
+                    class="my-1"
+                    :icon="item.icon"
+                    :label="$t(item.label)"
+                    nuxt
+                    :to="localePath({ name: item.routeName })"
+                  />
+                </v-list>
+
+                <!-- <v-divider class="mx-3" vertical /> -->
+                <v-list class="mx-3" width="250">
+                  <base-menu-list-item
+                    v-for="(item, index) in browseLab"
+                    :key="`browse-lab-item-${index}`"
+                    class="my-1"
+                    :icon="item.icon"
+                    :label="$t(item.label)"
+                    nuxt
+                    :to="localePath({ name: item.routeName })"
+                  />
+                </v-list>
+                <!-- <v-divider class="mx-3" vertical /> -->
+                <v-list class="mx-3" width="250">
+                  <base-menu-list-item
+                    v-for="(item, index) in browseTaxon"
+                    :key="`browse-lab-item-${index}`"
+                    class="my-1"
+                    :icon="item.icon"
+                    :label="$t(item.label)"
+                    nuxt
+                    :to="localePath({ name: item.routeName })"
+                  />
+                </v-list>
+              </v-card-actions>
+              <v-divider class="mx-5 mt-3" />
+              <v-card-actions>
+                <v-list class="mx-3" width="250">
+                  <base-menu-list-item
+                    class="my-1"
+                    icon="mdi-file-image-outline"
+                    :label="$t('photo.pageTitle')"
+                    nuxt
+                    :to="localePath({ name: 'photo' })"
+                  />
+                </v-list>
               </v-card-actions>
             </v-card>
           </v-menu>
@@ -140,6 +148,11 @@
 
 <script>
 import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
+import {
+  BROWSE_GEOLOGY_LIST,
+  BROWSE_LAB_LIST,
+  BROWSE_TAXON_LIST,
+} from '~/constants'
 export default {
   name: 'AppHeader',
   components: { LanguageSwitcher },
@@ -148,6 +161,9 @@ export default {
   },
   data() {
     return {
+      browseGeography: BROWSE_GEOLOGY_LIST,
+      browseLab: BROWSE_LAB_LIST,
+      browseTaxon: BROWSE_TAXON_LIST,
       tabsAll: [
         {
           routeName: 'locality',
