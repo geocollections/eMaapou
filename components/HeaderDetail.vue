@@ -4,7 +4,6 @@
       class="
         d-flex
         align-start
-        text-md-h3
         font-weight-medium
         text-h4
         pt-1

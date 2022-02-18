@@ -3,10 +3,11 @@
     id="edit-btn"
     icon
     dark
+    small
     color="deep-orange darken-2"
     @click="handleClick"
   >
-    <v-icon>mdi-square-edit-outline</v-icon>
+    <v-icon small>mdi-square-edit-outline</v-icon>
     <v-tooltip bottom activator="#edit-btn">
       <span>{{ $t('common.linkToEdit') }}</span>
     </v-tooltip>
