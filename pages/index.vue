@@ -1,7 +1,7 @@
 <template>
   <div class="mb-10">
     <div
-      class="spacer layer1 pb-15 pd-md-4"
+      class="spacer layer1 pb-10 pd-md-4"
       style="padding-top: 64px"
       :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset' }"
     >
@@ -76,20 +76,23 @@
                       "
                     >
                       <v-card-title
-                        class=""
+                        class="font-weight-regular"
                         :class="{
-                          'text-body-1 font-weight-medium':
-                            $vuetify.breakpoint.smAndDown,
+                          'text-body-1': $vuetify.breakpoint.smAndDown,
                         }"
                       >
-                        <v-icon
-                          :x-large="$vuetify.breakpoint.mdAndUp"
-                          color="accent"
-                          >{{ route.icon }}</v-icon
-                        >
-                        <div class="montserrat ml-3">
+                        <v-icon color="accent" left>{{ route.icon }}</v-icon>
+                        <div class="montserrat">
                           {{ $t(route.text) }}
                         </div>
+                        <v-icon
+                          v-show="hover"
+                          color="accent"
+                          class="ml-auto"
+                          right
+                        >
+                          mdi-arrow-right
+                        </v-icon>
                       </v-card-title>
                     </v-card>
                     <!-- <v-card
@@ -301,25 +304,19 @@ export default {
       scrollY: 0,
       searchRoutes: [
         {
-          routeName: 'drillcore',
-          text: 'drillcore.pageTitle',
-          icon: 'mdi-screw-machine-flat-top',
-        },
-        {
           routeName: 'locality',
           text: 'locality.pageTitle',
           icon: 'mdi-map-marker-outline',
         },
-
         {
           routeName: 'sample',
           text: 'sample.pageTitle',
           icon: 'mdi-test-tube',
         },
         {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
-          icon: 'mdi-chart-line',
+          routeName: 'drillcore',
+          text: 'drillcore.pageTitle',
+          icon: 'mdi-screw-machine-flat-top',
         },
         {
           routeName: 'specimen',
@@ -330,6 +327,11 @@ export default {
           routeName: 'photo',
           text: 'photo.pageTitle',
           icon: 'mdi-file-image-outline',
+        },
+        {
+          routeName: 'analytical-data',
+          text: 'analyticalData.pageTitle',
+          icon: 'mdi-chart-line',
         },
         // {
         //   routeName: 'analysis',
