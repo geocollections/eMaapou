@@ -99,7 +99,7 @@ export default {
     parameters: 'Parameetrid',
     image: 'Pildid',
     images: 'Pildid',
-    browse: 'Sirvi e-Maapõues',
+    browse: 'Sirvi',
     partners: 'Partnerid',
   },
   link: {

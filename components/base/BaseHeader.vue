@@ -8,13 +8,13 @@
     <slot name="before"> </slot>
     <slot>
       <v-card-title
-        style="word-break: normal"
-        class="text-md-h3 font-weight-medium text-h4 pt-0 px-0 pb-6 px-sm-3"
+        style="word-break: normal; color: #577daf"
+        class="text-md-h4 font-weight-bold text-h4 pt-0 px-0 pb-6 px-sm-3"
       >
         <v-icon
           v-show="$vuetify.breakpoint.smAndUp"
           class="pr-sm-2"
-          color="accent darken-2"
+          color="accent"
           large
         >
           {{ icon }}

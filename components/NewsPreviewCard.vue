@@ -15,7 +15,11 @@
       >{{ title }}</v-card-title
     >
 
-    <v-card-text class="pb-0" :class="{ 'white--text': dark }">
+    <v-card-text
+      style="font-size: 1em"
+      class="pb-0"
+      :class="{ 'white--text': dark }"
+    >
       {{ extractContent(content) | truncate(previewLenght) }}
     </v-card-text>
 
