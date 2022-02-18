@@ -1,10 +1,7 @@
 <template>
-  <div>
-    <v-row>
-      <v-col>
-        <base-header :title="$t('common.news')"></base-header>
-      </v-col>
-    </v-row>
+  <div class="pt-5">
+    <base-header :title="$t('common.news')"></base-header>
+
     <v-row no-gutters>
       <v-col lg="7" md="8" cols="12" class="pl-4">
         <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
