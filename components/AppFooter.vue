@@ -26,7 +26,7 @@
                 {{ $t('common.home') }}
               </div> -->
               <img
-                style="height: 32px; width: 64px"
+                style="height: 24px; margin-bottom: 10px"
                 :src="$img(logo, null, { provider: 'static' })"
               />
               <div
