@@ -16,7 +16,8 @@
     >
 
     <v-card-text
-      class="pb-0 pl-0 text-body-1 black--text"
+      class="pb-0 pl-0 text-body-1"
+      style="color: rgba(0, 0, 0, 0.87)"
       :class="{ 'white--text': dark }"
     >
       {{ extractContent(content) | truncate(previewLenght) }}

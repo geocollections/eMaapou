@@ -13,7 +13,7 @@
       class="roundedBorder"
     >
       <div
-        class="mx-6 montserrat"
+        class="mx-6 text-body-1"
         style="max-width: 700px"
         v-html="$translate({ et: page.content_et, en: page.content_en })"
       ></div>
