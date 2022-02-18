@@ -211,8 +211,8 @@
           </client-only>
         </v-col>
       </v-row>
-      <v-row no-gutters class="my-2 mt-5" justify="center" align="center">
-        <v-col id="otherServices" class="py-0" cols="12">
+      <v-row class="my-2 mt-5" justify="center" align="center">
+        <v-col id="otherServices" cols="12">
           <base-header :title="$t('landing.otherPages')" />
         </v-col>
         <v-col cols="12">
