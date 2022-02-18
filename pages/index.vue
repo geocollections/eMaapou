@@ -1,7 +1,7 @@
 <template>
   <div class="mb-10">
     <div
-      class="spacer layer1"
+      class="spacer layer1 pb-4"
       style="padding-top: 64px"
       :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset' }"
     >
@@ -71,7 +71,9 @@
                       nuxt
                       :to="localePath(route.routeName)"
                       class="ma-1"
-                      :color="hover ? 'grey lighten-2' : 'grey lighten-3'"
+                      :color="
+                        hover ? 'blue-grey lighten-4' : 'blue-grey lighten-5'
+                      "
                     >
                       <v-card-title
                         class=""
@@ -127,35 +129,57 @@
             <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
             <v-card class="mb-10 mb-lg-0 elevation-0" color="transparent">
               <v-card-text
-                class="white--text d-sm-flex justify-sm-space-around"
+                class="
+                  white--text
+                  d-sm-flex
+                  flex-lg-column flex-xl-row
+                  justify-sm-space-around
+                  pa-0
+                "
               >
                 <div class="px-md-10 py-4">
                   <div class="text-h4 text-center font-weight-bold">
-                    280 000
+                    {{
+                      (Math.floor(specimenCount / 1000) * 1000)
+                        .toLocaleString()
+                        .replace(/,/g, '\u00A0')
+                    }}+
                   </div>
                   <div class="text-h6 text-center font-weight-medium pb-3">
                     {{ $t('landing.statText1') }}
                   </div>
                 </div>
-                <v-divider
+                <!-- <v-divider
                   style="border-color: white !important"
-                  :vertical="$vuetify.breakpoint.smAndUp"
-                />
+                  :vertical="
+                    $vuetify.breakpoint.smAndUp && !$vuetify.breakpoint.lgOnly
+                  "
+                /> -->
                 <div class="px-md-10 py-4">
                   <div class="text-h4 text-center font-weight-bold">
-                    240 000
+                    {{
+                      (Math.floor(analysisCount / 1000) * 1000)
+                        .toLocaleString()
+                        .replace(/,/g, '\u00A0')
+                    }}+
                   </div>
                   <div class="text-h6 text-center font-weight-medium pb-3">
                     {{ $t('landing.statText2') }}
                   </div>
                 </div>
-                <v-divider
+                <!-- <v-divider
                   style="border-color: white !important"
-                  :vertical="$vuetify.breakpoint.smAndUp"
-                />
+                  :vertical="
+                    $vuetify.breakpoint.smAndUp && !$vuetify.breakpoint.lgOnly
+                  "
+                /> -->
                 <div class="px-md-10 py-4">
                   <div class="text-h4 text-center font-weight-bold">
-                    150 000
+                    {{
+                      (Math.floor(sampleCount / 1000) * 1000)
+                        .toLocaleString()
+                        .replace(/,/g, '\u00A0')
+                    }}+
                   </div>
                   <div class="text-h6 text-center font-weight-medium pb-3">
                     {{ $t('landing.statText3') }}
@@ -236,7 +260,38 @@ export default {
   layout: 'landing',
   async asyncData({ route, error, app }) {
     const data = await app.$services.sarvREST.getResource('web_pages', 87)
-    return { page: data }
+
+    const [specimenResponse, analysisResponse, sampleResponse] =
+      await Promise.all([
+        await app.$services.sarvSolr
+          .getResourceList('specimen', {
+            defaultParams: { rows: 0 },
+          })
+          .catch((_) => {
+            return {}
+          }),
+        await app.$services.sarvSolr
+          .getResourceList('analysis', {
+            defaultParams: { rows: 0 },
+          })
+          .catch((_) => {
+            return {}
+          }),
+        await app.$services.sarvSolr
+          .getResourceList('sample', {
+            defaultParams: { rows: 0 },
+          })
+          .catch((_) => {
+            return {}
+          }),
+      ])
+
+    return {
+      page: data,
+      specimenCount: specimenResponse?.count ?? 284000,
+      analysisCount: analysisResponse?.count ?? 249000,
+      sampleCount: sampleResponse?.count ?? 156000,
+    }
   },
   data() {
     return {
@@ -532,7 +587,7 @@ export default {
 
 .layer1 {
   background-image: url('~/static/frontpage/layered-peaks-haikei.svg'),
-    linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)),
+    linear-gradient(to right, #333333bf, #333333bf),
     url('~/static/frontpage/header_img2.jpg');
 }
 
