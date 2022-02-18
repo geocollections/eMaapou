@@ -116,6 +116,66 @@
       >
         {{ $t('common.news') }}
       </v-btn>
+      <v-btn
+        id="services_menu_btn"
+        aria-label="browse"
+        text
+        class="montserrat"
+        style="text-transform: capitalize; font-size: 0.875rem"
+      >
+        Services
+        <v-icon class="ml-1">mdi-chevron-down</v-icon>
+      </v-btn>
+      <v-menu
+        activator="#services_menu_btn"
+        content-class="elevation-2 mt-1"
+        transition="slide-y-transition"
+        offset-y
+        bottom
+        right
+        attach=""
+      >
+        <v-card width="550">
+          <v-card-actions class="d-block">
+            <div
+              v-for="(tabId, index) in externalCards.ids"
+              :key="`service-${index}`"
+              class="d-inline-block"
+            >
+              <v-hover v-slot="{ hover }">
+                <v-card
+                  tag="a"
+                  elevation="0"
+                  class="align-center ma-1 px-2 py-3"
+                  :class="{ 'on-hover': hover }"
+                  active-class="active-card"
+                  width="250"
+                  target="_blank"
+                  :href="externalCards[tabId].href"
+                >
+                  <div
+                    class="
+                      font-weight-medium
+                      text-button
+                      d-flex
+                      ml-2
+                      align-center
+                    "
+                    style="text-transform: capitalize !important"
+                  >
+                    <div class="montserrat tab" style="">
+                      {{ $t(externalCards[tabId].title) }}
+                    </div>
+                    <v-icon v-show="hover" class="ml-auto mr-2">
+                      mdi-arrow-right
+                    </v-icon>
+                  </div>
+                </v-card>
+              </v-hover>
+            </div>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
     </v-toolbar-items>
     <v-spacer v-if="$vuetify.breakpoint.mdAndUp" />
     <v-toolbar-items
@@ -161,65 +221,6 @@
         <v-icon size="font-size: 24px">mdi-menu</v-icon>
       </v-btn>
     </v-toolbar-items>
-
-    <!-- <template #extension>
-      <v-tabs
-        :value="tabValue"
-        align-with-title
-        optional
-        show-arrows
-        center-active
-        light
-        centered
-      >
-        <v-tab
-          v-for="(tab, index) in tabs"
-          :key="index"
-          nuxt
-          active-class="active-tab"
-          :to="localePath({ name: tab.routeName })"
-          class="tab montserrat font-weight-medium text-capitalize"
-          style="font-size: 0.875rem !important"
-        >
-          {{ $t(tab.text) }}
-        </v-tab>
-        <v-menu
-          transition="slide-y-transition"
-          offset-y
-          bottom
-          elevation="2"
-          content-class="elevation-2 rounded-t-0"
-        >
-          <template #activator="{ on }">
-            <v-btn
-              tile
-              height="auto"
-              elevation="0"
-              color="transparent"
-              class="px-0"
-              v-on="on"
-            >
-              <v-icon color="grey darken-3">mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-          <v-list class="py-0 dots-vertical-list" dense>
-            <v-list-item
-              v-for="(tab, index) in hiddenTabs"
-              :key="`hidden-tab-${index}`"
-              class="tab montserrat font-weight-medium text-capitalize"
-              style="font-size: 0.875rem"
-              active-class="active-tab"
-              nuxt
-              :to="localePath({ name: tab.routeName })"
-            >
-              <v-list-item-content class="justify-center">
-                {{ $t(tab.text) }}
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-tabs>
-    </template> -->
   </v-app-bar>
 </template>
 
@@ -236,56 +237,6 @@ export default {
   },
   data() {
     return {
-      tabs: [
-        {
-          routeName: 'locality',
-          text: 'locality.pageTitle',
-        },
-        {
-          routeName: 'site',
-          text: 'site.pageTitle',
-        },
-        {
-          routeName: 'drillcore',
-          text: 'drillcore.pageTitle',
-        },
-        {
-          routeName: 'sample',
-          text: 'sample.pageTitle',
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
-        },
-        { routeName: 'dataset', text: 'dataset.pageTitle' },
-        { routeName: 'photo', text: 'photo.pageTitle' },
-      ],
-      hiddenTabs: [
-        {
-          routeName: 'specimen',
-          text: 'specimen.pageTitle',
-        },
-        {
-          routeName: 'preparation',
-          text: 'preparation.pageTitle',
-        },
-        {
-          routeName: 'area',
-          text: 'area.pageTitle',
-        },
-        {
-          routeName: 'analysis',
-          text: 'analysis.pageTitle',
-        },
-        {
-          routeName: 'taxon',
-          text: 'taxon.pageTitle',
-        },
-        {
-          routeName: 'stratigraphy',
-          text: 'stratigraphy.pageTitle',
-        },
-      ],
       tabsAll: [
         {
           routeName: 'locality',
@@ -352,6 +303,104 @@ export default {
       ],
       logo: '/logos/emaapou5white.svg',
       logoCompact: '/logos/emaapou_short.svg',
+      externalCards: {
+        geocollections: {
+          title: 'geocollections.title',
+          description: 'geocollections.description',
+          href: 'https://geocollections.info',
+          background: '/frontpage/geokogud.jpg',
+        },
+        kirjandus: {
+          title: 'kirjandus.title',
+          description: 'kirjandus.description',
+          href: 'https://kirjandus.geoloogia.info',
+          background: '/frontpage/geokirjandus.jpg',
+        },
+        gmre: {
+          title: 'gmre.title',
+          description: 'gmre.description',
+          href: 'https://geoloogia.info/geology',
+          background: '/frontpage/gmre.jpg',
+        },
+        fond: {
+          title: 'fond.title',
+          description: 'fond.description',
+          href: 'https://fond.egt.ee',
+          background: '/frontpage/geoloogiafond.jpg',
+        },
+        // Divider
+        fossiilid: {
+          title: 'fossiilid.title',
+          description: 'fossiilid.description',
+          href: 'https://fossiilid.info',
+          background: '/frontpage/fossiilid.jpg',
+        },
+        kivid: {
+          title: 'kivid.title',
+          description: 'kivid.description',
+          href: 'https://kivid.info',
+          background: '/frontpage/kivid.jpg',
+        },
+        stratigraphy: {
+          title: 'frontStratigraphy.title',
+          description: 'frontStratigraphy.description',
+          href: 'https://stratotuup.ut.ee',
+          background: '/frontpage/stratigraafia.jpg',
+        },
+        // Divider
+        maardlad: {
+          title: 'maardlad.title',
+          description: 'maardlad.description',
+          href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+          background: '/frontpage/maardlad.jpg',
+        },
+        doi: {
+          title: 'doi.title',
+          description: 'doi.description',
+          href: 'https://doi.geocollections.info',
+          background: '/frontpage/sarv-doi.jpg',
+        },
+        turba: {
+          title: 'turba.title',
+          description: 'turba.description',
+          href: 'https://turba.geoloogia.info',
+          background: '/frontpage/turba.jpg',
+        },
+        // Divider
+        geocase: {
+          title: 'geocase.title',
+          description: 'geocase.description',
+          href: 'https://geocase.eu',
+          background: '/frontpage/geocase.jpg',
+        },
+        eurocore: {
+          title: 'eurocore.title',
+          description: 'eurocore.description',
+          href: 'https://eurocore.rocks',
+          background: '/frontpage/eurocore.jpg',
+        },
+        sarv: {
+          title: 'sarv.title',
+          description: 'sarv.description',
+          href: 'https://edit.geocollections.info',
+          background: '/frontpage/sarv-wb.jpg',
+        },
+        ids: [
+          'kirjandus',
+          'fossiilid',
+          'kivid',
+          'fond',
+          'maardlad',
+          'stratigraphy',
+          'gmre',
+          'turba',
+          'geocase',
+          'eurocore',
+          'geocollections',
+          'doi',
+          'sarv',
+        ],
+      },
     }
   },
   computed: {

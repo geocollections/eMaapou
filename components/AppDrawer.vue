@@ -73,54 +73,26 @@
           </v-list-item-title>
         </v-list-item>
       </v-list>
-      <!-- <div class="d-flex flex-column align-start pl-2">
-        <nuxt-link
-          v-for="route in searchRoutes"
-          :key="route.name"
-          exact
-          :to="localePath({ name: route.routeName })"
-          class="mb-1 menu-link"
-          active-class="menu-link-active"
-          ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
-          {{ $t(route.text) }}
-        </nuxt-link>
-      </div> -->
 
-      <!-- <div class="section-title montserrat pl-2">
-        {{ $t('common.links') }}
-      </div>
+      <div class="montserrat font-weight-medium pl-2 mt-2">Services</div>
 
-      <hr />
+      <v-divider class="primary" />
 
-      <div class="d-flex flex-column align-start pl-2">
-        <a
-          v-for="link in links"
-          :key="link.name"
-          :href="link.url"
-          class="mb-1 menu-link"
+      <v-list class="py-1 px-2">
+        <v-list-item
+          v-for="tabId in externalCards.ids"
+          :key="externalCards[tabId].href"
+          tag="a"
+          class="header-menu-item rounded my-1"
+          color="accent darken-1"
+          target="_blank"
+          :href="externalCards[tabId].href"
         >
-          <v-icon v-if="link.icon" small left>{{ link.icon }}</v-icon>
-          {{ $t(link.name) }}
-        </a>
-      </div>
-
-      <div class="section-title montserrat pl-2">
-        {{ $t('common.institutions') }}
-      </div>
-
-      <hr />
-
-      <div class="d-flex flex-column align-start pl-2">
-        <a
-          v-for="item in institutions"
-          :key="item.name"
-          :href="item.url"
-          class="mb-1 menu-link"
-        >
-          <v-icon v-if="item.icon" small left>{{ item.icon }}</v-icon>
-          {{ $t(item.name) }}
-        </a>
-      </div> -->
+          <v-list-item-title class="py-1">
+            <span class="montserrat">{{ $t(externalCards[tabId].title) }}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t('common.lang') }}
@@ -227,42 +199,104 @@ export default {
         { routeName: 'preparation', text: 'preparation.pageTitle' },
         { routeName: 'area', text: 'area.pageTitle' },
       ],
-      links: [
-        { name: 'geocollections.title', url: 'https://geocollections.info' },
-        { name: 'kirjandus.title', url: 'https://kirjandus.geoloogia.info' },
-        { name: 'gmre.title', url: 'https://geoloogia.info/geology' },
-        { name: 'fond.title', url: 'https://fond.egt.ee' },
-        { name: 'fossiilid.title', url: 'https://fossiilid.info' },
-        { name: 'kivid.title', url: 'https://kivid.info' },
-        { name: 'stratigraphy.title', url: 'http://stratigraafia.info' },
-        {
-          name: 'maardlad.title',
-          url: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+      externalCards: {
+        geocollections: {
+          title: 'geocollections.title',
+          description: 'geocollections.description',
+          href: 'https://geocollections.info',
+          background: '/frontpage/geokogud.jpg',
         },
-        { name: 'doi.title', url: 'https://doi.geocollections.info' },
-        { name: 'turba.title', url: 'https://turba.geoloogia.info' },
-        { name: 'geocase.title', url: 'https://geocase.eu' },
-        { name: 'eurocore.title', url: 'eurocore.description' },
-        { name: 'sarv.title', url: 'https://edit.geocollections.info' },
-        { name: 'link.sarvAPI', url: 'https://api.geocollections.info' },
-        { name: 'link.geologyAPI', url: 'https://api.geoloogia.info' },
-        { name: 'link.github', url: 'https://github.com/geocollections/' },
-      ],
-      institutions: [
-        {
-          name: 'institutions.ttu',
-          url: 'https://taltech.ee/geoloogia-instituut',
+        kirjandus: {
+          title: 'kirjandus.title',
+          description: 'kirjandus.description',
+          href: 'https://kirjandus.geoloogia.info',
+          background: '/frontpage/geokirjandus.jpg',
         },
-        { name: 'institutions.tu', url: 'https://geoloogia.ut.ee' },
-        { name: 'institutions.egt', url: 'https://egt.ee' },
-        {
-          name: 'institutions.maaamet',
-          url: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+        gmre: {
+          title: 'gmre.title',
+          description: 'gmre.description',
+          href: 'https://geoloogia.info/geology',
+          background: '/frontpage/gmre.jpg',
         },
-        { name: 'institutions.egeos', url: 'https://egeos.ee' },
-        { name: 'institutions.maeselts', url: 'http://maeselts.ee' },
-        { name: 'institutions.steiger', url: 'https://steiger.ee' },
-      ],
+        fond: {
+          title: 'fond.title',
+          description: 'fond.description',
+          href: 'https://fond.egt.ee',
+          background: '/frontpage/geoloogiafond.jpg',
+        },
+        // Divider
+        fossiilid: {
+          title: 'fossiilid.title',
+          description: 'fossiilid.description',
+          href: 'https://fossiilid.info',
+          background: '/frontpage/fossiilid.jpg',
+        },
+        kivid: {
+          title: 'kivid.title',
+          description: 'kivid.description',
+          href: 'https://kivid.info',
+          background: '/frontpage/kivid.jpg',
+        },
+        stratigraphy: {
+          title: 'frontStratigraphy.title',
+          description: 'frontStratigraphy.description',
+          href: 'https://stratotuup.ut.ee',
+          background: '/frontpage/stratigraafia.jpg',
+        },
+        // Divider
+        maardlad: {
+          title: 'maardlad.title',
+          description: 'maardlad.description',
+          href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
+          background: '/frontpage/maardlad.jpg',
+        },
+        doi: {
+          title: 'doi.title',
+          description: 'doi.description',
+          href: 'https://doi.geocollections.info',
+          background: '/frontpage/sarv-doi.jpg',
+        },
+        turba: {
+          title: 'turba.title',
+          description: 'turba.description',
+          href: 'https://turba.geoloogia.info',
+          background: '/frontpage/turba.jpg',
+        },
+        // Divider
+        geocase: {
+          title: 'geocase.title',
+          description: 'geocase.description',
+          href: 'https://geocase.eu',
+          background: '/frontpage/geocase.jpg',
+        },
+        eurocore: {
+          title: 'eurocore.title',
+          description: 'eurocore.description',
+          href: 'https://eurocore.rocks',
+          background: '/frontpage/eurocore.jpg',
+        },
+        sarv: {
+          title: 'sarv.title',
+          description: 'sarv.description',
+          href: 'https://edit.geocollections.info',
+          background: '/frontpage/sarv-wb.jpg',
+        },
+        ids: [
+          'kirjandus',
+          'fossiilid',
+          'kivid',
+          'fond',
+          'maardlad',
+          'stratigraphy',
+          'gmre',
+          'turba',
+          'geocase',
+          'eurocore',
+          'geocollections',
+          'doi',
+          'sarv',
+        ],
+      },
     }
   },
 }
