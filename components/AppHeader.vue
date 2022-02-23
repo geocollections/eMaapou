@@ -8,7 +8,7 @@
       absolute
       height="64"
       :elevation="0"
-      :color="transparent ? (hover ? 'tertiary' : 'transparent') : 'tertiary'"
+      :color="transparent ? (hover ? '#333333B3' : 'transparent') : 'tertiary'"
       :class="{
         'app-bar-full': $vuetify.breakpoint.mdAndUp,
         'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
