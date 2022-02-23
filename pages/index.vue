@@ -589,7 +589,7 @@ export default {
 
 .layer1 {
   background-image: url('~/static/frontpage/layered-peaks-haikei.svg'),
-    linear-gradient(to right, #333333bf, #333333bf),
+    linear-gradient(to right, #00000099, #00000099),
     url('~/static/frontpage/header_img2.jpg');
 }
 
