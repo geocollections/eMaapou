@@ -136,7 +136,7 @@
           class="montserrat"
           style="text-transform: capitalize; font-size: 0.875rem"
         >
-          Services
+          {{ $t('common.services') }}
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
         <v-menu

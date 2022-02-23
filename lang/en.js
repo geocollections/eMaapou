@@ -101,6 +101,7 @@ export default {
     images: 'Images',
     browse: 'Browse',
     partners: 'Partners',
+    services: 'E-Services',
   },
   link: {
     github: 'GitHub',

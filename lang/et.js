@@ -101,6 +101,7 @@ export default {
     images: 'Pildid',
     browse: 'Sirvi',
     partners: 'Partnerid',
+    services: 'E-Teenused',
   },
   link: {
     sarvAPI: 'Avalik API',
