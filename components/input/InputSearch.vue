@@ -44,7 +44,7 @@ export default {
     },
     autofocus: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
 }
