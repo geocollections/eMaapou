@@ -317,7 +317,8 @@
 </template>
 
 <script>
-import { isEmpty, isNil } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'

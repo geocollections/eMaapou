@@ -1,4 +1,4 @@
-import XLSX from 'xlsx'
+import { writeFile, utils } from 'xlsx'
 
 export default {
   methods: {
@@ -27,14 +27,14 @@ export default {
     },
     createWorkbook(table) {
       const tableCopy = this.removeSortIndicators(table)
-      const wb = XLSX.utils.table_to_book(tableCopy)
+      const wb = utils.table_to_book(tableCopy)
       return wb
     },
     handleExportCsv() {
       try {
         const wb = this.createWorkbook(document.querySelector('#table table'))
 
-        XLSX.writeFile(wb, 'export.csv', { bookType: 'csv' })
+        writeFile(wb, 'export.csv', { bookType: 'csv' })
       } catch (err) {
         console.error(err)
       }
@@ -43,7 +43,7 @@ export default {
       try {
         const wb = this.createWorkbook(document.querySelector('#table table'))
 
-        XLSX.writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
+        writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
       } catch (err) {
         console.error(err)
       }

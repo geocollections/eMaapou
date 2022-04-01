@@ -159,7 +159,8 @@
 </template>
 
 <script>
-import { isEmpty, isNull } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isNull from 'lodash/isNull'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import Tabs from '~/components/Tabs.vue'

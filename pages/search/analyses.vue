@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 

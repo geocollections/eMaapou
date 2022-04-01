@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { round, cloneDeep } from 'lodash'
+import round from 'lodash/round'
+import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import { HEADERS_LOCALITY_REFERENCE } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'

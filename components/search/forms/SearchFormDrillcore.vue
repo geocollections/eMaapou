@@ -33,7 +33,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'

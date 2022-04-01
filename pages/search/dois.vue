@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { DOI, HEADERS_DOI } from '~/constants'
 import DataTableDoi from '~/components/data-table/DataTableDoi'
 

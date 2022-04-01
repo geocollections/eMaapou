@@ -168,7 +168,8 @@
 </template>
 
 <script>
-import { isNull, debounce } from 'lodash'
+import isNull from 'lodash/isNull'
+import debounce from 'lodash/debounce'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import { HEADERS_ATTACHMENT } from '~/constants'

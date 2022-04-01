@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { ATTACHMENT, HEADERS_ATTACHMENT } from '~/constants'
 import DataTableAttachmentSolr from '~/components/data-table/DataTableAttachmentSolr'
 

@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'

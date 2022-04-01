@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import { round, cloneDeep } from 'lodash'
+import round from 'lodash/round'
+import cloneDeep from 'lodash/cloneDeep'
 import BaseLinkExternal from '../base/BaseLinkExternal.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'

@@ -124,7 +124,7 @@
 
 <script>
 // import MapLegend from '~/components/map/MapLegend'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
 import MapLinks from '~/components/map/MapLinks'

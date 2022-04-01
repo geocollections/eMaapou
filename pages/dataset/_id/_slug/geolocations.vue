@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import DataTableDatasetGeolocation from '~/components/data-table/DataTableDatasetGeolocation'
 
 import { HEADERS_DATASET_GEOLOCATION } from '~/constants'

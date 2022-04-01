@@ -324,7 +324,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'

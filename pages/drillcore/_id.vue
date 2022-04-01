@@ -182,7 +182,8 @@
 </template>
 
 <script>
-import { isEmpty, isNull } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isNull from 'lodash/isNull'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'

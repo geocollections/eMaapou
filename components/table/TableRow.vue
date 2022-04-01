@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 
 export default {
   name: 'TableRow',

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import DataTableDatasetReference from '~/components/data-table/DataTableDatasetReference.vue'
 import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {

@@ -272,7 +272,8 @@
 </template>
 
 <script>
-import { isNull, isNil } from 'lodash'
+import isNil from 'lodash/isNil'
+import isNull from 'lodash/isNull'
 
 import Tabs from '~/components/Tabs.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'

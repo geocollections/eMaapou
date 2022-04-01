@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { HEADERS_TAXON, TAXON } from '~/constants'
 import DataTableTaxon from '~/components/data-table/DataTableTaxon'
 

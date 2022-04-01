@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import DataTableArea from '~/components/data-table/DataTableArea.vue'
 import { HEADERS_AREA, AREA } from '~/constants'
 

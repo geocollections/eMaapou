@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import BaseDataTableHeaderMenu from '~/components/base/BaseDataTableHeaderMenu.vue'
 import BaseDataTableExportMenu from '~/components/base/BaseDataTableExportMenu.vue'
 import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'

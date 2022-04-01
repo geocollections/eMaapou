@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import { debounce, isNil } from 'lodash'
+import debounce from 'lodash/debounce'
+import isNil from 'lodash/isNil'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
 

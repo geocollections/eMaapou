@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import ThumbnailImage from '~/components/thumbnail/ThumbnailImage'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal'

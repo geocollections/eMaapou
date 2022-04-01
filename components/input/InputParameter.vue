@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import InputNumber from '~/components/input/InputNumber.vue'
 import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 export default {

@@ -118,7 +118,8 @@
 </template>
 
 <script>
-import { round, cloneDeep } from 'lodash'
+import round from 'lodash/round'
+import cloneDeep from 'lodash/cloneDeep'
 import TableRow from '../table/TableRow.vue'
 import TableRowLink from '../table/TableRowLink.vue'
 import BaseTable from '../base/BaseTable.vue'

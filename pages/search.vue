@@ -38,7 +38,10 @@
 </template>
 
 <script>
-import { debounce, isEmpty, isEqual, orderBy } from 'lodash'
+import debounce from 'lodash/debounce'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import orderBy from 'lodash/orderBy'
 import { mapFields } from 'vuex-map-fields'
 import ButtonTabs from '~/components/ButtonTabs.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'

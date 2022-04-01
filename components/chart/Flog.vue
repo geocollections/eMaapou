@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import { mapFields } from 'vuex-map-fields'
 import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'

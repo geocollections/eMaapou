@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import DataTableDatasetAuthor from '~/components/data-table/DataTableDatasetAuthor'
 
 import { HEADERS_DATASET_AUTHOR } from '~/constants'

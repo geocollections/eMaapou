@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '../base/BaseDataTable.vue'
 import ThumbnailAttachment from '~/components/thumbnail/ThumbnailAttachment.vue'
 import headersMixin from '~/mixins/headersMixin'

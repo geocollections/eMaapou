@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 
 const getPaginationParams = (options) => {
   if (options?.page && options?.itemsPerPage) {

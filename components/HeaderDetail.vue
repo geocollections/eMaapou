@@ -1,16 +1,7 @@
 <template>
   <base-header>
     <v-card-title
-      class="
-        d-flex
-        align-start
-        font-weight-medium
-        text-h4
-        pt-1
-        px-0
-        pb-6
-        px-sm-3
-      "
+      class="d-flex align-start font-weight-medium text-h4 pt-1 px-0 pb-6 px-sm-3"
       style="word-break: normal"
     >
       <slot>
@@ -63,15 +54,7 @@
 
         <back-button-detail />
         <div
-          class="
-            d-flex
-            align-center
-            montserrat
-            grey--text
-            text--darken-1
-            pt-0
-            px-0 px-sm-3
-          "
+          class="d-flex align-center montserrat grey--text text--darken-1 pt-0 px-0 px-sm-3"
         >
           {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
         </div>
@@ -119,7 +102,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
 import BaseHeader from './base/BaseHeader.vue'

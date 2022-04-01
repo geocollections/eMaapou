@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import BaseChipLink from '~/components/base/BaseChipLink.vue'
 import SearchFromQuick from '~/components/search/forms/SearchFormQuick.vue'
 export default {

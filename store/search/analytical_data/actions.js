@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import uniqueId from 'lodash/uniqueId'
 import { ANALYTICAL_DATA, HEADERS_ANALYTICAL_DATA } from '~/constants'
 import {
   ADD_PARAMETER_FILTER,
@@ -93,7 +93,7 @@ export default {
   },
   initDefaultParameters({ commit, state, dispatch }) {
     state.defaultParameters.forEach((parameterId) => {
-      const id = _.uniqueId('parameter_')
+      const id = uniqueId('parameter_')
       const parameter = state.parameters[parameterId]
       const filter = {
         id,

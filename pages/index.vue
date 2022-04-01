@@ -14,12 +14,7 @@
               </div> -->
               <!-- SUBTITLE -->
               <div
-                class="
-                  text-h3 text-md-h2
-                  font-weight-bold
-                  align-center
-                  white--text
-                "
+                class="text-h3 text-md-h2 font-weight-bold align-center white--text"
               >
                 {{ $t('subtitle') }}
               </div>
@@ -132,13 +127,7 @@
             <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
             <v-card class="mb-10 mb-lg-0 elevation-0" color="transparent">
               <v-card-text
-                class="
-                  white--text
-                  d-sm-flex
-                  flex-lg-column flex-xl-row
-                  justify-sm-space-around
-                  pa-0
-                "
+                class="white--text d-sm-flex flex-lg-column flex-xl-row justify-sm-space-around pa-0"
               >
                 <div class="px-md-10 py-4">
                   <div class="text-h4 text-center font-weight-bold">
@@ -245,7 +234,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
 // import TheMapCard from '~/components/landing/TheMapCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'

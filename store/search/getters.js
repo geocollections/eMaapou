@@ -1,4 +1,5 @@
-import { isEmpty, isNil } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 import { getField } from 'vuex-map-fields'
 
 export default {

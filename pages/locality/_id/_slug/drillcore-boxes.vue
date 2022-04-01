@@ -230,7 +230,8 @@
 </template>
 
 <script>
-import { isNull, debounce } from 'lodash'
+import isNull from 'lodash/isNull'
+import debounce from 'lodash/debounce'
 import { HEADERS_ATTACHMENT } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
 

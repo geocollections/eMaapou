@@ -1,4 +1,6 @@
-import { cloneDeep, isEmpty, isNil } from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
+import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 import qs from 'qs'
 import Wkt from 'wicket/wicket'
 import earcut from 'earcut'

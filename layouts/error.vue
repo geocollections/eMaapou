@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import SearchFromQuick from '~/components/search/forms/SearchFormQuick.vue'
 export default {
   components: { SearchFromQuick },

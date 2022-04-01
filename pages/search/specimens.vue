@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen'
 

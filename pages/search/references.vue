@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { HEADERS_REFERENCE, REFERENCE } from '~/constants'
 import DataTableReference from '~/components/data-table/DataTableReference'
 

@@ -79,7 +79,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import { round, cloneDeep } from 'lodash'
+
+import round from 'lodash/round'
+import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'

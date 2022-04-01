@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 

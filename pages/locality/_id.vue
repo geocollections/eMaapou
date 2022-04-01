@@ -258,7 +258,8 @@
 </template>
 
 <script>
-import { isNil, isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 import { mapFields } from 'vuex-map-fields'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'

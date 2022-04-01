@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { isNil } from 'lodash'
+import isNil from 'lodash/isNil'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import { HEADERS_ANALYSIS } from '~/constants'
 export default {
