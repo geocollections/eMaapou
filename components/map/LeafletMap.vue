@@ -193,6 +193,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    estonianBasementOverlay: {
+      type: Boolean,
+      default: false,
+    },
     estonianHybridOverlay: {
       type: Boolean,
       default: false,
@@ -335,6 +339,27 @@ export default {
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'geocollections:bedrock400k',
             visible: this.estonianBedrockOverlay,
+            transparent: true,
+            zIndex: 10,
+            options: {
+              maxNativeZoom: 18,
+              maxZoom: 21,
+              attribution:
+                "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+              format: 'image/png',
+              tiled: true,
+              detectRetina: true,
+              updateWhenIdle: true,
+              zIndex: 10,
+            },
+          },
+          {
+            id: 'est-basement-overlay',
+            isWMS: true,
+            name: 'Estonian basement',
+            url: 'https://gis.geocollections.info/geoserver/wms',
+            layers: 'geocollections:bedrock400k',
+            visible: this.estonianBasementOverlay,
             transparent: true,
             zIndex: 10,
             options: {
