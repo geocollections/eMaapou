@@ -62,10 +62,16 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+      {
+        rel: 'preload',
+        as: 'style',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500;700&display=swap',
+      },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;700;900&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500;700&display=swap',
       },
     ],
   },
@@ -197,6 +203,13 @@ export default {
     // Setting cssSoruceMap and cacheBusting to false fixes chrome dev tools style change problem (broke styles)
     cssSourceMap: false,
     cacheBusting: false,
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        // automaticNameDelimiter: '.',
+        // maxSize: 512000,
+      },
+    },
   },
 
   image: {
