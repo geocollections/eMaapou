@@ -1,9 +1,13 @@
 <template>
   <div class="mb-10">
     <div
-      class="spacer layer1 pb-10 pd-md-4"
+      class="spacer pb-10 pd-md-4"
       style="padding-top: 64px"
-      :style="{ height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset' }"
+      :style="{
+        'background-image': cssProps.background,
+        'background-color': '#333333',
+        height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset',
+      }"
     >
       <v-container :fluid="$vuetify.breakpoint.smAndDown">
         <v-row class="px-3" justify="space-around">
@@ -14,7 +18,12 @@
               </div> -->
               <!-- SUBTITLE -->
               <div
-                class="text-h3 text-md-h2 font-weight-bold align-center white--text"
+                class="
+                  text-h3 text-md-h2
+                  font-weight-bold
+                  align-center
+                  white--text
+                "
               >
                 {{ $t('subtitle') }}
               </div>
@@ -127,7 +136,13 @@
             <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
             <v-card class="mb-10 mb-lg-0 elevation-0" color="transparent">
               <v-card-text
-                class="white--text d-sm-flex flex-lg-column flex-xl-row justify-sm-space-around pa-0"
+                class="
+                  white--text
+                  d-sm-flex
+                  flex-lg-column flex-xl-row
+                  justify-sm-space-around
+                  pa-0
+                "
               >
                 <div class="px-md-10 py-4">
                   <div class="text-h4 text-center font-weight-bold">
@@ -513,14 +528,34 @@ export default {
           'eurocore',
         ],
       },
+      backgroundImg: this.$img('/frontpage/header_img2.jpg'),
+      backgroundSvg: this.$img('/frontpage/layered-peaks-haikei.svg'),
     }
   },
   head() {
     return {
       title: this.$t('landing.title'),
+      link: [
+        {
+          rel: 'preload',
+          as: 'image',
+          href: `${this.backgroundSvg}`,
+        },
+        {
+          rel: 'preload',
+          as: 'image',
+          href: `${this.backgroundImg}`,
+        },
+      ],
     }
   },
   computed: {
+    cssProps() {
+      return {
+        background: `url(${this.backgroundSvg}),
+    linear-gradient(to right, #00000099, #00000099), url(${this.backgroundImg})`,
+      }
+    },
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path
@@ -577,9 +612,7 @@ export default {
 }
 
 .layer1 {
-  background-image: url('~/static/frontpage/layered-peaks-haikei.svg'),
-    linear-gradient(to right, #00000099, #00000099),
-    url('~/static/frontpage/header_img2.jpg');
+  background-image: var(--background);
 }
 
 .quick-card {
