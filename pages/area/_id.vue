@@ -249,19 +249,34 @@
               {{ $t('alert.estonianLandBoardDatabase') }}
             </v-alert>
             <base-table>
-              <table-row
-                :title="$t('miningClaim.number')"
-                :value="area.maaamet_maeeraldis.id"
-              />
-              <table-row-link
-                :title="$t('miningClaim.registrationNo')"
-                :value="miningClaim.reg_kaart"
-                @link-click="
-                  $openWindow(
-                    `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`
-                  )
-                "
-              />
+              <table-row :title="$t('miningClaim.number')">
+                <template #value>
+                  <base-link-external
+                    @click.native="
+                      $openWindow(
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
+                      )
+                    "
+                  >
+                    {{ area.maaamet_maeeraldis.id }}
+                  </base-link-external>
+                  (Maaamet XGIS2)
+                </template>
+              </table-row>
+              <table-row :title="$t('miningClaim.registrationNo')">
+                <template #value>
+                  <base-link-external
+                    @click.native="
+                      $openWindow(
+                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${miningClaim.reg_kaart}`
+                      )
+                    "
+                  >
+                    {{ miningClaim.reg_kaart }}
+                  </base-link-external>
+                  (Maaamet XGIS2)
+                </template>
+              </table-row>
               <table-row
                 :title="$t('miningClaim.name')"
                 :value="`${miningClaim.nimetus} ${
@@ -289,6 +304,7 @@
                 :title="$t('miningClaim.status')"
                 :value="miningClaim.me_olek"
               />
+
               <table-row
                 v-if="miningClaim.loa_number"
                 :title="$t('miningClaim.extractionPermit')"
@@ -297,15 +313,19 @@
                   <base-link-external
                     @click.native="
                       $openWindow(
-                        `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7935&LOA_NUMBER=${miningClaim.loa_number}&hide=true`
+                        `https://kotkas.envir.ee/permits/public_index?search=1&permit_nr=${miningClaim.loa_number}`
                       )
                     "
                   >
                     {{ miningClaim.loa_number }}
                   </base-link-external>
-                  {{ ` (${miningClaim.loa_algus} - ${miningClaim.loa_lopp})` }}
+                  (Kotkas)
                 </template>
               </table-row>
+              <table-row
+                :title="$t('miningClaim.period')"
+                :value="`${miningClaim.loa_algus} - ${miningClaim.loa_lopp}`"
+              />
               <table-row
                 :title="$t('miningClaim.permitOwner')"
                 :value="miningClaim.loa_omanik"

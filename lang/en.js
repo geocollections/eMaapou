@@ -966,5 +966,6 @@ export default {
     permitOwner: 'Permit owner',
     miningCompany: 'Mining company',
     dataExportDate: 'Data imported',
+    period: 'Period of validity',
   },
 }

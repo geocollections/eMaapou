@@ -955,7 +955,7 @@ export default {
   },
   miningClaim: {
     id: 'Mäeeraldise ID',
-    number: 'Mäeeraldise Nr',
+    number: 'Mäeeraldise nr.',
     registrationNo: 'Maardla registrikaardi nr.',
     name: 'Nimi',
     area: 'Pindala (ha)',
@@ -967,5 +967,6 @@ export default {
     permitOwner: 'Kaevandusloa omanik',
     miningCompany: 'Kaevandaja',
     dataExportDate: 'Andmete import',
+    period: 'Kehtivuse periood',
   },
 }
