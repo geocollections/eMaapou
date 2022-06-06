@@ -690,6 +690,7 @@ export default {
           })
           this.$refs.map.mapObject.fitBounds(group.getBounds(), {
             padding: [50, 50],
+            maxZoom: this.geojson.type === 'Point' ? this.mapZoom : null,
           })
         })
       }
