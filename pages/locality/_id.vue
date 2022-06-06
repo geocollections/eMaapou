@@ -181,20 +181,11 @@
         </base-table>
 
         <v-btn
-          v-if="analysisResultsCount > 0"
-          small
-          color="emp-analysis montserrat"
-          class="mt-2 white--text"
-          @click="goToAnalyticalData"
-          >{{ $t('locality.linkToAnalyticalData') }}
-          <v-icon right>mdi-chart-scatter-plot</v-icon>
-        </v-btn>
-
-        <v-btn
           v-if="drillcore"
           small
-          color="emp-drillcore  montserrat"
-          class="mt-2 white--text"
+          rounded
+          color="accent"
+          class="mt-2 montserrat text-none"
           @click="
             $router.push(
               localePath({
@@ -203,13 +194,25 @@
               })
             )
           "
-          >{{
+        >
+          <v-icon left>mdi-screw-machine-flat-top</v-icon>
+          {{
             $translate({
               et: drillcore.drillcore,
               en: drillcore.drillcore_en,
             })
           }}
-          <v-icon right>mdi-screw-machine-flat-top</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="analysisResultsCount > 0"
+          small
+          rounded
+          color="accent"
+          class="mt-2 montserrat text-none"
+          @click="goToAnalyticalData"
+        >
+          <v-icon left>mdi-chart-scatter-plot</v-icon>
+          {{ $t('locality.linkToAnalyticalData') }}
         </v-btn>
       </v-card-text>
     </template>
