@@ -95,6 +95,7 @@ export default {
     '~/plugins/formatDate.js',
     '~/plugins/slug.js', // this might be only called on server-side
     { src: '~/plugins/vueMatomo.js', mode: 'client' },
+    { src: '~/plugins/vue-stack-grid.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

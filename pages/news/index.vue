@@ -1,39 +1,49 @@
 <template>
   <div class="pt-5">
     <base-header :title="$t('common.news')"></base-header>
-
-    <v-row no-gutters>
-      <v-col lg="7" md="8" cols="12" class="pl-4">
-        <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
-          <news-preview-card
-            :preview-lenght="400"
-            :date="news.date_added"
-            :title="$translate({ et: news.title_et, en: news.title_en })"
-            :content="$translate({ et: news.text_et, en: news.text_en })"
-            @click="openNews(news)"
+    <!-- <v-btn @click="nextPage">next</v-btn> -->
+    <client-only>
+      <v-card elevation="0" color="transparent px-sm-3">
+        <stack
+          v-if="newsList.length > 0"
+          ref="stacker"
+          :column-min-width="400"
+          :gutter-width="15"
+          :gutter-height="15"
+          monitor-images-loaded
+        >
+          <stack-item
+            v-for="(news, i) in newsList"
+            :key="i"
+            style="opacity: 1; transition: opacity 300ms linear"
           >
-          </news-preview-card>
-          <v-divider v-if="i !== newsList.length - 1" class="my-5" />
-        </div>
-        <client-only>
-          <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
-            <template #spinner>
-              <v-progress-circular color="primary darken-2" indeterminate />
-            </template>
-            <template #no-more>{{ $t('infinite.noMore') }}</template>
-            <template #error="{ trigger }">
-              <div>
-                {{ $t('infinite.error') }}
-              </div>
-              <br />
-              <v-btn outlined color="primary darken-2" @click="trigger">
-                {{ $t('infinite.retry') }}
-              </v-btn>
-            </template>
-          </infinite-loading>
-        </client-only>
-      </v-col>
-    </v-row>
+            <news-preview-card
+              :preview-lenght="500"
+              :date="news.date_added"
+              :title="$translate({ et: news.title_et, en: news.title_en })"
+              :content="$translate({ et: news.text_et, en: news.text_en })"
+              @click="openNews(news)"
+            />
+            <!-- <img src="https://i.imgur.com/0ui5ltX.jpg" /> -->
+          </stack-item>
+        </stack>
+        <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
+          <template #spinner>
+            <v-progress-circular color="primary darken-2" indeterminate />
+          </template>
+          <template #no-more>{{ $t('infinite.noMore') }}</template>
+          <template #error="{ trigger }">
+            <div>
+              {{ $t('infinite.error') }}
+            </div>
+            <br />
+            <v-btn outlined color="primary darken-2" @click="trigger">
+              {{ $t('infinite.retry') }}
+            </v-btn>
+          </template>
+        </infinite-loading>
+      </v-card>
+    </client-only>
   </div>
 </template>
 
@@ -51,7 +61,6 @@ export default {
       newsList: [],
     }
   },
-
   head() {
     return {
       title: this.$t('news.pageTitle'),
@@ -84,12 +93,19 @@ export default {
         .then((res) => {
           if (!res.next) {
             this.newsList.push(...res.items)
+            setTimeout(() => {
+              this.$refs.stacker.reflow()
+            }, 50)
 
             $state.loaded()
             $state.complete()
           } else {
             this.page += 1
             this.newsList.push(...res.items)
+            setTimeout(() => {
+              this.$refs.stacker.reflow()
+            }, 50)
+
             $state.loaded()
           }
         })

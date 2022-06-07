@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="max-width: 800px" class="mx-auto">
     <v-row no-gutters>
-      <v-col>
-        <div class="text-right montserrat pr-4">
+      <v-col class="mt-2">
+        <div class="text-right montserrat pr-4 text--secondary">
           {{ $formatDate(news.date_added) }}
         </div>
         <base-header
@@ -10,8 +10,8 @@
         />
       </v-col>
     </v-row>
-    <v-row no-gutters>
-      <v-col class="pl-4 pl-6" style="max-width: 700px">
+    <v-row no-gutters justify="center">
+      <v-col class="pl-4 pl-6">
         <div
           class="text-body-1"
           v-html="$translate({ et: news.text_et, en: news.text_en })"
@@ -26,6 +26,7 @@ import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   components: { BaseHeader },
+  layout: 'news',
   async asyncData({
     params,
     route,

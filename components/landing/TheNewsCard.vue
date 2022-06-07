@@ -3,9 +3,10 @@
     <v-row no-gutters>
       <v-col>
         <base-header :title="$t('common.news')" class="title-heading" />
-        <v-card-text class="d-flex flex-column pt-0">
-          <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
+        <v-card-text class="d-flex flex-column py-0">
+          <div v-for="news in newsList" :key="`landing-news-${news.id}`">
             <news-preview-card
+              class="mb-3"
               :preview-lenght="previewLength"
               :date="news.date_added"
               :title="$translate({ et: news.title_et, en: news.title_en })"
@@ -13,13 +14,18 @@
               @click="openNews(news)"
             >
             </news-preview-card>
-            <v-divider v-if="i !== newsList.length - 1" class="my-5" />
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-btn nuxt class="montserrat" :to="localePath('news')" text>{{
-            $t('common.viewNews')
-          }}</v-btn>
+          <v-spacer />
+          <v-btn
+            nuxt
+            color="accent"
+            class="montserrat text-none"
+            :to="localePath('news')"
+            text
+            >{{ $t('common.viewNews') }}</v-btn
+          >
         </v-card-actions>
       </v-col>
     </v-row>
