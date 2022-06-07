@@ -13,8 +13,17 @@
       <a
         v-if="item.reference"
         class="text-link"
-        @click="$openGeology('reference', item.reference)"
-        >{{ item.reference__reference }}</a
+        @click="$openGeology('reference', item.reference.id)"
+        >{{ item.reference.id }}</a
+      >
+    </template>
+
+    <template #item.reference__title="{ item }">
+      <a
+        v-if="item.reference"
+        class="text-link"
+        @click="$openGeology('reference', item.reference.id)"
+        >{{ item.reference.reference }}</a
       >
     </template>
   </base-data-table>
