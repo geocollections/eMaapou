@@ -845,6 +845,7 @@ export default {
     pages: 'Leheküljed',
     doi: 'DOI',
     remarks: 'Lisainfo',
+    pdf: 'PDF',
   },
   storage: {
     storage: 'Hoiukoht',

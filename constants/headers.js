@@ -900,6 +900,12 @@ export const HEADERS_REFERENCE = {
       show: true,
       apiFieldValue: 'remarks',
     },
+    pdf: {
+      text: 'reference.pdf',
+      value: 'pdf',
+      show: true,
+      apiFieldValue: 'pdf',
+    },
   },
   allIds: [
     'id',
@@ -910,6 +916,7 @@ export const HEADERS_REFERENCE = {
     'journal',
     'doi',
     'remarks',
+    'pdf',
   ],
 }
 

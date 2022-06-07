@@ -844,6 +844,7 @@ export default {
     pages: 'Pages',
     doi: 'DOI',
     remarks: 'Remarks',
+    pdf: 'PDF',
   },
   storage: {
     storage: 'Storage',
