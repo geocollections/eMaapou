@@ -1,7 +1,10 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('area.pageTitle')" />
+      <base-header
+        :title="$t('area.pageTitle')"
+        icon="mdi-map-marker-radius-outline"
+      />
     </template>
 
     <template #form>

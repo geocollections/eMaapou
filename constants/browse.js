@@ -14,7 +14,11 @@ export const BROWSE_GEOLOGY_LIST = [
     label: 'drillcore.pageTitle',
     icon: 'mdi-screw-machine-flat-top',
   },
-  { routeName: 'area', label: 'area.pageTitle' },
+  {
+    routeName: 'area',
+    label: 'area.pageTitle',
+    icon: 'mdi-map-marker-radius-outline',
+  },
 ]
 
 export const BROWSE_LAB_LIST = [
@@ -38,7 +42,11 @@ export const BROWSE_LAB_LIST = [
     label: 'dataset.pageTitle',
     icon: 'mdi-database-outline',
   },
-  { routeName: 'preparation', label: 'preparation.pageTitle' },
+  {
+    routeName: 'preparation',
+    label: 'preparation.pageTitle',
+    icon: 'mdi-eyedropper',
+  },
 ]
 
 export const BROWSE_TAXON_LIST = [

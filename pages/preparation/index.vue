@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('preparation.pageTitle')" />
+      <base-header :title="$t('preparation.pageTitle')" icon="mdi-eyedropper" />
     </template>
 
     <template #form>
