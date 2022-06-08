@@ -107,7 +107,6 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    '@nuxt/image',
     '@nuxtjs/composition-api/module',
   ],
 
@@ -117,6 +116,7 @@ export default {
     '@nuxtjs/axios',
     'nuxt-i18n',
     '@nuxtjs/sitemap',
+    '@nuxt/image',
   ],
 
   sitemap: {
