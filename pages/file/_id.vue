@@ -76,7 +76,13 @@
         </div>
 
         <div
-          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
+          class="
+            justify-center
+            d-flex
+            flex-column
+            justify-md-space-between
+            flex-md-row
+          "
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
@@ -359,79 +365,84 @@
     </template>
 
     <template #bottom>
-      <v-row
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-2"
-      >
-        <v-col
-          v-for="(item, index) in filteredTabs"
-          :key="index"
-          cols="12"
-          md="6"
+      <v-row v-if="filteredTabs.length > 0" class="mt-2">
+        <transition-group
+          appear
+          class="d-flex flex-wrap flex-grow-1"
+          name="fade"
         >
-          <v-card>
-            <v-card-title class="subsection-title"
-              >{{ $t(item.title) }}
-            </v-card-title>
+          <v-col
+            v-for="(item, index) in filteredTabs"
+            :key="index"
+            cols="12"
+            md="6"
+          >
+            <v-card>
+              <v-card-title class="subsection-title"
+                >{{ $t(item.title) }}
+              </v-card-title>
 
-            <v-card-text>
-              <v-simple-table>
-                <template #default>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>{{ $t(`${item.id}.${item.id}`) }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(row, key) in item.items" :key="key">
-                      <td>
-                        <template v-if="item.isLink">
-                          <nuxt-link
-                            v-if="item.isNuxtLink"
-                            class="text-link"
-                            :to="
-                              localePath({
-                                name: `${item.route ? item.route : item.id}-id`,
-                                params: { id: row[item.id].id },
-                              })
-                            "
-                            >{{ row[item.id].id }}
-                          </nuxt-link>
-                          <a
-                            v-else
-                            class="text-link"
-                            @click="
-                              $openWindow(
-                                `${item.href}${
-                                  item.id === 'doi'
-                                    ? row.doi.identifier
-                                    : row[item.id].id
-                                }`
-                              )
-                            "
-                            >{{
-                              item.id === 'doi'
-                                ? row.doi.identifier
-                                : row[item.id].id
-                            }}
-                            <v-icon small color="primary darken-2"
-                              >mdi-open-in-new
-                            </v-icon>
-                          </a>
-                        </template>
-                        <template v-else>
-                          {{ row[item.id].id }}
-                        </template>
-                      </td>
-                      <td>{{ buildData(item.id, row) }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-card>
-        </v-col>
+              <v-card-text>
+                <v-simple-table>
+                  <template #default>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t(`${item.id}.${item.id}`) }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(row, key) in item.items" :key="key">
+                        <td>
+                          <template v-if="item.isLink">
+                            <nuxt-link
+                              v-if="item.isNuxtLink"
+                              class="text-link"
+                              :to="
+                                localePath({
+                                  name: `${
+                                    item.route ? item.route : item.id
+                                  }-id`,
+                                  params: { id: row[item.id].id },
+                                })
+                              "
+                              >{{ row[item.id].id }}
+                            </nuxt-link>
+                            <a
+                              v-else
+                              class="text-link"
+                              @click="
+                                $openWindow(
+                                  `${item.href}${
+                                    item.id === 'doi'
+                                      ? row.doi.identifier
+                                      : row[item.id].id
+                                  }`
+                                )
+                              "
+                              >{{
+                                item.id === 'doi'
+                                  ? row.doi.identifier
+                                  : row[item.id].id
+                              }}
+                              <v-icon small color="primary darken-2"
+                                >mdi-open-in-new
+                              </v-icon>
+                            </a>
+                          </template>
+                          <template v-else>
+                            {{ row[item.id].id }}
+                          </template>
+                        </td>
+                        <td>{{ buildData(item.id, row) }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </transition-group>
       </v-row>
 
       <v-row v-if="fileContent" class="mt-2">
@@ -852,25 +863,86 @@ export default {
     }
     // Raw file content data END
 
+    // let startTime = performance.now()
+
+    // await Promise.allSettled(
+    //   this.tabs.map((tab) => {
+    //     return this.$services.sarvREST
+    //       .getResourceList('attachment_link', {
+    //         isValid: isNil(this.file?.id),
+    //         defaultParams: {
+    //           [`${tab.id}__isnull`]: false,
+    //           attachment: this.file?.id,
+    //           nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+    //         },
+    //       })
+    //       .then((response) => {
+    //         tab.count = response.count || 0
+    //         tab.items = response.items || []
+    //         return response
+    //       })
+    //   })
+    // )
+    // let endTime = performance.now()
+
+    // console.log(`Call to Promise.all took ${endTime - startTime} milliseconds`)
+    // // console.log(results)
+    let startTime
+    let endTime
+    // startTime = performance.now()
+    // // Related data START
+    // const forLoop = async () => {
+    //   for (const tab of this.tabs) {
+    //     const response = await this.$services.sarvREST.getResourceList(
+    //       'attachment_link',
+    //       {
+    //         isValid: isNil(this.file?.id),
+    //         defaultParams: {
+    //           [`${tab.id}__isnull`]: false,
+    //           attachment: this.file?.id,
+    //           nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+    //         },
+    //       }
+    //     )
+    //     tab.count = response.count || 0
+    //     tab.items = response.items || []
+    //   }
+    // }
+    // await forLoop()
+
+    // endTime = performance.now()
+
+    // console.log(`Call to forLoop took ${endTime - startTime} milliseconds`)
+
+    // eslint-disable-next-line prefer-const
+    startTime = performance.now()
     // Related data START
-    const forLoop = async () => {
+    const forLoop2 = () => {
       for (const tab of this.tabs) {
-        const response = await this.$services.sarvREST.getResourceList(
-          'attachment_link',
-          {
+        this.$services.sarvREST
+          .getResourceList('attachment_link', {
             isValid: isNil(this.file?.id),
             defaultParams: {
               [`${tab.id}__isnull`]: false,
               attachment: this.file?.id,
               nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
             },
-          }
-        )
-        tab.count = response.count || 0
-        tab.items = response.items || []
+          })
+          .then((response) => {
+            tab.count = response.count || 0
+            tab.items = response.items || []
+            return response
+          })
+        // eslint-disable-next-line promise/param-names
+        // await new Promise((r) => setTimeout(r, 500))
       }
     }
-    await forLoop()
+    forLoop2()
+
+    // eslint-disable-next-line prefer-const
+    endTime = performance.now()
+
+    console.log(`Call to forLoop2 took ${endTime - startTime} milliseconds`)
     // Related data END
   },
   fetchOnServer: false,
@@ -1079,6 +1151,14 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 video {
   max-width: 100%;
   vertical-align: middle;
