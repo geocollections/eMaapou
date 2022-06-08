@@ -12,11 +12,7 @@
           :gutter-height="15"
           monitor-images-loaded
         >
-          <stack-item
-            v-for="(news, i) in newsList"
-            :key="i"
-            style="opacity: 1; transition: opacity 300ms linear"
-          >
+          <stack-item v-for="(news, i) in newsList" :key="i">
             <news-preview-card
               :preview-lenght="500"
               :date="news.date_added"
