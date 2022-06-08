@@ -161,7 +161,7 @@ export default {
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
     graphs: 'Graafikud',
-    linkToAnalyticalData: 'Asukoha analüüsitulemused',
+    linkToAnalyticalData: 'Analüüsitulemused',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',
