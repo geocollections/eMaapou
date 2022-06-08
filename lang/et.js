@@ -162,6 +162,7 @@ export default {
     dateChanged: 'Kirje muudetud',
     graphs: 'Graafikud',
     linkToAnalyticalData: 'Analüüsitulemused',
+    linkGeoscienceLiterature: 'Geoloogiline kirjandus',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',

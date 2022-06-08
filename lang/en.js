@@ -161,6 +161,7 @@ export default {
     dateChanged: 'Date changed',
     graphs: 'Graphs',
     linkToAnalyticalData: 'View analytical data',
+    linkGeoscienceLiterature: 'Geoscience literature',
   },
   localitySynonym: {
     synonym: 'Synonym',

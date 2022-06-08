@@ -214,6 +214,18 @@
           <v-icon left>mdi-chart-scatter-plot</v-icon>
           {{ $t('locality.linkToAnalyticalData') }}
         </v-btn>
+        <v-btn
+          v-if="referenceCount > 0"
+          small
+          rounded
+          color="accent"
+          class="mt-2 montserrat text-none"
+          @click="goToGeoscienceLiterature"
+        >
+          <v-icon left>mdi-book-open-page-variant-outline</v-icon>
+          {{ $t('locality.linkGeoscienceLiterature') }}
+          <v-icon right>mdi-open-in-new</v-icon>
+        </v-btn>
       </v-card-text>
     </template>
     <template v-if="locality.latitude && locality.longitude" #column-right>
@@ -501,6 +513,9 @@ export default {
     analysisResultsCount() {
       return this.tabs?.find((tab) => tab.id === 'graphs')?.count
     },
+    referenceCount() {
+      return this.tabs?.find((tab) => tab.id === 'locality_reference')?.count
+    },
     type() {
       return this.locality?.type
     },
@@ -532,7 +547,18 @@ export default {
   methods: {
     isNil,
     isEmpty,
+    goToGeoscienceLiterature() {
+      const name = this.$translate({
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      })
 
+      window.open(
+        `https://kirjandus.geoloogia.info/reference/?localities=${name}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
     goToAnalyticalData() {
       this.analyticalDataLocality = this.$translate({
         et: this.locality.locality,
