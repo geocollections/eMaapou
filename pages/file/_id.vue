@@ -373,7 +373,7 @@
         >
           <v-col
             v-for="(item, index) in filteredTabs"
-            :key="index"
+            :key="`${item.title}-${index}`"
             cols="12"
             md="6"
           >
@@ -863,61 +863,8 @@ export default {
     }
     // Raw file content data END
 
-    // let startTime = performance.now()
-
-    // await Promise.allSettled(
-    //   this.tabs.map((tab) => {
-    //     return this.$services.sarvREST
-    //       .getResourceList('attachment_link', {
-    //         isValid: isNil(this.file?.id),
-    //         defaultParams: {
-    //           [`${tab.id}__isnull`]: false,
-    //           attachment: this.file?.id,
-    //           nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-    //         },
-    //       })
-    //       .then((response) => {
-    //         tab.count = response.count || 0
-    //         tab.items = response.items || []
-    //         return response
-    //       })
-    //   })
-    // )
-    // let endTime = performance.now()
-
-    // console.log(`Call to Promise.all took ${endTime - startTime} milliseconds`)
-    // // console.log(results)
-    let startTime
-    let endTime
-    // startTime = performance.now()
-    // // Related data START
-    // const forLoop = async () => {
-    //   for (const tab of this.tabs) {
-    //     const response = await this.$services.sarvREST.getResourceList(
-    //       'attachment_link',
-    //       {
-    //         isValid: isNil(this.file?.id),
-    //         defaultParams: {
-    //           [`${tab.id}__isnull`]: false,
-    //           attachment: this.file?.id,
-    //           nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-    //         },
-    //       }
-    //     )
-    //     tab.count = response.count || 0
-    //     tab.items = response.items || []
-    //   }
-    // }
-    // await forLoop()
-
-    // endTime = performance.now()
-
-    // console.log(`Call to forLoop took ${endTime - startTime} milliseconds`)
-
-    // eslint-disable-next-line prefer-const
-    startTime = performance.now()
     // Related data START
-    const forLoop2 = () => {
+    const getRelatedData = () => {
       for (const tab of this.tabs) {
         this.$services.sarvREST
           .getResourceList('attachment_link', {
@@ -937,12 +884,7 @@ export default {
         // await new Promise((r) => setTimeout(r, 500))
       }
     }
-    forLoop2()
-
-    // eslint-disable-next-line prefer-const
-    endTime = performance.now()
-
-    console.log(`Call to forLoop2 took ${endTime - startTime} milliseconds`)
+    getRelatedData()
     // Related data END
   },
   fetchOnServer: false,
