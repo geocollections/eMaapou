@@ -108,12 +108,12 @@
     </div>
     <template #placeholder>
       <div
-        :style="`height: ${height}px; width: 100%`"
-        class="d-flex align-center justify-center"
+        :style="`height: ${height}; width: 100%`"
+        class="d-flex align-center justify-center rounded secondary"
       >
         <v-progress-circular
           indeterminate
-          color="primary"
+          color="accent"
           :size="100"
           :width="6"
         />
