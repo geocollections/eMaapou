@@ -293,7 +293,7 @@ export default {
 
 .app-bar-transparent {
   &:hover {
-    background-color: #333333b3 !important;
+    background-color: #333333 !important;
   }
 }
 
