@@ -55,13 +55,8 @@
               </div>
             </div>
           </v-col>
-          <v-col
-            v-if="$vuetify.breakpoint.mdAndUp"
-            cols="12"
-            lg="6"
-            class="d-flex flex-column justify-end"
-          >
-            <v-row no-gutters class="mt-8">
+          <v-col cols="12" lg="6" class="d-flex flex-column justify-end">
+            <v-row no-gutters>
               <div
                 class="col-12 col-xl-auto d-flex flex-wrap"
                 :style="{
@@ -86,12 +81,23 @@
                       :elevation="hover ? 0 : 0"
                       :color="hover ? '#333333' : '#333333cc'"
                     >
-                      <div>
-                        <v-icon class="pl-3 pt-2" color="white" left>
+                      <div class="py-2 d-flex d-sm-block align-center">
+                        <v-icon
+                          v-if="$vuetify.breakpoint.smAndUp"
+                          class="pl-3"
+                          color="white"
+                          left
+                        >
                           {{ route.icon }}
                         </v-icon>
                         <div
-                          class="text-h4 pl-3 pt-2 font-weight-bold white--text"
+                          class="
+                            text-h5 text-sm-h4
+                            pl-2 pl-sm-3
+                            pt-sm-2
+                            font-weight-bold
+                            white--text
+                          "
                         >
                           {{
                             Math.max(
@@ -114,7 +120,7 @@
                             'text-body-1': $vuetify.breakpoint.smAndDown,
                           }"
                         >
-                          <div class="montserrat pb-1">
+                          <div class="montserrat">
                             {{ $t(route.text) }}
                           </div>
                         </div>
@@ -126,7 +132,7 @@
                   </v-hover>
                 </v-col>
                 <v-col cols="12">
-                  <div class="text-h4 white--text">
+                  <div class="text-h5 text-sm-h4 white--text">
                     {{ $t('landing.otherEmaapouServices') }}
                   </div>
                 </v-col>
@@ -143,7 +149,7 @@
                     <v-card
                       :href="route.href"
                       class="ma-1 d-flex py-2 fill-height"
-                      height="76"
+                      :height="$vuetify.breakpoint.smAndUp ? 76 : 56"
                       :elevation="hover ? 2 : 0"
                       :color="hover ? '#333333' : '#333333cc'"
                     >
@@ -615,7 +621,7 @@ export default {
     getTopHeight() {
       if (this.$vuetify.breakpoint.lgAndUp) return '825px'
       if (this.$vuetify.breakpoint.mdOnly) return '900px'
-      return 'unset'
+      return '1100px'
     },
   },
 }
