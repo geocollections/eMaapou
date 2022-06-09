@@ -36,6 +36,7 @@ export default {
     statText1: 'Specimens',
     statText2: 'Analyses',
     statText3: 'Samples',
+    otherEmaapouServices: 'Other e-maapõu services',
   },
   common: {
     general: 'General info',
@@ -116,6 +117,7 @@ export default {
   },
   locality: {
     pageTitle: 'Localities',
+    landingCard: 'localities',
     id: 'ID',
     locality: 'Locality',
     country: 'Country',
@@ -176,6 +178,7 @@ export default {
   },
   drillcore: {
     pageTitle: 'Drillcores',
+    landingCard: 'drillcores',
     id: 'ID',
     name: 'Name',
     boxes: 'Boxes',
@@ -311,6 +314,7 @@ export default {
     valueError: 'Error',
   },
   specimen: {
+    landingCard: 'specimens',
     id: 'ID',
     number: 'Specimen number',
     oldNumber: 'Old number',
@@ -426,6 +430,7 @@ export default {
   },
   sample: {
     pageTitle: 'Samples',
+    landingCard: 'samples',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -586,6 +591,7 @@ export default {
   kirjandus: {
     title: 'Geoscience Literature',
     description: 'Estonian Geoscience Literature Database',
+    landingCard: 'references',
   },
   gmre: {
     title: 'Geology of Estonia',
@@ -598,6 +604,7 @@ export default {
   fossiilid: {
     title: 'Baltoscandian Fossils',
     description: 'Baltoscandian Fossils',
+    landingCard: 'fossils',
   },
   kivid: {
     title: 'Minerals and Rocks',
@@ -605,6 +612,7 @@ export default {
   },
   stratigraphy: {
     title: 'Stratigraphy',
+    landingCard: 'stratigraphy',
     id: 'ID',
     stratigraphy: 'Stratigraphy',
     index_main: 'Index',
@@ -893,6 +901,7 @@ export default {
   analyticalData: {
     id: 'ID',
     pageTitle: 'Analytical data',
+    landingCard: 'analytical data',
     sample: 'Sample',
     locality: 'Locality',
     stratigraphy: 'Stratigraphy',
@@ -919,6 +928,7 @@ export default {
     isEmptyMessage: 'Nothing to show, please select an option.',
   },
   photo: {
+    landingCard: 'photos',
     pageTitle: 'Photo Archive',
     id: 'ID',
     number: 'Number',

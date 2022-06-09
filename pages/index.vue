@@ -6,10 +6,10 @@
       :style="{
         'background-image': cssProps.background,
         'background-color': '#333333',
-        height: $vuetify.breakpoint.lgAndUp ? '825px' : 'unset',
+        height: getTopHeight(),
       }"
     >
-      <v-container :fluid="$vuetify.breakpoint.smAndDown">
+      <v-container class="fill-height" :fluid="$vuetify.breakpoint.smAndDown">
         <v-row class="px-3" justify="space-around">
           <v-col cols="12" lg="6">
             <div class="d-flex flex-column pt-4 pt-md-8">
@@ -54,16 +54,23 @@
                 </v-card>
               </div>
             </div>
+          </v-col>
+          <v-col
+            v-if="$vuetify.breakpoint.mdAndUp"
+            cols="12"
+            lg="6"
+            class="d-flex flex-column justify-end"
+          >
             <v-row no-gutters class="mt-8">
               <div
                 class="col-12 col-xl-auto d-flex flex-wrap"
                 :style="{
-                  'max-width': $vuetify.breakpoint.xlOnly ? '660px' : 'unset',
+                  'max-width': $vuetify.breakpoint.xlOnly ? '780px' : 'unset',
                 }"
               >
                 <v-col
                   v-for="(route, index) in searchRoutes"
-                  :key="index"
+                  :key="`${route.routeName}-${index}`"
                   cols="12"
                   class="pa-0"
                   sm="6"
@@ -74,126 +81,98 @@
                     <v-card
                       nuxt
                       :to="localePath(route.routeName)"
-                      class="ma-1"
-                      :color="
-                        hover ? 'blue-grey lighten-4' : 'blue-grey lighten-5'
-                      "
+                      class="ma-1 d-flex"
+                      style="border: 1px solid white !important"
+                      :elevation="hover ? 0 : 0"
+                      :color="hover ? '#333333' : '#333333cc'"
                     >
-                      <v-card-title
-                        class="font-weight-regular"
-                        :class="{
-                          'text-body-1': $vuetify.breakpoint.smAndDown,
-                        }"
-                      >
-                        <v-icon color="accent" left>{{ route.icon }}</v-icon>
-                        <div class="montserrat">
-                          {{ $t(route.text) }}
-                        </div>
-                        <v-icon
-                          v-show="hover"
-                          color="accent"
-                          class="ml-auto"
-                          right
-                        >
-                          mdi-arrow-right
+                      <div>
+                        <v-icon class="pl-3 pt-2" color="white" left>
+                          {{ route.icon }}
                         </v-icon>
-                      </v-card-title>
-                    </v-card>
-                    <!-- <v-card
-                      nuxt
-                      :to="localePath(route.routeName)"
-                      :width="$vuetify.breakpoint.lgAndUp ? '210px' : 'auto'"
-                      :height="$vuetify.breakpoint.lgAndUp ? '200px' : 'auto'"
-                      class="ma-1 d-flex flex-column justify-center"
-                      :class="{ 'on-hover': hover }"
-                    >
-                      <v-card-title
-                        class="justify-center pb-0"
-                        :class="{
-                          'text-body-2 font-weight-medium':
-                            $vuetify.breakpoint.smAndDown,
-                        }"
-                      >
-                        <div class="montserrat">
-                          {{ $t(route.text) }}
+                        <div
+                          class="text-h4 pl-3 pt-2 font-weight-bold white--text"
+                        >
+                          {{
+                            Math.max(
+                              Math.floor(route.count / 1000) * 1000,
+                              Math.floor(route.count / 100) * 100
+                            )
+                              .toLocaleString()
+                              .replace(/,/g, '\u00A0')
+                          }}+
                         </div>
-                      </v-card-title>
-                      <v-card-text class="text-center py-6">
-                        <v-icon color="accent" x-large>{{ route.icon }}</v-icon>
-                      </v-card-text>
-                    </v-card> -->
+                        <div
+                          class="
+                            font-weight-regular
+                            text-h6
+                            pl-3
+                            pt-0
+                            white--text
+                          "
+                          :class="{
+                            'text-body-1': $vuetify.breakpoint.smAndDown,
+                          }"
+                        >
+                          <div class="montserrat pb-1">
+                            {{ $t(route.text) }}
+                          </div>
+                        </div>
+                      </div>
+                      <v-icon color="white" class="ml-auto pr-2">
+                        mdi-arrow-right
+                      </v-icon>
+                    </v-card>
+                  </v-hover>
+                </v-col>
+                <v-col cols="12">
+                  <div class="text-h4 white--text">
+                    {{ $t('landing.otherEmaapouServices') }}
+                  </div>
+                </v-col>
+                <v-col
+                  v-for="(route, index) in externalRoutes"
+                  :key="`external-card-${index}`"
+                  cols="12"
+                  class="pa-0"
+                  sm="6"
+                  md="4"
+                  lg="6"
+                >
+                  <v-hover v-slot="{ hover }">
+                    <v-card
+                      :href="route.href"
+                      class="ma-1 d-flex py-2 fill-height"
+                      height="76"
+                      :elevation="hover ? 2 : 0"
+                      :color="hover ? '#333333' : '#333333cc'"
+                    >
+                      <div class="d-flex align-center">
+                        <div
+                          class="
+                            font-weight-bold
+                            text-h5 text-capitalize
+                            pl-3
+                            pt-0
+                            white--text
+                          "
+                          :class="{
+                            'text-body-1': $vuetify.breakpoint.smAndDown,
+                          }"
+                        >
+                          <div class="montserrat pb-1">
+                            {{ $t(route.text) }}
+                          </div>
+                        </div>
+                      </div>
+                      <v-icon color="white" class="ml-auto pr-2">
+                        mdi-open-in-new
+                      </v-icon>
+                    </v-card>
                   </v-hover>
                 </v-col>
               </div>
             </v-row>
-          </v-col>
-          <v-col
-            v-if="$vuetify.breakpoint.mdAndUp"
-            cols="12"
-            lg="6"
-            class="d-flex flex-column justify-end"
-          >
-            <!-- <the-map-card v-if="$vuetify.breakpoint.lgAndUp" class="mt-8" /> -->
-            <v-card class="mb-10 mb-lg-0 elevation-0" color="transparent">
-              <v-card-text
-                class="
-                  white--text
-                  d-sm-flex
-                  flex-lg-column flex-xl-row
-                  justify-sm-space-around
-                  pa-0
-                "
-              >
-                <div class="px-md-10 py-4">
-                  <div class="text-h4 text-center font-weight-bold">
-                    {{
-                      (Math.floor(specimenCount / 1000) * 1000)
-                        .toLocaleString()
-                        .replace(/,/g, '\u00A0')
-                    }}+
-                  </div>
-                  <div class="text-h6 text-center font-weight-medium pb-3">
-                    {{ $t('landing.statText1') }}
-                  </div>
-                </div>
-                <!-- <v-divider
-                  style="border-color: white !important"
-                  :vertical="
-                    $vuetify.breakpoint.smAndUp && !$vuetify.breakpoint.lgOnly
-                  "
-                /> -->
-                <div class="px-md-10 py-4">
-                  <div class="text-h4 text-center font-weight-bold">
-                    {{
-                      (Math.floor(analysisCount / 1000) * 1000)
-                        .toLocaleString()
-                        .replace(/,/g, '\u00A0')
-                    }}+
-                  </div>
-                  <div class="text-h6 text-center font-weight-medium pb-3">
-                    {{ $t('landing.statText2') }}
-                  </div>
-                </div>
-                <!-- <v-divider
-                  style="border-color: white !important"
-                  :vertical="
-                    $vuetify.breakpoint.smAndUp && !$vuetify.breakpoint.lgOnly
-                  "
-                /> -->
-                <div class="px-md-10 py-4">
-                  <div class="text-h4 text-center font-weight-bold">
-                    {{
-                      (Math.floor(sampleCount / 1000) * 1000)
-                        .toLocaleString()
-                        .replace(/,/g, '\u00A0')
-                    }}+
-                  </div>
-                  <div class="text-h6 text-center font-weight-medium pb-3">
-                    {{ $t('landing.statText3') }}
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -251,7 +230,6 @@
 <script>
 import isEmpty from 'lodash/isEmpty'
 import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
-// import TheMapCard from '~/components/landing/TheMapCard.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
 import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
@@ -259,7 +237,6 @@ import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
 export default {
   components: {
     SearchFormQuick,
-    // TheMapCard,
     BaseHeader,
     TheNewsCard,
     ExternalLinkCard,
@@ -268,36 +245,98 @@ export default {
   async asyncData({ route, error, app }) {
     const data = await app.$services.sarvREST.getResource('web_pages', 87)
 
-    const [specimenResponse, analysisResponse, sampleResponse] =
-      await Promise.all([
-        await app.$services.sarvSolr
-          .getResourceList('specimen', {
-            defaultParams: { rows: 0 },
-          })
-          .catch((_) => {
-            return {}
-          }),
-        await app.$services.sarvSolr
-          .getResourceList('analysis', {
-            defaultParams: { rows: 0 },
-          })
-          .catch((_) => {
-            return {}
-          }),
-        await app.$services.sarvSolr
-          .getResourceList('sample', {
-            defaultParams: { rows: 0 },
-          })
-          .catch((_) => {
-            return {}
-          }),
-      ])
+    const [
+      specimenResponse,
+      analysisResponse,
+      sampleResponse,
+      localityResponse,
+      photoResponse,
+      drillcoreResponse,
+    ] = await Promise.all([
+      app.$services.sarvSolr
+        .getResourceList('specimen', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return {}
+        }),
+      app.$services.sarvSolr
+        .getResourceList('analysis', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return {}
+        }),
+      app.$services.sarvSolr
+        .getResourceList('sample', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return {}
+        }),
+      app.$services.sarvSolr
+        .getResourceList('locality', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return {}
+        }),
+      app.$services.sarvSolr
+        .getResourceList('attachment', {
+          defaultParams: { rows: 0, fq: 'specimen_image_attachment:"2"' },
+        })
+        .catch((_) => {
+          return {}
+        }),
+      app.$services.sarvSolr
+        .getResourceList('drillcore', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return {}
+        }),
+    ])
 
     return {
+      searchRoutes: [
+        {
+          routeName: 'locality',
+          text: 'locality.landingCard',
+          icon: 'mdi-map-marker-outline',
+          count: localityResponse?.count ?? 13000,
+        },
+        {
+          routeName: 'sample',
+          text: 'sample.landingCard',
+          icon: 'mdi-test-tube',
+          count: sampleResponse?.count ?? 156000,
+        },
+        {
+          routeName: 'drillcore',
+          text: 'drillcore.landingCard',
+          icon: 'mdi-screw-machine-flat-top',
+          count: drillcoreResponse?.count ?? 500,
+        },
+        {
+          routeName: 'specimen',
+          text: 'specimen.landingCard',
+          icon: 'mdi-microscope',
+          count: specimenResponse?.count ?? 284000,
+        },
+        {
+          routeName: 'photo',
+          text: 'photo.landingCard',
+          icon: 'mdi-file-image-outline',
+          count: photoResponse?.count ?? 20000,
+        },
+        {
+          routeName: 'analytical-data',
+          text: 'analyticalData.landingCard',
+          icon: 'mdi-chart-line',
+          count: analysisResponse?.count ?? 249000,
+        },
+      ],
       page: data,
-      specimenCount: specimenResponse?.count ?? 284000,
-      analysisCount: analysisResponse?.count ?? 249000,
-      sampleCount: sampleResponse?.count ?? 156000,
     }
   },
   data() {
@@ -306,47 +345,22 @@ export default {
       drawer: false,
       showMap: false,
       scrollY: 0,
-      searchRoutes: [
+      externalRoutes: [
         {
-          routeName: 'locality',
-          text: 'locality.pageTitle',
-          icon: 'mdi-map-marker-outline',
+          text: 'kirjandus.title',
+          href: 'https://kirjandus.geoloogia.info',
+          icon: 'mdi-book-open-page-variant-outline',
         },
         {
-          routeName: 'sample',
-          text: 'sample.pageTitle',
-          icon: 'mdi-test-tube',
-        },
-        {
-          routeName: 'drillcore',
-          text: 'drillcore.pageTitle',
-          icon: 'mdi-screw-machine-flat-top',
-        },
-        {
-          routeName: 'specimen',
-          text: 'specimen.pageTitle',
-          icon: 'mdi-microscope',
-        },
-        {
-          routeName: 'photo',
-          text: 'photo.pageTitle',
-          icon: 'mdi-file-image-outline',
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
+          text: 'fossiilid.title',
+          href: 'https://fossils.info',
           icon: 'mdi-chart-line',
         },
-        // {
-        //   routeName: 'analysis',
-        //   text: 'analysis.pageTitle',
-        //   icon: 'mdi-chart-scatter-plot',
-        // },
-        // {
-        //   routeName: 'analytical-data',
-        //   text: 'analyticalData.pageTitle',
-        //   icon: 'mdi-chart-line',
-        // },
+        {
+          text: 'stratigraphy.title',
+          href: 'https://stratigraafia.info',
+          icon: 'mdi-layers-triple',
+        },
       ],
       imageLinks: [
         {
@@ -597,6 +611,11 @@ export default {
         ? { ...this.$route.query }
         : { ...this.$route.query, q: this.search }
       this.$router.push(this.localePath({ name: routeName, query }))
+    },
+    getTopHeight() {
+      if (this.$vuetify.breakpoint.lgAndUp) return '825px'
+      if (this.$vuetify.breakpoint.mdOnly) return '900px'
+      return 'unset'
     },
   },
 }

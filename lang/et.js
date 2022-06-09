@@ -36,6 +36,7 @@ export default {
     statText1: 'Eksemplari',
     statText2: 'Analüüsi',
     statText3: 'Proovi',
+    otherEmaapouServices: 'Teised e-maapõu teenused',
   },
   common: {
     general: 'Üldinfo',
@@ -117,6 +118,7 @@ export default {
   },
   locality: {
     pageTitle: 'Lokaliteedid',
+    landingCard: 'lokaliteeti',
     id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
@@ -177,6 +179,7 @@ export default {
   },
   drillcore: {
     pageTitle: 'Puursüdamikud',
+    landingCard: 'puursüdamikku',
     id: 'ID',
     name: 'Nimi',
     boxes: 'Südamikukaste',
@@ -313,6 +316,7 @@ export default {
   },
   specimen: {
     id: 'ID',
+    landingCard: 'eksemplari',
     number: 'Eksemplari nr.',
     oldNumber: 'Vana nr.',
     depth: 'Sügavus (m)',
@@ -427,6 +431,7 @@ export default {
   },
   sample: {
     pageTitle: 'Proovid',
+    landingCard: 'proovi',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -587,6 +592,7 @@ export default {
   kirjandus: {
     title: 'Geoloogiline kirjandus',
     description: 'Eesti maapõue kirjanduse andmebaas',
+    landingCard: 'kirjet',
   },
   gmre: {
     title: 'Eesti Geoloogia',
@@ -599,6 +605,7 @@ export default {
   fossiilid: {
     title: 'Fossiilid',
     description: 'Baltoskandia fossiilide portaal',
+    landingCard: 'fossiili',
   },
   kivid: {
     title: 'Mineraalid ja kivimid',
@@ -606,6 +613,7 @@ export default {
   },
   stratigraphy: {
     title: 'Stratigraafia',
+    landingCard: 'stratigraafiat',
     id: 'ID',
     stratigraphy: 'Stratigraafia',
     index_main: 'Indeks',
@@ -894,6 +902,7 @@ export default {
   analyticalData: {
     id: 'ID',
     pageTitle: 'Laboriandmed',
+    landingCard: 'laboriandmeid',
     sample: 'Proov',
     locality: 'Lokaliteet',
     stratigraphy: 'Stratigraafia',
@@ -921,6 +930,7 @@ export default {
   },
   photo: {
     pageTitle: 'Fotoarhiiv',
+    landingCard: 'fotot',
     id: 'ID',
     number: 'Number',
     agent: 'Autor',
