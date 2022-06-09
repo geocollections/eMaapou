@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-5">
+  <div class="pt-5 mx-auto" style="max-width: 800px">
     <base-header
       :title="$t('about.title')"
       style="border-color: var(--v-header-darken1)"
@@ -25,6 +25,7 @@
 import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
   components: { BaseHeader },
+  layout: 'news',
   async asyncData({ route, error, app }) {
     try {
       const data = await app.$services.sarvREST.getResource('web_pages', 78)
