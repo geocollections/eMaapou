@@ -4,7 +4,7 @@
       dark
       class="transition-swing"
       :class="{ 'on-hover': hover }"
-      :elevation="hover ? 12 : 2"
+      :elevation="hover ? 2 : 0"
       :href="href"
       target="_blank"
     >
@@ -17,7 +17,7 @@
         height="190px"
         content-class=""
       >
-        <div class="rounded-t" style="background-color: rgba(0, 0, 0, 0.4)">
+        <div class="rounded-t" style="background-color: #333333cc">
           <v-card-title style="word-break: keep-all" class="montserrat text-h6"
             >{{ title }}
             <v-icon right x-small class="align-self-start">
