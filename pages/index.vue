@@ -10,9 +10,9 @@
       }"
     >
       <v-container class="fill-height" :fluid="$vuetify.breakpoint.smAndDown">
-        <v-row class="px-3" justify="space-around">
+        <v-row class="px-3">
           <v-col cols="12" lg="6">
-            <div class="d-flex flex-column pt-4 pt-md-8">
+            <div class="d-flex flex-column align-xl-center pt-4 pt-md-8">
               <!-- <div class="text-h5 text-md-h4 white--text font-weight-regular">
                 {{ $t('title') }}
               </div> -->
@@ -24,6 +24,9 @@
                   align-center
                   white--text
                 "
+                :style="{
+                  'max-width': $vuetify.breakpoint.xlOnly ? '660px' : 'default',
+                }"
               >
                 {{ $t('subtitle') }}
               </div>
@@ -55,7 +58,11 @@
               </div>
             </div>
           </v-col>
-          <v-col cols="12" lg="6" class="d-flex flex-column justify-end">
+          <v-col
+            cols="12"
+            lg="6"
+            class="d-flex flex-column align-center justify-end"
+          >
             <v-row no-gutters>
               <div
                 class="col-12 col-xl-auto d-flex flex-wrap"
