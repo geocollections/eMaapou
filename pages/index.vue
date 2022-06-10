@@ -77,7 +77,6 @@
                       nuxt
                       :to="localePath(route.routeName)"
                       class="ma-1 d-flex"
-                      style="border: 1px solid white !important"
                       :elevation="hover ? 0 : 0"
                       :color="hover ? '#333333' : '#333333cc'"
                     >
