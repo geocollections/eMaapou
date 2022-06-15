@@ -108,6 +108,7 @@ export default {
     browse: 'Sirvi',
     partners: 'Partnerid',
     services: 'E-Teenused',
+    accept: 'Nõustun',
   },
   link: {
     sarvAPI: 'Avalik API',

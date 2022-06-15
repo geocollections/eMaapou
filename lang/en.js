@@ -107,6 +107,7 @@ export default {
     browse: 'Browse',
     partners: 'Partners',
     services: 'E-Services',
+    accept: 'Accept',
   },
   link: {
     github: 'GitHub',
