@@ -1,43 +1,46 @@
 <template>
-  <v-card
-    v-bind="$attrs"
-    class="py-2"
-    :style="styleObject"
-    @click.stop="$emit('click')"
-  >
-    <div
-      class="text-right pr-4 montserrat text--secondary"
-      :class="{ 'white--text': dark }"
+  <v-hover v-slot="{ hover }">
+    <v-card
+      v-bind="$attrs"
+      class="py-2"
+      :elevation="hover ? 2 : 1"
+      :style="styleObject"
+      @click.stop="$emit('click')"
     >
-      {{ $formatDate(date) }}
-    </div>
-    <v-card-title
-      class="montserrat pt-0"
-      :class="{ 'white--text': dark }"
-      style="word-break: normal"
-      >{{ title }}</v-card-title
-    >
-
-    <v-card-text
-      class="pb-0 text-body-1"
-      style="color: rgba(0, 0, 0, 0.7)"
-      :class="{ 'white--text': dark }"
-    >
-      {{ extractContent(content) | truncate(previewLenght) }}
-    </v-card-text>
-
-    <v-card-actions class="justify-self-end py-0">
-      <v-spacer />
-      <v-btn
-        :color="dark ? 'white' : 'accent'"
-        class="text-none"
-        text
-        @click="$emit('click')"
+      <div
+        class="text-right pr-4 montserrat text--secondary"
+        :class="{ 'white--text': dark }"
       >
-        {{ $t('common.readNewsArticle') }}</v-btn
+        {{ $formatDate(date) }}
+      </div>
+      <v-card-title
+        class="montserrat pt-0"
+        :class="{ 'white--text': dark }"
+        style="word-break: normal"
+        >{{ title }}</v-card-title
       >
-    </v-card-actions>
-  </v-card>
+
+      <v-card-text
+        class="pb-0 text-body-1"
+        style="color: rgba(0, 0, 0, 0.7)"
+        :class="{ 'white--text': dark }"
+      >
+        {{ extractContent(content) | truncate(previewLenght) }}
+      </v-card-text>
+
+      <v-card-actions class="justify-self-end py-0">
+        <v-spacer />
+        <v-btn
+          :color="dark ? 'white' : 'accent'"
+          class="text-none"
+          text
+          @click="$emit('click')"
+        >
+          {{ $t('common.readNewsArticle') }}</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-hover>
 </template>
 
 <script>

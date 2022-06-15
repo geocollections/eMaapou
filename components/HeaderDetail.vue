@@ -1,7 +1,16 @@
 <template>
   <base-header>
     <v-card-title
-      class="d-flex align-start font-weight-medium text-h4 pt-1 px-0 pb-6 px-sm-3"
+      class="
+        d-flex
+        align-start
+        font-weight-medium
+        text-h4
+        pt-1
+        px-0
+        pb-3
+        px-sm-3
+      "
       style="word-break: normal"
     >
       <slot>
@@ -12,26 +21,6 @@
 
     <template #before>
       <div v-if="$vuetify.breakpoint.smAndUp" class="d-flex px-0 px-sm-3 pb-0">
-        <!-- <v-btn
-          id="first-id"
-          nuxt
-          icon
-          :disabled="!computedFirstId"
-          :title="$t('common.first', { id: computedFirstId })"
-          @click="
-            debouncedNavigation(
-              localePath({
-                params: { ...$route.params, id: computedFirstId },
-              })
-            )
-          "
-        >
-          <v-icon>mdi-page-first</v-icon>
-          <v-tooltip bottom activator="#first-id">
-            <span>{{ $t('common.first', { id: computedFirstId }) }}</span>
-          </v-tooltip>
-        </v-btn> -->
-
         <v-btn
           id="previous-id"
           nuxt
@@ -54,7 +43,15 @@
 
         <back-button-detail />
         <div
-          class="d-flex align-center montserrat grey--text text--darken-1 pt-0 px-0 px-sm-3"
+          class="
+            d-flex
+            align-center
+            montserrat
+            grey--text
+            text--darken-1
+            pt-0
+            px-0 px-sm-3
+          "
         >
           {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
         </div>
@@ -77,25 +74,6 @@
             <span>{{ $t('common.next', { id: computedNextId }) }}</span>
           </v-tooltip>
         </v-btn>
-        <!-- <v-btn
-          id="last-id"
-          nuxt
-          icon
-          :disabled="!computedLastId"
-          :title="$t('common.last', { id: computedLastId })"
-          @click="
-            debouncedNavigation(
-              localePath({
-                params: { ...$route.params, id: computedLastId },
-              })
-            )
-          "
-        >
-          <v-icon>mdi-page-last</v-icon>
-          <v-tooltip bottom activator="#last-id">
-            <span>{{ $t('common.last', { id: computedLastId }) }}</span>
-          </v-tooltip>
-        </v-btn> -->
       </div>
     </template>
   </base-header>

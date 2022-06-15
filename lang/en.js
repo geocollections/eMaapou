@@ -1,6 +1,6 @@
 export default {
-  title: 'e·Maapõu',
-  subtitle: 'Geological data and e\u2011services in Estonia',
+  title: 'eMaapõu',
+  subtitle: 'Geological data and e\u2011services',
   slogan: 'Estonian geology data portal',
   landing: {
     searchTitle: 'Find from e·Maapõu',
@@ -37,6 +37,10 @@ export default {
     statText2: 'Analyses',
     statText3: 'Samples',
     otherEmaapouServices: 'Other e-maapõu services',
+    otherServices: 'Other services',
+    searchPlaceholder: 'Search eMaapõu',
+    description:
+      'e-Maapõu is a window to geological information in Estonia,proving direct search functionality to the data hosted in the',
   },
   common: {
     general: 'General info',
@@ -901,7 +905,7 @@ export default {
   analyticalData: {
     id: 'ID',
     pageTitle: 'Analytical data',
-    landingCard: 'analytical data',
+    landingCard: 'analyses',
     sample: 'Sample',
     locality: 'Locality',
     stratigraphy: 'Stratigraphy',

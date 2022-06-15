@@ -1,6 +1,6 @@
 export default {
-  title: 'e·Maapõu',
-  subtitle: 'Maapõue andmed ja e\u2011teenused',
+  title: 'eMaapõu',
+  subtitle: 'Geoloogilised andmed ja e\u2011teenused',
   slogan: 'Kogu info Eesti maapõuest',
   landing: {
     searchTitle: 'Leia e·Maapõuest',
@@ -29,7 +29,8 @@ export default {
     searchRoutes: 'Sirvi e-Maapõues',
     eMaapouPages: 'e·Maapõu ökosüsteem',
     map: 'Andmed kaardil',
-    quickSearch: 'Leia kiirelt',
+    quickSearch:
+      'Leia kiirelt Leia kiireltLeia kiireltLeia kiireltLeia kiirelt',
     viewMore: 'Vaata lähemalt',
     intro:
       'e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja e-teenuste juurde. Lihtsaim viis e-Maapõuest andmete otsimiseks või sirvimiseks on kasutada portaali kiirotsingut. Detailotsingu moodulites on võimalik piiritleda täpsemad päringukriteeriumid, kasutada kaardiotsingut, kuvada pildifaile, andmeid eksportida ning analüüsida.',
@@ -37,6 +38,10 @@ export default {
     statText2: 'Analüüsi',
     statText3: 'Proovi',
     otherEmaapouServices: 'Teised e-maapõu teenused',
+    otherServices: 'Teised teenused',
+    searchPlaceholder: 'Otsi eMaapõuest',
+    description:
+      'e-Maapõu is a window to geological information in Estonia,proving direct search functionality to the data hosted in the',
   },
   common: {
     general: 'Üldinfo',
@@ -902,7 +907,7 @@ export default {
   analyticalData: {
     id: 'ID',
     pageTitle: 'Laboriandmed',
-    landingCard: 'laboriandmeid',
+    landingCard: 'analüüsi',
     sample: 'Proov',
     locality: 'Lokaliteet',
     stratigraphy: 'Stratigraafia',

@@ -1,7 +1,7 @@
 <template>
   <div class="mb-10">
     <div
-      class="spacer pb-10 pd-md-4"
+      class="spacer pd-md-4"
       style="padding-top: 64px"
       :style="{
         'background-image': cssProps.background,
@@ -9,228 +9,97 @@
         height: getTopHeight(),
       }"
     >
-      <v-container class="fill-height" :fluid="$vuetify.breakpoint.smAndDown">
-        <v-row class="px-3">
-          <v-col cols="12" lg="6">
-            <div class="d-flex flex-column align-xl-center pt-4 pt-md-8">
-              <!-- <div class="text-h5 text-md-h4 white--text font-weight-regular">
-                {{ $t('title') }}
-              </div> -->
+      <v-container
+        :fluid="$vuetify.breakpoint.smAndDown"
+        style="max-width: 1185px !important"
+      >
+        <v-row class="mb-lg-5">
+          <v-col>
+            <div class="d-flex pt-4 pt-md-8" :style="{ 'max-width': '1000px' }">
+              <div class="text-h3 text-md-h2 white--text font-weight-bold">
+                {{ $t('title') }}:
+                <span class="text-h3 text-md-h2 font-weight-light white--text">
+                  {{ $t('subtitle') }}
+                </span>
+              </div>
               <!-- SUBTITLE -->
-              <div
-                class="
-                  text-h3 text-md-h2
-                  font-weight-bold
-                  align-center
-                  white--text
-                "
-                :style="{
-                  'max-width': $vuetify.breakpoint.xlOnly ? '660px' : 'default',
-                }"
-              >
-                {{ $t('subtitle') }}
-              </div>
-              <div>
-                <v-card
-                  :width="$vuetify.breakpoint.lgAndUp ? '660px' : 'unset'"
-                  class="mt-3 mt-md-6"
-                  tile
-                  flat
-                  color="transparent"
-                >
-                  <v-card-title
-                    style="word-break: break-word"
-                    :class="{
-                      'font-small montserrat': $vuetify.breakpoint.smAndDown,
-                    }"
-                    class="px-0 text-sm-h5 white--text"
-                  >
-                    {{ $t('landing.quickSearch') }}
-                  </v-card-title>
-                  <v-card-actions class="pa-0">
-                    <search-form-quick
-                      style="width: 100%"
-                      :only-icon="$vuetify.breakpoint.smAndDown"
-                      @submit="handleSearch"
-                    />
-                  </v-card-actions>
-                </v-card>
-              </div>
             </div>
           </v-col>
-          <v-col
-            cols="12"
-            lg="6"
-            class="d-flex flex-column align-center justify-end"
-          >
-            <v-row no-gutters>
-              <div
-                class="col-12 col-xl-auto d-flex flex-wrap"
-                :style="{
-                  'max-width': $vuetify.breakpoint.xlOnly ? '780px' : 'unset',
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="5">
+            <v-card
+              class=""
+              :width="$vuetify.breakpoint.lgAndUp ? '660px' : 'unset'"
+              tile
+              flat
+              color="transparent"
+            >
+              <v-card-actions class="pa-0">
+                <search-form-quick
+                  style="width: 100%"
+                  :only-icon="$vuetify.breakpoint.smAndDown"
+                  @submit="handleSearch"
+                />
+              </v-card-actions>
+              <v-card-title
+                style="word-break: break-word"
+                :class="{
+                  'font-small montserrat': $vuetify.breakpoint.smAndDown,
                 }"
+                class="text-sm-h5 white--text"
               >
-                <v-col
-                  v-for="(route, index) in searchRoutes"
-                  :key="`${route.routeName}-${index}`"
-                  cols="12"
-                  class="pa-0"
-                  sm="6"
-                  md="4"
-                  lg="6"
-                >
-                  <v-hover v-slot="{ hover }">
-                    <v-card
-                      nuxt
-                      :to="localePath(route.routeName)"
-                      class="ma-1 d-flex"
-                      :elevation="hover ? 0 : 0"
-                      :color="hover ? '#333333' : '#333333cc'"
-                    >
-                      <div class="py-2 d-flex d-sm-block align-center">
-                        <v-icon
-                          v-if="$vuetify.breakpoint.smAndUp"
-                          class="pl-3"
-                          color="white"
-                          left
-                        >
-                          {{ route.icon }}
-                        </v-icon>
-                        <div
-                          class="
-                            text-h5 text-sm-h4
-                            pl-2 pl-sm-3
-                            pt-sm-2
-                            font-weight-bold
-                            white--text
-                          "
-                        >
-                          {{
-                            Math.max(
-                              Math.floor(route.count / 1000) * 1000,
-                              Math.floor(route.count / 100) * 100
-                            )
-                              .toLocaleString()
-                              .replace(/,/g, '\u00A0')
-                          }}+
-                        </div>
-                        <div
-                          class="
-                            font-weight-regular
-                            text-h6
-                            pl-3
-                            pt-0
-                            white--text
-                          "
-                          :class="{
-                            'text-body-1': $vuetify.breakpoint.smAndDown,
-                          }"
-                        >
-                          <div class="montserrat">
-                            {{ $t(route.text) }}
-                          </div>
-                        </div>
-                      </div>
-                      <v-icon color="white" class="ml-auto pr-2">
-                        mdi-arrow-right
-                      </v-icon>
-                    </v-card>
-                  </v-hover>
-                </v-col>
-                <v-col cols="12">
-                  <div class="text-h5 text-sm-h4 white--text">
-                    {{ $t('landing.otherEmaapouServices') }}
-                  </div>
-                </v-col>
-                <v-col
-                  v-for="(route, index) in externalRoutes"
-                  :key="`external-card-${index}`"
-                  cols="12"
-                  class="pa-0"
-                  sm="6"
-                  md="4"
-                  lg="6"
-                >
-                  <v-hover v-slot="{ hover }">
-                    <v-card
-                      :href="route.href"
-                      class="ma-1 d-flex py-2 fill-height"
-                      :height="$vuetify.breakpoint.smAndUp ? 76 : 56"
-                      :elevation="hover ? 2 : 0"
-                      :color="hover ? '#333333' : '#333333cc'"
-                    >
-                      <div class="d-flex align-center">
-                        <div
-                          class="
-                            font-weight-bold
-                            text-h5 text-capitalize
-                            pl-3
-                            pt-0
-                            white--text
-                          "
-                          :class="{
-                            'text-body-1': $vuetify.breakpoint.smAndDown,
-                          }"
-                        >
-                          <div class="montserrat pb-1">
-                            {{ $t(route.text) }}
-                          </div>
-                        </div>
-                      </div>
-                      <v-icon color="white" class="ml-auto pr-2">
-                        mdi-open-in-new
-                      </v-icon>
-                    </v-card>
-                  </v-hover>
-                </v-col>
-              </div>
-            </v-row>
+                {{ $t('landing.description') }}
+              </v-card-title>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="7" class="pl-lg-10">
+            <v-card color="transparent" flat>
+              <v-row no-gutters justify="center">
+                <div class="col-12 col-xl-auto d-flex flex-wrap">
+                  <v-col
+                    v-for="(route, index) in searchRoutes"
+                    :key="`${route.routeName}-${index}`"
+                    cols="12"
+                    class="pa-0"
+                    sm="6"
+                    md="6"
+                    lg="6"
+                  >
+                    <card-route-link :route="route" />
+                  </v-col>
+                </div>
+              </v-row>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
     </div>
-    <v-container class="pt-0" :fluid="$vuetify.breakpoint.smAndDown">
+    <v-container
+      class=""
+      :fluid="$vuetify.breakpoint.smAndDown"
+      style="max-width: 1185px !important"
+    >
       <v-row justify="center" class="mt-4">
-        <v-col cols="12" lg="6" class="pl-5">
-          <base-header :title="$t('about.title')" />
-
-          <div
-            class="aboutpage px-2 px-sm-5 text-body-1"
-            :style="{ 'column-count': aboutTextColumns }"
-            v-html="$translate({ et: page.content_et, en: page.content_en })"
-          ></div>
-        </v-col>
-        <v-col cols="12" lg="6" class="pr-5">
+        <v-col cols="12" md="8" class="pr-5">
           <client-only>
             <the-news-card />
           </client-only>
         </v-col>
-      </v-row>
-      <v-row class="my-2 mt-5" justify="center" align="center">
-        <v-col id="otherServices" cols="12">
-          <base-header :title="$t('landing.otherPages')" />
-        </v-col>
-        <v-col cols="12">
-          <v-row class="px-2 px-sm-5">
+        <v-col cols="12" md="4" class="pl-lg-5">
+          <base-header :title="$t('landing.otherServices')" />
+
+          <v-row no-gutters>
             <v-col
-              v-for="(item, index) in externalCards.ids.map(
+              v-for="(route, index) in externalCards.ids.map(
                 (id) => externalCards[id]
               )"
-              :key="`inner-${index}`"
-              class="pa-1"
+              :key="`external-card-${index}`"
               cols="12"
-              :sm="item.sm || 6"
-              :md="item.md || 6"
+              lg="12"
+              class="pb-2 px-1"
             >
-              <external-link-card
-                :title="$t(item.title)"
-                :description="$t(item.description)"
-                :href="item.href"
-                :background="
-                  $img(item.background, null, { provider: 'static' })
-                "
-                grayscale
-              />
+              <card-external-service :route="route" />
             </v-col>
           </v-row>
         </v-col>
@@ -244,14 +113,16 @@ import isEmpty from 'lodash/isEmpty'
 import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
-import ExternalLinkCard from '~/components/ExternalLinkCard.vue'
+import CardExternalService from '~/components/card/CardExternalService.vue'
+import CardRouteLink from '~/components/card/CardRouteLink.vue'
 
 export default {
   components: {
     SearchFormQuick,
     BaseHeader,
     TheNewsCard,
-    ExternalLinkCard,
+    CardExternalService,
+    CardRouteLink,
   },
   layout: 'landing',
   async asyncData({ route, error, app }) {
@@ -312,6 +183,12 @@ export default {
     return {
       searchRoutes: [
         {
+          routeName: 'specimen',
+          text: 'specimen.landingCard',
+          icon: 'mdi-microscope',
+          count: specimenResponse?.count ?? 284000,
+        },
+        {
           routeName: 'locality',
           text: 'locality.landingCard',
           icon: 'mdi-map-marker-outline',
@@ -330,22 +207,16 @@ export default {
           count: drillcoreResponse?.count ?? 500,
         },
         {
-          routeName: 'specimen',
-          text: 'specimen.landingCard',
-          icon: 'mdi-microscope',
-          count: specimenResponse?.count ?? 284000,
+          routeName: 'analytical-data',
+          text: 'analyticalData.landingCard',
+          icon: 'mdi-chart-line',
+          count: analysisResponse?.count ?? 249000,
         },
         {
           routeName: 'photo',
           text: 'photo.landingCard',
           icon: 'mdi-file-image-outline',
           count: photoResponse?.count ?? 20000,
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.landingCard',
-          icon: 'mdi-chart-line',
-          count: analysisResponse?.count ?? 249000,
         },
       ],
       page: data,
@@ -362,16 +233,19 @@ export default {
           text: 'kirjandus.title',
           href: 'https://kirjandus.geoloogia.info',
           icon: 'mdi-book-open-page-variant-outline',
+          description: 'kirjandus.description',
         },
         {
           text: 'fossiilid.title',
           href: 'https://fossils.info',
           icon: 'mdi-chart-line',
+          description: 'fossiilid.description',
         },
         {
           text: 'stratigraphy.title',
           href: 'https://stratigraafia.info',
           icon: 'mdi-layers-triple',
+          description: 'stratigraphy.description',
         },
       ],
       imageLinks: [
@@ -578,8 +452,7 @@ export default {
   computed: {
     cssProps() {
       return {
-        background: `url(${this.backgroundSvg}),
-    linear-gradient(to right, #00000099, #00000099), url(${this.backgroundImg})`,
+        background: `url(${this.backgroundSvg}), url(${this.backgroundImg})`,
       }
     },
     tabValue() {
@@ -625,9 +498,10 @@ export default {
       this.$router.push(this.localePath({ name: routeName, query }))
     },
     getTopHeight() {
-      if (this.$vuetify.breakpoint.lgAndUp) return '825px'
-      if (this.$vuetify.breakpoint.mdOnly) return '900px'
-      return '1100px'
+      if (this.$vuetify.breakpoint.lgAndUp) return '675px'
+      if (this.$vuetify.breakpoint.mdOnly) return '675px'
+      if (this.$vuetify.breakpoint.smOnly) return '775px'
+      return '875px'
     },
   },
 }
@@ -635,11 +509,11 @@ export default {
 
 <style lang="scss" scoped>
 .spacer {
-  aspect-ratio: 960/540;
+  aspect-ratio: 900/600;
   width: 100%;
   background-repeat: no-repeat;
-  background-position: bottom, center, center;
-  background-size: cover;
+  background-position: bottom, center;
+  background-size: cover, cover;
 }
 
 .layer1 {
