@@ -79,23 +79,8 @@ export default ($axios) => ({
 })
 
 const buildSolrQueryParameter = (search) => {
-  const s = search
-    ? search
-        .split(' ')
-        .map((s) => {
-          if (
-            !s.startsWith('-') &&
-            s.includes('-') &&
-            !s.startsWith('"') &&
-            !s.endsWith('"')
-          )
-            return `"${s}"`
-          return s
-        })
-        .join(' ')
-    : null
   return {
-    q: isEmpty(s) ? '*' : `${s}`,
+    q: search || '*',
   }
 }
 
