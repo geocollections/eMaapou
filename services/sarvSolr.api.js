@@ -191,9 +191,14 @@ const buildSolrParameters = (filters) => {
     .reduce((prev, [_, filter]) => {
       switch (filter.type) {
         case 'text': {
+          // eslint-disable-next-line no-useless-escape
+          const pattern = /([\!\*\+\-\=\<\>\&\|\(\)\[\]\{\}\^\~\?\:\\/"])/g
+
+          const value = filter.value.replace(pattern, '\\$1')
+
           const solrFilter = filter.fields
             .map((field) =>
-              createSolrFieldQuery(field, filter.value, filter.lookUpType)
+              createSolrFieldQuery(field, value, filter.lookUpType)
             )
             .join(' OR ')
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
