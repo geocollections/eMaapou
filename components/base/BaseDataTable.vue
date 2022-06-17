@@ -13,6 +13,7 @@
       mobile-breakpoint="0"
       dense
       calculate-widths
+      fixed-header
       multi-sort
       :loading="isLoading"
       :headers="visibleHeaders"
@@ -248,6 +249,10 @@ export default {
   }
 
   th {
+    // position: sticky;
+    // top: 0px;
+    background-color: white;
+
     &.sortable {
       white-space: nowrap;
     }

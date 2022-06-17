@@ -1,6 +1,6 @@
 export default {
   title: 'eMaapõu',
-  subtitle: 'Geological data and e\u2011services',
+  subtitle: 'Geoscience data and e\u2011services',
   slogan: 'Estonian geology data portal',
   landing: {
     searchTitle: 'Find from e·Maapõu',
@@ -40,7 +40,7 @@ export default {
     otherServices: 'Other services',
     searchPlaceholder: 'Search eMaapõu',
     description:
-      'e-Maapõu is a window to geological information in Estonia,proving direct search functionality to the data hosted in the',
+      'eMaapõu provides open access to geoscience data in Estonia. It is developed by the national research infrastructure NATARC.',
   },
   common: {
     general: 'General info',

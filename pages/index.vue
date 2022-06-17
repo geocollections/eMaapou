@@ -35,7 +35,7 @@
               flat
               color="transparent"
             >
-              <v-card-actions class="pa-0">
+              <v-card-actions class="px-0 pt-md-10">
                 <search-form-quick
                   style="width: 100%"
                   :only-icon="$vuetify.breakpoint.smAndDown"
@@ -43,6 +43,7 @@
                 />
               </v-card-actions>
               <v-card-title
+                v-show="$vuetify.breakpoint.mdAndUp"
                 style="word-break: break-word"
                 :class="{
                   'font-small montserrat': $vuetify.breakpoint.smAndDown,
@@ -500,8 +501,8 @@ export default {
     getTopHeight() {
       if (this.$vuetify.breakpoint.lgAndUp) return '675px'
       if (this.$vuetify.breakpoint.mdOnly) return '675px'
-      if (this.$vuetify.breakpoint.smOnly) return '775px'
-      return '875px'
+      if (this.$vuetify.breakpoint.smOnly) return '675px'
+      return '700px'
     },
   },
 }

@@ -5,13 +5,12 @@
     dark
     clipped-right
     absolute
-    height="64"
+    height="56"
     :elevation="0"
-    :color="transparent ? 'transparent' : 'tertiary'"
+    :color="transparent ? 'transparent' : 'accent darken-1'"
     :class="{
       'app-bar-full': $vuetify.breakpoint.mdAndUp,
       'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
-      'app-bar-transparent': transparent,
     }"
     style="z-index: 2060"
   >

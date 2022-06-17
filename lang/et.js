@@ -41,7 +41,7 @@ export default {
     otherServices: 'Teised teenused',
     searchPlaceholder: 'Otsi eMaapõuest',
     description:
-      'e-Maapõu is a window to geological information in Estonia,proving direct search functionality to the data hosted in the',
+      'eMaapõu pakub avatud juurdepääsu Eesti maapõue andmetele. Selle arendajaks on teadustaristu teekaart NATARC.',
   },
   common: {
     general: 'Üldinfo',
