@@ -42,7 +42,7 @@
         style="text-transform: capitalize; font-size: 0.875rem"
       >
         {{ $t('common.browse') }}
-        <v-icon class="ml-1">mdi-chevron-down</v-icon>
+        <v-icon color="accent lighten-2" class="ml-1">mdi-chevron-down</v-icon>
       </v-btn>
       <v-menu
         activator="#browse_menu_btn"
@@ -136,7 +136,7 @@
         style="text-transform: capitalize; font-size: 0.875rem"
       >
         {{ $t('common.services') }}
-        <v-icon class="ml-1">mdi-chevron-down</v-icon>
+        <v-icon color="accent lighten-2" class="ml-1">mdi-chevron-down</v-icon>
       </v-btn>
       <v-menu
         activator="#services_menu_btn"
@@ -199,7 +199,7 @@
             class="rounded-l-0"
             @click="$router.push(localePath({ name: 'search' }))"
           >
-            <v-icon color="accent darken-2">mdi-magnify</v-icon>
+            <v-icon color="accent">mdi-magnify</v-icon>
           </v-btn>
         </v-hover>
       </div>
