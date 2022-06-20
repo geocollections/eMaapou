@@ -19,9 +19,21 @@
               class="d-flex pt-sm-4 pt-md-8"
               :style="{ 'max-width': '1000px' }"
             >
-              <div class="text-h4 text-md-h2 white--text font-weight-bold">
+              <div
+                class="
+                  text-h4 text-sm-h3 text-md-h2
+                  white--text
+                  font-weight-bold
+                "
+              >
                 {{ $t('title') }}:
-                <span class="text-h4 text-md-h2 font-weight-light white--text">
+                <span
+                  class="
+                    text-h4 text-sm-h3 text-md-h2
+                    font-weight-light
+                    white--text
+                  "
+                >
                   {{ $t('subtitle') }}
                 </span>
               </div>
@@ -38,7 +50,7 @@
               flat
               color="transparent"
             >
-              <v-card-actions class="px-0 pt-md-10">
+              <v-card-actions class="px-0 pt-md-6">
                 <search-form-quick
                   style="width: 100%"
                   :only-icon="$vuetify.breakpoint.smAndDown"
@@ -505,7 +517,7 @@ export default {
       if (this.$vuetify.breakpoint.lgAndUp) return '675px'
       if (this.$vuetify.breakpoint.mdOnly) return '675px'
       if (this.$vuetify.breakpoint.smOnly) return '675px'
-      return '750px'
+      return '675px'
     },
   },
 }
@@ -582,10 +594,5 @@ export default {
 
 .shape-divider .shape-fill {
   fill: #f7f6f4;
-}
-
-.text-sm-h3 {
-  color: #577daf;
-  font-weight: bold !important;
 }
 </style>
