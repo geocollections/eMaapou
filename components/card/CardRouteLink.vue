@@ -5,13 +5,13 @@
       :to="localePath(route.routeName)"
       class="mx-sm-1 mb-1 mb-sm-2 d-flex"
       :elevation="hover ? 2 : 1"
-      :color="hover ? 'accent darken-1' : 'accent'"
+      :color="hover ? 'accent lighten-1' : 'accent'"
     >
       <div class="py-2 d-flex d-sm-block align-center">
         <v-icon
           v-if="$vuetify.breakpoint.smAndUp"
           class="pl-3"
-          color="white"
+          color="accent darken-2"
           left
         >
           {{ route.icon }}
@@ -45,7 +45,9 @@
           </div>
         </div>
       </div>
-      <v-icon color="white" class="ml-auto pr-2"> mdi-arrow-right </v-icon>
+      <v-icon color="accent darken-2" class="ml-auto pr-2">
+        mdi-arrow-right
+      </v-icon>
     </v-card>
   </v-hover>
 </template>
