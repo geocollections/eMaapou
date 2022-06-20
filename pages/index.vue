@@ -15,10 +15,13 @@
       >
         <v-row class="mb-lg-5">
           <v-col>
-            <div class="d-flex pt-4 pt-md-8" :style="{ 'max-width': '1000px' }">
-              <div class="text-h3 text-md-h2 white--text font-weight-bold">
+            <div
+              class="d-flex pt-sm-4 pt-md-8"
+              :style="{ 'max-width': '1000px' }"
+            >
+              <div class="text-h4 text-md-h2 white--text font-weight-bold">
                 {{ $t('title') }}:
-                <span class="text-h3 text-md-h2 font-weight-light white--text">
+                <span class="text-h4 text-md-h2 font-weight-light white--text">
                   {{ $t('subtitle') }}
                 </span>
               </div>
@@ -48,7 +51,7 @@
                 :class="{
                   'font-small montserrat': $vuetify.breakpoint.smAndDown,
                 }"
-                class="text-sm-h5 white--text"
+                class="text-sm-h5 white--text pr-0"
               >
                 {{ $t('landing.description') }}
               </v-card-title>
@@ -502,19 +505,25 @@ export default {
       if (this.$vuetify.breakpoint.lgAndUp) return '675px'
       if (this.$vuetify.breakpoint.mdOnly) return '675px'
       if (this.$vuetify.breakpoint.smOnly) return '675px'
-      return '700px'
+      return '750px'
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+@import '~vuetify/src/styles/settings/_variables';
+
 .spacer {
   aspect-ratio: 900/600;
   width: 100%;
   background-repeat: no-repeat;
   background-position: bottom, center;
   background-size: cover, cover;
+
+  @media #{map-get($display-breakpoints, 'xl-only')} {
+    background-position: bottom -5rem right, center;
+  }
 }
 
 .layer1 {

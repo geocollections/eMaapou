@@ -3,7 +3,7 @@
     <v-card
       nuxt
       :to="localePath(route.routeName)"
-      class="mx-1 mb-1 mb-sm-2 d-flex"
+      class="mx-sm-1 mb-1 mb-sm-2 d-flex"
       :elevation="hover ? 2 : 1"
       :color="hover ? 'accent darken-1' : 'accent'"
     >
