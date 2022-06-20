@@ -59,6 +59,8 @@ export default {
         // TODO: change to geoloogia.info after emaapou_short.png is pushed to production branch
         content: 'https://dev.geoloogia.info/logos/emaapou_short.png?t=12345?',
       },
+      { name: 'theme-color', content: '#577daf' },
+      { name: 'apple-mobile-web-app-status-bar-sytle', content: '#577daf' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
