@@ -1,5 +1,5 @@
 <template>
-  <v-form class="d-sm-flex text-right" @submit.prevent="$emit('submit')">
+  <v-form class="d-flex text-right" @submit.prevent="$emit('submit')">
     <input-search
       v-model="query"
       height="56"
@@ -8,7 +8,7 @@
     <v-btn
       height="56px"
       width="84px"
-      class="text-body-1 ml-3 mt-2 mt-sm-0"
+      class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
       type="submit"
       color="warning"
       dark
