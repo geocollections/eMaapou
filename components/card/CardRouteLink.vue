@@ -11,7 +11,7 @@
         <v-icon
           v-if="$vuetify.breakpoint.smAndUp"
           class="pl-3"
-          color="accent darken-2"
+          color="accent lighten-2"
           left
         >
           {{ route.icon }}
@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <v-icon color="accent darken-2" class="ml-auto pr-2">
+      <v-icon color="accent lighten-2" class="ml-auto pr-2">
         mdi-arrow-right
       </v-icon>
     </v-card>
