@@ -212,7 +212,9 @@
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <v-icon size="font-size: 24px">mdi-menu</v-icon>
+        <v-icon color="accent lighten-2" size="font-size: 24px"
+          >mdi-menu</v-icon
+        >
       </v-btn>
     </v-toolbar-items>
   </v-app-bar>
