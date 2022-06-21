@@ -169,6 +169,7 @@ export default {
     graphs: 'Graphs',
     linkToAnalyticalData: 'View analytical data',
     linkGeoscienceLiterature: 'Geoscience literature',
+    linkLandBoard: 'Estonian Land Board ID',
   },
   localitySynonym: {
     synonym: 'Synonym',

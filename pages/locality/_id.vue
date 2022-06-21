@@ -144,26 +144,16 @@
               })
             "
           />
-
-          <!-- NOTE: #466 added same link as a button -->
-          <!--              <table-row-link-->
-          <!--                v-if="drillcore"-->
-          <!--                nuxt-->
-          <!--                :title="$t('locality.drillcore')"-->
-          <!--                :value="-->
-          <!--                  $translate({-->
-          <!--                    et: drillcore.drillcore,-->
-          <!--                    en: drillcore.drillcore_en,-->
-          <!--                  })-->
-          <!--                "-->
-          <!--                :href="-->
-          <!--                  localePath({-->
-          <!--                    name: 'drillcore-id',-->
-          <!--                    params: { id: drillcore.id },-->
-          <!--                  })-->
-          <!--                "-->
-          <!--              />-->
-
+          <table-row
+            :title="$t('locality.remarks')"
+            :value="locality.remarks"
+          />
+          <table-row-link
+            v-if="locality.maaamet_pa_id"
+            :title="$t('locality.linkLandBoard')"
+            :value="locality.maaamet_pa_id"
+            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
+          />
           <table-row
             v-if="locality.date_added"
             :title="$t('locality.dateAdded')"
@@ -173,10 +163,6 @@
             v-if="locality.date_changed"
             :title="$t('locality.dateChanged')"
             :value="$formatDate(locality.date_changed)"
-          />
-          <table-row
-            :title="$t('locality.remarks')"
-            :value="locality.remarks"
           />
         </base-table>
 
