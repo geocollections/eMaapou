@@ -35,7 +35,7 @@ export const initState = () => {
           value: '',
           type: 'text',
           lookUpType: 'contains',
-          label: 'specimen.fossil',
+          label: 'specimen.fossilGroup',
           fields: ['fossilgroup'],
         },
         hierarchy: {
