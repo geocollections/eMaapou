@@ -97,12 +97,12 @@
       style="max-width: 1185px !important"
     >
       <v-row justify="center" class="mt-4">
-        <v-col cols="12" md="8" class="pr-5">
+        <v-col cols="12" md="8" class="pr-5" order="1" order-md="0">
           <client-only>
             <the-news-card />
           </client-only>
         </v-col>
-        <v-col cols="12" md="4" class="pl-lg-5">
+        <v-col cols="12" md="4" class="pl-lg-5" order="0" order-md="0">
           <base-header :title="$t('landing.otherServices')" />
 
           <v-row no-gutters>
@@ -517,7 +517,7 @@ export default {
       if (this.$vuetify.breakpoint.lgAndUp) return '675px'
       if (this.$vuetify.breakpoint.mdOnly) return '675px'
       if (this.$vuetify.breakpoint.smOnly) return '675px'
-      return '675px'
+      return '650px'
     },
   },
 }
