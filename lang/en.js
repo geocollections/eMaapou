@@ -343,7 +343,7 @@ export default {
     remarks: 'Remarks',
     part: 'Part/element',
     stratigraphyRemarks: 'Stratigraphy remarks',
-    hierarchy: 'Stratigraphy',
+    stratigraphyHierarchy: 'Stratigraphy',
     fossil: 'Fossil',
     pageTitle: 'Specimens',
     dateCollected: 'Date collected',

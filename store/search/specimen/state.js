@@ -38,13 +38,21 @@ export const initState = () => {
           label: 'specimen.fossilGroup',
           fields: ['fossilgroup'],
         },
+        stratigraphyHierarchy: {
+          value: null,
+          type: 'object',
+          searchField: 'hierarchy_string',
+          lookUpType: 'startsWith',
+          label: 'specimen.stratigraphyHierarchy',
+          fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
+        },
         hierarchy: {
           value: null,
           type: 'object',
           searchField: 'hierarchy_string',
           lookUpType: 'startsWith',
-          label: 'specimen.hierarchy',
-          fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
+          label: 'specimen.taxon',
+          fields: ['hierarchy_string'],
         },
         // mass: {
         //   type: 'range',
@@ -55,7 +63,13 @@ export const initState = () => {
         //   fields: ['mass'],
         // },
       },
-      allIds: ['number', 'collectionNr', 'fossil', 'hierarchy'],
+      allIds: [
+        'number',
+        'collectionNr',
+        'fossil',
+        'stratigraphyHierarchy',
+        'hierarchy',
+      ],
     },
   }
 }

@@ -345,7 +345,7 @@ export default {
     remarks: 'Lisainfo',
     part: 'Osis/element',
     stratigraphyRemarks: 'Stratigraafia lisainfo',
-    hierarchy: 'Stratigraafia',
+    stratigraphyHierarchy: 'Stratigraafia',
     fossil: 'Fossil',
     pageTitle: 'Eksemplarid',
     dateCollected: 'Kogumise aeg',

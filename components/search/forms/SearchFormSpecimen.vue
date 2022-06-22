@@ -14,12 +14,21 @@
         :label="$t(filters.byIds.locality.label)"
       />
       <input-autocomplete
-        v-model="hierarchy"
+        v-model="stratigraphyHierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
-        :label="$t(filters.byIds.hierarchy.label)"
+        :label="$t(filters.byIds.stratigraphyHierarchy.label)"
         :item-text="stratigraphyLabel"
         @search:items="autocompleteStratigraphySearch"
+      />
+
+      <input-autocomplete
+        v-model="hierarchy"
+        :items="autocomplete.taxon"
+        :loading="autocomplete.loaders.taxon"
+        :label="$t(filters.byIds.hierarchy.label)"
+        :item-text="hierarchyLabel"
+        @search:items="autocompleteHierarchySearch"
       />
 
       <input-text v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
@@ -64,7 +73,9 @@ export default {
         stratigraphy: [],
         loaders: {
           stratigraphy: false,
+          taxon: false,
         },
+        taxon: [],
       },
     }
   },
@@ -75,6 +86,7 @@ export default {
       collectionNr: 'filters.byIds.collectionNr.value',
       locality: 'filters.byIds.locality.value',
       fossil: 'filters.byIds.fossil.value',
+      stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       query: 'query',
     }),
@@ -99,7 +111,8 @@ export default {
       this.searchSpecimens()
     },
     fillAutocompleteLists() {
-      if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
+      if (this.stratigraphyHierarchy)
+        this.autocomplete.stratigraphy.push(this.stratigraphyHierarchy)
     },
     handleMapUpdate(tableState) {
       this.searchSpecimens(tableState?.options)
