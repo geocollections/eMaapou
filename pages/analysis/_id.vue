@@ -143,12 +143,8 @@
                       en: database.name_en,
                     })
                   "
-                  nuxt
-                  :href="
-                    localePath({
-                      name: `institution-${database.acronym.toLowerCase()}`,
-                    })
-                  "
+                  :href="database.url"
+                  target="DatabaseWindow"
                 />
 
                 <table-row
