@@ -311,11 +311,8 @@
                 en: database.name_en,
               })
             "
-            @link-click="
-              $openWindow(
-                `https://geocollections.info/${file.database.acronym.toLowerCase()}`
-              )
-            "
+            :href="database.url"
+            target="DatabaseWindow"
           />
           <table-row-link
             v-if="licence"

@@ -1,5 +1,5 @@
 <template>
-  <a :href="href" class="text-link">
+  <a :href="href" :target="target" class="text-link">
     <slot> </slot>
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
@@ -17,6 +17,7 @@ export default {
       type: String,
       default: null,
     },
+    target: { type: String, default: '_blank' },
   },
 }
 </script>
