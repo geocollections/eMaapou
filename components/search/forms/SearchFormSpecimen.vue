@@ -34,6 +34,14 @@
       <input-text v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
     </search-fields-wrapper>
 
+    <search-map
+      sample-overlay
+      :items="items"
+      class="mt-2"
+      :active="geoJSON != null"
+      @update="handleMapUpdate"
+    />
+
     <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
@@ -55,10 +63,12 @@ import InputText from '~/components/input/InputText.vue'
 import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import InputSearch from '~/components/input/InputSearch.vue'
+import SearchMap from '~/components/search/SearchMap'
 
 export default {
   name: 'SearchFormSpecimen',
   components: {
+    SearchMap,
     SearchInstitutionFilter,
     InputAutocomplete,
     InputText,
