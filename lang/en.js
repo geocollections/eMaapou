@@ -355,6 +355,9 @@ export default {
     sample: 'Sample',
     has_image: 'Show only data with images',
     has_map: 'Show only georeferenced data',
+    fossilName: 'Fossil name',
+    rockName: 'Rock/mineral',
+    reference: 'Reference',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',

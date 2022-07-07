@@ -22,7 +22,11 @@ export const initState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'specimen.number',
-          fields: ['specimen_full_name'],
+          fields: [
+            'specimen_full_name',
+            'specimen_number',
+            'specimen_number_old',
+          ],
         },
         collectionNr: {
           value: '',
@@ -37,6 +41,20 @@ export const initState = () => {
           lookUpType: 'contains',
           label: 'specimen.fossilGroup',
           fields: ['fossilgroup'],
+        },
+        fossilName: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'specimen.fossilName',
+          fields: ['taxon', 'taxon_txt', 'taxon_full'],
+        },
+        rock: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'specimen.rockName',
+          fields: ['rock', 'rock_en', 'rock_txt', 'rock_txt_en'],
         },
         stratigraphyHierarchy: {
           value: null,
@@ -53,6 +71,14 @@ export const initState = () => {
           lookUpType: 'startsWith',
           label: 'specimen.taxon',
           fields: ['hierarchy_string'],
+        },
+        reference: {
+          value: null,
+          type: 'object',
+          searchField: 'reference',
+          lookUpType: '',
+          label: 'specimen.reference',
+          fields: ['specimen_references'],
         },
         has_image: {
           value: false,
@@ -82,6 +108,7 @@ export const initState = () => {
       allIds: [
         'number',
         'collectionNr',
+        'fossilName',
         'fossil',
         'stratigraphyHierarchy',
         'hierarchy',

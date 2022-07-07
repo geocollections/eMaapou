@@ -31,7 +31,24 @@
         @search:items="autocompleteHierarchySearch"
       />
 
+      <input-autocomplete
+        v-model="reference"
+        :items="autocomplete.reference"
+        :loading="autocomplete.loaders.reference"
+        :label="$t(filters.byIds.reference.label)"
+        item-text="reference"
+        no-filter
+        @search:items="autocompleteReferenceSearch"
+      />
+
+      <input-text
+        v-model="fossilName"
+        :label="$t(filters.byIds.fossilName.label)"
+      />
+
       <input-text v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
+
+      <input-text v-model="rock" :label="$t(filters.byIds.rock.label)" />
 
       <input-checkbox
         v-model="has_image"
@@ -93,11 +110,13 @@ export default {
     return {
       autocomplete: {
         stratigraphy: [],
+        taxon: [],
+        reference: [],
         loaders: {
           stratigraphy: false,
           taxon: false,
+          reference: false,
         },
-        taxon: [],
       },
     }
   },
@@ -107,7 +126,10 @@ export default {
       number: 'filters.byIds.number.value',
       collectionNr: 'filters.byIds.collectionNr.value',
       locality: 'filters.byIds.locality.value',
+      fossilName: 'filters.byIds.fossilName.value',
       fossil: 'filters.byIds.fossil.value',
+      rock: 'filters.byIds.rock.value',
+      reference: 'filters.byIds.reference.value',
       stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
       has_image: 'filters.byIds.has_image.value',
@@ -137,6 +159,8 @@ export default {
     fillAutocompleteLists() {
       if (this.stratigraphyHierarchy)
         this.autocomplete.stratigraphy.push(this.stratigraphyHierarchy)
+      if (this.reference) this.autocomplete.reference.push(this.reference)
+      if (this.hierarchy) this.autocomplete.taxon.push(this.hierarchy)
     },
     handleMapUpdate(tableState) {
       this.searchSpecimens(tableState?.options)
