@@ -22,7 +22,11 @@ export const initState = () => {
           type: 'text',
           lookUpType: 'contains',
           label: 'specimen.number',
-          fields: ['specimen_full_name'],
+          fields: [
+            'specimen_full_name',
+            'specimen_number',
+            'specimen_number_old',
+          ],
         },
         collectionNr: {
           value: '',
@@ -37,6 +41,20 @@ export const initState = () => {
           lookUpType: 'contains',
           label: 'specimen.fossilGroup',
           fields: ['fossilgroup'],
+        },
+        fossilName: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'specimen.fossilName',
+          fields: ['taxon', 'taxon_txt', 'taxon_full'],
+        },
+        rock: {
+          value: '',
+          type: 'text',
+          lookUpType: 'contains',
+          label: 'specimen.rockName',
+          fields: ['rock', 'rock_en', 'rock_txt', 'rock_txt_en'],
         },
         stratigraphyHierarchy: {
           value: null,
@@ -54,6 +72,30 @@ export const initState = () => {
           label: 'specimen.taxon',
           fields: ['hierarchy_string'],
         },
+        reference: {
+          value: null,
+          type: 'object',
+          searchField: 'reference',
+          lookUpType: '',
+          label: 'specimen.reference',
+          fields: ['specimen_references'],
+        },
+        has_image: {
+          value: false,
+          type: 'boolean',
+          searchField: 'has_image',
+          lookUpType: 'equals',
+          label: 'specimen.has_image',
+          fields: ['has_image'],
+        },
+        has_map: {
+          value: false,
+          type: 'boolean',
+          searchField: 'has_map',
+          lookUpType: 'equals',
+          label: 'specimen.has_map',
+          fields: ['has_map'],
+        },
         // mass: {
         //   type: 'range',
         //   lookUpType: 'range',
@@ -66,9 +108,12 @@ export const initState = () => {
       allIds: [
         'number',
         'collectionNr',
+        'fossilName',
         'fossil',
         'stratigraphyHierarchy',
         'hierarchy',
+        'has_image',
+        'has_map',
       ],
     },
   }
