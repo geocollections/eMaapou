@@ -32,6 +32,16 @@
       />
 
       <input-text v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
+
+      <input-checkbox
+        v-model="has_image"
+        :label="$t(filters.byIds.has_image.label)"
+      />
+
+      <input-checkbox
+        v-model="has_map"
+        :label="$t(filters.byIds.has_map.label)"
+      />
     </search-fields-wrapper>
 
     <search-map
@@ -64,10 +74,12 @@ import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import InputSearch from '~/components/input/InputSearch.vue'
 import SearchMap from '~/components/search/SearchMap'
+import InputCheckbox from '~/components/input/InputCheckbox'
 
 export default {
   name: 'SearchFormSpecimen',
   components: {
+    InputCheckbox,
     SearchMap,
     SearchInstitutionFilter,
     InputAutocomplete,
@@ -98,6 +110,8 @@ export default {
       fossil: 'filters.byIds.fossil.value',
       stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
+      has_image: 'filters.byIds.has_image.value',
+      has_map: 'filters.byIds.has_map.value',
       query: 'query',
     }),
     ...mapFields('search', {

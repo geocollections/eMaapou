@@ -355,6 +355,8 @@ export default {
     references: 'Viited ({number})',
     name: 'Nimi',
     sample: 'Proov',
+    has_image: 'Näita ainult piltidega kirjeid',
+    has_map: 'Näita ainult koordinaatidega kirjeid',
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',

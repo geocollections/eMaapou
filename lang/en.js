@@ -353,6 +353,8 @@ export default {
     references: 'References ({number})',
     name: 'Name',
     sample: 'Sample',
+    has_image: 'Show only data with images',
+    has_map: 'Show only georeferenced data',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',

@@ -165,6 +165,11 @@ const isFilterValid = (filter) => {
     isEmpty(filter.value)
   )
     return false
+  if (
+    filter.type === 'boolean' &&
+    (typeof filter.value !== 'boolean' || !filter.value)
+  )
+    return false
   return filter.value !== null
 }
 
@@ -209,7 +214,7 @@ const buildSolrParameters = (filters) => {
 
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
-        case 'checkbox': {
+        case 'boolean': {
           const solrFilter = filter.fields
             .map((field) => `${field}:${filter.value}`)
             .join(' OR ')

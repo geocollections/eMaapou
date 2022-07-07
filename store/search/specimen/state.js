@@ -54,6 +54,22 @@ export const initState = () => {
           label: 'specimen.taxon',
           fields: ['hierarchy_string'],
         },
+        has_image: {
+          value: false,
+          type: 'boolean',
+          searchField: 'has_image',
+          lookUpType: 'equals',
+          label: 'specimen.has_image',
+          fields: ['has_image'],
+        },
+        has_map: {
+          value: false,
+          type: 'boolean',
+          searchField: 'has_map',
+          lookUpType: 'equals',
+          label: 'specimen.has_map',
+          fields: ['has_map'],
+        },
         // mass: {
         //   type: 'range',
         //   lookUpType: 'range',
@@ -69,6 +85,8 @@ export const initState = () => {
         'fossil',
         'stratigraphyHierarchy',
         'hierarchy',
+        'has_image',
+        'has_map',
       ],
     },
   }
