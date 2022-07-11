@@ -14,7 +14,7 @@
     "@geoman-io/leaflet-geoman-free": "^2.11.2",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/sitemap": "^2.4.0",
-    "core-js": "^3.18.2",
+    "core-js": "^3.23.4",
     "deepmerge": "^4.2.2",
     "earcut": "^2.2.3",
     "echarts": "^5.1.2",
