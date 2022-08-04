@@ -76,7 +76,7 @@ export const initState = () => {
           value: null,
           type: 'object',
           searchField: 'reference',
-          lookUpType: '',
+          lookUpType: 'equals',
           label: 'specimen.reference',
           fields: ['specimen_references'],
         },

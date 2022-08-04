@@ -38,6 +38,8 @@
         :label="$t(filters.byIds.reference.label)"
         item-text="reference"
         no-filter
+        do-not-cache
+        append-item="title"
         @search:items="autocompleteReferenceSearch"
       />
 
