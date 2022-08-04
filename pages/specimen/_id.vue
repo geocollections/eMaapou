@@ -172,16 +172,15 @@
         </base-table>
       </v-card-text>
     </template>
-    <template v-if="locality" #column-right>
+    <template
+      v-if="locality && locality.latitude && locality.longitude"
+      #column-right
+    >
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
       <v-card-text>
-        <v-card
-          v-if="locality.latitude && locality.longitude"
-          id="map-wrap"
-          elevation="0"
-        >
+        <v-card id="map-wrap" elevation="0">
           <leaflet-map
             rounded
             :estonian-map="
