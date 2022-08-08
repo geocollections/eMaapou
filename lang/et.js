@@ -470,7 +470,7 @@ export default {
     stratigraphyFree: 'Stratigraafia vaba',
     stratigraphyBed: 'Kiht',
     agentCollected: 'Koguja',
-    mass: 'Mass',
+    mass: 'Kaal (g)',
     samplePurpose: 'Proovi eesmärk',
     rock: 'Rock',
     classificationRock: 'Materjal',
