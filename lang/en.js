@@ -468,7 +468,7 @@ export default {
     stratigraphyFree: 'Stratigraphy free',
     stratigraphyBed: 'Bed',
     agentCollected: 'Collector',
-    mass: 'Weight',
+    mass: 'Weight (g)',
     samplePurpose: 'Sample purpose',
     rock: 'Rock',
     classificationRock: 'Material',
