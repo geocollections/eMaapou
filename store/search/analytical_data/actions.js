@@ -11,7 +11,7 @@ export default {
   addParameterFilter({ commit, dispatch, getters }) {
     const initParameter = getters.parameterList()[0]
 
-    const id = _.uniqueId('parameter_')
+    const id = uniqueId('parameter_')
 
     const filter = {
       id,

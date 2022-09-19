@@ -27,6 +27,6 @@ export default {
     state.parameterFilters.allIds = state.parameterFilters.allIds.filter(
       (id) => id !== removeId
     )
-    delete state.parameterFilters.byIds[removeId]
+    Vue.delete(state.parameterFilters.byIds, removeId)
   },
 }
