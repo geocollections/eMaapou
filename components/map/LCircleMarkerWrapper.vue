@@ -5,10 +5,10 @@
       :key="`marker-${idx}-lat-${marker.latitude}-lon-${marker.latitude}`"
       :lat-lng="[marker.latitude, marker.longitude]"
       :radius="6"
-      :weight="2"
+      :weight="1.5"
       color="#fff"
-      fill-color="red"
-      :fill-opacity="0.9"
+      :fill-color="$vuetify.theme.currentTheme.warning"
+      :fill-opacity="1"
       @click="handleClick($event, marker)"
     >
       <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
