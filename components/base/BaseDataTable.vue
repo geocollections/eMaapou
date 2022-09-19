@@ -56,7 +56,10 @@
               class="px-3 my-1 my-sm-3"
               align-self="center"
             >
-              <base-data-table-export-menu />
+              <base-data-table-export-menu
+                v-if="tableElement"
+                :table-element="tableElement"
+              />
               <base-data-table-header-menu
                 v-if="dynamicHeaders"
                 :headers="headers"
@@ -198,6 +201,7 @@ export default {
       },
       expanded: [],
       isLoading: false,
+      tableElement: null,
     }
   },
   computed: {
@@ -209,6 +213,9 @@ export default {
     items() {
       this.isLoading = false
     },
+  },
+  mounted() {
+    this.tableElement = this.$el.querySelector('table')
   },
   methods: {
     handleChange: debounce(function (options) {
