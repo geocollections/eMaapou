@@ -11,6 +11,24 @@
         <base-table>
           <table-row :title="$t('sample.number')" :value="sample.number" />
           <table-row-link
+            v-if="parent"
+            :title="$t('sample.parent')"
+            nuxt
+            :href="localePath({ name: 'sample-id', params: { id: parent.id } })"
+            :value="parent.number"
+          />
+          <table-row-link
+            :title="$t('sample.parentSpecimen')"
+            nuxt
+            :href="
+              localePath({
+                name: 'specimen-id',
+                params: { id: parentSpecimen.id },
+              })
+            "
+            :value="parentSpecimen.specimen_id"
+          />
+          <table-row-link
             :title="$t('sample.igsn')"
             :value="sample.igsn"
             :href="`http://igsn.org/${sample.igsn}`"
@@ -525,6 +543,12 @@ export default {
     },
     project() {
       return this.sample?.project
+    },
+    parent() {
+      return this.sample?.parent_sample
+    },
+    parentSpecimen() {
+      return this.sample?.parent_specimen
     },
   },
   methods: {

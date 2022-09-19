@@ -360,6 +360,7 @@ export default {
     fossilName: 'Fossiili nimi',
     rockName: 'Kivim/mineraal',
     reference: 'Kirjandus',
+    parent: 'Kuulub',
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',
@@ -492,6 +493,8 @@ export default {
     longitude: 'Pikkuskraad',
     project: 'Projekt',
     igsn: 'IGSN',
+    parent: 'Kuulub',
+    parentSpecimen: 'Kuulub eksemplari',
   },
   preparation: {
     pageTitle: 'Preparaadid',

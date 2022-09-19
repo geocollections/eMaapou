@@ -358,6 +358,7 @@ export default {
     fossilName: 'Fossil name',
     rockName: 'Rock/mineral',
     reference: 'Reference',
+    parent: 'Belongs to',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',
@@ -490,6 +491,8 @@ export default {
     longitude: 'Longitude',
     project: 'Project',
     igsn: 'IGSN',
+    parent: 'Belongs to',
+    parentSpecimen: 'Belongs to specimen',
   },
   preparation: {
     pageTitle: 'Preparations',

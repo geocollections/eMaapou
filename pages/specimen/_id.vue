@@ -45,6 +45,13 @@
             :title="$t('specimen.number')"
             :value="`${specimen.specimen_id}`"
           />
+          <table-row-link
+            v-if="parent"
+            :title="$t('specimen.parent')"
+            nuxt
+            :href="localePath('specimen-id', { id: parent.id })"
+            :value="parent.specimen_id"
+          />
           <table-row
             :title="$t('specimen.oldNumber')"
             :value="`${specimen.specimen_nr}`"
@@ -403,6 +410,9 @@ export default {
     },
     sample() {
       return this.specimen?.sample
+    },
+    parent() {
+      return this.specimen?.parent
     },
   },
 }
