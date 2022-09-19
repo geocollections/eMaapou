@@ -62,7 +62,14 @@
           :markers="markers"
         />
         <l-circle-marker-wrapper v-else :markers="markers" />
-        <l-geo-json v-if="geojson" :geojson="geojson" color="red" />
+        <l-geo-json
+          v-if="geojson"
+          :geojson="geojson"
+          :options-style="{
+            color: $vuetify.theme.currentTheme.accent,
+            fillColor: $vuetify.theme.currentTheme.accent,
+          }"
+        />
         <l-marker
           v-if="gpsEnabled && gpsLocation"
           :lat-lng="gpsLocation"
