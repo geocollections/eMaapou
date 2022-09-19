@@ -22,39 +22,44 @@
               })
             "
           />
-          <table-row
-            v-if="site.area"
-            :value="site.area"
-            :title="$t('site.area')"
-          >
+          <table-row v-if="area" :value="area" :title="$t('site.area')">
             <template #value>
               <a
-                v-if="site.area.area_type === 2"
+                v-if="area.area_type === 2"
                 class="text-link"
                 @click="$openTurba('turbaala', site.area)"
               >
                 {{
                   $translate({
-                    et: site.area.name,
-                    en: site.area.name_en,
+                    et: area.name,
+                    en: area.name_en,
                   })
                 }}
                 <v-icon small color="primary darken-2">mdi-open-in-new</v-icon>
               </a>
-              <div v-else>
+              <nuxt-link
+                v-else
+                class="text-link"
+                :to="
+                  localePath({
+                    name: 'area-id',
+                    params: { id: area.id },
+                  })
+                "
+              >
                 {{
                   $translate({
-                    et: site.area.name,
-                    en: site.area.name_en,
+                    et: area.name,
+                    en: area.name_en,
                   })
                 }}
-              </div>
+              </nuxt-link>
             </template>
           </table-row>
 
           <table-row
-            v-if="site.area && site.area.area_type === 2"
-            :value="site.area"
+            v-if="area && area.area_type === 2"
+            :value="area"
             :title="$t('site.areaText1')"
           >
             <template #value>
@@ -494,6 +499,9 @@ export default {
     },
     locality() {
       return this.site?.locality
+    },
+    area() {
+      return this.site?.area
     },
   },
   methods: {
