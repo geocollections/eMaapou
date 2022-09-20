@@ -63,7 +63,7 @@
                 :class="{
                   'font-small montserrat': $vuetify.breakpoint.smAndDown,
                 }"
-                class="text-sm-h5 white--text pr-0"
+                class="text-sm-h6 font-weight-regular white--text pr-0 pl-1"
               >
                 {{ $t('landing.description') }}
               </v-card-title>
