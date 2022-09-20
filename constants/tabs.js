@@ -265,6 +265,15 @@ export const TABS_DATASET = {
       count: 0,
       props: {},
     },
+    sample_results: {
+      id: 'sample_results',
+      table: 'sample_data',
+      isSolr: true,
+      routeName: 'dataset-id-slug-sample-results',
+      title: 'dataset.sampleResults',
+      count: 0,
+      props: {},
+    },
     graphs: {
       table: 'analysis_results',
       id: 'analysis_results',
@@ -281,6 +290,7 @@ export const TABS_DATASET = {
     'attachment_link',
     'dataset_author',
     'dataset_geolocation',
+    'sample_results',
     'graphs',
   ],
 }

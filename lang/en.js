@@ -309,6 +309,8 @@ export default {
     lithostratigraphy: 'Lithostratigraphy',
     locality: 'Locality',
     depth: 'Depth',
+    analysisMethod: 'Method',
+    lab: 'Lab',
   },
   analysisResult: {
     parameter: 'Parameter',
@@ -493,6 +495,9 @@ export default {
     igsn: 'IGSN',
     parent: 'Belongs to',
     parentSpecimen: 'Belongs to specimen',
+  },
+  sampleData: {
+    sampleNumber: 'Sample',
   },
   preparation: {
     pageTitle: 'Preparations',
@@ -850,6 +855,7 @@ export default {
     authors: 'Authors ({number})',
     geolocations: 'Geolocations ({number})',
     resource: 'Resource',
+    sampleResults: 'Results ({number})',
   },
   datasetGeolocation: {
     name: 'Name',

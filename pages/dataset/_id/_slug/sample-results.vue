@@ -1,6 +1,6 @@
 <template>
-  <data-table-dataset-analysis
-    :items="analyses"
+  <data-table-sample-data
+    :items="sampleData"
     :count="count"
     :options="options"
     :additional-headers="parameterHeaders"
@@ -10,11 +10,11 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis'
-import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
+import DataTableSampleData from '~/components/data-table/DataTableSampleData'
+import { SAMPLE_DATA, HEADERS_SAMPLE_DATA } from '~/constants'
 
 export default {
-  components: { DataTableDatasetAnalysis },
+  components: { DataTableSampleData },
   props: {
     parameterHeaders: {
       type: Object,
@@ -25,9 +25,9 @@ export default {
   },
   data() {
     return {
-      analyses: [],
+      sampleData: [],
       count: 0,
-      options: DATASET_ANALYSIS.options,
+      options: SAMPLE_DATA.options,
     }
   },
   computed: {
@@ -37,7 +37,7 @@ export default {
         {}
       )
       return {
-        ...this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
+        ...this.$getAPIFieldValues(HEADERS_SAMPLE_DATA),
         ...parameterFields,
       }
     },
@@ -45,8 +45,8 @@ export default {
   methods: {
     async handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'analytical_data',
+      const sampleDataResponse = await this.$services.sarvSolr.getResourceList(
+        'sample_data',
         {
           ...tableState,
           isValid: isNil(this.$route.params.id),
@@ -56,8 +56,8 @@ export default {
           fields: this.mergedFields,
         }
       )
-      this.analyses = analysisResponse.items
-      this.count = analysisResponse.count
+      this.sampleData = sampleDataResponse.items
+      this.count = sampleDataResponse.count
     },
   },
 }

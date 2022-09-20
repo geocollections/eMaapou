@@ -308,3 +308,12 @@ export const SPECIMEN_REFERENCE = {
     sortDesc: [],
   },
 }
+
+export const SAMPLE_DATA = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+}

@@ -311,6 +311,8 @@ export default {
     lithostratigraphy: 'Litostratigraafia',
     locality: 'Lokaliteet',
     depth: 'Sügavus',
+    analysisMethod: 'Meetod',
+    lab: 'Labor',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -495,6 +497,9 @@ export default {
     igsn: 'IGSN',
     parent: 'Kuulub',
     parentSpecimen: 'Kuulub eksemplari',
+  },
+  sampleData: {
+    sampleNumber: 'Proov',
   },
   preparation: {
     pageTitle: 'Preparaadid',
@@ -852,6 +857,7 @@ export default {
     authors: 'Autorid ({number})',
     geolocations: 'Geopunkt ({number})',
     resource: 'Allikas',
+    sampleResults: 'Tulemused ({number})',
   },
   datasetGeolocation: {
     name: 'Nimi',

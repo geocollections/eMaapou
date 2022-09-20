@@ -39,7 +39,7 @@ export default {
       if (this.statefulHeaders)
         this.resetHeaders({ module: this.module, options: this.options })
       else {
-        this.localHeaders = this.$options.data().localHeaders
+        this.localHeaders = this.$options.data.call(this).localHeaders
 
         this.options.sortBy.forEach((headerId) => {
           this.localHeaders.byIds[headerId].show = true

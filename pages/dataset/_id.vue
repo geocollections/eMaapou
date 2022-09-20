@@ -211,15 +211,22 @@ export default {
         params.id,
         { fl: 'parameter_index_list,parameter_list' }
       )
+      const parameterValues =
+        parameters[0]?.parameter_index_list?.[0]?.split('; ')
+      const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
 
-      const parameterValues = parameters?.parameter_index_list?.[0]?.split('; ')
-
-      const parameterText = parameters?.parameter_list?.[0]?.split('; ')
       const parsedParameters = parameterValues?.map((v, i) => {
         return { text: parameterText[i], value: v }
       })
-      const selectedParameters = parsedParameters?.slice(0, 5)
 
+      const parameterHeaders = {
+        byIds: parsedParameters.reduce((prev, parameter) => {
+          return { ...prev, [parameter.value]: { ...parameter, show: false } }
+        }, {}),
+        allIds: parameterValues,
+      }
+
+      const selectedParameters = parsedParameters?.slice(0, 5)
       const doiResponse = await $services.sarvREST.getResourceList('doi', {
         defaultParams: {
           dataset: params.id,
@@ -238,6 +245,7 @@ export default {
         ids,
         parameters: parsedParameters,
         selectedParameters,
+        parameterHeaders,
         doi,
         reference,
       }
@@ -279,7 +287,23 @@ export default {
 
     const tabsObject = TABS_DATASET
 
-    tabsObject.byIds.dataset_analysis.props.parameters = this.selectedParameters
+    tabsObject.byIds.dataset_analysis.props.parameterHeaders = {
+      ...this.parameterHeaders,
+      byIds: Object.fromEntries(
+        Object.entries(this.parameterHeaders.byIds).map(([k, v], i) => {
+          if (i < 5) return [k, { ...v, show: true }]
+          return [k, v]
+        })
+      ),
+    }
+    tabsObject.byIds.sample_results.props.parameterHeaders = {
+      ...this.parameterHeaders,
+      byIds: Object.fromEntries(
+        Object.entries(this.parameterHeaders.byIds).map(([k, v]) => {
+          return [k, { ...v, show: true }]
+        })
+      ),
+    }
 
     tabsObject.byIds.graphs.count =
       locations.length === 1 ? locations.length : 0
@@ -287,17 +311,24 @@ export default {
     const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
     const hydratedTabs = await Promise.all(
-      tabs.map(async (tab) =>
-        tab.id !== 'analysis_results'
-          ? await this.$hydrateTab(tab, {
-              countParams: {
-                api: {
-                  default: { dataset: this.dataset.id },
-                },
+      tabs.map(async (tab) => {
+        if (tab.isSolr) {
+          return await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `dataset_id:${this.dataset.id}` },
               },
-            })
-          : tab
-      )
+            },
+          })
+        }
+        return await this.$hydrateTab(tab, {
+          countParams: {
+            api: {
+              default: { dataset: this.dataset.id },
+            },
+          },
+        })
+      })
     )
     const slugRoute = this.$createSlugRoute(this.$route, this.dataset.title)
 

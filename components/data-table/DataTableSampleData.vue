@@ -9,26 +9,21 @@
     @change:headers="$_handleHeadersChange"
     @reset:headers="$_handleHeadersReset"
   >
-    <template #item.analysis="{ item }">
-      <nuxt-link
-        class="text-link"
-        :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
-      >
-        {{ item.id }}
-      </nuxt-link>
-    </template>
     <template #item.sample="{ item }">
       <nuxt-link
-        v-if="item.sample_id"
         class="text-link"
-        :to="
-          localePath({
-            name: 'sample-id',
-            params: { id: item.sample_id },
-          })
-        "
+        :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
-        {{ item.sample_id }}
+        {{ item.sample_number }}
+      </nuxt-link>
+    </template>
+    <template #item.number="{ item }">
+      <nuxt-link
+        v-if="item.number"
+        class="text-link"
+        :to="localePath({ name: 'sample-id', params: { id: item.id } })"
+      >
+        {{ item.number }}
       </nuxt-link>
     </template>
     <template #item.locality="{ item }">
@@ -36,10 +31,7 @@
         v-if="item.locality_id"
         class="text-link"
         :to="
-          localePath({
-            name: 'locality-id',
-            params: { id: item.locality_id },
-          })
+          localePath({ name: 'locality-id', params: { id: item.locality_id } })
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
@@ -63,17 +55,35 @@
           })
         "
       >
-        {{ $translate({ et: item.stratigraphy, en: item.stratigraphy_en }) }}
+        {{
+          $translate({
+            et: item.stratigraphy,
+            en: item.stratigraphy_en,
+          })
+        }}
       </nuxt-link>
     </template>
-
-    <template #item.analysis_method="{ item }">
-      {{
-        $translate({ et: item.analysis_method, en: item.analysis_method_en })
-      }}
+    <template #item.lithostratigraphy="{ item }">
+      <nuxt-link
+        v-if="item.lithostratigraphy"
+        class="text-link"
+        :to="
+          localePath({
+            name: 'stratigraphy-id',
+            params: { id: item.lithostratigraphy_id },
+          })
+        "
+      >
+        {{
+          $translate({
+            et: item.lithostratigraphy,
+            en: item.lithostratigraphy_en,
+          })
+        }}
+      </nuxt-link>
     </template>
-    <template #item.lab="{ item }">
-      {{ $translate({ et: item.lab, en: item.lab_en }) }}
+    <template #item.date_collected="{ item }">
+      {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
   </base-data-table>
 </template>
@@ -83,10 +93,10 @@ import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
-import { HEADERS_DATASET_ANALYSIS } from '~/constants'
+import { HEADERS_SAMPLE_DATA } from '~/constants'
 
 export default {
-  name: 'DataTableDatasetAnalysis',
+  name: 'DataTableSampleData',
   components: { BaseDataTable },
   mixins: [headersMixin],
   props: {
@@ -115,12 +125,14 @@ export default {
     },
   },
   data() {
-    return { localHeaders: this.getHeaders() }
+    return {
+      localHeaders: this.getHeaders(),
+    }
   },
   methods: {
     round,
     getHeaders() {
-      const defaultHeaders = cloneDeep(HEADERS_DATASET_ANALYSIS)
+      const defaultHeaders = cloneDeep(HEADERS_SAMPLE_DATA)
       return {
         byIds: {
           ...defaultHeaders.byIds,

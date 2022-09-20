@@ -403,20 +403,27 @@ export const HEADERS_DATASET_ANALYSIS = {
       show: true,
       apiFieldValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
     },
-    lithostratigraphy: {
-      text: 'datasetAnalysis.lithostratigraphy',
-      value: 'lithostratigraphy',
+    analysis_method: {
+      text: 'datasetAnalysis.analysisMethod',
+      value: 'analysis_method',
       show: true,
-      apiFieldValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
+      apiFieldValue: { et: 'analysis_method', en: 'analysis_method_en' },
     },
-    depth: {
-      text: 'datasetAnalysis.depth',
-      value: 'depth',
+    lab: {
+      text: 'datasetAnalysis.lab',
+      value: 'lab',
       show: true,
-      apiFieldValue: 'depth',
+      apiFieldValue: { et: 'lab', en: 'lab_en' },
     },
   },
-  allIds: ['sample', 'locality', 'stratigraphy', 'lithostratigraphy', 'depth'],
+  allIds: [
+    'analysis',
+    'sample',
+    'locality',
+    'stratigraphy',
+    'analysis_method',
+    'lab',
+  ],
 }
 
 export const HEADERS_DATASET_AUTHOR = {
@@ -1052,6 +1059,42 @@ export const HEADERS_SAMPLE_REFERENCE = {
     },
   },
   allIds: ['reference', 'reference__title', 'pages', 'remarks'],
+}
+
+export const HEADERS_SAMPLE_DATA = {
+  byIds: {
+    sample: {
+      text: 'sampleData.sampleNumber',
+      value: 'sample',
+      show: true,
+      apiFieldValue: 'sample_number',
+    },
+    latitude: {
+      text: 'sampleData.latitude',
+      value: 'latitude',
+      show: false,
+      apiFieldValue: 'latitude',
+    },
+    longitude: {
+      text: 'sampleData.longitude',
+      value: 'longitude',
+      show: false,
+      apiFieldValue: 'longitude',
+    },
+    locality: {
+      text: 'datasetAnalysis.locality',
+      value: 'locality',
+      show: true,
+      apiFieldValue: 'locality',
+    },
+    stratigraphy: {
+      text: 'datasetAnalysis.stratigraphy',
+      value: 'stratigraphy',
+      show: true,
+      apiFieldValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
+    },
+  },
+  allIds: ['sample', 'locality', 'latitude', 'longitude', 'stratigraphy'],
 }
 
 export const HEADERS_SITE = {
