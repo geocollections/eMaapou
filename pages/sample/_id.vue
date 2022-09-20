@@ -18,6 +18,7 @@
             :value="parent.number"
           />
           <table-row-link
+            v-if="parentSpecimen"
             :title="$t('sample.parentSpecimen')"
             nuxt
             :href="
