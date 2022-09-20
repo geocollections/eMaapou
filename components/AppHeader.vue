@@ -20,19 +20,16 @@
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-      <nuxt-link id="app-bar-title" :to="localePath({ path: '/' })">
+      <nuxt-link :to="localePath({ path: '/' })">
         <v-img
           :height="40"
           :width="80"
           contain
           :src="$img(logo, null, { provider: 'static' })"
         />
-        <v-tooltip bottom activator="#app-bar-title">
-          <span>{{ $t('landing.goToFrontpage') }}</span>
-        </v-tooltip>
       </nuxt-link>
     </v-toolbar-title>
-    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-10">
+    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-4 mr-md-2">
       {{ test }}
       <v-btn
         id="browse_menu_btn"
