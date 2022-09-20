@@ -125,22 +125,14 @@
             :value="parameters"
           >
             <template #value>
-              <v-chip-group
-                :value="selectedParameterValues"
-                multiple
-                column
-                active-class="active-tab font-weight-bold elevation-1"
-                @change="handleParameterChange"
+              <v-chip
+                v-for="(parameter, i) in parameters"
+                :key="i"
+                small
+                class="mr-1 mb-1"
               >
-                <v-chip
-                  v-for="(parameter, i) in parameters"
-                  :key="i"
-                  :value="parameter.value"
-                  small
-                >
-                  {{ parameter.text }}
-                </v-chip>
-              </v-chip-group>
+                {{ parameter.text }}
+              </v-chip>
             </template>
           </table-row>
         </base-table>
@@ -226,7 +218,6 @@ export default {
         allIds: parameterValues,
       }
 
-      const selectedParameters = parsedParameters?.slice(0, 5)
       const doiResponse = await $services.sarvREST.getResourceList('doi', {
         defaultParams: {
           dataset: params.id,
@@ -244,7 +235,6 @@ export default {
         dataset,
         ids,
         parameters: parsedParameters,
-        selectedParameters,
         parameterHeaders,
         doi,
         reference,
@@ -398,23 +388,10 @@ export default {
         return filtered
       }, [])
     },
-
-    selectedParameterValues() {
-      return this.selectedParameters?.map((param) => param.value)
-    },
   },
   methods: {
     isEmpty,
     isNil,
-    handleParameterChange(e) {
-      const analysisTab = this.tabs.find((tab) => tab.id === 'dataset_analysis')
-
-      const newParams = this.parameters.filter((parameter) =>
-        e.includes(parameter.value)
-      )
-
-      analysisTab.props = { ...analysisTab.props, parameters: newParams }
-    },
   },
 }
 </script>
