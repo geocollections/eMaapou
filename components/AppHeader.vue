@@ -64,7 +64,7 @@
               />
             </v-list>
 
-            <!-- <v-divider class="mx-3" vertical /> -->
+            <v-divider class="mx-3 my-2" vertical />
             <v-list class="mx-3" width="250">
               <base-menu-list-item
                 v-for="(item, index) in browseLab"
@@ -76,7 +76,7 @@
                 :to="localePath({ name: item.routeName })"
               />
             </v-list>
-            <!-- <v-divider class="mx-3" vertical /> -->
+            <v-divider class="mx-3 my-2" vertical />
             <v-list class="mx-3" width="250">
               <base-menu-list-item
                 v-for="(item, index) in browseTaxon"
@@ -86,18 +86,6 @@
                 :label="$t(item.label)"
                 nuxt
                 :to="localePath({ name: item.routeName })"
-              />
-            </v-list>
-          </v-card-actions>
-          <v-divider class="mx-5 mt-3" />
-          <v-card-actions>
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
-                class="my-1"
-                icon="mdi-file-image-outline"
-                :label="$t('photo.pageTitle')"
-                nuxt
-                :to="localePath({ name: 'photo' })"
               />
             </v-list>
           </v-card-actions>
