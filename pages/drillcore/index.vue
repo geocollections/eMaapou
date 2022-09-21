@@ -15,15 +15,18 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <data-table-drillcore
-        :show-search="false"
-        :items="items"
-        :count="count"
-        :options="options"
-        dynamic-headers
-        stateful-headers
-        @update="handleUpdate"
-      />
+      <v-card>
+        <data-table-drillcore
+          :show-search="false"
+          :items="items"
+          :count="count"
+          :options="options"
+          :flat="false"
+          dynamic-headers
+          stateful-headers
+          @update="handleUpdate"
+        />
+      </v-card>
     </template>
   </search>
 </template>

@@ -6,139 +6,141 @@
       To fix this for now, tables that have onlyTable prop do not
       enable loading indicator when created.
 ' -->
-  <v-card :flat="$attrs.flat">
-    <v-data-table
-      id="table"
-      item-key="id"
-      mobile-breakpoint="0"
-      dense
-      calculate-widths
-      fixed-header
-      multi-sort
-      :loading="isLoading"
-      :headers="visibleHeaders"
-      :items="items"
-      :options="options"
-      :server-items-length="count"
-      hide-default-footer
-      :footer-props="footerProps"
-      :show-expand="expandable"
-      :single-expand="singleExpand"
-      :expanded.sync="expanded"
-      @click:row="handleRowClick"
-      @update:options="
-        isLoading = !onlyTable
-        handleChange($event)
-      "
+  <v-data-table
+    id="table"
+    item-key="id"
+    mobile-breakpoint="0"
+    dense
+    calculate-widths
+    fixed-header
+    multi-sort
+    :loading="isLoading"
+    :headers="visibleHeaders"
+    :items="items"
+    :options="options"
+    :server-items-length="count"
+    hide-default-footer
+    :footer-props="footerProps"
+    :show-expand="expandable"
+    :single-expand="singleExpand"
+    :expanded.sync="expanded"
+    @click:row="handleRowClick"
+    @update:options="
+      isLoading = !onlyTable
+      handleChange($event)
+    "
+  >
+    <template #no-data>{{ $t('table.noData') }}</template>
+    <!-- eslint-disable-next-line vue/no-template-shadow -->
+    <template v-if="!onlyTable" #top="{ pagination, updateOptions, options }">
+      <div>
+        <v-row class="py-2 pl-3" no-gutters>
+          <v-col
+            cols="12"
+            sm="auto"
+            md="auto"
+            align-self="center"
+            class="pr-3 d-flex"
+          >
+            <v-text-field
+              v-if="showSearch"
+              v-model="search"
+              style="max-width: 400px"
+              class="mt-0 pt-0 pr-2 pr-sm-3"
+              color="primary darken-2"
+              append-icon="mdi-magnify"
+              :label="$t('common.search')"
+              hide-details
+              single-line
+              clearable
+              @input="handleSearch($event)"
+            ></v-text-field>
+            <base-data-table-export-menu
+              v-if="tableElement"
+              :table-element="tableElement"
+            />
+            <base-data-table-header-menu
+              v-if="dynamicHeaders"
+              :headers="headers"
+              :visible-headers="visibleHeaders"
+              :sort-by="options.sortBy"
+              @change="handleHeadersChange"
+              @reset="$emit('reset:headers')"
+            />
+          </v-col>
+          <v-col class="d-flex justify-end" align-self="center">
+            <base-data-table-pagination
+              :options="options"
+              :pagination="pagination"
+              :items-per-page-options="footerProps['items-per-page-options']"
+              :items-per-page-text="footerProps['items-per-page-text']"
+              :page-select-text="
+                $t('common.pageSelect', {
+                  current: options.page,
+                  count: pagination.pageCount,
+                })
+              "
+              :go-to-text="$t('common.goTo')"
+              :go-to-button-text="$t('common.goToBtn')"
+              select-page-id="header-select-btn"
+              @update:options="updateOptions"
+            />
+          </v-col>
+        </v-row>
+      </div>
+    </template>
+    <template v-if="!onlyTable" #footer="{ props }">
+      <v-row no-gutters>
+        <v-col class="d-flex justify-end" align-self="center">
+          <base-data-table-pagination
+            class="py-2"
+            :options="props.options"
+            :pagination="props.pagination"
+            :items-per-page-options="footerProps['items-per-page-options']"
+            :items-per-page-text="footerProps['items-per-page-text']"
+            :page-select-text="
+              $t('common.pageSelect', {
+                current: props.options.page,
+                count: props.pagination.pageCount,
+              })
+            "
+            :go-to-text="$t('common.goTo')"
+            :go-to-button-text="$t('common.goToBtn')"
+            select-page-id="footer-select-btn"
+            @update:options="
+              isLoading = !onlyTable
+              handleChange($event)
+            "
+          />
+        </v-col>
+      </v-row>
+    </template>
+    <template
+      v-if="expandable"
+      #item.data-table-expand="{ expand, isExpanded, item }"
     >
-      <template #no-data>{{ $t('table.noData') }}</template>
-      <!-- eslint-disable-next-line vue/no-template-shadow -->
-      <template v-if="!onlyTable" #top="{ pagination, updateOptions, options }">
-        <div>
-          <v-row no-gutters>
-            <v-col v-if="showSearch" cols="12" sm="4" class="px-3 py-0">
-              <v-text-field
-                v-model="search"
-                color="primary darken-2"
-                append-icon="mdi-magnify"
-                :label="$t('common.search')"
-                hide-details
-                clearable
-                @input="handleSearch($event)"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-
-          <v-row no-gutters>
-            <v-col
-              cols="12"
-              sm="auto"
-              class="px-3 my-1 my-sm-3"
-              align-self="center"
-            >
-              <base-data-table-export-menu
-                v-if="tableElement"
-                :table-element="tableElement"
-              />
-              <base-data-table-header-menu
-                v-if="dynamicHeaders"
-                :headers="headers"
-                :visible-headers="visibleHeaders"
-                :sort-by="options.sortBy"
-                @change="handleHeadersChange"
-                @reset="$emit('reset:headers')"
-              />
-            </v-col>
-            <v-col>
-              <base-data-table-pagination
-                :options="options"
-                :pagination="pagination"
-                :items-per-page-options="footerProps['items-per-page-options']"
-                :items-per-page-text="footerProps['items-per-page-text']"
-                :page-select-text="
-                  $t('common.pageSelect', {
-                    current: options.page,
-                    count: pagination.pageCount,
-                  })
-                "
-                :go-to-text="$t('common.goTo')"
-                :go-to-button-text="$t('common.goToBtn')"
-                select-page-id="header-select-btn"
-                @update:options="updateOptions"
-              />
-            </v-col>
-          </v-row>
-        </div>
-      </template>
-      <template v-if="!onlyTable" #footer="{ props }">
-        <base-data-table-pagination
-          class="py-3"
-          :options="props.options"
-          :pagination="props.pagination"
-          :items-per-page-options="footerProps['items-per-page-options']"
-          :items-per-page-text="footerProps['items-per-page-text']"
-          :page-select-text="
-            $t('common.pageSelect', {
-              current: props.options.page,
-              count: props.pagination.pageCount,
-            })
-          "
-          :go-to-text="$t('common.goTo')"
-          :go-to-button-text="$t('common.goToBtn')"
-          select-page-id="footer-select-btn"
-          @update:options="
-            isLoading = !onlyTable
-            handleChange($event)
-          "
-        />
-      </template>
-      <template
-        v-if="expandable"
-        #item.data-table-expand="{ expand, isExpanded, item }"
+      <v-btn
+        v-if="item.canExpand"
+        icon
+        :class="{ active: isExpanded }"
+        @click.stop="expand(!isExpanded)"
       >
-        <v-btn
-          v-if="item.canExpand"
-          icon
-          :class="{ active: isExpanded }"
-          @click.stop="expand(!isExpanded)"
-        >
-          <v-icon v-if="!isExpanded">mdi-chevron-down</v-icon>
-          <v-icon v-else>mdi-chevron-up</v-icon>
-        </v-btn>
-      </template>
-      <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
-        <slot :name="slotName" v-bind="context" />
-      </template>
+        <v-icon v-if="!isExpanded">mdi-chevron-down</v-icon>
+        <v-icon v-else>mdi-chevron-up</v-icon>
+      </v-btn>
+    </template>
+    <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
+      <slot :name="slotName" v-bind="context" />
+    </template>
 
-      <template #item.date_added="{ item }">
-        {{ $formatDate(item.date_added) }}
-      </template>
+    <template #item.date_added="{ item }">
+      {{ $formatDate(item.date_added) }}
+    </template>
 
-      <template #item.date_changed="{ item }">
-        {{ $formatDate(item.date_changed) }}
-      </template>
-    </v-data-table>
-  </v-card>
+    <template #item.date_changed="{ item }">
+      {{ $formatDate(item.date_changed) }}
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -220,7 +222,7 @@ export default {
   methods: {
     handleChange: debounce(function (options) {
       this.$emit('update', { options, search: this.search })
-    }, 500),
+    }, 250),
     handleSearch: debounce(function () {
       const options = { ...this.options, page: 1 }
       this.isLoading = true
@@ -228,7 +230,7 @@ export default {
         options,
         search: this.search,
       })
-    }, 500),
+    }, 400),
     handleHeadersChange(e) {
       this.$emit('change:headers', e.value)
     },

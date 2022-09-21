@@ -560,7 +560,7 @@ export default {
     scrollMac: 'Use \u2318 + scroll to zoom the map',
   },
   table: {
-    itemsPerPage: 'Rows per page:',
+    itemsPerPage: 'Items per page:',
     noData: 'No data found',
     tooltipExport: 'File export',
     tooltipConfig: 'Table configuration',

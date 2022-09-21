@@ -33,7 +33,7 @@ export default {
       handler: debounce(function (value) {
         this.options.page = 1
         this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 500),
+      }, 400),
     },
   },
   methods: {

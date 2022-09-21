@@ -562,7 +562,7 @@ export default {
     scrollMac: 'Kasuta \u2318 + scroll kaardi suumimiseks',
   },
   table: {
-    itemsPerPage: 'Ridade arv:',
+    itemsPerPage: 'Kirjete arv:',
     noData: 'Andmeid ei leitud',
     tooltipExport: 'Faili eksport',
     tooltipConfig: 'Tabeli konfiguratsioon',

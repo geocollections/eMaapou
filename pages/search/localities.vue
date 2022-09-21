@@ -36,7 +36,7 @@ export default {
           options: { ...this.options },
           search: value,
         })
-      }, 500),
+      }, 400),
     },
   },
   methods: {
