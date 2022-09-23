@@ -330,7 +330,7 @@ export default {
     }
   },
   async fetch() {
-    const attachmentResponse = await this.$services.sarvSolr.getResourceList(
+    const attachmentPromise = this.$services.sarvSolr.getResourceList(
       'attachment',
       {
         defaultParams: {
@@ -340,10 +340,8 @@ export default {
       }
     )
 
-    this.attachments = attachmentResponse?.items ?? []
-
     // Checking if locality has a related .las file to show in graph tab
-    const lasFileResponse = await this.$services.sarvREST.getResourceList(
+    const lasFilePromise = this.$services.sarvREST.getResourceList(
       'attachment_link',
       {
         defaultParams: {
@@ -364,32 +362,31 @@ export default {
 
     tabsObject.byIds.analysis_results.props = {
       localityObject: this.locality,
-      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
     }
 
     const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
     let hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            props: {
-              locality: this.locality.id,
-            },
-            countParams: {
-              solr: {
-                default: {
-                  fq:
-                    tab.id === 'graphs'
-                      ? `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
-                      : `locality_id:${this.$route.params.id}`,
-                },
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          props: {
+            locality: this.locality.id,
+          },
+          countParams: {
+            solr: {
+              default: {
+                fq:
+                  tab.id === 'graphs'
+                    ? `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
+                    : `locality_id:${this.$route.params.id}`,
               },
-              api: { default: { locality: this.locality.id } },
             },
-          })
+            api: { default: { locality: this.locality.id } },
+          },
+        })
       )
     )
+    const lasFileResponse = await lasFilePromise
     // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
     hydratedTabs = hydratedTabs.map((item) => {
       if (item.id === 'graphs') {
@@ -413,13 +410,18 @@ export default {
           count,
           props: {
             ...item.props,
+            attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
             analysisResultsCount: item.count,
             localityDescriptionCount,
             sampleCount,
           },
         }
-      } else return item
+      }
+      return item
     })
+
+    const attachmentResponse = await attachmentPromise
+    this.attachments = attachmentResponse?.items ?? []
 
     const slugRoute = this.$createSlugRoute(
       this.$route,
