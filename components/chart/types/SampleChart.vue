@@ -7,7 +7,7 @@
     autoresize
     group="flog"
     :init-options="initOptions"
-    :option="computedOptions"
+    :option="chartOptions"
     v-on="$listeners"
     @click="handleClick"
   />
@@ -15,29 +15,23 @@
 
 <script>
 import { graphic } from 'echarts'
-import deepmerge from 'deepmerge'
 import { mapState } from 'vuex'
 import { connect, disconnect } from 'echarts/core'
-import VChart from 'vue-echarts'
-// import SampleChartWrapper from '~/components/chart/wrappers/SampleChartWrapper'
 export default {
   name: 'SampleChart',
-  components: { VChart },
   props: {
     chartTitle: {
       type: String,
       required: false,
       default: 'Samples',
     },
-    minDepth: {
+    yMin: {
       type: Number,
       required: true,
-      default: 0,
     },
-    maxDepth: {
+    yMax: {
       type: Number,
       required: true,
-      default: 0,
     },
     results: {
       type: Array,
@@ -45,17 +39,23 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {
-      defaultOptions: {
+  computed: {
+    ...mapState('chart', ['renderer', 'connected']),
+
+    initOptions() {
+      return {
+        renderer: this.renderer,
+      }
+    },
+    chartOptions() {
+      return {
         title: {
-          text: 'Samples',
+          text: this.chartTitle,
           left: 'center',
           textStyle: {
             fontSize: 14,
           },
         },
-
         grid: {
           // show: true,
           top: 50,
@@ -64,12 +64,10 @@ export default {
           containLabel: true,
           width: '150px',
         },
-
         tooltip: {
           trigger: 'item',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
-
         toolbox: {
           top: 20,
           right: 30,
@@ -77,7 +75,6 @@ export default {
             saveAsImage: {},
           },
         },
-
         dataZoom: [
           {
             type: 'inside',
@@ -86,35 +83,11 @@ export default {
             minValueSpan: 0.1,
           },
         ],
-      },
-    }
-  },
-  computed: {
-    ...mapState('chart', ['renderer', 'connected']),
-    computedOptions() {
-      // Todo: Keep an eye on options if series or any other option which should/shouldn't exist then errors start showing,
-      const deepMergedObject = deepmerge(this.defaultOptions, this.chartOptions)
-      if (deepMergedObject?.series?.length > 0) return deepMergedObject
-      else return {}
-    },
-
-    initOptions() {
-      return {
-        renderer: this.renderer,
+        animation: false,
+        xAxis: this.buildXAxis(),
+        yAxis: this.buildYAxis(),
+        series: this.buildChartSeries(),
       }
-    },
-    chartOptions() {
-      if (this.results?.length > 0) {
-        return {
-          animation: false,
-          title: {
-            text: this.chartTitle,
-          },
-          xAxis: this.buildXAxis(),
-          yAxis: this.buildYAxis(),
-          series: this.buildChartSeries(),
-        }
-      } else return {}
     },
   },
   watch: {
@@ -174,12 +147,8 @@ export default {
         splitLine: {
           show: false,
         },
-        min(value) {
-          return value.min - 5
-        },
-        max(value) {
-          return value.max + 5
-        },
+        max: this.yMax,
+        min: this.yMin,
       }
     },
 

@@ -27,8 +27,8 @@
         v-if="sampleResults.length > 0 && minDepth && maxDepth"
         :results="sampleResults"
         :chart-title="$t('sampleChart.title')"
-        :min-depth="minDepth"
-        :max-depth="maxDepth"
+        :y-min="minDepth"
+        :y-max="maxDepth"
       />
 
       <div

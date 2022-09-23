@@ -13,10 +13,8 @@
 <script>
 import { mapState } from 'vuex'
 import { connect, disconnect } from 'echarts/core'
-// import ParamsChartWrapper from '~/components/chart/wrappers/ParamsChartWrapper'
 export default {
   name: 'ParamsChart',
-  // components: { ParamsChartWrapper },
   props: {
     chartTitle: {
       type: String,
@@ -210,8 +208,8 @@ export default {
         axisTick: {
           alignWithLabel: true,
         },
-        max: this.yMax + 5,
-        min: this.yMin - 5,
+        max: this.yMax,
+        min: this.yMin,
       }
     },
 
