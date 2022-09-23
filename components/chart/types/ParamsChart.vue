@@ -246,18 +246,20 @@ export default {
           type: 'line',
           smooth: false,
           xAxisIndex: 0,
-          data: this.results.map((t) => {
-            const avgDepth = t.depth_interval
-              ? (t.depth + t.depth_interval) / 2
-              : t.depth
-            return [
-              t.value,
-              -avgDepth,
-              -t.depth,
-              -t.depth_interval,
-              t.analysis_id,
-            ]
-          }),
+          data: this.results
+            .map((t) => {
+              const avgDepth = t.depth_interval
+                ? (t.depth + t.depth_interval) / 2
+                : t.depth
+              return [
+                t.value,
+                -avgDepth,
+                -t.depth,
+                -t.depth_interval,
+                t.analysis_id,
+              ]
+            })
+            .sort((a, b) => a[1] - b[1]),
           emphasis: {
             focus: 'series',
           },
