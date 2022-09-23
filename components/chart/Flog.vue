@@ -198,7 +198,7 @@ export default {
       return arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]))
     },
     handleMethodsUpdate(event) {
-      this.selectedParameters = event.map((parameter) => parameter.name)
+      this.selectedParameters = event
     },
     async fetchChartData() {
       const analysisResultsPromise = this.$services.sarvSolr.getResourceList(
