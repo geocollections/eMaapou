@@ -3,7 +3,7 @@
     <v-btn
       width="75"
       small
-      class="mb-2 rounded-r-0 rounded-l"
+      class="mb-2 rounded-r-0 text-none montserrat rounded-l"
       color="accent"
       :outlined="renderer !== 'canvas'"
       @click="$emit('update', 'canvas')"
@@ -12,7 +12,7 @@
     <v-btn
       width="75"
       small
-      class="mb-2 rounded-l-0 rounded-r"
+      class="mb-2 rounded-l-0 montserrat rounded-r"
       color="accent"
       :outlined="renderer !== 'svg'"
       @click="$emit('update', 'svg')"

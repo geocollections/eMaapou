@@ -109,6 +109,7 @@ export default {
     partners: 'Partnerid',
     services: 'E-Teenused',
     accept: 'Nõustun',
+    depth: 'Sügavus',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -1001,5 +1002,8 @@ export default {
     miningCompany: 'Kaevandaja',
     dataExportDate: 'Andmete import',
     period: 'Kehtivuse periood',
+  },
+  sampleChart: {
+    title: 'Proovid',
   },
 }

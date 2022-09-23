@@ -1,68 +1,207 @@
 <template>
-  <div>
-    <params-chart-wrapper
-      v-for="(item, index) in params"
-      :key="index"
-      :options="optionsUsingParameter(item)"
-    />
-  </div>
+  <v-chart
+    class="chart"
+    v-bind="$attrs"
+    autoresize
+    group="flog"
+    :init-options="initOptions"
+    :option="chartOptions"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
-import ParamsChartWrapper from '~/components/chart/wrappers/ParamsChartWrapper'
+import { mapState } from 'vuex'
+import { connect, disconnect } from 'echarts/core'
+// import ParamsChartWrapper from '~/components/chart/wrappers/ParamsChartWrapper'
 export default {
   name: 'ParamsChart',
-  components: { ParamsChartWrapper },
+  // components: { ParamsChartWrapper },
   props: {
     chartTitle: {
       type: String,
       required: false,
       default: 'Param',
     },
-    minDepth: {
+    yMin: {
       type: Number,
       required: true,
-      default: 0,
     },
-    maxDepth: {
+    yMax: {
       type: Number,
       required: true,
-      default: 0,
     },
     results: {
       type: Array,
       required: true,
-      default: () => {},
     },
-    params: {
-      type: Array,
+    param: {
+      type: String,
       required: true,
-      default: () => {},
     },
   },
-  methods: {
-    optionsUsingParameter(param) {
-      return {
-        animation: false,
-
+  data() {
+    return {
+      defaultOptions: {
         title: {
-          text: param,
+          text: 'Chart title',
+          left: 'center',
+          textStyle: {
+            fontSize: 14,
+          },
         },
 
-        yAxis: this.buildYAxis(),
+        grid: {
+          show: true,
+          top: 50,
+          bottom: 140,
+          left: '20px',
+          containLabel: true,
+          width: '200px',
+        },
 
-        xAxis: this.buildXAxis(param),
+        tooltip: {
+          trigger: 'item',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: this.$vuetify.theme.currentTheme.warning,
+            },
+            crossStyle: {
+              color: this.$vuetify.theme.currentTheme.warning,
+              width: 1,
+              type: 'solid',
+            },
+          },
+          formatter(params) {
+            return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.seriesName}
+              <br />Depth: <b>${params.data[1]}</b></span>
+              <br /><span>Value: <b>${params.data[0]}</b></span>`
+          },
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        },
 
-        series: this.buildChartSeries(param),
+        toolbox: {
+          top: 20,
+          right: 30,
+          feature: {
+            saveAsImage: {},
+          },
+        },
+
+        dataZoom: [
+          {
+            type: 'inside',
+            yAxisIndex: 0,
+            filterMode: 'filter',
+            minValueSpan: 0.1,
+          },
+        ],
+      },
+    }
+  },
+  computed: {
+    ...mapState('chart', ['renderer', 'connected']),
+    initOptions() {
+      return {
+        renderer: this.renderer,
       }
     },
+    chartOptions() {
+      return {
+        grid: {
+          show: true,
+          top: 50,
+          bottom: 140,
+          left: '20px',
+          containLabel: true,
+          width: '200px',
+        },
+        tooltip: {
+          trigger: 'item',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: this.$vuetify.theme.currentTheme.warning,
+            },
+            crossStyle: {
+              color: this.$vuetify.theme.currentTheme.warning,
+              width: 1,
+              type: 'solid',
+            },
+          },
+          formatter(params) {
+            return `
+              <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
+                params.color
+              }"></span>
+              <span>
+                ${params.data[4]}<br />
+                ${params.seriesName}: <b>${params.data[0]}</b><br />
+                Depth: <b>${params.data[2]}</b>
+                ${
+                  params.data[3]
+                    ? `<br />Depth interval: <b>${params.data[3]}</b>`
+                    : ''
+                }
+              </span>
+              `
+          },
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        },
+        toolbox: {
+          top: 20,
+          right: 30,
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        dataZoom: [
+          {
+            type: 'inside',
+            yAxisIndex: 0,
+            filterMode: 'filter',
+            minValueSpan: 0.1,
+          },
+        ],
+        animation: false,
+        title: {
+          left: 'center',
+          textStyle: {
+            fontSize: 14,
+          },
+          text: this.chartTitle,
+        },
+        xAxis: this.buildXAxis(),
+        yAxis: this.buildYAxis(),
+        series: this.buildChartSeries(),
+      }
+    },
+  },
 
+  watch: {
+    connected: {
+      handler(value) {
+        if (value) {
+          connect('flog')
+        } else {
+          disconnect('flog')
+        }
+      },
+      immediate: true,
+    },
+  },
+
+  mounted() {
+    connect('flog')
+  },
+  methods: {
     buildYAxis() {
       return {
         type: 'value',
         boundaryGap: false,
-        name: 'Depth',
-        nameLocation: 'end',
+        name: this.$t('common.depth'),
+        nameLocation: 'start',
         nameTextStyle: {
           fontWeight: 'bold',
         },
@@ -71,23 +210,17 @@ export default {
         axisTick: {
           alignWithLabel: true,
         },
-        max:
-          this.maxDepth > 0 && this.maxDepth > this.minDepth
-            ? this.minDepth * -1
-            : this.maxDepth,
-        min:
-          this.minDepth > 0 && this.minDepth < this.maxDepth
-            ? this.maxDepth * -1
-            : this.minDepth,
+        max: this.yMax + 5,
+        min: this.yMin - 5,
       }
     },
 
-    buildXAxis(param) {
+    buildXAxis() {
       return {
         show: true,
-        position: 'bottom',
+        position: 'top',
         type: 'value',
-        name: param.substring(param.indexOf('[') + 1, param.indexOf(']')),
+        // name: param,
         nameLocation: 'center',
         nameTextStyle: {
           fontWeight: 'bold',
@@ -95,11 +228,9 @@ export default {
         },
         min(value) {
           return (value.min - 0.1).toFixed(2) * 1
-          // return Math.floor(((value.min - 0.1).toFixed(2) * 1) / 10) * 10
         },
         max(value) {
           return (value.max + 0.1).toFixed(2) * 1
-          // return Math.ceil(((value.max + 0.1).toFixed(2) * 1) / 10) * 10
         },
         splitNumber: 2,
         axisLine: {
@@ -110,16 +241,25 @@ export default {
       }
     },
 
-    buildChartSeries(param) {
+    buildChartSeries() {
       return [
         {
-          name: param,
+          name: this.param,
           type: 'line',
           smooth: false,
           xAxisIndex: 0,
-          data: this.results
-            .filter((result) => result.parameter === param)
-            .map((t) => [t.value, t.depth * -1]),
+          data: this.results.map((t) => {
+            const avgDepth = t.depth_interval
+              ? (t.depth + t.depth_interval) / 2
+              : t.depth
+            return [
+              t.value,
+              -avgDepth,
+              -t.depth,
+              -t.depth_interval,
+              t.analysis_id,
+            ]
+          }),
           emphasis: {
             focus: 'series',
           },
@@ -129,3 +269,12 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.chart {
+  height: 90vh;
+  width: 250px;
+  min-height: 600px;
+  max-height: 2000px;
+}
+</style>

@@ -44,6 +44,7 @@ export default ($axios) => ({
       items: response?.response?.docs,
       count: response?.response?.numFound,
       stats: response?.stats,
+      facet: response?.facet_counts,
       grouped: response?.grouped,
     }
   },

@@ -108,6 +108,7 @@ export default {
     partners: 'Partners',
     services: 'E-Services',
     accept: 'Accept',
+    depth: 'Depth',
   },
   link: {
     github: 'GitHub',
@@ -999,5 +1000,8 @@ export default {
     miningCompany: 'Mining company',
     dataExportDate: 'Data imported',
     period: 'Period of validity',
+  },
+  sampleChart: {
+    title: 'Samples',
   },
 }

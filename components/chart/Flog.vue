@@ -1,99 +1,80 @@
 <template>
-  <client-only>
-    <div class="pa-2">
-      <external-legend-options
-        v-if="initSelectedParameters.length > 0"
-        :is-loading="isLoading"
-        :checkboxes-object="methods"
-        :all-items="parameters"
-        :init-selected-items="initSelectedParameters"
-        @update:selectedItems="selectedParameters = $event"
+  <div class="pa-2">
+    <div class="mb-2 d-flex flex-row flex-wrap">
+      <options-method-tree-view
+        :methods="methods"
+        :initial-selection="selectedParameters"
+        @input="handleMethodsUpdate"
+      />
+      <renderer-switch :renderer="renderer" @update="renderer = $event" />
+
+      <connection-switch
+        :input-value="connected"
+        @change="connected = $event"
+      />
+    </div>
+
+    <!-- Todo: Review all chart wrappers and limit it to only one wrapper -->
+
+    <div v-if="!isLoading" class="charts d-flex flex-row">
+      <!-- Todo: Stratigraphy chart -->
+      <!-- Disabled as it's not ready yet -->
+      <!-- <stratigraphy-chart
+          v-if="stratigraphyResults.length > 0 && false"
+          :results="stratigraphyResults"
+        /> -->
+      <sample-chart
+        v-if="sampleResults.length > 0 && minDepth && maxDepth"
+        :results="sampleResults"
+        :chart-title="$t('sampleChart.title')"
+        :min-depth="minDepth"
+        :max-depth="maxDepth"
       />
 
-      <external-legend-options
-        v-if="initSelectedTaxa.length > 0 && false"
-        :enable-checkboxes="false"
-        :is-loading="isLoading"
-        :all-items="taxa"
-        :init-selected-items="initSelectedTaxa"
-        select-field-title="statistics.activeTaxa"
-        padding-top-zero
-        @update:selectedItems="selectedTaxa = $event"
-      />
-
-      <div class="mb-2 d-flex flex-row flex-wrap">
-        <renderer-switch
-          class="mr-4"
-          :renderer="renderer"
-          @update="renderer = $event"
-        />
-
-        <connection-switch
-          v-if="parameters.length > 1"
-          :input-value="connected"
-          @change="connected = $event"
+      <div
+        v-if="analysisResults.length > 0 && selectedParameters.length > 0"
+        class="d-flex flex-row"
+      >
+        <params-chart
+          v-for="(param, index) in selectedParameters"
+          :key="index"
+          :results="
+            analysisResults.filter((result) => result.parameter === param.name)
+          "
+          :param="param.name"
+          :chart-title="param.name"
+          :y-min="minDepth"
+          :y-max="maxDepth"
         />
       </div>
 
-      <!-- Todo: Review all chart wrappers and limit it to only one wrapper -->
-
-      <div v-if="!isLoading" class="charts d-flex flex-row">
-        <!-- Todo: Stratigraphy chart -->
-        <!-- Disabled as it's not ready yet -->
-        <stratigraphy-chart
-          v-if="stratigraphyResults.length > 0 && false"
-          :results="stratigraphyResults"
-        />
-
-        <sample-chart
-          v-if="sampleResults.length > 0 && minDepth && maxDepth"
-          :results="sampleResults"
-          :min-depth="minDepth"
-          :max-depth="maxDepth"
-        />
-
-        <params-chart
-          v-if="analysisResults.length > 0 && selectedParameters.length > 0"
-          class="d-flex flex-row"
-          :results="analysisResults"
-          :params="selectedParameters"
-          :min-depth="minDepth"
-          :max-depth="maxDepth"
-        />
-
-        <taxa-chart
+      <!-- <taxa-chart
           v-if="taxaResults.length > 0 && selectedTaxa.length > 0 && false"
           class="d-flex flex-row"
           :results="taxaResults"
           :taxa="selectedTaxa"
           :min-depth="minDepth"
           :max-depth="maxDepth"
-        />
-      </div>
+        /> -->
     </div>
-  </client-only>
+  </div>
 </template>
 
 <script>
 import isNil from 'lodash/isNil'
 import { mapFields } from 'vuex-map-fields'
-import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
 import SampleChart from '~/components/chart/types/SampleChart'
-import StratigraphyChart from '~/components/chart/types/StratigraphyChart'
-import TaxaChart from '~/components/chart/types/TaxaChart'
 import ParamsChart from '~/components/chart/types/ParamsChart'
-
+import OptionsMethodTreeView from '~/components/chart/options/OptionsMethodTreeView.vue'
 export default {
   components: {
     ParamsChart,
-    TaxaChart,
-    StratigraphyChart,
     SampleChart,
     ConnectionSwitch,
     RendererSwitch,
-    ExternalLegendOptions,
+    OptionsMethodTreeView,
   },
   props: {
     tableKey: {
@@ -124,7 +105,7 @@ export default {
       sampleResults: [],
       taxaResults: [],
       // Analysis
-      methods: {},
+      methods: [],
       parameters: [],
       selectedParameters: [],
       initSelectedParameters: [],
@@ -142,56 +123,58 @@ export default {
       this.sampleResults === 0 ||
       this.taxaResults === 0
     ) {
-      const {
-        // stratigraphyResponse,
-        // stratigraphyStatsResponse,
-        resultsResponse,
-        statsResponse,
-        sampleResponse,
-        sampleStatsResponse,
-        taxaResponse,
-        taxaStatsResponse,
-      } = await this.fetchChartData()
-
+      const { analysisResultsResponse, sampleResponse } =
+        await this.fetchChartData()
       // Results
-      this.analysisResults = resultsResponse?.items
+      this.analysisResults = analysisResultsResponse?.items
       this.sampleResults = sampleResponse?.items
-      this.taxaResults = taxaResponse?.items
-
-      // Depth
-      // Depth may come from stratigraphy, samples, analyses or taxa
-      this.depth = new Set([
-        // Todo: Add depth from stratigraphyStatsResponse? (locality_description table is not in solr index)
-        ...statsResponse?.stats?.stats_fields?.depth?.distinctValues,
-        ...sampleStatsResponse?.stats?.stats_fields?.depth?.distinctValues,
-        ...taxaStatsResponse?.stats?.stats_fields?.depth?.distinctValues,
-      ])
-      // Floor or Ceil to next tenth
-      this.minDepth = Math.floor(Math.min(...this.depth) / 10) * 10
-      this.maxDepth = Math.ceil(Math.max(...this.depth) / 10) * 10
-
-      // Analysis
-      const methodKey =
-        this.$i18n.locale === 'en' ? 'analysis_method_en' : 'analysis_method'
-      this.methods =
-        statsResponse?.stats?.stats_fields?.[methodKey]?.distinctValues
-      this.methods = this.methods.reduce((prev, curr) => {
-        prev[curr] = [
-          ...new Set(
-            this.analysisResults
-              .filter((item) => item[methodKey] === curr)
-              .map((item) => item.parameter)
-          ),
-        ]
-        return prev
-      }, {})
-      this.parameters =
-        statsResponse?.stats?.stats_fields?.parameter?.distinctValues
-      this.selectedParameters = this.parameters.slice(
-        0,
-        this.parameters.length > 3 ? 3 : this.parameters.length
+      // this.taxaResults = taxaResponse?.items
+      this.minDepth = Math.min(
+        analysisResultsResponse.stats.stats_fields.depth.min,
+        sampleResponse.stats.stats_fields.depth.min
       )
-      this.initSelectedParameters = this.selectedParameters
+      this.maxDepth = Math.max(
+        analysisResultsResponse.stats.stats_fields.depth.max,
+        sampleResponse.stats.stats_fields.depth.max
+      )
+
+      if (
+        this.maxDepth > 0 &&
+        this.minDepth > 0 &&
+        this.maxDepth > this.minDepth
+      )
+        [this.maxDepth, this.minDepth] = [-this.minDepth, -this.maxDepth]
+
+      let id = 0
+      this.methods = this.zip(
+        ...Object.values(analysisResultsResponse.facet.facet_pivot)
+      ).map(([method, methodParameters]) => {
+        id += 1
+        return {
+          value: method.value,
+          id,
+          name: method.pivot[0].value,
+          name_en: method.pivot[0].pivot[0].value,
+          count: method.count,
+          children: methodParameters.pivot.map((parameter) => {
+            id += 1
+            return {
+              value: parameter.value,
+              id,
+              count: parameter.count,
+              name: parameter.pivot[0].value,
+            }
+          }),
+        }
+      })
+      if (this.methods.length > 0) {
+        this.selectedParameters = this.methods[0].children.slice(
+          0,
+          this.methods[0].children.length > 3
+            ? 3
+            : this.methods[0].children.length
+        )
+      }
 
       // Taxa
       // this.taxa = taxaStatsResponse?.stats?.stats_fields?.taxon?.distinctValues
@@ -199,10 +182,10 @@ export default {
         if (!prev.includes(curr.taxon)) prev.push(curr.taxon)
         return prev
       }, [])
-      this.selectedTaxa = this.taxa.slice(
-        0,
-        this.taxa.length > 3 ? 3 : this.taxa.length
-      )
+      // this.selectedTaxa = this.taxa.slice(
+      //   0,
+      //   this.taxa.length > 3 ? 3 : this.taxa.length
+      // )
       this.initSelectedTaxa = this.selectedTaxa
     }
     this.isLoading = false
@@ -211,8 +194,14 @@ export default {
     ...mapFields('chart', ['renderer', 'connected']),
   },
   methods: {
+    zip(arr, ...arrs) {
+      return arr.map((val, i) => arrs.reduce((a, arr) => [...a, arr[i]], [val]))
+    },
+    handleMethodsUpdate(event) {
+      this.selectedParameters = event.map((parameter) => parameter.name)
+    },
     async fetchChartData() {
-      const resultsResponse = await this.$services.sarvSolr.getResourceList(
+      const analysisResultsPromise = this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
           isValid: isNil(this.tableId),
@@ -220,100 +209,76 @@ export default {
             fq: `${this.tableKey}:${this.tableId}`,
             start: 0,
             rows: 50000,
-            fl: 'id,analysis_id,depth,depth_interval,parameter,analysis_method,analysis_method_en,value',
+            fl: 'id,analysis_id,depth,depth_interval,parameter,method_id,value',
             sort: 'depth asc',
-          },
-        }
-      )
-
-      const statsResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis_results',
-        {
-          isValid: isNil(this.tableId),
-          defaultParams: {
-            fq: `${this.tableKey}:${this.tableId}`,
-            rows: 0,
-            fl: 'depth',
-            sort: 'depth asc, parameter asc',
             stats: 'on',
-            'stats.field': [
-              'depth',
-              'parameter',
-              'analysis_method',
-              'analysis_method_en',
+            'stats.field': ['depth'],
+            facet: 'on',
+            'facet.pivot': [
+              'method_id,analysis_method,analysis_method_en',
+              'method_id,parameter_id,parameter',
             ],
-            'stats.calcdistinct': true,
           },
         }
       )
 
-      const sampleResponse = await this.$services.sarvSolr.getResourceList(
-        'sample',
+      const samplesPromise = this.$services.sarvSolr.getResourceList(
+        'sample_data',
         {
           isValid: isNil(this.tableId),
           defaultParams: {
             fq: `${this.tableKey}:${this.tableId} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
             start: 0,
             rows: 50000,
-            fl: 'id,number,depth,depth_interval,',
-            sort: 'depth asc',
-          },
-        }
-      )
-
-      const sampleStatsResponse = await this.$services.sarvSolr.getResourceList(
-        'sample',
-        {
-          isValid: isNil(this.tableId),
-          defaultParams: {
-            fq: `${this.tableKey}:${this.tableId}`,
-            rows: 0,
-            fl: 'depth',
+            fl: 'id,sample_id,sample_number,depth,depth_interval,',
             sort: 'depth asc',
             stats: 'on',
             'stats.field': ['depth'],
-            'stats.calcdistinct': true,
           },
         }
       )
 
-      const taxaResponse = await this.$services.sarvSolr.getResourceList(
-        'taxon_frequency',
-        {
-          isValid: isNil(this.tableId),
-          defaultParams: {
-            fq: `${this.tableKey}:${this.tableId} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
-            start: 0,
-            rows: 50000,
-            fl: 'depth,depth_interval,frequency,taxon,taxon_id,',
-            sort: 'depth asc',
-          },
-        }
-      )
+      // TODO: catch any failing promises
+      const [analysisResultsResponse, sampleResponse] = await Promise.all([
+        analysisResultsPromise,
+        samplesPromise,
+      ])
 
-      const taxaStatsResponse = await this.$services.sarvSolr.getResourceList(
-        'taxon_frequency',
-        {
-          isValid: isNil(this.tableId),
-          defaultParams: {
-            fq: `${this.tableKey}:${this.tableId}`,
-            rows: 0,
-            fl: 'depth',
-            sort: 'depth asc',
-            stats: 'on',
-            'stats.field': ['taxon', 'depth'],
-            'stats.calcdistinct': true,
-          },
-        }
-      )
+      // const taxaResponse = await this.$services.sarvSolr.getResourceList(
+      //   'taxon_frequency',
+      //   {
+      //     isValid: isNil(this.tableId),
+      //     defaultParams: {
+      //       fq: `${this.tableKey}:${this.tableId} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
+      //       start: 0,
+      //       rows: 50000,
+      //       fl: 'depth,depth_interval,frequency,taxon,taxon_id,',
+      //       sort: 'depth asc',
+      //     },
+      //   }
+      // )
+
+      // const taxaStatsResponse = await this.$services.sarvSolr.getResourceList(
+      //   'taxon_frequency',
+      //   {
+      //     isValid: isNil(this.tableId),
+      //     defaultParams: {
+      //       fq: `${this.tableKey}:${this.tableId}`,
+      //       rows: 0,
+      //       fl: 'depth',
+      //       sort: 'depth asc',
+      //       stats: 'on',
+      //       'stats.field': ['taxon', 'depth'],
+      //       'stats.calcdistinct': true,
+      //     },
+      //   }
+      // )
 
       return {
-        resultsResponse,
-        statsResponse,
+        analysisResultsResponse,
         sampleResponse,
-        sampleStatsResponse,
-        taxaResponse,
-        taxaStatsResponse,
+        // taxaResponse,
+        // taxaStatsResponse,
       }
     },
   },
