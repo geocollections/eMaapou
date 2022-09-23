@@ -14,7 +14,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        Parameters
+        {{ $t('common.parameters') }}
       </v-btn>
     </template>
     <v-treeview
@@ -28,7 +28,8 @@
     >
       <template #label="{ item }">
         <div>
-          {{ item.name }} <v-chip small>{{ item.count }}</v-chip>
+          {{ $translate({ et: item.name, en: item.name_en }) }}
+          <v-chip small>{{ item.count }}</v-chip>
         </div>
       </template>
     </v-treeview>
@@ -50,7 +51,6 @@ export default {
   },
   methods: {
     handleInput(event) {
-      console.log(event)
       this.$emit('input', event)
     },
   },
