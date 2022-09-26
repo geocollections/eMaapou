@@ -1,6 +1,6 @@
 export default {
-  title: 'e·Maapõu',
-  subtitle: 'Geological data and e\u2011services in Estonia',
+  title: 'eMaapõu',
+  subtitle: 'Geoscience data and e\u2011services',
   slogan: 'Estonian geology data portal',
   landing: {
     searchTitle: 'Find from e·Maapõu',
@@ -36,6 +36,11 @@ export default {
     statText1: 'Specimens',
     statText2: 'Analyses',
     statText3: 'Samples',
+    otherEmaapouServices: 'Other e-maapõu services',
+    otherServices: 'Other services',
+    searchPlaceholder: 'Search eMaapõu',
+    description:
+      'eMaapõu provides open access to geoscience data in Estonia. It is developed by the national research infrastructure NATARC.',
   },
   common: {
     general: 'General info',
@@ -102,6 +107,8 @@ export default {
     browse: 'Browse',
     partners: 'Partners',
     services: 'E-Services',
+    accept: 'Accept',
+    depth: 'Depth',
   },
   link: {
     github: 'GitHub',
@@ -116,6 +123,7 @@ export default {
   },
   locality: {
     pageTitle: 'Localities',
+    landingCard: 'localities',
     id: 'ID',
     locality: 'Locality',
     country: 'Country',
@@ -161,6 +169,8 @@ export default {
     dateChanged: 'Date changed',
     graphs: 'Graphs',
     linkToAnalyticalData: 'View analytical data',
+    linkGeoscienceLiterature: 'Geoscience literature',
+    linkLandBoard: 'Estonian Land Board ID',
   },
   localitySynonym: {
     synonym: 'Synonym',
@@ -175,6 +185,7 @@ export default {
   },
   drillcore: {
     pageTitle: 'Drillcores',
+    landingCard: 'drillcores',
     id: 'ID',
     name: 'Name',
     boxes: 'Boxes',
@@ -299,6 +310,8 @@ export default {
     lithostratigraphy: 'Lithostratigraphy',
     locality: 'Locality',
     depth: 'Depth',
+    analysisMethod: 'Method',
+    lab: 'Lab',
   },
   analysisResult: {
     parameter: 'Parameter',
@@ -310,6 +323,7 @@ export default {
     valueError: 'Error',
   },
   specimen: {
+    landingCard: 'specimens',
     id: 'ID',
     number: 'Specimen number',
     oldNumber: 'Old number',
@@ -332,7 +346,7 @@ export default {
     remarks: 'Remarks',
     part: 'Part/element',
     stratigraphyRemarks: 'Stratigraphy remarks',
-    hierarchy: 'Stratigraphy',
+    stratigraphyHierarchy: 'Stratigraphy',
     fossil: 'Fossil',
     pageTitle: 'Specimens',
     dateCollected: 'Date collected',
@@ -342,6 +356,12 @@ export default {
     references: 'References ({number})',
     name: 'Name',
     sample: 'Sample',
+    has_image: 'Show only data with images',
+    has_map: 'Show only georeferenced data',
+    fossilName: 'Fossil name',
+    rockName: 'Rock/mineral',
+    reference: 'Reference',
+    parent: 'Belongs to',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',
@@ -425,6 +445,7 @@ export default {
   },
   sample: {
     pageTitle: 'Samples',
+    landingCard: 'samples',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -451,7 +472,7 @@ export default {
     stratigraphyFree: 'Stratigraphy free',
     stratigraphyBed: 'Bed',
     agentCollected: 'Collector',
-    mass: 'Weight',
+    mass: 'Weight (g)',
     samplePurpose: 'Sample purpose',
     rock: 'Rock',
     classificationRock: 'Material',
@@ -473,6 +494,11 @@ export default {
     longitude: 'Longitude',
     project: 'Project',
     igsn: 'IGSN',
+    parent: 'Belongs to',
+    parentSpecimen: 'Belongs to specimen',
+  },
+  sampleData: {
+    sampleNumber: 'Sample',
   },
   preparation: {
     pageTitle: 'Preparations',
@@ -535,7 +561,7 @@ export default {
     scrollMac: 'Use \u2318 + scroll to zoom the map',
   },
   table: {
-    itemsPerPage: 'Rows per page:',
+    itemsPerPage: 'Items per page:',
     noData: 'No data found',
     tooltipExport: 'File export',
     tooltipConfig: 'Table configuration',
@@ -585,6 +611,7 @@ export default {
   kirjandus: {
     title: 'Geoscience Literature',
     description: 'Estonian Geoscience Literature Database',
+    landingCard: 'references',
   },
   gmre: {
     title: 'Geology of Estonia',
@@ -597,6 +624,7 @@ export default {
   fossiilid: {
     title: 'Baltoscandian Fossils',
     description: 'Baltoscandian Fossils',
+    landingCard: 'fossils',
   },
   kivid: {
     title: 'Minerals and Rocks',
@@ -604,6 +632,7 @@ export default {
   },
   stratigraphy: {
     title: 'Stratigraphy',
+    landingCard: 'stratigraphy',
     id: 'ID',
     stratigraphy: 'Stratigraphy',
     index_main: 'Index',
@@ -827,6 +856,7 @@ export default {
     authors: 'Authors ({number})',
     geolocations: 'Geolocations ({number})',
     resource: 'Resource',
+    sampleResults: 'Results ({number})',
   },
   datasetGeolocation: {
     name: 'Name',
@@ -844,6 +874,7 @@ export default {
     pages: 'Pages',
     doi: 'DOI',
     remarks: 'Remarks',
+    pdf: 'PDF',
   },
   storage: {
     storage: 'Storage',
@@ -891,6 +922,7 @@ export default {
   analyticalData: {
     id: 'ID',
     pageTitle: 'Analytical data',
+    landingCard: 'analyses',
     sample: 'Sample',
     locality: 'Locality',
     stratigraphy: 'Stratigraphy',
@@ -917,6 +949,7 @@ export default {
     isEmptyMessage: 'Nothing to show, please select an option.',
   },
   photo: {
+    landingCard: 'photos',
     pageTitle: 'Photo Archive',
     id: 'ID',
     number: 'Number',
@@ -966,5 +999,9 @@ export default {
     permitOwner: 'Permit owner',
     miningCompany: 'Mining company',
     dataExportDate: 'Data imported',
+    period: 'Period of validity',
+  },
+  sampleChart: {
+    title: 'Samples',
   },
 }

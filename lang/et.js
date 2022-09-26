@@ -1,6 +1,6 @@
 export default {
-  title: 'e·Maapõu',
-  subtitle: 'Maapõue andmed ja e\u2011teenused',
+  title: 'eMaapõu',
+  subtitle: 'Geoloogilised andmed ja e\u2011teenused',
   slogan: 'Kogu info Eesti maapõuest',
   landing: {
     searchTitle: 'Leia e·Maapõuest',
@@ -29,13 +29,19 @@ export default {
     searchRoutes: 'Sirvi e-Maapõues',
     eMaapouPages: 'e·Maapõu ökosüsteem',
     map: 'Andmed kaardil',
-    quickSearch: 'Leia kiirelt',
+    quickSearch:
+      'Leia kiirelt Leia kiireltLeia kiireltLeia kiireltLeia kiirelt',
     viewMore: 'Vaata lähemalt',
     intro:
       'e-Maapõu on aken Eesti geoloogiliste andmete, andmekogude ja e-teenuste juurde. Lihtsaim viis e-Maapõuest andmete otsimiseks või sirvimiseks on kasutada portaali kiirotsingut. Detailotsingu moodulites on võimalik piiritleda täpsemad päringukriteeriumid, kasutada kaardiotsingut, kuvada pildifaile, andmeid eksportida ning analüüsida.',
     statText1: 'Eksemplari',
     statText2: 'Analüüsi',
     statText3: 'Proovi',
+    otherEmaapouServices: 'Teised e-maapõu teenused',
+    otherServices: 'Teised teenused',
+    searchPlaceholder: 'Otsi eMaapõuest',
+    description:
+      'eMaapõu pakub avatud juurdepääsu Eesti maapõue andmetele. Selle arendajaks on teadustaristu teekaart NATARC.',
   },
   common: {
     general: 'Üldinfo',
@@ -102,6 +108,8 @@ export default {
     browse: 'Sirvi',
     partners: 'Partnerid',
     services: 'E-Teenused',
+    accept: 'Nõustun',
+    depth: 'Sügavus',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -117,6 +125,7 @@ export default {
   },
   locality: {
     pageTitle: 'Lokaliteedid',
+    landingCard: 'lokaliteeti',
     id: 'ID',
     locality: 'Lokaliteet',
     country: 'Riik',
@@ -161,7 +170,9 @@ export default {
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
     graphs: 'Graafikud',
-    linkToAnalyticalData: 'Asukoha analüüsitulemused',
+    linkToAnalyticalData: 'Analüüsitulemused',
+    linkGeoscienceLiterature: 'Geoloogiline kirjandus',
+    linkLandBoard: 'Maa-amet ID',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',
@@ -176,6 +187,7 @@ export default {
   },
   drillcore: {
     pageTitle: 'Puursüdamikud',
+    landingCard: 'puursüdamikku',
     id: 'ID',
     name: 'Nimi',
     boxes: 'Südamikukaste',
@@ -300,6 +312,8 @@ export default {
     lithostratigraphy: 'Litostratigraafia',
     locality: 'Lokaliteet',
     depth: 'Sügavus',
+    analysisMethod: 'Meetod',
+    lab: 'Labor',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -312,6 +326,7 @@ export default {
   },
   specimen: {
     id: 'ID',
+    landingCard: 'eksemplari',
     number: 'Eksemplari nr.',
     oldNumber: 'Vana nr.',
     depth: 'Sügavus (m)',
@@ -333,7 +348,7 @@ export default {
     remarks: 'Lisainfo',
     part: 'Osis/element',
     stratigraphyRemarks: 'Stratigraafia lisainfo',
-    hierarchy: 'Stratigraafia',
+    stratigraphyHierarchy: 'Stratigraafia',
     fossil: 'Fossil',
     pageTitle: 'Eksemplarid',
     dateCollected: 'Kogumise aeg',
@@ -343,6 +358,12 @@ export default {
     references: 'Viited ({number})',
     name: 'Nimi',
     sample: 'Proov',
+    has_image: 'Näita ainult piltidega kirjeid',
+    has_map: 'Näita ainult koordinaatidega kirjeid',
+    fossilName: 'Fossiili nimi',
+    rockName: 'Kivim/mineraal',
+    reference: 'Kirjandus',
+    parent: 'Kuulub',
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',
@@ -426,6 +447,7 @@ export default {
   },
   sample: {
     pageTitle: 'Proovid',
+    landingCard: 'proovi',
     id: 'ID',
     name: 'Name',
     area: 'Area',
@@ -452,7 +474,7 @@ export default {
     stratigraphyFree: 'Stratigraafia vaba',
     stratigraphyBed: 'Kiht',
     agentCollected: 'Koguja',
-    mass: 'Mass',
+    mass: 'Kaal (g)',
     samplePurpose: 'Proovi eesmärk',
     rock: 'Rock',
     classificationRock: 'Materjal',
@@ -474,6 +496,11 @@ export default {
     longitude: 'Pikkuskraad',
     project: 'Projekt',
     igsn: 'IGSN',
+    parent: 'Kuulub',
+    parentSpecimen: 'Kuulub eksemplari',
+  },
+  sampleData: {
+    sampleNumber: 'Proov',
   },
   preparation: {
     pageTitle: 'Preparaadid',
@@ -536,7 +563,7 @@ export default {
     scrollMac: 'Kasuta \u2318 + scroll kaardi suumimiseks',
   },
   table: {
-    itemsPerPage: 'Ridade arv:',
+    itemsPerPage: 'Kirjete arv:',
     noData: 'Andmeid ei leitud',
     tooltipExport: 'Faili eksport',
     tooltipConfig: 'Tabeli konfiguratsioon',
@@ -586,6 +613,7 @@ export default {
   kirjandus: {
     title: 'Geoloogiline kirjandus',
     description: 'Eesti maapõue kirjanduse andmebaas',
+    landingCard: 'kirjet',
   },
   gmre: {
     title: 'Eesti Geoloogia',
@@ -598,6 +626,7 @@ export default {
   fossiilid: {
     title: 'Fossiilid',
     description: 'Baltoskandia fossiilide portaal',
+    landingCard: 'fossiili',
   },
   kivid: {
     title: 'Mineraalid ja kivimid',
@@ -605,6 +634,7 @@ export default {
   },
   stratigraphy: {
     title: 'Stratigraafia',
+    landingCard: 'stratigraafiat',
     id: 'ID',
     stratigraphy: 'Stratigraafia',
     index_main: 'Indeks',
@@ -828,6 +858,7 @@ export default {
     authors: 'Autorid ({number})',
     geolocations: 'Geopunkt ({number})',
     resource: 'Allikas',
+    sampleResults: 'Tulemused ({number})',
   },
   datasetGeolocation: {
     name: 'Nimi',
@@ -845,6 +876,7 @@ export default {
     pages: 'Leheküljed',
     doi: 'DOI',
     remarks: 'Lisainfo',
+    pdf: 'PDF',
   },
   storage: {
     storage: 'Hoiukoht',
@@ -892,6 +924,7 @@ export default {
   analyticalData: {
     id: 'ID',
     pageTitle: 'Laboriandmed',
+    landingCard: 'analüüsi',
     sample: 'Proov',
     locality: 'Lokaliteet',
     stratigraphy: 'Stratigraafia',
@@ -919,6 +952,7 @@ export default {
   },
   photo: {
     pageTitle: 'Fotoarhiiv',
+    landingCard: 'fotot',
     id: 'ID',
     number: 'Number',
     agent: 'Autor',
@@ -955,7 +989,7 @@ export default {
   },
   miningClaim: {
     id: 'Mäeeraldise ID',
-    number: 'Mäeeraldise Nr',
+    number: 'Mäeeraldise nr.',
     registrationNo: 'Maardla registrikaardi nr.',
     name: 'Nimi',
     area: 'Pindala (ha)',
@@ -967,5 +1001,9 @@ export default {
     permitOwner: 'Kaevandusloa omanik',
     miningCompany: 'Kaevandaja',
     dataExportDate: 'Andmete import',
+    period: 'Kehtivuse periood',
+  },
+  sampleChart: {
+    title: 'Proovid',
   },
 }

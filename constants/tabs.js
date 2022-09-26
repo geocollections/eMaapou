@@ -265,6 +265,15 @@ export const TABS_DATASET = {
       count: 0,
       props: {},
     },
+    sample_results: {
+      id: 'sample_results',
+      table: 'sample_data',
+      isSolr: true,
+      routeName: 'dataset-id-slug-sample-results',
+      title: 'dataset.sampleResults',
+      count: 0,
+      props: {},
+    },
     graphs: {
       table: 'analysis_results',
       id: 'analysis_results',
@@ -277,6 +286,7 @@ export const TABS_DATASET = {
   },
   allIds: [
     'dataset_analysis',
+    'sample_results',
     'dataset_reference',
     'attachment_link',
     'dataset_author',

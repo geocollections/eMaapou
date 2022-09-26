@@ -32,6 +32,7 @@ export default ({ app }, inject) => {
   }
 
   const validateTabRoute = (route, tabs) => {
+    if (!tabs.length > 0) return route.path
     const currentTab = tabs.find(
       (tab) =>
         route.path ===

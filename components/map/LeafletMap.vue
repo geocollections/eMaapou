@@ -62,7 +62,14 @@
           :markers="markers"
         />
         <l-circle-marker-wrapper v-else :markers="markers" />
-        <l-geo-json v-if="geojson" :geojson="geojson" color="red" />
+        <l-geo-json
+          v-if="geojson"
+          :geojson="geojson"
+          :options-style="{
+            color: $vuetify.theme.currentTheme.accent,
+            fillColor: $vuetify.theme.currentTheme.accent,
+          }"
+        />
         <l-marker
           v-if="gpsEnabled && gpsLocation"
           :lat-lng="gpsLocation"
@@ -108,12 +115,12 @@
     </div>
     <template #placeholder>
       <div
-        :style="`height: ${height}px; width: 100%`"
-        class="d-flex align-center justify-center"
+        :style="`height: ${height}; width: 100%`"
+        class="d-flex align-center justify-center rounded secondary"
       >
         <v-progress-circular
           indeterminate
-          color="primary"
+          color="accent"
           :size="100"
           :width="6"
         />
@@ -690,6 +697,7 @@ export default {
           })
           this.$refs.map.mapObject.fitBounds(group.getBounds(), {
             padding: [50, 50],
+            maxZoom: this.geojson.type === 'Point' ? this.mapZoom : null,
           })
         })
       }

@@ -9,7 +9,7 @@
       <!--        value-->
       <!--      }}</nuxt-link>-->
       <span v-else>
-        <base-link-external v-if="href" :href="href">
+        <base-link-external v-if="href" :href="href" :target="target">
           {{ value }}
         </base-link-external>
         <base-link-external v-else @click.native="$emit('link-click')">
@@ -34,6 +34,7 @@ export default {
     value: { type: [String, Number], default: null, required: false },
     href: { type: String, default: null },
     suffix: { type: String, default: null },
+    target: { type: String, default: '_blank' },
   },
 }
 </script>

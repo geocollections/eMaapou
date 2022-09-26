@@ -4,8 +4,8 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s | e-Maapõu',
-    title: 'e-Maapõu',
+    titleTemplate: '%s | eMaapõu',
+    title: 'eMaapõu',
     htmlAttrs: {
       lang: 'en',
     },
@@ -59,17 +59,25 @@ export default {
         // TODO: change to geoloogia.info after emaapou_short.png is pushed to production branch
         content: 'https://dev.geoloogia.info/logos/emaapou_short.png?t=12345?',
       },
+      { name: 'theme-color', content: '#577daf' },
+      { name: 'apple-mobile-web-app-status-bar-sytle', content: '#577daf' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+      {
+        rel: 'preload',
+        as: 'style',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500;700&display=swap',
+      },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;700;900&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500;700&display=swap',
       },
     ],
   },
-
+  loading: false,
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@/assets/styles'],
 
@@ -89,6 +97,7 @@ export default {
     '~/plugins/formatDate.js',
     '~/plugins/slug.js', // this might be only called on server-side
     { src: '~/plugins/vueMatomo.js', mode: 'client' },
+    { src: '~/plugins/vue-stack-grid.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -100,7 +109,6 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    '@nuxt/image',
     '@nuxtjs/composition-api/module',
   ],
 
@@ -110,6 +118,7 @@ export default {
     '@nuxtjs/axios',
     'nuxt-i18n',
     '@nuxtjs/sitemap',
+    '@nuxt/image',
   ],
 
   sitemap: {
@@ -193,10 +202,25 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: ['vue-echarts', 'resize-detector'],
+    transpile: [
+      'vue-echarts',
+      'resize-detector',
+      'echarts/core',
+      'echarts/renderers',
+      'echarts/charts',
+      'echarts/components',
+      'zrender',
+    ],
     // Setting cssSoruceMap and cacheBusting to false fixes chrome dev tools style change problem (broke styles)
     cssSourceMap: false,
     cacheBusting: false,
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        // automaticNameDelimiter: '.',
+        // maxSize: 512000,
+      },
+    },
   },
 
   image: {

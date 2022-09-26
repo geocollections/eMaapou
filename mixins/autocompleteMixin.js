@@ -12,6 +12,9 @@ export default {
     nameLabel() {
       return this.$i18n.locale === 'et' ? 'name' : 'name_en'
     },
+    hierarchyLabel() {
+      return this.$i18n.locale === 'et' ? 'taxon' : 'taxon'
+    },
   },
 
   methods: {
@@ -39,6 +42,14 @@ export default {
       )
     },
 
+    autocompleteHierarchySearch(value) {
+      this.$_autocompleteMixin_search(value, 'taxon')
+    },
+
+    autocompleteReferenceSearch(value) {
+      this.$_autocompleteMixin_search(value, 'reference')
+    },
+
     $_autocompleteMixin_search: debounce(async function (
       value,
       table,
@@ -51,6 +62,7 @@ export default {
           if (clearAutocomplete) this.autocomplete[options] = []
         } else if (value.length >= minLength) {
           const query = buildAutocompleteQuery(value, options)
+
           if (query.length === 0) return
 
           this.autocomplete.loaders[options] = true
@@ -58,6 +70,10 @@ export default {
             await this.$services.sarvSolr.getResourceList(table, {
               defaultParams: {
                 fq: query,
+              },
+              options: {
+                page: 1,
+                itemsPerPage: 25,
               },
             })
           this.autocomplete.loaders[options] = false
@@ -80,5 +96,9 @@ function buildAutocompleteQuery(value, type) {
     case 'taxon':
       // return `taxon:(*${value}*)&fl=id,taxon,taxon_hierarchy`
       return `taxon:(*${value}*)`
+    case 'hierarchy':
+      return `taxon:(*${value}*)`
+    case 'reference':
+      return `reference:(*${value}*)`
   }
 }

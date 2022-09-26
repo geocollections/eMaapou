@@ -1,7 +1,7 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="mergedHeaders"
+    :headers="$_headers"
     :items="items"
     :options="options"
     :count="count"
@@ -42,7 +42,7 @@
           })
         "
       >
-        {{ item.locality }}
+        {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
       <nuxt-link
         v-else-if="item.site_id"
@@ -67,24 +67,13 @@
       </nuxt-link>
     </template>
 
-    <template #item.lithostratigraphy="{ item }">
-      <nuxt-link
-        v-if="item.lithostratigraphy_id"
-        class="text-link"
-        :to="
-          localePath({
-            name: 'stratigraphy-id',
-            params: { id: item.lithostratigraphy_id },
-          })
-        "
-      >
-        {{
-          $translate({
-            et: item.lithostratigraphy,
-            en: item.lithostratigraphy_en,
-          })
-        }}
-      </nuxt-link>
+    <template #item.analysis_method="{ item }">
+      {{
+        $translate({ et: item.analysis_method, en: item.analysis_method_en })
+      }}
+    </template>
+    <template #item.lab="{ item }">
+      {{ $translate({ et: item.lab, en: item.lab_en }) }}
     </template>
   </base-data-table>
 </template>
@@ -95,6 +84,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET_ANALYSIS } from '~/constants'
+
 export default {
   name: 'DataTableDatasetAnalysis',
   components: { BaseDataTable },
@@ -118,22 +108,30 @@ export default {
       }),
     },
     additionalHeaders: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {
+        return { byIds: {}, allIds: [] }
+      },
     },
   },
   data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_DATASET_ANALYSIS),
-    }
-  },
-  computed: {
-    mergedHeaders() {
-      return this.$_headers.concat(this.additionalHeaders)
-    },
+    return { localHeaders: this.getHeaders() }
   },
   methods: {
     round,
+    getHeaders() {
+      const defaultHeaders = cloneDeep(HEADERS_DATASET_ANALYSIS)
+      return {
+        byIds: {
+          ...defaultHeaders.byIds,
+          ...JSON.parse(JSON.stringify(this.additionalHeaders.byIds)),
+        },
+        allIds: [
+          ...defaultHeaders.allIds,
+          ...JSON.parse(JSON.stringify(this.additionalHeaders.allIds)),
+        ],
+      }
+    },
   },
 }
 </script>

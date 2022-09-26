@@ -5,16 +5,20 @@ export const BROWSE_GEOLOGY_LIST = [
     icon: 'mdi-map-marker-outline',
   },
   {
-    routeName: 'site',
-    label: 'site.pageTitle',
-    icon: 'mdi-binoculars',
-  },
-  {
     routeName: 'drillcore',
     label: 'drillcore.pageTitle',
     icon: 'mdi-screw-machine-flat-top',
   },
-  { routeName: 'area', label: 'area.pageTitle' },
+  {
+    routeName: 'area',
+    label: 'area.pageTitle',
+    icon: 'mdi-map-marker-radius-outline',
+  },
+  {
+    routeName: 'site',
+    label: 'site.pageTitle',
+    icon: 'mdi-binoculars',
+  },
 ]
 
 export const BROWSE_LAB_LIST = [
@@ -38,10 +42,19 @@ export const BROWSE_LAB_LIST = [
     label: 'dataset.pageTitle',
     icon: 'mdi-database-outline',
   },
-  { routeName: 'preparation', label: 'preparation.pageTitle' },
+  {
+    routeName: 'preparation',
+    label: 'preparation.pageTitle',
+    icon: 'mdi-eyedropper',
+  },
 ]
 
 export const BROWSE_TAXON_LIST = [
+  {
+    routeName: 'specimen',
+    label: 'specimen.pageTitle',
+    icon: 'mdi-microscope',
+  },
   {
     routeName: 'taxon',
     label: 'taxon.pageTitle',
@@ -53,9 +66,9 @@ export const BROWSE_TAXON_LIST = [
     icon: 'mdi-layers-triple',
   },
   {
-    routeName: 'specimen',
-    label: 'specimen.pageTitle',
-    icon: 'mdi-microscope',
+    routeName: 'photo',
+    label: 'photo.pageTitle',
+    icon: 'mdi-file-image-outline',
   },
 ]
 

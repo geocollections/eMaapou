@@ -1,35 +1,46 @@
 <template>
-  <v-card
-    elevation="0"
-    color="transparent"
-    v-bind="$attrs"
-    @click.stop="$emit('click')"
-  >
-    <div class="pl-0 montserrat" :class="{ 'white--text': dark }">
-      {{ $formatDate(date) }}
-    </div>
-    <v-card-title
-      class="montserrat pl-0 pt-0"
-      :class="{ 'white--text': dark }"
-      style="word-break: normal"
-      >{{ title }}</v-card-title
+  <v-hover v-slot="{ hover }">
+    <v-card
+      v-bind="$attrs"
+      class="py-2"
+      :elevation="hover ? 2 : 1"
+      :style="styleObject"
+      @click.stop="$emit('click')"
     >
-
-    <v-card-text
-      class="pb-0 pl-0 text-body-1"
-      style="color: rgba(0, 0, 0, 0.87)"
-      :class="{ 'white--text': dark }"
-    >
-      {{ extractContent(content) | truncate(previewLenght) }}
-    </v-card-text>
-
-    <v-card-actions class="justify-self-end py-0">
-      <v-spacer />
-      <v-btn :color="dark ? 'white' : 'black'" text @click="$emit('click')">
-        {{ $t('common.readNewsArticle') }}</v-btn
+      <div
+        class="text-right pr-4 montserrat text--secondary"
+        :class="{ 'white--text': dark }"
       >
-    </v-card-actions>
-  </v-card>
+        {{ $formatDate(date) }}
+      </div>
+      <v-card-title
+        class="montserrat pt-0"
+        :class="{ 'white--text': dark }"
+        style="word-break: normal"
+        >{{ title }}</v-card-title
+      >
+
+      <v-card-text
+        class="pb-0 text-body-1"
+        style="color: rgba(0, 0, 0, 0.7)"
+        :class="{ 'white--text': dark }"
+      >
+        {{ extractContent(content) | truncate(previewLenght) }}
+      </v-card-text>
+
+      <v-card-actions class="justify-self-end py-0">
+        <v-spacer />
+        <v-btn
+          :color="dark ? 'white' : 'accent'"
+          class="text-none"
+          text
+          @click="$emit('click')"
+        >
+          {{ $t('common.readNewsArticle') }}</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-hover>
 </template>
 
 <script>
@@ -52,6 +63,19 @@ export default {
     content: { type: String, default: null },
     date: { type: String, default: null },
     previewLenght: { type: Number, default: 200 },
+  },
+  data() {
+    return {
+      styleObject: {
+        opacity: 0,
+        transition: 'opacity 300ms linear',
+      },
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.styleObject.opacity = 1
+    })
   },
   methods: {
     extractContent(html) {

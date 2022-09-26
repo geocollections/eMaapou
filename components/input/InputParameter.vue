@@ -12,25 +12,6 @@
         @input="handleParameter($event)"
       />
     </v-col>
-
-    <!-- <v-col v-if="entity.isText" cols="6">
-      <v-row no-gutters>
-        <v-col cols="12" class="pr-1">
-          <input-text
-            :label="$t('common.textField')"
-            :value="entity.text"
-            @input="
-              updateActiveParam({
-                value: $event,
-                field: 'text',
-                index: index,
-              })
-            "
-          />
-        </v-col>
-      </v-row>
-    </v-col> -->
-
     <v-col cols="6">
       <v-row no-gutters>
         <v-col cols="6" class="px-1">

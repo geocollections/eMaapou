@@ -14,16 +14,62 @@
         :label="$t(filters.byIds.locality.label)"
       />
       <input-autocomplete
-        v-model="hierarchy"
+        v-model="stratigraphyHierarchy"
         :items="autocomplete.stratigraphy"
         :loading="autocomplete.loaders.stratigraphy"
-        :label="$t(filters.byIds.hierarchy.label)"
+        :label="$t(filters.byIds.stratigraphyHierarchy.label)"
         :item-text="stratigraphyLabel"
         @search:items="autocompleteStratigraphySearch"
       />
 
+      <input-autocomplete
+        v-model="hierarchy"
+        :items="autocomplete.taxon"
+        :loading="autocomplete.loaders.taxon"
+        :label="$t(filters.byIds.hierarchy.label)"
+        :item-text="hierarchyLabel"
+        @search:items="autocompleteHierarchySearch"
+      />
+
+      <input-autocomplete
+        v-model="reference"
+        :items="autocomplete.reference"
+        :loading="autocomplete.loaders.reference"
+        :label="$t(filters.byIds.reference.label)"
+        item-text="reference"
+        no-filter
+        do-not-cache
+        append-item="title"
+        @search:items="autocompleteReferenceSearch"
+      />
+
+      <input-text
+        v-model="fossilName"
+        :label="$t(filters.byIds.fossilName.label)"
+      />
+
       <input-text v-model="fossil" :label="$t(filters.byIds.fossil.label)" />
+
+      <input-text v-model="rock" :label="$t(filters.byIds.rock.label)" />
+
+      <input-checkbox
+        v-model="has_image"
+        :label="$t(filters.byIds.has_image.label)"
+      />
+
+      <input-checkbox
+        v-model="has_map"
+        :label="$t(filters.byIds.has_map.label)"
+      />
     </search-fields-wrapper>
+
+    <search-map
+      sample-overlay
+      :items="items"
+      class="mt-2"
+      :active="geoJSON != null"
+      @update="handleMapUpdate"
+    />
 
     <search-institution-filter
       class="mt-2"
@@ -46,10 +92,14 @@ import InputText from '~/components/input/InputText.vue'
 import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import InputSearch from '~/components/input/InputSearch.vue'
+import SearchMap from '~/components/search/SearchMap'
+import InputCheckbox from '~/components/input/InputCheckbox'
 
 export default {
   name: 'SearchFormSpecimen',
   components: {
+    InputCheckbox,
+    SearchMap,
     SearchInstitutionFilter,
     InputAutocomplete,
     InputText,
@@ -62,8 +112,12 @@ export default {
     return {
       autocomplete: {
         stratigraphy: [],
+        taxon: [],
+        reference: [],
         loaders: {
           stratigraphy: false,
+          taxon: false,
+          reference: false,
         },
       },
     }
@@ -74,8 +128,14 @@ export default {
       number: 'filters.byIds.number.value',
       collectionNr: 'filters.byIds.collectionNr.value',
       locality: 'filters.byIds.locality.value',
+      fossilName: 'filters.byIds.fossilName.value',
       fossil: 'filters.byIds.fossil.value',
+      rock: 'filters.byIds.rock.value',
+      reference: 'filters.byIds.reference.value',
+      stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
       hierarchy: 'filters.byIds.hierarchy.value',
+      has_image: 'filters.byIds.has_image.value',
+      has_map: 'filters.byIds.has_map.value',
       query: 'query',
     }),
     ...mapFields('search', {
@@ -99,7 +159,10 @@ export default {
       this.searchSpecimens()
     },
     fillAutocompleteLists() {
-      if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
+      if (this.stratigraphyHierarchy)
+        this.autocomplete.stratigraphy.push(this.stratigraphyHierarchy)
+      if (this.reference) this.autocomplete.reference.push(this.reference)
+      if (this.hierarchy) this.autocomplete.taxon.push(this.hierarchy)
     },
     handleMapUpdate(tableState) {
       this.searchSpecimens(tableState?.options)

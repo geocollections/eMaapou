@@ -76,7 +76,13 @@
         </div>
 
         <div
-          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
+          class="
+            justify-center
+            d-flex
+            flex-column
+            justify-md-space-between
+            flex-md-row
+          "
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">
@@ -305,11 +311,8 @@
                 en: database.name_en,
               })
             "
-            @link-click="
-              $openWindow(
-                `https://geocollections.info/${file.database.acronym.toLowerCase()}`
-              )
-            "
+            :href="database.url"
+            target="DatabaseWindow"
           />
           <table-row-link
             v-if="licence"
@@ -359,79 +362,84 @@
     </template>
 
     <template #bottom>
-      <v-row
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-2"
-      >
-        <v-col
-          v-for="(item, index) in filteredTabs"
-          :key="index"
-          cols="12"
-          md="6"
+      <v-row v-if="filteredTabs.length > 0" class="mt-2">
+        <transition-group
+          appear
+          class="d-flex flex-wrap flex-grow-1"
+          name="fade"
         >
-          <v-card>
-            <v-card-title class="subsection-title"
-              >{{ $t(item.title) }}
-            </v-card-title>
+          <v-col
+            v-for="(item, index) in filteredTabs"
+            :key="`${item.title}-${index}`"
+            cols="12"
+            md="6"
+          >
+            <v-card>
+              <v-card-title class="subsection-title"
+                >{{ $t(item.title) }}
+              </v-card-title>
 
-            <v-card-text>
-              <v-simple-table>
-                <template #default>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>{{ $t(`${item.id}.${item.id}`) }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(row, key) in item.items" :key="key">
-                      <td>
-                        <template v-if="item.isLink">
-                          <nuxt-link
-                            v-if="item.isNuxtLink"
-                            class="text-link"
-                            :to="
-                              localePath({
-                                name: `${item.route ? item.route : item.id}-id`,
-                                params: { id: row[item.id].id },
-                              })
-                            "
-                            >{{ row[item.id].id }}
-                          </nuxt-link>
-                          <a
-                            v-else
-                            class="text-link"
-                            @click="
-                              $openWindow(
-                                `${item.href}${
-                                  item.id === 'doi'
-                                    ? row.doi.identifier
-                                    : row[item.id].id
-                                }`
-                              )
-                            "
-                            >{{
-                              item.id === 'doi'
-                                ? row.doi.identifier
-                                : row[item.id].id
-                            }}
-                            <v-icon small color="primary darken-2"
-                              >mdi-open-in-new
-                            </v-icon>
-                          </a>
-                        </template>
-                        <template v-else>
-                          {{ row[item.id].id }}
-                        </template>
-                      </td>
-                      <td>{{ buildData(item.id, row) }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-card>
-        </v-col>
+              <v-card-text>
+                <v-simple-table>
+                  <template #default>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t(`${item.id}.${item.id}`) }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(row, key) in item.items" :key="key">
+                        <td>
+                          <template v-if="item.isLink">
+                            <nuxt-link
+                              v-if="item.isNuxtLink"
+                              class="text-link"
+                              :to="
+                                localePath({
+                                  name: `${
+                                    item.route ? item.route : item.id
+                                  }-id`,
+                                  params: { id: row[item.id].id },
+                                })
+                              "
+                              >{{ row[item.id].id }}
+                            </nuxt-link>
+                            <a
+                              v-else
+                              class="text-link"
+                              @click="
+                                $openWindow(
+                                  `${item.href}${
+                                    item.id === 'doi'
+                                      ? row.doi.identifier
+                                      : row[item.id].id
+                                  }`
+                                )
+                              "
+                              >{{
+                                item.id === 'doi'
+                                  ? row.doi.identifier
+                                  : row[item.id].id
+                              }}
+                              <v-icon small color="primary darken-2"
+                                >mdi-open-in-new
+                              </v-icon>
+                            </a>
+                          </template>
+                          <template v-else>
+                            {{ row[item.id].id }}
+                          </template>
+                        </td>
+                        <td>{{ buildData(item.id, row) }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </transition-group>
       </v-row>
 
       <v-row v-if="fileContent" class="mt-2">
@@ -514,7 +522,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ app, params, route, error }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
         'attachment',
@@ -528,97 +536,109 @@ export default {
       )
       const ids = fileResponse?.ids
       const file = fileResponse
-
-      return {
-        file,
-        ids,
+      let text
+      switch (file?.specimen_image_attachment) {
+        case 1:
+          text = `${file?.specimen?.coll?.number?.split(' ')?.[0]} ${
+            file?.specimen?.specimen_id
+          } (ID-${file.specimen.id})`
+          break
+        case 2:
+          text = file.image_number
+          break
+        case 4:
+          text = file?.reference?.reference
+          break
+        default:
+          text = `${app.$translate({
+            et: file?.description,
+            en: file?.description_en,
+          })}`
       }
-    } catch (err) {
-      error({
-        message: `Cannot find file ${route.params.id}`,
-        path: route.path,
-      })
-    }
-  },
-  data() {
-    return {
-      expansionPanel: [1],
-      nameFields: {
-        collection: {
-          et: 'collection_name',
-          en: 'collection_name_en',
-        },
-        specimen: {
-          et: 'number',
-          en: 'number',
-        },
-        sample: {
-          et: 'number',
-          en: 'number',
-        },
-        sample_series: {
-          et: 'name',
-          en: 'name',
-        },
-        analysis: {
-          et: 'number',
-          en: 'number',
-        },
-        dataset: {
-          et: 'name',
-          en: 'name_en',
-        },
-        doi: {
-          et: 'identifier',
-          en: 'identifier',
-        },
-        locality: {
-          et: 'locality',
-          en: 'locality_en',
-        },
-        drillcore: {
-          et: 'drillcore',
-          en: 'drillcore_en',
-        },
-        drillcore_box: {
-          et: 'number',
-          en: 'number',
-        },
-        preparation: {
-          et: 'preparation_number',
-          en: 'preparation_number',
-        },
-        reference: {
-          et: 'reference',
-          en: 'reference',
-        },
-        storage: {
-          et: 'location',
-          en: 'location',
-        },
-        project: {
-          et: 'name',
-          en: 'name_en',
-        },
-        site: {
-          et: 'name',
-          en: 'name_en',
-        },
-        locality_description: {
-          et: 'description',
-          en: 'description',
-        },
-        taxon: {
-          et: 'taxon',
-          en: 'taxon',
-        },
-      },
-      specimenIdentification: [],
-      specimenIdentificationGeology: [],
-      attachmentKeywords: [],
-      fileContent: '',
-      rawFileContent: '',
-      tabs: [
+      const slugRoute = app.$createSlugRoute(route, text)
+      const validPath = app.$validateTabRoute(slugRoute, [])
+      let specimenIdentification = []
+      let specimenIdentificationGeology = []
+      // Specimen data START
+      if (file?.specimen) {
+        const specimenIdentificationResponse =
+          await app.$services.sarvREST.getResourceList(
+            'specimen_identification',
+            {
+              isValid: isNil(file?.id),
+              defaultParams: {
+                current: true,
+                specimen: file?.specimen?.id,
+                nest: 1,
+              },
+            }
+          )
+        specimenIdentification = specimenIdentificationResponse.items
+        const specimenIdentificationGeologyResponse =
+          await app.$services.sarvREST.getResourceList(
+            'specimen_identification_geology',
+            {
+              isValid: isNil(file?.id),
+              defaultParams: {
+                current: true,
+                specimen: file?.specimen?.id,
+                nest: 1,
+              },
+            }
+          )
+        specimenIdentificationGeology =
+          specimenIdentificationGeologyResponse.items
+      }
+      // Specimen data END
+
+      // Attachment keywords START
+      const attachmentKeywordsResponse =
+        await app.$services.sarvREST.getResourceList('attachment_keyword', {
+          isValid: isNil(file?.id),
+          defaultParams: {
+            attachment: file?.id,
+            nest: 1,
+          },
+        })
+      const attachmentKeywords = attachmentKeywordsResponse.items
+      // Attachment keywords END
+
+      // Raw file content data START
+      let rawFileContent = ''
+      let fileContent = ''
+      if (
+        file?.uuid_filename?.endsWith('.txt') ||
+        file?.uuid_filename?.endsWith('.las')
+      ) {
+        // File content (e.g., .las in json format)
+        const fileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          route.params.id
+        )
+        fileContent = fileContentResponse
+        if (fileContentResponse.startsWith('Error: ')) fileContent = ''
+
+        // Raw file content in text format
+        const rawFileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          route.params.id,
+          {
+            params: {
+              raw_content: 'true',
+            },
+          }
+        )
+        rawFileContent = rawFileContentResponse
+        if (
+          typeof rawFileContentResponse === 'string' &&
+          rawFileContentResponse.startsWith('Error: ')
+        )
+          rawFileContent = ''
+      }
+      // Raw file content data END
+
+      // Related data START
+      let tabs = [
         {
           id: 'collection',
           title: 'related.collection',
@@ -750,130 +770,125 @@ export default {
           isLink: true,
           href: 'https://fossiilid.info/',
         },
-      ],
-    }
-  },
-  async fetch() {
-    const text = () => {
-      switch (this.file?.specimen_image_attachment) {
-        case 1:
-          return `${this.file?.specimen?.coll?.number?.split(' ')?.[0]} ${
-            this.file?.specimen?.specimen_id
-          } (ID-${this.file.specimen.id})`
-        case 2:
-          return this.file.image_number
-        case 4:
-          return this.file?.reference?.reference
-        default:
-          return `${this.$translate({
-            et: this.file?.description,
-            en: this.file?.description_en,
-          })}`
+      ]
+
+      tabs = await Promise.all(
+        tabs.map(async (tab) => {
+          const res = await app.$services.sarvREST.getResourceList(
+            'attachment_link',
+            {
+              isValid: isNil(file?.id),
+              defaultParams: {
+                [`${tab.id}__isnull`]: false,
+                attachment: file?.id,
+                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+              },
+            }
+          )
+          return { ...tab, count: res.count, items: res.items }
+        })
+      )
+
+      return {
+        file,
+        ids,
+        validPath,
+        initActiveTab: validPath,
+        rawFileContent,
+        fileContent,
+        specimenIdentificationGeology,
+        specimenIdentification,
+        attachmentKeywords,
+        tabs,
       }
-    }
-
-    const slugRoute = this.$createSlugRoute(this.$route, text())
-    if (slugRoute.path !== this.$route.path)
-      await this.$router.replace(slugRoute.path)
-
-    // Specimen data START
-    if (this.file?.specimen) {
-      const specimenIdentificationResponse =
-        await this.$services.sarvREST.getResourceList(
-          'specimen_identification',
-          {
-            isValid: isNil(this.file?.id),
-            defaultParams: {
-              current: true,
-              specimen: this.file?.specimen?.id,
-              nest: 1,
-            },
-          }
-        )
-      this.specimenIdentification = specimenIdentificationResponse.items
-      const specimenIdentificationGeologyResponse =
-        await this.$services.sarvREST.getResourceList(
-          'specimen_identification_geology',
-          {
-            isValid: isNil(this.file?.id),
-            defaultParams: {
-              current: true,
-              specimen: this.file?.specimen?.id,
-              nest: 1,
-            },
-          }
-        )
-      this.specimenIdentificationGeology =
-        specimenIdentificationGeologyResponse.items
-    }
-    // Specimen data END
-
-    // Attachment keywords START
-    const attachmentKeywordsResponse =
-      await this.$services.sarvREST.getResourceList('attachment_keyword', {
-        isValid: isNil(this.file?.id),
-        defaultParams: {
-          attachment: this.file?.id,
-          nest: 1,
-        },
+    } catch (err) {
+      error({
+        message: `Cannot find file ${route.params.id}`,
+        path: route.path,
       })
-    this.attachmentKeywords = attachmentKeywordsResponse.items
-    // Attachment keywords END
-
-    // Raw file content data START
-    if (
-      this.file?.uuid_filename?.endsWith('.txt') ||
-      this.file?.uuid_filename?.endsWith('.las')
-    ) {
-      // File content (e.g., .las in json format)
-      const fileContentResponse = await this.$services.sarvREST.getResource(
-        'file',
-        this.$route.params.id
-      )
-      this.fileContent = fileContentResponse
-      if (fileContentResponse.startsWith('Error: ')) this.fileContent = ''
-
-      // Raw file content in text format
-      const rawFileContentResponse = await this.$services.sarvREST.getResource(
-        'file',
-        this.$route.params.id,
-        {
-          params: {
-            raw_content: 'true',
-          },
-        }
-      )
-      this.rawFileContent = rawFileContentResponse
-      if (
-        typeof rawFileContentResponse === 'string' &&
-        rawFileContentResponse.startsWith('Error: ')
-      )
-        this.rawFileContent = ''
     }
-    // Raw file content data END
-
-    // Related data START
-    const forLoop = async () => {
-      for (const tab of this.tabs) {
-        const response = await this.$services.sarvREST.getResourceList(
-          'attachment_link',
-          {
-            isValid: isNil(this.file?.id),
-            defaultParams: {
-              [`${tab.id}__isnull`]: false,
-              attachment: this.file?.id,
-              nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-            },
-          }
-        )
-        tab.count = response.count || 0
-        tab.items = response.items || []
-      }
-    }
-    await forLoop()
-    // Related data END
   },
-  fetchOnServer: false,
+  data() {
+    return {
+      expansionPanel: [1],
+      nameFields: {
+        collection: {
+          et: 'collection_name',
+          en: 'collection_name_en',
+        },
+        specimen: {
+          et: 'number',
+          en: 'number',
+        },
+        sample: {
+          et: 'number',
+          en: 'number',
+        },
+        sample_series: {
+          et: 'name',
+          en: 'name',
+        },
+        analysis: {
+          et: 'number',
+          en: 'number',
+        },
+        dataset: {
+          et: 'name',
+          en: 'name_en',
+        },
+        doi: {
+          et: 'identifier',
+          en: 'identifier',
+        },
+        locality: {
+          et: 'locality',
+          en: 'locality_en',
+        },
+        drillcore: {
+          et: 'drillcore',
+          en: 'drillcore_en',
+        },
+        drillcore_box: {
+          et: 'number',
+          en: 'number',
+        },
+        preparation: {
+          et: 'preparation_number',
+          en: 'preparation_number',
+        },
+        reference: {
+          et: 'reference',
+          en: 'reference',
+        },
+        storage: {
+          et: 'location',
+          en: 'location',
+        },
+        project: {
+          et: 'name',
+          en: 'name_en',
+        },
+        site: {
+          et: 'name',
+          en: 'name_en',
+        },
+        locality_description: {
+          et: 'description',
+          en: 'description',
+        },
+        taxon: {
+          et: 'taxon',
+          en: 'taxon',
+        },
+      },
+      specimenIdentification: [],
+      specimenIdentificationGeology: [],
+      attachmentKeywords: [],
+      fileContent: '',
+      rawFileContent: '',
+    }
+  },
+
   head() {
     return {
       title: this.fileTitle,
@@ -1056,6 +1071,10 @@ export default {
       return this?.file?.licence
     },
   },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
+  },
   methods: {
     isNull,
     isNil,
@@ -1079,6 +1098,14 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 video {
   max-width: 100%;
   vertical-align: middle;

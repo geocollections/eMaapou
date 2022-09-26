@@ -8,14 +8,13 @@
       @click="$i18n.setLocale(locale.code)"
     >
       <v-list-item-title class="d-flex py-1">
-        <span
-          v-if="locale.code === 'et'"
-          class="flag flag-et mr-2 lang-icon elevation-1"
-        />
-        <span
-          v-if="locale.code === 'en'"
-          class="flag flag-en mr-2 lang-icon elevation-1"
-        />
+        <v-icon
+          v-show="$i18n.locale === locale.code"
+          class="mr-2"
+          color="accent"
+        >
+          mdi-check
+        </v-icon>
         <span class="align-self-center montserrat">{{ locale.name }}</span>
       </v-list-item-title>
     </v-list-item>

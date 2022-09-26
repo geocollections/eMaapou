@@ -3,23 +3,36 @@
     <v-row no-gutters>
       <v-col>
         <base-header :title="$t('common.news')" class="title-heading" />
-        <v-card-text class="d-flex flex-column pt-0">
-          <div v-for="(news, i) in newsList" :key="`landing-news-${news.id}`">
-            <news-preview-card
-              :preview-lenght="previewLength"
-              :date="news.date_added"
-              :title="$translate({ et: news.title_et, en: news.title_en })"
-              :content="$translate({ et: news.text_et, en: news.text_en })"
-              @click="openNews(news)"
-            >
-            </news-preview-card>
-            <v-divider v-if="i !== newsList.length - 1" class="my-5" />
-          </div>
+        <v-card-text class="d-flex flex-column pa-0">
+          <stack
+            v-if="newsList.length > 0"
+            ref="stacker"
+            :column-min-width="350"
+            :gutter-width="15"
+            :gutter-height="15"
+            monitor-images-loaded
+          >
+            <stack-item v-for="(news, i) in newsList" :key="i">
+              <news-preview-card
+                :preview-lenght="previewLength"
+                :date="news.date_added"
+                :title="$translate({ et: news.title_et, en: news.title_en })"
+                :content="$translate({ et: news.text_et, en: news.text_en })"
+                @click="openNews(news)"
+              />
+            </stack-item>
+          </stack>
         </v-card-text>
         <v-card-actions>
-          <v-btn nuxt class="montserrat" :to="localePath('news')" text>{{
-            $t('common.viewNews')
-          }}</v-btn>
+          <v-spacer />
+          <v-btn
+            nuxt
+            color="accent"
+            class="montserrat text-none"
+            :to="localePath('news')"
+            text
+            >{{ $t('common.viewNews') }}</v-btn
+          >
         </v-card-actions>
       </v-col>
     </v-row>
@@ -43,7 +56,7 @@ export default {
       {
         options: {
           page: 1,
-          itemsPerPage: 2,
+          itemsPerPage: 6,
           sortBy: ['date_added'],
           sortDesc: [true],
         },
@@ -54,7 +67,7 @@ export default {
   },
   computed: {
     previewLength() {
-      if (this.$vuetify.breakpoint.lgAndUp) return 200
+      if (this.$vuetify.breakpoint.lgAndUp) return 400
       return 140
     },
   },

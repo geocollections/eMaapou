@@ -30,6 +30,7 @@ export default {
           isValid: isNil(this.$route.params.id),
           defaultParams: {
             area: this.$route.params.id,
+            nest: 1,
           },
           fields: this.$getAPIFieldValues(HEADERS_LOCALITY_REFERENCE),
         }

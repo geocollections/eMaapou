@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('preparation.pageTitle')" />
+      <base-header :title="$t('preparation.pageTitle')" icon="mdi-eyedropper" />
     </template>
 
     <template #form>
@@ -12,15 +12,18 @@
       <div class="py-1 pl-2 text-h6">
         {{ count ? $tc('common.count', count) : '&nbsp;' }}
       </div>
-      <data-table-preparation
-        :show-search="false"
-        :items="items"
-        :count="count"
-        :options="options"
-        stateful-headers
-        dynamic-headers
-        @update="handleUpdate"
-      />
+
+      <v-card>
+        <data-table-preparation
+          :show-search="false"
+          :items="items"
+          :count="count"
+          :options="options"
+          stateful-headers
+          dynamic-headers
+          @update="handleUpdate"
+        />
+      </v-card>
     </template>
   </search>
 </template>

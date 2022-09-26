@@ -44,6 +44,7 @@ export default ($axios) => ({
       items: response?.response?.docs,
       count: response?.response?.numFound,
       stats: response?.stats,
+      facet: response?.facet_counts,
       grouped: response?.grouped,
     }
   },
@@ -79,23 +80,8 @@ export default ($axios) => ({
 })
 
 const buildSolrQueryParameter = (search) => {
-  const s = search
-    ? search
-        .split(' ')
-        .map((s) => {
-          if (
-            !s.startsWith('-') &&
-            s.includes('-') &&
-            !s.startsWith('"') &&
-            !s.endsWith('"')
-          )
-            return `"${s}"`
-          return s
-        })
-        .join(' ')
-    : null
   return {
-    q: isEmpty(s) ? '*' : `${s}`,
+    q: search || '*',
   }
 }
 
@@ -180,6 +166,11 @@ const isFilterValid = (filter) => {
     isEmpty(filter.value)
   )
     return false
+  if (
+    filter.type === 'boolean' &&
+    (typeof filter.value !== 'boolean' || !filter.value)
+  )
+    return false
   return filter.value !== null
 }
 
@@ -191,10 +182,19 @@ const buildSolrParameters = (filters) => {
     .reduce((prev, [_, filter]) => {
       switch (filter.type) {
         case 'text': {
+          // eslint-disable-next-line no-useless-escape
+          const pattern = /([\!\*\+\-\=\<\>\&\|\(\)\[\]\{\}\^\~\?\:\\/"])/g
+
+          const values = filter.value.replace(pattern, '\\$1').split(' ')
+
           const solrFilter = filter.fields
-            .map((field) =>
-              createSolrFieldQuery(field, filter.value, filter.lookUpType)
-            )
+            .map((field) => {
+              return `(${values
+                .map((value) => {
+                  return createSolrFieldQuery(field, value, filter.lookUpType)
+                })
+                .join(' AND ')})`
+            })
             .join(' OR ')
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
@@ -215,7 +215,7 @@ const buildSolrParameters = (filters) => {
 
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
-        case 'checkbox': {
+        case 'boolean': {
           const solrFilter = filter.fields
             .map((field) => `${field}:${filter.value}`)
             .join(' OR ')

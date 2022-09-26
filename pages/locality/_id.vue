@@ -144,26 +144,16 @@
               })
             "
           />
-
-          <!-- NOTE: #466 added same link as a button -->
-          <!--              <table-row-link-->
-          <!--                v-if="drillcore"-->
-          <!--                nuxt-->
-          <!--                :title="$t('locality.drillcore')"-->
-          <!--                :value="-->
-          <!--                  $translate({-->
-          <!--                    et: drillcore.drillcore,-->
-          <!--                    en: drillcore.drillcore_en,-->
-          <!--                  })-->
-          <!--                "-->
-          <!--                :href="-->
-          <!--                  localePath({-->
-          <!--                    name: 'drillcore-id',-->
-          <!--                    params: { id: drillcore.id },-->
-          <!--                  })-->
-          <!--                "-->
-          <!--              />-->
-
+          <table-row
+            :title="$t('locality.remarks')"
+            :value="locality.remarks"
+          />
+          <table-row-link
+            v-if="locality.maaamet_pa_id"
+            :title="$t('locality.linkLandBoard')"
+            :value="locality.maaamet_pa_id"
+            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
+          />
           <table-row
             v-if="locality.date_added"
             :title="$t('locality.dateAdded')"
@@ -174,27 +164,14 @@
             :title="$t('locality.dateChanged')"
             :value="$formatDate(locality.date_changed)"
           />
-          <table-row
-            :title="$t('locality.remarks')"
-            :value="locality.remarks"
-          />
         </base-table>
-
-        <v-btn
-          v-if="analysisResultsCount > 0"
-          small
-          color="emp-analysis montserrat"
-          class="mt-2 white--text"
-          @click="goToAnalyticalData"
-          >{{ $t('locality.linkToAnalyticalData') }}
-          <v-icon right>mdi-chart-scatter-plot</v-icon>
-        </v-btn>
 
         <v-btn
           v-if="drillcore"
           small
-          color="emp-drillcore  montserrat"
-          class="mt-2 white--text"
+          rounded
+          color="accent"
+          class="mt-2 montserrat text-none"
           @click="
             $router.push(
               localePath({
@@ -203,13 +180,37 @@
               })
             )
           "
-          >{{
+        >
+          <v-icon left>mdi-screw-machine-flat-top</v-icon>
+          {{
             $translate({
               et: drillcore.drillcore,
               en: drillcore.drillcore_en,
             })
           }}
-          <v-icon right>mdi-screw-machine-flat-top</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="analysisResultsCount > 0"
+          small
+          rounded
+          color="accent"
+          class="mt-2 montserrat text-none"
+          @click="goToAnalyticalData"
+        >
+          <v-icon left>mdi-chart-scatter-plot</v-icon>
+          {{ $t('locality.linkToAnalyticalData') }}
+        </v-btn>
+        <v-btn
+          v-if="referenceCount > 0"
+          small
+          rounded
+          color="accent"
+          class="mt-2 montserrat text-none"
+          @click="goToGeoscienceLiterature"
+        >
+          <v-icon left>mdi-book-open-page-variant-outline</v-icon>
+          {{ $t('locality.linkGeoscienceLiterature') }}
+          <v-icon right>mdi-open-in-new</v-icon>
         </v-btn>
       </v-card-text>
     </template>
@@ -247,10 +248,7 @@
 
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -282,7 +280,7 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const localityResponse = await $services.sarvREST.getResource(
         'locality',
@@ -309,10 +307,115 @@ export default {
         ? drillcoreResponse.items[0]
         : null
 
+      const attachmentPromise = app.$services.sarvSolr.getResourceList(
+        'attachment',
+        {
+          defaultParams: {
+            fq: `locality_id:${locality?.id} AND specimen_image_attachment:2`,
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+          },
+        }
+      )
+
+      // Checking if locality has a related .las file to show in graph tab
+      const lasFilePromise = app.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            attachment__uuid_filename__iendswith: '.las',
+            locality: locality?.id,
+            fields: 'attachment',
+          },
+        }
+      )
+
+      // Todo: Add taxa tab?
+      const tabsObject = TABS_LOCALITY
+
+      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
+      tabsObject.byIds.boxes.props.drillcore = drillcore ? drillcore.id : null
+
+      tabsObject.byIds.analysis_results.props = {
+        localityObject: locality,
+      }
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      let hydratedTabs = await Promise.all(
+        tabs.map((tab) =>
+          app.$hydrateTab(tab, {
+            props: {
+              locality: locality.id,
+            },
+            countParams: {
+              solr: {
+                default: {
+                  fq:
+                    tab.id === 'graphs'
+                      ? `locality_id:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
+                      : `locality_id:${params.id}`,
+                },
+              },
+              api: { default: { locality: locality.id } },
+            },
+          })
+        )
+      )
+      const lasFileResponse = await lasFilePromise
+      // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
+      hydratedTabs = hydratedTabs.map((item) => {
+        if (item.id === 'graphs') {
+          // Todo: Also add taxa check
+          const localityDescriptionCount = hydratedTabs.find(
+            (item) => item.id === 'locality_description'
+          ).count
+          const sampleCount = hydratedTabs.find(
+            (item) => item.id === 'sample'
+          ).count
+
+          const combinedCount =
+            item.count + localityDescriptionCount + sampleCount
+
+          const count = lasFileResponse?.items?.[0]?.attachment
+            ? combinedCount + 1
+            : combinedCount
+
+          return {
+            ...item,
+            count,
+            props: {
+              ...item.props,
+              attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+              analysisResultsCount: item.count,
+              localityDescriptionCount,
+              sampleCount,
+            },
+          }
+        }
+        return item
+      })
+
+      const attachmentResponse = await attachmentPromise
+      const attachments = attachmentResponse?.items ?? []
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        app.$translate({
+          et: locality.locality,
+          en: locality.locality_en,
+        })
+      )
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         locality,
         ids,
         drillcore,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        attachments,
       }
     } catch (err) {
       error({
@@ -321,121 +424,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-      attachments: [],
-    }
-  },
-  async fetch() {
-    const attachmentResponse = await this.$services.sarvSolr.getResourceList(
-      'attachment',
-      {
-        defaultParams: {
-          fq: `locality_id:${this.locality?.id} AND specimen_image_attachment:2`,
-          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-        },
-      }
-    )
-
-    this.attachments = attachmentResponse?.items ?? []
-
-    // Checking if locality has a related .las file to show in graph tab
-    const lasFileResponse = await this.$services.sarvREST.getResourceList(
-      'attachment_link',
-      {
-        defaultParams: {
-          attachment__uuid_filename__iendswith: '.las',
-          locality: this.locality?.id,
-          fields: 'attachment',
-        },
-      }
-    )
-
-    // Todo: Add taxa tab?
-    const tabsObject = TABS_LOCALITY
-
-    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
-    tabsObject.byIds.boxes.props.drillcore = this.drillcore
-      ? this.drillcore.id
-      : null
-
-    tabsObject.byIds.analysis_results.props = {
-      localityObject: this.locality,
-      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
-    }
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    let hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            props: {
-              locality: this.locality.id,
-            },
-            countParams: {
-              solr: {
-                default: {
-                  fq:
-                    tab.id === 'graphs'
-                      ? `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
-                      : `locality_id:${this.$route.params.id}`,
-                },
-              },
-              api: { default: { locality: this.locality.id } },
-            },
-          })
-      )
-    )
-    // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
-    hydratedTabs = hydratedTabs.map((item) => {
-      if (item.id === 'graphs') {
-        // Todo: Also add taxa check
-        const localityDescriptionCount = hydratedTabs.find(
-          (item) => item.id === 'locality_description'
-        ).count
-        const sampleCount = hydratedTabs.find(
-          (item) => item.id === 'sample'
-        ).count
-
-        const combinedCount =
-          item.count + localityDescriptionCount + sampleCount
-
-        const count = lasFileResponse?.items?.[0]?.attachment
-          ? combinedCount + 1
-          : combinedCount
-
-        return {
-          ...item,
-          count,
-          props: {
-            ...item.props,
-            analysisResultsCount: item.count,
-            localityDescriptionCount,
-            sampleCount,
-          },
-        }
-      } else return item
-    })
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({
-        et: this.locality.locality,
-        en: this.locality.locality_en,
-      })
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.$translate({
@@ -498,6 +486,9 @@ export default {
     analysisResultsCount() {
       return this.tabs?.find((tab) => tab.id === 'graphs')?.count
     },
+    referenceCount() {
+      return this.tabs?.find((tab) => tab.id === 'locality_reference')?.count
+    },
     type() {
       return this.locality?.type
     },
@@ -526,10 +517,25 @@ export default {
       return this.locality?.stratigraphy_base
     },
   },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
+  },
   methods: {
     isNil,
     isEmpty,
+    goToGeoscienceLiterature() {
+      const name = this.$translate({
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      })
 
+      window.open(
+        `https://kirjandus.geoloogia.info/reference/?localities=${name}`,
+        '_blank',
+        'height=800, width=800'
+      )
+    },
     goToAnalyticalData() {
       this.analyticalDataLocality = this.$translate({
         et: this.locality.locality,

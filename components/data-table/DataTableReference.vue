@@ -33,6 +33,22 @@
         {{ item.doi }}
       </base-link-external>
     </template>
+    <template #item.pdf="{ item }">
+      <v-chip
+        v-if="item.pdf"
+        color="red "
+        :ripple="false"
+        outlined
+        small
+        target="_blank"
+        rel="noopener"
+        class="d-print-none ml-1 my-1 link"
+        @click.stop="openPDF(item.pdf)"
+      >
+        <v-icon class="pr-1">mdi-file-pdf-box</v-icon>
+        <b>PDF</b>
+      </v-chip>
+    </template>
   </base-data-table>
 </template>
 
@@ -69,6 +85,11 @@ export default {
     return {
       localHeaders: cloneDeep(HEADERS_REFERENCE),
     }
+  },
+  methods: {
+    openPDF(link) {
+      window.open(link, '_blank', 'height=800, width=800')
+    },
   },
 }
 </script>

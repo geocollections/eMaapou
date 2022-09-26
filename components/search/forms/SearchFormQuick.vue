@@ -1,17 +1,22 @@
 <template>
-  <v-form class="d-sm-flex text-right" @submit.prevent="$emit('submit')">
-    <input-search v-model="query" height="56" />
+  <v-form class="d-flex text-right" @submit.prevent="$emit('submit')">
+    <input-search
+      v-model="query"
+      height="56"
+      :placeholder="$t('landing.searchPlaceholder')"
+    />
     <v-btn
       height="56px"
-      class="text-body-1 ml-3 mt-2 mt-sm-0"
+      width="84px"
+      class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
       type="submit"
       color="warning"
       dark
     >
       <v-icon>mdi-magnify</v-icon>
-      <div class="pl-2 montserrat text-capitalize">
-        {{ $t('common.searchCommand') }}
-      </div>
+      <!-- <div class="pl-2 montserrat text-capitalize">
+          {{ $t('common.searchCommand') }}
+        </div> -->
     </v-btn>
   </v-form>
 </template>

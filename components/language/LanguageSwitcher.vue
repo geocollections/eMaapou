@@ -2,11 +2,13 @@
   <v-btn
     id="lang_switch_btn"
     aria-label="select language"
-    class="d-block"
-    icon
+    text
+    class="montserrat text-capitalize"
     :color="color"
   >
-    <span class="elevation-1" :class="classObject" />
+    <v-icon class="mr-2" color="accent lighten-2">mdi-web</v-icon>
+    {{ $i18n.localeProperties.name }}
+    <v-icon class="ml-1" color="accent lighten-2">mdi-chevron-down</v-icon>
     <v-menu
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"

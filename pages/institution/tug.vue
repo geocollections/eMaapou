@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div style="max-width: 800px" class="mx-auto">
     <base-header
       :title="$translate({ et: page.title_et, en: page.title_en })"
     />
     <v-row no-gutters>
-      <v-col class="pl-4" cols="12" md="8" lg="7">
+      <v-col class="pl-4" cols="12">
         <v-card v-if="page" width="" tile flat color="transparent">
           <div
             class="mx-3"
@@ -20,6 +20,7 @@
 import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
   components: { BaseHeader },
+  layout: 'news',
   async asyncData({ route, error, app }) {
     try {
       const data = await app.$services.sarvREST.getResource('web_pages', 63)

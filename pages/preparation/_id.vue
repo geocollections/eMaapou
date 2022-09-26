@@ -128,10 +128,7 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 pb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -151,7 +148,7 @@ import BaseTable from '~/components/base/BaseTable.vue'
 export default {
   components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
 
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'preparation',
@@ -165,9 +162,37 @@ export default {
       const ids = detailViewResponse?.ids
       const preparation = detailViewResponse
 
+      const tabs = TABS_PREPARATION.allIds.map(
+        (id) => TABS_PREPARATION.byIds[id]
+      )
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: { fq: `preparation_id:${preparation?.id}` },
+                },
+                api: { default: { preparation: preparation?.id } },
+              },
+            })
+        )
+      )
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        preparation?.preparation_number
+      )
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         preparation,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -176,42 +201,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-    }
-  },
-  async fetch() {
-    const tabs = TABS_PREPARATION.allIds.map((id) => TABS_PREPARATION.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: {
-                default: { fq: `preparation_id:${this.preparation?.id}` },
-              },
-              api: { default: { preparation: this.preparation?.id } },
-            },
-          })
-      )
-    )
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.preparation?.preparation_number
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.preparation.preparation_number} | ${this.$t(
@@ -258,6 +247,10 @@ export default {
     owner() {
       return this.preparation?.owner
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,
