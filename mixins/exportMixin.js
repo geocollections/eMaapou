@@ -1,20 +1,7 @@
-import { writeFile, utils } from 'xlsx'
+import { utils, writeFile } from 'xlsx'
 
 export default {
   methods: {
-    filterItemsByKeys(items, keys) {
-      const filteredItems = items.map((item) => {
-        const res = {}
-
-        Object.keys(item).forEach((key) => {
-          if (keys.includes(key)) {
-            res[key] = item[key]
-          }
-        })
-        return res
-      })
-      return filteredItems
-    },
     removeSortIndicators(table) {
       const tableCopy = table.cloneNode(true)
       const sortIndicators = tableCopy.querySelectorAll(

@@ -1,24 +1,29 @@
 <template>
-  <div class="d-flex flex-row px-4">
+  <v-btn-toggle
+    dense
+    color="accent"
+    :value="renderer"
+    @change="$emit('update', $event)"
+  >
     <v-btn
       width="75"
       small
-      class="mb-2 rounded-r-0 rounded-l"
-      color="accent"
+      class="text-none montserrat"
       :outlined="renderer !== 'canvas'"
-      @click="$emit('update', 'canvas')"
-      >Canvas</v-btn
+      value="canvas"
     >
+      Canvas
+    </v-btn>
     <v-btn
       width="75"
       small
-      class="mb-2 rounded-l-0 rounded-r"
-      color="accent"
+      class="text-none montserrat"
       :outlined="renderer !== 'svg'"
-      @click="$emit('update', 'svg')"
-      >SVG</v-btn
+      value="svg"
     >
-  </div>
+      SVG
+    </v-btn>
+  </v-btn-toggle>
 </template>
 
 <script>

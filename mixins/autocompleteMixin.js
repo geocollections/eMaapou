@@ -46,6 +46,10 @@ export default {
       this.$_autocompleteMixin_search(value, 'taxon')
     },
 
+    autocompleteReferenceSearch(value) {
+      this.$_autocompleteMixin_search(value, 'reference')
+    },
+
     $_autocompleteMixin_search: debounce(async function (
       value,
       table,
@@ -66,6 +70,10 @@ export default {
             await this.$services.sarvSolr.getResourceList(table, {
               defaultParams: {
                 fq: query,
+              },
+              options: {
+                page: 1,
+                itemsPerPage: 25,
               },
             })
           this.autocomplete.loaders[options] = false
@@ -90,5 +98,7 @@ function buildAutocompleteQuery(value, type) {
       return `taxon:(*${value}*)`
     case 'hierarchy':
       return `taxon:(*${value}*)`
+    case 'reference':
+      return `reference:(*${value}*)`
   }
 }

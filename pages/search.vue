@@ -31,7 +31,9 @@
           <button-tabs ref="tabs" :tabs="computedTabs" />
         </div> -->
 
-        <nuxt-child :query="query" keep-alive />
+        <v-card>
+          <nuxt-child :query="query" keep-alive />
+        </v-card>
       </v-col>
     </v-row>
   </div>
@@ -142,7 +144,7 @@ export default {
         )
       )
       this.updateRouteQuery()
-    }, 500),
+    }, 400),
     updateRouteQuery() {
       const routeName = this.$route.name.includes('search')
         ? this.$route.name.split('__')[0]

@@ -109,6 +109,7 @@ export default {
     partners: 'Partnerid',
     services: 'E-Teenused',
     accept: 'Nõustun',
+    depth: 'Sügavus',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -311,6 +312,8 @@ export default {
     lithostratigraphy: 'Litostratigraafia',
     locality: 'Lokaliteet',
     depth: 'Sügavus',
+    analysisMethod: 'Meetod',
+    lab: 'Labor',
   },
   analysisResult: {
     parameter: 'Parameeter',
@@ -355,6 +358,12 @@ export default {
     references: 'Viited ({number})',
     name: 'Nimi',
     sample: 'Proov',
+    has_image: 'Näita ainult piltidega kirjeid',
+    has_map: 'Näita ainult koordinaatidega kirjeid',
+    fossilName: 'Fossiili nimi',
+    rockName: 'Kivim/mineraal',
+    reference: 'Kirjandus',
+    parent: 'Kuulub',
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',
@@ -465,7 +474,7 @@ export default {
     stratigraphyFree: 'Stratigraafia vaba',
     stratigraphyBed: 'Kiht',
     agentCollected: 'Koguja',
-    mass: 'Mass',
+    mass: 'Kaal (g)',
     samplePurpose: 'Proovi eesmärk',
     rock: 'Rock',
     classificationRock: 'Materjal',
@@ -487,6 +496,11 @@ export default {
     longitude: 'Pikkuskraad',
     project: 'Projekt',
     igsn: 'IGSN',
+    parent: 'Kuulub',
+    parentSpecimen: 'Kuulub eksemplari',
+  },
+  sampleData: {
+    sampleNumber: 'Proov',
   },
   preparation: {
     pageTitle: 'Preparaadid',
@@ -549,7 +563,7 @@ export default {
     scrollMac: 'Kasuta \u2318 + scroll kaardi suumimiseks',
   },
   table: {
-    itemsPerPage: 'Ridade arv:',
+    itemsPerPage: 'Kirjete arv:',
     noData: 'Andmeid ei leitud',
     tooltipExport: 'Faili eksport',
     tooltipConfig: 'Tabeli konfiguratsioon',
@@ -844,6 +858,7 @@ export default {
     authors: 'Autorid ({number})',
     geolocations: 'Geopunkt ({number})',
     resource: 'Allikas',
+    sampleResults: 'Tulemused ({number})',
   },
   datasetGeolocation: {
     name: 'Nimi',
@@ -987,5 +1002,8 @@ export default {
     miningCompany: 'Kaevandaja',
     dataExportDate: 'Andmete import',
     period: 'Kehtivuse periood',
+  },
+  sampleChart: {
+    title: 'Proovid',
   },
 }

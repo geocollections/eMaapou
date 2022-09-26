@@ -3,42 +3,23 @@
     :items="analyses"
     :count="count"
     :options="options"
-    :additional-headers="parameters"
     @update="handleUpdate"
   />
 </template>
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis'
+import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis.vue'
 import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
 
 export default {
   components: { DataTableDatasetAnalysis },
-  props: {
-    parameters: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data() {
     return {
       analyses: [],
       count: 0,
       options: DATASET_ANALYSIS.options,
     }
-  },
-  computed: {
-    mergedFields() {
-      const parameterFields = this.parameters.reduce(
-        (obj, item) => ({ ...obj, [item.value]: item.value }),
-        {}
-      )
-      return {
-        ...this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
-        ...parameterFields,
-      }
-    },
   },
   methods: {
     async handleUpdate(tableState) {
@@ -51,7 +32,7 @@ export default {
           defaultParams: {
             fq: `dataset_id:${this.$route.params.id}`,
           },
-          fields: this.mergedFields,
+          fields: this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
         }
       )
       this.analyses = analysisResponse.items

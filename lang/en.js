@@ -108,6 +108,7 @@ export default {
     partners: 'Partners',
     services: 'E-Services',
     accept: 'Accept',
+    depth: 'Depth',
   },
   link: {
     github: 'GitHub',
@@ -309,6 +310,8 @@ export default {
     lithostratigraphy: 'Lithostratigraphy',
     locality: 'Locality',
     depth: 'Depth',
+    analysisMethod: 'Method',
+    lab: 'Lab',
   },
   analysisResult: {
     parameter: 'Parameter',
@@ -353,6 +356,12 @@ export default {
     references: 'References ({number})',
     name: 'Name',
     sample: 'Sample',
+    has_image: 'Show only data with images',
+    has_map: 'Show only georeferenced data',
+    fossilName: 'Fossil name',
+    rockName: 'Rock/mineral',
+    reference: 'Reference',
+    parent: 'Belongs to',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',
@@ -463,7 +472,7 @@ export default {
     stratigraphyFree: 'Stratigraphy free',
     stratigraphyBed: 'Bed',
     agentCollected: 'Collector',
-    mass: 'Weight',
+    mass: 'Weight (g)',
     samplePurpose: 'Sample purpose',
     rock: 'Rock',
     classificationRock: 'Material',
@@ -485,6 +494,11 @@ export default {
     longitude: 'Longitude',
     project: 'Project',
     igsn: 'IGSN',
+    parent: 'Belongs to',
+    parentSpecimen: 'Belongs to specimen',
+  },
+  sampleData: {
+    sampleNumber: 'Sample',
   },
   preparation: {
     pageTitle: 'Preparations',
@@ -547,7 +561,7 @@ export default {
     scrollMac: 'Use \u2318 + scroll to zoom the map',
   },
   table: {
-    itemsPerPage: 'Rows per page:',
+    itemsPerPage: 'Items per page:',
     noData: 'No data found',
     tooltipExport: 'File export',
     tooltipConfig: 'Table configuration',
@@ -842,6 +856,7 @@ export default {
     authors: 'Authors ({number})',
     geolocations: 'Geolocations ({number})',
     resource: 'Resource',
+    sampleResults: 'Results ({number})',
   },
   datasetGeolocation: {
     name: 'Name',
@@ -985,5 +1000,8 @@ export default {
     miningCompany: 'Mining company',
     dataExportDate: 'Data imported',
     period: 'Period of validity',
+  },
+  sampleChart: {
+    title: 'Samples',
   },
 }

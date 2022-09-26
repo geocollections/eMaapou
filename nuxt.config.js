@@ -77,7 +77,7 @@ export default {
       },
     ],
   },
-
+  loading: false,
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['@/assets/styles'],
 
@@ -202,7 +202,15 @@ export default {
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: ['vue-echarts', 'resize-detector'],
+    transpile: [
+      'vue-echarts',
+      'resize-detector',
+      'echarts/core',
+      'echarts/renderers',
+      'echarts/charts',
+      'echarts/components',
+      'zrender',
+    ],
     // Setting cssSoruceMap and cacheBusting to false fixes chrome dev tools style change problem (broke styles)
     cssSourceMap: false,
     cacheBusting: false,

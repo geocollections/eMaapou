@@ -1,6 +1,6 @@
 <template>
-  <div class="align-center justify-space-around fill-height d-flex mr-sm-3">
-    <div class="d-flex align-center ml-sm-auto mr-sm-7" style="flex: 0 0 0">
+  <div class="d-inline-flex justify-end mr-2 mr-sm-3">
+    <div class="d-inline-flex align-center mr-2 mr-sm-3" style="flex: 0 0 0">
       <div
         v-show="$vuetify.breakpoint.smAndUp"
         class="mr-3 text-no-wrap text-caption"
@@ -18,7 +18,7 @@
         @change="changeRowsPerPage"
       />
     </div>
-    <div class="justify-end my-1 d-flex align-center">
+    <div class="justify-end my-1 d-inline-flex align-center">
       <v-btn :disabled="options.page === 1" icon @click="first">
         <v-icon>mdi-page-first</v-icon>
       </v-btn>
@@ -119,7 +119,7 @@ export default {
     },
     itemsPerPageText: {
       type: String,
-      default: 'Rows per page',
+      default: 'Items per page',
     },
     pageSelectText: {
       type: String,

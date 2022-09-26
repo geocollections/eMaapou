@@ -11,6 +11,25 @@
         <base-table>
           <table-row :title="$t('sample.number')" :value="sample.number" />
           <table-row-link
+            v-if="parent"
+            :title="$t('sample.parent')"
+            nuxt
+            :href="localePath({ name: 'sample-id', params: { id: parent.id } })"
+            :value="parent.number"
+          />
+          <table-row-link
+            v-if="parentSpecimen"
+            :title="$t('sample.parentSpecimen')"
+            nuxt
+            :href="
+              localePath({
+                name: 'specimen-id',
+                params: { id: parentSpecimen.id },
+              })
+            "
+            :value="parentSpecimen.specimen_id"
+          />
+          <table-row-link
             :title="$t('sample.igsn')"
             :value="sample.igsn"
             :href="`http://igsn.org/${sample.igsn}`"
@@ -302,10 +321,7 @@
     </template>
 
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -335,7 +351,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'sample',
@@ -349,9 +365,60 @@ export default {
       const ids = detailViewResponse?.ids
       const sample = detailViewResponse
 
+      const localityGroupedResponse =
+        await app.$services.sarvSolr.getResourceList('analysis', {
+          useRawSolr: true,
+          defaultParams: {
+            fq: `sample_id:${sample?.id}`,
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            group: true,
+            'group.field': ['locality_id', 'site_id'],
+            rows: 10000,
+          },
+        })
+
+      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+        ?.map((item) => item?.doclist?.docs?.[0])
+        .filter((item) => !isEmpty(item) && item?.locality_id)
+      const sites = localityGroupedResponse?.grouped?.site_id?.groups
+        ?.map((item) => item?.doclist?.docs?.[0])
+        .filter((item) => !isEmpty(item) && item?.site_id)
+      const locations = localities.concat(sites)
+
+      const tabsObject = TABS_SAMPLE
+
+      tabsObject.byIds.graphs.props.sampleObject = sample
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateTab(tab, {
+              countParams: {
+                solr: { default: { fq: `sample_id:${sample?.id}` } },
+                api: { default: { sample: sample?.id } },
+              },
+            })
+        )
+      )
+      const name = `${
+        sample?.number || sample?.number_additional || sample?.number_field
+      }`.trim()
+      // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
+      const slugRoute = app.$createSlugRoute(
+        route,
+        `${isEmpty(name) ? sample?.id : name}`
+      )
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         sample,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        locations,
       }
     } catch (err) {
       error({
@@ -360,69 +427,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-      locations: [],
-    }
-  },
-  async fetch() {
-    const localityGroupedResponse =
-      await this.$services.sarvSolr.getResourceList('analysis', {
-        useRawSolr: true,
-        defaultParams: {
-          fq: `sample_id:${this.sample?.id}`,
-          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-          group: true,
-          'group.field': ['locality_id', 'site_id'],
-          rows: 10000,
-        },
-      })
-
-    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => !isEmpty(item) && item?.locality_id)
-    const sites = localityGroupedResponse?.grouped?.site_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => !isEmpty(item) && item?.site_id)
-    this.locations = localities.concat(sites)
-
-    const tabsObject = TABS_SAMPLE
-
-    tabsObject.byIds.graphs.props.sampleObject = this.sample
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: { default: { fq: `sample_id:${this.sample?.id}` } },
-              api: { default: { sample: this.sample?.id } },
-            },
-          })
-      )
-    )
-    const name = `${
-      this.sample?.number ||
-      this.sample?.number_additional ||
-      this.sample?.number_field
-    }`.trim()
-    // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      `${isEmpty(name) ? this.sample?.id : name}`
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.title} | ${this.$t('sample.pageTitle')}`,
@@ -526,6 +530,16 @@ export default {
     project() {
       return this.sample?.project
     },
+    parent() {
+      return this.sample?.parent_sample
+    },
+    parentSpecimen() {
+      return this.sample?.parent_specimen
+    },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

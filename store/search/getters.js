@@ -1,5 +1,6 @@
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
+import isBoolean from 'lodash/isBoolean'
 import { getField } from 'vuex-map-fields'
 
 export default {
@@ -10,6 +11,7 @@ export default {
         return filter.value.some(function (v) {
           return v !== null
         })
+      else if (isBoolean(filter.value) && filter.value === true) return true
       return !isEmpty(filter.value) && !isNil(filter.value)
     })
   },

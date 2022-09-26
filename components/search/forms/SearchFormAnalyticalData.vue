@@ -113,7 +113,7 @@
         </v-col>
         <v-col
           v-for="(id, index) in parameterFilters.allIds"
-          :key="index"
+          :key="id"
           cols="12"
         >
           <input-parameter

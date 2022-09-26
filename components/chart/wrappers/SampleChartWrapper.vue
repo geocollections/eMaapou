@@ -26,49 +26,6 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {
-      defaultOptions: {
-        title: {
-          text: 'Samples',
-          left: 'center',
-          textStyle: {
-            fontSize: 14,
-          },
-        },
-
-        grid: {
-          // show: true,
-          top: 50,
-          bottom: 140,
-          left: '20px',
-          containLabel: true,
-          width: '100px',
-        },
-
-        tooltip: {
-          trigger: 'item',
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        },
-
-        toolbox: {
-          top: 20,
-          right: 30,
-          feature: {
-            saveAsImage: {},
-          },
-        },
-
-        dataZoom: [
-          {
-            type: 'inside',
-            yAxisIndex: 0,
-            filterMode: 'filter',
-          },
-        ],
-      },
-    }
-  },
   computed: {
     ...mapState('chart', ['renderer', 'connected']),
     computedOptions() {

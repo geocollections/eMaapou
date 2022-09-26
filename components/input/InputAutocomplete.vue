@@ -13,9 +13,12 @@
     v-on="$listeners"
   >
     <template #item="{ item }">
-      <v-list-item-content>
-        {{ item[$attrs['item-text']] }}
-      </v-list-item-content>
+      <div :class="{ 'd-flex flex-row flex-nowrap': appendItem }">
+        <div :class="{ 'whitespace-nowrap mr-2': appendItem }">
+          {{ item[$attrs['item-text']] }}
+        </div>
+        <div v-if="appendItem" class="truncate">({{ item[appendItem] }})</div>
+      </div>
     </template>
   </v-autocomplete>
 </template>
@@ -26,6 +29,10 @@ export default {
   props: {
     removeClearable: Boolean,
     doNotCache: Boolean,
+    appendItem: {
+      type: String,
+      default: '',
+    },
     returnObject: {
       type: Boolean,
       default() {
@@ -56,4 +63,14 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+.truncate {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>

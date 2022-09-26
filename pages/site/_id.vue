@@ -22,39 +22,44 @@
               })
             "
           />
-          <table-row
-            v-if="site.area"
-            :value="site.area"
-            :title="$t('site.area')"
-          >
+          <table-row v-if="area" :value="area" :title="$t('site.area')">
             <template #value>
               <a
-                v-if="site.area.area_type === 2"
+                v-if="area.area_type === 2"
                 class="text-link"
                 @click="$openTurba('turbaala', site.area)"
               >
                 {{
                   $translate({
-                    et: site.area.name,
-                    en: site.area.name_en,
+                    et: area.name,
+                    en: area.name_en,
                   })
                 }}
                 <v-icon small color="primary darken-2">mdi-open-in-new</v-icon>
               </a>
-              <div v-else>
+              <nuxt-link
+                v-else
+                class="text-link"
+                :to="
+                  localePath({
+                    name: 'area-id',
+                    params: { id: area.id },
+                  })
+                "
+              >
                 {{
                   $translate({
-                    et: site.area.name,
-                    en: site.area.name_en,
+                    et: area.name,
+                    en: area.name_en,
                   })
                 }}
-              </div>
+              </nuxt-link>
             </template>
           </table-row>
 
           <table-row
-            v-if="site.area && site.area.area_type === 2"
-            :value="site.area"
+            v-if="area && area.area_type === 2"
+            :value="area"
             :title="$t('site.areaText1')"
           >
             <template #value>
@@ -313,10 +318,7 @@
           <div v-else>{{ $t('common.clickToOpen') }}</div>
         </template>
       </image-bar>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -347,6 +349,7 @@ export default {
     BaseTable,
   },
   async asyncData({
+    app,
     params,
     route,
     error,
@@ -370,13 +373,52 @@ export default {
       const ids = detailViewResponse?.ids
       const site = detailViewResponse
 
+      const attachmentResponse = await app.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          isValid: isNil(site?.id),
+          defaultParams: {
+            site: site?.id,
+            attachment__attachment_format__value__istartswith: 'image',
+            nest: 1,
+          },
+          fields: {},
+        }
+      )
+      const images = attachmentResponse.items ?? []
+
+      const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: { default: { fq: `site_id:${site?.id}` } },
+                api: { default: { site: site?.id } },
+              },
+            })
+        )
+      )
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        app.$translate({ et: site?.name, en: site?.name_en })
+      )
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         site,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        images,
       }
     } catch (err) {
       error({
-        message: `Could not find site ${route.params.id}`,
+        message: `Could not find site ${params.id}`,
         path: route.path,
       })
     }
@@ -388,48 +430,7 @@ export default {
       images: [],
     }
   },
-  async fetch() {
-    const attachmentResponse = await this.$services.sarvREST.getResourceList(
-      'attachment_link',
-      {
-        isValid: isNil(this.site?.id),
-        defaultParams: {
-          site: this.site?.id,
-          attachment__attachment_format__value__istartswith: 'image',
-          nest: 1,
-        },
-        fields: {},
-      }
-    )
-    this.images = attachmentResponse.items ?? []
 
-    const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: { default: { fq: `site_id:${this.site?.id}` } },
-              api: { default: { site: this.site?.id } },
-            },
-          })
-      )
-    )
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({ et: this.site?.name, en: this.site?.name_en })
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.title} | ${this.$t('site.pageTitle')}`,
@@ -495,6 +496,13 @@ export default {
     locality() {
       return this.site?.locality
     },
+    area() {
+      return this.site?.area
+    },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,
