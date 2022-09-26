@@ -522,7 +522,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ params, route, error, app }) {
+  async asyncData({ app, params, route, error }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(
         'attachment',
@@ -536,97 +536,109 @@ export default {
       )
       const ids = fileResponse?.ids
       const file = fileResponse
-
-      return {
-        file,
-        ids,
+      let text
+      switch (file?.specimen_image_attachment) {
+        case 1:
+          text = `${file?.specimen?.coll?.number?.split(' ')?.[0]} ${
+            file?.specimen?.specimen_id
+          } (ID-${file.specimen.id})`
+          break
+        case 2:
+          text = file.image_number
+          break
+        case 4:
+          text = file?.reference?.reference
+          break
+        default:
+          text = `${app.$translate({
+            et: file?.description,
+            en: file?.description_en,
+          })}`
       }
-    } catch (err) {
-      error({
-        message: `Cannot find file ${route.params.id}`,
-        path: route.path,
-      })
-    }
-  },
-  data() {
-    return {
-      expansionPanel: [1],
-      nameFields: {
-        collection: {
-          et: 'collection_name',
-          en: 'collection_name_en',
-        },
-        specimen: {
-          et: 'number',
-          en: 'number',
-        },
-        sample: {
-          et: 'number',
-          en: 'number',
-        },
-        sample_series: {
-          et: 'name',
-          en: 'name',
-        },
-        analysis: {
-          et: 'number',
-          en: 'number',
-        },
-        dataset: {
-          et: 'name',
-          en: 'name_en',
-        },
-        doi: {
-          et: 'identifier',
-          en: 'identifier',
-        },
-        locality: {
-          et: 'locality',
-          en: 'locality_en',
-        },
-        drillcore: {
-          et: 'drillcore',
-          en: 'drillcore_en',
-        },
-        drillcore_box: {
-          et: 'number',
-          en: 'number',
-        },
-        preparation: {
-          et: 'preparation_number',
-          en: 'preparation_number',
-        },
-        reference: {
-          et: 'reference',
-          en: 'reference',
-        },
-        storage: {
-          et: 'location',
-          en: 'location',
-        },
-        project: {
-          et: 'name',
-          en: 'name_en',
-        },
-        site: {
-          et: 'name',
-          en: 'name_en',
-        },
-        locality_description: {
-          et: 'description',
-          en: 'description',
-        },
-        taxon: {
-          et: 'taxon',
-          en: 'taxon',
-        },
-      },
-      specimenIdentification: [],
-      specimenIdentificationGeology: [],
-      attachmentKeywords: [],
-      fileContent: '',
-      rawFileContent: '',
-      tabs: [
+      const slugRoute = app.$createSlugRoute(route, text)
+      const validPath = app.$validateTabRoute(slugRoute, [])
+      let specimenIdentification = []
+      let specimenIdentificationGeology = []
+      // Specimen data START
+      if (file?.specimen) {
+        const specimenIdentificationResponse =
+          await app.$services.sarvREST.getResourceList(
+            'specimen_identification',
+            {
+              isValid: isNil(file?.id),
+              defaultParams: {
+                current: true,
+                specimen: file?.specimen?.id,
+                nest: 1,
+              },
+            }
+          )
+        specimenIdentification = specimenIdentificationResponse.items
+        const specimenIdentificationGeologyResponse =
+          await app.$services.sarvREST.getResourceList(
+            'specimen_identification_geology',
+            {
+              isValid: isNil(file?.id),
+              defaultParams: {
+                current: true,
+                specimen: file?.specimen?.id,
+                nest: 1,
+              },
+            }
+          )
+        specimenIdentificationGeology =
+          specimenIdentificationGeologyResponse.items
+      }
+      // Specimen data END
+
+      // Attachment keywords START
+      const attachmentKeywordsResponse =
+        await app.$services.sarvREST.getResourceList('attachment_keyword', {
+          isValid: isNil(file?.id),
+          defaultParams: {
+            attachment: file?.id,
+            nest: 1,
+          },
+        })
+      const attachmentKeywords = attachmentKeywordsResponse.items
+      // Attachment keywords END
+
+      // Raw file content data START
+      let rawFileContent = ''
+      let fileContent = ''
+      if (
+        file?.uuid_filename?.endsWith('.txt') ||
+        file?.uuid_filename?.endsWith('.las')
+      ) {
+        // File content (e.g., .las in json format)
+        const fileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          route.params.id
+        )
+        fileContent = fileContentResponse
+        if (fileContentResponse.startsWith('Error: ')) fileContent = ''
+
+        // Raw file content in text format
+        const rawFileContentResponse = await app.$services.sarvREST.getResource(
+          'file',
+          route.params.id,
+          {
+            params: {
+              raw_content: 'true',
+            },
+          }
+        )
+        rawFileContent = rawFileContentResponse
+        if (
+          typeof rawFileContentResponse === 'string' &&
+          rawFileContentResponse.startsWith('Error: ')
+        )
+          rawFileContent = ''
+      }
+      // Raw file content data END
+
+      // Related data START
+      let tabs = [
         {
           id: 'collection',
           title: 'related.collection',
@@ -758,133 +770,125 @@ export default {
           isLink: true,
           href: 'https://fossiilid.info/',
         },
-      ],
-    }
-  },
-  async fetch() {
-    const text = () => {
-      switch (this.file?.specimen_image_attachment) {
-        case 1:
-          return `${this.file?.specimen?.coll?.number?.split(' ')?.[0]} ${
-            this.file?.specimen?.specimen_id
-          } (ID-${this.file.specimen.id})`
-        case 2:
-          return this.file.image_number
-        case 4:
-          return this.file?.reference?.reference
-        default:
-          return `${this.$translate({
-            et: this.file?.description,
-            en: this.file?.description_en,
-          })}`
+      ]
+
+      tabs = await Promise.all(
+        tabs.map(async (tab) => {
+          const res = await app.$services.sarvREST.getResourceList(
+            'attachment_link',
+            {
+              isValid: isNil(file?.id),
+              defaultParams: {
+                [`${tab.id}__isnull`]: false,
+                attachment: file?.id,
+                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+              },
+            }
+          )
+          return { ...tab, count: res.count, items: res.items }
+        })
+      )
+
+      return {
+        file,
+        ids,
+        validPath,
+        initActiveTab: validPath,
+        rawFileContent,
+        fileContent,
+        specimenIdentificationGeology,
+        specimenIdentification,
+        attachmentKeywords,
+        tabs,
       }
-    }
-
-    const slugRoute = this.$createSlugRoute(this.$route, text())
-    if (slugRoute.path !== this.$route.path)
-      await this.$router.replace(slugRoute.path)
-
-    // Specimen data START
-    if (this.file?.specimen) {
-      const specimenIdentificationResponse =
-        await this.$services.sarvREST.getResourceList(
-          'specimen_identification',
-          {
-            isValid: isNil(this.file?.id),
-            defaultParams: {
-              current: true,
-              specimen: this.file?.specimen?.id,
-              nest: 1,
-            },
-          }
-        )
-      this.specimenIdentification = specimenIdentificationResponse.items
-      const specimenIdentificationGeologyResponse =
-        await this.$services.sarvREST.getResourceList(
-          'specimen_identification_geology',
-          {
-            isValid: isNil(this.file?.id),
-            defaultParams: {
-              current: true,
-              specimen: this.file?.specimen?.id,
-              nest: 1,
-            },
-          }
-        )
-      this.specimenIdentificationGeology =
-        specimenIdentificationGeologyResponse.items
-    }
-    // Specimen data END
-
-    // Attachment keywords START
-    const attachmentKeywordsResponse =
-      await this.$services.sarvREST.getResourceList('attachment_keyword', {
-        isValid: isNil(this.file?.id),
-        defaultParams: {
-          attachment: this.file?.id,
-          nest: 1,
-        },
+    } catch (err) {
+      error({
+        message: `Cannot find file ${route.params.id}`,
+        path: route.path,
       })
-    this.attachmentKeywords = attachmentKeywordsResponse.items
-    // Attachment keywords END
-
-    // Raw file content data START
-    if (
-      this.file?.uuid_filename?.endsWith('.txt') ||
-      this.file?.uuid_filename?.endsWith('.las')
-    ) {
-      // File content (e.g., .las in json format)
-      const fileContentResponse = await this.$services.sarvREST.getResource(
-        'file',
-        this.$route.params.id
-      )
-      this.fileContent = fileContentResponse
-      if (fileContentResponse.startsWith('Error: ')) this.fileContent = ''
-
-      // Raw file content in text format
-      const rawFileContentResponse = await this.$services.sarvREST.getResource(
-        'file',
-        this.$route.params.id,
-        {
-          params: {
-            raw_content: 'true',
-          },
-        }
-      )
-      this.rawFileContent = rawFileContentResponse
-      if (
-        typeof rawFileContentResponse === 'string' &&
-        rawFileContentResponse.startsWith('Error: ')
-      )
-        this.rawFileContent = ''
     }
-    // Raw file content data END
-
-    // Related data START
-    const getRelatedData = () => {
-      for (const tab of this.tabs) {
-        this.$services.sarvREST
-          .getResourceList('attachment_link', {
-            isValid: isNil(this.file?.id),
-            defaultParams: {
-              [`${tab.id}__isnull`]: false,
-              attachment: this.file?.id,
-              nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-            },
-          })
-          .then((response) => {
-            tab.count = response.count || 0
-            tab.items = response.items || []
-            return response
-          })
-        // eslint-disable-next-line promise/param-names
-        // await new Promise((r) => setTimeout(r, 500))
-      }
-    }
-    getRelatedData()
-    // Related data END
   },
-  fetchOnServer: false,
+  data() {
+    return {
+      expansionPanel: [1],
+      nameFields: {
+        collection: {
+          et: 'collection_name',
+          en: 'collection_name_en',
+        },
+        specimen: {
+          et: 'number',
+          en: 'number',
+        },
+        sample: {
+          et: 'number',
+          en: 'number',
+        },
+        sample_series: {
+          et: 'name',
+          en: 'name',
+        },
+        analysis: {
+          et: 'number',
+          en: 'number',
+        },
+        dataset: {
+          et: 'name',
+          en: 'name_en',
+        },
+        doi: {
+          et: 'identifier',
+          en: 'identifier',
+        },
+        locality: {
+          et: 'locality',
+          en: 'locality_en',
+        },
+        drillcore: {
+          et: 'drillcore',
+          en: 'drillcore_en',
+        },
+        drillcore_box: {
+          et: 'number',
+          en: 'number',
+        },
+        preparation: {
+          et: 'preparation_number',
+          en: 'preparation_number',
+        },
+        reference: {
+          et: 'reference',
+          en: 'reference',
+        },
+        storage: {
+          et: 'location',
+          en: 'location',
+        },
+        project: {
+          et: 'name',
+          en: 'name_en',
+        },
+        site: {
+          et: 'name',
+          en: 'name_en',
+        },
+        locality_description: {
+          et: 'description',
+          en: 'description',
+        },
+        taxon: {
+          et: 'taxon',
+          en: 'taxon',
+        },
+      },
+      specimenIdentification: [],
+      specimenIdentificationGeology: [],
+      attachmentKeywords: [],
+      fileContent: '',
+      rawFileContent: '',
+    }
+  },
+
   head() {
     return {
       title: this.fileTitle,
@@ -1066,6 +1070,10 @@ export default {
     licence() {
       return this?.file?.licence
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNull,

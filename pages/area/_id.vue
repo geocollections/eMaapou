@@ -363,10 +363,7 @@
     </template>
 
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -397,7 +394,7 @@ export default {
     BaseLinkExternal,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'area',
@@ -425,12 +422,43 @@ export default {
 
       const sites = sitesForMapResponse.items
 
+      const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: { fq: `area_id:${area.id}` },
+                },
+                api: {
+                  default: { area: area.id },
+                  relatedArea: { parent_area: area.id },
+                },
+              },
+            })
+        )
+      )
+
+      const text = app.$translate({
+        et: area.name,
+        en: area.name_en,
+      })
+
+      const slugRoute = app.$createSlugRoute(route, text)
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         area,
         ids,
         sites,
         deposit,
         miningClaim,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -439,44 +467,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-    }
-  },
-  async fetch() {
-    const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: {
-                default: { fq: `area_id:${this.area.id}` },
-              },
-              api: {
-                default: { area: this.area.id },
-                relatedArea: { parent_area: this.area.id },
-              },
-            },
-          })
-      )
-    )
-
-    const text = this.$translate({ et: this.area.name, en: this.area.name_en })
-
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.$translate({
@@ -570,6 +560,10 @@ export default {
         }, [])
       } else return []
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

@@ -144,10 +144,7 @@
       </div>
     </template>
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -173,7 +170,7 @@ export default {
     Tabs,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const collectionResponse = await $services.sarvREST.getResource(
         'collection',
@@ -187,9 +184,35 @@ export default {
       const ids = collectionResponse?.ids
       const collection = collectionResponse
 
+      const tabsObject = TABS_COLLECTION
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateTab(tab, {
+              props: { collection },
+              countParams: {
+                solr: {
+                  default: {
+                    fq: `collection_id:${collection?.id}`,
+                  },
+                },
+              },
+            })
+        )
+      )
+
+      const slugRoute = app.$createSlugRoute(route, collection.number)
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         collection,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -198,43 +221,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-    }
-  },
-  async fetch() {
-    const tabsObject = TABS_COLLECTION
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            props: { collection: this.collection },
-            countParams: {
-              solr: {
-                default: {
-                  fq: `collection_id:${this.collection?.id}`,
-                },
-              },
-            },
-          })
-      )
-    )
-    // console.log(hydratedTabs, this.collection.number)
-    const slugRoute = this.$createSlugRoute(this.$route, this.collection.number)
-    // console.log(slugRoute)
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-    // console.log(validPath)
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.title} | ${this.$t('collection.pageTitle')}`,
@@ -273,6 +259,10 @@ export default {
     database() {
       return this.collection?.database
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

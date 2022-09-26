@@ -151,10 +151,7 @@
     </template>
 
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -184,7 +181,7 @@ export default {
     TableRowLink,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const datasetResponse = await $services.sarvREST.getResource(
         'dataset',
@@ -231,6 +228,75 @@ export default {
         reference: doiResponse.items?.[0]?.reference?.reference,
       }
 
+      const localityGroupedResponse =
+        await app.$services.sarvSolr.getResourceList('analysis', {
+          useRawSolr: true,
+          defaultParams: {
+            fq: `dataset_id:${dataset.id}`,
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            group: true,
+            'group.field': ['locality_id', 'site_id'],
+            rows: 10000,
+          },
+        })
+
+      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+        ?.map((item) => item?.doclist?.docs?.[0])
+        .filter((item) => !isEmpty(item) && item?.locality_id)
+      const sites = localityGroupedResponse?.grouped?.site_id?.groups
+        ?.map((item) => item?.doclist?.docs?.[0])
+        .filter((item) => !isEmpty(item) && item?.site_id)
+      const locations = localities.concat(sites)
+
+      const tabsObject = TABS_DATASET
+
+      tabsObject.byIds.dataset_analysis.props.parameterHeaders = {
+        ...parameterHeaders,
+        byIds: Object.fromEntries(
+          Object.entries(parameterHeaders.byIds).map(([k, v], i) => {
+            if (i < 5) return [k, { ...v, show: true }]
+            return [k, v]
+          })
+        ),
+      }
+      tabsObject.byIds.sample_results.props.parameterHeaders = {
+        ...parameterHeaders,
+        byIds: Object.fromEntries(
+          Object.entries(parameterHeaders.byIds).map(([k, v]) => {
+            return [k, { ...v, show: true }]
+          })
+        ),
+      }
+
+      tabsObject.byIds.graphs.count =
+        locations.length === 1 ? locations.length : 0
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(async (tab) => {
+          if (tab.isSolr) {
+            return await app.$hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: { fq: `dataset_id:${dataset.id}` },
+                },
+              },
+            })
+          }
+          return await app.$hydrateTab(tab, {
+            countParams: {
+              api: {
+                default: { dataset: dataset.id },
+              },
+            },
+          })
+        })
+      )
+      const slugRoute = app.$createSlugRoute(route, dataset.title)
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         dataset,
         ids,
@@ -238,6 +304,11 @@ export default {
         parameterHeaders,
         doi,
         reference,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        localities,
+        locations,
       }
     } catch (err) {
       error({
@@ -254,84 +325,7 @@ export default {
       locations: [],
     }
   },
-  async fetch() {
-    const localityGroupedResponse =
-      await this.$services.sarvSolr.getResourceList('analysis', {
-        useRawSolr: true,
-        defaultParams: {
-          fq: `dataset_id:${this.dataset.id}`,
-          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-          group: true,
-          'group.field': ['locality_id', 'site_id'],
-          rows: 10000,
-        },
-      })
 
-    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => !isEmpty(item) && item?.locality_id)
-    const sites = localityGroupedResponse?.grouped?.site_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => !isEmpty(item) && item?.site_id)
-    const locations = localities.concat(sites)
-
-    const tabsObject = TABS_DATASET
-
-    tabsObject.byIds.dataset_analysis.props.parameterHeaders = {
-      ...this.parameterHeaders,
-      byIds: Object.fromEntries(
-        Object.entries(this.parameterHeaders.byIds).map(([k, v], i) => {
-          if (i < 5) return [k, { ...v, show: true }]
-          return [k, v]
-        })
-      ),
-    }
-    tabsObject.byIds.sample_results.props.parameterHeaders = {
-      ...this.parameterHeaders,
-      byIds: Object.fromEntries(
-        Object.entries(this.parameterHeaders.byIds).map(([k, v]) => {
-          return [k, { ...v, show: true }]
-        })
-      ),
-    }
-
-    tabsObject.byIds.graphs.count =
-      locations.length === 1 ? locations.length : 0
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(async (tab) => {
-        if (tab.isSolr) {
-          return await this.$hydrateTab(tab, {
-            countParams: {
-              solr: {
-                default: { fq: `dataset_id:${this.dataset.id}` },
-              },
-            },
-          })
-        }
-        return await this.$hydrateTab(tab, {
-          countParams: {
-            api: {
-              default: { dataset: this.dataset.id },
-            },
-          },
-        })
-      })
-    )
-    const slugRoute = this.$createSlugRoute(this.$route, this.dataset.title)
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.localities = localities
-    this.locations = locations
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: this.$translate({
@@ -388,6 +382,10 @@ export default {
         return filtered
       }, [])
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

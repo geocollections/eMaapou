@@ -193,10 +193,7 @@
     </template>
 
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
       <v-card
@@ -254,7 +251,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const stratigraphyResponse = await $services.sarvREST.getResource(
         'stratigraphy',
@@ -268,9 +265,82 @@ export default {
       const ids = stratigraphyResponse?.ids
       const stratigraphy = stratigraphyResponse
 
+      const stratotypeResponse = await $services.sarvREST.getResourceList(
+        'stratigraphy_stratotype',
+        {
+          ...STRATOTYPE.options,
+          isValid: isNil(stratigraphy?.id),
+          defaultParams: {
+            stratigraphy: stratigraphy?.id,
+            nest: 2,
+          },
+          fields: app.$getAPIFieldValues(HEADERS_STRATOTYPE),
+        }
+      )
+      const stratotypes = stratotypeResponse.items
+      const stratotypeCount = stratotypeResponse.count
+
+      const tabsObject = TABS_STRATIGRAPHY
+
+      tabsObject.byIds.specimen.props.stratigraphy = stratigraphy
+      tabsObject.byIds.sample.props.stratigraphy = stratigraphy
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateTab(tab, {
+              countParams: {
+                api: {
+                  default: {
+                    stratigraphy: stratigraphy?.id,
+                  },
+                  stratigraphy_stratotype: {
+                    stratigraphy: stratigraphy?.id,
+                  },
+                  stratigraphy_synonym: {
+                    stratigraphy: stratigraphy?.id,
+                  },
+                },
+                solr: {
+                  default: {
+                    fq: stratigraphy?.hierarchy_string
+                      ? `(stratigraphy_hierarchy:(${stratigraphy?.hierarchy_string}*) OR age_hierarchy:(${stratigraphy?.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy?.hierarchy_string}*))`
+                      : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
+                    // fq: `stratigraphy_id:${stratigraphy.id}`,
+                  },
+                  lithostratigraphy: {
+                    fq: `age_chronostratigraphy:${stratigraphy?.id}`,
+                  },
+                  subunits: {
+                    fq: `parent_id:${stratigraphy?.id}`,
+                  },
+                },
+                fields: tab.fields ?? 'id',
+              },
+            })
+        )
+      )
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        app.$translate({
+          et: stratigraphy?.stratigraphy,
+          en: stratigraphy?.stratigraphy_en,
+        })
+      )
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         stratigraphy,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        stratotypes,
+        stratotypeCount,
       }
     } catch (err) {
       error({
@@ -279,90 +349,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      options: STRATOTYPE.options,
-      tabs: [],
-      initActiveTab: '',
-      stratotypes: [],
-      stratotypeCount: 0,
-    }
-  },
-  async fetch() {
-    const stratotypeResponse = await this.$services.sarvREST.getResourceList(
-      'stratigraphy_stratotype',
-      {
-        ...STRATOTYPE.options,
-        isValid: isNil(this.stratigraphy?.id),
-        defaultParams: {
-          stratigraphy: this.stratigraphy?.id,
-          nest: 2,
-        },
-        fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
-      }
-    )
-    this.stratotypes = stratotypeResponse.items
-    this.stratotypeCount = stratotypeResponse.count
-
-    const tabsObject = TABS_STRATIGRAPHY
-
-    tabsObject.byIds.specimen.props.stratigraphy = this.stratigraphy
-    tabsObject.byIds.sample.props.stratigraphy = this.stratigraphy
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              api: {
-                default: {
-                  stratigraphy: this.stratigraphy?.id,
-                },
-                stratigraphy_stratotype: {
-                  stratigraphy: this.stratigraphy?.id,
-                },
-                stratigraphy_synonym: {
-                  stratigraphy: this.stratigraphy?.id,
-                },
-              },
-              solr: {
-                default: {
-                  fq: this.stratigraphy?.hierarchy_string
-                    ? `(stratigraphy_hierarchy:(${this.stratigraphy?.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy?.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy?.hierarchy_string}*))`
-                    : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
-                  // fq: `stratigraphy_id:${stratigraphy.id}`,
-                },
-                lithostratigraphy: {
-                  fq: `age_chronostratigraphy:${this.stratigraphy?.id}`,
-                },
-                subunits: {
-                  fq: `parent_id:${this.stratigraphy?.id}`,
-                },
-              },
-              fields: tab.fields ?? 'id',
-            },
-          })
-      )
-    )
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({
-        et: this.stratigraphy?.stratigraphy,
-        en: this.stratigraphy?.stratigraphy_en,
-      })
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.$translate({
@@ -416,6 +402,10 @@ export default {
       }
       return false
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

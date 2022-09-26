@@ -261,10 +261,7 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -292,7 +289,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const drillcoreBoxResponse = await $services.sarvREST.getResource(
         'drillcore_box',
@@ -320,11 +317,52 @@ export default {
       const drillcoreBoxImages = attachmentLinkResponse.items
       const activeImage = drillcoreBoxImages?.[0]
 
+      const tabs = TABS_DRILLCORE_BOX.allIds.map(
+        (id) => TABS_DRILLCORE_BOX.byIds[id]
+      )
+
+      const hydratedTabs =
+        !isNil(drillcoreBox?.drillcore?.locality) &&
+        !isNil(drillcoreBox?.depth_start) &&
+        !isNil(drillcoreBox?.depth_end)
+          ? await Promise.all(
+              tabs.map(
+                async (tab) =>
+                  await app.$hydrateTab(tab, {
+                    props: {
+                      locality: drillcoreBox.drillcore?.locality,
+                      depthStart: drillcoreBox.depth_start,
+                      depthEnd: drillcoreBox.depth_end,
+                    },
+                    countParams: {
+                      solr: {
+                        default: {
+                          fq: `locality_id:${drillcoreBox.drillcore?.locality} AND (depth:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}] OR depth_interval:[${drillcoreBox.depth_start} TO ${drillcoreBox.depth_end}])`,
+                        },
+                      },
+                      api: {},
+                    },
+                  })
+              )
+            )
+          : tabs
+
+      const text = `${app.$translate({
+        et: drillcoreBox.drillcore?.drillcore,
+        en: drillcoreBox.drillcore?.drillcore_en,
+      })}-${drillcoreBox.number}`
+      const slugRoute = app.$createSlugRoute(route, text)
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         drillcoreBox,
         drillcoreBoxImages,
         activeImage,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -340,51 +378,6 @@ export default {
       initActiveTab: '',
     }
   },
-  async fetch() {
-    const tabs = TABS_DRILLCORE_BOX.allIds.map(
-      (id) => TABS_DRILLCORE_BOX.byIds[id]
-    )
-
-    const hydratedTabs =
-      !isNil(this.drillcoreBox?.drillcore?.locality) &&
-      !isNil(this.drillcoreBox?.depth_start) &&
-      !isNil(this.drillcoreBox?.depth_end)
-        ? await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await this.$hydrateTab(tab, {
-                  props: {
-                    locality: this.drillcoreBox.drillcore?.locality,
-                    depthStart: this.drillcoreBox.depth_start,
-                    depthEnd: this.drillcoreBox.depth_end,
-                  },
-                  countParams: {
-                    solr: {
-                      default: {
-                        fq: `locality_id:${this.drillcoreBox.drillcore?.locality} AND (depth:[${this.drillcoreBox.depth_start} TO ${this.drillcoreBox.depth_end}] OR depth_interval:[${this.drillcoreBox.depth_start} TO ${this.drillcoreBox.depth_end}])`,
-                      },
-                    },
-                    api: {},
-                  },
-                })
-            )
-          )
-        : tabs
-
-    const text = `${this.$translate({
-      et: this.drillcoreBox.drillcore?.drillcore,
-      en: this.drillcoreBox.drillcore?.drillcore_en,
-    })}-${this.drillcoreBox.number}`
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.title} | ${this.$t('drillcoreBox.pageTitle')}`,
@@ -437,6 +430,10 @@ export default {
         })}`
       return title
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNull,

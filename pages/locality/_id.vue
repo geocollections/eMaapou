@@ -248,10 +248,7 @@
 
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -283,7 +280,7 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const localityResponse = await $services.sarvREST.getResource(
         'locality',
@@ -310,10 +307,115 @@ export default {
         ? drillcoreResponse.items[0]
         : null
 
+      const attachmentPromise = app.$services.sarvSolr.getResourceList(
+        'attachment',
+        {
+          defaultParams: {
+            fq: `locality_id:${locality?.id} AND specimen_image_attachment:2`,
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+          },
+        }
+      )
+
+      // Checking if locality has a related .las file to show in graph tab
+      const lasFilePromise = app.$services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            attachment__uuid_filename__iendswith: '.las',
+            locality: locality?.id,
+            fields: 'attachment',
+          },
+        }
+      )
+
+      // Todo: Add taxa tab?
+      const tabsObject = TABS_LOCALITY
+
+      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
+      tabsObject.byIds.boxes.props.drillcore = drillcore ? drillcore.id : null
+
+      tabsObject.byIds.analysis_results.props = {
+        localityObject: locality,
+      }
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      let hydratedTabs = await Promise.all(
+        tabs.map((tab) =>
+          app.$hydrateTab(tab, {
+            props: {
+              locality: locality.id,
+            },
+            countParams: {
+              solr: {
+                default: {
+                  fq:
+                    tab.id === 'graphs'
+                      ? `locality_id:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
+                      : `locality_id:${params.id}`,
+                },
+              },
+              api: { default: { locality: locality.id } },
+            },
+          })
+        )
+      )
+      const lasFileResponse = await lasFilePromise
+      // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
+      hydratedTabs = hydratedTabs.map((item) => {
+        if (item.id === 'graphs') {
+          // Todo: Also add taxa check
+          const localityDescriptionCount = hydratedTabs.find(
+            (item) => item.id === 'locality_description'
+          ).count
+          const sampleCount = hydratedTabs.find(
+            (item) => item.id === 'sample'
+          ).count
+
+          const combinedCount =
+            item.count + localityDescriptionCount + sampleCount
+
+          const count = lasFileResponse?.items?.[0]?.attachment
+            ? combinedCount + 1
+            : combinedCount
+
+          return {
+            ...item,
+            count,
+            props: {
+              ...item.props,
+              attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+              analysisResultsCount: item.count,
+              localityDescriptionCount,
+              sampleCount,
+            },
+          }
+        }
+        return item
+      })
+
+      const attachmentResponse = await attachmentPromise
+      const attachments = attachmentResponse?.items ?? []
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        app.$translate({
+          et: locality.locality,
+          en: locality.locality_en,
+        })
+      )
+
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         locality,
         ids,
         drillcore,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        attachments,
       }
     } catch (err) {
       error({
@@ -322,123 +424,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-      attachments: [],
-    }
-  },
-  async fetch() {
-    const attachmentPromise = this.$services.sarvSolr.getResourceList(
-      'attachment',
-      {
-        defaultParams: {
-          fq: `locality_id:${this.locality?.id} AND specimen_image_attachment:2`,
-          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-        },
-      }
-    )
-
-    // Checking if locality has a related .las file to show in graph tab
-    const lasFilePromise = this.$services.sarvREST.getResourceList(
-      'attachment_link',
-      {
-        defaultParams: {
-          attachment__uuid_filename__iendswith: '.las',
-          locality: this.locality?.id,
-          fields: 'attachment',
-        },
-      }
-    )
-
-    // Todo: Add taxa tab?
-    const tabsObject = TABS_LOCALITY
-
-    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
-    tabsObject.byIds.boxes.props.drillcore = this.drillcore
-      ? this.drillcore.id
-      : null
-
-    tabsObject.byIds.analysis_results.props = {
-      localityObject: this.locality,
-    }
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    let hydratedTabs = await Promise.all(
-      tabs.map((tab) =>
-        this.$hydrateTab(tab, {
-          props: {
-            locality: this.locality.id,
-          },
-          countParams: {
-            solr: {
-              default: {
-                fq:
-                  tab.id === 'graphs'
-                    ? `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
-                    : `locality_id:${this.$route.params.id}`,
-              },
-            },
-            api: { default: { locality: this.locality.id } },
-          },
-        })
-      )
-    )
-    const lasFileResponse = await lasFilePromise
-    // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
-    hydratedTabs = hydratedTabs.map((item) => {
-      if (item.id === 'graphs') {
-        // Todo: Also add taxa check
-        const localityDescriptionCount = hydratedTabs.find(
-          (item) => item.id === 'locality_description'
-        ).count
-        const sampleCount = hydratedTabs.find(
-          (item) => item.id === 'sample'
-        ).count
-
-        const combinedCount =
-          item.count + localityDescriptionCount + sampleCount
-
-        const count = lasFileResponse?.items?.[0]?.attachment
-          ? combinedCount + 1
-          : combinedCount
-
-        return {
-          ...item,
-          count,
-          props: {
-            ...item.props,
-            attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
-            analysisResultsCount: item.count,
-            localityDescriptionCount,
-            sampleCount,
-          },
-        }
-      }
-      return item
-    })
-
-    const attachmentResponse = await attachmentPromise
-    this.attachments = attachmentResponse?.items ?? []
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({
-        et: this.locality.locality,
-        en: this.locality.locality_en,
-      })
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.$translate({
@@ -531,6 +516,10 @@ export default {
     stratigraphy_base() {
       return this.locality?.stratigraphy_base
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

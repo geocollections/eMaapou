@@ -217,10 +217,7 @@
     </template>
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -249,7 +246,7 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'specimen',
@@ -266,10 +263,50 @@ export default {
 
       const specimenAlt = specimenNameResponse?.[0]
 
+      const attachmentResponse = await $services.sarvSolr.getResourceList(
+        'attachment',
+        {
+          defaultParams: {
+            fq: `specimen_id:${specimen?.id} AND specimen_image_attachment:1`,
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+            rows: 25,
+          },
+        }
+      )
+
+      const images = attachmentResponse.items ?? []
+
+      const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map(
+          async (tab) =>
+            await app.$hydrateTab(tab, {
+              countParams: {
+                solr: { default: { fq: `specimen_id:${specimen?.id}` } },
+                api: {
+                  default: { specimen: specimen?.id },
+                  specimen_reference: { specimen: specimen?.id },
+                },
+              },
+            })
+        )
+      )
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        `${specimen.database.acronym} ${specimen.specimen_id}`
+      )
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         specimen,
         specimenAlt,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
+        images,
       }
     } catch (err) {
       error({
@@ -278,55 +315,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      images: [],
-      initActiveTab: '',
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const attachmentResponse = await this.$services.sarvSolr.getResourceList(
-      'attachment',
-      {
-        defaultParams: {
-          fq: `specimen_id:${this.specimen?.id} AND specimen_image_attachment:1`,
-          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-          rows: 25,
-        },
-      }
-    )
-
-    this.images = attachmentResponse.items ?? []
-
-    const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: { default: { fq: `specimen_id:${this.specimen?.id}` } },
-              api: {
-                default: { specimen: this.specimen?.id },
-                specimen_reference: { specimen: this.specimen?.id },
-              },
-            },
-          })
-      )
-    )
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
-    )
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.title} | ${this.$t('specimen.pageTitle')}`,
@@ -414,6 +402,10 @@ export default {
     parent() {
       return this.specimen?.parent
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
 }
 </script>
