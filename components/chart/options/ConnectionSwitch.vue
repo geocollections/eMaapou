@@ -4,6 +4,7 @@
     v-bind="$attrs"
     label="Connected"
     hide-details
+    dense
     color="accent"
     v-on="$listeners"
   />

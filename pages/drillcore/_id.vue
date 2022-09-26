@@ -167,10 +167,7 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card
-        v-if="filteredTabs.length > 0 && !$fetchState.pending"
-        class="mt-4 mb-4"
-      >
+      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
       </v-card>
     </template>
@@ -199,7 +196,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services }) {
     try {
       const drillcoreResponse = await $services.sarvREST.getResource(
         'drillcore',
@@ -213,9 +210,87 @@ export default {
       const ids = drillcoreResponse?.ids
       const drillcore = drillcoreResponse
 
+      let lasFileResponse
+      if (drillcore?.locality) {
+        lasFileResponse = await app.$services.sarvREST.getResourceList(
+          'attachment_link',
+          {
+            defaultParams: {
+              attachment__uuid_filename__iendswith: '.las',
+              locality: drillcore.locality.id,
+              fields: 'attachment',
+            },
+          }
+        )
+      }
+
+      const tabsObject = TABS_DRILLCORE
+
+      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
+      tabsObject.byIds.analysis_results.props = {
+        drillcoreObject: drillcore,
+        locality: drillcore?.locality?.id,
+        attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+      }
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      let hydratedTabs = drillcore?.locality?.id
+        ? await Promise.all(
+            tabs.map(
+              async (tab) =>
+                await app.$hydrateTab(tab, {
+                  props: { locality: drillcore?.locality?.id },
+                  countParams: {
+                    solr: {
+                      default: {
+                        fq: `locality_id :${drillcore?.locality?.id}`,
+                      },
+                    },
+                    api: {
+                      default: { locality: drillcore?.locality?.id },
+                      attachment_link: {
+                        or_search: `drillcore:${drillcore.id} OR locality:${drillcore.locality.id}`,
+                      },
+                    },
+                  },
+                })
+            )
+          )
+        : tabs
+
+      // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
+      hydratedTabs = hydratedTabs.map((item) => {
+        if (item.id === 'graphs') {
+          const count = lasFileResponse?.items?.[0]?.attachment
+            ? item.count + 1
+            : item.count
+          return {
+            ...item,
+            count,
+            props: {
+              ...item.props,
+              analysisResultsCount: item.count,
+            },
+          }
+        } else return item
+      })
+
+      const slugRoute = app.$createSlugRoute(
+        route,
+        app.$translate({
+          et: drillcore.drillcore,
+          en: drillcore.drillcore_en,
+        })
+      )
+      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+
       return {
         drillcore,
         ids,
+        validPath,
+        tabs: hydratedTabs,
+        initActiveTab: validPath,
       }
     } catch (err) {
       error({
@@ -224,96 +299,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-    }
-  },
-  async fetch() {
-    // Checking if drillcore has a related .las file to show in graph tab (through locality)
-    let lasFileResponse
-    if (this.drillcore?.locality) {
-      lasFileResponse = await this.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          defaultParams: {
-            attachment__uuid_filename__iendswith: '.las',
-            locality: this.drillcore.locality.id,
-            fields: 'attachment',
-          },
-        }
-      )
-    }
-
-    const tabsObject = TABS_DRILLCORE
-
-    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
-    tabsObject.byIds.analysis_results.props = {
-      drillcoreObject: this.drillcore,
-      locality: this.drillcore?.locality?.id,
-      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
-    }
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    let hydratedTabs = this.drillcore?.locality?.id
-      ? await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await this.$hydrateTab(tab, {
-                props: { locality: this.drillcore?.locality?.id },
-                countParams: {
-                  solr: {
-                    default: {
-                      fq: `locality_id :${this.drillcore?.locality?.id}`,
-                    },
-                  },
-                  api: {
-                    default: { locality: this.drillcore?.locality?.id },
-                    attachment_link: {
-                      or_search: `drillcore:${this.drillcore.id} OR locality:${this.drillcore.locality.id}`,
-                    },
-                  },
-                },
-              })
-          )
-        )
-      : tabs
-
-    // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
-    hydratedTabs = hydratedTabs.map((item) => {
-      if (item.id === 'graphs') {
-        const count = lasFileResponse?.items?.[0]?.attachment
-          ? item.count + 1
-          : item.count
-        return {
-          ...item,
-          count,
-          props: {
-            ...item.props,
-            analysisResultsCount: item.count,
-          },
-        }
-      } else return item
-    })
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({
-        et: this.drillcore.drillcore,
-        en: this.drillcore.drillcore_en,
-      })
-    )
-
-    const validPath = this.$validateTabRoute(slugRoute, hydratedTabs)
-
-    this.tabs = hydratedTabs
-    this.initActiveTab = validPath
-
-    if (validPath !== this.$route.path) await this.$router.replace(validPath)
-  },
-  fetchOnServer: false,
   head() {
     return {
       title: `${this.title} | ${this.$t('drillcore.pageTitle')}`,
@@ -360,6 +345,10 @@ export default {
     locality() {
       return this.drillcore?.locality
     },
+  },
+  created() {
+    if (this.validPath !== this.$route.path)
+      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,
