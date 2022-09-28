@@ -38,66 +38,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      defaultOptions: {
-        title: {
-          text: 'Chart title',
-          left: 'center',
-          textStyle: {
-            fontSize: 14,
-          },
-        },
-
-        grid: {
-          show: true,
-          top: 50,
-          bottom: 140,
-          left: '20px',
-          containLabel: true,
-          width: '200px',
-        },
-
-        tooltip: {
-          trigger: 'item',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: this.$vuetify.theme.currentTheme.warning,
-            },
-            crossStyle: {
-              color: this.$vuetify.theme.currentTheme.warning,
-              width: 1,
-              type: 'solid',
-            },
-          },
-          formatter(params) {
-            return `<span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${params.color}"></span><span>${params.seriesName}
-              <br />Depth: <b>${params.data[1]}</b></span>
-              <br /><span>Value: <b>${params.data[0]}</b></span>`
-          },
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        },
-
-        toolbox: {
-          top: 20,
-          right: 30,
-          feature: {
-            saveAsImage: {},
-          },
-        },
-
-        dataZoom: [
-          {
-            type: 'inside',
-            yAxisIndex: 0,
-            filterMode: 'filter',
-            minValueSpan: 0.1,
-          },
-        ],
-      },
-    }
-  },
   computed: {
     ...mapState('chart', ['renderer', 'connected']),
     initOptions() {
@@ -109,14 +49,13 @@ export default {
       return {
         grid: {
           show: true,
-          top: 50,
-          bottom: 140,
-          left: '20px',
-          containLabel: true,
-          width: '200px',
+          // top: 50,
+          // bottom: 140,
+          // left: '20px',
+          // containLabel: true,
+          // width: 400,
         },
         tooltip: {
-          trigger: 'item',
           axisPointer: {
             type: 'cross',
             label: {
@@ -148,7 +87,7 @@ export default {
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
         toolbox: {
-          top: 20,
+          // top: 20,
           right: 30,
           feature: {
             saveAsImage: {},
@@ -176,7 +115,6 @@ export default {
       }
     },
   },
-
   watch: {
     connected: {
       handler(value) {
@@ -189,7 +127,6 @@ export default {
       immediate: true,
     },
   },
-
   mounted() {
     connect('flog')
   },
@@ -207,6 +144,12 @@ export default {
         splitNumber: 7,
         axisTick: {
           alignWithLabel: true,
+        },
+        axisLabel: {
+          show: false,
+        },
+        splitLine: {
+          show: false,
         },
         max: this.yMax,
         min: this.yMin,
@@ -259,7 +202,7 @@ export default {
                 t.analysis_id,
               ]
             })
-            .sort((a, b) => a[1] - b[1]),
+            .sort((a, b) => b[1] - a[1]),
           emphasis: {
             focus: 'series',
           },

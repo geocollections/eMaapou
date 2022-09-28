@@ -1,5 +1,6 @@
 <template>
-  <flog
+  <chart-flog
+    v-if="analysisResults.length > 0 && sampleResults.length > 0"
     :analyses="analysisResults"
     :samples="sampleResults"
     :min-depth="minDepth"
@@ -10,11 +11,11 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import Flog from '~/components/chart/Flog'
+import ChartFlog from '~/components/chart/ChartFlog.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
 export default {
-  components: { Flog },
+  components: { ChartFlog },
   props: {
     datasetObject: {
       type: Object,
@@ -51,7 +52,7 @@ export default {
         fl: 'id,sample_id,sample_number,depth,depth_interval,',
         sort: 'depth asc',
         stats: 'on',
-        'stats.field': ['depth'],
+        'stats.field': ['depth', 'depth_interval'],
       },
     })
 
@@ -68,10 +69,12 @@ export default {
       [
         analysisResultsResponse.stats.stats_fields.depth.max,
         sampleResponse.stats.stats_fields.depth.max,
+        sampleResponse.stats.stats_fields.depth_interval.max,
       ],
       [
         analysisResultsResponse.stats.stats_fields.depth.min,
         sampleResponse.stats.stats_fields.depth.min,
+        sampleResponse.stats.stats_fields.depth_interval.min,
       ]
     )
     const methods = flogParameters(analysisResultsResponse.facet.facet_pivot)

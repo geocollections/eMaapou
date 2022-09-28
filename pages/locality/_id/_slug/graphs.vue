@@ -1,14 +1,14 @@
 <template>
   <div>
-    <flog
+    <chart-flog
       v-if="analysisResults.length > 0 && sampleResults.length > 0"
       :analyses="analysisResults"
       :samples="sampleResults"
+      :taxa="taxaResults"
       :min-depth="minDepth"
       :max-depth="maxDepth"
       :methods="methods"
     />
-
     <las-chart
       v-if="attachment && lasContent"
       class="pa-2"
@@ -22,13 +22,13 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import Flog from '~/components/chart/Flog'
-import LasChart from '~/components/chart/types/LasChart'
+import LasChart from '~/components/chart/types/LasChart.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
+import ChartFlog from '~/components/chart/ChartFlog.vue'
 
 export default {
-  components: { LasChart, Flog },
+  components: { LasChart, ChartFlog },
   props: {
     localityObject: {
       type: Object,
@@ -50,6 +50,7 @@ export default {
       lasContent: null,
       analysisResults: [],
       sampleResults: [],
+      taxaResults: [],
       minDepth: 0,
       maxDepth: 0,
       methods: [],
@@ -104,33 +105,54 @@ export default {
           fl: 'id,sample_id,sample_number,depth,depth_interval,',
           sort: 'depth asc',
           stats: 'on',
-          'stats.field': ['depth'],
+          'stats.field': ['depth', 'depth_interval'],
+        },
+      }
+    )
+
+    const taxaPromise = this.$services.sarvSolr.getResourceList(
+      'taxon_frequency',
+      {
+        isValid: isNil('locality_id'),
+        defaultParams: {
+          fq: `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
+          start: 0,
+          rows: 50000,
+          fl: 'depth,depth_interval,frequency,taxon,taxon_id,',
+          sort: 'depth asc',
+          stats: 'on',
+          'stats.field': ['taxon', 'depth'],
+          'stats.calcdistinct': true,
         },
       }
     )
 
     // TODO: catch any failing promises
-    const [analysisResultsResponse, sampleResponse] = await Promise.all([
-      analysisResultsPromise,
-      samplesPromise,
-    ])
+    const [analysisResultsResponse, sampleResponse, taxaResponse] =
+      await Promise.all([analysisResultsPromise, samplesPromise, taxaPromise])
 
     const analysisResults = analysisResultsResponse?.items
     const sampleResults = sampleResponse?.items
+    const taxaResults = taxaResponse?.items
 
     const [maxDepth, minDepth] = chartRange(
       [
         analysisResultsResponse.stats.stats_fields.depth.max,
         sampleResponse.stats.stats_fields.depth.max,
+        sampleResponse.stats.stats_fields.depth_interval.max,
+        taxaResponse.stats.stats_fields.depth.max,
       ],
       [
         analysisResultsResponse.stats.stats_fields.depth.min,
         sampleResponse.stats.stats_fields.depth.min,
+        sampleResponse.stats.stats_fields.depth_interval.min,
+        taxaResponse.stats.stats_fields.depth.min,
       ]
     )
     const methods = flogParameters(analysisResultsResponse.facet.facet_pivot)
     this.analysisResults = analysisResults
     this.sampleResults = sampleResults
+    this.taxaResults = taxaResults
     this.maxDepth = maxDepth
     this.minDepth = minDepth
     this.methods = methods

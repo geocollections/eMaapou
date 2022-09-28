@@ -1,6 +1,6 @@
 <template>
   <div>
-    <flog
+    <chart-flog
       v-if="analysisResults.length > 0 && sampleResults.length > 0"
       :analyses="analysisResults"
       :samples="sampleResults"
@@ -22,13 +22,13 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import Flog from '~/components/chart/Flog'
 import LasChart from '~/components/chart/types/LasChart'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
+import ChartFlog from '~/components/chart/ChartFlog.vue'
 
 export default {
-  components: { LasChart, Flog },
+  components: { LasChart, ChartFlog },
   props: {
     locality: {
       type: Number,
@@ -110,7 +110,7 @@ export default {
             fl: 'id,sample_id,sample_number,depth,depth_interval,',
             sort: 'depth asc',
             stats: 'on',
-            'stats.field': ['depth'],
+            'stats.field': ['depth', 'depth_interval'],
           },
         }
       )
@@ -128,10 +128,12 @@ export default {
         [
           analysisResultsResponse.stats.stats_fields.depth.max,
           sampleResponse.stats.stats_fields.depth.max,
+          sampleResponse.stats.stats_fields.depth_interval.max,
         ],
         [
           analysisResultsResponse.stats.stats_fields.depth.min,
           sampleResponse.stats.stats_fields.depth.min,
+          sampleResponse.stats.stats_fields.depth_interval.min,
         ]
       )
       const methods = flogParameters(analysisResultsResponse.facet.facet_pivot)

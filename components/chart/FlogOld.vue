@@ -1,14 +1,6 @@
 <template>
-  <v-fade-transition hide-on-leave mode="out-in">
-    <div
-      v-if="isLoading"
-      key="flog-loading"
-      class="d-flex align-center justify-center"
-      style="height: 500px; width: 100%"
-    >
-      <v-progress-circular indeterminate color="accent" :size="100" />
-    </div>
-    <div v-else key="flog-chart" class="pa-2">
+  <client-only>
+    <div class="pa-2">
       <div class="mb-2">
         <options-method-tree-view
           :methods="methods"
@@ -60,17 +52,17 @@
           />
         </div>
 
-        <!-- <taxa-chart
-          v-if="taxaResults.length > 0 && selectedTaxa.length > 0 && false"
+        <taxa-chart
+          v-if="taxa.length > 0"
           class="d-flex flex-row"
-          :results="taxaResults"
+          :results="taxa"
           :taxa="selectedTaxa"
           :min-depth="minDepth"
           :max-depth="maxDepth"
-        /> -->
+        />
       </div>
     </div>
-  </v-fade-transition>
+  </client-only>
 </template>
 
 <script>
@@ -80,10 +72,12 @@ import ConnectionSwitch from '~/components/chart/options/ConnectionSwitch'
 import SampleChart from '~/components/chart/types/SampleChart'
 import ParamsChart from '~/components/chart/types/ParamsChart'
 import OptionsMethodTreeView from '~/components/chart/options/OptionsMethodTreeView.vue'
+import TaxaChart from '~/components/chart/types/TaxaChart.vue'
 export default {
   components: {
     ParamsChart,
     SampleChart,
+    TaxaChart,
     ConnectionSwitch,
     RendererSwitch,
     OptionsMethodTreeView,
@@ -94,6 +88,10 @@ export default {
       default: () => [],
     },
     samples: {
+      type: Array,
+      default: () => [],
+    },
+    taxa: {
       type: Array,
       default: () => [],
     },
@@ -119,7 +117,7 @@ export default {
       // Analysis
       selectedParameters: [],
       // Taxa
-      taxa: [],
+      // taxa: [],
       selectedTaxa: [],
       initSelectedTaxa: [],
     }

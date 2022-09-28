@@ -1,16 +1,17 @@
 <template>
   <!-- <sample-chart-wrapper :options="chartOptions" /> -->
-
-  <v-chart
-    class="chart"
-    v-bind="$attrs"
-    autoresize
-    group="flog"
-    :init-options="initOptions"
-    :option="chartOptions"
-    v-on="$listeners"
-    @click="handleClick"
-  />
+  <div>
+    <v-chart
+      class="chart"
+      v-bind="$attrs"
+      autoresize
+      group="flog"
+      :init-options="initOptions"
+      :option="chartOptions"
+      v-on="$listeners"
+      @click="handleClick"
+    />
+  </div>
 </template>
 
 <script>
@@ -57,19 +58,18 @@ export default {
           },
         },
         grid: {
-          // show: true,
-          top: 50,
-          bottom: 140,
-          left: '20px',
-          containLabel: true,
-          width: '150px',
+          // top: 50,
+          // bottom: 140,
+          left: '30%',
+          // containLabel: true,
+          width: 200,
         },
         tooltip: {
           trigger: 'item',
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
         toolbox: {
-          top: 20,
+          // top: 20,
           right: 30,
           feature: {
             saveAsImage: {},
@@ -197,16 +197,16 @@ export default {
             const start = api.coord([categoryIndex, api.value(1)])
             const end = api.coord([categoryIndex, depthInterval])
 
-            const width = api.value(2) ? 20 : 10
+            const categoryWidth = api.size([0, 1])[0]
             const height =
               api.value(2) || end[1] - start[1] < 10 ? end[1] - start[1] : 10
-            const x = start[0] - width / 2 - 25
+            const x = start[0] - categoryWidth * 0.5
             const y = api.value(2) ? start[1] : start[1] - height / 2
             const rectShape = graphic.clipRectByRect(
               {
                 x,
                 y,
-                width,
+                width: 10,
                 height,
               },
               {
@@ -256,7 +256,7 @@ export default {
 <style scoped>
 .chart {
   height: 90vh;
-  width: 230px;
+  width: 200px;
   min-height: 600px;
   max-height: 2000px;
 }
