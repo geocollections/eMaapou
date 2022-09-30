@@ -8,6 +8,12 @@
       :min-depth="minDepth"
       :max-depth="maxDepth"
       :methods="methods"
+      :title="
+        $translate({
+          et: localityObject.locality,
+          en: localityObject.locality_en,
+        })
+      "
     />
     <las-chart
       v-if="attachment && lasContent"
@@ -32,7 +38,7 @@ export default {
   props: {
     localityObject: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     attachment: {
       type: String,

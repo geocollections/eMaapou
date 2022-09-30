@@ -11,9 +11,11 @@
         class="montserrat text-none"
         small
         dark
+        outlined
         v-bind="attrs"
         v-on="on"
       >
+        <v-icon left dark> mdi-chart-line-variant </v-icon>
         {{ $t('common.parameters') }}
       </v-btn>
     </template>

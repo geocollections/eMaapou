@@ -1006,4 +1006,7 @@ export default {
   sampleChart: {
     title: 'Proovid',
   },
+  flogChart: {
+    titleSubtext: '1:{scale} (alates {minDepth} kuni {maxDepth} m)',
+  },
 }

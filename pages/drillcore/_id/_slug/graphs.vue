@@ -7,6 +7,12 @@
       :min-depth="minDepth"
       :max-depth="maxDepth"
       :methods="methods"
+      :title="
+        $translate({
+          et: drillcoreObject.drillcore,
+          en: drillcoreObject.drillcore_en,
+        })
+      "
     />
 
     <las-chart
@@ -36,7 +42,7 @@ export default {
     },
     drillcoreObject: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     attachment: {
       type: String,

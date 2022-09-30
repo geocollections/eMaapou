@@ -339,6 +339,8 @@ export default {
         localityObject: locality,
       }
 
+      tabsObject.byIds.analysis_results.props.locality = locality
+
       const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
       let hydratedTabs = await Promise.all(

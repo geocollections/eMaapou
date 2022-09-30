@@ -270,7 +270,7 @@ export default {
 
       tabsObject.byIds.graphs.count =
         locations.length === 1 ? locations.length : 0
-
+      tabsObject.byIds.graphs.props.dataset = dataset
       const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
 
       const hydratedTabs = await Promise.all(

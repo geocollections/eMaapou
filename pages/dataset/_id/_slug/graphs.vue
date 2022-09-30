@@ -6,6 +6,7 @@
     :min-depth="minDepth"
     :max-depth="maxDepth"
     :methods="methods"
+    :title="$translate({ et: dataset.name, en: dataset.name_en })"
   />
 </template>
 
@@ -17,7 +18,7 @@ import chartRange from '~/utils/chartRange'
 export default {
   components: { ChartFlog },
   props: {
-    datasetObject: {
+    dataset: {
       type: Object,
       default: () => {},
     },

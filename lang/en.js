@@ -1004,4 +1004,7 @@ export default {
   sampleChart: {
     title: 'Samples',
   },
+  flogChart: {
+    titleSubtext: '1:{scale} (from {minDepth} to {maxDepth} m)',
+  },
 }
