@@ -132,8 +132,8 @@ export default {
     titleSubtext() {
       return this.$t('flogChart.titleSubtext', {
         scale: this.currentScale,
-        minDepth: this.maxDepth.toFixed(2),
-        maxDepth: this.minDepth.toFixed(2),
+        minDepth: this.currentMaxDepth.toFixed(2),
+        maxDepth: this.currentMinDepth.toFixed(2),
       })
     },
     chartScale() {
