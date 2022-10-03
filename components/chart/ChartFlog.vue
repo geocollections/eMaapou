@@ -24,37 +24,32 @@
           @change="handleScaleChange"
         >
           <template #prepend>
-            <div class="text-body-2 text--secondary">Scale</div>
+            <div class="text-body-2 text--secondary">
+              {{ $t('flogChart.heightScale') }}
+            </div>
           </template>
           <template #append class="align-self-end">
             <v-icon dense @click="handleScaleReset"> mdi-refresh </v-icon>
           </template>
-          <!-- <template #append-outer>
-            <v-btn small @click="handleScaleChange">Scale</v-btn>
-          </template> -->
         </v-text-field>
       </v-toolbar>
       <v-divider />
-      <!-- <div>Current scale: {{ currentScale }}</div> -->
-      <div class="overflow-x-auto">
+      <div ref="containerFlogChart" class="overflow-x-auto">
         <v-chart
           ref="flogChart"
           class="chart pa-2"
           :style="{
-            height: `${(scaleChart ? chartHeightScaled : chartHeight) + 200}px`,
+            width: `${totalWidth}px`,
+            height: `${currentHeight + 200}px`,
           }"
           v-bind="$attrs"
           autoresize
           :init-options="initOptions"
           :option="options"
-          :update-options="{
-            notMerge: false,
-            replaceMerge: ['grid', 'xAxis', 'yAxis', 'series', 'title'],
-          }"
+          :update-options="updateOptions"
           v-on="$listeners"
           @click="handleClick"
           @datazoom="handleDataZoom"
-          @rendered="handleRendered"
         />
       </div>
     </div>
@@ -113,22 +108,38 @@ export default {
       parameterModulePadding: 40,
       sampleChartWidth: 100,
       sampleChartPaddingLeft: 100,
-      chartHeight: 618,
-      chartHeightScaled: 618,
-      // chartScale: 1 / 1000,
+      initialHeight: 618,
+      currentHeight: 618,
+      totalWidth: 0,
       scale: parseFloat(
-        (((this.maxDepth - this.minDepth) * 1000) / this.px2mm(618)).toFixed(2)
+        (((this.maxDepth - this.minDepth) * 1000) / this.px2mm(618)).toFixed(0)
       ),
       currentScale: parseFloat(
-        (((this.maxDepth - this.minDepth) * 1000) / this.px2mm(618)).toFixed(2)
+        (((this.maxDepth - this.minDepth) * 1000) / this.px2mm(618)).toFixed(0)
       ),
-      scaleChart: true,
       options: {},
       nextGridIndex: 4,
+      replace: true,
     }
   },
   computed: {
     ...mapFields('chart', ['renderer', 'connected']),
+    initOptions() {
+      return {
+        renderer: this.renderer,
+      }
+    },
+    updateOptions() {
+      if (this.replace) {
+        return {
+          notMerge: false,
+          replaceMerge: ['grid', 'xAxis', 'yAxis', 'series'],
+        }
+      }
+      return {
+        notMerge: false,
+      }
+    },
     titleSubtext() {
       return this.$t('flogChart.titleSubtext', {
         scale: this.currentScale,
@@ -136,27 +147,26 @@ export default {
         maxDepth: this.currentMinDepth.toFixed(2),
       })
     },
-    chartScale() {
-      return 1 / (this.currentMaxDepth - this.currentMinDepth)
+    chartTitle() {
+      return {
+        id: 'main-title',
+        text: this.title,
+        left: 60,
+        subtext: this.titleSubtext,
+      }
     },
     chartWidth() {
       const parameterModuleWidth =
         this.selectedParameters.length *
           (this.parameterChartWidth + this.parameterChartPadding) +
         this.parameterModulePadding
-      return `${
+
+      const totalWidth =
         this.sampleChartWidth +
         this.sampleChartPaddingLeft +
         parameterModuleWidth
-      }px`
-    },
-    totalSubcharts() {
-      return 1 + this.selectedParameters.length
-    },
-    initOptions() {
-      return {
-        renderer: this.renderer,
-      }
+
+      return `${totalWidth}px`
     },
   },
   created() {
@@ -169,6 +179,7 @@ export default {
           : this.methods[0].children.length
       )
     }
+    this.totalWidth = this.calculateTotalWidth()
     this.options = this.initializeOption()
   },
   methods: {
@@ -177,6 +188,28 @@ export default {
     },
     px2mm(px) {
       return px / 3.7795275591
+    },
+    calculateScale(maxDepth, minDepth, chartHeight) {
+      return ((maxDepth - minDepth) * 1000) / this.px2mm(chartHeight)
+    },
+    calculateTotalWidth() {
+      const parameterModuleWidth =
+        this.selectedParameters.length *
+          (this.parameterChartWidth + this.parameterChartPadding) +
+        this.parameterModulePadding
+
+      const totalWidth =
+        this.sampleChartWidth +
+        this.sampleChartPaddingLeft +
+        parameterModuleWidth
+
+      if (this.$refs.containerFlogChart) {
+        return this.$refs.containerFlogChart.clientWidth > totalWidth
+          ? this.$refs.containerFlogChart.clientWidth
+          : totalWidth
+      }
+
+      return totalWidth
     },
     scaleChartHeight() {
       return this.mm2px(
@@ -193,19 +226,17 @@ export default {
       const datazoom = this.$refs.flogChart.getOption().dataZoom[0]
       this.currentMinDepth = datazoom.startValue
       this.currentMaxDepth = datazoom.endValue
+      this.currentScale = this.calculateScale(
+        this.currentMaxDepth,
+        this.currentMinDepth,
+        this.currentHeight
+      ).toFixed(0)
 
-      this.currentScale = parseFloat(
-        (
-          ((this.currentMaxDepth - this.currentMinDepth) * 1000) /
-          this.px2mm(this.chartHeightScaled)
-        ).toFixed(2)
-      )
-
+      this.replace = false
       this.options = {
-        ...this.options,
         title: {
-          id: 'main-title',
-          subtext: this.titleSubtext,
+          id: this.chartTitle.id,
+          subtext: this.chartTitle.subtext,
         },
       }
     },
@@ -216,6 +247,12 @@ export default {
         )
       })
       this.selectedParameters = newSelectedParameters
+
+      const nullGridIndex = this.$refs.flogChart.getOption().grid.indexOf(null)
+      this.nextGridIndex =
+        nullGridIndex > -1 ? nullGridIndex : this.selectedParameters.length
+      this.totalWidth = this.calculateTotalWidth()
+
       if (addedParameters.length > 0) {
         const newChartComponents = this.createParameterChartComponents(
           addedParameters[0],
@@ -223,17 +260,30 @@ export default {
           this.selectedParameters.length - 1
         )
 
+        this.replace = false
         this.options = {
-          ...this.options,
-          grid: [...this.options.grid, newChartComponents.grid],
-          xAxis: [...this.options.xAxis, newChartComponents.xAxis],
-          yAxis: [...this.options.yAxis, newChartComponents.yAxis],
-          series: [...this.options.series, newChartComponents.series],
+          // ...this.options,
+          grid: [
+            // ...this.options.grid,
+            newChartComponents.grid,
+          ],
+          xAxis: [
+            // ...this.options.xAxis,
+            newChartComponents.xAxis,
+          ],
+          yAxis: [
+            // ...this.options.yAxis,
+            newChartComponents.yAxis,
+          ],
+          series: [
+            // ...this.options.series,
+            newChartComponents.series,
+          ],
           dataZoom: [
             {
-              ...this.options.dataZoom[0],
+              // ...this.options.dataZoom[0],
               yAxisIndex: [
-                ...this.options.dataZoom[0].yAxisIndex,
+                ...this.$refs.flogChart.getOption().dataZoom[0].yAxisIndex,
                 this.nextGridIndex,
               ],
             },
@@ -250,8 +300,8 @@ export default {
           })
           .filter((idx) => idx !== -1)
 
+        this.replace = true
         this.options = {
-          ...newOptions,
           grid: [
             ...newOptions.grid.map((grid) => {
               return {
@@ -286,62 +336,36 @@ export default {
         }
       }
     },
-    handleRendered() {
-      const nullGridIndex = this.$refs.flogChart.getOption().grid.indexOf(null)
-      this.nextGridIndex =
-        nullGridIndex > -1 ? nullGridIndex : 1 + this.selectedParameters.length
-    },
-    handleScaleCheckboxChange(scaleChart) {
-      const newOptions = this.initializeOption()
-
-      this.options = {
-        ...this.options,
-        grid: newOptions.grid.map((grid) => {
-          return { id: grid.id, height: grid.height }
-        }),
-      }
-      if (scaleChart) {
-        this.currentScale = parseFloat(
-          (
-            ((this.currentMaxDepth - this.currentMinDepth) * 1000) /
-            this.px2mm(this.chartHeightScaled)
-          ).toFixed(2)
-        )
-      } else {
-        this.currentScale = parseFloat(
-          (
-            ((this.currentMaxDepth - this.currentMinDepth) * 1000) /
-            this.px2mm(this.chartHeight)
-          ).toFixed(2)
-        )
-      }
-    },
     handleScaleReset() {
-      this.scale = parseFloat(
-        (((this.maxDepth - this.minDepth) * 1000) / this.px2mm(618)).toFixed(2)
-      )
+      this.scale = this.calculateScale(
+        this.maxDepth,
+        this.minDepth,
+        this.initialHeight
+      ).toFixed(0)
       this.currentScale = this.scale
-      this.chartHeightScaled = this.scaleChartHeight()
+      this.currentHeight = this.initialHeight
 
       const newOptions = this.initializeOption()
-
+      this.replace = false
       this.options = {
-        ...this.options,
+        // ...this.options,
         grid: newOptions.grid.map((grid) => {
           return { id: grid.id, height: grid.height }
         }),
+        title: this.chartTitle,
       }
     },
     handleScaleChange(scale) {
       this.currentScale = parseFloat(this.scale).toFixed(2)
-      this.chartHeightScaled = this.scaleChartHeight()
+      this.currentHeight = this.scaleChartHeight()
       const newOptions = this.initializeOption()
-
+      this.replace = false
       this.options = {
-        ...this.options,
+        // ...this.options,
         grid: newOptions.grid.map((grid) => {
           return { id: grid.id, height: grid.height }
         }),
+        title: this.chartTitle,
       }
     },
     createParameterChartComponents(param, index, position) {
@@ -357,7 +381,7 @@ export default {
             this.parameterModulePadding,
           width: this.parameterChartWidth,
           top: 100,
-          height: this.chartHeightScaled,
+          height: this.currentHeight,
           borderWidth: 0,
           tooltip: {
             trigger: 'item',
@@ -373,7 +397,6 @@ export default {
           nameLocation: 'center',
           nameTextStyle: {
             fontWeight: 'bold',
-            // padding: [7, 0, 0, 0],
           },
           nameGap: 30,
           min(value) {
@@ -397,11 +420,6 @@ export default {
           id: `parameter-y-axis-${param.name}`,
           type: 'value',
           boundaryGap: false,
-          // name: this.$t('common.depth'),
-          // nameLocation: 'start',
-          // nameTextStyle: {
-          //   fontWeight: 'bold',
-          // },
           nameGap: 10,
           splitNumber: 7,
           axisTick: {
@@ -420,13 +438,6 @@ export default {
           },
           axisPointer: {
             show: true,
-            // label: {
-            //   backgroundColor: this.$vuetify.theme.currentTheme.warning,
-            // },
-            // lineStyle: {
-            //   color: this.$vuetify.theme.currentTheme.warning,
-            //   width: 1,
-            // },
           },
           max: this.maxDepth,
           min: this.minDepth,
@@ -484,18 +495,10 @@ export default {
         },
       }
     },
-    getOptions() {
-      return this.options
-    },
     initializeOption() {
       return {
         animation: false,
-        title: {
-          id: 'main-title',
-          text: this.title,
-          left: 60,
-          subtext: this.titleSubtext,
-        },
+        title: this.chartTitle,
         grid: [
           {
             id: 'samples-grid',
@@ -503,10 +506,9 @@ export default {
             containLabel: false,
             top: 100,
             width: this.sampleChartWidth,
-            height: this.chartHeightScaled,
+            height: this.currentHeight,
           },
           ...this.parameterGrid(this.selectedParameters),
-          // { show: false, containLabel: false, left: 0, right: 0 },
         ],
         tooltip: {
           trigger: 'item',
@@ -521,7 +523,6 @@ export default {
           },
         ],
         toolbox: {
-          // right: 30,
           orient: 'vertical',
           left: 'left',
           feature: {
@@ -561,16 +562,6 @@ export default {
             },
           },
           ...this.parameterXAxes(this.selectedParameters),
-          // {
-          //   show: false,
-          //   min(value) {
-          //     return (value.min - 0.1).toFixed(2) * 1
-          //   },
-          //   max(value) {
-          //     return (value.max + 0.1).toFixed(2) * 1
-          //   },
-          //   gridIndex: this.selectedParameters.length + 1,
-          // },
         ],
         yAxis: [
           {
@@ -605,35 +596,12 @@ export default {
             },
             axisPointer: {
               show: true,
-              // label: {
-              //   backgroundColor: this.$vuetify.theme.currentTheme.warning,
-              // },
-              // lineStyle: {
-              //   color: this.$vuetify.theme.currentTheme.warning,
-              //   width: 1,
-              // },
             },
             gridIndex: 0,
             max: this.maxDepth,
             min: this.minDepth,
           },
           ...this.parameterYAxes(this.selectedParameters),
-          // {
-          //   show: false,
-          //   axisPointer: {
-          //     show: true,
-          //     label: {
-          //       backgroundColor: this.$vuetify.theme.currentTheme.warning,
-          //     },
-          //     lineStyle: {
-          //       color: this.$vuetify.theme.currentTheme.warning,
-          //       width: 1,
-          //     },
-          //   },
-          //   gridIndex: this.selectedParameters.length + 1,
-          //   max: this.maxDepth,
-          //   min: this.minDepth,
-          // },
         ],
         series: [
           {
@@ -745,22 +713,10 @@ export default {
             this.parameterModulePadding,
           top: 100,
           width: this.parameterChartWidth,
-          height: this.chartHeightScaled,
+          height: this.currentHeight,
           borderWidth: 0,
           tooltip: {
             trigger: 'item',
-            // axisPointer: {
-            //   type: 'line',
-            //   axis: 'x',
-            //   label: {
-            //     backgroundColor: this.$vuetify.theme.currentTheme.warning,
-            //   },
-            //   crossStyle: {
-            //     color: this.$vuetify.theme.currentTheme.warning,
-            //     width: 1,
-            //     type: 'solid',
-            //   },
-            // },
             backgroundColor: 'rgba(255, 255, 255, 0.8)',
           },
         }
@@ -777,7 +733,6 @@ export default {
           nameLocation: 'center',
           nameTextStyle: {
             fontWeight: 'bold',
-            // padding: [7, 0, 0, 0],
           },
           nameGap: 30,
           min(value) {
@@ -805,11 +760,6 @@ export default {
           id: `parameter-y-axis-${selectedParam.name}`,
           type: 'value',
           boundaryGap: false,
-          // name: this.$t('common.depth'),
-          // nameLocation: 'start',
-          // nameTextStyle: {
-          //   fontWeight: 'bold',
-          // },
           nameGap: 10,
           splitNumber: 7,
           axisTick: {
@@ -828,13 +778,6 @@ export default {
           },
           axisPointer: {
             show: true,
-            // label: {
-            //   backgroundColor: this.$vuetify.theme.currentTheme.warning,
-            // },
-            // lineStyle: {
-            //   color: this.$vuetify.theme.currentTheme.warning,
-            //   width: 1,
-            // },
           },
           max: this.maxDepth,
           min: this.minDepth,

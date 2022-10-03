@@ -1006,5 +1006,6 @@ export default {
   },
   flogChart: {
     titleSubtext: '1:{scale} (from {minDepth} to {maxDepth} m)',
+    heightScale: 'Scale',
   },
 }

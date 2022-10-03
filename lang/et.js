@@ -1008,5 +1008,6 @@ export default {
   },
   flogChart: {
     titleSubtext: '1:{scale} (alates {minDepth} kuni {maxDepth} m)',
+    heightScale: 'Skaala',
   },
 }
