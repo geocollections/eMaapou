@@ -45,7 +45,7 @@
           v-bind="$attrs"
           autoresize
           :init-options="initOptions"
-          :option="options"
+          :option="option"
           :update-options="updateOptions"
           v-on="$listeners"
           @click="handleClick"
@@ -117,7 +117,7 @@ export default {
       currentScale: parseFloat(
         (((this.maxDepth - this.minDepth) * 1000) / this.px2mm(618)).toFixed(0)
       ),
-      options: {},
+      option: {},
       nextGridIndex: 4,
       replace: true,
     }
@@ -180,7 +180,7 @@ export default {
       )
     }
     this.totalWidth = this.calculateTotalWidth()
-    this.options = this.initializeOption()
+    this.option = this.createOption()
   },
   methods: {
     mm2px(mm) {
@@ -233,7 +233,7 @@ export default {
       ).toFixed(0)
 
       this.replace = false
-      this.options = {
+      this.option = {
         title: {
           id: this.chartTitle.id,
           subtext: this.chartTitle.subtext,
@@ -261,27 +261,14 @@ export default {
         )
 
         this.replace = false
-        this.options = {
-          // ...this.options,
-          grid: [
-            // ...this.options.grid,
-            newChartComponents.grid,
-          ],
-          xAxis: [
-            // ...this.options.xAxis,
-            newChartComponents.xAxis,
-          ],
-          yAxis: [
-            // ...this.options.yAxis,
-            newChartComponents.yAxis,
-          ],
-          series: [
-            // ...this.options.series,
-            newChartComponents.series,
-          ],
+        this.option = {
+          grid: newChartComponents.grid,
+          xAxis: newChartComponents.xAxis,
+          yAxis: newChartComponents.yAxis,
+          series: newChartComponents.series,
           dataZoom: [
             {
-              // ...this.options.dataZoom[0],
+              id: this.$refs.flogChart.getOption().dataZoom[0].id,
               yAxisIndex: [
                 ...this.$refs.flogChart.getOption().dataZoom[0].yAxisIndex,
                 this.nextGridIndex,
@@ -290,7 +277,7 @@ export default {
           ],
         }
       } else {
-        const newOptions = this.initializeOption()
+        const newOptions = this.createOption()
 
         const dataZoomYAxes = this.$refs.flogChart
           .getOption()
@@ -301,7 +288,7 @@ export default {
           .filter((idx) => idx !== -1)
 
         this.replace = true
-        this.options = {
+        this.option = {
           grid: [
             ...newOptions.grid.map((grid) => {
               return {
@@ -345,32 +332,36 @@ export default {
       this.currentScale = this.scale
       this.currentHeight = this.initialHeight
 
-      const newOptions = this.initializeOption()
       this.replace = false
-      this.options = {
-        // ...this.options,
-        grid: newOptions.grid.map((grid) => {
-          return { id: grid.id, height: grid.height }
+      this.option = {
+        grid: this.$refs.flogChart.getOption().grid.map((grid) => {
+          return { id: grid.id, height: this.currentHeight }
         }),
         title: this.chartTitle,
       }
     },
-    handleScaleChange(scale) {
+    handleScaleChange() {
       this.currentScale = parseFloat(this.scale).toFixed(2)
       this.currentHeight = this.scaleChartHeight()
-      const newOptions = this.initializeOption()
+
       this.replace = false
-      this.options = {
-        // ...this.options,
-        grid: newOptions.grid.map((grid) => {
-          return { id: grid.id, height: grid.height }
+      this.option = {
+        grid: this.$refs.flogChart.getOption().grid.map((grid) => {
+          return { id: grid.id, height: this.currentHeight }
         }),
         title: this.chartTitle,
       }
     },
-    createParameterChartComponents(param, index, position) {
-      return {
-        grid: {
+    createParameterChartComponents(
+      param,
+      index,
+      position,
+      { returnComponents = ['grid', 'xAxis', 'yAxis', 'series'] } = {}
+    ) {
+      const result = {}
+
+      if (returnComponents.includes('grid')) {
+        result.grid = {
           id: `parameter-grid-${param.name}`,
           show: true,
           containLabel: false,
@@ -387,8 +378,10 @@ export default {
             trigger: 'item',
             backgroundColor: 'rgba(255, 255, 255, 0.8)',
           },
-        },
-        xAxis: {
+        }
+      }
+      if (returnComponents.includes('xAxis')) {
+        result.xAxis = {
           id: `parameter-x-axis-${param.name}`,
           show: true,
           position: 'top',
@@ -399,24 +392,19 @@ export default {
             fontWeight: 'bold',
           },
           nameGap: 30,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
           gridIndex: index,
-          splitNumber: 2,
           axisPointer: {
             show: true,
           },
-          axisLine: {
-            show: true,
-            symbol: ['none', 'arrow'],
-            symbolSize: [5, 5],
-          },
-        },
-        yAxis: {
+          // axisLine: {
+          // show: true,
+          // symbol: ['none', 'arrow'],
+          // symbolSize: [5, 5],
+          // },
+        }
+      }
+      if (returnComponents.includes('yAxis')) {
+        result.yAxis = {
           id: `parameter-y-axis-${param.name}`,
           type: 'value',
           boundaryGap: false,
@@ -441,8 +429,10 @@ export default {
           },
           max: this.maxDepth,
           min: this.minDepth,
-        },
-        series: {
+        }
+      }
+      if (returnComponents.includes('series')) {
+        result.series = {
           id: `parameter-series-${param.name}`,
           name: param.name,
           type: 'line',
@@ -492,24 +482,64 @@ export default {
           emphasis: {
             focus: 'series',
           },
-        },
+        }
       }
+      return result
     },
-    initializeOption() {
+    createSelectedParameterChartComponents({
+      returnComponents = ['grid', 'xAxis', 'yAxis', 'series'],
+    } = {}) {
+      return this.selectedParameters.reduce(
+        (prev, parameter, i) => {
+          const parameterComponents = this.createParameterChartComponents(
+            parameter,
+            i + 1,
+            i,
+            { returnComponents }
+          )
+          return {
+            grid: parameterComponents.grid && [
+              ...prev.grid,
+              parameterComponents.grid,
+            ],
+            xAxis: parameterComponents.xAxis && [
+              ...prev.xAxis,
+              parameterComponents.xAxis,
+            ],
+            yAxis: parameterComponents.yAxis && [
+              ...prev.yAxis,
+              parameterComponents.yAxis,
+            ],
+            series: parameterComponents.series && [
+              ...prev.series,
+              parameterComponents.series,
+            ],
+          }
+        },
+        { grid: [], xAxis: [], yAxis: [], series: [] }
+      )
+    },
+    createOption() {
+      const selectedParameterChartComponents = this.selectedParameters.reduce(
+        (prev, parameter, i) => {
+          const parameterComponents = this.createParameterChartComponents(
+            parameter,
+            i + 1,
+            i
+          )
+          return {
+            grid: [...prev.grid, parameterComponents.grid],
+            xAxis: [...prev.xAxis, parameterComponents.xAxis],
+            yAxis: [...prev.yAxis, parameterComponents.yAxis],
+            series: [...prev.series, parameterComponents.series],
+          }
+        },
+        { grid: [], xAxis: [], yAxis: [], series: [] }
+      )
+
       return {
         animation: false,
         title: this.chartTitle,
-        grid: [
-          {
-            id: 'samples-grid',
-            left: this.sampleChartPaddingLeft,
-            containLabel: false,
-            top: 100,
-            width: this.sampleChartWidth,
-            height: this.currentHeight,
-          },
-          ...this.parameterGrid(this.selectedParameters),
-        ],
         tooltip: {
           trigger: 'item',
         },
@@ -529,6 +559,7 @@ export default {
             dataZoom: {
               yAxisIndex: 'none',
               xAxisIndex: 'all',
+              filterMode: 'none',
             },
             saveAsImage: {},
           },
@@ -545,6 +576,17 @@ export default {
             width: 1,
           },
         },
+        grid: [
+          {
+            id: 'samples-grid',
+            left: this.sampleChartPaddingLeft,
+            containLabel: false,
+            top: 100,
+            width: this.sampleChartWidth,
+            height: this.currentHeight,
+          },
+          ...selectedParameterChartComponents.grid,
+        ],
         xAxis: [
           {
             id: 'samples-x-axis',
@@ -561,7 +603,7 @@ export default {
               show: false,
             },
           },
-          ...this.parameterXAxes(this.selectedParameters),
+          ...selectedParameterChartComponents.xAxis,
         ],
         yAxis: [
           {
@@ -601,7 +643,7 @@ export default {
             max: this.maxDepth,
             min: this.minDepth,
           },
-          ...this.parameterYAxes(this.selectedParameters),
+          ...selectedParameterChartComponents.yAxis,
         ],
         series: [
           {
@@ -637,10 +679,7 @@ export default {
               position: 'right',
               color: 'black',
               fontSize: 12,
-              triggerEvent: true,
-              formatter(params) {
-                return params.data[4]
-              },
+              formatter: '{@[4]}',
             },
             renderItem(params, api) {
               const categoryIndex = api.value(0)
@@ -696,148 +735,9 @@ export default {
               ]
             }),
           },
-          ...this.parameterSeries(this.selectedParameters),
+          ...selectedParameterChartComponents.series,
         ],
       }
-    },
-    parameterGrid(selectedParameters, startPosition = 1) {
-      return selectedParameters.map((param, i) => {
-        return {
-          id: `parameter-grid-${param.name}`,
-          show: true,
-          containLabel: false,
-          left:
-            this.sampleChartWidth +
-            this.sampleChartPaddingLeft +
-            i * (this.parameterChartWidth + this.parameterChartPadding) +
-            this.parameterModulePadding,
-          top: 100,
-          width: this.parameterChartWidth,
-          height: this.currentHeight,
-          borderWidth: 0,
-          tooltip: {
-            trigger: 'item',
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          },
-        }
-      })
-    },
-    parameterXAxes(selectedParameters, startPosition = 1) {
-      return selectedParameters.map((selectedParam, i) => {
-        return {
-          id: `parameter-x-axis-${selectedParam.name}`,
-          show: true,
-          position: 'top',
-          type: 'value',
-          name: selectedParam.name,
-          nameLocation: 'center',
-          nameTextStyle: {
-            fontWeight: 'bold',
-          },
-          nameGap: 30,
-          min(value) {
-            return (value.min - 0.1).toFixed(2) * 1
-          },
-          max(value) {
-            return (value.max + 0.1).toFixed(2) * 1
-          },
-          gridIndex: startPosition + i,
-          splitNumber: 2,
-          axisPointer: {
-            show: true,
-          },
-          axisLine: {
-            show: true,
-            symbol: ['none', 'arrow'],
-            symbolSize: [5, 5],
-          },
-        }
-      })
-    },
-    parameterYAxes(selectedParameters, startPosition = 1) {
-      return selectedParameters.map((selectedParam, i) => {
-        return {
-          id: `parameter-y-axis-${selectedParam.name}`,
-          type: 'value',
-          boundaryGap: false,
-          nameGap: 10,
-          splitNumber: 7,
-          axisTick: {
-            alignWithLabel: true,
-          },
-          minorTick: {
-            show: true,
-            splitNumber: 10,
-          },
-          axisLabel: {
-            show: false,
-          },
-          gridIndex: startPosition + i,
-          splitLine: {
-            show: false,
-          },
-          axisPointer: {
-            show: true,
-          },
-          max: this.maxDepth,
-          min: this.minDepth,
-        }
-      })
-    },
-    parameterSeries(selectedParameters, startPosition = 1) {
-      return selectedParameters.map((selectedParam, i) => {
-        return {
-          id: `parameter-series-${selectedParam.name}`,
-          name: selectedParam.name,
-          type: 'line',
-          smooth: false,
-          xAxisIndex: startPosition + i,
-          yAxisIndex: startPosition + i,
-          itemStyle: {
-            color: this.$vuetify.theme.currentTheme.accent,
-          },
-          lineStyle: {
-            width: 1,
-          },
-          tooltip: {
-            formatter(params) {
-              return `
-                <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
-                  params.color
-                }"></span>
-                <span>
-                  ${params.data[4]}<br />
-                  ${params.seriesName}: <b>${params.data[0]}</b><br />
-                  Depth: <b>${params.data[2]}</b>
-                  ${
-                    params.data[3]
-                      ? `<br />Depth interval: <b>${params.data[3]}</b>`
-                      : ''
-                  }
-                </span>
-                `
-            },
-          },
-          data: this.analyses
-            .filter((result) => result.parameter === selectedParam.name)
-            .map((t) => {
-              const avgDepth = t.depth_interval
-                ? (t.depth + t.depth_interval) / 2
-                : t.depth
-              return [
-                t.value,
-                -avgDepth,
-                -t.depth,
-                -t.depth_interval,
-                t.analysis_id,
-              ]
-            })
-            .sort((a, b) => a[1] - b[1]),
-          emphasis: {
-            focus: 'series',
-          },
-        }
-      })
     },
   },
 }
