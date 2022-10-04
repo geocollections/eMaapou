@@ -43,10 +43,14 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import BaseBoolean from '../base/BaseBoolean.vue'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ROCK } from '~/constants'
 export default {
   name: 'DataTableRock',
+  components: { BaseLinkExternal, BaseDataTable, BaseBoolean },
   mixins: [headersMixin],
   props: {
     items: {

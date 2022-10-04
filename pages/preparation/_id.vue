@@ -137,9 +137,17 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import HeaderDetail from '~/components/HeaderDetail.vue'
+import Tabs from '~/components/Tabs.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import Detail from '~/templates/Detail.vue'
 import { TABS_PREPARATION } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
+  components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
+
   async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(

@@ -101,7 +101,7 @@
           <map-click-popup :response="mapClickResponse" />
         </l-layer-group>
 
-        <!-- <leaflet-map-legend
+        <!-- <map-legend
           :active-base-layer="activeBaseLayer"
           :active-overlays="activeOverlays"
           :height="height"
@@ -130,11 +130,22 @@
 </template>
 
 <script>
+// import MapLegend from '~/components/map/MapLegend'
 import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
+import MapLinks from '~/components/map/MapLinks'
+import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
+import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
+import MapClickPopup from '~/components/map/MapClickPopup'
 export default {
   name: 'LeafletMap',
+  components: {
+    MapClickPopup,
+    VMarkerClusterWrapper,
+    LCircleMarkerWrapper,
+    MapLinks,
+  },
   props: {
     zoom: {
       type: Number,

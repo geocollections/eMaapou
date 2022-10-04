@@ -56,10 +56,14 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
+import BaseBoolean from '../base/BaseBoolean.vue'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
 export default {
   name: 'DataTableSpecimenIdentificationGeology',
+  components: { BaseDataTable, BaseLinkExternal, BaseBoolean },
   mixins: [headersMixin],
   props: {
     showSearch: {

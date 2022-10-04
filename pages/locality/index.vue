@@ -32,8 +32,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import SearchFormLocality from '~/components/search/forms/SearchFormLocality'
+import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
+import Search from '~/templates/Search'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
+  components: {
+    Search,
+    DataTableLocality,
+    SearchFormLocality,
+    BaseHeader,
+  },
   head() {
     return {
       title: this.$t('locality.pageTitle'),

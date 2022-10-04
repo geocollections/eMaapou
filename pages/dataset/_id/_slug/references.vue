@@ -9,8 +9,10 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import DataTableDatasetReference from '~/components/data-table/DataTableDatasetReference.vue'
 import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
+  components: { DataTableDatasetReference },
   data() {
     return {
       references: [],

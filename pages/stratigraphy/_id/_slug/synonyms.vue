@@ -9,8 +9,10 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import DataTableStratigraphySynonym from '~/components/data-table/DataTableStratigraphySynonym.vue'
 import { HEADERS_STRATIGRAPHY_SYNONYM, STRATIGRAPHY_SYNONYM } from '~/constants'
 export default {
+  components: { DataTableStratigraphySynonym },
   props: {
     stratigraphy: {
       type: Number,

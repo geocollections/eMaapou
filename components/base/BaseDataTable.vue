@@ -145,8 +145,16 @@
 
 <script>
 import debounce from 'lodash/debounce'
+import BaseDataTableHeaderMenu from '~/components/base/BaseDataTableHeaderMenu.vue'
+import BaseDataTableExportMenu from '~/components/base/BaseDataTableExportMenu.vue'
+import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 export default {
   name: 'BaseDataTable',
+  components: {
+    BaseDataTablePagination,
+    BaseDataTableHeaderMenu,
+    BaseDataTableExportMenu,
+  },
   props: {
     onlyTable: {
       type: Boolean,

@@ -28,10 +28,13 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import LasChart from '~/components/chart/types/LasChart'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
+import ChartFlog from '~/components/chart/ChartFlog.vue'
 
 export default {
+  components: { LasChart, ChartFlog },
   props: {
     locality: {
       type: Number,

@@ -17,7 +17,20 @@
 </template>
 
 <script>
+import AppFooter from '~/components/AppFooter.vue'
+import AppHeader from '~/components/AppHeader.vue'
+import FabScrollTop from '~/components/FabScrollTop.vue'
+import CookiePolicy from '~/components/CookiePolicy.vue'
+import AppDrawer from '~/components/AppDrawer.vue'
+
 export default {
+  components: {
+    AppDrawer,
+    CookiePolicy,
+    AppHeader,
+    AppFooter,
+    FabScrollTop,
+  },
   data() {
     return {
       drawer: false,

@@ -62,9 +62,15 @@ import { graphic } from 'echarts'
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import differenceBy from 'lodash/differenceBy'
+import RendererSwitch from '~/components/chart/options/RendererSwitch'
+import OptionsMethodTreeView from '~/components/chart/options/OptionsMethodTreeView.vue'
 import range from '~/utils/range'
 export default {
   name: 'ChartFlogNew',
+  components: {
+    RendererSwitch,
+    OptionsMethodTreeView,
+  },
   props: {
     title: {
       type: String,

@@ -53,10 +53,14 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
+import BaseBoolean from '../base/BaseBoolean.vue'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
   name: 'DataTableSpecimenIdentification',
+  components: { BaseDataTable, BaseLinkExternal, BaseBoolean },
   mixins: [headersMixin],
   props: {
     items: {

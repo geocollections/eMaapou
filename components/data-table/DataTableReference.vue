@@ -54,10 +54,13 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_REFERENCE } from '~/constants'
 export default {
   name: 'DataTableReference',
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

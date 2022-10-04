@@ -35,10 +35,12 @@
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import { HEADERS_LOCALITY } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'DataTableLocality',
+  components: { BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

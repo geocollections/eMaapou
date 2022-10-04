@@ -54,8 +54,25 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import SearchActions from '../SearchActions.vue'
+import InputText from '~/components/input/InputText.vue'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
+import InputRange from '~/components/input/InputRange'
+import SearchMap from '~/components/search/SearchMap'
+import InputSearch from '~/components/input/InputSearch.vue'
+
 export default {
   name: 'SearchFormPhoto',
+  components: {
+    InputRange,
+    SearchInstitutionFilter,
+    InputText,
+    SearchFieldsWrapper,
+    SearchActions,
+    SearchMap,
+    InputSearch,
+  },
   props: {
     markers: {
       type: Array,

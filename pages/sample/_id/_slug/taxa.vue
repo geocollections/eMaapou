@@ -10,8 +10,10 @@
 <script>
 import isNil from 'lodash/isNil'
 import { HEADERS_TAXON_LIST, TAXON_LIST } from '~/constants'
+import DataTableTaxonList from '~/components/data-table/DataTableTaxonList'
 
 export default {
+  components: { DataTableTaxonList },
   data() {
     return {
       taxa: [],

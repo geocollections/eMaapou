@@ -118,8 +118,20 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty'
+import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
+import TheNewsCard from '~/components/landing/TheNewsCard.vue'
+import CardExternalService from '~/components/card/CardExternalService.vue'
+import CardRouteLink from '~/components/card/CardRouteLink.vue'
 
 export default {
+  components: {
+    SearchFormQuick,
+    BaseHeader,
+    TheNewsCard,
+    CardExternalService,
+    CardRouteLink,
+  },
   layout: 'landing',
   async asyncData({ route, error, app }) {
     const data = await app.$services.sarvREST.getResource('web_pages', 87)

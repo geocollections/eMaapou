@@ -85,10 +85,28 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import SearchActions from '../SearchActions.vue'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputSearch from '~/components/input/InputSearch.vue'
+import SearchMap from '~/components/search/SearchMap'
+import InputCheckbox from '~/components/input/InputCheckbox'
 
 export default {
   name: 'SearchFormSpecimen',
+  components: {
+    InputCheckbox,
+    SearchMap,
+    SearchInstitutionFilter,
+    InputAutocomplete,
+    InputText,
+    SearchFieldsWrapper,
+    SearchActions,
+    InputSearch,
+  },
   mixins: [autocompleteMixin],
   data() {
     return {

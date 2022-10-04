@@ -22,7 +22,9 @@
 </template>
 
 <script>
+import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
+  components: { BaseHeader },
   layout: 'news',
   async asyncData({ route, error, app }) {
     try {

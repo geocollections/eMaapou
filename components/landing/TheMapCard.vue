@@ -12,8 +12,13 @@
 </template>
 
 <script>
+import LeafletMap from '~/components/map/LeafletMap.vue'
+
 export default {
   name: 'TheMapCard',
+  components: {
+    LeafletMap,
+  },
   props: {
     showMap: {
       type: Boolean,

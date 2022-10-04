@@ -37,10 +37,24 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import SearchActions from '../SearchActions.vue'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import SearchMap from '~/components/search/SearchMap.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormLocality',
+  components: {
+    InputText,
+    InputAutocomplete,
+    SearchFieldsWrapper,
+    SearchActions,
+    SearchMap,
+    InputSearch,
+  },
   mixins: [autocompleteMixin],
 
   data() {

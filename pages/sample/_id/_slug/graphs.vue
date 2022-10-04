@@ -7,7 +7,10 @@
 </template>
 
 <script>
+import PieChart from '~/components/chart/types/PieChart'
+
 export default {
+  components: { PieChart },
   props: {
     sampleObject: {
       type: Object,

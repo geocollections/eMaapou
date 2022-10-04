@@ -3,8 +3,11 @@
 </template>
 
 <script>
+import StratigraphyChartWrapper from '~/components/chart/wrappers/StratigraphyChartWrapper'
+
 export default {
   name: 'StratigraphyChart',
+  components: { StratigraphyChartWrapper },
   props: {
     chartTitle: {
       type: String,

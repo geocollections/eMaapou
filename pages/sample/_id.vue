@@ -331,9 +331,26 @@
 <script>
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
+
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import Tabs from '~/components/Tabs.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
+import Detail from '~/templates/Detail.vue'
 import { TABS_SAMPLE } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
+  components: {
+    HeaderDetail,
+    TableRowLink,
+    TableRow,
+    Tabs,
+    LeafletMap,
+    Detail,
+    BaseTable,
+  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(

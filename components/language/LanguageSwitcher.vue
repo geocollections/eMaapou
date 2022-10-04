@@ -23,8 +23,10 @@
 </template>
 
 <script>
+import LanguageList from '~/components/language/LanguageList'
 export default {
   name: 'LanguageSwitcher',
+  components: { LanguageList },
   props: {
     color: {
       type: String,

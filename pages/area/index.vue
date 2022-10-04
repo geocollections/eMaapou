@@ -33,8 +33,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import SearchFormArea from '~/components/search/forms/SearchFormArea.vue'
+import DataTableArea from '~/components/data-table/DataTableArea.vue'
+import Search from '~/templates/Search.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
+  components: {
+    Search,
+    DataTableArea,
+    SearchFormArea,
+    BaseHeader,
+  },
   head() {
     return {
       title: this.$t('area.pageTitle'),

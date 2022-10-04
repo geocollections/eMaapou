@@ -46,7 +46,14 @@
 
           <!-- eslint-disable prettier/prettier -->
           <div
-            class="justify-center mx-8 d-flex flex-column justify-md-space-between flex-md-row"
+            class="
+              justify-center
+              mx-8
+              d-flex
+              flex-column
+              justify-md-space-between
+              flex-md-row
+            "
           >
             <!-- eslint-enable prettier/prettier -->
             <div class="text-center text-md-left">
@@ -265,9 +272,23 @@
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
 
+import Tabs from '~/components/Tabs.vue'
+import HeaderDetail from '~/components/HeaderDetail.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import Detail from '~/templates/Detail.vue'
 import { TABS_DRILLCORE_BOX } from '~/constants'
+import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
+  components: {
+    Tabs,
+    TableRow,
+    TableRowLink,
+    HeaderDetail,
+    Detail,
+    BaseTable,
+  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const drillcoreBoxResponse = await $services.sarvREST.getResource(

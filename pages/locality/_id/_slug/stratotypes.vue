@@ -9,9 +9,11 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import DataTableStratotype from '~/components/data-table/DataTableStratotype'
 import { HEADERS_STRATOTYPE, STRATOTYPE } from '~/constants'
 
 export default {
+  components: { DataTableStratotype },
   data() {
     return {
       stratotypes: [],

@@ -173,10 +173,30 @@ import { mapFields } from 'vuex-map-fields'
 
 import isEmpty from 'lodash/isEmpty'
 
+import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
+import SearchActions from '../SearchActions.vue'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
+import InputText from '~/components/input/InputText.vue'
+import InputAutocomplete from '~/components/input/InputAutocomplete'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputRange from '~/components/input/InputRange'
+import InputParameter from '~/components/input/InputParameter.vue'
+import SearchMap from '~/components/search/SearchMap.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   name: 'SearchFormAnalyticalData',
   fetchOnServer: false,
+  components: {
+    SearchInstitutionFilter,
+    InputRange,
+    InputAutocomplete,
+    InputText,
+    InputParameter,
+    SearchFieldsWrapper,
+    SearchActions,
+    SearchMap,
+    InputSearch,
+  },
   mixins: [autocompleteMixin],
   data() {
     return {

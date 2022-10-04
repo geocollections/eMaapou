@@ -14,7 +14,9 @@
 import round from 'lodash/round'
 import isNil from 'lodash/isNil'
 import { ANALYSIS_RESULT, HEADERS_ANALYSIS_RESULT } from '~/constants'
+import DataTableAnalysisResult from '~/components/data-table/DataTableAnalysisResult.vue'
 export default {
+  components: { DataTableAnalysisResult },
   data() {
     return {
       analysisResults: [],

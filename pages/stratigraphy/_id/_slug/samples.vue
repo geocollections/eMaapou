@@ -9,9 +9,11 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import DataTableSample from '~/components/data-table/DataTableSample.vue'
 
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 export default {
+  components: { DataTableSample },
   props: {
     stratigraphy: {
       type: Object,

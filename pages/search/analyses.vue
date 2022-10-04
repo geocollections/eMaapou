@@ -10,9 +10,11 @@
 
 <script>
 import debounce from 'lodash/debounce'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {
+  components: { DataTableAnalysis },
   props: {
     query: {
       type: String,

@@ -126,10 +126,13 @@
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ANALYTICAL_DATA } from '~/constants'
 export default {
   name: 'DataTableAnalyticalData',
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

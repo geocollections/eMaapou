@@ -64,9 +64,17 @@
 
 <script>
 import debounce from 'lodash/debounce'
+import BackButtonDetail from './BackButtonDetail.vue'
+import EditButton from './EditButton.vue'
+import BaseHeader from './base/BaseHeader.vue'
 
 export default {
   name: 'HeaderDetail',
+  components: {
+    EditButton,
+    BaseHeader,
+    BackButtonDetail,
+  },
   props: {
     arrowKeys: {
       type: Boolean,
