@@ -166,10 +166,8 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-// import InputSearch from './input/InputSearch.vue'
 export default {
   name: 'AppFooter',
-  // components: { InputSearch },
   data() {
     return {
       logo: '/logos/emaapou5white.svg',

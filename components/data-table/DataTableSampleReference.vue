@@ -32,12 +32,10 @@
 <script>
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE_REFERENCE } from '~/constants'
 export default {
   name: 'DataTableSampleReference',
-  components: { BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

@@ -327,27 +327,9 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import LeafletMap from '~/components/map/LeafletMap.vue'
-import HeaderDetail from '~/components/HeaderDetail.vue'
-import Tabs from '~/components/Tabs.vue'
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import Detail from '~/templates/Detail.vue'
-import ImageBar from '~/components/ImageBar.vue'
 import { TABS_SITE } from '~/constants'
-import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
-  components: {
-    HeaderDetail,
-    Tabs,
-    LeafletMap,
-    TableRow,
-    TableRowLink,
-    Detail,
-    ImageBar,
-    BaseTable,
-  },
   async asyncData({
     app,
     params,

@@ -14,10 +14,8 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-import BaseCardExpand from '~/components/base/BaseCardExpand.vue'
 export default {
   name: 'SearchFieldWrapper',
-  components: { BaseCardExpand },
   props: {
     active: {
       type: Boolean,

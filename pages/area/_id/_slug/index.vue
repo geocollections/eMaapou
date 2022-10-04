@@ -9,11 +9,9 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableSite from '~/components/data-table/DataTableSite'
 import { HEADERS_SITE, SITE } from '~/constants'
 
 export default {
-  components: { DataTableSite },
   data() {
     return {
       sites: [],

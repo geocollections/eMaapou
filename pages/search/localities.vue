@@ -10,11 +10,9 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import { HEADERS_LOCALITY, LOCALITY } from '~/constants'
 
 export default {
-  components: { DataTableLocality },
   props: {
     query: {
       type: String,

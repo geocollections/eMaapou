@@ -24,10 +24,8 @@
 </template>
 
 <script>
-import ThumbnailImage from './ThumbnailImage.vue'
 export default {
   name: 'ThumbnailAttachment',
-  components: { ThumbnailImage },
   props: {
     src: {
       type: String,

@@ -20,7 +20,6 @@
 <script>
 import deepmerge from 'deepmerge'
 import { mapFields } from 'vuex-map-fields'
-import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import {
   DATAZOOM_Y_SLIDER_LEFT,
   DATAZOOM_Y_SLIDER_LEFT_SMALL,
@@ -39,7 +38,6 @@ import {
 } from '~/constants'
 export default {
   name: 'ChartWrapper',
-  components: { RendererSwitch },
   props: {
     options: {
       type: Object,

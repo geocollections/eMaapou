@@ -120,15 +120,10 @@
 <script>
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
-import TableRow from '../table/TableRow.vue'
-import TableRowLink from '../table/TableRowLink.vue'
-import BaseTable from '../base/BaseTable.vue'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DESCRIPTION } from '~/constants'
 export default {
   name: 'DataTableDescription',
-  components: { BaseDataTable, TableRow, TableRowLink, BaseTable },
   mixins: [headersMixin],
   props: {
     items: {

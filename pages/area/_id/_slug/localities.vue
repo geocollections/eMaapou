@@ -9,11 +9,9 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import { HEADERS_AREA, AREA } from '~/constants'
 
 export default {
-  components: { DataTableLocality },
   data() {
     return {
       localities: [],

@@ -232,25 +232,7 @@ import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
 import { STRATOTYPE, TABS_STRATIGRAPHY, HEADERS_STRATOTYPE } from '~/constants'
-import LeafletMap from '~/components/map/LeafletMap.vue'
-import HeaderDetail from '~/components/HeaderDetail.vue'
-import Tabs from '~/components/Tabs.vue'
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import DataTableStratigraphyStratotype from '~/components/data-table/DataTableStratigraphyStratotype.vue'
-import Detail from '~/templates/Detail.vue'
-import BaseTable from '~/components/base/BaseTable.vue'
 export default {
-  components: {
-    HeaderDetail,
-    Tabs,
-    TableRowLink,
-    TableRow,
-    DataTableStratigraphyStratotype,
-    LeafletMap,
-    Detail,
-    BaseTable,
-  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const stratigraphyResponse = await $services.sarvREST.getResource(

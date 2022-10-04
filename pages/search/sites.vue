@@ -11,10 +11,8 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_SITE, SITE } from '~/constants'
-import DataTableSite from '~/components/data-table/DataTableSite.vue'
 
 export default {
-  components: { DataTableSite },
   props: {
     query: {
       type: String,

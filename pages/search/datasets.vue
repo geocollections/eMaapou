@@ -11,10 +11,8 @@
 <script>
 import debounce from 'lodash/debounce'
 import { DATASET, HEADERS_DATASET } from '~/constants'
-import DataTableDataset from '~/components/data-table/DataTableDataset'
 
 export default {
-  components: { DataTableDataset },
   props: {
     query: {
       type: String,

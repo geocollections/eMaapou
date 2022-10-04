@@ -225,27 +225,9 @@
 </template>
 
 <script>
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import Detail from '~/templates/Detail.vue'
-import HeaderDetail from '~/components/HeaderDetail.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
-import Tabs from '~/components/Tabs.vue'
-import ImageBar from '~/components/ImageBar.vue'
 import { TABS_SPECIMEN } from '~/constants'
-import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
-  components: {
-    Detail,
-    HeaderDetail,
-    TableRow,
-    TableRowLink,
-    LeafletMap,
-    Tabs,
-    ImageBar,
-    BaseTable,
-  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(

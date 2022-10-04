@@ -37,23 +37,8 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
-import SearchActions from '../SearchActions.vue'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
-import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete'
-import InputSearch from '~/components/input/InputSearch.vue'
-
 export default {
   name: 'SearchFormDataset',
-  components: {
-    SearchInstitutionFilter,
-    InputText,
-    SearchActions,
-    InputAutocomplete,
-    SearchFieldsWrapper,
-    InputSearch,
-  },
   data() {
     return {
       availableParameters: [],

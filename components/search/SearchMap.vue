@@ -30,11 +30,8 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-import BaseCardExpand from '../base/BaseCardExpand.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
 export default {
   name: 'SearchMap',
-  components: { LeafletMap, BaseCardExpand },
   props: {
     items: {
       type: Array,

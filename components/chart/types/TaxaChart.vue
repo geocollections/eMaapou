@@ -9,11 +9,8 @@
 </template>
 
 <script>
-import TaxaChartWrapper from '~/components/chart/wrappers/TaxaChartWrapper'
-
 export default {
   name: 'TaxaChart',
-  components: { TaxaChartWrapper },
   props: {
     chartTitle: {
       type: String,

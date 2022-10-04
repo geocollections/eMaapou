@@ -498,24 +498,8 @@
 <script>
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
-import HeaderDetail from '~/components/HeaderDetail'
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import LeafletMap from '~/components/map/LeafletMap'
-import Detail from '~/templates/Detail'
-import LasChart from '~/components/chart/types/LasChart'
-import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
-  components: {
-    LasChart,
-    HeaderDetail,
-    LeafletMap,
-    TableRow,
-    TableRowLink,
-    Detail,
-    BaseTable,
-  },
   async asyncData({ app, params, route, error }) {
     try {
       const fileResponse = await app.$services.sarvREST.getResource(

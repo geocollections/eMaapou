@@ -154,22 +154,8 @@
 <script>
 import isEmpty from 'lodash/isEmpty'
 import isNull from 'lodash/isNull'
-import HeaderDetail from '~/components/HeaderDetail.vue'
-import TableRow from '~/components/table/TableRow.vue'
-import Tabs from '~/components/Tabs.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import Detail from '~/templates/Detail.vue'
 import { TABS_COLLECTION } from '~/constants/tabs'
-import BaseTable from '~/components/base/BaseTable.vue'
 export default {
-  components: {
-    HeaderDetail,
-    TableRow,
-    TableRowLink,
-    Detail,
-    Tabs,
-    BaseTable,
-  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const collectionResponse = await $services.sarvREST.getResource(

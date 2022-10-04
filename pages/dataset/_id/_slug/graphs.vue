@@ -12,11 +12,9 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import ChartFlog from '~/components/chart/ChartFlog.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
 export default {
-  components: { ChartFlog },
   props: {
     dataset: {
       type: Object,

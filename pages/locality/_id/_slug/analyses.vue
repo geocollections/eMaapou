@@ -11,9 +11,7 @@
 <script>
 import isNil from 'lodash/isNil'
 import { HEADERS_ANALYSIS } from '~/constants'
-import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
 export default {
-  components: { DataTableAnalysis },
   data() {
     return {
       analyses: [],

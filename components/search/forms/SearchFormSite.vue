@@ -21,21 +21,8 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import InputText from '../../input/InputText.vue'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import SearchActions from '../SearchActions.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
-import InputSearch from '~/components/input/InputSearch.vue'
-
 export default {
   name: 'SearchFormSite',
-  components: {
-    InputText,
-    SearchFieldsWrapper,
-    SearchActions,
-    SearchMap,
-    InputSearch,
-  },
   computed: {
     ...mapState('search/site', ['filters', 'count', 'items']),
     ...mapFields('search/site', {

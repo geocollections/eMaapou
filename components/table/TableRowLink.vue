@@ -22,12 +22,8 @@
 </template>
 
 <script>
-import TableRow from './TableRow.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-
 export default {
   name: 'TableRowLink',
-  components: { BaseLinkExternal, TableRow },
   props: {
     nuxt: { type: Boolean, default: false },
     title: { type: String, default: null },

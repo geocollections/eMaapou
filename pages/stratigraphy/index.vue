@@ -33,18 +33,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Search from '~/templates/Search'
-import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
-import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
-import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
-  components: {
-    Search,
-    SearchFormStratigraphy,
-    DataTableStratigraphy,
-    BaseHeader,
-  },
   head() {
     return {
       title: this.$t('stratigraphy.pageTitle'),

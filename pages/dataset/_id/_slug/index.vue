@@ -9,11 +9,9 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis.vue'
 import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
 
 export default {
-  components: { DataTableDatasetAnalysis },
   data() {
     return {
       analyses: [],

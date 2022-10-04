@@ -208,9 +208,6 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 
-import InputSearch from './input/InputSearch.vue'
-import BaseMenuListItem from './base/BaseMenuListItem.vue'
-import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -219,7 +216,6 @@ import {
 } from '~/constants'
 export default {
   name: 'AppHeader',
-  components: { LanguageSwitcher, InputSearch, BaseMenuListItem },
   props: {
     drawer: Boolean,
     showSearch: {

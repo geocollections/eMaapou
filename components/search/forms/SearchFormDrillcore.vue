@@ -35,25 +35,8 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import SearchActions from '../SearchActions.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import InputRange from '~/components/input/InputRange.vue'
-import InputText from '~/components/input/InputText.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
-import InputSearch from '~/components/input/InputSearch.vue'
-
 export default {
   name: 'SearchFormDrillcore',
-  components: {
-    SearchInstitutionFilter,
-    InputText,
-    InputRange,
-    SearchFieldsWrapper,
-    SearchActions,
-    SearchMap,
-    InputSearch,
-  },
   computed: {
     ...mapState('search/drillcore', ['filters', 'count', 'items']),
     ...mapFields('search/drillcore', {

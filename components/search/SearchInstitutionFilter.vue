@@ -95,11 +95,9 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { mapState } from 'vuex'
-import BaseCardExpand from '../base/BaseCardExpand.vue'
 
 export default {
   name: 'SearchInstitutionFilter',
-  components: { BaseCardExpand },
   props: {
     institution: {
       type: Array,

@@ -259,27 +259,9 @@
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import { mapFields } from 'vuex-map-fields'
-import HeaderDetail from '~/components/HeaderDetail.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import TableRow from '~/components/table/TableRow.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
-import Tabs from '~/components/Tabs.vue'
-import Detail from '~/templates/Detail.vue'
-import ImageBar from '~/components/ImageBar.vue'
 import { TABS_LOCALITY } from '~/constants'
-import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
-  components: {
-    HeaderDetail,
-    TableRow,
-    TableRowLink,
-    LeafletMap,
-    Tabs,
-    Detail,
-    ImageBar,
-    BaseTable,
-  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const localityResponse = await $services.sarvREST.getResource(

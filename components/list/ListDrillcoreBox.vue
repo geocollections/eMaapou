@@ -188,13 +188,8 @@
 <script>
 import debounce from 'lodash/debounce'
 
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import BaseTable from '~/components/base/BaseTable.vue'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 export default {
   name: 'ListDrillcoreBox',
-  components: { BaseDataTablePagination, TableRow, TableRowLink, BaseTable },
   props: {
     items: {
       type: Array,
