@@ -22,10 +22,12 @@
 <script>
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET_AUTHOR } from '~/constants'
 export default {
   name: 'DataTableDatasetAuthor',
+  components: { BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

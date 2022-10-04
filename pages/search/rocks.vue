@@ -11,8 +11,10 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_ROCK, ROCK } from '~/constants'
+import DataTableRock from '~/components/data-table/DataTableRock'
 
 export default {
+  components: { DataTableRock },
   props: {
     query: {
       type: String,

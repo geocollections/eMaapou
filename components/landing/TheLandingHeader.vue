@@ -147,6 +147,7 @@
 </template>
 
 <script>
+import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -154,6 +155,7 @@ import {
 } from '~/constants'
 export default {
   name: 'AppHeader',
+  components: { LanguageSwitcher },
   props: {
     drawer: Boolean,
   },

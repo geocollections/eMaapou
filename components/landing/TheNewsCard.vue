@@ -40,8 +40,11 @@
 </template>
 
 <script>
+import NewsPreviewCard from '~/components/NewsPreviewCard.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
   name: 'TheNewsSection',
+  components: { NewsPreviewCard, BaseHeader },
   data() {
     return {
       newsList: [],

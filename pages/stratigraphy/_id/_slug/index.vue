@@ -14,8 +14,10 @@ import {
   HEADERS_STRATIGRAPHY_REFERENCE,
   STRATIGRAPHY_REFERENCE,
 } from '~/constants'
+import DataTableStratigraphyReference from '~/components/data-table/DataTableStratigraphyReference'
 
 export default {
+  components: { DataTableStratigraphyReference },
   data() {
     return {
       options: STRATIGRAPHY_REFERENCE.options,

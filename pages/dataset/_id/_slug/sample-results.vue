@@ -10,9 +10,11 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import DataTableSampleData from '~/components/data-table/DataTableSampleData'
 import { SAMPLE_DATA, HEADERS_SAMPLE_DATA } from '~/constants'
 
 export default {
+  components: { DataTableSampleData },
   props: {
     parameterHeaders: {
       type: Object,

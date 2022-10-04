@@ -11,8 +11,10 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_PHOTO, IMAGE } from '~/constants'
+import DataTableAttachmentSolr from '~/components/data-table/DataTableAttachmentSolr'
 
 export default {
+  components: { DataTableAttachmentSolr },
   props: {
     query: {
       type: String,

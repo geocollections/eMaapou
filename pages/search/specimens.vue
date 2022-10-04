@@ -11,8 +11,10 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
+import DataTableSpecimen from '~/components/data-table/DataTableSpecimen'
 
 export default {
+  components: { DataTableSpecimen },
   props: {
     query: {
       type: String,

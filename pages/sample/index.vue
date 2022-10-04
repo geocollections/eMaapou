@@ -30,8 +30,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
+import DataTableSample from '~/components/data-table/DataTableSample.vue'
+import Search from '~/templates/Search'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
+  components: {
+    Search,
+    SearchFormSample,
+    DataTableSample,
+    BaseHeader,
+  },
   head() {
     return {
       title: this.$t('sample.pageTitle'),

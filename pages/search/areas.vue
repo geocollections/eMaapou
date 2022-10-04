@@ -10,9 +10,11 @@
 
 <script>
 import debounce from 'lodash/debounce'
+import DataTableArea from '~/components/data-table/DataTableArea'
 import { AREA, HEADERS_AREA } from '~/constants'
 
 export default {
+  components: { DataTableArea },
   props: {
     query: {
       type: String,

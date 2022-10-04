@@ -12,8 +12,10 @@ import round from 'lodash/round'
 import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
 import { DESCRIPTION, HEADERS_DESCRIPTION } from '~/constants'
+import DataTableDescription from '~/components/data-table/DataTableDescription.vue'
 
 export default {
+  components: { DataTableDescription },
   data() {
     return {
       descriptions: [],

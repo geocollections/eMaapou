@@ -175,9 +175,17 @@
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import HeaderDetail from '~/components/HeaderDetail.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import Tabs from '~/components/Tabs.vue'
+import Detail from '~/templates/Detail.vue'
+import BaseTable from '~/components/base/BaseTable.vue'
 import { TABS_ANALYSIS } from '~/constants'
 
 export default {
+  components: { HeaderDetail, TableRow, TableRowLink, Tabs, Detail, BaseTable },
+
   async asyncData({ app, params, route, error, $services }) {
     try {
       const analysisResponse = await $services.sarvREST.getResource(

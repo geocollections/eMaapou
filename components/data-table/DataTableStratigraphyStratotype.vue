@@ -49,10 +49,13 @@
 <script>
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY_STRATOTYPE } from '~/constants'
 export default {
   name: 'DataTableStratigraphyStratotype',
+  components: { BaseDataTable, BaseLinkExternal },
   mixins: [headersMixin],
   props: {
     items: {

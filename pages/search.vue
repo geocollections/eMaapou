@@ -45,9 +45,13 @@ import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import orderBy from 'lodash/orderBy'
 import { mapFields } from 'vuex-map-fields'
+import ButtonTabs from '~/components/ButtonTabs.vue'
+import BaseHeader from '~/components/base/BaseHeader.vue'
 import { TABS_QUICK_SEARCH } from '~/constants'
+import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   name: 'QuickSearch',
+  components: { ButtonTabs, BaseHeader, InputSearch },
   // layout: 'search',
   async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab, from }) {
     try {

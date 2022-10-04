@@ -8,8 +8,11 @@
 </template>
 
 <script>
+import DataTableAttachment from '~/components/data-table/DataTableAttachment'
+
 import { HEADERS_ATTACHMENT } from '~/constants'
 export default {
+  components: { DataTableAttachment },
   data() {
     return {
       attachments: [],

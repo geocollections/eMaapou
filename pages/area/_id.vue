@@ -372,8 +372,28 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import HeaderDetail from '~/components/HeaderDetail.vue'
+import Tabs from '~/components/Tabs.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import Detail from '~/templates/Detail.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
 import { TABS_AREA } from '~/constants'
+import BaseBoolean from '~/components/base/BaseBoolean.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
+import BaseTable from '~/components/base/BaseTable.vue'
 export default {
+  components: {
+    LeafletMap,
+    HeaderDetail,
+    Tabs,
+    TableRow,
+    TableRowLink,
+    Detail,
+    BaseBoolean,
+    BaseLinkExternal,
+    BaseTable,
+  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(

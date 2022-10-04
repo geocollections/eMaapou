@@ -39,10 +39,13 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DOI } from '~/constants'
 export default {
   name: 'DataTableDoi',
+  components: { BaseLinkExternal, BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

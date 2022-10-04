@@ -30,10 +30,13 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import BaseLinkExternal from '../base/BaseLinkExternal.vue'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_STRATIGRAPHY_REFERENCE } from '~/constants'
 export default {
   name: 'DataTableStratigraphyReference',
+  components: { BaseDataTable, BaseLinkExternal },
   mixins: [headersMixin],
   props: {
     items: {

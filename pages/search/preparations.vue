@@ -10,9 +10,11 @@
 
 <script>
 import debounce from 'lodash/debounce'
+import DataTablePreparation from '~/components/data-table/DataTablePreparation'
 import { HEADERS_PREPARATION, PREPARATION } from '~/constants'
 
 export default {
+  components: { DataTablePreparation },
   props: {
     query: {
       type: String,

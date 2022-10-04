@@ -162,9 +162,25 @@
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import HeaderDetail from '~/components/HeaderDetail.vue'
+import Tabs from '~/components/Tabs.vue'
+import Detail from '~/templates/Detail.vue'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import BaseTable from '~/components/base/BaseTable.vue'
 import { TABS_DATASET } from '~/constants'
 
 export default {
+  components: {
+    LeafletMap,
+    HeaderDetail,
+    Tabs,
+    Detail,
+    TableRow,
+    TableRowLink,
+    BaseTable,
+  },
   async asyncData({ app, params, route, error, $services }) {
     try {
       const datasetResponse = await $services.sarvREST.getResource(

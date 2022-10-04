@@ -54,10 +54,12 @@
 <script>
 import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET } from '~/constants'
 export default {
   name: 'DataTableDataset',
+  components: { BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

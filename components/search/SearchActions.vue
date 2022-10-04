@@ -11,8 +11,15 @@
 </template>
 
 <script>
+import SearchResetButton from '~/components/search/SearchResetButton.vue'
+import SearchButton from '~/components/search/SearchButton.vue'
+
 export default {
   name: 'SearchActions',
+  components: {
+    SearchResetButton,
+    SearchButton,
+  },
   props: {
     count: {
       type: Number,

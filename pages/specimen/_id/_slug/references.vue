@@ -9,8 +9,10 @@
 
 <script>
 import isNil from 'lodash/isNil'
+import DataTableSpecimenReference from '~/components/data-table/DataTableSpecimenReference.vue'
 import { HEADERS_SPECIMEN_REFERENCE, SPECIMEN_REFERENCE } from '~/constants'
 export default {
+  components: { DataTableSpecimenReference },
   data() {
     return {
       references: [],
