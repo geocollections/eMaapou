@@ -59,6 +59,9 @@
 <script>
 import { mapFields } from 'vuex-map-fields'
 import { graphic } from 'echarts'
+import groupBy from 'lodash/groupBy'
+import orderBy from 'lodash/orderBy'
+import differenceBy from 'lodash/differenceBy'
 import RendererSwitch from '~/components/chart/options/RendererSwitch'
 import OptionsMethodTreeView from '~/components/chart/options/OptionsMethodTreeView.vue'
 import range from '~/utils/range'
@@ -168,6 +171,9 @@ export default {
 
       return `${totalWidth}px`
     },
+    selectedParametersGrouped() {
+      return this.groupParameters(this.selectedParameters)
+    },
   },
   created() {
     // Set initial selected parameters
@@ -194,7 +200,7 @@ export default {
     },
     calculateTotalWidth() {
       const parameterModuleWidth =
-        this.selectedParameters.length *
+        this.selectedParametersGrouped.length *
           (this.parameterChartWidth + this.parameterChartPadding) +
         this.parameterModulePadding
 
@@ -240,87 +246,204 @@ export default {
         },
       }
     },
+    groupParameters(parameters) {
+      const grouped = groupBy(parameters, 'value')
+      return orderBy(
+        Object.entries(grouped).map(([paramId, params]) => {
+          return {
+            id: params[0].id,
+            value: parseInt(paramId),
+            name: params[0].name,
+            count: params[0].count,
+            methods: grouped[paramId].map((p) => p.methodValue),
+          }
+        }),
+        ['id'],
+        ['asc']
+      )
+    },
     handleMethodsUpdate(newSelectedParameters) {
       const addedParameters = newSelectedParameters.filter((newParam) => {
         return !this.selectedParameters.some(
           (param) => param.id === newParam.id
         )
       })
+      const removedParameters = this.selectedParameters.filter((newParam) => {
+        return !newSelectedParameters.some((param) => param.id === newParam.id)
+      })
+      const oldGroupedParameters = this.groupParameters(this.selectedParameters)
+
       this.selectedParameters = newSelectedParameters
 
-      const nullGridIndex = this.$refs.flogChart.getOption().grid.indexOf(null)
-      this.nextGridIndex =
-        nullGridIndex > -1 ? nullGridIndex : this.selectedParameters.length
+      const groupedParameters = this.groupParameters(this.selectedParameters)
+
       this.totalWidth = this.calculateTotalWidth()
 
       if (addedParameters.length > 0) {
-        const newChartComponents = this.createParameterChartComponents(
-          addedParameters[0],
-          this.nextGridIndex,
-          this.selectedParameters.length - 1
+        const newDataZoomYAxisIndices = [
+          ...this.$refs.flogChart.getOption().dataZoom[0].yAxisIndex,
+        ]
+        const newOptions = addedParameters.reduce(
+          (prev, addedParameter, i) => {
+            // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
+            if (
+              groupBy(newSelectedParameters, 'value')[addedParameter.value]
+                .length > 1
+            ) {
+              const newChartComponents = this.createParameterChartComponents(
+                groupedParameters.find((param) => {
+                  return param.value === addedParameter.value
+                }),
+                -1,
+                -1,
+                { returnComponents: ['series'] }
+              )
+              return {
+                series: [
+                  ...prev.series,
+                  {
+                    id: newChartComponents.series.id,
+                    data: newChartComponents.series.data,
+                  },
+                ],
+              }
+            } else {
+              const nullGridIndex = this.$refs.flogChart
+                .getOption()
+                .grid.indexOf(null)
+              this.nextGridIndex =
+                nullGridIndex > -1
+                  ? nullGridIndex
+                  : oldGroupedParameters.length + i + 1
+              newDataZoomYAxisIndices.push(this.nextGridIndex)
+              const newChartComponents = this.createParameterChartComponents(
+                groupedParameters.find((param) => {
+                  return param.value === addedParameter.value
+                }),
+                this.nextGridIndex,
+                oldGroupedParameters.length + i
+              )
+              return {
+                grid: [...prev.grid, newChartComponents.grid],
+                xAxis: [...prev.xAxis, newChartComponents.xAxis],
+                yAxis: [...prev.yAxis, newChartComponents.yAxis],
+                series: [...prev.series, newChartComponents.series],
+              }
+            }
+          },
+          { grid: [], xAxis: [], yAxis: [], series: [] }
         )
 
         this.replace = false
         this.option = {
-          grid: newChartComponents.grid,
-          xAxis: newChartComponents.xAxis,
-          yAxis: newChartComponents.yAxis,
-          series: newChartComponents.series,
+          ...newOptions,
           dataZoom: [
             {
               id: this.$refs.flogChart.getOption().dataZoom[0].id,
-              yAxisIndex: [
-                ...this.$refs.flogChart.getOption().dataZoom[0].yAxisIndex,
-                this.nextGridIndex,
-              ],
+              yAxisIndex: newDataZoomYAxisIndices,
             },
           ],
         }
       } else {
-        const newOptions = this.createOption()
+        const removed = differenceBy(
+          oldGroupedParameters,
+          groupedParameters,
+          'value'
+        )
+        const modified = differenceBy(removedParameters, removed, 'value')
 
-        const dataZoomYAxes = this.$refs.flogChart
-          .getOption()
-          .grid.map((grid, i) => {
-            if (grid === null) return -1
-            return i
-          })
-          .filter((idx) => idx !== -1)
+        const currentOption = this.$refs.flogChart.getOption()
+        const gridsOrdered = orderBy(currentOption.grid, ['left'], ['asc'])
+        let position = 0
+
+        const newOptions = gridsOrdered.reduce(
+          (prev, grid, i) => {
+            if (grid == null) {
+              return prev
+            }
+
+            const name = grid.id.split('-')[2]
+            if (name === undefined) {
+              return {
+                ...prev,
+                grid: [
+                  ...prev.grid,
+                  { id: this.$refs.flogChart.getOption().grid[i].id },
+                ],
+                xAxis: [
+                  ...prev.xAxis,
+                  { id: this.$refs.flogChart.getOption().xAxis[i].id },
+                ],
+                yAxis: [
+                  ...prev.yAxis,
+                  { id: this.$refs.flogChart.getOption().yAxis[i].id },
+                ],
+                series: [
+                  ...prev.series,
+                  { id: this.$refs.flogChart.getOption().series[i].id },
+                ],
+              }
+            }
+
+            const xAxis = currentOption.xAxis.find((xAxis) =>
+              xAxis.id.includes(name)
+            )
+            const yAxis = currentOption.yAxis.find((yAxis) =>
+              yAxis.id.includes(name)
+            )
+            const series = currentOption.series.find((series) =>
+              series.id.includes(name)
+            )
+
+            // if one of the parameter methods removed but some method still selected,
+            // update series data and grid position
+            if (modified.some((m) => m.name === name)) {
+              const param = groupedParameters.find((m) => m.name === name)
+              const newChartComponents = this.createParameterChartComponents(
+                param,
+                -1,
+                position,
+                { returnComponents: ['series', 'grid'] }
+              )
+              position += 1
+
+              return {
+                grid: [...prev.grid, newChartComponents.grid],
+                xAxis: [...prev.xAxis, { id: xAxis.id }],
+                yAxis: [...prev.yAxis, { id: yAxis.id }],
+                series: [
+                  ...prev.series,
+                  {
+                    id: series.id,
+                    data: newChartComponents.series.data,
+                  },
+                ],
+              }
+            }
+            // if chart is not modified or removed, leave it as is, only update grid position.
+            if (!removed.some((m) => m.name === name)) {
+              const param = groupedParameters.find((m) => m.name === name)
+              const newChartComponents = this.createParameterChartComponents(
+                param,
+                -1,
+                position,
+                { returnComponents: ['grid'] }
+              )
+              position += 1
+              return {
+                grid: [...prev.grid, newChartComponents.grid],
+                xAxis: [...prev.xAxis, { id: xAxis.id }],
+                yAxis: [...prev.yAxis, { id: yAxis.id }],
+                series: [...prev.series, { id: series.id }],
+              }
+            }
+            return prev
+          },
+          { grid: [], xAxis: [], yAxis: [], series: [] }
+        )
 
         this.replace = true
-        this.option = {
-          grid: [
-            ...newOptions.grid.map((grid) => {
-              return {
-                id: grid.id,
-                width: grid.width,
-                height: grid.height,
-                left: grid.left,
-              }
-            }),
-          ],
-          xAxis: [
-            ...newOptions.xAxis.map((axis) => {
-              return { id: axis.id }
-            }),
-          ],
-          yAxis: [
-            ...newOptions.yAxis.map((axis) => {
-              return { id: axis.id }
-            }),
-          ],
-          series: [
-            ...newOptions.series.map((series) => {
-              return { id: series.id }
-            }),
-          ],
-          dataZoom: [
-            {
-              ...newOptions.dataZoom[0],
-              yAxisIndex: dataZoomYAxes,
-            },
-          ],
-        }
+        this.option = newOptions
       }
     },
     handleScaleReset() {
@@ -396,11 +519,11 @@ export default {
           axisPointer: {
             show: true,
           },
-          // axisLine: {
-          // show: true,
-          // symbol: ['none', 'arrow'],
-          // symbolSize: [5, 5],
-          // },
+          axisLabel: {
+            showMinLabel: true,
+            showMaxLabel: true,
+            hideOverlap: true,
+          },
         }
       }
       if (returnComponents.includes('yAxis')) {
@@ -465,7 +588,11 @@ export default {
             },
           },
           data: this.analyses
-            .filter((result) => result.parameter === param.name)
+            .filter(
+              (result) =>
+                result.parameter === param.name &&
+                param.methods.includes(result.method_id)
+            )
             .map((t) => {
               const avgDepth = t.depth_interval
                 ? (t.depth + t.depth_interval) / 2
@@ -486,41 +613,10 @@ export default {
       }
       return result
     },
-    createSelectedParameterChartComponents({
-      returnComponents = ['grid', 'xAxis', 'yAxis', 'series'],
-    } = {}) {
-      return this.selectedParameters.reduce(
-        (prev, parameter, i) => {
-          const parameterComponents = this.createParameterChartComponents(
-            parameter,
-            i + 1,
-            i,
-            { returnComponents }
-          )
-          return {
-            grid: parameterComponents.grid && [
-              ...prev.grid,
-              parameterComponents.grid,
-            ],
-            xAxis: parameterComponents.xAxis && [
-              ...prev.xAxis,
-              parameterComponents.xAxis,
-            ],
-            yAxis: parameterComponents.yAxis && [
-              ...prev.yAxis,
-              parameterComponents.yAxis,
-            ],
-            series: parameterComponents.series && [
-              ...prev.series,
-              parameterComponents.series,
-            ],
-          }
-        },
-        { grid: [], xAxis: [], yAxis: [], series: [] }
-      )
-    },
     createOption() {
-      const selectedParameterChartComponents = this.selectedParameters.reduce(
+      const selectedParameterChartComponents = this.groupParameters(
+        this.selectedParameters
+      ).reduce(
         (prev, parameter, i) => {
           const parameterComponents = this.createParameterChartComponents(
             parameter,
@@ -544,12 +640,21 @@ export default {
           trigger: 'item',
         },
         dataZoom: [
-          // TODO: yAxisIndex 0 should be `weakFilter` and others `empty`, if possible
           {
+            id: 'dataZoom-y-inside',
             type: 'inside',
             yAxisIndex: range(1 + this.selectedParameters.length),
-            filterMode: 'empty',
+            filterMode: 'none',
             minValueSpan: 0.1,
+          },
+          {
+            id: 'dataZoom-y-slider',
+            type: 'slider',
+            yAxisIndex: 0,
+            realtime: false,
+            minValueSpan: 0.1,
+            width: 20,
+            left: 10,
           },
         ],
         toolbox: {
@@ -561,7 +666,9 @@ export default {
               xAxisIndex: 'all',
               filterMode: 'none',
             },
-            saveAsImage: {},
+            saveAsImage: {
+              excludeComponents: ['toolbox', 'dataZoom'],
+            },
           },
         },
         axisPointer: {

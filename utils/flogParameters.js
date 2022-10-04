@@ -6,7 +6,6 @@ export default function flogParameters(analysisResultsPivot) {
     ([method, methodParameters]) => {
       id += 1
       return {
-        value: method.value,
         id,
         name: method.pivot[0].value,
         name_en: method.pivot[0].pivot[0].value,
@@ -14,7 +13,8 @@ export default function flogParameters(analysisResultsPivot) {
         children: methodParameters.pivot.map((parameter) => {
           id += 1
           return {
-            value: parameter.value,
+            value: parseInt(parameter.value),
+            methodValue: parseInt(method.value),
             id,
             count: parameter.count,
             name: parameter.pivot[0].value,
