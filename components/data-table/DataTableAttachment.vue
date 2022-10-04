@@ -53,14 +53,11 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import BaseDataTable from '../base/BaseDataTable.vue'
-import ThumbnailAttachment from '~/components/thumbnail/ThumbnailAttachment.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ATTACHMENT } from '~/constants'
 
 export default {
   name: 'DataTableAttachment',
-  components: { BaseDataTable, ThumbnailAttachment },
   mixins: [headersMixin],
   props: {
     items: {

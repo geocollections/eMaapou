@@ -9,10 +9,8 @@
 
 <script>
 import { HEADERS_ATTACHMENT } from '~/constants'
-import ListDrillcoreBox from '~/components/list/ListDrillcoreBox.vue'
 
 export default {
-  components: { ListDrillcoreBox },
   props: {
     drillcore: {
       type: Number,

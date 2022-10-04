@@ -11,10 +11,8 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_REFERENCE, REFERENCE } from '~/constants'
-import DataTableReference from '~/components/data-table/DataTableReference'
 
 export default {
-  components: { DataTableReference },
   props: {
     query: {
       type: String,

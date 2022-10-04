@@ -7,10 +7,8 @@
 </template>
 
 <script>
-import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
 export default {
   name: 'VMarkerClusterWrapper',
-  components: { LCircleMarkerWrapper },
   props: {
     markers: {
       type: Array,

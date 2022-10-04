@@ -9,10 +9,8 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableSpecimenIdentification from '~/components/data-table/DataTableSpecimenIdentification.vue'
 import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
-  components: { DataTableSpecimenIdentification },
   data() {
     return {
       identifications: [],

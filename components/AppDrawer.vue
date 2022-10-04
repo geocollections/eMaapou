@@ -138,8 +138,6 @@
 </template>
 
 <script>
-import LanguageList from '~/components/language/LanguageList'
-import BaseMenuListItem from '~/components/base/BaseMenuListItem.vue'
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -148,7 +146,6 @@ import {
 } from '~/constants'
 export default {
   name: 'AppDrawer',
-  components: { LanguageList, BaseMenuListItem },
   props: {
     drawer: {
       type: Boolean,

@@ -142,11 +142,8 @@
 </template>
 
 <script>
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-
 export default {
   name: 'GalleryView',
-  components: { BaseDataTablePagination },
   props: {
     items: {
       type: Array,

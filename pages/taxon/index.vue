@@ -34,18 +34,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Search from '~/templates/Search'
-import SearchFormTaxon from '~/components/search/forms/SearchFormTaxon.vue'
-import DataTableTaxon from '~/components/data-table/DataTableTaxon'
-import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
-  components: {
-    Search,
-    SearchFormTaxon,
-    DataTableTaxon,
-    BaseHeader,
-  },
   head() {
     return {
       title: this.$t('taxon.pageTitle'),

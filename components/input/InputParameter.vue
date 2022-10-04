@@ -62,11 +62,8 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty'
-import InputNumber from '~/components/input/InputNumber.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 export default {
   name: 'InputParameter',
-  components: { InputNumber, InputAutocomplete },
   props: {
     disableRemove: {
       type: Boolean,

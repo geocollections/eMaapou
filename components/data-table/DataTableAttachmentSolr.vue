@@ -66,14 +66,10 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ThumbnailImage from '~/components/thumbnail/ThumbnailImage'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal'
 import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'
 export default {
   name: 'DataTableAttachmentSolr',
-  components: { BaseLinkExternal, BaseDataTable, ThumbnailImage },
   mixins: [headersMixin],
   props: {
     items: {

@@ -92,13 +92,11 @@
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE } from '~/constants'
 
 export default {
   name: 'DataTableSample',
-  components: { BaseDataTable },
   mixins: [headersMixin],
   props: {
     items: {

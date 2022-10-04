@@ -10,10 +10,8 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import { DRILLCORE, HEADERS_DRILLCORE } from '~/constants'
 export default {
-  components: { DataTableDrillcore },
   props: {
     query: {
       type: String,

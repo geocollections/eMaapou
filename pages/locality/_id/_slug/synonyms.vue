@@ -9,10 +9,8 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableSynonym from '~/components/data-table/DataTableSynonym.vue'
 import { HEADERS_SYNONYM, SYNONYM } from '~/constants'
 export default {
-  components: { DataTableSynonym },
   data() {
     return {
       synonyms: [],

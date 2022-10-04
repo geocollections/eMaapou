@@ -27,24 +27,8 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import SearchActions from '../SearchActions.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
-import InputText from '~/components/input/InputText.vue'
-import SearchMap from '~/components/search/SearchMap'
-import InputSearch from '~/components/input/InputSearch.vue'
-import InputRange from '~/components/input/InputRange.vue'
 export default {
   name: 'SearchFormAnalysis',
-  components: {
-    SearchInstitutionFilter,
-    InputText,
-    SearchFieldsWrapper,
-    SearchActions,
-    SearchMap,
-    InputSearch,
-    InputRange,
-  },
   computed: {
     ...mapState('search/analysis', ['filters', 'count', 'items']),
     ...mapFields('search/analysis', {

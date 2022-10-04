@@ -6,11 +6,8 @@
 </template>
 
 <script>
-import ChartWrapper from '~/components/chart/wrappers/ChartWrapper'
-
 export default {
   name: 'LasChart',
-  components: { ChartWrapper },
   props: {
     fileData: {
       type: Object,

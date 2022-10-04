@@ -22,11 +22,9 @@
 </template>
 <script>
 import { mapFields } from 'vuex-map-fields'
-import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFromQuick',
-  components: { InputSearch },
   props: {
     onlyIcon: {
       type: Boolean,

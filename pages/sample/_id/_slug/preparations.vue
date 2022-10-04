@@ -9,10 +9,8 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
 import { HEADERS_PREPARATION } from '~/constants'
 export default {
-  components: { DataTablePreparation },
   data() {
     return {
       preparations: [],

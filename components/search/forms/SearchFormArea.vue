@@ -35,20 +35,8 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import SearchActions from '../SearchActions.vue'
-import InputText from '~/components/input/InputText.vue'
-import InputSearch from '~/components/input/InputSearch.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 export default {
   name: 'SearchFormArea',
-  components: {
-    InputText,
-    SearchFieldsWrapper,
-    SearchActions,
-    InputSearch,
-    InputAutocomplete,
-  },
   data() {
     return {
       counties: [],

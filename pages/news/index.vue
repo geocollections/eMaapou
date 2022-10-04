@@ -44,13 +44,7 @@
 </template>
 
 <script>
-import NewsPreviewCard from '~/components/NewsPreviewCard.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
-  components: {
-    BaseHeader,
-    NewsPreviewCard,
-  },
   data() {
     return {
       page: 1,

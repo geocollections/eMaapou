@@ -9,10 +9,8 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableLocalityReference from '~/components/data-table/DataTableLocalityReference.vue'
 import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from '~/constants'
 export default {
-  components: { DataTableLocalityReference },
   props: {
     locality: {
       type: Number,

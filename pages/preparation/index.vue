@@ -30,19 +30,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
-import SearchFormPreparation from '~/components/search/forms/SearchFormPreparation.vue'
-import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
   name: 'PreparationSearch',
-  components: {
-    Search,
-    SearchFormPreparation,
-    DataTablePreparation,
-    BaseHeader,
-  },
   head() {
     return {
       title: this.$t('preparation.pageTitle'),

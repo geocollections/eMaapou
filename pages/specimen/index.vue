@@ -30,18 +30,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
-import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
-import Search from '~/templates/Search'
-import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {
-  components: {
-    Search,
-    SearchFormSpecimen,
-    DataTableSpecimen,
-    BaseHeader,
-  },
   head() {
     return {
       title: this.$t('specimen.pageTitle'),
