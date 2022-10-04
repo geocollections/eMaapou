@@ -17,13 +17,7 @@
           {{ route.icon }}
         </v-icon>
         <div
-          class="
-            text-h5 text-sm-h4
-            pl-2 pl-sm-3
-            pt-sm-2
-            font-weight-bold
-            white--text
-          "
+          class="text-h5 text-sm-h4 pl-2 pl-sm-3 pt-sm-2 font-weight-bold white--text"
         >
           {{
             Math.max(

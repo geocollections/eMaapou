@@ -89,13 +89,7 @@
           </v-carousel>
 
           <div
-            class="
-              d-flex
-              justify-center
-              flex-column
-              justify-sm-space-between
-              flex-sm-row
-            "
+            class="d-flex justify-center flex-column justify-sm-space-between flex-sm-row"
             style="max-width: 1000px; margin-left: auto; margin-right: auto"
           >
             <div class="text-center text-sm-left">

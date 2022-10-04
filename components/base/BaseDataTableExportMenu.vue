@@ -64,18 +64,14 @@ export default {
         const wb = this.createWorkbook(this.tableElement)
 
         writeFile(wb, 'export.csv', { bookType: 'csv' })
-      } catch (err) {
-        console.error(err)
-      }
+      } catch (err) {}
     },
     handleExportExcel() {
       try {
         const wb = this.createWorkbook(this.tableElement)
 
         writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
-      } catch (err) {
-        console.error(err)
-      }
+      } catch (err) {}
     },
     handleClipboard() {
       const body = document.body

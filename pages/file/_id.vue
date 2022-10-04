@@ -76,13 +76,7 @@
         </div>
 
         <div
-          class="
-            justify-center
-            d-flex
-            flex-column
-            justify-md-space-between
-            flex-md-row
-          "
+          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
           :class="{ 'mt-4': !isImage }"
         >
           <div class="text-center text-md-left">

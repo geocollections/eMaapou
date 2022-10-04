@@ -1,4 +1,4 @@
-import VuexPersistence from 'vuex-persist'
+import { VuexPersistence } from 'vuex-persist'
 
 const vuexOptions = {
   key: 'eMaapou',

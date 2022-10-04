@@ -20,19 +20,11 @@
               :style="{ 'max-width': '1000px' }"
             >
               <div
-                class="
-                  text-h4 text-sm-h3 text-md-h2
-                  white--text
-                  font-weight-bold
-                "
+                class="text-h4 text-sm-h3 text-md-h2 white--text font-weight-bold"
               >
                 {{ $t('title') }}:
                 <span
-                  class="
-                    text-h4 text-sm-h3 text-md-h2
-                    font-weight-light
-                    white--text
-                  "
+                  class="text-h4 text-sm-h3 text-md-h2 font-weight-light white--text"
                 >
                   {{ $t('subtitle') }}
                 </span>

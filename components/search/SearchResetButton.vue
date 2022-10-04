@@ -2,14 +2,7 @@
   <v-btn
     outlined
     color="grey"
-    class="
-      reset-search
-      mr-2
-      px-3
-      montserrat
-      rounded
-      text-body-1 text-capitalize
-    "
+    class="reset-search mr-2 px-3 montserrat rounded text-body-1 text-capitalize"
     :icon="$vuetify.breakpoint.mdOnly"
     @click="$emit('click')"
   >

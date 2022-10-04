@@ -37,13 +37,7 @@
                 <v-icon color="white" x-small>mdi-chevron-right</v-icon>
                 <nuxt-link
                   :to="localePath(link.routeName)"
-                  class="
-                    text-link text-body-2
-                    grey--text
-                    text--lighten-2
-                    d-block
-                    ml-1
-                  "
+                  class="text-link text-body-2 grey--text text--lighten-2 d-block ml-1"
                   style="font-weight: 500 !important"
                 >
                   {{ $t(link.text) }}
@@ -52,13 +46,7 @@
             </div>
             <div class="mx-4 mb-6">
               <div
-                class="
-                  section-title
-                  white--text
-                  font-weight-medium
-                  montserrat
-                  mb-4
-                "
+                class="section-title white--text font-weight-medium montserrat mb-4"
               >
                 {{ $t('landing.searchRoutes') }}
               </div>
@@ -72,13 +60,7 @@
                   <v-icon color="white" x-small>mdi-chevron-right</v-icon>
                   <nuxt-link
                     :to="localePath(link.routeName)"
-                    class="
-                      text-link text-body-2
-                      grey--text
-                      text--lighten-2
-                      d-block
-                      ml-1
-                    "
+                    class="text-link text-body-2 grey--text text--lighten-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.text) }}
@@ -88,13 +70,7 @@
             </div>
             <div class="ml-3 mb-6">
               <div
-                class="
-                  section-title
-                  white--text
-                  font-weight-medium
-                  montserrat
-                  mb-4
-                "
+                class="section-title white--text font-weight-medium montserrat mb-4"
               >
                 {{ $t('common.links') }}
               </div>
@@ -104,13 +80,7 @@
                   <v-icon color="white" x-small>mdi-chevron-right</v-icon>
                   <a
                     :href="link.url"
-                    class="
-                      text-link text-body-2
-                      grey--text
-                      text--lighten-2
-                      d-block
-                      ml-1
-                    "
+                    class="text-link text-body-2 grey--text text--lighten-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.name) }}
@@ -123,13 +93,7 @@
         <v-col>
           <div class="ml-3 mb-6">
             <div
-              class="
-                section-title
-                white--text
-                font-weight-medium
-                montserrat
-                mb-4
-              "
+              class="section-title white--text font-weight-medium montserrat mb-4"
             >
               {{ $t('common.partners') }}
             </div>
@@ -176,12 +140,7 @@
                     v-for="(item, index) in textLinks"
                     :key="index"
                     :href="item.href"
-                    class="
-                      text-link
-                      font-weight-bold
-                      grey--text
-                      text--lighten-2
-                    "
+                    class="text-link font-weight-bold grey--text text--lighten-2"
                     target="FooterLink"
                     >{{ item.text }}</a
                   >
