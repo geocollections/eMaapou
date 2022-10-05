@@ -10,7 +10,7 @@
         <renderer-switch
           class="mx-2"
           :renderer="renderer"
-          @update="renderer = $event"
+          @update="handleRenderSwitch"
         />
         <v-text-field
           v-model="scale"
@@ -261,6 +261,11 @@ export default {
         ['id'],
         ['asc']
       )
+    },
+    handleRenderSwitch(event) {
+      this.renderer = event
+      this.replace = true
+      this.option = this.$refs.flogChart.getOption()
     },
     handleMethodsUpdate(newSelectedParameters) {
       const addedParameters = newSelectedParameters.filter((newParam) => {
