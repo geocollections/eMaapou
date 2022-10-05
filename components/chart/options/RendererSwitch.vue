@@ -6,7 +6,7 @@
     @change="$emit('update', $event)"
   >
     <v-btn
-      width="75"
+      width="65"
       small
       class="text-none montserrat"
       :outlined="renderer !== 'canvas'"
@@ -15,7 +15,7 @@
       Canvas
     </v-btn>
     <v-btn
-      width="75"
+      width="65"
       small
       class="text-none montserrat"
       :outlined="renderer !== 'svg'"

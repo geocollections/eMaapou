@@ -7,11 +7,15 @@
           :initial-selection="selectedParameters"
           @input="handleMethodsUpdate"
         />
+
+        <v-divider class="ml-2" vertical />
         <renderer-switch
           class="mx-2"
           :renderer="renderer"
           @update="handleRenderSwitch"
         />
+
+        <v-divider vertical />
         <v-text-field
           v-model="scale"
           class="ml-2 shrink text-body-2"
@@ -32,6 +36,32 @@
             <v-icon dense @click="handleScaleReset"> mdi-refresh </v-icon>
           </template>
         </v-text-field>
+        <v-btn-toggle
+          class="ml-2"
+          dense
+          color="accent"
+          :value="ppi"
+          @change="handlePpiChange"
+        >
+          <v-btn
+            width="65"
+            small
+            class="text-none montserrat"
+            :outlined="ppi !== 96"
+            :value="96"
+          >
+            96 PPI
+          </v-btn>
+          <v-btn
+            width="65"
+            small
+            class="text-none montserrat"
+            :outlined="ppi !== 72"
+            :value="72"
+          >
+            72 PPI
+          </v-btn>
+        </v-btn-toggle>
       </v-toolbar>
       <v-divider />
       <div ref="containerFlogChart" class="overflow-x-auto">
@@ -62,7 +92,7 @@ import { graphic } from 'echarts'
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import differenceBy from 'lodash/differenceBy'
-import RendererSwitch from '~/components/chart/options/RendererSwitch'
+import RendererSwitch from '~/components/chart/options/RendererSwitch.vue'
 import OptionsMethodTreeView from '~/components/chart/options/OptionsMethodTreeView.vue'
 import range from '~/utils/range'
 export default {
@@ -126,7 +156,7 @@ export default {
     }
   },
   computed: {
-    ...mapFields('chart', ['renderer', 'connected']),
+    ...mapFields('chart', ['renderer', 'connected', 'ppi']),
     initOptions() {
       return {
         renderer: this.renderer,
@@ -218,8 +248,13 @@ export default {
       return totalWidth
     },
     scaleChartHeight() {
-      return this.mm2px(
-        (this.currentMaxDepth - this.currentMinDepth) * 1000 * (1 / this.scale)
+      return (
+        this.mm2px(
+          (this.currentMaxDepth - this.currentMinDepth) *
+            1000 *
+            (1 / this.scale)
+        ) *
+        (this.ppi / 96)
       )
     },
     handleClick(event) {
@@ -266,6 +301,18 @@ export default {
       this.renderer = event
       this.replace = true
       this.option = this.$refs.flogChart.getOption()
+    },
+    handlePpiChange(event) {
+      this.ppi = event
+      this.currentScale = parseFloat(this.scale).toFixed(2)
+      this.currentHeight = this.scaleChartHeight()
+      this.replace = false
+      this.option = {
+        grid: this.$refs.flogChart.getOption().grid.map((grid) => {
+          return { id: grid.id, height: this.currentHeight }
+        }),
+        title: this.chartTitle,
+      }
     },
     handleMethodsUpdate(newSelectedParameters) {
       const addedParameters = newSelectedParameters.filter((newParam) => {
@@ -458,6 +505,7 @@ export default {
         this.initialHeight
       ).toFixed(0)
       this.currentScale = this.scale
+      this.ppi = 96
       this.currentHeight = this.initialHeight
 
       this.replace = false

@@ -4,6 +4,7 @@ export const state = () => {
   return {
     renderer: 'canvas',
     connected: true,
+    ppi: 96,
   }
 }
 
