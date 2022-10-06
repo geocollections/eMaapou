@@ -8,60 +8,76 @@
           @input="handleMethodsUpdate"
         />
 
-        <v-divider class="ml-2" vertical />
-        <renderer-switch
-          class="mx-2"
-          :renderer="renderer"
-          @update="handleRenderSwitch"
-        />
-
-        <v-divider vertical />
-        <v-text-field
-          v-model="scale"
-          class="ml-2 shrink text-body-2"
-          type="number"
-          single-line
-          height="24"
-          dense
-          hide-details
-          prefix="1:"
-          @change="handleScaleChange"
+        <v-menu
+          transition="slide-y-transition"
+          offset-y
+          content-class="white"
+          :close-on-content-click="false"
         >
-          <template #prepend>
-            <div class="text-body-2 text--secondary">
-              {{ $t('flogChart.heightScale') }}
-            </div>
+          <template #activator="{ on, attrs }">
+            <v-btn class="ml-3" icon small v-bind="attrs" v-on="on">
+              <v-icon> mdi-cog </v-icon>
+            </v-btn>
           </template>
-          <template #append class="align-self-end">
-            <v-icon dense @click="handleScaleReset"> mdi-refresh </v-icon>
-          </template>
-        </v-text-field>
-        <v-btn-toggle
-          class="ml-2"
-          dense
-          color="accent"
-          :value="ppi"
-          @change="handlePpiChange"
-        >
-          <v-btn
-            width="65"
-            small
-            class="text-none montserrat"
-            :outlined="ppi !== 96"
-            :value="96"
-          >
-            96 PPI
-          </v-btn>
-          <v-btn
-            width="65"
-            small
-            class="text-none montserrat"
-            :outlined="ppi !== 72"
-            :value="72"
-          >
-            72 PPI
-          </v-btn>
-        </v-btn-toggle>
+          <v-card>
+            <v-card-title class="montserrat pb-2"> Settings </v-card-title>
+            <v-card-text>
+              <renderer-switch
+                :renderer="renderer"
+                @update="handleRenderSwitch"
+              />
+              <v-divider class="my-2" />
+              <v-text-field
+                v-model="scale"
+                type="number"
+                :label="$t('flogChart.heightScale')"
+                prefix="1:"
+                hide-details
+                @change="handleScaleChange"
+              >
+                <template #append>
+                  <v-icon @click="handleScaleReset"> mdi-refresh </v-icon>
+                </template>
+                <template #append-outer>
+                  <v-btn-toggle
+                    dense
+                    color="accent"
+                    :value="ppi"
+                    @change="handlePpiChange"
+                  >
+                    <v-btn
+                      width="65"
+                      small
+                      class="text-none montserrat"
+                      :outlined="ppi !== 96"
+                      :value="96"
+                    >
+                      96 PPI
+                    </v-btn>
+                    <v-btn
+                      width="65"
+                      small
+                      class="text-none montserrat"
+                      :outlined="ppi !== 72"
+                      :value="72"
+                    >
+                      72 PPI
+                    </v-btn>
+                  </v-btn-toggle>
+                </template>
+              </v-text-field>
+              <v-text-field
+                :value="parameterChartWidth"
+                type="number"
+                class="d-inline-flex"
+                hide-details
+                suffix="px"
+                :label="$t('flogChart.parameterChartWidth')"
+                @change="handleParameterChartWidthChange"
+              />
+            </v-card-text>
+          </v-card>
+        </v-menu>
       </v-toolbar>
       <v-divider />
       <div ref="containerFlogChart" class="overflow-x-auto">
@@ -136,7 +152,7 @@ export default {
       currentMinDepth: this.minDepth,
       currentMaxDepth: this.maxDepth,
       selectedParameters: [],
-      parameterChartWidth: 200,
+      parameterChartWidth: 150,
       parameterChartPadding: 50,
       parameterModulePadding: 40,
       sampleChartWidth: 100,
@@ -528,6 +544,33 @@ export default {
         title: this.chartTitle,
       }
     },
+    handleParameterChartWidthChange(event) {
+      this.parameterChartWidth = parseInt(event)
+
+      this.totalWidth = this.calculateTotalWidth()
+      this.replace = false
+      this.option = {
+        grid: this.$refs.flogChart.getOption().grid.map((grid, i) => {
+          if (!grid.id.startsWith('parameter')) {
+            return { id: grid.id }
+          }
+          return {
+            id: grid.id,
+            width: this.parameterChartWidth,
+            left: this.calcParameterChartLeft(i - 1),
+          }
+        }),
+        title: this.chartTitle,
+      }
+    },
+    calcParameterChartLeft(position) {
+      return (
+        this.sampleChartWidth +
+        this.sampleChartPaddingLeft +
+        position * (this.parameterChartWidth + this.parameterChartPadding) +
+        this.parameterModulePadding
+      )
+    },
     createParameterChartComponents(
       param,
       index,
@@ -541,11 +584,7 @@ export default {
           id: `parameter-grid-${param.name}`,
           show: true,
           containLabel: false,
-          left:
-            this.sampleChartWidth +
-            this.sampleChartPaddingLeft +
-            position * (this.parameterChartWidth + this.parameterChartPadding) +
-            this.parameterModulePadding,
+          left: this.calcParameterChartLeft(position),
           width: this.parameterChartWidth,
           top: 100,
           height: this.currentHeight,
