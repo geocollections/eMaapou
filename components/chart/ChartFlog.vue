@@ -351,6 +351,7 @@ export default {
         const newDataZoomYAxisIndices = [
           ...this.$refs.flogChart.getOption().dataZoom[0].yAxisIndex,
         ]
+        let parameterGridIndex = 0
         const newOptions = addedParameters.reduce(
           (prev, addedParameter, i) => {
             // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
@@ -367,6 +368,7 @@ export default {
                 { returnComponents: ['series'] }
               )
               return {
+                ...prev,
                 series: [
                   ...prev.series,
                   {
@@ -382,15 +384,16 @@ export default {
               this.nextGridIndex =
                 nullGridIndex > -1
                   ? nullGridIndex
-                  : oldGroupedParameters.length + i + 1
+                  : oldGroupedParameters.length + parameterGridIndex + 1
               newDataZoomYAxisIndices.push(this.nextGridIndex)
               const newChartComponents = this.createParameterChartComponents(
                 groupedParameters.find((param) => {
                   return param.value === addedParameter.value
                 }),
                 this.nextGridIndex,
-                oldGroupedParameters.length + i
+                oldGroupedParameters.length + parameterGridIndex
               )
+              parameterGridIndex++
               return {
                 grid: [...prev.grid, newChartComponents.grid],
                 xAxis: [...prev.xAxis, newChartComponents.xAxis],
@@ -401,7 +404,6 @@ export default {
           },
           { grid: [], xAxis: [], yAxis: [], series: [] }
         )
-
         this.replace = false
         this.option = {
           ...newOptions,
@@ -429,9 +431,7 @@ export default {
             if (grid == null) {
               return prev
             }
-
-            const name = grid.id.split('-')[2]
-            if (name === undefined) {
+            if (!grid.id.startsWith('parameter')) {
               return {
                 ...prev,
                 grid: [
@@ -452,21 +452,24 @@ export default {
                 ],
               }
             }
-
+            const parameterValueStr = grid.id.split('-')[2]
+            const parameterValue = parseInt(parameterValueStr)
             const xAxis = currentOption.xAxis.find((xAxis) =>
-              xAxis.id.includes(name)
+              xAxis?.id.endsWith(parameterValueStr)
             )
             const yAxis = currentOption.yAxis.find((yAxis) =>
-              yAxis.id.includes(name)
+              yAxis?.id.endsWith(parameterValueStr)
             )
             const series = currentOption.series.find((series) =>
-              series.id.includes(name)
+              series?.id.endsWith(parameterValueStr)
             )
 
-            // if one of the parameter methods removed but some method still selected,
+            // if one of the parameter methods removed but some method, for that parameter, still selected,
             // update series data and grid position
-            if (modified.some((m) => m.name === name)) {
-              const param = groupedParameters.find((m) => m.name === name)
+            if (modified.some((m) => m.value === parameterValue)) {
+              const param = groupedParameters.find(
+                (m) => m.value === parameterValue
+              )
               const newChartComponents = this.createParameterChartComponents(
                 param,
                 -1,
@@ -489,8 +492,10 @@ export default {
               }
             }
             // if chart is not modified or removed, leave it as is, only update grid position.
-            if (!removed.some((m) => m.name === name)) {
-              const param = groupedParameters.find((m) => m.name === name)
+            if (!removed.some((m) => m.value === parameterValue)) {
+              const param = groupedParameters.find(
+                (m) => m.value === parameterValue
+              )
               const newChartComponents = this.createParameterChartComponents(
                 param,
                 -1,
@@ -581,7 +586,7 @@ export default {
 
       if (returnComponents.includes('grid')) {
         result.grid = {
-          id: `parameter-grid-${param.name}`,
+          id: `parameter-grid-${param.value}`,
           show: true,
           containLabel: false,
           left: this.calcParameterChartLeft(position),
@@ -597,7 +602,7 @@ export default {
       }
       if (returnComponents.includes('xAxis')) {
         result.xAxis = {
-          id: `parameter-x-axis-${param.name}`,
+          id: `parameter-x-axis-${param.value}`,
           show: true,
           position: 'top',
           type: 'value',
@@ -620,7 +625,7 @@ export default {
       }
       if (returnComponents.includes('yAxis')) {
         result.yAxis = {
-          id: `parameter-y-axis-${param.name}`,
+          id: `parameter-y-axis-${param.value}`,
           type: 'value',
           boundaryGap: false,
           nameGap: 10,
@@ -648,7 +653,7 @@ export default {
       }
       if (returnComponents.includes('series')) {
         result.series = {
-          id: `parameter-series-${param.name}`,
+          id: `parameter-series-${param.value}`,
           name: param.name,
           type: 'line',
           smooth: false,
