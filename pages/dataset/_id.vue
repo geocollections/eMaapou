@@ -84,7 +84,7 @@
             :href="
               localePath({
                 name: 'locality-id',
-                params: { id: dataset.locality },
+                params: { id: dataset.locality.id },
               })
             "
           />
@@ -224,7 +224,7 @@ export default {
 
       const doi = doiResponse.items?.[0]?.identifier
       const reference = {
-        id: doiResponse.items?.[0]?.reference,
+        id: doiResponse.items?.[0]?.reference.id,
         reference: doiResponse.items?.[0]?.reference?.reference,
       }
 

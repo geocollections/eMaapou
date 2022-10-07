@@ -285,13 +285,13 @@ export const TABS_DATASET = {
     },
   },
   allIds: [
-    'dataset_analysis',
     'sample_results',
+    'graphs',
+    'dataset_analysis',
     'dataset_reference',
     'attachment_link',
     'dataset_author',
     'dataset_geolocation',
-    'graphs',
   ],
 }
 
