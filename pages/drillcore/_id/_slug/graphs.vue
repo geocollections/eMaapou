@@ -6,7 +6,7 @@
       :samples="sampleResults"
       :min-depth="minDepth"
       :max-depth="maxDepth"
-      :methods="methods"
+      :parameters="parameters"
       :title="
         $translate({
           et: drillcoreObject.drillcore,
@@ -63,7 +63,7 @@ export default {
       sampleResults: [],
       minDepth: 0,
       maxDepth: 0,
-      methods: [],
+      parameters: [],
     }
   },
   async fetch() {
@@ -142,12 +142,14 @@ export default {
           sampleResponse.stats.stats_fields.depth_interval.min,
         ]
       )
-      const methods = flogParameters(analysisResultsResponse.facet.facet_pivot)
+      const parameters = flogParameters(
+        analysisResultsResponse.facet.facet_pivot
+      )
       this.analysisResults = analysisResults
       this.sampleResults = sampleResults
       this.maxDepth = maxDepth
       this.minDepth = minDepth
-      this.methods = methods
+      this.parameters = parameters
     }
   },
   computed: {

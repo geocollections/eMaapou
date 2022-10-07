@@ -7,7 +7,7 @@
       :taxa="taxaResults"
       :min-depth="minDepth"
       :max-depth="maxDepth"
-      :methods="methods"
+      :parameters="parameters"
       :title="
         $translate({
           et: localityObject.locality,
@@ -59,7 +59,7 @@ export default {
       taxaResults: [],
       minDepth: 0,
       maxDepth: 0,
-      methods: [],
+      parameters: [],
     }
   },
   async fetch() {
@@ -155,13 +155,13 @@ export default {
         taxaResponse.stats.stats_fields.depth.min,
       ]
     )
-    const methods = flogParameters(analysisResultsResponse.facet.facet_pivot)
+    const parameters = flogParameters(analysisResultsResponse.facet.facet_pivot)
     this.analysisResults = analysisResults
     this.sampleResults = sampleResults
     this.taxaResults = taxaResults
     this.maxDepth = maxDepth
     this.minDepth = minDepth
-    this.methods = methods
+    this.parameters = parameters
   },
   computed: {
     chartTitle() {

@@ -5,7 +5,7 @@
     :samples="sampleResults"
     :min-depth="minDepth"
     :max-depth="maxDepth"
-    :methods="methods"
+    :parameters="parameters"
     :title="$translate({ et: dataset.name, en: dataset.name_en })"
   />
 </template>
@@ -78,14 +78,14 @@ export default {
         sampleResponse.stats.stats_fields.depth_interval.min,
       ]
     )
-    const methods = flogParameters(analysisResultsResponse.facet.facet_pivot)
+    const parameters = flogParameters(analysisResultsResponse.facet.facet_pivot)
 
     return {
       analysisResults,
       sampleResults,
       minDepth,
       maxDepth,
-      methods,
+      parameters,
     }
   },
 }

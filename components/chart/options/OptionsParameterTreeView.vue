@@ -39,7 +39,7 @@
           selectable
           :search="search"
           return-object
-          :items="methods"
+          :items="parameters"
           :value="initialSelection"
           @input="handleInput"
         >
@@ -57,9 +57,9 @@
 
 <script>
 export default {
-  name: 'OptionsMethodtreeView',
+  name: 'OptionsParameterTreeView',
   props: {
-    methods: {
+    parameters: {
       type: Array,
       required: true,
     },

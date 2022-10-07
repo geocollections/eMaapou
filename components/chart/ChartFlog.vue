@@ -2,12 +2,11 @@
   <client-only>
     <div class="">
       <v-toolbar flat dense>
-        <options-method-tree-view
-          :methods="methods"
+        <options-parameter-tree-view
+          :parameters="parameters"
           :initial-selection="selectedParameters"
-          @input="handleMethodsUpdate"
+          @input="handleParametersUpdate"
         />
-
         <v-menu
           transition="slide-y-transition"
           offset-y
@@ -109,13 +108,13 @@ import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import differenceBy from 'lodash/differenceBy'
 import RendererSwitch from '~/components/chart/options/RendererSwitch.vue'
-import OptionsMethodTreeView from '~/components/chart/options/OptionsMethodTreeView.vue'
+import OptionsParameterTreeView from '~/components/chart/options/OptionsParameterTreeView.vue'
 import range from '~/utils/range'
 export default {
   name: 'ChartFlogNew',
   components: {
     RendererSwitch,
-    OptionsMethodTreeView,
+    OptionsParameterTreeView,
   },
   props: {
     title: {
@@ -142,7 +141,7 @@ export default {
       type: Number,
       required: true,
     },
-    methods: {
+    parameters: {
       type: Array,
       required: true,
     },
@@ -223,14 +222,14 @@ export default {
   },
   created() {
     // Set initial selected parameters
-    if (this.methods.length > 0) {
-      this.selectedParameters = this.methods[0].children.slice(
-        0,
-        this.methods[0].children.length > 3
-          ? 3
-          : this.methods[0].children.length
-      )
-    }
+    // if (this.parameters.length > 0) {
+    //   this.selectedParameters = this.parameters[0].children.slice(
+    //     0,
+    //     this.parameters[0].children.length > 3
+    //       ? 3
+    //       : this.parameters[0].children.length
+    //   )
+    // }
     this.totalWidth = this.calculateTotalWidth()
     this.option = this.createOption()
   },
@@ -245,23 +244,24 @@ export default {
       return ((maxDepth - minDepth) * 1000) / this.px2mm(chartHeight)
     },
     calculateTotalWidth() {
-      const parameterModuleWidth =
-        this.selectedParametersGrouped.length *
-          (this.parameterChartWidth + this.parameterChartPadding) +
-        this.parameterModulePadding
+      return 5000
+      // const parameterModuleWidth =
+      //   this.selectedParametersGrouped.length *
+      //     (this.parameterChartWidth + this.parameterChartPadding) +
+      //   this.parameterModulePadding
 
-      const totalWidth =
-        this.sampleChartWidth +
-        this.sampleChartPaddingLeft +
-        parameterModuleWidth
+      // const totalWidth =
+      //   this.sampleChartWidth +
+      //   this.sampleChartPaddingLeft +
+      //   parameterModuleWidth
 
-      if (this.$refs.containerFlogChart) {
-        return this.$refs.containerFlogChart.clientWidth > totalWidth
-          ? this.$refs.containerFlogChart.clientWidth
-          : totalWidth
-      }
+      // if (this.$refs.containerFlogChart) {
+      //   return this.$refs.containerFlogChart.clientWidth > totalWidth
+      //     ? this.$refs.containerFlogChart.clientWidth
+      //     : totalWidth
+      // }
 
-      return totalWidth
+      // return totalWidth
     },
     scaleChartHeight() {
       return (
@@ -330,7 +330,7 @@ export default {
         title: this.chartTitle,
       }
     },
-    handleMethodsUpdate(newSelectedParameters) {
+    handleParametersUpdate(newSelectedParameters) {
       const addedParameters = newSelectedParameters.filter((newParam) => {
         return !this.selectedParameters.some(
           (param) => param.id === newParam.id
@@ -352,6 +352,9 @@ export default {
           ...this.$refs.flogChart.getOption().dataZoom[0].yAxisIndex,
         ]
         let parameterGridIndex = 0
+        let fromIndex = 0
+        let parameterGridPosition = 0
+        console.log(newSelectedParameters)
         const newOptions = addedParameters.reduce(
           (prev, addedParameter, i) => {
             // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
@@ -380,26 +383,75 @@ export default {
             } else {
               const nullGridIndex = this.$refs.flogChart
                 .getOption()
-                .grid.indexOf(null)
-              this.nextGridIndex =
-                nullGridIndex > -1
-                  ? nullGridIndex
-                  : oldGroupedParameters.length + parameterGridIndex + 1
-              newDataZoomYAxisIndices.push(this.nextGridIndex)
-              const newChartComponents = this.createParameterChartComponents(
-                groupedParameters.find((param) => {
-                  return param.value === addedParameter.value
-                }),
-                this.nextGridIndex,
-                oldGroupedParameters.length + parameterGridIndex
-              )
-              parameterGridIndex++
-              return {
-                grid: [...prev.grid, newChartComponents.grid],
-                xAxis: [...prev.xAxis, newChartComponents.xAxis],
-                yAxis: [...prev.yAxis, newChartComponents.yAxis],
-                series: [...prev.series, newChartComponents.series],
+                .grid.indexOf(null, fromIndex)
+
+              // if empty spot in echarts grid list, use the empty spot index as `gridIndex`, as echarts wants these empty spaces to be filled
+              if (nullGridIndex > -1) {
+                this.nextGridIndex = nullGridIndex
+                fromIndex = nullGridIndex + 1
+                const newChartComponents = this.createParameterChartComponents(
+                  groupedParameters.find((param) => {
+                    return param.value === addedParameter.value
+                  }),
+                  this.nextGridIndex,
+                  oldGroupedParameters.length + parameterGridPosition
+                )
+
+                parameterGridPosition += 1
+                return {
+                  grid: [...prev.grid, newChartComponents.grid],
+                  xAxis: [...prev.xAxis, newChartComponents.xAxis],
+                  yAxis: [...prev.yAxis, newChartComponents.yAxis],
+                  series: [...prev.series, newChartComponents.series],
+                }
+              } else {
+                this.nextGridIndex =
+                  this.$refs.flogChart.getOption().grid.length +
+                  parameterGridIndex
+                const newChartComponents = this.createParameterChartComponents(
+                  groupedParameters.find((param) => {
+                    return param.value === addedParameter.value
+                  }),
+                  this.nextGridIndex,
+                  oldGroupedParameters.length + parameterGridPosition
+                )
+                parameterGridIndex += 1
+                parameterGridPosition += 1
+                return {
+                  grid: [...prev.grid, newChartComponents.grid],
+                  xAxis: [...prev.xAxis, newChartComponents.xAxis],
+                  yAxis: [...prev.yAxis, newChartComponents.yAxis],
+                  series: [...prev.series, newChartComponents.series],
+                }
               }
+
+              // this.nextGridIndex =
+              //   nullGridIndex > -1
+              //     ? nullGridIndex
+              //     : this.$refs.flogChart.getOption().grid.length +
+              //       parameterGridIndex
+              // console.log(`${fromIndex} ${nullGridIndex} ${this.nextGridIndex}`)
+
+              // fromIndex = nullGridIndex > -1 ? nullGridIndex + 1 : fromIndex
+              // newDataZoomYAxisIndices.push(this.nextGridIndex)
+
+              // const newChartComponents = this.createParameterChartComponents(
+              //   groupedParameters.find((param) => {
+              //     return param.value === addedParameter.value
+              //   }),
+              //   this.nextGridIndex,
+              //   oldGroupedParameters.length + parameterGridIndex
+              // )
+              // if (nullGridIndex === -1) {
+              //   parameterGridIndex += 1
+              // }
+              // console.log(newChartComponents)
+              // return {
+              //   grid: [...prev.grid, newChartComponents.grid],
+              //   xAxis: [...prev.xAxis, newChartComponents.xAxis],
+              //   yAxis: [...prev.yAxis, newChartComponents.yAxis],
+              //   series: [...prev.series, newChartComponents.series],
+              // }
             }
           },
           { grid: [], xAxis: [], yAxis: [], series: [] }
@@ -431,25 +483,16 @@ export default {
             if (grid == null) {
               return prev
             }
+
             if (!grid.id.startsWith('parameter')) {
+              // !!! using `i` is not correct as the grids have been reordered
+              // this should not cause any problems right now but, could when other chart tpyes are added (taxon, stratigraphy) or when samples chart can be disabled
               return {
                 ...prev,
-                grid: [
-                  ...prev.grid,
-                  { id: this.$refs.flogChart.getOption().grid[i].id },
-                ],
-                xAxis: [
-                  ...prev.xAxis,
-                  { id: this.$refs.flogChart.getOption().xAxis[i].id },
-                ],
-                yAxis: [
-                  ...prev.yAxis,
-                  { id: this.$refs.flogChart.getOption().yAxis[i].id },
-                ],
-                series: [
-                  ...prev.series,
-                  { id: this.$refs.flogChart.getOption().series[i].id },
-                ],
+                grid: [...prev.grid, { id: grid.id }],
+                xAxis: [...prev.xAxis, { id: currentOption.xAxis[i].id }],
+                yAxis: [...prev.yAxis, { id: currentOption.yAxis[i].id }],
+                series: [...prev.series, { id: currentOption.series[i].id }],
               }
             }
             const parameterValueStr = grid.id.split('-')[2]
@@ -479,7 +522,14 @@ export default {
               position += 1
 
               return {
-                grid: [...prev.grid, newChartComponents.grid],
+                ...prev,
+                grid: [
+                  ...prev.grid,
+                  {
+                    id: grid.id,
+                    left: newChartComponents.grid.left,
+                  },
+                ],
                 xAxis: [...prev.xAxis, { id: xAxis.id }],
                 yAxis: [...prev.yAxis, { id: yAxis.id }],
                 series: [
@@ -504,7 +554,14 @@ export default {
               )
               position += 1
               return {
-                grid: [...prev.grid, newChartComponents.grid],
+                ...prev,
+                grid: [
+                  ...prev.grid,
+                  {
+                    id: grid.id,
+                    left: newChartComponents.grid.left,
+                  },
+                ],
                 xAxis: [...prev.xAxis, { id: xAxis.id }],
                 yAxis: [...prev.yAxis, { id: yAxis.id }],
                 series: [...prev.series, { id: series.id }],
@@ -516,6 +573,7 @@ export default {
         )
 
         this.replace = true
+        console.log(newOptions)
         this.option = newOptions
       }
     },
