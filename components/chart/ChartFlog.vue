@@ -19,7 +19,10 @@
             </v-btn>
           </template>
           <v-card>
-            <v-card-title class="montserrat pb-2"> Settings </v-card-title>
+            <v-card-title
+              class="montserrat pb-2"
+              v-text="$t('flogChart.settings')"
+            />
             <v-card-text>
               <renderer-switch
                 :renderer="renderer"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-caption">Renderer</div>
+    <div class="text-caption" v-text="$t('common.render')" />
     <v-btn-toggle
       dense
       color="accent"

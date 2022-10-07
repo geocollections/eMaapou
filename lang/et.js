@@ -110,6 +110,7 @@ export default {
     services: 'E-Teenused',
     accept: 'Nõustun',
     depth: 'Sügavus',
+    render: 'Väljund',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -1010,5 +1011,6 @@ export default {
     titleSubtext: '1:{scale} (alates {minDepth} kuni {maxDepth} m)',
     heightScale: 'Sügavuse skaala',
     parameterChartWidth: 'Parameeter diagrammi laius',
+    settings: 'Seaded',
   },
 }

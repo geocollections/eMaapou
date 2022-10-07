@@ -109,6 +109,7 @@ export default {
     services: 'E-Services',
     accept: 'Accept',
     depth: 'Depth',
+    render: 'Render',
   },
   link: {
     github: 'GitHub',
@@ -1008,5 +1009,6 @@ export default {
     titleSubtext: '1:{scale} (from {minDepth} to {maxDepth} m)',
     heightScale: 'Depth scale',
     parameterChartWidth: 'Parameter chart width',
+    settings: 'Settings',
   },
 }
