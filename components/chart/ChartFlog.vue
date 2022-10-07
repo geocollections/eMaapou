@@ -697,7 +697,10 @@ export default {
         result.series = param.methods.map((method) => {
           return {
             id: `parameter-series-${method}-${param.value}`,
-            name: `(${this.methods[method].name}) ${param.name}`,
+            name: `(${this.$translate({
+              et: this.methods[method].name,
+              en: this.methods[method].name_en,
+            })}) ${param.name}`,
             type: 'line',
             smooth: false,
             xAxisIndex: index,
