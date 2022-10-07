@@ -7,6 +7,7 @@ export default function flogParameters(analysisResultsPivot) {
       id += 1
       return {
         id,
+        value: parseInt(method.value),
         name: method.pivot[0].value,
         name_en: method.pivot[0].pivot[0].value,
         count: method.count,

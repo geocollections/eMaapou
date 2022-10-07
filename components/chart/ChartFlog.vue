@@ -106,13 +106,13 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-import { graphic } from 'echarts'
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import differenceBy from 'lodash/differenceBy'
 import RendererSwitch from '~/components/chart/options/RendererSwitch.vue'
 import OptionsParameterTreeView from '~/components/chart/options/OptionsParameterTreeView.vue'
 import range from '~/utils/range'
+import clipRectByRect from '~/utils/clipRectByRect'
 export default {
   name: 'ChartFlogNew',
   components: {
@@ -221,6 +221,11 @@ export default {
     },
     selectedParametersGrouped() {
       return this.groupParameters(this.selectedParameters)
+    },
+    methods() {
+      return this.parameters.reduce((prev, method) => {
+        return { ...prev, [method.value]: method }
+      }, {})
     },
   },
   created() {
@@ -363,11 +368,16 @@ export default {
               groupBy(newSelectedParameters, 'value')[addedParameter.value]
                 .length > 1
             ) {
+              const series = this.$refs.flogChart
+                .getOption()
+                .series.find((series) =>
+                  series?.id.endsWith(`-${addedParameter.value}`)
+                )
               const newChartComponents = this.createParameterChartComponents(
                 groupedParameters.find((param) => {
                   return param.value === addedParameter.value
                 }),
-                -1,
+                series.xAxisIndex,
                 -1,
                 { returnComponents: ['series'] }
               )
@@ -375,10 +385,11 @@ export default {
                 ...prev,
                 series: [
                   ...prev.series,
-                  {
-                    id: newChartComponents.series.id,
-                    data: newChartComponents.series.data,
-                  },
+                  ...newChartComponents.series,
+                  // {
+                  //   id: newChartComponents.series.id,
+                  //   data: newChartComponents.series.data,
+                  // },
                 ],
               }
             } else {
@@ -403,7 +414,7 @@ export default {
                   grid: [...prev.grid, newChartComponents.grid],
                   xAxis: [...prev.xAxis, newChartComponents.xAxis],
                   yAxis: [...prev.yAxis, newChartComponents.yAxis],
-                  series: [...prev.series, newChartComponents.series],
+                  series: [...prev.series, ...newChartComponents.series],
                 }
               } else {
                 this.nextGridIndex =
@@ -422,7 +433,7 @@ export default {
                   grid: [...prev.grid, newChartComponents.grid],
                   xAxis: [...prev.xAxis, newChartComponents.xAxis],
                   yAxis: [...prev.yAxis, newChartComponents.yAxis],
-                  series: [...prev.series, newChartComponents.series],
+                  series: [...prev.series, ...newChartComponents.series],
                 }
               }
             }
@@ -476,7 +487,7 @@ export default {
             const yAxis = currentOption.yAxis.find((yAxis) =>
               yAxis?.id.endsWith(`-${parameterValueStr}`)
             )
-            const series = currentOption.series.find((series) =>
+            const series = currentOption.series.filter((series) =>
               series?.id.endsWith(`-${parameterValueStr}`)
             )
 
@@ -488,7 +499,7 @@ export default {
               )
               const newChartComponents = this.createParameterChartComponents(
                 param,
-                -1,
+                xAxis.gridIndex,
                 position,
                 { returnComponents: ['series', 'grid'] }
               )
@@ -507,10 +518,11 @@ export default {
                 yAxis: [...prev.yAxis, { id: yAxis.id }],
                 series: [
                   ...prev.series,
-                  {
-                    id: series.id,
-                    data: newChartComponents.series.data,
-                  },
+                  ...newChartComponents.series,
+                  // {
+                  //   id: series.id,
+                  //   data: newChartComponents.series.data,
+                  // },
                 ],
               }
             }
@@ -537,7 +549,7 @@ export default {
                 ],
                 xAxis: [...prev.xAxis, { id: xAxis.id }],
                 yAxis: [...prev.yAxis, { id: yAxis.id }],
-                series: [...prev.series, { id: series.id }],
+                series: [...prev.series, ...series],
               }
             }
             return prev
@@ -682,22 +694,23 @@ export default {
         }
       }
       if (returnComponents.includes('series')) {
-        result.series = {
-          id: `parameter-series-${param.value}`,
-          name: param.name,
-          type: 'line',
-          smooth: false,
-          xAxisIndex: index,
-          yAxisIndex: index,
-          itemStyle: {
-            color: this.$vuetify.theme.currentTheme.accent,
-          },
-          lineStyle: {
-            width: 1,
-          },
-          tooltip: {
-            formatter(params) {
-              return `
+        result.series = param.methods.map((method) => {
+          return {
+            id: `parameter-series-${method}-${param.value}`,
+            name: `(${this.methods[method].name}) ${param.name}`,
+            type: 'line',
+            smooth: false,
+            xAxisIndex: index,
+            yAxisIndex: index,
+            // itemStyle: {
+            //   color: this.$vuetify.theme.currentTheme.accent,
+            // },
+            lineStyle: {
+              width: 1,
+            },
+            tooltip: {
+              formatter(params) {
+                return `
                 <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
                   params.color
                 }"></span>
@@ -712,31 +725,31 @@ export default {
                   }
                 </span>
                 `
+              },
             },
-          },
-          data: this.analyses
-            .filter(
-              (result) =>
-                result.parameter === param.name &&
-                param.methods.includes(result.method_id)
-            )
-            .map((t) => {
-              const avgDepth = t.depth_interval
-                ? (t.depth + t.depth_interval) / 2
-                : t.depth
-              return [
-                t.value,
-                -avgDepth,
-                -t.depth,
-                -t.depth_interval,
-                t.analysis_id,
-              ]
-            })
-            .sort((a, b) => a[1] - b[1]),
-          emphasis: {
-            focus: 'series',
-          },
-        }
+            data: this.analyses
+              .filter(
+                (result) =>
+                  result.parameter === param.name && method === result.method_id
+              )
+              .map((t) => {
+                const avgDepth = t.depth_interval
+                  ? (t.depth + t.depth_interval) / 2
+                  : t.depth
+                return [
+                  t.value,
+                  -avgDepth,
+                  -t.depth,
+                  -t.depth_interval,
+                  t.analysis_id,
+                ]
+              })
+              .sort((a, b) => a[1] - b[1]),
+            emphasis: {
+              focus: 'series',
+            },
+          }
+        })
       }
       return result
     },
@@ -754,7 +767,7 @@ export default {
             grid: [...prev.grid, parameterComponents.grid],
             xAxis: [...prev.xAxis, parameterComponents.xAxis],
             yAxis: [...prev.yAxis, parameterComponents.yAxis],
-            series: [...prev.series, parameterComponents.series],
+            series: [...prev.series, ...parameterComponents.series],
           }
         },
         { grid: [], xAxis: [], yAxis: [], series: [] }
@@ -765,6 +778,10 @@ export default {
         title: this.chartTitle,
         tooltip: {
           trigger: 'item',
+        },
+        legend: {
+          bottom: '20',
+          left: 'center',
         },
         dataZoom: [
           {
@@ -929,7 +946,7 @@ export default {
                 api.value(2) || end[1] - start[1] < 10 ? end[1] - start[1] : 10
               const x = start[0] - categoryWidth * 0.5
               const y = api.value(2) ? start[1] : start[1] - height / 2
-              const rectShape = graphic.clipRectByRect(
+              const rectShape = clipRectByRect(
                 {
                   x,
                   y,
