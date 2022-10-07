@@ -279,7 +279,7 @@ export default {
             return await app.$hydrateTab(tab, {
               countParams: {
                 solr: {
-                  default: { fq: `dataset_id:${dataset.id}` },
+                  default: { fq: `dataset_ids:${dataset.id}` },
                 },
               },
             })

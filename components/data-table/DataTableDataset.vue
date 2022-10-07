@@ -21,11 +21,11 @@
 
     <template #item.name="{ item }">
       <nuxt-link
-        v-if="$translate({ et: item.name, en: item.name_en })"
+        v-if="item.title"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
       >
-        {{ $translate({ et: item.name, en: item.name_en }) }}
+        {{ item.title }}
       </nuxt-link>
     </template>
 

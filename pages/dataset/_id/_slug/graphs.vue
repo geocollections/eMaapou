@@ -27,9 +27,9 @@ export default {
     const analysisResultsPromise = $services.sarvSolr.getResourceList(
       'analysis_results',
       {
-        isValid: isNil('dataset_id'),
+        isValid: isNil('dataset_ids'),
         defaultParams: {
-          fq: `dataset_id:${params.id}`,
+          fq: `dataset_ids:${params.id}`,
           start: 0,
           rows: 50000,
           fl: 'id,analysis_id,depth,depth_interval,parameter,method_id,value',
@@ -45,9 +45,9 @@ export default {
       }
     )
     const samplesPromise = $services.sarvSolr.getResourceList('sample_data', {
-      isValid: isNil('dataset_id'),
+      isValid: isNil('dataset_ids'),
       defaultParams: {
-        fq: `dataset_id:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
+        fq: `dataset_ids:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
         start: 0,
         rows: 50000,
         fl: 'id,sample_id,sample_number,depth,depth_interval,',

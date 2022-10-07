@@ -30,7 +30,7 @@ export default {
           ...tableState,
           isValid: isNil(this.$route.params.id),
           defaultParams: {
-            fq: `dataset_id:${this.$route.params.id}`,
+            fq: `dataset_ids:${this.$route.params.id}`,
           },
           fields: this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
         }
