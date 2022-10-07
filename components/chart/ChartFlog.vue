@@ -222,14 +222,14 @@ export default {
   },
   created() {
     // Set initial selected parameters
-    // if (this.parameters.length > 0) {
-    //   this.selectedParameters = this.parameters[0].children.slice(
-    //     0,
-    //     this.parameters[0].children.length > 3
-    //       ? 3
-    //       : this.parameters[0].children.length
-    //   )
-    // }
+    if (this.parameters.length > 0) {
+      this.selectedParameters = this.parameters[0].children.slice(
+        0,
+        this.parameters[0].children.length > 3
+          ? 3
+          : this.parameters[0].children.length
+      )
+    }
     this.totalWidth = this.calculateTotalWidth()
     this.option = this.createOption()
   },
@@ -244,24 +244,23 @@ export default {
       return ((maxDepth - minDepth) * 1000) / this.px2mm(chartHeight)
     },
     calculateTotalWidth() {
-      return 5000
-      // const parameterModuleWidth =
-      //   this.selectedParametersGrouped.length *
-      //     (this.parameterChartWidth + this.parameterChartPadding) +
-      //   this.parameterModulePadding
+      const parameterModuleWidth =
+        this.selectedParametersGrouped.length *
+          (this.parameterChartWidth + this.parameterChartPadding) +
+        this.parameterModulePadding
 
-      // const totalWidth =
-      //   this.sampleChartWidth +
-      //   this.sampleChartPaddingLeft +
-      //   parameterModuleWidth
+      const totalWidth =
+        this.sampleChartWidth +
+        this.sampleChartPaddingLeft +
+        parameterModuleWidth
 
-      // if (this.$refs.containerFlogChart) {
-      //   return this.$refs.containerFlogChart.clientWidth > totalWidth
-      //     ? this.$refs.containerFlogChart.clientWidth
-      //     : totalWidth
-      // }
+      if (this.$refs.containerFlogChart) {
+        return this.$refs.containerFlogChart.clientWidth > totalWidth
+          ? this.$refs.containerFlogChart.clientWidth
+          : totalWidth
+      }
 
-      // return totalWidth
+      return totalWidth
     },
     scaleChartHeight() {
       return (
@@ -354,7 +353,6 @@ export default {
         let parameterGridIndex = 0
         let fromIndex = 0
         let parameterGridPosition = 0
-        console.log(newSelectedParameters)
         const newOptions = addedParameters.reduce(
           (prev, addedParameter, i) => {
             // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
@@ -424,34 +422,6 @@ export default {
                   series: [...prev.series, newChartComponents.series],
                 }
               }
-
-              // this.nextGridIndex =
-              //   nullGridIndex > -1
-              //     ? nullGridIndex
-              //     : this.$refs.flogChart.getOption().grid.length +
-              //       parameterGridIndex
-              // console.log(`${fromIndex} ${nullGridIndex} ${this.nextGridIndex}`)
-
-              // fromIndex = nullGridIndex > -1 ? nullGridIndex + 1 : fromIndex
-              // newDataZoomYAxisIndices.push(this.nextGridIndex)
-
-              // const newChartComponents = this.createParameterChartComponents(
-              //   groupedParameters.find((param) => {
-              //     return param.value === addedParameter.value
-              //   }),
-              //   this.nextGridIndex,
-              //   oldGroupedParameters.length + parameterGridIndex
-              // )
-              // if (nullGridIndex === -1) {
-              //   parameterGridIndex += 1
-              // }
-              // console.log(newChartComponents)
-              // return {
-              //   grid: [...prev.grid, newChartComponents.grid],
-              //   xAxis: [...prev.xAxis, newChartComponents.xAxis],
-              //   yAxis: [...prev.yAxis, newChartComponents.yAxis],
-              //   series: [...prev.series, newChartComponents.series],
-              // }
             }
           },
           { grid: [], xAxis: [], yAxis: [], series: [] }
@@ -498,13 +468,13 @@ export default {
             const parameterValueStr = grid.id.split('-')[2]
             const parameterValue = parseInt(parameterValueStr)
             const xAxis = currentOption.xAxis.find((xAxis) =>
-              xAxis?.id.endsWith(parameterValueStr)
+              xAxis?.id.endsWith(`-${parameterValueStr}`)
             )
             const yAxis = currentOption.yAxis.find((yAxis) =>
-              yAxis?.id.endsWith(parameterValueStr)
+              yAxis?.id.endsWith(`-${parameterValueStr}`)
             )
             const series = currentOption.series.find((series) =>
-              series?.id.endsWith(parameterValueStr)
+              series?.id.endsWith(`-${parameterValueStr}`)
             )
 
             // if one of the parameter methods removed but some method, for that parameter, still selected,
@@ -573,7 +543,6 @@ export default {
         )
 
         this.replace = true
-        console.log(newOptions)
         this.option = newOptions
       }
     },
