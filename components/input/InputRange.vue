@@ -39,10 +39,27 @@
 </template>
 
 <script>
-import rangeFieldMixin from '~/mixins/rangeFieldMixin'
+import isEmpty from 'lodash/isEmpty'
 export default {
   name: 'InputRange',
-  mixins: [rangeFieldMixin],
+  props: {
+    value: {
+      type: Array,
+      default: () => {
+        return [null, null]
+      },
+    },
+    label: {
+      type: String,
+      default: null,
+    },
+    fieldLabels: {
+      type: Object,
+      default: () => {
+        return { min: 'min', max: 'max' }
+      },
+    },
+  },
   data() {
     return {
       isFocused: false,
@@ -54,6 +71,17 @@ export default {
     },
     handleBlur(e) {
       this.isFocused = false
+    },
+    parseInput(input) {
+      if (isEmpty(input)) return null
+      else return parseInt(input)
+    },
+    handleInput(e, isMin) {
+      if (isMin) {
+        this.$emit('input', [this.parseInput(e), this.value[1]])
+      } else {
+        this.$emit('input', [this.value[0], this.parseInput(e)])
+      }
     },
   },
 }
