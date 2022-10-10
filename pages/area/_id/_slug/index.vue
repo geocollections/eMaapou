@@ -9,7 +9,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableSite from '~/components/data-table/DataTableSite'
+import DataTableSite from '~/components/data-table/DataTableSite.vue'
 import { HEADERS_SITE, SITE } from '~/constants'
 
 export default {

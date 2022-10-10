@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { DOI, HEADERS_DOI } from '~/constants'
-import DataTableDoi from '~/components/data-table/DataTableDoi'
+import DataTableDoi from '~/components/data-table/DataTableDoi.vue'
 
 export default {
   components: { DataTableDoi },

@@ -67,8 +67,8 @@
 <script>
 import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ThumbnailImage from '~/components/thumbnail/ThumbnailImage'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal'
+import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
 import headersMixin from '~/mixins/headersMixin'
 export default {

@@ -33,9 +33,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Search from '~/templates/Search'
+import Search from '~/templates/Search.vue'
 import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
-import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
+import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {

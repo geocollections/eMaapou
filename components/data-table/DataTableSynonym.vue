@@ -24,7 +24,7 @@
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SYNONYM } from '~/constants'
 export default {

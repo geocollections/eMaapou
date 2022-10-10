@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_REFERENCE, REFERENCE } from '~/constants'
-import DataTableReference from '~/components/data-table/DataTableReference'
+import DataTableReference from '~/components/data-table/DataTableReference.vue'
 
 export default {
   components: { DataTableReference },

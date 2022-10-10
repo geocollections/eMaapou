@@ -28,7 +28,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import LasChart from '~/components/chart/types/LasChart'
+import LasChart from '~/components/chart/types/LasChart.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
 import ChartFlog from '~/components/chart/ChartFlog.vue'

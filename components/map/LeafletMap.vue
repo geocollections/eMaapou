@@ -134,10 +134,10 @@
 import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
-import MapLinks from '~/components/map/MapLinks'
-import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
-import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper'
-import MapClickPopup from '~/components/map/MapClickPopup'
+import MapLinks from '~/components/map/MapLinks.vue'
+import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
+import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
+import MapClickPopup from '~/components/map/MapClickPopup.vue'
 export default {
   name: 'LeafletMap',
   components: {

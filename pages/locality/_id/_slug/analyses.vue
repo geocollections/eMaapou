@@ -11,7 +11,7 @@
 <script>
 import isNil from 'lodash/isNil'
 import { HEADERS_ANALYSIS } from '~/constants'
-import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 export default {
   components: { DataTableAnalysis },
   data() {

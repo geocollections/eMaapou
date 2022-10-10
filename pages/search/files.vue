@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { ATTACHMENT, HEADERS_ATTACHMENT } from '~/constants'
-import DataTableAttachmentSolr from '~/components/data-table/DataTableAttachmentSolr'
+import DataTableAttachmentSolr from '~/components/data-table/DataTableAttachmentSolr.vue'
 
 export default {
   components: { DataTableAttachmentSolr },

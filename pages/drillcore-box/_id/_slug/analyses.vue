@@ -9,7 +9,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import { HEADERS_ANALYSIS } from '~/constants'
 export default {
   components: { DataTableAnalysis },

@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
-import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy'
+import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
 
 export default {
   components: { DataTableStratigraphy },

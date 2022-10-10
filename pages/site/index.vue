@@ -33,9 +33,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SearchFormSite from '~/components/search/forms/SearchFormSite'
+import SearchFormSite from '~/components/search/forms/SearchFormSite.vue'
 import DataTableSite from '~/components/data-table/DataTableSite.vue'
-import Search from '~/templates/Search'
+import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {

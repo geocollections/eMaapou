@@ -29,9 +29,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
-import Search from '~/templates/Search'
+import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {

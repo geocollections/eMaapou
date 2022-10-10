@@ -15,8 +15,8 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import ChartWrapper from '~/components/chart/wrappers/ChartWrapper'
-import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions'
+import ChartWrapper from '~/components/chart/wrappers/ChartWrapper.vue'
+import ExternalLegendOptions from '~/components/chart/options/ExternalLegendOptions.vue'
 
 export default {
   components: {

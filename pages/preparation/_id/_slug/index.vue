@@ -9,7 +9,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableAttachment from '~/components/data-table/DataTableAttachment'
+import DataTableAttachment from '~/components/data-table/DataTableAttachment.vue'
 import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from '~/constants'
 export default {
   components: { DataTableAttachment },

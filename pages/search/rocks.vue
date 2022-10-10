@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_ROCK, ROCK } from '~/constants'
-import DataTableRock from '~/components/data-table/DataTableRock'
+import DataTableRock from '~/components/data-table/DataTableRock.vue'
 
 export default {
   components: { DataTableRock },

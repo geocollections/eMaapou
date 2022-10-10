@@ -138,8 +138,8 @@ import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
 
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ThumbnailImage from '~/components/thumbnail/ThumbnailImage'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal'
+import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN } from '~/constants'
 export default {

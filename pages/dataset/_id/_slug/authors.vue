@@ -10,7 +10,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableDatasetAuthor from '~/components/data-table/DataTableDatasetAuthor'
+import DataTableDatasetAuthor from '~/components/data-table/DataTableDatasetAuthor.vue'
 
 import { HEADERS_DATASET_AUTHOR } from '~/constants'
 export default {

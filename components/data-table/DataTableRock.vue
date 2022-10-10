@@ -45,7 +45,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 import BaseBoolean from '../base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal'
+import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ROCK } from '~/constants'
 export default {

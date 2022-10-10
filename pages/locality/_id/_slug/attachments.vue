@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import DataTableAttachment from '~/components/data-table/DataTableAttachment'
+import DataTableAttachment from '~/components/data-table/DataTableAttachment.vue'
 
 import { HEADERS_ATTACHMENT } from '~/constants'
 export default {

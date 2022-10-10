@@ -498,12 +498,12 @@
 <script>
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
-import HeaderDetail from '~/components/HeaderDetail'
+import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
-import LeafletMap from '~/components/map/LeafletMap'
-import Detail from '~/templates/Detail'
-import LasChart from '~/components/chart/types/LasChart'
+import LeafletMap from '~/components/map/LeafletMap.vue'
+import Detail from '~/templates/Detail.vue'
+import LasChart from '~/components/chart/types/LasChart.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {

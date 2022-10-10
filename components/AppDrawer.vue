@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import LanguageList from '~/components/language/LanguageList'
+import LanguageList from '~/components/language/LanguageList.vue'
 import BaseMenuListItem from '~/components/base/BaseMenuListItem.vue'
 import {
   BROWSE_GEOLOGY_LIST,

@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
-import DataTableSpecimen from '~/components/data-table/DataTableSpecimen'
+import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 
 export default {
   components: { DataTableSpecimen },

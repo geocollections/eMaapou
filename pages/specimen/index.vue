@@ -32,7 +32,7 @@
 import { mapState, mapActions } from 'vuex'
 import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
-import Search from '~/templates/Search'
+import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TaxaChartWrapper from '~/components/chart/wrappers/TaxaChartWrapper'
+import TaxaChartWrapper from '~/components/chart/wrappers/TaxaChartWrapper.vue'
 
 export default {
   name: 'TaxaChart',

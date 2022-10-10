@@ -9,7 +9,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableSampleReference from '~/components/data-table/DataTableSampleReference'
+import DataTableSampleReference from '~/components/data-table/DataTableSampleReference.vue'
 import { HEADERS_SAMPLE_REFERENCE, SAMPLE_REFERENCE } from '~/constants'
 export default {
   components: { DataTableSampleReference },

@@ -10,7 +10,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import DataTablePreparation from '~/components/data-table/DataTablePreparation'
+import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
 import { HEADERS_PREPARATION, PREPARATION } from '~/constants'
 
 export default {

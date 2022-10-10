@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import StratigraphyChartWrapper from '~/components/chart/wrappers/StratigraphyChartWrapper'
+import StratigraphyChartWrapper from '~/components/chart/wrappers/StratigraphyChartWrapper.vue'
 
 export default {
   name: 'StratigraphyChart',

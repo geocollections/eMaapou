@@ -39,9 +39,9 @@ import isEmpty from 'lodash/isEmpty'
 
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter'
+import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete'
+import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {

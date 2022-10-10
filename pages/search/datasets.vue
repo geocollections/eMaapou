@@ -11,7 +11,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import { DATASET, HEADERS_DATASET } from '~/constants'
-import DataTableDataset from '~/components/data-table/DataTableDataset'
+import DataTableDataset from '~/components/data-table/DataTableDataset.vue'
 
 export default {
   components: { DataTableDataset },

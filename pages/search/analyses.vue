@@ -10,7 +10,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import DataTableAnalysis from '~/components/data-table/DataTableAnalysis'
+import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
 export default {

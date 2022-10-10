@@ -70,11 +70,11 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import Search from '~/templates/Search'
-import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto'
-import DataTablePhoto from '~/components/data-table/DataTablePhoto'
-import ImageView from '~/components/ImageView'
-import GalleryView from '~/components/GalleryView'
+import Search from '~/templates/Search.vue'
+import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto.vue'
+import DataTablePhoto from '~/components/data-table/DataTablePhoto.vue'
+import ImageView from '~/components/ImageView.vue'
+import GalleryView from '~/components/GalleryView.vue'
 
 export default {
   components: {

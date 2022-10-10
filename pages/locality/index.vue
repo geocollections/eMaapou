@@ -32,9 +32,9 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import SearchFormLocality from '~/components/search/forms/SearchFormLocality'
+import SearchFormLocality from '~/components/search/forms/SearchFormLocality.vue'
 import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
-import Search from '~/templates/Search'
+import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 
 export default {

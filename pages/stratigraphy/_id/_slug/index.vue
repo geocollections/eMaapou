@@ -14,7 +14,7 @@ import {
   HEADERS_STRATIGRAPHY_REFERENCE,
   STRATIGRAPHY_REFERENCE,
 } from '~/constants'
-import DataTableStratigraphyReference from '~/components/data-table/DataTableStratigraphyReference'
+import DataTableStratigraphyReference from '~/components/data-table/DataTableStratigraphyReference.vue'
 
 export default {
   components: { DataTableStratigraphyReference },

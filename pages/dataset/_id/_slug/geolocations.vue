@@ -10,7 +10,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableDatasetGeolocation from '~/components/data-table/DataTableDatasetGeolocation'
+import DataTableDatasetGeolocation from '~/components/data-table/DataTableDatasetGeolocation.vue'
 
 import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
 export default {

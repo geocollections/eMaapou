@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import LanguageList from '~/components/language/LanguageList'
+import LanguageList from '~/components/language/LanguageList.vue'
 export default {
   name: 'LanguageSwitcher',
   components: { LanguageList },

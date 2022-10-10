@@ -9,7 +9,7 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableSample from '~/components/data-table/DataTableSample'
+import DataTableSample from '~/components/data-table/DataTableSample.vue'
 
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
 export default {

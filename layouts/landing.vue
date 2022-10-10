@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import AppFooter from '~/components/AppFooter'
+import AppFooter from '~/components/AppFooter.vue'
 import CookiePolicy from '~/components/CookiePolicy.vue'
 import AppDrawer from '~/components/AppDrawer.vue'
 import AppHeader from '~/components/AppHeader.vue'

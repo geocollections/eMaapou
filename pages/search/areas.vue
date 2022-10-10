@@ -10,7 +10,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-import DataTableArea from '~/components/data-table/DataTableArea'
+import DataTableArea from '~/components/data-table/DataTableArea.vue'
 import { AREA, HEADERS_AREA } from '~/constants'
 
 export default {

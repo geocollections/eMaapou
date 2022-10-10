@@ -92,8 +92,8 @@ import InputText from '~/components/input/InputText.vue'
 import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import autocompleteMixin from '~/mixins/autocompleteMixin'
 import InputSearch from '~/components/input/InputSearch.vue'
-import SearchMap from '~/components/search/SearchMap'
-import InputCheckbox from '~/components/input/InputCheckbox'
+import SearchMap from '~/components/search/SearchMap.vue'
+import InputCheckbox from '~/components/input/InputCheckbox.vue'
 
 export default {
   name: 'SearchFormSpecimen',

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper'
+import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 export default {
   name: 'VMarkerClusterWrapper',
   components: { LCircleMarkerWrapper },
