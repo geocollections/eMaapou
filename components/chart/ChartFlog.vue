@@ -1,88 +1,88 @@
 <template>
-  <client-only>
-    <div class="">
-      <v-toolbar flat dense>
-        <options-parameter-tree-view
-          :parameters="parameters"
-          :initial-selection="selectedParameters"
-          @input="handleParametersUpdate"
-        />
-        <v-menu
-          transition="slide-y-transition"
-          offset-y
-          content-class="white"
-          :close-on-content-click="false"
-        >
-          <template #activator="{ on, attrs }">
-            <v-btn class="ml-3" icon small v-bind="attrs" v-on="on">
-              <v-icon> mdi-cog </v-icon>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-title
-              class="montserrat pb-2"
-              v-text="$t('flogChart.settings')"
+  <div class="">
+    <v-toolbar flat dense>
+      <options-parameter-tree-view
+        :parameters="parameters"
+        :initial-selection="selectedParameters"
+        @input="handleParametersUpdate"
+      />
+      <v-menu
+        transition="slide-y-transition"
+        offset-y
+        content-class="white"
+        :close-on-content-click="false"
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn class="ml-3" icon small v-bind="attrs" v-on="on">
+            <v-icon> mdi-cog </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title
+            class="montserrat pb-2"
+            v-text="$t('flogChart.settings')"
+          />
+          <v-card-text>
+            <renderer-switch
+              :renderer="renderer"
+              @update="handleRenderSwitch"
             />
-            <v-card-text>
-              <renderer-switch
-                :renderer="renderer"
-                @update="handleRenderSwitch"
-              />
-              <v-divider class="my-2" />
-              <v-text-field
-                v-model="scale"
-                type="number"
-                :label="$t('flogChart.heightScale')"
-                prefix="1:"
-                hide-details
-                @change="handleScaleChange"
-              >
-                <template #append>
-                  <v-icon @click="handleScaleReset"> mdi-refresh </v-icon>
-                </template>
-                <template #append-outer>
-                  <v-btn-toggle
-                    dense
-                    color="accent"
-                    :value="ppi"
-                    @change="handlePpiChange"
+            <v-divider class="my-2" />
+            <v-text-field
+              v-model="scale"
+              type="number"
+              :label="$t('flogChart.heightScale')"
+              prefix="1:"
+              hide-details
+              @change="handleScaleChange"
+            >
+              <template #append>
+                <v-icon @click="handleScaleReset"> mdi-refresh </v-icon>
+              </template>
+              <template #append-outer>
+                <v-btn-toggle
+                  dense
+                  color="accent"
+                  :value="ppi"
+                  @change="handlePpiChange"
+                >
+                  <v-btn
+                    width="65"
+                    small
+                    class="text-none montserrat"
+                    :outlined="ppi !== 96"
+                    :value="96"
                   >
-                    <v-btn
-                      width="65"
-                      small
-                      class="text-none montserrat"
-                      :outlined="ppi !== 96"
-                      :value="96"
-                    >
-                      96 PPI
-                    </v-btn>
-                    <v-btn
-                      width="65"
-                      small
-                      class="text-none montserrat"
-                      :outlined="ppi !== 72"
-                      :value="72"
-                    >
-                      72 PPI
-                    </v-btn>
-                  </v-btn-toggle>
-                </template>
-              </v-text-field>
-              <v-text-field
-                :value="parameterChartWidth"
-                type="number"
-                class="d-inline-flex"
-                hide-details
-                suffix="px"
-                :label="$t('flogChart.parameterChartWidth')"
-                @change="handleParameterChartWidthChange"
-              />
-            </v-card-text>
-          </v-card>
-        </v-menu>
-      </v-toolbar>
-      <v-divider />
-      <div ref="containerFlogChart" class="overflow-x-auto">
+                    96 PPI
+                  </v-btn>
+                  <v-btn
+                    width="65"
+                    small
+                    class="text-none montserrat"
+                    :outlined="ppi !== 72"
+                    :value="72"
+                  >
+                    72 PPI
+                  </v-btn>
+                </v-btn-toggle>
+              </template>
+            </v-text-field>
+            <v-text-field
+              :value="parameterChartWidth"
+              type="number"
+              class="d-inline-flex"
+              hide-details
+              suffix="px"
+              :label="$t('flogChart.parameterChartWidth')"
+              @change="handleParameterChartWidthChange"
+            />
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    </v-toolbar>
+    <v-divider />
+    <div ref="containerFlogChart" class="overflow-x-auto">
+      <client-only>
         <v-chart
           ref="flogChart"
           class="chart pa-2"
@@ -99,9 +99,22 @@
           @click="handleClick"
           @datazoom="handleDataZoom"
         />
-      </div>
+        <template #placeholder>
+          <div
+            :style="`height: ${initialHeight + 200}px; width: 100%`"
+            class="d-flex align-center justify-center"
+          >
+            <v-progress-circular
+              indeterminate
+              color="accent"
+              :size="100"
+              :width="6"
+            />
+          </div>
+        </template>
+      </client-only>
     </div>
-  </client-only>
+  </div>
 </template>
 
 <script>
@@ -963,7 +976,7 @@ export default {
               return (
                 rectShape && {
                   type: 'rect',
-                  transition: ['shape'],
+                  transition: [],
                   shape: rectShape,
                   style: { ...api.style(), fill: '#000000' },
                   emphasis: {
@@ -971,10 +984,6 @@ export default {
                   },
                 }
               )
-            },
-            encode: {
-              x: [0],
-              y: [1, 2],
             },
             data: this.samples.map((item) => {
               return [
