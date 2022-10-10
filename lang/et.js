@@ -1012,5 +1012,6 @@ export default {
     heightScale: 'Sügavuse skaala',
     parameterChartWidth: 'Parameeter diagrammi laius',
     settings: 'Seaded',
+    samples: 'Proovid',
   },
 }

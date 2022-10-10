@@ -1010,5 +1010,6 @@ export default {
     heightScale: 'Depth scale',
     parameterChartWidth: 'Parameter chart width',
     settings: 'Settings',
+    samples: 'Samples',
   },
 }

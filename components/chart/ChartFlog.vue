@@ -705,9 +705,6 @@ export default {
             smooth: false,
             xAxisIndex: index,
             yAxisIndex: index,
-            // itemStyle: {
-            //   color: this.$vuetify.theme.currentTheme.accent,
-            // },
             lineStyle: {
               width: 1,
             },
@@ -845,7 +842,7 @@ export default {
           {
             id: 'samples-x-axis',
             type: 'category',
-            data: ['Samples'],
+            data: [this.$t('flogChart.samples')],
             position: 'top',
             axisLabel: {
               fontWeight: 'bold',
@@ -903,7 +900,7 @@ export default {
           {
             id: 'samples-series',
             type: 'custom',
-            name: 'samples',
+            name: this.$t('flogChart.samples'),
             xAxisIndex: 0,
             yAxisIndex: 0,
             tooltip: {
