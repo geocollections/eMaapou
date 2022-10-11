@@ -112,6 +112,7 @@
                       :src="item.src"
                       :alt="$t(item.alt)"
                       provider="static"
+                      :format="item.format"
                       class="footer-logo py-1 py-sm-0 px-3"
                       v-on="on"
                     />
@@ -154,6 +155,7 @@
                 src="/logos/GitHub-Mark-Light-64px.png"
                 alt="GitHub"
                 provider="static"
+                format="webp"
                 class="github-logo py-1 py-sm-0 px-3"
               />
             </a>
@@ -179,30 +181,35 @@ export default {
           src: '/logos/sarv_logo1b.svg',
           title: 'footerLinks.sarv',
           alt: 'footerLinks.sarv',
+          format: null,
         },
         {
           href: 'https://natarc.ut.ee',
           src: '/logos/natarclogovalge1.png',
           title: 'footerLinks.natarc',
           alt: 'footerLinks.natarc',
+          format: 'webp',
         },
         {
           href: 'https://taltech.ee/geoloogia-instituut',
           src: '/logos/tutaltech2.png',
           title: 'footerLinks.ttu',
           alt: 'footerLinks.ttu',
+          format: 'webp',
         },
         {
           href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
           src: '/logos/TY_logo_ring_jooneta_valge.png',
           title: 'footerLinks.tu',
           alt: 'footerLinks.tu',
+          format: 'webp',
         },
         {
           href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
           src: '/logos/ELM_logo_white1.png',
           title: 'footerLinks.elm',
           alt: 'footerLinks.elm',
+          format: 'webp',
         },
         /* {
           href: 'https://struktuurifondid.ee',

@@ -259,25 +259,21 @@ export default {
       imageLinks: [
         {
           href: 'https://taltech.ee/geoloogia-instituut',
-          src: '/logos/tutaltech2.png',
           title: 'footerLinks.ttu',
           alt: 'footerLinks.ttu',
         },
         {
           href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
-          src: '/logos/TY_logo_ring_jooneta_valge.png',
           title: 'footerLinks.tu',
           alt: 'footerLinks.tu',
         },
         {
           href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
-          src: '/logos/ELM_logo_white1.png',
           title: 'footerLinks.elm',
           alt: 'footerLinks.elm',
         },
         /* {
           href: 'https://struktuurifondid.ee',
-          src: '/logos/EL_mv.png',
           title: 'footerLinks.el',
           alt: 'footerLinks.el',
         }, */
