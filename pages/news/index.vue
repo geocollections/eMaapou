@@ -20,7 +20,6 @@
               :content="$translate({ et: news.text_et, en: news.text_en })"
               @click="openNews(news)"
             />
-            <!-- <img src="https://i.imgur.com/0ui5ltX.jpg" /> -->
           </stack-item>
         </stack>
         <infinite-loading ref="infiniteLoading" @infinite="infiniteHandler">
