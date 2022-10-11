@@ -10,22 +10,15 @@
         :label="$t(filters.byIds.locality.label)"
       />
 
-      <input-autocomplete
+      <input-autocomplete-stratigraphy
         v-model="stratigraphyHierarchy"
-        :items="autocomplete.stratigraphy"
-        :loading="autocomplete.loaders.stratigraphy"
+        return-object
         :label="$t(filters.byIds.stratigraphyHierarchy.label)"
-        :item-text="stratigraphyLabel"
-        @search:items="autocompleteStratigraphySearch"
       />
 
-      <input-autocomplete
+      <input-autocomplete-taxon
         v-model="taxonHierarchy"
-        :items="autocomplete.taxon"
-        :loading="autocomplete.loaders.taxon"
         :label="$t(filters.byIds.taxonHierarchy.label)"
-        :item-text="taxonLabel"
-        @search:items="autocompleteTaxonSearch"
       />
 
       <input-text v-model="author" :label="$t(filters.byIds.author.label)" />
@@ -47,33 +40,21 @@ import { mapFields } from 'vuex-map-fields'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
+import InputAutocompleteTaxon from '~/components/input/InputAutocompleteTaxon.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormTaxon',
   components: {
-    InputAutocomplete,
+    InputAutocompleteStratigraphy,
+    InputAutocompleteTaxon,
     InputText,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
     InputSearch,
-  },
-  mixins: [autocompleteMixin],
-  data() {
-    return {
-      autocomplete: {
-        stratigraphy: [],
-        taxon: [],
-        loaders: {
-          stratigraphy: false,
-          taxon: false,
-        },
-      },
-    }
   },
   computed: {
     ...mapState('search/taxon', ['filters', 'count', 'items']),
@@ -90,9 +71,6 @@ export default {
     }),
     ...mapGetters('search', ['hasActiveFilters']),
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/taxon', ['searchTaxa']),
@@ -102,9 +80,6 @@ export default {
     async handleReset(e) {
       await this.resetFilters('taxon')
       this.searchTaxa()
-    },
-    fillAutocompleteLists() {
-      if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
     },
     handleMapUpdate(tableState) {
       this.searchTaxa(tableState?.options)

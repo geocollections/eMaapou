@@ -1,64 +1,85 @@
 <template>
   <v-autocomplete
-    class="pt-4"
     v-bind="$attrs"
+    class="pt-4"
     hide-details
     hide-no-data
-    autocomplete="off"
+    :clearable="clearable"
+    :no-filter="apiSearch"
     :search-input.sync="search"
-    :clearable="!removeClearable"
-    :cache-items="!doNotCache"
+    :loading="isLoading"
+    :items="internalItems"
     :item-value="$attrs['item-value'] ? $attrs['item-value'] : 'id'"
     :return-object="returnObject"
+    :chips="multiSelect"
+    :deletable-chips="multiSelect"
+    :multiple="multiSelect"
+    :small-chips="multiSelect"
     v-on="$listeners"
   >
-    <template #item="{ item }">
-      <div :class="{ 'd-flex flex-row flex-nowrap': appendItem }">
-        <div :class="{ 'whitespace-nowrap mr-2': appendItem }">
-          {{ item[$attrs['item-text']] }}
-        </div>
-        <div v-if="appendItem" class="truncate">({{ item[appendItem] }})</div>
-      </div>
-    </template>
   </v-autocomplete>
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
 export default {
   name: 'InputAutocomplete',
   props: {
-    removeClearable: Boolean,
-    doNotCache: Boolean,
-    appendItem: {
-      type: String,
-      default: '',
+    items: {
+      type: Array,
+      default: () => [],
     },
     returnObject: {
       type: Boolean,
-      default() {
-        return !this.$attrs['item-value']
-      },
+      default: false,
+    },
+    apiSearch: {
+      type: Boolean,
+      default: false,
+    },
+    multiSelect: {
+      type: Boolean,
+      default: false,
+    },
+    clearable: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
     return {
       search: null,
+      isLoading: false,
+      internalItems: [],
     }
   },
   watch: {
+    items(value) {
+      this.isLoading = false
+      this.internalItems = value
+    },
     search(newVal, oldVal) {
+      this.handleSearch(newVal, oldVal)
+    },
+  },
+  created() {
+    if (this.multiSelect && this.$attrs.value)
+      this.internalItems = this.$attrs.value
+    else if (this.$attrs.value) this.internalItems.push(this.$attrs.value)
+  },
+  methods: {
+    handleSearch: debounce(function (newVal, oldVal) {
+      if (!this.apiSearch) return
+      if (!newVal) return
+      if (newVal.length < 3) return
+      if (newVal === oldVal) return
+
       const currentValue =
         this.$attrs.value && this.$attrs.value[this.$attrs['item-text']]
-
-      if (
-        newVal &&
-        newVal.length > 0 &&
-        newVal !== currentValue &&
-        newVal !== oldVal
-      ) {
-        this.$emit('search:items', newVal)
-      }
-    },
+      if (newVal === currentValue) return
+      this.isLoading = true
+      this.$emit('search:items', newVal)
+    }, 300),
   },
 }
 </script>

@@ -18,23 +18,19 @@
 
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
-          <input-autocomplete
+          <input-autocomplete-stratigraphy
             v-model="stratigraphy"
-            :items="autocomplete.chronostratigraphy"
-            :loading="autocomplete.loaders.chronostratigraphy"
+            chrono
+            return-object
             :label="$t(filters.byIds.stratigraphy.label)"
-            :item-text="stratigraphyLabel"
-            @search:items="autocompleteChronostratigraphySearch"
           />
         </v-col>
         <v-col cols="12" sm="6" md="12" class="pl-sm-3 pl-md-0">
-          <input-autocomplete
+          <input-autocomplete-stratigraphy
             v-model="lithostratigraphy"
-            :items="autocomplete.lithostratigraphy"
-            :loading="autocomplete.loaders.lithostratigraphy"
+            litho
+            return-object
             :label="$t(filters.byIds.lithostratigraphy.label)"
-            :item-text="stratigraphyLabel"
-            @search:items="autocompleteLithostratigraphySearch"
           />
         </v-col>
       </v-row>
@@ -127,24 +123,6 @@
           />
         </v-col>
       </v-row>
-
-      <!-- <v-row no-gutters>
-        <v-col cols="12">
-          <input-autocomplete
-            :label="$t('analyticalData.columns')"
-            chips
-            clearable
-            multiple
-            :items="listParameters"
-            :value="shownActiveListParameters"
-            return-object
-            item-text="label"
-            small-chips
-            deletable-chips
-            @input="updateAnalyticalDataHeaders"
-          />
-        </v-col>
-      </v-row> -->
     </search-fields-wrapper>
     <search-map
       site-overlay
@@ -177,8 +155,7 @@ import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import InputRange from '~/components/input/InputRange.vue'
 import InputParameter from '~/components/input/InputParameter.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
@@ -189,26 +166,13 @@ export default {
   components: {
     SearchInstitutionFilter,
     InputRange,
-    InputAutocomplete,
+    InputAutocompleteStratigraphy,
     InputText,
     InputParameter,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
     InputSearch,
-  },
-  mixins: [autocompleteMixin],
-  data() {
-    return {
-      autocomplete: {
-        chronostratigraphy: [],
-        lithostratigraphy: [],
-        loaders: {
-          chronostratigraphy: false,
-          lithostratigraphy: false,
-        },
-      },
-    }
   },
   async fetch() {
     if (isEmpty(this.parameters)) {

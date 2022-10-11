@@ -18,9 +18,9 @@ export default {
       type: 'range',
       lookUpType: 'range',
       value: [null, null],
-      label: initParameter.label,
+      label: initParameter.text,
       placeholders: ['common.from', 'common.to'],
-      fields: [initParameter.id],
+      fields: [initParameter.value],
       isText: false,
     }
 
@@ -30,7 +30,7 @@ export default {
       'headers/toggleHeader',
       {
         module: 'analytical_data',
-        headerId: initParameter.id,
+        headerId: initParameter.value,
       },
       { root: true }
     )
@@ -73,8 +73,8 @@ export default {
         return {
           ...prev,
           [parameter.parameter_index]: {
-            id: parameter.parameter_index,
-            label: parameter.parameter,
+            value: parameter.parameter_index,
+            text: parameter.parameter,
           },
         }
       }, {})
@@ -100,9 +100,9 @@ export default {
         type: 'range',
         lookUpType: 'range',
         value: [null, null],
-        label: parameter.label,
+        label: parameter.text,
         placeholders: ['common.from', 'common.to'],
-        fields: [parameter.id],
+        fields: [parameter.value],
         isText: false,
       }
       commit(ADD_PARAMETER_FILTER, filter)
@@ -110,7 +110,7 @@ export default {
         'headers/toggleHeader',
         {
           module: 'analytical_data',
-          headerId: parameter.id,
+          headerId: parameter.value,
         },
         { root: true }
       )

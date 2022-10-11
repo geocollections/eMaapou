@@ -2,14 +2,11 @@
   <v-row no-gutters>
     <v-col cols="4" class="pr-1">
       <input-autocomplete
+        :value="parameter"
         :items="parameters"
         return-object
-        item-text="label"
-        :value="parameter"
-        item-value="id"
-        remove-clearable
-        do-not-cache
-        @input="handleParameter($event)"
+        :clearable="false"
+        @input="handleParameter"
       />
     </v-col>
     <v-col cols="6">
@@ -90,8 +87,8 @@ export default {
   data() {
     return {
       parameter: {
-        id: this.value.fields[0],
-        label: this.value.label,
+        value: this.value.fields[0],
+        text: this.value.label,
       },
     }
   },
@@ -106,8 +103,8 @@ export default {
 
         this.$emit('input', {
           ...this.value,
-          label: newParameter.label,
-          fields: [newParameter.id],
+          label: newParameter.text,
+          fields: [newParameter.value],
         })
       }
     },

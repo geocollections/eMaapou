@@ -38,7 +38,7 @@ export const initState = () => {
           searchField: 'hierarchy_string',
           lookUpType: 'startsWith',
           label: 'taxon.taxonHierarchy',
-          fields: ['taxon_hierarchy'],
+          fields: ['hierarchy_string'],
         },
 
         // hierarchy: {

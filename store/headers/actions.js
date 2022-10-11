@@ -41,11 +41,11 @@ export default {
         return {
           ...prev,
           [key]: {
-            text: parameter.label,
-            value: parameter.id,
+            text: parameter.text,
+            value: parameter.value,
             align: 'center',
             translate: false,
-            apiFieldValue: parameter.id,
+            apiFieldValue: parameter.value,
             show: false,
           },
         }

@@ -13,34 +13,19 @@
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
-      <input-autocomplete
+      <input-autocomplete-stratigraphy
         v-model="stratigraphyHierarchy"
-        :items="autocomplete.stratigraphy"
-        :loading="autocomplete.loaders.stratigraphy"
+        return-object
         :label="$t(filters.byIds.stratigraphyHierarchy.label)"
-        :item-text="stratigraphyLabel"
-        @search:items="autocompleteStratigraphySearch"
       />
 
-      <input-autocomplete
+      <input-autocomplete-taxon
         v-model="hierarchy"
-        :items="autocomplete.taxon"
-        :loading="autocomplete.loaders.taxon"
         :label="$t(filters.byIds.hierarchy.label)"
-        :item-text="hierarchyLabel"
-        @search:items="autocompleteHierarchySearch"
       />
-
-      <input-autocomplete
+      <input-autocomplete-reference
         v-model="reference"
-        :items="autocomplete.reference"
-        :loading="autocomplete.loaders.reference"
         :label="$t(filters.byIds.reference.label)"
-        item-text="reference"
-        no-filter
-        do-not-cache
-        append-item="title"
-        @search:items="autocompleteReferenceSearch"
       />
 
       <input-text
@@ -89,11 +74,12 @@ import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-import autocompleteMixin from '~/mixins/autocompleteMixin'
 import InputSearch from '~/components/input/InputSearch.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputCheckbox from '~/components/input/InputCheckbox.vue'
+import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
+import InputAutocompleteTaxon from '~/components/input/InputAutocompleteTaxon.vue'
+import InputAutocompleteReference from '~/components/input/InputAutocompleteReference.vue'
 
 export default {
   name: 'SearchFormSpecimen',
@@ -101,26 +87,13 @@ export default {
     InputCheckbox,
     SearchMap,
     SearchInstitutionFilter,
-    InputAutocomplete,
     InputText,
     SearchFieldsWrapper,
     SearchActions,
     InputSearch,
-  },
-  mixins: [autocompleteMixin],
-  data() {
-    return {
-      autocomplete: {
-        stratigraphy: [],
-        taxon: [],
-        reference: [],
-        loaders: {
-          stratigraphy: false,
-          taxon: false,
-          reference: false,
-        },
-      },
-    }
+    InputAutocompleteStratigraphy,
+    InputAutocompleteTaxon,
+    InputAutocompleteReference,
   },
   computed: {
     ...mapState('search/specimen', ['filters', 'count', 'items']),
@@ -144,9 +117,6 @@ export default {
     }),
     ...mapGetters('search', ['hasActiveFilters']),
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   methods: {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
@@ -157,12 +127,6 @@ export default {
     async handleReset(e) {
       await this.resetFilters('specimen')
       this.searchSpecimens()
-    },
-    fillAutocompleteLists() {
-      if (this.stratigraphyHierarchy)
-        this.autocomplete.stratigraphy.push(this.stratigraphyHierarchy)
-      if (this.reference) this.autocomplete.reference.push(this.reference)
-      if (this.hierarchy) this.autocomplete.taxon.push(this.hierarchy)
     },
     handleMapUpdate(tableState) {
       this.searchSpecimens(tableState?.options)

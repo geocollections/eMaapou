@@ -6,17 +6,12 @@
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
 
       <input-text v-model="country" :label="$t(filters.byIds.country.label)" />
-
-      <input-autocomplete
+      <input-autocomplete-stratigraphy
         v-model="stratigraphy"
-        :items="autocomplete.chronostratigraphy"
-        :loading="autocomplete.loaders.chronostratigraphy"
+        chrono
         :label="$t(filters.byIds.stratigraphy.label)"
-        :item-text="stratigraphyLabel"
-        :item-value="stratigraphyLabel"
-        @search:items="autocompleteChronostratigraphySearch"
+        :item-value="$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'"
       />
-
       <input-text
         v-model="reference"
         :label="$t(filters.byIds.reference.label)"
@@ -40,8 +35,7 @@ import { mapFields } from 'vuex-map-fields'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
@@ -49,25 +43,11 @@ export default {
   name: 'SearchFormLocality',
   components: {
     InputText,
-    InputAutocomplete,
+    InputAutocompleteStratigraphy,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
     InputSearch,
-  },
-  mixins: [autocompleteMixin],
-
-  data() {
-    return {
-      autocomplete: {
-        chronostratigraphy: [],
-        lithostratigraphy: [],
-        loaders: {
-          chronostratigraphy: false,
-          lithostratigraphy: false,
-        },
-      },
-    }
   },
   computed: {
     ...mapState('search/locality', ['filters', 'count', 'items']),

@@ -5,13 +5,10 @@
     <search-fields-wrapper :active="hasActiveFilters('stratigraphy')">
       <input-text v-model="number" :label="$t(filters.byIds.id.label)" />
 
-      <input-autocomplete
+      <input-autocomplete-stratigraphy
         v-model="hierarchy"
-        :items="autocomplete.stratigraphy"
-        :loading="autocomplete.loaders.stratigraphy"
+        return-object
         :label="$t(filters.byIds.stratigraphy.label)"
-        :item-text="stratigraphyLabel"
-        @search:items="autocompleteStratigraphySearch"
       />
 
       <input-text v-model="index" :label="$t(filters.byIds.index.label)" />
@@ -28,29 +25,17 @@ import { mapFields } from 'vuex-map-fields'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   name: 'SearchFormStratigraphy',
   components: {
     InputText,
-    InputAutocomplete,
+    InputAutocompleteStratigraphy,
     SearchFieldsWrapper,
     SearchActions,
     InputSearch,
-  },
-  mixins: [autocompleteMixin],
-  data() {
-    return {
-      autocomplete: {
-        stratigraphy: [],
-        loaders: {
-          stratigraphy: false,
-        },
-      },
-    }
   },
   computed: {
     ...mapState('search/stratigraphy', ['filters', 'count']),
@@ -64,9 +49,6 @@ export default {
     }),
     ...mapGetters('search', ['hasActiveFilters']),
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/stratigraphy', ['searchStratigraphies']),
@@ -76,9 +58,6 @@ export default {
     async handleReset(e) {
       await this.resetFilters('stratigraphy')
       this.searchStratigraphies()
-    },
-    fillAutocompleteLists() {
-      if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
     },
   },
 }

@@ -10,13 +10,10 @@
         :label="$t(filters.byIds.locality.label)"
       />
 
-      <input-autocomplete
+      <input-autocomplete-stratigraphy
         v-model="hierarchy"
-        :items="autocomplete.stratigraphy"
-        :loading="autocomplete.loaders.stratigraphy"
+        return-object
         :label="$t(filters.byIds.hierarchy.label)"
-        :item-text="stratigraphyLabel"
-        @search:items="autocompleteStratigraphySearch"
       />
 
       <input-text
@@ -54,8 +51,7 @@ import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import InputRange from '~/components/input/InputRange.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-import autocompleteMixin from '~/mixins/autocompleteMixin'
+import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
@@ -63,24 +59,13 @@ export default {
   name: 'SearchFormSample',
   components: {
     SearchInstitutionFilter,
-    InputAutocomplete,
+    InputAutocompleteStratigraphy,
     InputText,
     InputRange,
     SearchFieldsWrapper,
     SearchActions,
     SearchMap,
     InputSearch,
-  },
-  mixins: [autocompleteMixin],
-  data() {
-    return {
-      autocomplete: {
-        stratigraphy: [],
-        loaders: {
-          stratigraphy: false,
-        },
-      },
-    }
   },
   computed: {
     ...mapState('search/sample', ['filters', 'count', 'items']),
@@ -101,9 +86,6 @@ export default {
     }),
     ...mapGetters('search', ['hasActiveFilters']),
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   methods: {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
@@ -114,9 +96,6 @@ export default {
     async handleReset(e) {
       await this.resetFilters('sample')
       this.searchSamples()
-    },
-    fillAutocompleteLists() {
-      if (this.hierarchy) this.autocomplete.stratigraphy.push(this.hierarchy)
     },
     handleMapUpdate(tableState) {
       this.searchSamples(tableState?.options)

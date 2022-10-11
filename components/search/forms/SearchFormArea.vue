@@ -11,20 +11,16 @@
       <input-autocomplete
         v-model="county"
         :items="counties"
-        :return-object="false"
         :item-text="$i18n.locale === 'et' ? 'maakond' : 'maakond_en'"
         :item-value="'maakond'"
-        do-not-cache
         :label="$t(filters.byIds.county.label)"
       />
       <!-- NOTE: Same as with counties above. But this might be a problem when new types are added. -->
       <input-autocomplete
         v-model="type"
         :items="types"
-        :return-object="false"
         :item-text="$i18n.locale === 'et' ? 'name' : 'name_en'"
         :item-value="'name'"
-        do-not-cache
         :label="$t(filters.byIds.type.label)"
       />
     </search-fields-wrapper>
@@ -56,6 +52,7 @@ export default {
     }
   },
   async fetch() {
+    // TODO: Should await these requests together, so the first does not block the other
     const countiesResponse = await this.$services.sarvREST.getResourceList(
       'list_maakond',
       {
@@ -67,7 +64,6 @@ export default {
         },
       }
     )
-
     const typesResponse = await this.$services.sarvREST.getResourceList(
       'area_type',
       {

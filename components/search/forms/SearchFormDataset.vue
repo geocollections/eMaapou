@@ -7,19 +7,10 @@
       <input-text v-model="owner" :label="$t(filters.byIds.owner.label)" />
       <input-text v-model="date" :label="$t(filters.byIds.date.label)" />
       <input-text v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
-
-      <input-autocomplete
+      <input-autocomplete-parameter
+        v-model="parameters"
+        multi-select
         :label="$t('dataset.parameters')"
-        chips
-        clearable
-        multiple
-        :items="availableParameters"
-        :value="parameters"
-        return-object
-        item-text="text"
-        small-chips
-        deletable-chips
-        @input="handleParameterInput"
       />
     </search-fields-wrapper>
 
@@ -41,8 +32,8 @@ import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import InputText from '~/components/input/InputText.vue'
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
+import InputAutocompleteParameter from '~/components/input/InputAutocompleteParameter.vue'
 
 export default {
   name: 'SearchFormDataset',
@@ -50,9 +41,9 @@ export default {
     SearchInstitutionFilter,
     InputText,
     SearchActions,
-    InputAutocomplete,
     SearchFieldsWrapper,
     InputSearch,
+    InputAutocompleteParameter,
   },
   data() {
     return {
