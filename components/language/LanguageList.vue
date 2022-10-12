@@ -3,9 +3,10 @@
     <v-list-item
       v-for="(locale, i) in availableLocales"
       :key="i"
+      nuxt
       class="header-menu-item rounded my-1"
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
-      @click="$i18n.setLocale(locale.code)"
+      :to="switchLocalePath(locale.code)"
     >
       <v-list-item-title class="d-flex py-1">
         <v-icon
