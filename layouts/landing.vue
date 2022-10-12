@@ -5,6 +5,7 @@
       :drawer="drawer"
       transparent
       :show-search="false"
+      :max-width="1185"
       @toggle:navigationDrawer="drawer = !drawer"
     />
     <v-main class="pt-0 pb-10" style="min-height: 100vh">

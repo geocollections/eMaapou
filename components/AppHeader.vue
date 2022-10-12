@@ -13,6 +13,7 @@
       'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
     }"
     style="z-index: 2060"
+    :style="cssProps"
   >
     <v-toolbar-title class="align-self-center">
       <!--
@@ -236,6 +237,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    maxWidth: {
+      type: Number,
+      default: 1785,
+    },
   },
   data() {
     return {
@@ -262,6 +267,11 @@ export default {
         ? this.$route.name.split('__')[0]
         : 'search'
     },
+    cssProps() {
+      return {
+        '--max-width': `${this.maxWidth}px`,
+      }
+    },
   },
   created() {
     this.query = this.$route.query.q
@@ -284,7 +294,7 @@ export default {
 }
 
 .app-bar-mobile ::v-deep .v-toolbar__content {
-  max-width: 1785px;
+  max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
   padding-right: 0px;
@@ -298,7 +308,7 @@ export default {
 }
 
 .app-bar-full ::v-deep .v-toolbar__content {
-  max-width: 1785px;
+  max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
   // padding-right: 0px;
