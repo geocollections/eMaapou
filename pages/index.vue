@@ -1,12 +1,11 @@
 <template>
-  <div class="mb-10">
+  <div>
     <div
-      class="spacer pd-md-4"
-      style="padding-top: 64px"
+      class="spacer pt-16"
       :style="{
-        'background-image': cssProps.background,
+        'background-image': backgroundImage,
         'background-color': '#333333',
-        height: getTopHeight(),
+        height: topHeight,
       }"
     >
       <v-container
@@ -19,17 +18,17 @@
               class="d-flex pt-sm-4 pt-md-8"
               :style="{ 'max-width': '1000px' }"
             >
-              <div
+              <i18n
+                path="title"
+                tag="div"
                 class="text-h4 text-sm-h3 text-md-h2 white--text font-weight-bold"
               >
-                {{ $t('title') }}:
                 <span
                   class="text-h4 text-sm-h3 text-md-h2 font-weight-light white--text"
                 >
                   {{ $t('subtitle') }}
                 </span>
-              </div>
-              <!-- SUBTITLE -->
+              </i18n>
             </div>
           </v-col>
         </v-row>
@@ -43,11 +42,27 @@
               color="transparent"
             >
               <v-card-actions class="px-0 pt-md-6">
-                <search-form-quick
+                <v-form
+                  class="d-flex text-right"
                   style="width: 100%"
-                  :only-icon="$vuetify.breakpoint.smAndDown"
-                  @submit="handleSearch"
-                />
+                  @submit.prevent="handleSearch"
+                >
+                  <input-search
+                    v-model="query"
+                    height="56"
+                    :placeholder="$t('landing.searchPlaceholder')"
+                  />
+                  <v-btn
+                    height="56px"
+                    width="84px"
+                    class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
+                    type="submit"
+                    color="warning"
+                    dark
+                  >
+                    <v-icon>mdi-magnify</v-icon>
+                  </v-btn>
+                </v-form>
               </v-card-actions>
               <v-card-title
                 v-show="$vuetify.breakpoint.mdAndUp"
@@ -84,7 +99,6 @@
       </v-container>
     </div>
     <v-container
-      class=""
       :fluid="$vuetify.breakpoint.smAndDown"
       style="max-width: 1185px !important"
     >
@@ -99,8 +113,8 @@
 
           <v-row no-gutters>
             <v-col
-              v-for="(route, index) in externalCards.ids.map(
-                (id) => externalCards[id]
+              v-for="(route, index) in otherServices.ids.map(
+                (id) => otherServices[id]
               )"
               :key="`external-card-${index}`"
               cols="12"
@@ -117,25 +131,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
 import CardExternalService from '~/components/card/CardExternalService.vue'
 import CardRouteLink from '~/components/card/CardRouteLink.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 
 export default {
   components: {
-    SearchFormQuick,
     BaseHeader,
     TheNewsCard,
     CardExternalService,
     CardRouteLink,
+    InputSearch,
   },
   layout: 'landing',
-  async asyncData({ route, error, app }) {
-    const data = await app.$services.sarvREST.getResource('web_pages', 87)
-
+  async asyncData({ $services }) {
     const [
       specimenResponse,
       analysisResponse,
@@ -144,42 +155,42 @@ export default {
       photoResponse,
       drillcoreResponse,
     ] = await Promise.all([
-      app.$services.sarvSolr
+      $services.sarvSolr
         .getResourceList('specimen', {
           defaultParams: { rows: 0 },
         })
         .catch((_) => {
           return {}
         }),
-      app.$services.sarvSolr
+      $services.sarvSolr
         .getResourceList('analysis', {
           defaultParams: { rows: 0 },
         })
         .catch((_) => {
           return {}
         }),
-      app.$services.sarvSolr
+      $services.sarvSolr
         .getResourceList('sample', {
           defaultParams: { rows: 0 },
         })
         .catch((_) => {
           return {}
         }),
-      app.$services.sarvSolr
+      $services.sarvSolr
         .getResourceList('locality', {
           defaultParams: { rows: 0 },
         })
         .catch((_) => {
           return {}
         }),
-      app.$services.sarvSolr
+      $services.sarvSolr
         .getResourceList('attachment', {
           defaultParams: { rows: 0, fq: 'specimen_image_attachment:"2"' },
         })
         .catch((_) => {
           return {}
         }),
-      app.$services.sarvSolr
+      $services.sarvSolr
         .getResourceList('drillcore', {
           defaultParams: { rows: 0 },
         })
@@ -227,164 +238,77 @@ export default {
           count: photoResponse?.count ?? 20000,
         },
       ],
-      page: data,
     }
   },
   data() {
     return {
-      logo: '/logos/emaapou5white.svg',
-      drawer: false,
-      showMap: false,
-      scrollY: 0,
-      externalRoutes: [
-        {
-          text: 'kirjandus.title',
-          href: 'https://kirjandus.geoloogia.info',
-          icon: 'mdi-book-open-page-variant-outline',
-          description: 'kirjandus.description',
-        },
-        {
-          text: 'fossiilid.title',
-          href: 'https://fossils.info',
-          icon: 'mdi-chart-line',
-          description: 'fossiilid.description',
-        },
-        {
-          text: 'stratigraphy.title',
-          href: 'https://stratigraafia.info',
-          icon: 'mdi-layers-triple',
-          description: 'stratigraphy.description',
-        },
-      ],
-      imageLinks: [
-        {
-          href: 'https://taltech.ee/geoloogia-instituut',
-          title: 'footerLinks.ttu',
-          alt: 'footerLinks.ttu',
-        },
-        {
-          href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
-          title: 'footerLinks.tu',
-          alt: 'footerLinks.tu',
-        },
-        {
-          href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
-          title: 'footerLinks.elm',
-          alt: 'footerLinks.elm',
-        },
-        /* {
-          href: 'https://struktuurifondid.ee',
-          title: 'footerLinks.el',
-          alt: 'footerLinks.el',
-        }, */
-      ],
-      externalCards: {
+      query: '',
+      otherServices: {
         geocollections: {
           title: 'geocollections.title',
           description: 'geocollections.description',
           href: 'https://geocollections.info',
-          sm: 6,
-          md: 4,
-          lg: 4,
         },
         kirjandus: {
           title: 'kirjandus.title',
           description: 'kirjandus.description',
           href: 'https://kirjandus.geoloogia.info',
-          sm: 6,
-          md: 4,
-          lg: 4,
         },
         gmre: {
           title: 'gmre.title',
           description: 'gmre.description',
           href: 'https://geoloogia.info/geology',
-          sm: 6,
-          md: 3,
-          lg: 3,
         },
         fond: {
           title: 'fond.title',
           description: 'fond.description',
           href: 'https://fond.egt.ee',
-          sm: 6,
-          md: 3,
-          lg: 3,
         },
-        // Divider
         fossiilid: {
           title: 'fossiilid.title',
           description: 'fossiilid.description',
           href: 'https://fossiilid.info',
-          sm: 6,
-          md: 4,
-          lg: 4,
         },
         kivid: {
           title: 'kivid.title',
           description: 'kivid.description',
           href: 'https://kivid.info',
-          sm: 6,
-          md: 4,
-          lg: 4,
         },
         stratigraphy: {
           title: 'frontStratigraphy.title',
           description: 'frontStratigraphy.description',
           href: 'https://stratotuup.ut.ee',
-          sm: 6,
-          md: 3,
-          lg: 3,
         },
-        // Divider
         maardlad: {
           title: 'maardlad.title',
           description: 'maardlad.description',
           href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
-          sm: 6,
-          md: 6,
-          lg: 6,
         },
         doi: {
           title: 'doi.title',
           description: 'doi.description',
           href: 'https://doi.geocollections.info',
-          sm: 6,
-          md: 4,
-          lg: 4,
         },
         turba: {
           title: 'turba.title',
           description: 'turba.description',
           href: 'https://turba.geoloogia.info',
-          sm: 6,
-          md: 3,
-          lg: 3,
         },
         // Divider
         geocase: {
           title: 'geocase.title',
           description: 'geocase.description',
           href: 'https://geocase.eu',
-          sm: 6,
-          md: 3,
-          lg: 3,
         },
         eurocore: {
           title: 'eurocore.title',
           description: 'eurocore.description',
           href: 'https://eurocore.rocks',
-          sm: 6,
-          md: 3,
-          lg: 3,
         },
         sarv: {
           title: 'sarv.title',
           description: 'sarv.description',
           href: 'https://edit.geocollections.info',
-          sm: 6,
-          md: 4,
-          lg: 4,
         },
         ids: [
           'kirjandus',
@@ -400,23 +324,6 @@ export default {
           'geocollections',
           'doi',
           'sarv',
-        ],
-        innerIds: [
-          'kirjandus',
-          'doi',
-          'geocollections',
-          'fossiilid',
-          'kivid',
-          'sarv',
-        ],
-        outerIds: [
-          'fond',
-          'maardlad',
-          'stratigraphy',
-          'gmre',
-          'turba',
-          'geocase',
-          'eurocore',
         ],
       },
       backgroundImg: this.$img('/frontpage/header_img2.jpg', {
@@ -434,66 +341,30 @@ export default {
         {
           rel: 'preload',
           as: 'image',
-          href: `${this.backgroundSvg}`,
+          href: this.backgroundSvg,
         },
         {
           rel: 'preload',
           as: 'image',
-          href: `${this.backgroundImg}`,
+          href: this.backgroundImg,
         },
       ],
     }
   },
   computed: {
-    ...mapState('search', ['query']),
-    cssProps() {
-      return {
-        background: `url(${this.backgroundSvg}), url(${this.backgroundImg})`,
-      }
+    backgroundImage() {
+      return `url(${this.backgroundSvg}), url(${this.backgroundImg})`
     },
-    tabValue() {
-      // https://github.com/vuetifyjs/vuetify/issues/12265
-      const path = this.$route.path
-      const full = this.$route.fullPath
-      return path[path.length - 1] !== '/'
-        ? `${path}/${full.substring(path.length)}`
-        : `${full}/`
+    topHeight() {
+      if (this.$vuetify.breakpoint.smAndUp) return '675px'
+      return '650px'
     },
-    aboutTextColumns() {
-      if (this.$vuetify.breakpoint.lgAndUp) return 1
-      if (this.$vuetify.breakpoint.mdOnly) return 2
-      return 1
-    },
-    renderSideCard() {
-      return this.$vuetify.breakpoint.mdAndUp
-    },
-  },
-  watch: {
-    '$vuetify.breakpoint.mdAndUp'(newVal, oldVal) {
-      if (newVal === false) this.showMap = false
-    },
-  },
-  beforeMount() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
-    handleScroll() {
-      // Your scroll handling here
-      this.scrollY = window.scrollY
-    },
     handleSearch() {
-      const routeName = 'search'
-      const query = { ...this.$route.query, q: this.query }
-      this.$router.push(this.localePath({ name: routeName, query }))
-    },
-    getTopHeight() {
-      if (this.$vuetify.breakpoint.lgAndUp) return '675px'
-      if (this.$vuetify.breakpoint.mdOnly) return '675px'
-      if (this.$vuetify.breakpoint.smOnly) return '675px'
-      return '650px'
+      this.$router.push(
+        this.localePath({ name: 'search', query: { q: this.query } })
+      )
     },
   },
 }
@@ -512,63 +383,5 @@ export default {
   @media #{map-get($display-breakpoints, 'xl-only')} {
     background-position: bottom -5rem right, center;
   }
-}
-
-.layer1 {
-  background-image: var(--background);
-}
-
-.quick-card {
-  :hover {
-    color: red;
-  }
-}
-
-// OLD
-
-.background-image ::v-deep > .v-image__image {
-  filter: brightness(0.95) !important;
-}
-
-.footer-logo {
-  height: 60px;
-  width: auto;
-  /*padding: 0 10px;*/
-}
-// .v-image ::v-deep .v-responsive__content {
-//   align-self: center;
-// }
-.pulse {
-  animation: pulse 2s infinite;
-  @keyframes pulse {
-    0% {
-      padding-bottom: 30px;
-    }
-    70% {
-      padding-bottom: 0px;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-}
-.shape-divider {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-}
-
-.shape-divider svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 50px;
-}
-
-.shape-divider .shape-fill {
-  fill: #f7f6f4;
 }
 </style>

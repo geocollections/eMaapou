@@ -1,5 +1,5 @@
 export default {
-  title: 'eMaapõu',
+  title: 'eMaapõu: {0}',
   subtitle: 'Geoscience data and e\u2011services',
   slogan: 'Estonian geology data portal',
   landing: {
