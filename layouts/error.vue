@@ -5,7 +5,23 @@
         {{ title }}
       </h1>
       <div class="montserrat">{{ error.message }}</div>
-      <search-from-quick class="my-4" @submit="handleSearch" />
+      <v-form class="d-flex text-right my-4" @submit.prevent="handleSearch">
+        <input-search
+          v-model="query"
+          height="56"
+          :placeholder="$t('landing.searchPlaceholder')"
+        />
+        <v-btn
+          height="56px"
+          width="84px"
+          class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
+          type="submit"
+          color="warning"
+          dark
+        >
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+      </v-form>
       <NuxtLink to="/" class="text-link-grey montserrat">
         {{ $t('common.backToLanding') }}
       </NuxtLink>
@@ -14,10 +30,9 @@
 </template>
 
 <script>
-import isEmpty from 'lodash/isEmpty'
-import SearchFromQuick from '~/components/search/forms/SearchFormQuick.vue'
+import InputSearch from '~/components/input/InputSearch.vue'
 export default {
-  components: { SearchFromQuick },
+  components: { InputSearch },
   layout: 'empty',
   props: {
     error: {
@@ -27,6 +42,7 @@ export default {
   },
   data() {
     return {
+      query: '',
       pageNotFound: '404 Not Found',
       otherError: 'An error occurred',
     }
@@ -45,13 +61,9 @@ export default {
   },
   methods: {
     handleSearch() {
-      const routeName = this.$route.name.includes('search')
-        ? this.$route.name.split('__')[0]
-        : 'search'
-      const query = isEmpty(this.search)
-        ? { ...this.$route.query }
-        : { ...this.$route.query, q: this.search }
-      this.$router.push(this.localePath({ name: routeName, query }))
+      this.$router.push(
+        this.localePath({ name: 'search', query: { q: this.query } })
+      )
     },
   },
 }
