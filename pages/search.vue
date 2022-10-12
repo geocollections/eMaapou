@@ -2,23 +2,20 @@
   <div>
     <v-row no-gutters justify="center" align="center">
       <v-col class="pt-5">
-        <base-header :title="$t('landing.searchTitle')" />
+        <base-header icon="mdi-magnify">
+          <template #title>
+            <i18n path="quickSearch.title" tag="div">
+              <template #query>
+                <b v-text="$route.query.q" />
+              </template>
+            </i18n>
+          </template>
+        </base-header>
       </v-col>
     </v-row>
     <v-row class="px-sm-3" no-gutters>
-      <v-col cols="12" md="4" lg="3" class="pr-md-3">
-        <v-card flat color="transparent">
-          <v-card-title class="py-1 pl-2 montserrat">
-            {{ $t('common.showSearch') }}
-          </v-card-title>
-          <input-search v-model="query" @input="handleSearch" />
-        </v-card>
-      </v-col>
       <v-col class="pt-2 pt-md-0">
         <v-card flat color="transparent">
-          <v-card-title class="py-1 pl-2 montserrat">
-            {{ $t('common.selectModule') }}
-          </v-card-title>
           <v-card-actions class="pt-0">
             <button-tabs ref="tabs" :tabs="computedTabs" />
           </v-card-actions>
@@ -27,12 +24,8 @@
     </v-row>
     <v-row no-gutters class="px-sm-3" justify="center">
       <v-col>
-        <!-- <div class="mb-2">
-          <button-tabs ref="tabs" :tabs="computedTabs" />
-        </div> -->
-
         <v-card>
-          <nuxt-child :query="query" keep-alive />
+          <nuxt-child :query="$route.query.q" keep-alive />
         </v-card>
       </v-col>
     </v-row>
@@ -40,57 +33,48 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
-import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
 import orderBy from 'lodash/orderBy'
-import { mapFields } from 'vuex-map-fields'
 import ButtonTabs from '~/components/ButtonTabs.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { TABS_QUICK_SEARCH } from '~/constants'
-import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   name: 'QuickSearch',
-  components: { ButtonTabs, BaseHeader, InputSearch },
-  // layout: 'search',
-  async asyncData({ route, store, redirect, $hydrateTab, $getMaxTab, from }) {
-    try {
-      const tabs = TABS_QUICK_SEARCH.allIds.map(
-        (id) => TABS_QUICK_SEARCH.byIds[id]
-      )
+  components: { ButtonTabs, BaseHeader },
+  async asyncData({ route, $hydrateTab, from, $getMaxTab, redirect }) {
+    const tabs = TABS_QUICK_SEARCH.allIds.map(
+      (id) => TABS_QUICK_SEARCH.byIds[id]
+    )
 
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: {
-                    q: isEmpty(store.state.search.query)
-                      ? '*'
-                      : `${store.state.search.query}`,
-                  },
-                  photo: {
-                    q: isEmpty(store.state.search.query)
-                      ? '*'
-                      : `${store.state.search.query}`,
-                    fq: 'specimen_image_attachment:2',
-                  },
+    const hydratedTabs = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await $hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: {
+                  q: route.query?.q ?? '*',
+                },
+                photo: {
+                  q: route.query?.q ?? '*',
+                  fq: 'specimen_image_attachment:2',
                 },
               },
-            })
-        )
+            },
+          })
       )
-
-      if (from) {
-        const validPath = $getMaxTab(route, hydratedTabs)
-        if (validPath !== route.path) redirect(validPath)
-      }
-
-      return {
-        tabs: hydratedTabs,
-      }
-    } catch (err) {}
+    )
+    if (from !== undefined && !from?.name.startsWith('search')) {
+      const validRoute = $getMaxTab(route, hydratedTabs)
+      if (validRoute.path !== route.path) redirect(validRoute)
+    }
+    return {
+      tabs: hydratedTabs,
+    }
+  },
+  data() {
+    return {
+      tabs: TABS_QUICK_SEARCH.allIds.map((id) => TABS_QUICK_SEARCH.byIds[id]),
+    }
   },
   head() {
     return {
@@ -98,33 +82,18 @@ export default {
     }
   },
   computed: {
-    ...mapFields('search', { query: 'query' }),
     computedTabs() {
-      // Filtering out empty tabs but still showing active tab whether it is empty or not
-      // const filteredTabs = this.tabs.filter((item) =>
-      //   this.$route.name.includes(
-      //     item.id === 'drillcore' ? `${item.routeName}__` : item.routeName
-      //   )
-      // )
       return orderBy(this.tabs, ['count'], ['desc'])
     },
   },
   watch: {
     '$route.query'(newVal, oldVal) {
-      if (!isEqual(newVal, oldVal)) {
-        this.handleSearch()
-      }
+      if (newVal.q === oldVal.q) return
+      this.handleSearch()
     },
   },
-  created() {
-    if (this.$route.query) {
-      // Todo: Should deconstruct query params (page?, paginate? sort?)
-      if (!isEmpty(this.$route.query?.q)) this.search = this.$route.query.q
-      this.handleSearch()
-    }
-  },
   methods: {
-    handleSearch: debounce(async function () {
+    handleSearch: async function () {
       this.tabs = await Promise.all(
         this.tabs.map(
           async (tab) =>
@@ -132,10 +101,10 @@ export default {
               countParams: {
                 solr: {
                   default: {
-                    q: isEmpty(this.query) ? '*' : `${this.query}`,
+                    q: this.$route.query?.q ?? '*',
                   },
                   photo: {
-                    q: isEmpty(this.query) ? '*' : `${this.query}`,
+                    q: this.$route.query?.q ?? '*',
                     fq: 'specimen_image_attachment:2',
                   },
                 },
@@ -143,14 +112,6 @@ export default {
             })
         )
       )
-      this.updateRouteQuery()
-    }, 400),
-    updateRouteQuery() {
-      const routeName = this.$route.name.includes('search')
-        ? this.$route.name.split('__')[0]
-        : 'search'
-      const query = isEmpty(this.search) ? {} : { q: this.search }
-      this.$router.push(this.localePath({ name: routeName, query }))
     },
   },
 }

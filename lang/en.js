@@ -1012,4 +1012,7 @@ export default {
     settings: 'Settings',
     samples: 'Samples',
   },
+  quickSearch: {
+    title: 'Results for {query}',
+  },
 }

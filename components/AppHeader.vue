@@ -173,7 +173,11 @@
           flat
           :autofocus="false"
           :placeholder="$t('common.search')"
-          @enter="$router.push(localePath({ name: 'search' }))"
+          @enter="
+            $router.push(
+              localePath({ name: searchRouteName, query: { q: query } })
+            )
+          "
         />
         <v-hover v-slot="{ hover }">
           <v-btn
@@ -182,7 +186,11 @@
             elevation="0"
             :color="hover ? 'warning' : 'grey lighten-2'"
             class="rounded-l-0"
-            @click="$router.push(localePath({ name: 'search' }))"
+            @click="
+              $router.push(
+                localePath({ name: searchRouteName, query: { q: query } })
+              )
+            "
           >
             <v-icon color="accent">mdi-magnify</v-icon>
           </v-btn>
@@ -206,8 +214,6 @@
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields'
-
 import InputSearch from './input/InputSearch.vue'
 import BaseMenuListItem from './base/BaseMenuListItem.vue'
 import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
@@ -239,10 +245,10 @@ export default {
       logo: '/logos/emaapou5white.svg',
       logoCompact: '/logos/emaapou_short.svg',
       services: SERVICES,
+      query: '',
     }
   },
   computed: {
-    ...mapFields('search', ['query']),
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path
@@ -251,6 +257,14 @@ export default {
         ? `${path}/${full.substring(path.length)}`
         : `${full}/`
     },
+    searchRouteName() {
+      return this.$route.name.includes('search')
+        ? this.$route.name.split('__')[0]
+        : 'search'
+    },
+  },
+  created() {
+    this.query = this.$route.query.q
   },
 }
 </script>

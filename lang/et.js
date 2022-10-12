@@ -1014,4 +1014,7 @@ export default {
     settings: 'Seaded',
     samples: 'Proovid',
   },
+  quickSearch: {
+    title: 'Tulemused päringule {query}',
+  },
 }

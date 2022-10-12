@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import isEmpty from 'lodash/isEmpty'
+import { mapState } from 'vuex'
 import SearchFormQuick from '~/components/search/forms/SearchFormQuick.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
@@ -445,6 +445,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('search', ['query']),
     cssProps() {
       return {
         background: `url(${this.backgroundSvg}), url(${this.backgroundImg})`,
@@ -484,12 +485,8 @@ export default {
       this.scrollY = window.scrollY
     },
     handleSearch() {
-      const routeName = this.$route.name.includes('search')
-        ? this.$route.name.split('__')[0]
-        : 'search'
-      const query = isEmpty(this.search)
-        ? { ...this.$route.query }
-        : { ...this.$route.query, q: this.search }
+      const routeName = 'search'
+      const query = { ...this.$route.query, q: this.query }
       this.$router.push(this.localePath({ name: routeName, query }))
     },
     getTopHeight() {

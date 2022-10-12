@@ -19,7 +19,9 @@
         >
           {{ icon }}
         </v-icon>
-        {{ title }}
+        <slot name="title">
+          {{ title }}
+        </slot>
       </v-card-title>
     </slot>
   </v-card>

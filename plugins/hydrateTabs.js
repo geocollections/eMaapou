@@ -62,9 +62,10 @@ export default ({ app }, inject) => {
 
     // Constuct route
     // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
-    const path = app.localePath({
+    const path = app.localeRoute({
       name: initTab?.routeName ?? tabs[0].routeName,
       params: route.params,
+      query: route.query,
     })
     return path
   }

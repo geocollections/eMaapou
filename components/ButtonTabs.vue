@@ -10,10 +10,9 @@
         rounded
         exact
         :to="
-          localePath({
+          localeRoute({
             name: item.routeName,
-            params: { id: $route.params.id },
-            query: { ...$route.query },
+            query: $route.query,
           })
         "
       >
