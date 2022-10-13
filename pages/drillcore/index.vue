@@ -24,6 +24,7 @@
           :flat="false"
           dynamic-headers
           stateful-headers
+          :is-loading="$fetchState.pending"
           @update="handleUpdate"
         />
       </v-card>
@@ -33,6 +34,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
 import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import Search from '~/templates/Search.vue'
@@ -44,6 +46,9 @@ export default {
     SearchFormDrillcore,
     DataTableDrillcore,
     BaseHeader,
+  },
+  async fetch() {
+    await this.searchDrillcores(this.options)
   },
   head() {
     return {
@@ -63,12 +68,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/drillcore', ['options', 'items', 'count']),
+    ...mapState('search/drillcore', ['items', 'count']),
+    ...mapFields('search/drillcore', ['options']),
   },
   methods: {
     ...mapActions('search/drillcore', ['searchDrillcores']),
     handleUpdate(tableState) {
-      this.searchDrillcores(tableState?.options)
+      this.options = tableState.options
+      this.$fetch()
     },
   },
 }

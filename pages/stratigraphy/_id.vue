@@ -174,6 +174,7 @@
           :items="stratotypes"
           :count="stratotypeCount"
           :options="options"
+          :is-loading="false"
           class="mb-2"
         />
         <v-card

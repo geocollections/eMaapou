@@ -1,10 +1,13 @@
 <template>
-  <data-table-specimen
-    :items="specimens"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-specimen
+      :items="specimens"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -25,24 +28,30 @@ export default {
       specimens: [],
       count: 0,
       options: SPECIMEN.options,
+      search: '',
     }
   },
+  async fetch() {
+    const specimenResponse = await this.$services.sarvSolr.getResourceList(
+      'specimen',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.locality),
+        defaultParams: {
+          fq: `locality_id:${this.locality}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
+      }
+    )
+    this.specimens = specimenResponse.items
+    this.count = specimenResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const specimenResponse = await this.$services.sarvSolr.getResourceList(
-        'specimen',
-        {
-          ...tableState,
-          isValid: isNil(this.locality),
-          defaultParams: {
-            fq: `locality_id:${this.locality}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
-        }
-      )
-      this.specimens = specimenResponse.items
-      this.count = specimenResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

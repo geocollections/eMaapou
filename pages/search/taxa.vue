@@ -1,16 +1,18 @@
 <template>
-  <data-table-taxon
-    :show-search="false"
-    :items="items"
-    :count="count"
-    :options="options"
-    dynamic-headers
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-taxon
+      :show-search="false"
+      :items="items"
+      :count="count"
+      :options="options"
+      dynamic-headers
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { HEADERS_TAXON, TAXON } from '~/constants'
 import DataTableTaxon from '~/components/data-table/DataTableTaxon.vue'
 
@@ -29,28 +31,23 @@ export default {
       count: 0,
     }
   },
-  watch: {
-    query: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const analysisResponse = await this.$services.sarvSolr.getResourceList(
+      'taxon',
+      {
+        options: this.options,
+        search: this.query,
+        fields: this.$getAPIFieldValues(HEADERS_TAXON),
+        searchFilters: {},
+      }
+    )
+    this.items = analysisResponse.items
+    this.count = analysisResponse.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'taxon',
-        {
-          options: tableState.options,
-          search: this.query,
-          fields: this.$getAPIFieldValues(HEADERS_TAXON),
-          searchFilters: {},
-        }
-      )
-      this.items = analysisResponse.items
-      this.count = analysisResponse.count
+      this.$fetch()
     },
   },
 }

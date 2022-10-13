@@ -1,15 +1,17 @@
 <template>
-  <data-table-doi
-    :show-search="false"
-    :items="items"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-doi
+      :show-search="false"
+      :items="items"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { DOI, HEADERS_DOI } from '~/constants'
 import DataTableDoi from '~/components/data-table/DataTableDoi.vue'
 
@@ -28,25 +30,20 @@ export default {
       count: 0,
     }
   },
-  watch: {
-    query: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const response = await this.$services.sarvSolr.getResourceList('doi', {
+      options: this.options,
+      search: this.query,
+      fields: this.$getAPIFieldValues(HEADERS_DOI),
+      searchFilters: {},
+    })
+    this.items = response.items
+    this.count = response.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const response = await this.$services.sarvSolr.getResourceList('doi', {
-        options: tableState.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_DOI),
-        searchFilters: {},
-      })
-      this.items = response.items
-      this.count = response.count
+      this.$fetch()
     },
   },
 }

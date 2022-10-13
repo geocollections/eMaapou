@@ -1,10 +1,13 @@
 <template>
-  <data-table-attachment
-    :items="attachments"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-attachment
+      :items="attachments"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -23,24 +26,30 @@ export default {
         sortBy: [],
         sortDesc: [],
       },
+      search: '',
     }
   },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        search: this.search,
+        options: this.options,
+        defaultParams: {
+          locality: `${this.$route.params.id}`,
+          nest: 2,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
+      }
+    )
+    this.attachments = attachmentResponse.items
+    this.count = attachmentResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const attachmentResponse = await this.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          ...tableState,
-          defaultParams: {
-            locality: `${this.$route.params.id}`,
-            nest: 2,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
-        }
-      )
-      this.attachments = attachmentResponse.items
-      this.count = attachmentResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

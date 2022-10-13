@@ -1,12 +1,15 @@
 <template>
-  <data-table-analysis
-    :items="analyses"
-    :count="count"
-    :options="options"
-    hide-depth
-    hide-sample
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-analysis
+      :items="analyses"
+      :count="count"
+      :options="options"
+      hide-depth
+      hide-sample
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -25,24 +28,30 @@ export default {
         sortBy: [],
         sortDesc: [],
       },
+      search: '',
     }
   },
+  async fetch() {
+    const analysisResponse = await this.$services.sarvSolr.getResourceList(
+      'analysis',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          fq: `sample_id:${this.$route.params.id}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
+      }
+    )
+    this.analyses = analysisResponse.items
+    this.count = analysisResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            fq: `sample_id:${this.$route.params.id}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
-        }
-      )
-      this.analyses = analysisResponse.items
-      this.count = analysisResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <!-- HACK: line 28 'isLoading = !onlyTable is hacky.
+  <!-- HACK: `isLoading = !onlyTable`
       For some reason @update is getting called on created,
       because of that the loading indicator stayies perminantly active
       on tables where update function is not set.
@@ -25,10 +25,7 @@
     :single-expand="singleExpand"
     :expanded.sync="expanded"
     @click:row="handleRowClick"
-    @update:options="
-      isLoading = !onlyTable
-      handleChange($event)
-    "
+    @update:options="handleChange($event)"
   >
     <template #no-data>{{ $t('table.noData') }}</template>
     <!-- eslint-disable-next-line vue/no-template-shadow -->
@@ -107,10 +104,7 @@
             :go-to-text="$t('common.goTo')"
             :go-to-button-text="$t('common.goToBtn')"
             select-page-id="footer-select-btn"
-            @update:options="
-              isLoading = !onlyTable
-              handleChange($event)
-            "
+            @update:options="handleChange($event)"
           />
         </v-col>
       </v-row>
@@ -144,6 +138,7 @@
 </template>
 
 <script>
+import isEqual from 'lodash/isEqual'
 import debounce from 'lodash/debounce'
 import BaseDataTableHeaderMenu from '~/components/base/BaseDataTableHeaderMenu.vue'
 import BaseDataTableExportMenu from '~/components/base/BaseDataTableExportMenu.vue'
@@ -192,6 +187,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isLoading: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -202,7 +201,7 @@ export default {
         'items-per-page-text': this.$t('table.itemsPerPage'),
       },
       expanded: [],
-      isLoading: false,
+      // isLoading: false,
       tableElement: null,
     }
   },
@@ -211,21 +210,28 @@ export default {
       return this.headers.filter((header) => header.show)
     },
   },
-  watch: {
-    items() {
-      this.isLoading = false
-    },
-  },
+  // watch: {
+  //   items() {
+  //     this.isLoading = false
+  //   },
+  // },
   mounted() {
     this.tableElement = this.$el.querySelector('table')
   },
   methods: {
     handleChange: debounce(function (options) {
+      if (
+        options.itemsPerPage === this.options.itemsPerPage &&
+        options.page === this.options.page &&
+        isEqual(options.sortBy, this.options.sortBy) &&
+        isEqual(options.sortDesc, this.options.sortDesc)
+      )
+        return
       this.$emit('update', { options, search: this.search })
     }, 250),
     handleSearch: debounce(function () {
       const options = { ...this.options, page: 1 }
-      this.isLoading = true
+      // this.isLoading = true
       this.$emit('update', {
         options,
         search: this.search,

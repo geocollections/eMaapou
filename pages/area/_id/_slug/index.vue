@@ -1,10 +1,13 @@
 <template>
-  <data-table-site
-    :items="sites"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-site
+      :items="sites"
+      :count="count"
+      :is-loading="$fetchState.pending"
+      :options="options"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,25 +22,28 @@ export default {
       sites: [],
       count: 0,
       options: SITE.options,
+      search: '',
     }
   },
-  methods: {
-    async handleUpdate(tableState) {
-      this.options = tableState.options
-      const solrResponse = await this.$services.sarvSolr.getResourceList(
-        'site',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            fq: `area_id:${this.$route.params.id}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_SITE),
-        }
-      )
+  async fetch() {
+    const solrResponse = await this.$services.sarvSolr.getResourceList('site', {
+      search: this.search,
+      options: this.options,
+      isValid: isNil(this.$route.params.id),
+      defaultParams: {
+        fq: `area_id:${this.$route.params.id}`,
+      },
+      fields: this.$getAPIFieldValues(HEADERS_SITE),
+    })
 
-      this.sites = solrResponse.items
-      this.count = solrResponse.count
+    this.sites = solrResponse.items
+    this.count = solrResponse.count
+  },
+  methods: {
+    handleUpdate(tableState) {
+      this.options = tableState.options
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

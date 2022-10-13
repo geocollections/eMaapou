@@ -1,15 +1,17 @@
 <template>
-  <data-table-site
-    :show-search="false"
-    :items="items"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-site
+      :show-search="false"
+      :items="items"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import { HEADERS_SITE, SITE } from '~/constants'
 import DataTableSite from '~/components/data-table/DataTableSite.vue'
 
@@ -28,28 +30,23 @@ export default {
       count: 0,
     }
   },
-  watch: {
-    query: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const sampleResponse = await this.$services.sarvSolr.getResourceList(
+      'site',
+      {
+        options: this.options,
+        search: this.query,
+        fields: this.$getAPIFieldValues(HEADERS_SITE),
+        searchFilters: {},
+      }
+    )
+    this.items = sampleResponse.items
+    this.count = sampleResponse.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const sampleResponse = await this.$services.sarvSolr.getResourceList(
-        'site',
-        {
-          options: tableState.options,
-          search: this.query,
-          fields: this.$getAPIFieldValues(HEADERS_SITE),
-          searchFilters: {},
-        }
-      )
-      this.items = sampleResponse.items
-      this.count = sampleResponse.count
+      this.$fetch()
     },
   },
 }

@@ -1,14 +1,16 @@
 <template>
-  <data-table-stratigraphy
-    :items="items"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-stratigraphy
+      :items="items"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import isNil from 'lodash/isNil'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
@@ -20,32 +22,30 @@ export default {
       options: STRATIGRAPHY.options,
       items: [],
       count: 0,
+      search: '',
     }
   },
-  watch: {
-    search: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const analysisResponse = await this.$services.sarvSolr.getResourceList(
+      'stratigraphy',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          fq: `age_chronostratigraphy:${this.$route.params.id}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY),
+      }
+    )
+    this.items = analysisResponse.items
+    this.count = analysisResponse.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'stratigraphy',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            fq: `age_chronostratigraphy:${this.$route.params.id}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY),
-        }
-      )
-      this.items = analysisResponse.items
-      this.count = analysisResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

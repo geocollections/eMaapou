@@ -1,10 +1,13 @@
 <template>
-  <data-table-stratotype
-    :items="stratotypes"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-stratotype
+      :items="stratotypes"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,25 +22,31 @@ export default {
       stratotypes: [],
       count: 0,
       options: STRATOTYPE.options,
+      search: '',
     }
   },
+  async fetch() {
+    const stratotypeResponse = await this.$services.sarvREST.getResourceList(
+      'stratigraphy_stratotype',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          locality: this.$route.params.id,
+          nest: 1,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
+      }
+    )
+    this.stratotypes = stratotypeResponse.items
+    this.count = stratotypeResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const stratotypeResponse = await this.$services.sarvREST.getResourceList(
-        'stratigraphy_stratotype',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            locality: this.$route.params.id,
-            nest: 1,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
-        }
-      )
-      this.stratotypes = stratotypeResponse.items
-      this.count = stratotypeResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

@@ -1,10 +1,13 @@
 <template>
-  <data-table-dataset-reference
-    :items="references"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-dataset-reference
+      :items="references"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -18,25 +21,31 @@ export default {
       references: [],
       count: 0,
       options: DATASET_REFERENCE.options,
+      search: '',
     }
   },
+  async fetch() {
+    const referenceResponse = await this.$services.sarvREST.getResourceList(
+      'dataset_reference',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          dataset: this.$route.params.id,
+          nest: 2,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_DATASET_REFERENCE),
+      }
+    )
+    this.references = referenceResponse.items
+    this.count = referenceResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const referenceResponse = await this.$services.sarvREST.getResourceList(
-        'dataset_reference',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            dataset: this.$route.params.id,
-            nest: 2,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_DATASET_REFERENCE),
-        }
-      )
-      this.references = referenceResponse.items
-      this.count = referenceResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

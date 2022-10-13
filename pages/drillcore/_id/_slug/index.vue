@@ -1,10 +1,13 @@
 <template>
-  <list-drillcore-box
-    :options="options"
-    :count="count"
-    :items="boxes"
-    @update="handleUpdate"
-  />
+  <div>
+    <list-drillcore-box
+      :options="options"
+      :count="count"
+      :items="boxes"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -22,10 +25,26 @@ export default {
       },
       boxes: [],
       count: 0,
+      search: '',
     }
   },
-  fetch() {
-    this.handleUpdate({ options: this.options, search: '' })
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        search: this.search,
+        options: this.options,
+        defaultParams: {
+          ordering: 'drillcore_box__depth_start,drillcore_box',
+          drillcore_box__drillcore: this.$route.params.id,
+          attachment__is_preferred: true,
+          nest: 2,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
+      }
+    )
+    this.boxes = attachmentResponse.items
+    this.count = attachmentResponse.count
   },
   methods: {
     boxHasInfo(box) {
@@ -38,23 +57,10 @@ export default {
         box.drillcore_box?.remarks
       )
     },
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const attachmentResponse = await this.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          ...tableState,
-          defaultParams: {
-            ordering: 'drillcore_box__depth_start,drillcore_box',
-            drillcore_box__drillcore: this.$route.params.id,
-            attachment__is_preferred: true,
-            nest: 2,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
-        }
-      )
-      this.boxes = attachmentResponse.items
-      this.count = attachmentResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

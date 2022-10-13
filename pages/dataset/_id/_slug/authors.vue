@@ -1,11 +1,14 @@
 <template>
-  <data-table-dataset-author
-    :items="authors"
-    :count="count"
-    :options="options"
-    id-field="dataset"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-dataset-author
+      :items="authors"
+      :count="count"
+      :options="options"
+      id-field="dataset"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -27,23 +30,28 @@ export default {
       },
     }
   },
+  async fetch() {
+    const authorsResponse = await this.$services.sarvREST.getResourceList(
+      'dataset_author',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          dataset: this.$route.params.id,
+          nest: 1,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_DATASET_AUTHOR),
+      }
+    )
+    this.authors = authorsResponse.items
+    this.count = authorsResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const authorsResponse = await this.$services.sarvREST.getResourceList(
-        'dataset_author',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            dataset: this.$route.params.id,
-            nest: 1,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_DATASET_AUTHOR),
-        }
-      )
-      this.authors = authorsResponse.items
-      this.count = authorsResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

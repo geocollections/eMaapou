@@ -1,10 +1,13 @@
 <template>
-  <data-table-sample
-    :items="samples"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-sample
+      :items="samples"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -26,24 +29,30 @@ export default {
       samples: [],
       count: 0,
       options: SAMPLE.options,
+      search: '',
     }
   },
+  async fetch() {
+    const sampleResponse = await this.$services.sarvSolr.getResourceList(
+      'sample',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.locality),
+        defaultParams: {
+          fq: `locality_id:${this.locality}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
+      }
+    )
+    this.samples = sampleResponse.items
+    this.count = sampleResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const sampleResponse = await this.$services.sarvSolr.getResourceList(
-        'sample',
-        {
-          ...tableState,
-          isValid: isNil(this.locality),
-          defaultParams: {
-            fq: `locality_id:${this.locality}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
-        }
-      )
-      this.samples = sampleResponse.items
-      this.count = sampleResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

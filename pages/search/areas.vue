@@ -1,15 +1,17 @@
 <template>
-  <data-table-area
-    :show-search="false"
-    :items="items"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-area
+      :show-search="false"
+      :items="items"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import DataTableArea from '~/components/data-table/DataTableArea.vue'
 import { AREA, HEADERS_AREA } from '~/constants'
 
@@ -28,28 +30,20 @@ export default {
       count: 0,
     }
   },
-  watch: {
-    query: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const areaResponse = await this.$services.sarvSolr.getResourceList('area', {
+      options: this.options,
+      search: this.query,
+      fields: this.$getAPIFieldValues(HEADERS_AREA),
+      searchFilters: {},
+    })
+    this.items = areaResponse.items
+    this.count = areaResponse.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const areaResponse = await this.$services.sarvSolr.getResourceList(
-        'area',
-        {
-          options: tableState.options,
-          search: this.query,
-          fields: this.$getAPIFieldValues(HEADERS_AREA),
-          searchFilters: {},
-        }
-      )
-      this.items = areaResponse.items
-      this.count = areaResponse.count
+      this.$fetch()
     },
   },
 }

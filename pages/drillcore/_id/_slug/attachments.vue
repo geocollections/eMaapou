@@ -1,11 +1,14 @@
 <template>
-  <data-table-attachment
-    :items="attachments"
-    :count="count"
-    :options="options"
-    id-field="attachment"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-attachment
+      :items="attachments"
+      :count="count"
+      :options="options"
+      id-field="attachment"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -31,25 +34,31 @@ export default {
         sortBy: [],
         sortDesc: [],
       },
+      search: '',
     }
   },
+  async fetch() {
+    const attachmentResponse = await this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.locality),
+        defaultParams: {
+          nest: 2,
+          or_search: `drillcore:${this.$route.params.id} OR locality:${this.locality}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
+      }
+    )
+    this.attachments = attachmentResponse.items
+    this.count = attachmentResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const attachmentResponse = await this.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          ...tableState,
-          isValid: isNil(this.locality),
-          defaultParams: {
-            nest: 2,
-            or_search: `drillcore:${this.$route.params.id} OR locality:${this.locality}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_ATTACHMENT),
-        }
-      )
-      this.attachments = attachmentResponse.items
-      this.count = attachmentResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

@@ -1,15 +1,17 @@
 <template>
-  <data-table-analysis
-    :show-search="false"
-    :items="items"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-analysis
+      :show-search="false"
+      :items="items"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 
@@ -28,28 +30,23 @@ export default {
       count: 0,
     }
   },
-  watch: {
-    query: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const analysisResponse = await this.$services.sarvSolr.getResourceList(
+      'analysis',
+      {
+        options: this.options,
+        search: this.query,
+        fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
+        searchFilters: {},
+      }
+    )
+    this.items = analysisResponse.items
+    this.count = analysisResponse.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResponse = await this.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          options: tableState.options,
-          search: this.query,
-          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
-          searchFilters: {},
-        }
-      )
-      this.items = analysisResponse.items
-      this.count = analysisResponse.count
+      this.$fetch()
     },
   },
 }

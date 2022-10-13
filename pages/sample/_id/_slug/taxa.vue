@@ -1,10 +1,13 @@
 <template>
-  <data-table-taxon-list
-    :items="taxa"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-taxon-list
+      :items="taxa"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,25 +22,31 @@ export default {
       taxa: [],
       count: 0,
       options: TAXON_LIST.options,
+      search: '',
     }
   },
+  async fetch() {
+    const taxonResponse = await this.$services.sarvREST.getResourceList(
+      'taxon_list',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          sample: this.$route.params.id,
+          nest: 1,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_TAXON_LIST),
+      }
+    )
+    this.taxa = taxonResponse.items
+    this.count = taxonResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const taxonResponse = await this.$services.sarvREST.getResourceList(
-        'taxon_list',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            sample: this.$route.params.id,
-            nest: 1,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_TAXON_LIST),
-        }
-      )
-      this.taxa = taxonResponse.items
-      this.count = taxonResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

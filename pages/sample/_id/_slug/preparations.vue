@@ -1,10 +1,13 @@
 <template>
-  <data-table-preparation
-    :items="preparations"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-preparation
+      :items="preparations"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -23,24 +26,30 @@ export default {
         sortBy: [],
         sortDesc: [],
       },
+      search: '',
     }
   },
+  async fetch() {
+    const preparationResponse = await this.$services.sarvSolr.getResourceList(
+      'preparation',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          fq: `sample_id:${this.$route.params.id}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_PREPARATION),
+      }
+    )
+    this.preparations = preparationResponse.items
+    this.count = preparationResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const preparationResponse = await this.$services.sarvSolr.getResourceList(
-        'preparation',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            fq: `sample_id:${this.$route.params.id}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_PREPARATION),
-        }
-      )
-      this.preparations = preparationResponse.items
-      this.count = preparationResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

@@ -1,10 +1,13 @@
 <template>
-  <data-table-synonym
-    :items="synonyms"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-synonym
+      :items="synonyms"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -18,25 +21,31 @@ export default {
       synonyms: [],
       count: 0,
       options: SYNONYM.options,
+      search: '',
     }
   },
+  async fetch() {
+    const synonymResponse = await this.$services.sarvREST.getResourceList(
+      'locality_synonym',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          locality: this.$route.params.id,
+          nest: 1,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_SYNONYM),
+      }
+    )
+    this.synonyms = synonymResponse.items
+    this.count = synonymResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const synonymResponse = await this.$services.sarvREST.getResourceList(
-        'locality_synonym',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            locality: this.$route.params.id,
-            nest: 1,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_SYNONYM),
-        }
-      )
-      this.synonyms = synonymResponse.items
-      this.count = synonymResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

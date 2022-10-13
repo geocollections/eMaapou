@@ -22,6 +22,7 @@
           :count="count"
           :options="options"
           dynamic-headers
+          :is-loading="$fetchState.pending"
           stateful-headers
           @update="handleUpdate"
         />
@@ -32,6 +33,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import SearchFormLocality from '~/components/search/forms/SearchFormLocality.vue'
 import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import Search from '~/templates/Search.vue'
@@ -43,6 +45,9 @@ export default {
     DataTableLocality,
     SearchFormLocality,
     BaseHeader,
+  },
+  async fetch() {
+    await this.searchLocalities(this.options)
   },
   head() {
     return {
@@ -62,12 +67,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/locality', ['options', 'items', 'count']),
+    ...mapState('search/locality', ['items', 'count']),
+    ...mapFields('search/locality', ['options']),
   },
   methods: {
     ...mapActions('search/locality', ['searchLocalities']),
     handleUpdate(tableState) {
-      this.searchLocalities(tableState?.options)
+      this.options = tableState.options
+      this.$fetch()
     },
   },
 }

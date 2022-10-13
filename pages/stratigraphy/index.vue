@@ -24,6 +24,7 @@
           :options="options"
           dynamic-headers
           stateful-headers
+          :is-loading="$fetchState.pending"
           @update="handleUpdate"
         />
       </v-card>
@@ -33,6 +34,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import Search from '~/templates/Search.vue'
 import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
@@ -44,6 +46,9 @@ export default {
     SearchFormStratigraphy,
     DataTableStratigraphy,
     BaseHeader,
+  },
+  async fetch() {
+    await this.searchStratigraphies(this.options)
   },
   head() {
     return {
@@ -63,12 +68,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/stratigraphy', ['options', 'items', 'count']),
+    ...mapState('search/stratigraphy', ['items', 'count']),
+    ...mapFields('search/stratigraphy', ['options']),
   },
   methods: {
     ...mapActions('search/stratigraphy', ['searchStratigraphies']),
-    async handleUpdate(tableState) {
-      await this.searchStratigraphies(tableState?.options)
+    handleUpdate(tableState) {
+      this.options = tableState.options
+      this.$fetch()
     },
   },
 }

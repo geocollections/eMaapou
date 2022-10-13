@@ -1,11 +1,14 @@
 <template>
-  <data-table-sample-data
-    :items="sampleData"
-    :count="count"
-    :options="options"
-    :additional-headers="parameterHeaders"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-sample-data
+      :items="sampleData"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      :additional-headers="parameterHeaders"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -28,7 +31,24 @@ export default {
       sampleData: [],
       count: 0,
       options: SAMPLE_DATA.options,
+      search: '',
     }
+  },
+  async fetch() {
+    const sampleDataResponse = await this.$services.sarvSolr.getResourceList(
+      'sample_data',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          fq: `dataset_ids:${this.$route.params.id}`,
+        },
+        fields: this.mergedFields,
+      }
+    )
+    this.sampleData = sampleDataResponse.items
+    this.count = sampleDataResponse.count
   },
   computed: {
     mergedFields() {
@@ -43,21 +63,10 @@ export default {
     },
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const sampleDataResponse = await this.$services.sarvSolr.getResourceList(
-        'sample_data',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            fq: `dataset_ids:${this.$route.params.id}`,
-          },
-          fields: this.mergedFields,
-        }
-      )
-      this.sampleData = sampleDataResponse.items
-      this.count = sampleDataResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

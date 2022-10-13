@@ -21,6 +21,7 @@
           :options="options"
           dynamic-headers
           stateful-headers
+          :is-loading="$fetchState.pending"
           @update="handleUpdate"
         />
       </v-card>
@@ -30,6 +31,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 import Search from '~/templates/Search.vue'
@@ -41,6 +43,9 @@ export default {
     SearchFormSpecimen,
     DataTableSpecimen,
     BaseHeader,
+  },
+  async fetch() {
+    await this.searchSpecimens(this.options)
   },
   head() {
     return {
@@ -60,12 +65,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/specimen', ['options', 'items', 'count']),
+    ...mapState('search/specimen', ['items', 'count']),
+    ...mapFields('search/specimen', ['options']),
   },
   methods: {
     ...mapActions('search/specimen', ['searchSpecimens']),
     handleUpdate(tableState) {
-      this.searchSpecimens(tableState?.options)
+      this.options = tableState.options
+      this.$fetch()
     },
   },
 }

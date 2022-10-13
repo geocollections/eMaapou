@@ -1,13 +1,16 @@
 <template>
-  <data-table-analysis-result
-    :items="analysisResults"
-    :count="count"
-    :options="options"
-    hide-depth
-    hide-method
-    dynamic-headers
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-analysis-result
+      :items="analysisResults"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      hide-depth
+      hide-method
+      dynamic-headers
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -22,24 +25,30 @@ export default {
       analysisResults: [],
       count: 0,
       options: ANALYSIS_RESULT.options,
+      search: '',
     }
+  },
+  async fetch() {
+    const analysisResultResponse =
+      await this.$services.sarvSolr.getResourceList('analysis_results', {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          fq: `analysis_id:${this.$route.params.id}`,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_ANALYSIS_RESULT),
+      })
+
+    this.analysisResults = analysisResultResponse.items
+    this.count = analysisResultResponse.count
   },
   methods: {
     round,
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const analysisResultResponse =
-        await this.$services.sarvSolr.getResourceList('analysis_results', {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            fq: `analysis_id:${this.$route.params.id}`,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_ANALYSIS_RESULT),
-        })
-
-      this.analysisResults = analysisResultResponse.items
-      this.count = analysisResultResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

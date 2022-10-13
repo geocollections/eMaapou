@@ -1,14 +1,16 @@
 <template>
-  <data-table-stratigraphy-reference
-    :items="items"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-stratigraphy-reference
+      :items="items"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
 import isNil from 'lodash/isNil'
 import {
   HEADERS_STRATIGRAPHY_REFERENCE,
@@ -23,34 +25,32 @@ export default {
       options: STRATIGRAPHY_REFERENCE.options,
       items: [],
       count: 0,
+      search: '',
     }
   },
-  watch: {
-    search: {
-      handler: debounce(function (value) {
-        this.options.page = 1
-        this.handleUpdate({ options: { ...this.options }, search: value })
-      }, 400),
-    },
+  async fetch() {
+    const referenceResponse = await this.$services.sarvREST.getResourceList(
+      'stratigraphy_reference',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          stratigraphy: this.$route.params.id,
+          nest: 1,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY_REFERENCE),
+      }
+    )
+
+    this.items = referenceResponse.items
+    this.count = referenceResponse.count
   },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const referenceResponse = await this.$services.sarvREST.getResourceList(
-        'stratigraphy_reference',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            stratigraphy: this.$route.params.id,
-            nest: 1,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY_REFERENCE),
-        }
-      )
-
-      this.items = referenceResponse.items
-      this.count = referenceResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

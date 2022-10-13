@@ -1,11 +1,14 @@
 <template>
-  <data-table-dataset-geolocation
-    :items="geolocations"
-    :count="count"
-    :options="options"
-    id-field="dataset"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-dataset-geolocation
+      :items="geolocations"
+      :count="count"
+      :options="options"
+      id-field="dataset"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,6 +22,7 @@ export default {
     return {
       geolocations: [],
       count: 0,
+      search: '',
       options: {
         page: 1,
         itemsPerPage: 25,
@@ -27,21 +31,28 @@ export default {
       },
     }
   },
+  async fetch() {
+    const geolocationsResponse = await this.$services.sarvREST.getResourceList(
+      'dataset_geolocation',
+      {
+        search: this.search,
+        options: this.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          dataset: this.$route.params.id,
+          nest: 1,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_DATASET_GEOLOCATION),
+      }
+    )
+    this.geolocations = geolocationsResponse.items
+    this.count = geolocationsResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const geolocationsResponse =
-        await this.$services.sarvREST.getResourceList('dataset_geolocation', {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            dataset: this.$route.params.id,
-            nest: 1,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_DATASET_GEOLOCATION),
-        })
-      this.geolocations = geolocationsResponse.items
-      this.count = geolocationsResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

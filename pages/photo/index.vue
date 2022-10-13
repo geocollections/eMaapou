@@ -43,6 +43,7 @@
           :options="options"
           dynamic-headers
           stateful-headers
+          :is-loading="$fetchState.pending"
           @update="handleUpdate"
         />
 
@@ -85,6 +86,9 @@ export default {
     Search,
     BaseHeader,
   },
+  async fetch() {
+    await this.searchImages(this.options)
+  },
   head() {
     return {
       title: this.$t('photo.pageTitle'),
@@ -105,7 +109,7 @@ export default {
   computed: {
     ...mapState('search/image', ['options', 'items', 'count']),
     ...mapState('settings', ['listOfViews']),
-    ...mapFields('search/image', ['currentView']),
+    ...mapFields('search/image', ['currentView', 'options']),
     mapMarkers() {
       if (this.items?.length > 0) {
         return this.items.reduce((filtered, item) => {
@@ -142,8 +146,9 @@ export default {
   },
   methods: {
     ...mapActions('search/image', ['searchImages']),
-    async handleUpdate(tableState) {
-      await this.searchImages(tableState?.options)
+    handleUpdate(tableState) {
+      this.options = tableState.options
+      this.$fetch()
     },
   },
 }

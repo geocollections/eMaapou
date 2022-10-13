@@ -1,10 +1,13 @@
 <template>
-  <data-table-specimen-identification-geology
-    :items="identifications"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-specimen-identification-geology
+      :items="identifications"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -23,28 +26,34 @@ export default {
         sortBy: [],
         sortDesc: [],
       },
+      search: '',
     }
   },
+  async fetch() {
+    const identificationResponse =
+      await this.$services.sarvREST.getResourceList(
+        'specimen_identification_geology',
+        {
+          search: this.search,
+          options: this.options,
+          isValid: isNil(this.$route.params.id),
+          defaultParams: {
+            specimen: this.$route.params.id,
+            nest: 1,
+          },
+          fields: this.$getAPIFieldValues(
+            HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY
+          ),
+        }
+      )
+    this.identifications = identificationResponse.items
+    this.count = identificationResponse.count
+  },
   methods: {
-    async handleUpdate(tableState) {
+    handleUpdate(tableState) {
       this.options = tableState.options
-      const identificationResponse =
-        await this.$services.sarvREST.getResourceList(
-          'specimen_identification_geology',
-          {
-            ...tableState,
-            isValid: isNil(this.$route.params.id),
-            defaultParams: {
-              specimen: this.$route.params.id,
-              nest: 1,
-            },
-            fields: this.$getAPIFieldValues(
-              HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY
-            ),
-          }
-        )
-      this.identifications = identificationResponse.items
-      this.count = identificationResponse.count
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }

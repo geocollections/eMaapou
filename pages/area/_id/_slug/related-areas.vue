@@ -1,10 +1,13 @@
 <template>
-  <data-table-area
-    :items="areas"
-    :count="count"
-    :options="options"
-    @update="handleUpdate"
-  />
+  <div>
+    <data-table-area
+      :items="areas"
+      :count="count"
+      :options="options"
+      :is-loading="$fetchState.pending"
+      @update="handleUpdate"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,25 +22,28 @@ export default {
       areas: [],
       count: 0,
       options: AREA.options,
+      search: '',
     }
   },
-  methods: {
-    async handleUpdate(tableState) {
-      this.options = tableState.options
-      const solrResponse = await this.$services.sarvREST.getResourceList(
-        'area',
-        {
-          ...tableState,
-          isValid: isNil(this.$route.params.id),
-          defaultParams: {
-            parent_area: this.$route.params.id,
-          },
-          fields: this.$getAPIFieldValues(HEADERS_AREA),
-        }
-      )
+  async fetch() {
+    const solrResponse = await this.$services.sarvREST.getResourceList('area', {
+      search: this.search,
+      options: this.options,
+      isValid: isNil(this.$route.params.id),
+      defaultParams: {
+        parent_area: this.$route.params.id,
+      },
+      fields: this.$getAPIFieldValues(HEADERS_AREA),
+    })
 
-      this.areas = solrResponse.items
-      this.count = solrResponse.count
+    this.areas = solrResponse.items
+    this.count = solrResponse.count
+  },
+  methods: {
+    handleUpdate(tableState) {
+      this.options = tableState.options
+      this.search = tableState.search
+      this.$fetch()
     },
   },
 }
