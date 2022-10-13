@@ -1,10 +1,11 @@
 <template>
   <div>
-    <data-table-dataset-analysis
-      :items="analyses"
+    <data-table-sample-data
+      :items="sampleData"
       :count="count"
       :options="options"
       :is-loading="$fetchState.pending"
+      :additional-headers="parameterHeaders"
       @update="handleUpdate"
     />
   </div>
@@ -12,22 +13,30 @@
 
 <script>
 import isNil from 'lodash/isNil'
-import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis.vue'
-import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
+import DataTableSampleData from '~/components/data-table/DataTableSampleData.vue'
+import { SAMPLE_DATA, HEADERS_SAMPLE_DATA } from '~/constants'
 
 export default {
-  components: { DataTableDatasetAnalysis },
+  components: { DataTableSampleData },
+  props: {
+    parameterHeaders: {
+      type: Object,
+      default: () => {
+        return { byIds: {}, allIds: [] }
+      },
+    },
+  },
   data() {
     return {
-      analyses: [],
+      sampleData: [],
       count: 0,
-      options: DATASET_ANALYSIS.options,
+      options: SAMPLE_DATA.options,
       search: '',
     }
   },
   async fetch() {
-    const analysisResponse = await this.$services.sarvSolr.getResourceList(
-      'analytical_data',
+    const sampleDataResponse = await this.$services.sarvSolr.getResourceList(
+      'sample_data',
       {
         search: this.search,
         options: this.options,
@@ -35,11 +44,23 @@ export default {
         defaultParams: {
           fq: `dataset_ids:${this.$route.params.id}`,
         },
-        fields: this.$getAPIFieldValues(HEADERS_DATASET_ANALYSIS),
+        fields: this.mergedFields,
       }
     )
-    this.analyses = analysisResponse.items
-    this.count = analysisResponse.count
+    this.sampleData = sampleDataResponse.items
+    this.count = sampleDataResponse.count
+  },
+  computed: {
+    mergedFields() {
+      const parameterFields = Object.values(this.parameterHeaders).reduce(
+        (obj, item) => ({ ...obj, [item.value]: item.value }),
+        {}
+      )
+      return {
+        ...this.$getAPIFieldValues(HEADERS_SAMPLE_DATA),
+        ...parameterFields,
+      }
+    },
   },
   methods: {
     handleUpdate(tableState) {

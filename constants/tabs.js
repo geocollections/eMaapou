@@ -228,7 +228,7 @@ export const TABS_DATASET = {
     dataset_analysis: {
       id: 'dataset_analysis',
       table: 'dataset_analysis',
-      routeName: 'dataset-id-slug',
+      routeName: 'dataset-id-slug-analyses',
       title: 'dataset.analyses',
       count: 0,
       props: {},
@@ -269,7 +269,7 @@ export const TABS_DATASET = {
       id: 'sample_results',
       table: 'sample_data',
       isSolr: true,
-      routeName: 'dataset-id-slug-sample-results',
+      routeName: 'dataset-id-slug',
       title: 'dataset.sampleResults',
       count: 0,
       props: {},
