@@ -90,10 +90,12 @@ export default {
   },
   computed: {
     title() {
-      return this.$translate({
-        et: this.dataset?.name,
-        en: this.dataset?.name_en,
-      })
+      return (
+        this.$translate({
+          et: this.dataset?.name,
+          en: this.dataset?.name_en,
+        }) ?? ''
+      )
     },
   },
 }
