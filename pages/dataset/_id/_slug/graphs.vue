@@ -6,7 +6,7 @@
     :min-depth="minDepth"
     :max-depth="maxDepth"
     :parameters="parameters"
-    :title="$translate({ et: dataset.name, en: dataset.name_en })"
+    :title="title"
   />
 </template>
 
@@ -87,6 +87,14 @@ export default {
       maxDepth,
       parameters,
     }
+  },
+  computed: {
+    title() {
+      return this.$translate({
+        et: this.dataset?.name,
+        en: this.dataset?.name_en,
+      })
+    },
   },
 }
 </script>
