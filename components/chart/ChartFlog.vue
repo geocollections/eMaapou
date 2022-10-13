@@ -127,7 +127,7 @@ import OptionsParameterTreeView from '~/components/chart/options/OptionsParamete
 import range from '~/utils/range'
 import clipRectByRect from '~/utils/clipRectByRect'
 export default {
-  name: 'ChartFlogNew',
+  name: 'ChartFlog',
   components: {
     RendererSwitch,
     OptionsParameterTreeView,
