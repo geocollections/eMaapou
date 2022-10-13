@@ -417,6 +417,7 @@ export default {
               // if empty spot in echarts grid list, use the empty spot index as `gridIndex`, as echarts wants these empty spaces to be filled
               if (nullGridIndex > -1) {
                 this.nextGridIndex = nullGridIndex
+                newDataZoomYAxisIndices.push(this.nextGridIndex)
                 fromIndex = nullGridIndex + 1
                 const newChartComponents = this.createParameterChartComponents(
                   groupedParameters.find((param) => {
@@ -437,6 +438,7 @@ export default {
                 this.nextGridIndex =
                   this.$refs.flogChart.getOption().grid.length +
                   parameterGridIndex
+                newDataZoomYAxisIndices.push(this.nextGridIndex)
                 const newChartComponents = this.createParameterChartComponents(
                   groupedParameters.find((param) => {
                     return param.value === addedParameter.value
