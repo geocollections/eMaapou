@@ -7,6 +7,7 @@
     :max-depth="maxDepth"
     :parameters="parameters"
     :title="title"
+    :reverse="reversed"
   />
 </template>
 
@@ -66,7 +67,7 @@ export default {
     const analysisResults = analysisResultsResponse?.items
     const sampleResults = sampleResponse?.items
 
-    const [maxDepth, minDepth] = chartRange(
+    const [maxDepth, minDepth, reversed] = chartRange(
       [
         analysisResultsResponse.stats.stats_fields.depth.max,
         sampleResponse.stats.stats_fields.depth.max,
@@ -85,6 +86,7 @@ export default {
       sampleResults,
       minDepth,
       maxDepth,
+      reversed,
       parameters,
     }
   },

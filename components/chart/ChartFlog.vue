@@ -161,6 +161,10 @@ export default {
       type: Array,
       required: true,
     },
+    reverse: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -751,9 +755,9 @@ export default {
                   : t.depth
                 return [
                   t.value,
-                  -avgDepth,
-                  -t.depth,
-                  -t.depth_interval,
+                  this.reverse ? -avgDepth : avgDepth,
+                  this.reverse ? -t.depth : t.depth,
+                  this.reverse ? -t.depth_interval : t.depth_interval,
                   t.analysis_id,
                 ]
               })
@@ -947,18 +951,22 @@ export default {
             },
             renderItem(params, api) {
               const categoryIndex = api.value(0)
-
               const depthInterval = api.value(2)
                 ? api.value(2)
                 : api.value(1) - 0.1
-              const start = api.coord([categoryIndex, api.value(1)])
-              const end = api.coord([categoryIndex, depthInterval])
+              const switchDepths = api.value(1) < depthInterval
+              const startDepth = switchDepths ? depthInterval : api.value(1)
+              const endDepth = switchDepths ? api.value(1) : depthInterval
+              const start = api.coord([categoryIndex, startDepth])
+              const end = api.coord([categoryIndex, endDepth])
 
               const categoryWidth = api.size([0, 1])[0]
+              const dynamicHeight = end[1] - start[1]
               const height =
-                api.value(2) || end[1] - start[1] < 10 ? end[1] - start[1] : 10
+                api.value(2) || dynamicHeight < 10 ? dynamicHeight : 10
               const x = start[0] - categoryWidth * 0.5
               const y = api.value(2) ? start[1] : start[1] - height / 2
+              // console.log(y, height)
               const rectShape = clipRectByRect(
                 {
                   x,
@@ -988,8 +996,8 @@ export default {
             data: this.samples.map((item) => {
               return [
                 0,
-                -item.depth,
-                -item.depth_interval,
+                this.reverse ? -item.depth : item.depth,
+                this.reverse ? -item.depth_interval : item.depth_interval,
                 item.id,
                 item.sample_number || item.sample_id,
               ]

@@ -14,6 +14,7 @@
           en: localityObject.locality_en,
         })
       "
+      :reverse="reversed"
     />
     <las-chart
       v-if="attachment && lasContent"
@@ -60,6 +61,7 @@ export default {
       minDepth: 0,
       maxDepth: 0,
       parameters: [],
+      reversed: false,
     }
   },
   async fetch() {
@@ -141,7 +143,7 @@ export default {
     const sampleResults = sampleResponse?.items
     const taxaResults = taxaResponse?.items
 
-    const [maxDepth, minDepth] = chartRange(
+    const [maxDepth, minDepth, reversed] = chartRange(
       [
         analysisResultsResponse.stats.stats_fields.depth.max,
         sampleResponse.stats.stats_fields.depth.max,
@@ -162,6 +164,7 @@ export default {
     this.maxDepth = maxDepth
     this.minDepth = minDepth
     this.parameters = parameters
+    this.reversed = reversed
   },
   computed: {
     chartTitle() {
