@@ -342,6 +342,7 @@ export default {
         initActiveTab: validPath,
         stratotypes,
         stratotypeCount,
+        options: STRATOTYPE.options,
       }
     } catch (err) {
       error({
