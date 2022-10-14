@@ -225,6 +225,24 @@ export const TABS_COLLECTION = {
 
 export const TABS_DATASET = {
   byIds: {
+    sample_results: {
+      id: 'sample_results',
+      table: 'sample_data',
+      isSolr: true,
+      routeName: 'dataset-id-slug',
+      title: 'dataset.sampleResults',
+      count: 0,
+      props: {},
+    },
+    graphs: {
+      table: 'analysis_results',
+      id: 'graphs',
+      isSolr: true,
+      routeName: 'dataset-id-slug-graphs',
+      title: 'locality.graphs',
+      count: 0,
+      props: {},
+    },
     dataset_analysis: {
       id: 'dataset_analysis',
       table: 'dataset_analysis',
@@ -262,24 +280,6 @@ export const TABS_DATASET = {
       table: 'dataset_geolocation',
       routeName: 'dataset-id-slug-geolocations',
       title: 'dataset.geolocations',
-      count: 0,
-      props: {},
-    },
-    sample_results: {
-      id: 'sample_results',
-      table: 'sample_data',
-      isSolr: true,
-      routeName: 'dataset-id-slug',
-      title: 'dataset.sampleResults',
-      count: 0,
-      props: {},
-    },
-    graphs: {
-      table: 'analysis_results',
-      id: 'analysis_results',
-      isSolr: true,
-      routeName: 'dataset-id-slug-graphs',
-      title: 'locality.graphs',
       count: 0,
       props: {},
     },

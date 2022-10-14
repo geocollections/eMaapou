@@ -279,7 +279,7 @@ export default {
             return await app.$hydrateTab(tab, {
               countParams: {
                 solr: {
-                  default: { fq: `dataset_ids:${dataset.id}` },
+                  default: { fq: `dataset_ids:${dataset?.id}` },
                 },
               },
             })
@@ -287,13 +287,13 @@ export default {
           return await app.$hydrateTab(tab, {
             countParams: {
               api: {
-                default: { dataset: dataset.id },
+                default: { dataset: dataset?.id },
               },
             },
           })
         })
       )
-      const slugRoute = app.$createSlugRoute(route, dataset.title)
+      const slugRoute = app.$createSlugRoute(route, dataset?.title)
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
@@ -320,17 +320,11 @@ export default {
   },
   head() {
     return {
-      title: this.$translate({
-        et: this.dataset.name,
-        en: this.dataset.name_en,
-      }),
+      title: this.dataset.title,
       meta: [
         {
           property: 'og:title',
-          content: this.$translate({
-            et: this.dataset.name,
-            en: this.dataset.name_en,
-          }),
+          content: this.dataset.title,
           hid: 'og:title',
         },
         {
@@ -350,7 +344,6 @@ export default {
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },
-
     computedLocations() {
       return this.locations.reduce((filtered, item) => {
         if (item.latitude && item.longitude) {

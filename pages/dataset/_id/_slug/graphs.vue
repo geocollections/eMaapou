@@ -1,14 +1,16 @@
 <template>
-  <chart-flog
-    v-if="analysisResults.length > 0 && sampleResults.length > 0"
-    :analyses="analysisResults"
-    :samples="sampleResults"
-    :min-depth="minDepth"
-    :max-depth="maxDepth"
-    :parameters="parameters"
-    :title="title"
-    :reverse="reversed"
-  />
+  <div>
+    <chart-flog
+      v-if="analysisResults.length > 0 && sampleResults.length > 0"
+      :analyses="analysisResults"
+      :samples="sampleResults"
+      :min-depth="minDepth"
+      :max-depth="maxDepth"
+      :parameters="parameters"
+      :title="dataset.title"
+      :reverse="reversed"
+    />
+  </div>
 </template>
 
 <script>
@@ -21,16 +23,26 @@ export default {
   props: {
     dataset: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
-  async asyncData({ params, $services }) {
-    const analysisResultsPromise = $services.sarvSolr.getResourceList(
+  data() {
+    return {
+      analysisResults: {},
+      sampleResults: {},
+      minDepth: 0,
+      maxDepth: 0,
+      reversed: false,
+      parameters: [],
+    }
+  },
+  async fetch() {
+    const analysisResultsPromise = this.$services.sarvSolr.getResourceList(
       'analysis_results',
       {
         isValid: isNil('dataset_ids'),
         defaultParams: {
-          fq: `dataset_ids:${params.id}`,
+          fq: `dataset_ids:${this.$route.params.id}`,
           start: 0,
           rows: 50000,
           fl: 'id,analysis_id,depth,depth_interval,parameter,method_id,value',
@@ -45,18 +57,21 @@ export default {
         },
       }
     )
-    const samplesPromise = $services.sarvSolr.getResourceList('sample_data', {
-      isValid: isNil('dataset_ids'),
-      defaultParams: {
-        fq: `dataset_ids:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
-        start: 0,
-        rows: 50000,
-        fl: 'id,sample_id,sample_number,depth,depth_interval,',
-        sort: 'depth asc',
-        stats: 'on',
-        'stats.field': ['depth', 'depth_interval'],
-      },
-    })
+    const samplesPromise = this.$services.sarvSolr.getResourceList(
+      'sample_data',
+      {
+        isValid: isNil('dataset_ids'),
+        defaultParams: {
+          fq: `dataset_ids:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
+          start: 0,
+          rows: 50000,
+          fl: 'id,sample_id,sample_number,depth,depth_interval,',
+          sort: 'depth asc',
+          stats: 'on',
+          'stats.field': ['depth', 'depth_interval'],
+        },
+      }
+    )
 
     // TODO: catch any failing promises
     const [analysisResultsResponse, sampleResponse] = await Promise.all([
@@ -81,23 +96,16 @@ export default {
     )
     const parameters = flogParameters(analysisResultsResponse.facet.facet_pivot)
 
-    return {
-      analysisResults,
-      sampleResults,
-      minDepth,
-      maxDepth,
-      reversed,
-      parameters,
-    }
+    this.analysisResults = analysisResults
+    this.sampleResults = sampleResults
+    this.minDepth = minDepth
+    this.maxDepth = maxDepth
+    this.reversed = reversed
+    this.parameters = parameters
   },
   computed: {
     title() {
-      return (
-        this.$translate({
-          et: this.dataset?.name,
-          en: this.dataset?.name_en,
-        }) ?? ''
-      )
+      return this.dataset?.title
     },
   },
 }

@@ -28,22 +28,7 @@
         >{{ $t(item.title, { number: item.count }) }}</v-tab
       >
     </v-tabs>
-    <v-tabs-items v-model="activeTab" touchless class="rounded">
-      <v-tab-item
-        v-for="(item, index) in tabs"
-        :key="index"
-        :value="
-          localePath({
-            name: item.routeName,
-            params: $route.params,
-          })
-        "
-      >
-        <!-- Todo: Removing keep-alive fixes empty tab problem when navigating but breaks tab data (weird problem have to look into it) -->
-        <!-- Todo: Even if keep-alive is on then navigating between tabs is not updating nuxt-child??? example preparation/9981 -> 9980. -->
-        <nuxt-child :key="index" keep-alive v-bind="item.props" />
-      </v-tab-item>
-    </v-tabs-items>
+    <nuxt-child keep-alive v-bind="tabsDict[activeTab].props" />
   </div>
 </template>
 
@@ -53,7 +38,7 @@ export default {
   props: {
     tabs: {
       type: Array,
-      required: true,
+      default: () => [],
     },
     initActiveTab: {
       type: String,
@@ -64,6 +49,19 @@ export default {
     return {
       activeTab: this.initActiveTab,
     }
+  },
+  computed: {
+    tabsDict() {
+      return this.tabs.reduce((prev, tab) => {
+        return {
+          ...prev,
+          [this.localePath({
+            name: tab.routeName,
+            params: this.$route.params,
+          })]: tab,
+        }
+      }, {})
+    },
   },
 }
 </script>
