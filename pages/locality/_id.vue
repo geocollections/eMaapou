@@ -280,7 +280,7 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const localityResponse = await $services.sarvREST.getResource(
         'locality',
@@ -410,6 +410,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         locality,
         ids,
@@ -518,10 +519,6 @@ export default {
     stratigraphy_base() {
       return this.locality?.stratigraphy_base
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

@@ -246,7 +246,7 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'specimen',
@@ -299,6 +299,7 @@ export default {
       )
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         specimen,
         specimenAlt,
@@ -402,10 +403,6 @@ export default {
     parent() {
       return this.specimen?.parent
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
 }
 </script>

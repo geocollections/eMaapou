@@ -252,7 +252,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const stratigraphyResponse = await $services.sarvREST.getResource(
         'stratigraphy',
@@ -334,6 +334,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         stratigraphy,
         ids,
@@ -404,10 +405,6 @@ export default {
       }
       return false
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

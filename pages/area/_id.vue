@@ -394,7 +394,7 @@ export default {
     BaseLinkExternal,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'area',
@@ -450,6 +450,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         area,
         ids,
@@ -560,10 +561,6 @@ export default {
         }, [])
       } else return []
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

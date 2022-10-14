@@ -408,6 +408,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         site,
         ids,
@@ -423,14 +424,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-      images: [],
-    }
-  },
-
   head() {
     return {
       title: `${this.title} | ${this.$t('site.pageTitle')}`,
@@ -499,10 +492,6 @@ export default {
     area() {
       return this.site?.area
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

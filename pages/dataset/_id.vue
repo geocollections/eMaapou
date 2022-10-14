@@ -181,7 +181,7 @@ export default {
     TableRowLink,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const datasetResponse = await $services.sarvREST.getResource(
         'dataset',
@@ -297,6 +297,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         dataset,
         ids,
@@ -317,15 +318,6 @@ export default {
       })
     }
   },
-  data() {
-    return {
-      tabs: [],
-      initActiveTab: '',
-      localities: [],
-      locations: [],
-    }
-  },
-
   head() {
     return {
       title: this.$translate({
@@ -382,10 +374,6 @@ export default {
         return filtered
       }, [])
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

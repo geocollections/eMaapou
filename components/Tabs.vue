@@ -32,14 +32,12 @@
       <v-tab-item
         v-for="(item, index) in tabs"
         :key="index"
-        :disabled="item.count === 0"
         :value="
           localePath({
             name: item.routeName,
             params: $route.params,
           })
         "
-        :height="$vuetify.breakpoint.xsOnly ? 38 : 'unset'"
       >
         <!-- Todo: Removing keep-alive fixes empty tab problem when navigating but breaks tab data (weird problem have to look into it) -->
         <!-- Todo: Even if keep-alive is on then navigating between tabs is not updating nuxt-child??? example preparation/9981 -> 9980. -->
@@ -55,24 +53,17 @@ export default {
   props: {
     tabs: {
       type: Array,
-      default: () => [],
+      required: true,
     },
     initActiveTab: {
       type: String,
-      default: null,
+      required: true,
     },
   },
   data() {
     return {
       activeTab: this.initActiveTab,
     }
-  },
-  created() {
-    // if (document.getElementsByClassName('v-slide-group__prev')) {
-    //   document
-    //     .getElementsByClassName('v-slide-group__prev')[0]
-    //     .firstElementChild.classList.remove('theme--light')
-    // }
   },
 }
 </script>

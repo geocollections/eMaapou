@@ -196,7 +196,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const drillcoreResponse = await $services.sarvREST.getResource(
         'drillcore',
@@ -285,6 +285,7 @@ export default {
       )
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         drillcore,
         ids,
@@ -345,10 +346,6 @@ export default {
     locality() {
       return this.drillcore?.locality
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

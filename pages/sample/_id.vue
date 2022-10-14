@@ -351,7 +351,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'sample',
@@ -412,6 +412,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         sample,
         ids,
@@ -536,10 +537,6 @@ export default {
     parentSpecimen() {
       return this.sample?.parent_specimen
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

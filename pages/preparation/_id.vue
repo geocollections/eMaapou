@@ -148,7 +148,7 @@ import BaseTable from '~/components/base/BaseTable.vue'
 export default {
   components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
 
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const detailViewResponse = await $services.sarvREST.getResource(
         'preparation',
@@ -187,6 +187,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         preparation,
         ids,
@@ -247,10 +248,6 @@ export default {
     owner() {
       return this.preparation?.owner
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNil,

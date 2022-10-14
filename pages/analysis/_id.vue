@@ -186,7 +186,7 @@ import { TABS_ANALYSIS } from '~/constants'
 export default {
   components: { HeaderDetail, TableRow, TableRowLink, Tabs, Detail, BaseTable },
 
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const analysisResponse = await $services.sarvREST.getResource(
         'analysis',
@@ -227,6 +227,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         analysis,
         ids,
@@ -289,10 +290,6 @@ export default {
     dataset() {
       return this.analysis?.dataset
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

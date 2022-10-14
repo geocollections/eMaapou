@@ -46,14 +46,7 @@
 
           <!-- eslint-disable prettier/prettier -->
           <div
-            class="
-              justify-center
-              mx-8
-              d-flex
-              flex-column
-              justify-md-space-between
-              flex-md-row
-            "
+            class="justify-center mx-8 d-flex flex-column justify-md-space-between flex-md-row"
           >
             <!-- eslint-enable prettier/prettier -->
             <div class="text-center text-md-left">
@@ -289,7 +282,7 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
+  async asyncData({ app, params, route, error, $services, redirect }) {
     try {
       const drillcoreBoxResponse = await $services.sarvREST.getResource(
         'drillcore_box',
@@ -355,6 +348,7 @@ export default {
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
 
+      if (validPath !== route.path) redirect(validPath)
       return {
         drillcoreBox,
         drillcoreBoxImages,
@@ -374,8 +368,6 @@ export default {
   data() {
     return {
       imageSizes: ['small', 'medium', 'large', 'original'],
-      tabs: [],
-      initActiveTab: '',
     }
   },
   head() {
@@ -430,10 +422,6 @@ export default {
         })}`
       return title
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNull,
