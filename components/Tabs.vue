@@ -28,7 +28,7 @@
         >{{ $t(item.title, { number: item.count }) }}</v-tab
       >
     </v-tabs>
-    <nuxt-child keep-alive v-bind="tabsDict[activeTab].props" />
+    <nuxt-child keep-alive v-bind="tabsDict[getRouteBaseName()].props" />
   </div>
 </template>
 
@@ -55,10 +55,7 @@ export default {
       return this.tabs.reduce((prev, tab) => {
         return {
           ...prev,
-          [this.localePath({
-            name: tab.routeName,
-            params: this.$route.params,
-          })]: tab,
+          [tab.routeName]: tab,
         }
       }, {})
     },
