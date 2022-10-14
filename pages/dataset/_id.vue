@@ -183,7 +183,7 @@ export default {
   },
   async asyncData({ app, params, route, error, $services, redirect }) {
     try {
-      const datasetResponse = await $services.sarvREST.getResource(
+      const datasetPromise = $services.sarvREST.getResource(
         'dataset',
         params.id,
         {
@@ -192,14 +192,73 @@ export default {
           },
         }
       )
-      const ids = datasetResponse?.ids
-      const dataset = datasetResponse
-
-      const parameters = await $services.sarvSolr.getResource(
+      const parametersPromise = $services.sarvSolr.getResource(
         'dataset',
         params.id,
         { fl: 'parameter_index_list,parameter_list' }
       )
+      const doiPromise = $services.sarvREST.getResourceList('doi', {
+        defaultParams: {
+          dataset: params.id,
+          nest: 1,
+        },
+      })
+      const localityGroupedPromise = app.$services.sarvSolr.getResourceList(
+        'analysis',
+        {
+          useRawSolr: true,
+          defaultParams: {
+            fq: `dataset_id:${params.id}`,
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            group: true,
+            'group.field': ['locality_id', 'site_id'],
+            rows: 10000,
+          },
+        }
+      )
+
+      const tabs = TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map(async (tab) => {
+          if (tab.isSolr) {
+            return await app.$hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: { fq: `dataset_ids:${params.id}` },
+                },
+              },
+            })
+          }
+          return await app.$hydrateTab(tab, {
+            countParams: {
+              api: {
+                default: { dataset: params.id },
+              },
+            },
+          })
+        })
+      ).then((res) => {
+        return res.reduce((prev, tab) => {
+          return { ...prev, [tab.id]: tab }
+        }, {})
+      })
+      const [
+        datasetResponse,
+        parameters,
+        doiResponse,
+        localityGroupedResponse,
+        hydratedTabsDict,
+      ] = await Promise.all([
+        datasetPromise,
+        parametersPromise,
+        doiPromise,
+        localityGroupedPromise,
+        hydratedTabsPromise,
+      ])
+
+      const ids = datasetResponse?.ids
+      const dataset = datasetResponse
+
       const parameterValues =
         parameters[0]?.parameter_index_list?.[0]?.split('; ')
       const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
@@ -215,30 +274,11 @@ export default {
         allIds: parameterValues,
       }
 
-      const doiResponse = await $services.sarvREST.getResourceList('doi', {
-        defaultParams: {
-          dataset: params.id,
-          nest: 1,
-        },
-      })
-
       const doi = doiResponse.items?.[0]?.identifier
       const reference = {
         id: doiResponse.items?.[0]?.reference.id,
         reference: doiResponse.items?.[0]?.reference?.reference,
       }
-
-      const localityGroupedResponse =
-        await app.$services.sarvSolr.getResourceList('analysis', {
-          useRawSolr: true,
-          defaultParams: {
-            fq: `dataset_id:${dataset.id}`,
-            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-            group: true,
-            'group.field': ['locality_id', 'site_id'],
-            rows: 10000,
-          },
-        })
 
       const localities = localityGroupedResponse?.grouped?.locality_id?.groups
         ?.map((item) => item?.doclist?.docs?.[0])
@@ -248,18 +288,7 @@ export default {
         .filter((item) => !isEmpty(item) && item?.site_id)
       const locations = localities.concat(sites)
 
-      const tabsObject = TABS_DATASET
-
-      tabsObject.byIds.dataset_analysis.props.parameterHeaders = {
-        ...parameterHeaders,
-        byIds: Object.fromEntries(
-          Object.entries(parameterHeaders.byIds).map(([k, v], i) => {
-            if (i < 5) return [k, { ...v, show: true }]
-            return [k, v]
-          })
-        ),
-      }
-      tabsObject.byIds.sample_results.props.parameterHeaders = {
+      hydratedTabsDict.sample_results.props.parameterHeaders = {
         ...parameterHeaders,
         byIds: Object.fromEntries(
           Object.entries(parameterHeaders.byIds).map(([k, v]) => {
@@ -268,36 +297,17 @@ export default {
         ),
       }
 
-      tabsObject.byIds.graphs.count =
+      hydratedTabsDict.graphs.count =
         locations.length === 1 ? locations.length : 0
-      tabsObject.byIds.graphs.props.dataset = dataset
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+      hydratedTabsDict.graphs.props.dataset = dataset
 
-      const hydratedTabs = await Promise.all(
-        tabs.map(async (tab) => {
-          if (tab.isSolr) {
-            return await app.$hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `dataset_ids:${dataset?.id}` },
-                },
-              },
-            })
-          }
-          return await app.$hydrateTab(tab, {
-            countParams: {
-              api: {
-                default: { dataset: dataset?.id },
-              },
-            },
-          })
-        })
-      )
+      const hydratedTabs = TABS_DATASET.allIds.map((id) => hydratedTabsDict[id])
+
       const slugRoute = app.$createSlugRoute(route, dataset?.title)
 
       const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
       if (validPath !== route.path) redirect(validPath)
+
       return {
         dataset,
         ids,
