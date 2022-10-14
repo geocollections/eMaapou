@@ -40,6 +40,9 @@ export default {
     this.items = areaResponse.items
     this.count = areaResponse.count
   },
+  watch: {
+    '$route.query': '$fetch',
+  },
   methods: {
     handleUpdate(tableState) {
       this.options = tableState.options

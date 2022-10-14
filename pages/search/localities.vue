@@ -43,6 +43,9 @@ export default {
     this.items = localityResponse.items
     this.count = localityResponse.count
   },
+  watch: {
+    '$route.query': '$fetch',
+  },
   methods: {
     handleUpdate(tableState) {
       this.options = tableState.options

@@ -50,6 +50,9 @@ export default {
     this.items = response.items
     this.count = response.count
   },
+  watch: {
+    '$route.query': '$fetch',
+  },
   methods: {
     handleUpdate(tableState) {
       this.options = tableState.options

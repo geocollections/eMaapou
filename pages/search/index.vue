@@ -42,6 +42,9 @@ export default {
     this.items = drillcoreResponse.items
     this.count = drillcoreResponse.count
   },
+  watch: {
+    '$route.query': '$fetch',
+  },
   methods: {
     handleUpdate(tableState) {
       this.options = tableState.options

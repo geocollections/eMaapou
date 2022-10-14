@@ -43,6 +43,9 @@ export default {
     this.items = analysisResponse.items
     this.count = analysisResponse.count
   },
+  watch: {
+    '$route.query': '$fetch',
+  },
   methods: {
     handleUpdate(tableState) {
       this.options = tableState.options
