@@ -5,6 +5,7 @@
       :count="count"
       :options="options"
       id-field="attachment"
+      :is-loading="$fetchState.pending"
       @update="handleUpdate"
     />
   </div>

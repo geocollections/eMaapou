@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail :ids="ids" :title="fileTitle" />
     </template>
@@ -199,6 +199,7 @@
             "
           />
           <table-row
+            v-if="file.image_scalebar"
             :title="$t('file.scalebar')"
             :value="file.image_scalebar"
           />
@@ -516,292 +517,6 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error }) {
-    try {
-      const fileResponse = await app.$services.sarvREST.getResource(
-        'attachment',
-        params.id,
-        {
-          params: {
-            nest: 2,
-            only_photo_ids: route.name.startsWith('photo'),
-          },
-        }
-      )
-      const ids = fileResponse?.ids
-      const file = fileResponse
-      let text
-      switch (file?.specimen_image_attachment) {
-        case 1:
-          text = `${file?.specimen?.coll?.number?.split(' ')?.[0]} ${
-            file?.specimen?.specimen_id
-          } (ID-${file.specimen.id})`
-          break
-        case 2:
-          text = file.image_number
-          break
-        case 4:
-          text = file?.reference?.reference
-          break
-        default:
-          text = `${app.$translate({
-            et: file?.description,
-            en: file?.description_en,
-          })}`
-      }
-      const slugRoute = app.$createSlugRoute(route, text)
-      const validPath = app.$validateTabRoute(slugRoute, [])
-      let specimenIdentification = []
-      let specimenIdentificationGeology = []
-      // Specimen data START
-      if (file?.specimen) {
-        const specimenIdentificationResponse =
-          await app.$services.sarvREST.getResourceList(
-            'specimen_identification',
-            {
-              isValid: isNil(file?.id),
-              defaultParams: {
-                current: true,
-                specimen: file?.specimen?.id,
-                nest: 1,
-              },
-            }
-          )
-        specimenIdentification = specimenIdentificationResponse.items
-        const specimenIdentificationGeologyResponse =
-          await app.$services.sarvREST.getResourceList(
-            'specimen_identification_geology',
-            {
-              isValid: isNil(file?.id),
-              defaultParams: {
-                current: true,
-                specimen: file?.specimen?.id,
-                nest: 1,
-              },
-            }
-          )
-        specimenIdentificationGeology =
-          specimenIdentificationGeologyResponse.items
-      }
-      // Specimen data END
-
-      // Attachment keywords START
-      const attachmentKeywordsResponse =
-        await app.$services.sarvREST.getResourceList('attachment_keyword', {
-          isValid: isNil(file?.id),
-          defaultParams: {
-            attachment: file?.id,
-            nest: 1,
-          },
-        })
-      const attachmentKeywords = attachmentKeywordsResponse.items
-      // Attachment keywords END
-
-      // Raw file content data START
-      let rawFileContent = ''
-      let fileContent = ''
-      if (
-        file?.uuid_filename?.endsWith('.txt') ||
-        file?.uuid_filename?.endsWith('.las')
-      ) {
-        // File content (e.g., .las in json format)
-        const fileContentResponse = await app.$services.sarvREST.getResource(
-          'file',
-          route.params.id
-        )
-        fileContent = fileContentResponse
-        if (fileContentResponse.startsWith('Error: ')) fileContent = ''
-
-        // Raw file content in text format
-        const rawFileContentResponse = await app.$services.sarvREST.getResource(
-          'file',
-          route.params.id,
-          {
-            params: {
-              raw_content: 'true',
-            },
-          }
-        )
-        rawFileContent = rawFileContentResponse
-        if (
-          typeof rawFileContentResponse === 'string' &&
-          rawFileContentResponse.startsWith('Error: ')
-        )
-          rawFileContent = ''
-      }
-      // Raw file content data END
-
-      // Related data START
-      let tabs = [
-        {
-          id: 'collection',
-          title: 'related.collection',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'specimen',
-          title: 'related.specimen',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'sample',
-          title: 'related.sample',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'sample_series',
-          title: 'related.sample_series',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'analysis',
-          title: 'related.analysis',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'dataset',
-          title: 'related.dataset',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'doi',
-          title: 'related.doi',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://doi.geocollections.info/',
-        },
-        {
-          id: 'locality',
-          title: 'related.locality',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'drillcore',
-          title: 'related.drillcore',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'drillcore_box',
-          route: 'drillcore-box',
-          title: 'related.drillcore_box',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'preparation',
-          title: 'related.preparation',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'reference',
-          title: 'related.reference',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://kirjandus.geoloogia.info/reference/',
-        },
-        {
-          id: 'storage',
-          title: 'related.storage',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'project',
-          title: 'related.project',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'site',
-          title: 'related.site',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'locality_description',
-          title: 'related.locality_description',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'taxon',
-          title: 'related.taxon',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://fossiilid.info/',
-        },
-      ]
-
-      tabs = await Promise.all(
-        tabs.map(async (tab) => {
-          const res = await app.$services.sarvREST.getResourceList(
-            'attachment_link',
-            {
-              isValid: isNil(file?.id),
-              defaultParams: {
-                [`${tab.id}__isnull`]: false,
-                attachment: file?.id,
-                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-              },
-            }
-          )
-          return { ...tab, count: res.count, items: res.items }
-        })
-      )
-
-      return {
-        file,
-        ids,
-        validPath,
-        initActiveTab: validPath,
-        rawFileContent,
-        fileContent,
-        specimenIdentificationGeology,
-        specimenIdentification,
-        attachmentKeywords,
-        tabs,
-      }
-    } catch (err) {
-      error({
-        message: `Cannot find file ${route.params.id}`,
-        path: route.path,
-      })
-    }
-  },
   data() {
     return {
       expansionPanel: [1],
@@ -880,9 +595,285 @@ export default {
       attachmentKeywords: [],
       fileContent: '',
       rawFileContent: '',
+      file: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
     }
   },
 
+  async fetch() {
+    const filePromise = this.$services.sarvREST.getResource(
+      'attachment',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 2,
+          only_photo_ids: this.$route.name.startsWith('photo'),
+        },
+      }
+    )
+    const tabs = [
+      {
+        id: 'collection',
+        title: 'related.collection',
+        count: 0,
+        items: [],
+        isLink: false,
+      },
+      {
+        id: 'specimen',
+        title: 'related.specimen',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'sample',
+        title: 'related.sample',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'sample_series',
+        title: 'related.sample_series',
+        count: 0,
+        items: [],
+        isLink: false,
+      },
+      {
+        id: 'analysis',
+        title: 'related.analysis',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'dataset',
+        title: 'related.dataset',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'doi',
+        title: 'related.doi',
+        count: 0,
+        items: [],
+        isLink: true,
+        href: 'https://doi.geocollections.info/',
+      },
+      {
+        id: 'locality',
+        title: 'related.locality',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'drillcore',
+        title: 'related.drillcore',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'drillcore_box',
+        route: 'drillcore-box',
+        title: 'related.drillcore_box',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'preparation',
+        title: 'related.preparation',
+        count: 0,
+        items: [],
+        isLink: false,
+      },
+      {
+        id: 'reference',
+        title: 'related.reference',
+        count: 0,
+        items: [],
+        isLink: true,
+        href: 'https://kirjandus.geoloogia.info/reference/',
+      },
+      {
+        id: 'storage',
+        title: 'related.storage',
+        count: 0,
+        items: [],
+        isLink: false,
+      },
+      {
+        id: 'project',
+        title: 'related.project',
+        count: 0,
+        items: [],
+        isLink: false,
+      },
+      {
+        id: 'site',
+        title: 'related.site',
+        count: 0,
+        items: [],
+        isLink: true,
+        isNuxtLink: true,
+      },
+      {
+        id: 'locality_description',
+        title: 'related.locality_description',
+        count: 0,
+        items: [],
+        isLink: false,
+      },
+      {
+        id: 'taxon',
+        title: 'related.taxon',
+        count: 0,
+        items: [],
+        isLink: true,
+        href: 'https://fossiilid.info/',
+      },
+    ]
+    const hydratedTabsPromise = Promise.all(
+      tabs.map((tab) => {
+        const res = this.$services.sarvREST.getResourceList('attachment_link', {
+          isValid: isNil(this.$route.params.id),
+          defaultParams: {
+            [`${tab.id}__isnull`]: false,
+            attachment: this.$route.params.id,
+            nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+          },
+        })
+        return { ...tab, count: res.count, items: res.items }
+      })
+    )
+    const attachmentKeywordsPromise = this.$services.sarvREST.getResourceList(
+      'attachment_keyword',
+      {
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          attachment: this.$route.params.id,
+          nest: 1,
+        },
+      }
+    )
+
+    const [fileResponse, attachmentKeywordsResponse, hydratedTabs] =
+      await Promise.all([
+        filePromise,
+        attachmentKeywordsPromise,
+        hydratedTabsPromise,
+      ])
+
+    this.ids = fileResponse?.ids
+    this.file = fileResponse
+    this.tabs = hydratedTabs
+    this.attachmentKeywords = attachmentKeywordsResponse.items
+    // console.log(this.file)
+    let text
+    switch (this.file.specimen_image_attachment) {
+      case 1:
+        text = `${this.file.specimen?.coll?.number?.split(' ')?.[0]} ${
+          this.file.specimen?.specimen_id
+        } (ID-${this.file.specimen.id})`
+        break
+      case 2:
+        text = this.file.image_number
+        break
+      case 4:
+        text = this.file.reference?.reference
+        break
+      default:
+        text = `${this.$translate({
+          et: this.file.description,
+          en: this.file.description_en,
+        })}`
+    }
+
+    if (this.file.specimen) {
+      const specimenIdentificationPromise =
+        this.$services.sarvREST.getResourceList('specimen_identification', {
+          isValid: isNil(this.$route.params.id),
+          defaultParams: {
+            current: true,
+            specimen: this.file.specimen?.id,
+            nest: 1,
+          },
+        })
+      const specimenIdentificationGeologyPromise =
+        this.$services.sarvREST.getResourceList(
+          'specimen_identification_geology',
+          {
+            isValid: isNil(this.$route.params.id),
+            defaultParams: {
+              current: true,
+              specimen: this.file.specimen?.id,
+              nest: 1,
+            },
+          }
+        )
+      const [
+        specimenIdentificationResponse,
+        specimenIdentificationGeologyResponse,
+      ] = await Promise.all([
+        specimenIdentificationPromise,
+        specimenIdentificationGeologyPromise,
+      ])
+      this.specimenIdentification = specimenIdentificationResponse.items
+      this.specimenIdentificationGeology =
+        specimenIdentificationGeologyResponse.items
+    }
+
+    if (
+      this.file.uuid_filename?.endsWith('.txt') ||
+      this.file.uuid_filename?.endsWith('.las')
+    ) {
+      // File content (e.g., .las in json format)
+      const fileContentPromise = this.$services.sarvREST.getResource(
+        'file',
+        this.$route.params.id
+      )
+      // Raw file content in text format
+      const rawFileContentPromise = this.$services.sarvREST.getResource(
+        'file',
+        this.$route.params.id,
+        {
+          params: {
+            raw_content: 'true',
+          },
+        }
+      )
+      const [fileContentResponse, rawFileContentResponse] = await Promise.all([
+        fileContentPromise,
+        rawFileContentPromise,
+      ])
+
+      this.fileContent = fileContentResponse
+      if (fileContentResponse.startsWith('Error: ')) this.fileContent = ''
+      this.rawFileContent = rawFileContentResponse
+      if (
+        typeof rawFileContentResponse === 'string' &&
+        rawFileContentResponse.startsWith('Error: ')
+      )
+        this.rawFileContent = ''
+    }
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+    this.validRoute = this.$validateTabRoute(slugRoute, [])
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
+  },
   head() {
     return {
       title: this.fileTitle,
@@ -1064,10 +1055,6 @@ export default {
     licence() {
       return this?.file?.licence
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isNull,

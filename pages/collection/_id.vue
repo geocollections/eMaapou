@@ -145,7 +145,7 @@
     </template>
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -170,56 +170,53 @@ export default {
     Tabs,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services }) {
-    try {
-      const collectionResponse = await $services.sarvREST.getResource(
-        'collection',
-        params.id,
-        {
-          params: {
-            nest: 1,
-          },
-        }
-      )
-      const ids = collectionResponse?.ids
-      const collection = collectionResponse
-
-      const tabsObject = TABS_COLLECTION
-
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              props: { collection },
-              countParams: {
-                solr: {
-                  default: {
-                    fq: `collection_id:${collection?.id}`,
-                  },
+  data() {
+    return {
+      collection: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
+    }
+  },
+  async fetch() {
+    const collectionPromise = this.$services.sarvREST.getResource(
+      'collection',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 1,
+        },
+      }
+    )
+    const tabs = TABS_COLLECTION.allIds.map((id) => TABS_COLLECTION.byIds[id])
+    const hydratedTabsPromise = await Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: {
+                  fq: `collection_id:${this.$route.params.id}`,
                 },
               },
-            })
-        )
+            },
+          })
       )
+    )
+    const [collectionResponse, hydratedTabs] = Promise.all([
+      collectionPromise,
+      hydratedTabsPromise,
+    ])
+    this.ids = collectionResponse?.ids
+    this.collection = collectionResponse
+    this.tabs = hydratedTabs.map((tab) => {
+      return { ...tab, props: { collection: this.collection } }
+    })
 
-      const slugRoute = app.$createSlugRoute(route, collection.number)
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      return {
-        collection,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find collection ${route.params.id}`,
-        path: route.path,
-      })
-    }
+    const slugRoute = this.$createSlugRoute(this.$route, this.collection.number)
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
@@ -259,10 +256,6 @@ export default {
     database() {
       return this.collection?.database
     },
-  },
-  created() {
-    if (this.validPath !== this.$route.path)
-      this.$router.replace(this.validPath)
   },
   methods: {
     isEmpty,

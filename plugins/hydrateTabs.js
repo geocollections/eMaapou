@@ -32,7 +32,13 @@ export default ({ app }, inject) => {
   }
 
   const validateTabRoute = (route, tabs) => {
-    if (!tabs.length > 0) return route.path
+    const routeCopy = {
+      name: route.name,
+      params: route.params,
+      path: route.path,
+      matched: undefined, // NOTE: if `matched` is not removed, will get maximum call stach error
+    }
+    if (!tabs.length > 0) return routeCopy
     const currentTab = tabs.find(
       (tab) =>
         route.path ===
@@ -41,18 +47,16 @@ export default ({ app }, inject) => {
           params: route.params,
         })
     )
-
-    if (currentTab.count > 0) return route.path
-
+    if (currentTab.count > 0) return routeCopy
     // Find tab that has items
     const initTab = tabs.find((tab) => tab.count > 0)
     // Constuct route
     // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
-    const path = app.localePath({
+    const localePath = app.localeRoute({
       name: initTab?.routeName ?? tabs[0].routeName,
       params: route.params,
     })
-    return path
+    return { ...localePath, matched: undefined }
   }
 
   const getMaxTab = (route, tabs) => {

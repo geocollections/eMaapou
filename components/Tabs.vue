@@ -25,10 +25,11 @@
             params: $route.params,
           })
         "
+        @click="handleTabChange"
         >{{ $t(item.title, { number: item.count }) }}</v-tab
       >
     </v-tabs>
-    <nuxt-child keep-alive v-bind="tabsDict[getRouteBaseName()].props" />
+    <nuxt-child keep-alive v-bind="activeTabProps" />
   </div>
 </template>
 
@@ -41,25 +42,45 @@ export default {
       default: () => [],
     },
     initActiveTab: {
-      type: String,
+      type: Object,
       required: true,
     },
   },
   data() {
     return {
-      activeTab: this.initActiveTab,
-    }
-  },
-  computed: {
-    tabsDict() {
-      return this.tabs.reduce((prev, tab) => {
+      activeTab: this.$router.resolve(this.initActiveTab),
+      tabsDict: this.tabs.reduce((prev, tab) => {
         return {
           ...prev,
           [tab.routeName]: tab,
         }
-      }, {})
+      }, {}),
+      activeTabProps: this.tabs.reduce((prev, tab) => {
+        return {
+          ...prev,
+          [tab.routeName]: tab,
+        }
+      }, {})[this.getRouteBaseName(this.initActiveTab)].props,
+    }
+  },
+  methods: {
+    handleTabChange() {
+      this.activeTabProps = this.tabsDict[this.getRouteBaseName()].props
     },
   },
+  // computed: {
+  //   tabsDict() {
+  //     return this.tabs.reduce((prev, tab) => {
+  //       return {
+  //         ...prev,
+  //         [tab.routeName]: tab,
+  //       }
+  //     }, {})
+  //   },
+  //   // activeTabProps() {
+  //   //   return this.tabsDict[this.getRouteBaseName()].props
+  //   // },
+  // },
 }
 </script>
 

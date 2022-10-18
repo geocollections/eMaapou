@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail :ids="ids" :title="sampleTitle" />
     </template>
@@ -322,7 +322,7 @@
 
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -351,82 +351,85 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const detailViewResponse = await $services.sarvREST.getResource(
-        'sample',
-        params.id,
-        {
-          params: {
-            nest: 2,
-          },
-        }
-      )
-      const ids = detailViewResponse?.ids
-      const sample = detailViewResponse
-
-      const localityGroupedResponse =
-        await app.$services.sarvSolr.getResourceList('analysis', {
-          useRawSolr: true,
-          defaultParams: {
-            fq: `sample_id:${sample?.id}`,
-            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-            group: true,
-            'group.field': ['locality_id', 'site_id'],
-            rows: 10000,
+  data() {
+    return {
+      sample: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
+      locations: [],
+    }
+  },
+  async fetch() {
+    const samplePromise = this.$services.sarvREST.getResource(
+      'sample',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 2,
+        },
+      }
+    )
+    const localityGroupedPromise = this.$services.sarvSolr.getResourceList(
+      'analysis',
+      {
+        useRawSolr: true,
+        defaultParams: {
+          fq: `sample_id:${this.$route.params.id}`,
+          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+          group: true,
+          'group.field': ['locality_id', 'site_id'],
+          rows: 10000,
+        },
+      }
+    )
+    const tabsObject = TABS_SAMPLE
+    tabsObject.byIds.graphs.props.sampleObject = this.sample
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+    const hydratedTabsPromise = Promise.all(
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          countParams: {
+            solr: { default: { fq: `sample_id:${this.$route.params.id}` } },
+            api: { default: { sample: this.$route.params.id } },
           },
         })
-
-      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.locality_id)
-      const sites = localityGroupedResponse?.grouped?.site_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.site_id)
-      const locations = localities.concat(sites)
-
-      const tabsObject = TABS_SAMPLE
-
-      tabsObject.byIds.graphs.props.sampleObject = sample
-
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              countParams: {
-                solr: { default: { fq: `sample_id:${sample?.id}` } },
-                api: { default: { sample: sample?.id } },
-              },
-            })
-        )
       )
-      const name = `${
-        sample?.number || sample?.number_additional || sample?.number_field
-      }`.trim()
-      // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
-      const slugRoute = app.$createSlugRoute(
-        route,
-        `${isEmpty(name) ? sample?.id : name}`
-      )
+    )
+    const [sampleResponse, localityGroupedResponse, hydratedTabs] =
+      await Promise.all([
+        samplePromise,
+        localityGroupedPromise,
+        hydratedTabsPromise,
+      ])
 
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+    this.ids = sampleResponse?.ids
+    this.sample = sampleResponse
 
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        sample,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-        locations,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find sample ${route.params.id}`,
-        path: route.path,
-      })
-    }
+    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.locality_id)
+    const sites = localityGroupedResponse?.grouped?.site_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => !isEmpty(item) && item?.site_id)
+    this.locations = localities.concat(sites)
+
+    this.tabs = hydratedTabs
+
+    const name = `${
+      this.sample.number ||
+      this.sample.number_additional ||
+      this.sample.number_field
+    }`.trim()
+    // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      `${isEmpty(name) ? this.sample.id : name}`
+    )
+
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
@@ -448,22 +451,17 @@ export default {
   computed: {
     title() {
       return (
-        this.sample.number ||
-        this.sample.number_additional ||
-        this.sample.number_field ||
-        this.sample.id
+        this.sample?.number ||
+        this.sample?.number_additional ||
+        this.sample?.number_field ||
+        this.sample?.id
       )
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },
     sampleTitle() {
-      return `${this.$t('sample.number')} ${
-        this.sample.number ||
-        this.sample.number_additional ||
-        this.sample.number_field ||
-        this.sample.id
-      }`
+      return `${this.$t('sample.number')} ${this.title}`
     },
 
     computedLocations() {
@@ -489,7 +487,7 @@ export default {
         return filtered
       }, [])
 
-      if (this.sample.site) {
+      if (this.sample?.site) {
         locations.push({
           latitude: this.sample?.site?.latitude,
           longitude: this.sample?.site?.longitude,

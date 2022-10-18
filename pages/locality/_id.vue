@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail
         :ids="ids"
@@ -214,11 +214,11 @@
         </v-btn>
       </v-card-text>
     </template>
-    <template v-if="locality.latitude && locality.longitude" #column-right>
+    <template #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
-      <v-card-text>
+      <v-card-text v-if="locality.latitude && locality.longitude">
         <v-card id="map-wrap" elevation="0">
           <leaflet-map
             rounded
@@ -249,7 +249,7 @@
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -280,166 +280,139 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const localityResponse = await $services.sarvREST.getResource(
-        'locality',
-        params.id,
-        {
-          params: {
-            nest: 1,
-          },
-        }
-      )
-      const ids = localityResponse?.ids
-      const locality = localityResponse
-
-      const drillcoreResponse = await $services.sarvREST.getResourceList(
-        'drillcore',
-        {
-          defaultParams: {
-            locality: locality.id,
-          },
-        }
-      )
-
-      const drillcore = drillcoreResponse.items
-        ? drillcoreResponse.items[0]
-        : null
-
-      const attachmentPromise = app.$services.sarvSolr.getResourceList(
-        'attachment',
-        {
-          defaultParams: {
-            fq: `locality_id:${locality?.id} AND specimen_image_attachment:2`,
-            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-          },
-        }
-      )
-
-      // Checking if locality has a related .las file to show in graph tab
-      const lasFilePromise = app.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          defaultParams: {
-            attachment__uuid_filename__iendswith: '.las',
-            locality: locality?.id,
-            fields: 'attachment',
-          },
-        }
-      )
-
-      // Todo: Add taxa tab?
-      const tabsObject = TABS_LOCALITY
-
-      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
-      tabsObject.byIds.boxes.props.drillcore = drillcore ? drillcore.id : null
-
-      tabsObject.byIds.analysis_results.props = {
-        localityObject: locality,
+  data() {
+    return {
+      locality: null,
+      ids: [],
+      drillcore: null,
+      validRoute: {},
+      tabs: [],
+      attachments: [],
+    }
+  },
+  async fetch() {
+    const localityPromise = this.$services.sarvREST.getResource(
+      'locality',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 1,
+        },
       }
+    )
+    const drillcorePromise = this.$services.sarvREST.getResourceList(
+      'drillcore',
+      {
+        defaultParams: {
+          locality: this.$route.params.id,
+        },
+      }
+    )
+    const attachmentPromise = this.$services.sarvSolr.getResourceList(
+      'attachment',
+      {
+        defaultParams: {
+          fq: `locality_id:${this.$route.params.id} AND specimen_image_attachment:2`,
+          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+        },
+      }
+    )
 
-      tabsObject.byIds.analysis_results.props.locality = locality
-
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-      let hydratedTabs = await Promise.all(
-        tabs.map((tab) =>
-          app.$hydrateTab(tab, {
-            props: {
-              locality: locality.id,
-            },
-            countParams: {
-              solr: {
-                default: {
-                  fq:
-                    tab.id === 'graphs'
-                      ? `locality_id:${params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
-                      : `locality_id:${params.id}`,
-                },
+    // Checking if locality has a related .las file to show in graph tab
+    const lasFilePromise = this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        defaultParams: {
+          attachment__uuid_filename__iendswith: '.las',
+          locality: this.$route.params.id,
+          fields: 'attachment',
+        },
+      }
+    )
+    const tabsObject = TABS_LOCALITY
+    const tabs = tabsObject.allIds.map((id) => {
+      return { ...tabsObject.byIds[id], objectId: id }
+    })
+    const hydratedTabsByIdsPromise = Promise.all(
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          countParams: {
+            solr: {
+              default: {
+                fq:
+                  tab.id === 'graphs'
+                    ? `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
+                    : `locality_id:${this.$route.params.id}`,
               },
-              api: { default: { locality: locality.id } },
             },
-          })
-        )
-      )
-      const lasFileResponse = await lasFilePromise
-      // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
-      hydratedTabs = hydratedTabs.map((item) => {
-        if (item.id === 'graphs') {
-          // Todo: Also add taxa check
-          const localityDescriptionCount = hydratedTabs.find(
-            (item) => item.id === 'locality_description'
-          ).count
-          const sampleCount = hydratedTabs.find(
-            (item) => item.id === 'sample'
-          ).count
-
-          const combinedCount =
-            item.count + localityDescriptionCount + sampleCount
-
-          const count = lasFileResponse?.items?.[0]?.attachment
-            ? combinedCount + 1
-            : combinedCount
-
-          return {
-            ...item,
-            count,
-            props: {
-              ...item.props,
-              attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
-              analysisResultsCount: item.count,
-              localityDescriptionCount,
-              sampleCount,
-            },
-          }
-        }
-        return item
-      })
-
-      const attachmentResponse = await attachmentPromise
-      const attachments = attachmentResponse?.items ?? []
-
-      const slugRoute = app.$createSlugRoute(
-        route,
-        app.$translate({
-          et: locality.locality,
-          en: locality.locality_en,
+            api: { default: { locality: this.$route.params.id } },
+          },
         })
       )
+    ).then((res) => {
+      return res.reduce((prev, tab) => {
+        return { ...prev, [tab.objectId]: tab }
+      }, {})
+    })
+    const [
+      localityResponse,
+      drillcoreResponse,
+      attachmentResponse,
+      lasFileResponse,
+      hydratedTabsByIds,
+    ] = await Promise.all([
+      localityPromise,
+      drillcorePromise,
+      attachmentPromise,
+      lasFilePromise,
+      hydratedTabsByIdsPromise,
+    ])
+    this.ids = localityResponse?.ids
+    this.locality = localityResponse
 
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
+    this.drillcore = drillcoreResponse.items ? drillcoreResponse.items[0] : null
 
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        locality,
-        ids,
-        drillcore,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-        attachments,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find locality ${params.id}`,
-        path: route.path,
-      })
+    hydratedTabsByIds.boxes.count = this.drillcore?.boxes || 0
+    hydratedTabsByIds.boxes.props.drillcore = this.drillcore?.id
+    hydratedTabsByIds.analysis_results.props = {
+      localityObject: this.locality,
+      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+      analysisResultsCount: hydratedTabsByIds.analysis_results.count,
     }
+    hydratedTabsByIds.analysis_results.count =
+      hydratedTabsByIds.analysis_results.count +
+      hydratedTabsByIds.locality_description.count +
+      hydratedTabsByIds.sample.count +
+      (lasFileResponse?.items?.[0]?.attachment ? 1 : 0)
+
+    this.tabs = TABS_LOCALITY.allIds.map((id) => hydratedTabsByIds[id])
+    this.attachments = attachmentResponse?.items ?? []
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({
+        et: this.locality.locality,
+        en: this.locality.locality_en,
+      })
+    )
+    this.validRoute = this.$validateTabRoute(slugRoute, this.tabs)
+
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
       title: `${this.$translate({
-        et: this.locality.locality,
-        en: this.locality.locality_en,
+        et: this.locality?.locality,
+        en: this.locality?.locality_en,
       })} | ${this.$t('locality.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
           content: `${this.$translate({
-            et: this.locality.locality,
-            en: this.locality.locality_en,
+            et: this.locality?.locality,
+            en: this.locality?.locality_en,
           })} | ${this.$t('locality.pageTitle')}`,
         },
         {

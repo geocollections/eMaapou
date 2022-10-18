@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail
         :ids="ids"
@@ -165,7 +165,7 @@
     </template>
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -185,62 +185,59 @@ import { TABS_ANALYSIS } from '~/constants'
 
 export default {
   components: { HeaderDetail, TableRow, TableRowLink, Tabs, Detail, BaseTable },
-
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const analysisResponse = await $services.sarvREST.getResource(
-        'analysis',
-        params.id,
-        {
-          params: {
-            nest: 2,
-          },
-        }
-      )
-      const ids = analysisResponse?.ids
-      const analysis = analysisResponse
-
-      const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `analysis_id:${analysis.id}` },
-                },
-                api: {
-                  default: { analysis: analysis.id },
-                },
-              },
-            })
-        )
-      )
-
-      const text = `${app.$translate({
-        et: analysis?.analysis_method.analysis_method,
-        en: analysis?.analysis_method.method_en,
-      })}-${analysis?.sample.number}`
-
-      const slugRoute = app.$createSlugRoute(route, text)
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        analysis,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find analysis ${route.params.id}`,
-        path: route.path,
-      })
+  data() {
+    return {
+      analysis: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
     }
+  },
+  async fetch() {
+    const analysisPromise = this.$services.sarvREST.getResource(
+      'analysis',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 2,
+        },
+      }
+    )
+
+    const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
+    const hydratedTabsPromise = Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `analysis_id:${this.$route.params.id}` },
+              },
+              api: {
+                default: { analysis: this.$route.params.id },
+              },
+            },
+          })
+      )
+    )
+    const [analysisResponse, hydratedTabs] = await Promise.all([
+      analysisPromise,
+      hydratedTabsPromise,
+    ])
+    this.tabs = hydratedTabs
+    this.ids = analysisResponse?.ids
+    this.analysis = analysisResponse
+
+    const text = `${this.$translate({
+      et: this.analysis.analysis_method.analysis_method,
+      en: this.analysis.analysis_method.method_en,
+    })}-${this.analysis.sample.number}`
+
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {

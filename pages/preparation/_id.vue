@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail :ids="ids" :title="preparation.preparation_number" />
     </template>
@@ -129,7 +129,7 @@
     </template>
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -147,71 +147,68 @@ import BaseTable from '~/components/base/BaseTable.vue'
 
 export default {
   components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
-
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const detailViewResponse = await $services.sarvREST.getResource(
-        'preparation',
-        params.id,
-        {
-          params: {
-            nest: 1,
-          },
-        }
-      )
-      const ids = detailViewResponse?.ids
-      const preparation = detailViewResponse
-
-      const tabs = TABS_PREPARATION.allIds.map(
-        (id) => TABS_PREPARATION.byIds[id]
-      )
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `preparation_id:${preparation?.id}` },
-                },
-                api: { default: { preparation: preparation?.id } },
-              },
-            })
-        )
-      )
-
-      const slugRoute = app.$createSlugRoute(
-        route,
-        preparation?.preparation_number
-      )
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        preparation,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find preparation ${route.params.id}`,
-        path: route.path,
-      })
+  data() {
+    return {
+      preparation: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
     }
+  },
+  async fetch() {
+    const preparationResponse = await this.$services.sarvREST.getResource(
+      'preparation',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 1,
+        },
+      }
+    )
+    const tabs = TABS_PREPARATION.allIds.map((id) => TABS_PREPARATION.byIds[id])
+    const hydratedTabs = await Promise.all(
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          countParams: {
+            solr: {
+              default: { fq: `preparation_id:${this.$route.params.id}` },
+            },
+            api: { default: { preparation: this.$route.params.id } },
+          },
+        })
+      )
+    )
+    // NOTE: using `Promise.all`, breaks the page weirdly.
+    // For some reason the preparation promise returns a `taxon_list` result with the same id sometimes
+    // Ex. `preparation/10045`
+    // Making the query straight to the the API, it always returns the correct response.
+    // Seems to be caused if multiple queries are made to API at the same time and if the API endpoints use generic views.
+    // const [preparationResponse, hydratedTabs] = await Promise.all([
+    //   preparationPromise,
+    //   hydratedTabsPromise,
+    // ])
+
+    this.ids = preparationResponse?.ids
+    this.preparation = preparationResponse
+    this.tabs = hydratedTabs
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.preparation.preparation_number
+    )
+    this.validRoute = this.$validateTabRoute(slugRoute, this.tabs)
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
-      title: `${this.preparation.preparation_number} | ${this.$t(
+      title: `${this.preparation?.preparation_number} | ${this.$t(
         'preparation.pageTitle'
       )}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: `${this.preparation.preparation_number} | ${this.$t(
+          content: `${this.preparation?.preparation_number} | ${this.$t(
             'preparation.pageTitle'
           )}`,
         },

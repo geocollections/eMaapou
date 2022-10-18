@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail :ids="ids" :title="dataset.title" />
     </template>
@@ -152,7 +152,7 @@
 
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -181,170 +181,160 @@ export default {
     TableRowLink,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const datasetPromise = $services.sarvREST.getResource(
-        'dataset',
-        params.id,
-        {
-          params: {
-            nest: 1,
-          },
-        }
-      )
-      const parametersPromise = $services.sarvSolr.getResource(
-        'dataset',
-        params.id,
-        { fl: 'parameter_index_list,parameter_list' }
-      )
-      const doiPromise = $services.sarvREST.getResourceList('doi', {
-        defaultParams: {
-          dataset: params.id,
+  data() {
+    return {
+      dataset: null,
+      ids: [],
+      parameters: [],
+      parameterHeaders: [],
+      doi: null,
+      reference: null,
+      validRoute: {},
+      tabs: TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id]),
+      localities: [],
+      locations: [],
+    }
+  },
+  async fetch() {
+    const datasetPromise = this.$services.sarvREST.getResource(
+      'dataset',
+      this.$route.params.id,
+      {
+        params: {
           nest: 1,
         },
-      })
-      const localityGroupedPromise = app.$services.sarvSolr.getResourceList(
-        'analysis',
-        {
-          useRawSolr: true,
-          defaultParams: {
-            fq: `dataset_id:${params.id}`,
-            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-            group: true,
-            'group.field': ['locality_id', 'site_id'],
-            rows: 10000,
-          },
-        }
-      )
+      }
+    )
+    const parametersPromise = this.$services.sarvSolr.getResource(
+      'dataset',
+      this.$route.params.id,
+      { fl: 'parameter_index_list,parameter_list' }
+    )
+    const doiPromise = this.$services.sarvREST.getResourceList('doi', {
+      defaultParams: {
+        dataset: this.$route.params.id,
+        nest: 1,
+      },
+    })
+    const localityGroupedPromise = this.$services.sarvSolr.getResourceList(
+      'analysis',
+      {
+        useRawSolr: true,
+        defaultParams: {
+          fq: `dataset_id:${this.$route.params.id}`,
+          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+          group: true,
+          'group.field': ['locality_id', 'site_id'],
+          rows: 10000,
+        },
+      }
+    )
 
-      const tabs = TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id])
-      const hydratedTabsPromise = Promise.all(
-        tabs.map(async (tab) => {
-          if (tab.isSolr) {
-            return await app.$hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `dataset_ids:${params.id}` },
-                },
-              },
-            })
-          }
-          return await app.$hydrateTab(tab, {
-            countParams: {
-              api: {
-                default: { dataset: params.id },
-              },
+    const tabs = TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id])
+    const hydratedTabsPromise = Promise.all(
+      tabs.map((tab) => {
+        return this.$hydrateTab(tab, {
+          countParams: {
+            solr: {
+              default: { fq: `dataset_ids:${this.$route.params.id}` },
             },
-          })
+            api: {
+              default: { dataset: this.$route.params.id },
+            },
+          },
         })
-      ).then((res) => {
-        return res.reduce((prev, tab) => {
-          return { ...prev, [tab.id]: tab }
-        }, {})
       })
-      const [
-        datasetResponse,
-        parameters,
-        doiResponse,
-        localityGroupedResponse,
-        hydratedTabsDict,
-      ] = await Promise.all([
-        datasetPromise,
-        parametersPromise,
-        doiPromise,
-        localityGroupedPromise,
-        hydratedTabsPromise,
-      ])
+    ).then((res) => {
+      return res.reduce((prev, tab) => {
+        return { ...prev, [tab.id]: tab }
+      }, {})
+    })
+    const [
+      datasetResponse,
+      parameters,
+      doiResponse,
+      localityGroupedResponse,
+      hydratedTabsByIds,
+    ] = await Promise.all([
+      datasetPromise,
+      parametersPromise,
+      doiPromise,
+      localityGroupedPromise,
+      hydratedTabsPromise,
+    ])
 
-      const ids = datasetResponse?.ids
-      const dataset = datasetResponse
+    this.ids = datasetResponse?.ids
+    this.dataset = datasetResponse
 
-      const parameterValues =
-        parameters[0]?.parameter_index_list?.[0]?.split('; ')
-      const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
+    const parameterValues =
+      parameters[0]?.parameter_index_list?.[0]?.split('; ')
+    const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
 
-      const parsedParameters = parameterValues?.map((v, i) => {
-        return { text: parameterText[i], value: v }
-      })
+    this.parameters = parameterValues?.map((v, i) => {
+      return { text: parameterText[i], value: v }
+    })
 
-      const parameterHeaders = {
-        byIds: parsedParameters.reduce((prev, parameter) => {
-          return { ...prev, [parameter.value]: { ...parameter, show: false } }
-        }, {}),
-        allIds: parameterValues,
-      }
-
-      const doi = doiResponse.items?.[0]?.identifier
-      const reference = {
-        id: doiResponse.items?.[0]?.reference.id,
-        reference: doiResponse.items?.[0]?.reference?.reference,
-      }
-
-      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.locality_id)
-      const sites = localityGroupedResponse?.grouped?.site_id?.groups
-        ?.map((item) => item?.doclist?.docs?.[0])
-        .filter((item) => !isEmpty(item) && item?.site_id)
-      const locations = localities.concat(sites)
-
-      hydratedTabsDict.sample_results.props.parameterHeaders = {
-        ...parameterHeaders,
-        byIds: Object.fromEntries(
-          Object.entries(parameterHeaders.byIds).map(([k, v]) => {
-            return [k, { ...v, show: true }]
-          })
-        ),
-      }
-
-      hydratedTabsDict.graphs.count =
-        locations.length === 1 ? locations.length : 0
-      hydratedTabsDict.graphs.props.dataset = dataset
-
-      const hydratedTabs = TABS_DATASET.allIds.map((id) => hydratedTabsDict[id])
-
-      const slugRoute = app.$createSlugRoute(route, dataset?.title)
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-      if (validPath !== route.path) redirect(validPath)
-
-      return {
-        dataset,
-        ids,
-        parameters: parsedParameters,
-        parameterHeaders,
-        doi,
-        reference,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-        localities,
-        locations,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find dataset ${route.params.id}`,
-        path: route.path,
-      })
+    this.parameterHeaders = {
+      byIds: this.parameters.reduce((prev, parameter) => {
+        return { ...prev, [parameter.value]: { ...parameter, show: false } }
+      }, {}),
+      allIds: parameterValues,
     }
+
+    this.doi = doiResponse.items?.[0]?.identifier
+    this.reference = {
+      id: doiResponse.items?.[0]?.reference?.id,
+      reference: doiResponse.items?.[0]?.reference?.reference,
+    }
+
+    this.localities = localityGroupedResponse?.grouped?.locality_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => {
+        return !isEmpty(item) && item?.locality_id
+      })
+    const sites = localityGroupedResponse?.grouped?.site_id?.groups
+      ?.map((item) => item?.doclist?.docs?.[0])
+      .filter((item) => {
+        return !isEmpty(item) && item?.site_id
+      })
+    this.locations = this.localities.concat(sites)
+
+    hydratedTabsByIds.sample_results.props.parameterHeaders = {
+      ...this.parameterHeaders,
+      byIds: Object.fromEntries(
+        Object.entries(this.parameterHeaders.byIds).map(([k, v]) => {
+          return [k, { ...v, show: true }]
+        })
+      ),
+    }
+
+    hydratedTabsByIds.graphs.count =
+      this.locations.length === 1 ? this.locations.length : 0
+    hydratedTabsByIds.graphs.props.dataset = this.dataset
+
+    this.tabs = TABS_DATASET.allIds.map((id) => hydratedTabsByIds[id])
+    const slugRoute = this.$createSlugRoute(this.$route, this.dataset?.title)
+    this.validRoute = this.$validateTabRoute(slugRoute, this.tabs)
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
-      title: this.dataset.title,
+      title: this.dataset?.title,
       meta: [
         {
           property: 'og:title',
-          content: this.dataset.title,
+          content: this.dataset?.title,
           hid: 'og:title',
         },
         {
           property: 'og:description',
-          content: this.dataset.abstract,
+          content: this.dataset?.abstract,
           hid: 'og:description',
         },
         {
           property: 'description',
-          content: this.dataset.abstract,
+          content: this.dataset?.abstract,
           hid: 'description',
         },
       ],

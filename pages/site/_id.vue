@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail
         :ids="ids"
@@ -319,7 +319,7 @@
         </template>
       </image-bar>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -348,80 +348,68 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({
-    app,
-    params,
-    route,
-    error,
-    redirect,
-    $validateTabRoute,
-    $services,
-    $hydrateTab,
-    $translate,
-    $createSlugRoute,
-  }) {
-    try {
-      const detailViewResponse = await $services.sarvREST.getResource(
-        'site',
-        params.id,
-        {
-          params: {
-            nest: 2,
-          },
-        }
-      )
-      const ids = detailViewResponse?.ids
-      const site = detailViewResponse
-
-      const attachmentResponse = await app.$services.sarvREST.getResourceList(
-        'attachment_link',
-        {
-          isValid: isNil(site?.id),
-          defaultParams: {
-            site: site?.id,
-            attachment__attachment_format__value__istartswith: 'image',
-            nest: 1,
-          },
-          fields: {},
-        }
-      )
-      const images = attachmentResponse.items ?? []
-
-      const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await $hydrateTab(tab, {
-              countParams: {
-                solr: { default: { fq: `site_id:${site?.id}` } },
-                api: { default: { site: site?.id } },
-              },
-            })
-        )
-      )
-
-      const slugRoute = app.$createSlugRoute(
-        route,
-        app.$translate({ et: site?.name, en: site?.name_en })
-      )
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        site,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-        images,
+  data() {
+    return {
+      site: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
+      images: [],
+    }
+  },
+  async fetch() {
+    const sitePromise = this.$services.sarvREST.getResource(
+      'site',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 2,
+        },
       }
-    } catch (err) {
-      error({
-        message: `Could not find site ${params.id}`,
-        path: route.path,
-      })
+    )
+    const attachmentPromise = this.$services.sarvREST.getResourceList(
+      'attachment_link',
+      {
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          site: this.$route.params.id,
+          attachment__attachment_format__value__istartswith: 'image',
+          nest: 1,
+        },
+        fields: {},
+      }
+    )
+
+    const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
+    const hydratedTabsPromise = Promise.all(
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          countParams: {
+            solr: { default: { fq: `site_id:${this.$route.params.id}` } },
+            api: { default: { site: this.$route.params.id } },
+          },
+        })
+      )
+    )
+    const [siteResponse, attachmentResponse, hydratedTabs] = await Promise.all([
+      sitePromise,
+      attachmentPromise,
+      hydratedTabsPromise,
+    ])
+
+    this.ids = siteResponse?.ids
+    this.site = siteResponse
+    this.images = attachmentResponse.items ?? []
+    this.tabs = hydratedTabs
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({ et: this.site.name, en: this.site.name_en })
+    )
+
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+    if (this.validRoute.path !== this.$route.path) {
+      this.$router.replace(this.validRoute)
     }
   },
   head() {
@@ -436,12 +424,12 @@ export default {
         {
           property: 'description',
           hid: 'description',
-          content: this.site.description ?? undefined,
+          content: this.site?.description ?? undefined,
         },
         {
           property: 'og:description',
           hid: 'og:description',
-          content: this.site.description ?? undefined,
+          content: this.site?.description ?? undefined,
         },
         {
           property: 'og:image',
@@ -461,7 +449,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$translate({ et: this.site.name, en: this.site.name_en })
+      return this.$translate({ et: this.site?.name, en: this.site?.name_en })
     },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)

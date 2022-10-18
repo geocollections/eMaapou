@@ -252,119 +252,115 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const stratigraphyResponse = await $services.sarvREST.getResource(
-        'stratigraphy',
-        params.id,
-        {
-          params: {
-            nest: 1,
-          },
-        }
-      )
-      const ids = stratigraphyResponse?.ids
-      const stratigraphy = stratigraphyResponse
+  data() {
+    return {
+      stratigraphy: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
+      stratotypes: [],
+      stratotypeCount: 0,
+      options: STRATOTYPE.options,
+    }
+  },
+  async fetch() {
+    const stratigraphyPromise = this.$services.sarvREST.getResource(
+      'stratigraphy',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 1,
+        },
+      }
+    )
 
-      const stratotypeResponse = await $services.sarvREST.getResourceList(
-        'stratigraphy_stratotype',
-        {
-          ...STRATOTYPE.options,
-          isValid: isNil(stratigraphy?.id),
-          defaultParams: {
-            stratigraphy: stratigraphy?.id,
-            nest: 2,
-          },
-          fields: app.$getAPIFieldValues(HEADERS_STRATOTYPE),
-        }
-      )
-      const stratotypes = stratotypeResponse.items
-      const stratotypeCount = stratotypeResponse.count
+    const stratotypePromise = this.$services.sarvREST.getResourceList(
+      'stratigraphy_stratotype',
+      {
+        ...STRATOTYPE.options,
+        isValid: isNil(this.$route.params.id),
+        defaultParams: {
+          stratigraphy: this.$route.params.id,
+          nest: 2,
+        },
+        fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
+      }
+    )
+    const [stratigraphyResponse, stratotypeResponse] = await Promise.all([
+      stratigraphyPromise,
+      stratotypePromise,
+    ])
 
-      const tabsObject = TABS_STRATIGRAPHY
+    this.ids = stratigraphyResponse?.ids
+    this.stratigraphy = stratigraphyResponse
+    this.stratotypes = stratotypeResponse.items
+    this.stratotypeCount = stratotypeResponse.count
 
-      tabsObject.byIds.specimen.props.stratigraphy = stratigraphy
-      tabsObject.byIds.sample.props.stratigraphy = stratigraphy
+    const tabsObject = TABS_STRATIGRAPHY
 
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+    tabsObject.byIds.specimen.props.stratigraphy = this.stratigraphy
+    tabsObject.byIds.sample.props.stratigraphy = this.stratigraphy
 
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              countParams: {
-                api: {
-                  default: {
-                    stratigraphy: stratigraphy?.id,
-                  },
-                  stratigraphy_stratotype: {
-                    stratigraphy: stratigraphy?.id,
-                  },
-                  stratigraphy_synonym: {
-                    stratigraphy: stratigraphy?.id,
-                  },
-                },
-                solr: {
-                  default: {
-                    fq: stratigraphy?.hierarchy_string
-                      ? `(stratigraphy_hierarchy:(${stratigraphy?.hierarchy_string}*) OR age_hierarchy:(${stratigraphy?.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy?.hierarchy_string}*))`
-                      : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
-                    // fq: `stratigraphy_id:${stratigraphy.id}`,
-                  },
-                  lithostratigraphy: {
-                    fq: `age_chronostratigraphy:${stratigraphy?.id}`,
-                  },
-                  subunits: {
-                    fq: `parent_id:${stratigraphy?.id}`,
-                  },
-                },
-                fields: tab.fields ?? 'id',
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+    const hydratedTabs = await Promise.all(
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          countParams: {
+            api: {
+              default: {
+                stratigraphy: this.$route.params.id,
               },
-            })
-        )
-      )
-
-      const slugRoute = app.$createSlugRoute(
-        route,
-        app.$translate({
-          et: stratigraphy?.stratigraphy,
-          en: stratigraphy?.stratigraphy_en,
+              stratigraphy_stratotype: {
+                stratigraphy: this.$route.params.id,
+              },
+              stratigraphy_synonym: {
+                stratigraphy: this.$route.params.id,
+              },
+            },
+            solr: {
+              default: {
+                fq: this.stratigraphy.hierarchy_string
+                  ? `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`
+                  : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
+              },
+              lithostratigraphy: {
+                fq: `age_chronostratigraphy:${this.$route.params.id}`,
+              },
+              subunits: {
+                fq: `parent_id:${this.$route.params.id}`,
+              },
+            },
+            fields: tab.fields ?? 'id',
+          },
         })
       )
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        stratigraphy,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-        stratotypes,
-        stratotypeCount,
-        options: STRATOTYPE.options,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find stratigraphy ${route.params.id}`,
-        path: route.path,
+    )
+    this.tabs = hydratedTabs
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({
+        et: this.stratigraphy.stratigraphy,
+        en: this.stratigraphy.stratigraphy_en,
       })
-    }
+    )
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
       title: `${this.$translate({
-        et: this.stratigraphy.stratigraphy,
-        en: this.stratigraphy.stratigraphy_en,
+        et: this.stratigraphy?.stratigraphy,
+        en: this.stratigraphy?.stratigraphy_en,
       })} | ${this.$t('stratigraphy.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
           content: `${this.$translate({
-            et: this.stratigraphy.stratigraphy,
-            en: this.stratigraphy.stratigraphy_en,
+            et: this.stratigraphy?.stratigraphy,
+            en: this.stratigraphy?.stratigraphy_en,
           })} | ${this.$t('stratigraphy.pageTitle')}`,
         },
         {

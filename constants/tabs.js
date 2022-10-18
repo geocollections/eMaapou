@@ -350,7 +350,7 @@ export const TABS_DRILLCORE = {
     },
     analysis_results: {
       table: 'analysis_results',
-      id: 'graphs',
+      id: 'analysis_results',
       isSolr: true,
       routeName: 'drillcore-id-slug-graphs',
       title: 'locality.graphs',

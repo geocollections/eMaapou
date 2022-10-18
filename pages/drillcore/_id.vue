@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail
         :ids="ids"
@@ -87,7 +87,7 @@
       </div>
     </template>
 
-    <template v-if="drillcore.locality" #column-right>
+    <template v-if="locality" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.locality')
       }}</v-card-title>
@@ -168,7 +168,7 @@
     </template>
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -196,109 +196,90 @@ export default {
     Detail,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const drillcoreResponse = await $services.sarvREST.getResource(
-        'drillcore',
-        params.id,
+  data() {
+    return {
+      drillcore: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
+    }
+  },
+  async fetch() {
+    const drillcoreResponse = await this.$services.sarvREST.getResource(
+      'drillcore',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 2,
+        },
+      }
+    )
+    this.ids = drillcoreResponse?.ids
+    this.drillcore = drillcoreResponse
+
+    let lasFileResponse
+    if (this.drillcore?.locality) {
+      lasFileResponse = await this.$services.sarvREST.getResourceList(
+        'attachment_link',
         {
-          params: {
-            nest: 2,
+          defaultParams: {
+            attachment__uuid_filename__iendswith: '.las',
+            locality: this.drillcore.locality.id,
+            fields: 'attachment',
           },
         }
       )
-      const ids = drillcoreResponse?.ids
-      const drillcore = drillcoreResponse
+    }
 
-      let lasFileResponse
-      if (drillcore?.locality) {
-        lasFileResponse = await app.$services.sarvREST.getResourceList(
-          'attachment_link',
-          {
-            defaultParams: {
-              attachment__uuid_filename__iendswith: '.las',
-              locality: drillcore.locality.id,
-              fields: 'attachment',
-            },
-          }
-        )
-      }
+    const tabsObject = TABS_DRILLCORE
 
-      const tabsObject = TABS_DRILLCORE
+    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
+    tabsObject.byIds.analysis_results.count = lasFileResponse?.items?.[0]
+      ?.attachment
+      ? 1
+      : 0
+    tabsObject.byIds.analysis_results.props = {
+      drillcoreObject: this.drillcore,
+      locality: this.drillcore?.locality?.id,
+      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+      analysisResultsCount: tabsObject.byIds.analysis_results.count,
+    }
 
-      tabsObject.byIds.boxes.count = drillcore?.boxes || 0
-      tabsObject.byIds.analysis_results.props = {
-        drillcoreObject: drillcore,
-        locality: drillcore?.locality?.id,
-        attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
-      }
-
-      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-      let hydratedTabs = drillcore?.locality?.id
-        ? await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await app.$hydrateTab(tab, {
-                  props: { locality: drillcore?.locality?.id },
-                  countParams: {
-                    solr: {
-                      default: {
-                        fq: `locality_id :${drillcore?.locality?.id}`,
-                      },
-                    },
-                    api: {
-                      default: { locality: drillcore?.locality?.id },
-                      attachment_link: {
-                        or_search: `drillcore:${drillcore.id} OR locality:${drillcore.locality.id}`,
-                      },
+    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+    this.tabs = this.drillcore?.locality?.id
+      ? await Promise.all(
+          tabs.map(
+            async (tab) =>
+              await this.$hydrateTab(tab, {
+                props: { locality: this.drillcore?.locality?.id },
+                countParams: {
+                  solr: {
+                    default: {
+                      fq: `locality_id :${this.drillcore?.locality?.id}`,
                     },
                   },
-                })
-            )
+                  api: {
+                    default: { locality: this.drillcore?.locality?.id },
+                    attachment_link: {
+                      or_search: `drillcore:${this.drillcore.id} OR locality:${this.drillcore.locality.id}`,
+                    },
+                  },
+                },
+              })
           )
-        : tabs
+        )
+      : tabs
 
-      // Hack for graphs to show tab if related .las file exists (otherwise tab is shown but is disabled)
-      hydratedTabs = hydratedTabs.map((item) => {
-        if (item.id === 'graphs') {
-          const count = lasFileResponse?.items?.[0]?.attachment
-            ? item.count + 1
-            : item.count
-          return {
-            ...item,
-            count,
-            props: {
-              ...item.props,
-              analysisResultsCount: item.count,
-            },
-          }
-        } else return item
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      this.$translate({
+        et: this.drillcore.drillcore,
+        en: this.drillcore.drillcore_en,
       })
-
-      const slugRoute = app.$createSlugRoute(
-        route,
-        app.$translate({
-          et: drillcore.drillcore,
-          en: drillcore.drillcore_en,
-        })
-      )
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        drillcore,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find drillcore ${route.params.id}`,
-        path: route.path,
-      })
-    }
+    )
+    this.validRoute = this.$validateTabRoute(slugRoute, this.tabs)
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
@@ -320,8 +301,8 @@ export default {
   computed: {
     title() {
       return this.$translate({
-        et: this.drillcore.drillcore,
-        en: this.drillcore.drillcore_en,
+        et: this.drillcore?.drillcore,
+        en: this.drillcore?.drillcore_en,
       })
     },
     filteredTabs() {

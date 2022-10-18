@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail
         :ids="ids"
@@ -364,7 +364,7 @@
 
     <template #bottom>
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -394,92 +394,85 @@ export default {
     BaseLinkExternal,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const detailViewResponse = await $services.sarvREST.getResource(
-        'area',
-        params.id,
-        {
-          params: {
-            nest: 1,
-          },
-        }
-      )
-      const ids = detailViewResponse?.ids
-      const area = detailViewResponse
-      const sitesForMapResponse = await $services.sarvSolr.getResourceList(
-        'site',
-        {
-          defaultParams: {
-            fq: `area_id:${params.id}`,
-          },
-        }
-      )
-
-      const deposit = area.maaamet_maardla
-
-      const miningClaim = area.maaamet_maeeraldis
-
-      const sites = sitesForMapResponse.items
-
-      const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: { fq: `area_id:${area.id}` },
-                },
-                api: {
-                  default: { area: area.id },
-                  relatedArea: { parent_area: area.id },
-                },
-              },
-            })
-        )
-      )
-
-      const text = app.$translate({
-        et: area.name,
-        en: area.name_en,
-      })
-
-      const slugRoute = app.$createSlugRoute(route, text)
-
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        area,
-        ids,
-        sites,
-        deposit,
-        miningClaim,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-      }
-    } catch (err) {
-      error({
-        message: `Could not find area ${route.params.id}`,
-        path: route.path,
-      })
+  data() {
+    return {
+      area: null,
+      ids: [],
+      sites: [],
+      deposit: '',
+      miningClaim: '',
+      validRoute: {},
+      tabs: [],
     }
+  },
+  async fetch() {
+    const areaPromise = this.$services.sarvREST.getResource(
+      'area',
+      this.$route.params.id,
+      {
+        params: {
+          nest: 1,
+        },
+      }
+    )
+    const sitesForMapPromise = this.$services.sarvSolr.getResourceList('site', {
+      defaultParams: {
+        fq: `area_id:${this.$route.params.id}`,
+      },
+    })
+    const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
+    const hydratedTabsPromise = Promise.all(
+      tabs.map(
+        async (tab) =>
+          await this.$hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `area_id:${this.$route.params.id}` },
+              },
+              api: {
+                default: { area: this.$route.params.id },
+                relatedArea: { parent_area: this.$route.params.id },
+              },
+            },
+          })
+      )
+    )
+    const [areaResponse, sitesForMapResponse, hydratedTabs] = await Promise.all(
+      [areaPromise, sitesForMapPromise, hydratedTabsPromise]
+    )
+    this.ids = areaResponse?.ids
+    this.area = areaResponse
+
+    this.deposit = this.area.maaamet_maardla
+
+    this.miningClaim = this.area.maaamet_maeeraldis
+
+    this.sites = sitesForMapResponse.items
+
+    const text = this.$translate({
+      et: this.area.name,
+      en: this.area.name_en,
+    })
+
+    const slugRoute = this.$createSlugRoute(this.$route, text)
+
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+
+    if (this.validRoute.path !== this.$route.path)
+      this.$router.replace(this.validRoute)
   },
   head() {
     return {
       title: `${this.$translate({
-        et: this.area.name,
-        en: this.area.name_en,
+        et: this.area?.name,
+        en: this.area?.name_en,
       })} | ${this.$t('area.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           content: `${this.$translate({
-            et: this.area.name,
-            en: this.area.name_en,
+            et: this.area?.name,
+            en: this.area?.name_en,
           })} | ${this.$t('area.pageTitle')}`,
           hid: 'og:title',
         },

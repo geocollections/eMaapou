@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail :ids="ids">
         <div>
@@ -218,7 +218,7 @@
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
       <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
@@ -246,74 +246,77 @@ export default {
     ImageBar,
     BaseTable,
   },
-  async asyncData({ app, params, route, error, $services, redirect }) {
-    try {
-      const detailViewResponse = await $services.sarvREST.getResource(
-        'specimen',
-        params.id,
-        { params: { nest: 2 } }
-      )
-      const ids = detailViewResponse?.ids
-      const specimen = detailViewResponse
+  data() {
+    return {
+      specimen: null,
+      specimenAlt: null,
+      ids: [],
+      validRoute: {},
+      tabs: [],
+      images: [],
+    }
+  },
+  async fetch() {
+    const specimenPromise = this.$services.sarvREST.getResource(
+      'specimen',
+      this.$route.params.id,
+      { params: { nest: 2 } }
+    )
 
-      const specimenNameResponse = await $services.sarvSolr.getResource(
-        'specimen',
-        params.id
-      )
+    const specimenNamePromise = this.$services.sarvSolr.getResource(
+      'specimen',
+      this.$route.params.id
+    )
 
-      const specimenAlt = specimenNameResponse?.[0]
-
-      const attachmentResponse = await $services.sarvSolr.getResourceList(
-        'attachment',
-        {
-          defaultParams: {
-            fq: `specimen_id:${specimen?.id} AND specimen_image_attachment:1`,
-            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-            rows: 25,
-          },
-        }
-      )
-
-      const images = attachmentResponse.items ?? []
-
-      const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
-
-      const hydratedTabs = await Promise.all(
-        tabs.map(
-          async (tab) =>
-            await app.$hydrateTab(tab, {
-              countParams: {
-                solr: { default: { fq: `specimen_id:${specimen?.id}` } },
-                api: {
-                  default: { specimen: specimen?.id },
-                  specimen_reference: { specimen: specimen?.id },
-                },
-              },
-            })
-        )
-      )
-
-      const slugRoute = app.$createSlugRoute(
-        route,
-        `${specimen.database.acronym} ${specimen.specimen_id}`
-      )
-      const validPath = app.$validateTabRoute(slugRoute, hydratedTabs)
-
-      if (validPath !== route.path) redirect(validPath)
-      return {
-        specimen,
-        specimenAlt,
-        ids,
-        validPath,
-        tabs: hydratedTabs,
-        initActiveTab: validPath,
-        images,
+    const attachmentPromise = this.$services.sarvSolr.getResourceList(
+      'attachment',
+      {
+        defaultParams: {
+          fq: `specimen_id:${this.$route.params.id} AND specimen_image_attachment:1`,
+          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+          rows: 25,
+        },
       }
-    } catch (err) {
-      error({
-        message: `Could not find specimen ${route.params.id}`,
-        path: route.path,
-      })
+    )
+    const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
+    const hydratedTabsPromise = Promise.all(
+      tabs.map((tab) =>
+        this.$hydrateTab(tab, {
+          countParams: {
+            solr: { default: { fq: `specimen_id:${this.$route.params.id}` } },
+            api: {
+              default: { specimen: this.$route.params.id },
+              specimen_reference: { specimen: this.$route.params.id },
+            },
+          },
+        })
+      )
+    )
+    const [
+      specimenResponse,
+      specimenNameResponse,
+      attachmentResponse,
+      hydratedTabs,
+    ] = await Promise.all([
+      specimenPromise,
+      specimenNamePromise,
+      attachmentPromise,
+      hydratedTabsPromise,
+    ])
+
+    this.ids = specimenResponse?.ids
+    this.specimen = specimenResponse
+    this.specimenAlt = specimenNameResponse?.[0]
+    this.images = attachmentResponse.items ?? []
+    this.tabs = hydratedTabs
+
+    const slugRoute = this.$createSlugRoute(
+      this.$route,
+      `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
+    )
+    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
+    if (this.validRoute.path !== this.$route.path) {
+      this.$router.replace(this.validRoute)
     }
   },
   head() {
@@ -343,7 +346,7 @@ export default {
   },
   computed: {
     title() {
-      return `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
+      return `${this.specimen?.database?.acronym} ${this.specimen?.specimen_id}`
     },
     titleAlt() {
       if (this.specimenAlt?.rock) {
