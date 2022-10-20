@@ -83,19 +83,19 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~plugins/translate.js',
+    '~plugins/translate.ts',
     { src: '~/plugins/infiniteLoading.js', mode: 'client' },
-    '~plugins/services.js',
+    '~plugins/services.ts',
     { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.js',
-    '~plugins/hydrateTabs.js',
-    '~plugins/getAPIFieldValues.js',
+    '~plugins/hydrateTabs.ts',
+    '~plugins/getAPIFieldValues.ts',
     { src: '~plugins/gtag.js', mode: 'client' },
     { src: '~plugins/vuexPersist.js', mode: 'client' },
-    { src: '~plugins/afterEach.js', mode: 'client' },
+    { src: '~plugins/afterEach.ts', mode: 'client' },
     { src: '~plugins/vueECharts.js', mode: 'client' },
-    '~/plugins/formatDate.js',
-    '~/plugins/slug.js', // this might be only called on server-side
+    '~/plugins/formatDate.ts',
+    '~/plugins/slug.ts', // this might be only called on server-side
     { src: '~/plugins/vueMatomo.js', mode: 'client' },
     { src: '~/plugins/vue-stack-grid.js', mode: 'client' },
   ],
@@ -110,13 +110,15 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
     '@nuxtjs/composition-api/module',
+    '@nuxt/typescript-build',
+    'nuxt-typed-vuex',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    'nuxt-i18n',
+    '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/image',
   ],
@@ -231,6 +233,13 @@ export default {
         options: {
           baseURL: 'https://files.geocollections.info/',
         },
+      },
+    },
+  },
+  typescript: {
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,js,vue}',
       },
     },
   },

@@ -117,16 +117,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapFields } from 'vuex-map-fields'
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import differenceBy from 'lodash/differenceBy'
+import Vue, { PropType } from 'vue'
 import RendererSwitch from '~/components/chart/options/RendererSwitch.vue'
 import OptionsParameterTreeView from '~/components/chart/options/OptionsParameterTreeView.vue'
 import range from '~/utils/range'
 import clipRectByRect from '~/utils/clipRectByRect'
-export default {
+export default Vue.extend({
   name: 'ChartFlog',
   components: {
     RendererSwitch,
@@ -138,15 +139,15 @@ export default {
       required: true,
     },
     analyses: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
     samples: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
     taxa: {
-      type: Array,
+      type: Array as PropType<any[]>,
       default: () => [],
     },
     minDepth: {
@@ -158,7 +159,7 @@ export default {
       required: true,
     },
     parameters: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: true,
     },
     reverse: {
@@ -192,12 +193,12 @@ export default {
   },
   computed: {
     ...mapFields('chart', ['renderer', 'connected', 'ppi']),
-    initOptions() {
+    initOptions(): any {
       return {
         renderer: this.renderer,
       }
     },
-    updateOptions() {
+    updateOptions(): any {
       if (this.replace) {
         return {
           notMerge: false,
@@ -208,14 +209,14 @@ export default {
         notMerge: false,
       }
     },
-    titleSubtext() {
+    titleSubtext(): any {
       return this.$t('flogChart.titleSubtext', {
         scale: this.currentScale,
         minDepth: this.currentMaxDepth.toFixed(2),
         maxDepth: this.currentMinDepth.toFixed(2),
       })
     },
-    chartTitle() {
+    chartTitle(): any {
       return {
         id: 'main-title',
         text: this.title,
@@ -223,7 +224,7 @@ export default {
         subtext: this.titleSubtext,
       }
     },
-    chartWidth() {
+    chartWidth(): any {
       const parameterModuleWidth =
         this.selectedParameters.length *
           (this.parameterChartWidth + this.parameterChartPadding) +
@@ -236,10 +237,10 @@ export default {
 
       return `${totalWidth}px`
     },
-    selectedParametersGrouped() {
+    selectedParametersGrouped(): any {
       return this.groupParameters(this.selectedParameters)
     },
-    methods() {
+    methods(): any {
       return this.parameters.reduce((prev, method) => {
         return { ...prev, [method.value]: method }
       }, {})
@@ -259,13 +260,13 @@ export default {
     this.option = this.createOption()
   },
   methods: {
-    mm2px(mm) {
+    mm2px(mm: number): number {
       return mm * 3.7795275591
     },
-    px2mm(px) {
+    px2mm(px: number): number {
       return px / 3.7795275591
     },
-    calculateScale(maxDepth, minDepth, chartHeight) {
+    calculateScale(maxDepth: number, minDepth: number, chartHeight: number) {
       return ((maxDepth - minDepth) * 1000) / this.px2mm(chartHeight)
     },
     calculateTotalWidth() {
@@ -303,7 +304,7 @@ export default {
         if (sampleId) this.$openNuxtWindow('sample-id', { id: sampleId })
       }
     },
-    handleDataZoom(event) {
+    handleDataZoom() {
       const datazoom = this.$refs.flogChart.getOption().dataZoom[0]
       this.currentMinDepth = datazoom.startValue
       this.currentMaxDepth = datazoom.endValue
@@ -321,7 +322,7 @@ export default {
         },
       }
     },
-    groupParameters(parameters) {
+    groupParameters(parameters: any[]) {
       const grouped = groupBy(parameters, 'value')
       return orderBy(
         Object.entries(grouped).map(([paramId, params]) => {
@@ -354,7 +355,7 @@ export default {
         title: this.chartTitle,
       }
     },
-    handleParametersUpdate(newSelectedParameters) {
+    handleParametersUpdate(newSelectedParameters: any[]) {
       const addedParameters = newSelectedParameters.filter((newParam) => {
         return !this.selectedParameters.some(
           (param) => param.id === newParam.id
@@ -639,8 +640,8 @@ export default {
     },
     createParameterChartComponents(
       param,
-      index,
-      position,
+      index: number,
+      position: number,
       { returnComponents = ['grid', 'xAxis', 'yAxis', 'series'] } = {}
     ) {
       const result = {}
@@ -1010,7 +1011,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style scoped>

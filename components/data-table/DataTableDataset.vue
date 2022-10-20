@@ -51,13 +51,14 @@
   </base-data-table>
 </template>
 
-<script>
+<script lang="ts">
 import cloneDeep from 'lodash/cloneDeep'
 import { mapState } from 'vuex'
+import Vue from 'vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET } from '~/constants'
-export default {
+export default Vue.extend({
   name: 'DataTableDataset',
   components: { BaseDataTable },
   mixins: [headersMixin],
@@ -89,5 +90,5 @@ export default {
   computed: {
     ...mapState('headers', { stateHeaders: 'dataset' }),
   },
-}
+})
 </script>

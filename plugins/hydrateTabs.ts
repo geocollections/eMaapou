@@ -1,4 +1,6 @@
-export default ({ app }, inject) => {
+import { Plugin } from '@nuxt/types'
+import { Route } from 'vue-router'
+const plugin: Plugin = ({ app }, inject) => {
   const hydrateCount = async (tab, params = {}) => {
     if (!tab.id) return tab
 
@@ -25,13 +27,16 @@ export default ({ app }, inject) => {
     }
   }
 
-  const hydrateTab = async (tab, options = { props: {}, countParams: {} }) => {
+  const hydrateTab = async (
+    tab: object,
+    options = { props: {}, countParams: {} }
+  ): Promise<object> => {
     tab = hydrateProps(tab, options.props)
 
     return await hydrateCount(tab, options.countParams)
   }
 
-  const validateTabRoute = (route, tabs) => {
+  const validateTabRoute = (route: Route, tabs: object[]): Route => {
     const routeCopy = {
       name: route.name,
       params: route.params,
@@ -59,7 +64,7 @@ export default ({ app }, inject) => {
     return { ...localePath, matched: undefined }
   }
 
-  const getMaxTab = (route, tabs) => {
+  const getMaxTab = (route: Route, tabs: object[]): Route | undefined => {
     const initTab = tabs.reduce((max, tab) =>
       max.count > tab.count ? max : tab
     )
@@ -73,9 +78,9 @@ export default ({ app }, inject) => {
     })
     return path
   }
-  inject('hydrateCount', hydrateCount)
-  inject('hydrateProps', hydrateProps)
   inject('hydrateTab', hydrateTab)
   inject('validateTabRoute', validateTabRoute)
   inject('getMaxTab', getMaxTab)
 }
+
+export default plugin

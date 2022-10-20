@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
-import qs from 'qs'
+import { stringify } from 'qs'
 import Wkt from 'wicket/wicket'
 import earcut from 'earcut'
 
@@ -9,6 +9,7 @@ export default ($axios) => ({
   async getResourceList(
     resource,
     {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       useRawSolr,
       defaultParams,
       fields,
@@ -36,7 +37,7 @@ export default ($axios) => ({
     const response = await $axios.$get(`solr/${resource}`, {
       params,
       paramsSerializer: (par) => {
-        return qs.stringify(par, { indices: false })
+        return stringify(par, { indices: false })
       },
     })
 
@@ -305,7 +306,7 @@ const buildSolrParameters = (filters) => {
               return [data.vertices[startIndex], data.vertices[startIndex + 1]]
             })
             const triangleCoordinates = coordinates.reduce(
-              (prev, item, index, arr) => {
+              (prev, _, index, arr) => {
                 if ((index + 1) % 3 === 0) {
                   prev.push([
                     arr[index - 2],

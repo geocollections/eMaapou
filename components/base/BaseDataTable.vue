@@ -137,13 +137,22 @@
   </v-data-table>
 </template>
 
-<script>
+<script lang="ts">
 import isEqual from 'lodash/isEqual'
 import debounce from 'lodash/debounce'
+import Vue, { PropType } from 'vue'
 import BaseDataTableHeaderMenu from '~/components/base/BaseDataTableHeaderMenu.vue'
 import BaseDataTableExportMenu from '~/components/base/BaseDataTableExportMenu.vue'
 import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-export default {
+
+interface IHeader {
+  text: string
+  value: string
+  show: boolean
+  apiFieldValue?: string | { et: string; en: string }
+}
+
+export default Vue.extend({
   name: 'BaseDataTable',
   components: {
     BaseDataTablePagination,
@@ -157,15 +166,15 @@ export default {
     },
     items: {
       type: Array,
-      default: () => [],
+      required: true,
     },
     headers: {
-      type: Array,
-      default: () => [],
+      type: Array as PropType<IHeader[]>,
+      required: true,
     },
     options: {
       type: Object,
-      default: () => {},
+      required: true,
     },
     count: {
       type: Number,
@@ -206,20 +215,15 @@ export default {
     }
   },
   computed: {
-    visibleHeaders() {
+    visibleHeaders(): IHeader[] {
       return this.headers.filter((header) => header.show)
     },
   },
-  // watch: {
-  //   items() {
-  //     this.isLoading = false
-  //   },
+  // mounted() {
+  //   this.tableElement = this.$el.querySelector('table')
   // },
-  mounted() {
-    this.tableElement = this.$el.querySelector('table')
-  },
   methods: {
-    handleChange: debounce(function (options) {
+    handleChange: debounce(function (this: any, options) {
       if (
         options.itemsPerPage === this.options.itemsPerPage &&
         options.page === this.options.page &&
@@ -229,7 +233,7 @@ export default {
         return
       this.$emit('update', { options, search: this.search })
     }, 250),
-    handleSearch: debounce(function () {
+    handleSearch: debounce(function (this: any) {
       const options = { ...this.options, page: 1 }
       // this.isLoading = true
       this.$emit('update', {
@@ -237,21 +241,21 @@ export default {
         search: this.search,
       })
     }, 400),
-    handleHeadersChange(e) {
+    handleHeadersChange(e: any) {
       this.$emit('change:headers', e.value)
     },
-    handleRowClick(item, slot) {
+    handleRowClick(_: any, slot: any) {
       // HACK: This is added to handle propagation,
       // as this function does not have a event argument (https://vuetifyjs.com/en/api/v-data-table/#api-events)
       // .stop cannot be used to stop propagation.
       // Right now we check if the target has class 'text-link',
       // if does then we know that the user clicked a link and we do not expand the row.
       // Workaround found from: https://github.com/vuetifyjs/vuetify/issues/1538
-      if (event.target.classList.contains('text-link')) return
+      if ((event?.target as Element)?.classList.contains('text-link')) return
       slot.expand(!slot.isExpanded)
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>
