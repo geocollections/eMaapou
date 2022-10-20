@@ -24,6 +24,15 @@ declare module 'vue/types/vue' {
     $validateTabRoute(route: Route, tabs: object[]): Route
     $getMaxTab(route: Route, tabs: object[]): Route | undefined
     $createSlugRoute(route: Route, text: string): Route | undefined
+    $openWindow(url: string): void
+    $openNuxtWindow(route: string, params?: object): void
+    $openImage(filename: string, size?: string): void
+    $openEdit(table: string, id: string): void
+    $openDeposit(id: string): void
+    $openEelis(id: string): void
+    $openEgf(id: string): void
+    $openTurba(table: string, id: string, openNewWindow?: boolean): void
+    $openGeology(table: string, id: string): void
   }
 }
 declare module '@nuxt/types' {
@@ -40,6 +49,15 @@ declare module '@nuxt/types' {
     $validateTabRoute(route: Route, tabs: object[]): Route
     $getMaxTab(route: Route, tabs: object[]): Route | undefined
     $createSlugRoute(route: Route, text: string): Route | undefined
+    $openWindow(url: string): void
+    $openNuxtWindow(route: string, params?: object): void
+    $openImage(filename: string, size?: string): void
+    $openEdit(table: string, id: string): void
+    $openDeposit(id: string): void
+    $openEelis(id: string): void
+    $openEgf(id: string): void
+    $openTurba(table: string, id: string, openNewWindow?: boolean): void
+    $openGeology(table: string, id: string): void
   }
 
   interface Context {
@@ -55,6 +73,15 @@ declare module '@nuxt/types' {
     $validateTabRoute(route: Route, tabs: object[]): Route
     $getMaxTab(route: Route, tabs: object[]): Route | undefined
     $createSlugRoute(route: Route, text: string): Route | undefined
+    $openWindow(url: string): void
+    $openNuxtWindow(route: string, params?: object): void
+    $openImage(filename: string, size?: string): void
+    $openEdit(table: string, id: string): void
+    $openDeposit(id: string): void
+    $openEelis(id: string): void
+    $openEgf(id: string): void
+    $openTurba(table: string, id: string, openNewWindow?: boolean): void
+    $openGeology(table: string, id: string): void
   }
 }
 declare module 'vue/types/options' {

@@ -87,7 +87,7 @@ export default {
     { src: '~/plugins/infiniteLoading.js', mode: 'client' },
     '~plugins/services.ts',
     { src: '~plugins/leaflet.js', mode: 'client' },
-    '~plugins/openWindow.js',
+    '~plugins/openWindow.ts',
     '~plugins/hydrateTabs.ts',
     '~plugins/getAPIFieldValues.ts',
     { src: '~plugins/gtag.js', mode: 'client' },
