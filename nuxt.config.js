@@ -229,7 +229,7 @@ export default {
     providers: {
       geocollections: {
         name: 'geocollections',
-        provider: '~/providers/geocollections',
+        provider: '~/providers/geocollections.ts',
         options: {
           baseURL: 'https://files.geocollections.info/',
         },
