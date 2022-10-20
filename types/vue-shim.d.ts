@@ -5,12 +5,14 @@ import { accessorType } from '~/store'
 import services from '~/services'
 import { ITranslations } from '~/plugins/translate'
 import { Route } from 'vue-router'
+import * as L from 'leaflet'
 declare module '*.vue' {
   export default Vue
 }
 declare module 'vue/types/vue' {
   interface Vue {
     $accessor: typeof accessorType
+    $L: typeof L
     $formatDate(isoDate: string): string
     $getAPIFieldValues(headers: { byIds: object; allIds: string[] }): object
     $services: ReturnType<typeof services>

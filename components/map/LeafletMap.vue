@@ -129,16 +129,17 @@
   </client-only>
 </template>
 
-<script>
+<script lang="ts">
 // import MapLegend from '~/components/map/MapLegend'
 import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
+import Vue from 'vue'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
 import MapClickPopup from '~/components/map/MapClickPopup.vue'
-export default {
+export default Vue.extend({
   name: 'LeafletMap',
   components: {
     MapClickPopup,
@@ -149,7 +150,6 @@ export default {
   props: {
     zoom: {
       type: Number,
-      require: false,
       default: null,
     },
     height: {
@@ -514,22 +514,22 @@ export default {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
     ...mapGetters('map', ['isBaseLayerEstonian', 'getBaseLayer']),
-    mapZoom() {
+    mapZoom(): number {
       return this.zoom ?? (this.estonianBedrockOverlay ? 9 : 11)
     },
-    tileOverlays() {
+    tileOverlays(): object[] {
       return this.layers.overlay.filter((item) => !item.isWMS)
     },
-    wmsOverlays() {
+    wmsOverlays(): object[] {
       return this.layers.overlay.filter((item) => item.isWMS)
     },
-    latLngMarkers() {
+    latLngMarkers(): any[] {
       return [
         this.markers.map((marker) => marker.latitude),
         this.markers.map((marker) => marker.longitude),
       ]
     },
-    tooltipOptions() {
+    tooltipOptions(): object {
       return {
         permanent: this.markers.length <= 5,
         direction: 'top',
@@ -537,13 +537,13 @@ export default {
       }
     },
 
-    markersAsFitBoundsObject() {
+    markersAsFitBoundsObject(): [number, number][] {
       return this.markers.map((m) => {
         return [m.latitude, m.longitude]
       })
     },
 
-    checkableLayers() {
+    checkableLayers(): any {
       const checkableLayerNames = [
         'Lokaliteedid / Localities',
         'Puursüdamikud / Drillcores',
@@ -563,11 +563,11 @@ export default {
       )
     },
 
-    isDetailView() {
+    isDetailView(): boolean {
       return this.$route.name.includes('-id-')
     },
 
-    computedBaseLayers() {
+    computedBaseLayers(): object[] {
       return this.layers.base.map((layer) => {
         return {
           ...layer,
@@ -575,7 +575,7 @@ export default {
         }
       })
     },
-    isPolygonSet() {
+    isPolygonSet(): boolean {
       return this.polygon && this.polygon.length > 0
     },
   },
@@ -691,7 +691,6 @@ export default {
       if (this.geojson) {
         this.$nextTick(() => {
           const group = this.$L.featureGroup()
-
           this.$refs.map.mapObject.eachLayer(function (layer) {
             if (layer.feature !== undefined) group.addLayer(layer)
           })
@@ -711,7 +710,7 @@ export default {
       else return false
     },
 
-    handleMapClick: debounce(async function (event) {
+    handleMapClick: debounce(async function (this, event) {
       if (this.isMapClickEnabled()) {
         const MAX_ZOOM = 21
         const radius =
@@ -869,7 +868,7 @@ export default {
       }
     }, 500),
   },
-}
+})
 </script>
 
 <style scoped>
