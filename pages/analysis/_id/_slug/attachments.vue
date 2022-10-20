@@ -49,7 +49,7 @@ export default Vue.extend({
   },
   methods: {
     handleUpdate(tableState) {
-      this.this.options = tableState.options
+      this.options = tableState.options
       this.search = tableState.search
       this.$fetch()
     },

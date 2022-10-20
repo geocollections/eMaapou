@@ -1,6 +1,6 @@
 import { Plugin } from '@nuxt/types'
 
-interface ITranslations {
+export interface ITranslations {
   et: string
   en: string
 }
