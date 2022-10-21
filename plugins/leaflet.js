@@ -2,7 +2,7 @@ import Vue from 'vue'
 import * as Vue2Leaflet from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 import { GestureHandling } from 'leaflet-gesture-handling'
 import LControlFullscreen from 'vue2-leaflet-fullscreen'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
@@ -48,7 +48,7 @@ Icon.Default.mergeOptions({
 })
 
 const LeafletPlugin = {
-  install(Vue, options) {
+  install(Vue, _options) {
     // Expose Leaflet
     // eslint-disable-next-line no-undef
     Vue.prototype.$L = L

@@ -1,26 +1,29 @@
 import { Plugin } from '@nuxt/types'
-import { Route } from 'vue-router'
+import { Route, Location } from 'vue-router'
 const plugin: Plugin = ({ app }, inject) => {
-  const hydrateCount = async (tab, params = {}) => {
+  const hydrateCount = async (
+    tab: any,
+    options: { solr?: any; api?: any; fields?: any } = {}
+  ) => {
     if (!tab.id) return tab
 
     if (tab.isSolr) {
       const res = await app.$services.sarvSolr.getResourceCount(
         tab.table ?? tab.id,
-        params.solr?.[tab.id] ?? params.solr?.default ?? {}
+        options.solr?.[tab.id] ?? options.solr?.default ?? {}
       )
       return { ...tab, count: res?.count ?? 0 }
     } else {
       const res = await app.$services.sarvREST.getResourceCount(
         tab.table ?? tab.id,
-        params.api?.[tab.id] ?? params.api?.default ?? {},
-        params.fields ?? null
+        options.api?.[tab.id] ?? options.api?.default ?? {},
+        options.fields ?? null
       )
       return { ...tab, count: res?.count ?? 0 }
     }
   }
 
-  const hydrateProps = (tab, props) => {
+  const hydrateProps = (tab: any, props: any) => {
     return {
       ...tab,
       props: { ...tab.props, ...props },
@@ -36,14 +39,16 @@ const plugin: Plugin = ({ app }, inject) => {
     return await hydrateCount(tab, options.countParams)
   }
 
-  const validateTabRoute = (route: Route, tabs: object[]): Route => {
+  const validateTabRoute = (
+    route: Location,
+    tabs: any[]
+  ): Location | undefined => {
     const routeCopy = {
       name: route.name,
       params: route.params,
       path: route.path,
-      matched: undefined, // NOTE: if `matched` is not removed, will get maximum call stach error
     }
-    if (!tabs.length > 0) return routeCopy
+    if (!(tabs.length > 0)) return routeCopy
     const currentTab = tabs.find(
       (tab) =>
         route.path ===
@@ -57,14 +62,14 @@ const plugin: Plugin = ({ app }, inject) => {
     const initTab = tabs.find((tab) => tab.count > 0)
     // Constuct route
     // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
-    const localePath = app.localeRoute({
+    const localePath = app.localeLocation({
       name: initTab?.routeName ?? tabs[0].routeName,
       params: route.params,
     })
-    return { ...localePath, matched: undefined }
+    return localePath
   }
 
-  const getMaxTab = (route: Route, tabs: object[]): Route | undefined => {
+  const getMaxTab = (route: Route, tabs: any[]): Route | undefined => {
     const initTab = tabs.reduce((max, tab) =>
       max.count > tab.count ? max : tab
     )

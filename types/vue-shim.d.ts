@@ -4,7 +4,7 @@ import { MetaInfo } from 'vue-meta'
 import { accessorType } from '~/store'
 import services from '~/services'
 import { ITranslations } from '~/plugins/translate'
-import { Route } from 'vue-router'
+import { Route, Location } from 'vue-router'
 import * as L from 'leaflet'
 declare module '*.vue' {
   export default Vue
@@ -21,11 +21,11 @@ declare module 'vue/types/vue' {
       tab: object,
       options?: { props: {}; countParams: {} }
     ): Promise<object>
-    $validateTabRoute(route: Route, tabs: object[]): Route
-    $getMaxTab(route: Route, tabs: object[]): Route | undefined
-    $createSlugRoute(route: Route, text: string): Route | undefined
+    $validateTabRoute(route: Location, tabs: any[]): Location | undefined
+    $getMaxTab(route: Route, tabs: any[]): Route | undefined
+    $createSlugRoute(route: Route, text: string): Location | undefined
     $openWindow(url: string): void
-    $openNuxtWindow(route: string, params?: object): void
+    $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
     $openEdit(table: string, id: string): void
     $openDeposit(id: string): void
@@ -46,11 +46,11 @@ declare module '@nuxt/types' {
       tab: object,
       options?: { props: {}; countParams: {} }
     ): Promise<object>
-    $validateTabRoute(route: Route, tabs: object[]): Route
-    $getMaxTab(route: Route, tabs: object[]): Route | undefined
+    $validateTabRoute(route: Location, tabs: any[]): Location | undefined
+    $getMaxTab(route: Route, tabs: any[]): Route | undefined
     $createSlugRoute(route: Route, text: string): Route | undefined
     $openWindow(url: string): void
-    $openNuxtWindow(route: string, params?: object): void
+    $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
     $openEdit(table: string, id: string): void
     $openDeposit(id: string): void
@@ -70,11 +70,11 @@ declare module '@nuxt/types' {
       tab: object,
       options?: { props: {}; countParams: {} }
     ): Promise<object>
-    $validateTabRoute(route: Route, tabs: object[]): Route
-    $getMaxTab(route: Route, tabs: object[]): Route | undefined
-    $createSlugRoute(route: Route, text: string): Route | undefined
+    $validateTabRoute(route: Location, tabs: any[]): Location | undefined
+    $getMaxTab(route: Route, tabs: any[]): Route | undefined
+    $createSlugRoute(route: Route, text: string): Location | undefined
     $openWindow(url: string): void
-    $openNuxtWindow(route: string, params?: object): void
+    $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
     $openEdit(table: string, id: string): void
     $openDeposit(id: string): void

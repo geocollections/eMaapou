@@ -77,11 +77,11 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/preparation', ['searchPreparations']),
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('preparation')
       this.searchPreparations()
     },
-    handleSearch(e) {
+    handleSearch() {
       this.searchPreparations()
     },
     handleMapUpdate(tableState) {

@@ -71,7 +71,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions('search/dataset', ['searchDatasets']),
-    handleUpdate(tableState) {
+    handleUpdate(tableState: any) {
       this.options = tableState.options
       this.$fetch()
     },

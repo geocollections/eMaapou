@@ -62,11 +62,11 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/analysis', ['searchAnalyses']),
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('analysis')
       this.searchAnalyses()
     },
-    handleSearch(e) {
+    handleSearch() {
       this.searchAnalyses()
     },
     handleMapUpdate(tableState) {

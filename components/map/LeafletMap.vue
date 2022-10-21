@@ -130,11 +130,12 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 // import MapLegend from '~/components/map/MapLegend'
 import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
@@ -166,7 +167,7 @@ export default Vue.extend({
       },
     },
     markers: {
-      type: Array,
+      type: Array as PropType<{ latitude: number; longitude: number }[]>,
       required: false,
       default() {
         return []
@@ -234,7 +235,7 @@ export default Vue.extend({
       allGeomanLayers: null,
       activeGeomanLayer: null,
       gpsLocation: null,
-      gpsID: null,
+      gpsID: null as null | number,
       nearMeRadius: 5,
       currentCenter: {
         lat: this.center.latitude,
@@ -523,11 +524,10 @@ export default Vue.extend({
     wmsOverlays(): object[] {
       return this.layers.overlay.filter((item) => item.isWMS)
     },
-    latLngMarkers(): any[] {
-      return [
-        this.markers.map((marker) => marker.latitude),
-        this.markers.map((marker) => marker.longitude),
-      ]
+    latLngMarkers(): [number, number][] {
+      return this.markers.map((m) => {
+        return [m.latitude, m.longitude]
+      })
     },
     tooltipOptions(): object {
       return {
@@ -564,7 +564,7 @@ export default Vue.extend({
     },
 
     isDetailView(): boolean {
-      return this.$route.name.includes('-id-')
+      return (this.$route.name as string)?.includes('-id-')
     },
 
     computedBaseLayers(): object[] {
@@ -844,7 +844,7 @@ export default Vue.extend({
       } else console.error('Geolocation is not supported by this browser.')
     },
 
-    successGeo(position) {
+    successGeo(position: any) {
       if (position) {
         this.gpsLocation = {
           lng: position.coords.longitude,
@@ -853,13 +853,13 @@ export default Vue.extend({
       }
     },
 
-    errorGeo(error) {
+    errorGeo(error: any) {
       // eslint-disable-next-line no-console
       console.error(`Error: ${error.message}`)
     },
     // GPS end
 
-    handleNearMeSliderChange: debounce(function (val) {
+    handleNearMeSliderChange: debounce(function (this: any, val) {
       if (val) {
         this.removeAllGeomanLayers()
         const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })

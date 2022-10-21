@@ -235,11 +235,11 @@ export default {
       'removeParameterFilter',
     ]),
     ...mapActions('headers/analytical_data', ['removeHeader']),
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('analytical_data')
       this.searchAnalyticalData()
     },
-    handleSearch(e) {
+    handleSearch() {
       this.searchAnalyticalData()
     },
     handleMapUpdate(tableState) {

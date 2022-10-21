@@ -66,10 +66,10 @@ export default {
     }
   },
   methods: {
-    handleFocus(e) {
+    handleFocus() {
       this.isFocused = true
     },
-    handleBlur(e) {
+    handleBlur() {
       this.isFocused = false
     },
     parseInput(input) {

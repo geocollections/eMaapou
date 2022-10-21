@@ -48,7 +48,7 @@ export default Vue.extend({
     this.count = attachmentResponse.count
   },
   methods: {
-    handleUpdate(tableState) {
+    handleUpdate(tableState: any) {
       this.options = tableState.options
       this.search = tableState.search
       this.$fetch()

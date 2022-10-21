@@ -54,10 +54,10 @@ export default {
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/site', ['searchSites']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchSites()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('site')
       this.searchSites()
     },

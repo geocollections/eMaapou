@@ -1,10 +1,13 @@
 import { Plugin } from '@nuxt/types'
 import slugify from 'slugify'
-import { Route } from 'vue-router'
+import { Route, Location } from 'vue-router'
 
-const plugin: Plugin = ({ localeRoute, getRouteBaseName }, inject) => {
-  const createSlugRoute = (route: Route, text: string): Route | undefined => {
-    return localeRoute({
+const plugin: Plugin = ({ localeLocation, getRouteBaseName }, inject) => {
+  const createSlugRoute = (
+    route: Route,
+    text: string
+  ): Location | undefined => {
+    return localeLocation({
       ...route,
       name: getRouteBaseName()?.includes('-slug')
         ? getRouteBaseName()

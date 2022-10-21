@@ -1,5 +1,5 @@
 import { Plugin } from '@nuxt/types'
-
+import { Location } from 'vue-router'
 const EDIT_URL = 'https://edit.geocollections.info'
 const DEPOSIT_URL =
   'https://xgis.maaamet.ee/xGIS/bronx/maardlad/showdata.aspx?registrikaart='
@@ -23,12 +23,9 @@ const plugin: Plugin = ({ app }, inject) => {
     }
   }
   // TODO: `route` should be of type Route, not string
-  const openNuxtWindow = (route: string, params = null) => {
-    const routeData = app.router.resolve({
-      name: `${route}___${app.i18n.locale}`,
-      params,
-    })
-    window.open(routeData.href, '_blank', 'height=800, width=800')
+  const openNuxtWindow = (location: Location | undefined) => {
+    const resolvedRoute = app.router?.resolve(location as Location)
+    window.open(resolvedRoute?.href, '_blank', 'height=800, width=800')
   }
 
   const openImage = (filename: string, size = 'large') => {

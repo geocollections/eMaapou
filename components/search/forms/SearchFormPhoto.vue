@@ -104,10 +104,10 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/image', ['searchImages']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchImages()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('image')
       this.searchImages()
     },

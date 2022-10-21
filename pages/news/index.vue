@@ -104,7 +104,7 @@ export default {
             $state.loaded()
           }
         })
-        .catch((e) => {
+        .catch(() => {
           $state.error()
         })
     },

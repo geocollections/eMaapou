@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   head(): MetaInfo {
     return {
-      title: this.$t('about.pageTitle'),
+      title: this.$t('about.pageTitle') as string,
     }
   },
   computed: {

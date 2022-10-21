@@ -49,6 +49,7 @@
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@nuxtjs/eslint-module": "^3.1.0",
     "@nuxtjs/vuetify": "^1.12.3",
+    "@types/echarts": "^4.9.16",
     "@types/lodash": "^4.14.186",
     "@vue/compiler-dom": "^3.2.41",
     "@vue/composition-api": "^1.2.4",

@@ -66,10 +66,10 @@ export default {
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/locality', ['searchLocalities']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchLocalities()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('locality')
       this.searchLocalities()
     },
