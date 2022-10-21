@@ -74,11 +74,11 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/drillcore', ['searchDrillcores']),
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('drillcore')
       this.searchDrillcores()
     },
-    handleSearch(e) {
+    handleSearch() {
       this.searchDrillcores()
     },
     handleMapUpdate(tableState) {

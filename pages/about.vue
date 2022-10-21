@@ -21,9 +21,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-export default {
+export default Vue.extend({
   components: { BaseHeader },
   layout: 'news',
   async asyncData({ route, error, app }) {
@@ -37,9 +39,9 @@ export default {
       })
     }
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: this.$t('about.pageTitle'),
+      title: this.$t('about.pageTitle') as string,
     }
   },
   computed: {
@@ -49,7 +51,7 @@ export default {
       return 1
     },
   },
-}
+})
 </script>
 
 <style scoped>

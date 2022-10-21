@@ -44,15 +44,6 @@ export default {
         fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
       }
     )
-    console.log(specimenResponse, {
-      search: this.search,
-      options: this.options,
-      isValid: isNil(this.locality),
-      defaultParams: {
-        fq: `locality_id:${this.locality}`,
-      },
-      fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
-    })
     this.specimens = specimenResponse.items
     this.count = specimenResponse.count
   },

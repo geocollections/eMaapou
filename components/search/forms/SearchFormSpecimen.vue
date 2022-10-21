@@ -121,10 +121,10 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/specimen', ['searchSpecimens']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchSpecimens()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('specimen')
       this.searchSpecimens()
     },

@@ -27,14 +27,7 @@ import BaseHeader from '~/components/base/BaseHeader.vue'
 export default {
   components: { BaseHeader },
   layout: 'news',
-  async asyncData({
-    params,
-    route,
-    redirect,
-    $services,
-    $translate,
-    $createSlugRoute,
-  }) {
+  async asyncData({ params, $services }) {
     const newsResponse = await $services.sarvREST.getResource(
       'web_news',
       params.id

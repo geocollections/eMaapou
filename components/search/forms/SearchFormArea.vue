@@ -91,10 +91,10 @@ export default {
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/area', ['searchAreas']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchAreas()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('area')
       this.searchAreas()
     },

@@ -19,9 +19,9 @@
       <v-card>
         <data-table-dataset
           :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
+          :items="$accessor.search.dataset.items"
+          :count="$accessor.search.dataset.count"
+          :options="$accessor.search.dataset.options"
           stateful-headers
           dynamic-headers
           :is-loading="$fetchState.pending"
@@ -32,15 +32,16 @@
   </search>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import DataTableDataset from '~/components/data-table/DataTableDataset.vue'
 import SearchFormDataset from '~/components/search/forms/SearchFormDataset.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-
-export default {
+export default Vue.extend({
   components: {
     Search,
     SearchFormDataset,
@@ -48,7 +49,8 @@ export default {
     BaseHeader,
   },
   async fetch() {
-    await this.searchDatasets(this.options)
+    await this.$accessor.search.dataset.searchDatasets(this.options)
+    // await this.searchDatasets(this.options)
   },
   head() {
     return {
@@ -60,18 +62,19 @@ export default {
           content: this.$t('dataset.pageTitle'),
         },
       ],
-    }
+    } as MetaInfo
   },
   computed: {
     ...mapState('search/dataset', ['options', 'items', 'count']),
+    ...mapState('settings', ['cookiePolicy']),
     ...mapFields('search/dataset', ['options']),
   },
   methods: {
     ...mapActions('search/dataset', ['searchDatasets']),
-    handleUpdate(tableState) {
+    handleUpdate(tableState: any) {
       this.options = tableState.options
       this.$fetch()
     },
   },
-}
+})
 </script>

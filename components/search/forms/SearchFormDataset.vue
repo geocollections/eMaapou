@@ -84,11 +84,11 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/dataset', ['searchDatasets']),
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('dataset')
       this.searchDatasets()
     },
-    handleSearch(e) {
+    handleSearch() {
       this.searchDatasets()
     },
     handleParameterInput(e) {

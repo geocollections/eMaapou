@@ -53,7 +53,12 @@
             tile
             :ripple="false"
             @click="
-              $openNuxtWindow('drillcore-box-id', { id: box.drillcore_box.id })
+              $openNuxtWindow(
+                localeLocation({
+                  name: 'drillcore-box-id',
+                  params: { id: box.drillcore_box.id },
+                })
+              )
             "
           >
             <v-card-text class="drillcore-box__card">

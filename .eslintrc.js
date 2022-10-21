@@ -6,11 +6,10 @@ module.exports = {
   },
   parserOptions: {
     sourceType: 'module',
-    parser: '@babel/eslint-parser',
     requireConfigFile: false,
   },
   extends: [
-    '@nuxtjs',
+    '@nuxtjs/eslint-config-typescript',
     'eslint:recommended',
     'plugin:nuxt/recommended',
     'plugin:prettier/recommended',

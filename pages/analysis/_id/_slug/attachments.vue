@@ -10,12 +10,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import isNil from 'lodash/isNil'
+import Vue from 'vue'
 import DataTableAttachment from '~/components/data-table/DataTableAttachment.vue'
-
 import { HEADERS_ATTACHMENT } from '~/constants'
-export default {
+export default Vue.extend({
   components: { DataTableAttachment },
   data() {
     return {
@@ -48,11 +48,11 @@ export default {
     this.count = attachmentResponse.count
   },
   methods: {
-    handleUpdate(tableState) {
+    handleUpdate(tableState: any) {
       this.options = tableState.options
       this.search = tableState.search
       this.$fetch()
     },
   },
-}
+})
 </script>

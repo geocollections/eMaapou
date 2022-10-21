@@ -52,10 +52,10 @@ export default {
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/stratigraphy', ['searchStratigraphies']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchStratigraphies()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('stratigraphy')
       this.searchStratigraphies()
     },

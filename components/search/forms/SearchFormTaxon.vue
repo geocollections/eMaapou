@@ -74,10 +74,10 @@ export default {
   methods: {
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/taxon', ['searchTaxa']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchTaxa()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('taxon')
       this.searchTaxa()
     },

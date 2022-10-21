@@ -90,10 +90,10 @@ export default {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
     ...mapActions('search/sample', ['searchSamples']),
-    handleSearch(e) {
+    handleSearch() {
       this.searchSamples()
     },
-    async handleReset(e) {
+    async handleReset() {
       await this.resetFilters('sample')
       this.searchSamples()
     },

@@ -129,16 +129,18 @@
   </client-only>
 </template>
 
-<script>
+<script lang="ts">
+// @ts-nocheck
 // import MapLegend from '~/components/map/MapLegend'
 import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
+import Vue, { PropType } from 'vue'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
 import MapClickPopup from '~/components/map/MapClickPopup.vue'
-export default {
+export default Vue.extend({
   name: 'LeafletMap',
   components: {
     MapClickPopup,
@@ -149,7 +151,6 @@ export default {
   props: {
     zoom: {
       type: Number,
-      require: false,
       default: null,
     },
     height: {
@@ -166,7 +167,7 @@ export default {
       },
     },
     markers: {
-      type: Array,
+      type: Array as PropType<{ latitude: number; longitude: number }[]>,
       required: false,
       default() {
         return []
@@ -234,7 +235,7 @@ export default {
       allGeomanLayers: null,
       activeGeomanLayer: null,
       gpsLocation: null,
-      gpsID: null,
+      gpsID: null as null | number,
       nearMeRadius: 5,
       currentCenter: {
         lat: this.center.latitude,
@@ -514,22 +515,21 @@ export default {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
     ...mapGetters('map', ['isBaseLayerEstonian', 'getBaseLayer']),
-    mapZoom() {
+    mapZoom(): number {
       return this.zoom ?? (this.estonianBedrockOverlay ? 9 : 11)
     },
-    tileOverlays() {
+    tileOverlays(): object[] {
       return this.layers.overlay.filter((item) => !item.isWMS)
     },
-    wmsOverlays() {
+    wmsOverlays(): object[] {
       return this.layers.overlay.filter((item) => item.isWMS)
     },
-    latLngMarkers() {
-      return [
-        this.markers.map((marker) => marker.latitude),
-        this.markers.map((marker) => marker.longitude),
-      ]
+    latLngMarkers(): [number, number][] {
+      return this.markers.map((m) => {
+        return [m.latitude, m.longitude]
+      })
     },
-    tooltipOptions() {
+    tooltipOptions(): object {
       return {
         permanent: this.markers.length <= 5,
         direction: 'top',
@@ -537,13 +537,13 @@ export default {
       }
     },
 
-    markersAsFitBoundsObject() {
+    markersAsFitBoundsObject(): [number, number][] {
       return this.markers.map((m) => {
         return [m.latitude, m.longitude]
       })
     },
 
-    checkableLayers() {
+    checkableLayers(): any {
       const checkableLayerNames = [
         'Lokaliteedid / Localities',
         'Puursüdamikud / Drillcores',
@@ -563,11 +563,11 @@ export default {
       )
     },
 
-    isDetailView() {
-      return this.$route.name.includes('-id-')
+    isDetailView(): boolean {
+      return (this.$route.name as string)?.includes('-id-')
     },
 
-    computedBaseLayers() {
+    computedBaseLayers(): object[] {
       return this.layers.base.map((layer) => {
         return {
           ...layer,
@@ -575,7 +575,7 @@ export default {
         }
       })
     },
-    isPolygonSet() {
+    isPolygonSet(): boolean {
       return this.polygon && this.polygon.length > 0
     },
   },
@@ -691,7 +691,6 @@ export default {
       if (this.geojson) {
         this.$nextTick(() => {
           const group = this.$L.featureGroup()
-
           this.$refs.map.mapObject.eachLayer(function (layer) {
             if (layer.feature !== undefined) group.addLayer(layer)
           })
@@ -711,7 +710,7 @@ export default {
       else return false
     },
 
-    handleMapClick: debounce(async function (event) {
+    handleMapClick: debounce(async function (this, event) {
       if (this.isMapClickEnabled()) {
         const MAX_ZOOM = 21
         const radius =
@@ -845,7 +844,7 @@ export default {
       } else console.error('Geolocation is not supported by this browser.')
     },
 
-    successGeo(position) {
+    successGeo(position: any) {
       if (position) {
         this.gpsLocation = {
           lng: position.coords.longitude,
@@ -854,13 +853,13 @@ export default {
       }
     },
 
-    errorGeo(error) {
+    errorGeo(error: any) {
       // eslint-disable-next-line no-console
       console.error(`Error: ${error.message}`)
     },
     // GPS end
 
-    handleNearMeSliderChange: debounce(function (val) {
+    handleNearMeSliderChange: debounce(function (this: any, val) {
       if (val) {
         this.removeAllGeomanLayers()
         const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })
@@ -869,7 +868,7 @@ export default {
       }
     }, 500),
   },
-}
+})
 </script>
 
 <style scoped>

@@ -1,7 +1,12 @@
-export default ({ app }, inject) => {
-  const getAPIFieldValues = (headers) => {
+import { Plugin } from '@nuxt/types'
+
+const plugin: Plugin = ({ app }, inject) => {
+  const getAPIFieldValues = (headers: {
+    byIds: object
+    allIds: string[]
+  }): object => {
     return Object.entries(headers.byIds)
-      .filter(([headerKey, header]) => {
+      .filter(([_, header]) => {
         return header.apiFieldValue
       })
       .reduce((o, [headerKey, header]) => {
@@ -20,3 +25,5 @@ export default ({ app }, inject) => {
 
   inject('getAPIFieldValues', getAPIFieldValues)
 }
+
+export default plugin

@@ -1,3 +1,5 @@
+import { Plugin } from '@nuxt/types'
+import { Location } from 'vue-router'
 const EDIT_URL = 'https://edit.geocollections.info'
 const DEPOSIT_URL =
   'https://xgis.maaamet.ee/xGIS/bronx/maardlad/showdata.aspx?registrikaart='
@@ -6,12 +8,12 @@ const TURBA_URL = 'https://turba.geoloogia.info'
 const EGF_URL = 'https://fond.egt.ee/fond/egf/'
 const GEOLOGY_URL = 'https://geoloogia.info'
 
-export default ({ app }, inject) => {
-  const openWindow = (url) => {
+const plugin: Plugin = ({ app }, inject) => {
+  const openWindow = (url: string) => {
     window.open(url, '_blank', 'height=800, width=800')
   }
 
-  const openGeoDetail = (table, id) => {
+  const openGeoDetail = (table: string, id: string) => {
     if (table && id) {
       window.open(
         `https://geocollections.info/${table}/${id}`,
@@ -20,16 +22,13 @@ export default ({ app }, inject) => {
       )
     }
   }
-
-  const openNuxtWindow = (route, params = null) => {
-    const routeData = app.router.resolve({
-      name: `${route}___${app.i18n.locale}`,
-      params,
-    })
-    window.open(routeData.href, '_blank', 'height=800, width=800')
+  // TODO: `route` should be of type Route, not string
+  const openNuxtWindow = (location: Location | undefined) => {
+    const resolvedRoute = app.router?.resolve(location as Location)
+    window.open(resolvedRoute?.href, '_blank', 'height=800, width=800')
   }
 
-  const openImage = (filename, size = 'large') => {
+  const openImage = (filename: string, size = 'large') => {
     if (filename && size) {
       if (size === 'original') {
         window.open(
@@ -45,7 +44,7 @@ export default ({ app }, inject) => {
     }
   }
 
-  const openEdit = (table, id) => {
+  const openEdit = (table: string, id: string) => {
     if (table && id) {
       if (table === 'file') table = 'attachment'
       window.open(
@@ -56,7 +55,7 @@ export default ({ app }, inject) => {
     }
   }
 
-  const openDeposit = (id) => {
+  const openDeposit = (id: string) => {
     if (id) {
       window.open(
         `${DEPOSIT_URL}${id}`,
@@ -66,19 +65,19 @@ export default ({ app }, inject) => {
     }
   }
 
-  const openEelis = (id) => {
+  const openEelis = (id: string) => {
     if (id) {
       window.open(`${EELIS_URL}${id}`, 'EelisWindow', 'height=800, width=800')
     }
   }
 
-  const openEgf = (id) => {
+  const openEgf = (id: string) => {
     if (id) {
       window.open(`${EGF_URL}${id}`, 'EgfWindow', 'height=800, width=800')
     }
   }
 
-  const openTurba = (table, id, openNewWindow = true) => {
+  const openTurba = (table: string, id: string, openNewWindow = true) => {
     if (table && id) {
       window.open(
         `${TURBA_URL}/${table}/${id}`,
@@ -88,7 +87,7 @@ export default ({ app }, inject) => {
     }
   }
 
-  const openGeology = (table, id) => {
+  const openGeology = (table: string, id: string) => {
     if (table && id) {
       window.open(
         `${GEOLOGY_URL}/${table}/${id}`,
@@ -109,3 +108,5 @@ export default ({ app }, inject) => {
   inject('openImage', openImage)
   inject('openGeoDetail', openGeoDetail)
 }
+
+export default plugin
