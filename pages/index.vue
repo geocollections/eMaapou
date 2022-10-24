@@ -239,12 +239,6 @@ export default {
           'sarv',
         ],
       },
-      backgroundImg: this.$img('/frontpage/header_img2.jpg', {
-        width: 1600,
-        height: 900,
-        format: 'webp',
-      }),
-      backgroundSvg: this.$img('/frontpage/layered-peaks-haikei.svg'),
       searchRoutes: [],
     }
   },
@@ -362,6 +356,16 @@ export default {
       return {
         mdiMagnify,
       }
+    },
+    backgroundImg() {
+      return this.$img('/frontpage/header_img2.jpg', {
+        // width: 1600,
+        // height: 900,
+        // format: 'webp',
+      })
+    },
+    backgroundSvg() {
+      return this.$img('/frontpage/layered-peaks-haikei.svg')
     },
     backgroundImage() {
       return `url(${this.backgroundSvg}), url(${this.backgroundImg})`
