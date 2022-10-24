@@ -45,7 +45,7 @@
         class="d-print-none ml-1 my-1 link"
         @click.stop="openPDF(item.pdf)"
       >
-        <v-icon class="pr-1">mdi-file-pdf-box</v-icon>
+        <v-icon class="pr-1">{{ icons.mdiFilePdfBox }}</v-icon>
         <b>PDF</b>
       </v-chip>
     </template>
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mdiFilePdfBox } from '@mdi/js'
 import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
@@ -85,6 +86,13 @@ export default {
     return {
       localHeaders: cloneDeep(HEADERS_REFERENCE),
     }
+  },
+  computed: {
+    icons() {
+      return {
+        mdiFilePdfBox,
+      }
+    },
   },
   methods: {
     openPDF(link) {

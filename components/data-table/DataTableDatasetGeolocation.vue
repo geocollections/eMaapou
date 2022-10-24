@@ -28,13 +28,16 @@
     <template #item.longitude="{ item }">{{ item.point_longitude }}</template>
     <template #item.latitude="{ item }">{{ item.point_latitude }}</template>
     <template #item.is_polygon="{ item }">
-      <v-icon v-if="item.polygon" color="green" small>mdi-check-bold</v-icon>
-      <v-icon v-else color="red" small>mdi-close-thick</v-icon>
+      <v-icon v-if="item.polygon" color="green" small>
+        {{ icons.mdiCheckBold }}
+      </v-icon>
+      <v-icon v-else color="red" small>{{ icons.mdiCloseThick }}</v-icon>
     </template>
   </base-data-table>
 </template>
 
 <script>
+import { mdiCheckBold, mdiCloseThick } from '@mdi/js'
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '../base/BaseDataTable.vue'
@@ -67,6 +70,14 @@ export default {
     return {
       localHeaders: cloneDeep(HEADERS_DATASET_GEOLOCATION),
     }
+  },
+  computed: {
+    icons() {
+      return {
+        mdiCheckBold,
+        mdiCloseThick,
+      }
+    },
   },
   methods: {
     round,

@@ -1,7 +1,10 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('preparation.pageTitle')" icon="mdi-eyedropper" />
+      <base-header
+        :title="$t('preparation.pageTitle')"
+        :icon="icons.mdiEyedropper"
+      />
     </template>
 
     <template #form>
@@ -30,6 +33,7 @@
 </template>
 
 <script>
+import { mdiEyedropper } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
@@ -68,6 +72,9 @@ export default {
   computed: {
     ...mapState('search/preparation', ['items', 'count']),
     ...mapFields('search/preparation', ['options']),
+    icons() {
+      return { mdiEyedropper }
+    },
   },
   methods: {
     ...mapActions('search/preparation', ['searchPreparations']),

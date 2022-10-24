@@ -40,7 +40,9 @@
         style="text-transform: capitalize; font-size: 0.875rem"
       >
         {{ $t('common.browse') }}
-        <v-icon color="accent lighten-2" class="ml-1">mdi-chevron-down</v-icon>
+        <v-icon color="accent lighten-2" class="ml-1">
+          {{ icons.mdiChevronDown }}
+        </v-icon>
       </v-btn>
       <v-menu
         activator="#browse_menu_btn"
@@ -122,7 +124,9 @@
         style="text-transform: capitalize; font-size: 0.875rem"
       >
         {{ $t('common.services') }}
-        <v-icon color="accent lighten-2" class="ml-1">mdi-chevron-down</v-icon>
+        <v-icon color="accent lighten-2" class="ml-1">
+          {{ icons.mdiChevronDown }}
+        </v-icon>
       </v-btn>
       <v-menu
         activator="#services_menu_btn"
@@ -193,7 +197,7 @@
               )
             "
           >
-            <v-icon color="accent">mdi-magnify</v-icon>
+            <v-icon color="accent">{{ icons.mdiMagnify }}</v-icon>
           </v-btn>
         </v-hover>
       </div>
@@ -206,15 +210,16 @@
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <v-icon color="accent lighten-2" size="font-size: 24px"
-          >mdi-menu</v-icon
-        >
+        <v-icon color="accent lighten-2" size="font-size: 24px">
+          {{ icons.mdiMenu }}
+        </v-icon>
       </v-btn>
     </v-toolbar-items>
   </v-app-bar>
 </template>
 
 <script>
+import { mdiChevronDown, mdiMagnify, mdiMenu } from '@mdi/js'
 import InputSearch from './input/InputSearch.vue'
 import BaseMenuListItem from './base/BaseMenuListItem.vue'
 import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
@@ -254,6 +259,13 @@ export default {
     }
   },
   computed: {
+    icons() {
+      return {
+        mdiMagnify,
+        mdiMenu,
+        mdiChevronDown,
+      }
+    },
     tabValue() {
       // https://github.com/vuetifyjs/vuetify/issues/12265
       const path = this.$route.path

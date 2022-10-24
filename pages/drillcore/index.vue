@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('drillcore.pageTitle')"
-        icon="mdi-screw-machine-flat-top"
+        :icon="icons.mdiScrewMachineFlatTop"
       />
     </template>
 
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiScrewMachineFlatTop } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
@@ -70,6 +71,11 @@ export default {
   computed: {
     ...mapState('search/drillcore', ['items', 'count']),
     ...mapFields('search/drillcore', ['options']),
+    icons() {
+      return {
+        mdiScrewMachineFlatTop,
+      }
+    },
   },
   methods: {
     ...mapActions('search/drillcore', ['searchDrillcores']),

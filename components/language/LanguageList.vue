@@ -14,7 +14,7 @@
           class="mr-2"
           color="accent"
         >
-          mdi-check
+          {{ icons.mdiCheck }}
         </v-icon>
         <span class="align-self-center montserrat">{{ locale.name }}</span>
       </v-list-item-title>
@@ -23,11 +23,17 @@
 </template>
 
 <script>
+import { mdiCheck } from '@mdi/js'
 export default {
   name: 'LanguageList',
   computed: {
     availableLocales() {
       return this.$i18n.locales
+    },
+    icons() {
+      return {
+        mdiCheck,
+      }
     },
   },
 }

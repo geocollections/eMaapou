@@ -25,13 +25,14 @@
     </template>
 
     <template #item.extra="{ item }">
-      <v-icon v-if="item.extra">mdi-plus</v-icon>
-      <v-icon v-else>mdi-minus</v-icon>
+      <v-icon v-if="item.extra">{{ icons.mdiPlus }}</v-icon>
+      <v-icon v-else>{{ icons.mdiMinus }}</v-icon>
     </template>
   </base-data-table>
 </template>
 
 <script>
+import { mdiPlus, mdiMinus } from '@mdi/js'
 import round from 'lodash/round'
 import cloneDeep from 'lodash/cloneDeep'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
@@ -66,6 +67,14 @@ export default {
     return {
       localHeaders: cloneDeep(HEADERS_TAXON_LIST),
     }
+  },
+  computed: {
+    icons() {
+      return {
+        mdiPlus,
+        mdiMinus,
+      }
+    },
   },
   methods: {
     round,

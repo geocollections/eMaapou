@@ -128,8 +128,9 @@
                     v-if="size === 'original'"
                     small
                     color="primary darken-2"
-                    >mdi-file-download-outline</v-icon
                   >
+                    {{ icons.mdiFileDownloadOutline }}
+                  </v-icon>
                 </a>
                 <span v-if="index < imageSizes.length - 1">| </span>
               </span>
@@ -142,6 +143,7 @@
 </template>
 
 <script>
+import { mdiFileDownloadOutline } from '@mdi/js'
 import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 
 export default {
@@ -183,6 +185,11 @@ export default {
     },
     pagination() {
       return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
+    },
+    icons() {
+      return {
+        mdiFileDownloadOutline,
+      }
     },
   },
   watch: {

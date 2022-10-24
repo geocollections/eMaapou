@@ -26,7 +26,7 @@
             )
           "
         >
-          <v-icon>mdi-chevron-left</v-icon>
+          <v-icon>{{ icons.mdiChevronLeft }}</v-icon>
           <v-tooltip bottom activator="#previous-id">
             <span>{{ $t('common.previous', { id: computedPrevId }) }}</span>
           </v-tooltip>
@@ -52,7 +52,7 @@
             )
           "
         >
-          <v-icon>mdi-chevron-right</v-icon>
+          <v-icon>{{ icons.mdiChevronRight }}</v-icon>
           <v-tooltip bottom activator="#next-id">
             <span>{{ $t('common.next', { id: computedNextId }) }}</span>
           </v-tooltip>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mdiChevronRight, mdiChevronLeft } from '@mdi/js'
 import debounce from 'lodash/debounce'
 import BackButtonDetail from './BackButtonDetail.vue'
 import EditButton from './EditButton.vue'
@@ -101,21 +102,23 @@ export default {
     computedPrevId() {
       return this.ids?.prev_id ?? 0
     },
-
     computedNextId() {
       return this.ids?.next_id ?? 0
     },
-
     computedLastId() {
       return this.ids?.last_id ?? 0
     },
-
     computedFirstId() {
       return this.ids?.first_id ?? 0
     },
-
     routeName() {
       return this.getRouteBaseName().split('-id')[0]
+    },
+    icons() {
+      return {
+        mdiChevronRight,
+        mdiChevronLeft,
+      }
     },
   },
   beforeMount() {

@@ -47,7 +47,7 @@
             :src="`https://files.geocollections.info/${file.uuid_filename}`"
           />
           Your browser does not support the audio element.
-          <v-icon>mdi-file-music-outline</v-icon>
+          <v-icon>{{ icons.mdiFileMusicOutline }}</v-icon>
         </audio>
 
         <!-- Video -->
@@ -56,7 +56,7 @@
             :src="`https://files.geocollections.info/${file.uuid_filename}`"
           />
           Your browser does not support the video element.
-          <v-icon>mdi-file-video-outline</v-icon>
+          <v-icon>{{ icons.mdiFileVideoOutline }}</v-icon>
         </video>
 
         <!-- File -->
@@ -69,8 +69,8 @@
             )
           "
         >
-          <v-icon large color="primary darken-2"
-            >mdi-file-download-outline
+          <v-icon large color="primary darken-2">
+            {{ icons.mdiFileDownloadOutline }}
           </v-icon>
           {{ $t('file.download') }}
         </div>
@@ -103,8 +103,9 @@
                   v-if="size === 'original'"
                   small
                   color="primary darken-2"
-                  >mdi-file-download-outline</v-icon
                 >
+                  {{ icons.mdiFileDownloadOutline }}
+                </v-icon>
               </a>
               <span v-if="index < imageSizes.length - 1">| </span>
             </span>
@@ -417,8 +418,8 @@
                                   ? row.doi.identifier
                                   : row[item.id].id
                               }}
-                              <v-icon small color="primary darken-2"
-                                >mdi-open-in-new
+                              <v-icon small color="primary darken-2">
+                                {{ icons.mdiOpenInNew }}
                               </v-icon>
                             </a>
                           </template>
@@ -497,6 +498,12 @@
 </template>
 
 <script>
+import {
+  mdiFileMusicOutline,
+  mdiFileVideoOutline,
+  mdiFileDownloadOutline,
+  mdiOpenInNew,
+} from '@mdi/js'
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
 import HeaderDetail from '~/components/HeaderDetail.vue'
@@ -923,6 +930,14 @@ export default {
     }
   },
   computed: {
+    icons() {
+      return {
+        mdiFileMusicOutline,
+        mdiFileVideoOutline,
+        mdiFileDownloadOutline,
+        mdiOpenInNew,
+      }
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

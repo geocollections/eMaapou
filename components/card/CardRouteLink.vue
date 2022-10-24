@@ -40,19 +40,27 @@
         </div>
       </div>
       <v-icon color="accent lighten-2" class="ml-auto pr-2">
-        mdi-arrow-right
+        {{ icons.mdiArrowRight }}
       </v-icon>
     </v-card>
   </v-hover>
 </template>
 
 <script>
+import { mdiArrowRight } from '@mdi/js'
 export default {
   name: 'CardRouteLink',
   props: {
     route: {
       type: Object,
       required: true,
+    },
+  },
+  computed: {
+    icons() {
+      return {
+        mdiArrowRight,
+      }
     },
   },
 }

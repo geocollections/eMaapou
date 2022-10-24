@@ -10,7 +10,7 @@
             icon
             v-on="{ ...menu.on, ...tooltip.on }"
           >
-            <v-icon>mdi-file-export-outline</v-icon>
+            <v-icon>{{ icons.mdiFileExportOutline }}</v-icon>
           </v-btn>
         </template>
         <span>{{ $t('table.tooltipExport') }}</span>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiFileExportOutline } from '@mdi/js'
 import { writeFile, utils } from 'xlsx'
 
 export default {
@@ -41,6 +42,13 @@ export default {
     tableElement: {
       type: undefined,
       required: true,
+    },
+  },
+  computed: {
+    icons() {
+      return {
+        mdiFileExportOutline,
+      }
     },
   },
   methods: {

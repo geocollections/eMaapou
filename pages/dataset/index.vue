@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('dataset.pageTitle')"
-        icon="mdi-database-outline"
+        :icon="icons.mdiDatabaseOutline"
       />
     </template>
 
@@ -33,6 +33,7 @@
 </template>
 
 <script lang="ts">
+import { mdiDatabaseOutline } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import Vue from 'vue'
@@ -68,6 +69,11 @@ export default Vue.extend({
     ...mapState('search/dataset', ['options', 'items', 'count']),
     ...mapState('settings', ['cookiePolicy']),
     ...mapFields('search/dataset', ['options']),
+    icons() {
+      return {
+        mdiDatabaseOutline,
+      }
+    },
   },
   methods: {
     ...mapActions('search/dataset', ['searchDatasets']),

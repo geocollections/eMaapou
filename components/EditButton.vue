@@ -7,7 +7,7 @@
     color="deep-orange darken-2"
     @click="handleClick"
   >
-    <v-icon small>mdi-square-edit-outline</v-icon>
+    <v-icon small>{{ icons.mdiSquareEditOutline }}</v-icon>
     <v-tooltip bottom activator="#edit-btn">
       <span>{{ $t('common.linkToEdit') }}</span>
     </v-tooltip>
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { mdiSquareEditOutline } from '@mdi/js'
+
 export default {
   name: 'EditButton',
   fetchOnServer: false,
@@ -32,7 +34,11 @@ export default {
     style() {
       return ` z-index: 4;`
     },
-
+    icons() {
+      return {
+        mdiSquareEditOutline,
+      }
+    },
     table() {
       return this.$route.name.substring(0, this.$route.name.indexOf('-'))
     },

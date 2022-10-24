@@ -12,17 +12,23 @@
       right
       @click="toTop"
     >
-      <v-icon>mdi-chevron-up</v-icon>
+      <v-icon>{{ icons.mdiChevronUp }}</v-icon>
     </v-btn>
   </v-fab-transition>
 </template>
 
 <script>
+import { mdiChevronUp } from '@mdi/js'
 export default {
   name: 'FabScrollTop',
   data: () => ({
     showFab: false,
   }),
+  computed: {
+    icons() {
+      return { mdiChevronUp }
+    },
+  },
   methods: {
     onScroll(event) {
       if (typeof window === 'undefined') return

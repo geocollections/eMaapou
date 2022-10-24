@@ -21,7 +21,7 @@
           <v-card-title style="word-break: keep-all" class="montserrat text-h6"
             >{{ title }}
             <v-icon right x-small class="align-self-start">
-              mdi-open-in-new
+              {{ mdiOpenInNew }}
             </v-icon>
           </v-card-title>
           <v-expand-transition>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mdiOpenInNew } from '@mdi/js'
 export default {
   name: 'ExternalLinkCard',
   props: {
@@ -62,6 +63,11 @@ export default {
       default: 'https://picsum.photos/700/300',
     },
     grayscale: Boolean,
+  },
+  computed: {
+    icons() {
+      return { mdiOpenInNew }
+    },
   },
 }
 </script>

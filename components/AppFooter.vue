@@ -34,7 +34,9 @@
                 :key="link.routeName"
                 class="d-flex mb-1"
               >
-                <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+                <v-icon class="align-self-center" color="white" x-small>{{
+                  icons.mdiChevronRight
+                }}</v-icon>
                 <nuxt-link
                   :to="localePath(link.routeName)"
                   class="text-link text-body-2 grey--text text--lighten-2 d-block ml-1"
@@ -57,7 +59,9 @@
                   :key="link.routeName"
                   class="d-flex mb-1"
                 >
-                  <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+                  <v-icon class="align-self-center" color="white" x-small>{{
+                    icons.mdiChevronRight
+                  }}</v-icon>
                   <nuxt-link
                     :to="localePath(link.routeName)"
                     class="text-link text-body-2 grey--text text--lighten-2 d-block ml-1"
@@ -77,7 +81,9 @@
 
               <div class="d-sm-inline-block" style="column-count: 2">
                 <div v-for="link in links" :key="link.name" class="d-flex mb-1">
-                  <v-icon color="white" x-small>mdi-chevron-right</v-icon>
+                  <v-icon class="align-self-center" color="white" x-small>{{
+                    icons.mdiChevronRight
+                  }}</v-icon>
                   <a
                     :href="link.url"
                     class="text-link text-body-2 grey--text text--lighten-2 d-block ml-1"
@@ -168,6 +174,7 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
+import { mdiChevronRight } from '@mdi/js'
 // import InputSearch from './input/InputSearch.vue'
 export default {
   name: 'AppFooter',
@@ -290,12 +297,10 @@ export default {
         {
           routeName: 'drillcore',
           text: 'drillcore.pageTitle',
-          icon: 'mdi-screw-machine-flat-top',
         },
         {
           routeName: 'sample',
           text: 'sample.pageTitle',
-          icon: 'mdi-test-tube',
         },
         {
           routeName: 'analysis',
@@ -313,11 +318,6 @@ export default {
           routeName: 'taxon',
           text: 'taxon.pageTitle',
         },
-        // {
-        //   name: 'file',
-        //   lang: 'attachments',
-        //   icon: 'mdi-folder-open-outline',
-        // },
         {
           routeName: 'stratigraphy',
           text: 'stratigraphy.pageTitle',
@@ -337,23 +337,25 @@ export default {
         {
           routeName: 'search',
           text: 'common.search',
-          icon: 'mdi-magnify',
         },
         {
           routeName: 'about',
           text: 'common.about',
-          icon: 'mdi-information-outline',
         },
         {
           routeName: 'news',
           text: 'common.news',
-          icon: 'mdi-newspaper-variant-outline',
         },
       ],
     }
   },
   computed: {
     ...mapFields('search', ['query']),
+    icons() {
+      return {
+        mdiChevronRight,
+      }
+    },
   },
 }
 </script>

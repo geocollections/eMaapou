@@ -45,7 +45,7 @@
               style="max-width: 400px"
               class="mt-0 pt-0 pr-2 pr-sm-3"
               color="primary darken-2"
-              append-icon="mdi-magnify"
+              :append-icon="icons.mdiMagnify"
               :label="$t('common.search')"
               hide-details
               single-line
@@ -119,8 +119,8 @@
         :class="{ active: isExpanded }"
         @click.stop="expand(!isExpanded)"
       >
-        <v-icon v-if="!isExpanded">mdi-chevron-down</v-icon>
-        <v-icon v-else>mdi-chevron-up</v-icon>
+        <v-icon v-if="!isExpanded">{{ icons.mdiChevronDown }}</v-icon>
+        <v-icon v-else>{{ icons.mdiChevronUp }}</v-icon>
       </v-btn>
     </template>
     <template v-for="(_, slotName) in $scopedSlots" #[slotName]="context">
@@ -138,6 +138,7 @@
 </template>
 
 <script lang="ts">
+import { mdiMagnify, mdiChevronUp, mdiChevronDown } from '@mdi/js'
 import isEqual from 'lodash/isEqual'
 import debounce from 'lodash/debounce'
 import Vue, { PropType } from 'vue'
@@ -217,6 +218,13 @@ export default Vue.extend({
   computed: {
     visibleHeaders(): IHeader[] {
       return this.headers.filter((header) => header.show)
+    },
+    icons() {
+      return {
+        mdiChevronUp,
+        mdiChevronDown,
+        mdiMagnify,
+      }
     },
   },
   // mounted() {

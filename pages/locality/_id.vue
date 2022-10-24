@@ -181,7 +181,7 @@
             )
           "
         >
-          <v-icon left>mdi-screw-machine-flat-top</v-icon>
+          <v-icon left>{{ icons.mdiScrewMachineFlatTop }}</v-icon>
           {{
             $translate({
               et: drillcore.drillcore,
@@ -197,7 +197,7 @@
           class="mt-2 montserrat text-none"
           @click="goToAnalyticalData"
         >
-          <v-icon left>mdi-chart-scatter-plot</v-icon>
+          <v-icon left>{{ icons.mdiChartScatterPlot }}</v-icon>
           {{ $t('locality.linkToAnalyticalData') }}
         </v-btn>
         <v-btn
@@ -208,9 +208,9 @@
           class="mt-2 montserrat text-none"
           @click="goToGeoscienceLiterature"
         >
-          <v-icon left>mdi-book-open-page-variant-outline</v-icon>
+          <v-icon left>{{ icons.mdiBookOpenPageVariantOutline }}</v-icon>
           {{ $t('locality.linkGeoscienceLiterature') }}
-          <v-icon right>mdi-open-in-new</v-icon>
+          <v-icon right>{{ icons.mdiOpenInNew }}</v-icon>
         </v-btn>
       </v-card-text>
     </template>
@@ -256,6 +256,12 @@
 </template>
 
 <script>
+import {
+  mdiScrewMachineFlatTop,
+  mdiChartScatterPlot,
+  mdiBookOpenPageVariantOutline,
+  mdiOpenInNew,
+} from '@mdi/js'
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 import { mapFields } from 'vuex-map-fields'
@@ -454,12 +460,18 @@ export default {
         } else return item.count > 0
       })
     },
-
+    icons() {
+      return {
+        mdiScrewMachineFlatTop,
+        mdiChartScatterPlot,
+        mdiBookOpenPageVariantOutline,
+        mdiOpenInNew,
+      }
+    },
     images() {
       // return this.attachmentsOutcrop.concat(this.attachments)
       return this.attachments
     },
-
     analysisResultsCount() {
       return this.tabs?.find((tab) => tab.id === 'graphs')?.count
     },

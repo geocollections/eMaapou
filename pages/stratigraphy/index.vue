@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('stratigraphy.pageTitle')"
-        icon="mdi-layers-triple"
+        :icon="icons.mdiLayersTriple"
       />
     </template>
 
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiLayersTriple } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import Search from '~/templates/Search.vue'
@@ -70,6 +71,11 @@ export default {
   computed: {
     ...mapState('search/stratigraphy', ['items', 'count']),
     ...mapFields('search/stratigraphy', ['options']),
+    icons() {
+      return {
+        mdiLayersTriple,
+      }
+    },
   },
   methods: {
     ...mapActions('search/stratigraphy', ['searchStratigraphies']),

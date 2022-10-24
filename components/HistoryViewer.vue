@@ -25,7 +25,7 @@
           class="mx-1 divider"
           x-small
         >
-          mdi-arrow-left
+          {{ mdiArrowLeft }}
         </v-icon>
       </span>
     </span>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiArrowLeft } from '@mdi/js'
 import { mapState } from 'vuex'
 
 export default {
@@ -43,6 +44,11 @@ export default {
       if (this.$vuetify.breakpoint.lgAndUp) return 200
 
       return 100
+    },
+    icons() {
+      return {
+        mdiArrowLeft,
+      }
     },
   },
 }

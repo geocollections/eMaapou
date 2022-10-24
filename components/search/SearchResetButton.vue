@@ -8,24 +8,32 @@
   >
     <v-tooltip v-if="$vuetify.breakpoint.mdOnly" bottom>
       <template #activator="{ on }">
-        <v-icon :right="!$vuetify.breakpoint.mdOnly" v-on="on"
-          >mdi-eraser</v-icon
-        >
+        <v-icon :right="!$vuetify.breakpoint.mdOnly" v-on="on">
+          {{ icons.mdiEraser }}
+        </v-icon>
       </template>
 
       <span>
         {{ $t('common.resetSearchLong') }}
       </span>
     </v-tooltip>
-    <v-icon v-else left>mdi-eraser</v-icon>
+    <v-icon v-else left>{{ icons.mdiEraser }}</v-icon>
     <span class="hidden-md-only montserrat">
       {{ $t('common.resetSearch') }}
     </span>
   </v-btn>
 </template>
 <script>
+import { mdiEraser } from '@mdi/js'
 export default {
   name: 'SearchResetButton',
+  computed: {
+    icons() {
+      return {
+        mdiEraser,
+      }
+    },
+  },
 }
 </script>
 

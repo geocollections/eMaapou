@@ -35,7 +35,9 @@
                     en: area.name_en,
                   })
                 }}
-                <v-icon small color="primary darken-2">mdi-open-in-new</v-icon>
+                <v-icon small color="primary darken-2">{{
+                  icons.mdiOpenInNew
+                }}</v-icon>
               </a>
               <nuxt-link
                 v-else
@@ -70,9 +72,9 @@
                   @click="$openTurba('plaanid', item.trim(), false)"
                 >
                   {{ item }}
-                  <v-icon small color="primary darken-2"
-                    >mdi-file-download-outline</v-icon
-                  >
+                  <v-icon small color="primary darken-2">
+                    {{ icons.mdiFileDownloadOutline }}
+                  </v-icon>
                 </a>
                 <span v-if="index !== planArray.length - 1" class="mr-1"
                   >|</span
@@ -326,6 +328,7 @@
 </template>
 
 <script>
+import { mdiOpenInNew, mdiFileDownloadOutline } from '@mdi/js'
 import isNil from 'lodash/isNil'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
@@ -449,6 +452,12 @@ export default {
     }
   },
   computed: {
+    icons() {
+      return {
+        mdiOpenInNew,
+        mdiFileDownloadOutline,
+      }
+    },
     title() {
       return this.$translate({ et: this.site?.name, en: this.site?.name_en })
     },

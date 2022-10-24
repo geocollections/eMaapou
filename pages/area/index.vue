@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('area.pageTitle')"
-        icon="mdi-map-marker-radius-outline"
+        :icon="icons.mdiMapMarkerRadiusOutline"
       />
     </template>
 
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiMapMarkerRadiusOutline } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import SearchFormArea from '~/components/search/forms/SearchFormArea.vue'
@@ -65,6 +66,11 @@ export default {
   computed: {
     ...mapState('search/area', ['items', 'count']),
     ...mapFields('search/area', ['options']),
+    icons() {
+      return {
+        mdiMapMarkerRadiusOutline,
+      }
+    },
   },
   methods: {
     ...mapActions('search/area', ['searchAreas']),

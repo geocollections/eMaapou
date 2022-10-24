@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('site.pageTitle')"
-        icon="mdi-map-marker-star-outline"
+        :icon="icons.mdiMapMarkerStarOutline"
       />
     </template>
 
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiMapMarkerStarOutline } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import SearchFormSite from '~/components/search/forms/SearchFormSite.vue'
@@ -70,6 +71,11 @@ export default {
   computed: {
     ...mapState('search/site', ['items', 'count']),
     ...mapFields('search/site', ['options']),
+    icons() {
+      return {
+        mdiMapMarkerStarOutline,
+      }
+    },
     translatedHeaders() {
       return this.headers.map((header) => {
         return {

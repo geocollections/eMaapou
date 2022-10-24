@@ -6,9 +6,11 @@
     class="montserrat text-capitalize"
     :color="color"
   >
-    <v-icon class="mr-2" color="accent lighten-2">mdi-web</v-icon>
+    <v-icon class="mr-2" color="accent lighten-2">{{ icons.mdiWeb }}</v-icon>
     {{ $i18n.localeProperties.name }}
-    <v-icon class="ml-1" color="accent lighten-2">mdi-chevron-down</v-icon>
+    <v-icon class="ml-1" color="accent lighten-2">{{
+      icons.mdiChevronDown
+    }}</v-icon>
     <v-menu
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"
@@ -22,9 +24,11 @@
   </v-btn>
 </template>
 
-<script>
+<script lang="ts">
+import { mdiWeb, mdiChevronDown } from '@mdi/js'
+import Vue from 'vue'
 import LanguageList from '~/components/language/LanguageList.vue'
-export default {
+export default Vue.extend({
   name: 'LanguageSwitcher',
   components: { LanguageList },
   props: {
@@ -34,16 +38,14 @@ export default {
     },
   },
   computed: {
-    classObject() {
+    icons(): any {
       return {
-        flag: true,
-        'flag-en': this.$i18n.locale === 'en',
-        'flag-et': this.$i18n.locale === 'et',
-        'lang-icon': true,
+        mdiWeb,
+        mdiChevronDown,
       }
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

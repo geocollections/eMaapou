@@ -41,6 +41,7 @@
   "devDependencies": {
     "@babel/core": "^7.19.1",
     "@babel/eslint-parser": "^7.19.1",
+    "@mdi/js": "^7.0.96",
     "@nuxt/image": "0.6.0",
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",

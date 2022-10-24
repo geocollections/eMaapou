@@ -11,7 +11,9 @@
       </slot>
       <v-spacer />
       <v-btn icon @click.stop="$emit('click', !showBody)">
-        <v-icon>{{ showBody ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+        <v-icon>
+          {{ showBody ? icons.mdiChevronUp : icons.mdiChevronDown }}
+        </v-icon>
       </v-btn>
     </v-card-title>
     <v-expand-transition>
@@ -27,6 +29,7 @@
 </template>
 
 <script>
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 export default {
   name: 'BaseCardExpand',
   props: {
@@ -42,6 +45,14 @@ export default {
     active: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    icons() {
+      return {
+        mdiChevronUp,
+        mdiChevronDown,
+      }
     },
   },
 }

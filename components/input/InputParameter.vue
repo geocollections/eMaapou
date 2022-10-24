@@ -39,7 +39,7 @@
         :disabled="disableAdd"
         @click="$emit('add:parameter')"
       >
-        <v-icon>mdi-plus</v-icon>
+        <v-icon>{{ icons.mdiPlus }}</v-icon>
       </v-btn>
     </v-col>
 
@@ -51,13 +51,14 @@
         :disabled="disableRemove"
         @click="$emit('remove:parameter')"
       >
-        <v-icon>mdi-minus</v-icon>
+        <v-icon>{{ icons.mdiMinus }}</v-icon>
       </v-btn>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import { mdiPlus, mdiMinus } from '@mdi/js'
 import isEmpty from 'lodash/isEmpty'
 import InputNumber from '~/components/input/InputNumber.vue'
 import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
@@ -91,6 +92,14 @@ export default {
         text: this.value.label,
       },
     }
+  },
+  computed: {
+    icons() {
+      return {
+        mdiPlus,
+        mdiMinus,
+      }
+    },
   },
   methods: {
     parseInput(input) {

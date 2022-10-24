@@ -19,7 +19,7 @@
           color="warning"
           dark
         >
-          <v-icon>mdi-magnify</v-icon>
+          <v-icon>{{ icons.mdiMagnify }}</v-icon>
         </v-btn>
       </v-form>
       <NuxtLink to="/" class="text-link-grey montserrat">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mdiMagnify } from '@mdi/js'
 import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   components: { InputSearch },
@@ -57,6 +58,11 @@ export default {
   computed: {
     title() {
       return this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+    },
+    icons() {
+      return {
+        mdiMagnify,
+      }
     },
   },
   methods: {

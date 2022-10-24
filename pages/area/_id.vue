@@ -139,9 +139,9 @@
                       @click="$openTurba('plaanid', item.trim(), false)"
                     >
                       {{ item }}
-                      <v-icon small color="primary darken-2"
-                        >mdi-file-download-outline</v-icon
-                      >
+                      <v-icon small color="primary darken-2">
+                        {{ icons.mdiFileDownloadOutline }}
+                      </v-icon>
                     </a>
                     <span v-if="index !== planArray.length - 1" class="mr-1"
                       >|</span
@@ -371,6 +371,7 @@
 </template>
 
 <script>
+import { mdiFileDownloadOutline } from '@mdi/js'
 import isNil from 'lodash/isNil'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -481,6 +482,11 @@ export default {
     }
   },
   computed: {
+    icons() {
+      return {
+        mdiFileDownloadOutline,
+      }
+    },
     filteredTabs() {
       return this.tabs.filter((item) => item.count > 0)
     },

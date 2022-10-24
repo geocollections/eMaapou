@@ -18,20 +18,28 @@
           {{ $t(route.description) }}
         </v-card-text>
       </div>
-      <v-icon small class="ml-auto pr-2 align-self-baseline">
-        mdi-open-in-new
+      <v-icon small class="ml-auto mr-2 align-self-baseline">
+        {{ icons.mdiOpenInNew }}
       </v-icon>
     </v-card>
   </v-hover>
 </template>
 
 <script>
+import { mdiOpenInNew } from '@mdi/js'
 export default {
   name: 'CardExternalService',
   props: {
     route: {
       type: Object,
       required: true,
+    },
+  },
+  computed: {
+    icons() {
+      return {
+        mdiOpenInNew,
+      }
     },
   },
 }

@@ -5,7 +5,7 @@
     @click="showMap = $event"
   >
     <template #title>
-      <v-icon left>mdi-earth</v-icon>
+      <v-icon left>{{ icons.mdiEarth }}</v-icon>
       <span class="montserrat" style="font-size: 1rem">{{
         $t('common.map')
       }}</span>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mdiEarth } from '@mdi/js'
 import { mapFields } from 'vuex-map-fields'
 import BaseCardExpand from '../base/BaseCardExpand.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
@@ -59,6 +60,11 @@ export default {
     ...mapFields('settings', {
       showMap: 'showSearchViewMap',
     }),
+    icons() {
+      return {
+        mdiEarth,
+      }
+    },
     mapMarkers() {
       if (this.useCustomMarkers) return this.items
 

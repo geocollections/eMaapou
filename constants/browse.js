@@ -1,23 +1,39 @@
+import {
+  mdiMapMarkerOutline,
+  mdiScrewMachineFlatTop,
+  mdiMapMarkerRadiusOutline,
+  mdiBinoculars,
+  mdiTestTube,
+  mdiChartScatterPlot,
+  mdiChartLine,
+  mdiDatabaseOutline,
+  mdiEyedropper,
+  mdiMicroscope,
+  mdiFamilyTree,
+  mdiLayersTriple,
+  mdiFileImageOutline,
+} from '@mdi/js'
+
 export const BROWSE_GEOLOGY_LIST = [
   {
     routeName: 'locality',
     label: 'locality.pageTitle',
-    icon: 'mdi-map-marker-outline',
+    icon: mdiMapMarkerOutline,
   },
   {
     routeName: 'drillcore',
     label: 'drillcore.pageTitle',
-    icon: 'mdi-screw-machine-flat-top',
+    icon: mdiScrewMachineFlatTop,
   },
   {
     routeName: 'area',
     label: 'area.pageTitle',
-    icon: 'mdi-map-marker-radius-outline',
+    icon: mdiMapMarkerRadiusOutline,
   },
   {
     routeName: 'site',
     label: 'site.pageTitle',
-    icon: 'mdi-binoculars',
+    icon: mdiBinoculars,
   },
 ]
 
@@ -25,27 +41,27 @@ export const BROWSE_LAB_LIST = [
   {
     routeName: 'sample',
     label: 'sample.pageTitle',
-    icon: 'mdi-test-tube',
+    icon: mdiTestTube,
   },
   {
     routeName: 'analysis',
     label: 'analysis.pageTitle',
-    icon: 'mdi-chart-scatter-plot',
+    icon: mdiChartScatterPlot,
   },
   {
     routeName: 'analytical-data',
     label: 'analyticalData.pageTitle',
-    icon: 'mdi-chart-line',
+    icon: mdiChartLine,
   },
   {
     routeName: 'dataset',
     label: 'dataset.pageTitle',
-    icon: 'mdi-database-outline',
+    icon: mdiDatabaseOutline,
   },
   {
     routeName: 'preparation',
     label: 'preparation.pageTitle',
-    icon: 'mdi-eyedropper',
+    icon: mdiEyedropper,
   },
 ]
 
@@ -53,27 +69,27 @@ export const BROWSE_TAXON_LIST = [
   {
     routeName: 'specimen',
     label: 'specimen.pageTitle',
-    icon: 'mdi-microscope',
+    icon: mdiMicroscope,
   },
   {
     routeName: 'taxon',
     label: 'taxon.pageTitle',
-    icon: 'mdi-family-tree',
+    icon: mdiFamilyTree,
   },
   {
     routeName: 'stratigraphy',
     label: 'stratigraphy.pageTitle',
-    icon: 'mdi-layers-triple',
+    icon: mdiLayersTriple,
   },
   {
     routeName: 'photo',
     label: 'photo.pageTitle',
-    icon: 'mdi-file-image-outline',
+    icon: mdiFileImageOutline,
   },
 ]
 
 export const BROWSE_PHOTO = {
   routeName: 'photo',
   text: 'photo.pageTitle',
-  icon: 'mdi-file-image-outline',
+  icon: mdiFileImageOutline,
 }

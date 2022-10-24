@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mdiArrowRight } from '@mdi/js'
 export default {
   name: 'BaseMenuListItem',
   props: {
@@ -34,7 +35,7 @@ export default {
     },
     trailingIcon: {
       type: String,
-      default: 'mdi-arrow-right',
+      default: mdiArrowRight,
     },
   },
 }

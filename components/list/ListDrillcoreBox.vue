@@ -12,7 +12,7 @@
           v-model="search"
           class="pt-0 mt-0"
           color="primary darken-2"
-          append-icon="mdi-magnify"
+          :append-icon="icons.mdiMagnify"
           :label="$t('common.search')"
           single-line
           hide-details
@@ -192,7 +192,7 @@
 
 <script>
 import debounce from 'lodash/debounce'
-
+import { mdiMagnify } from '@mdi/js'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
@@ -232,6 +232,11 @@ export default {
   computed: {
     pagination() {
       return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
+    },
+    icons() {
+      return {
+        mdiMagnify,
+      }
     },
   },
   watch: {

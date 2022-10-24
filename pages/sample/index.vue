@@ -1,7 +1,7 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('sample.pageTitle')" icon="mdi-test-tube" />
+      <base-header :title="$t('sample.pageTitle')" :icon="icons.mdiTestTube" />
     </template>
 
     <template #form>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mdiTestTube } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
@@ -67,6 +68,11 @@ export default {
   computed: {
     ...mapState('search/sample', ['items', 'count']),
     ...mapFields('search/sample', ['options']),
+    icons() {
+      return {
+        mdiTestTube,
+      }
+    },
   },
   methods: {
     ...mapActions('search/sample', ['searchSamples']),

@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('analyticalData.pageTitle')"
-        icon="mdi-chart-line"
+        :icon="icons.mdiChartLine"
       />
     </template>
 
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiChartLine } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
@@ -66,6 +67,11 @@ export default {
   computed: {
     ...mapState('search/analytical_data', ['items', 'count']),
     ...mapFields('search/analytical_data', ['options']),
+    icons() {
+      return {
+        mdiChartLine,
+      }
+    },
   },
   methods: {
     ...mapActions('search/analytical_data', ['searchAnalyticalData']),

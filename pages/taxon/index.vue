@@ -4,7 +4,7 @@
       <base-header
         :title="$t('taxon.pageTitle')"
         :subtitle="$t('common.count', { count: count })"
-        icon="mdi-family-tree"
+        :icon="icons.mdiFamilyTree"
       />
     </template>
 
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mdiFamilyTree } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import Search from '~/templates/Search.vue'
@@ -71,6 +72,11 @@ export default {
   computed: {
     ...mapState('search/taxon', ['items', 'count']),
     ...mapFields('search/taxon', ['options']),
+    icons() {
+      return {
+        mdiFamilyTree,
+      }
+    },
   },
   methods: {
     ...mapActions('search/taxon', ['searchTaxa']),

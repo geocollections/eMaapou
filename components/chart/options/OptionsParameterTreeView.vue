@@ -15,7 +15,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon left dark> mdi-chart-line-variant </v-icon>
+        <v-icon left dark> {{ icons.mdiChartLineVariant }} </v-icon>
         {{ $t('common.parameters') }}
       </v-btn>
     </template>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { mdiChartLineVariant } from '@mdi/js'
 export default {
   name: 'OptionsParameterTreeView',
   props: {
@@ -72,6 +73,13 @@ export default {
     return {
       search: '',
     }
+  },
+  computed: {
+    icons() {
+      return {
+        mdiChartLineVariant,
+      }
+    },
   },
   methods: {
     handleInput(event) {

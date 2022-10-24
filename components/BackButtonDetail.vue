@@ -1,6 +1,8 @@
 <template>
   <v-btn id="back-btn-detail" icon @click="handleClick">
-    <v-icon>mdi-subdirectory-arrow-left mdi-rotate-90</v-icon>
+    <v-icon style="transform: rotate(90deg)">
+      {{ icons.mdiSubdirectoryArrowLeft }}
+    </v-icon>
     <v-tooltip bottom activator="#back-btn-detail">
       <span>{{ $t('common.goBack') }}</span>
     </v-tooltip>
@@ -8,11 +10,17 @@
 </template>
 
 <script>
+import { mdiSubdirectoryArrowLeft } from '@mdi/js'
 export default {
   name: 'BackButtonDetail',
   computed: {
     table() {
       return this.$route.name.substring(0, this.$route.name.indexOf('-'))
+    },
+    icons() {
+      return {
+        mdiSubdirectoryArrowLeft,
+      }
     },
   },
   methods: {

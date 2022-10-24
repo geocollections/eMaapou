@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('photo.pageTitle')"
-        icon="mdi-file-image-outline"
+        :icon="icons.mdiFileImageOutline"
       />
     </template>
 
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { mdiFileImageOutline } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import BaseHeader from '~/components/base/BaseHeader.vue'
@@ -110,6 +111,11 @@ export default {
     ...mapState('search/image', ['options', 'items', 'count']),
     ...mapState('settings', ['listOfViews']),
     ...mapFields('search/image', ['currentView', 'options']),
+    icons() {
+      return {
+        mdiFileImageOutline,
+      }
+    },
     mapMarkers() {
       if (this.items?.length > 0) {
         return this.items.reduce((filtered, item) => {

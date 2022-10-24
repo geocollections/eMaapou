@@ -17,7 +17,7 @@
             v-bind="{ ...menu.attrs, ...tooltip.attrs }"
             v-on="{ ...menu.on, ...tooltip.on }"
           >
-            <v-icon>mdi-table-cog</v-icon>
+            <v-icon>{{ icons.mdiTableCog }}</v-icon>
           </v-btn>
         </template>
         <span>{{ $t('table.tooltipConfig') }}</span>
@@ -30,7 +30,7 @@
           <v-tooltip bottom open-delay="500">
             <template #activator="{ on, attrs }">
               <v-btn v-bind="attrs" icon v-on="on" @click="$emit('reset')">
-                <v-icon>mdi-refresh</v-icon>
+                <v-icon>{{ icons.mdiRefresh }}</v-icon>
               </v-btn>
             </template>
             {{ $t('table.tooltipResetHeaders') }}
@@ -44,8 +44,8 @@
                 v-on="on"
                 @click="onlyVisible = !onlyVisible"
               >
-                <v-icon v-if="!onlyVisible">mdi-eye</v-icon>
-                <v-icon v-else>mdi-eye-off</v-icon>
+                <v-icon v-if="!onlyVisible">{{ icons.mdiEye }}</v-icon>
+                <v-icon v-else>{{ icons.mdiEyeOff }}</v-icon>
               </v-btn>
             </template>
             <span v-if="!onlyVisible">
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { mdiTableCog, mdiRefresh, mdiEye, mdiEyeOff } from '@mdi/js'
 export default {
   name: 'BaseDataTableHeaderMenu',
   filters: {
@@ -135,6 +136,16 @@ export default {
       onlyVisible: false,
       filter: '',
     }
+  },
+  computed: {
+    icons() {
+      return {
+        mdiTableCog,
+        mdiRefresh,
+        mdiEye,
+        mdiEyeOff,
+      }
+    },
   },
 }
 </script>

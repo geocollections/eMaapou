@@ -2,7 +2,7 @@
   <div>
     <v-row no-gutters justify="center" align="center">
       <v-col class="pt-5">
-        <base-header icon="mdi-magnify">
+        <base-header :icon="icons.mdiMagnify">
           <template #title>
             <i18n path="quickSearch.title" tag="div">
               <template #query>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mdiMagnify } from '@mdi/js'
 import orderBy from 'lodash/orderBy'
 import ButtonTabs from '~/components/ButtonTabs.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
@@ -84,6 +85,11 @@ export default {
   computed: {
     computedTabs() {
       return orderBy(this.tabs, ['count'], ['desc'])
+    },
+    icons() {
+      return {
+        mdiMagnify,
+      }
     },
   },
   watch: {

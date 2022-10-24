@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('locality.pageTitle')"
-        icon="mdi-map-marker-outline"
+        :icon="icons.mdiMapMarkerOutline"
       />
     </template>
 
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mdiMapMarkerOutline } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import SearchFormLocality from '~/components/search/forms/SearchFormLocality.vue'
@@ -69,6 +70,11 @@ export default {
   computed: {
     ...mapState('search/locality', ['items', 'count']),
     ...mapFields('search/locality', ['options']),
+    icons() {
+      return {
+        mdiMapMarkerOutline,
+      }
+    },
   },
   methods: {
     ...mapActions('search/locality', ['searchLocalities']),

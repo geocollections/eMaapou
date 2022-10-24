@@ -60,7 +60,7 @@
                     color="warning"
                     dark
                   >
-                    <v-icon>mdi-magnify</v-icon>
+                    <v-icon>{{ icons.mdiMagnify }}</v-icon>
                   </v-btn>
                 </v-form>
               </v-card-actions>
@@ -131,6 +131,15 @@
 </template>
 
 <script>
+import {
+  mdiMagnify,
+  mdiMicroscope,
+  mdiMapMarkerOutline,
+  mdiTestTube,
+  mdiScrewMachineFlatTop,
+  mdiChartLine,
+  mdiFileImageOutline,
+} from '@mdi/js'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
 import CardExternalService from '~/components/card/CardExternalService.vue'
@@ -204,37 +213,37 @@ export default {
         {
           routeName: 'specimen',
           text: 'specimen.landingCard',
-          icon: 'mdi-microscope',
+          icon: mdiMicroscope,
           count: specimenResponse?.count ?? 284000,
         },
         {
           routeName: 'locality',
           text: 'locality.landingCard',
-          icon: 'mdi-map-marker-outline',
+          icon: mdiMapMarkerOutline,
           count: localityResponse?.count ?? 13000,
         },
         {
           routeName: 'sample',
           text: 'sample.landingCard',
-          icon: 'mdi-test-tube',
+          icon: mdiTestTube,
           count: sampleResponse?.count ?? 156000,
         },
         {
           routeName: 'drillcore',
           text: 'drillcore.landingCard',
-          icon: 'mdi-screw-machine-flat-top',
+          icon: mdiScrewMachineFlatTop,
           count: drillcoreResponse?.count ?? 500,
         },
         {
           routeName: 'analytical-data',
           text: 'analyticalData.landingCard',
-          icon: 'mdi-chart-line',
+          icon: mdiChartLine,
           count: analysisResponse?.count ?? 249000,
         },
         {
           routeName: 'photo',
           text: 'photo.landingCard',
-          icon: 'mdi-file-image-outline',
+          icon: mdiFileImageOutline,
           count: photoResponse?.count ?? 20000,
         },
       ],
@@ -352,6 +361,11 @@ export default {
     }
   },
   computed: {
+    icons() {
+      return {
+        mdiMagnify,
+      }
+    },
     backgroundImage() {
       return `url(${this.backgroundSvg}), url(${this.backgroundImg})`
     },

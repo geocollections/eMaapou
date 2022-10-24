@@ -1,7 +1,10 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('specimen.pageTitle')" icon="mdi-microscope" />
+      <base-header
+        :title="$t('specimen.pageTitle')"
+        :icon="icons.mdiMicroscope"
+      />
     </template>
 
     <template #form>
@@ -30,6 +33,7 @@
 </template>
 
 <script>
+import { mdiMicroscope } from '@mdi/js'
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
@@ -67,6 +71,11 @@ export default {
   computed: {
     ...mapState('search/specimen', ['items', 'count']),
     ...mapFields('search/specimen', ['options']),
+    icons() {
+      return {
+        mdiMicroscope,
+      }
+    },
   },
   methods: {
     ...mapActions('search/specimen', ['searchSpecimens']),

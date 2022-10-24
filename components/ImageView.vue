@@ -91,9 +91,9 @@
                 <v-row v-else align="center">
                   <v-col class="text-center">
                     <div class="py-3">
-                      <v-icon style="font-size: 6rem" class="grey--text"
-                        >mdi-file-image-outline</v-icon
-                      >
+                      <v-icon style="font-size: 6rem" class="grey--text">
+                        {{ mdiFileImageOutline }}
+                      </v-icon>
                     </div>
                   </v-col>
                 </v-row>
@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import { mdiFileImageOutline } from '@mdi/js'
 import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 export default {
   name: 'ImageView',
@@ -163,6 +164,11 @@ export default {
   computed: {
     pagination() {
       return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
+    },
+    icons() {
+      return {
+        mdiFileImageOutline,
+      }
     },
   },
   created() {

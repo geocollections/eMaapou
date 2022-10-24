@@ -19,7 +19,9 @@
             :to="localePath({ name: 'terms' })"
           >
             {{ $t('cookiePolicy.readMoreButton') }}
-            <v-icon small color="primary darken-2">mdi-cookie</v-icon>
+            <v-icon small color="primary darken-2">
+              {{ icons.mdiCookie }}
+            </v-icon>
           </nuxt-link>
         </div>
 
@@ -40,11 +42,14 @@
 
 <script>
 import { mapFields } from 'vuex-map-fields'
-
+import { mdiCookie } from '@mdi/js'
 export default {
   name: 'CookiePolicy',
   computed: {
     ...mapFields('settings', ['cookiePolicy']),
+    icons() {
+      return { mdiCookie }
+    },
   },
 }
 </script>

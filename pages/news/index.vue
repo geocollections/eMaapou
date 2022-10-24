@@ -1,6 +1,6 @@
 <template>
   <div class="pt-5">
-    <base-header :title="$t('common.news')"></base-header>
+    <base-header :title="$t('common.news')" />
     <!-- <v-btn @click="nextPage">next</v-btn> -->
     <client-only>
       <v-card elevation="0" color="transparent px-sm-3">

@@ -20,10 +20,10 @@
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
       <v-btn :disabled="options.page === 1" icon @click="first">
-        <v-icon>mdi-page-first</v-icon>
+        <v-icon>{{ icons.mdiPageFirst }}</v-icon>
       </v-btn>
       <v-btn :disabled="options.page === 1" icon @click="previous">
-        <v-icon>mdi-chevron-left</v-icon>
+        <v-icon>{{ icons.mdiChevronLeft }}</v-icon>
       </v-btn>
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
       <v-menu offset-y :close-on-content-click="false">
@@ -60,7 +60,8 @@
             text
             @click="selectPage"
           >
-            {{ goToButtonText }} <v-icon small>mdi-chevron-right</v-icon>
+            {{ goToButtonText }}
+            <v-icon small>{{ icons.mdiChevronRight }}</v-icon>
           </v-btn>
         </v-card>
       </v-menu>
@@ -69,19 +70,25 @@
         icon
         @click="next"
       >
-        <v-icon>mdi-chevron-right</v-icon>
+        <v-icon>{{ icons.mdiChevronRight }}</v-icon>
       </v-btn>
       <v-btn
         :disabled="options.page === pagination.pageCount"
         icon
         @click="last"
       >
-        <v-icon>mdi-page-last</v-icon>
+        <v-icon>{{ icons.mdiPageLast }}</v-icon>
       </v-btn>
     </div>
   </div>
 </template>
 <script>
+import {
+  mdiPageFirst,
+  mdiPageLast,
+  mdiChevronRight,
+  mdiChevronLeft,
+} from '@mdi/js'
 export default {
   name: 'BaseDataTablePagination',
   props: {
@@ -146,6 +153,14 @@ export default {
   computed: {
     pages() {
       return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    },
+    icons() {
+      return {
+        mdiPageFirst,
+        mdiPageLast,
+        mdiChevronLeft,
+        mdiChevronRight,
+      }
     },
   },
   methods: {

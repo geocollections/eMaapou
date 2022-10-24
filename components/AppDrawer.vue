@@ -35,19 +35,6 @@
           </v-list-item-title>
         </v-list-item>
       </v-list>
-
-      <!-- <div class="d-flex flex-column align-start pl-2">
-        <nuxt-link
-          v-for="route in routes"
-          :key="route.name"
-          exact
-          :to="localePath({ name: route.routeName })"
-          class="mb-1 menu-link"
-          active-class="menu-link-active"
-          ><v-icon v-if="route.icon" small left>{{ route.icon }}</v-icon>
-          {{ $t(route.text) }}
-        </nuxt-link>
-      </div> -->
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t('landing.searchRoutes') }}
       </div>
@@ -98,7 +85,7 @@
       <v-list class="py-1 px-2">
         <base-menu-list-item
           class="my-1"
-          icon="mdi-file-image-outline"
+          :icon="icons.mdiFileImageOutline"
           :label="$t('photo.pageTitle')"
           nuxt
           trailing-icon=""
@@ -137,7 +124,24 @@
   </v-navigation-drawer>
 </template>
 
-<script>
+<script lang="ts">
+import {
+  mdiMagnify,
+  mdiInformationOutline,
+  mdiNewspaperVariantOutline,
+  mdiMapMarkerOutline,
+  mdiBinoculars,
+  mdiScrewMachineFlatTop,
+  mdiTestTube,
+  mdiChartScatterPlot,
+  mdiChartLine,
+  mdiDatabaseOutline,
+  mdiFamilyTree,
+  mdiLayersTriple,
+  mdiFileImageOutline,
+  mdiMicroscope,
+} from '@mdi/js'
+import Vue from 'vue'
 import LanguageList from '~/components/language/LanguageList.vue'
 import BaseMenuListItem from '~/components/base/BaseMenuListItem.vue'
 import {
@@ -146,7 +150,8 @@ import {
   BROWSE_TAXON_LIST,
   SERVICES,
 } from '~/constants'
-export default {
+
+export default Vue.extend({
   name: 'AppDrawer',
   components: { LanguageList, BaseMenuListItem },
   props: {
@@ -165,79 +170,74 @@ export default {
         {
           routeName: 'search',
           text: 'common.search',
-          icon: 'mdi-magnify',
+          icon: mdiMagnify,
         },
         {
           routeName: 'about',
           text: 'common.about',
-          icon: 'mdi-information-outline',
+          icon: mdiInformationOutline,
         },
         {
           routeName: 'news',
           text: 'common.news',
-          icon: 'mdi-newspaper-variant-outline',
+          icon: mdiNewspaperVariantOutline,
         },
       ],
       searchRoutes: [
         {
           routeName: 'locality',
           text: 'locality.pageTitle',
-          icon: 'mdi-map-marker-outline',
+          icon: mdiMapMarkerOutline,
         },
         {
           routeName: 'site',
           text: 'site.pageTitle',
-          icon: 'mdi-binoculars',
+          icon: mdiBinoculars,
         },
         {
           routeName: 'drillcore',
           text: 'drillcore.pageTitle',
-          icon: 'mdi-screw-machine-flat-top',
+          icon: mdiScrewMachineFlatTop,
         },
         {
           routeName: 'sample',
           text: 'sample.pageTitle',
-          icon: 'mdi-test-tube',
+          icon: mdiTestTube,
         },
         {
           routeName: 'analysis',
           text: 'analysis.pageTitle',
-          icon: 'mdi-chart-scatter-plot',
+          icon: mdiChartScatterPlot,
         },
         {
           routeName: 'analytical-data',
           text: 'analyticalData.pageTitle',
-          icon: 'mdi-chart-line',
+          icon: mdiChartLine,
         },
         {
           routeName: 'dataset',
           text: 'dataset.pageTitle',
-          icon: 'mdi-database-outline',
+          icon: mdiDatabaseOutline,
         },
         {
           routeName: 'taxon',
           text: 'taxon.pageTitle',
-          icon: 'mdi-family-tree',
+          icon: mdiFamilyTree,
         },
-        // {
-        //   name: 'file',
-        //   lang: 'attachments',
-        //   icon: 'mdi-folder-open-outline',
-        // },
         {
           routeName: 'stratigraphy',
           text: 'stratigraphy.pageTitle',
-          icon: 'mdi-layers-triple',
+          icon: mdiLayersTriple,
         },
         {
           routeName: 'photo',
           text: 'photo.pageTitle',
-          icon: 'mdi-file-image-outline',
+          icon: mdiFileImageOutline,
         },
         {
           routeName: 'specimen',
           text: 'specimen.pageTitle',
-          icon: 'mdi-microscope',
+          icon: mdiMicroscope,
         },
         { routeName: 'preparation', text: 'preparation.pageTitle' },
         { routeName: 'area', text: 'area.pageTitle' },
@@ -329,7 +329,14 @@ export default {
       },
     }
   },
-}
+  computed: {
+    icons() {
+      return {
+        mdiFileImageOutline,
+      }
+    },
+  },
+})
 </script>
 
 <style scoped>

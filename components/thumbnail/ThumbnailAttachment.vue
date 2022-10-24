@@ -7,7 +7,7 @@
       large
       @click="$emit('click')"
     >
-      mdi-file-image-outline
+      {{ icons.mdiFileImageOutline }}
     </v-icon>
     <v-icon
       v-else-if="isVideo"
@@ -15,15 +15,20 @@
       large
       @click="$emit('click')"
     >
-      mdi-file-video-outline
+      {{ icons.mdiFileVideoOutline }}
     </v-icon>
     <v-icon v-else color="primary darken-2" large @click="$emit('click')">
-      mdi-file-outline
+      {{ icons.mdiFileOutline }}
     </v-icon>
   </div>
 </template>
 
 <script>
+import {
+  mdiFileVideoOutline,
+  mdiFileOutline,
+  mdiFileImageOutline,
+} from '@mdi/js'
 import ThumbnailImage from './ThumbnailImage.vue'
 export default {
   name: 'ThumbnailAttachment',
@@ -40,6 +45,13 @@ export default {
     },
   },
   computed: {
+    icons() {
+      return {
+        mdiFileVideoOutline,
+        mdiFileOutline,
+        mdiFileImageOutline,
+      }
+    },
     isImage() {
       return this.type?.startsWith('image')
     },

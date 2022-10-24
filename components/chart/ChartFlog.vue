@@ -14,7 +14,7 @@
       >
         <template #activator="{ on, attrs }">
           <v-btn class="ml-3" icon small v-bind="attrs" v-on="on">
-            <v-icon> mdi-cog </v-icon>
+            <v-icon> {{ icons.mdiCog }} </v-icon>
           </v-btn>
         </template>
         <v-card>
@@ -37,7 +37,9 @@
               @change="handleScaleChange"
             >
               <template #append>
-                <v-icon @click="handleScaleReset"> mdi-refresh </v-icon>
+                <v-icon @click="handleScaleReset">
+                  {{ icons.mdiRefresh }}
+                </v-icon>
               </template>
               <template #append-outer>
                 <v-btn-toggle
@@ -118,6 +120,7 @@
 </template>
 
 <script lang="ts">
+import { mdiCog, mdiRefresh } from '@mdi/js'
 import { mapFields } from 'vuex-map-fields'
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
@@ -227,6 +230,12 @@ export default Vue.extend({
   },
   computed: {
     ...mapFields('chart', ['renderer', 'connected', 'ppi']),
+    icons(): any {
+      return {
+        mdiCog,
+        mdiRefresh,
+      }
+    },
     initOptions(): any {
       return {
         renderer: this.renderer,

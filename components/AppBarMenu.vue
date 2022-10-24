@@ -7,7 +7,7 @@
       style="text-transform: capitalize; font-size: 0.875rem"
     >
       {{ label }}
-      <v-icon class="ml-1">mdi-chevron-down</v-icon>
+      <v-icon class="ml-1">{{ icons.mdiChevronDown }}</v-icon>
       <v-menu
         :activator="`#${id}`"
         content-class="elevation-2 mt-1"
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mdiChevronDown } from '@mdi/js'
 export default {
   name: 'AppBarMenu',
   props: {
@@ -34,6 +35,13 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+  },
+  computed: {
+    icons() {
+      return {
+        mdiChevronDown,
+      }
     },
   },
 }
