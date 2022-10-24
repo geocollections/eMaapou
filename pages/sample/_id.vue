@@ -427,9 +427,11 @@ export default {
       `${isEmpty(name) ? this.sample.id : name}`
     )
 
-    this.validRoute = this.$validateTabRoute(slugRoute, hydratedTabs)
-    if (this.validRoute.path !== this.$route.path)
-      this.$router.replace(this.validRoute)
+    this.validRoute = this.localeLocation(
+      this.$validateTabRoute(slugRoute, this.tabs)
+    )
+    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
+      this.$nuxt.context.redirect(this.validRoute)
   },
   head() {
     return {

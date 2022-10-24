@@ -277,9 +277,11 @@ export default {
         en: this.drillcore.drillcore_en,
       })
     )
-    this.validRoute = this.$validateTabRoute(slugRoute, this.tabs)
-    if (this.validRoute.path !== this.$route.path)
-      this.$router.replace(this.validRoute)
+    this.validRoute = this.localeLocation(
+      this.$validateTabRoute(slugRoute, this.tabs)
+    )
+    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
+      this.$nuxt.context.redirect(this.validRoute)
   },
   head() {
     return {

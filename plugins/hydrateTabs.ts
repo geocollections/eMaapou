@@ -43,12 +43,13 @@ const plugin: Plugin = ({ app }, inject) => {
     route: Location,
     tabs: any[]
   ): Location | undefined => {
-    const routeCopy = {
-      name: route.name,
-      params: route.params,
-      path: route.path,
-    }
-    if (!(tabs.length > 0)) return routeCopy
+    // const routeCopy = {
+    //   name: route.name,
+    //   params: route.params,
+    //   path: route.path,
+    // }
+
+    if (!(tabs.length > 0)) return route
     const currentTab = tabs.find(
       (tab) =>
         route.path ===
@@ -57,16 +58,16 @@ const plugin: Plugin = ({ app }, inject) => {
           params: route.params,
         })
     )
-    if (currentTab.count > 0) return routeCopy
+    if (!currentTab) return route
+    if (currentTab.count > 0) return route
     // Find tab that has items
     const initTab = tabs.find((tab) => tab.count > 0)
     // Constuct route
     // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
-    const localePath = app.localeLocation({
+    return {
       name: initTab?.routeName ?? tabs[0].routeName,
       params: route.params,
-    })
-    return localePath
+    }
   }
 
   const getMaxTab = (route: Route, tabs: any[]): Route | undefined => {
