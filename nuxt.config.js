@@ -62,20 +62,7 @@ export default {
       { name: 'theme-color', content: '#577daf' },
       { name: 'apple-mobile-web-app-status-bar-sytle', content: '#577daf' },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-      {
-        rel: 'preload',
-        as: 'style',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500;700&display=swap',
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Open+Sans:wght@400;500;700&display=swap',
-      },
-    ],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
   loading: false,
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -112,6 +99,7 @@ export default {
     '@nuxtjs/composition-api/module',
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
+    '@nuxtjs/google-fonts',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -173,6 +161,7 @@ export default {
   vuetify: {
     customVariables: ['@/assets/variables.scss'],
     defaultAssets: {
+      font: false,
       icons: false,
     },
     treeShake: true,
@@ -248,5 +237,15 @@ export default {
         files: './**/*.{ts,js,vue}',
       },
     },
+  },
+  googleFonts: {
+    families: {
+      Montserrat: [300, 400, 500, 700],
+      'Open+Sans': [400, 500, 700],
+    },
+    prefetch: true,
+    preconnect: true,
+    preload: true,
+    useStylesheet: true,
   },
 }
