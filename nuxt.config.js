@@ -111,7 +111,6 @@ export default {
     '@nuxtjs/composition-api/module',
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
-    // '@nuxtjs/google-fonts',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -250,10 +249,4 @@ export default {
       },
     },
   },
-  // googleFonts: {
-  //   families: {
-  //     Montserrat: [300, 400, 500, 700],
-  //     'Open+Sans': [400, 500, 700],
-  //   },
-  // },
 }
