@@ -104,9 +104,7 @@
     >
       <v-row justify="center" class="mt-4">
         <v-col cols="12" md="8" class="pr-5" order="1" order-md="0">
-          <client-only>
-            <the-news-card />
-          </client-only>
+          <the-news-card />
         </v-col>
         <v-col cols="12" md="4" class="pl-lg-5" order="0" order-md="0">
           <base-header :title="$t('landing.otherServices')" />

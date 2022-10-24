@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { decode } from 'html-entities'
 export default {
   name: 'NewsPreviewCard',
   filters: {
@@ -81,9 +82,10 @@ export default {
     extractContent(html) {
       if (html) {
         // DOM elemet is greated to decode HTML entities (eg. &nbsp;)
-        const txt = document.createElement('textarea')
-        txt.innerHTML = html
-        return txt.value.replace(/<[^>]+>/g, '')
+        // const txt = this.createElement('textarea')
+        // console.log(txt)
+        // txt.innerHTML = html
+        return decode(html).replace(/<[^>]+>/g, '')
       }
       return null
     },
