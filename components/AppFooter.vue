@@ -4,27 +4,7 @@
       <v-row no-gutters>
         <v-col cols="12" lg="auto">
           <div class="d-md-flex justify-center">
-            <!-- <div class="montserrat white--text mx-3 mr-8 mb-6">
-              <img
-                style="height: 50px; width: 100px"
-                :src="$img(logo, null, { provider: 'static' })"
-              />
-              <div class="font-weight-medium" style="white-space: nowrap">
-                {{ $t('subtitle') }}
-              </div>
-            </div> -->
             <div class="ml-4 ml-md-0 mr-4 mb-6">
-              <!-- <div
-                class="
-                  section-title
-                  white--text
-                  font-weight-medium
-                  montserrat
-                  mb-4
-                "
-              >
-                {{ $t('common.home') }}
-              </div> -->
               <img
                 style="height: 24px; margin-bottom: 10px"
                 :src="$img(logo, null, { provider: 'static' })"
@@ -119,6 +99,8 @@
                       :alt="$t(item.alt)"
                       provider="static"
                       :format="item.format"
+                      :height="item.height"
+                      :width="item.width"
                       class="footer-logo py-1 py-sm-0 px-3"
                       v-on="on"
                     />
@@ -149,8 +131,9 @@
                     :href="item.href"
                     class="text-link font-weight-bold grey--text text--lighten-2"
                     target="FooterLink"
-                    >{{ item.text }}</a
                   >
+                    {{ item.text }}
+                  </a>
                 </i18n>
               </div>
             </div>
@@ -163,6 +146,8 @@
                 provider="static"
                 format="webp"
                 class="github-logo py-1 py-sm-0 px-3"
+                width="32"
+                height="32"
               />
             </a>
           </v-col>
@@ -189,6 +174,8 @@ export default {
           title: 'footerLinks.sarv',
           alt: 'footerLinks.sarv',
           format: null,
+          width: 172,
+          height: 60,
         },
         {
           href: 'https://natarc.ut.ee',
@@ -196,6 +183,8 @@ export default {
           title: 'footerLinks.natarc',
           alt: 'footerLinks.natarc',
           format: 'webp',
+          width: 60,
+          height: 60,
         },
         {
           href: 'https://taltech.ee/geoloogia-instituut',
@@ -203,6 +192,8 @@ export default {
           title: 'footerLinks.ttu',
           alt: 'footerLinks.ttu',
           format: 'webp',
+          height: 60,
+          width: 105,
         },
         {
           href: 'http://www.natmuseum.ut.ee/et/content/geoloogiakogud',
@@ -210,6 +201,8 @@ export default {
           title: 'footerLinks.tu',
           alt: 'footerLinks.tu',
           format: 'webp',
+          width: 58,
+          height: 60,
         },
         {
           href: 'https://loodusmuuseum.ee/geoloogilised-kogud',
@@ -217,6 +210,8 @@ export default {
           title: 'footerLinks.elm',
           alt: 'footerLinks.elm',
           format: 'webp',
+          height: 60,
+          width: 127,
         },
         /* {
           href: 'https://struktuurifondid.ee',
@@ -382,7 +377,7 @@ export default {
 } */
 
 .footer-logo {
-  height: 60px;
+  // height: 60px;
   width: auto;
   /*padding: 0 10px;*/
 }
