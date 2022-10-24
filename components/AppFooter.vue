@@ -5,9 +5,12 @@
         <v-col cols="12" lg="auto">
           <div class="d-md-flex justify-center">
             <div class="ml-4 ml-md-0 mr-4 mb-6">
-              <img
-                style="height: 24px; margin-bottom: 10px"
-                :src="$img(logo, null, { provider: 'static' })"
+              <nuxt-img
+                :src="logo"
+                height="24"
+                width="60"
+                format="webp"
+                style="margin-bottom: 10px"
               />
               <div
                 v-for="link in routes"
