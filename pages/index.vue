@@ -153,100 +153,6 @@ export default {
     InputSearch,
   },
   layout: 'landing',
-  async asyncData({ $services }) {
-    const [
-      specimenResponse,
-      analysisResponse,
-      sampleResponse,
-      localityResponse,
-      photoResponse,
-      drillcoreResponse,
-    ] = await Promise.all([
-      $services.sarvSolr
-        .getResourceList('specimen', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return {}
-        }),
-      $services.sarvSolr
-        .getResourceList('analysis', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return {}
-        }),
-      $services.sarvSolr
-        .getResourceList('sample', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return {}
-        }),
-      $services.sarvSolr
-        .getResourceList('locality', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return {}
-        }),
-      $services.sarvSolr
-        .getResourceList('attachment', {
-          defaultParams: { rows: 0, fq: 'specimen_image_attachment:"2"' },
-        })
-        .catch((_) => {
-          return {}
-        }),
-      $services.sarvSolr
-        .getResourceList('drillcore', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return {}
-        }),
-    ])
-
-    return {
-      searchRoutes: [
-        {
-          routeName: 'specimen',
-          text: 'specimen.landingCard',
-          icon: mdiMicroscope,
-          count: specimenResponse?.count ?? 284000,
-        },
-        {
-          routeName: 'locality',
-          text: 'locality.landingCard',
-          icon: mdiMapMarkerOutline,
-          count: localityResponse?.count ?? 13000,
-        },
-        {
-          routeName: 'sample',
-          text: 'sample.landingCard',
-          icon: mdiTestTube,
-          count: sampleResponse?.count ?? 156000,
-        },
-        {
-          routeName: 'drillcore',
-          text: 'drillcore.landingCard',
-          icon: mdiScrewMachineFlatTop,
-          count: drillcoreResponse?.count ?? 500,
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.landingCard',
-          icon: mdiChartLine,
-          count: analysisResponse?.count ?? 249000,
-        },
-        {
-          routeName: 'photo',
-          text: 'photo.landingCard',
-          icon: mdiFileImageOutline,
-          count: photoResponse?.count ?? 20000,
-        },
-      ],
-    }
-  },
   data() {
     return {
       query: '',
@@ -339,7 +245,100 @@ export default {
         format: 'webp',
       }),
       backgroundSvg: this.$img('/frontpage/layered-peaks-haikei.svg'),
+      searchRoutes: [],
     }
+  },
+  async fetch() {
+    const [
+      specimenResponse,
+      analysisResponse,
+      sampleResponse,
+      localityResponse,
+      photoResponse,
+      drillcoreResponse,
+    ] = await Promise.all([
+      this.$services.sarvSolr
+        .getResourceList('specimen', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return { count: 284000 }
+        }),
+      this.$services.sarvSolr
+        .getResourceList('analysis', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return { count: 249000 }
+        }),
+      this.$services.sarvSolr
+        .getResourceList('sample', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return { count: 156000 }
+        }),
+      this.$services.sarvSolr
+        .getResourceList('locality', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return { count: 13000 }
+        }),
+      this.$services.sarvSolr
+        .getResourceList('attachment', {
+          defaultParams: { rows: 0, fq: 'specimen_image_attachment:"2"' },
+        })
+        .catch((_) => {
+          return { count: 20000 }
+        }),
+      this.$services.sarvSolr
+        .getResourceList('drillcore', {
+          defaultParams: { rows: 0 },
+        })
+        .catch((_) => {
+          return { count: 500 }
+        }),
+    ])
+
+    this.searchRoutes = [
+      {
+        routeName: 'specimen',
+        text: 'specimen.landingCard',
+        icon: mdiMicroscope,
+        count: specimenResponse.count,
+      },
+      {
+        routeName: 'locality',
+        text: 'locality.landingCard',
+        icon: mdiMapMarkerOutline,
+        count: localityResponse.count,
+      },
+      {
+        routeName: 'sample',
+        text: 'sample.landingCard',
+        icon: mdiTestTube,
+        count: sampleResponse.count,
+      },
+      {
+        routeName: 'drillcore',
+        text: 'drillcore.landingCard',
+        icon: mdiScrewMachineFlatTop,
+        count: drillcoreResponse.count,
+      },
+      {
+        routeName: 'analytical-data',
+        text: 'analyticalData.landingCard',
+        icon: mdiChartLine,
+        count: analysisResponse.count,
+      },
+      {
+        routeName: 'photo',
+        text: 'photo.landingCard',
+        icon: mdiFileImageOutline,
+        count: photoResponse.count,
+      },
+    ]
   },
   head() {
     return {
