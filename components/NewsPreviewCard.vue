@@ -4,7 +4,6 @@
       v-bind="$attrs"
       class="py-2"
       :elevation="hover ? 2 : 1"
-      :style="styleObject"
       @click.stop="$emit('click')"
     >
       <div
@@ -17,8 +16,9 @@
         class="montserrat pt-0"
         :class="{ 'white--text': dark }"
         style="word-break: normal"
-        >{{ title }}</v-card-title
       >
+        {{ title }}
+      </v-card-title>
 
       <v-card-text
         class="pb-0 text-body-1"
@@ -36,8 +36,8 @@
           text
           @click="$emit('click')"
         >
-          {{ $t('common.readNewsArticle') }}</v-btn
-        >
+          {{ $t('common.readNewsArticle') }}
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-hover>
@@ -65,26 +65,9 @@ export default {
     date: { type: String, default: null },
     previewLenght: { type: Number, default: 200 },
   },
-  data() {
-    return {
-      styleObject: {
-        opacity: 0,
-        transition: 'opacity 300ms linear',
-      },
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.styleObject.opacity = 1
-    })
-  },
   methods: {
     extractContent(html) {
       if (html) {
-        // DOM elemet is greated to decode HTML entities (eg. &nbsp;)
-        // const txt = this.createElement('textarea')
-        // console.log(txt)
-        // txt.innerHTML = html
         return decode(html).replace(/<[^>]+>/g, '')
       }
       return null
