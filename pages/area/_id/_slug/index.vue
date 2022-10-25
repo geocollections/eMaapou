@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSite from '~/components/data-table/DataTableSite.vue'
 import { HEADERS_SITE, SITE } from '~/constants'
 
@@ -29,7 +28,6 @@ export default {
     const solrResponse = await this.$services.sarvSolr.getResourceList('site', {
       search: this.search,
       options: this.options,
-      isValid: isNil(this.$route.params.id),
       defaultParams: {
         fq: `area_id:${this.$route.params.id}`,
       },

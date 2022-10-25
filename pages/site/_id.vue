@@ -373,7 +373,6 @@ export default {
     const attachmentPromise = this.$services.sarvREST.getResourceList(
       'attachment_link',
       {
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           site: this.$route.params.id,
           attachment__attachment_format__value__istartswith: 'image',

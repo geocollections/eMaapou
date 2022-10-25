@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import { HEADERS_ANALYSIS } from '~/constants'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 export default {
@@ -34,7 +33,6 @@ export default {
     const response = await this.$services.sarvSolr.getResourceList('analysis', {
       search: this.search,
       options: this.options,
-      isValid: isNil(this.$route.params.id),
       defaultParams: {
         fq: `locality_id:${this.$route.params.id}`,
       },

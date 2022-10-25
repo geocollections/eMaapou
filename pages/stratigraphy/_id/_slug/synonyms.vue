@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableStratigraphySynonym from '~/components/data-table/DataTableStratigraphySynonym.vue'
 import { HEADERS_STRATIGRAPHY_SYNONYM, STRATIGRAPHY_SYNONYM } from '~/constants'
 export default {
@@ -36,7 +35,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           stratigraphy: this.$route.params.id,
           nest: 1,

@@ -31,12 +31,12 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.locality)) return
     const referenceResponse = await this.$services.sarvREST.getResourceList(
       'locality_reference',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.locality),
         defaultParams: {
           locality: this.locality,
           nest: 1,

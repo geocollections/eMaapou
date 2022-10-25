@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
@@ -31,7 +30,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           fq: `locality_id:${this.$route.params.id}`,
         },

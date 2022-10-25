@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableDatasetGeolocation from '~/components/data-table/DataTableDatasetGeolocation.vue'
 
 import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
@@ -37,7 +36,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           dataset: this.$route.params.id,
           nest: 1,

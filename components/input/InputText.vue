@@ -6,6 +6,7 @@
     :value="value"
     type="text"
     @input="$emit('input', $event)"
+    @change="$emit('change', $event)"
   />
 </template>
 

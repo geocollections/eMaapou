@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import ChartFlog from '~/components/chart/ChartFlog.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
@@ -40,7 +39,6 @@ export default {
     const analysisResultsPromise = this.$services.sarvSolr.getResourceList(
       'analysis_results',
       {
-        isValid: isNil('dataset_ids'),
         defaultParams: {
           fq: `dataset_ids:${this.$route.params.id}`,
           start: 0,
@@ -60,7 +58,6 @@ export default {
     const samplesPromise = this.$services.sarvSolr.getResourceList(
       'sample_data',
       {
-        isValid: isNil('dataset_ids'),
         defaultParams: {
           fq: `dataset_ids:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
           start: 0,

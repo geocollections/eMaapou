@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import LasChart from '~/components/chart/types/LasChart.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
@@ -90,7 +89,6 @@ export default {
       const analysisResultsPromise = this.$services.sarvSolr.getResourceList(
         'analysis_results',
         {
-          isValid: isNil('locality_id'),
           defaultParams: {
             fq: `locality_id:${this.locality}`,
             start: 0,
@@ -110,7 +108,6 @@ export default {
       const samplesPromise = this.$services.sarvSolr.getResourceList(
         'sample_data',
         {
-          isValid: isNil('locality_id'),
           defaultParams: {
             fq: `locality_id:${this.locality} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
             start: 0,

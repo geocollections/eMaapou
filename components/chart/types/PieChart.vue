@@ -69,10 +69,12 @@ export default {
   },
   methods: {
     async fetchChartData() {
+      if (isNil(this.tableId)) {
+        return { resultsResponse: { items: [], count: 0 } }
+      }
       const resultsResponse = await this.$services.sarvREST.getResourceList(
         'taxon_list',
         {
-          isValid: isNil(this.tableId),
           defaultParams: {
             [this.tableKey]: this.tableId,
             fields: 'id,name,taxon,frequency',

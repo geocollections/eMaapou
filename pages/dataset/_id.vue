@@ -219,7 +219,6 @@ export default {
     const localityGroupedPromise = this.$services.sarvSolr.getResourceList(
       'analysis',
       {
-        useRawSolr: true,
         defaultParams: {
           fq: `dataset_id:${this.$route.params.id}`,
           fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',

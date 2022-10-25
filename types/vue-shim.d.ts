@@ -14,7 +14,10 @@ declare module 'vue/types/vue' {
     $accessor: typeof accessorType
     $L: typeof L
     $formatDate(isoDate: string): string
-    $getAPIFieldValues(headers: { byIds: object; allIds: string[] }): object
+    $getAPIFieldValues(headers: {
+      byIds: { [key: string]: any }
+      allIds: string[]
+    }): { [key: string]: string }
     $services: ReturnType<typeof services>
     $translate(translations: ITranslations): string
     $hydrateTab(
@@ -39,7 +42,10 @@ declare module '@nuxt/types' {
   interface NuxtAppOptions {
     $accessor: typeof accessorType
     $formatDate(isoDate: string): string
-    $getAPIFieldValues(headers: { byIds: object; allIds: string[] }): object
+    $getAPIFieldValues(headers: {
+      byIds: { [key: string]: any }
+      allIds: string[]
+    }): { [key: string]: string }
     $services: ReturnType<typeof services>
     $translate(translations: ITranslations): string
     $hydrateTab(
@@ -63,7 +69,10 @@ declare module '@nuxt/types' {
   interface Context {
     $accessor: typeof accessorType
     $formatDate(isoDate: string): string
-    $getAPIFieldValues(headers: { byIds: object; allIds: string[] }): object
+    $getAPIFieldValues(headers: {
+      byIds: { [key: string]: any }
+      allIds: string[]
+    }): { [key: string]: string }
     $services: ReturnType<typeof services>
     $translate(translations: ITranslations): string
     $hydrateTab(

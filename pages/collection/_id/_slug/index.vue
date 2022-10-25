@@ -32,12 +32,13 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.collection)) return
+
     const specimenResponse = await this.$services.sarvSolr.getResourceList(
       'specimen',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.collection),
         defaultParams: {
           fq: `collection_id:${this.collection.id}`,
           // fq: `stratigraphy_id:${this.stratigraphy}`,

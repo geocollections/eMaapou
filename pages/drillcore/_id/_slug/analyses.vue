@@ -38,12 +38,12 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.locality)) return
     const analysisResponse = await this.$services.sarvSolr.getResourceList(
       'analysis',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.locality),
         defaultParams: {
           fq: `locality_id:${this.locality}`,
         },

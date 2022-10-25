@@ -230,7 +230,6 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty'
-import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
 import { STRATOTYPE, TABS_STRATIGRAPHY, HEADERS_STRATOTYPE } from '~/constants'
 import LeafletMap from '~/components/map/LeafletMap.vue'
@@ -278,7 +277,6 @@ export default {
       'stratigraphy_stratotype',
       {
         ...STRATOTYPE.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           stratigraphy: this.$route.params.id,
           nest: 2,

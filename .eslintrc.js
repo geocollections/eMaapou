@@ -22,5 +22,7 @@ module.exports = {
         allowModifiers: true,
       },
     ],
+    'vue/no-v-html': 'off',
+    'no-unused-vars': 'off',
   },
 }

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 
 import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
@@ -32,7 +31,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           fq: `locality_id:${this.$route.params.id}`,
         },

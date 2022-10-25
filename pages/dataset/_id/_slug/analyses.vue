@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableDatasetAnalysis from '~/components/data-table/DataTableDatasetAnalysis.vue'
 import { DATASET_ANALYSIS, HEADERS_DATASET_ANALYSIS } from '~/constants'
 
@@ -31,7 +30,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           fq: `dataset_ids:${this.$route.params.id}`,
         },

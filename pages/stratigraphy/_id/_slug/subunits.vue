@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
 
@@ -31,7 +30,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           fq: `parent_id:${this.$route.params.id}`,
         },

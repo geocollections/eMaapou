@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import LasChart from '~/components/chart/types/LasChart.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
@@ -85,7 +84,6 @@ export default {
     const analysisResultsPromise = this.$services.sarvSolr.getResourceList(
       'analysis_results',
       {
-        isValid: isNil('locality_id'),
         defaultParams: {
           fq: `locality_id:${this.$route.params.id}`,
           start: 0,
@@ -105,7 +103,6 @@ export default {
     const samplesPromise = this.$services.sarvSolr.getResourceList(
       'sample_data',
       {
-        isValid: isNil('locality_id'),
         defaultParams: {
           fq: `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
           start: 0,
@@ -121,7 +118,6 @@ export default {
     const taxaPromise = this.$services.sarvSolr.getResourceList(
       'taxon_frequency',
       {
-        isValid: isNil('locality_id'),
         defaultParams: {
           fq: `locality_id:${this.$route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
           start: 0,

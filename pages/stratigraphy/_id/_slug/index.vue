@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import {
   HEADERS_STRATIGRAPHY_REFERENCE,
   STRATIGRAPHY_REFERENCE,
@@ -34,7 +33,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           stratigraphy: this.$route.params.id,
           nest: 1,

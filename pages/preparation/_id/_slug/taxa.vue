@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import { HEADERS_TAXON_LIST, TAXON_LIST } from '~/constants'
 import DataTableTaxonList from '~/components/data-table/DataTableTaxonList.vue'
 
@@ -31,7 +30,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           preparation: this.$route.params.id,
         },

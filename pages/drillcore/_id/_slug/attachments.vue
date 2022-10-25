@@ -38,12 +38,12 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.locality)) return
     const attachmentResponse = await this.$services.sarvREST.getResourceList(
       'attachment_link',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.locality),
         defaultParams: {
           nest: 2,
           or_search: `drillcore:${this.$route.params.id} OR locality:${this.locality}`,

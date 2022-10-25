@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts">
-import isNil from 'lodash/isNil'
 import Vue from 'vue'
 import DataTableAttachment from '~/components/data-table/DataTableAttachment.vue'
 import { HEADERS_ATTACHMENT } from '~/constants'
@@ -36,7 +35,6 @@ export default Vue.extend({
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           analysis: this.$route.params.id,
           nest: 2,

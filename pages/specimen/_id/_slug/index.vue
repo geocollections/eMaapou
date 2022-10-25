@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSpecimenIdentification from '~/components/data-table/DataTableSpecimenIdentification.vue'
 import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
 export default {
@@ -34,7 +33,6 @@ export default {
       await this.$services.sarvREST.getResourceList('specimen_identification', {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           specimen: this.$route.params.id,
           nest: 1,

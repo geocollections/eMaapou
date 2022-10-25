@@ -15,7 +15,6 @@
 
 <script>
 import round from 'lodash/round'
-import isNil from 'lodash/isNil'
 import { ANALYSIS_RESULT, HEADERS_ANALYSIS_RESULT } from '~/constants'
 import DataTableAnalysisResult from '~/components/data-table/DataTableAnalysisResult.vue'
 export default {
@@ -33,7 +32,6 @@ export default {
       await this.$services.sarvSolr.getResourceList('analysis_results', {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           fq: `analysis_id:${this.$route.params.id}`,
         },

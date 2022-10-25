@@ -40,12 +40,12 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.locality)) return
     const sampleResponse = await this.$services.sarvSolr.getResourceList(
       'sample',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.locality),
         defaultParams: {
           fq: `locality_id:${this.locality} AND (depth:[${this.depthStart} TO ${this.depthEnd}] OR depth_interval:[${this.depthStart} TO ${this.depthEnd}])`,
         },

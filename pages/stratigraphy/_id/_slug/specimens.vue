@@ -32,12 +32,12 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.stratigraphy)) return
     const specimenResponse = await this.$services.sarvSolr.getResourceList(
       'specimen',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.stratigraphy),
         defaultParams: {
           fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
           // fq: `stratigraphy_id:${this.stratigraphy}`,

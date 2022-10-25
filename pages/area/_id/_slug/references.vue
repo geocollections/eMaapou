@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableLocalityReference from '~/components/data-table/DataTableLocalityReference.vue'
 import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from '~/constants'
 export default {
@@ -30,7 +29,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           area: this.$route.params.id,
           nest: 1,

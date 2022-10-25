@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSpecimenIdentificationGeology from '~/components/data-table/DataTableSpecimenIdentificationGeology.vue'
 import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
 export default {
@@ -36,7 +35,6 @@ export default {
         {
           search: this.search,
           options: this.options,
-          isValid: isNil(this.$route.params.id),
           defaultParams: {
             specimen: this.$route.params.id,
             nest: 1,

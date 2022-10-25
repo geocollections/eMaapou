@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import { HEADERS_ANALYSIS } from '~/constants'
 export default {
@@ -37,7 +36,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           fq: `sample_id:${this.$route.params.id}`,
         },

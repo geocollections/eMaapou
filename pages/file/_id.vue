@@ -756,7 +756,6 @@ export default {
     const hydratedTabsPromise = Promise.all(
       tabs.map((tab) => {
         const res = this.$services.sarvREST.getResourceList('attachment_link', {
-          isValid: isNil(this.$route.params.id),
           defaultParams: {
             [`${tab.id}__isnull`]: false,
             attachment: this.$route.params.id,
@@ -769,7 +768,6 @@ export default {
     const attachmentKeywordsPromise = this.$services.sarvREST.getResourceList(
       'attachment_keyword',
       {
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           attachment: this.$route.params.id,
           nest: 1,
@@ -812,7 +810,6 @@ export default {
     if (this.file.specimen) {
       const specimenIdentificationPromise =
         this.$services.sarvREST.getResourceList('specimen_identification', {
-          isValid: isNil(this.$route.params.id),
           defaultParams: {
             current: true,
             specimen: this.file.specimen?.id,
@@ -823,7 +820,6 @@ export default {
         this.$services.sarvREST.getResourceList(
           'specimen_identification_geology',
           {
-            isValid: isNil(this.$route.params.id),
             defaultParams: {
               current: true,
               specimen: this.file.specimen?.id,

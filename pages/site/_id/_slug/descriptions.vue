@@ -12,7 +12,6 @@
 
 <script>
 import round from 'lodash/round'
-import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
 import { DESCRIPTION, HEADERS_DESCRIPTION } from '~/constants'
 import DataTableDescription from '~/components/data-table/DataTableDescription.vue'
@@ -33,7 +32,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           site: this.$route.params.id,
           nest: 1,

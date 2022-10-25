@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableDatasetReference from '~/components/data-table/DataTableDatasetReference.vue'
 import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from '~/constants'
 export default {
@@ -30,7 +29,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           dataset: this.$route.params.id,
           nest: 2,

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSpecimenReference from '~/components/data-table/DataTableSpecimenReference.vue'
 import { HEADERS_SPECIMEN_REFERENCE, SPECIMEN_REFERENCE } from '~/constants'
 export default {
@@ -30,7 +29,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           specimen: this.$route.params.id,
           nest: 1,

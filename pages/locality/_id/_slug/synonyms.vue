@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSynonym from '~/components/data-table/DataTableSynonym.vue'
 import { HEADERS_SYNONYM, SYNONYM } from '~/constants'
 export default {
@@ -30,7 +29,6 @@ export default {
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.$route.params.id),
         defaultParams: {
           locality: this.$route.params.id,
           nest: 1,

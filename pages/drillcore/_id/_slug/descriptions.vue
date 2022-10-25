@@ -34,12 +34,12 @@ export default {
     }
   },
   async fetch() {
+    if (isNil(this.locality)) return
     const descriptionResponse = await this.$services.sarvREST.getResourceList(
       'locality_description',
       {
         search: this.search,
         options: this.options,
-        isValid: isNil(this.locality),
         defaultParams: {
           locality: this.locality,
           nest: 1,

@@ -2,9 +2,9 @@ import { Plugin } from '@nuxt/types'
 
 const plugin: Plugin = ({ app }, inject) => {
   const getAPIFieldValues = (headers: {
-    byIds: object
+    byIds: { [key: string]: any }
     allIds: string[]
-  }): object => {
+  }): { [key: string]: string } => {
     return Object.entries(headers.byIds)
       .filter(([_, header]) => {
         return header.apiFieldValue
