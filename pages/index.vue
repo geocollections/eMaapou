@@ -358,11 +358,7 @@ export default {
       }
     },
     backgroundImg() {
-      return this.$img('/frontpage/header_img2.jpg', {
-        // width: 1600,
-        // height: 900,
-        // format: 'webp',
-      })
+      return this.$img('/frontpage/header_img2.jpg')
     },
     backgroundSvg() {
       return this.$img('/frontpage/layered-peaks-haikei.svg')
