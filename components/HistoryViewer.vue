@@ -25,7 +25,7 @@
           class="mx-1 divider"
           x-small
         >
-          {{ mdiArrowLeft }}
+          {{ icons.mdiArrowLeft }}
         </v-icon>
       </span>
     </span>
