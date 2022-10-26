@@ -1,17 +1,19 @@
+import { FilterType, LookupType } from '~/types/enums'
+
 export const initState = () => {
   return {
     query: '',
     globalFilters: {
       byIds: {
         institutions: {
-          type: 'list_or',
-          lookUpType: 'equals',
+          type: FilterType.ListOr,
+          lookUpType: LookupType.Equals,
           value: [],
           fields: ['database_id'],
         },
         geoJSON: {
-          type: 'geom',
-          lookUpType: 'equals',
+          type: FilterType.Geom,
+          lookUpType: LookupType.Equals,
           value: null,
           fields: ['latlong'],
         },

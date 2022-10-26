@@ -1,6 +1,8 @@
+import { SearchModuleState } from '../types'
 import { ANALYSIS } from '~/constants'
+import { FilterType, LookupType } from '~/types/enums'
 
-export const initState = () => {
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,15 +14,14 @@ export const initState = () => {
       byIds: {
         id: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analysis.id',
           fields: ['id'],
         },
         depth: {
           value: [null, null],
-          type: 'range',
-          lookUpType: 'range',
+          type: FilterType.Range,
           label: 'analysis.depth',
           placeholders: ['depth.min', 'depth.max'],
           fields: ['depth'],

@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { LOCALITY } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,22 +13,22 @@ export const initState = () => {
       byIds: {
         name: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'locality.name',
           fields: ['locality', 'locality_en'],
         },
         country: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'locality.country',
           fields: ['country', 'country_en'],
         },
         stratigraphy: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'locality.stratigraphy',
           fields: [
             'stratigraphy_base',
@@ -40,8 +41,8 @@ export const initState = () => {
         },
         reference: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'locality.reference',
           fields: ['locality_references'],
         },

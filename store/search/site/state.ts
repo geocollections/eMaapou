@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { SITE } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,22 +13,22 @@ export const initState = () => {
       byIds: {
         name: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'site.name',
           fields: ['name'],
         },
         area: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'site.area',
           fields: ['area_name', 'area_name_en'],
         },
         project: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'site.project',
           fields: ['project_name', 'project_name_en'],
         },

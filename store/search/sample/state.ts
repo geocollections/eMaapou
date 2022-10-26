@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { SAMPLE } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,30 +13,30 @@ export const initState = () => {
       byIds: {
         number: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'sample.number',
           fields: ['number'],
         },
         locality: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'sample.locality',
           fields: ['locality', 'locality_en', 'site_name', 'site_name_en'],
         },
         stratigraphy: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'sample.stratigraphy',
           fields: ['stratigraphy', 'stratigraphy_en'],
         },
         hierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'startsWith',
+          lookUpType: LookupType.StartsWith,
           label: 'sample.hierarchy',
           fields: [
             'stratigraphy_hierarchy',
@@ -45,14 +46,13 @@ export const initState = () => {
         },
         collector: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'sample.collector',
           fields: ['collector', 'collector_full_name'],
         },
         depth: {
-          type: 'range',
-          lookUpType: 'range',
+          type: FilterType.Range,
           value: [null, null],
           label: 'sample.depth',
           placeholders: ['depth.min', 'depth.max'],
@@ -60,26 +60,18 @@ export const initState = () => {
         },
         mass: {
           value: '',
-          type: 'text',
-          lookUpType: 'equals',
+          type: FilterType.Text,
+          lookUpType: LookupType.Equals,
           label: 'sample.mass',
           fields: ['mass'],
         },
         project: {
           value: '',
-          type: 'text',
-          lookUpType: 'equals',
+          type: FilterType.Text,
+          lookUpType: LookupType.Equals,
           label: 'sample.project',
           fields: ['project_name', 'project_name_en'],
         },
-        // mass: {
-        //   type: 'range',
-        //   lookUpType: 'range',
-        //   value: [0, 1000000],
-        //   label: 'sample.mass',
-        //   placeholders: ['mass.min', 'mass.max'],
-        //   fields: ['mass'],
-        // },
       },
       allIds: ['number', 'stratigraphy', 'hierarchy'],
     },

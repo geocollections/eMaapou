@@ -1,6 +1,15 @@
+import { SearchModuleState } from '../types'
 import { IMAGE } from '~/constants'
+import { FilterType, LookupType } from '~/types/enums'
 
-export const initState = () => {
+type ImageSearchModuleState = SearchModuleState & {
+  currentView: string // TODO: this can/should be a enum
+  persistantFilters: {
+    [K: string]: any
+  }
+}
+
+export const initState = (): ImageSearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -13,29 +22,29 @@ export const initState = () => {
       byIds: {
         locality: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.locality',
           fields: ['locality', 'locality_en'],
         },
         people: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.people',
           fields: ['image_people'],
         },
         tags: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.tags',
           fields: ['tags'],
         },
         country: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.countryCountyParish',
           fields: [
             'country',
@@ -47,8 +56,7 @@ export const initState = () => {
           ],
         },
         date: {
-          type: 'range',
-          lookUpType: 'range',
+          type: FilterType.Range,
           value: [null, null],
           label: 'photo.date',
           placeholders: ['boxes.min', 'boxes.max'],
@@ -56,29 +64,29 @@ export const initState = () => {
         },
         dateFree: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.dateFree',
           fields: ['date_created_free'],
         },
         imageNumber: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.imageNumber',
           fields: ['image_number'],
         },
         author: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'photo.author',
           fields: ['agent', 'author_free'],
         },
         imageSize: {
           value: '',
-          type: 'text',
-          lookUpType: 'greaterThan',
+          type: FilterType.Text,
+          lookUpType: LookupType.GreaterThan,
           label: 'photo.size',
           fields: ['image_width', 'image_height'],
         },
@@ -90,8 +98,8 @@ export const initState = () => {
     persistantFilters: {
       specimenImageAttachment: {
         value: '2',
-        type: 'text',
-        lookUpType: 'equals',
+        type: FilterType.Text,
+        lookUpType: LookupType.Equals,
         fields: ['specimen_image_attachment'],
       },
     },

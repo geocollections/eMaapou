@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { DATASET } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,15 +13,15 @@ export const initState = () => {
       byIds: {
         name: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'dataset.name',
           fields: ['name', 'name_en'],
         },
         owner: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'dataset.owner',
           fields: [
             'owner_id',
@@ -32,22 +33,21 @@ export const initState = () => {
         },
         date: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'dataset.date',
           fields: ['date', 'date_txt'],
         },
         remarks: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'dataset.remarks',
           fields: ['remarks'],
         },
         parameters: {
           value: [],
-          type: 'list',
-          lookUpType: 'contains',
+          type: FilterType.List,
           label: 'dataset.parameters',
           fields: ['parameter_index_list'],
         },

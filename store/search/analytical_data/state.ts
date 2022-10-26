@@ -1,6 +1,17 @@
+import { SearchModuleState } from '../types'
 import { ANALYTICAL_DATA } from '~/constants'
+import { FilterType, LookupType } from '~/types/enums'
 
-export const initState = () => {
+type AnalyticalDataSearchModuleState = SearchModuleState & {
+  defaultParameters: string[]
+  parameters: { [K: string]: any }
+  parameterFilters: {
+    byIds: { [K: string]: any }
+    allIds: string[]
+  }
+}
+
+export const initState = (): AnalyticalDataSearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,8 +23,8 @@ export const initState = () => {
       byIds: {
         locality: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.locality',
           fields: [
             'locality',
@@ -24,8 +35,7 @@ export const initState = () => {
           ],
         },
         depth: {
-          type: 'range',
-          lookUpType: 'range',
+          type: FilterType.Range,
           value: [null, null],
           label: 'analyticalData.depth',
           placeholders: ['analyticalData.depthMin', 'analyticalData.depthMin'],
@@ -33,66 +43,66 @@ export const initState = () => {
         },
         stratigraphy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'contains',
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.stratigraphy',
           fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
         },
         lithostratigraphy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'contains',
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.lithostratigraphy',
           fields: ['lithostratigraphy_hierarchy'],
         },
         analysis: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.analysis',
           fields: ['id'],
         },
         method: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.method',
           fields: ['analysis_method', 'analysis_method_en', 'method_details'],
         },
         lab: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.lab',
           fields: ['lab', 'lab_en'],
         },
         agentAnalysed: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.agentAnalysed',
           fields: ['agent_analysed', 'agent_analysed_free'],
         },
         reference: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.reference',
           fields: ['reference', 'reference_id_s'],
         },
         dataset: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.dataset',
           fields: ['dataset_name', 'dataset_id_s'],
         },
         stratigraphyBed: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.stratigraphyBed',
           fields: [
             'stratigraphy',
@@ -105,22 +115,22 @@ export const initState = () => {
         },
         rock: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.rock',
           fields: ['rock', 'rock_en', 'rock_txt', 'rock_en_txt', 'rock_id_s'],
         },
         sample: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'analyticalData.sample',
           fields: ['sample_id_s', 'sample_number', 'sample_type'],
         },
         project: {
           value: '',
-          type: 'text',
-          lookUpType: 'equals',
+          type: FilterType.Text,
+          lookUpType: LookupType.Equals,
           label: 'analyticalData.project',
           fields: ['project_name', 'project_name_en'],
         },
@@ -136,7 +146,6 @@ export const initState = () => {
         'sample',
       ],
     },
-
     defaultParameters: ['CaO_pct', 'MgO_pct', 'SiO2_pct', 'Al2O3_pct'],
     parameters: {},
     parameterFilters: {

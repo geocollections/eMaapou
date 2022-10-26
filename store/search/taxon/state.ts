@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { TAXON } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,51 +13,38 @@ export const initState = () => {
       byIds: {
         species: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'taxon.species',
           fields: ['taxon'],
         },
         locality: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'taxon.locality',
           fields: ['locality', 'locality_en'],
         },
         stratigraphyHierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'startsWith',
+          lookUpType: LookupType.StartsWith,
           label: 'taxon.stratigraphyHierarchy',
           fields: ['stratigraphy_hierarchy'],
         },
         taxonHierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'startsWith',
+          lookUpType: LookupType.StartsWith,
           label: 'taxon.taxonHierarchy',
           fields: ['hierarchy_string'],
         },
-
-        // hierarchy: {
-        //   value: null,
-        //   type: 'object',
-        //   searchField: 'hierarchy_string',
-        //   lookUpType: 'startsWith',
-        //   label: 'taxon.hierarchy',
-        //   fields: [
-        //     'stratigraphy_hierarchy',
-        //     'age_hierarchy',
-        //     'lithostratigraphy_hierarchy',
-        //   ],
-        // },
         author: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'taxon.author',
           fields: ['author_year'],
         },

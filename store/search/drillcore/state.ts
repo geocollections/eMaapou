@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { DRILLCORE } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,35 +13,34 @@ export const initState = () => {
       byIds: {
         name: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'drillcore.name',
           fields: ['drillcore', 'drillcore_en'],
         },
         country: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'locality.country',
           fields: ['country', 'country_en'],
         },
         repository: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'drillcore.repository',
           fields: ['core_repository', 'core_repository_en'],
         },
         storage: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'drillcore.storage',
           fields: ['location'],
         },
         boxes: {
-          type: 'range',
-          lookUpType: 'range',
+          type: FilterType.Range,
           value: [null, null],
           label: 'drillcore.boxes',
           placeholders: ['boxes.min', 'boxes.max'],

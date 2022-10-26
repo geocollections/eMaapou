@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { STRATIGRAPHY } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,38 +13,37 @@ export const initState = () => {
       byIds: {
         id: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'stratigraphy.id',
           fields: ['id'],
         },
         stratigraphy: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'stratigraphy.stratigraphy',
           fields: ['stratigraphy', 'stratigraphy_en'],
         },
         index: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'stratigraphy.index',
           fields: ['index_main', 'index_additional'],
         },
         age: {
           value: '',
-          type: 'range_alt',
-          lookUpType: 'range',
+          type: FilterType.RangeAlt,
           label: 'stratigraphy.age',
           placeholders: ['stratigraphy.min', 'stratigraphy.max'],
           fields: ['age_base', 'age_top'],
         },
         hierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'equals',
+          lookUpType: LookupType.Equals,
           label: 'stratigraphy.hierarchy',
           fields: ['hierarchy_string'],
         },

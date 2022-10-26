@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { PREPARATION } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,23 +13,23 @@ export const initState = () => {
       byIds: {
         number: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'preparation.number',
           fields: ['preparation_number'],
         },
         locality: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'preparation.locality',
           fields: ['locality', 'locality_en'],
         },
         hierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'startsWith',
+          lookUpType: LookupType.StartsWith,
           label: 'preparation.hierarchy',
           fields: [
             'stratigraphy_hierarchy',
@@ -38,8 +39,7 @@ export const initState = () => {
         },
         depth: {
           value: [null, null],
-          type: 'range',
-          lookUpType: 'range',
+          type: FilterType.Range,
           label: 'preparation.depth',
           placeholders: ['depth.min', 'depth.max'],
           fields: ['depth'],

@@ -1,6 +1,7 @@
+import { SearchModuleState } from '../types'
 import { SPECIMEN } from '~/constants'
-
-export const initState = () => {
+import { FilterType, LookupType } from '~/types/enums'
+export const initState = (): SearchModuleState => {
   return {
     items: [],
     count: 0,
@@ -12,15 +13,15 @@ export const initState = () => {
       byIds: {
         locality: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'specimen.locality',
           fields: ['locality', 'locality_en'],
         },
         number: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'specimen.number',
           fields: [
             'specimen_full_name',
@@ -30,69 +31,65 @@ export const initState = () => {
         },
         collectionNr: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'specimen.collectionNr',
           fields: ['collection_number'],
         },
         fossil: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'specimen.fossilGroup',
           fields: ['fossilgroup'],
         },
         fossilName: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'specimen.fossilName',
           fields: ['taxon', 'taxon_txt', 'taxon_full'],
         },
         rock: {
           value: '',
-          type: 'text',
-          lookUpType: 'contains',
+          type: FilterType.Text,
+          lookUpType: LookupType.Contains,
           label: 'specimen.rockName',
           fields: ['rock', 'rock_en', 'rock_txt', 'rock_txt_en'],
         },
         stratigraphyHierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'startsWith',
+          lookUpType: LookupType.StartsWith,
           label: 'specimen.stratigraphyHierarchy',
           fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
         },
         hierarchy: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'hierarchy_string',
-          lookUpType: 'startsWith',
+          lookUpType: LookupType.StartsWith,
           label: 'specimen.taxon',
           fields: ['hierarchy_string'],
         },
         reference: {
           value: null,
-          type: 'object',
+          type: FilterType.Object,
           searchField: 'reference',
-          lookUpType: 'equals',
+          lookUpType: LookupType.Equals,
           label: 'specimen.reference',
           fields: ['specimen_references'],
         },
         has_image: {
           value: false,
-          type: 'boolean',
-          searchField: 'has_image',
-          lookUpType: 'equals',
+          type: FilterType.Boolean,
           label: 'specimen.has_image',
           fields: ['has_image'],
         },
         has_map: {
           value: false,
-          type: 'boolean',
-          searchField: 'has_map',
-          lookUpType: 'equals',
+          type: FilterType.Boolean,
           label: 'specimen.has_map',
           fields: ['has_map'],
         },
