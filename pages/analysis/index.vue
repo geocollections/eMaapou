@@ -39,10 +39,6 @@ import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import isFilterValid from '~/utils/isFilterValid'
-import { FilterType } from '~/types/enums'
-import { Filter } from '~/types/filters'
-import { IOptions } from '~/services'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 import parseQueryParams from '~/utils/parseQueryParams'
 import getQueryParams from '~/utils/getQueryParams'
@@ -56,6 +52,19 @@ export default Vue.extend({
     SearchFormAnalysis,
     DataTableAnalysis,
     BaseHeader,
+  },
+  beforeRouteEnter(_to, _from, next) {
+    next(async (vm) => {
+      const query = getQueryParams({
+        q: vm.$accessor.search.analysis.query,
+        qKey: qParamKey,
+        globalFilters: vm.$accessor.search.globalFilters.byIds,
+        tableOptions: vm.options,
+      })
+      await new Promise((resolve, reject) =>
+        vm.$router.replace({ query }, resolve, reject)
+      )
+    })
   },
   data() {
     return {
@@ -101,6 +110,10 @@ export default Vue.extend({
       query: 'query',
       depth: 'filters.byIds.depth.value',
     }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+      institutions: 'globalFilters.byIds.institutions.value',
+    }),
   },
   watch: {
     '$route.query': {
@@ -116,11 +129,12 @@ export default Vue.extend({
   methods: {
     async setStateFromQueryParams() {
       await this.$accessor.search.resetModuleFilters('analysis')
-      const parsedValues = parseQueryParams(
-        this.$route,
-        this.$accessor.search.analysis.filters.byIds,
-        qParamKey
-      )
+      const parsedValues = parseQueryParams({
+        route: this.$route,
+        filters: this.$accessor.search.analysis.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        qKey: qParamKey,
+      })
       this.query = parsedValues.query
       if (parsedValues.filters) {
         Object.keys(parsedValues.filters).forEach((key) => {
@@ -128,44 +142,17 @@ export default Vue.extend({
           this[key] = parsedValues.filters?.[key]
         })
       }
+      if (parsedValues.globalFilters) {
+        Object.keys(parsedValues.globalFilters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.globalFilters?.[key]
+        })
+      }
       this.options = {
         ...this.options,
         ...parsedValues.options,
       }
     },
-    getQueryParams({
-      q,
-      qKey,
-      filters,
-      tableOptions,
-    }: {
-      q: string
-      qKey: string
-      filters: { [K: string]: Filter }
-      tableOptions: IOptions
-    }) {
-      const query: { [K: string]: any | any[] } = {}
-
-      if (q.length > 0) {
-        query[qKey] = q
-      }
-      Object.entries(filters)
-        .filter(([_, filter]) => isFilterValid(filter))
-        .forEach(([key, filter]) => {
-          if (filter.type === FilterType.Text) query[key] = filter.value
-          else if (filter.type === FilterType.Range) {
-            const start = filter.value[0] ?? '*'
-            const end = filter.value[1] ?? '*'
-            query[key] = `${start}-${end}`
-          }
-        })
-      query.page = tableOptions.page.toString()
-      query.itemsPerPage = tableOptions.itemsPerPage.toString()
-      query.sortBy = tableOptions.sortBy
-      query.sortDesc = tableOptions.sortDesc
-      return query
-    },
-
     async handleFormReset() {
       this.options.page = 1
 
@@ -186,6 +173,7 @@ export default Vue.extend({
         q: this.$accessor.search.analysis.query,
         qKey: qParamKey,
         filters: this.$accessor.search.analysis.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
         tableOptions: this.options,
       })
       await new Promise((resolve, reject) =>
@@ -199,6 +187,7 @@ export default Vue.extend({
         q: this.$accessor.search.analysis.query,
         qKey: qParamKey,
         filters: this.$accessor.search.analysis.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
         tableOptions: this.options,
       })
       await new Promise((resolve, reject) =>
