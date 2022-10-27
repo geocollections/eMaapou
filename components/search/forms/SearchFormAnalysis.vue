@@ -10,7 +10,7 @@
     <search-map
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
     <search-institution-filter
@@ -22,11 +22,12 @@
   </v-form>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
@@ -34,7 +35,7 @@ import InputText from '~/components/input/InputText.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import InputRange from '~/components/input/InputRange.vue'
-export default {
+export default Vue.extend({
   name: 'SearchFormAnalysis',
   components: {
     SearchInstitutionFilter,
@@ -61,17 +62,15 @@ export default {
   methods: {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/analysis', ['searchAnalyses']),
-    async handleReset() {
-      await this.resetFilters('analysis')
-      this.searchAnalyses()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchAnalyses()
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchAnalyses(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
   },
-}
+})
 </script>

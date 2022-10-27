@@ -10,8 +10,17 @@ import {
 } from '../mutation_types'
 
 export default {
+  async resetModuleFilters({ commit }, module) {
+    const { initState } = await import(`/${module}/state`)
+
+    const initStateObj = initState()
+
+    commit(RESET_MODULE_QUERY, { module, initQuery: initStateObj.query })
+    commit(RESET_MODULE_FILTERS, { module, initFilters: initStateObj.filters })
+    commit(RESET_MODULE_OPTIONS, { module, initOptions: initStateObj.options })
+  },
   async resetFilters({ commit }, module) {
-    const { initState } = await import(`/${module}/state.js`)
+    const { initState } = await import(`/${module}/state`)
 
     const initStateObj = initState()
 

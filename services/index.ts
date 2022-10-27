@@ -5,10 +5,10 @@ import createSarvRwapiRepository from '~/services/sarvRwapi.api'
 import createGeoserverRepository from '~/services/geoserver.api'
 
 export interface IOptions {
-  page?: number
-  itemsPerPage?: number
-  sortBy?: string[]
-  sortDesc?: boolean[]
+  page: number
+  itemsPerPage: number
+  sortBy: string[]
+  sortDesc: boolean[]
 }
 
 export default (context: Context) => ({
