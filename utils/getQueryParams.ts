@@ -5,21 +5,19 @@ import { Filter } from '~/types/filters'
 
 export default ({
   q,
-  qKey,
   filters,
   globalFilters,
   tableOptions,
 }: {
-  q: string
-  qKey: string
+  q?: { key: string; value: string }
   filters?: { [K: string]: Filter }
   globalFilters?: { [K: string]: Filter }
   tableOptions: IOptions
 }) => {
   const query: { [K: string]: any | any[] } = {}
 
-  if (q.length > 0) {
-    query[qKey] = q
+  if (q && q.value.length > 0) {
+    query[q.key] = q
   }
   query.page = tableOptions.page.toString()
   query.itemsPerPage = tableOptions.itemsPerPage.toString()
@@ -30,27 +28,30 @@ export default ({
     Object.entries(filters)
       .filter(([_, filter]) => isFilterValid(filter))
       .forEach(([key, filter]) => {
-        if (filter.type === FilterType.Text) query[key] = filter.value
-        else if (filter.type === FilterType.Range) {
-          const start = filter.value[0] ?? '*'
-          const end = filter.value[1] ?? '*'
-          query[key] = `${start}-${end}`
-        }
+        query[key] = serializeFilter(filter)
       })
   }
   if (globalFilters) {
     Object.entries(globalFilters)
       .filter(([_, filter]) => isFilterValid(filter))
       .forEach(([key, filter]) => {
-        if (filter.type === FilterType.Text) query[key] = filter.value
-        else if (filter.type === FilterType.Range) {
-          const start = filter.value[0] ?? '*'
-          const end = filter.value[1] ?? '*'
-          query[key] = `${start}-${end}`
-        } else if (filter.type === FilterType.Geom) {
-          query[key] = JSON.stringify(filter.value)
-        }
+        query[key] = serializeFilter(filter)
       })
   }
   return query
+}
+
+const serializeFilter = (filter: Filter): string | string[] => {
+  if (filter.type === FilterType.Text) return filter.value
+  else if (filter.type === FilterType.Range) {
+    const start = filter.value[0] ?? '*'
+    const end = filter.value[1] ?? '*'
+    return `${start}-${end}`
+  } else if (filter.type === FilterType.Geom) {
+    return JSON.stringify(filter.value)
+  } else if (filter.type === FilterType.Object) {
+    return JSON.stringify(filter.value)
+  } else if (filter.type === FilterType.ListOr) {
+    return filter.value
+  }
 }

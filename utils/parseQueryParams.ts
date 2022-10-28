@@ -25,49 +25,20 @@ export default ({
     result.filters = Object.entries(filters)
       .filter(([key, _]) => route.query[key])
       .reduce((prev, [key, filter]): { [K: string]: any } => {
-        if (filter.type === FilterType.Text) {
-          return {
-            ...prev,
-            [key]: route.query[key] as string,
-          }
-        } else if (filter.type === FilterType.Range) {
-          const [start, end] = (route.query[key] as string)?.split('-') ?? [
-            null,
-            null,
-          ]
-          return {
-            ...prev,
-            [key]: [start !== '*' ? start : null, end !== '*' ? end : null],
-          }
+        return {
+          ...prev,
+          [key]: parseFilterValue(route, key, filter),
         }
-        return prev
       }, {})
   }
   if (globalFilters) {
     result.globalFilters = Object.entries(globalFilters)
       .filter(([key, _]) => route.query[key])
       .reduce((prev, [key, filter]): { [K: string]: any } => {
-        if (filter.type === FilterType.Text) {
-          return {
-            ...prev,
-            [key]: route.query[key] as string,
-          }
-        } else if (filter.type === FilterType.Range) {
-          const [start, end] = (route.query[key] as string)?.split('-') ?? [
-            null,
-            null,
-          ]
-          return {
-            ...prev,
-            [key]: [start !== '*' ? start : null, end !== '*' ? end : null],
-          }
-        } else if (filter.type === FilterType.Geom) {
-          return {
-            ...prev,
-            [key]: JSON.parse(route.query[key] as string),
-          }
+        return {
+          ...prev,
+          [key]: parseFilterValue(route, key, filter),
         }
-        return prev
       }, {})
   }
   const options: any = {}
@@ -89,4 +60,22 @@ export default ({
   }
   result.options = options
   return result
+}
+
+const parseFilterValue = (route: Route, key: string, filter: Filter): any => {
+  if (filter.type === FilterType.Text) {
+    return route.query[key] as string
+  } else if (filter.type === FilterType.Range) {
+    const [start, end] = (route.query[key] as string)?.split('-') ?? [
+      null,
+      null,
+    ]
+    return [start !== '*' ? start : null, end !== '*' ? end : null]
+  } else if (filter.type === FilterType.Geom) {
+    return JSON.parse(route.query[key] as string)
+  } else if (filter.type === FilterType.Object) {
+    return JSON.parse(route.query[key] as string)
+  } else if (filter.type === FilterType.ListOr) {
+    return route.query[key]
+  }
 }

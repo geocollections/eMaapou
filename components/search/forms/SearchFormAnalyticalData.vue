@@ -138,7 +138,7 @@
           class="mt-2"
           :active="!isEmpty(institution)"
           :institution="institution"
-          @change:institution="institution = $event"
+          @change:institution="handleInstitutionsUpdate"
         />
       </v-col>
     </v-row>
@@ -221,9 +221,6 @@ export default {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   methods: {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
@@ -235,21 +232,18 @@ export default {
       'removeParameterFilter',
     ]),
     ...mapActions('headers/analytical_data', ['removeHeader']),
-    async handleReset() {
-      await this.resetFilters('analytical_data')
-      this.searchAnalyticalData()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchAnalyticalData()
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchAnalyticalData(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
-    fillAutocompleteLists() {
-      if (this.stratigraphy)
-        this.autocomplete.chronostratigraphy.push(this.stratigraphy)
-      if (this.lithostratigraphy)
-        this.autocomplete.lithostratigraphy.push(this.lithostratigraphy)
+    handleInstitutionsUpdate(newInstitutions) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
     handleParameterUpdate(e, id) {
       this.updateParameterFilter({ id, filter: e })

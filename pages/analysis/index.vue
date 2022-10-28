@@ -35,6 +35,7 @@
 import { mapFields } from 'vuex-map-fields'
 import Vue from 'vue'
 import { MetaInfo } from 'vue-meta'
+import isEqual from 'lodash/isEqual'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search.vue'
@@ -42,7 +43,6 @@ import BaseHeader from '~/components/base/BaseHeader.vue'
 import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
 import parseQueryParams from '~/utils/parseQueryParams'
 import getQueryParams from '~/utils/getQueryParams'
-
 const qParamKey = 'analysisQ'
 
 export default Vue.extend({
@@ -52,19 +52,6 @@ export default Vue.extend({
     SearchFormAnalysis,
     DataTableAnalysis,
     BaseHeader,
-  },
-  beforeRouteEnter(_to, _from, next) {
-    next(async (vm) => {
-      const query = getQueryParams({
-        q: vm.$accessor.search.analysis.query,
-        qKey: qParamKey,
-        globalFilters: vm.$accessor.search.globalFilters.byIds,
-        tableOptions: vm.options,
-      })
-      await new Promise((resolve, reject) =>
-        vm.$router.replace({ query }, resolve, reject)
-      )
-    })
   },
   data() {
     return {
@@ -118,17 +105,27 @@ export default Vue.extend({
   watch: {
     '$route.query': {
       async handler() {
-        await this.setStateFromQueryParams()
+        await this.$accessor.search.resetFilters('analysis')
+        this.setStateFromQueryParams()
         this.$fetch()
       },
     },
   },
   created() {
+    // Add global filters and table options to query params, if they are missing
+    const query = getQueryParams({
+      globalFilters: this.$accessor.search.globalFilters.byIds,
+      // @ts-ignore
+      tableOptions: this.options,
+    })
+    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
+      this.$router.replace({ query: { ...query, ...this.$route.query } })
+
     this.setStateFromQueryParams()
   },
   methods: {
-    async setStateFromQueryParams() {
-      await this.$accessor.search.resetModuleFilters('analysis')
+    setStateFromQueryParams() {
+      // await this.$accessor.search.resetModuleFilters('analysis')
       const parsedValues = parseQueryParams({
         route: this.$route,
         filters: this.$accessor.search.analysis.filters.byIds,
@@ -170,8 +167,7 @@ export default Vue.extend({
     async handleFormUpdate() {
       this.options.page = 1
       const query = getQueryParams({
-        q: this.$accessor.search.analysis.query,
-        qKey: qParamKey,
+        q: { key: qParamKey, value: this.$accessor.search.analysis.query },
         filters: this.$accessor.search.analysis.filters.byIds,
         globalFilters: this.$accessor.search.globalFilters.byIds,
         tableOptions: this.options,
@@ -184,8 +180,7 @@ export default Vue.extend({
     async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
       const query = getQueryParams({
-        q: this.$accessor.search.analysis.query,
-        qKey: qParamKey,
+        q: { key: qParamKey, value: this.$accessor.search.analysis.query },
         filters: this.$accessor.search.analysis.filters.byIds,
         globalFilters: this.$accessor.search.globalFilters.byIds,
         tableOptions: this.options,
