@@ -119,6 +119,7 @@ export default Vue.extend({
     this.setStateFromQueryParams()
   },
   methods: {
+    // TODO: Each of the search views has a copy of this function. Find a way to extract it and import it. If possible avoid mixins.
     setStateFromQueryParams() {
       // await this.$accessor.search.resetModuleFilters('analysis')
       const parsedValues = parseQueryParams({

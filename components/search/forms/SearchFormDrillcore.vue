@@ -25,16 +25,17 @@
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
@@ -42,8 +43,7 @@ import InputRange from '~/components/input/InputRange.vue'
 import InputText from '~/components/input/InputText.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormDrillcore',
   components: {
     SearchInstitutionFilter,
@@ -72,18 +72,19 @@ export default {
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/drillcore', ['searchDrillcores']),
-    async handleReset() {
-      await this.resetFilters('drillcore')
-      this.searchDrillcores()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchDrillcores()
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchDrillcores(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
+    },
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
   },
-}
+})
 </script>
