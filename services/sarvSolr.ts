@@ -22,7 +22,7 @@ export default ($axios: NuxtAxiosInstance) => ({
       options,
       searchFilters = {},
     }: {
-      options: IOptions
+      options?: IOptions
       search?: string | null
       fields?: { [key: string]: string }
       defaultParams?: { [key: string]: any }
@@ -33,8 +33,8 @@ export default ($axios: NuxtAxiosInstance) => ({
       ...defaultParams,
       ...buildSolrQueryParameter(search),
       ...buildSolrParameters(searchFilters),
-      ...buildSolrPaginationParameters(options),
-      ...buildSolrSortParameter(options, fields),
+      ...(options && buildSolrPaginationParameters(options)),
+      ...(options && buildSolrSortParameter(options, fields)),
     }
 
     const response = await $axios.$get(`solr/${resource}`, {
@@ -108,7 +108,7 @@ const buildSolrQueryParameter = (search: string | null) => {
 }
 
 const buildSolrPaginationParameters = (options: IOptions) => {
-  if (!(options?.page && options?.itemsPerPage)) return null
+  if (!(options.page && options.itemsPerPage)) return null
 
   return {
     start: (options.page - 1) * options.itemsPerPage,
@@ -120,7 +120,7 @@ const buildSolrSortParameter = (
   options: IOptions,
   fields: { [key: string]: string }
 ) => {
-  if (!(options?.sortBy && options?.sortDesc)) return null
+  if (!(options.sortBy && options.sortDesc)) return null
 
   const orderBy = options.sortBy
     .map((field, i) => {

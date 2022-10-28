@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
@@ -47,7 +47,7 @@ export default Vue.extend({
     InputRange,
   },
   computed: {
-    ...mapState('search/analysis', ['filters']),
+    ...mapState('search/analysis', ['filters', 'items']),
     ...mapFields('search/analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
@@ -61,7 +61,6 @@ export default Vue.extend({
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
     handleReset() {
       this.$emit('reset')
     },

@@ -40,7 +40,7 @@ import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import { ANALYSIS, HEADERS_ANALYSIS } from '~/constants'
+import { HEADERS_ANALYSIS } from '~/constants'
 import parseQueryParams from '~/utils/parseQueryParams'
 import getQueryParams from '~/utils/getQueryParams'
 const qParamKey = 'analysisQ'
@@ -52,13 +52,6 @@ export default Vue.extend({
     SearchFormAnalysis,
     DataTableAnalysis,
     BaseHeader,
-  },
-  data() {
-    return {
-      options: ANALYSIS.options,
-      items: [],
-      count: 0,
-    }
   },
   async fetch() {
     const response = await this.$services.sarvSolr.getResourceList('analysis', {
@@ -92,9 +85,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapFields('search/analysis', {
-      // options: 'options',
-      id: 'filters.byIds.id.value',
       query: 'query',
+      items: 'items',
+      count: 'count',
+      options: 'options',
+      id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
     }),
     ...mapFields('search', {

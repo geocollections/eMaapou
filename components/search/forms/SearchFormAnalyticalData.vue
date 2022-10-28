@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
 
     <search-fields-wrapper :active="hasActiveFilters('analytical_data')">
       <v-row no-gutters>
@@ -192,7 +192,6 @@ export default {
   computed: {
     ...mapState('search/analytical_data', [
       'filters',
-      'count',
       'items',
       'parameters',
       'parameterFilters',

@@ -57,7 +57,7 @@ const serializeFilter = (filter: Filter) => {
     return filter.value
   } else if (filter.type === FilterType.Boolean) {
     return `${filter.value}`
-  } else {
-    return filter.value
+  } else if (filter.type === FilterType.List) {
+    return filter.value.map((value) => JSON.stringify(value))
   }
 }

@@ -46,7 +46,7 @@ import SearchFormAnalyticalData from '~/components/search/forms/SearchFormAnalyt
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { HEADERS_ANALYTICAL_DATA } from '~/constants/headers'
-import { ANALYTICAL_DATA } from '~/constants'
+
 import parseQueryParams from '~/utils/parseQueryParams'
 import getQueryParams from '~/utils/getQueryParams'
 const qParamKey = 'analyticalDataQ'
@@ -58,13 +58,6 @@ export default Vue.extend({
     SearchFormAnalyticalData,
     DataTableAnalyticalData,
     BaseHeader,
-  },
-  data() {
-    return {
-      options: ANALYTICAL_DATA.options,
-      items: [],
-      count: 0,
-    }
   },
   async fetch() {
     const response = await this.$services.sarvSolr.getResourceList(
@@ -98,6 +91,10 @@ export default Vue.extend({
   computed: {
     ...mapFields('search/analytical_data', {
       query: 'query',
+
+      items: 'items',
+      count: 'count',
+      options: 'options',
       locality: 'filters.byIds.locality.value',
       depth: 'filters.byIds.depth.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',

@@ -81,7 +81,11 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
     return route.query[key]
   } else if (filter.type === FilterType.Boolean) {
     return route.query[key] === 'true'
-  } else {
-    return route.query[key]
+  } else if (filter.type === FilterType.List) {
+    if (typeof route.query[key] === 'string')
+      return [JSON.parse(route.query[key] as string)]
+    return (route.query[key] as string[]).map((value: string) =>
+      JSON.parse(value)
+    )
   }
 }

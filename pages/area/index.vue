@@ -42,7 +42,7 @@ import SearchFormArea from '~/components/search/forms/SearchFormArea.vue'
 import DataTableArea from '~/components/data-table/DataTableArea.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import { AREA, HEADERS_AREA } from '~/constants'
+import { HEADERS_AREA } from '~/constants'
 import getQueryParams from '~/utils/getQueryParams'
 import parseQueryParams from '~/utils/parseQueryParams'
 const qParamKey = 'areaQ'
@@ -52,13 +52,6 @@ export default Vue.extend({
     DataTableArea,
     SearchFormArea,
     BaseHeader,
-  },
-  data() {
-    return {
-      options: AREA.options,
-      items: [],
-      count: 0,
-    }
   },
   async fetch() {
     const response = await this.$services.sarvSolr.getResourceList('area', {
@@ -87,6 +80,9 @@ export default Vue.extend({
   computed: {
     ...mapFields('search/area', {
       query: 'query',
+      items: 'items',
+      count: 'count',
+      options: 'options',
       name: 'filters.byIds.name.value',
       county: 'filters.byIds.county.value',
       type: 'filters.byIds.county.value',
