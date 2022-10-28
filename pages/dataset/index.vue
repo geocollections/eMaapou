@@ -95,6 +95,9 @@ export default Vue.extend({
       remarks: 'filters.byIds.remarks.value',
       parameters: 'filters.byIds.parameters.value',
     }),
+    ...mapFields('search', {
+      institutions: 'globalFilters.byIds.institutions.value',
+    }),
     icons(): any {
       return {
         mdiDatabaseOutline,

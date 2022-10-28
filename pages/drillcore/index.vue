@@ -101,6 +101,10 @@ export default Vue.extend({
       storage: 'filters.byIds.storage.value',
       boxes: 'filters.byIds.boxes.value',
     }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+      institutions: 'globalFilters.byIds.institutions.value',
+    }),
     icons(): any {
       return {
         mdiScrewMachineFlatTop,

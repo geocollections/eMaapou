@@ -96,6 +96,9 @@ export default Vue.extend({
       stratigraphy: 'filters.byIds.stratigraphy.value',
       reference: 'filters.byIds.reference.value',
     }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+    }),
     icons(): any {
       return {
         mdiMapMarkerOutline,

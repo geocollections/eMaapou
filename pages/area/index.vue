@@ -87,6 +87,10 @@ export default Vue.extend({
       county: 'filters.byIds.county.value',
       type: 'filters.byIds.county.value',
     }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+      institutions: 'globalFilters.byIds.institutions.value',
+    }),
     icons(): any {
       return {
         mdiMapMarkerRadiusOutline,
