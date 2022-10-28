@@ -119,6 +119,18 @@ export default Vue.extend({
         mdiChartLine,
       }
     },
+    queryParams(): { [K: string]: any } {
+      return getQueryParams({
+        q: {
+          key: qParamKey,
+          value: this.$accessor.search.analytical_data.query,
+        },
+
+        filters: this.$accessor.search.analytical_data.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        tableOptions: this.options,
+      })
+    },
   },
   watch: {
     '$route.query': {
@@ -183,34 +195,17 @@ export default Vue.extend({
     },
     async handleFormUpdate() {
       this.options.page = 1
-      const query = getQueryParams({
-        q: {
-          key: qParamKey,
-          value: this.$accessor.search.analytical_data.query,
-        },
-        filters: this.$accessor.search.analytical_data.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        tableOptions: this.options,
-      })
+
       await new Promise((resolve, reject) =>
-        this.$router.push({ query }, resolve, reject)
+        this.$router.push({ query: this.queryParams }, resolve, reject)
       )
       this.$fetch()
     },
     async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
-      const query = getQueryParams({
-        q: {
-          key: qParamKey,
-          value: this.$accessor.search.analytical_data.query,
-        },
 
-        filters: this.$accessor.search.analytical_data.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        tableOptions: this.options,
-      })
       await new Promise((resolve, reject) =>
-        this.$router.push({ query }, resolve, reject)
+        this.$router.push({ query: this.queryParams }, resolve, reject)
       )
       this.$fetch()
     },

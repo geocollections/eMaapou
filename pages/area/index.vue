@@ -92,6 +92,13 @@ export default Vue.extend({
         mdiMapMarkerRadiusOutline,
       }
     },
+    queryParams(): { [K: string]: any } {
+      return getQueryParams({
+        q: { key: qParamKey, value: this.$accessor.search.area.query },
+        filters: this.$accessor.search.area.filters.byIds,
+        tableOptions: this.options,
+      })
+    },
   },
   watch: {
     '$route.query': {
@@ -154,25 +161,17 @@ export default Vue.extend({
     },
     async handleFormUpdate() {
       this.options.page = 1
-      const query = getQueryParams({
-        q: { key: qParamKey, value: this.$accessor.search.area.query },
-        filters: this.$accessor.search.area.filters.byIds,
-        tableOptions: this.options,
-      })
+
       await new Promise((resolve, reject) =>
-        this.$router.push({ query }, resolve, reject)
+        this.$router.push({ query: this.queryParams }, resolve, reject)
       )
       this.$fetch()
     },
     async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
-      const query = getQueryParams({
-        q: { key: qParamKey, value: this.$accessor.search.area.query },
-        filters: this.$accessor.search.area.filters.byIds,
-        tableOptions: this.options,
-      })
+
       await new Promise((resolve, reject) =>
-        this.$router.push({ query }, resolve, reject)
+        this.$router.push({ query: this.queryParams }, resolve, reject)
       )
       this.$fetch()
     },
