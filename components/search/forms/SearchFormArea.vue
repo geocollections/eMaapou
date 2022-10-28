@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('area')">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <!--
@@ -27,16 +27,16 @@
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-export default {
+export default Vue.extend({
   name: 'SearchFormArea',
   components: {
     InputText,
@@ -79,7 +79,7 @@ export default {
     this.counties = countiesResponse.items
   },
   computed: {
-    ...mapState('search/area', ['filters', 'count', 'items']),
+    ...mapState('search/area', ['filters']),
     ...mapFields('search/area', {
       name: 'filters.byIds.name.value',
       county: 'filters.byIds.county.value',
@@ -89,18 +89,15 @@ export default {
     ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/area', ['searchAreas']),
+    handleReset() {
+      this.$emit('reset')
+    },
     handleSearch() {
-      this.searchAreas()
+      this.$emit('update')
     },
-    async handleReset() {
-      await this.resetFilters('area')
-      this.searchAreas()
-    },
-    handleMapUpdate(tableState) {
-      this.searchAreas(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
   },
-}
+})
 </script>

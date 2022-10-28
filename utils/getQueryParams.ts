@@ -41,7 +41,7 @@ export default ({
   return query
 }
 
-const serializeFilter = (filter: Filter): string | string[] => {
+const serializeFilter = (filter: Filter) => {
   if (filter.type === FilterType.Text) return filter.value
   else if (filter.type === FilterType.Range) {
     const start = filter.value[0] ?? '*'
@@ -52,6 +52,12 @@ const serializeFilter = (filter: Filter): string | string[] => {
   } else if (filter.type === FilterType.Object) {
     return JSON.stringify(filter.value)
   } else if (filter.type === FilterType.ListOr) {
+    return filter.value
+  } else if (filter.type === FilterType.RangeAlt) {
+    return filter.value
+  } else if (filter.type === FilterType.Boolean) {
+    return `${filter.value}`
+  } else {
     return filter.value
   }
 }

@@ -2,12 +2,10 @@ export enum FilterType {
   Range = 'range',
   Text = 'text',
   RangeAlt = 'range_alt',
-  Select = 'select', // NOTE: this is not used currently anywhere
   Object = 'object',
   List = 'list',
   ListOr = 'list_or',
   Boolean = 'boolean',
-  Raw = 'raw', // NOTE: this is not used currently anywhere
   Geom = 'geom',
 }
 

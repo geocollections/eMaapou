@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('analysis')">
       <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
       <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
@@ -17,7 +17,7 @@
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
@@ -47,7 +47,7 @@ export default Vue.extend({
     InputRange,
   },
   computed: {
-    ...mapState('search/analysis', ['filters', 'count', 'items']),
+    ...mapState('search/analysis', ['filters']),
     ...mapFields('search/analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
@@ -69,6 +69,10 @@ export default Vue.extend({
       this.$emit('update')
     },
     handleMapUpdate() {
+      this.$emit('update')
+    },
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
       this.$emit('update')
     },
   },

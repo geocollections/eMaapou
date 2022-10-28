@@ -62,7 +62,7 @@ export default ({
   return result
 }
 
-const parseFilterValue = (route: Route, key: string, filter: Filter): any => {
+const parseFilterValue = (route: Route, key: string, filter: Filter) => {
   if (filter.type === FilterType.Text) {
     return route.query[key] as string
   } else if (filter.type === FilterType.Range) {
@@ -76,6 +76,12 @@ const parseFilterValue = (route: Route, key: string, filter: Filter): any => {
   } else if (filter.type === FilterType.Object) {
     return JSON.parse(route.query[key] as string)
   } else if (filter.type === FilterType.ListOr) {
+    return route.query[key]
+  } else if (filter.type === FilterType.RangeAlt) {
+    return route.query[key]
+  } else if (filter.type === FilterType.Boolean) {
+    return route.query[key] === 'true'
+  } else {
     return route.query[key]
   }
 }

@@ -1,10 +1,16 @@
+import { IOptions } from '~/services'
+
 export * from './tabs'
 export * from './headers'
 export * from './chart'
 export * from './browse'
 export * from './services'
 
-export const ANALYSIS = {
+type ResourceDefaults = {
+  options: IOptions
+}
+
+export const ANALYSIS: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -13,7 +19,7 @@ export const ANALYSIS = {
   },
 }
 
-export const ANALYTICAL_DATA = {
+export const ANALYTICAL_DATA: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -22,7 +28,7 @@ export const ANALYTICAL_DATA = {
   },
 }
 
-export const AREA = {
+export const AREA: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -31,7 +37,7 @@ export const AREA = {
   },
 }
 
-export const DATASET_ANALYSIS = {
+export const DATASET_ANALYSIS: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -40,7 +46,7 @@ export const DATASET_ANALYSIS = {
   },
 }
 
-export const ATTACHMENT = {
+export const ATTACHMENT: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -49,7 +55,7 @@ export const ATTACHMENT = {
   },
 }
 
-export const ATTACHMENT_LINK = {
+export const ATTACHMENT_LINK: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -58,7 +64,7 @@ export const ATTACHMENT_LINK = {
   },
 }
 
-export const DATASET_AUTHORS = {
+export const DATASET_AUTHORS: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -67,7 +73,7 @@ export const DATASET_AUTHORS = {
   },
 }
 
-export const DATASET_GEOLOCATIONS = {
+export const DATASET_GEOLOCATIONS: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -76,7 +82,7 @@ export const DATASET_GEOLOCATIONS = {
   },
 }
 
-export const IMAGE = {
+export const IMAGE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -85,7 +91,7 @@ export const IMAGE = {
   },
 }
 
-export const SAMPLE = {
+export const SAMPLE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -94,7 +100,7 @@ export const SAMPLE = {
   },
 }
 
-export const SPECIMEN = {
+export const SPECIMEN: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -103,7 +109,7 @@ export const SPECIMEN = {
   },
 }
 
-export const LOCALITY_REFERENCE = {
+export const LOCALITY_REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -112,7 +118,7 @@ export const LOCALITY_REFERENCE = {
   },
 }
 
-export const DATASET_REFERENCE = {
+export const DATASET_REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -121,7 +127,7 @@ export const DATASET_REFERENCE = {
   },
 }
 
-export const STRATIGRAPHY_REFERENCE = {
+export const STRATIGRAPHY_REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -130,7 +136,7 @@ export const STRATIGRAPHY_REFERENCE = {
   },
 }
 
-export const SAMPLE_REFERENCE = {
+export const SAMPLE_REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -139,7 +145,7 @@ export const SAMPLE_REFERENCE = {
   },
 }
 
-export const SITE = {
+export const SITE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -148,7 +154,7 @@ export const SITE = {
   },
 }
 
-export const PREPARATION = {
+export const PREPARATION: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -157,7 +163,7 @@ export const PREPARATION = {
   },
 }
 
-export const LOCALITY = {
+export const LOCALITY: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -166,7 +172,7 @@ export const LOCALITY = {
   },
 }
 
-export const DRILLCORE = {
+export const DRILLCORE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -175,7 +181,7 @@ export const DRILLCORE = {
   },
 }
 
-export const STRATOTYPE = {
+export const STRATOTYPE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -184,7 +190,7 @@ export const STRATOTYPE = {
   },
 }
 
-export const SYNONYM = {
+export const SYNONYM: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -192,7 +198,7 @@ export const SYNONYM = {
     sortDesc: [],
   },
 }
-export const STRATIGRAPHY_SYNONYM = {
+export const STRATIGRAPHY_SYNONYM: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -201,7 +207,7 @@ export const STRATIGRAPHY_SYNONYM = {
   },
 }
 
-export const DESCRIPTION = {
+export const DESCRIPTION: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -210,7 +216,7 @@ export const DESCRIPTION = {
   },
 }
 
-export const TAXON_LIST = {
+export const TAXON_LIST: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -219,7 +225,7 @@ export const TAXON_LIST = {
   },
 }
 
-export const TAXON = {
+export const TAXON: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -228,7 +234,7 @@ export const TAXON = {
   },
 }
 
-export const ANALYSIS_RESULT = {
+export const ANALYSIS_RESULT: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -237,7 +243,7 @@ export const ANALYSIS_RESULT = {
   },
 }
 
-export const ROCK = {
+export const ROCK: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -246,7 +252,7 @@ export const ROCK = {
   },
 }
 
-export const DOI = {
+export const DOI: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -255,7 +261,7 @@ export const DOI = {
   },
 }
 
-export const DATASET = {
+export const DATASET: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -264,7 +270,7 @@ export const DATASET = {
   },
 }
 
-export const REFERENCE = {
+export const REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -273,7 +279,7 @@ export const REFERENCE = {
   },
 }
 
-export const STRATIGRAPHY = {
+export const STRATIGRAPHY: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -282,7 +288,7 @@ export const STRATIGRAPHY = {
   },
 }
 
-export const SPECIMEN_IDENTIFICATION = {
+export const SPECIMEN_IDENTIFICATION: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -291,7 +297,7 @@ export const SPECIMEN_IDENTIFICATION = {
   },
 }
 
-export const SPECIMEN_IDENTIFICATION_GEOLOGY = {
+export const SPECIMEN_IDENTIFICATION_GEOLOGY: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -300,7 +306,7 @@ export const SPECIMEN_IDENTIFICATION_GEOLOGY = {
   },
 }
 
-export const SPECIMEN_REFERENCE = {
+export const SPECIMEN_REFERENCE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
@@ -309,7 +315,7 @@ export const SPECIMEN_REFERENCE = {
   },
 }
 
-export const SAMPLE_DATA = {
+export const SAMPLE_DATA: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
