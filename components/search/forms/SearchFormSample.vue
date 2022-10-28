@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('sample')">
       <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
 
@@ -36,16 +36,17 @@
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
@@ -54,8 +55,7 @@ import InputText from '~/components/input/InputText.vue'
 import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormSample',
   components: {
     SearchInstitutionFilter,
@@ -68,7 +68,7 @@ export default {
     InputSearch,
   },
   computed: {
-    ...mapState('search/sample', ['filters', 'count', 'items']),
+    ...mapState('search/sample', ['filters', 'items']),
     ...mapFields('search/sample', {
       number: 'filters.byIds.number.value',
       locality: 'filters.byIds.locality.value',
@@ -88,18 +88,19 @@ export default {
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/sample', ['searchSamples']),
+    handleReset() {
+      this.$emit('reset')
+    },
     handleSearch() {
-      this.searchSamples()
+      this.$emit('update')
     },
-    async handleReset() {
-      await this.resetFilters('sample')
-      this.searchSamples()
+    handleMapUpdate() {
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchSamples(tableState?.options)
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
   },
-}
+})
 </script>
