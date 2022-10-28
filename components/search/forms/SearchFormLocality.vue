@@ -28,18 +28,18 @@
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
 import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormLocality',
   components: {
     InputText,
@@ -50,7 +50,7 @@ export default {
     InputSearch,
   },
   computed: {
-    ...mapState('search/locality', ['filters', 'count', 'items']),
+    ...mapState('search/locality', ['filters', 'items']),
     ...mapFields('search/locality', {
       name: 'filters.byIds.name.value',
       country: 'filters.byIds.country.value',
@@ -64,18 +64,15 @@ export default {
     ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/locality', ['searchLocalities']),
+    handleReset() {
+      this.$emit('reset')
+    },
     handleSearch() {
-      this.searchLocalities()
+      this.$emit('update')
     },
-    async handleReset() {
-      await this.resetFilters('locality')
-      this.searchLocalities()
-    },
-    handleMapUpdate(tableState) {
-      this.searchLocalities(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
   },
-}
+})
 </script>

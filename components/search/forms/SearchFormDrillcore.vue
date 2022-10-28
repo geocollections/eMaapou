@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('drillcore')">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text
@@ -55,7 +55,7 @@ export default Vue.extend({
     InputSearch,
   },
   computed: {
-    ...mapState('search/drillcore', ['filters', 'count', 'items']),
+    ...mapState('search/drillcore', ['filters', 'items']),
     ...mapFields('search/drillcore', {
       name: 'filters.byIds.name.value',
       repository: 'filters.byIds.repository.value',
