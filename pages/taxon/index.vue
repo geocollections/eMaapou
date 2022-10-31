@@ -165,30 +165,32 @@ export default Vue.extend({
     async handleFormReset() {
       this.options.page = 1
 
-      // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
-      await new Promise((resolve, reject) =>
-        this.$router.push(
-          { path: this.$route.path, query: {} },
-          resolve,
-          reject
+      if (!isEqual({}, this.$route.query)) {
+        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: {} }, resolve, reject)
         )
-      )
+      }
       await this.$accessor.search.taxon.resetFilters()
       this.$fetch()
     },
     async handleFormUpdate() {
       this.options.page = 1
 
-      await new Promise((resolve, reject) =>
-        this.$router.push({ query: this.queryParams }, resolve, reject)
-      )
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
       this.$fetch()
     },
     async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
-      await new Promise((resolve, reject) =>
-        this.$router.push({ query: this.queryParams }, resolve, reject)
-      )
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
       this.$fetch()
     },
   },

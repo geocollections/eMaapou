@@ -1,4 +1,4 @@
-import { searchModuleActions } from '../actions'
+import { searchModuleActions } from '../moduleActions'
 
 export default {
   ...searchModuleActions,
