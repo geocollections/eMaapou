@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('site')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text v-model="area" :label="$t(filters.byIds.area.label)" />
       <input-text v-model="project" :label="$t(filters.byIds.project.label)" />
@@ -49,7 +49,7 @@ export default Vue.extend({
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/site', ['hasActiveFilters']),
   },
   methods: {
     handleReset() {

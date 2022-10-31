@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('stratigraphy')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="number" :label="$t(filters.byIds.id.label)" />
 
       <input-autocomplete-stratigraphy
@@ -48,7 +48,7 @@ export default Vue.extend({
       age: 'filters.byIds.age.value',
       query: 'query',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/stratigraphy', ['hasActiveFilters']),
   },
   methods: {
     handleReset() {

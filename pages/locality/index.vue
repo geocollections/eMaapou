@@ -118,7 +118,7 @@ export default Vue.extend({
   watch: {
     '$route.query': {
       async handler() {
-        await this.$accessor.search.resetFilters('locality')
+        await this.$accessor.search.locality.resetFilters()
         this.setStateFromQueryParams()
         this.$fetch()
       },
@@ -175,7 +175,7 @@ export default Vue.extend({
           reject
         )
       )
-      await this.$accessor.search.resetFilters('locality')
+      await this.$accessor.search.locality.resetFilters()
       this.$fetch()
     },
     async handleFormUpdate() {

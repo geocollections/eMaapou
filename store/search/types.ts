@@ -1,6 +1,7 @@
 import { IOptions } from '~/services'
 import { Filter } from '~/types/filters'
 export type SearchModuleState = {
+  name: string
   items: any[]
   count: number
   useMap: boolean

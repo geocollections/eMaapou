@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('dataset')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text v-model="owner" :label="$t(filters.byIds.owner.label)" />
       <input-text v-model="date" :label="$t(filters.byIds.date.label)" />
@@ -78,7 +78,7 @@ export default Vue.extend({
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/dataset', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,

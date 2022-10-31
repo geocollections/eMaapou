@@ -107,7 +107,7 @@ export default Vue.extend({
   watch: {
     '$route.query': {
       async handler() {
-        await this.$accessor.search.resetFilters('area')
+        await this.$accessor.search.area.resetFilters()
         this.setStateFromQueryParams()
         this.$fetch()
       },
@@ -160,7 +160,7 @@ export default Vue.extend({
           reject
         )
       )
-      await this.$accessor.search.resetFilters('area')
+      await this.$accessor.search.area.resetFilters()
       this.$fetch()
     },
     async handleFormUpdate() {

@@ -118,7 +118,7 @@ export default Vue.extend({
   watch: {
     '$route.query': {
       async handler() {
-        await this.$accessor.search.resetFilters('taxon')
+        await this.$accessor.search.taxon.resetFilters()
         this.setStateFromQueryParams()
         this.$fetch()
       },
@@ -173,7 +173,7 @@ export default Vue.extend({
           reject
         )
       )
-      await this.$accessor.search.resetFilters('taxon')
+      await this.$accessor.search.taxon.resetFilters()
       this.$fetch()
     },
     async handleFormUpdate() {

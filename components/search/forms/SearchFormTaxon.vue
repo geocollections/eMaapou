@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('taxon')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="species" :label="$t(filters.byIds.species.label)" />
 
       <input-text
@@ -69,7 +69,7 @@ export default Vue.extend({
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/taxon', ['hasActiveFilters']),
   },
   methods: {
     handleReset() {

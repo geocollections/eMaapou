@@ -3,6 +3,7 @@ import { LOCALITY } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'locality',
     items: [],
     count: 0,
     options: LOCALITY.options,

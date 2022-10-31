@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('image')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
@@ -98,7 +98,7 @@ export default Vue.extend({
       institution: 'globalFilters.byIds.institutions.value',
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/image', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,

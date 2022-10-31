@@ -3,6 +3,7 @@ import { SPECIMEN } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'specimen',
     items: [],
     count: 0,
     options: SPECIMEN.options,

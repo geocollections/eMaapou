@@ -3,6 +3,7 @@ import { DRILLCORE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'drillcore',
     items: [],
     count: 0,
     options: DRILLCORE.options,

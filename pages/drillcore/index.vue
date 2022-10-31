@@ -122,7 +122,7 @@ export default Vue.extend({
   watch: {
     '$route.query': {
       async handler() {
-        await this.$accessor.search.resetFilters('drillcore')
+        await this.$accessor.search.drillcore.resetFilters()
         this.setStateFromQueryParams()
         this.$fetch()
       },
@@ -177,7 +177,7 @@ export default Vue.extend({
           reject
         )
       )
-      await this.$accessor.search.resetFilters('drillcore')
+      await this.$accessor.search.drillcore.resetFilters()
       this.$fetch()
     },
     async handleFormUpdate() {

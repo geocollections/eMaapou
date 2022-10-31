@@ -3,6 +3,7 @@ import { PREPARATION } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'preparation',
     items: [],
     count: 0,
     options: PREPARATION.options,

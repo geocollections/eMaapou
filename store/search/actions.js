@@ -6,17 +6,17 @@ import {
   RESET_MODULE_QUERY,
 } from '../mutation_types'
 
-export default {
-  async resetFilters({ commit }, module) {
-    const { initState } = await import(`/${module}/state`)
+export const searchModuleActions = {
+  async resetFilters({ commit, state }) {
+    const { initState } = await import(`/${state.name}/state`)
 
     const initStateObj = initState()
 
-    commit(RESET_MODULE_QUERY, { module, initQuery: initStateObj.query })
-    commit(RESET_MODULE_FILTERS, { module, initFilters: initStateObj.filters })
-    commit(RESET_MODULE_OPTIONS, { module, initOptions: initStateObj.options })
+    commit(RESET_MODULE_QUERY, { initQuery: initStateObj.query })
+    commit(RESET_MODULE_FILTERS, { initFilters: initStateObj.filters })
+    commit(RESET_MODULE_OPTIONS, { initOptions: initStateObj.options })
 
-    commit(RESET_GEOJSON)
-    commit(RESET_INSTITUTIONS)
+    commit(`search/${RESET_GEOJSON}`, null, { root: true })
+    commit(`search/${RESET_INSTITUTIONS}`, null, { root: true })
   },
 }

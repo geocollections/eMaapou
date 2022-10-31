@@ -3,7 +3,7 @@
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
 
-    <search-fields-wrapper :active="hasActiveFilters('analytical_data')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
           <input-text
@@ -197,7 +197,7 @@ export default {
       'parameterFilters',
     ]),
     ...mapGetters('search/analytical_data', ['parameterList']),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/analytical_data', ['hasActiveFilters']),
     ...mapFields('search/analytical_data', {
       locality: 'filters.byIds.locality.value',
       depth: 'filters.byIds.depth.value',

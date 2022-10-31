@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('area')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <!--
         NOTE: Search on estonian county names. These don't contain spaces and therefore don't break the search.
@@ -86,7 +86,7 @@ export default Vue.extend({
       type: 'filters.byIds.type.value',
       query: 'query',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/area', ['hasActiveFilters']),
   },
   methods: {
     handleReset() {

@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('analysis')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
       <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
     </search-fields-wrapper>
@@ -57,7 +57,7 @@ export default Vue.extend({
       institution: 'globalFilters.byIds.institutions.value',
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/analysis', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,

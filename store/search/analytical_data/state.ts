@@ -13,6 +13,7 @@ type AnalyticalDataSearchModuleState = SearchModuleState & {
 
 export const initState = (): AnalyticalDataSearchModuleState => {
   return {
+    name: 'analytical_data',
     items: [],
     count: 0,
     options: ANALYTICAL_DATA.options,
