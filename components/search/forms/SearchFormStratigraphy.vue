@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('stratigraphy')">
       <input-text v-model="number" :label="$t(filters.byIds.id.label)" />
 
@@ -18,17 +18,18 @@
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
 import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
-export default {
+export default Vue.extend({
   name: 'SearchFormStratigraphy',
   components: {
     InputText,
@@ -38,7 +39,7 @@ export default {
     InputSearch,
   },
   computed: {
-    ...mapState('search/stratigraphy', ['filters', 'count']),
+    ...mapState('search/stratigraphy', ['filters']),
     ...mapFields('search/stratigraphy', {
       number: 'filters.byIds.id.value',
       stratigraphy: 'filters.byIds.stratigraphy.value',
@@ -50,15 +51,12 @@ export default {
     ...mapGetters('search', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/stratigraphy', ['searchStratigraphies']),
-    handleSearch() {
-      this.searchStratigraphies()
+    handleReset() {
+      this.$emit('reset')
     },
-    async handleReset() {
-      await this.resetFilters('stratigraphy')
-      this.searchStratigraphies()
+    handleSearch() {
+      this.$emit('update')
     },
   },
-}
+})
 </script>
