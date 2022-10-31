@@ -553,17 +553,18 @@ export default Vue.extend({
             }
             const parameterValueStr = grid.id.split('-')[2]
             const parameterValue = parseInt(parameterValueStr)
+
             const xAxis = currentOption.xAxis.find(
               (xAxis: XAXisComponentOption) =>
-                (xAxis.id as string)?.endsWith(`-${parameterValueStr}`)
+                (xAxis?.id as string)?.endsWith(`-${parameterValueStr}`)
             )
             const yAxis = currentOption.yAxis.find(
               (yAxis: YAXisComponentOption) =>
-                (yAxis.id as string)?.endsWith(`-${parameterValueStr}`)
+                (yAxis?.id as string)?.endsWith(`-${parameterValueStr}`)
             )
             const series = currentOption.series.filter(
               (series: LineSeriesOption) =>
-                (series.id as string)?.endsWith(`-${parameterValueStr}`)
+                (series?.id as string)?.endsWith(`-${parameterValueStr}`)
             )
 
             // if one of the parameter methods removed but some method, for that parameter, still selected,
