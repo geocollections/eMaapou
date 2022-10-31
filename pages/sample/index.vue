@@ -5,7 +5,7 @@
     </template>
 
     <template #form>
-      <search-form-sample />
+      <search-form-sample @update="handleFormUpdate" @reset="handleFormReset" />
     </template>
 
     <template #result>
@@ -22,23 +22,28 @@
           dynamic-headers
           stateful-headers
           :is-loading="$fetchState.pending"
-          @update="handleUpdate"
+          @update="handleDataTableUpdate"
         />
       </v-card>
     </template>
   </search>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiTestTube } from '@mdi/js'
-import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
+import isEqual from 'lodash/isEqual'
 import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-
-export default {
+import getQueryParams from '~/utils/getQueryParams'
+import parseQueryParams from '~/utils/parseQueryParams'
+import { HEADERS_SAMPLE } from '~/constants'
+const qParamKey = 'sampleQ'
+export default Vue.extend({
   components: {
     Search,
     SearchFormSample,
@@ -46,16 +51,26 @@ export default {
     BaseHeader,
   },
   async fetch() {
-    await this.searchSamples(this.options)
+    const response = await this.$services.sarvSolr.getResourceList('sample', {
+      options: this.options,
+      search: this.query,
+      fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
+      searchFilters: {
+        ...this.$accessor.search.sample.filters.byIds,
+        ...this.$accessor.search.globalFilters.byIds,
+      },
+    })
+    this.items = response.items
+    this.count = response.count
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: this.$t('sample.pageTitle'),
+      title: this.$t('sample.pageTitle') as string,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.$t('sample.pageTitle'),
+          content: this.$t('sample.pageTitle') as string,
         },
         {
           property: 'og:url',
@@ -66,20 +81,112 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/sample', ['items', 'count']),
-    ...mapFields('search/sample', ['options']),
-    icons() {
+    ...mapFields('search/sample', {
+      query: 'query',
+      items: 'items',
+      count: 'count',
+      options: 'options',
+      number: 'filters.byIds.number.value',
+      locality: 'filters.byIds.locality.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      hierarchy: 'filters.byIds.hierarchy.value',
+      depth: 'filters.byIds.depth.value',
+      collector: 'filters.byIds.collector.value',
+      mass: 'filters.byIds.mass.value',
+      project: 'filters.byIds.project.value',
+    }),
+    icons(): any {
       return {
         mdiTestTube,
       }
     },
+    queryParams(): { [K: string]: any } {
+      return getQueryParams({
+        q: { key: qParamKey, value: this.$accessor.search.sample.query },
+        filters: this.$accessor.search.sample.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        tableOptions: this.options,
+      })
+    },
+  },
+  watch: {
+    '$route.query': {
+      async handler() {
+        await this.$accessor.search.sample.resetFilters()
+        this.setStateFromQueryParams()
+        this.$fetch()
+      },
+    },
+  },
+  created() {
+    // Add global filters and table options to query params, if they are missing
+    const query = getQueryParams({
+      globalFilters: this.$accessor.search.globalFilters.byIds,
+      // @ts-ignore
+      tableOptions: this.options,
+    })
+    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
+      this.$router.replace({ query: { ...query, ...this.$route.query } })
+
+    this.setStateFromQueryParams()
   },
   methods: {
-    ...mapActions('search/sample', ['searchSamples']),
-    handleUpdate(tableState) {
+    setStateFromQueryParams() {
+      const parsedValues = parseQueryParams({
+        route: this.$route,
+        filters: this.$accessor.search.sample.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        qKey: qParamKey,
+      })
+      this.query = parsedValues.query
+      if (parsedValues.filters) {
+        Object.keys(parsedValues.filters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.filters?.[key]
+        })
+      }
+      if (parsedValues.globalFilters) {
+        Object.keys(parsedValues.globalFilters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.globalFilters?.[key]
+        })
+      }
+      this.options = {
+        ...this.options,
+        ...parsedValues.options,
+      }
+    },
+    async handleFormReset() {
+      this.options.page = 1
+
+      if (!isEqual({}, this.$route.query)) {
+        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: {} }, resolve, reject)
+        )
+      }
+      await this.$accessor.search.sample.resetFilters()
+      this.$fetch()
+    },
+    async handleFormUpdate() {
+      this.options.page = 1
+
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
+      this.$fetch()
+    },
+    async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
       this.$fetch()
     },
   },
-}
+})
 </script>

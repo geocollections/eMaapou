@@ -15,4 +15,6 @@ declare module 'vuex-map-fields' {
   type Computed = () => any
 
   export const mapFields: Mapper<Computed> & MapperWithNamespace<Computed>
+  export const getField: any
+  export const updateField: any
 }

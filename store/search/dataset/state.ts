@@ -3,6 +3,7 @@ import { DATASET } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'dataset',
     items: [],
     count: 0,
     options: DATASET.options,

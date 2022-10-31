@@ -20,11 +20,5 @@ export default {
     SearchResetButton,
     SearchButton,
   },
-  props: {
-    count: {
-      type: Number,
-      default: 0,
-    },
-  },
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('analysis')">
+    <search-actions class="mb-3" @click="handleReset" />
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
       <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
     </search-fields-wrapper>
@@ -10,23 +10,24 @@
     <search-map
       :items="items"
       class="mt-2"
-      :active="geoJSON"
+      :active="geoJSON !== null"
       @update="handleMapUpdate"
     />
     <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
@@ -34,7 +35,7 @@ import InputText from '~/components/input/InputText.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import InputRange from '~/components/input/InputRange.vue'
-export default {
+export default Vue.extend({
   name: 'SearchFormAnalysis',
   components: {
     SearchInstitutionFilter,
@@ -46,7 +47,7 @@ export default {
     InputRange,
   },
   computed: {
-    ...mapState('search/analysis', ['filters', 'count', 'items']),
+    ...mapState('search/analysis', ['filters', 'items']),
     ...mapFields('search/analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
@@ -56,22 +57,23 @@ export default {
       institution: 'globalFilters.byIds.institutions.value',
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/analysis', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/analysis', ['searchAnalyses']),
-    async handleReset() {
-      await this.resetFilters('analysis')
-      this.searchAnalyses()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchAnalyses()
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchAnalyses(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
+    },
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
   },
-}
+})
 </script>

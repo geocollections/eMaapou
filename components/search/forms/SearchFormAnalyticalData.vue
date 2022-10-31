@@ -1,9 +1,9 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
 
-    <search-fields-wrapper :active="hasActiveFilters('analytical_data')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
           <input-text
@@ -138,7 +138,7 @@
           class="mt-2"
           :active="!isEmpty(institution)"
           :institution="institution"
-          @change:institution="institution = $event"
+          @change:institution="handleInstitutionsUpdate"
         />
       </v-col>
     </v-row>
@@ -192,13 +192,12 @@ export default {
   computed: {
     ...mapState('search/analytical_data', [
       'filters',
-      'count',
       'items',
       'parameters',
       'parameterFilters',
     ]),
     ...mapGetters('search/analytical_data', ['parameterList']),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/analytical_data', ['hasActiveFilters']),
     ...mapFields('search/analytical_data', {
       locality: 'filters.byIds.locality.value',
       depth: 'filters.byIds.depth.value',
@@ -221,9 +220,6 @@ export default {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
   },
-  created() {
-    this.fillAutocompleteLists()
-  },
   methods: {
     isEmpty,
     ...mapActions('search', ['resetFilters']),
@@ -235,21 +231,18 @@ export default {
       'removeParameterFilter',
     ]),
     ...mapActions('headers/analytical_data', ['removeHeader']),
-    async handleReset() {
-      await this.resetFilters('analytical_data')
-      this.searchAnalyticalData()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchAnalyticalData()
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchAnalyticalData(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
-    fillAutocompleteLists() {
-      if (this.stratigraphy)
-        this.autocomplete.chronostratigraphy.push(this.stratigraphy)
-      if (this.lithostratigraphy)
-        this.autocomplete.lithostratigraphy.push(this.lithostratigraphy)
+    handleInstitutionsUpdate(newInstitutions) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
     handleParameterUpdate(e, id) {
       this.updateParameterFilter({ id, filter: e })

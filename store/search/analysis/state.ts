@@ -4,6 +4,7 @@ import { FilterType, LookupType } from '~/types/enums'
 
 export const initState = (): SearchModuleState => {
   return {
+    name: 'analysis',
     items: [],
     count: 0,
     options: ANALYSIS.options,

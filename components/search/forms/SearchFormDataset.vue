@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('dataset')">
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text v-model="owner" :label="$t(filters.byIds.owner.label)" />
       <input-text v-model="date" :label="$t(filters.byIds.date.label)" />
@@ -18,24 +18,24 @@
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
 import InputText from '~/components/input/InputText.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import InputAutocompleteParameter from '~/components/input/InputAutocompleteParameter.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormDataset',
   components: {
     SearchInstitutionFilter,
@@ -59,7 +59,7 @@ export default {
           },
         })
       this.availableParameters = availableParametersResponse?.items.map(
-        (parameter) => {
+        (parameter: any) => {
           return { text: parameter.parameter, value: parameter.parameter_index }
         }
       )
@@ -78,22 +78,23 @@ export default {
     ...mapFields('search', {
       institution: 'globalFilters.byIds.institutions.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/dataset', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/dataset', ['searchDatasets']),
-    async handleReset() {
-      await this.resetFilters('dataset')
-      this.searchDatasets()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchDatasets()
+      this.$emit('update')
     },
-    handleParameterInput(e) {
+    handleParameterInput(e: any) {
       this.parameters = e
     },
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
+      this.$emit('update')
+    },
   },
-}
+})
 </script>

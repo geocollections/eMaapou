@@ -11,6 +11,7 @@ import type { IOptions } from '.'
 
 import { FilterType, LookupType } from '~/types/enums'
 import { Filter } from '~/types/filters'
+import isFilterValid from '~/utils/isFilterValid'
 export default ($axios: NuxtAxiosInstance) => ({
   async getResourceList(
     resource: string,
@@ -21,7 +22,7 @@ export default ($axios: NuxtAxiosInstance) => ({
       options,
       searchFilters = {},
     }: {
-      options: IOptions
+      options?: IOptions
       search?: string | null
       fields?: { [key: string]: string }
       defaultParams?: { [key: string]: any }
@@ -32,8 +33,8 @@ export default ($axios: NuxtAxiosInstance) => ({
       ...defaultParams,
       ...buildSolrQueryParameter(search),
       ...buildSolrParameters(searchFilters),
-      ...buildSolrPaginationParameters(options),
-      ...buildSolrSortParameter(options, fields),
+      ...(options && buildSolrPaginationParameters(options)),
+      ...(options && buildSolrSortParameter(options, fields)),
     }
 
     const response = await $axios.$get(`solr/${resource}`, {
@@ -107,20 +108,19 @@ const buildSolrQueryParameter = (search: string | null) => {
 }
 
 const buildSolrPaginationParameters = (options: IOptions) => {
-  if (options?.page && options?.itemsPerPage) {
-    return {
-      start: (options.page - 1) * options.itemsPerPage,
-      rows: options.itemsPerPage,
-    }
+  if (!(options.page && options.itemsPerPage)) return null
+
+  return {
+    start: (options.page - 1) * options.itemsPerPage,
+    rows: options.itemsPerPage,
   }
-  return null
 }
 
 const buildSolrSortParameter = (
   options: IOptions,
   fields: { [key: string]: string }
 ) => {
-  if (!(options?.sortBy && options?.sortDesc)) return null
+  if (!(options.sortBy && options.sortDesc)) return null
 
   const orderBy = options.sortBy
     .map((field, i) => {
@@ -132,7 +132,8 @@ const buildSolrSortParameter = (
             options.sortDesc?.[i] ? `${item} desc` : `${item} asc`
           )
           .join()
-      } else return options.sortDesc?.[i] ? `${field} desc` : `${field} asc`
+      }
+      return options.sortDesc?.[i] ? `${field} desc` : `${field} asc`
     })
     .filter((item) => item)
 
@@ -162,18 +163,6 @@ const createSolrFieldQuery = (
     default:
       return `${field}:${value}`
   }
-}
-const isFilterValid = (filter: Filter): boolean => {
-  if (filter.type === FilterType.Range)
-    return !(isNil(filter.value[0]) && isNil(filter.value[1]))
-  if (filter.type === FilterType.Text || filter.type === FilterType.RangeAlt)
-    return filter.value?.trim().length > 0
-  if (filter.type === FilterType.Object)
-    return filter.value?.[filter.searchField]
-  if (filter.type === FilterType.List || filter.type === FilterType.ListOr)
-    return !isEmpty(filter.value)
-  if (filter.type === FilterType.Boolean) return filter.value
-  return filter.value !== null
 }
 
 const buildSolrParameters = (filters: { [key: string]: Filter }) => {

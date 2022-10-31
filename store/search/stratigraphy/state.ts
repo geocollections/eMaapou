@@ -3,6 +3,7 @@ import { STRATIGRAPHY } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'stratigraphy',
     items: [],
     count: 0,
     options: STRATIGRAPHY.options,

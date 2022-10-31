@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import actions from './actions'
 import getters from './getters'
 import mutations from './mutations'
 import { initState as state } from './state'
@@ -17,7 +16,6 @@ import stratigraphy from './stratigraphy'
 import dataset from './dataset'
 import taxon from './taxon'
 export default {
-  actions,
   getters,
   mutations,
   state,

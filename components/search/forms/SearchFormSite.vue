@@ -1,8 +1,8 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('site')">
+    <search-actions class="mb-3" @click="handleReset" />
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text v-model="area" :label="$t(filters.byIds.area.label)" />
       <input-text v-model="project" :label="$t(filters.byIds.project.label)" />
@@ -17,17 +17,17 @@
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
-
+import Vue from 'vue'
 import InputText from '../../input/InputText.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 
-export default {
+export default Vue.extend({
   name: 'SearchFormSite',
   components: {
     InputText,
@@ -37,7 +37,7 @@ export default {
     InputSearch,
   },
   computed: {
-    ...mapState('search/site', ['filters', 'count', 'items']),
+    ...mapState('search/site', ['filters', 'items']),
     ...mapFields('search/site', {
       name: 'filters.byIds.name.value',
       latitude: 'filters.byIds.latitude.value',
@@ -49,21 +49,18 @@ export default {
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/site', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/site', ['searchSites']),
+    handleReset() {
+      this.$emit('reset')
+    },
     handleSearch() {
-      this.searchSites()
+      this.$emit('update')
     },
-    async handleReset() {
-      await this.resetFilters('site')
-      this.searchSites()
-    },
-    async handleMapUpdate(tableState) {
-      await this.searchSites(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
   },
-}
+})
 </script>

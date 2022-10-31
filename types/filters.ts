@@ -40,9 +40,14 @@ type BooleanFilter = {
 }
 
 type ListFilter = {
-  type: FilterType.List | FilterType.ListOr
+  type: FilterType.List
   value: any[]
   label: string
+  fields: string[]
+}
+type ListOrFilter = {
+  type: FilterType.ListOr
+  value: any[]
   fields: string[]
 }
 
@@ -59,4 +64,5 @@ export type Filter =
   | ObjectFilter
   | BooleanFilter
   | ListFilter
+  | ListOrFilter
   | GeomFilter

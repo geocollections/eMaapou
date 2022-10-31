@@ -5,7 +5,10 @@
     </template>
 
     <template #form>
-      <search-form-analysis />
+      <search-form-analysis
+        @update="handleFormUpdate"
+        @reset="handleFormReset"
+      />
     </template>
 
     <template #result>
@@ -21,22 +24,28 @@
           stateful-headers
           dynamic-headers
           :is-loading="$fetchState.pending"
-          @update="handleUpdate"
+          @update="handleDataTableUpdate"
         />
       </v-card>
     </template>
   </search>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex'
+<script lang="ts">
 import { mapFields } from 'vuex-map-fields'
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
+import isEqual from 'lodash/isEqual'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
+import { HEADERS_ANALYSIS } from '~/constants'
+import parseQueryParams from '~/utils/parseQueryParams'
+import getQueryParams from '~/utils/getQueryParams'
+const qParamKey = 'analysisQ'
 
-export default {
+export default Vue.extend({
   name: 'AnalysisSearch',
   components: {
     Search,
@@ -45,15 +54,25 @@ export default {
     BaseHeader,
   },
   async fetch() {
-    await this.searchAnalyses(this.options)
+    const response = await this.$services.sarvSolr.getResourceList('analysis', {
+      options: this.options,
+      search: this.query,
+      fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
+      searchFilters: {
+        ...this.$accessor.search.analysis.filters.byIds,
+        ...this.$accessor.search.globalFilters.byIds,
+      },
+    })
+    this.items = response.items
+    this.count = response.count
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: this.$t('analysis.pageTitle'),
+      title: this.$t('analysis.pageTitle') as string,
       meta: [
         {
           property: 'og:title',
-          content: this.$t('analysis.pageTitle'),
+          content: this.$t('analysis.pageTitle') as string,
           hid: 'og:title',
         },
         {
@@ -65,15 +84,107 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/analysis', ['items', 'count']),
-    ...mapFields('search/analysis', ['options']),
+    ...mapFields('search/analysis', {
+      query: 'query',
+      items: 'items',
+      count: 'count',
+      options: 'options',
+      id: 'filters.byIds.id.value',
+      depth: 'filters.byIds.depth.value',
+    }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+      institutions: 'globalFilters.byIds.institutions.value',
+    }),
+    queryParams(): { [K: string]: any } {
+      return getQueryParams({
+        q: { key: qParamKey, value: this.$accessor.search.analysis.query },
+        filters: this.$accessor.search.analysis.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        tableOptions: this.options,
+      })
+    },
+  },
+  watch: {
+    '$route.query': {
+      async handler() {
+        await this.$accessor.search.analysis.resetFilters()
+        this.setStateFromQueryParams()
+        this.$fetch()
+      },
+    },
+  },
+  created() {
+    // Add global filters and table options to query params, if they are missing
+    const query = getQueryParams({
+      globalFilters: this.$accessor.search.globalFilters.byIds,
+      // @ts-ignore
+      tableOptions: this.options,
+    })
+    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
+      this.$router.replace({ query: { ...query, ...this.$route.query } })
+
+    this.setStateFromQueryParams()
   },
   methods: {
-    ...mapActions('search/analysis', ['searchAnalyses']),
-    handleUpdate(tableState) {
+    // TODO: Each of the search views has a copy of this function. Find a way to extract it and import it. If possible avoid mixins.
+    setStateFromQueryParams() {
+      const parsedValues = parseQueryParams({
+        route: this.$route,
+        filters: this.$accessor.search.analysis.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        qKey: qParamKey,
+      })
+      this.query = parsedValues.query
+      if (parsedValues.filters) {
+        Object.keys(parsedValues.filters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.filters?.[key]
+        })
+      }
+      if (parsedValues.globalFilters) {
+        Object.keys(parsedValues.globalFilters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.globalFilters?.[key]
+        })
+      }
+      this.options = {
+        ...this.options,
+        ...parsedValues.options,
+      }
+    },
+    async handleFormReset() {
+      this.options.page = 1
+
+      if (!isEqual({}, this.$route.query)) {
+        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: {} }, resolve, reject)
+        )
+      }
+      await this.$accessor.search.analysis.resetFilters()
+      this.$fetch()
+    },
+    async handleFormUpdate() {
+      this.options.page = 1
+
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
+      this.$fetch()
+    },
+    async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
+
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
       this.$fetch()
     },
   },
-}
+})
 </script>

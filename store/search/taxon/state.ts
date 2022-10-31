@@ -3,6 +3,7 @@ import { TAXON } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 export const initState = (): SearchModuleState => {
   return {
+    name: 'taxon',
     items: [],
     count: 0,
     options: TAXON.options,

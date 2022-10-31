@@ -8,7 +8,10 @@
     </template>
 
     <template #form>
-      <search-form-stratigraphy />
+      <search-form-stratigraphy
+        @update="handleFormUpdate"
+        @reset="handleFormReset"
+      />
     </template>
 
     <template #result>
@@ -25,23 +28,29 @@
           dynamic-headers
           stateful-headers
           :is-loading="$fetchState.pending"
-          @update="handleUpdate"
+          @update="handleDataTableUpdate"
         />
       </v-card>
     </template>
   </search>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiLayersTriple } from '@mdi/js'
-import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
+import isEqual from 'lodash/isEqual'
 import Search from '~/templates/Search.vue'
 import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
+import parseQueryParams from '~/utils/parseQueryParams'
+import getQueryParams from '~/utils/getQueryParams'
+import { HEADERS_STRATIGRAPHY } from '~/constants'
+const qParamKey = 'stratigraphyQ'
 
-export default {
+export default Vue.extend({
   components: {
     Search,
     SearchFormStratigraphy,
@@ -49,16 +58,28 @@ export default {
     BaseHeader,
   },
   async fetch() {
-    await this.searchStratigraphies(this.options)
+    const response = await this.$services.sarvSolr.getResourceList(
+      'stratigraphy',
+      {
+        options: this.options,
+        search: this.query,
+        fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY),
+        searchFilters: {
+          ...this.$accessor.search.stratigraphy.filters.byIds,
+        },
+      }
+    )
+    this.items = response.items
+    this.count = response.count
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: this.$t('stratigraphy.pageTitle'),
+      title: this.$t('stratigraphy.pageTitle').toString(),
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.$t('stratigraphy.pageTitle'),
+          content: this.$t('stratigraphy.pageTitle').toString(),
         },
         {
           property: 'og:url',
@@ -69,20 +90,106 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/stratigraphy', ['items', 'count']),
-    ...mapFields('search/stratigraphy', ['options']),
-    icons() {
+    ...mapFields('search/stratigraphy', {
+      query: 'query',
+      items: 'items',
+      count: 'count',
+      options: 'options',
+      number: 'filters.byIds.id.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      hierarchy: 'filters.byIds.hierarchy.value',
+      index: 'filters.byIds.index.value',
+      age: 'filters.byIds.age.value',
+    }),
+    icons(): any {
       return {
         mdiLayersTriple,
       }
     },
+    queryParams(): { [K: string]: any } {
+      return getQueryParams({
+        q: { key: qParamKey, value: this.$accessor.search.stratigraphy.query },
+        filters: this.$accessor.search.stratigraphy.filters.byIds,
+        tableOptions: this.options,
+      })
+    },
+  },
+  watch: {
+    '$route.query': {
+      async handler() {
+        await this.$accessor.search.stratigraphy.resetFilters()
+        this.setStateFromQueryParams()
+        this.$fetch()
+      },
+    },
+  },
+  created() {
+    // Add  table options to query params, if they are missing
+    const query = getQueryParams({
+      // @ts-ignore
+      tableOptions: this.options,
+    })
+    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
+      this.$router.replace({ query: { ...query, ...this.$route.query } })
+
+    this.setStateFromQueryParams()
   },
   methods: {
-    ...mapActions('search/stratigraphy', ['searchStratigraphies']),
-    handleUpdate(tableState) {
+    setStateFromQueryParams() {
+      const parsedValues = parseQueryParams({
+        route: this.$route,
+        filters: this.$accessor.search.stratigraphy.filters.byIds,
+        qKey: qParamKey,
+      })
+      this.query = parsedValues.query
+      if (parsedValues.filters) {
+        Object.keys(parsedValues.filters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.filters?.[key]
+        })
+      }
+      if (parsedValues.globalFilters) {
+        Object.keys(parsedValues.globalFilters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.globalFilters?.[key]
+        })
+      }
+      this.options = {
+        ...this.options,
+        ...parsedValues.options,
+      }
+    },
+    async handleFormReset() {
+      this.options.page = 1
+
+      if (!isEqual({}, this.$route.query)) {
+        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: {} }, resolve, reject)
+        )
+      }
+      await this.$accessor.search.stratigraphy.resetFilters()
+      this.$fetch()
+    },
+    async handleFormUpdate() {
+      this.options.page = 1
+
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
+      this.$fetch()
+    },
+    async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
       this.$fetch()
     },
   },
-}
+})
 </script>

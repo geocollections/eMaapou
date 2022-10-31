@@ -1,8 +1,8 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('preparation')">
+    <search-actions class="mb-3" @click="handleReset" />
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
       <input-text
         v-model="locality"
@@ -27,16 +27,17 @@
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
@@ -45,8 +46,7 @@ import InputRange from '~/components/input/InputRange.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormPreparation',
   components: {
     SearchInstitutionFilter,
@@ -59,7 +59,7 @@ export default {
     InputSearch,
   },
   computed: {
-    ...mapState('search/preparation', ['filters', 'count', 'items']),
+    ...mapState('search/preparation', ['filters', 'items']),
     ...mapFields('search/preparation', {
       number: 'filters.byIds.number.value',
       depth: 'filters.byIds.depth.value',
@@ -71,22 +71,23 @@ export default {
       institution: 'globalFilters.byIds.institutions.value',
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/preparation', ['hasActiveFilters']),
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/preparation', ['searchPreparations']),
-    async handleReset() {
-      await this.resetFilters('preparation')
-      this.searchPreparations()
+    handleReset() {
+      this.$emit('reset')
     },
     handleSearch() {
-      this.searchPreparations()
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchPreparations(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
+    },
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
   },
-}
+})
 </script>

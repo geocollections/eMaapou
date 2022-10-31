@@ -8,7 +8,10 @@
     </template>
 
     <template #form>
-      <search-form-locality />
+      <search-form-locality
+        @update="handleFormUpdate"
+        @reset="handleFormReset"
+      />
     </template>
 
     <template #result>
@@ -24,23 +27,28 @@
           dynamic-headers
           :is-loading="$fetchState.pending"
           stateful-headers
-          @update="handleUpdate"
+          @update="handleDataTableUpdate"
         />
       </v-card>
     </template>
   </search>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiMapMarkerOutline } from '@mdi/js'
-import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
+import isEqual from 'lodash/isEqual'
 import SearchFormLocality from '~/components/search/forms/SearchFormLocality.vue'
 import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-
-export default {
+import getQueryParams from '~/utils/getQueryParams'
+import parseQueryParams from '~/utils/parseQueryParams'
+import { HEADERS_LOCALITY } from '~/constants'
+const qParamKey = 'localityQ'
+export default Vue.extend({
   components: {
     Search,
     DataTableLocality,
@@ -48,16 +56,26 @@ export default {
     BaseHeader,
   },
   async fetch() {
-    await this.searchLocalities(this.options)
+    const response = await this.$services.sarvSolr.getResourceList('locality', {
+      options: this.options,
+      search: this.query,
+      fields: this.$getAPIFieldValues(HEADERS_LOCALITY),
+      searchFilters: {
+        ...this.$accessor.search.locality.filters.byIds,
+        ...{ geoJSON: this.$accessor.search.globalFilters.byIds.geoJSON },
+      },
+    })
+    this.items = response.items
+    this.count = response.count
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: this.$t('locality.pageTitle'),
+      title: this.$t('locality.pageTitle') as string,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.$t('locality.pageTitle'),
+          content: this.$t('locality.pageTitle') as string,
         },
         {
           property: 'og:url',
@@ -68,20 +86,115 @@ export default {
     }
   },
   computed: {
-    ...mapState('search/locality', ['items', 'count']),
-    ...mapFields('search/locality', ['options']),
-    icons() {
+    ...mapFields('search/locality', {
+      options: 'options',
+      items: 'items',
+      count: 'count',
+      query: 'query',
+      name: 'filters.byIds.name.value',
+      country: 'filters.byIds.country.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
+      reference: 'filters.byIds.reference.value',
+    }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+    }),
+    icons(): any {
       return {
         mdiMapMarkerOutline,
       }
     },
+    queryParams(): { [K: string]: any } {
+      return getQueryParams({
+        q: { key: qParamKey, value: this.$accessor.search.locality.query },
+        filters: this.$accessor.search.locality.filters.byIds,
+        globalFilters: {
+          geoJSON: this.$accessor.search.globalFilters.byIds.geoJSON,
+        },
+        tableOptions: this.options,
+      })
+    },
+  },
+  watch: {
+    '$route.query': {
+      async handler() {
+        await this.$accessor.search.locality.resetFilters()
+        this.setStateFromQueryParams()
+        this.$fetch()
+      },
+    },
+  },
+  created() {
+    // Add global filters and table options to query params, if they are missing
+    const query = getQueryParams({
+      globalFilters: {
+        geoJSON: this.$accessor.search.globalFilters.byIds.geoJSON,
+      },
+      // @ts-ignore
+      tableOptions: this.options,
+    })
+    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
+      this.$router.replace({ query: { ...query, ...this.$route.query } })
+
+    this.setStateFromQueryParams()
   },
   methods: {
-    ...mapActions('search/locality', ['searchLocalities']),
-    handleUpdate(tableState) {
+    setStateFromQueryParams() {
+      const parsedValues = parseQueryParams({
+        route: this.$route,
+        filters: this.$accessor.search.locality.filters.byIds,
+        globalFilters: this.$accessor.search.globalFilters.byIds,
+        qKey: qParamKey,
+      })
+      this.query = parsedValues.query
+      if (parsedValues.filters) {
+        Object.keys(parsedValues.filters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.filters?.[key]
+        })
+      }
+      if (parsedValues.globalFilters) {
+        Object.keys(parsedValues.globalFilters).forEach((key) => {
+          // @ts-ignore
+          this[key] = parsedValues.globalFilters?.[key]
+        })
+      }
+      this.options = {
+        ...this.options,
+        ...parsedValues.options,
+      }
+    },
+    async handleFormReset() {
+      this.options.page = 1
+
+      if (!isEqual({}, this.$route.query)) {
+        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: {} }, resolve, reject)
+        )
+      }
+      await this.$accessor.search.locality.resetFilters()
+      this.$fetch()
+    },
+    async handleFormUpdate() {
+      this.options.page = 1
+
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
+      this.$fetch()
+    },
+    async handleDataTableUpdate(tableState: any) {
       this.options = tableState.options
+      if (!isEqual(this.queryParams, this.$route.query)) {
+        await new Promise((resolve, reject) =>
+          this.$router.push({ query: this.queryParams }, resolve, reject)
+        )
+      }
       this.$fetch()
     },
   },
-}
+})
 </script>

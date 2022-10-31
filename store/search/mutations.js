@@ -11,6 +11,30 @@ import {
   SET_MODULE_OPTIONS,
 } from '../mutation_types'
 
+export const searchModuleMutations = {
+  [SET_MODULE_ITEMS](state, { items }) {
+    state.items = items
+  },
+  [SET_MODULE_COUNT](state, { count }) {
+    state.count = count
+  },
+  [SET_MODULE_OPTIONS](state, { options }) {
+    state.options = options
+  },
+  [RESET_MODULE_QUERY](state, { initQuery }) {
+    state.query = initQuery
+  },
+  [RESET_MODULE_FILTERS](state, { initFilters }) {
+    state.filters = initFilters
+  },
+  [RESET_MODULE_OPTIONS](state, { initOptions }) {
+    state.options = {
+      ...state.options,
+      page: initOptions.page,
+    }
+  },
+}
+
 export default {
   updateField,
   [SET_MODULE_ITEMS](state, { module, items }) {

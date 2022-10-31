@@ -11,6 +11,7 @@ type ImageSearchModuleState = SearchModuleState & {
 
 export const initState = (): ImageSearchModuleState => {
   return {
+    name: 'image',
     items: [],
     count: 0,
     options: IMAGE.options,

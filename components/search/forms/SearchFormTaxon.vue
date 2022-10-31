@@ -1,8 +1,8 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters('taxon')">
+    <search-actions class="mb-3" @click="handleReset" />
+    <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="species" :label="$t(filters.byIds.species.label)" />
 
       <input-text
@@ -33,10 +33,11 @@
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputText from '~/components/input/InputText.vue'
@@ -44,8 +45,7 @@ import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteS
 import InputAutocompleteTaxon from '~/components/input/InputAutocompleteTaxon.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormTaxon',
   components: {
     InputAutocompleteStratigraphy,
@@ -57,7 +57,7 @@ export default {
     InputSearch,
   },
   computed: {
-    ...mapState('search/taxon', ['filters', 'count', 'items']),
+    ...mapState('search/taxon', ['filters', 'items']),
     ...mapFields('search/taxon', {
       species: 'filters.byIds.species.value',
       locality: 'filters.byIds.locality.value',
@@ -69,21 +69,18 @@ export default {
     ...mapFields('search', {
       geoJSON: 'globalFilters.byIds.geoJSON.value',
     }),
-    ...mapGetters('search', ['hasActiveFilters']),
+    ...mapGetters('search/taxon', ['hasActiveFilters']),
   },
   methods: {
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/taxon', ['searchTaxa']),
+    handleReset() {
+      this.$emit('reset')
+    },
     handleSearch() {
-      this.searchTaxa()
+      this.$emit('update')
     },
-    async handleReset() {
-      await this.resetFilters('taxon')
-      this.searchTaxa()
-    },
-    handleMapUpdate(tableState) {
-      this.searchTaxa(tableState?.options)
+    handleMapUpdate() {
+      this.$emit('update')
     },
   },
-}
+})
 </script>
