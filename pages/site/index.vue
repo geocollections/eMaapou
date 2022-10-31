@@ -98,6 +98,9 @@ export default Vue.extend({
       area: 'filters.byIds.area.value',
       project: 'filters.byIds.project.value',
     }),
+    ...mapFields('search', {
+      geoJSON: 'globalFilters.byIds.geoJSON.value',
+    }),
     icons(): any {
       return {
         mdiMapMarkerStarOutline,

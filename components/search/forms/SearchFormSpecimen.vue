@@ -1,7 +1,7 @@
 <template>
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
-    <search-actions class="mb-3" :count="count" @click="handleReset" />
+    <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="hasActiveFilters('specimen')">
       <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
 
@@ -60,16 +60,17 @@
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
-      @change:institution="institution = $event"
+      @change:institution="handleInstitutionsUpdate"
     />
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script lang="ts">
+import { mapState, mapGetters } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
+import Vue from 'vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
@@ -80,8 +81,7 @@ import InputCheckbox from '~/components/input/InputCheckbox.vue'
 import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import InputAutocompleteTaxon from '~/components/input/InputAutocompleteTaxon.vue'
 import InputAutocompleteReference from '~/components/input/InputAutocompleteReference.vue'
-
-export default {
+export default Vue.extend({
   name: 'SearchFormSpecimen',
   components: {
     InputCheckbox,
@@ -96,7 +96,7 @@ export default {
     InputAutocompleteReference,
   },
   computed: {
-    ...mapState('search/specimen', ['filters', 'count', 'items']),
+    ...mapState('search/specimen', ['filters', 'items']),
     ...mapFields('search/specimen', {
       number: 'filters.byIds.number.value',
       collectionNr: 'filters.byIds.collectionNr.value',
@@ -119,18 +119,19 @@ export default {
   },
   methods: {
     isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/specimen', ['searchSpecimens']),
+    handleReset() {
+      this.$emit('reset')
+    },
     handleSearch() {
-      this.searchSpecimens()
+      this.$emit('update')
     },
-    async handleReset() {
-      await this.resetFilters('specimen')
-      this.searchSpecimens()
+    handleMapUpdate() {
+      this.$emit('update')
     },
-    handleMapUpdate(tableState) {
-      this.searchSpecimens(tableState?.options)
+    handleInstitutionsUpdate(newInstitutions: any[]) {
+      this.institution = newInstitutions
+      this.$emit('update')
     },
   },
-}
+})
 </script>
