@@ -10,6 +10,7 @@ export default (filter: Filter): boolean => {
     return filter.value?.trim().length > 0
   if (filter.type === FilterType.Object)
     return (
+      // @ts-ignore
       filter.value !== null && Object.hasOwn(filter.value, filter.searchField)
     )
   if (filter.type === FilterType.List || filter.type === FilterType.ListOr)

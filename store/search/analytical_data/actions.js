@@ -1,5 +1,4 @@
 import uniqueId from 'lodash/uniqueId'
-import { ANALYTICAL_DATA, HEADERS_ANALYTICAL_DATA } from '~/constants'
 import {
   ADD_PARAMETER_FILTER,
   REMOVE_PARAMETER_FILTER,
@@ -49,22 +48,6 @@ export default {
   },
   removeParameterFilter({ commit }, id) {
     commit(REMOVE_PARAMETER_FILTER, id)
-  },
-
-  async searchAnalyticalData({ dispatch }, options = null) {
-    await dispatch(
-      'search/searchResource',
-      {
-        ...(options && { options }),
-        module: 'analytical_data',
-        resource: 'analytical_data',
-        resourceDefaults: {
-          ...ANALYTICAL_DATA,
-          headers: HEADERS_ANALYTICAL_DATA,
-        },
-      },
-      { root: true }
-    )
   },
   setParameters({ commit, dispatch }, { parameters }) {
     let parametersNew = {}
