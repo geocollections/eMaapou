@@ -14,15 +14,19 @@
 
     <template #result>
       <div class="py-1 pl-2 text-h6">
-        {{ count ? $tc('common.count', count) : '&nbsp;' }}
+        {{
+          $accessor.search.taxon.count
+            ? $tc('common.count', $accessor.search.taxon.count)
+            : '&nbsp;'
+        }}
       </div>
 
       <v-card>
         <data-table-taxon
           :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
+          :items="$accessor.search.taxon.items"
+          :count="$accessor.search.taxon.count"
+          :options="$accessor.search.taxon.options"
           stateful-headers
           dynamic-headers
           :is-loading="$fetchState.pending"
@@ -34,40 +38,66 @@
 </template>
 
 <script lang="ts">
+import {
+  defineComponent,
+  useFetch,
+  wrapProperty,
+  computed,
+} from '@nuxtjs/composition-api'
 import { mdiFamilyTree } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
-import Vue from 'vue'
-import { MetaInfo } from 'vue-meta'
-import isEqual from 'lodash/isEqual'
 import Search from '~/templates/Search.vue'
 import SearchFormTaxon from '~/components/search/forms/SearchFormTaxon.vue'
 import DataTableTaxon from '~/components/data-table/DataTableTaxon.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import parseQueryParams from '~/utils/parseQueryParams'
-import getQueryParams from '~/utils/getQueryParams'
 import { HEADERS_TAXON } from '~/constants'
-const qParamKey = 'taxonQ'
-export default Vue.extend({
+import { useAccessor } from '~/composables/useAccessor'
+import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
+
+const useServices = wrapProperty('$services', false)
+const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
+export default defineComponent({
   components: {
     Search,
     SearchFormTaxon,
     DataTableTaxon,
     BaseHeader,
   },
-  async fetch() {
-    const response = await this.$services.sarvSolr.getResourceList('taxon', {
-      options: this.options,
-      search: this.query,
-      fields: this.$getAPIFieldValues(HEADERS_TAXON),
-      searchFilters: {
-        ...this.$accessor.search.taxon.filters.byIds,
-        ...this.$accessor.search.globalFilters.byIds,
-      },
+  setup() {
+    const accessor = useAccessor()
+    const services = useServices()
+    const getAPIFieldValues = useGetAPIFieldValues()
+    const { fetch } = useFetch(async () => {
+      const response = await services.sarvSolr.getResourceList('taxon', {
+        options: accessor.search.taxon.options,
+        search: accessor.search.taxon.query,
+        fields: getAPIFieldValues(HEADERS_TAXON),
+        searchFilters: {
+          ...accessor.search.taxon.filters.byIds,
+          ...accessor.search.globalFilters.byIds,
+        },
+      })
+      accessor.search.taxon.SET_MODULE_ITEMS({ items: response.items })
+      accessor.search.taxon.SET_MODULE_COUNT({ count: response.count })
     })
-    this.items = response.items
-    this.count = response.count
+    const filters = computed(() => accessor.search.taxon.filters.byIds)
+    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+
+    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
+      useSearchQueryParams({
+        module: 'taxon',
+        qParamKey: 'taxonQ',
+        filters: filters.value,
+        globalFilters: globalFilters.value,
+        fetch,
+      })
+
+    return {
+      handleFormReset,
+      handleFormUpdate,
+      handleDataTableUpdate,
+    }
   },
-  head(): MetaInfo {
+  head() {
     return {
       title: this.$t('taxon.pageTitle').toString(),
       meta: [
@@ -85,113 +115,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapFields('search/taxon', {
-      query: 'query',
-      items: 'items',
-      count: 'count',
-      options: 'options',
-      species: 'filters.byIds.species.value',
-      locality: 'filters.byIds.locality.value',
-      stratigraphyHierarchy: 'filters.byIds.stratigraphyHierarchy.value',
-      taxonHierarchy: 'filters.byIds.taxonHierarchy.value',
-      author: 'filters.byIds.author.value',
-    }),
-    ...mapFields('search', {
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-    }),
     icons(): any {
       return {
         mdiFamilyTree,
       }
-    },
-    queryParams(): { [K: string]: any } {
-      return getQueryParams({
-        q: { key: qParamKey, value: this.$accessor.search.taxon.query },
-        filters: this.$accessor.search.taxon.filters.byIds,
-        globalFilters: {
-          geoJSON: this.$accessor.search.globalFilters.byIds.geoJSON,
-        },
-        tableOptions: this.options,
-      })
-    },
-  },
-  watch: {
-    '$route.query': {
-      async handler() {
-        await this.$accessor.search.taxon.resetFilters()
-        this.setStateFromQueryParams()
-        this.$fetch()
-      },
-    },
-  },
-  created() {
-    // Add global filters and table options to query params, if they are missing
-    const query = getQueryParams({
-      globalFilters: this.$accessor.search.globalFilters.byIds,
-      // @ts-ignore
-      tableOptions: this.options,
-    })
-    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
-      this.$router.replace({ query: { ...query, ...this.$route.query } })
-
-    this.setStateFromQueryParams()
-  },
-  methods: {
-    setStateFromQueryParams() {
-      const parsedValues = parseQueryParams({
-        route: this.$route,
-        filters: this.$accessor.search.taxon.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        qKey: qParamKey,
-      })
-      this.query = parsedValues.query
-      if (parsedValues.filters) {
-        Object.keys(parsedValues.filters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.filters?.[key]
-        })
-      }
-      if (parsedValues.globalFilters) {
-        Object.keys(parsedValues.globalFilters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.globalFilters?.[key]
-        })
-      }
-      this.options = {
-        ...this.options,
-        ...parsedValues.options,
-      }
-    },
-    async handleFormReset() {
-      this.options.page = 1
-
-      if (!isEqual({}, this.$route.query)) {
-        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: {} }, resolve, reject)
-        )
-      }
-      await this.$accessor.search.taxon.resetFilters()
-      this.$fetch()
-    },
-    async handleFormUpdate() {
-      this.options.page = 1
-
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
-    },
-    async handleDataTableUpdate(tableState: any) {
-      this.options = tableState.options
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
     },
   },
 })

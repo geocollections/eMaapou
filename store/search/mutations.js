@@ -21,6 +21,12 @@ export const searchModuleMutations = {
   [SET_MODULE_OPTIONS](state, { options }) {
     state.options = options
   },
+  SET_MODULE_QUERY(state, { query }) {
+    state.query = query
+  },
+  SET_MODULE_FILTER_VALUE(state, { key, value }) {
+    state.filters.byIds[key].value = value
+  },
   [RESET_MODULE_QUERY](state, { initQuery }) {
     state.query = initQuery
   },
@@ -37,26 +43,8 @@ export const searchModuleMutations = {
 
 export default {
   updateField,
-  [SET_MODULE_ITEMS](state, { module, items }) {
-    state[module].items = items
-  },
-  [SET_MODULE_COUNT](state, { module, count }) {
-    state[module].count = count
-  },
-  [SET_MODULE_OPTIONS](state, { module, options }) {
-    state[module].options = options
-  },
-  [RESET_MODULE_QUERY](state, { module, initQuery }) {
-    state[module].query = initQuery
-  },
-  [RESET_MODULE_FILTERS](state, { module, initFilters }) {
-    state[module].filters = initFilters
-  },
-  [RESET_MODULE_OPTIONS](state, { module, initOptions }) {
-    state[module].options = {
-      ...state[module].options,
-      page: initOptions.page,
-    }
+  SET_GLOBAL_FILTER_VALUE(state, { key, value }) {
+    state.globalFilters.byIds[key].value = value
   },
   [RESET_INSTITUTIONS](state) {
     state.globalFilters.byIds.institutions.value = []

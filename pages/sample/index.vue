@@ -10,15 +10,19 @@
 
     <template #result>
       <div class="py-1 pl-2 text-h6">
-        {{ count ? $tc('common.count', count) : '&nbsp;' }}
+        {{
+          $accessor.search.sample.count
+            ? $tc('common.count', $accessor.search.sample.count)
+            : '&nbsp;'
+        }}
       </div>
 
       <v-card>
         <data-table-sample
           :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
+          :items="$accessor.search.sample.items"
+          :count="$accessor.search.sample.count"
+          :options="$accessor.search.sample.options"
           dynamic-headers
           stateful-headers
           :is-loading="$fetchState.pending"
@@ -30,40 +34,66 @@
 </template>
 
 <script lang="ts">
+import {
+  defineComponent,
+  useFetch,
+  wrapProperty,
+  computed,
+} from '@nuxtjs/composition-api'
 import { mdiTestTube } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
-import Vue from 'vue'
-import { MetaInfo } from 'vue-meta'
-import isEqual from 'lodash/isEqual'
 import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import getQueryParams from '~/utils/getQueryParams'
-import parseQueryParams from '~/utils/parseQueryParams'
 import { HEADERS_SAMPLE } from '~/constants'
-const qParamKey = 'sampleQ'
-export default Vue.extend({
+import { useAccessor } from '~/composables/useAccessor'
+import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
+
+const useServices = wrapProperty('$services', false)
+const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
+export default defineComponent({
   components: {
     Search,
     SearchFormSample,
     DataTableSample,
     BaseHeader,
   },
-  async fetch() {
-    const response = await this.$services.sarvSolr.getResourceList('sample', {
-      options: this.options,
-      search: this.query,
-      fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
-      searchFilters: {
-        ...this.$accessor.search.sample.filters.byIds,
-        ...this.$accessor.search.globalFilters.byIds,
-      },
+  setup() {
+    const accessor = useAccessor()
+    const services = useServices()
+    const getAPIFieldValues = useGetAPIFieldValues()
+    const { fetch } = useFetch(async () => {
+      const response = await services.sarvSolr.getResourceList('sample', {
+        options: accessor.search.sample.options,
+        search: accessor.search.sample.query,
+        fields: getAPIFieldValues(HEADERS_SAMPLE),
+        searchFilters: {
+          ...accessor.search.sample.filters.byIds,
+          ...accessor.search.globalFilters.byIds,
+        },
+      })
+      accessor.search.sample.SET_MODULE_ITEMS({ items: response.items })
+      accessor.search.sample.SET_MODULE_COUNT({ count: response.count })
     })
-    this.items = response.items
-    this.count = response.count
+    const filters = computed(() => accessor.search.sample.filters.byIds)
+    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+
+    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
+      useSearchQueryParams({
+        module: 'sample',
+        qParamKey: 'sampleQ',
+        filters: filters.value,
+        globalFilters: globalFilters.value,
+        fetch,
+      })
+
+    return {
+      handleFormReset,
+      handleFormUpdate,
+      handleDataTableUpdate,
+    }
   },
-  head(): MetaInfo {
+  head() {
     return {
       title: this.$t('sample.pageTitle') as string,
       meta: [
@@ -81,111 +111,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapFields('search/sample', {
-      query: 'query',
-      items: 'items',
-      count: 'count',
-      options: 'options',
-      number: 'filters.byIds.number.value',
-      locality: 'filters.byIds.locality.value',
-      stratigraphy: 'filters.byIds.stratigraphy.value',
-      hierarchy: 'filters.byIds.hierarchy.value',
-      depth: 'filters.byIds.depth.value',
-      collector: 'filters.byIds.collector.value',
-      mass: 'filters.byIds.mass.value',
-      project: 'filters.byIds.project.value',
-    }),
     icons(): any {
       return {
         mdiTestTube,
       }
-    },
-    queryParams(): { [K: string]: any } {
-      return getQueryParams({
-        q: { key: qParamKey, value: this.$accessor.search.sample.query },
-        filters: this.$accessor.search.sample.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        tableOptions: this.options,
-      })
-    },
-  },
-  watch: {
-    '$route.query': {
-      async handler() {
-        await this.$accessor.search.sample.resetFilters()
-        this.setStateFromQueryParams()
-        this.$fetch()
-      },
-    },
-  },
-  created() {
-    // Add global filters and table options to query params, if they are missing
-    const query = getQueryParams({
-      globalFilters: this.$accessor.search.globalFilters.byIds,
-      // @ts-ignore
-      tableOptions: this.options,
-    })
-    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
-      this.$router.replace({ query: { ...query, ...this.$route.query } })
-
-    this.setStateFromQueryParams()
-  },
-  methods: {
-    setStateFromQueryParams() {
-      const parsedValues = parseQueryParams({
-        route: this.$route,
-        filters: this.$accessor.search.sample.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        qKey: qParamKey,
-      })
-      this.query = parsedValues.query
-      if (parsedValues.filters) {
-        Object.keys(parsedValues.filters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.filters?.[key]
-        })
-      }
-      if (parsedValues.globalFilters) {
-        Object.keys(parsedValues.globalFilters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.globalFilters?.[key]
-        })
-      }
-      this.options = {
-        ...this.options,
-        ...parsedValues.options,
-      }
-    },
-    async handleFormReset() {
-      this.options.page = 1
-
-      if (!isEqual({}, this.$route.query)) {
-        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: {} }, resolve, reject)
-        )
-      }
-      await this.$accessor.search.sample.resetFilters()
-      this.$fetch()
-    },
-    async handleFormUpdate() {
-      this.options.page = 1
-
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
-    },
-    async handleDataTableUpdate(tableState: any) {
-      this.options = tableState.options
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
     },
   },
 })

@@ -1,7 +1,7 @@
 import { FilterType } from '~/types/enums'
 import { Filter } from '~/types/filters'
 
-type SearchState = {
+export type SearchState = {
   query: string
   globalFilters: {
     byIds: { [K: string]: Filter }

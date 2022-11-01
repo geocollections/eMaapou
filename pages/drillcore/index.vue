@@ -16,14 +16,18 @@
 
     <template #result>
       <div class="py-1 pl-2 text-h6">
-        {{ count ? $tc('common.count', count) : '&nbsp;' }}
+        {{
+          $accessor.search.drillcore.count
+            ? $tc('common.count', $accessor.search.drillcore.count)
+            : '&nbsp;'
+        }}
       </div>
       <v-card>
         <data-table-drillcore
           :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
+          :items="$accessor.search.drillcore.items"
+          :count="$accessor.search.drillcore.count"
+          :options="$accessor.search.drillcore.options"
           :flat="false"
           dynamic-headers
           stateful-headers
@@ -36,43 +40,65 @@
 </template>
 
 <script lang="ts">
+import {
+  defineComponent,
+  useFetch,
+  wrapProperty,
+  computed,
+} from '@nuxtjs/composition-api'
 import { mdiScrewMachineFlatTop } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
-import Vue from 'vue'
-import { MetaInfo } from 'vue-meta'
-import isEqual from 'lodash/isEqual'
 import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
 import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { HEADERS_DRILLCORE } from '~/constants'
-import getQueryParams from '~/utils/getQueryParams'
-import parseQueryParams from '~/utils/parseQueryParams'
-const qParamKey = 'drillcoreQ'
-export default Vue.extend({
+import { useAccessor } from '~/composables/useAccessor'
+import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
+const useServices = wrapProperty('$services', false)
+const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
+export default defineComponent({
   components: {
     Search,
     SearchFormDrillcore,
     DataTableDrillcore,
     BaseHeader,
   },
-  async fetch() {
-    const response = await this.$services.sarvSolr.getResourceList(
-      'drillcore',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_DRILLCORE),
+  setup() {
+    const accessor = useAccessor()
+    const services = useServices()
+    const getAPIFieldValues = useGetAPIFieldValues()
+    const { fetch } = useFetch(async () => {
+      const response = await services.sarvSolr.getResourceList('drillcore', {
+        options: accessor.search.drillcore.options,
+        search: accessor.search.drillcore.query,
+        fields: getAPIFieldValues(HEADERS_DRILLCORE),
         searchFilters: {
-          ...this.$accessor.search.drillcore.filters.byIds,
-          ...this.$accessor.search.globalFilters.byIds,
+          ...accessor.search.drillcore.filters.byIds,
+          ...accessor.search.globalFilters.byIds,
         },
-      }
-    )
-    this.items = response.items
-    this.count = response.count
+      })
+      accessor.search.drillcore.SET_MODULE_ITEMS({ items: response.items })
+      accessor.search.drillcore.SET_MODULE_COUNT({ count: response.count })
+    })
+    const filters = computed(() => accessor.search.drillcore.filters.byIds)
+    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+
+    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
+      useSearchQueryParams({
+        module: 'drillcore',
+        qParamKey: 'drillcoreQ',
+        filters: filters.value,
+        globalFilters: globalFilters.value,
+        fetch,
+      })
+
+    return {
+      handleFormReset,
+      handleFormUpdate,
+      handleDataTableUpdate,
+    }
   },
-  head(): MetaInfo {
+  head() {
     return {
       title: this.$t('drillcore.pageTitle') as string,
       meta: [
@@ -90,111 +116,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapFields('search/drillcore', {
-      options: 'options',
-      items: 'items',
-      count: 'count',
-      query: 'query',
-      name: 'filters.byIds.name.value',
-      country: 'filters.byIds.country.value',
-      repository: 'filters.byIds.repository.value',
-      storage: 'filters.byIds.storage.value',
-      boxes: 'filters.byIds.boxes.value',
-    }),
-    ...mapFields('search', {
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-      institutions: 'globalFilters.byIds.institutions.value',
-    }),
     icons(): any {
       return {
         mdiScrewMachineFlatTop,
       }
-    },
-    queryParams(): { [K: string]: any } {
-      return getQueryParams({
-        q: { key: qParamKey, value: this.$accessor.search.drillcore.query },
-        filters: this.$accessor.search.drillcore.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        tableOptions: this.options,
-      })
-    },
-  },
-  watch: {
-    '$route.query': {
-      async handler() {
-        await this.$accessor.search.drillcore.resetFilters()
-        this.setStateFromQueryParams()
-        this.$fetch()
-      },
-    },
-  },
-  created() {
-    // Add global filters and table options to query params, if they are missing
-    const query = getQueryParams({
-      globalFilters: this.$accessor.search.globalFilters.byIds,
-      // @ts-ignore
-      tableOptions: this.options,
-    })
-    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
-      this.$router.replace({ query: { ...query, ...this.$route.query } })
-
-    this.setStateFromQueryParams()
-  },
-  methods: {
-    setStateFromQueryParams() {
-      const parsedValues = parseQueryParams({
-        route: this.$route,
-        filters: this.$accessor.search.drillcore.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        qKey: qParamKey,
-      })
-      this.query = parsedValues.query
-      if (parsedValues.filters) {
-        Object.keys(parsedValues.filters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.filters?.[key]
-        })
-      }
-      if (parsedValues.globalFilters) {
-        Object.keys(parsedValues.globalFilters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.globalFilters?.[key]
-        })
-      }
-      this.options = {
-        ...this.options,
-        ...parsedValues.options,
-      }
-    },
-    async handleFormReset() {
-      this.options.page = 1
-
-      if (!isEqual({}, this.$route.query)) {
-        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: {} }, resolve, reject)
-        )
-      }
-      await this.$accessor.search.drillcore.resetFilters()
-      this.$fetch()
-    },
-    async handleFormUpdate() {
-      this.options.page = 1
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
-    },
-    async handleDataTableUpdate(tableState: any) {
-      this.options = tableState.options
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
     },
   },
 })

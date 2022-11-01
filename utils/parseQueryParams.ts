@@ -55,8 +55,8 @@ export default ({
   }
   if (route.query.sortDesc) {
     options.sortDesc = Array.isArray(route.query.sortDesc)
-      ? route.query.sortDesc
-      : [route.query.sortDesc]
+      ? route.query.sortDesc.map((value) => value === 'true')
+      : [route.query.sortDesc === 'true']
   }
   result.options = options
   return result

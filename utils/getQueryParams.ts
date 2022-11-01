@@ -17,12 +17,20 @@ export default ({
   const query: { [K: string]: any | any[] } = {}
 
   if (q && q.value.length > 0) {
-    query[q.key] = q
+    query[q.key] = q.value
   }
   query.page = tableOptions.page.toString()
   query.itemsPerPage = tableOptions.itemsPerPage.toString()
   query.sortBy = tableOptions.sortBy
   query.sortDesc = tableOptions.sortDesc
+  // query.sortBy =
+  //   tableOptions.sortBy.length > 1
+  //     ? tableOptions.sortBy
+  //     : tableOptions.sortBy[0]
+  // query.sortDesc =
+  //   tableOptions.sortDesc.length > 1
+  //     ? tableOptions.sortDesc
+  //     : tableOptions.sortDesc[0]
 
   if (filters) {
     Object.entries(filters)

@@ -171,9 +171,6 @@ export default {
       }
     },
   },
-  created() {
-    this.$emit('update', { options: { ...this.options } })
-  },
   methods: {
     updateOptions(event) {
       this.$emit('update', { options: event })

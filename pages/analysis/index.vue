@@ -13,14 +13,18 @@
 
     <template #result>
       <div class="py-1 pl-2 text-h6">
-        {{ count ? $tc('common.count', count) : '&nbsp;' }}
+        {{
+          $accessor.search.analysis.count
+            ? $tc('common.count', $accessor.search.analysis.count)
+            : '&nbsp;'
+        }}
       </div>
       <v-card>
         <data-table-analysis
           :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
+          :items="$accessor.search.analysis.items"
+          :count="$accessor.search.analysis.count"
+          :options="$accessor.search.analysis.options"
           stateful-headers
           dynamic-headers
           :is-loading="$fetchState.pending"
@@ -32,20 +36,23 @@
 </template>
 
 <script lang="ts">
-import { mapFields } from 'vuex-map-fields'
-import Vue from 'vue'
-import { MetaInfo } from 'vue-meta'
-import isEqual from 'lodash/isEqual'
+import {
+  defineComponent,
+  useFetch,
+  wrapProperty,
+  computed,
+} from '@nuxtjs/composition-api'
+import { useAccessor } from '~/composables/useAccessor'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { HEADERS_ANALYSIS } from '~/constants'
-import parseQueryParams from '~/utils/parseQueryParams'
-import getQueryParams from '~/utils/getQueryParams'
-const qParamKey = 'analysisQ'
+import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 
-export default Vue.extend({
+const useServices = wrapProperty('$services', false)
+const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
+export default defineComponent({
   name: 'AnalysisSearch',
   components: {
     Search,
@@ -53,20 +60,42 @@ export default Vue.extend({
     DataTableAnalysis,
     BaseHeader,
   },
-  async fetch() {
-    const response = await this.$services.sarvSolr.getResourceList('analysis', {
-      options: this.options,
-      search: this.query,
-      fields: this.$getAPIFieldValues(HEADERS_ANALYSIS),
-      searchFilters: {
-        ...this.$accessor.search.analysis.filters.byIds,
-        ...this.$accessor.search.globalFilters.byIds,
-      },
+  setup() {
+    const accessor = useAccessor()
+    const services = useServices()
+    const getAPIFieldValues = useGetAPIFieldValues()
+    const { fetch } = useFetch(async () => {
+      const response = await services.sarvSolr.getResourceList('analysis', {
+        options: accessor.search.analysis.options,
+        search: accessor.search.analysis.query,
+        fields: getAPIFieldValues(HEADERS_ANALYSIS),
+        searchFilters: {
+          ...accessor.search.analysis.filters.byIds,
+          ...accessor.search.globalFilters.byIds,
+        },
+      })
+      accessor.search.analysis.SET_MODULE_ITEMS({ items: response.items })
+      accessor.search.analysis.SET_MODULE_COUNT({ count: response.count })
     })
-    this.items = response.items
-    this.count = response.count
+    const filters = computed(() => accessor.search.analysis.filters.byIds)
+    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+
+    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
+      useSearchQueryParams({
+        module: 'analysis',
+        qParamKey: 'analysisQ',
+        filters: filters.value,
+        globalFilters: globalFilters.value,
+        fetch,
+      })
+
+    return {
+      handleFormReset,
+      handleFormUpdate,
+      handleDataTableUpdate,
+    }
   },
-  head(): MetaInfo {
+  head() {
     return {
       title: this.$t('analysis.pageTitle') as string,
       meta: [
@@ -82,109 +111,6 @@ export default Vue.extend({
         },
       ],
     }
-  },
-  computed: {
-    ...mapFields('search/analysis', {
-      query: 'query',
-      items: 'items',
-      count: 'count',
-      options: 'options',
-      id: 'filters.byIds.id.value',
-      depth: 'filters.byIds.depth.value',
-    }),
-    ...mapFields('search', {
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-      institutions: 'globalFilters.byIds.institutions.value',
-    }),
-    queryParams(): { [K: string]: any } {
-      return getQueryParams({
-        q: { key: qParamKey, value: this.$accessor.search.analysis.query },
-        filters: this.$accessor.search.analysis.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        tableOptions: this.options,
-      })
-    },
-  },
-  watch: {
-    '$route.query': {
-      async handler() {
-        await this.$accessor.search.analysis.resetFilters()
-        this.setStateFromQueryParams()
-        this.$fetch()
-      },
-    },
-  },
-  created() {
-    // Add global filters and table options to query params, if they are missing
-    const query = getQueryParams({
-      globalFilters: this.$accessor.search.globalFilters.byIds,
-      // @ts-ignore
-      tableOptions: this.options,
-    })
-    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
-      this.$router.replace({ query: { ...query, ...this.$route.query } })
-
-    this.setStateFromQueryParams()
-  },
-  methods: {
-    // TODO: Each of the search views has a copy of this function. Find a way to extract it and import it. If possible avoid mixins.
-    setStateFromQueryParams() {
-      const parsedValues = parseQueryParams({
-        route: this.$route,
-        filters: this.$accessor.search.analysis.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        qKey: qParamKey,
-      })
-      this.query = parsedValues.query
-      if (parsedValues.filters) {
-        Object.keys(parsedValues.filters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.filters?.[key]
-        })
-      }
-      if (parsedValues.globalFilters) {
-        Object.keys(parsedValues.globalFilters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.globalFilters?.[key]
-        })
-      }
-      this.options = {
-        ...this.options,
-        ...parsedValues.options,
-      }
-    },
-    async handleFormReset() {
-      this.options.page = 1
-
-      if (!isEqual({}, this.$route.query)) {
-        // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: {} }, resolve, reject)
-        )
-      }
-      await this.$accessor.search.analysis.resetFilters()
-      this.$fetch()
-    },
-    async handleFormUpdate() {
-      this.options.page = 1
-
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
-    },
-    async handleDataTableUpdate(tableState: any) {
-      this.options = tableState.options
-
-      if (!isEqual(this.queryParams, this.$route.query)) {
-        await new Promise((resolve, reject) =>
-          this.$router.push({ query: this.queryParams }, resolve, reject)
-        )
-      }
-      this.$fetch()
-    },
   },
 })
 </script>

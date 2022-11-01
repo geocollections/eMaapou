@@ -16,15 +16,19 @@
 
     <template #result>
       <div class="py-1 pl-2 text-h6">
-        {{ count ? $tc('common.count', count) : '&nbsp;' }}
+        {{
+          $accessor.search.analytical_data.count
+            ? $tc('common.count', $accessor.search.analytical_data.count)
+            : '&nbsp;'
+        }}
       </div>
 
       <v-card>
         <data-table-analytical-data
           :show-search="false"
-          :items="items"
-          :count="count"
-          :options="options"
+          :items="$accessor.search.analytical_data.items"
+          :count="$accessor.search.analytical_data.count"
+          :options="$accessor.search.analytical_data.options"
           dynamic-headers
           stateful-headers
           :is-loading="$fetchState.pending"
@@ -36,47 +40,77 @@
 </template>
 
 <script lang="ts">
+import {
+  defineComponent,
+  useFetch,
+  wrapProperty,
+  computed,
+} from '@nuxtjs/composition-api'
 import { mdiChartLine } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
-import Vue from 'vue'
-import { MetaInfo } from 'vue-meta'
-import isEqual from 'lodash/isEqual'
 import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
 import SearchFormAnalyticalData from '~/components/search/forms/SearchFormAnalyticalData.vue'
 import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { HEADERS_ANALYTICAL_DATA } from '~/constants/headers'
+import { useAccessor } from '~/composables/useAccessor'
+import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 
-import parseQueryParams from '~/utils/parseQueryParams'
-import getQueryParams from '~/utils/getQueryParams'
-const qParamKey = 'analyticalDataQ'
-
-export default Vue.extend({
-  name: 'AnalysisSearch',
+const useServices = wrapProperty('$services', false)
+const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
+export default defineComponent({
+  name: 'AnalyticalDataSearch',
   components: {
     Search,
     SearchFormAnalyticalData,
     DataTableAnalyticalData,
     BaseHeader,
   },
-  async fetch() {
-    const response = await this.$services.sarvSolr.getResourceList(
-      'analytical_data',
-      {
-        options: this.options,
-        search: this.query,
-        fields: this.$getAPIFieldValues(HEADERS_ANALYTICAL_DATA),
-        searchFilters: {
-          ...this.$accessor.search.analytical_data.filters.byIds,
-          ...this.$accessor.search.globalFilters.byIds,
-          ...this.$accessor.search.analytical_data.parameterFilters.byIds,
-        },
-      }
+  setup() {
+    const accessor = useAccessor()
+    const services = useServices()
+    const getAPIFieldValues = useGetAPIFieldValues()
+    const { fetch } = useFetch(async () => {
+      const response = await services.sarvSolr.getResourceList(
+        'analytical_data',
+        {
+          options: accessor.search.analytical_data.options,
+          search: accessor.search.analytical_data.query,
+          fields: getAPIFieldValues(HEADERS_ANALYTICAL_DATA),
+          searchFilters: {
+            ...accessor.search.analytical_data.filters.byIds,
+            ...accessor.search.globalFilters.byIds,
+            ...accessor.search.analytical_data.parameterFilters.byIds,
+          },
+        }
+      )
+      accessor.search.analytical_data.SET_MODULE_ITEMS({
+        items: response.items,
+      })
+      accessor.search.analytical_data.SET_MODULE_COUNT({
+        count: response.count,
+      })
+    })
+    const filters = computed(
+      () => accessor.search.analytical_data.filters.byIds
     )
-    this.items = response.items
-    this.count = response.count
+    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+
+    const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
+      useSearchQueryParams({
+        module: 'analytical_data',
+        qParamKey: 'analyticalDataQ',
+        filters: filters.value,
+        globalFilters: globalFilters.value,
+        fetch,
+      })
+
+    return {
+      handleFormReset,
+      handleFormUpdate,
+      handleDataTableUpdate,
+    }
   },
-  head(): MetaInfo {
+  head() {
     return {
       title: this.$t('analyticalData.pageTitle') as string,
       meta: [
@@ -89,125 +123,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapFields('search/analytical_data', {
-      query: 'query',
-
-      items: 'items',
-      count: 'count',
-      options: 'options',
-      locality: 'filters.byIds.locality.value',
-      depth: 'filters.byIds.depth.value',
-      stratigraphy: 'filters.byIds.stratigraphy.value',
-      lithostratigraphy: 'filters.byIds.lithostratigraphy.value',
-      analysis: 'filters.byIds.analysis.value',
-      method: 'filters.byIds.method.value',
-      lab: 'filters.byIds.lab.value',
-      agentAnalysed: 'filters.byIds.agentAnalysed.value',
-      reference: 'filters.byIds.reference.value',
-      dataset: 'filters.byIds.dataset.value',
-      stratigraphyBed: 'filters.byIds.stratigraphyBed.value',
-      rock: 'filters.byIds.rock.value',
-      sample: 'filters.byIds.sample.value',
-      project: 'filters.byIds.project.value',
-    }),
-    ...mapFields('search', {
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-      institutions: 'globalFilters.byIds.institutions.value',
-    }),
     icons(): any {
       return {
         mdiChartLine,
       }
-    },
-    queryParams(): { [K: string]: any } {
-      return getQueryParams({
-        q: {
-          key: qParamKey,
-          value: this.$accessor.search.analytical_data.query,
-        },
-
-        filters: this.$accessor.search.analytical_data.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        tableOptions: this.options,
-      })
-    },
-  },
-  watch: {
-    '$route.query': {
-      async handler() {
-        await this.$accessor.search.analytical_data.resetFilters()
-        this.setStateFromQueryParams()
-        this.$fetch()
-      },
-    },
-  },
-  created() {
-    // Add global filters and table options to query params, if they are missing
-    const query = getQueryParams({
-      globalFilters: this.$accessor.search.globalFilters.byIds,
-      // @ts-ignore
-      tableOptions: this.options,
-    })
-    if (!isEqual({ ...query, ...this.$route.query }, this.$route.query))
-      this.$router.replace({ query: { ...query, ...this.$route.query } })
-
-    this.setStateFromQueryParams()
-  },
-  methods: {
-    setStateFromQueryParams() {
-      const parsedValues = parseQueryParams({
-        route: this.$route,
-        filters: this.$accessor.search.analytical_data.filters.byIds,
-        globalFilters: this.$accessor.search.globalFilters.byIds,
-        qKey: qParamKey,
-      })
-      this.query = parsedValues.query
-      if (parsedValues.filters) {
-        Object.keys(parsedValues.filters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.filters?.[key]
-        })
-      }
-      if (parsedValues.globalFilters) {
-        Object.keys(parsedValues.globalFilters).forEach((key) => {
-          // @ts-ignore
-          this[key] = parsedValues.globalFilters?.[key]
-        })
-      }
-      this.options = {
-        ...this.options,
-        ...parsedValues.options,
-      }
-    },
-    async handleFormReset() {
-      this.options.page = 1
-
-      // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
-      await new Promise((resolve, reject) =>
-        this.$router.push(
-          { path: this.$route.path, query: {} },
-          resolve,
-          reject
-        )
-      )
-      await this.$accessor.search.analytical_data.resetFilters()
-      this.$fetch()
-    },
-    async handleFormUpdate() {
-      this.options.page = 1
-
-      await new Promise((resolve, reject) =>
-        this.$router.push({ query: this.queryParams }, resolve, reject)
-      )
-      this.$fetch()
-    },
-    async handleDataTableUpdate(tableState: any) {
-      this.options = tableState.options
-
-      await new Promise((resolve, reject) =>
-        this.$router.push({ query: this.queryParams }, resolve, reject)
-      )
-      this.$fetch()
     },
   },
 })
