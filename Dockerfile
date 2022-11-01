@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:18.12.0-alpine
 
 # create destination directory
 RUN mkdir -p /usr/src/ema
@@ -7,10 +7,13 @@ WORKDIR /usr/src/ema
 # update and install dependency
 RUN apk update && apk upgrade
 RUN apk add git
+RUN apk add --no-cache --virtual .gyp python3 make g++
 
 # copy the app, note .dockerignore
 COPY . /usr/src/ema/
 RUN npm install
+
+RUN apk del .gyp
 
 # build necessary, even if no static files are needed,
 # since it builds the server as well
