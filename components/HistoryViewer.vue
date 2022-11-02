@@ -1,11 +1,11 @@
 <template>
-  <div v-if="history.length > 0" class="d-flex align-center">
+  <div v-if="historyEntries.length > 0" class="d-flex align-center">
     <v-subheader style="height: 32px !important" class="pl-3 text-no-wrap">{{
       `${$t('common.history')}:`
     }}</v-subheader>
     <span class="pb-1 pt-2 history-viewer d-flex">
       <span
-        v-for="(item, index) in history"
+        v-for="(entry, index) in historyEntries"
         :key="index"
         class="d-flex align-center"
       >
@@ -13,15 +13,15 @@
           :id="`history-${index}`"
           class="text-link-grey history-link d-inline-block text-truncate"
           :style="`max-width: ${linkWidth}px`"
-          :to="localePath({ path: item.to })"
+          :to="localePath({ path: entry.to })"
         >
-          {{ item.text }}
+          {{ entry.title }}
           <v-tooltip open-delay="500" bottom :activator="`#history-${index}`">
-            <span>{{ item.text }}</span>
+            <span>{{ entry.title }}</span>
           </v-tooltip>
         </nuxt-link>
         <v-icon
-          v-if="index !== history.length - 1"
+          v-if="index !== historyEntries.length - 1"
           class="mx-1 divider"
           x-small
         >
@@ -32,26 +32,28 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiArrowLeft } from '@mdi/js'
-import { mapState } from 'vuex'
+import { defineComponent } from '@nuxtjs/composition-api'
+import { HistoryEntry } from '~/store/history'
 
-export default {
+export default defineComponent({
   name: 'HistoryViewer',
   computed: {
-    ...mapState('history', ['history']),
-    linkWidth() {
+    historyEntries(): HistoryEntry[] {
+      return this.$accessor.history.historyEntries
+    },
+    linkWidth(): number {
       if (this.$vuetify.breakpoint.lgAndUp) return 200
-
       return 100
     },
-    icons() {
+    icons(): any {
       return {
         mdiArrowLeft,
       }
     },
   },
-}
+})
 </script>
 <style scoped>
 .history-viewer {

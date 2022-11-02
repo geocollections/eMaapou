@@ -1,45 +1,39 @@
 import { Plugin } from '@nuxt/types'
-import { Route } from 'vue-router'
+import { HistoryEntry } from '~/store/history'
 
-const EXCLUDED_PAGES = ['index', 'about', 'news', 'news-id', 'search']
-
-const plugin: Plugin = ({ app, store }, _) => {
+// const EXCLUDED_PAGES = ['index', 'about', 'news', 'news-id', 'search']
+const INCLUDED_PAGES = [
+  'analysis-id',
+  'analytical-data-id',
+  'area-id',
+  'collection-id',
+  'dataset-id',
+  'drillcore-id',
+  'drillcore-box-id',
+  'file-id',
+  'locality-id',
+  'photo-id',
+  'preparation-id',
+  'sample-id',
+  'site-id',
+  'specimen-id',
+  'stratigraphy-id',
+]
+const plugin: Plugin = ({ app, $accessor }, _) => {
   app.router?.afterEach((_, from) => {
-    if (app.nuxt.err) return
-    if (EXCLUDED_PAGES.some((page) => from.name?.startsWith(page))) return
-
-    const name = serializeName(from)
-    const id = from.params?.id ?? null
     const title = document.title
-
     const parsedTitle = title.substring(0, title.indexOf('|')).trim()
+    if (app.nuxt.err) return
+    if (parsedTitle === 'undefined') return
+    if (!INCLUDED_PAGES.some((page) => from.name?.includes(page))) return
 
     const historyObject = {
-      text: parsedTitle,
-      id,
-      name: app.getRouteBaseName(from),
+      title: parsedTitle,
       to: from.path,
-      uniqueIdentifier: `${name}.${id}`,
-    }
+    } as HistoryEntry
 
-    const lastHistoryEntryUniqueIdentifier =
-      store.getters['history/getLastHistoryEntry']?.uniqueIdentifier ??
-      'index.null'
-
-    if (
-      historyObject.uniqueIdentifier !== lastHistoryEntryUniqueIdentifier &&
-      !historyObject.uniqueIdentifier.includes('-id-')
-    ) {
-      store.dispatch('history/pushHistory', historyObject)
-    }
+    $accessor.history.pushHistory(historyObject)
   })
-}
-
-const serializeName = (route: Route): string => {
-  let name = route.name ?? 'index'
-  if (name.includes('___')) name = name.split('___')[0]
-  if (name.includes('-id-')) name = `${name.split('-id-')[0]}-id`
-  return name
 }
 
 export default plugin
