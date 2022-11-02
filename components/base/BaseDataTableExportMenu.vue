@@ -34,7 +34,7 @@
 
 <script>
 import { mdiFileExportOutline } from '@mdi/js'
-import { writeFile, utils } from 'xlsx'
+import { writeFileXLSX, utils } from 'xlsx'
 
 export default {
   name: 'BaseDataTableExportMenu',
@@ -71,14 +71,14 @@ export default {
       try {
         const wb = this.createWorkbook(this.tableElement)
 
-        writeFile(wb, 'export.csv', { bookType: 'csv' })
+        writeFileXLSX(wb, 'export.csv', { bookType: 'csv' })
       } catch (err) {}
     },
     handleExportExcel() {
       try {
         const wb = this.createWorkbook(this.tableElement)
 
-        writeFile(wb, 'export.xlsx', { bookType: 'xlsx' })
+        writeFileXLSX(wb, 'export.xlsx', { bookType: 'xlsx' })
       } catch (err) {}
     },
     handleClipboard() {

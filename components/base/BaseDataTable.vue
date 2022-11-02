@@ -212,7 +212,7 @@ export default Vue.extend({
       },
       expanded: [],
       // isLoading: false,
-      tableElement: null,
+      tableElement: null as HTMLElement | null,
     }
   },
   computed: {
@@ -227,9 +227,9 @@ export default Vue.extend({
       }
     },
   },
-  // mounted() {
-  //   this.tableElement = this.$el.querySelector('table')
-  // },
+  mounted() {
+    this.tableElement = this.$el.querySelector('table')
+  },
   methods: {
     handleChange: debounce(function (this: any, options) {
       if (

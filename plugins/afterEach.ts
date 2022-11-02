@@ -1,7 +1,6 @@
-import { Plugin } from '@nuxt/types'
+import { defineNuxtPlugin } from '@nuxtjs/composition-api'
 import { HistoryEntry } from '~/store/history'
 
-// const EXCLUDED_PAGES = ['index', 'about', 'news', 'news-id', 'search']
 const INCLUDED_PAGES = [
   'analysis-id',
   'analytical-data-id',
@@ -19,7 +18,7 @@ const INCLUDED_PAGES = [
   'specimen-id',
   'stratigraphy-id',
 ]
-const plugin: Plugin = ({ app, $accessor }, _) => {
+export default defineNuxtPlugin(({ app, $accessor }, _) => {
   app.router?.afterEach((_, from) => {
     const title = document.title
     const parsedTitle = title.substring(0, title.indexOf('|')).trim()
@@ -34,6 +33,4 @@ const plugin: Plugin = ({ app, $accessor }, _) => {
 
     $accessor.history.pushHistory(historyObject)
   })
-}
-
-export default plugin
+})
