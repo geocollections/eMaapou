@@ -89,7 +89,6 @@ export default {
     '~plugins/openWindow.ts',
     '~plugins/hydrateTabs.ts',
     '~plugins/getAPIFieldValues.ts',
-    { src: '~plugins/gtag.js', mode: 'client' },
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.ts', mode: 'client' },
     { src: '~plugins/vueECharts.js', mode: 'client' },
