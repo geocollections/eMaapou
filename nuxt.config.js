@@ -133,7 +133,6 @@ export default {
       routesNameSeparator: '___',
     },
     gzip: true,
-    generate: true,
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
