@@ -94,7 +94,7 @@ export default {
     { src: '~plugins/vueECharts.js', mode: 'client' },
     '~/plugins/formatDate.ts',
     '~/plugins/slug.ts', // this might be only called on server-side
-    { src: '~/plugins/vueMatomo.js', mode: 'client' },
+    { src: '~/plugins/vueMatomo.ts', mode: 'client' },
     { src: '~/plugins/vue-stack-grid.js', mode: 'client' },
   ],
 

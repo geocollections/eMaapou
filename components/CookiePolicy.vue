@@ -30,7 +30,7 @@
             color="warning white--text"
             class="text-capitalize montserrat"
             :title="$t('cookiePolicy.acceptAndClose')"
-            @click="cookiePolicy = false"
+            @click="handleConsent"
           >
             {{ $t('common.accept') }}
           </v-btn>
@@ -45,10 +45,18 @@ import { mapFields } from 'vuex-map-fields'
 import { mdiCookie } from '@mdi/js'
 export default {
   name: 'CookiePolicy',
+
   computed: {
     ...mapFields('settings', ['cookiePolicy']),
     icons() {
       return { mdiCookie }
+    },
+  },
+  methods: {
+    handleConsent() {
+      this.cookiePolicy = false
+      this.$matomo.rememberConsentGiven()
+      this.$matomo.rememberCookieConsentGiven()
     },
   },
 }
