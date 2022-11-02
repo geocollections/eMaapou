@@ -32,37 +32,6 @@ export function useSearchQueryParams({
     })
   )
 
-  const queryParamsComparable = computed(() => {
-    return {
-      ...queryParams.value,
-      sortBy:
-        typeof queryParams.value.sortBy === 'string'
-          ? queryParams.value.sortBy
-          : queryParams.value.sortBy.join(','),
-      sortDesc:
-        typeof queryParams.value.sortDesc === 'string'
-          ? queryParams.value.sortDesc
-          : queryParams.value.sortDesc.join(','),
-    }
-  })
-  const routeQueryComparable = computed(() => {
-    return {
-      ...route.value.query,
-      ...(route.value.query.sortBy && {
-        sortBy:
-          typeof route.value.query.sortBy === 'string'
-            ? route.value.query.sortBy
-            : route.value.query.sortBy.join(','),
-      }),
-      ...(route.value.query.sortDesc && {
-        sortDesc:
-          typeof route.value.query.sortDesc === 'string'
-            ? route.value.query.sortDesc
-            : route.value.query.sortDesc.join(','),
-      }),
-    }
-  })
-
   const setStateFromQueryParams = () => {
     const parsedValues = parseQueryParams({
       route: route.value,
@@ -120,7 +89,7 @@ export function useSearchQueryParams({
     })
 
     await accessor.search[module].resetFilters()
-    if (!isEqual(queryParamsComparable, routeQueryComparable)) {
+    if (!isEqual(queryParams.value, route.value.query)) {
       // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
       await new Promise((resolve, reject) =>
         router.push({ query: queryParams.value }, resolve, reject)
@@ -133,7 +102,7 @@ export function useSearchQueryParams({
       options: { ...accessor.search[module].options, page: 1 },
     })
 
-    if (!isEqual(queryParamsComparable, routeQueryComparable)) {
+    if (!isEqual(queryParams.value, route.value.query)) {
       await new Promise((resolve, reject) =>
         router.push({ query: queryParams.value }, resolve, reject)
       )
@@ -144,7 +113,7 @@ export function useSearchQueryParams({
     accessor.search[module].SET_MODULE_OPTIONS({
       options: tableState.options,
     })
-    if (!isEqual(queryParamsComparable, routeQueryComparable)) {
+    if (!isEqual(queryParams.value, route.value.query)) {
       await new Promise((resolve, reject) =>
         router.push({ query: queryParams.value }, resolve, reject)
       )

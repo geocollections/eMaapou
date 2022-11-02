@@ -49,14 +49,12 @@ export default ({
     options.itemsPerPage = parseInt(route.query.itemsPerPage as string)
   }
   if (route.query.sortBy) {
-    options.sortBy = Array.isArray(route.query.sortBy)
-      ? route.query.sortBy
-      : [route.query.sortBy]
+    options.sortBy = (route.query.sortBy as string).split(',')
   }
   if (route.query.sortDesc) {
-    options.sortDesc = Array.isArray(route.query.sortDesc)
-      ? route.query.sortDesc.map((value) => value === 'true')
-      : [route.query.sortDesc === 'true']
+    options.sortDesc = (route.query.sortDesc as string)
+      .split(',')
+      .map((value) => value === 'true')
   }
   result.options = options
   return result
