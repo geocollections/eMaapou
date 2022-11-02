@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { decode } from 'html-entities'
+import { decodeHTML } from 'entities'
 export default {
   name: 'NewsPreviewCard',
   filters: {
@@ -68,7 +68,7 @@ export default {
   methods: {
     extractContent(html) {
       if (html) {
-        return decode(html).replace(/<[^>]+>/g, '')
+        return decodeHTML(html).replace(/<[^>]+>/g, '')
       }
       return null
     },
