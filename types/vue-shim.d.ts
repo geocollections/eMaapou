@@ -36,6 +36,7 @@ declare module 'vue/types/vue' {
     $openEgf(id: string): void
     $openTurba(table: string, id: string, openNewWindow?: boolean): void
     $openGeology(table: string, id: string): void
+    $matomo: any
   }
 }
 declare module '@nuxt/types' {
@@ -64,6 +65,7 @@ declare module '@nuxt/types' {
     $openEgf(id: string): void
     $openTurba(table: string, id: string, openNewWindow?: boolean): void
     $openGeology(table: string, id: string): void
+    $matomo: any
   }
 
   interface Context {
@@ -91,6 +93,7 @@ declare module '@nuxt/types' {
     $openEgf(id: string): void
     $openTurba(table: string, id: string, openNewWindow?: boolean): void
     $openGeology(table: string, id: string): void
+    $matomo: any
   }
 }
 declare module 'vue/types/options' {

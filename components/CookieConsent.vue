@@ -3,49 +3,56 @@
     v-if="cookiePolicy"
     class="cookie-policy py-3 px-6 d-flex justify-center"
   >
-    <v-card class="cookie-policy-card py-3 px-6" elevation="12">
-      <div class="d-sm-flex flex-row justify-center">
+    <v-card class="cookie-policy-card py-3 px-3" elevation="2">
+      <div class="d-flex justify-center mb-2">
+        <v-icon left color="accent">
+          {{ icons.mdiCookie }}
+        </v-icon>
         <div
           class="align-self-center pr-3"
           :class="{
-            'text-sm': $vuetify.breakpoint.smAndDown,
+            'text-sm': $vuetify.breakpoint.xsOnly,
           }"
         >
           {{ $t('cookiePolicy.introduction') }}
 
           <nuxt-link
             class="text-link text-decoration-none"
-            :title="$t('cookiePolicy.readMoreButton')"
-            :to="localePath({ name: 'terms' })"
+            :to="localePath({ name: 'cookie-policy' })"
           >
             {{ $t('cookiePolicy.readMoreButton') }}
-            <v-icon small color="primary darken-2">
-              {{ icons.mdiCookie }}
-            </v-icon>
           </nuxt-link>
         </div>
-
-        <div class="align-self-center text-right mt-2 mt-sm-0">
-          <v-btn
-            color="warning white--text"
-            class="text-capitalize montserrat"
-            :title="$t('cookiePolicy.acceptAndClose')"
-            @click="handleConsent"
-          >
-            {{ $t('common.accept') }}
-          </v-btn>
-        </div>
+      </div>
+      <div class="align-self-center text-right mt-2 mt-sm-0">
+        <v-btn
+          class="text-none montserrat"
+          width="100"
+          outlined
+          color="grey darken-1"
+          @click="handleRejectConsent"
+        >
+          {{ $t('cookiePolicy.reject') }}
+        </v-btn>
+        <v-btn
+          width="100"
+          color="warning white--text"
+          class="text-none montserrat"
+          @click="handleConsent"
+        >
+          {{ $t('cookiePolicy.accept') }}
+        </v-btn>
       </div>
     </v-card>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapFields } from 'vuex-map-fields'
 import { mdiCookie } from '@mdi/js'
-export default {
-  name: 'CookiePolicy',
-
+import { defineComponent } from '@nuxtjs/composition-api'
+export default defineComponent({
+  name: 'CookieConsent',
   computed: {
     ...mapFields('settings', ['cookiePolicy']),
     icons() {
@@ -58,8 +65,11 @@ export default {
       this.$matomo.rememberConsentGiven()
       this.$matomo.rememberCookieConsentGiven()
     },
+    handleRejectConsent() {
+      this.cookiePolicy = false
+    },
   },
-}
+})
 </script>
 
 <style scoped>

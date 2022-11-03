@@ -775,9 +775,10 @@ export default {
   },
   cookiePolicy: {
     introduction:
-      'This website uses cookies in order to deliver the best possible web experience. By continuing to visit this website you agree to our use of cookies.',
-    readMoreButton: 'Read our terms of use',
-    acceptAndClose: 'Accept and close the notification',
+      'This website uses cookies in order to deliver the best possible web experience. By clicking "Accept", you consent to our use of cookies.',
+    readMoreButton: 'Cookie policy',
+    accept: 'Accept',
+    reject: 'Reject',
   },
   related: {
     collection: 'Related collections',

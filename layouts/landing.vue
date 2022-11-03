@@ -12,7 +12,7 @@
       <nuxt />
       <fab-scroll-top />
       <client-only>
-        <cookie-policy />
+        <cookie-consent />
       </client-only>
     </v-main>
 
@@ -22,7 +22,7 @@
 
 <script>
 import AppFooter from '~/components/AppFooter.vue'
-import CookiePolicy from '~/components/CookiePolicy.vue'
+import CookieConsent from '~/components/CookieConsent.vue'
 import AppDrawer from '~/components/AppDrawer.vue'
 import AppHeader from '~/components/AppHeader.vue'
 import FabScrollTop from '~/components/FabScrollTop.vue'
@@ -31,7 +31,7 @@ export default {
     AppDrawer,
     AppHeader,
     FabScrollTop,
-    CookiePolicy,
+    CookieConsent,
     AppFooter,
   },
   data() {

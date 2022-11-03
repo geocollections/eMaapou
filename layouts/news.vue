@@ -9,7 +9,7 @@
         <fab-scroll-top />
       </v-container>
       <client-only>
-        <cookie-policy />
+        <cookie-consent />
       </client-only>
     </v-main>
     <app-footer />
@@ -20,13 +20,13 @@
 import AppFooter from '~/components/AppFooter.vue'
 import AppHeader from '~/components/AppHeader.vue'
 import FabScrollTop from '~/components/FabScrollTop.vue'
-import CookiePolicy from '~/components/CookiePolicy.vue'
+import CookieConsent from '~/components/CookieConsent.vue'
 import AppDrawer from '~/components/AppDrawer.vue'
 
 export default {
   components: {
     AppDrawer,
-    CookiePolicy,
+    CookieConsent,
     AppHeader,
     AppFooter,
     FabScrollTop,
