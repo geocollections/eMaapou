@@ -145,23 +145,34 @@
       }}</v-card-title>
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
-          <leaflet-map rounded :markers="computedLocations" />
+          <leaflet-map rounded :markers="locationMarkers" />
         </v-card>
       </v-card-text>
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
@@ -169,9 +180,10 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { TABS_DATASET } from '~/constants'
-
-export default {
+import { Tab, TABS_DATASET } from '~/constants'
+import { useSlugRoute } from '~/composables/useSlugRoute'
+import { MapMarker } from '~/types/map'
+export default defineComponent({
   components: {
     LeafletMap,
     HeaderDetail,
@@ -181,199 +193,204 @@ export default {
     TableRowLink,
     BaseTable,
   },
-  data() {
-    return {
-      dataset: null,
-      ids: [],
-      parameters: [],
-      parameterHeaders: [],
-      doi: null,
-      reference: null,
-      validRoute: {},
-      tabs: TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id]),
-      localities: [],
-      locations: [],
-    }
-  },
-  async fetch() {
-    const datasetPromise = this.$services.sarvREST.getResource(
-      'dataset',
-      this.$route.params.id,
-      {
-        params: {
+  setup() {
+    const { $services, $hydrateTab, $translate } = useContext()
+    const route = useRoute()
+    const state = reactive({
+      dataset: null as any,
+      ids: {} as any,
+      parameters: [] as any[],
+      parameterHeaders: { byIds: {}, allIds: [] } as {
+        byIds: { [K: string]: any }
+        allIds: string[]
+      },
+      doi: null as any,
+      reference: null as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+      localities: [] as any[],
+      locationMarkers: [] as any[],
+    })
+    const title = computed(() => state.dataset?.title)
+
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'dataset'),
+    }).value
+
+    useFetch(async () => {
+      const datasetPromise = $services.sarvREST.getResource(
+        'dataset',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 1,
+          },
+        }
+      )
+      const parametersPromise = $services.sarvSolr.getResource(
+        'dataset',
+        parseInt(route.value.params.id),
+        { fl: 'parameter_index_list,parameter_list' }
+      )
+      const doiPromise = $services.sarvREST.getResourceList('doi', {
+        defaultParams: {
+          dataset: route.value.params.id,
           nest: 1,
         },
-      }
-    )
-    const parametersPromise = this.$services.sarvSolr.getResource(
-      'dataset',
-      this.$route.params.id,
-      { fl: 'parameter_index_list,parameter_list' }
-    )
-    const doiPromise = this.$services.sarvREST.getResourceList('doi', {
-      defaultParams: {
-        dataset: this.$route.params.id,
-        nest: 1,
-      },
-    })
-    const localityGroupedPromise = this.$services.sarvSolr.getResourceList(
-      'analysis',
-      {
-        defaultParams: {
-          fq: `dataset_id:${this.$route.params.id}`,
-          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-          group: true,
-          'group.field': ['locality_id', 'site_id'],
-          rows: 10000,
-        },
-      }
-    )
-
-    const tabs = TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id])
-    const hydratedTabsPromise = Promise.all(
-      tabs.map((tab) => {
-        return this.$hydrateTab(tab, {
-          countParams: {
-            solr: {
-              default: { fq: `dataset_ids:${this.$route.params.id}` },
-            },
-            api: {
-              default: { dataset: this.$route.params.id },
-            },
+      })
+      const localityGroupedPromise = $services.sarvSolr.getResourceList(
+        'analysis',
+        {
+          defaultParams: {
+            fq: `dataset_id:${route.value.params.id}`,
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            group: true,
+            'group.field': ['locality_id', 'site_id'],
+            rows: 10000,
           },
+        }
+      )
+
+      const tabs = TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map((tab) => {
+          return $hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `dataset_ids:${route.value.params.id}` },
+              },
+              api: {
+                default: { dataset: route.value.params.id },
+              },
+            },
+          })
         })
+      ).then((res): { [K: string]: any } => {
+        return res.reduce((prev, tab): { [K: string]: any } => {
+          return { ...prev, [tab.id]: tab }
+        }, {})
       })
-    ).then((res) => {
-      return res.reduce((prev, tab) => {
-        return { ...prev, [tab.id]: tab }
-      }, {})
-    })
-    const [
-      datasetResponse,
-      parameters,
-      doiResponse,
-      localityGroupedResponse,
-      hydratedTabsByIds,
-    ] = await Promise.all([
-      datasetPromise,
-      parametersPromise,
-      doiPromise,
-      localityGroupedPromise,
-      hydratedTabsPromise,
-    ])
+      const [
+        datasetResponse,
+        parameters,
+        doiResponse,
+        localityGroupedResponse,
+        hydratedTabsByIds,
+      ] = await Promise.all([
+        datasetPromise,
+        parametersPromise,
+        doiPromise,
+        localityGroupedPromise,
+        hydratedTabsPromise,
+      ])
 
-    this.ids = datasetResponse?.ids
-    this.dataset = datasetResponse
+      state.ids = datasetResponse?.ids
+      state.dataset = datasetResponse
 
-    const parameterValues =
-      parameters[0]?.parameter_index_list?.[0]?.split('; ')
-    const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
+      const parameterValues =
+        parameters[0]?.parameter_index_list?.[0]?.split('; ')
+      const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
 
-    this.parameters = parameterValues?.map((v, i) => {
-      return { text: parameterText[i], value: v }
-    })
-
-    this.parameterHeaders = {
-      byIds: this.parameters.reduce((prev, parameter) => {
-        return { ...prev, [parameter.value]: { ...parameter, show: false } }
-      }, {}),
-      allIds: parameterValues,
-    }
-
-    this.doi = doiResponse.items?.[0]?.identifier
-    this.reference = {
-      id: doiResponse.items?.[0]?.reference?.id,
-      reference: doiResponse.items?.[0]?.reference?.reference,
-    }
-
-    this.localities = localityGroupedResponse?.grouped?.locality_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => {
-        return !isEmpty(item) && item?.locality_id
+      state.parameters = parameterValues?.map((v: string, i: number) => {
+        return { text: parameterText[i], value: v }
       })
-    const sites = localityGroupedResponse?.grouped?.site_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => {
-        return !isEmpty(item) && item?.site_id
-      })
-    this.locations = this.localities.concat(sites)
 
-    hydratedTabsByIds.sample_results.props.parameterHeaders = {
-      ...this.parameterHeaders,
-      byIds: Object.fromEntries(
-        Object.entries(this.parameterHeaders.byIds).map(([k, v]) => {
-          return [k, { ...v, show: true }]
+      state.parameterHeaders = {
+        byIds: state.parameters.reduce((prev, parameter) => {
+          return { ...prev, [parameter.value]: { ...parameter, show: false } }
+        }, {}),
+        allIds: parameterValues,
+      }
+
+      state.doi = doiResponse.items?.[0]?.identifier
+      state.reference = {
+        id: doiResponse.items?.[0]?.reference?.id,
+        reference: doiResponse.items?.[0]?.reference?.reference,
+      }
+
+      state.localities = localityGroupedResponse?.grouped?.locality_id?.groups
+        ?.map((item: any) => item?.doclist?.docs?.[0])
+        .filter((item: any) => {
+          return !isEmpty(item) && item?.locality_id
         })
-      ),
-    }
+      const sites = localityGroupedResponse?.grouped?.site_id?.groups
+        ?.map((item: any) => item?.doclist?.docs?.[0])
+        .filter((item: any) => {
+          return !isEmpty(item) && item?.site_id
+        })
+      state.locationMarkers = state.localities
+        .concat(sites)
+        .reduce((filtered: MapMarker[], item): MapMarker[] => {
+          if (!(item.latitude && item.longitude)) return filtered
+          const isItemInArray = filtered.some(
+            (existingItem) =>
+              existingItem.latitude === item.latitude &&
+              existingItem.longitude === item.longitude
+          )
+          if (isItemInArray) return filtered
 
-    hydratedTabsByIds.graphs.count =
-      this.locations.length === 1 ? this.locations.length : 0
-    hydratedTabsByIds.graphs.props.dataset = this.dataset
-
-    this.tabs = TABS_DATASET.allIds.map((id) => hydratedTabsByIds[id])
-    const slugRoute = this.$createSlugRoute(this.$route, this.dataset?.title)
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
-  },
-  head() {
-    return {
-      title: this.dataset?.title,
-      meta: [
-        {
-          property: 'og:title',
-          content: this.dataset?.title,
-          hid: 'og:title',
-        },
-        {
-          property: 'og:description',
-          content: this.dataset?.abstract,
-          hid: 'og:description',
-        },
-        {
-          property: 'description',
-          content: this.dataset?.abstract,
-          hid: 'description',
-        },
-      ],
-    }
-  },
-  computed: {
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    computedLocations() {
-      return this.locations.reduce((filtered, item) => {
-        if (item.latitude && item.longitude) {
           const newItem = {
             latitude: item.latitude,
             longitude: item.longitude,
             text:
-              this.$translate({ et: item.locality, en: item.locality_en }) ??
+              $translate({ et: item.locality, en: item.locality_en }) ??
               (item.name || `ID: ${item.id}`),
             routeName: item.locality_id ? 'locality' : 'site',
             id: item.locality_id ?? item.site_id,
           }
 
-          const isItemInArray = !!filtered.find(
-            (existingItem) =>
-              existingItem.latitude === item.latitude &&
-              existingItem.longitude === item.longitude
-          )
-          if (!isItemInArray) filtered.push(newItem)
-        }
-        return filtered
-      }, [])
-    },
+          return [...filtered, newItem]
+        }, [])
+
+      hydratedTabsByIds.sample_results.props.parameterHeaders = {
+        ...state.parameterHeaders,
+        byIds: Object.fromEntries(
+          Object.entries(state.parameterHeaders.byIds).map(([k, v]) => {
+            return [k, { ...v, show: true }]
+          })
+        ),
+      }
+
+      hydratedTabsByIds.graphs.count =
+        state.locationMarkers.length === 1 ? state.locationMarkers.length : 0
+      hydratedTabsByIds.graphs.props.dataset = state.dataset
+
+      state.tabs = TABS_DATASET.allIds
+        .map((id) => hydratedTabsByIds[id])
+        .filter((tab) => tab.count > 0)
+    })
+
+    return { ...toRefs(state), title }
+  },
+  head() {
+    return {
+      title: `${this.title}| ${this.$t('dataset.pageTitle')}`,
+      meta: [
+        {
+          property: 'og:title',
+          content: `${this.title}| ${this.$t('dataset.pageTitle')}`,
+          hid: 'og:title',
+        },
+        {
+          property: 'og:description',
+          content: (this.dataset as any)?.abstract,
+          hid: 'og:description',
+        },
+        {
+          property: 'description',
+          content: (this.dataset as any)?.abstract,
+          hid: 'description',
+        },
+      ],
+    }
   },
   methods: {
     isEmpty,
     isNil,
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

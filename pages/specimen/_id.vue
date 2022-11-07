@@ -143,9 +143,9 @@
             :value="dateCollected"
           />
           <table-row
-            v-if="agent_collected"
+            v-if="agentCollected"
             :title="$t('specimen.collector')"
-            :value="agent_collected.agent"
+            :value="agentCollected.agent"
           />
           <table-row-link
             v-if="sample"
@@ -217,14 +217,25 @@
     </template>
     <template #bottom>
       <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
@@ -232,10 +243,10 @@ import HeaderDetail from '~/components/HeaderDetail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
-import { TABS_SPECIMEN } from '~/constants'
+import { Tab, TABS_SPECIMEN } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     Detail,
     HeaderDetail,
@@ -246,80 +257,134 @@ export default {
     ImageBar,
     BaseTable,
   },
-  data() {
+  setup() {
+    const { $services, $hydrateTab, $translate } = useContext()
+    const route = useRoute()
+    const state = reactive({
+      specimen: null as any,
+      specimenAlt: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      images: [] as any[],
+      tabs: [] as Tab[],
+    })
+    const isRock = computed(() => !!state.specimenAlt?.rock)
+    const isTaxon = computed(() => !!state.specimenAlt?.taxon)
+    const dateCollected = computed(() =>
+      state.specimen?.date_collected
+        ? state.specimen.date_collected
+        : state.specimen.date_collected_free
+    )
+    const coll = computed(() => state.specimen?.coll)
+    const type = computed(() => state.specimen?.type)
+    const classification = computed(() => state.specimen?.classification)
+    const locality = computed(() => state.specimen?.locality)
+    const stratigraphy = computed(() => state.specimen?.stratigraphy)
+    const lithostratigraphy = computed(() => state.specimen?.lithostratigraphy)
+    const agentCollected = computed(() => state.specimen?.agent_collected)
+    const database = computed(() => state.specimen?.database)
+    const sample = computed(() => state.specimen?.sample)
+    const parent = computed(() => state.specimen?.parent)
+
+    const title = computed(
+      () =>
+        `${state.specimen?.database?.acronym} ${state.specimen?.specimen_id}`
+    )
+    const titleAlt = computed(() => {
+      if (state.specimenAlt?.rock) {
+        const defaultName = $translate({
+          et: state.specimenAlt.rock,
+          en: state.specimenAlt.rock_en,
+        })
+        return state.specimenAlt.rock_txt &&
+          state.specimenAlt.rock_txt.length > 0
+          ? state.specimenAlt.rock_txt[0]
+          : defaultName
+      }
+      if (state.specimenAlt?.taxon) {
+        return state.specimenAlt.taxon
+      }
+      return null
+    })
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'specimen'),
+    }).value
+    useFetch(async () => {
+      const specimenPromise = $services.sarvREST.getResource(
+        'specimen',
+        parseInt(route.value.params.id),
+        { params: { nest: 2 } }
+      )
+
+      const specimenNamePromise = $services.sarvSolr.getResource(
+        'specimen',
+        parseInt(route.value.params.id)
+      )
+
+      const attachmentPromise = $services.sarvSolr.getResourceList(
+        'attachment',
+        {
+          defaultParams: {
+            fq: `specimen_id:${route.value.params.id} AND specimen_image_attachment:1`,
+            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+            rows: 25,
+          },
+        }
+      )
+      const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `specimen_id:${route.value.params.id}` } },
+              api: {
+                default: { specimen: route.value.params.id },
+                specimen_reference: { specimen: route.value.params.id },
+              },
+            },
+          })
+        )
+      )
+      const [
+        specimenResponse,
+        specimenNameResponse,
+        attachmentResponse,
+        hydratedTabs,
+      ] = await Promise.all([
+        specimenPromise,
+        specimenNamePromise,
+        attachmentPromise,
+        hydratedTabsPromise,
+      ])
+
+      state.ids = specimenResponse?.ids
+      state.specimen = specimenResponse
+      state.specimenAlt = specimenNameResponse?.[0]
+      state.images = attachmentResponse.items ?? []
+      state.tabs = hydratedTabs.filter((item) => item.count > 0)
+    })
     return {
-      specimen: null,
-      specimenAlt: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-      images: [],
+      ...toRefs(state),
+      title,
+      titleAlt,
+      isRock,
+      isTaxon,
+      dateCollected,
+      coll,
+      type,
+      classification,
+      locality,
+      stratigraphy,
+      lithostratigraphy,
+      agentCollected,
+      database,
+      sample,
+      parent,
     }
   },
-  async fetch() {
-    const specimenPromise = this.$services.sarvREST.getResource(
-      'specimen',
-      this.$route.params.id,
-      { params: { nest: 2 } }
-    )
-
-    const specimenNamePromise = this.$services.sarvSolr.getResource(
-      'specimen',
-      this.$route.params.id
-    )
-
-    const attachmentPromise = this.$services.sarvSolr.getResourceList(
-      'attachment',
-      {
-        defaultParams: {
-          fq: `specimen_id:${this.$route.params.id} AND specimen_image_attachment:1`,
-          sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
-          rows: 25,
-        },
-      }
-    )
-    const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
-    const hydratedTabsPromise = Promise.all(
-      tabs.map((tab) =>
-        this.$hydrateTab(tab, {
-          countParams: {
-            solr: { default: { fq: `specimen_id:${this.$route.params.id}` } },
-            api: {
-              default: { specimen: this.$route.params.id },
-              specimen_reference: { specimen: this.$route.params.id },
-            },
-          },
-        })
-      )
-    )
-    const [
-      specimenResponse,
-      specimenNameResponse,
-      attachmentResponse,
-      hydratedTabs,
-    ] = await Promise.all([
-      specimenPromise,
-      specimenNamePromise,
-      attachmentPromise,
-      hydratedTabsPromise,
-    ])
-
-    this.ids = specimenResponse?.ids
-    this.specimen = specimenResponse
-    this.specimenAlt = specimenNameResponse?.[0]
-    this.images = attachmentResponse.items ?? []
-    this.tabs = hydratedTabs
-
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      `${this.specimen.database.acronym} ${this.specimen.specimen_id}`
-    )
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
-  },
+  // @ts-ignore
   head() {
     return {
       title: `${this.title} | ${this.$t('specimen.pageTitle')}`,
@@ -332,8 +397,10 @@ export default {
         {
           property: 'og:image',
           hid: 'og:image',
+          // @ts-ignore
           content: this.images[0]?.filename
             ? this.$img(
+                // @ts-ignore
                 `${this.images[0]?.filename}`,
                 { size: 'small' },
                 {
@@ -345,68 +412,5 @@ export default {
       ],
     }
   },
-  computed: {
-    title() {
-      return `${this.specimen?.database?.acronym} ${this.specimen?.specimen_id}`
-    },
-    titleAlt() {
-      if (this.specimenAlt?.rock) {
-        const defaultName = this.$translate({
-          et: this.specimenAlt.rock,
-          en: this.specimenAlt.rock_en,
-        })
-        return this.specimenAlt.rock_txt && this.specimenAlt.rock_txt.length > 0
-          ? this.specimenAlt.rock_txt[0]
-          : defaultName
-      }
-      if (this.specimenAlt?.taxon) {
-        return this.specimenAlt.taxon
-      }
-      return null
-    },
-    isRock() {
-      return !!this.specimenAlt?.rock
-    },
-    isTaxon() {
-      return !!this.specimenAlt?.taxon
-    },
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    dateCollected() {
-      if (this.specimen.date_collected) return this.specimen.date_collected
-      return this.specimen.date_collected_free
-    },
-    coll() {
-      return this.specimen?.coll
-    },
-    type() {
-      return this.specimen?.type
-    },
-    classification() {
-      return this.specimen?.classification
-    },
-    locality() {
-      return this.specimen?.locality
-    },
-    stratigraphy() {
-      return this.specimen?.stratigraphy
-    },
-    lithostratigraphy() {
-      return this.specimen?.lithostratigraphy
-    },
-    agent_collected() {
-      return this.specimen?.agent_collected
-    },
-    database() {
-      return this.specimen?.database
-    },
-    sample() {
-      return this.specimen?.sample
-    },
-    parent() {
-      return this.specimen?.parent
-    },
-  },
-}
+})
 </script>

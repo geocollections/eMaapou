@@ -1,10 +1,7 @@
 <template>
   <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail
-        :ids="ids"
-        :title="$translate({ et: site.name, en: site.name_en })"
-      />
+      <header-detail :ids="ids" :title="title" />
     </template>
 
     <template #column-left>
@@ -320,16 +317,27 @@
           <div v-else>{{ $t('common.clickToOpen') }}</div>
         </template>
       </image-bar>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiOpenInNew, mdiFileDownloadOutline } from '@mdi/js'
 import isNil from 'lodash/isNil'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -337,10 +345,10 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
-import { TABS_SITE } from '~/constants'
+import { Tab, TABS_SITE } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     HeaderDetail,
     Tabs,
@@ -351,69 +359,91 @@ export default {
     ImageBar,
     BaseTable,
   },
-  data() {
-    return {
-      site: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-      images: [],
-    }
-  },
-  async fetch() {
-    const sitePromise = this.$services.sarvREST.getResource(
-      'site',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 2,
-        },
-      }
-    )
-    const attachmentPromise = this.$services.sarvREST.getResourceList(
-      'attachment_link',
-      {
-        defaultParams: {
-          site: this.$route.params.id,
-          attachment__attachment_format__value__istartswith: 'image',
-          nest: 1,
-        },
-        fields: {},
-      }
-    )
+  setup() {
+    const { $services, $hydrateTab, $translate, $formatDate } = useContext()
+    const route = useRoute()
+    const state = reactive({
+      site: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+      images: [] as any[],
+    })
+    const planArray = computed(() => {
+      return state.site?.area?.text1 ? state.site?.area?.text1.split(',') : []
+    })
+    const elevation = computed(() => {
+      return state.site?.elevation_accuracy
+        ? `${state.site?.elevation} (± ${state.site?.elevation_accuracy})`
+        : state.site?.elevation
+    })
+    const studied = computed(() => {
+      return state.site?.date_start
+        ? $formatDate(state.site?.date_start)
+        : state.site?.date_free
+    })
+    const locality = computed(() => state.site?.locality)
+    const area = computed(() => state.site?.area)
 
-    const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
-    const hydratedTabsPromise = Promise.all(
-      tabs.map((tab) =>
-        this.$hydrateTab(tab, {
-          countParams: {
-            solr: { default: { fq: `site_id:${this.$route.params.id}` } },
-            api: { default: { site: this.$route.params.id } },
+    const title = computed(() =>
+      $translate({ et: state.site?.name, en: state.site?.name_en })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'site'),
+    }).value
+
+    useFetch(async () => {
+      const sitePromise = $services.sarvREST.getResource(
+        'site',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 2,
           },
-        })
+        }
       )
-    )
-    const [siteResponse, attachmentResponse, hydratedTabs] = await Promise.all([
-      sitePromise,
-      attachmentPromise,
-      hydratedTabsPromise,
-    ])
+      const attachmentPromise = $services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            site: route.value.params.id,
+            attachment__attachment_format__value__istartswith: 'image',
+            nest: 1,
+          },
+          fields: {},
+        }
+      )
 
-    this.ids = siteResponse?.ids
-    this.site = siteResponse
-    this.images = attachmentResponse.items ?? []
-    this.tabs = hydratedTabs
+      const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `site_id:${route.value.params.id}` } },
+              api: { default: { site: route.value.params.id } },
+            },
+          })
+        )
+      )
+      const [siteResponse, attachmentResponse, hydratedTabs] =
+        await Promise.all([sitePromise, attachmentPromise, hydratedTabsPromise])
 
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({ et: this.site.name, en: this.site.name_en })
-    )
-
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+      state.ids = siteResponse?.ids
+      state.site = siteResponse
+      state.images = attachmentResponse.items ?? []
+      state.tabs = hydratedTabs.filter((item) => item.count > 0)
+    })
+    return {
+      ...toRefs(state),
+      title,
+      planArray,
+      elevation,
+      studied,
+      locality,
+      area,
+    }
   },
   head() {
     return {
@@ -427,18 +457,22 @@ export default {
         {
           property: 'description',
           hid: 'description',
+          // @ts-ignore
           content: this.site?.description ?? undefined,
         },
         {
           property: 'og:description',
           hid: 'og:description',
+          // @ts-ignore
           content: this.site?.description ?? undefined,
         },
         {
           property: 'og:image',
           hid: 'og:image',
+          // @ts-ignore
           content: this.images[0]?.attachment.filename
             ? this.$img(
+                // @ts-ignore
                 `${this.images[0]?.attachment.filename}`,
                 { size: 'small' },
                 {
@@ -457,41 +491,9 @@ export default {
         mdiFileDownloadOutline,
       }
     },
-    title() {
-      return this.$translate({ et: this.site?.name, en: this.site?.name_en })
-    },
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    planArray() {
-      if (this.site?.area?.text1) {
-        if (this.site?.area?.text1.includes(',')) {
-          return this.site?.area?.text1.split(',')
-        } else return [this.site?.area?.text1]
-      } else return []
-    },
-    routeName() {
-      return this.getRouteBaseName().split('-id')[0]
-    },
-    elevation() {
-      if (this.site.elevation_accuracy) {
-        return `${this.site.elevation} (± ${this.site.elevation_accuracy})`
-      }
-      return this.site.elevation
-    },
-    studied() {
-      if (this.site.date_start) return this.$formatDate(this.site.date_start)
-      return this.site.date_free
-    },
-    locality() {
-      return this.site?.locality
-    },
-    area() {
-      return this.site?.area
-    },
   },
   methods: {
     isNil,
   },
-}
+})
 </script>

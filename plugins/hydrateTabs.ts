@@ -1,12 +1,13 @@
 import { Plugin } from '@nuxt/types'
 import { Route, Location } from 'vue-router'
+import { Tab } from '~/constants'
 const plugin: Plugin = ({ app }, inject) => {
   const hydrateCount = async (
-    tab: any,
+    tab: Tab,
     options: { solr?: any; api?: any; fields?: any } = {}
   ) => {
     if (!tab.id) return tab
-
+    if (tab.count > 0) return tab
     if (tab.isSolr) {
       const res = await app.$services.sarvSolr.getResourceCount(
         tab.table ?? tab.id,
@@ -23,7 +24,7 @@ const plugin: Plugin = ({ app }, inject) => {
     }
   }
 
-  const hydrateProps = (tab: any, props: any) => {
+  const hydrateProps = (tab: Tab, props: any) => {
     return {
       ...tab,
       props: { ...tab.props, ...props },
@@ -31,24 +32,15 @@ const plugin: Plugin = ({ app }, inject) => {
   }
 
   const hydrateTab = async (
-    tab: object,
+    tab: Tab,
     options = { props: {}, countParams: {} }
-  ): Promise<object> => {
+  ): Promise<Tab> => {
     tab = hydrateProps(tab, options.props)
 
     return await hydrateCount(tab, options.countParams)
   }
 
-  const validateTabRoute = (
-    route: Location,
-    tabs: any[]
-  ): Location | undefined => {
-    // const routeCopy = {
-    //   name: route.name,
-    //   params: route.params,
-    //   path: route.path,
-    // }
-
+  const validateTabRoute = (route: Location, tabs: Tab[]): Location => {
     if (!(tabs.length > 0)) return route
     const currentTab = tabs.find(
       (tab) =>
@@ -58,7 +50,7 @@ const plugin: Plugin = ({ app }, inject) => {
           params: route.params,
         })
     )
-    if (!currentTab) return route
+    if (typeof currentTab === 'undefined') return route
     if (currentTab.count > 0) return route
     // Find tab that has items
     const initTab = tabs.find((tab) => tab.count > 0)

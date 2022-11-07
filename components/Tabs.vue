@@ -1,12 +1,10 @@
 <template>
   <div>
     <v-tabs
+      ref="tabs"
       v-model="activeTab"
-      style="border-bottom: lightgrey solid 1px"
       class="tabs"
-      light
-      background-color="grey lighten-4"
-      slider-color="accent darken-1"
+      slider-size="0"
       :show-arrows="$vuetify.breakpoint.smAndUp"
       :vertical="$vuetify.breakpoint.xsOnly"
       grow
@@ -16,8 +14,8 @@
         :key="index"
         :disabled="item.count === 0"
         nuxt
-        class="montserrat tab"
-        exact-active-class="active-tab"
+        class="montserrat tab text-none"
+        exact-active-class="active-tab font-weight-medium"
         exact
         :to="
           localePath({
@@ -33,70 +31,88 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
+import { Tab } from '~/constants'
+export default defineComponent({
   name: 'Tabs',
   props: {
     tabs: {
-      type: Array,
-      default: () => [],
+      type: Array as PropType<Tab[]>,
+      required: true,
     },
     initActiveTab: {
-      type: Object,
+      type: Object as PropType<Location>,
       required: true,
     },
   },
   data() {
+    const tabsDict = this.tabs.reduce((prev, tab) => {
+      return {
+        ...prev,
+        [tab.routeName]: tab,
+      }
+    }, {} as { [K: string]: Tab })
     return {
-      activeTab: this.$router.resolve(this.initActiveTab),
-      tabsDict: this.tabs.reduce((prev, tab) => {
-        return {
-          ...prev,
-          [tab.routeName]: tab,
-        }
-      }, {}),
-      activeTabProps: this.tabs.reduce((prev, tab) => {
-        return {
-          ...prev,
-          [tab.routeName]: tab,
-        }
-      }, {})[this.getRouteBaseName(this.initActiveTab)].props,
+      activeTab: null as any,
+      tabsDict,
+      activeTabProps: this.tabs[0].props,
     }
+  },
+  watch: {
+    initActiveTab: {
+      handler(newVal) {
+        this.activeTab = this.$router.resolve(newVal)
+        // @ts-ignore
+        this.$refs.tabs?.onResize()
+      },
+    },
   },
   methods: {
     handleTabChange() {
-      this.activeTabProps = this.tabsDict[this.getRouteBaseName()].props
+      this.activeTabProps =
+        this.tabsDict[this.getRouteBaseName() as string].props
     },
   },
-  // computed: {
-  //   tabsDict() {
-  //     return this.tabs.reduce((prev, tab) => {
-  //       return {
-  //         ...prev,
-  //         [tab.routeName]: tab,
-  //       }
-  //     }, {})
-  //   },
-  //   // activeTabProps() {
-  //   //   return this.tabsDict[this.getRouteBaseName()].props
-  //   // },
-  // },
-}
+})
 </script>
 
 <style lang="scss" scoped>
 .tabs {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+  // &::after {
+  //   content: '';
+  //   width: 100%;
+  //   height: 1px;
+  //   background: black;
+  //   display: inline-block;
+  //   position: absolute;
+  //   background-color: var(--v-accent-darken1);
+  //   opacity: 0.2;
+  // }
+  border-bottom: lightgray solid 1px;
 }
 
 .tab {
   color: #424242 !important;
+  &::before {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
 }
 
 .active-tab {
-  font-weight: bold;
+  // font-weight: bold;
   color: var(--v-accent-darken1) !important;
+  &::before {
+    opacity: 0.2 !important;
+    background-color: var(--v-accent-darken1) !important;
+
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
 }
 
 .v-tabs--vertical {

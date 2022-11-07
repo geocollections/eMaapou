@@ -1,18 +1,7 @@
 <template>
   <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail
-        :ids="ids"
-        :title="
-          $t('analysis.title', {
-            method: $translate({
-              et: analysis_method.analysis_method,
-              en: analysis_method.method_en,
-            }),
-            sample: sample.number,
-          })
-        "
-      />
+      <header-detail :ids="ids" :title="pageTitle" />
     </template>
 
     <template #default>
@@ -25,12 +14,12 @@
             <v-card-text>
               <base-table>
                 <table-row
-                  v-if="analysis_method"
+                  v-if="analysisMethod"
                   :title="$t('analysis.method')"
                   :value="
                     $translate({
-                      et: analysis_method.analysis_method,
-                      en: analysis_method.method_en,
+                      et: analysisMethod.analysis_method,
+                      en: analysisMethod.method_en,
                     })
                   "
                 />
@@ -164,89 +153,130 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { TABS_ANALYSIS } from '~/constants'
-
-export default {
+import { Tab, TABS_ANALYSIS } from '~/constants'
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: { HeaderDetail, TableRow, TableRowLink, Tabs, Detail, BaseTable },
-  data() {
-    return {
-      analysis: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const analysisPromise = this.$services.sarvREST.getResource(
-      'analysis',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 2,
-        },
-      }
-    )
+  setup() {
+    const { $services, $hydrateTab, $translate, i18n } = useContext()
+    const route = useRoute()
+    const state = reactive({
+      analysis: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+    })
 
-    const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
-    const hydratedTabsPromise = Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: {
-                default: { fq: `analysis_id:${this.$route.params.id}` },
-              },
-              api: {
-                default: { analysis: this.$route.params.id },
-              },
-            },
-          })
+    const database = computed(() => state.analysis?.database)
+    const analysisMethod = computed(() => state.analysis?.analysis_method ?? '')
+    const sample = computed(() => state.analysis?.sample)
+    const agent = computed(() => state.analysis?.agent)
+    const reference = computed(() => state.analysis?.reference)
+    const dataset = computed(() => state.analysis?.dataset)
+    const slugText = computed(
+      () =>
+        `${$translate({
+          et: state.analysis?.analysis_method.analysis_method,
+          en: state.analysis?.analysis_method.method_en,
+        })}-${state.analysis?.sample.number}`
+    )
+    const pageTitle = computed(() =>
+      i18n.t('analysis.title', {
+        method: $translate({
+          et: state.analysis?.analysis_method?.analysis_method,
+          en: state.analysis?.analysis_method?.method_en,
+        }),
+        sample: state.analysis?.sample?.number,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: slugText,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'analysis'),
+    }).value
+
+    useFetch(async () => {
+      const analysisPromise = $services.sarvREST.getResource(
+        'analysis',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 2,
+          },
+        }
       )
-    )
-    const [analysisResponse, hydratedTabs] = await Promise.all([
-      analysisPromise,
-      hydratedTabsPromise,
-    ])
-    this.tabs = hydratedTabs
-    this.ids = analysisResponse?.ids
-    this.analysis = analysisResponse
 
-    const text = `${this.$translate({
-      et: this.analysis.analysis_method.analysis_method,
-      en: this.analysis.analysis_method.method_en,
-    })}-${this.analysis.sample.number}`
+      const tabs = TABS_ANALYSIS.allIds.map((id) => TABS_ANALYSIS.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map(
+          async (tab) =>
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: { fq: `analysis_id:${route.value.params.id}` },
+                },
+                api: {
+                  default: { analysis: route.value.params.id },
+                },
+              },
+            })
+        )
+      )
+      const [analysisResponse, hydratedTabs] = await Promise.all([
+        analysisPromise,
+        hydratedTabsPromise,
+      ])
+      state.tabs = hydratedTabs.filter((tab) => tab.count > 0)
+      state.ids = analysisResponse?.ids
+      state.analysis = analysisResponse
+    })
 
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    return {
+      ...toRefs(state),
+      database,
+      analysisMethod,
+      sample,
+      agent,
+      reference,
+      dataset,
+      pageTitle,
+    }
   },
   head() {
     return {
-      title: `${this.title} | ${this.$t('analysis.pageTitle')}`,
+      title: `${this.pageTitle} | ${this.$t('analysis.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
-          content: `${this.title} | ${this.$t('analysis.pageTitle')}`,
+          content: `${this.pageTitle} | ${this.$t('analysis.pageTitle')}`,
           hid: 'og:title',
         },
         {
@@ -257,41 +287,9 @@ export default {
       ],
     }
   },
-  computed: {
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    title() {
-      return this.$t('analysis.title', {
-        method: this.$translate({
-          et: this.analysis?.analysis_method?.analysis_method,
-          en: this.analysis?.analysis_method?.method_en,
-        }),
-        sample: this.analysis?.sample?.number,
-      })
-    },
-    database() {
-      return this.analysis?.database
-    },
-    analysis_method() {
-      return this.analysis?.analysis_method ?? ''
-    },
-    sample() {
-      return this.analysis?.sample
-    },
-    agent() {
-      return this.analysis?.agent
-    },
-    reference() {
-      return this.analysis?.reference
-    },
-    dataset() {
-      return this.analysis?.dataset
-    },
-  },
   methods: {
     isEmpty,
     isNil,
   },
-}
+})
 </script>

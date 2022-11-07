@@ -1,5 +1,5 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
       <header-detail :ids="ids" :title="title" />
     </template>
@@ -144,24 +144,36 @@
       </div>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isEmpty from 'lodash/isEmpty'
 import isNull from 'lodash/isNull'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
-import { TABS_COLLECTION } from '~/constants/tabs'
+import { Tab, TABS_COLLECTION } from '~/constants/tabs'
 import BaseTable from '~/components/base/BaseTable.vue'
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     HeaderDetail,
     TableRow,
@@ -170,55 +182,68 @@ export default {
     Tabs,
     BaseTable,
   },
-  data() {
-    return {
-      collection: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const collectionPromise = this.$services.sarvREST.getResource(
-      'collection',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 1,
-        },
-      }
+  setup() {
+    const { $services, $hydrateTab, $translate } = useContext()
+    const route = useRoute()
+
+    const state = reactive({
+      collection: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+    })
+    const title = computed(() =>
+      $translate({
+        et: state.collection?.name,
+        en: state.collection?.name_en,
+      })
     )
-    const tabs = TABS_COLLECTION.allIds.map((id) => TABS_COLLECTION.byIds[id])
-    const hydratedTabsPromise = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
+    const reference = computed(() => state.collection?.reference)
+    const database = computed(() => state.collection?.database)
+    const classification = computed(() => state.collection?.classification)
+
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'collection'),
+    }).value
+    useFetch(async () => {
+      const collectionPromise = $services.sarvREST.getResource(
+        'collection',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 1,
+          },
+        }
+      )
+      const tabs = TABS_COLLECTION.allIds.map((id) => TABS_COLLECTION.byIds[id])
+      const hydratedTabsPromise = await Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
             countParams: {
               solr: {
                 default: {
-                  fq: `collection_id:${this.$route.params.id}`,
+                  fq: `collection_id:${route.value.params.id}`,
                 },
               },
             },
           })
+        )
       )
-    )
-    const [collectionResponse, hydratedTabs] = Promise.all([
-      collectionPromise,
-      hydratedTabsPromise,
-    ])
-    this.ids = collectionResponse?.ids
-    this.collection = collectionResponse
-    this.tabs = hydratedTabs.map((tab) => {
-      return { ...tab, props: { collection: this.collection } }
+      const [collectionResponse, hydratedTabs] = await Promise.all([
+        collectionPromise,
+        hydratedTabsPromise,
+      ])
+      state.ids = collectionResponse?.ids
+      state.collection = collectionResponse
+      state.tabs = hydratedTabs
+        .filter((tab) => tab.count > 0)
+        .map((tab) => {
+          return { ...tab, props: { collection: state.collection } }
+        })
     })
-
-    const slugRoute = this.$createSlugRoute(this.$route, this.collection.number)
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    return { ...toRefs(state), title, reference, classification, database }
   },
   head() {
     return {
@@ -237,31 +262,9 @@ export default {
       ],
     }
   },
-  computed: {
-    title() {
-      return this.$translate({
-        et: this.collection.name,
-        en: this.collection.name_en,
-      })
-    },
-    filteredTabs() {
-      return this.tabs.filter((item) => {
-        return item.count > 0
-      })
-    },
-    reference() {
-      return this.collection?.reference
-    },
-    classification() {
-      return this.collection?.classification
-    },
-    database() {
-      return this.collection?.database
-    },
-  },
   methods: {
     isEmpty,
     isNull,
   },
-}
+})
 </script>

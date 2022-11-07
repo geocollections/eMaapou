@@ -1,7 +1,7 @@
 <template>
   <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail :ids="ids" :title="drillcoreBoxTitle" />
+      <header-detail :ids="ids" :title="pageTitle" />
     </template>
     <template #top>
       <v-card v-if="activeImage" class="my-2">
@@ -254,26 +254,37 @@
       </v-card>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
 
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import Tabs from '~/components/Tabs.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
-import { TABS_DRILLCORE_BOX } from '~/constants'
+import { Tab, TABS_DRILLCORE_BOX } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     Tabs,
     TableRow,
@@ -282,100 +293,116 @@ export default {
     Detail,
     BaseTable,
   },
-  data() {
-    return {
+  setup() {
+    const { $services, $hydrateTab, $translate, i18n } = useContext()
+    const route = useRoute()
+    const state = reactive({
       imageSizes: ['small', 'medium', 'large', 'original'],
-      drillcoreBox: null,
-      drillcoreBoxImages: [],
-      activeImage: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const drillcoreBoxPromise = this.$services.sarvREST.getResource(
-      'drillcore_box',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 1,
-        },
-      }
-    )
-    const attachmentLinkPromise = this.$services.sarvREST.getResourceList(
-      'attachment_link',
-      {
-        defaultParams: {
-          drillcore_box: this.$route.params.id,
-          nest: 2,
-          ordering: '-attachment__is_preferred',
-        },
-      }
+      drillcoreBox: null as any,
+      drillcoreBoxImages: [] as any[],
+      activeImage: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+    })
+    const drillcore = computed(() => state.drillcoreBox?.drillcore)
+
+    const pageTitle = computed(
+      () =>
+        `${i18n.t('drillcoreBox.nr', {
+          number: state.drillcoreBox?.number,
+        })} - ${$translate({
+          et: state.drillcoreBox?.drillcore?.drillcore,
+          en: state.drillcoreBox?.drillcore?.drillcore_en,
+        })}`
     )
 
-    const [drillcoreBoxResponse, attachmentLinkResponse] = await Promise.all([
-      drillcoreBoxPromise,
-      attachmentLinkPromise,
-    ])
-
-    this.ids = drillcoreBoxResponse?.ids
-    this.drillcoreBox = drillcoreBoxResponse
-
-    this.drillcoreBoxImages = attachmentLinkResponse.items
-    this.activeImage = this.drillcoreBoxImages?.[0]
-
-    const tabs = TABS_DRILLCORE_BOX.allIds.map(
-      (id) => TABS_DRILLCORE_BOX.byIds[id]
+    const title = computed(
+      () =>
+        `${$translate({
+          et: state.drillcoreBox?.drillcore?.drillcore,
+          en: state.drillcoreBox?.drillcore?.drillcore_en,
+        })}-${state.drillcoreBox?.number}`
     )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'drillcoreBox'),
+    }).value
 
-    this.tabs =
-      !isNil(this.drillcoreBox?.drillcore?.locality) &&
-      !isNil(this.drillcoreBox?.depth_start) &&
-      !isNil(this.drillcoreBox?.depth_end)
-        ? await Promise.all(
-            tabs.map(
-              async (tab) =>
-                await this.$hydrateTab(tab, {
-                  props: {
-                    locality: this.drillcoreBox.drillcore.locality,
-                    depthStart: this.drillcoreBox.depth_start,
-                    depthEnd: this.drillcoreBox.depth_end,
-                  },
-                  countParams: {
-                    solr: {
-                      default: {
-                        fq: `locality_id:${this.drillcoreBox.drillcore.locality} AND (depth:[${this.drillcoreBox.depth_start} TO ${this.drillcoreBox.depth_end}] OR depth_interval:[${this.drillcoreBox.depth_start} TO ${this.drillcoreBox.depth_end}])`,
-                      },
+    useFetch(async () => {
+      const drillcoreBoxPromise = $services.sarvREST.getResource(
+        'drillcore_box',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 1,
+          },
+        }
+      )
+      const attachmentLinkPromise = $services.sarvREST.getResourceList(
+        'attachment_link',
+        {
+          defaultParams: {
+            drillcore_box: route.value.params.id,
+            nest: 2,
+            ordering: '-attachment__is_preferred',
+          },
+        }
+      )
+
+      const [drillcoreBoxResponse, attachmentLinkResponse] = await Promise.all([
+        drillcoreBoxPromise,
+        attachmentLinkPromise,
+      ])
+
+      state.ids = drillcoreBoxResponse?.ids
+      state.drillcoreBox = drillcoreBoxResponse
+
+      state.drillcoreBoxImages = attachmentLinkResponse.items
+      state.activeImage = state.drillcoreBoxImages?.[0]
+
+      const tabs = TABS_DRILLCORE_BOX.allIds.map(
+        (id) => TABS_DRILLCORE_BOX.byIds[id]
+      )
+
+      state.tabs = (
+        !isNil(state.drillcoreBox?.drillcore?.locality) &&
+        !isNil(state.drillcoreBox?.depth_start) &&
+        !isNil(state.drillcoreBox?.depth_end)
+          ? await Promise.all(
+              tabs.map(
+                async (tab) =>
+                  await $hydrateTab(tab, {
+                    props: {
+                      locality: state.drillcoreBox.drillcore.locality,
+                      depthStart: state.drillcoreBox.depth_start,
+                      depthEnd: state.drillcoreBox.depth_end,
                     },
-                    api: {},
-                  },
-                })
+                    countParams: {
+                      solr: {
+                        default: {
+                          fq: `locality_id:${state.drillcoreBox.drillcore.locality} AND (depth:[${state.drillcoreBox.depth_start} TO ${state.drillcoreBox.depth_end}] OR depth_interval:[${state.drillcoreBox.depth_start} TO ${state.drillcoreBox.depth_end}])`,
+                        },
+                      },
+                      api: {},
+                    },
+                  })
+              )
             )
-          )
-        : tabs
-
-    const text = `${this.$translate({
-      et: this.drillcoreBox.drillcore?.drillcore,
-      en: this.drillcoreBox.drillcore?.drillcore_en,
-    })}-${this.drillcoreBox.number}`
-    // eslint-disable-next-line no-unused-vars
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+          : tabs
+      ).filter((item) => item.count > 0)
+    })
+    return { ...toRefs(state), drillcore, pageTitle }
   },
   head() {
     return {
-      title: `${this.title} | ${this.$t('drillcoreBox.pageTitle')}`,
+      title: `${this.pageTitle} | ${this.$t('drillcoreBox.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: `${this.title} | ${this.$t('drillcoreBox.pageTitle')}`,
+          content: `${this.pageTitle} | ${this.$t('drillcoreBox.pageTitle')}`,
         },
         {
           property: 'og:url',
@@ -386,6 +413,7 @@ export default {
           property: 'og:image',
           hid: 'og:image',
           content: this.$img(
+            // @ts-ignore
             `${this.activeImage?.attachment?.uuid_filename}`,
             { size: 'medium' },
             {
@@ -396,37 +424,9 @@ export default {
       ],
     }
   },
-  computed: {
-    title() {
-      return `${this.$t('drillcoreBox.nr', {
-        number: this.drillcoreBox?.number,
-      })} - ${this.$translate({
-        et: this.drillcoreBox?.drillcore?.drillcore,
-        en: this.drillcoreBox?.drillcore?.drillcore_en,
-      })}`
-    },
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-
-    drillcoreBoxTitle() {
-      let title = this.$translate({
-        et: this.drillcoreBox?.drillcore?.drillcore,
-        en: this.drillcoreBox?.drillcore?.drillcore_en,
-      })
-      if (this.drillcoreBox?.number)
-        title += `, ${this.$t('drillcoreBox.nr', {
-          number: this.drillcoreBox?.number,
-        })}`
-      return title
-    },
-    drillcore() {
-      return this.drillcoreBox?.drillcore
-    },
-  },
   methods: {
     isNull,
     isNil,
   },
-}
+})
 </script>

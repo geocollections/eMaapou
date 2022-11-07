@@ -6,6 +6,7 @@ import services from '~/services'
 import { ITranslations } from '~/plugins/translate'
 import { Route, Location } from 'vue-router'
 import * as L from 'leaflet'
+import { Tab } from '~/constants'
 declare module '*.vue' {
   export default Vue
 }
@@ -21,12 +22,15 @@ declare module 'vue/types/vue' {
     $services: ReturnType<typeof services>
     $translate(translations: ITranslations): string
     $hydrateTab(
-      tab: object,
-      options?: { props: {}; countParams: {} }
-    ): Promise<object>
-    $validateTabRoute(route: Location, tabs: any[]): Location | undefined
+      tab: Tab,
+      options?: {
+        props?: any
+        countParams?: any
+      }
+    ): Promise<Tab>
+    $validateTabRoute(route: Location, tabs: any[]): Location
     $getMaxTab(route: Route, tabs: any[]): Route | undefined
-    $createSlugRoute(route: Route, text: string): Location | undefined
+    $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
@@ -50,12 +54,15 @@ declare module '@nuxt/types' {
     $services: ReturnType<typeof services>
     $translate(translations: ITranslations): string
     $hydrateTab(
-      tab: object,
-      options?: { props: {}; countParams: {} }
-    ): Promise<object>
-    $validateTabRoute(route: Location, tabs: any[]): Location | undefined
+      tab: Tab,
+      options?: {
+        props?: any
+        countParams?: any
+      }
+    ): Promise<Tab>
+    $validateTabRoute(route: Location, tabs: any[]): Location
     $getMaxTab(route: Route, tabs: any[]): Route | undefined
-    $createSlugRoute(route: Route, text: string): Route | undefined
+    $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
@@ -78,12 +85,15 @@ declare module '@nuxt/types' {
     $services: ReturnType<typeof services>
     $translate(translations: ITranslations): string
     $hydrateTab(
-      tab: object,
-      options?: { props: {}; countParams: {} }
-    ): Promise<object>
-    $validateTabRoute(route: Location, tabs: any[]): Location | undefined
+      tab: Tab,
+      options?: {
+        props?: any
+        countParams?: any
+      }
+    ): Promise<Tab>
+    $validateTabRoute(route: Location, tabs: any[]): Location
     $getMaxTab(route: Route, tabs: any[]): Route | undefined
-    $createSlugRoute(route: Route, text: string): Location | undefined
+    $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void

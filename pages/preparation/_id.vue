@@ -45,9 +45,9 @@
             :value="agent.agent || preparation.agent_txt"
           />
           <table-row
-            v-if="identification_agent"
+            v-if="identificationAgent"
             :title="$t('preparation.identification_agent')"
-            :value="identification_agent.agent"
+            :value="identificationAgent.agent"
           />
           <table-row
             :title="$t('preparation.date_prepared')"
@@ -128,91 +128,123 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 pb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 pb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isNil from 'lodash/isNil'
+import {
+  useContext,
+  useFetch,
+  useRoute,
+  computed,
+  defineComponent,
+  reactive,
+  toRefs,
+  toRef,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
-import { TABS_PREPARATION } from '~/constants'
+import { Tab, TABS_PREPARATION } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
-  data() {
-    return {
-      preparation: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const preparationResponse = await this.$services.sarvREST.getResource(
-      'preparation',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 1,
-        },
-      }
-    )
-    const tabs = TABS_PREPARATION.allIds.map((id) => TABS_PREPARATION.byIds[id])
-    const hydratedTabs = await Promise.all(
-      tabs.map((tab) =>
-        this.$hydrateTab(tab, {
-          countParams: {
-            solr: {
-              default: { fq: `preparation_id:${this.$route.params.id}` },
-            },
-            api: { default: { preparation: this.$route.params.id } },
-          },
-        })
-      )
-    )
-    // NOTE: using `Promise.all`, breaks the page weirdly.
-    // For some reason the preparation promise returns a `taxon_list` result with the same id sometimes
-    // Ex. `preparation/10045`
-    // Making the query straight to the the API, it always returns the correct response.
-    // Seems to be caused if multiple queries are made to API at the same time and if the API endpoints use generic views.
-    // const [preparationResponse, hydratedTabs] = await Promise.all([
-    //   preparationPromise,
-    //   hydratedTabsPromise,
-    // ])
+  setup() {
+    const { $services, $hydrateTab } = useContext()
+    const route = useRoute()
 
-    this.ids = preparationResponse?.ids
-    this.preparation = preparationResponse
-    this.tabs = hydratedTabs
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.preparation.preparation_number
+    const state = reactive({
+      preparation: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+    })
+    const sample = computed(() => state.preparation?.sample)
+    const analysis = computed(() => state.preparation?.analysis)
+    const taxon = computed(() => state.preparation?.taxon)
+    const agent = computed(() => state.preparation?.agent)
+    const identificationAgent = computed(
+      () => state.preparation?.identification_agent
     )
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    const storage = computed(() => state.preparation?.storage)
+    const owner = computed(() => state.preparation?.owner)
+
+    const title = computed(() => state.preparation?.preparation_number)
+
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'preparation'),
+    }).value
+
+    useFetch(async () => {
+      const preparationResponse = await $services.sarvREST.getResource(
+        'preparation',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 1,
+          },
+        }
+      )
+      const tabs = TABS_PREPARATION.allIds.map(
+        (id) => TABS_PREPARATION.byIds[id]
+      )
+      const hydratedTabs = await Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
+            countParams: {
+              solr: {
+                default: { fq: `preparation_id:${route.value.params.id}` },
+              },
+              api: { default: { preparation: route.value.params.id } },
+            },
+          })
+        )
+      )
+      // NOTE: using `Promise.all`, breaks the page weirdly.
+      // For some reason the preparation promise returns a `taxon_list` result with the same id sometimes
+      // Ex. `preparation/10045`
+      // Making the query straight to the the API, it always returns the correct response.
+      // Seems to be caused if multiple queries are made to API at the same time and if the API endpoints use generic views.
+      // const [preparationResponse, hydratedTabs] = await Promise.all([
+      //   preparationPromise,
+      //   hydratedTabsPromise,
+      // ])
+      state.ids = preparationResponse?.ids
+      state.preparation = preparationResponse
+      state.tabs = hydratedTabs.filter((item) => item.count > 0)
+    })
+
+    return {
+      ...toRefs(state),
+      title,
+      sample,
+      analysis,
+      taxon,
+      agent,
+      identificationAgent,
+      storage,
+      owner,
+    }
   },
   head() {
     return {
-      title: `${this.preparation?.preparation_number} | ${this.$t(
-        'preparation.pageTitle'
-      )}`,
+      title: `${this.title} | ${this.$t('preparation.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: `${this.preparation?.preparation_number} | ${this.$t(
-            'preparation.pageTitle'
-          )}`,
+          content: `${this.title} | ${this.$t('preparation.pageTitle')}`,
         },
         {
           property: 'og:url',
@@ -222,34 +254,8 @@ export default {
       ],
     }
   },
-  computed: {
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    sample() {
-      return this.preparation?.sample
-    },
-    analysis() {
-      return this.preparation?.analysis
-    },
-    taxon() {
-      return this.preparation?.taxon
-    },
-    agent() {
-      return this.preparation?.agent
-    },
-    identification_agent() {
-      return this.preparation?.identification_agent
-    },
-    storage() {
-      return this.preparation?.storage
-    },
-    owner() {
-      return this.preparation?.owner
-    },
-  },
   methods: {
     isNil,
   },
-}
+})
 </script>

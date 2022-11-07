@@ -36,9 +36,9 @@ export default ($axios: NuxtAxiosInstance) => ({
       defaultParams = {},
       fields = {},
       search = null,
-      options,
+      options = {},
     }: {
-      options: IOptions
+      options?: IOptions
       search?: string | null
       fields?: { [key: string]: string }
       defaultParams?: { [key: string]: any }

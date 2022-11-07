@@ -1,4 +1,20 @@
-export const TABS_QUICK_SEARCH = {
+export type Tab = {
+  id: string
+  isSolr?: boolean
+  table?: string
+  routeName: string
+  title: string
+  count: number
+  props: { [K: string]: any }
+  fields?: string
+  objectId?: string
+}
+type ResourceTabs = {
+  byIds: { [K: string]: Tab }
+  allIds: string[]
+}
+
+export const TABS_QUICK_SEARCH: ResourceTabs = {
   byIds: {
     locality: {
       id: 'locality',
@@ -43,7 +59,6 @@ export const TABS_QUICK_SEARCH = {
     preparation: {
       id: 'preparation',
       routeName: 'search-preparations',
-      path: '/localities',
       title: 'landing.preparations',
       isSolr: true,
       count: 0,
@@ -151,7 +166,7 @@ export const TABS_QUICK_SEARCH = {
   ],
 }
 
-export const TABS_ANALYSIS = {
+export const TABS_ANALYSIS: ResourceTabs = {
   byIds: {
     analysis_results: {
       id: 'analysis_results',
@@ -172,7 +187,7 @@ export const TABS_ANALYSIS = {
   allIds: ['analysis_results', 'attachment_link'],
 }
 
-export const TABS_AREA = {
+export const TABS_AREA: ResourceTabs = {
   byIds: {
     site: {
       id: 'site',
@@ -209,7 +224,7 @@ export const TABS_AREA = {
   allIds: ['site', 'locality_reference', 'relatedArea', 'locality'],
 }
 
-export const TABS_COLLECTION = {
+export const TABS_COLLECTION: ResourceTabs = {
   byIds: {
     specimen: {
       id: 'specimen',
@@ -223,7 +238,7 @@ export const TABS_COLLECTION = {
   allIds: ['specimen'],
 }
 
-export const TABS_DATASET = {
+export const TABS_DATASET: ResourceTabs = {
   byIds: {
     sample_results: {
       id: 'sample_results',
@@ -295,9 +310,11 @@ export const TABS_DATASET = {
   ],
 }
 
-export const TABS_DRILLCORE = {
+export const TABS_DRILLCORE: ResourceTabs = {
   byIds: {
     boxes: {
+      id: 'boxes',
+      table: 'drillcore_box',
       routeName: 'drillcore-id-slug',
       title: 'drillcore.drillcoreBoxesTitle',
       count: 0,
@@ -370,7 +387,7 @@ export const TABS_DRILLCORE = {
   ],
 }
 
-export const TABS_DRILLCORE_BOX = {
+export const TABS_DRILLCORE_BOX: ResourceTabs = {
   byIds: {
     sample: {
       id: 'sample',
@@ -400,7 +417,7 @@ export const TABS_DRILLCORE_BOX = {
   allIds: ['sample', 'analysis', 'specimen'],
 }
 
-export const TABS_LOCALITY = {
+export const TABS_LOCALITY: ResourceTabs = {
   byIds: {
     locality_reference: {
       id: 'locality_reference',
@@ -432,6 +449,8 @@ export const TABS_LOCALITY = {
       props: {},
     },
     boxes: {
+      id: 'boxes',
+      table: 'drillcore_box',
       routeName: 'locality-id-slug-drillcore-boxes',
       title: 'locality.drillcoreBoxes',
       count: 0,
@@ -491,7 +510,7 @@ export const TABS_LOCALITY = {
   ],
 }
 
-export const TABS_PREPARATION = {
+export const TABS_PREPARATION: ResourceTabs = {
   byIds: {
     attachment_link: {
       id: 'attachment_link',
@@ -512,7 +531,7 @@ export const TABS_PREPARATION = {
   allIds: ['attachment_link', 'taxon_list'],
 }
 
-export const TABS_SAMPLE = {
+export const TABS_SAMPLE: ResourceTabs = {
   byIds: {
     analysis: {
       id: 'analysis',
@@ -579,7 +598,7 @@ export const TABS_SAMPLE = {
   ],
 }
 
-export const TABS_SITE = {
+export const TABS_SITE: ResourceTabs = {
   byIds: {
     attachment_link: {
       id: 'attachment_link',
@@ -619,7 +638,7 @@ export const TABS_SITE = {
   ],
 }
 
-export const TABS_SPECIMEN = {
+export const TABS_SPECIMEN: ResourceTabs = {
   byIds: {
     specimen_identification: {
       id: 'specimen_identification',
@@ -656,7 +675,7 @@ export const TABS_SPECIMEN = {
   ],
 }
 
-export const TABS_STRATIGRAPHY = {
+export const TABS_STRATIGRAPHY: ResourceTabs = {
   byIds: {
     stratigraphy_reference: {
       id: 'stratigraphy_reference',

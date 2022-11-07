@@ -1,10 +1,7 @@
 <template>
   <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail
-        :ids="ids"
-        :title="$translate({ et: area.name, en: area.name_en })"
-      />
+      <header-detail :ids="ids" :title="pageTitle" />
     </template>
 
     <template #column-left>
@@ -345,7 +342,7 @@
       </v-row>
     </template>
 
-    <template v-if="computedSites" #column-right>
+    <template v-if="siteMarkers" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
@@ -355,7 +352,7 @@
             rounded
             estonian-map
             estonian-bedrock-overlay
-            :markers="computedSites"
+            :markers="siteMarkers"
             :geojson="geojson"
           />
         </v-card>
@@ -363,27 +360,40 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiFileDownloadOutline } from '@mdi/js'
 import isNil from 'lodash/isNil'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
-import { TABS_AREA } from '~/constants'
+import { Tab, TABS_AREA } from '~/constants'
 import BaseBoolean from '~/components/base/BaseBoolean.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+import { MapMarker } from '~/types/map'
+export default defineComponent({
   components: {
     LeafletMap,
     HeaderDetail,
@@ -395,87 +405,143 @@ export default {
     BaseLinkExternal,
     BaseTable,
   },
-  data() {
-    return {
-      area: null,
-      ids: [],
-      sites: [],
-      deposit: '',
-      miningClaim: '',
-      validRoute: {},
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const areaPromise = this.$services.sarvREST.getResource(
-      'area',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 1,
-        },
-      }
-    )
-    const sitesForMapPromise = this.$services.sarvSolr.getResourceList('site', {
-      defaultParams: {
-        fq: `area_id:${this.$route.params.id}`,
-      },
+  setup() {
+    const { $services, $hydrateTab, $translate, i18n } = useContext()
+    const route = useRoute()
+
+    const state = reactive({
+      area: null as any,
+      ids: {} as any,
+      siteMarkers: [] as MapMarker[],
+      deposit: '' as string,
+      miningClaim: '' as string,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
     })
-    const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
-    const hydratedTabsPromise = Promise.all(
-      tabs.map(
-        async (tab) =>
-          await this.$hydrateTab(tab, {
-            countParams: {
-              solr: {
-                default: { fq: `area_id:${this.$route.params.id}` },
-              },
-              api: {
-                default: { area: this.$route.params.id },
-                relatedArea: { parent_area: this.$route.params.id },
-              },
-            },
-          })
+    const eelisArray = computed(() => state.area?.eelis?.split(';') ?? [])
+    const egfArray = computed(() => state.area?.egf?.split(';') ?? [])
+    const planArray = computed(() => state.area?.text1?.split(';') ?? [])
+    const geojson = computed(() => {
+      const parsedPolygon =
+        JSON.parse(
+          // NOTE: Remove trailing commas from JSON object string
+          // eslint-disable-next-line no-useless-escape
+          state.area?.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, '')
+        ) ?? null
+      if (!(parsedPolygon instanceof Array)) return parsedPolygon
+      else
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: parsedPolygon,
+          },
+        }
+    })
+    const pageTitle = computed(() =>
+      $translate({
+        et: state.area?.name,
+        en: state.area?.name_en,
+      })
+    )
+    const metaTitle = computed(
+      () =>
+        `${$translate({
+          et: state.area?.name,
+          en: state.area?.name_en,
+        })} | ${i18n.t('area.pageTitle')}`
+    )
+    state.validRoute = useSlugRoute({
+      slug: pageTitle,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'area'),
+    }).value
+    useFetch(async () => {
+      const areaPromise = $services.sarvREST.getResource(
+        'area',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 1,
+          },
+        }
       )
-    )
-    const [areaResponse, sitesForMapResponse, hydratedTabs] = await Promise.all(
-      [areaPromise, sitesForMapPromise, hydratedTabsPromise]
-    )
-    this.ids = areaResponse?.ids
-    this.area = areaResponse
-    this.tabs = hydratedTabs
-    this.deposit = this.area.maaamet_maardla
+      const sitesForMapPromise = $services.sarvSolr.getResourceList('site', {
+        defaultParams: {
+          fq: `area_id:${route.value.params.id}`,
+        },
+      })
+      const tabs = TABS_AREA.allIds.map((id) => TABS_AREA.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map(
+          async (tab) =>
+            await $hydrateTab(tab, {
+              countParams: {
+                solr: {
+                  default: { fq: `area_id:${route.value.params.id}` },
+                },
+                api: {
+                  default: { area: route.value.params.id },
+                  relatedArea: { parent_area: route.value.params.id },
+                },
+              },
+            })
+        )
+      )
+      const [areaResponse, sitesForMapResponse, hydratedTabs] =
+        await Promise.all([
+          areaPromise,
+          sitesForMapPromise,
+          hydratedTabsPromise,
+        ])
+      state.ids = areaResponse?.ids
+      state.area = areaResponse
+      state.tabs = hydratedTabs.filter((tab) => tab.count > 0)
+      state.deposit = state.area.maaamet_maardla
 
-    this.miningClaim = this.area.maaamet_maeeraldis
+      state.miningClaim = state.area.maaamet_maeeraldis
 
-    this.sites = sitesForMapResponse.items
+      state.siteMarkers = sitesForMapResponse.items.reduce(
+        (filtered: MapMarker[], item: any) => {
+          if (!(item.longitude && item.latitude)) return filtered
+          const isItemInArray = filtered.some(
+            (existingItem: any) =>
+              existingItem.latitude === item.latitude &&
+              existingItem.longitude === item.longitude
+          )
+          if (isItemInArray) return filtered
+          const newItem = {
+            longitude: item.longitude,
+            latitude: item.latitude,
+            text:
+              $translate({ et: item.name, en: item.name_en }) ??
+              `ID: ${item.id}`,
+            routeName: 'site',
+            id: item.id,
+          }
 
-    const text = this.$translate({
-      et: this.area.name,
-      en: this.area.name_en,
+          return [...filtered, newItem]
+        },
+        []
+      )
     })
-
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    return {
+      ...toRefs(state),
+      eelisArray,
+      egfArray,
+      planArray,
+      geojson,
+      pageTitle,
+      metaTitle,
+    }
   },
   head() {
     return {
-      title: `${this.$translate({
-        et: this.area?.name,
-        en: this.area?.name_en,
-      })} | ${this.$t('area.pageTitle')}`,
+      title: this.metaTitle as string,
       meta: [
         {
           property: 'og:title',
-          content: `${this.$translate({
-            et: this.area?.name,
-            en: this.area?.name_en,
-          })} | ${this.$t('area.pageTitle')}`,
+          content: this.metaTitle as string,
           hid: 'og:title',
         },
       ],
@@ -487,83 +553,9 @@ export default {
         mdiFileDownloadOutline,
       }
     },
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-
-    eelisArray() {
-      if (this.area.eelis) {
-        if (this.area.eelis.includes(';')) {
-          return this.area.eelis.split(';')
-        } else return [this.area.eelis]
-      } else return []
-    },
-
-    egfArray() {
-      if (this.area.egf) {
-        if (this.area.egf.includes(';')) {
-          return this.area.egf.split(';')
-        } else return [this.area.egf]
-      } else return []
-    },
-
-    planArray() {
-      if (this.area.text1) {
-        if (this.area.text1.includes(',')) {
-          return this.area.text1.split(',')
-        } else return [this.area.text1]
-      } else return []
-    },
-    parsedPolygon() {
-      try {
-        // NOTE: Remove trailing commas from JSON object string
-        // eslint-disable-next-line no-useless-escape
-        const regex = /\,(?!\s*?[\{\[\"\'\w])/g
-        return JSON.parse(this.area.polygon.replace(regex, ''))
-      } catch (e) {
-        return null
-      }
-    },
-    geojson() {
-      if (this.parsedPolygon === null) return null
-
-      if (!(this.parsedPolygon instanceof Array)) return this.parsedPolygon
-      else
-        return {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: this.parsedPolygon,
-          },
-        }
-    },
-    computedSites() {
-      if (this.sites) {
-        return this.sites.reduce((filtered, item) => {
-          if (item.longitude && item.latitude) {
-            const newItem = {
-              longitude: item.longitude,
-              latitude: item.latitude,
-              text:
-                this.$translate({ et: item.name, en: item.name_en }) ??
-                `ID: ${item.id}`,
-              routeName: 'site',
-              id: item.id,
-            }
-            const isItemInArray = !!filtered.find(
-              (existingItem) =>
-                existingItem.latitude === item.latitude &&
-                existingItem.longitude === item.longitude
-            )
-            if (!isItemInArray) filtered.push(newItem)
-          }
-          return filtered
-        }, [])
-      } else return []
-    },
   },
   methods: {
     isNil,
   },
-}
+})
 </script>

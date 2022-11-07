@@ -1,7 +1,7 @@
 <template>
   <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail :ids="ids" :title="fileTitle" />
+      <header-detail :ids="ids" :title="pageTitle" />
     </template>
     <template #column-left>
       <v-card-text class="text-center">
@@ -289,9 +289,9 @@
             </template>
           </table-row>
           <table-row
-            v-if="agent_digitised"
+            v-if="agentDigitised"
             :title="$t('file.personDigitised')"
-            :value="agent_digitised.agent"
+            :value="agentDigitised.agent"
           />
           <table-row
             :title="$t('file.dateDigitised')"
@@ -358,14 +358,14 @@
     </template>
 
     <template #bottom>
-      <v-row v-if="filteredTabs.length > 0" class="mt-2">
+      <v-row v-if="tabs.length > 0" class="mt-2">
         <transition-group
           appear
           class="d-flex flex-wrap flex-grow-1"
           name="fade"
         >
           <v-col
-            v-for="(item, index) in filteredTabs"
+            v-for="(item, index) in tabs"
             :key="`${item.title}-${index}`"
             cols="12"
             md="6"
@@ -455,7 +455,7 @@
                   }}</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <las-chart
-                      :chart-title="fileTitle"
+                      :chart-title="pageTitle"
                       :file-data="rawFileContent"
                     />
                   </v-expansion-panel-content>
@@ -497,7 +497,7 @@
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import {
   mdiFileMusicOutline,
   mdiFileVideoOutline,
@@ -506,6 +506,17 @@ import {
 } from '@mdi/js'
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
@@ -513,8 +524,8 @@ import LeafletMap from '~/components/map/LeafletMap.vue'
 import Detail from '~/templates/Detail.vue'
 import LasChart from '~/components/chart/types/LasChart.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     LasChart,
     HeaderDetail,
@@ -524,9 +535,11 @@ export default {
     Detail,
     BaseTable,
   },
-  data() {
-    return {
-      expansionPanel: [1],
+  setup() {
+    const { $services, $translate, i18n } = useContext()
+    const route = useRoute()
+    const state = reactive({
+      expansionPanel: [1] as number[],
       nameFields: {
         collection: {
           et: 'collection_name',
@@ -596,297 +609,422 @@ export default {
           et: 'taxon',
           en: 'taxon',
         },
-      },
-      specimenIdentification: [],
-      specimenIdentificationGeology: [],
-      attachmentKeywords: [],
+      } as any,
+      specimenIdentification: [] as any[],
+      specimenIdentificationGeology: [] as any[],
+      attachmentKeywords: [] as any[],
       fileContent: '',
       rawFileContent: '',
-      file: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-    }
-  },
-
-  async fetch() {
-    const filePromise = this.$services.sarvREST.getResource(
-      'attachment',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 2,
-          only_photo_ids: this.$route.name.startsWith('photo'),
-        },
-      }
+      file: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as any[],
+    })
+    const imageSize = computed(() => {
+      return state.file?.image_width && state.file?.image_height
+        ? `${state.file.image_width} × ${state.file.image_height} px`
+        : null
+    })
+    const isImage = computed(() =>
+      state.file?.attachment_format.includes('image')
     )
-    const tabs = [
-      {
-        id: 'collection',
-        title: 'related.collection',
-        count: 0,
-        items: [],
-        isLink: false,
-      },
-      {
-        id: 'specimen',
-        title: 'related.specimen',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'sample',
-        title: 'related.sample',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'sample_series',
-        title: 'related.sample_series',
-        count: 0,
-        items: [],
-        isLink: false,
-      },
-      {
-        id: 'analysis',
-        title: 'related.analysis',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'dataset',
-        title: 'related.dataset',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'doi',
-        title: 'related.doi',
-        count: 0,
-        items: [],
-        isLink: true,
-        href: 'https://doi.geocollections.info/',
-      },
-      {
-        id: 'locality',
-        title: 'related.locality',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'drillcore',
-        title: 'related.drillcore',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'drillcore_box',
-        route: 'drillcore-box',
-        title: 'related.drillcore_box',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'preparation',
-        title: 'related.preparation',
-        count: 0,
-        items: [],
-        isLink: false,
-      },
-      {
-        id: 'reference',
-        title: 'related.reference',
-        count: 0,
-        items: [],
-        isLink: true,
-        href: 'https://kirjandus.geoloogia.info/reference/',
-      },
-      {
-        id: 'storage',
-        title: 'related.storage',
-        count: 0,
-        items: [],
-        isLink: false,
-      },
-      {
-        id: 'project',
-        title: 'related.project',
-        count: 0,
-        items: [],
-        isLink: false,
-      },
-      {
-        id: 'site',
-        title: 'related.site',
-        count: 0,
-        items: [],
-        isLink: true,
-        isNuxtLink: true,
-      },
-      {
-        id: 'locality_description',
-        title: 'related.locality_description',
-        count: 0,
-        items: [],
-        isLink: false,
-      },
-      {
-        id: 'taxon',
-        title: 'related.taxon',
-        count: 0,
-        items: [],
-        isLink: true,
-        href: 'https://fossiilid.info/',
-      },
-    ]
-    const hydratedTabsPromise = Promise.all(
-      tabs.map((tab) => {
-        const res = this.$services.sarvREST.getResourceList('attachment_link', {
-          defaultParams: {
-            [`${tab.id}__isnull`]: false,
-            attachment: this.$route.params.id,
-            nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-          },
-        })
-        return { ...tab, count: res.count, items: res.items }
-      })
+    const isAudio = computed(() =>
+      state.file?.attachment_format.includes('audio')
     )
-    const attachmentKeywordsPromise = this.$services.sarvREST.getResourceList(
-      'attachment_keyword',
-      {
-        defaultParams: {
-          attachment: this.$route.params.id,
-          nest: 1,
-        },
-      }
+    const isVideo = computed(() =>
+      state.file?.attachment_format.includes('video')
     )
-
-    const [fileResponse, attachmentKeywordsResponse, hydratedTabs] =
-      await Promise.all([
-        filePromise,
-        attachmentKeywordsPromise,
-        hydratedTabsPromise,
-      ])
-
-    this.ids = fileResponse?.ids
-    this.file = fileResponse
-    this.tabs = hydratedTabs
-    this.attachmentKeywords = attachmentKeywordsResponse.items
-    // console.log(this.file)
-    let text
-    switch (this.file.specimen_image_attachment) {
-      case 1:
-        text = `${this.file.specimen?.coll?.number?.split(' ')?.[0]} ${
-          this.file.specimen?.specimen_id
-        } (ID-${this.file.specimen.id})`
-        break
-      case 2:
-        text = this.file.image_number
-        break
-      case 4:
-        text = this.file.reference?.reference
-        break
-      default:
-        text = `${this.$translate({
-          et: this.file.description,
-          en: this.file.description_en,
-        })}`
-    }
-
-    if (this.file.specimen) {
-      const specimenIdentificationPromise =
-        this.$services.sarvREST.getResourceList('specimen_identification', {
-          defaultParams: {
-            current: true,
-            specimen: this.file.specimen?.id,
-            nest: 1,
-          },
-        })
-      const specimenIdentificationGeologyPromise =
-        this.$services.sarvREST.getResourceList(
-          'specimen_identification_geology',
-          {
-            defaultParams: {
-              current: true,
-              specimen: this.file.specimen?.id,
-              nest: 1,
-            },
-          }
-        )
-      const [
-        specimenIdentificationResponse,
-        specimenIdentificationGeologyResponse,
-      ] = await Promise.all([
-        specimenIdentificationPromise,
-        specimenIdentificationGeologyPromise,
-      ])
-      this.specimenIdentification = specimenIdentificationResponse.items
-      this.specimenIdentificationGeology =
-        specimenIdentificationGeologyResponse.items
-    }
-
-    if (
-      this.file.uuid_filename?.endsWith('.txt') ||
-      this.file.uuid_filename?.endsWith('.las')
-    ) {
-      // File content (e.g., .las in json format)
-      const fileContentPromise = this.$services.sarvREST.getResource(
-        'file',
-        this.$route.params.id
+    const imageSizes = computed(() => {
+      if (!isImage) return ['original']
+      return ['small', 'medium', 'large', 'original']
+    })
+    const showMap = computed(() => {
+      return (
+        (state.file?.locality?.latitude && state.file?.locality?.longitude) ||
+        (state.file?.image_latitude && state?.file.image_longitude) ||
+        (state.file?.specimen?.locality?.latitude &&
+          state.file?.specimen?.locality?.longitude)
       )
-      // Raw file content in text format
-      const rawFileContentPromise = this.$services.sarvREST.getResource(
-        'file',
-        this.$route.params.id,
+    })
+
+    const mapIsEstonian = computed(() => {
+      return (
+        state.file?.locality?.country?.value === 'Eesti' ||
+        state.file?.specimen?.locality?.country?.value === 'Eesti'
+      )
+    })
+
+    const mapLatitude = computed(() => {
+      return (
+        state.file?.locality?.latitude ||
+        state.file?.specimen?.locality?.latitude ||
+        state.file?.image_latitude
+      )
+    })
+    const mapLongitude = computed(() => {
+      return (
+        state.file?.locality?.longitude ||
+        state.file?.specimen?.locality?.longitude ||
+        state.file?.image_longitude
+      )
+    })
+
+    const mapLocalityText = computed(() => {
+      return $translate({
+        et:
+          state.file?.locality?.locality ||
+          state.file?.specimen?.locality?.locality ||
+          state.file?.image_place ||
+          state.file?.description,
+        en:
+          state.file?.locality?.locality_en ||
+          state.file?.specimen?.locality?.locality_en ||
+          state.file?.image_place ||
+          state.file?.description_en,
+      })
+    })
+
+    const specimen = computed(() => state.file?.specimen)
+    const imageset = computed(() => state.file?.imageset)
+    const locality = computed(() => state.file?.locality)
+    const type = computed(() => state.file?.type)
+    const agentDigitised = computed(() => state.file?.agent_digitised)
+    const database = computed(() => state.file?.database)
+    const licence = computed(() => state.file?.licence)
+
+    const title = computed(() => {
+      if (!state.file) return ''
+      switch (state.file.specimen_image_attachment) {
+        case 1:
+          return `${state.file?.specimen?.coll?.number?.split(' ')?.[0]} ${
+            state.file?.specimen?.specimen_id
+          } (ID: ${state.file?.specimen.id})`
+        case 2:
+          return state.file?.image_number
+        case 4:
+          return state.file?.reference?.reference
+        default:
+          return `${
+            $translate({
+              et: state.file?.description,
+              en: state.file?.description_en,
+            }) ?? state.file?.id
+          }`
+      }
+    })
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'file'),
+    }).value
+    const pageType = computed(() => {
+      if (!state.file) return ''
+      switch (state.file.specimen_image_attachment) {
+        case 1:
+          return i18n.t('file.specimenTitle')
+        case 2:
+          return i18n.t('file.imageTitle')
+        case 4:
+          return i18n.t('file.referenceTitle')
+        default:
+          return i18n.t('file.fileTitle')
+      }
+    })
+    const pageTitle = computed(() => `${title.value} | ${pageType.value}`)
+    useFetch(async () => {
+      const filePromise = $services.sarvREST.getResource(
+        'attachment',
+        parseInt(route.value.params.id),
         {
           params: {
-            raw_content: 'true',
+            nest: 2,
+            only_photo_ids: route.value.name?.startsWith('photo'),
           },
         }
       )
-      const [fileContentResponse, rawFileContentResponse] = await Promise.all([
-        fileContentPromise,
-        rawFileContentPromise,
-      ])
-
-      this.fileContent = fileContentResponse
-      if (fileContentResponse.startsWith('Error: ')) this.fileContent = ''
-      this.rawFileContent = rawFileContentResponse
-      if (
-        typeof rawFileContentResponse === 'string' &&
-        rawFileContentResponse.startsWith('Error: ')
+      const tabs = [
+        {
+          id: 'collection',
+          title: 'related.collection',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'specimen',
+          title: 'related.specimen',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'sample',
+          title: 'related.sample',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'sample_series',
+          title: 'related.sample_series',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'analysis',
+          title: 'related.analysis',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'dataset',
+          title: 'related.dataset',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'doi',
+          title: 'related.doi',
+          count: 0,
+          items: [],
+          isLink: true,
+          href: 'https://doi.geocollections.info/',
+        },
+        {
+          id: 'locality',
+          title: 'related.locality',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'drillcore',
+          title: 'related.drillcore',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'drillcore_box',
+          route: 'drillcore-box',
+          title: 'related.drillcore_box',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'preparation',
+          title: 'related.preparation',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'reference',
+          title: 'related.reference',
+          count: 0,
+          items: [],
+          isLink: true,
+          href: 'https://kirjandus.geoloogia.info/reference/',
+        },
+        {
+          id: 'storage',
+          title: 'related.storage',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'project',
+          title: 'related.project',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'site',
+          title: 'related.site',
+          count: 0,
+          items: [],
+          isLink: true,
+          isNuxtLink: true,
+        },
+        {
+          id: 'locality_description',
+          title: 'related.locality_description',
+          count: 0,
+          items: [],
+          isLink: false,
+        },
+        {
+          id: 'taxon',
+          title: 'related.taxon',
+          count: 0,
+          items: [],
+          isLink: true,
+          href: 'https://fossiilid.info/',
+        },
+      ]
+      const hydratedTabsPromise = Promise.all(
+        tabs.map((tab) => {
+          return $services.sarvREST
+            .getResourceList('attachment_link', {
+              defaultParams: {
+                [`${tab.id}__isnull`]: false,
+                attachment: route.value.params.id,
+                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
+              },
+            })
+            .then((res) => {
+              return { ...tab, count: res.count, items: res.items }
+            })
+        })
       )
-        this.rawFileContent = ''
+      const attachmentKeywordsPromise = $services.sarvREST.getResourceList(
+        'attachment_keyword',
+        {
+          defaultParams: {
+            attachment: route.value.params.id,
+            nest: 1,
+          },
+        }
+      )
+
+      const [fileResponse, attachmentKeywordsResponse, hydratedTabs] =
+        await Promise.all([
+          filePromise,
+          attachmentKeywordsPromise,
+          hydratedTabsPromise,
+        ])
+
+      state.ids = fileResponse?.ids
+      state.file = fileResponse
+      state.tabs = hydratedTabs.filter((item) => item.count > 0)
+      state.attachmentKeywords = attachmentKeywordsResponse.items
+
+      if (state.file?.specimen) {
+        const specimenIdentificationPromise =
+          $services.sarvREST.getResourceList('specimen_identification', {
+            defaultParams: {
+              current: true,
+              specimen: state.file.specimen?.id,
+              nest: 1,
+            },
+          })
+        const specimenIdentificationGeologyPromise =
+          $services.sarvREST.getResourceList(
+            'specimen_identification_geology',
+            {
+              defaultParams: {
+                current: true,
+                specimen: state.file.specimen?.id,
+                nest: 1,
+              },
+            }
+          )
+        const [
+          specimenIdentificationResponse,
+          specimenIdentificationGeologyResponse,
+        ] = await Promise.all([
+          specimenIdentificationPromise,
+          specimenIdentificationGeologyPromise,
+        ])
+        state.specimenIdentification = specimenIdentificationResponse.items
+        state.specimenIdentificationGeology =
+          specimenIdentificationGeologyResponse.items
+      }
+
+      if (
+        state.file?.uuid_filename?.endsWith('.txt') ||
+        state.file?.uuid_filename?.endsWith('.las')
+      ) {
+        // File content (e.g., .las in json format)
+        const fileContentPromise = $services.sarvREST.getResource(
+          'file',
+          parseInt(route.value.params.id)
+        )
+        // Raw file content in text format
+        const rawFileContentPromise = $services.sarvREST.getResource(
+          'file',
+          parseInt(route.value.params.id),
+          {
+            params: {
+              raw_content: 'true',
+            },
+          }
+        )
+        const [fileContentResponse, rawFileContentResponse] = await Promise.all(
+          [fileContentPromise, rawFileContentPromise]
+        )
+
+        state.fileContent = fileContentResponse
+        if (fileContentResponse.startsWith('Error: ')) state.fileContent = ''
+        state.rawFileContent = rawFileContentResponse
+        if (
+          typeof rawFileContentResponse === 'string' &&
+          rawFileContentResponse.startsWith('Error: ')
+        )
+          state.rawFileContent = ''
+      }
+    })
+
+    const buildData = (type: string, data: any) => {
+      if (type === 'specimen') {
+        return `${data[type].coll.number.split(' ')[0]} ${
+          data[type].specimen_id
+        }`
+      }
+      if (type === 'analysis') {
+        return data[type].sample.number
+      } else {
+        return $translate({
+          et: data[type][state.nameFields[type].et],
+          en: data[type][state.nameFields[type].en],
+        })
+      }
     }
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    return {
+      ...toRefs(state),
+      licence,
+      database,
+      agentDigitised,
+      type,
+      locality,
+      imageset,
+      specimen,
+      mapLocalityText,
+      mapLongitude,
+      mapLatitude,
+      mapIsEstonian,
+      showMap,
+      imageSizes,
+      isVideo,
+      isAudio,
+      isImage,
+      imageSize,
+      pageTitle,
+      buildData,
+    }
   },
+  // @ts-ignore
   head() {
     return {
-      title: this.fileTitle,
+      title: this.pageTitle as string,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: this.fileTitle,
+          content: this.pageTitle as string,
         },
         {
           property: 'og:url',
@@ -899,6 +1037,7 @@ export default {
             hid: 'og:image',
             content: this.isImage
               ? this.$img(
+                  // @ts-ignore
                   `${this.file.filename}`,
                   { size: 'small' },
                   {
@@ -911,14 +1050,16 @@ export default {
             property: 'og:video',
             hid: 'og:video',
             content: this.isVideo
-              ? `https://files.geocollections.info/${this.file.uuid_filename}`
+              ? // @ts-ignore
+                `https://files.geocollections.info/${this.file.uuid_filename}`
               : undefined,
           },
           {
             property: 'og:audio',
             hid: 'og:audio',
             content: this.isAudio
-              ? `https://files.geocollections.info/${this.file.uuid_filename}`
+              ? // @ts-ignore
+                `https://files.geocollections.info/${this.file.uuid_filename}`
               : undefined,
           },
         ],
@@ -934,161 +1075,12 @@ export default {
         mdiOpenInNew,
       }
     },
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-
-    fileTitle() {
-      switch (this.file?.specimen_image_attachment) {
-        case 1:
-          return `${this.file?.specimen?.coll?.number?.split(' ')[0]} ${
-            this.file?.specimen?.specimen_id
-          } (ID: ${this.file.specimen.id}) | ${this.$t('file.specimenTitle')}`
-        case 2:
-          return `${this.file.image_number} | ${this.$t('file.imageTitle')}`
-        case 4:
-          return `${this.file?.reference?.reference} | ${this.$t(
-            'file.referenceTitle'
-          )}`
-        default: {
-          const description = this.$translate({
-            et: this?.file?.description,
-            en: this?.file?.description_en,
-          })
-
-          return `${description ?? this?.file?.id} | ${this.$t(
-            'file.fileTitle'
-          )}`
-        }
-      }
-    },
-
-    imageSize() {
-      if (this.file.image_width && this.file.image_height) {
-        return `${this.file.image_width} × ${this.file.image_height} px`
-      } else {
-        return null
-      }
-    },
-
-    isImage() {
-      return this.file?.attachment_format.includes('image')
-    },
-
-    isAudio() {
-      return this.file?.attachment_format?.includes('audio')
-    },
-
-    isVideo() {
-      return this.file?.attachment_format?.includes('video')
-    },
-
-    imageSizes() {
-      let sizes = ['small', 'medium', 'large', 'original']
-      if (!this.isImage) {
-        sizes = ['original']
-      }
-      return sizes
-    },
-
-    showMap() {
-      return (
-        (this.file?.locality?.latitude && this.file?.locality?.longitude) ||
-        (this.file.image_latitude && this.file.image_longitude) ||
-        (this.file?.specimen?.locality?.latitude &&
-          this.file?.specimen?.locality?.longitude)
-      )
-    },
-
-    mapIsEstonian() {
-      return (
-        this.file?.locality?.country?.value === 'Eesti' ||
-        this.file?.specimen?.locality?.country?.value === 'Eesti'
-      )
-    },
-
-    mapLatitude() {
-      return (
-        this.file?.locality?.latitude ||
-        this.file?.specimen?.locality?.latitude ||
-        this.file.image_latitude
-      )
-    },
-
-    mapLongitude() {
-      return (
-        this.file?.locality?.longitude ||
-        this.file?.specimen?.locality?.longitude ||
-        this.file.image_longitude
-      )
-    },
-
-    mapLocality() {
-      return (
-        this.file?.locality?.locality ||
-        this.file?.specimen?.locality?.locality ||
-        this.file.image_place ||
-        this.file.description
-      )
-    },
-
-    mapLocalityEn() {
-      return (
-        this.file?.locality?.locality_en ||
-        this.file?.specimen?.locality?.locality_en ||
-        this.file.image_place ||
-        this.file.description_en
-      )
-    },
-
-    specimen() {
-      return this?.file?.specimen
-    },
-
-    imageset() {
-      return this?.file?.imageset
-    },
-
-    locality() {
-      return this?.file?.locality
-    },
-
-    type() {
-      return this?.file?.type
-    },
-
-    agent_digitised() {
-      return this?.file?.agent_digitised
-    },
-
-    database() {
-      return this?.file?.database
-    },
-
-    licence() {
-      return this?.file?.licence
-    },
   },
   methods: {
     isNull,
     isNil,
-    buildData(type, data) {
-      if (type === 'specimen') {
-        return `${data[type].coll.number.split(' ')[0]} ${
-          data[type].specimen_id
-        }`
-      }
-      if (type === 'analysis') {
-        return data[type].sample.number
-      } else {
-        return this.$translate({
-          et: data[type][this.nameFields[type].et],
-          en: data[type][this.nameFields[type].en],
-        })
-      }
-    },
   },
-}
+})
 </script>
 
 <style scoped>

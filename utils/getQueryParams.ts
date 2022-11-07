@@ -19,10 +19,10 @@ export default ({
   if (q && q.value.length > 0) {
     query[q.key] = q.value
   }
-  query.page = tableOptions.page.toString()
-  query.itemsPerPage = tableOptions.itemsPerPage.toString()
-  query.sortBy = tableOptions.sortBy.join(',')
-  query.sortDesc = tableOptions.sortDesc.join(',')
+  query.page = tableOptions.page?.toString()
+  query.itemsPerPage = tableOptions.itemsPerPage?.toString()
+  query.sortBy = tableOptions.sortBy?.join(',')
+  query.sortDesc = tableOptions.sortDesc?.join(',')
 
   if (filters) {
     Object.entries(filters)

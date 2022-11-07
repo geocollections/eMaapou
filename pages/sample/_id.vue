@@ -1,7 +1,7 @@
 <template>
   <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail :ids="ids" :title="sampleTitle" />
+      <header-detail :ids="ids" :title="pageTitle" />
     </template>
     <template #column-left>
       <v-card-title class="subsection-title">{{
@@ -143,18 +143,18 @@
             :value="sample.date_collected || sample.date_collected_free"
           />
           <table-row
-            v-if="agent_collected || sample.agent_collected_txt"
+            v-if="agentCollected || sample.agent_collected_txt"
             :title="$t('sample.agentCollected')"
-            :value="agent_collected.agent || sample.agent_collected_txt"
+            :value="agentCollected.agent || sample.agent_collected_txt"
           />
           <table-row :title="$t('sample.mass')" :value="sample.mass" />
           <table-row
-            v-if="sample_purpose"
+            v-if="samplePurpose"
             :title="$t('sample.samplePurpose')"
             :value="
               $translate({
-                et: sample_purpose.value,
-                en: sample_purpose.value_en,
+                et: samplePurpose.value,
+                en: samplePurpose.value_en,
               })
             "
           />
@@ -168,12 +168,12 @@
             "
           />
           <table-row
-            v-if="classification_rock"
+            v-if="classificationRock"
             :title="$t('sample.classificationRock')"
             :value="
               $translate({
-                et: classification_rock.name,
-                en: classification_rock.name_en,
+                et: classificationRock.name,
+                en: classificationRock.name_en,
               })
             "
           />
@@ -309,39 +309,50 @@
       </v-card-text>
     </template>
 
-    <template v-else-if="computedLocations.length > 0" #column-right>
+    <template v-else-if="locations.length > 0" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
       <v-card-text>
         <v-card elevation="0">
-          <leaflet-map rounded :markers="computedLocations" />
+          <leaflet-map rounded :markers="locations" />
         </v-card>
       </v-card-text>
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isEmpty from 'lodash/isEmpty'
 import isNil from 'lodash/isNil'
 
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Tabs from '~/components/Tabs.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Detail from '~/templates/Detail.vue'
-import { TABS_SAMPLE } from '~/constants'
+import { Tab, TABS_SAMPLE } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     HeaderDetail,
     TableRowLink,
@@ -351,86 +362,152 @@ export default {
     Detail,
     BaseTable,
   },
-  data() {
-    return {
-      sample: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-      locations: [],
-    }
-  },
-  async fetch() {
-    const samplePromise = this.$services.sarvREST.getResource(
-      'sample',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 2,
-        },
-      }
+  setup() {
+    const { i18n, $hydrateTab, $services, $translate } = useContext()
+    const route = useRoute()
+
+    const state = reactive({
+      sample: null as any,
+      tabs: [] as Tab[],
+      locations: [] as any[],
+      validRoute: {} as Location,
+      ids: {} as any,
+    })
+
+    const parentSpecimen = computed(() => state.sample?.parent_specimen)
+    const parent = computed(() => state.sample?.parent_sample)
+    const project = computed(() => state.sample?.project)
+    const database = computed(() => state.sample?.database)
+    const owner = computed(() => state.sample?.owner)
+    const classificationRock = computed(() => state.sample?.classification_rock)
+    const samplePurpose = computed(() => state.sample?.sample_purpose)
+    const agentCollected = computed(() => state.sample?.agent_collected)
+    const lithostratigraphy = computed(() => state.sample?.lithostratigraphy)
+    const stratigraphy = computed(() => state.sample?.stratigraphy)
+    const site = computed(() => state.sample?.site)
+    const locality = computed(() => state.sample?.locality)
+    const title = computed(() =>
+      `${
+        state.sample?.number ||
+        state.sample?.number_additional ||
+        state.sample?.number_field ||
+        state.sample?.id
+      }`.trim()
     )
-    const localityGroupedPromise = this.$services.sarvSolr.getResourceList(
-      'analysis',
-      {
-        defaultParams: {
-          fq: `sample_id:${this.$route.params.id}`,
-          fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
-          group: true,
-          'group.field': ['locality_id', 'site_id'],
-          rows: 10000,
-        },
-      }
+    const pageTitle = computed(
+      () => `${i18n.t('sample.number')} ${title.value}`
     )
-    const tabsObject = TABS_SAMPLE
-    tabsObject.byIds.graphs.props.sampleObject = this.sample
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-    const hydratedTabsPromise = Promise.all(
-      tabs.map((tab) =>
-        this.$hydrateTab(tab, {
-          countParams: {
-            solr: { default: { fq: `sample_id:${this.$route.params.id}` } },
-            api: { default: { sample: this.$route.params.id } },
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'sample'),
+    }).value
+
+    useFetch(async () => {
+      const samplePromise = $services.sarvREST.getResource(
+        'sample',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 2,
           },
-        })
+        }
       )
-    )
-    const [sampleResponse, localityGroupedResponse, hydratedTabs] =
-      await Promise.all([
-        samplePromise,
-        localityGroupedPromise,
-        hydratedTabsPromise,
-      ])
+      const localityGroupedPromise = $services.sarvSolr.getResourceList(
+        'analysis',
+        {
+          defaultParams: {
+            fq: `sample_id:${route.value.params.id}`,
+            fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
+            group: true,
+            'group.field': ['locality_id', 'site_id'],
+            rows: 10000,
+          },
+        }
+      )
+      const tabsObject = TABS_SAMPLE
+      // TODO: this prop should be set after `samplePromise` resolves
+      // @ts-ignore
+      tabsObject.byIds.graphs.props.sampleObject = state.sample
+      // @ts-ignore
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+      const hydratedTabsPromise = Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
+            countParams: {
+              solr: { default: { fq: `sample_id:${route.value.params.id}` } },
+              api: { default: { sample: route.value.params.id } },
+            },
+          })
+        )
+      )
+      const [sampleResponse, localityGroupedResponse, hydratedTabs] =
+        await Promise.all([
+          samplePromise,
+          localityGroupedPromise,
+          hydratedTabsPromise,
+        ])
+      state.ids = sampleResponse?.ids
+      state.sample = sampleResponse
+      state.tabs = hydratedTabs.filter((tab) => tab.count > 0)
 
-    this.ids = sampleResponse?.ids
-    this.sample = sampleResponse
+      const localities = localityGroupedResponse?.grouped?.locality_id?.groups
+        ?.map((item: any) => item?.doclist?.docs?.[0])
+        .filter((item: any) => !isEmpty(item) && item?.locality_id)
+      const sites = localityGroupedResponse?.grouped?.site_id?.groups
+        ?.map((item: any) => item?.doclist?.docs?.[0])
+        .filter((item: any) => !isEmpty(item) && item?.site_id)
 
-    const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => !isEmpty(item) && item?.locality_id)
-    const sites = localityGroupedResponse?.grouped?.site_id?.groups
-      ?.map((item) => item?.doclist?.docs?.[0])
-      .filter((item) => !isEmpty(item) && item?.site_id)
-    this.locations = localities.concat(sites)
+      state.locations = localities
+        .concat(sites)
+        .reduce((filtered: any[], item: any) => {
+          if (!(item.latitude && item.longitude)) return filtered
+          const isItemInArray = filtered.some(
+            (existingItem: any) =>
+              existingItem.latitude === item.latitude &&
+              existingItem.longitude === item.longitude
+          )
+          if (isItemInArray) return filtered
 
-    this.tabs = hydratedTabs
+          const newItem = {
+            latitude: item.latitude,
+            longitude: item.longitude,
+            text:
+              $translate({ et: item.locality, en: item.locality_en }) ??
+              (item.name || `ID: ${item.id}`),
+            routeName: item.locality_id ? 'locality' : 'site',
+            id: item.locality_id ?? item.site_id,
+          }
+          return [...filtered, newItem]
+        }, [])
 
-    const name = `${
-      this.sample.number ||
-      this.sample.number_additional ||
-      this.sample.number_field
-    }`.trim()
-    // NOTE: Sample 115823 has number = " ", so slug fallback is the id of the sample
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      `${isEmpty(name) ? this.sample.id : name}`
-    )
-
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+      if (state.sample?.site) {
+        state.locations.push({
+          latitude: state.sample.site.latitude,
+          longitude: state.sample.site.longitude,
+          text: state.sample.site.name,
+          routeName: 'site',
+          id: state.sample.site_id,
+        })
+      }
+    })
+    return {
+      ...toRefs(state),
+      parentSpecimen,
+      parent,
+      project,
+      database,
+      owner,
+      classificationRock,
+      samplePurpose,
+      agentCollected,
+      lithostratigraphy,
+      stratigraphy,
+      site,
+      locality,
+      title,
+      pageTitle,
+    }
   },
   head() {
     return {
@@ -449,96 +526,8 @@ export default {
       ],
     }
   },
-  computed: {
-    title() {
-      return (
-        this.sample?.number ||
-        this.sample?.number_additional ||
-        this.sample?.number_field ||
-        this.sample?.id
-      )
-    },
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    sampleTitle() {
-      return `${this.$t('sample.number')} ${this.title}`
-    },
-
-    computedLocations() {
-      const locations = this.locations.reduce((filtered, item) => {
-        if (item.latitude && item.longitude) {
-          const newItem = {
-            latitude: item.latitude,
-            longitude: item.longitude,
-            text:
-              this.$translate({ et: item.locality, en: item.locality_en }) ??
-              (item.name || `ID: ${item.id}`),
-            routeName: item.locality_id ? 'locality' : 'site',
-            id: item.locality_id ?? item.site_id,
-          }
-
-          const isItemInArray = !!filtered.find(
-            (existingItem) =>
-              existingItem.latitude === item.latitude &&
-              existingItem.longitude === item.longitude
-          )
-          if (!isItemInArray) filtered.push(newItem)
-        }
-        return filtered
-      }, [])
-
-      if (this.sample?.site) {
-        locations.push({
-          latitude: this.sample?.site?.latitude,
-          longitude: this.sample?.site?.longitude,
-          text: this.sample?.site?.name,
-          routeName: 'site',
-          id: this.sample.site_id,
-        })
-      }
-
-      return locations
-    },
-    locality() {
-      return this.sample?.locality
-    },
-    site() {
-      return this.sample?.site
-    },
-    stratigraphy() {
-      return this.sample?.stratigraphy
-    },
-    lithostratigraphy() {
-      return this.sample?.lithostratigraphy
-    },
-    agent_collected() {
-      return this.sample?.agent_collected
-    },
-    sample_purpose() {
-      return this.sample?.sample_purpose
-    },
-    classification_rock() {
-      return this.sample?.classification_rock
-    },
-    owner() {
-      return this.sample?.owner
-    },
-    database() {
-      return this.sample?.database
-    },
-    project() {
-      return this.sample?.project
-    },
-    parent() {
-      return this.sample?.parent_sample
-    },
-    parentSpecimen() {
-      return this.sample?.parent_specimen
-    },
-  },
   methods: {
     isNil,
   },
-}
+})
 </script>

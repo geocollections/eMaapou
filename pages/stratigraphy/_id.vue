@@ -1,15 +1,7 @@
 <template>
-  <detail>
+  <detail v-if="!$fetchState.pending">
     <template #title>
-      <header-detail
-        :ids="ids"
-        :title="
-          $translate({
-            et: stratigraphy.stratigraphy,
-            en: stratigraphy.stratigraphy_en,
-          })
-        "
-      />
+      <header-detail :ids="ids" :title="title" />
     </template>
 
     <template #column-left>
@@ -194,8 +186,8 @@
     </template>
 
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="initActiveTab" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
       <v-card
         v-if="
@@ -228,10 +220,26 @@
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isEmpty from 'lodash/isEmpty'
 import isNull from 'lodash/isNull'
-import { STRATOTYPE, TABS_STRATIGRAPHY, HEADERS_STRATOTYPE } from '~/constants'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useRoute,
+  useContext,
+  useFetch,
+  toRef,
+  computed,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
+import {
+  STRATOTYPE,
+  TABS_STRATIGRAPHY,
+  HEADERS_STRATOTYPE,
+  Tab,
+} from '~/constants'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
@@ -240,7 +248,9 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import DataTableStratigraphyStratotype from '~/components/data-table/DataTableStratigraphyStratotype.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+import { MapMarker } from '~/types/map'
+export default defineComponent({
   components: {
     HeaderDetail,
     Tabs,
@@ -251,117 +261,140 @@ export default {
     Detail,
     BaseTable,
   },
-  data() {
-    return {
-      stratigraphy: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-      stratotypes: [],
+  setup() {
+    const { $services, $getAPIFieldValues, $hydrateTab, $translate } =
+      useContext()
+    const route = useRoute()
+    const state = reactive({
+      stratigraphy: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+      stratotypes: [] as any[],
       stratotypeCount: 0,
       options: STRATOTYPE.options,
-    }
-  },
-  async fetch() {
-    const stratigraphyPromise = this.$services.sarvREST.getResource(
-      'stratigraphy',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 1,
-        },
-      }
-    )
-
-    const stratotypePromise = this.$services.sarvREST.getResourceList(
-      'stratigraphy_stratotype',
-      {
-        ...STRATOTYPE.options,
-        defaultParams: {
-          stratigraphy: this.$route.params.id,
-          nest: 2,
-        },
-        fields: this.$getAPIFieldValues(HEADERS_STRATOTYPE),
-      }
-    )
-    const [stratigraphyResponse, stratotypeResponse] = await Promise.all([
-      stratigraphyPromise,
-      stratotypePromise,
-    ])
-
-    this.ids = stratigraphyResponse?.ids
-    this.stratigraphy = stratigraphyResponse
-    this.stratotypes = stratotypeResponse.items
-    this.stratotypeCount = stratotypeResponse.count
-
-    const tabsObject = TABS_STRATIGRAPHY
-
-    tabsObject.byIds.specimen.props.stratigraphy = this.stratigraphy
-    tabsObject.byIds.sample.props.stratigraphy = this.stratigraphy
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-
-    const hydratedTabs = await Promise.all(
-      tabs.map((tab) =>
-        this.$hydrateTab(tab, {
-          countParams: {
-            api: {
-              default: {
-                stratigraphy: this.$route.params.id,
-              },
-              stratigraphy_stratotype: {
-                stratigraphy: this.$route.params.id,
-              },
-              stratigraphy_synonym: {
-                stratigraphy: this.$route.params.id,
-              },
-            },
-            solr: {
-              default: {
-                fq: this.stratigraphy.hierarchy_string
-                  ? `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`
-                  : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
-              },
-              lithostratigraphy: {
-                fq: `age_chronostratigraphy:${this.$route.params.id}`,
-              },
-              subunits: {
-                fq: `parent_id:${this.$route.params.id}`,
-              },
-            },
-            fields: tab.fields ?? 'id',
-          },
-        })
+    })
+    const stratigraphyMarkers = computed((): MapMarker[] => {
+      return state.stratotypes?.reduce((prev, stratotype) => {
+        if (stratotype.locality) {
+          prev.push({
+            latitude: stratotype?.locality?.latitude,
+            longitude: stratotype?.locality?.longitude,
+            text: `${$translate({
+              et: stratotype?.locality?.locality,
+              en: stratotype?.locality?.locality_en,
+            })} (${$translate({
+              et: stratotype?.stratotype_type?.value,
+              en: stratotype?.stratotype_type?.value_en,
+            })})`,
+          })
+        }
+        return prev
+      }, [])
+    })
+    const mapIsEstonian = computed(() => {
+      return state.stratotypes.some(
+        (item) => item?.locality?.country?.value_en === 'Estonia'
       )
-    )
-    this.tabs = hydratedTabs
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({
-        et: this.stratigraphy.stratigraphy,
-        en: this.stratigraphy.stratigraphy_en,
+    })
+
+    const title = computed(() =>
+      $translate({
+        et: state.stratigraphy?.stratigraphy,
+        en: state.stratigraphy?.stratigraphy_en,
       })
     )
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'stratigraphy'),
+    }).value
+
+    useFetch(async () => {
+      const stratigraphyPromise = $services.sarvREST.getResource(
+        'stratigraphy',
+        parseInt(route.value.params.id),
+        {
+          params: {
+            nest: 1,
+          },
+        }
+      )
+
+      const stratotypePromise = $services.sarvREST.getResourceList(
+        'stratigraphy_stratotype',
+        {
+          ...STRATOTYPE.options,
+          defaultParams: {
+            stratigraphy: route.value.params.id,
+            nest: 2,
+          },
+          fields: $getAPIFieldValues(HEADERS_STRATOTYPE),
+        }
+      )
+      const [stratigraphyResponse, stratotypeResponse] = await Promise.all([
+        stratigraphyPromise,
+        stratotypePromise,
+      ])
+
+      state.ids = stratigraphyResponse?.ids
+      state.stratigraphy = stratigraphyResponse
+      state.stratotypes = stratotypeResponse.items
+      state.stratotypeCount = stratotypeResponse.count
+
+      const tabsObject = TABS_STRATIGRAPHY
+
+      tabsObject.byIds.specimen.props.stratigraphy = state.stratigraphy
+      tabsObject.byIds.sample.props.stratigraphy = state.stratigraphy
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      const hydratedTabs = await Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
+            countParams: {
+              api: {
+                default: {
+                  stratigraphy: route.value.params.id,
+                },
+                stratigraphy_stratotype: {
+                  stratigraphy: route.value.params.id,
+                },
+                stratigraphy_synonym: {
+                  stratigraphy: route.value.params.id,
+                },
+              },
+              solr: {
+                default: {
+                  fq: state.stratigraphy.hierarchy_string
+                    ? `(stratigraphy_hierarchy:(${state.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${state.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${state.stratigraphy.hierarchy_string}*))`
+                    : `(stratigraphy_hierarchy:("") OR age_hierarchy:("") OR lithostratigraphy_hierarchy:(""))`,
+                },
+                lithostratigraphy: {
+                  fq: `age_chronostratigraphy:${route.value.params.id}`,
+                },
+                subunits: {
+                  fq: `parent_id:${route.value.params.id}`,
+                },
+              },
+              fields: tab.fields ?? 'id',
+            },
+          })
+        )
+      )
+      state.tabs = hydratedTabs.filter((tab) => tab.count > 0)
+    })
+
+    return { ...toRefs(state), title, stratigraphyMarkers, mapIsEstonian }
   },
   head() {
     return {
-      title: `${this.$translate({
-        et: this.stratigraphy?.stratigraphy,
-        en: this.stratigraphy?.stratigraphy_en,
-      })} | ${this.$t('stratigraphy.pageTitle')}`,
+      title: `${this.title} | ${this.$t('stratigraphy.pageTitle')}`,
       meta: [
         {
           property: 'og:title',
           hid: 'og:title',
-          content: `${this.$translate({
-            et: this.stratigraphy?.stratigraphy,
-            en: this.stratigraphy?.stratigraphy_en,
-          })} | ${this.$t('stratigraphy.pageTitle')}`,
+          content: `${this.title} | ${this.$t('stratigraphy.pageTitle')}`,
         },
         {
           property: 'og:url',
@@ -371,40 +404,9 @@ export default {
       ],
     }
   },
-  computed: {
-    filteredTabs() {
-      return this.tabs.filter((item) => item.count > 0)
-    },
-    stratigraphyMarkers() {
-      return this.stratotypes?.reduce((prev, stratotype) => {
-        if (stratotype.locality) {
-          prev.push({
-            latitude: stratotype?.locality?.latitude,
-            longitude: stratotype?.locality?.longitude,
-            text: `${this.$translate({
-              et: stratotype?.locality?.locality,
-              en: stratotype?.locality?.locality_en,
-            })} (${this.$translate({
-              et: stratotype?.stratotype_type?.value,
-              en: stratotype?.stratotype_type?.value_en,
-            })})`,
-          })
-        }
-        return prev
-      }, [])
-    },
-    mapIsEstonian() {
-      if (this.stratotypes?.length > 0) {
-        return this.stratotypes.some(
-          (item) => item?.locality?.country?.value_en === 'Estonia'
-        )
-      }
-      return false
-    },
-  },
   methods: {
     isEmpty,
     isNull,
   },
-}
+})
 </script>

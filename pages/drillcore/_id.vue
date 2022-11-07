@@ -167,26 +167,39 @@
       </v-card-text>
     </template>
     <template #bottom>
-      <v-card v-if="filteredTabs.length > 0" class="mt-4 mb-4">
-        <tabs :tabs="filteredTabs" :init-active-tab="validRoute" />
+      <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
+        <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
     </template>
   </detail>
 </template>
 
-<script>
+<script lang="ts">
 import isEmpty from 'lodash/isEmpty'
 import isNull from 'lodash/isNull'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  // reactive,
+  // shallowReactive,
+  toRef,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
-import { TABS_DRILLCORE } from '~/constants'
+import { Tab, TABS_DRILLCORE } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-
-export default {
+import { useSlugRoute } from '~/composables/useSlugRoute'
+export default defineComponent({
   components: {
     HeaderDetail,
     Tabs,
@@ -196,92 +209,114 @@ export default {
     Detail,
     BaseTable,
   },
-  data() {
-    return {
-      drillcore: null,
-      ids: [],
-      validRoute: {},
-      tabs: [],
-    }
-  },
-  async fetch() {
-    const drillcoreResponse = await this.$services.sarvREST.getResource(
-      'drillcore',
-      this.$route.params.id,
-      {
-        params: {
-          nest: 2,
-        },
-      }
-    )
-    this.ids = drillcoreResponse?.ids
-    this.drillcore = drillcoreResponse
+  setup() {
+    const { $services, $hydrateTab, $translate } = useContext()
+    const route = useRoute()
+    const state = reactive({
+      drillcore: null as any,
+      ids: {} as any,
+      validRoute: {} as Location,
+      tabs: [] as Tab[],
+    })
 
-    let lasFileResponse
-    if (this.drillcore?.locality) {
-      lasFileResponse = await this.$services.sarvREST.getResourceList(
-        'attachment_link',
+    const depository = computed(() => state.drillcore?.depository)
+    const storage = computed(() => state.drillcore?.storage)
+    const agent = computed(() => state.drillcore?.agent)
+    const database = computed(() => state.drillcore?.database)
+    const locality = computed(() => state.drillcore?.locality)
+
+    const title = computed(() =>
+      $translate({
+        et: state.drillcore?.drillcore,
+        en: state.drillcore?.drillcore_en,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: state.tabs,
+      watchableObject: toRef(state, 'drillcore'),
+    }).value
+    useFetch(async () => {
+      const drillcoreResponse = await $services.sarvREST.getResource(
+        'drillcore',
+        parseInt(route.value.params.id),
         {
-          defaultParams: {
-            attachment__uuid_filename__iendswith: '.las',
-            locality: this.drillcore.locality.id,
-            fields: 'attachment',
+          params: {
+            nest: 2,
           },
         }
       )
-    }
-
-    const tabsObject = TABS_DRILLCORE
-
-    tabsObject.byIds.boxes.count = this.drillcore?.boxes || 0
-    tabsObject.byIds.analysis_results.count = lasFileResponse?.items?.[0]
-      ?.attachment
-      ? 1
-      : 0
-    tabsObject.byIds.analysis_results.props = {
-      drillcoreObject: this.drillcore,
-      locality: this.drillcore?.locality?.id,
-      attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
-      analysisResultsCount: tabsObject.byIds.analysis_results.count,
-    }
-
-    const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
-    this.tabs = this.drillcore?.locality?.id
-      ? await Promise.all(
-          tabs.map(
-            async (tab) =>
-              await this.$hydrateTab(tab, {
-                props: { locality: this.drillcore?.locality?.id },
-                countParams: {
-                  solr: {
-                    default: {
-                      fq: `locality_id :${this.drillcore?.locality?.id}`,
-                    },
-                  },
-                  api: {
-                    default: { locality: this.drillcore?.locality?.id },
-                    attachment_link: {
-                      or_search: `drillcore:${this.drillcore.id} OR locality:${this.drillcore.locality.id}`,
-                    },
-                  },
-                },
-              })
-          )
+      state.ids = drillcoreResponse?.ids
+      state.drillcore = drillcoreResponse
+      let lasFileResponse
+      if (state.drillcore?.locality) {
+        lasFileResponse = await $services.sarvREST.getResourceList(
+          'attachment_link',
+          {
+            defaultParams: {
+              attachment__uuid_filename__iendswith: '.las',
+              locality: state.drillcore.locality.id,
+              fields: 'attachment',
+            },
+          }
         )
-      : tabs
+      }
 
-    const slugRoute = this.$createSlugRoute(
-      this.$route,
-      this.$translate({
-        et: this.drillcore.drillcore,
-        en: this.drillcore.drillcore_en,
+      const tabsObject = TABS_DRILLCORE
+
+      tabsObject.byIds.boxes.count = state.drillcore?.boxes || 0
+      tabsObject.byIds.analysis_results.count = lasFileResponse?.items?.[0]
+        ?.attachment
+        ? 1
+        : 0
+      tabsObject.byIds.analysis_results.props = {
+        drillcoreObject: state.drillcore,
+        locality: state.drillcore?.locality?.id,
+        attachment: lasFileResponse?.items?.[0]?.attachment?.toString(),
+        analysisResultsCount: tabsObject.byIds.analysis_results.count,
+      }
+
+      const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
+
+      state.tabs = (
+        state.drillcore?.locality?.id
+          ? await Promise.all(
+              tabs.map((tab) => {
+                return $hydrateTab(tab, {
+                  props: { locality: state.drillcore?.locality?.id },
+                  countParams: {
+                    solr: {
+                      default: {
+                        fq: `locality_id:${state.drillcore?.locality?.id}`,
+                      },
+                    },
+                    api: {
+                      default: { locality: state.drillcore?.locality?.id },
+                      attachment_link: {
+                        or_search: `drillcore:${state.drillcore.id} OR locality:${state.drillcore.locality.id}`,
+                      },
+                    },
+                  },
+                })
+              })
+            )
+          : tabs
+      ).filter((tab) => {
+        if (tab.id === 'graphs') {
+          return tab.props.attachment || tab.props.analysisResultsCount > 0
+        } else return tab.count > 0
       })
-    )
-    this.validRoute = this.localeLocation(
-      this.$validateTabRoute(slugRoute, this.tabs)
-    )
-    if (this.$router.resolve(this.validRoute).href !== this.$route.path)
-      this.$nuxt.context.redirect(this.validRoute)
+    })
+
+    return {
+      ...toRefs(state),
+      title,
+      depository,
+      storage,
+      agent,
+      database,
+      locality,
+    }
   },
   head() {
     return {
@@ -300,39 +335,9 @@ export default {
       ],
     }
   },
-  computed: {
-    title() {
-      return this.$translate({
-        et: this.drillcore?.drillcore,
-        en: this.drillcore?.drillcore_en,
-      })
-    },
-    filteredTabs() {
-      return this.tabs.filter((item) => {
-        if (item.id === 'graphs') {
-          return item.props.attachment || item.props.analysisResultsCount > 0
-        } else return item.count > 0
-      })
-    },
-    depository() {
-      return this.drillcore?.depository
-    },
-    storage() {
-      return this.drillcore?.storage
-    },
-    agent() {
-      return this.drillcore?.agent
-    },
-    database() {
-      return this.drillcore?.database
-    },
-    locality() {
-      return this.drillcore?.locality
-    },
-  },
   methods: {
     isEmpty,
     isNull,
   },
-}
+})
 </script>
