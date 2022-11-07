@@ -31,6 +31,9 @@ export default defineNuxtPlugin(({ app, $accessor }, _) => {
       to: from.path,
     } as HistoryEntry
 
+    if ($accessor.history.historyEntries[0].title === historyObject.title)
+      return
+
     $accessor.history.pushHistory(historyObject)
   })
 })
