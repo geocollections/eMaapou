@@ -388,12 +388,13 @@ export default defineComponent({
           en: state.drillcoreBox?.drillcore?.drillcore_en,
         })}-${state.drillcoreBox?.number}`
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'drillcoreBox'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return { ...toRefs(state), drillcore, pageTitle }
   },

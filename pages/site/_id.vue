@@ -430,12 +430,13 @@ export default defineComponent({
     const title = computed(() =>
       $translate({ et: state.site?.name, en: state.site?.name_en })
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'site'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return {
       ...toRefs(state),

@@ -959,12 +959,13 @@ export default defineComponent({
           }`
       }
     })
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'file'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
     const pageType = computed(() => {
       if (!state.file) return ''
       switch (state.file.specimen_image_attachment) {

@@ -356,12 +356,13 @@ export default defineComponent({
     })
     const title = computed(() => state.dataset?.title)
 
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'dataset'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return { ...toRefs(state), title }
   },

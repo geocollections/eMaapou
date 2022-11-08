@@ -520,12 +520,13 @@ export default defineComponent({
           en: state.area?.name_en,
         })} | ${i18n.t('area.pageTitle')}`
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: pageTitle,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'area'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
     return {
       ...toRefs(state),
       eelisArray,

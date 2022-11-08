@@ -487,12 +487,13 @@ export default defineComponent({
     const pageTitle = computed(
       () => `${i18n.t('sample.number')} ${title.value}`
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'sample'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return {
       ...toRefs(state),

@@ -360,12 +360,13 @@ export default defineComponent({
       }
       return null
     })
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       pending: toRef(fetchState, 'pending'),
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'specimen'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return {
       ...toRefs(state),

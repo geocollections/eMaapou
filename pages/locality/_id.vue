@@ -441,12 +441,13 @@ export default defineComponent({
         en: state.locality?.locality_en,
       })
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'locality'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     const goToGeoscienceLiterature = () => {
       window.open(

@@ -382,12 +382,13 @@ export default defineComponent({
         en: state.stratigraphy?.stratigraphy_en,
       })
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'stratigraphy'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return { ...toRefs(state), title, stratigraphyMarkers, mapIsEstonian }
   },

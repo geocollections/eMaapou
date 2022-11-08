@@ -54,15 +54,22 @@ export default defineComponent({
         [tab.routeName]: tab,
       }
     }, {} as { [K: string]: Tab })
+    const props =
+      this.getRouteBaseName(this.$route) &&
+      (this.getRouteBaseName(this.$route) as string) in tabsDict
+        ? tabsDict[this.getRouteBaseName(this.$route) as string].props
+        : this.tabs[0].props
     return {
       activeTab: null as any,
       tabsDict,
-      activeTabProps: this.tabs[0].props,
+      activeTabProps: props,
     }
   },
   watch: {
     initActiveTab: {
       handler(newVal) {
+        this.activeTabProps =
+          this.tabsDict[this.getRouteBaseName(newVal) as string].props
         this.activeTab = this.$router.resolve(newVal)
         // @ts-ignore
         this.$refs.tabs?.onResize()

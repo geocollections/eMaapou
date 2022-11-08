@@ -18,11 +18,13 @@ export function useSlugRoute({
   tabs,
   watchableObject,
   pending,
+  validRoute,
 }: {
   slug: ComputedRef<string>
   tabs: Ref<Tab[]>
   watchableObject: Ref<any>
   pending: Ref<any>
+  validRoute: Ref<any>
 }) {
   const createSlugRoute = useCreateSlugRoute()
   const validateTabRoute = useValidateTabRoute()
@@ -34,7 +36,7 @@ export function useSlugRoute({
   })
   watch([watchableObject, pending], ([_object, pending]) => {
     if (pending) return
-    state.validRoute = setSlugRoute({
+    validRoute.value = setSlugRoute({
       slug: slug.value,
       tabs: tabs.value,
     })
@@ -47,6 +49,5 @@ export function useSlugRoute({
       router.replace(validRoute as Location)
     return validRoute as Location
   }
-
   return toRef(state, 'validRoute')
 }

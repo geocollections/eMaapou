@@ -253,12 +253,13 @@ export default defineComponent({
         sample: state.analysis?.sample?.number,
       })
     )
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: slugText,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'analysis'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return {
       ...toRefs(state),

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 
 import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
@@ -20,7 +19,7 @@ export default {
   props: {
     stratigraphy: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
   data() {
@@ -32,7 +31,6 @@ export default {
     }
   },
   async fetch() {
-    if (isNil(this.stratigraphy)) return
     const specimenResponse = await this.$services.sarvSolr.getResourceList(
       'specimen',
       {

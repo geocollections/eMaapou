@@ -218,12 +218,13 @@ export default defineComponent({
     })
     const title = computed(() => state.preparation?.preparation_number)
 
-    state.validRoute = useSlugRoute({
+    useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'preparation'),
       pending: toRef(fetchState, 'pending'),
-    }).value
+      validRoute: toRef(state, 'validRoute'),
+    })
 
     return {
       ...toRefs(state),
