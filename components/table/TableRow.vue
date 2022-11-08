@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="value || hasValueSlot">
+  <tr v-if="!isInvalid || hasValueSlot">
     <td class="font-weight-medium">{{ title }}</td>
     <td>
       <slot name="value">
