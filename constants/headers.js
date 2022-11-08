@@ -1087,6 +1087,18 @@ export const HEADERS_SAMPLE_DATA = {
       show: true,
       apiFieldValue: 'locality',
     },
+    depth: {
+      text: 'sampleData.depth',
+      value: 'depth',
+      show: false,
+      apiFieldValue: 'depth',
+    },
+    depth_interval: {
+      text: 'sampleData.depthInterval',
+      value: 'depth_interval',
+      show: false,
+      apiFieldValue: 'depth_interval',
+    },
     stratigraphy: {
       text: 'datasetAnalysis.stratigraphy',
       value: 'stratigraphy',
@@ -1094,7 +1106,15 @@ export const HEADERS_SAMPLE_DATA = {
       apiFieldValue: { et: 'stratigraphy', en: 'stratigraphy_en' },
     },
   },
-  allIds: ['sample', 'locality', 'latitude', 'longitude', 'stratigraphy'],
+  allIds: [
+    'sample',
+    'locality',
+    'depth',
+    'depth_interval',
+    'latitude',
+    'longitude',
+    'stratigraphy',
+  ],
 }
 
 export const HEADERS_SITE = {

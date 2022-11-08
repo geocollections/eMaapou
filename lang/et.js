@@ -502,6 +502,10 @@ export default {
   },
   sampleData: {
     sampleNumber: 'Proov',
+    latitude: 'Laiuskraad',
+    longitude: 'Pikkuskraad',
+    depth: 'Sügavus',
+    depthInterval: 'Sügavus kuni',
   },
   preparation: {
     pageTitle: 'Preparaadid',

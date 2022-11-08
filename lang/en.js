@@ -500,6 +500,10 @@ export default {
   },
   sampleData: {
     sampleNumber: 'Sample',
+    latitude: 'Latitude',
+    longitude: 'Longitude',
+    depth: 'Depth',
+    depthInterval: 'Depth to',
   },
   preparation: {
     pageTitle: 'Preparations',
