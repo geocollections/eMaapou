@@ -9,9 +9,9 @@
     @change:headers="$_handleHeadersChange"
     @reset:headers="$_handleHeadersReset"
   >
-    <template #item.name="{ item }"
-      ><div v-if="item.agent">{{ item.agent.agent }}</div></template
-    >
+    <template #item.name="{ item }">
+      {{ item.name }}
+    </template>
     <template #item.affiliation="{ item }">{{ item.affiliation }}</template>
     <template #item.type="{ item }"
       ><div v-if="item.agent_type">{{ item.agent_type.value }}</div></template
