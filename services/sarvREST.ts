@@ -27,7 +27,11 @@ const getSortByParams = (
 
 export default ($axios: NuxtAxiosInstance) => ({
   async getResource(resource: string, id: number, options = {}) {
-    const response = await $axios.get(`${resource}/${id}/`, options)
+    const response = await $axios
+      .get(`${resource}/${id}/`, options)
+      .catch((err) => {
+        throw new Error(err.message)
+      })
     return response.data
   },
   async getResourceList(
@@ -61,7 +65,11 @@ export default ($axios: NuxtAxiosInstance) => ({
       ...getSortByParams(options, fields),
     }
 
-    const response = await $axios.$get(`${resource}/`, { params })
+    const response = await $axios
+      .$get(`${resource}/`, { params })
+      .catch((err) => {
+        throw new Error(err.message)
+      })
 
     return {
       next: response.next,

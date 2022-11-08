@@ -37,12 +37,16 @@ export default ($axios: NuxtAxiosInstance) => ({
       ...(options && buildSolrSortParameter(options, fields)),
     }
 
-    const response = await $axios.$get(`solr/${resource}`, {
-      params,
-      paramsSerializer: (par) => {
-        return stringify(par, { indices: false })
-      },
-    })
+    const response = await $axios
+      .$get(`solr/${resource}`, {
+        params,
+        paramsSerializer: (par) => {
+          return stringify(par, { indices: false })
+        },
+      })
+      .catch((err) => {
+        throw new Error(err.message)
+      })
 
     return {
       items: response?.response?.docs,
@@ -54,9 +58,13 @@ export default ($axios: NuxtAxiosInstance) => ({
   },
 
   async getResource(resource: string, id: number, options = {}) {
-    const response = await $axios.get(`solr/${resource}?q=id:${id}`, {
-      params: { ...options },
-    })
+    const response = await $axios
+      .get(`solr/${resource}?q=id:${id}`, {
+        params: { ...options },
+      })
+      .catch((err) => {
+        throw new Error(err.message)
+      })
     return response.data?.response?.docs
   },
 
@@ -64,13 +72,17 @@ export default ($axios: NuxtAxiosInstance) => ({
     resource: string,
     countParams: { [key: string]: any }
   ) {
-    const response = await $axios.$get(`solr/${resource}`, {
-      params: {
-        rows: 0,
-        ...countParams,
-        ...buildSolrQueryParameter(countParams.q ?? null),
-      },
-    })
+    const response = await $axios
+      .$get(`solr/${resource}`, {
+        params: {
+          rows: 0,
+          ...countParams,
+          ...buildSolrQueryParameter(countParams.q ?? null),
+        },
+      })
+      .catch((err) => {
+        throw new Error(err.message)
+      })
     return {
       count: response?.response?.numFound,
     }

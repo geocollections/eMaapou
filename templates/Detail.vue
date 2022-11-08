@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col>
+    <v-col v-if="error">
+      <error :error="error" />
+    </v-col>
+    <v-col v-else-if="!loading">
       <slot name="title" />
       <div class="px-0 px-sm-3">
         <slot name="top" />
@@ -22,8 +25,22 @@
   </v-row>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api'
+import Error from '~/components/error.vue'
+
+export default defineComponent({
   name: 'Detail',
-}
+  components: { Error },
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    error: {
+      type: Object,
+      default: null,
+    },
+  },
+})
 </script>

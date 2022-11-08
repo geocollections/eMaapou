@@ -1,5 +1,5 @@
 <template>
-  <detail v-if="!$fetchState.pending">
+  <detail :loading="$fetchState.pending" :error="$fetchState.error">
     <template #title>
       <header-detail :ids="ids" :title="title" />
     </template>

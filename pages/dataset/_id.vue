@@ -1,5 +1,5 @@
 <template>
-  <detail v-if="!$fetchState.pending">
+  <detail :loading="$fetchState.pending" :error="$fetchState.error">
     <template #title>
       <header-detail :ids="ids" :title="dataset.title" />
     </template>
@@ -225,7 +225,9 @@ export default defineComponent({
       const parametersPromise = $services.sarvSolr.getResource(
         'dataset',
         parseInt(route.value.params.id),
-        { fl: 'parameter_index_list,parameter_list' }
+        {
+          fl: 'parameter_index_list,parameter_list',
+        }
       )
       const doiPromise = $services.sarvREST.getResourceList('doi', {
         defaultParams: {
