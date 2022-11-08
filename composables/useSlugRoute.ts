@@ -3,7 +3,6 @@ import {
   reactive,
   Ref,
   toRef,
-  // useContext,
   useRoute,
   useRouter,
   watch,
@@ -18,36 +17,33 @@ export function useSlugRoute({
   slug,
   tabs,
   watchableObject,
+  pending,
 }: {
   slug: ComputedRef<string>
-  tabs: Tab[]
+  tabs: Ref<Tab[]>
   watchableObject: Ref<any>
+  pending: Ref<any>
 }) {
   const createSlugRoute = useCreateSlugRoute()
   const validateTabRoute = useValidateTabRoute()
-  // const ctx = useContext()
   const route = useRoute()
   const router = useRouter()
   const i18n = useI18n()
   const state = reactive({
     validRoute: {} as Location,
   })
-  watch(
-    () => watchableObject,
-    () => {
-      state.validRoute = setSlugRoute({
-        slug: slug.value,
-        tabs,
-      })
-    },
-    { deep: true }
-  )
+  watch([watchableObject, pending], ([_object, pending]) => {
+    if (pending) return
+    state.validRoute = setSlugRoute({
+      slug: slug.value,
+      tabs: tabs.value,
+    })
+  })
   const setSlugRoute = ({ slug, tabs }: { slug: string; tabs: Tab[] }) => {
     const slugRoute = createSlugRoute(route.value, slug)
     const validRoute = i18n.localeLocation(validateTabRoute(slugRoute, tabs))
 
     if (router.resolve(validRoute as Location).href !== route.value.path)
-      // ctx.redirect(validRoute as Location)
       router.replace(validRoute as Location)
     return validRoute as Location
   }

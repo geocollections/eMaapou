@@ -327,19 +327,7 @@ export default defineComponent({
     const stratigraphyTop = computed(() => state.locality?.stratigraphy_top)
     const stratigraphyBase = computed(() => state.locality?.stratigraphy_base)
 
-    const title = computed(() =>
-      $translate({
-        et: state.locality?.locality,
-        en: state.locality?.locality_en,
-      })
-    )
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'locality'),
-    }).value
-
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const localityPromise = $services.sarvREST.getResource(
         'locality',
         parseInt(route.value.params.id),
@@ -447,6 +435,18 @@ export default defineComponent({
         })
       state.images = attachmentResponse?.items ?? []
     })
+    const title = computed(() =>
+      $translate({
+        et: state.locality?.locality,
+        en: state.locality?.locality_en,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'locality'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
 
     const goToGeoscienceLiterature = () => {
       window.open(

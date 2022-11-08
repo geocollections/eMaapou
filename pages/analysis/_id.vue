@@ -201,29 +201,8 @@ export default defineComponent({
     const agent = computed(() => state.analysis?.agent)
     const reference = computed(() => state.analysis?.reference)
     const dataset = computed(() => state.analysis?.dataset)
-    const slugText = computed(
-      () =>
-        `${$translate({
-          et: state.analysis?.analysis_method.analysis_method,
-          en: state.analysis?.analysis_method.method_en,
-        })}-${state.analysis?.sample.number}`
-    )
-    const pageTitle = computed(() =>
-      i18n.t('analysis.title', {
-        method: $translate({
-          et: state.analysis?.analysis_method?.analysis_method,
-          en: state.analysis?.analysis_method?.method_en,
-        }),
-        sample: state.analysis?.sample?.number,
-      })
-    )
-    state.validRoute = useSlugRoute({
-      slug: slugText,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'analysis'),
-    }).value
 
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const analysisPromise = $services.sarvREST.getResource(
         'analysis',
         parseInt(route.value.params.id),
@@ -258,6 +237,28 @@ export default defineComponent({
       state.ids = analysisResponse?.ids
       state.analysis = analysisResponse
     })
+    const slugText = computed(
+      () =>
+        `${$translate({
+          et: state.analysis?.analysis_method.analysis_method,
+          en: state.analysis?.analysis_method.method_en,
+        })}-${state.analysis?.sample.number}`
+    )
+    const pageTitle = computed(() =>
+      i18n.t('analysis.title', {
+        method: $translate({
+          et: state.analysis?.analysis_method?.analysis_method,
+          en: state.analysis?.analysis_method?.method_en,
+        }),
+        sample: state.analysis?.sample?.number,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: slugText,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'analysis'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
 
     return {
       ...toRefs(state),

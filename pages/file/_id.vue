@@ -692,46 +692,7 @@ export default defineComponent({
     const database = computed(() => state.file?.database)
     const licence = computed(() => state.file?.licence)
 
-    const title = computed(() => {
-      if (!state.file) return ''
-      switch (state.file.specimen_image_attachment) {
-        case 1:
-          return `${state.file?.specimen?.coll?.number?.split(' ')?.[0]} ${
-            state.file?.specimen?.specimen_id
-          } (ID: ${state.file?.specimen.id})`
-        case 2:
-          return state.file?.image_number
-        case 4:
-          return state.file?.reference?.reference
-        default:
-          return `${
-            $translate({
-              et: state.file?.description,
-              en: state.file?.description_en,
-            }) ?? state.file?.id
-          }`
-      }
-    })
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'file'),
-    }).value
-    const pageType = computed(() => {
-      if (!state.file) return ''
-      switch (state.file.specimen_image_attachment) {
-        case 1:
-          return i18n.t('file.specimenTitle')
-        case 2:
-          return i18n.t('file.imageTitle')
-        case 4:
-          return i18n.t('file.referenceTitle')
-        default:
-          return i18n.t('file.fileTitle')
-      }
-    })
-    const pageTitle = computed(() => `${title.value} | ${pageType.value}`)
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const filePromise = $services.sarvREST.getResource(
         'attachment',
         parseInt(route.value.params.id),
@@ -977,6 +938,47 @@ export default defineComponent({
           state.rawFileContent = ''
       }
     })
+
+    const title = computed(() => {
+      if (!state.file) return ''
+      switch (state.file.specimen_image_attachment) {
+        case 1:
+          return `${state.file?.specimen?.coll?.number?.split(' ')?.[0]} ${
+            state.file?.specimen?.specimen_id
+          } (ID: ${state.file?.specimen.id})`
+        case 2:
+          return state.file?.image_number
+        case 4:
+          return state.file?.reference?.reference
+        default:
+          return `${
+            $translate({
+              et: state.file?.description,
+              en: state.file?.description_en,
+            }) ?? state.file?.id
+          }`
+      }
+    })
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'file'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
+    const pageType = computed(() => {
+      if (!state.file) return ''
+      switch (state.file.specimen_image_attachment) {
+        case 1:
+          return i18n.t('file.specimenTitle')
+        case 2:
+          return i18n.t('file.imageTitle')
+        case 4:
+          return i18n.t('file.referenceTitle')
+        default:
+          return i18n.t('file.fileTitle')
+      }
+    })
+    const pageTitle = computed(() => `${title.value} | ${pageType.value}`)
 
     const buildData = (type: string, data: any) => {
       if (type === 'specimen') {

@@ -225,18 +225,7 @@ export default defineComponent({
     const database = computed(() => state.drillcore?.database)
     const locality = computed(() => state.drillcore?.locality)
 
-    const title = computed(() =>
-      $translate({
-        et: state.drillcore?.drillcore,
-        en: state.drillcore?.drillcore_en,
-      })
-    )
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'drillcore'),
-    }).value
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const drillcoreResponse = await $services.sarvREST.getResource(
         'drillcore',
         parseInt(route.value.params.id),
@@ -307,7 +296,18 @@ export default defineComponent({
         } else return tab.count > 0
       })
     })
-
+    const title = computed(() =>
+      $translate({
+        et: state.drillcore?.drillcore,
+        en: state.drillcore?.drillcore_en,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'drillcore'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
     return {
       ...toRefs(state),
       title,

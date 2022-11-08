@@ -192,22 +192,11 @@ export default defineComponent({
       validRoute: {} as Location,
       tabs: [] as Tab[],
     })
-    const title = computed(() =>
-      $translate({
-        et: state.collection?.name,
-        en: state.collection?.name_en,
-      })
-    )
     const reference = computed(() => state.collection?.reference)
     const database = computed(() => state.collection?.database)
     const classification = computed(() => state.collection?.classification)
 
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'collection'),
-    }).value
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const collectionPromise = $services.sarvREST.getResource(
         'collection',
         parseInt(route.value.params.id),
@@ -243,6 +232,18 @@ export default defineComponent({
           return { ...tab, props: { collection: state.collection } }
         })
     })
+    const title = computed(() =>
+      $translate({
+        et: state.collection?.name,
+        en: state.collection?.name_en,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'collection'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
     return { ...toRefs(state), title, reference, classification, database }
   },
   head() {

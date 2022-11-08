@@ -211,15 +211,8 @@ export default defineComponent({
       localities: [] as any[],
       locationMarkers: [] as any[],
     })
-    const title = computed(() => state.dataset?.title)
 
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'dataset'),
-    }).value
-
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const datasetPromise = $services.sarvREST.getResource(
         'dataset',
         parseInt(route.value.params.id),
@@ -361,6 +354,14 @@ export default defineComponent({
         .map((id) => hydratedTabsByIds[id])
         .filter((tab) => tab.count > 0)
     })
+    const title = computed(() => state.dataset?.title)
+
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'dataset'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
 
     return { ...toRefs(state), title }
   },

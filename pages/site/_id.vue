@@ -385,16 +385,7 @@ export default defineComponent({
     const locality = computed(() => state.site?.locality)
     const area = computed(() => state.site?.area)
 
-    const title = computed(() =>
-      $translate({ et: state.site?.name, en: state.site?.name_en })
-    )
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'site'),
-    }).value
-
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const sitePromise = $services.sarvREST.getResource(
         'site',
         parseInt(route.value.params.id),
@@ -435,6 +426,17 @@ export default defineComponent({
       state.images = attachmentResponse.items ?? []
       state.tabs = hydratedTabs.filter((item) => item.count > 0)
     })
+
+    const title = computed(() =>
+      $translate({ et: state.site?.name, en: state.site?.name_en })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'site'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
+
     return {
       ...toRefs(state),
       title,

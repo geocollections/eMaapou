@@ -386,24 +386,8 @@ export default defineComponent({
     const stratigraphy = computed(() => state.sample?.stratigraphy)
     const site = computed(() => state.sample?.site)
     const locality = computed(() => state.sample?.locality)
-    const title = computed(() =>
-      `${
-        state.sample?.number ||
-        state.sample?.number_additional ||
-        state.sample?.number_field ||
-        state.sample?.id
-      }`.trim()
-    )
-    const pageTitle = computed(
-      () => `${i18n.t('sample.number')} ${title.value}`
-    )
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'sample'),
-    }).value
 
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const samplePromise = $services.sarvREST.getResource(
         'sample',
         parseInt(route.value.params.id),
@@ -491,6 +475,25 @@ export default defineComponent({
         })
       }
     })
+
+    const title = computed(() =>
+      `${
+        state.sample?.number ||
+        state.sample?.number_additional ||
+        state.sample?.number_field ||
+        state.sample?.id
+      }`.trim()
+    )
+    const pageTitle = computed(
+      () => `${i18n.t('sample.number')} ${title.value}`
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'sample'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
+
     return {
       ...toRefs(state),
       parentSpecimen,

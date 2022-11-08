@@ -44,14 +44,16 @@ const plugin: Plugin = ({ app }, inject) => {
     if (!(tabs.length > 0)) return route
     const currentTab = tabs.find(
       (tab) =>
-        route.path ===
+        app.localePath({
+          name: route.name,
+          params: route.params,
+        }) ===
         app.localePath({
           name: tab.routeName,
           params: route.params,
         })
     )
-    if (typeof currentTab === 'undefined') return route
-    if (currentTab.count > 0) return route
+    if (typeof currentTab !== 'undefined' && currentTab.count > 0) return route
     // Find tab that has items
     const initTab = tabs.find((tab) => tab.count > 0)
     // Constuct route

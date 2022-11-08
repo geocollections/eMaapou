@@ -230,8 +230,11 @@ import {
   useRoute,
   useContext,
   useFetch,
-  toRef,
+  // toRef,
   computed,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  watch,
+  toRef,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
 import {
@@ -298,19 +301,7 @@ export default defineComponent({
       )
     })
 
-    const title = computed(() =>
-      $translate({
-        et: state.stratigraphy?.stratigraphy,
-        en: state.stratigraphy?.stratigraphy_en,
-      })
-    )
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'stratigraphy'),
-    }).value
-
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const stratigraphyPromise = $services.sarvREST.getResource(
         'stratigraphy',
         parseInt(route.value.params.id),
@@ -384,6 +375,19 @@ export default defineComponent({
       )
       state.tabs = hydratedTabs.filter((tab) => tab.count > 0)
     })
+
+    const title = computed(() =>
+      $translate({
+        et: state.stratigraphy?.stratigraphy,
+        en: state.stratigraphy?.stratigraphy_en,
+      })
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'stratigraphy'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
 
     return { ...toRefs(state), title, stratigraphyMarkers, mapIsEstonian }
   },

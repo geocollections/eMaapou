@@ -438,25 +438,7 @@ export default defineComponent({
           },
         }
     })
-    const pageTitle = computed(() =>
-      $translate({
-        et: state.area?.name,
-        en: state.area?.name_en,
-      })
-    )
-    const metaTitle = computed(
-      () =>
-        `${$translate({
-          et: state.area?.name,
-          en: state.area?.name_en,
-        })} | ${i18n.t('area.pageTitle')}`
-    )
-    state.validRoute = useSlugRoute({
-      slug: pageTitle,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'area'),
-    }).value
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const areaPromise = $services.sarvREST.getResource(
         'area',
         parseInt(route.value.params.id),
@@ -525,6 +507,25 @@ export default defineComponent({
         []
       )
     })
+    const pageTitle = computed(() =>
+      $translate({
+        et: state.area?.name,
+        en: state.area?.name_en,
+      })
+    )
+    const metaTitle = computed(
+      () =>
+        `${$translate({
+          et: state.area?.name,
+          en: state.area?.name_en,
+        })} | ${i18n.t('area.pageTitle')}`
+    )
+    state.validRoute = useSlugRoute({
+      slug: pageTitle,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'area'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
     return {
       ...toRefs(state),
       eelisArray,

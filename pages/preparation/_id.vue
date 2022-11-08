@@ -178,15 +178,7 @@ export default defineComponent({
     const storage = computed(() => state.preparation?.storage)
     const owner = computed(() => state.preparation?.owner)
 
-    const title = computed(() => state.preparation?.preparation_number)
-
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'preparation'),
-    }).value
-
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const preparationResponse = await $services.sarvREST.getResource(
         'preparation',
         parseInt(route.value.params.id),
@@ -224,6 +216,14 @@ export default defineComponent({
       state.preparation = preparationResponse
       state.tabs = hydratedTabs.filter((item) => item.count > 0)
     })
+    const title = computed(() => state.preparation?.preparation_number)
+
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'preparation'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
 
     return {
       ...toRefs(state),

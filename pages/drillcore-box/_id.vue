@@ -317,20 +317,7 @@ export default defineComponent({
         })}`
     )
 
-    const title = computed(
-      () =>
-        `${$translate({
-          et: state.drillcoreBox?.drillcore?.drillcore,
-          en: state.drillcoreBox?.drillcore?.drillcore_en,
-        })}-${state.drillcoreBox?.number}`
-    )
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'drillcoreBox'),
-    }).value
-
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const drillcoreBoxPromise = $services.sarvREST.getResource(
         'drillcore_box',
         parseInt(route.value.params.id),
@@ -393,6 +380,21 @@ export default defineComponent({
           : tabs
       ).filter((item) => item.count > 0)
     })
+
+    const title = computed(
+      () =>
+        `${$translate({
+          et: state.drillcoreBox?.drillcore?.drillcore,
+          en: state.drillcoreBox?.drillcore?.drillcore_en,
+        })}-${state.drillcoreBox?.number}`
+    )
+    state.validRoute = useSlugRoute({
+      slug: title,
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'drillcoreBox'),
+      pending: toRef(fetchState, 'pending'),
+    }).value
+
     return { ...toRefs(state), drillcore, pageTitle }
   },
   head() {

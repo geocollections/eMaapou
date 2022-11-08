@@ -286,32 +286,7 @@ export default defineComponent({
     const sample = computed(() => state.specimen?.sample)
     const parent = computed(() => state.specimen?.parent)
 
-    const title = computed(
-      () =>
-        `${state.specimen?.database?.acronym} ${state.specimen?.specimen_id}`
-    )
-    const titleAlt = computed(() => {
-      if (state.specimenAlt?.rock) {
-        const defaultName = $translate({
-          et: state.specimenAlt.rock,
-          en: state.specimenAlt.rock_en,
-        })
-        return state.specimenAlt.rock_txt &&
-          state.specimenAlt.rock_txt.length > 0
-          ? state.specimenAlt.rock_txt[0]
-          : defaultName
-      }
-      if (state.specimenAlt?.taxon) {
-        return state.specimenAlt.taxon
-      }
-      return null
-    })
-    state.validRoute = useSlugRoute({
-      slug: title,
-      tabs: state.tabs,
-      watchableObject: toRef(state, 'specimen'),
-    }).value
-    useFetch(async () => {
+    const { fetchState } = useFetch(async () => {
       const specimenPromise = $services.sarvREST.getResource(
         'specimen',
         parseInt(route.value.params.id),
@@ -365,6 +340,33 @@ export default defineComponent({
       state.images = attachmentResponse.items ?? []
       state.tabs = hydratedTabs.filter((item) => item.count > 0)
     })
+    const title = computed(
+      () =>
+        `${state.specimen?.database?.acronym} ${state.specimen?.specimen_id}`
+    )
+    const titleAlt = computed(() => {
+      if (state.specimenAlt?.rock) {
+        const defaultName = $translate({
+          et: state.specimenAlt.rock,
+          en: state.specimenAlt.rock_en,
+        })
+        return state.specimenAlt.rock_txt &&
+          state.specimenAlt.rock_txt.length > 0
+          ? state.specimenAlt.rock_txt[0]
+          : defaultName
+      }
+      if (state.specimenAlt?.taxon) {
+        return state.specimenAlt.taxon
+      }
+      return null
+    })
+    state.validRoute = useSlugRoute({
+      slug: title,
+      pending: toRef(fetchState, 'pending'),
+      tabs: toRef(state, 'tabs'),
+      watchableObject: toRef(state, 'specimen'),
+    }).value
+
     return {
       ...toRefs(state),
       title,
