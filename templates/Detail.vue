@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col v-if="error">
-      <error :error="error" />
+      <detail-error :error="error" />
     </v-col>
     <v-col v-else-if="!loading">
       <slot name="title" />
@@ -27,11 +27,11 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import Error from '~/components/error.vue'
+import DetailError from '~/components/DetailError.vue'
 
 export default defineComponent({
   name: 'Detail',
-  components: { Error },
+  components: { DetailError },
   props: {
     loading: {
       type: Boolean,

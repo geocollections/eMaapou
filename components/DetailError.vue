@@ -33,6 +33,7 @@
 import { mdiMagnify } from '@mdi/js'
 import InputSearch from '~/components/input/InputSearch.vue'
 export default {
+  name: 'DetailError',
   components: { InputSearch },
   layout: 'empty',
   props: {
