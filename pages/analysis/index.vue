@@ -1,7 +1,10 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('analysis.pageTitle')" />
+      <base-header
+        :title="$t('analysis.pageTitle')"
+        :icon="icons.mdiChartScatterPlot"
+      />
     </template>
 
     <template #form="{ closeMobileSearch }">
@@ -48,6 +51,7 @@ import {
   wrapProperty,
   computed,
 } from '@nuxtjs/composition-api'
+import { mdiChartScatterPlot } from '@mdi/js'
 import { useAccessor } from '~/composables/useAccessor'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
@@ -55,7 +59,6 @@ import Search from '~/templates/Search.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { HEADERS_ANALYSIS } from '~/constants'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
-
 const useServices = wrapProperty('$services', false)
 const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
 export default defineComponent({
@@ -117,6 +120,11 @@ export default defineComponent({
         },
       ],
     }
+  },
+  computed: {
+    icons() {
+      return { mdiChartScatterPlot }
+    },
   },
 })
 </script>
