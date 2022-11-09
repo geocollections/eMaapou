@@ -324,6 +324,7 @@ export default {
     value: 'Väärtus',
     valueText: 'Tekst',
     valueError: 'Viga',
+    methodDetails: 'Met. detailid',
   },
   specimen: {
     id: 'ID',

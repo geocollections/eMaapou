@@ -65,6 +65,63 @@ export const HEADERS_ANALYSIS_RESULT = {
     'value_error',
   ],
 }
+export const HEADERS_SAMPLE_ANALYSIS_RESULT = {
+  byIds: {
+    parameter: {
+      text: 'analysisResult.parameter',
+      value: 'parameter',
+      show: true,
+      apiFieldValue: 'parameter',
+    },
+    analysis_method: {
+      text: 'analysisResult.method',
+      value: 'analysis_method',
+      show: true,
+      apiFieldValue: 'analysis_method',
+    },
+    method_details: {
+      text: 'analysisResult.methodDetails',
+      value: 'method_details',
+      show: true,
+      apiFieldValue: 'method_details',
+    },
+    depth: {
+      text: 'analysisResult.depth',
+      value: 'depth',
+      show: true,
+      apiFieldValue: 'depth',
+    },
+    depth_interval: {
+      text: 'analysisResult.depthInterval',
+      value: 'depth_interval',
+      show: true,
+      apiFieldValue: 'depth_interval',
+    },
+    value: { text: 'analysisResult.value', value: 'value', show: true },
+    value_txt: {
+      text: 'analysisResult.valueText',
+      value: 'value_txt',
+      show: true,
+      apiFieldValue: 'value_txt',
+    },
+    value_error: {
+      text: 'analysisResult.valueError',
+      value: 'value_error',
+      show: true,
+      apiFieldValue: 'value_error',
+    },
+  },
+  allIds: [
+    'parameter',
+    'analysis_method',
+    'method_details',
+    'depth',
+    'depth_interval',
+    'value',
+    'value_txt',
+    'value_error',
+  ],
+}
 
 export const HEADERS_ANALYSIS = {
   byIds: {

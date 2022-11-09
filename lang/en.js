@@ -322,6 +322,7 @@ export default {
     value: 'Value',
     valueText: 'Text',
     valueError: 'Error',
+    methodDetails: 'Method details',
   },
   specimen: {
     landingCard: 'specimens',

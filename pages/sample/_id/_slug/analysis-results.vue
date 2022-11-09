@@ -1,6 +1,6 @@
 <template>
   <div>
-    <data-table-analysis-result
+    <data-table-sample-analysis-result
       :items="analysisResults"
       :count="count"
       :options="options"
@@ -13,9 +13,9 @@
 
 <script>
 import { HEADERS_ANALYSIS_RESULT } from '~/constants'
-import DataTableAnalysisResult from '~/components/data-table/DataTableAnalysisResult.vue'
+import DataTableSampleAnalysisResult from '~/components/data-table/DataTableSampleAnalysisResult.vue'
 export default {
-  components: { DataTableAnalysisResult },
+  components: { DataTableSampleAnalysisResult },
   data() {
     return {
       analysisResults: [],
