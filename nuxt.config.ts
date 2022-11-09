@@ -1,6 +1,8 @@
 // import colors from 'vuetify/es5/util/colors'
 // import axios from 'axios'
 
+import { NuxtConfig } from '@nuxt/types'
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -247,4 +249,4 @@ export default {
       },
     },
   },
-}
+} as NuxtConfig
