@@ -53,6 +53,7 @@
             :value="parent.specimen_id"
           />
           <table-row
+            v-if="specimen.specimen_nr"
             :title="$t('specimen.oldNumber')"
             :value="`${specimen.specimen_nr}`"
           />
