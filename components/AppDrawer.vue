@@ -24,7 +24,7 @@
           :key="route.name"
           nuxt
           class="header-menu-item rounded my-1"
-          color="accent darken-1"
+          color="accent"
           :to="localePath({ name: route.routeName })"
         >
           <v-list-item-title class="d-flex py-1">
