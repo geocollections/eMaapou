@@ -7,8 +7,17 @@
       />
     </template>
 
-    <template #form>
-      <search-form-area @update="handleFormUpdate" @reset="handleFormReset" />
+    <template #form="{ closeMobileSearch }">
+      <search-form-area
+        @update="
+          handleFormUpdate()
+          closeMobileSearch && closeMobileSearch()
+        "
+        @reset="
+          handleFormReset()
+          closeMobileSearch && closeMobileSearch()
+        "
+      />
     </template>
 
     <template #result>

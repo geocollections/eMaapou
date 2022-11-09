@@ -7,10 +7,16 @@
       />
     </template>
 
-    <template #form>
+    <template #form="{ closeMobileSearch }">
       <search-form-drillcore
-        @update="handleFormUpdate"
-        @reset="handleFormReset"
+        @update="
+          handleFormUpdate()
+          closeMobileSearch && closeMobileSearch()
+        "
+        @reset="
+          handleFormReset()
+          closeMobileSearch && closeMobileSearch()
+        "
       />
     </template>
 

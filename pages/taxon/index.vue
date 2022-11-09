@@ -8,8 +8,17 @@
       />
     </template>
 
-    <template #form>
-      <search-form-taxon @update="handleFormUpdate" @reset="handleFormReset" />
+    <template #form="{ closeMobileSearch }">
+      <search-form-taxon
+        @update="
+          handleFormUpdate()
+          closeMobileSearch && closeMobileSearch()
+        "
+        @reset="
+          handleFormReset()
+          closeMobileSearch && closeMobileSearch()
+        "
+      />
     </template>
 
     <template #result>

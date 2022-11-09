@@ -4,10 +4,16 @@
       <base-header :title="$t('analysis.pageTitle')" />
     </template>
 
-    <template #form>
+    <template #form="{ closeMobileSearch }">
       <search-form-analysis
-        @update="handleFormUpdate"
-        @reset="handleFormReset"
+        @update="
+          handleFormUpdate()
+          closeMobileSearch && closeMobileSearch()
+        "
+        @reset="
+          handleFormReset()
+          closeMobileSearch && closeMobileSearch()
+        "
       />
     </template>
 

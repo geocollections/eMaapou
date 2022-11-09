@@ -4,8 +4,17 @@
       <base-header :title="$t('sample.pageTitle')" :icon="icons.mdiTestTube" />
     </template>
 
-    <template #form>
-      <search-form-sample @update="handleFormUpdate" @reset="handleFormReset" />
+    <template #form="{ closeMobileSearch }">
+      <search-form-sample
+        @update="
+          handleFormUpdate()
+          closeMobileSearch && closeMobileSearch()
+        "
+        @reset="
+          handleFormReset()
+          closeMobileSearch && closeMobileSearch()
+        "
+      />
     </template>
 
     <template #result>

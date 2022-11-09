@@ -9,9 +9,7 @@
       <span>{{ $t('common.showInstitutions') }}</span>
     </template>
 
-    <div
-      class="flex-wrap d-flex flex-column flex-sm-row flex-md-column justify-space-between"
-    >
+    <div class="flex-wrap d-flex flex-column justify-space-between">
       <div v-for="(entity, key) in institutions" :key="key">
         <v-tooltip
           right

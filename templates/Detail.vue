@@ -1,9 +1,9 @@
 <template>
-  <v-row>
-    <v-col v-if="error">
+  <v-row no-gutters>
+    <v-col v-if="error" class="pt-5">
       <detail-error :error="error" />
     </v-col>
-    <v-col v-else-if="!loading">
+    <v-col v-else-if="!loading" class="pt-5">
       <slot name="title" />
       <div class="px-0 px-sm-3">
         <slot name="top" />

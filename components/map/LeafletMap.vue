@@ -805,8 +805,10 @@ export default Vue.extend({
     },
 
     terminateLeafletGeoman() {
-      this.map.mapObject.off('pm:create', this.handlePmCreate)
-      this.map.mapObject.off('pm:remove', this.handlePmRemove)
+      if (this.map?.mapObject) {
+        this.map.mapObject.off('pm:create', this.handlePmCreate)
+        this.map.mapObject.off('pm:remove', this.handlePmRemove)
+      }
     },
 
     handlePmGlobalDrawOrRemovalModeToggled(event) {
