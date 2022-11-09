@@ -81,18 +81,6 @@
         />
       </v-list>
 
-      <v-divider class="mx-3 my-1" />
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
-          class="my-1"
-          :icon="icons.mdiFileImageOutline"
-          :label="$t('photo.pageTitle')"
-          nuxt
-          trailing-icon=""
-          :to="localePath({ name: 'photo' })"
-        />
-      </v-list>
-
       <div class="montserrat font-weight-medium pl-2 mt-2">Services</div>
 
       <v-divider class="primary" />
