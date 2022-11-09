@@ -124,12 +124,8 @@ export default {
       return {
         byIds: {
           ...defaultHeaders.byIds,
-          ...JSON.parse(JSON.stringify(this.additionalHeaders.byIds)),
         },
-        allIds: [
-          ...defaultHeaders.allIds,
-          ...JSON.parse(JSON.stringify(this.additionalHeaders.allIds)),
-        ],
+        allIds: [...defaultHeaders.allIds],
       }
     },
   },

@@ -136,12 +136,14 @@ export default {
       return {
         byIds: {
           ...defaultHeaders.byIds,
-          ...JSON.parse(JSON.stringify(this.additionalHeaders.byIds)),
+          ...Object.entries(this.additionalHeaders.byIds).reduce(
+            (prev, [key, value]) => {
+              return { ...prev, [key]: { ...value, translate: false } }
+            },
+            {}
+          ),
         },
-        allIds: [
-          ...defaultHeaders.allIds,
-          ...JSON.parse(JSON.stringify(this.additionalHeaders.allIds)),
-        ],
+        allIds: [...defaultHeaders.allIds, ...this.additionalHeaders.allIds],
       }
     },
   },
