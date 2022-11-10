@@ -85,7 +85,7 @@ export default ($axios: NuxtAxiosInstance) => ({
     fields = 'id'
   ) {
     const response = await $axios.$get(`${resource}/`, {
-      params: { ...countParams, page: 1, paginate_by: 1, fields },
+      params: { ...countParams, offset: 0, limit: 1, fields },
     })
     return {
       count: response.count,
