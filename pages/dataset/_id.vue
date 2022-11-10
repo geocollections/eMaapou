@@ -239,7 +239,7 @@ export default defineComponent({
         'analysis',
         {
           defaultParams: {
-            fq: `dataset_id:${route.value.params.id}`,
+            fq: `dataset_ids:${route.value.params.id}`,
             fl: 'locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en',
             group: true,
             'group.field': ['locality_id', 'site_id'],
