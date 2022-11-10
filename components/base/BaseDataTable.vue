@@ -14,6 +14,8 @@
     calculate-widths
     fixed-header
     multi-sort
+    style="position: relative"
+    :style="cssVars"
     :loading="isLoading"
     :headers="visibleHeaders"
     :items="items"
@@ -24,13 +26,15 @@
     :show-expand="expandable"
     :single-expand="singleExpand"
     :expanded.sync="expanded"
+    :can-scroll-right="canScrollRight"
+    :can-scroll-left="canScrollLeft"
     @click:row="handleRowClick"
     @update:options="handleChange($event)"
   >
     <template #no-data>{{ $t('table.noData') }}</template>
     <!-- eslint-disable-next-line vue/no-template-shadow -->
     <template v-if="!onlyTable" #top="{ pagination, updateOptions, options }">
-      <div>
+      <div id="top">
         <v-row class="py-2 pl-3" no-gutters>
           <v-col
             cols="12"
@@ -85,8 +89,10 @@
           </v-col>
         </v-row>
       </div>
+      <v-divider />
     </template>
     <template v-if="!onlyTable" #footer="{ props }">
+      <v-divider />
       <v-row no-gutters>
         <v-col class="d-flex justify-end" align-self="center">
           <base-data-table-pagination
@@ -213,22 +219,71 @@ export default Vue.extend({
       expanded: [],
       // isLoading: false,
       tableElement: null as HTMLElement | null,
+      canScrollLeft: false,
+      canScrollRight: false,
+      topOptionsHeight: 0,
     }
   },
   computed: {
     visibleHeaders(): IHeader[] {
       return this.headers.filter((header) => header.show)
     },
-    icons() {
+    icons(): any {
       return {
         mdiChevronUp,
         mdiChevronDown,
         mdiMagnify,
       }
     },
+    cssVars(): any {
+      return {
+        '--top-options-height': `${this.topOptionsHeight}px`,
+      }
+    },
   },
   mounted() {
     this.tableElement = this.$el.querySelector('table')
+    this.$nextTick(() => {
+      this.topOptionsHeight = this.$el.querySelector('#top')?.clientHeight ?? 0
+    })
+    const dataTableWrapper = this.$el.querySelector(
+      '.v-data-table__wrapper'
+    ) as HTMLElement | null
+    dataTableWrapper?.addEventListener('scroll', () => {
+      if (
+        dataTableWrapper.scrollLeft + dataTableWrapper.clientWidth >=
+        dataTableWrapper.scrollWidth
+      ) {
+        this.canScrollRight = false
+      } else if (dataTableWrapper.scrollLeft === 0) {
+        this.canScrollLeft = false
+      } else {
+        this.canScrollLeft = true
+        this.canScrollRight = true
+      }
+    })
+
+    window.addEventListener('resize', () => {
+      this.topOptionsHeight = this.$el.querySelector('#top')?.clientHeight ?? 0
+      if (
+        dataTableWrapper?.offsetWidth &&
+        dataTableWrapper?.scrollWidth &&
+        dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
+      ) {
+        this.canScrollRight = true
+      } else {
+        this.canScrollLeft = false
+        this.canScrollRight = false
+      }
+    })
+
+    if (
+      dataTableWrapper?.offsetWidth &&
+      dataTableWrapper?.scrollWidth &&
+      dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
+    ) {
+      this.canScrollRight = true
+    }
   },
   methods: {
     handleChange: debounce(function (this: any, options) {
@@ -284,5 +339,67 @@ export default Vue.extend({
       white-space: nowrap;
     }
   }
+}
+.v-data-table[can-scroll-right] {
+  ::v-deep .v-data-table__wrapper table::after {
+    @extend .scroll-right;
+  }
+}
+.v-data-table[can-scroll-left] {
+  ::v-deep .v-data-table__wrapper table::before {
+    @extend .scroll-left;
+  }
+}
+
+.scroll-right {
+  background: -webkit-linear-gradient(
+      270deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0) 75%
+    )
+    100% center;
+  background: linear-gradient(
+      270deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0) 75%
+    )
+    100% center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: 15px 100%;
+  background-position: 100% 0%;
+  content: '';
+  display: block;
+  position: absolute;
+  top: var(--top-options-height);
+  bottom: 60px;
+  right: 0;
+  width: 15px;
+  z-index: 100;
+}
+.scroll-left {
+  background: -webkit-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0) 75%
+    )
+    0 center;
+  background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0) 75%
+    )
+    0 center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-size: 15px 100%;
+  content: '';
+  display: block;
+  position: absolute;
+  top: var(--top-options-height);
+  bottom: 60px;
+  left: 0;
+  width: 15px;
+  z-index: 100;
 }
 </style>
