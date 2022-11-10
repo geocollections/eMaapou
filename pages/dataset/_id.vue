@@ -139,7 +139,7 @@
       </v-card-text>
     </template>
 
-    <template #column-right>
+    <template v-if="locationMarkers.length > 0" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>

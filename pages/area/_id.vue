@@ -342,7 +342,7 @@
       </v-row>
     </template>
 
-    <template v-if="siteMarkers" #column-right>
+    <template v-if="siteMarkers.length > 0 || geojson" #column-right>
       <v-card-title class="subsection-title">{{
         $t('locality.map')
       }}</v-card-title>
@@ -428,6 +428,7 @@ export default defineComponent({
           // eslint-disable-next-line no-useless-escape
           state.area?.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, '')
         ) ?? null
+      if (parsedPolygon === null) return null
       if (!(parsedPolygon instanceof Array)) return parsedPolygon
       else
         return {

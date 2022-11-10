@@ -153,7 +153,7 @@
       </v-card-text>
     </template>
     <template
-      v-if="stratotypeCount > 0 || stratigraphyMarkers > 0"
+      v-if="stratotypeCount > 0 || stratigraphyMarkers.length > 0"
       #column-right
     >
       <v-card-title class="subsection-title">{{
