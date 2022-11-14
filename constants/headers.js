@@ -1147,7 +1147,7 @@ export const HEADERS_SAMPLE_DATA = {
     depth: {
       text: 'sampleData.depth',
       value: 'depth',
-      show: false,
+      show: true,
       apiFieldValue: 'depth',
     },
     depth_interval: {
