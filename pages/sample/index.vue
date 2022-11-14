@@ -91,8 +91,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'sample',
         qParamKey: 'sampleQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

@@ -95,8 +95,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'locality',
         qParamKey: 'localityQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

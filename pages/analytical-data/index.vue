@@ -105,8 +105,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'analytical_data',
         qParamKey: 'analyticalDataQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

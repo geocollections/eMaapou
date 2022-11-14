@@ -95,8 +95,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'preparation',
         qParamKey: 'preparationQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

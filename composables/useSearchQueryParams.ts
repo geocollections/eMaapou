@@ -1,4 +1,10 @@
-import { useRoute, useRouter, computed, watch } from '@nuxtjs/composition-api'
+import {
+  useRoute,
+  useRouter,
+  computed,
+  watch,
+  ComputedRef,
+} from '@nuxtjs/composition-api'
 import isEqual from 'lodash/isEqual'
 import { useAccessor } from './useAccessor'
 import getQueryParams from '~/utils/getQueryParams'
@@ -10,13 +16,13 @@ export function useSearchQueryParams({
   module,
   qParamKey,
   filters,
-  globalFilters = {},
+  globalFilters,
   fetch,
 }: {
   module: keyof typeof searchModule.modules
   qParamKey: string
-  filters: SearchModuleState['filters']['byIds']
-  globalFilters?: SearchState['globalFilters']['byIds']
+  filters: ComputedRef<SearchModuleState['filters']['byIds']>
+  globalFilters?: ComputedRef<SearchState['globalFilters']['byIds']>
   fetch: any
 }) {
   const accessor = useAccessor()
@@ -26,8 +32,8 @@ export function useSearchQueryParams({
   const queryParams = computed(() =>
     getQueryParams({
       q: { key: qParamKey, value: accessor.search[module].query },
-      filters,
-      globalFilters,
+      filters: filters.value,
+      globalFilters: globalFilters?.value ?? {},
       tableOptions: accessor.search[module].options,
     })
   )
@@ -35,8 +41,8 @@ export function useSearchQueryParams({
   const setStateFromQueryParams = () => {
     const parsedValues = parseQueryParams({
       route: route.value,
-      filters,
-      globalFilters,
+      filters: filters.value,
+      globalFilters: globalFilters?.value ?? {},
       qKey: qParamKey,
     })
     accessor.search[module].SET_MODULE_QUERY({ query: parsedValues.query })
@@ -68,7 +74,7 @@ export function useSearchQueryParams({
 
   // Add global filters and table options to query params, if they are missing
   const query = getQueryParams({
-    globalFilters,
+    globalFilters: globalFilters?.value ?? {},
     tableOptions: accessor.search[module].options,
   })
   if (!isEqual({ ...query, ...route.value.query }, route.value.query))
@@ -101,7 +107,6 @@ export function useSearchQueryParams({
     accessor.search[module].SET_MODULE_OPTIONS({
       options: { ...accessor.search[module].options, page: 1 },
     })
-
     if (!isEqual(queryParams.value, route.value.query)) {
       await new Promise((resolve, reject) =>
         router.push({ query: queryParams.value }, resolve, reject)

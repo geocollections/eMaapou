@@ -96,8 +96,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'dataset',
         qParamKey: 'datasetQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

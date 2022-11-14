@@ -93,8 +93,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'drillcore',
         qParamKey: 'drillcoreQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

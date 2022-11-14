@@ -93,7 +93,7 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'area',
         qParamKey: 'areaQ',
-        filters: filters.value,
+        filters,
         fetch,
       })
 

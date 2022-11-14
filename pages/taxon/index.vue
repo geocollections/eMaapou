@@ -95,8 +95,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'taxon',
         qParamKey: 'taxonQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

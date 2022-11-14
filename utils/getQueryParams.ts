@@ -21,8 +21,10 @@ export default ({
   }
   query.page = tableOptions.page?.toString()
   query.itemsPerPage = tableOptions.itemsPerPage?.toString()
-  query.sortBy = tableOptions.sortBy?.join(',')
-  query.sortDesc = tableOptions.sortDesc?.join(',')
+  if ((tableOptions.sortBy?.length ?? 0) > 0)
+    query.sortBy = tableOptions.sortBy?.join(',')
+  if ((tableOptions.sortDesc?.length ?? 0) > 0)
+    query.sortDesc = tableOptions.sortDesc?.join(',')
 
   if (filters) {
     Object.entries(filters)

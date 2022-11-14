@@ -93,8 +93,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'analysis',
         qParamKey: 'analysisQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 

@@ -93,7 +93,7 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'stratigraphy',
         qParamKey: 'stratigraphyQ',
-        filters: filters.value,
+        filters,
         fetch,
       })
 

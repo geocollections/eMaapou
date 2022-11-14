@@ -144,8 +144,8 @@ export default defineComponent({
       useSearchQueryParams({
         module: 'image',
         qParamKey: 'photoQ',
-        filters: filters.value,
-        globalFilters: globalFilters.value,
+        filters,
+        globalFilters,
         fetch,
       })
 
