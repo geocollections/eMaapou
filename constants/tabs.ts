@@ -260,7 +260,8 @@ export const TABS_DATASET: ResourceTabs = {
     },
     dataset_analysis: {
       id: 'dataset_analysis',
-      table: 'dataset_analysis',
+      table: 'analytical_data',
+      isSolr: true,
       routeName: 'dataset-id-slug-analyses',
       title: 'dataset.analyses',
       count: 0,
