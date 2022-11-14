@@ -12,9 +12,9 @@
     <template #item.taxon="{ item }">
       <base-link-external
         v-if="item.taxon"
-        @click.native="$openWindow(`https://fossiilid.info/${item.taxon}`)"
+        @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
-        {{ item.name }}
+        {{ item.taxon.taxon }}
       </base-link-external>
     </template>
 
