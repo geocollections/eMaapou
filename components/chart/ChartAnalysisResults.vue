@@ -26,15 +26,10 @@ import {
   XAXisComponentOption,
   YAXisComponentOption,
 } from 'echarts/types/dist/echarts'
-import {
-  LegendOption,
-  BarSeriesOption,
-  TooltipOption,
-} from 'echarts/types/dist/shared'
+import { BarSeriesOption, TooltipOption } from 'echarts/types/dist/shared'
 
 type ECOption = ComposeOption<
   | TooltipOption
-  | LegendOption
   | BarSeriesOption
   | XAXisComponentOption
   | YAXisComponentOption
@@ -46,7 +41,7 @@ export default defineComponent({
   props: {
     data: {
       type: Object as PropType<{
-        [K: number | string]: BarSeriesOption['data']
+        [K: number]: BarSeriesOption['data']
       }>,
       required: true,
     },
@@ -55,7 +50,6 @@ export default defineComponent({
     const initOptions = computed(() => {
       return { renderer: 'canvas' }
     })
-    const unitGroup = 1
 
     const createSubCharts = (data: typeof props['data']) => {
       let topPosition = 20
@@ -131,15 +125,6 @@ export default defineComponent({
       return {
         tooltip: {
           trigger: 'item',
-        },
-        legend: {
-          type: 'scroll',
-          orient: 'vertical',
-          right: 10,
-          top: 20,
-          bottom: 20,
-          // @ts-ignore
-          data: Object.values(props.data)[unitGroup]?.map((val) => val.name),
         },
         grid: subCharts.grid,
         xAxis: subCharts.xAxis,
