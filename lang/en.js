@@ -303,6 +303,7 @@ export default {
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
     institution: 'Institution',
+    resultColumn: 'Results',
   },
   datasetAnalysis: {
     analysis: 'Analysis',

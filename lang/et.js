@@ -305,6 +305,7 @@ export default {
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
     institution: 'Asutus',
+    resultColumn: 'Tulemused',
   },
   datasetAnalysis: {
     analysis: 'Analüüs',

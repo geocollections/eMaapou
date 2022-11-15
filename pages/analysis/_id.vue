@@ -153,7 +153,9 @@
     <template v-if="resultChartData" #column-right>
       <v-row no-gutters justify="center">
         <v-col>
-          <v-card-title class="subsection-title">Results </v-card-title>
+          <v-card-title class="subsection-title">{{
+            $t('analysis.resultColumn')
+          }}</v-card-title>
           <chart-analysis-results :data="resultChartData" />
         </v-col>
       </v-row>
