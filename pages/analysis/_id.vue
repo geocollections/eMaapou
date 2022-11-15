@@ -150,7 +150,7 @@
         </v-col>
       </v-row>
     </template>
-    <template v-if="resultChartData" #column-right>
+    <template v-if="!isEmpty(resultChartData)" #column-right>
       <v-row no-gutters justify="center">
         <v-col>
           <v-card-title class="subsection-title">{{
