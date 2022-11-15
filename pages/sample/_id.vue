@@ -409,10 +409,7 @@ export default defineComponent({
         }
       )
       const tabsObject = TABS_SAMPLE
-      // TODO: this prop should be set after `samplePromise` resolves
-      // @ts-ignore
-      tabsObject.byIds.graphs.props.sampleObject = state.sample
-      // @ts-ignore
+
       const tabs = tabsObject.allIds.map((id) => tabsObject.byIds[id])
       const hydratedTabsPromise = Promise.all(
         tabs.map((tab) =>
@@ -423,8 +420,12 @@ export default defineComponent({
             },
           })
         )
-      )
-      const [sampleResponse, localityGroupedResponse, hydratedTabs] =
+      ).then((res): { [K: string]: any } => {
+        return res.reduce((prev, tab): { [K: string]: any } => {
+          return { ...prev, [tab.id]: tab }
+        }, {})
+      })
+      const [sampleResponse, localityGroupedResponse, hydratedTabsByIds] =
         await Promise.all([
           samplePromise,
           localityGroupedPromise,
@@ -432,7 +433,11 @@ export default defineComponent({
         ])
       state.ids = sampleResponse?.ids
       state.sample = sampleResponse
-      state.tabs = hydratedTabs.filter((tab) => tab.count > 0)
+
+      hydratedTabsByIds.graphs.props.sampleObject = state.sample
+      state.tabs = TABS_SAMPLE.allIds
+        .map((id) => hydratedTabsByIds[id])
+        .filter((tab) => tab.count > 0)
 
       const localities = localityGroupedResponse?.grouped?.locality_id?.groups
         ?.map((item: any) => item?.doclist?.docs?.[0])
