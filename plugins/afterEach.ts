@@ -19,11 +19,12 @@ const INCLUDED_PAGES = [
   'stratigraphy-id',
 ]
 export default defineNuxtPlugin(({ app, $accessor }, _) => {
-  app.router?.afterEach((_, from) => {
+  app.router?.afterEach((to, from) => {
     const title = document.title
     const parsedTitle = title.substring(0, title.indexOf('|')).trim()
     if (app.nuxt.err) return
     if (parsedTitle === 'undefined') return
+    if (to.params.id === from.params.id) return
     if (!INCLUDED_PAGES.some((page) => from.name?.includes(page))) return
 
     const historyObject = {
