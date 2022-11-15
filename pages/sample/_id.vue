@@ -293,7 +293,6 @@
               latitude: locality.latitude,
               longitude: locality.longitude,
             }"
-            sample-overlay
             :markers="[
               {
                 latitude: locality.latitude,
