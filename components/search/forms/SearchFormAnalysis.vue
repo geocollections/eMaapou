@@ -5,6 +5,20 @@
     <search-fields-wrapper :active="hasActiveFilters">
       <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
       <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
+      <input-text v-model="method" :label="$t(filters.byIds.method.label)" />
+      <input-text
+        v-model="locality"
+        :label="$t(filters.byIds.locality.label)"
+      />
+      <input-text v-model="sample" :label="$t(filters.byIds.sample.label)" />
+      <input-text v-model="agent" :label="$t(filters.byIds.agent.label)" />
+      <input-text v-model="lab" :label="$t(filters.byIds.lab.label)" />
+      <!-- <input-autocomplete-stratigraphy
+        v-model="stratigraphy"
+        return-object
+        :label="$t(filters.byIds.stratigraphy.label)"
+      />
+      <input-text v-model="dataset" :label="$t(filters.byIds.dataset.label)" /> -->
     </search-fields-wrapper>
 
     <search-map
@@ -35,6 +49,7 @@ import InputText from '~/components/input/InputText.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import InputRange from '~/components/input/InputRange.vue'
+// import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 export default Vue.extend({
   name: 'SearchFormAnalysis',
   components: {
@@ -45,12 +60,20 @@ export default Vue.extend({
     SearchMap,
     InputSearch,
     InputRange,
+    // InputAutocompleteStratigraphy,
   },
   computed: {
     ...mapState('search/analysis', ['filters', 'items']),
     ...mapFields('search/analysis', {
       id: 'filters.byIds.id.value',
       depth: 'filters.byIds.depth.value',
+      method: 'filters.byIds.method.value',
+      agent: 'filters.byIds.agent.value',
+      dataset: 'filters.byIds.dataset.value',
+      lab: 'filters.byIds.lab.value',
+      sample: 'filters.byIds.sample.value',
+      locality: 'filters.byIds.locality.value',
+      stratigraphy: 'filters.byIds.stratigraphy.value',
       query: 'query',
     }),
     ...mapFields('search', {

@@ -306,6 +306,8 @@ export default {
     dateChanged: 'Kirje muudetud',
     institution: 'Asutus',
     resultColumn: 'Tulemused',
+    agent: 'Agent',
+    sample: 'Proov',
   },
   datasetAnalysis: {
     analysis: 'Analüüs',

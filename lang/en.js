@@ -304,6 +304,8 @@ export default {
     dateChanged: 'Date changed',
     institution: 'Institution',
     resultColumn: 'Results',
+    agent: 'Agent',
+    sample: 'Sample',
   },
   datasetAnalysis: {
     analysis: 'Analysis',
