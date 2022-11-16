@@ -48,6 +48,11 @@
             "
           />
           <table-row
+            v-if="stratigraphy.original_rank"
+            :title="$t('stratigraphy.originalRank')"
+            :value="stratigraphy.original_rank"
+          />
+          <table-row
             v-if="stratigraphy.scope"
             :title="$t('stratigraphy.scope')"
             :value="
@@ -137,6 +142,14 @@
             <template #value>
               <!-- eslint-disable-next-line vue/no-v-html -->
               <div v-html="stratigraphy.index_additional_html" />
+            </template>
+          </table-row>
+          <table-row
+            v-if="stratigraphy.index_old"
+            :title="$t('stratigraphy.indexAlt')"
+          >
+            <template #value>
+              <div v-text="stratigraphy.index_old" />
             </template>
           </table-row>
           <table-row

@@ -674,6 +674,7 @@ export default {
     pageTitle: 'Stratigraphy',
     dateAdded: 'Date added',
     dateChanged: 'Date changed',
+    originalRank: 'Original rank',
   },
   stratigraphyReference: {
     reference: 'Reference',

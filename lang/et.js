@@ -676,6 +676,7 @@ export default {
     pageTitle: 'Stratigraafia',
     dateAdded: 'Kirje lisatud',
     dateChanged: 'Kirje muudetud',
+    originalRank: 'Originaalne tase',
   },
   stratigraphyReference: {
     reference: 'Viide',
