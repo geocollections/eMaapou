@@ -1,5 +1,5 @@
 import { Plugin } from '@nuxt/types'
-import { Route, Location } from 'vue-router'
+import { Location } from 'vue-router'
 import { Tab } from '~/constants'
 const plugin: Plugin = ({ app }, inject) => {
   const hydrateCount = async (
@@ -64,18 +64,18 @@ const plugin: Plugin = ({ app }, inject) => {
     }
   }
 
-  const getMaxTab = (route: Route, tabs: any[]): Route | undefined => {
+  const getMaxTab = (route: Location, tabs: any[]): Location => {
+    if (!(tabs.length > 0)) return route
     const initTab = tabs.reduce((max, tab) =>
       max.count > tab.count ? max : tab
     )
 
     // Constuct route
     // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
-    const path = app.localeRoute({
+    const path = {
       name: initTab?.routeName ?? tabs[0].routeName,
-      params: route.params,
       query: route.query,
-    })
+    }
     return path
   }
   inject('hydrateTab', hydrateTab)

@@ -29,7 +29,7 @@ declare module 'vue/types/vue' {
       }
     ): Promise<Tab>
     $validateTabRoute(route: Location, tabs: any[]): Location
-    $getMaxTab(route: Route, tabs: any[]): Route | undefined
+    $getMaxTab(route: Location, tabs: any[]): Location
     $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
@@ -61,7 +61,7 @@ declare module '@nuxt/types' {
       }
     ): Promise<Tab>
     $validateTabRoute(route: Location, tabs: any[]): Location
-    $getMaxTab(route: Route, tabs: any[]): Route | undefined
+    $getMaxTab(route: Location, tabs: any[]): Location
     $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
@@ -92,7 +92,7 @@ declare module '@nuxt/types' {
       }
     ): Promise<Tab>
     $validateTabRoute(route: Location, tabs: any[]): Location
-    $getMaxTab(route: Route, tabs: any[]): Route | undefined
+    $getMaxTab(route: Location, tabs: any[]): Location
     $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void

@@ -17,7 +17,7 @@
       <v-col class="pt-2 pt-md-0">
         <v-card flat color="transparent">
           <v-card-actions class="pt-0">
-            <button-tabs ref="tabs" :tabs="computedTabs" />
+            <button-tabs :tabs="tabs" />
           </v-card-actions>
         </v-card>
       </v-col>
@@ -32,93 +32,95 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiMagnify } from '@mdi/js'
 import orderBy from 'lodash/orderBy'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  useContext,
+  useFetch,
+  useRoute,
+  useRouter,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  watch,
+} from '@nuxtjs/composition-api'
+import { Location } from 'vue-router'
 import ButtonTabs from '~/components/ButtonTabs.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
-import { TABS_QUICK_SEARCH } from '~/constants'
-export default {
+import { Tab, TABS_QUICK_SEARCH } from '~/constants'
+import { useI18n } from '~/composables/useI18n'
+
+export default defineComponent({
   name: 'QuickSearch',
   components: { ButtonTabs, BaseHeader },
-  async asyncData({ route, $hydrateTab, from, $getMaxTab, redirect }) {
-    const tabs = TABS_QUICK_SEARCH.allIds.map(
-      (id) => TABS_QUICK_SEARCH.byIds[id]
-    )
+  setup() {
+    const { $hydrateTab, from, $getMaxTab } = useContext()
 
-    const hydratedTabs = await Promise.all(
-      tabs.map(
-        async (tab) =>
-          await $hydrateTab(tab, {
+    const i18n = useI18n()
+    const route = useRoute()
+    const router = useRouter()
+    const state = reactive({
+      tabs: [] as Tab[],
+    })
+    const { fetch } = useFetch(async () => {
+      const tabs = TABS_QUICK_SEARCH.allIds.map(
+        (id) => TABS_QUICK_SEARCH.byIds[id]
+      )
+
+      const hydratedTabs = await Promise.all(
+        tabs.map((tab) =>
+          $hydrateTab(tab, {
             countParams: {
               solr: {
                 default: {
-                  q: route.query?.q ?? '*',
+                  q: route.value.query?.q ?? '*',
                 },
                 photo: {
-                  q: route.query?.q ?? '*',
+                  q: route.value.query?.q ?? '*',
                   fq: 'specimen_image_attachment:2',
                 },
               },
             },
           })
+        )
       )
+      state.tabs = orderBy(hydratedTabs, ['count'], ['desc'])
+
+      // If navigating to quick search from elsewhere in the app, go to the route with the most results
+      if (from.value && !from.value.name?.startsWith('search')) {
+        const location = {
+          name: route.value.name ?? undefined,
+          query: route.value.query,
+        }
+        const validRoute = i18n.localeLocation($getMaxTab(location, state.tabs))
+
+        if (router.resolve(validRoute as Location).href !== route.value.path)
+          router.replace(validRoute as Location)
+      }
+    })
+    watch(
+      () => route.value.query.q,
+      () => {
+        fetch()
+      }
     )
-    if (from !== undefined && !from?.name.startsWith('search')) {
-      const validRoute = $getMaxTab(route, hydratedTabs)
-      if (validRoute.path !== route.path) redirect(validRoute)
-    }
     return {
-      tabs: hydratedTabs,
-    }
-  },
-  data() {
-    return {
-      tabs: TABS_QUICK_SEARCH.allIds.map((id) => TABS_QUICK_SEARCH.byIds[id]),
+      ...toRefs(state),
     }
   },
   head() {
     return {
-      title: this.$t('search.pageTitle'),
+      title: this.$t('search.pageTitle') as string,
     }
   },
   computed: {
-    computedTabs() {
-      return orderBy(this.tabs, ['count'], ['desc'])
-    },
     icons() {
       return {
         mdiMagnify,
       }
     },
   },
-  watch: {
-    '$route.query'(newVal, oldVal) {
-      if (newVal.q === oldVal.q) return
-      this.handleSearch()
-    },
-  },
-  methods: {
-    handleSearch: async function () {
-      this.tabs = await Promise.all(
-        this.tabs.map(
-          async (tab) =>
-            await this.$hydrateTab(tab, {
-              countParams: {
-                solr: {
-                  default: {
-                    q: this.$route.query?.q ?? '*',
-                  },
-                  photo: {
-                    q: this.$route.query?.q ?? '*',
-                    fq: 'specimen_image_attachment:2',
-                  },
-                },
-              },
-            })
-        )
-      )
-    },
-  },
-}
+})
 </script>

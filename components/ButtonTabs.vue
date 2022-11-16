@@ -30,15 +30,17 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from '@nuxtjs/composition-api'
+
+export default defineComponent({
   name: 'ButtonTabs',
   props: {
     tabs: {
       type: Array,
-      default: () => [],
+      required: true,
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>
