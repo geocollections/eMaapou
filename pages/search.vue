@@ -33,11 +33,13 @@
 </template>
 
 <script lang="ts">
+import isNil from 'lodash/isNil'
 import { mdiMagnify } from '@mdi/js'
 import orderBy from 'lodash/orderBy'
 import {
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -57,13 +59,13 @@ export default defineComponent({
   components: { ButtonTabs, BaseHeader },
   setup() {
     const { $hydrateTab, from, $getMaxTab } = useContext()
-
     const i18n = useI18n()
     const route = useRoute()
     const router = useRouter()
     const state = reactive({
       tabs: [] as Tab[],
     })
+    const firstEnter = ref(true)
     const { fetch } = useFetch(async () => {
       const tabs = TABS_QUICK_SEARCH.allIds.map(
         (id) => TABS_QUICK_SEARCH.byIds[id]
@@ -87,16 +89,18 @@ export default defineComponent({
         )
       )
       state.tabs = orderBy(hydratedTabs, ['count'], ['desc'])
-
       // If navigating to quick search from elsewhere in the app, go to the route with the most results
-      if (from.value && !from.value.name?.startsWith('search')) {
+      if (!isNil(from.value) && firstEnter.value) {
+        firstEnter.value = false
         const location = {
           name: route.value.name ?? undefined,
           query: route.value.query,
         }
         const validRoute = i18n.localeLocation($getMaxTab(location, state.tabs))
 
-        if (router.resolve(validRoute as Location).href !== route.value.path)
+        if (
+          router.resolve(validRoute as Location).route.path !== route.value.path
+        )
           router.replace(validRoute as Location)
       }
     })
