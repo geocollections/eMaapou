@@ -1,6 +1,6 @@
 // NOTE: this function is copied from `echarts/lib/util/graphic.js`,
 //  so we do not need to import the whole `graphic` module, which is really large
-export default function clipRectByRect(targetRect, rect) {
+export default function clipRectByRect(targetRect: any, rect: any) {
   const x = Math.max(targetRect.x, rect.x)
   const x2 = Math.min(targetRect.x + targetRect.width, rect.x + rect.width)
   const y = Math.max(targetRect.y, rect.y)

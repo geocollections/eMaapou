@@ -14,6 +14,23 @@ import {
   HEADERS_PREPARATION,
   HEADERS_AREA,
 } from '~/constants'
+
+export type HeadersState = {
+  analysis: Headers
+  analytical_data: Headers
+  area: Headers
+  dataset: Headers
+  drillcore: Headers
+  locality: Headers
+  photo: Headers
+  preparation: Headers
+  sample: Headers
+  site: Headers
+  specimen: Headers
+  stratigraphy: Headers
+  taxon: Headers
+}
+
 export const initState = () => {
   return {
     analysis: cloneDeep(HEADERS_ANALYSIS),

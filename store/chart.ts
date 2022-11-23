@@ -1,8 +1,14 @@
 import { getField, updateField } from 'vuex-map-fields'
+import { Renderer } from '~/types/enums'
 
-export const state = () => {
+type ChartState = {
+  renderer: Renderer
+  connected: boolean
+  ppi: number
+}
+export const state = (): ChartState => {
   return {
-    renderer: 'canvas',
+    renderer: Renderer.Canvas,
     connected: true,
     ppi: 96,
   }

@@ -39,13 +39,13 @@
           mandatory
         >
           <v-radio
-            v-for="entity in listOfViews"
-            :key="entity"
+            v-for="view in views"
+            :key="view"
             class="montserrat"
-            :label="$t(`common.${entity}`)"
-            :value="entity"
+            :label="$t(`common.${view}`)"
+            :value="view"
             color="header"
-          ></v-radio>
+          />
         </v-radio-group>
 
         <data-table-photo
@@ -89,7 +89,6 @@ import {
   computed,
 } from '@nuxtjs/composition-api'
 import { mdiFileImageOutline } from '@mdi/js'
-import { mapState } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import Search from '~/templates/Search.vue'
@@ -105,6 +104,12 @@ import { Filter } from '~/types/filters'
 
 const useServices = wrapProperty('$services', false)
 const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
+enum ViewType {
+  Table = 'table',
+  Image = 'image',
+  Gallery = 'gallery',
+}
+
 export default defineComponent({
   components: {
     GalleryView,
@@ -137,9 +142,14 @@ export default defineComponent({
       accessor.search.image.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.image.SET_MODULE_COUNT({ count: response.count })
     })
+
     const filters = computed(() => accessor.search.image.filters.byIds)
     const globalFilters = computed(() => accessor.search.globalFilters.byIds)
-
+    const views = computed(() => [
+      ViewType.Table,
+      ViewType.Image,
+      ViewType.Gallery,
+    ])
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({
         module: 'image',
@@ -153,6 +163,7 @@ export default defineComponent({
       handleFormReset,
       handleFormUpdate,
       handleDataTableUpdate,
+      views,
     }
   },
   head() {
@@ -173,7 +184,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState('settings', ['listOfViews']),
     ...mapFields('search/image', {
       currentView: 'currentView',
     }),

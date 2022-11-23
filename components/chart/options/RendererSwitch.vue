@@ -29,17 +29,19 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from '@nuxtjs/composition-api'
+import { Renderer } from '~/types/enums'
+export default defineComponent({
   name: 'RendererSwitch',
   props: {
     renderer: {
       type: String,
-      default: 'canvas',
+      default: Renderer.Canvas,
       required: true,
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

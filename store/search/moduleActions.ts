@@ -1,3 +1,4 @@
+import { ActionContext } from 'vuex'
 import {
   RESET_GEOJSON,
   RESET_INSTITUTIONS,
@@ -5,9 +6,10 @@ import {
   RESET_MODULE_FILTERS,
   RESET_MODULE_QUERY,
 } from '../mutation_types'
+import { SearchModuleState } from './types'
 
 export const searchModuleActions = {
-  async resetFilters({ commit, state }) {
+  async resetFilters({ commit, state }: ActionContext<SearchModuleState, any>) {
     const { initState } = await import(`/${state.name}/state`)
 
     const initStateObj = initState()

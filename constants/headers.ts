@@ -10,12 +10,22 @@
     value: String ()
     show: Boolean (field indicating if the field should be shown when table first rendered)
     field: String/Object (API field that are used when sorting and searching is done)
-    **vuetify DataTableHeader properties https://vuetifyjs.com/en/api/v-data-table/#props
+      **vuetify DataTableHeader properties https://vuetifyjs.com/en/api/v-data-table/#props
   }
   NOTE: If in the future there is a need for text fields that should not be translated using i18n, add a boolean field to check if text needs to be translated
 */
-
-export const HEADERS_ANALYSIS_RESULT = {
+type Header = {
+  text: string
+  value: string
+  show: boolean
+  apiFieldValue?: string | { et: string; en: string }
+  [K: string]: any
+}
+type Headers = {
+  byIds: { [K: string]: Header }
+  allIds: string[]
+}
+export const HEADERS_ANALYSIS_RESULT: Headers = {
   byIds: {
     parameter: {
       text: 'analysisResult.parameter',
@@ -65,7 +75,7 @@ export const HEADERS_ANALYSIS_RESULT = {
     'value_error',
   ],
 }
-export const HEADERS_SAMPLE_ANALYSIS_RESULT = {
+export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
   byIds: {
     parameter: {
       text: 'analysisResult.parameter',
@@ -123,7 +133,7 @@ export const HEADERS_SAMPLE_ANALYSIS_RESULT = {
   ],
 }
 
-export const HEADERS_ANALYSIS = {
+export const HEADERS_ANALYSIS: Headers = {
   byIds: {
     id: { text: 'analysis.id', value: 'id', show: true, apiFieldValue: 'id_l' },
     sample_number: {
@@ -188,7 +198,7 @@ export const HEADERS_ANALYSIS = {
   ],
 }
 
-export const HEADERS_ANALYTICAL_DATA = {
+export const HEADERS_ANALYTICAL_DATA: Headers = {
   byIds: {
     id_l: {
       text: 'analyticalData.id',
@@ -287,7 +297,7 @@ export const HEADERS_ANALYTICAL_DATA = {
     'analysis_id',
   ],
 }
-export const HEADERS_AREA = {
+export const HEADERS_AREA: Headers = {
   byIds: {
     id: {
       text: 'area.id',
@@ -317,7 +327,7 @@ export const HEADERS_AREA = {
   allIds: ['id', 'name', 'county', 'type'],
 }
 
-export const HEADERS_ATTACHMENT_SOLR = {
+export const HEADERS_ATTACHMENT_SOLR: Headers = {
   byIds: {
     id: { text: 'attachment.id', value: 'id', show: true, apiFieldValue: 'id' },
     format_value: {
@@ -376,7 +386,7 @@ export const HEADERS_ATTACHMENT_SOLR = {
   ],
 }
 
-export const HEADERS_ATTACHMENT = {
+export const HEADERS_ATTACHMENT: Headers = {
   byIds: {
     file: {
       text: 'attachment.file',
@@ -404,7 +414,7 @@ export const HEADERS_ATTACHMENT = {
   allIds: ['file', 'description', 'agent'],
 }
 
-export const HEADERS_DATASET = {
+export const HEADERS_DATASET: Headers = {
   byIds: {
     id: {
       text: 'dataset.id',
@@ -434,7 +444,7 @@ export const HEADERS_DATASET = {
   allIds: ['id', 'name', 'date', 'database'],
 }
 
-export const HEADERS_DATASET_ANALYSIS = {
+export const HEADERS_DATASET_ANALYSIS: Headers = {
   byIds: {
     analysis: {
       text: 'datasetAnalysis.analysis',
@@ -483,7 +493,7 @@ export const HEADERS_DATASET_ANALYSIS = {
   ],
 }
 
-export const HEADERS_DATASET_AUTHOR = {
+export const HEADERS_DATASET_AUTHOR: Headers = {
   byIds: {
     name: {
       text: 'datasetAuthor.name',
@@ -507,7 +517,7 @@ export const HEADERS_DATASET_AUTHOR = {
   allIds: ['name', 'affiliation', 'type'],
 }
 
-export const HEADERS_DATASET_GEOLOCATION = {
+export const HEADERS_DATASET_GEOLOCATION: Headers = {
   byIds: {
     name: {
       text: 'datasetGeolocation.name',
@@ -537,7 +547,7 @@ export const HEADERS_DATASET_GEOLOCATION = {
   allIds: ['name', 'longitude', 'latitude', 'is_polygon'],
 }
 
-export const HEADERS_DATASET_REFERENCE = {
+export const HEADERS_DATASET_REFERENCE: Headers = {
   byIds: {
     reference: {
       text: 'reference.reference',
@@ -567,7 +577,7 @@ export const HEADERS_DATASET_REFERENCE = {
   allIds: ['reference', 'title', 'journal', 'pages'],
 }
 
-export const HEADERS_DESCRIPTION = {
+export const HEADERS_DESCRIPTION: Headers = {
   byIds: {
     depth_top: {
       text: 'localityDescription.depthTop',
@@ -630,7 +640,7 @@ export const HEADERS_DESCRIPTION = {
   ],
 }
 
-export const HEADERS_DOI = {
+export const HEADERS_DOI: Headers = {
   byIds: {
     identifier: {
       text: 'doi.identifier',
@@ -679,7 +689,7 @@ export const HEADERS_DOI = {
   ],
 }
 
-export const HEADERS_DRILLCORE = {
+export const HEADERS_DRILLCORE: Headers = {
   byIds: {
     id: {
       text: 'drillcore.id',
@@ -742,7 +752,7 @@ export const HEADERS_DRILLCORE = {
   ],
 }
 
-export const HEADERS_LOCALITY = {
+export const HEADERS_LOCALITY: Headers = {
   byIds: {
     id: { text: 'locality.id', value: 'id', show: true, apiFieldValue: 'id_l' },
     locality: {
@@ -773,7 +783,7 @@ export const HEADERS_LOCALITY = {
   allIds: ['id', 'locality', 'country', 'latitude', 'longitude'],
 }
 
-export const HEADERS_LOCALITY_REFERENCE = {
+export const HEADERS_LOCALITY_REFERENCE: Headers = {
   byIds: {
     reference: {
       text: 'localityReference.reference',
@@ -803,7 +813,7 @@ export const HEADERS_LOCALITY_REFERENCE = {
   allIds: ['reference', 'title', 'pages', 'remarks'],
 }
 
-export const HEADERS_PHOTO = {
+export const HEADERS_PHOTO: Headers = {
   byIds: {
     id: { text: 'photo.id', value: 'id', show: true, apiFieldValue: 'id_sl' },
     image_number: {
@@ -854,7 +864,7 @@ export const HEADERS_PHOTO = {
   ],
 }
 
-export const HEADERS_PREPARATION = {
+export const HEADERS_PREPARATION: Headers = {
   byIds: {
     id: {
       text: 'preparation.id',
@@ -913,7 +923,7 @@ export const HEADERS_PREPARATION = {
   ],
 }
 
-export const HEADERS_REFERENCE = {
+export const HEADERS_REFERENCE: Headers = {
   byIds: {
     id: { text: 'reference.id', value: 'id', show: true, apiFieldValue: 'id' },
     reference: {
@@ -984,7 +994,7 @@ export const HEADERS_REFERENCE = {
   ],
 }
 
-export const HEADERS_ROCK = {
+export const HEADERS_ROCK: Headers = {
   byIds: {
     id: { text: 'rock.id', value: 'id', show: true, apiFieldValue: 'id' },
     name: {
@@ -1020,7 +1030,7 @@ export const HEADERS_ROCK = {
   },
   allIds: ['id', 'name', 'name_en', 'formula', 'in_estonia', 'mindat_id'],
 }
-export const HEADERS_SAMPLE = {
+export const HEADERS_SAMPLE: Headers = {
   byIds: {
     id: { text: 'sample.id', value: 'id', show: true, apiFieldValue: 'id_l' },
     number: {
@@ -1088,7 +1098,7 @@ export const HEADERS_SAMPLE = {
   ],
 }
 
-export const HEADERS_SAMPLE_REFERENCE = {
+export const HEADERS_SAMPLE_REFERENCE: Headers = {
   byIds: {
     reference: {
       text: 'sampleReference.reference',
@@ -1118,7 +1128,7 @@ export const HEADERS_SAMPLE_REFERENCE = {
   allIds: ['reference', 'reference__title', 'pages', 'remarks'],
 }
 
-export const HEADERS_SAMPLE_DATA = {
+export const HEADERS_SAMPLE_DATA: Headers = {
   byIds: {
     sample: {
       text: 'sampleData.sampleNumber',
@@ -1174,7 +1184,7 @@ export const HEADERS_SAMPLE_DATA = {
   ],
 }
 
-export const HEADERS_SITE = {
+export const HEADERS_SITE: Headers = {
   byIds: {
     id: { text: 'site.id', value: 'id', show: true, apiFieldValue: 'id_l' },
     name: {
@@ -1217,7 +1227,7 @@ export const HEADERS_SITE = {
   allIds: ['id', 'name', 'area', 'latitude', 'longitude', 'z', 'depth'],
 }
 
-export const HEADERS_SPECIMEN = {
+export const HEADERS_SPECIMEN: Headers = {
   byIds: {
     id: { text: 'specimen.id', value: 'id', show: true, apiFieldValue: 'id' },
     specimen_full_name: {
@@ -1284,7 +1294,7 @@ export const HEADERS_SPECIMEN = {
   ],
 }
 
-export const HEADERS_SPECIMEN_IDENTIFICATION = {
+export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
   byIds: {
     name: {
       text: 'specimenIdentification.name',
@@ -1343,7 +1353,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION = {
   ],
 }
 
-export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY = {
+export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
   byIds: {
     rock: {
       text: 'specimenIdentification.rock',
@@ -1418,7 +1428,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY = {
   ],
 }
 
-export const HEADERS_SPECIMEN_REFERENCE = {
+export const HEADERS_SPECIMEN_REFERENCE: Headers = {
   byIds: {
     reference: {
       text: 'specimenReference.reference',
@@ -1448,7 +1458,7 @@ export const HEADERS_SPECIMEN_REFERENCE = {
   allIds: ['reference', 'pages', 'figures', 'remarks'],
 }
 
-export const HEADERS_STRATIGRAPHY = {
+export const HEADERS_STRATIGRAPHY: Headers = {
   byIds: {
     id: {
       text: 'stratigraphy.id',
@@ -1535,7 +1545,7 @@ export const HEADERS_STRATIGRAPHY = {
   ],
 }
 
-export const HEADERS_STRATIGRAPHY_REFERENCE = {
+export const HEADERS_STRATIGRAPHY_REFERENCE: Headers = {
   byIds: {
     reference: {
       text: 'stratigraphyReference.reference',
@@ -1571,7 +1581,7 @@ export const HEADERS_STRATIGRAPHY_REFERENCE = {
   allIds: ['reference', 'content', 'year', 'pages', 'remarks'],
 }
 
-export const HEADERS_STRATIGRAPHY_STRATOTYPE = {
+export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
   byIds: {
     locality: {
       text: 'stratotype.locality',
@@ -1623,7 +1633,7 @@ export const HEADERS_STRATIGRAPHY_STRATOTYPE = {
   ],
 }
 
-export const HEADERS_STRATIGRAPHY_SYNONYM = {
+export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
   byIds: {
     synonym: {
       text: 'stratigraphySynonym.synonym',
@@ -1653,7 +1663,7 @@ export const HEADERS_STRATIGRAPHY_SYNONYM = {
   allIds: ['synonym', 'language', 'reference', 'remarks'],
 }
 
-export const HEADERS_STRATOTYPE = {
+export const HEADERS_STRATOTYPE: Headers = {
   byIds: {
     stratigraphy: {
       text: 'stratotype.stratigraphy',
@@ -1708,7 +1718,7 @@ export const HEADERS_STRATOTYPE = {
   ],
 }
 
-export const HEADERS_SYNONYM = {
+export const HEADERS_SYNONYM: Headers = {
   byIds: {
     synonym: {
       text: 'localitySynonym.synonym',
@@ -1738,7 +1748,7 @@ export const HEADERS_SYNONYM = {
   allIds: ['synonym', 'pages', 'reference', 'remarks'],
 }
 
-export const HEADERS_TAXON_LIST = {
+export const HEADERS_TAXON_LIST: Headers = {
   byIds: {
     taxon: {
       text: 'taxon.taxon',
@@ -1794,7 +1804,7 @@ export const HEADERS_TAXON_LIST = {
   ],
 }
 
-export const HEADERS_TAXON = {
+export const HEADERS_TAXON: Headers = {
   byIds: {
     id: { text: 'taxon.id', value: 'id', show: true, apiFieldValue: 'id' },
     taxon: {

@@ -85,6 +85,7 @@ export default defineComponent({
           ...accessor.search.globalFilters.byIds,
         },
       })
+
       accessor.search.taxon.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.taxon.SET_MODULE_COUNT({ count: response.count })
     })

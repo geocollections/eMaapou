@@ -1,4 +1,4 @@
-export default function chartRange(maxs, mins) {
+export default function chartRange(maxs: number[], mins: number[]) {
   let minDepth = Math.min(...mins)
   let maxDepth = Math.max(...maxs)
   const reversed = maxDepth > 0 && minDepth >= 0

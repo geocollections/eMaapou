@@ -1,12 +1,19 @@
 import { getField, updateField } from 'vuex-map-fields'
 
-export const state = () => ({
+type SettingsState = {
+  cookiePolicy: boolean
+  showSearchViewMap: boolean
+  showSearchViewForm: boolean
+  showInstitutionFilters: boolean
+  showExtraOptions: boolean
+}
+
+export const state = (): SettingsState => ({
   cookiePolicy: true,
   showSearchViewMap: false,
   showSearchViewForm: true,
   showInstitutionFilters: false,
   showExtraOptions: false,
-  listOfViews: ['table', 'image', 'gallery'],
 })
 
 export const mutations = {

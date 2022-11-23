@@ -18,3 +18,8 @@ export enum LookupType {
   GreaterThan = 'greaterThan',
   SmallerThan = 'smallerThan',
 }
+
+export enum Renderer {
+  Canvas = 'canvas',
+  Svg = 'svg',
+}
