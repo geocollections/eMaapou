@@ -1,7 +1,5 @@
 FROM node:16.18.0-alpine
 
-ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
 
 # create destination directory
 RUN mkdir -p /usr/src/ema
@@ -16,6 +14,9 @@ COPY package*.json ./
 RUN npm ci && npm cache clean -force
 
 COPY . .
+
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 
 RUN npm run build
 # copy the app, note .dockerignore
