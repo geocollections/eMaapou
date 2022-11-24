@@ -1,5 +1,8 @@
 FROM node:16.18.0-alpine
 
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
+
 # create destination directory
 RUN mkdir -p /usr/src/ema
 WORKDIR /usr/src/ema
@@ -10,7 +13,7 @@ WORKDIR /usr/src/ema
 # RUN apk add --no-cache --virtual .gyp python3 make g++
 
 COPY package*.json ./
-RUN npm install
+RUN npm ci && npm cache clean -force
 
 COPY . .
 
