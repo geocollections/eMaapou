@@ -1,6 +1,8 @@
-export default function zip(...arrs: any) {
-  if (arrs.length < 1) return []
-  return arrs[0].map((val: any, i: number) =>
-    arrs.shift().reduce((a: any, arr: any) => [...a, arr[i]], [val])
+export default function zip(...arrs: any[][]) {
+  const firstArray = arrs.shift()
+  return (
+    firstArray?.map((val: any, i: number) =>
+      arrs.reduce((a: any, arr: any) => [...a, arr[i]], [val])
+    ) ?? []
   )
 }

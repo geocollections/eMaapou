@@ -16,10 +16,12 @@ export interface IFlogMethod {
   children: IFlogParameter[]
 }
 
-export default function flogParameters(analysisResultsPivot: {}): IFlogMethod[] {
+export default function flogParameters(analysisResultsPivot: {
+  [K: string]: any[]
+}): IFlogMethod[] {
   let id = 0
   const methods = zip(...Object.values(analysisResultsPivot)).map(
-    ([method, methodParameters]: [any, any]) => {
+    ([method, methodParameters]: any[]) => {
       id += 1
       return {
         id,
