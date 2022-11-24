@@ -1,14 +1,10 @@
 FROM node:16.18.0-alpine
 
-# update and install dependency
-RUN apk-get update && apk-get upgrade -y
-
 # create destination directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 RUN chown node:node ./
 USER node
-
 
 COPY package*.json ./
 RUN npm ci && npm cache clean -force
