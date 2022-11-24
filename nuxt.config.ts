@@ -112,19 +112,15 @@ export default {
     '@nuxtjs/composition-api/module',
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
-    '@nuxtjs/axios',
-    '@nuxtjs/i18n',
-    '@nuxtjs/sitemap',
-    '@nuxt/image',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    // '@nuxtjs/axios',
-    // '@nuxtjs/i18n',
-    // '@nuxtjs/sitemap',
-    // '@nuxt/image',
+    '@nuxtjs/axios',
+    '@nuxtjs/i18n',
+    '@nuxtjs/sitemap',
+    '@nuxt/image',
   ],
 
   sitemap: {
