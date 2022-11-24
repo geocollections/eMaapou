@@ -1,7 +1,7 @@
 FROM node:16.18.0-alpine
 
-# ARG NODE_ENV=production
-# ENV NODE_ENV $NODE_ENV
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 
 # create destination directory
 RUN mkdir -p /usr/src/ema
