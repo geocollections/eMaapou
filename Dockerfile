@@ -1,7 +1,7 @@
 FROM node:16.18.0-alpine
 
 # update and install dependency
-RUN apk update && apk upgrade -y
+RUN apk-get update && apk-get upgrade -y
 
 # create destination directory
 RUN mkdir -p /usr/src/app
