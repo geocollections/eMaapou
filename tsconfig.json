@@ -23,7 +23,8 @@
       "@nuxtjs/i18n",
       "@nuxtjs/axios",
       "@nuxtjs/vuetify",
-      "@nuxt/image"
+      "@nuxt/image",
+      "nuxt-webpack-optimisations"
     ],
   },
   // "vueCompilerOptions": {

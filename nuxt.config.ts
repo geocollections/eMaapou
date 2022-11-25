@@ -112,6 +112,7 @@ export default {
     '@nuxtjs/composition-api/module',
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
+    'nuxt-webpack-optimisations',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
