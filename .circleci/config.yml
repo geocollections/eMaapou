@@ -6,7 +6,7 @@ orbs:
 parameters:
   package-version:
     type: string
-    default: "1.0.5"
+    default: '1.0.5'
 
 executors:
   docker-publisher:
@@ -21,10 +21,11 @@ jobs:
     executor: docker-publisher
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+        docker_layer_caching: true
       - when:
           condition:
-            equal: [ "production", << pipeline.git.branch >> ]
+            equal: ['production', << pipeline.git.branch >>]
           steps:
             - run:
                 name: Build Docker image
@@ -35,7 +36,7 @@ jobs:
                 command: docker save -o image.tar $IMAGE_NAME
       - when:
           condition:
-            equal: [ "development", << pipeline.git.branch >> ]
+            equal: ['development', << pipeline.git.branch >>]
           steps:
             - run:
                 name: Build Docker dev image
@@ -54,13 +55,14 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - setup_remote_docker
+      - setup_remote_docker:
+        docker_layer_caching: true
       - run:
           name: Load archive Docker image
           command: docker load -i /tmp/workspace/image.tar
       - when:
           condition:
-            equal: [ "production", << pipeline.git.branch >> ]
+            equal: ['production', << pipeline.git.branch >>]
           steps:
             - run:
                 name: Publish Docker image to Docker Hub
@@ -69,7 +71,7 @@ jobs:
                   docker push $IMAGE_NAME
       - when:
           condition:
-            equal: [ "development", << pipeline.git.branch >> ]
+            equal: ['development', << pipeline.git.branch >>]
           steps:
             - run:
                 name: Publish Docker dev image to Docker Hub
