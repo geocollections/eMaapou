@@ -235,7 +235,7 @@ export default {
     providers: {
       geocollections: {
         name: 'geocollections',
-        provider: '~/providers/geocollections.ts',
+        provider: require.resolve('./providers/geocollections.ts'),
         options: {
           baseURL: 'https://files.geocollections.info/',
         },
