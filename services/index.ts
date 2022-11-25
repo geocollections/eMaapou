@@ -1,7 +1,6 @@
 import { Context } from '@nuxt/types'
 import createSarvRESTRepository from '~/services/sarvREST'
 import createSarvSolrRepository from '~/services/sarvSolr'
-import createSarvRwapiRepository from '~/services/sarvRwapi.api'
 import createGeoserverRepository from '~/services/geoserver.api'
 
 export interface IOptions {
@@ -14,6 +13,5 @@ export interface IOptions {
 export default (context: Context) => ({
   sarvREST: createSarvRESTRepository(context.$axios),
   sarvSolr: createSarvSolrRepository(context.$axios),
-  sarvRwapi: createSarvRwapiRepository(context.$axios),
   geoserver: createGeoserverRepository(context.$axios),
 })
