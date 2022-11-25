@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.11.2",
+    "@mdi/js": "^7.0.96",
     "@nuxt/typescript-runtime": "^2.1.0",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/i18n": "^7.3.0",
@@ -44,7 +45,6 @@
   "devDependencies": {
     "@babel/core": "^7.19.1",
     "@babel/eslint-parser": "^7.19.1",
-    "@mdi/js": "^7.0.96",
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/composition-api": "^0.29.3",
