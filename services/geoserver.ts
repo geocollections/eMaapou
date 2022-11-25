@@ -1,3 +1,5 @@
+import type { NuxtAxiosInstance } from '@nuxtjs/axios'
+
 const GEOSERVER_URL_WMS =
   'https://gis.geocollections.info/geoserver/sarv/wms?' +
   'SERVICE=WMS' +
@@ -13,8 +15,8 @@ const GEOSERVER_URL_WMS =
   '&exceptions=text/javascript' +
   '&INFO_FORMAT=application/json'
 
-export default ($axios) => ({
-  async getWMSData(params) {
+export default ($axios: NuxtAxiosInstance) => ({
+  async getWMSData(params: any) {
     const response = await $axios.$get(`${GEOSERVER_URL_WMS}`, { params })
 
     return {
