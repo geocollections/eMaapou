@@ -20,9 +20,6 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build-stage /src/ .
 
-# RUN npm install "nuxt-start@2.15.8"
-# COPY package*.json ./
-# RUN npm ci --only=production && npm cache clean --force
 # set app serving to permissive / assigned
 ENV NUXT_HOST=0.0.0.0
 # set app port
