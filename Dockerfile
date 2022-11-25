@@ -10,17 +10,15 @@ RUN npm ci && npm cache clean --force
 COPY . .
 
 RUN npm run build
+RUN rm -Rf node_modules
 
 FROM node:16.18.0-alpine AS production-stage
 
 WORKDIR /app
-COPY --from=build-stage /src/.nuxt /app/.nuxt
-COPY --from=build-stage /src/nuxt.config.ts /app/
-COPY --from=build-stage /src/static /app/
-COPY --from=build-stage /src/providers /app/providers
 
 COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
+COPY --from=build-stage /src/ .
 
 # RUN npm install "nuxt-start@2.15.8"
 # COPY package*.json ./
