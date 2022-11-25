@@ -120,7 +120,7 @@
             :value="$formatDate(dataset.date_changed)"
           />
           <table-row
-            v-if="parameters"
+            v-if="parameters.length > 0"
             :title="$t('dataset.parameters')"
             :value="parameters"
           >
@@ -288,9 +288,10 @@ export default defineComponent({
         parameters[0]?.parameter_index_list?.[0]?.split('; ')
       const parameterText = parameters[0]?.parameter_list?.[0]?.split('; ')
 
-      state.parameters = parameterValues?.map((v: string, i: number) => {
-        return { text: parameterText[i], value: v }
-      })
+      state.parameters =
+        parameterValues?.map((v: string, i: number) => {
+          return { text: parameterText[i], value: v }
+        }) ?? []
 
       state.parameterHeaders = {
         byIds: state.parameters.reduce((prev, parameter) => {
