@@ -375,7 +375,7 @@ export default Vue.extend({
   bottom: 60px;
   right: 0;
   width: 15px;
-  z-index: 2;
+  z-index: 3;
 }
 .scroll-left {
   background: -webkit-linear-gradient(
@@ -393,6 +393,7 @@ export default Vue.extend({
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: 15px 100%;
+  background-position: 100% 0%;
   content: '';
   display: block;
   position: absolute;
@@ -400,6 +401,6 @@ export default Vue.extend({
   bottom: 60px;
   left: 0;
   width: 15px;
-  z-index: 2;
+  z-index: 3;
 }
 </style>
