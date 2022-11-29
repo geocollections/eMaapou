@@ -132,14 +132,27 @@ import {
   TooltipComponentOption,
   TitleComponentOption,
   AxisPointerComponentOption,
+  TitleComponent,
+  TooltipComponent,
+  DataZoomComponent,
+  AxisPointerComponent,
+  ToolboxComponent,
+  LegendComponent,
+  GridComponent,
 } from 'echarts/components'
 import {
   XAXisComponentOption,
   YAXisComponentOption,
 } from 'echarts/types/dist/echarts'
-import { LineSeriesOption, CustomSeriesOption } from 'echarts/charts'
+import {
+  LineSeriesOption,
+  CustomSeriesOption,
+  CustomChart,
+  LineChart,
+} from 'echarts/charts'
 import VChart from 'vue-echarts'
-import { ComposeOption } from 'echarts/core'
+import { ComposeOption, use } from 'echarts/core'
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers'
 import RendererSwitch from '~/components/chart/options/RendererSwitch.vue'
 import OptionsParameterTreeView from '~/components/chart/options/OptionsParameterTreeView.vue'
 import range from '~/utils/range'
@@ -163,12 +176,26 @@ interface GroupedParameter {
   count: number
   methods: any[]
 }
+use([
+  CanvasRenderer,
+  SVGRenderer,
+  CustomChart,
+  LineChart,
+  GridComponent,
+  TitleComponent,
+  TooltipComponent,
+  DataZoomComponent,
+  AxisPointerComponent,
+  ToolboxComponent,
+  LegendComponent,
+])
 
 export default Vue.extend({
   name: 'ChartFlog',
   components: {
     RendererSwitch,
     OptionsParameterTreeView,
+    VChart,
   },
   props: {
     title: {
@@ -245,7 +272,7 @@ export default Vue.extend({
       if (this.replace) {
         return {
           notMerge: false,
-          replaceMerge: ['grid', 'xAxis', 'yAxis', 'series'],
+          replaceMerge: ['xAxis', 'yAxis', 'series', 'grid'],
         }
       }
       return {

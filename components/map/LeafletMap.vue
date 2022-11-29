@@ -1,6 +1,6 @@
 <template>
-  <client-only>
-    <div>
+  <div>
+    <client-only>
       <l-map
         id="map"
         ref="map"
@@ -22,7 +22,7 @@
         @ready="fitBounds"
       >
         <l-control-layers ref="layer-control" :auto-z-index="false" />
-        <l-control-fullscreen position="topleft" />
+        <!-- <l-control-fullscreen position="topleft" /> -->
         <l-control-scale
           position="bottomleft"
           :metric="true"
@@ -107,39 +107,82 @@
           :height="height"
         />-->
       </l-map>
-      <map-links
-        v-if="showLinks"
-        :latitude="currentCenter.lat"
-        :longitude="currentCenter.lng"
-      />
-    </div>
-    <template #placeholder>
-      <div
-        :style="`height: ${height}; width: 100%`"
-        class="d-flex align-center justify-center rounded secondary"
-      >
-        <v-progress-circular
-          indeterminate
-          color="accent"
-          :size="100"
-          :width="6"
-        />
-      </div>
-    </template>
-  </client-only>
+      <template #placeholder>
+        <div
+          :style="`height: ${height}; width: 100%`"
+          class="d-flex align-center justify-center rounded secondary"
+        >
+          <v-progress-circular
+            indeterminate
+            color="accent"
+            :size="100"
+            :width="6"
+          />
+        </div>
+      </template>
+    </client-only>
+    <map-links
+      v-if="showLinks"
+      :latitude="currentCenter.lat"
+      :longitude="currentCenter.lng"
+    />
+  </div>
 </template>
 
 <script lang="ts">
 // @ts-nocheck
 // import MapLegend from '~/components/map/MapLegend'
+// import { Icon, Circle, featureGroup, layerGroup } from 'leaflet'
 import debounce from 'lodash/debounce'
 import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapGetters } from 'vuex'
 import Vue, { PropType } from 'vue'
+// import {
+// LControlLayers,
+// LControlScale,
+// LGeoJson,
+// LLayerGroup,
+// LMap,
+// LMarker,
+// LPopup,
+// LTileLayer,
+// LTooltip,
+// LWMSTileLayer,
+// } from 'vue2-leaflet'
+// import LControlFullscreen from 'vue2-leaflet-fullscreen'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
 import MapClickPopup from '~/components/map/MapClickPopup.vue'
+import 'leaflet/dist/leaflet.css'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+// import '@geoman-io/leaflet-geoman-free'
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
+import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css'
+let Vue2Leaflet = {}
+let L
+if (process.client) {
+  // console.log('loading vue2-leaflet')
+  Vue2Leaflet = require('vue2-leaflet')
+  L = require('leaflet')
+  require('@geoman-io/leaflet-geoman-free')
+  require('leaflet-fullscreen')
+}
+
+// let L
+// if (process.client) {
+//   L = require('leaflet')
+//   require('@geoman-io/leaflet-geoman-free')
+// }
+// delete Icon.Default.prototype._getIconUrl
+
+// Icon.Default.mergeOptions({
+//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+//   iconUrl: require('leaflet/dist/images/marker-icon.png'),
+//   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+// })
 export default Vue.extend({
   name: 'LeafletMap',
   components: {
@@ -147,6 +190,18 @@ export default Vue.extend({
     VMarkerClusterWrapper,
     LCircleMarkerWrapper,
     MapLinks,
+    'l-control-layers': Vue2Leaflet.LControlLayers,
+    'l-control-scale': Vue2Leaflet.LControlScale,
+    // LControlZoom,
+    'l-geo-json': Vue2Leaflet.LGeoJson,
+    'l-layer-group': Vue2Leaflet.LLayerGroup,
+    'l-map': Vue2Leaflet.LMap,
+    'l-marker': Vue2Leaflet.LMarker,
+    'l-popup': Vue2Leaflet.LPopup,
+    'l-tile-layer': Vue2Leaflet.LTileLayer,
+    'l-tooltip': Vue2Leaflet.LTooltip,
+    'l-wms-tile-layer': Vue2Leaflet.LWMSTileLayer,
+    // 'l-control-fullscreen': LControlFullscreen,
   },
   props: {
     zoom: {
@@ -605,7 +660,7 @@ export default Vue.extend({
         const json = newVal.toGeoJSON()
 
         // Adding radius if Circle
-        if (newVal instanceof this.$L.Circle) {
+        if (newVal instanceof L.Circle) {
           json.properties.radius = newVal.getRadius()
         }
 
@@ -680,6 +735,11 @@ export default Vue.extend({
     },
 
     fitBounds() {
+      this.$refs.map.mapObject.addControl(
+        new window.L.Control.Fullscreen({
+          position: 'topleft',
+        })
+      )
       if (this.markersAsFitBoundsObject.length > 0) {
         this.$nextTick(() => {
           this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
@@ -690,7 +750,7 @@ export default Vue.extend({
       }
       if (this.geojson) {
         this.$nextTick(() => {
-          const group = this.$L.featureGroup()
+          const group = featureGroup()
           this.$refs.map.mapObject.eachLayer(function (layer) {
             if (layer.feature !== undefined) group.addLayer(layer)
           })
@@ -715,9 +775,10 @@ export default Vue.extend({
         const MAX_ZOOM = 21
         const radius =
           (MAX_ZOOM + 0.25 - this.$refs.map.mapObject.getZoom()) * 1000
-        const circle = this.$L
-          .circle(event.latlng, { radius })
-          .addTo(this.$refs.map.mapObject)
+        // eslint-disable-next-line no-use-before-define
+        const circle = Circle(event.latlng, { radius }).addTo(
+          this.$refs.map.mapObject
+        )
         const bbox = circle.getBounds().toBBoxString()
 
         // eslint-disable-next-line no-unused-vars
@@ -788,7 +849,7 @@ export default Vue.extend({
           snappable: false,
         })
 
-        this.allGeomanLayers = this.$L.layerGroup()
+        this.allGeomanLayers = L.layerGroup()
         this.allGeomanLayers.addTo(this.map.mapObject)
 
         this.map.mapObject.on(
@@ -864,7 +925,8 @@ export default Vue.extend({
     handleNearMeSliderChange: debounce(function (this: any, val) {
       if (val) {
         this.removeAllGeomanLayers()
-        const circle = this.$L.circle(this.gpsLocation, { radius: val * 1000 })
+        // eslint-disable-next-line no-use-before-define
+        const circle = circle(this.gpsLocation, { radius: val * 1000 })
         circle.addTo(this.allGeomanLayers)
         this.activeGeomanLayer = circle
       }

@@ -20,8 +20,14 @@ import {
   onMounted,
   PropType,
 } from '@nuxtjs/composition-api'
-import { GridComponentOption } from 'echarts/components'
-import { ComposeOption } from 'echarts/core'
+import { BarChart } from 'echarts/charts'
+import {
+  GridComponent,
+  GridComponentOption,
+  TooltipComponent,
+} from 'echarts/components'
+import { ComposeOption, use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
 import {
   XAXisComponentOption,
   YAXisComponentOption,
@@ -35,7 +41,7 @@ type ECOption = ComposeOption<
   | YAXisComponentOption
   | GridComponentOption
 >
-
+use([CanvasRenderer, BarChart, GridComponent, TooltipComponent])
 export default defineComponent({
   name: 'ChartAnalysisResults',
   props: {

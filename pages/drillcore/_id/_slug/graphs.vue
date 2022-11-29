@@ -16,11 +16,10 @@
       :reverse="reversed"
     />
 
-    <las-chart
+    <chart-las
       v-if="attachment && lasContent"
       class="pa-2"
       :class="{ 'pt-4': analysisResultsCount === 0 }"
-      :hide-renderer-switch="analysisResultsCount > 0"
       :chart-title="chartTitle"
       :file-data="lasContent"
     />
@@ -28,13 +27,13 @@
 </template>
 
 <script>
-import LasChart from '~/components/chart/types/LasChart.vue'
+import ChartLas from '~/components/chart/ChartLas.vue'
 import flogParameters from '~/utils/flogParameters'
 import chartRange from '~/utils/chartRange'
 import ChartFlog from '~/components/chart/ChartFlog.vue'
 
 export default {
-  components: { LasChart, ChartFlog },
+  components: { ChartLas, ChartFlog },
   props: {
     locality: {
       type: Number,

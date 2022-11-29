@@ -19,8 +19,21 @@
 </template>
 
 <script>
+// import { LCircleMarker, LTooltip } from 'vue2-leaflet'
+
+let Vue2Leaflet = {}
+// let L
+if (process.client) {
+  // console.log('loading vue2-leaflet')
+  Vue2Leaflet = require('vue2-leaflet')
+  // L = require('leaflet')
+}
 export default {
   name: 'LCircleMarkerWrapper',
+  components: {
+    'l-circle-marker': Vue2Leaflet.LCircleMarker,
+    'l-tooltip': Vue2Leaflet.LTooltip,
+  },
   props: {
     markers: {
       type: Array,

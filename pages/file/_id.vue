@@ -454,7 +454,7 @@
                     $t('file.lasGraph')
                   }}</v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <las-chart
+                    <chart-las
                       :chart-title="pageTitle"
                       :file-data="rawFileContent"
                     />
@@ -522,18 +522,18 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import LeafletMap from '~/components/map/LeafletMap.vue'
 import Detail from '~/templates/Detail.vue'
-import LasChart from '~/components/chart/types/LasChart.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 import { useSlugRoute } from '~/composables/useSlugRoute'
+import ChartLas from '~/components/chart/ChartLas.vue'
 export default defineComponent({
   components: {
-    LasChart,
     HeaderDetail,
     LeafletMap,
     TableRow,
     TableRowLink,
     Detail,
     BaseTable,
+    ChartLas,
   },
   setup() {
     const { $services, $translate, i18n } = useContext()

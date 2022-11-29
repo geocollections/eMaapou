@@ -7,10 +7,18 @@
 </template>
 
 <script>
+// import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
+let Vue2LeafletMarkerCluster
+if (process.client) {
+  Vue2LeafletMarkerCluster = require('vue2-leaflet-markercluster')
+}
 export default {
   name: 'VMarkerClusterWrapper',
-  components: { LCircleMarkerWrapper },
+  components: {
+    LCircleMarkerWrapper,
+    'v-marker-cluster': Vue2LeafletMarkerCluster,
+  },
   props: {
     markers: {
       type: Array,
