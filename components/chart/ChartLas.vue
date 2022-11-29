@@ -19,13 +19,13 @@
 <script lang="ts">
 import VChart from 'vue-echarts'
 import {
-  // AxisPointerComponent,
-  // DataZoomComponent,
+  AxisPointerComponent,
+  DataZoomComponent,
   GridComponent,
-  // LegendComponent,
-  // TitleComponent,
-  // ToolboxComponent,
-  // TooltipComponent,
+  LegendComponent,
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
 } from 'echarts/components'
 import { use } from 'echarts/core'
 import { LineChart } from 'echarts/charts'
@@ -54,12 +54,12 @@ use([
   SVGRenderer,
   LineChart,
   GridComponent,
-  // AxisPointerComponent,
-  // TooltipComponent,
-  // ToolboxComponent,
-  // DataZoomComponent,
-  // TitleComponent,
-  // LegendComponent,
+  AxisPointerComponent,
+  TooltipComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  TitleComponent,
+  LegendComponent,
 ])
 
 export default defineComponent({
