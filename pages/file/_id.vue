@@ -438,7 +438,7 @@
         </transition-group>
       </v-row>
 
-      <v-row v-if="fileContent" class="mt-2">
+      <v-row v-if="isEmpty(fileContent)" class="mt-2">
         <v-col cols="12">
           <v-card>
             <v-card-title class="subsection-title">{{
@@ -450,9 +450,9 @@
                 <v-expansion-panel
                   v-if="rawFileContent && file.uuid_filename.endsWith('.las')"
                 >
-                  <v-expansion-panel-header>{{
-                    $t('file.lasGraph')
-                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-header>
+                    {{ $t('file.lasGraph') }}
+                  </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <chart-las
                       :chart-title="pageTitle"
@@ -466,9 +466,9 @@
                     rawFileContent && file.uuid_filename.endsWith('.txt')
                   "
                 >
-                  <v-expansion-panel-header>{{
-                    $t('file.textTable')
-                  }}</v-expansion-panel-header>
+                  <v-expansion-panel-header>
+                    {{ $t('file.textTable') }}
+                  </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-data-table
                       :headers="rawFileContent.headers"
@@ -479,13 +479,12 @@
 
                 <v-expansion-panel>
                   <v-expansion-panel-header>
-                    {{ $t('file.lasText') }}</v-expansion-panel-header
-                  >
+                    {{ $t('file.lasText') }}
+                  </v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <pre>
-                {{ fileContent }}
-              </pre
-                    >
+                      {{ fileContent }}
+                    </pre>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
@@ -498,6 +497,8 @@
 </template>
 
 <script lang="ts">
+// NOTE: For some incomprehensible reason, using any echart based chart
+// and `v-data-table` together in this components results in the production build containing copies of echarts.
 import {
   mdiFileMusicOutline,
   mdiFileVideoOutline,
@@ -506,6 +507,7 @@ import {
 } from '@mdi/js'
 import isNil from 'lodash/isNil'
 import isNull from 'lodash/isNull'
+import isEmpty from 'lodash/isEmpty'
 import {
   computed,
   defineComponent,
@@ -614,7 +616,7 @@ export default defineComponent({
       specimenIdentificationGeology: [] as any[],
       attachmentKeywords: [] as any[],
       fileContent: '',
-      rawFileContent: '',
+      rawFileContent: null as any,
       file: null as any,
       ids: {} as any,
       validRoute: {} as Location,
@@ -1082,6 +1084,7 @@ export default defineComponent({
   methods: {
     isNull,
     isNil,
+    isEmpty,
   },
 })
 </script>
