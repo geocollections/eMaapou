@@ -87,13 +87,11 @@ export default {
     '~plugins/translate.ts',
     { src: '~/plugins/infiniteLoading.js', mode: 'client' },
     '~plugins/services.ts',
-    // { src: '~plugins/leaflet.js', mode: 'client' },
     '~plugins/openWindow.ts',
     '~plugins/hydrateTabs.ts',
     '~plugins/getAPIFieldValues.ts',
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.ts', mode: 'client' },
-    // { src: '~plugins/vueECharts.js', mode: 'client' },
     '~/plugins/formatDate.ts',
     '~/plugins/slug.ts', // this might be only called on server-side
     { src: '~/plugins/vueMatomo.ts', mode: 'client' },
