@@ -381,6 +381,8 @@ import {
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
+// import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
@@ -422,11 +424,12 @@ export default defineComponent({
     const egfArray = computed(() => state.area?.egf?.split(';') ?? [])
     const planArray = computed(() => state.area?.text1?.split(';') ?? [])
     const geojson = computed(() => {
+      if (isEmpty(state.area)) return null
       const parsedPolygon =
         JSON.parse(
           // NOTE: Remove trailing commas from JSON object string
           // eslint-disable-next-line no-useless-escape
-          state.area?.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, '')
+          state.area.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, '')
         ) ?? null
       if (parsedPolygon === null) return null
       if (!(parsedPolygon instanceof Array)) return parsedPolygon

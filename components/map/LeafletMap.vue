@@ -21,7 +21,7 @@
         @overlayremove="handleOverlayRemove"
         @ready="handleReady"
       >
-        <l-control-layers ref="layerControl" position="topleft" />
+        <l-control-layers ref="layerControl" />
         <l-control-scale
           position="bottomleft"
           :metric="true"
@@ -744,6 +744,10 @@ export default defineComponent({
               maxZoom: geoJSON.type === 'Point' ? mapZoom.value : undefined,
             }
           )
+        } else if (props.geojson) {
+          state.map?.fitBounds(L.geoJSON(props.geojson).getBounds(), {
+            padding: [50, 50],
+          })
         } else if (markersAsFitBoundsObject.value.length > 0) {
           state.map?.fitBounds(markersAsFitBoundsObject.value, {
             padding: [50, 50],
