@@ -11,24 +11,24 @@
       :fill-opacity="1"
       @click="handleClick($event, marker)"
     >
-      <l-tooltip v-if="marker.text" :options="tooltipOptions">{{
-        marker.text
-      }}</l-tooltip>
+      <l-tooltip v-if="marker.text" :options="tooltipOptions">
+        {{ marker.text }}
+      </l-tooltip>
     </l-circle-marker>
   </div>
 </template>
 
-<script>
-// import { LCircleMarker, LTooltip } from 'vue2-leaflet'
-
-let Vue2Leaflet = {}
-// let L
+<script lang="ts">
+import { defineComponent } from '@nuxtjs/composition-api'
+import type * as Leaflet from 'leaflet'
+import { MapMarker } from '~/types/map'
+let Vue2Leaflet: any = {}
+let L: typeof Leaflet
 if (process.client) {
-  // console.log('loading vue2-leaflet')
   Vue2Leaflet = require('vue2-leaflet')
-  // L = require('leaflet')
+  L = require('leaflet')
 }
-export default {
+export default defineComponent({
   name: 'LCircleMarkerWrapper',
   components: {
     'l-circle-marker': Vue2Leaflet.LCircleMarker,
@@ -53,19 +53,19 @@ export default {
     },
   },
   methods: {
-    handleClick(event, marker) {
-      this.$L.DomEvent.stopPropagation(event)
+    handleClick(event: Leaflet.LeafletMouseEvent, marker: MapMarker) {
+      L.DomEvent.stopPropagation(event)
       if (marker.id && marker.routeName) {
         this.$router.push(
           this.localePath({
             name: `${marker.routeName}-id`,
-            params: { id: marker.id },
+            params: { id: marker.id.toString() },
           })
         )
       }
     },
   },
-}
+})
 </script>
 
 <style scoped></style>

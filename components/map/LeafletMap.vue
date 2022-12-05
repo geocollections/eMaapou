@@ -19,10 +19,9 @@
         @baselayerchange="handleBaseLayerChange"
         @overlayadd="handleOverlayAdd"
         @overlayremove="handleOverlayRemove"
-        @ready="fitBounds"
+        @ready="handleReady"
       >
-        <l-control-layers ref="layer-control" :auto-z-index="false" />
-        <!-- <l-control-fullscreen position="topleft" /> -->
+        <l-control-layers ref="layerControl" position="topleft" />
         <l-control-scale
           position="bottomleft"
           :metric="true"
@@ -96,7 +95,6 @@
           </l-popup>
         </l-marker>
 
-        <l-geo-json v-if="geoJSON" :geojson="geoJSON" />
         <l-layer-group ref="popup">
           <map-click-popup :response="mapClickResponse" />
         </l-layer-group>
@@ -130,26 +128,23 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
 // import MapLegend from '~/components/map/MapLegend'
-// import { Icon, Circle, featureGroup, layerGroup } from 'leaflet'
 import debounce from 'lodash/debounce'
-import { mapFields } from 'vuex-map-fields'
-import { mapActions, mapGetters } from 'vuex'
-import Vue, { PropType } from 'vue'
-// import {
-// LControlLayers,
-// LControlScale,
-// LGeoJson,
-// LLayerGroup,
-// LMap,
-// LMarker,
-// LPopup,
-// LTileLayer,
-// LTooltip,
-// LWMSTileLayer,
-// } from 'vue2-leaflet'
-// import LControlFullscreen from 'vue2-leaflet-fullscreen'
+import { LControlLayers, LMap, LPopup } from 'vue2-leaflet'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onUnmounted,
+  PropType,
+  reactive,
+  ref,
+  useContext,
+  useRoute,
+  toRefs,
+  watch,
+} from '@nuxtjs/composition-api'
+import type Leaflet from 'types/leaflet'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
@@ -157,33 +152,37 @@ import MapClickPopup from '~/components/map/MapClickPopup.vue'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-// import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
-import 'leaflet-fullscreen/dist/leaflet.fullscreen.css'
-let Vue2Leaflet = {}
-let L
+import 'leaflet.fullscreen/Control.FullScreen.css'
+import { MapMarker } from '~/types/map'
+import { useAccessor } from '~/composables/useAccessor'
+let Vue2Leaflet: any = {}
+let L: typeof Leaflet
 if (process.client) {
-  // console.log('loading vue2-leaflet')
   Vue2Leaflet = require('vue2-leaflet')
   L = require('leaflet')
   require('@geoman-io/leaflet-geoman-free')
-  require('leaflet-fullscreen')
+  // require('leaflet-fullscreen')
+  require('leaflet-gesture-handling')
+  require('leaflet.fullscreen')
+  type D = L.Icon.Default & {
+    _getIconUrl?: string
+  }
+  delete (L.Icon.Default.prototype as D)._getIconUrl
+
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+  })
 }
-
-// let L
-// if (process.client) {
-//   L = require('leaflet')
-//   require('@geoman-io/leaflet-geoman-free')
-// }
-// delete Icon.Default.prototype._getIconUrl
-
-// Icon.Default.mergeOptions({
-//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-//   iconUrl: require('leaflet/dist/images/marker-icon.png'),
-//   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-// })
-export default Vue.extend({
+interface State {
+  activeGeomanLayer: L.GeoJSON | L.Circle | null
+  map: L.Map | undefined
+  [K: string]: any
+}
+export default defineComponent({
   name: 'LeafletMap',
   components: {
     MapClickPopup,
@@ -192,7 +191,6 @@ export default Vue.extend({
     MapLinks,
     'l-control-layers': Vue2Leaflet.LControlLayers,
     'l-control-scale': Vue2Leaflet.LControlScale,
-    // LControlZoom,
     'l-geo-json': Vue2Leaflet.LGeoJson,
     'l-layer-group': Vue2Leaflet.LLayerGroup,
     'l-map': Vue2Leaflet.LMap,
@@ -201,7 +199,6 @@ export default Vue.extend({
     'l-tile-layer': Vue2Leaflet.LTileLayer,
     'l-tooltip': Vue2Leaflet.LTooltip,
     'l-wms-tile-layer': Vue2Leaflet.LWMSTileLayer,
-    // 'l-control-fullscreen': LControlFullscreen,
   },
   props: {
     zoom: {
@@ -222,11 +219,8 @@ export default Vue.extend({
       },
     },
     markers: {
-      type: Array as PropType<{ latitude: number; longitude: number }[]>,
-      required: false,
-      default() {
-        return []
-      },
+      type: Array as PropType<MapMarker[]>,
+      default: () => [],
     },
     estonianMap: {
       type: Boolean,
@@ -284,38 +278,42 @@ export default Vue.extend({
       default: () => {},
     },
   },
-  data() {
-    return {
-      map: null,
-      allGeomanLayers: null,
-      activeGeomanLayer: null,
-      gpsLocation: null,
+  // @ts-ignore
+  setup(props, { emit }) {
+    const { $services, i18n } = useContext()
+    const accessor = useAccessor()
+    const route = useRoute()
+    const state: State = reactive({
       gpsID: null as null | number,
-      nearMeRadius: 5,
+      map: undefined,
+      mapClickResponse: null as any,
+      activeGeomanLayer: null,
+      gpsLocation: null as any,
+      activeOverlays: [] as string[],
       currentCenter: {
-        lat: this.center.latitude,
-        lng: this.center.longitude,
+        lat: props.center.latitude,
+        lng: props.center.longitude,
       },
-      mapClickResponse: null,
       options: {
-        gestureHandling: this.gestureHandling,
+        fullscreenControl: true,
+        gestureHandling: props.gestureHandling,
         gestureHandlingOptions: {
           text: {
-            touch: this.$t('gestureHandling.touch'),
-            scroll: this.$t('gestureHandling.scroll'),
-            scrollMac: this.$t('gestureHandling.scrollMac'),
+            touch: i18n.t('gestureHandling.touch'),
+            scroll: i18n.t('gestureHandling.scroll'),
+            scrollMac: i18n.t('gestureHandling.scrollMac'),
           },
           duration: 1000,
         },
       },
-      activeOverlays: [],
+      nearMeRadius: 5,
       layers: {
         base: [
           {
             id: 'carto-base',
             name: 'CartoDB',
             url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-            visible: !this.estonianMap,
+            visible: !props.estonianMap,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -366,7 +364,7 @@ export default Vue.extend({
             id: 'est-map-base',
             name: 'Estonian map',
             url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: this.estonianMap,
+            visible: props.estonianMap,
             options: {
               maxNativeZoom: 18,
               maxZoom: 21,
@@ -383,7 +381,7 @@ export default Vue.extend({
             id: 'est-hyb-overlay',
             name: 'Estonian hybrid',
             url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            visible: this.estonianHybridOverlay,
+            visible: props.estonianHybridOverlay,
             zIndex: 20,
             options: {
               maxNativeZoom: 18,
@@ -401,7 +399,7 @@ export default Vue.extend({
             name: 'Estonian bedrock',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'geocollections:bedrock400k',
-            visible: this.estonianBedrockOverlay,
+            visible: props.estonianBedrockOverlay,
             transparent: true,
             zIndex: 10,
             options: {
@@ -422,7 +420,7 @@ export default Vue.extend({
             name: 'Estonian basement',
             url: 'https://gis.geoloogia.info/geoserver/sarv/wms',
             layers: 'sarv:basement',
-            visible: this.estonianBasementOverlay,
+            visible: props.estonianBasementOverlay,
             transparent: true,
             zIndex: 10,
             options: {
@@ -444,7 +442,7 @@ export default Vue.extend({
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary',
             styles: 'point',
-            visible: this.localityOverlay,
+            visible: props.localityOverlay,
             transparent: true,
             zIndex: 30,
             options: {
@@ -484,7 +482,7 @@ export default Vue.extend({
             name: 'Puursüdamikud / Drillcores',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_drillcores',
-            visible: this.boreholeOverlay,
+            visible: props.boreholeOverlay,
             transparent: true,
             zIndex: 40,
             options: {
@@ -505,7 +503,7 @@ export default Vue.extend({
             name: 'Uuringupunktid / Sites',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:site_summary',
-            visible: this.siteOverlay,
+            visible: props.siteOverlay,
             transparent: true,
             zIndex: 50,
             options: {
@@ -525,7 +523,7 @@ export default Vue.extend({
             name: 'Proovid / Samples',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:sample_summary',
-            visible: this.sampleOverlay,
+            visible: props.sampleOverlay,
             transparent: true,
             zIndex: 50,
             options: {
@@ -546,7 +544,7 @@ export default Vue.extend({
             name: 'Üldine / Summary',
             url: 'https://gis.geocollections.info/geoserver/wms',
             layers: 'sarv:locality_summary_front',
-            visible: this.summaryOverlay,
+            visible: props.summaryOverlay,
             transparent: true,
             zIndex: 50,
             options: {
@@ -563,42 +561,198 @@ export default Vue.extend({
           },
         ],
       },
-    }
-  },
-  computed: {
-    ...mapFields('search', {
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-    }),
-    ...mapGetters('map', ['isBaseLayerEstonian', 'getBaseLayer']),
-    mapZoom(): number {
-      return this.zoom ?? (this.estonianBedrockOverlay ? 9 : 11)
-    },
-    tileOverlays(): object[] {
-      return this.layers.overlay.filter((item) => !item.isWMS)
-    },
-    wmsOverlays(): object[] {
-      return this.layers.overlay.filter((item) => item.isWMS)
-    },
-    latLngMarkers(): [number, number][] {
-      return this.markers.map((m) => {
-        return [m.latitude, m.longitude]
-      })
-    },
-    tooltipOptions(): object {
-      return {
-        permanent: this.markers.length <= 5,
-        direction: 'top',
-        offset: [1, -7],
+    })
+    const popup = ref<LPopup>()
+    const layerControl = ref<LControlLayers>()
+    const map = ref<LMap>()
+    watch(
+      () => state.activeOverlays,
+      (newVal) => {
+        if (!checkableLayers.value) return
+        if (document.getElementById('map')) {
+          if (
+            Object.keys(checkableLayers.value).some((el) => newVal.includes(el))
+          )
+            document.getElementById('map')?.classList.add('cursor-crosshair')
+          else
+            document.getElementById('map')?.classList.remove('cursor-crosshair')
+        }
       }
-    },
+    )
 
-    markersAsFitBoundsObject(): [number, number][] {
-      return this.markers.map((m) => {
-        return [m.latitude, m.longitude]
+    watch(
+      () => props.markers,
+      () => {
+        fitBounds()
+      }
+    )
+    watch(
+      () => props.invalidateSize,
+      (newVal) => {
+        if (newVal) {
+          state.map?.invalidateSize()
+          // HACK: This fixes initial bounds problem in search view (markers out of bounds)
+          fitBounds()
+        }
+      }
+    )
+
+    const handleNearMeSliderChange = debounce((val: number) => {
+      if (state.activeGeomanLayer)
+        state.map?.removeLayer(state.activeGeomanLayer)
+      // eslint-disable-next-line no-use-before-define
+      const circle = L.circle(state.gpsLocation, { radius: val * 1000 }).addTo(
+        state.map as L.Map
+      )
+      // circle.addTo(this.allGeomanLayers)
+      state.activeGeomanLayer = circle
+
+      const json = state.activeGeomanLayer?.toGeoJSON()
+      if (state.activeGeomanLayer instanceof L.Circle) {
+        // @ts-ignore
+        json.properties.radius = state.activeGeomanLayer.getRadius()
+      }
+      accessor.search.SET_GLOBAL_FILTER_VALUE({
+        key: 'geoJSON',
+        value: json,
       })
-    },
+      emit('update')
+    }, 500)
+    const handlePmCreate: Leaflet.PM.CreateEventHandler = ({ layer }) => {
+      if (state.activeGeomanLayer) {
+        state.map?.removeLayer(state.activeGeomanLayer)
+      }
+      state.activeGeomanLayer = layer as State['activeGeomanLayer']
+      const json = state.activeGeomanLayer?.toGeoJSON()
+      // Adding radius if Circle
+      if (state.activeGeomanLayer instanceof L.Circle) {
+        // @ts-ignore
+        json.properties.radius = state.activeGeomanLayer.getRadius()
+      }
+      accessor.search.SET_GLOBAL_FILTER_VALUE({
+        key: 'geoJSON',
+        value: json,
+      })
+      emit('update')
+    }
+    const handlePmRemove: Leaflet.PM.RemoveEventHandler = () => {
+      state.activeGeomanLayer?.remove()
+      state.activeGeomanLayer = null
 
-    checkableLayers(): any {
+      accessor.search.SET_GLOBAL_FILTER_VALUE({ key: 'geoJSON', value: null })
+      emit('update')
+    }
+    const handlePmGlobalDrawModeToggled: Leaflet.PM.GlobalDrawModeToggledEventHandler =
+      (event) => {
+        if (event.enabled) state.map?.off('click', handleMapClick)
+        else state.map?.on('click', handleMapClick)
+      }
+    const handlePmGlobalRemovalModeToggled: Leaflet.PM.GlobalRemovalModeToggledEventHandler =
+      (event) => {
+        if (event.enabled) state.map?.off('click', handleMapClick)
+        else state.map?.on('click', handleMapClick)
+      }
+    const initLeafletGeoman = () => {
+      state.map?.pm.addControls({
+        position: 'topleft',
+        drawMarker: false,
+        drawCircleMarker: false,
+        drawPolyline: false,
+        editMode: false,
+        dragMode: false,
+        cutPolygon: false,
+        rotateMode: false,
+        drawText: false,
+      })
+
+      state.map?.pm.setGlobalOptions({
+        allowSelfIntersection: false,
+        finishOn: 'dblclick',
+        snappable: false,
+      })
+
+      // this.allGeomanLayers = L.layerGroup()
+      // this.allGeomanLayers.addTo(this.map)
+
+      state.map?.on('pm:globaldrawmodetoggled', handlePmGlobalDrawModeToggled)
+      state.map?.on(
+        'pm:globalremovalmodetoggled',
+        handlePmGlobalRemovalModeToggled
+      )
+      state.map?.on('pm:create', handlePmCreate)
+      state.map?.on('pm:remove', handlePmRemove)
+      state.map?.on('locationfound', successGeo)
+      state.map?.on('locationerror', errorGeo)
+    }
+
+    const trackPosition = () => {
+      state.map?.locate({ watch: true, enableHighAccuracy: true })
+    }
+    const successGeo: Leaflet.LocationEventHandlerFn = (event) => {
+      state.gpsLocation = event.latlng
+    }
+    const errorGeo: Leaflet.ErrorEventHandlerFn = (error) => {
+      // eslint-disable-next-line no-console
+      console.error(`Error: ${error.message}`)
+    }
+    const handleReady = () => {
+      state.map = map.value?.mapObject
+      if (props.activateSearch) initLeafletGeoman()
+      // @ts-ignore
+      if (props.gestureHandling) state.map?.gestureHandling.enable()
+      if (props.gpsEnabled && props.activateSearch) trackPosition()
+
+      if (isMapClickEnabled && document.getElementById('map')) {
+        state.map?.on('click', handleMapClick)
+        document.getElementById('map')?.classList.add('cursor-crosshair')
+      }
+      const isDetailView = route.value.name?.includes('-id-') ?? false
+      // Setting initial base layer for detail view
+      if (isDetailView) {
+        if (!props.estonianMap && accessor.map.isBaseLayerEstonian)
+          accessor.map.setBaseLayer('CartoDB')
+        if (props.estonianMap && !accessor.map.isBaseLayerEstonian)
+          accessor.map.setBaseLayer('Estonian map')
+      }
+      if (accessor.search.globalFilters.byIds.geoJSON.value) {
+        state.activeGeomanLayer = L.geoJSON(
+          accessor.search.globalFilters.byIds.geoJSON.value,
+          {
+            pointToLayer: function (feature, latlng) {
+              return L.circle(latlng, feature.properties.radius)
+            },
+          }
+        )
+        state.map?.addLayer(state.activeGeomanLayer)
+      }
+      fitBounds()
+    }
+    const mapZoom = computed(() => {
+      return props.zoom ?? (props.estonianBedrockOverlay ? 9 : 11)
+    })
+    const markersAsFitBoundsObject = computed(() => {
+      return props.markers.map((m: MapMarker) => [m.latitude, m.longitude])
+    })
+    const fitBounds = () => {
+      nextTick(() => {
+        const geoJSON = accessor.search.globalFilters.byIds.geoJSON.value
+        if (geoJSON) {
+          state.map?.fitBounds(
+            (state.activeGeomanLayer as Leaflet.FeatureGroup).getBounds(),
+            {
+              padding: [50, 50],
+              maxZoom: geoJSON.type === 'Point' ? mapZoom.value : undefined,
+            }
+          )
+        } else if (markersAsFitBoundsObject.value.length > 0) {
+          state.map?.fitBounds(markersAsFitBoundsObject.value, {
+            padding: [50, 50],
+            maxZoom: mapZoom.value,
+          })
+        }
+      })
+    }
+    const checkableLayers = computed((): { [K: string]: Leaflet.Layer } => {
       const checkableLayerNames = [
         'Lokaliteedid / Localities',
         'Puursüdamikud / Drillcores',
@@ -606,9 +760,9 @@ export default Vue.extend({
         'Proovid / Samples',
         'Üldine / Summary',
       ]
-
-      return this.$refs['layer-control'].mapObject._layers.reduce(
-        (layers, item) => {
+      // @ts-ignore
+      return layerControl.value?.mapObject._layers.reduce(
+        (layers: any, item: any) => {
           if (checkableLayerNames.includes(item.name)) {
             layers[item.name] = item.layer
           }
@@ -616,326 +770,143 @@ export default Vue.extend({
         },
         {}
       )
-    },
-
-    isDetailView(): boolean {
-      return (this.$route.name as string)?.includes('-id-')
-    },
-
-    computedBaseLayers(): object[] {
-      return this.layers.base.map((layer) => {
-        return {
-          ...layer,
-          visible: layer.name === this.getBaseLayer,
-        }
-      })
-    },
-    isPolygonSet(): boolean {
-      return this.polygon && this.polygon.length > 0
-    },
-  },
-  // Todo: watch language update for leaflet geoman, this means pull request for et.json file should be made
-  watch: {
-    markers() {
-      this.fitBounds()
-    },
-    invalidateSize(newVal) {
-      if (newVal) {
-        this.$refs.map.mapObject.invalidateSize()
-
-        // HACK: This fixes initial bounds problem in search view (markers out of bounds)
-        this.fitBounds()
-      }
-    },
-    activeOverlays(newVal) {
-      if (document.getElementById('map')) {
-        if (Object.keys(this.checkableLayers).some((el) => newVal.includes(el)))
-          document.getElementById('map').classList.add('cursor-crosshair')
-        else document.getElementById('map').classList.remove('cursor-crosshair')
-      }
-    },
-
-    activeGeomanLayer(newVal) {
-      if (newVal) {
-        const json = newVal.toGeoJSON()
-
-        // Adding radius if Circle
-        if (newVal instanceof L.Circle) {
-          json.properties.radius = newVal.getRadius()
-        }
-
-        if (json) this.geoJSON = json
-      } else this.geoJSON = null
-
-      // Updating activeGeomanLayer triggers search update
-      this.$emit('update')
-    },
-
-    geoJSON(newVal) {
-      if (!newVal) this.removeAllGeomanLayers()
-    },
-    gestureHandling(value) {
-      if (!this.map) return
-      if (!value) this.map.mapObject.gestureHandling.disable()
-      else this.map.mapObject.gestureHandling.enable()
-    },
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.map = this.$refs.map
-
-      if (this.activateSearch) this.initLeafletGeoman()
-
-      if (this.gpsEnabled) this.trackPosition()
-
-      if (this.isMapClickEnabled() && document.getElementById('map')) {
-        this.map.mapObject.on('click', this.handleMapClick)
-        document.getElementById('map').classList.add('cursor-crosshair')
-      }
-
-      // Setting initial base layer for detail view
-      if (this.isDetailView) {
-        if (!this.estonianMap && this.isBaseLayerEstonian)
-          this.setBaseLayer('CartoDB')
-        if (this.estonianMap && !this.isBaseLayerEstonian)
-          this.setBaseLayer('Estonian map')
-      }
     })
-  },
-  beforeDestroy() {
-    if (this.gpsID) navigator.geolocation.clearWatch(this.gpsID)
-    if (this.activateSearch) this.terminateLeafletGeoman()
-
-    // NOTE: Condition added because on specimen detail view
-    // switching language when after refreshing the page would
-    // result in TypeError: cannot read property 'mapObject' of undefined.
-    // Tried with different detail views as well, there the issue did not seem to be present.
-    if (this.map) this.map.mapObject.off('click', this.handleMapClick)
-  },
-  methods: {
-    ...mapActions('map', ['setBaseLayer']),
-    updateCenter(center) {
-      this.currentCenter = center
-    },
-    handleBaseLayerChange(event) {
-      this.setBaseLayer(event.name)
-    },
-
-    handleOverlayAdd(event) {
-      if (!this.activeOverlays.includes(event.name)) {
-        this.activeOverlays.push(event.name)
-      }
-    },
-
-    handleOverlayRemove(event) {
-      const index = this.activeOverlays.indexOf(event.name)
-      if (index > -1) {
-        this.activeOverlays.splice(index, 1)
-      }
-    },
-
-    fitBounds() {
-      this.$refs.map.mapObject.addControl(
-        new window.L.Control.Fullscreen({
-          position: 'topleft',
-        })
-      )
-      if (this.markersAsFitBoundsObject.length > 0) {
-        this.$nextTick(() => {
-          this.$refs.map.mapObject.fitBounds(this.markersAsFitBoundsObject, {
-            padding: [50, 50],
-            maxZoom: this.mapZoom,
-          })
-        })
-      }
-      if (this.geojson) {
-        this.$nextTick(() => {
-          const group = featureGroup()
-          this.$refs.map.mapObject.eachLayer(function (layer) {
-            if (layer.feature !== undefined) group.addLayer(layer)
-          })
-          this.$refs.map.mapObject.fitBounds(group.getBounds(), {
-            padding: [50, 50],
-            maxZoom: this.geojson.type === 'Point' ? this.mapZoom : null,
-          })
-        })
-      }
-    },
-
-    isMapClickEnabled() {
-      if (this.$refs?.map?.mapObject)
-        return Object.values(this.checkableLayers).some((layer) =>
-          this.$refs.map.mapObject.hasLayer(layer)
+    const isMapClickEnabled = computed(() => {
+      if (state.map)
+        return Object.values(checkableLayers).some((layer) =>
+          state.map?.hasLayer(layer)
         )
       else return false
-    },
-
-    handleMapClick: debounce(async function (this, event) {
-      if (this.isMapClickEnabled()) {
-        const MAX_ZOOM = 21
-        const radius =
-          (MAX_ZOOM + 0.25 - this.$refs.map.mapObject.getZoom()) * 1000
-        // eslint-disable-next-line no-use-before-define
-        const circle = Circle(event.latlng, { radius }).addTo(
-          this.$refs.map.mapObject
-        )
-        const bbox = circle.getBounds().toBBoxString()
-
-        // eslint-disable-next-line no-unused-vars
-        // const rect = this.$L
-        //   .rectangle(circle.getBounds(), { color: 'green', weight: 1 })
-        //   .addTo(this.$refs.map.mapObject)
-        circle.remove()
-
-        const wmsResponse = await this.$services.geoserver.getWMSData({
-          QUERY_LAYERS: this.buildQueryLayers(),
-          LAYERS:
-            'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary,sarv:locality_summary_front',
-          // BBOX: `${bbox.minX},${bbox.minY},${bbox.maxX},${bbox.maxY}`,
-          BBOX: bbox,
-          // X: Math.floor(event.layerPoint.x),
-          // Y: Math.floor(event.layerPoint.y),
-          // HEIGHT: this.$refs.map.mapObject._size.y,
-          // WIDTH: this.$refs.map.mapObject._size.x,
-        })
-
-        // console.log(wmsResponse)
-        if (wmsResponse?.features?.length > 0) {
-          this.mapClickResponse = {
-            latlng: event.latlng,
-            features: wmsResponse.features,
-          }
-          this.$refs.popup.mapObject.openPopup(event.latlng)
-        } else this.mapClickResponse = null
-      }
-    }, 400),
-
-    buildQueryLayers() {
+    })
+    const terminateLeafletGeoman = () => {
+      state.map?.off('pm:create', handlePmCreate)
+      state.map?.off('pm:remove', handlePmRemove)
+    }
+    const queryLayers = computed(() => {
       const queryLayers = []
-      if (this.activeOverlays.includes('Uuringupunktid / Sites')) {
+      if (state.activeOverlays.includes('Uuringupunktid / Sites')) {
         queryLayers.push('sarv:site_summary')
       }
-      if (this.activeOverlays.includes('Puursüdamikud / Drillcores')) {
+      if (state.activeOverlays.includes('Puursüdamikud / Drillcores')) {
         queryLayers.push('sarv:locality_drillcores')
       }
-      if (this.activeOverlays.includes('Lokaliteedid / Localities')) {
+      if (state.activeOverlays.includes('Lokaliteedid / Localities')) {
         queryLayers.push('sarv:locality_summary1')
       }
-      if (this.activeOverlays.includes('Proovid / Samples')) {
+      if (state.activeOverlays.includes('Proovid / Samples')) {
         queryLayers.push('sarv:sample_summary')
       }
-      if (this.activeOverlays.includes('Üldine / Summary')) {
+      if (state.activeOverlays.includes('Üldine / Summary')) {
         queryLayers.push('sarv:locality_summary_front')
       }
       return queryLayers.join(',')
-    },
+    })
+    const handleMapClick = async (event: Leaflet.LeafletMouseEvent) => {
+      if (!isMapClickEnabled) return
+      if (!state.map) return
+      const MAX_ZOOM = 21
+      const radius = (MAX_ZOOM + 0.25 - state.map.getZoom()) * 1000
+      const circle = L.circle(event.latlng, { radius })
+      state.map.addLayer(circle)
+      const bbox = circle.getBounds().toBBoxString()
+      circle.remove()
 
-    initLeafletGeoman() {
-      if (this.map?.mapObject) {
-        this.map.mapObject.pm.addControls({
-          position: 'topleft',
-          drawMarker: false,
-          drawCircleMarker: false,
-          drawPolyline: false,
-          editMode: false,
-          dragMode: false,
-          cutPolygon: false,
-          rotateMode: false,
-        })
+      const wmsResponse = await $services.geoserver.getWMSData({
+        QUERY_LAYERS: queryLayers.value,
+        LAYERS:
+          'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary,sarv:locality_summary_front',
+        BBOX: bbox,
+      })
 
-        this.map.mapObject.pm.setGlobalOptions({
-          allowSelfIntersection: false,
-          finishOn: 'dblclick',
-          snappable: false,
-        })
-
-        this.allGeomanLayers = L.layerGroup()
-        this.allGeomanLayers.addTo(this.map.mapObject)
-
-        this.map.mapObject.on(
-          'pm:globaldrawmodetoggled',
-          this.handlePmGlobalDrawOrRemovalModeToggled
-        )
-        this.map.mapObject.on(
-          'pm:globalremovalmodetoggled',
-          this.handlePmGlobalDrawOrRemovalModeToggled
-        )
-        this.map.mapObject.on('pm:create', this.handlePmCreate)
-        this.map.mapObject.on('pm:remove', this.handlePmRemove)
-      }
-    },
-
-    terminateLeafletGeoman() {
-      if (this.map?.mapObject) {
-        this.map.mapObject.off('pm:create', this.handlePmCreate)
-        this.map.mapObject.off('pm:remove', this.handlePmRemove)
-      }
-    },
-
-    handlePmGlobalDrawOrRemovalModeToggled(event) {
-      if (event.enabled) this.map.mapObject.off('click', this.handleMapClick)
-      else this.map.mapObject.on('click', this.handleMapClick)
-    },
-
-    handlePmCreate({ layer }) {
-      // layer.pm.enable({ allowSelfIntersection: false })
-      // console.log(layer.pm.hasSelfIntersection())
-      this.removeAllGeomanLayers()
-      layer.addTo(this.allGeomanLayers)
-      this.activeGeomanLayer = layer
-    },
-
-    handlePmRemove() {
-      this.removeAllGeomanLayers()
-      this.activeGeomanLayer = null
-      this.geoJSON = null
-      this.$emit('update')
-    },
-
-    removeAllGeomanLayers() {
-      this.allGeomanLayers.eachLayer((layer) => layer.remove())
-    },
-
-    // GPS start
-    trackPosition() {
-      if (navigator.geolocation) {
-        this.gpsID = navigator.geolocation.watchPosition(
-          this.successGeo,
-          this.errorGeo
-        )
-        // eslint-disable-next-line no-console
-      } else console.error('Geolocation is not supported by this browser.')
-    },
-
-    successGeo(position: any) {
-      if (position) {
-        this.gpsLocation = {
-          lng: position.coords.longitude,
-          lat: position.coords.latitude,
+      if (wmsResponse?.features?.length > 0) {
+        state.mapClickResponse = {
+          latlng: event.latlng,
+          features: wmsResponse.features,
         }
-      }
-    },
+        popup.value?.mapObject.openPopup(event.latlng)
+      } else state.mapClickResponse = null
+    }
+    onUnmounted(() => {
+      if (state.gpsID) navigator.geolocation.clearWatch(state.gpsID)
+      if (props.activateSearch) terminateLeafletGeoman()
 
-    errorGeo(error: any) {
-      // eslint-disable-next-line no-console
-      console.error(`Error: ${error.message}`)
-    },
-    // GPS end
+      // NOTE: Condition added because on specimen detail view
+      // switching language when after refreshing the page would
+      // result in TypeError: cannot read property 'mapObject' of undefined.
+      // Tried with different detail views as well, there the issue did not seem to be present.
+      state.map?.off('click', handleMapClick)
+    })
 
-    handleNearMeSliderChange: debounce(function (this: any, val) {
-      if (val) {
-        this.removeAllGeomanLayers()
-        // eslint-disable-next-line no-use-before-define
-        const circle = circle(this.gpsLocation, { radius: val * 1000 })
-        circle.addTo(this.allGeomanLayers)
-        this.activeGeomanLayer = circle
+    const updateCenter = (center: { lng: number; lat: number }) => {
+      state.currentCenter = center
+    }
+    const handleBaseLayerChange = (event: Leaflet.LayersControlEvent) => {
+      accessor.map.setBaseLayer(event.name)
+    }
+
+    const handleOverlayAdd = (event: Leaflet.LayersControlEvent) => {
+      if (!state.activeOverlays.includes(event.name)) {
+        state.activeOverlays.push(event.name)
       }
-    }, 500),
+    }
+
+    const handleOverlayRemove = (event: Leaflet.LayersControlEvent) => {
+      const index = state.activeOverlays.indexOf(event.name)
+      if (index > -1) {
+        state.activeOverlays.splice(index, 1)
+      }
+    }
+
+    const tileOverlays = computed(() => {
+      return state.layers.overlay.filter((item: any) => !item.isWMS)
+    })
+    const wmsOverlays = computed(() => {
+      return state.layers.overlay.filter((item: any) => item.isWMS)
+    })
+    const latLngMarkers = computed(() => {
+      return props.markers.map((m: MapMarker) => {
+        return [m.latitude, m.longitude]
+      })
+    })
+    const tooltipOptions = computed(() => {
+      return {
+        permanent: props.markers.length <= 5,
+        direction: 'top',
+        offset: [1, -7],
+      }
+    })
+    const computedBaseLayers = computed(() => {
+      return state.layers.base.map((layer: any) => {
+        return {
+          ...layer,
+          visible: layer.name === accessor.map.getBaseLayer,
+        }
+      })
+    })
+    return {
+      ...toRefs(state),
+      handleReady,
+      handleNearMeSliderChange,
+      updateCenter,
+      handleBaseLayerChange,
+      handleOverlayAdd,
+      handleOverlayRemove,
+      tileOverlays,
+      wmsOverlays,
+      latLngMarkers,
+      tooltipOptions,
+      computedBaseLayers,
+      mapZoom,
+      fitBounds,
+      map,
+      layerControl,
+      popup,
+    }
   },
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .cursor-crosshair {
   cursor: crosshair;
 }
@@ -949,5 +920,11 @@ export default Vue.extend({
 }
 .leaflet-container {
   font-family: 'Open Sans', sans-serif;
+
+  ::v-deep .leaflet-control-layers-toggle {
+    width: 30px;
+    height: 30px;
+    background-size: 20px;
+  }
 }
 </style>

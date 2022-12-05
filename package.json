@@ -11,7 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@geoman-io/leaflet-geoman-free": "^2.11.2",
+    "@geoman-io/leaflet-geoman-free": "^2.13.1",
     "@mdi/js": "^7.0.96",
     "@nuxt/image": "0.6.0",
     "@nuxt/typescript-runtime": "^2.1.0",
@@ -26,6 +26,7 @@
     "entities": "^4.4.0",
     "leaflet": "^1.7.1",
     "leaflet-gesture-handling": "^1.2.1",
+    "leaflet.fullscreen": "^2.4.0",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.8",
     "qs": "^6.11.0",
@@ -55,6 +56,7 @@
     "@nuxtjs/vuetify": "^1.12.3",
     "@types/earcut": "^2.1.1",
     "@types/echarts": "^4.9.16",
+    "@types/leaflet": "^1.9.0",
     "@types/lodash": "^4.14.186",
     "@vue/compiler-dom": "^3.2.41",
     "@vue/composition-api": "^1.2.4",
