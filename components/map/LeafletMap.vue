@@ -449,6 +449,8 @@ export default defineComponent({
               // maxNativeZoom: 18,
               // minZoom: 13,
               // maxZoom: 21,
+              // cql_filter:
+              //   'WITHIN(geom, MULTIPOLYGON(((21.372915 60.116882,21.372915 57.240421,28.235844 57.240421,21.372915 60.116882)),((28.235844 57.240421,28.235844 60.116882,21.372915 60.116882,28.235844 57.240421))))',
               attribution:
                 "Localities: <a  href='https://geoloogia.info'>SARV</a>",
               format: 'image/png',
@@ -682,7 +684,6 @@ export default defineComponent({
       state.map?.on('pm:create', handlePmCreate)
       state.map?.on('pm:remove', handlePmRemove)
       state.map?.on('locationfound', successGeo)
-      state.map?.on('locationerror', errorGeo)
     }
 
     const trackPosition = () => {
@@ -690,10 +691,6 @@ export default defineComponent({
     }
     const successGeo: Leaflet.LocationEventHandlerFn = (event) => {
       state.gpsLocation = event.latlng
-    }
-    const errorGeo: Leaflet.ErrorEventHandlerFn = (error) => {
-      // eslint-disable-next-line no-console
-      console.error(`Error: ${error.message}`)
     }
     const handleReady = () => {
       state.map = map.value?.mapObject

@@ -280,7 +280,7 @@
           id="map-wrap"
           elevation="0"
         >
-          <leaflet-map
+          <map-detail
             rounded
             :estonian-map="
               locality.country ? locality.country.value === 'Eesti' : false
@@ -314,7 +314,7 @@
       }}</v-card-title>
       <v-card-text>
         <v-card elevation="0">
-          <leaflet-map rounded :markers="locations" />
+          <map-detail rounded :markers="locations" />
         </v-card>
       </v-card-text>
     </template>
@@ -345,7 +345,7 @@ import { Location } from 'vue-router'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Tabs from '~/components/Tabs.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import { Tab, TABS_SAMPLE } from '~/constants'
@@ -357,7 +357,7 @@ export default defineComponent({
     TableRowLink,
     TableRow,
     Tabs,
-    LeafletMap,
+    MapDetail,
     Detail,
     BaseTable,
   },

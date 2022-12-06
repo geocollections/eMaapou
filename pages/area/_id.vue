@@ -348,7 +348,7 @@
       }}</v-card-title>
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
-          <leaflet-map
+          <map-detail
             rounded
             estonian-map
             estonian-bedrock-overlay
@@ -388,7 +388,7 @@ import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import { Tab, TABS_AREA } from '~/constants'
 import BaseBoolean from '~/components/base/BaseBoolean.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
@@ -397,7 +397,7 @@ import { useSlugRoute } from '~/composables/useSlugRoute'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
   components: {
-    LeafletMap,
+    MapDetail,
     HeaderDetail,
     Tabs,
     TableRow,

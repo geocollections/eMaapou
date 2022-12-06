@@ -214,7 +214,7 @@
           id="map-wrap"
           elevation="0"
         >
-          <leaflet-map
+          <map-detail
             rounded
             :estonian-map="
               locality && locality.country
@@ -338,7 +338,7 @@ import {
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
@@ -352,7 +352,7 @@ export default defineComponent({
   components: {
     HeaderDetail,
     Tabs,
-    LeafletMap,
+    MapDetail,
     TableRow,
     TableRowLink,
     Detail,

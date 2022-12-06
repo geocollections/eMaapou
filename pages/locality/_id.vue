@@ -220,7 +220,7 @@
       }}</v-card-title>
       <v-card-text v-if="locality.latitude && locality.longitude">
         <v-card id="map-wrap" elevation="0">
-          <leaflet-map
+          <map-detail
             rounded
             :estonian-map="country ? country.value === 'Eesti' : false"
             :estonian-bedrock-overlay="
@@ -279,7 +279,7 @@ import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import TableRow from '~/components/table/TableRow.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
@@ -291,7 +291,7 @@ export default defineComponent({
     HeaderDetail,
     TableRow,
     TableRowLink,
-    LeafletMap,
+    MapDetail,
     Tabs,
     Detail,
     ImageBar,

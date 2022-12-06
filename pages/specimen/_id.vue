@@ -189,7 +189,7 @@
       }}</v-card-title>
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
-          <leaflet-map
+          <map-detail
             rounded
             :estonian-map="
               locality.country ? locality.country.value === 'Eesti' : false
@@ -241,7 +241,7 @@ import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { Tab, TABS_SPECIMEN } from '~/constants'
@@ -253,7 +253,7 @@ export default defineComponent({
     HeaderDetail,
     TableRow,
     TableRowLink,
-    LeafletMap,
+    MapDetail,
     Tabs,
     ImageBar,
     BaseTable,

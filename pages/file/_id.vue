@@ -333,7 +333,7 @@
           <v-card-title class="pl-0 subsection-title"
             >{{ $t('locality.map') }}
           </v-card-title>
-          <leaflet-map
+          <map-detail
             rounded
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
@@ -522,7 +522,7 @@ import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 import { useSlugRoute } from '~/composables/useSlugRoute'
@@ -530,7 +530,7 @@ import ChartLas from '~/components/chart/ChartLas.vue'
 export default defineComponent({
   components: {
     HeaderDetail,
-    LeafletMap,
+    MapDetail,
     TableRow,
     TableRowLink,
     Detail,

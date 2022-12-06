@@ -145,7 +145,7 @@
       }}</v-card-title>
       <v-card-text>
         <v-card id="map-wrap" elevation="0">
-          <leaflet-map rounded :markers="locationMarkers" />
+          <map-detail rounded :markers="locationMarkers" />
         </v-card>
       </v-card-text>
     </template>
@@ -178,14 +178,14 @@ import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 import { Tab, TABS_DATASET } from '~/constants'
 import { useSlugRoute } from '~/composables/useSlugRoute'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
   components: {
-    LeafletMap,
+    MapDetail,
     HeaderDetail,
     Tabs,
     Detail,

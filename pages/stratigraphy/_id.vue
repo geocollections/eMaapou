@@ -187,7 +187,7 @@
           id="map-wrap"
           elevation="0"
         >
-          <leaflet-map
+          <map-detail
             rounded
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
@@ -256,7 +256,7 @@ import {
   HEADERS_STRATOTYPE,
   Tab,
 } from '~/constants'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapDetail from '~/components/map/MapDetail.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
 import Tabs from '~/components/Tabs.vue'
 import TableRow from '~/components/table/TableRow.vue'
@@ -273,7 +273,7 @@ export default defineComponent({
     TableRowLink,
     TableRow,
     DataTableStratigraphyStratotype,
-    LeafletMap,
+    MapDetail,
     Detail,
     BaseTable,
   },
