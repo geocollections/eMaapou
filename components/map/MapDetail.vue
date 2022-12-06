@@ -114,7 +114,6 @@ import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
 import MapClickPopup from '~/components/map/MapClickPopup.vue'
 import 'leaflet/dist/leaflet.css'
-import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
 import 'leaflet.fullscreen/Control.FullScreen.css'
 import { MapMarker } from '~/types/map'
@@ -126,6 +125,7 @@ if (process.client) {
   L = require('leaflet')
   require('leaflet-gesture-handling')
   require('leaflet.fullscreen')
+  require('@geoman-io/leaflet-geoman-free')
   type D = L.Icon.Default & {
     _getIconUrl?: string
   }

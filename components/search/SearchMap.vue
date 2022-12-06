@@ -12,7 +12,7 @@
     </template>
 
     <template #body="{ showBody }">
-      <leaflet-map
+      <map-search
         v-show="showBody"
         v-bind="$attrs"
         :markers="mapMarkers"
@@ -32,10 +32,10 @@
 import { mdiEarth } from '@mdi/js'
 import { mapFields } from 'vuex-map-fields'
 import BaseCardExpand from '../base/BaseCardExpand.vue'
-import LeafletMap from '~/components/map/LeafletMap.vue'
+import MapSearch from '~/components/map/MapSearch.vue'
 export default {
   name: 'SearchMap',
-  components: { LeafletMap, BaseCardExpand },
+  components: { MapSearch, BaseCardExpand },
   props: {
     items: {
       type: Array,
