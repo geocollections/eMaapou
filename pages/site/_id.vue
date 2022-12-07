@@ -137,12 +137,12 @@
           </table-row>
           <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
           <table-row
-            v-if="(site.latitude && site.longitude) || locality"
+            v-if="site.latitude && site.longitude"
             :title="$t('locality.latitude')"
             :value="site.latitude"
           />
           <table-row
-            v-if="(site.latitude && site.longitude) || locality"
+            v-if="site.latitude && site.longitude"
             :title="$t('locality.longitude')"
             :value="site.longitude"
           />
@@ -205,7 +205,7 @@
     </template>
 
     <template
-      v-if="(site.latitude && site.longitude) || site.locality_id"
+      v-if="site && ((site.latitude && site.longitude) || site.locality_id)"
       #column-right
     >
       <v-card-text>
