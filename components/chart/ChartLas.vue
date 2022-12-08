@@ -2,8 +2,8 @@
   <div>
     <renderer-switch
       v-if="!hideRendererSwitch"
-      :renderer="renderer"
-      @update="renderer = $event"
+      :renderer="$accessor.chart.renderer"
+      @update="$accessor.chart.setRenderer($event)"
     />
     <client-only>
       <v-chart
@@ -30,7 +30,6 @@ import {
 import { use } from 'echarts/core'
 import { LineChart } from 'echarts/charts'
 import { SVGRenderer, CanvasRenderer } from 'echarts/renderers'
-import { mapFields } from 'vuex-map-fields'
 import { defineComponent } from '@nuxtjs/composition-api'
 import {
   DATAZOOM_Y_SLIDER_LEFT,
@@ -153,10 +152,9 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapFields('chart', ['renderer']),
     initOptions(): any {
       return {
-        renderer: this.renderer,
+        renderer: this.$accessor.chart.renderer,
       }
     },
     chartOptions(): any {

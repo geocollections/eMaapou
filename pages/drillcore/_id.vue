@@ -16,7 +16,7 @@
       <v-card-text>
         <base-table>
           <table-row
-            :title="$t('drillcore.name')"
+            :title="$t('drillcore.name').toString()"
             :value="
               $translate({
                 et: drillcore.drillcore,
@@ -24,14 +24,17 @@
               })
             "
           />
-          <table-row :title="$t('drillcore.boxes')" :value="drillcore.boxes" />
           <table-row
-            :title="$t('drillcore.boxNumbers')"
+            :title="$t('drillcore.boxes').toString()"
+            :value="drillcore.boxes"
+          />
+          <table-row
+            :title="$t('drillcore.boxNumbers').toString()"
             :value="drillcore.box_numbers"
           />
           <table-row
             v-if="depository"
-            :title="$t('drillcore.repository')"
+            :title="$t('drillcore.repository').toString()"
             :value="
               $translate({
                 et: depository.value,
@@ -41,23 +44,26 @@
           />
           <table-row
             v-if="storage"
-            :title="$t('drillcore.storage')"
+            :title="$t('drillcore.storage').toString()"
             :value="storage.location"
           />
           <table-row
             v-if="agent"
-            :title="$t('drillcore.driller')"
+            :title="$t('drillcore.driller').toString()"
             :value="agent.agent"
           />
-          <table-row :title="$t('drillcore.year')" :value="drillcore.year" />
           <table-row
-            :title="$t('drillcore.metersInBox')"
+            :title="$t('drillcore.year').toString()"
+            :value="drillcore.year"
+          />
+          <table-row
+            :title="$t('drillcore.metersInBox').toString()"
             :value="drillcore.number_meters"
           />
 
           <table-row-link
             v-if="database"
-            :title="$t('drillcore.database')"
+            :title="$t('drillcore.database').toString()"
             :value="
               $translate({
                 et: database.name,
@@ -69,12 +75,12 @@
           />
           <table-row
             v-if="drillcore.date_added"
-            :title="$t('drillcore.dateAdded')"
+            :title="$t('drillcore.dateAdded').toString()"
             :value="$formatDate(drillcore.date_added)"
           />
           <table-row
             v-if="drillcore.date_changed"
-            :title="$t('drillcore.dateChanged')"
+            :title="$t('drillcore.dateChanged').toString()"
             :value="$formatDate(drillcore.date_changed)"
           />
         </base-table>
@@ -94,7 +100,7 @@
       <v-card-text>
         <base-table class="mb-4">
           <table-row-link
-            :title="$t('locality.locality')"
+            :title="$t('locality.locality').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -111,7 +117,7 @@
           />
           <table-row
             v-if="locality.country"
-            :title="$t('locality.country')"
+            :title="$t('locality.country').toString()"
             :value="
               $translate({
                 et: locality.country.value,
@@ -120,18 +126,21 @@
             "
           />
           <table-row
-            :title="$t('locality.latitude')"
+            :title="$t('locality.latitude').toString()"
             :value="locality.latitude"
           />
           <table-row
-            :title="$t('locality.longitude')"
+            :title="$t('locality.longitude').toString()"
             :value="locality.longitude"
           />
           <table-row
-            :title="$t('locality.elevation')"
+            :title="$t('locality.elevation').toString()"
             :value="locality.elevation"
           />
-          <table-row :title="$t('locality.depth')" :value="locality.depth" />
+          <table-row
+            :title="$t('locality.depth').toString()"
+            :value="locality.depth"
+          />
         </base-table>
         <v-card
           v-if="locality.latitude && locality.longitude"
@@ -187,6 +196,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -210,7 +220,7 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate } = useContext()
+    const { $services, $hydrateTab, $translate, i18n } = useContext()
     const route = useRoute()
     const state = reactive({
       drillcore: null as any,
@@ -309,6 +319,23 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('drillcore.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            content: `${title.value} | ${i18n.t('drillcore.pageTitle')}`,
+            hid: 'og:title',
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       title,
@@ -317,28 +344,10 @@ export default defineComponent({
       agent,
       database,
       locality,
+      isEmpty,
+      isNull,
     }
   },
-  head() {
-    return {
-      title: `${this.title} | ${this.$t('drillcore.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          content: `${this.title} | ${this.$t('drillcore.pageTitle')}`,
-          hid: 'og:title',
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  methods: {
-    isEmpty,
-    isNull,
-  },
+  head: {},
 })
 </script>

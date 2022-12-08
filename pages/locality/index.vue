@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('locality.pageTitle')"
+        :title="$t('locality.pageTitle').toString()"
         :icon="icons.mdiMapMarkerOutline"
       />
     </template>

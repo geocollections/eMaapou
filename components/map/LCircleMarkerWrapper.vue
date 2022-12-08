@@ -19,7 +19,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  useContext,
+  useRouter,
+} from '@nuxtjs/composition-api'
 import type * as Leaflet from 'leaflet'
 import { MapMarker } from '~/types/map'
 let Vue2Leaflet: any = {}
@@ -36,34 +42,39 @@ export default defineComponent({
   },
   props: {
     markers: {
-      type: Array,
+      type: Array as PropType<MapMarker[]>,
       required: false,
-      default() {
-        return []
-      },
+      default: () => [],
     },
   },
-  computed: {
-    tooltipOptions() {
+  setup(props) {
+    const { localePath } = useContext()
+    const router = useRouter()
+    const tooltipOptions = computed(() => {
       return {
-        permanent: this.markers.length <= 5,
+        permanent: props.markers.length <= 5,
         direction: 'top',
         offset: [1, -7],
       }
-    },
-  },
-  methods: {
-    handleClick(event: Leaflet.LeafletMouseEvent, marker: MapMarker) {
+    })
+    const handleClick = (
+      event: Leaflet.LeafletMouseEvent,
+      marker: MapMarker
+    ) => {
       L.DomEvent.stopPropagation(event)
       if (marker.id && marker.routeName) {
-        this.$router.push(
-          this.localePath({
+        router.push(
+          localePath({
             name: `${marker.routeName}-id`,
             params: { id: marker.id.toString() },
           })
         )
       }
-    },
+    }
+    return {
+      tooltipOptions,
+      handleClick,
+    }
   },
 })
 </script>

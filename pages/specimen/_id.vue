@@ -30,7 +30,7 @@
         <base-table>
           <table-row-link
             v-if="coll"
-            :title="$t('specimen.collectionNr')"
+            :title="$t('specimen.collectionNr').toString()"
             :value="coll.number"
             nuxt
             :href="
@@ -42,24 +42,26 @@
           />
 
           <table-row
-            :title="$t('specimen.number')"
+            :title="$t('specimen.number').toString()"
             :value="`${specimen.specimen_id}`"
           />
           <table-row-link
             v-if="parent"
-            :title="$t('specimen.parent')"
+            :title="$t('specimen.parent').toString()"
             nuxt
-            :href="localePath('specimen-id', { id: parent.id })"
+            :href="
+              localePath({ name: 'specimen-id', params: { id: parent.id } })
+            "
             :value="parent.specimen_id"
           />
           <table-row
             v-if="specimen.specimen_nr"
-            :title="$t('specimen.oldNumber')"
+            :title="$t('specimen.oldNumber').toString()"
             :value="`${specimen.specimen_nr}`"
           />
           <table-row
             v-if="type"
-            :title="$t('specimen.type')"
+            :title="$t('specimen.type').toString()"
             :value="
               $translate({
                 et: type.value,
@@ -69,7 +71,7 @@
           />
           <table-row
             v-if="classification"
-            :title="$t('specimen.group')"
+            :title="$t('specimen.group').toString()"
             :value="
               $translate({
                 et: classification.class_field,
@@ -77,10 +79,13 @@
               })
             "
           />
-          <table-row :title="$t('specimen.part')" :value="specimen.part" />
+          <table-row
+            :title="$t('specimen.part').toString()"
+            :value="specimen.part"
+          />
           <table-row-link
             v-if="locality"
-            :title="$t('specimen.locality')"
+            :title="$t('specimen.locality').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -95,10 +100,13 @@
               })
             "
           />
-          <table-row :title="$t('specimen.depth')" :value="specimen.depth" />
+          <table-row
+            :title="$t('specimen.depth').toString()"
+            :value="specimen.depth"
+          />
           <table-row-link
             v-if="stratigraphy"
-            :title="$t('specimen.stratigraphy')"
+            :title="$t('specimen.stratigraphy').toString()"
             :value="
               $translate({
                 et: stratigraphy.stratigraphy,
@@ -115,7 +123,7 @@
           />
           <table-row-link
             v-if="lithostratigraphy"
-            :title="$t('specimen.lithostratigraphy')"
+            :title="$t('specimen.lithostratigraphy').toString()"
             :value="
               $translate({
                 et: lithostratigraphy.stratigraphy,
@@ -131,26 +139,26 @@
             "
           />
           <table-row
-            :title="$t('specimen.stratigraphyRemarks')"
+            :title="$t('specimen.stratigraphyRemarks').toString()"
             :value="specimen.stratigraphy_free"
           />
 
           <table-row
-            :title="$t('specimen.remarks')"
+            :title="$t('specimen.remarks').toString()"
             :value="specimen.remarks"
           />
           <table-row
-            :title="$t('specimen.dateCollected')"
+            :title="$t('specimen.dateCollected').toString()"
             :value="dateCollected"
           />
           <table-row
             v-if="agentCollected"
-            :title="$t('specimen.collector')"
+            :title="$t('specimen.collector').toString()"
             :value="agentCollected.agent"
           />
           <table-row-link
             v-if="sample"
-            :title="$t('specimen.sample')"
+            :title="$t('specimen.sample').toString()"
             :value="
               $translate({
                 et: sample.number,
@@ -167,7 +175,7 @@
           />
           <table-row-link
             v-if="database"
-            :title="$t('specimen.institution')"
+            :title="$t('specimen.institution').toString()"
             :value="
               $translate({
                 et: database.name,
@@ -234,6 +242,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -259,7 +268,7 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate } = useContext()
+    const { $services, $hydrateTab, $translate, i18n, $img } = useContext()
     const route = useRoute()
     const state = reactive({
       specimen: null as any,
@@ -369,6 +378,31 @@ export default defineComponent({
       validRoute: toRef(state, 'validRoute'),
     })
 
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('specimen.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${title.value} | ${i18n.t('specimen.pageTitle')}`,
+          },
+          {
+            property: 'og:image',
+            hid: 'og:image',
+            content: state.images[0]?.filename
+              ? $img(
+                  `${state.images[0]?.filename}`,
+                  { size: 'small' },
+                  {
+                    provider: 'geocollections',
+                  }
+                )
+              : '',
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       title,
@@ -388,33 +422,6 @@ export default defineComponent({
       parent,
     }
   },
-  // @ts-ignore
-  head() {
-    return {
-      title: `${this.title} | ${this.$t('specimen.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.title} | ${this.$t('specimen.pageTitle')}`,
-        },
-        {
-          property: 'og:image',
-          hid: 'og:image',
-          // @ts-ignore
-          content: this.images[0]?.filename
-            ? this.$img(
-                // @ts-ignore
-                `${this.images[0]?.filename}`,
-                { size: 'small' },
-                {
-                  provider: 'geocollections',
-                }
-              )
-            : undefined,
-        },
-      ],
-    }
-  },
+  head: {},
 })
 </script>

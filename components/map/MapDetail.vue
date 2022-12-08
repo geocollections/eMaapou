@@ -69,10 +69,6 @@
             fillColor: $vuetify.theme.currentTheme.accent,
           }"
         />
-
-        <l-layer-group ref="popup">
-          <map-click-popup :response="mapClickResponse" />
-        </l-layer-group>
       </l-map>
       <template #placeholder>
         <div
@@ -112,7 +108,6 @@ import type Leaflet from 'types/leaflet'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
-import MapClickPopup from '~/components/map/MapClickPopup.vue'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
 import 'leaflet.fullscreen/Control.FullScreen.css'
@@ -140,14 +135,12 @@ if (process.client) {
 export default defineComponent({
   name: 'MapDetail',
   components: {
-    MapClickPopup,
     VMarkerClusterWrapper,
     LCircleMarkerWrapper,
     MapLinks,
     'l-control-layers': Vue2Leaflet.LControlLayers,
     'l-control-scale': Vue2Leaflet.LControlScale,
     'l-geo-json': Vue2Leaflet.LGeoJson,
-    'l-layer-group': Vue2Leaflet.LLayerGroup,
     'l-map': Vue2Leaflet.LMap,
     'l-tile-layer': Vue2Leaflet.LTileLayer,
     'l-wms-tile-layer': Vue2Leaflet.LWMSTileLayer,

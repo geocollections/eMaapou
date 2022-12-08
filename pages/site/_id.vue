@@ -11,7 +11,7 @@
       <v-card-text>
         <base-table>
           <table-row
-            :title="$t('site.name')"
+            :title="$t('site.name').toString()"
             :value="
               $translate({
                 et: site.name,
@@ -19,7 +19,11 @@
               })
             "
           />
-          <table-row v-if="area" :value="area" :title="$t('site.area')">
+          <table-row
+            v-if="area"
+            :value="area"
+            :title="$t('site.area').toString()"
+          >
             <template #value>
               <a
                 v-if="area.area_type === 2"
@@ -59,7 +63,7 @@
           <table-row
             v-if="area && area.area_type === 2"
             :value="area"
-            :title="$t('site.areaText1')"
+            :title="$t('site.areaText1').toString()"
           >
             <template #value>
               <span v-for="(item, index) in planArray" :key="index">
@@ -81,7 +85,7 @@
           </table-row>
           <table-row
             v-if="site.project"
-            :title="$t('site.project')"
+            :title="$t('site.project').toString()"
             :value="
               $translate({
                 et: site.project.name,
@@ -89,14 +93,23 @@
               })
             "
           />
-          <table-row :title="$t('site.coordx')" :value="site.coordx" />
-          <table-row :title="$t('site.coordy')" :value="site.coordy" />
-          <table-row :title="$t('site.extent')" :value="site.extent" />
-          <table-row :title="$t('site.depth')" :value="site.depth" />
+          <table-row
+            :title="$t('site.coordx').toString()"
+            :value="site.coordx"
+          />
+          <table-row
+            :title="$t('site.coordy').toString()"
+            :value="site.coordy"
+          />
+          <table-row
+            :title="$t('site.extent').toString()"
+            :value="site.extent"
+          />
+          <table-row :title="$t('site.depth').toString()" :value="site.depth" />
 
           <table-row-link
             v-if="locality"
-            :title="$t('locality.locality')"
+            :title="$t('locality.locality').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -113,7 +126,7 @@
           />
           <table-row
             v-if="locality && locality.country"
-            :title="$t('locality.country')"
+            :title="$t('locality.country').toString()"
             :value="
               isNil(
                 $translate({
@@ -138,32 +151,32 @@
           <!-- ???: What is this if statment? Why does this element have to be shown when there is a locality id?  -->
           <table-row
             v-if="site.latitude && site.longitude"
-            :title="$t('locality.latitude')"
+            :title="$t('locality.latitude').toString()"
             :value="site.latitude"
           />
           <table-row
             v-if="site.latitude && site.longitude"
-            :title="$t('locality.longitude')"
+            :title="$t('locality.longitude').toString()"
             :value="site.longitude"
           />
           <table-row
             v-if="elevation"
-            :title="$t('site.elevation')"
+            :title="$t('site.elevation').toString()"
             :value="elevation"
           />
           <table-row
             v-if="locality"
-            :title="$t('locality.depth')"
+            :title="$t('locality.depth').toString()"
             :value="locality.depth"
           />
           <table-row
             v-if="site.location_accuracy"
-            :title="$t('site.locationAccuracy')"
+            :title="$t('site.locationAccuracy').toString()"
             :value="site.location_accuracy"
           />
           <table-row
             v-if="site.coord_det_method"
-            :title="$t('site.coordDetMethod')"
+            :title="$t('site.coordDetMethod').toString()"
             :value="
               $translate({
                 et: site.coord_det_method.value,
@@ -172,32 +185,32 @@
             "
           />
           <table-row
-            :title="$t('site.description')"
+            :title="$t('site.description').toString()"
             :value="site.description"
           />
           <table-row
             v-if="site.remarks"
-            :title="$t('site.remarks')"
+            :title="$t('site.remarks').toString()"
             :value="site.remarks"
           />
           <table-row
             v-if="site.remarks_location"
-            :title="$t('site.remarksLocation')"
+            :title="$t('site.remarksLocation').toString()"
             :value="site.remarks_location"
           />
           <table-row
             v-if="studied"
-            :title="$t('site.studied')"
+            :title="$t('site.studied').toString()"
             :value="studied"
           />
           <table-row
             v-if="site.date_added"
-            :title="$t('site.dateAdded')"
+            :title="$t('site.dateAdded').toString()"
             :value="$formatDate(site.date_added)"
           />
           <table-row
             v-if="site.date_changed"
-            :title="$t('site.dateChanged')"
+            :title="$t('site.dateChanged').toString()"
             :value="$formatDate(site.date_changed)"
           />
         </base-table>
@@ -335,6 +348,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -360,7 +374,8 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate, $formatDate } = useContext()
+    const { $services, $hydrateTab, $translate, $formatDate, i18n, $img } =
+      useContext()
     const route = useRoute()
     const state = reactive({
       site: null as any,
@@ -385,6 +400,12 @@ export default defineComponent({
     const locality = computed(() => state.site?.locality)
     const area = computed(() => state.site?.area)
 
+    const icons = computed(() => {
+      return {
+        mdiOpenInNew,
+        mdiFileDownloadOutline,
+      }
+    })
     const { fetchState } = useFetch(async () => {
       const sitePromise = $services.sarvREST.getResource(
         'site',
@@ -437,7 +458,45 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('site.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${title.value} | ${i18n.t('site.pageTitle')}`,
+          },
+          {
+            property: 'description',
+            hid: 'description',
+            // @ts-ignore
+            content: state.site?.description ?? undefined,
+          },
+          {
+            property: 'og:description',
+            hid: 'og:description',
+            // @ts-ignore
+            content: state.site?.description ?? undefined,
+          },
+          {
+            property: 'og:image',
+            hid: 'og:image',
+            // @ts-ignore
+            content: this.images[0]?.attachment.filename
+              ? $img(
+                  // @ts-ignore
+                  `${this.images[0]?.attachment.filename}`,
+                  { size: 'small' },
+                  {
+                    provider: 'geocollections',
+                  }
+                )
+              : undefined,
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       title,
@@ -446,57 +505,11 @@ export default defineComponent({
       studied,
       locality,
       area,
+      icons,
+      isNil,
     }
   },
-  head() {
-    return {
-      title: `${this.title} | ${this.$t('site.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.title} | ${this.$t('site.pageTitle')}`,
-        },
-        {
-          property: 'description',
-          hid: 'description',
-          // @ts-ignore
-          content: this.site?.description ?? undefined,
-        },
-        {
-          property: 'og:description',
-          hid: 'og:description',
-          // @ts-ignore
-          content: this.site?.description ?? undefined,
-        },
-        {
-          property: 'og:image',
-          hid: 'og:image',
-          // @ts-ignore
-          content: this.images[0]?.attachment.filename
-            ? this.$img(
-                // @ts-ignore
-                `${this.images[0]?.attachment.filename}`,
-                { size: 'small' },
-                {
-                  provider: 'geocollections',
-                }
-              )
-            : undefined,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiOpenInNew,
-        mdiFileDownloadOutline,
-      }
-    },
-  },
-  methods: {
-    isNil,
-  },
+  head: {},
+  computed: {},
 })
 </script>

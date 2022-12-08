@@ -11,17 +11,17 @@
       <v-card-text>
         <base-table>
           <table-row
-            :title="$t('preparation.preparation_number')"
+            :title="$t('preparation.preparation_number').toString()"
             :value="preparation.preparation_number"
           />
 
           <table-row
-            :title="$t('preparation.sample_number')"
+            :title="$t('preparation.sample_number').toString()"
             :value="preparation.sample_number"
           />
           <table-row-link
             v-if="analysis"
-            :title="$t('preparation.analysis')"
+            :title="$t('preparation.analysis').toString()"
             :value="analysis.id"
             nuxt
             :href="
@@ -33,7 +33,7 @@
           />
           <table-row-link
             v-if="taxon"
-            :title="$t('preparation.taxon')"
+            :title="$t('preparation.taxon').toString()"
             :value="taxon.taxon"
             @link-click="
               $openWindow(`https://fossiilid.info/${preparation.taxon.id}`)
@@ -41,52 +41,52 @@
           />
           <table-row
             v-if="agent"
-            :title="$t('preparation.agent')"
+            :title="$t('preparation.agent').toString()"
             :value="agent.agent || preparation.agent_txt"
           />
           <table-row
             v-if="identificationAgent"
-            :title="$t('preparation.identification_agent')"
+            :title="$t('preparation.identification_agent').toString()"
             :value="identificationAgent.agent"
           />
           <table-row
-            :title="$t('preparation.date_prepared')"
+            :title="$t('preparation.date_prepared').toString()"
             :value="preparation.date_prepared || preparation.date_prepared_txt"
           />
           <table-row
-            :title="$t('preparation.identification_date')"
+            :title="$t('preparation.identification_date').toString()"
             :value="preparation.identification_date"
           />
           <table-row
-            :title="$t('preparation.identification_remarks')"
+            :title="$t('preparation.identification_remarks').toString()"
             :value="preparation.identification_remarks"
           />
           <table-row
-            :title="$t('preparation.location')"
+            :title="$t('preparation.location').toString()"
             :value="preparation.location"
           />
           <table-row
             v-if="storage"
-            :title="$t('preparation.storage')"
+            :title="$t('preparation.storage').toString()"
             :value="storage.location"
           />
           <table-row
             v-if="owner"
-            :title="$t('preparation.owner')"
+            :title="$t('preparation.owner').toString()"
             :value="owner.agent"
           />
           <table-row
             v-if="preparation.date_added"
-            :title="$t('preparation.dateAdded')"
+            :title="$t('preparation.dateAdded').toString()"
             :value="$formatDate(preparation.date_added)"
           />
           <table-row
             v-if="preparation.date_changed"
-            :title="$t('preparation.dateChanged')"
+            :title="$t('preparation.dateChanged').toString()"
             :value="$formatDate(preparation.date_changed)"
           />
           <table-row
-            :title="$t('preparation.remarks')"
+            :title="$t('preparation.remarks').toString()"
             :value="preparation.remarks"
           />
         </base-table>
@@ -100,7 +100,7 @@
         <base-table>
           <table-row-link
             v-if="sample"
-            :title="$t('sample.number')"
+            :title="$t('sample.number').toString()"
             :value="
               sample.number ||
               sample.number_additional ||
@@ -115,13 +115,13 @@
               })
             "
           />
-          <table-row :title="$t('sample.depth')" :value="sample.depth" />
+          <table-row :title="$t('sample.depth').toString()" :value="sample.depth" />
           <table-row
-            :title="$t('sample.depthInterval')"
+            :title="$t('sample.depthInterval').toString()"
             :value="sample.depth_interval"
           />
           <table-row
-            :title="$t('sample.dateCollected')"
+            :title="$t('sample.dateCollected').toString()"
             :value="sample.date_collected || sample.date_collected_free"
           />
         </base-table>
@@ -146,6 +146,7 @@ import {
   reactive,
   toRefs,
   toRef,
+  useMeta,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
 import HeaderDetail from '~/components/HeaderDetail.vue'
@@ -159,7 +160,7 @@ import { useSlugRoute } from '~/composables/useSlugRoute'
 export default defineComponent({
   components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
   setup() {
-    const { $services, $hydrateTab } = useContext()
+    const { $services, $hydrateTab, i18n } = useContext()
     const route = useRoute()
 
     const state = reactive({
@@ -225,7 +226,23 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('preparation.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${title.value} | ${i18n.t('preparation.pageTitle')}`,
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       title,
@@ -236,27 +253,9 @@ export default defineComponent({
       identificationAgent,
       storage,
       owner,
+      isNil,
     }
   },
-  head() {
-    return {
-      title: `${this.title} | ${this.$t('preparation.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.title} | ${this.$t('preparation.pageTitle')}`,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  methods: {
-    isNil,
-  },
+  head: {},
 })
 </script>

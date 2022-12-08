@@ -162,7 +162,7 @@
             <table-row-link
               v-if="drillcore"
               nuxt
-              :title="$t('drillcoreBox.drillcore')"
+              :title="$t('drillcoreBox.drillcore').toString()"
               :value="
                 $translate({
                   et: drillcore.drillcore,
@@ -177,24 +177,24 @@
               "
             />
             <table-row
-              :title="$t('drillcoreBox.depthStart')"
+              :title="$t('drillcoreBox.depthStart').toString()"
               :value="drillcoreBox.depth_start"
             />
             <table-row
-              :title="$t('drillcoreBox.depthEnd')"
+              :title="$t('drillcoreBox.depthEnd').toString()"
               :value="drillcoreBox.depth_end"
             />
             <table-row
-              :title="$t('drillcoreBox.depthOther')"
+              :title="$t('drillcoreBox.depthOther').toString()"
               :value="drillcoreBox.depth_other"
             />
             <table-row
-              :title="$t('drillcoreBox.diameter')"
+              :title="$t('drillcoreBox.diameter').toString()"
               :value="drillcoreBox.diameter"
             />
             <table-row-link
               v-if="drillcoreBox.stratigraphy_top"
-              :title="$t('drillcoreBox.stratigraphyTop')"
+              :title="$t('drillcoreBox.stratigraphyTop').toString()"
               :value="
                 $translate({
                   et: drillcoreBox.stratigraphy_top.stratigraphy,
@@ -210,12 +210,12 @@
               "
             />
             <table-row
-              :title="$t('drillcoreBox.stratigraphyTopFree')"
+              :title="$t('drillcoreBox.stratigraphyTopFree').toString()"
               :value="drillcoreBox.stratigraphy_top_free"
             />
             <table-row-link
               v-if="drillcoreBox.stratigraphy_base"
-              :title="$t('drillcoreBox.stratigraphyBase')"
+              :title="$t('drillcoreBox.stratigraphyBase').toString()"
               :value="
                 $translate({
                   et: drillcoreBox.stratigraphy_base.stratigraphy,
@@ -231,22 +231,22 @@
               "
             />
             <table-row
-              :title="$t('drillcoreBox.stratigraphyBaseFree')"
+              :title="$t('drillcoreBox.stratigraphyBaseFree').toString()"
               :value="drillcoreBox.stratigraphy_base_free"
             />
 
             <table-row
               v-if="drillcoreBox.date_added"
-              :title="$t('drillcoreBox.dateAdded')"
+              :title="$t('drillcoreBox.dateAdded').toString()"
               :value="$formatDate(drillcoreBox.date_added)"
             />
             <table-row
               v-if="drillcoreBox.date_changed"
-              :title="$t('drillcoreBox.dateChanged')"
+              :title="$t('drillcoreBox.dateChanged').toString()"
               :value="$formatDate(drillcoreBox.date_changed)"
             />
             <table-row
-              :title="$t('drillcoreBox.remarks')"
+              :title="$t('drillcoreBox.remarks').toString()"
               :value="drillcoreBox.remarks"
             />
           </base-table>
@@ -273,6 +273,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -294,7 +295,7 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate, i18n } = useContext()
+    const { $services, $hydrateTab, $translate, i18n, $img } = useContext()
     const route = useRoute()
     const state = reactive({
       imageSizes: ['small', 'medium', 'large', 'original'],
@@ -395,41 +396,36 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
-    return { ...toRefs(state), drillcore, pageTitle }
+    useMeta(() => {
+      return {
+        title: `${pageTitle.value} | ${i18n.t('drillcoreBox.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${pageTitle.value} | ${i18n.t('drillcoreBox.pageTitle')}`,
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+          {
+            property: 'og:image',
+            hid: 'og:image',
+            content: $img(
+              `${state.activeImage?.attachment?.uuid_filename}`,
+              { size: 'medium' },
+              {
+                provider: 'geocollections',
+              }
+            ),
+          },
+        ],
+      }
+    })
+    return { ...toRefs(state), drillcore, pageTitle, isNull, isNil }
   },
-  head() {
-    return {
-      title: `${this.pageTitle} | ${this.$t('drillcoreBox.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.pageTitle} | ${this.$t('drillcoreBox.pageTitle')}`,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-        {
-          property: 'og:image',
-          hid: 'og:image',
-          content: this.$img(
-            // @ts-ignore
-            `${this.activeImage?.attachment?.uuid_filename}`,
-            { size: 'medium' },
-            {
-              provider: 'geocollections',
-            }
-          ),
-        },
-      ],
-    }
-  },
-  methods: {
-    isNull,
-    isNil,
-  },
+  head: {},
 })
 </script>

@@ -18,13 +18,12 @@
           </v-btn>
         </template>
         <v-card>
-          <v-card-title
-            class="montserrat pb-2"
-            v-text="$t('flogChart.settings')"
-          />
+          <v-card-title class="montserrat pb-2">
+            {{ $t('flogChart.settings') }}
+          </v-card-title>
           <v-card-text>
             <renderer-switch
-              :renderer="renderer"
+              :renderer="$accessor.chart.renderer"
               @update="handleRenderSwitch"
             />
             <v-divider class="my-2" />
@@ -45,14 +44,14 @@
                 <v-btn-toggle
                   dense
                   color="accent"
-                  :value="ppi"
+                  :value="$accessor.chart.ppi"
                   @change="handlePpiChange"
                 >
                   <v-btn
                     width="65"
                     small
                     class="text-none montserrat"
-                    :outlined="ppi !== 96"
+                    :outlined="$accessor.chart.ppi !== 96"
                     :value="96"
                   >
                     96 PPI
@@ -61,7 +60,7 @@
                     width="65"
                     small
                     class="text-none montserrat"
-                    :outlined="ppi !== 72"
+                    :outlined="$accessor.chart.ppi !== 72"
                     :value="72"
                   >
                     72 PPI
@@ -121,11 +120,10 @@
 
 <script lang="ts">
 import { mdiCog, mdiRefresh } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
 import groupBy from 'lodash/groupBy'
 import orderBy from 'lodash/orderBy'
 import differenceBy from 'lodash/differenceBy'
-import Vue, { PropType } from 'vue'
+import { PropType } from 'vue'
 import {
   DataZoomComponentOption,
   GridComponentOption,
@@ -153,6 +151,15 @@ import {
 import VChart from 'vue-echarts'
 import { ComposeOption, use } from 'echarts/core'
 import { CanvasRenderer, SVGRenderer } from 'echarts/renderers'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  computed,
+  useContext,
+  ref,
+} from '@nuxtjs/composition-api'
+import { TitleOption } from 'echarts/types/dist/shared'
 import RendererSwitch from '~/components/chart/options/RendererSwitch.vue'
 import OptionsParameterTreeView from '~/components/chart/options/OptionsParameterTreeView.vue'
 import range from '~/utils/range'
@@ -160,6 +167,8 @@ import clipRectByRect from '~/utils/clipRectByRect'
 import mm2px from '~/utils/mm2px'
 import px2mm from '~/utils/px2mm'
 import { IFlogMethod, IFlogParameter } from '~/utils/flogParameters'
+import { useAccessor } from '~/composables/useAccessor'
+import { Renderer } from '~/types/enums'
 type ECOption = ComposeOption<
   | GridComponentOption
   | LineSeriesOption
@@ -190,7 +199,7 @@ use([
   LegendComponent,
 ])
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ChartFlog',
   components: {
     RendererSwitch,
@@ -231,10 +240,13 @@ export default Vue.extend({
       default: false,
     },
   },
-  data() {
-    return {
-      currentMinDepth: this.minDepth,
-      currentMaxDepth: this.maxDepth,
+  setup(props) {
+    const accessor = useAccessor()
+    const { i18n, $openNuxtWindow, localeLocation, $vuetify, $translate } =
+      useContext()
+    const state = reactive({
+      currentMinDepth: props.minDepth,
+      currentMaxDepth: props.maxDepth,
       selectedParameters: [] as IFlogParameter[],
       parameterChartWidth: 150,
       parameterChartPadding: 50,
@@ -245,31 +257,32 @@ export default Vue.extend({
       currentHeight: 618,
       totalWidth: 0,
       scale: parseFloat(
-        (((this.maxDepth - this.minDepth) * 1000) / px2mm(618)).toFixed(0)
+        (((props.maxDepth - props.minDepth) * 1000) / px2mm(618)).toFixed(0)
       ),
       currentScale: parseFloat(
-        (((this.maxDepth - this.minDepth) * 1000) / px2mm(618)).toFixed(0)
+        (((props.maxDepth - props.minDepth) * 1000) / px2mm(618)).toFixed(0)
       ),
       option: {},
       nextGridIndex: 4,
       replace: true,
-    }
-  },
-  computed: {
-    ...mapFields('chart', ['renderer', 'connected', 'ppi']),
-    icons(): any {
+    })
+
+    const containerFlogChart = ref<HTMLElement>()
+    const flogChart = ref<typeof VChart>()
+
+    const icons = computed(() => {
       return {
         mdiCog,
         mdiRefresh,
       }
-    },
-    initOptions(): any {
+    })
+    const initOptions = computed(() => {
       return {
-        renderer: this.renderer,
+        renderer: accessor.chart.renderer,
       }
-    },
-    updateOptions(): any {
-      if (this.replace) {
+    })
+    const updateOptions = computed(() => {
+      if (state.replace) {
         return {
           notMerge: false,
           replaceMerge: ['xAxis', 'yAxis', 'series', 'grid'],
@@ -278,121 +291,98 @@ export default Vue.extend({
       return {
         notMerge: false,
       }
-    },
-    titleSubtext(): any {
-      return this.$t('flogChart.titleSubtext', {
-        scale: this.currentScale,
-        minDepth: this.currentMaxDepth.toFixed(2),
-        maxDepth: this.currentMinDepth.toFixed(2),
-      })
-    },
-    chartTitle(): any {
+    })
+    const titleSubtext = computed(() => {
+      return i18n
+        .t('flogChart.titleSubtext', {
+          scale: state.currentScale,
+          minDepth: state.currentMaxDepth.toFixed(2),
+          maxDepth: state.currentMinDepth.toFixed(2),
+        })
+        .toString()
+    })
+    const chartTitle = computed((): TitleOption => {
       return {
         id: 'main-title',
-        text: this.title,
+        text: props.title,
         left: 60,
-        subtext: this.titleSubtext,
+        subtext: titleSubtext.value,
       }
-    },
-    chartWidth(): any {
-      const parameterModuleWidth =
-        this.selectedParameters.length *
-          (this.parameterChartWidth + this.parameterChartPadding) +
-        this.parameterModulePadding
-
-      const totalWidth =
-        this.sampleChartWidth +
-        this.sampleChartPaddingLeft +
-        parameterModuleWidth
-
-      return `${totalWidth}px`
-    },
-    selectedParametersGrouped(): any {
-      return this.groupParameters(this.selectedParameters)
-    },
-    methods(): any {
-      return this.parameters.reduce((prev, method) => {
+    })
+    const methods = computed(() => {
+      return props.parameters.reduce((prev, method) => {
         return { ...prev, [method.value]: method }
-      }, {})
-    },
-  },
-  created() {
-    // Set initial selected parameters
-    if (this.parameters.length > 0) {
-      this.selectedParameters = this.parameters[0].children.slice(
-        0,
-        this.parameters[0].children.length > 3
-          ? 3
-          : this.parameters[0].children.length
-      )
-    }
-    this.totalWidth = this.calculateTotalWidth()
-    this.option = this.createOption()
-  },
-  methods: {
-    calculateScale(maxDepth: number, minDepth: number, chartHeight: number) {
+      }, {} as { [K: string]: IFlogMethod })
+    })
+    const selectedParametersGrouped = computed(() => {
+      return groupParameters(state.selectedParameters)
+    })
+    const calculateScale = (
+      maxDepth: number,
+      minDepth: number,
+      chartHeight: number
+    ) => {
       return ((maxDepth - minDepth) * 1000) / px2mm(chartHeight)
-    },
-    calculateTotalWidth() {
+    }
+    const calculateTotalWidth = () => {
       const parameterModuleWidth =
-        this.selectedParametersGrouped.length *
-          (this.parameterChartWidth + this.parameterChartPadding) +
-        this.parameterModulePadding
+        selectedParametersGrouped.value.length *
+          (state.parameterChartWidth + state.parameterChartPadding) +
+        state.parameterModulePadding
 
       const totalWidth =
-        this.sampleChartWidth +
-        this.sampleChartPaddingLeft +
+        state.sampleChartWidth +
+        state.sampleChartPaddingLeft +
         parameterModuleWidth
 
-      if (this.$refs.containerFlogChart) {
-        const chartContainer = this.$refs.containerFlogChart as HTMLElement
-        return chartContainer.clientWidth > totalWidth
-          ? chartContainer.clientWidth
+      if (containerFlogChart.value) {
+        return containerFlogChart.value.clientWidth &&
+          containerFlogChart.value.clientWidth > totalWidth
+          ? containerFlogChart.value.clientWidth
           : totalWidth
       }
 
       return totalWidth
-    },
-    scaleChartHeight() {
+    }
+    const scaleChartHeight = () => {
       return (
         mm2px(
-          (this.currentMaxDepth - this.currentMinDepth) *
+          (state.currentMaxDepth - state.currentMinDepth) *
             1000 *
-            (1 / this.scale)
+            (1 / state.scale)
         ) *
-        (this.ppi / 96)
+        (accessor.chart.ppi / 96)
       )
-    },
-    handleClick(event: any) {
+    }
+    const handleClick = (event: any) => {
       // TODO: `any` should be replaced with the correct event type from echarts
       if (event.seriesName === 'samples') {
         const sampleId = event.data[3]
         if (sampleId)
-          this.$openNuxtWindow(
-            this.localeLocation({ name: 'sample-id', params: { id: sampleId } })
+          $openNuxtWindow(
+            localeLocation({ name: 'sample-id', params: { id: sampleId } })
           )
       }
-    },
-    handleDataZoom() {
-      const chart = this.$refs.flogChart as typeof VChart
-      const datazoom = chart.getOption().dataZoom[0]
-      this.currentMinDepth = datazoom.startValue
-      this.currentMaxDepth = datazoom.endValue
-      this.currentScale = this.calculateScale(
-        this.currentMaxDepth,
-        this.currentMinDepth,
-        this.currentHeight
+    }
+    const handleDataZoom = () => {
+      const datazoom = flogChart.value?.getOption().dataZoom[0]
+      state.currentMinDepth = datazoom.startValue
+      state.currentMaxDepth = datazoom.endValue
+      state.currentScale = calculateScale(
+        state.currentMaxDepth,
+        state.currentMinDepth,
+        state.currentHeight
       )
 
-      this.replace = false
-      this.option = {
+      state.replace = false
+      state.option = {
         title: {
-          id: this.chartTitle.id,
-          subtext: this.chartTitle.subtext,
+          id: chartTitle.value.id,
+          subtext: chartTitle.value.subtext,
         },
       }
-    },
-    groupParameters(parameters: any[]): GroupedParameter[] {
+    }
+    const groupParameters = (parameters: any[]): GroupedParameter[] => {
       const grouped = groupBy(parameters, 'value')
       return orderBy(
         Object.entries(grouped).map(([paramId, params]) => {
@@ -407,48 +397,48 @@ export default Vue.extend({
         ['id'],
         ['asc']
       )
-    },
-    handleRenderSwitch(newRenderer: string) {
-      this.renderer = newRenderer
-      this.replace = true
-      this.option = (this.$refs.flogChart as typeof VChart).getOption()
-    },
-    handlePpiChange(newPpi: string) {
-      this.ppi = parseInt(newPpi)
-      this.currentScale = this.scale
-      this.currentHeight = this.scaleChartHeight()
-      this.replace = false
-      this.option = {
-        grid: (this.$refs.flogChart as typeof VChart)
-          .getOption()
+    }
+    const handleRenderSwitch = (newRenderer: Renderer) => {
+      accessor.chart.setRenderer(newRenderer)
+      state.replace = true
+      state.option = flogChart.value?.getOption()
+    }
+    const handlePpiChange = (newPpi: string) => {
+      accessor.chart.setPpi(parseInt(newPpi))
+      state.currentScale = state.scale
+      state.currentHeight = scaleChartHeight()
+      state.replace = false
+      state.option = {
+        grid: flogChart.value
+          ?.getOption()
           .grid.map((grid: GridComponentOption) => {
-            return { id: grid.id, height: this.currentHeight }
+            return { id: grid.id, height: state.currentHeight }
           }),
-        title: this.chartTitle,
+        title: chartTitle.value,
       }
-    },
-    handleParametersUpdate(newSelectedParameters: any[]) {
-      const chart = this.$refs.flogChart as typeof VChart
+    }
+    const handleParametersUpdate = (newSelectedParameters: any[]) => {
+      const chart = flogChart.value
 
       const addedParameters = newSelectedParameters.filter((newParam) => {
-        return !this.selectedParameters.some(
+        return !state.selectedParameters.some(
           (param) => param.id === newParam.id
         )
       })
-      const removedParameters = this.selectedParameters.filter((newParam) => {
+      const removedParameters = state.selectedParameters.filter((newParam) => {
         return !newSelectedParameters.some((param) => param.id === newParam.id)
       })
-      const oldGroupedParameters = this.groupParameters(this.selectedParameters)
+      const oldGroupedParameters = groupParameters(state.selectedParameters)
 
-      this.selectedParameters = newSelectedParameters
+      state.selectedParameters = newSelectedParameters
 
-      const groupedParameters = this.groupParameters(this.selectedParameters)
+      const groupedParameters = groupParameters(state.selectedParameters)
 
-      this.totalWidth = this.calculateTotalWidth()
+      state.totalWidth = calculateTotalWidth()
 
       if (addedParameters.length > 0) {
         const newDataZoomYAxisIndices = [
-          ...chart.getOption().dataZoom[0].yAxisIndex,
+          ...chart?.getOption().dataZoom[0].yAxisIndex,
         ]
         let parameterGridIndex = 0
         let fromIndex = 0
@@ -461,12 +451,12 @@ export default Vue.extend({
                 .length > 1
             ) {
               const series = chart
-                .getOption()
+                ?.getOption()
                 .series.find((series: LineSeriesOption) =>
                   (series.id as string)?.endsWith(`-${addedParameter.value}`)
                 )
-              const newChartComponents = this.createParameterChartComponents(
-                groupedParameters.find((param) => {
+              const newChartComponents = createParameterChartComponents(
+                groupedParameters.find((param: any) => {
                   return param.value === addedParameter.value
                 }) as GroupedParameter,
                 series.xAxisIndex,
@@ -486,19 +476,19 @@ export default Vue.extend({
               }
             } else {
               const nullGridIndex = chart
-                .getOption()
+                ?.getOption()
                 .grid.indexOf(null, fromIndex)
 
               // if empty spot in echarts grid list, use the empty spot index as `gridIndex`, as echarts wants these empty spaces to be filled
               if (nullGridIndex > -1) {
-                this.nextGridIndex = nullGridIndex
-                newDataZoomYAxisIndices.push(this.nextGridIndex)
+                state.nextGridIndex = nullGridIndex
+                newDataZoomYAxisIndices.push(state.nextGridIndex)
                 fromIndex = nullGridIndex + 1
-                const newChartComponents = this.createParameterChartComponents(
-                  groupedParameters.find((param) => {
+                const newChartComponents = createParameterChartComponents(
+                  groupedParameters.find((param: any) => {
                     return param.value === addedParameter.value
                   }) as GroupedParameter,
-                  this.nextGridIndex,
+                  state.nextGridIndex,
                   oldGroupedParameters.length + parameterGridPosition
                 )
 
@@ -513,14 +503,14 @@ export default Vue.extend({
                   ],
                 }
               } else {
-                this.nextGridIndex =
-                  chart.getOption().grid.length + parameterGridIndex
-                newDataZoomYAxisIndices.push(this.nextGridIndex)
-                const newChartComponents = this.createParameterChartComponents(
-                  groupedParameters.find((param) => {
+                state.nextGridIndex =
+                  chart?.getOption().grid.lenthisgth + parameterGridIndex
+                newDataZoomYAxisIndices.push(state.nextGridIndex)
+                const newChartComponents = createParameterChartComponents(
+                  groupedParameters.find((param: any) => {
                     return param.value === addedParameter.value
                   }) as GroupedParameter,
-                  this.nextGridIndex,
+                  state.nextGridIndex,
                   oldGroupedParameters.length + parameterGridPosition
                 )
                 parameterGridIndex += 1
@@ -539,12 +529,12 @@ export default Vue.extend({
           },
           { grid: [], xAxis: [], yAxis: [], series: [] }
         )
-        this.replace = false
-        this.option = {
+        state.replace = false
+        state.option = {
           ...newOptions,
           dataZoom: [
             {
-              id: chart.getOption().dataZoom[0].id,
+              id: chart?.getOption().dataZoom[0].id,
               yAxisIndex: newDataZoomYAxisIndices,
             },
           ],
@@ -557,7 +547,7 @@ export default Vue.extend({
         )
         const modified = differenceBy(removedParameters, removed, 'value')
 
-        const currentOption = chart.getOption()
+        const currentOption = chart?.getOption()
         const gridsOrdered = orderBy(currentOption.grid, ['left'], ['asc'])
         let position = 0
 
@@ -600,7 +590,7 @@ export default Vue.extend({
               const param = groupedParameters.find(
                 (m) => m.value === parameterValue
               ) as GroupedParameter
-              const newChartComponents = this.createParameterChartComponents(
+              const newChartComponents = createParameterChartComponents(
                 param,
                 xAxis.gridIndex,
                 position,
@@ -634,7 +624,7 @@ export default Vue.extend({
               const param = groupedParameters.find(
                 (m) => m.value === parameterValue
               ) as GroupedParameter
-              const newChartComponents = this.createParameterChartComponents(
+              const newChartComponents = createParameterChartComponents(
                 param,
                 -1,
                 position,
@@ -660,74 +650,76 @@ export default Vue.extend({
           { grid: [], xAxis: [], yAxis: [], series: [] }
         )
 
-        this.replace = true
-        this.option = newOptions
+        state.replace = true
+        state.option = newOptions
       }
-    },
-    handleScaleReset() {
-      this.scale = this.calculateScale(
-        this.maxDepth,
-        this.minDepth,
-        this.initialHeight
+    }
+    const handleScaleReset = () => {
+      state.scale = calculateScale(
+        props.maxDepth,
+        props.minDepth,
+        state.initialHeight
       )
-      this.currentScale = this.scale
-      this.ppi = 96
-      this.currentHeight = this.initialHeight
+      state.currentScale = state.scale
+      accessor.chart.setPpi(96)
+      state.currentHeight = state.initialHeight
 
-      this.replace = false
-      this.option = {
-        grid: (this.$refs.flogChart as typeof VChart)
-          .getOption()
+      state.replace = false
+      state.option = {
+        grid: flogChart.value
+          ?.getOption()
           .grid.map((grid: GridComponentOption) => {
-            return { id: grid.id, height: this.currentHeight }
+            return { id: grid.id, height: state.currentHeight }
           }),
-        title: this.chartTitle,
+        title: chartTitle.value,
       }
-    },
-    handleScaleChange() {
-      this.currentScale = this.scale
-      this.currentHeight = this.scaleChartHeight()
+    }
+    const handleScaleChange = () => {
+      state.currentScale = state.scale
+      state.currentHeight = scaleChartHeight()
 
-      this.replace = false
-      this.option = {
-        grid: (this.$refs.flogChart as typeof VChart)
-          .getOption()
+      state.replace = false
+      state.option = {
+        grid: flogChart.value
+          ?.getOption()
           .grid.map((grid: GridComponentOption) => {
-            return { id: grid.id, height: this.currentHeight }
+            return { id: grid.id, height: state.currentHeight }
           }),
-        title: this.chartTitle,
+        title: chartTitle.value,
       }
-    },
-    handleParameterChartWidthChange(newParameterChartWidth: string) {
-      this.parameterChartWidth = parseInt(newParameterChartWidth)
+    }
+    const handleParameterChartWidthChange = (
+      newParameterChartWidth: string
+    ) => {
+      state.parameterChartWidth = parseInt(newParameterChartWidth)
 
-      this.totalWidth = this.calculateTotalWidth()
-      this.replace = false
-      this.option = {
-        grid: (this.$refs.flogChart as typeof VChart)
-          .getOption()
+      state.totalWidth = calculateTotalWidth()
+      state.replace = false
+      state.option = {
+        grid: flogChart.value
+          ?.getOption()
           .grid.map((grid: GridComponentOption, i: number) => {
             if (!(grid.id as string)?.startsWith('parameter')) {
               return { id: grid.id }
             }
             return {
               id: grid.id,
-              width: this.parameterChartWidth,
-              left: this.calcParameterChartLeft(i - 1),
+              width: state.parameterChartWidth,
+              left: calcParameterChartLeft(i - 1),
             }
           }),
-        title: this.chartTitle,
+        title: chartTitle.value,
       }
-    },
-    calcParameterChartLeft(position: number) {
+    }
+    const calcParameterChartLeft = (position: number) => {
       return (
-        this.sampleChartWidth +
-        this.sampleChartPaddingLeft +
-        position * (this.parameterChartWidth + this.parameterChartPadding) +
-        this.parameterModulePadding
+        state.sampleChartWidth +
+        state.sampleChartPaddingLeft +
+        position * (state.parameterChartWidth + state.parameterChartPadding) +
+        state.parameterModulePadding
       )
-    },
-    createParameterChartComponents(
+    }
+    const createParameterChartComponents = (
       param: {
         id: any
         value: number
@@ -743,7 +735,7 @@ export default Vue.extend({
       xAxis?: XAXisComponentOption
       yAxis?: YAXisComponentOption
       series?: LineSeriesOption[]
-    } {
+    } => {
       const result = {} as {
         grid?: GridComponentOption
         xAxis?: XAXisComponentOption
@@ -756,10 +748,10 @@ export default Vue.extend({
           id: `parameter-grid-${param.value}`,
           show: true,
           containLabel: false,
-          left: this.calcParameterChartLeft(position),
-          width: this.parameterChartWidth,
+          left: calcParameterChartLeft(position),
+          width: state.parameterChartWidth,
           top: 100,
-          height: this.currentHeight,
+          height: state.currentHeight,
           borderWidth: 0,
           tooltip: {
             trigger: 'item',
@@ -810,17 +802,17 @@ export default Vue.extend({
           axisPointer: {
             show: true,
           },
-          max: this.maxDepth,
-          min: this.minDepth,
+          max: props.maxDepth,
+          min: props.minDepth,
         }
       }
       if (returnComponents.includes('series')) {
         result.series = param.methods.map((method): LineSeriesOption => {
           return {
             id: `parameter-series-${method}-${param.value}`,
-            name: `(${this.$translate({
-              et: this.methods[method].name,
-              en: this.methods[method].name_en,
+            name: `(${$translate({
+              et: methods.value[method].name,
+              en: methods.value[method].name_en,
             })}) ${param.name}`,
             type: 'line',
             smooth: false,
@@ -847,9 +839,9 @@ export default Vue.extend({
                 `
               },
             },
-            data: this.analyses
+            data: props.analyses
               .filter(
-                (result) =>
+                (result: any) =>
                   result.parameter === param.name && method === result.method_id
               )
               .map((t) => {
@@ -858,9 +850,9 @@ export default Vue.extend({
                   : t.depth
                 return [
                   t.value,
-                  this.reverse ? -avgDepth : avgDepth,
-                  this.reverse ? -t.depth : t.depth,
-                  this.reverse ? -t.depth_interval : t.depth_interval,
+                  props.reverse ? -avgDepth : avgDepth,
+                  props.reverse ? -t.depth : t.depth,
+                  props.reverse ? -t.depth_interval : t.depth_interval,
                   t.analysis_id,
                 ]
               })
@@ -872,10 +864,10 @@ export default Vue.extend({
         })
       }
       return result
-    },
-    createOption(): ECOption {
-      const selectedParameterChartComponents = this.groupParameters(
-        this.selectedParameters
+    }
+    const createOption = (): ECOption => {
+      const selectedParameterChartComponents = groupParameters(
+        state.selectedParameters
       ).reduce(
         (
           prev,
@@ -887,7 +879,7 @@ export default Vue.extend({
           yAxis: YAXisComponentOption[]
           series: LineSeriesOption[]
         } => {
-          const parameterComponents = this.createParameterChartComponents(
+          const parameterComponents = createParameterChartComponents(
             parameter,
             i + 1,
             i
@@ -921,7 +913,7 @@ export default Vue.extend({
 
       return {
         animation: false,
-        title: this.chartTitle,
+        title: chartTitle.value,
         tooltip: {
           trigger: 'item',
         },
@@ -933,7 +925,7 @@ export default Vue.extend({
           {
             id: 'dataZoom-y-inside',
             type: 'inside',
-            yAxisIndex: range(1 + this.selectedParameters.length),
+            yAxisIndex: range(1 + state.selectedParameters.length),
             filterMode: 'none',
             minValueSpan: 0.1,
           },
@@ -967,11 +959,10 @@ export default Vue.extend({
             triggerTooltip: false,
             label: {
               fontSize: 10,
-              backgroundColor: this.$vuetify.theme.currentTheme
-                .warning as string,
+              backgroundColor: $vuetify.theme.currentTheme.warning as string,
             },
             lineStyle: {
-              color: this.$vuetify.theme.currentTheme.warning as string,
+              color: $vuetify.theme.currentTheme.warning as string,
               width: 1,
             },
           },
@@ -979,11 +970,11 @@ export default Vue.extend({
         grid: [
           {
             id: 'samples-grid',
-            left: this.sampleChartPaddingLeft,
+            left: state.sampleChartPaddingLeft,
             containLabel: false,
             top: 100,
-            width: this.sampleChartWidth,
-            height: this.currentHeight,
+            width: state.sampleChartWidth,
+            height: state.currentHeight,
           },
           ...selectedParameterChartComponents.grid,
         ],
@@ -991,7 +982,7 @@ export default Vue.extend({
           {
             id: 'samples-x-axis',
             type: 'category',
-            data: [this.$t('flogChart.samples') as string],
+            data: [i18n.t('flogChart.samples') as string],
             position: 'top',
             axisLabel: {
               fontWeight: 'bold',
@@ -1010,7 +1001,7 @@ export default Vue.extend({
             id: 'samples-y-axis',
             show: true,
             type: 'value',
-            name: this.$t('common.depth') as string,
+            name: i18n.t('common.depth') as string,
             nameLocation: 'middle',
             nameGap: 40,
             nameTextStyle: {
@@ -1040,8 +1031,8 @@ export default Vue.extend({
               show: true,
             },
             gridIndex: 0,
-            max: this.maxDepth,
-            min: this.minDepth,
+            max: props.maxDepth,
+            min: props.minDepth,
           },
           ...selectedParameterChartComponents.yAxis,
         ],
@@ -1049,7 +1040,7 @@ export default Vue.extend({
           {
             id: 'samples-series',
             type: 'custom',
-            name: this.$t('flogChart.samples') as string,
+            name: i18n.t('flogChart.samples') as string,
             xAxisIndex: 0,
             yAxisIndex: 0,
             tooltip: {
@@ -1101,7 +1092,6 @@ export default Vue.extend({
                 api.value(2) || dynamicHeight < 10 ? dynamicHeight : 10
               const x = start[0] - categoryWidth * 0.5
               const y = api.value(2) ? start[1] : start[1] - height / 2
-              // console.log(y, height)
               const rectShape = clipRectByRect(
                 {
                   x,
@@ -1132,11 +1122,11 @@ export default Vue.extend({
                 }
               )
             },
-            data: this.samples.map((item) => {
+            data: props.samples.map((item: any) => {
               return [
                 0,
-                this.reverse ? -item.depth : item.depth,
-                this.reverse ? -item.depth_interval : item.depth_interval,
+                props.reverse ? -item.depth : item.depth,
+                props.reverse ? -item.depth_interval : item.depth_interval,
                 item.id,
                 item.sample_number || item.sample_id,
               ]
@@ -1145,7 +1135,34 @@ export default Vue.extend({
           ...selectedParameterChartComponents.series,
         ],
       }
-    },
+    }
+    // Set initial selected parameters
+    if (props.parameters.length > 0) {
+      state.selectedParameters = props.parameters[0].children.slice(
+        0,
+        props.parameters[0].children.length > 3
+          ? 3
+          : props.parameters[0].children.length
+      )
+    }
+    state.totalWidth = calculateTotalWidth()
+    state.option = createOption()
+    return {
+      ...toRefs(state),
+      flogChart,
+      containerFlogChart,
+      handleParametersUpdate,
+      handleRenderSwitch,
+      handleScaleChange,
+      handleScaleReset,
+      handlePpiChange,
+      handleParameterChartWidthChange,
+      handleClick,
+      handleDataZoom,
+      initOptions,
+      updateOptions,
+      icons,
+    }
   },
 })
 </script>

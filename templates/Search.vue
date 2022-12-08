@@ -27,7 +27,7 @@
         <v-card-title class="pl-2 py-1 montserrat">
           {{ $t('common.showSearch') }}
         </v-card-title>
-        <slot name="form" :closeMobileSearch="closeMobileSearch"></slot>
+        <slot name="form" :close-mobile-search="closeMobileSearch"></slot>
       </v-card>
     </v-navigation-drawer>
     <v-fab-transition v-if="$vuetify.breakpoint.smAndDown">
