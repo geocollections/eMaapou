@@ -148,11 +148,6 @@ export default {
     langDir: 'lang/',
     defaultLocale: 'et',
     strategy: 'prefix_and_default',
-    detectBrowserLanguage: {
-      useCookie: true,
-      onlyOnRoot: true,
-      fallbackLocale: 'et',
-    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -206,16 +201,6 @@ export default {
       'echarts/components',
       'zrender',
     ],
-    // Setting cssSoruceMap and cacheBusting to false fixes chrome dev tools style change problem (broke styles)
-    cssSourceMap: false,
-    cacheBusting: false,
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-        // automaticNameDelimiter: '.',
-        // maxSize: 512000,
-      },
-    },
   },
   googleFonts: {
     families: {
