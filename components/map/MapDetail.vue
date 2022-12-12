@@ -104,7 +104,9 @@ import {
   useContext,
   toRefs,
 } from '@nuxtjs/composition-api'
-import type Leaflet from 'types/leaflet'
+import { GeoJsonObject } from 'geojson'
+import type * as Leaflet from 'leaflet'
+// import type Leaflet from 'types/leaflet'
 import MapLinks from '~/components/map/MapLinks.vue'
 import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
@@ -156,7 +158,7 @@ export default defineComponent({
     },
     center: {
       type: Object,
-      default() {
+      default: () => {
         return {
           latitude: 58.5,
           longitude: 25.5,
@@ -195,12 +197,11 @@ export default defineComponent({
       default: true,
     },
     geojson: {
-      type: Object,
+      type: Object as PropType<GeoJsonObject>,
       required: false,
       default: () => {},
     },
   },
-  // @ts-ignore
   setup(props) {
     const { i18n } = useContext()
     const state: MapState = reactive({
@@ -245,9 +246,11 @@ export default defineComponent({
     const mapZoom = computed(() => {
       return props.zoom ?? (props.estonianBedrockOverlay ? 9 : 11)
     })
-    const markersAsFitBoundsObject = computed(() => {
-      return props.markers.map((m: MapMarker) => [m.latitude, m.longitude])
-    })
+    const markersAsFitBoundsObject = computed(
+      (): Leaflet.LatLngBoundsLiteral => {
+        return props.markers.map((m: MapMarker) => [m.latitude, m.longitude])
+      }
+    )
     const fitBounds = () => {
       nextTick(() => {
         if (props.geojson) {

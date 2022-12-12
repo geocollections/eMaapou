@@ -41,6 +41,8 @@ declare module 'vue/types/vue' {
     $openTurba(table: string, id: string, openNewWindow?: boolean): void
     $openGeology(table: string, id: string): void
     $matomo: any
+    $xlsxUtils: any
+    $writeFileXLSX: any
   }
 }
 declare module '@nuxt/types' {
@@ -73,6 +75,8 @@ declare module '@nuxt/types' {
     $openTurba(table: string, id: string, openNewWindow?: boolean): void
     $openGeology(table: string, id: string): void
     $matomo: any
+    $xlsxUtils: any
+    $writeFileXLSX: any
   }
 
   interface Context {
@@ -104,6 +108,8 @@ declare module '@nuxt/types' {
     $openTurba(table: string, id: string, openNewWindow?: boolean): void
     $openGeology(table: string, id: string): void
     $matomo: any
+    $xlsxUtils: any
+    $writeFileXLSX: any
   }
 }
 declare module 'vue/types/options' {

@@ -453,7 +453,7 @@
         </transition-group>
       </v-row>
 
-      <v-row v-if="isEmpty(fileContent)" class="mt-2">
+      <v-row v-if="!isEmpty(fileContent)" class="mt-2">
         <v-col cols="12">
           <v-card>
             <v-card-title class="subsection-title">{{

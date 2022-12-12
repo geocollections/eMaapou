@@ -14,14 +14,14 @@
   }
   NOTE: If in the future there is a need for text fields that should not be translated using i18n, add a boolean field to check if text needs to be translated
 */
-type Header = {
+export type Header = {
   text: string
   value: string
   show: boolean
   apiFieldValue?: string | { et: string; en: string }
   [K: string]: any
 }
-type Headers = {
+export type Headers = {
   byIds: { [K: string]: Header }
   allIds: string[]
 }
