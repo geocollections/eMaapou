@@ -1,7 +1,7 @@
 <template>
   <detail :loading="$fetchState.pending" :error="$fetchState.error">
     <template #title>
-      <header-detail :ids="ids" :title="pageTitle" />
+      <header-detail :ids="ids" :title="pageTitle.toString()" />
     </template>
 
     <template #column-left>
@@ -14,7 +14,7 @@
             <base-table>
               <table-row
                 v-if="analysisMethod"
-                :title="$t('analysis.method')"
+                :title="$t('analysis.method').toString()"
                 :value="
                   $translate({
                     et: analysisMethod.analysis_method,
@@ -24,13 +24,13 @@
               />
               <table-row
                 v-if="agent"
-                :title="$t('analysis.analysedBy')"
+                :title="$t('analysis.analysedBy').toString()"
                 :value="agent.agent"
               />
 
               <table-row-link
                 v-if="sample"
-                :title="$t('analysis.sampleNumber')"
+                :title="$t('analysis.sampleNumber').toString()"
                 :value="sample.number"
                 nuxt
                 :href="
@@ -42,18 +42,18 @@
               />
 
               <table-row
-                :title="$t('analysis.remarks')"
+                :title="$t('analysis.remarks').toString()"
                 :value="analysis.remarks"
               />
               <table-row-link
                 v-if="reference"
-                :title="$t('analysis.reference')"
+                :title="$t('analysis.reference').toString()"
                 :value="reference.reference"
                 @link-click="$openGeology('reference', reference.id)"
               />
               <table-row
                 v-if="dataset"
-                :title="$t('analysis.dataset')"
+                :title="$t('analysis.dataset').toString()"
                 :value="
                   $translate({
                     et: dataset.name,
@@ -63,7 +63,7 @@
               />
               <table-row-link
                 v-if="sample && sample.locality"
-                :title="$t('analysis.locality')"
+                :title="$t('analysis.locality').toString()"
                 :value="
                   $translate({
                     et: sample.locality.locality,
@@ -80,17 +80,17 @@
               />
               <table-row
                 v-if="sample"
-                :title="$t('analysis.depth')"
+                :title="$t('analysis.depth').toString()"
                 :value="sample.depth"
               />
               <table-row
                 v-if="sample"
-                :title="$t('analysis.depthInterval')"
+                :title="$t('analysis.depthInterval').toString()"
                 :value="sample.depth_interval"
               />
               <table-row-link
                 v-if="sample && sample.stratigraphy"
-                :title="$t('analysis.stratigraphy')"
+                :title="$t('analysis.stratigraphy').toString()"
                 :value="
                   $translate({
                     et: sample.stratigraphy.stratigraphy,
@@ -107,7 +107,7 @@
               />
               <table-row-link
                 v-if="sample && sample.lithostratigraphy"
-                :title="$t('analysis.lithostratigraphy')"
+                :title="$t('analysis.lithostratigraphy').toString()"
                 :value="
                   $translate({
                     et: sample.lithostratigraphy.stratigraphy,
@@ -124,7 +124,7 @@
               />
               <table-row-link
                 v-if="database"
-                :title="$t('analysis.institution')"
+                :title="$t('analysis.institution').toString()"
                 :value="
                   $translate({
                     et: database.name,
@@ -137,12 +137,12 @@
 
               <table-row
                 v-if="analysis.date_added"
-                :title="$t('analysis.dateAdded')"
+                :title="$t('analysis.dateAdded').toString()"
                 :value="$formatDate(analysis.date_added)"
               />
               <table-row
                 v-if="analysis.date_changed"
-                :title="$t('analysis.dateChanged')"
+                :title="$t('analysis.dateChanged').toString()"
                 :value="$formatDate(analysis.date_changed)"
               />
             </base-table>
@@ -180,6 +180,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -320,7 +321,23 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
+    useMeta(() => {
+      return {
+        title: `${pageTitle.value} | ${i18n.t('analysis.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            content: `${pageTitle.value} | ${i18n.t('analysis.pageTitle')}`,
+            hid: 'og:title',
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       database,
@@ -330,28 +347,10 @@ export default defineComponent({
       reference,
       dataset,
       pageTitle,
+      isEmpty,
+      isNil,
     }
   },
-  head() {
-    return {
-      title: `${this.pageTitle} | ${this.$t('analysis.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          content: `${this.pageTitle} | ${this.$t('analysis.pageTitle')}`,
-          hid: 'og:title',
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  methods: {
-    isEmpty,
-    isNil,
-  },
+  head: {},
 })
 </script>

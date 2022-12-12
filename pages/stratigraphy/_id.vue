@@ -12,7 +12,7 @@
         <base-table>
           <table-row-link
             v-if="stratigraphy.parent"
-            :title="$t('stratigraphy.parentStratigraphy')"
+            :title="$t('stratigraphy.parentStratigraphy').toString()"
             :value="
               $translate({
                 et: stratigraphy.parent.stratigraphy,
@@ -29,7 +29,7 @@
           />
           <table-row
             v-if="stratigraphy.type"
-            :title="$t('stratigraphy.type')"
+            :title="$t('stratigraphy.type').toString()"
             :value="
               $translate({
                 et: stratigraphy.type.value,
@@ -39,7 +39,7 @@
           />
           <table-row
             v-if="stratigraphy.rank"
-            :title="$t('stratigraphy.rank')"
+            :title="$t('stratigraphy.rank').toString()"
             :value="
               $translate({
                 et: stratigraphy.rank.value,
@@ -49,12 +49,12 @@
           />
           <table-row
             v-if="stratigraphy.original_rank"
-            :title="$t('stratigraphy.originalRank')"
+            :title="$t('stratigraphy.originalRank').toString()"
             :value="stratigraphy.original_rank"
           />
           <table-row
             v-if="stratigraphy.scope"
-            :title="$t('stratigraphy.scope')"
+            :title="$t('stratigraphy.scope').toString()"
             :value="
               $translate({
                 et: stratigraphy.scope.value,
@@ -64,7 +64,7 @@
           />
           <table-row
             v-if="stratigraphy.status"
-            :title="$t('stratigraphy.status')"
+            :title="$t('stratigraphy.status').toString()"
             :value="
               $translate({
                 et: stratigraphy.status.value,
@@ -73,15 +73,15 @@
             "
           />
           <table-row
-            :title="$t('stratigraphy.author')"
+            :title="$t('stratigraphy.author').toString()"
             :value="stratigraphy.author_free"
           />
           <table-row
-            :title="$t('stratigraphy.year')"
+            :title="$t('stratigraphy.year').toString()"
             :value="stratigraphy.year"
           />
           <table-row
-            :title="$t('stratigraphy.etymon')"
+            :title="$t('stratigraphy.etymon').toString()"
             :value="
               $translate({
                 et: stratigraphy.etymon,
@@ -90,20 +90,20 @@
             "
           />
           <table-row
-            :title="$t('stratigraphy.originalLocality')"
+            :title="$t('stratigraphy.originalLocality').toString()"
             :value="stratigraphy.original_locality"
           />
           <table-row
-            :title="$t('stratigraphy.ageTop')"
+            :title="$t('stratigraphy.ageTop').toString()"
             :value="stratigraphy.age_top"
           />
           <table-row
-            :title="$t('stratigraphy.ageBase')"
+            :title="$t('stratigraphy.ageBase').toString()"
             :value="stratigraphy.age_base"
           />
           <table-row-link
             v-if="stratigraphy.age_chronostratigraphy"
-            :title="$t('stratigraphy.age')"
+            :title="$t('stratigraphy.age').toString()"
             :value="
               $translate({
                 et: stratigraphy.age_chronostratigraphy.stratigraphy,
@@ -122,13 +122,13 @@
           />
           <table-row
             v-if="stratigraphy.age_reference"
-            :title="$t('stratigraphy.ageReference')"
+            :title="$t('stratigraphy.ageReference').toString()"
             :value="stratigraphy.age_reference.reference"
           />
 
           <table-row
             v-if="stratigraphy.index_main_html"
-            :title="$t('stratigraphy.index')"
+            :title="$t('stratigraphy.index').toString()"
           >
             <template #value>
               <!-- eslint-disable-next-line vue/no-v-html -->
@@ -137,7 +137,7 @@
           </table-row>
           <table-row
             v-if="stratigraphy.index_additional_html"
-            :title="$t('stratigraphy.indexAlt')"
+            :title="$t('stratigraphy.indexAlt').toString()"
           >
             <template #value>
               <!-- eslint-disable-next-line vue/no-v-html -->
@@ -146,7 +146,7 @@
           </table-row>
           <table-row
             v-if="stratigraphy.index_old"
-            :title="$t('stratigraphy.indexAlt')"
+            :title="$t('stratigraphy.indexAlt').toString()"
           >
             <template #value>
               <div v-text="stratigraphy.index_old" />
@@ -154,12 +154,12 @@
           </table-row>
           <table-row
             v-if="stratigraphy.date_added"
-            :title="$t('stratigraphy.dateAdded')"
+            :title="$t('stratigraphy.dateAdded').toString()"
             :value="$formatDate(stratigraphy.date_added)"
           />
           <table-row
             v-if="stratigraphy.date_changed"
-            :title="$t('stratigraphy.dateChanged')"
+            :title="$t('stratigraphy.dateChanged').toString()"
             :value="$formatDate(stratigraphy.date_changed)"
           />
         </base-table>
@@ -216,16 +216,16 @@
               $t('common.description')
             }}</v-card-title>
 
-            <!-- eslint-disable vue/no-v-html -->
-            <v-card-text
-              v-html="
-                $translate({
-                  et: stratigraphy.description,
-                  en: stratigraphy.description_en,
-                })
-              "
-            />
-            <!-- eslint-enable -->
+            <v-card-text>
+              <div
+                v-html="
+                  $translate({
+                    et: stratigraphy.description,
+                    en: stratigraphy.description_en,
+                  })
+                "
+              />
+            </v-card-text>
           </v-col>
         </v-row>
       </v-card>
@@ -248,6 +248,7 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   watch,
   toRef,
+  useMeta,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
 import {
@@ -278,7 +279,7 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $getAPIFieldValues, $hydrateTab, $translate } =
+    const { $services, $getAPIFieldValues, $hydrateTab, $translate, i18n } =
       useContext()
     const route = useRoute()
     const state = reactive({
@@ -402,29 +403,32 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
-    return { ...toRefs(state), title, stratigraphyMarkers, mapIsEstonian }
-  },
-  head() {
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('stratigraphy.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${title.value} | ${i18n.t('stratigraphy.pageTitle')}`,
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+        ],
+      }
+    })
     return {
-      title: `${this.title} | ${this.$t('stratigraphy.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.title} | ${this.$t('stratigraphy.pageTitle')}`,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
+      ...toRefs(state),
+      title,
+      stratigraphyMarkers,
+      mapIsEstonian,
+      isEmpty,
+      isNull,
     }
   },
-  methods: {
-    isEmpty,
-    isNull,
-  },
+  head: {},
 })
 </script>

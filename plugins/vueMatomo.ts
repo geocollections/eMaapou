@@ -12,4 +12,10 @@ export default defineNuxtPlugin(({ app }) => {
     requireConsent: true,
     debug: process.env.NODE_ENV !== 'production',
   })
+
+  const tag = document.querySelector(
+    'script[src*="https://matomo.geoloogia.info//matomo.js"]'
+  )
+  tag?.setAttribute('type', 'text/partytown')
+  tag?.setAttribute('crossorigin', 'anonymous')
 })

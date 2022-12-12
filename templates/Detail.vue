@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
 import DetailError from '~/components/DetailError.vue'
 
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
       default: false,
     },
     error: {
-      type: Object,
+      type: Object as PropType<Error | null>,
       default: null,
     },
   },

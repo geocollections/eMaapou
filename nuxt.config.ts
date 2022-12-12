@@ -80,6 +80,7 @@ export default {
     '~plugins/getAPIFieldValues.ts',
     { src: '~plugins/vuexPersist.js', mode: 'client' },
     { src: '~plugins/afterEach.ts', mode: 'client' },
+    { src: '~plugins/xlsx.ts', mode: 'client' },
     '~/plugins/formatDate.ts',
     '~/plugins/slug.ts', // this might be only called on server-side
     { src: '~/plugins/vueMatomo.ts', mode: 'client' },
@@ -108,6 +109,7 @@ export default {
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/image',
+    // '@nuxtjs/partytown',
   ],
 
   sitemap: {
@@ -148,19 +150,14 @@ export default {
     langDir: 'lang/',
     defaultLocale: 'et',
     strategy: 'prefix_and_default',
-    detectBrowserLanguage: {
-      useCookie: true,
-      onlyOnRoot: true,
-      fallbackLocale: 'et',
-    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['@/assets/variables.scss'],
     defaultAssets: {
-      font: false,
-      icons: false,
+      font: undefined,
+      icons: undefined,
     },
     treeShake: true,
     icons: {
@@ -206,16 +203,6 @@ export default {
       'echarts/components',
       'zrender',
     ],
-    // Setting cssSoruceMap and cacheBusting to false fixes chrome dev tools style change problem (broke styles)
-    cssSourceMap: false,
-    cacheBusting: false,
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-        // automaticNameDelimiter: '.',
-        // maxSize: 512000,
-      },
-    },
   },
   googleFonts: {
     families: {
@@ -242,4 +229,15 @@ export default {
       },
     },
   },
+  // partytown: {
+  //   forward: ['_paq', '_paq.push'],
+  //   resolveUrl: function (url, location, type) {
+  //     if (type === 'script') {
+  //       const proxyUrl = new URL('https://my-reverse-proxy.com/')
+  //       proxyUrl.searchParams.append('url', url.href)
+  //       return proxyUrl
+  //     }
+  //     return url
+  //   },
+  // },
 } as NuxtConfig

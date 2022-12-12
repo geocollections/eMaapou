@@ -14,7 +14,7 @@
       <v-card-text>
         <base-table>
           <table-row
-            :title="$t('locality.name')"
+            :title="$t('locality.name').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -24,7 +24,7 @@
           />
           <table-row
             v-if="type"
-            :title="$t('locality.type')"
+            :title="$t('locality.type').toString()"
             :value="
               $translate({
                 et: type.value,
@@ -34,7 +34,7 @@
           />
           <table-row
             v-if="country"
-            :title="$t('locality.country')"
+            :title="$t('locality.country').toString()"
             :value="
               $translate({
                 et: country.value,
@@ -44,7 +44,7 @@
           />
           <table-row
             v-if="municipality"
-            :title="$t('locality.parish')"
+            :title="$t('locality.parish').toString()"
             :value="
               $translate({
                 et: municipality.vald,
@@ -54,7 +54,7 @@
           />
           <table-row
             v-if="settlementUnit"
-            :title="$t('locality.settlement')"
+            :title="$t('locality.settlement').toString()"
             :value="
               $translate({
                 et: settlementUnit.asustusyksus,
@@ -63,37 +63,37 @@
             "
           />
           <table-row
-            :title="$t('locality.elevation')"
+            :title="$t('locality.elevation').toString()"
             :value="locality.elevation"
           />
           <table-row
-            :title="$t('locality.latitude')"
+            :title="$t('locality.latitude').toString()"
             :value="locality.latitude"
           />
           <table-row
-            :title="$t('locality.longitude')"
+            :title="$t('locality.longitude').toString()"
             :value="locality.longitude"
           />
           <table-row
-            :title="$t('locality.coordinateSystem')"
+            :title="$t('locality.coordinateSystem').toString()"
             :value="locality.coord_system"
           />
           <table-row
-            :title="$t('locality.coordinateX')"
+            :title="$t('locality.coordinateX').toString()"
             :value="locality.coordx"
           />
           <table-row
-            :title="$t('locality.coordinateY')"
+            :title="$t('locality.coordinateY').toString()"
             :value="locality.coordy"
           />
           <table-row
             v-if="coordinatePrecision"
-            :title="$t('locality.coordinatePrecision')"
+            :title="$t('locality.coordinatePrecision').toString()"
             :value="coordinatePrecision.value"
           />
           <table-row
             v-if="coordinateMethod"
-            :title="$t('locality.coordinateMethod')"
+            :title="$t('locality.coordinateMethod').toString()"
             :value="
               $translate({
                 et: coordinateMethod.value,
@@ -103,16 +103,16 @@
           />
           <table-row
             v-if="coordinateAgent"
-            :title="$t('locality.coordinateAgent')"
+            :title="$t('locality.coordinateAgent').toString()"
             :value="coordinateAgent.agent"
           />
           <table-row
-            :title="$t('locality.locationRemarks')"
+            :title="$t('locality.locationRemarks').toString()"
             :value="locality.remarks_location"
           />
           <table-row-link
             v-if="stratigraphyTop"
-            :title="$t('locality.stratigraphyTop')"
+            :title="$t('locality.stratigraphyTop').toString()"
             :value="
               $translate({
                 et: stratigraphyTop.stratigraphy,
@@ -129,7 +129,7 @@
           />
           <table-row-link
             v-if="stratigraphyBase"
-            :title="$t('locality.stratigraphyBase')"
+            :title="$t('locality.stratigraphyBase').toString()"
             :value="
               $translate({
                 et: stratigraphyBase.stratigraphy,
@@ -145,23 +145,23 @@
             "
           />
           <table-row
-            :title="$t('locality.remarks')"
+            :title="$t('locality.remarks').toString()"
             :value="locality.remarks"
           />
           <table-row-link
             v-if="locality.maaamet_pa_id"
-            :title="$t('locality.linkLandBoard')"
+            :title="$t('locality.linkLandBoard').toString()"
             :value="locality.maaamet_pa_id"
             :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
           />
           <table-row
             v-if="locality.date_added"
-            :title="$t('locality.dateAdded')"
+            :title="$t('locality.dateAdded').toString()"
             :value="$formatDate(locality.date_added)"
           />
           <table-row
             v-if="locality.date_changed"
-            :title="$t('locality.dateChanged')"
+            :title="$t('locality.dateChanged').toString()"
             :value="$formatDate(locality.date_changed)"
           />
         </base-table>
@@ -272,6 +272,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
   useRouter,
 } from '@nuxtjs/composition-api'
@@ -298,7 +299,8 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate, localePath } = useContext()
+    const { $services, $hydrateTab, $translate, localePath, i18n, $img } =
+      useContext()
     const route = useRoute()
     const router = useRouter()
     const state = reactive({
@@ -309,11 +311,21 @@ export default defineComponent({
       tabs: [] as Tab[],
       images: [] as any[],
     })
+
+    const icons = computed(() => {
+      return {
+        mdiScrewMachineFlatTop,
+        mdiChartScatterPlot,
+        mdiBookOpenPageVariantOutline,
+        mdiOpenInNew,
+      }
+    })
     const analysisResultsCount = computed(
-      () => state.tabs.find((tab) => tab.id === 'graphs')?.count
+      () => state.tabs.find((tab) => tab.id === 'graphs')?.count ?? 0
     )
     const referenceCount = computed(
-      () => state.tabs.find((tab) => tab.id === 'locality_reference')?.count
+      () =>
+        state.tabs.find((tab) => tab.id === 'locality_reference')?.count ?? 0
     )
     const type = computed(() => state.locality?.type)
     const country = computed(() => state.locality?.country)
@@ -466,7 +478,36 @@ export default defineComponent({
         })
       )
     }
-
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('locality.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${title.value} | ${i18n.t('locality.pageTitle')}`,
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+          {
+            property: 'og:image',
+            hid: 'og:image',
+            content: state.images[0]?.filename
+              ? $img(
+                  `${state.images[0]?.filename}`,
+                  { size: 'small' },
+                  {
+                    provider: 'geocollections',
+                  }
+                )
+              : '',
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       title,
@@ -483,54 +524,11 @@ export default defineComponent({
       stratigraphyBase,
       goToGeoscienceLiterature,
       goToAnalyticalData,
+      isNil,
+      isEmpty,
+      icons,
     }
   },
-  // @ts-ignore
-  head() {
-    return {
-      title: `${this.title} | ${this.$t('locality.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.title} | ${this.$t('locality.pageTitle')}`,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-        {
-          property: 'og:image',
-          hid: 'og:image',
-          // @ts-ignore
-          content: this.images[0]?.filename
-            ? this.$img(
-                // @ts-ignore
-                `${this.images[0]?.filename}`,
-                { size: 'small' },
-                {
-                  provider: 'geocollections',
-                }
-              )
-            : undefined,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiScrewMachineFlatTop,
-        mdiChartScatterPlot,
-        mdiBookOpenPageVariantOutline,
-        mdiOpenInNew,
-      }
-    },
-  },
-  methods: {
-    isNil,
-    isEmpty,
-  },
+  head: {},
 })
 </script>

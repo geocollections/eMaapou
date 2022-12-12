@@ -4,14 +4,10 @@ module.exports = {
     browser: true,
     node: true,
   },
-  parserOptions: {
-    sourceType: 'module',
-    requireConfigFile: false,
-  },
   extends: [
     '@nuxtjs/eslint-config-typescript',
     'plugin:nuxt/recommended',
-    'plugin:prettier/recommended',
+    'prettier',
   ],
   // add your custom rules here
   rules: {
@@ -23,5 +19,6 @@ module.exports = {
     ],
     'vue/no-v-html': 'off',
     'no-unused-vars': 'off',
+    'vue/multi-word-component-names': 'off',
   },
 }

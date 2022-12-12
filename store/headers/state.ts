@@ -13,8 +13,8 @@ import {
   HEADERS_TAXON,
   HEADERS_PREPARATION,
   HEADERS_AREA,
+  Headers,
 } from '~/constants'
-
 export type HeadersState = {
   analysis: Headers
   analytical_data: Headers

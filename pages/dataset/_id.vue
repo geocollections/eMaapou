@@ -10,42 +10,48 @@
       }}</v-card-title>
       <v-card-text>
         <base-table>
-          <table-row :title="$t('dataset.title')" :value="dataset.title" />
           <table-row
-            :title="$t('dataset.titleTranslated')"
+            :title="$t('dataset.title').toString()"
+            :value="dataset.title"
+          />
+          <table-row
+            :title="$t('dataset.titleTranslated').toString()"
             :value="dataset.title_translated"
           />
           <table-row
-            :title="$t('dataset.titleAlt')"
+            :title="$t('dataset.titleAlt').toString()"
             :value="dataset.title_alternative"
           />
           <table-row
             v-if="dataset.creators || dataset.owner_txt || dataset.owner"
-            :title="$t('dataset.creators')"
+            :title="$t('dataset.creators').toString()"
             :value="
               dataset.creators || dataset.owner_txt || dataset.owner.agent
             "
           />
           <table-row
-            :title="$t('dataset.publicationYear')"
+            :title="$t('dataset.publicationYear').toString()"
             :value="dataset.publication_year"
           />
-          <table-row :title="$t('dataset.date')" :value="dataset.date" />
           <table-row
-            :title="$t('dataset.resourceTopic')"
+            :title="$t('dataset.date').toString()"
+            :value="dataset.date"
+          />
+          <table-row
+            :title="$t('dataset.resourceTopic').toString()"
             :value="dataset.resource"
           />
           <table-row
-            :title="$t('dataset.publisher')"
+            :title="$t('dataset.publisher').toString()"
             :value="dataset.publisher"
           />
           <table-row
-            :title="$t('dataset.subjects')"
+            :title="$t('dataset.subjects').toString()"
             :value="dataset.subjects"
           />
           <table-row
             v-if="dataset.language"
-            :title="$t('dataset.language')"
+            :title="$t('dataset.language').toString()"
             :value="
               $translate({
                 et: dataset.language.value,
@@ -54,26 +60,32 @@
             "
           />
           <table-row
-            :title="$t('dataset.abstract')"
+            :title="$t('dataset.abstract').toString()"
             :value="dataset.abstract"
           />
-          <table-row :title="$t('dataset.methods')" :value="dataset.methods" />
-          <table-row :title="$t('dataset.version')" :value="dataset.version" />
+          <table-row
+            :title="$t('dataset.methods').toString()"
+            :value="dataset.methods"
+          />
+          <table-row
+            :title="$t('dataset.version').toString()"
+            :value="dataset.version"
+          />
           <table-row-link
             v-if="doi"
-            :title="$t('dataset.doi')"
+            :title="$t('dataset.doi').toString()"
             :value="doi"
             :href="`https://doi.geocollections.info/${doi}`"
           />
           <table-row-link
             v-if="reference"
-            :title="$t('dataset.reference')"
+            :title="$t('dataset.reference').toString()"
             :value="reference.reference"
             :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
           />
           <table-row-link
             v-if="dataset.locality"
-            :title="$t('dataset.locality')"
+            :title="$t('dataset.locality').toString()"
             :value="
               $translate({
                 et: dataset.locality.locality,
@@ -90,12 +102,12 @@
           />
           <table-row
             v-if="dataset.copyright_agent"
-            :title="$t('dataset.copyright')"
+            :title="$t('dataset.copyright').toString()"
             :value="dataset.copyright_agent.agent"
           />
           <table-row-link
             v-if="dataset.licence"
-            :title="$t('dataset.licence')"
+            :title="$t('dataset.licence').toString()"
             :value="
               $translate({
                 et: dataset.licence.licence,
@@ -111,17 +123,17 @@
           />
           <table-row
             v-if="dataset.date_added"
-            :title="$t('dataset.dateAdded')"
+            :title="$t('dataset.dateAdded').toString()"
             :value="$formatDate(dataset.date_added)"
           />
           <table-row
             v-if="dataset.date_changed"
-            :title="$t('dataset.dateChanged')"
+            :title="$t('dataset.dateChanged').toString()"
             :value="$formatDate(dataset.date_changed)"
           />
           <table-row
             v-if="parameters.length > 0"
-            :title="$t('dataset.parameters')"
+            :title="$t('dataset.parameters').toString()"
             :value="parameters"
           >
             <template #value>
@@ -170,6 +182,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -194,7 +207,7 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate } = useContext()
+    const { $services, $hydrateTab, $translate, i18n } = useContext()
     const route = useRoute()
     const state = reactive({
       dataset: null as any,
@@ -366,31 +379,31 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
+    useMeta(() => {
+      return {
+        title: `${title.value}| ${i18n.t('dataset.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            content: `${title.value}| ${i18n.t('dataset.pageTitle')}`,
+            hid: 'og:title',
+          },
+          {
+            property: 'og:description',
+            content: state.dataset?.abstract,
+            hid: 'og:description',
+          },
+          {
+            property: 'description',
+            content: state.dataset?.abstract,
+            hid: 'description',
+          },
+        ],
+      }
+    })
     return { ...toRefs(state), title }
   },
-  head() {
-    return {
-      title: `${this.title}| ${this.$t('dataset.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          content: `${this.title}| ${this.$t('dataset.pageTitle')}`,
-          hid: 'og:title',
-        },
-        {
-          property: 'og:description',
-          content: (this.dataset as any)?.abstract,
-          hid: 'og:description',
-        },
-        {
-          property: 'description',
-          content: (this.dataset as any)?.abstract,
-          hid: 'description',
-        },
-      ],
-    }
-  },
+  head: {},
   methods: {
     isEmpty,
     isNil,

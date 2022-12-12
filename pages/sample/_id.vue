@@ -9,17 +9,20 @@
       }}</v-card-title>
       <v-card-text>
         <base-table>
-          <table-row :title="$t('sample.number')" :value="sample.number" />
+          <table-row
+            :title="$t('sample.number').toString()"
+            :value="sample.number"
+          />
           <table-row-link
             v-if="parent"
-            :title="$t('sample.parent')"
+            :title="$t('sample.parent').toString()"
             nuxt
             :href="localePath({ name: 'sample-id', params: { id: parent.id } })"
             :value="parent.number"
           />
           <table-row-link
             v-if="parentSpecimen"
-            :title="$t('sample.parentSpecimen')"
+            :title="$t('sample.parentSpecimen').toString()"
             nuxt
             :href="
               localePath({
@@ -30,21 +33,21 @@
             :value="parentSpecimen.specimen_id"
           />
           <table-row-link
-            :title="$t('sample.igsn')"
+            :title="$t('sample.igsn').toString()"
             :value="sample.igsn"
             :href="`http://igsn.org/${sample.igsn}`"
           />
           <table-row
-            :title="$t('sample.numberAdditional')"
+            :title="$t('sample.numberAdditional').toString()"
             :value="sample.number_additional"
           />
           <table-row
-            :title="$t('sample.numberField')"
+            :title="$t('sample.numberField').toString()"
             :value="sample.number_field"
           />
           <table-row-link
             v-if="locality"
-            :title="$t('sample.locality')"
+            :title="$t('sample.locality').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -61,17 +64,17 @@
           />
           <table-row
             v-if="locality"
-            :title="$t('sample.latitude')"
+            :title="$t('sample.latitude').toString()"
             :value="locality.latitude"
           />
           <table-row
             v-if="locality"
-            :title="$t('sample.longitude')"
+            :title="$t('sample.longitude').toString()"
             :value="locality.longitude"
           />
           <table-row-link
             v-if="site"
-            :title="$t('sample.site')"
+            :title="$t('sample.site').toString()"
             :value="site.name"
             nuxt
             :href="
@@ -83,22 +86,25 @@
           />
           <table-row
             v-if="site"
-            :title="$t('sample.latitude')"
+            :title="$t('sample.latitude').toString()"
             :value="site.latitude"
           />
           <table-row
             v-if="site"
-            :title="$t('sample.longitude')"
+            :title="$t('sample.longitude').toString()"
             :value="site.longitude"
           />
-          <table-row :title="$t('sample.depth')" :value="sample.depth" />
           <table-row
-            :title="$t('sample.depthInterval')"
+            :title="$t('sample.depth').toString()"
+            :value="sample.depth"
+          />
+          <table-row
+            :title="$t('sample.depthInterval').toString()"
             :value="sample.depth_interval"
           />
           <table-row-link
             v-if="stratigraphy"
-            :title="$t('sample.stratigraphy')"
+            :title="$t('sample.stratigraphy').toString()"
             :value="
               $translate({
                 et: stratigraphy.stratigraphy,
@@ -115,7 +121,7 @@
           />
           <table-row-link
             v-if="lithostratigraphy"
-            :title="$t('sample.lithostratigraphy')"
+            :title="$t('sample.lithostratigraphy').toString()"
             :value="
               $translate({
                 et: lithostratigraphy.stratigraphy,
@@ -131,26 +137,29 @@
             "
           />
           <table-row
-            :title="$t('sample.stratigraphyFree')"
+            :title="$t('sample.stratigraphyFree').toString()"
             :value="sample.stratigraphy_free"
           />
           <table-row
-            :title="$t('sample.stratigraphyBed')"
+            :title="$t('sample.stratigraphyBed').toString()"
             :value="sample.stratigraphy_bed"
           />
           <table-row
-            :title="$t('sample.dateCollected')"
+            :title="$t('sample.dateCollected').toString()"
             :value="sample.date_collected || sample.date_collected_free"
           />
           <table-row
             v-if="agentCollected || sample.agent_collected_txt"
-            :title="$t('sample.agentCollected')"
+            :title="$t('sample.agentCollected').toString()"
             :value="agentCollected.agent || sample.agent_collected_txt"
           />
-          <table-row :title="$t('sample.mass')" :value="sample.mass" />
+          <table-row
+            :title="$t('sample.mass').toString()"
+            :value="sample.mass"
+          />
           <table-row
             v-if="samplePurpose"
-            :title="$t('sample.samplePurpose')"
+            :title="$t('sample.samplePurpose').toString()"
             :value="
               $translate({
                 et: samplePurpose.value,
@@ -159,7 +168,7 @@
             "
           />
           <table-row
-            :title="$t('sample.rock')"
+            :title="$t('sample.rock').toString()"
             :value="
               $translate({
                 et: sample.rock,
@@ -169,7 +178,7 @@
           />
           <table-row
             v-if="classificationRock"
-            :title="$t('sample.classificationRock')"
+            :title="$t('sample.classificationRock').toString()"
             :value="
               $translate({
                 et: classificationRock.name,
@@ -178,19 +187,25 @@
             "
           />
           <table-row
-            :title="$t('sample.palaeontology')"
+            :title="$t('sample.palaeontology').toString()"
             :value="sample.palaeontology"
           />
-          <table-row :title="$t('sample.fossils')" :value="sample.fossils" />
-          <table-row :title="$t('sample.remarks')" :value="sample.remarks" />
+          <table-row
+            :title="$t('sample.fossils').toString()"
+            :value="sample.fossils"
+          />
+          <table-row
+            :title="$t('sample.remarks').toString()"
+            :value="sample.remarks"
+          />
           <table-row
             v-if="owner"
-            :title="$t('sample.owner')"
+            :title="$t('sample.owner').toString()"
             :value="owner.agent"
           />
           <table-row-link
             v-if="database"
-            :title="$t('sample.database')"
+            :title="$t('sample.database').toString()"
             :value="
               $translate({
                 et: database.name,
@@ -202,7 +217,7 @@
           />
           <table-row
             v-if="project"
-            :title="$t('sample.project')"
+            :title="$t('sample.project').toString()"
             :value="
               $translate({
                 et: sample.project.name,
@@ -212,12 +227,12 @@
           />
           <table-row
             v-if="sample.date_added"
-            :title="$t('sample.dateAdded')"
+            :title="$t('sample.dateAdded').toString()"
             :value="$formatDate(sample.date_added)"
           />
           <table-row
             v-if="sample.date_changed"
-            :title="$t('sample.dateChanged')"
+            :title="$t('sample.dateChanged').toString()"
             :value="$formatDate(sample.date_changed)"
           />
         </base-table>
@@ -231,7 +246,7 @@
       <v-card-text>
         <base-table class="mb-4">
           <table-row-link
-            :title="$t('locality.locality')"
+            :title="$t('locality.locality').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -248,12 +263,12 @@
           >
           </table-row-link>
           <table-row
-            :title="$t('sample.localityFree')"
+            :title="$t('sample.localityFree').toString()"
             :value="sample.locality_free"
           />
           <table-row
             v-if="locality.country"
-            :title="$t('locality.country')"
+            :title="$t('locality.country').toString()"
             :value="
               $translate({
                 et: locality.country.value,
@@ -262,18 +277,21 @@
             "
           />
           <table-row
-            :title="$t('locality.latitude')"
+            :title="$t('locality.latitude').toString()"
             :value="locality.latitude"
           />
           <table-row
-            :title="$t('locality.longitude')"
+            :title="$t('locality.longitude').toString()"
             :value="locality.longitude"
           />
           <table-row
-            :title="$t('locality.elevation')"
+            :title="$t('locality.elevation').toString()"
             :value="locality.elevation"
           />
-          <table-row :title="$t('locality.depth')" :value="locality.depth" />
+          <table-row
+            :title="$t('locality.depth').toString()"
+            :value="locality.depth"
+          />
         </base-table>
         <v-card
           v-if="locality.latitude && locality.longitude"
@@ -339,6 +357,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -498,7 +517,23 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('sample.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: `${title.value} | ${i18n.t('sample.pageTitle')}`,
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       parentSpecimen,
@@ -515,27 +550,9 @@ export default defineComponent({
       locality,
       title,
       pageTitle,
+      isNil,
     }
   },
-  head() {
-    return {
-      title: `${this.title} | ${this.$t('sample.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: `${this.title} | ${this.$t('sample.pageTitle')}`,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  methods: {
-    isNil,
-  },
+  head: {},
 })
 </script>

@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('analyticalData.pageTitle')"
+        :title="$t('analyticalData.pageTitle').toString()"
         :icon="icons.mdiChartLine"
       />
     </template>
@@ -51,6 +51,8 @@ import {
   useFetch,
   wrapProperty,
   computed,
+  useMeta,
+  useContext,
 } from '@nuxtjs/composition-api'
 import { mdiChartLine } from '@mdi/js'
 import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
@@ -72,6 +74,7 @@ export default defineComponent({
     BaseHeader,
   },
   setup() {
+    const { i18n } = useContext()
     const accessor = useAccessor()
     const services = useServices()
     const getAPIFieldValues = useGetAPIFieldValues()
@@ -100,7 +103,11 @@ export default defineComponent({
       () => accessor.search.analytical_data.filters.byIds
     )
     const globalFilters = computed(() => accessor.search.globalFilters.byIds)
-
+    const icons = computed(() => {
+      return {
+        mdiChartLine,
+      }
+    })
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({
         module: 'analytical_data',
@@ -109,31 +116,25 @@ export default defineComponent({
         globalFilters,
         fetch,
       })
-
+    useMeta(() => {
+      return {
+        title: i18n.t('analyticalData.pageTitle') as string,
+        meta: [
+          {
+            property: 'og:title',
+            content: i18n.t('analyticalData.pageTitle') as string,
+            hid: 'og:title',
+          },
+        ],
+      }
+    })
     return {
       handleFormReset,
       handleFormUpdate,
       handleDataTableUpdate,
+      icons,
     }
   },
-  head() {
-    return {
-      title: this.$t('analyticalData.pageTitle') as string,
-      meta: [
-        {
-          property: 'og:title',
-          content: this.$t('analyticalData.pageTitle') as string,
-          hid: 'og:title',
-        },
-      ],
-    }
-  },
-  computed: {
-    icons(): any {
-      return {
-        mdiChartLine,
-      }
-    },
-  },
+  head: {},
 })
 </script>

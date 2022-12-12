@@ -11,11 +11,11 @@
       <v-card-text>
         <base-table>
           <table-row
-            :title="$t('collection.number')"
+            :title="$t('collection.number').toString()"
             :value="collection.number"
           />
           <table-row
-            :title="$t('collection.name')"
+            :title="$t('collection.name').toString()"
             :value="
               $translate({
                 et: collection.name,
@@ -24,7 +24,7 @@
             "
           />
           <table-row
-            :title="$t('collection.nameLong')"
+            :title="$t('collection.nameLong').toString()"
             :value="
               $translate({
                 et: collection.name_long,
@@ -34,12 +34,12 @@
           />
           <table-row
             v-if="classification"
-            :title="$t('collection.classification')"
+            :title="$t('collection.classification').toString()"
             :value="classification.class_field"
           />
           <table-row-link
             v-if="reference"
-            :title="$t('collection.reference')"
+            :title="$t('collection.reference').toString()"
             :value="
               $translate({
                 et: reference.reference,
@@ -49,12 +49,12 @@
             :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
           />
           <table-row
-            :title="$t('collection.numberObjects')"
+            :title="$t('collection.numberObjects').toString()"
             :value="`${collection.number_objects}`"
           />
           <table-row-link
             v-if="database"
-            :title="$t('collection.database')"
+            :title="$t('collection.database').toString()"
             :value="
               $translate({
                 et: database.name,
@@ -66,12 +66,12 @@
           />
           <table-row
             v-if="collection.date_added"
-            :title="$t('collection.dateAdded')"
+            :title="$t('collection.dateAdded').toString()"
             :value="$formatDate(collection.date_added)"
           />
           <table-row
             v-if="collection.date_changed"
-            :title="$t('collection.dateChanged')"
+            :title="$t('collection.dateChanged').toString()"
             :value="$formatDate(collection.date_changed)"
           />
           <!-- <table-row
@@ -162,6 +162,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -183,7 +184,7 @@ export default defineComponent({
     BaseTable,
   },
   setup() {
-    const { $services, $hydrateTab, $translate } = useContext()
+    const { $services, $hydrateTab, $translate, i18n } = useContext()
     const route = useRoute()
 
     const state = reactive({
@@ -245,28 +246,33 @@ export default defineComponent({
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
-    return { ...toRefs(state), title, reference, classification, database }
-  },
-  head() {
+    useMeta(() => {
+      return {
+        title: `${title.value} | ${i18n.t('collection.pageTitle')}`,
+        meta: [
+          {
+            property: 'og:title',
+            content: `${title.value} | ${i18n.t('collection.pageTitle')}`,
+            hid: 'og:title',
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+        ],
+      }
+    })
     return {
-      title: `${this.title} | ${this.$t('collection.pageTitle')}`,
-      meta: [
-        {
-          property: 'og:title',
-          content: `${this.title} | ${this.$t('collection.pageTitle')}`,
-          hid: 'og:title',
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
+      ...toRefs(state),
+      title,
+      reference,
+      classification,
+      database,
+      isEmpty,
+      isNull,
     }
   },
-  methods: {
-    isEmpty,
-    isNull,
-  },
+  head: {},
 })
 </script>

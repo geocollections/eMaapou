@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="cookiePolicy"
+    v-if="$accessor.settings.cookiePolicy"
     class="cookie-policy py-3 px-6 d-flex justify-center"
   >
     <v-card class="cookie-policy-card py-3 px-3" elevation="2">
@@ -38,7 +38,7 @@
           width="100"
           color="warning white--text"
           class="text-none montserrat"
-          @click="handleConsent"
+          @click="handleAcceptConsent"
         >
           {{ $t('cookiePolicy.accept') }}
         </v-btn>
@@ -48,26 +48,26 @@
 </template>
 
 <script lang="ts">
-import { mapFields } from 'vuex-map-fields'
 import { mdiCookie } from '@mdi/js'
-import { defineComponent } from '@nuxtjs/composition-api'
+import { computed, defineComponent, useContext } from '@nuxtjs/composition-api'
+import { useAccessor } from '~/composables/useAccessor'
 export default defineComponent({
   name: 'CookieConsent',
-  computed: {
-    ...mapFields('settings', ['cookiePolicy']),
-    icons() {
+  setup() {
+    const { $matomo } = useContext()
+    const accessor = useAccessor()
+    const icons = computed(() => {
       return { mdiCookie }
-    },
-  },
-  methods: {
-    handleConsent() {
-      this.cookiePolicy = false
-      this.$matomo.rememberConsentGiven()
-      this.$matomo.rememberCookieConsentGiven()
-    },
-    handleRejectConsent() {
-      this.cookiePolicy = false
-    },
+    })
+    const handleAcceptConsent = () => {
+      accessor.settings.setCookiePolicy(false)
+      $matomo.rememberConsentGiven()
+      $matomo.rememberCookieConsentGiven()
+    }
+    const handleRejectConsent = () => {
+      accessor.settings.setCookiePolicy(false)
+    }
+    return { icons, handleAcceptConsent, handleRejectConsent }
   },
 })
 </script>

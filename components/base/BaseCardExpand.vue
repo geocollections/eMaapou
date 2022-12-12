@@ -6,7 +6,7 @@
       style="font-size: 1rem; cursor: pointer"
       @click="$emit('click', !showBody)"
     >
-      <slot name="title" :showBody="showBody">
+      <slot name="title" :show-body="showBody">
         {{ title }}
       </slot>
       <v-spacer />
@@ -17,7 +17,7 @@
       </v-btn>
     </v-card-title>
     <v-expand-transition>
-      <slot name="body" :showBody="showBody">
+      <slot name="body" :show-body="showBody">
         <div v-show="showBody">
           <div class="px-3 pb-3 pt-1">
             <slot></slot>

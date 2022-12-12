@@ -28,55 +28,57 @@
   </base-card-expand>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiEarth } from '@mdi/js'
 import { mapFields } from 'vuex-map-fields'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  useContext,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import BaseCardExpand from '../base/BaseCardExpand.vue'
 import MapSearch from '~/components/map/MapSearch.vue'
-export default {
+import { MapMarker } from '~/types/map'
+export default defineComponent({
   name: 'SearchMap',
   components: { MapSearch, BaseCardExpand },
   props: {
     items: {
-      type: Array,
+      type: Array as PropType<any[]>,
       required: false,
-      default() {
-        return []
-      },
+      default: () => [],
     },
     useCustomMarkers: {
       type: Boolean,
-      required: false,
-      default() {
-        return false
-      },
+      default: false,
     },
     active: {
       type: Boolean,
       default: false,
     },
   },
-  computed: {
-    ...mapFields('settings', {
-      showMap: 'showSearchViewMap',
-    }),
-    icons() {
+  setup(props) {
+    const { $translate } = useContext()
+    const route = useRoute()
+    const icons = computed(() => {
       return {
         mdiEarth,
       }
-    },
-    mapMarkers() {
-      if (this.useCustomMarkers) return this.items
+    })
+    const mapMarkers = computed(() => {
+      if (props.useCustomMarkers) return props.items
 
-      const routeName = this.$route.name.split('___')[0]
-      return this.items.reduce((filtered, item) => {
+      const routeName = route.value.name?.split('___')[0]
+      return props.items.reduce((filtered, item) => {
         if (item.latitude && item.longitude) {
           const newItem = {
             latitude: item.latitude,
             longitude: item.longitude,
             text:
-              this.$translate({ et: item.locality, en: item.locality_en }) ??
-              (this.$translate({
+              $translate({ et: item.locality, en: item.locality_en }) ??
+              ($translate({
                 et: item.site_name,
                 en: item.site_name_en,
               }) ||
@@ -89,10 +91,10 @@ export default {
                 ? 'site'
                 : 'locality',
             id: (item.locality_id || item.site_id) ?? item.id,
-          }
+          } as MapMarker
 
           const isItemInArray = !!filtered.find(
-            (existingItem) =>
+            (existingItem: any) =>
               existingItem.latitude === item.latitude &&
               existingItem.longitude === item.longitude
           )
@@ -100,7 +102,13 @@ export default {
         }
         return filtered
       }, [])
-    },
+    })
+    return { icons, mapMarkers }
   },
-}
+  computed: {
+    ...mapFields('settings', {
+      showMap: 'showSearchViewMap',
+    }),
+  },
+})
 </script>

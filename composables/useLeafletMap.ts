@@ -4,6 +4,8 @@ import { useAccessor } from './useAccessor'
 import type Leaflet from 'types/leaflet'
 export interface MapState {
   map: Leaflet.Map | undefined
+  options: any
+  currentCenter: { lat: number; lng: number }
   [K: string]: any
 }
 export function useLeafletMap({

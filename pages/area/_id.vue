@@ -13,12 +13,12 @@
           <v-card-text>
             <base-table>
               <table-row
-                :title="$t('area.name')"
+                :title="$t('area.name').toString()"
                 :value="$translate({ et: area.name, en: area.name_en })"
               />
               <table-row-link
                 v-if="area.area_type === 2"
-                :title="$t('area.areaType')"
+                :title="$t('area.areaType').toString()"
                 :value="
                   $translate({
                     et: area.area_type__name,
@@ -29,7 +29,7 @@
               />
               <table-row
                 v-else
-                :title="$t('area.areaType')"
+                :title="$t('area.areaType').toString()"
                 :value="
                   $translate({
                     et: area.area_type.name,
@@ -46,7 +46,7 @@
                     params: { id: area.parent_area.id },
                   })
                 "
-                :title="$t('area.parentArea')"
+                :title="$t('area.parentArea').toString()"
                 :value="
                   $translate({
                     et: area.parent_area.name,
@@ -55,7 +55,7 @@
                 "
               />
               <table-row
-                :title="$t('area.county')"
+                :title="$t('area.county').toString()"
                 :value="
                   $translate({
                     et: area.maakond__maakond,
@@ -63,9 +63,12 @@
                   })
                 "
               />
-              <table-row :title="$t('area.areaHa')" :value="area.area_ha" />
               <table-row
-                :title="$t('area.depositAreaHa')"
+                :title="$t('area.areaHa').toString()"
+                :value="area.area_ha"
+              />
+              <table-row
+                :title="$t('area.depositAreaHa').toString()"
                 :value="area.deposit_area_ha"
               />
               <table-row
@@ -75,7 +78,7 @@
                     en: area.description_en,
                   })
                 "
-                :title="$t('area.description')"
+                :title="$t('area.description').toString()"
               >
                 <template #value>
                   <!-- eslint-disable vue/no-v-html -->
@@ -90,7 +93,7 @@
                   <!-- eslint-enable -->
                 </template>
               </table-row>
-              <table-row :title="$t('area.egf')">
+              <table-row :title="$t('area.egf').toString()">
                 <template #value>
                   <span v-for="(item, index) in egfArray" :key="index">
                     <a class="text-link" @click="$openEgf(item)">
@@ -103,14 +106,14 @@
                 </template>
               </table-row>
               <table-row-link
-                :title="$t('area.maardla')"
-                @link-click="$openEelis(item)"
+                :title="$t('area.maardla').toString()"
+                @link-click="$openEelis(area.maardla)"
               >
                 <template #value>
                   {{ $t('area.maardlaLink') }} ({{ area.maardla }})
                 </template>
               </table-row-link>
-              <table-row :title="$t('area.eelis')">
+              <table-row :title="$t('area.eelis').toString()">
                 <template #value>
                   <span v-for="(item, index) in eelisArray" :key="index">
                     <a class="text-link" @click="$openEelis(item)">
@@ -125,7 +128,7 @@
 
               <table-row
                 v-if="area.area_type === 2"
-                :title="$t('area.text1')"
+                :title="$t('area.text1').toString()"
                 :value="planArray"
               >
                 <template #value>
@@ -148,12 +151,12 @@
               </table-row>
               <table-row
                 v-if="area.date_added"
-                :title="$t('area.dateAdded')"
+                :title="$t('area.dateAdded').toString()"
                 :value="$formatDate(area.date_added)"
               />
               <table-row
                 v-if="area.date_changed"
-                :title="$t('area.dateChanged')"
+                :title="$t('area.dateChanged').toString()"
                 :value="$formatDate(area.date_changed)"
               />
             </base-table>
@@ -177,7 +180,7 @@
             </v-alert>
             <base-table>
               <table-row-link
-                :title="$t('deposit.registrationNo')"
+                :title="$t('deposit.registrationNo').toString()"
                 :value="deposit.id"
                 @link-click="
                   $openWindow(
@@ -186,44 +189,47 @@
                 "
               />
               <table-row
-                :title="$t('deposit.name')"
+                :title="$t('deposit.name').toString()"
                 :value="`${deposit.nimetus} ${
                   deposit.maardla_os ? `(${deposit.maardla_os})` : ''
                 }`"
               />
               <table-row
-                :title="$t('deposit.name')"
+                :title="$t('deposit.name').toString()"
                 :value="deposit.maardla_os"
               />
-              <table-row :title="$t('deposit.area')" :value="deposit.pindala" />
-              <table-row :title="$t('deposit.isBedrock')">
+              <table-row
+                :title="$t('deposit.area').toString()"
+                :value="deposit.pindala"
+              />
+              <table-row :title="$t('deposit.isBedrock').toString()">
                 <template #value>
                   <base-boolean :value="deposit.aluspohja" />
                 </template>
               </table-row>
               <table-row
-                :title="$t('deposit.commodity')"
+                :title="$t('deposit.commodity').toString()"
                 :value="deposit.maavara"
               />
               <table-row
-                :title="$t('deposit.usage')"
+                :title="$t('deposit.usage').toString()"
                 :value="deposit.pohimaavar"
               />
               <table-row
-                :title="$t('deposit.additionalCommodity')"
+                :title="$t('deposit.additionalCommodity').toString()"
                 :value="deposit.kaasmaavar"
               />
 
               <table-row
-                :title="$t('deposit.miningConditions')"
+                :title="$t('deposit.miningConditions').toString()"
                 :value="deposit.maeteh_ti"
               />
               <table-row
-                :title="$t('deposit.enviromentalRestrictions')"
+                :title="$t('deposit.enviromentalRestrictions').toString()"
                 :value="deposit.geookol_ti"
               />
               <table-row
-                :title="$t('deposit.dataExportDate')"
+                :title="$t('deposit.dataExportDate').toString()"
                 :value="deposit.eksporditi"
               />
             </base-table>
@@ -246,7 +252,7 @@
               {{ $t('alert.estonianLandBoardDatabase') }}
             </v-alert>
             <base-table>
-              <table-row :title="$t('miningClaim.number')">
+              <table-row :title="$t('miningClaim.number').toString()">
                 <template #value>
                   <base-link-external
                     @click.native="
@@ -260,7 +266,7 @@
                   (Maaamet XGIS2)
                 </template>
               </table-row>
-              <table-row :title="$t('miningClaim.registrationNo')">
+              <table-row :title="$t('miningClaim.registrationNo').toString()">
                 <template #value>
                   <base-link-external
                     @click.native="
@@ -275,36 +281,36 @@
                 </template>
               </table-row>
               <table-row
-                :title="$t('miningClaim.name')"
+                :title="$t('miningClaim.name').toString()"
                 :value="`${miningClaim.nimetus} ${
                   miningClaim.maardla_os ? `(${miningClaim.maardla_os})` : ''
                 }`"
               />
               <table-row
-                :title="$t('miningClaim.area')"
+                :title="$t('miningClaim.area').toString()"
                 :value="miningClaim.pindala"
               />
               <table-row
-                :title="$t('miningClaim.reserve')"
+                :title="$t('miningClaim.reserve').toString()"
                 :value="miningClaim.erald_varu"
               />
               <table-row
-                :title="$t('miningClaim.usage')"
+                :title="$t('miningClaim.usage').toString()"
                 :value="miningClaim.kas_eesm"
               />
               <table-row
-                :title="$t('miningClaim.reclamation')"
+                :title="$t('miningClaim.reclamation').toString()"
                 :value="miningClaim.rekult"
               />
 
               <table-row
-                :title="$t('miningClaim.status')"
+                :title="$t('miningClaim.status').toString()"
                 :value="miningClaim.me_olek"
               />
 
               <table-row
                 v-if="miningClaim.loa_number"
-                :title="$t('miningClaim.extractionPermit')"
+                :title="$t('miningClaim.extractionPermit').toString()"
               >
                 <template #value>
                   <base-link-external
@@ -320,20 +326,20 @@
                 </template>
               </table-row>
               <table-row
-                :title="$t('miningClaim.period')"
+                :title="$t('miningClaim.period').toString()"
                 :value="`${miningClaim.loa_algus} - ${miningClaim.loa_lopp}`"
               />
               <table-row
-                :title="$t('miningClaim.permitOwner')"
+                :title="$t('miningClaim.permitOwner').toString()"
                 :value="miningClaim.loa_omanik"
               />
               <table-row
-                :title="$t('miningClaim.miningCompany')"
+                :title="$t('miningClaim.miningCompany').toString()"
                 :value="miningClaim.kaevandaja"
               />
 
               <table-row
-                :title="$t('miningClaim.dataExportDate')"
+                :title="$t('miningClaim.dataExportDate').toString()"
                 :value="miningClaim.eksporditi"
               />
             </base-table>
@@ -378,6 +384,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -415,8 +422,8 @@ export default defineComponent({
       area: null as any,
       ids: {} as any,
       siteMarkers: [] as MapMarker[],
-      deposit: '' as string,
-      miningClaim: '' as string,
+      deposit: null as any,
+      miningClaim: null as any,
       validRoute: {} as Location,
       tabs: [] as Tab[],
     })
@@ -524,12 +531,30 @@ export default defineComponent({
           en: state.area?.name_en,
         })} | ${i18n.t('area.pageTitle')}`
     )
+
+    const icons = computed(() => {
+      return {
+        mdiFileDownloadOutline,
+      }
+    })
     useSlugRoute({
       slug: pageTitle,
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'area'),
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
+    })
+    useMeta(() => {
+      return {
+        title: metaTitle.value,
+        meta: [
+          {
+            property: 'og:title',
+            content: metaTitle.value,
+            hid: 'og:title',
+          },
+        ],
+      }
     })
     return {
       ...toRefs(state),
@@ -539,29 +564,11 @@ export default defineComponent({
       geojson,
       pageTitle,
       metaTitle,
+      icons,
+      isNil,
     }
   },
-  head() {
-    return {
-      title: this.metaTitle as string,
-      meta: [
-        {
-          property: 'og:title',
-          content: this.metaTitle as string,
-          hid: 'og:title',
-        },
-      ],
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiFileDownloadOutline,
-      }
-    },
-  },
-  methods: {
-    isNil,
-  },
+  head: {},
+  computed: {},
 })
 </script>

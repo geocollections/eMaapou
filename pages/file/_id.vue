@@ -119,7 +119,7 @@
         <base-table>
           <table-row-link
             v-if="specimen && specimen.coll"
-            :title="$t('file.collectionNr')"
+            :title="$t('file.collectionNr').toString()"
             :value="specimen.coll.number"
             nuxt
             :href="
@@ -131,7 +131,7 @@
           />
           <table-row-link
             v-if="specimen"
-            :title="$t('file.specimenNr')"
+            :title="$t('file.specimenNr').toString()"
             :value="file.specimen.specimen_id"
             nuxt
             :href="
@@ -145,7 +145,7 @@
             <table-row-link
               v-if="item.taxon"
               :key="index"
-              :title="$t('file.name')"
+              :title="$t('file.name').toString()"
               :value="item.taxon.taxon"
               :suffix="item.name ? `| ${item.name}` : ''"
               @link-click="
@@ -157,7 +157,7 @@
             <table-row-link
               v-if="item.taxon"
               :key="index"
-              :title="$t('file.name')"
+              :title="$t('file.name').toString()"
               :value="item.taxon.taxon"
               :suffix="item.name ? `| ${item.name}` : ''"
               @link-click="
@@ -167,7 +167,7 @@
           </template>
           <table-row-link
             v-if="specimen && specimen.locality"
-            :title="$t('file.locality')"
+            :title="$t('file.locality').toString()"
             :value="
               $translate({
                 et: specimen.locality.locality,
@@ -184,7 +184,7 @@
           />
           <table-row-link
             v-if="specimen && specimen.stratigraphy"
-            :title="$t('file.stratigraphy')"
+            :title="$t('file.stratigraphy').toString()"
             :value="
               $translate({
                 et: specimen.stratigraphy.stratigraphy,
@@ -201,11 +201,11 @@
           />
           <table-row
             v-if="file.image_scalebar"
-            :title="$t('file.scalebar')"
+            :title="$t('file.scalebar').toString()"
             :value="file.image_scalebar"
           />
           <table-row
-            :title="$t('file.description')"
+            :title="$t('file.description').toString()"
             :value="
               $translate({
                 et: file.description,
@@ -214,33 +214,42 @@
             "
           />
           <table-row
-            :title="$t('file.imageNumber')"
+            :title="$t('file.imageNumber').toString()"
             :value="file.image_number"
           />
           <table-row
             v-if="imageset"
-            :title="$t('file.imagesetNumber')"
+            :title="$t('file.imagesetNumber').toString()"
             :value="imageset.imageset_number"
           />
           <table-row
             v-if="imageset"
-            :title="$t('file.imagesetDescription')"
+            :title="$t('file.imagesetDescription').toString()"
             :value="imageset.description"
           />
-          <table-row :title="$t('file.author')" :value="file.author" />
-          <table-row :title="$t('file.author')" :value="file.author_free" />
           <table-row
-            :title="$t('file.imagePeople')"
+            :title="$t('file.author').toString()"
+            :value="file.author"
+          />
+          <table-row
+            :title="$t('file.author').toString()"
+            :value="file.author_free"
+          />
+          <table-row
+            :title="$t('file.imagePeople').toString()"
             :value="file.image_people"
           />
           <table-row
-            :title="$t('file.date')"
+            :title="$t('file.date').toString()"
             :value="file.date_created || file.date_created_free"
           />
-          <table-row :title="$t('file.imagePlace')" :value="file.image_place" />
+          <table-row
+            :title="$t('file.imagePlace').toString()"
+            :value="file.image_place"
+          />
           <table-row-link
             v-if="locality"
-            :title="$t('file.locality')"
+            :title="$t('file.locality').toString()"
             :value="
               $translate({
                 et: locality.locality,
@@ -256,16 +265,16 @@
             "
           />
           <table-row
-            :title="$t('file.imageLatitude')"
+            :title="$t('file.imageLatitude').toString()"
             :value="file.image_latitude"
           />
           <table-row
-            :title="$t('file.imageLongitude')"
+            :title="$t('file.imageLongitude').toString()"
             :value="file.image_longitude"
           />
           <table-row
             v-if="type"
-            :title="$t('file.type')"
+            :title="$t('file.type').toString()"
             :value="
               $translate({
                 et: type.value,
@@ -274,12 +283,12 @@
             "
           />
           <table-row
-            :title="$t('file.format')"
+            :title="$t('file.format').toString()"
             :value="file.attachment_format"
           />
           <table-row
             v-if="attachmentKeywords.length > 0"
-            :title="$t('file.keywords')"
+            :title="$t('file.keywords').toString()"
             :value="attachmentKeywords"
           >
             <template #value>
@@ -290,17 +299,20 @@
           </table-row>
           <table-row
             v-if="agentDigitised"
-            :title="$t('file.personDigitised')"
+            :title="$t('file.personDigitised').toString()"
             :value="agentDigitised.agent"
           />
           <table-row
-            :title="$t('file.dateDigitised')"
+            :title="$t('file.dateDigitised').toString()"
             :value="file.date_digitised || file.date_digitised_free"
           />
-          <table-row :title="$t('file.imageSize')" :value="imageSize" />
+          <table-row
+            :title="$t('file.imageSize').toString()"
+            :value="imageSize"
+          />
           <table-row-link
             v-if="database"
-            :title="$t('file.institution')"
+            :title="$t('file.institution').toString()"
             :value="
               $translate({
                 et: database.name,
@@ -312,19 +324,22 @@
           />
           <table-row-link
             v-if="licence"
-            :title="$t('file.licence')"
+            :title="$t('file.licence').toString()"
             :value="licence.licence_en"
             @link-click="$openWindow(licence.licence_url_en)"
           />
-          <table-row :title="$t('file.remarks')" :value="file.remarks" />
+          <table-row
+            :title="$t('file.remarks').toString()"
+            :value="file.remarks"
+          />
           <table-row
             v-if="file.date_added"
-            :title="$t('file.dateAdded')"
+            :title="$t('file.dateAdded').toString()"
             :value="$formatDate(file.date_added)"
           />
           <table-row
             v-if="file.date_changed"
-            :title="$t('file.dateChanged')"
+            :title="$t('file.dateChanged').toString()"
             :value="$formatDate(file.date_changed)"
           />
         </base-table>
@@ -347,8 +362,8 @@
                 latitude: mapLatitude,
                 longitude: mapLongitude,
                 text: $translate({
-                  et: mapLocality,
-                  en: mapLocalityEn,
+                  et: locality.locality,
+                  en: locality.locality_en,
                 }),
               },
             ]"
@@ -438,7 +453,7 @@
         </transition-group>
       </v-row>
 
-      <v-row v-if="isEmpty(fileContent)" class="mt-2">
+      <v-row v-if="!isEmpty(fileContent)" class="mt-2">
         <v-col cols="12">
           <v-card>
             <v-card-title class="subsection-title">{{
@@ -516,6 +531,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
 import { Location } from 'vue-router'
@@ -538,7 +554,7 @@ export default defineComponent({
     ChartLas,
   },
   setup() {
-    const { $services, $translate, i18n } = useContext()
+    const { $services, $translate, i18n, $img } = useContext()
     const route = useRoute()
     const state = reactive({
       expansionPanel: [1] as number[],
@@ -621,6 +637,14 @@ export default defineComponent({
       ids: {} as any,
       validRoute: {} as Location,
       tabs: [] as any[],
+    })
+    const icons = computed(() => {
+      return {
+        mdiFileMusicOutline,
+        mdiFileVideoOutline,
+        mdiFileDownloadOutline,
+        mdiOpenInNew,
+      }
     })
     const imageSize = computed(() => {
       return state.file?.image_width && state.file?.image_height
@@ -998,6 +1022,52 @@ export default defineComponent({
         })
       }
     }
+    useMeta(() => {
+      return {
+        title: pageTitle.value,
+        meta: [
+          {
+            property: 'og:title',
+            hid: 'og:title',
+            content: pageTitle.value,
+          },
+          {
+            property: 'og:url',
+            hid: 'og:url',
+            content: route.value.path,
+          },
+          ...[
+            {
+              property: 'og:image',
+              hid: 'og:image',
+              content: isImage.value
+                ? $img(
+                    `${state.file.filename}`,
+                    { size: 'small' },
+                    {
+                      provider: 'geocollections',
+                    }
+                  )
+                : '',
+            },
+            {
+              property: 'og:video',
+              hid: 'og:video',
+              content: isVideo.value
+                ? `https://files.geocollections.info/${state.file.uuid_filename}`
+                : '',
+            },
+            {
+              property: 'og:audio',
+              hid: 'og:audio',
+              content: isAudio.value
+                ? `https://files.geocollections.info/${state.file.uuid_filename}`
+                : '',
+            },
+          ],
+        ],
+      }
+    })
     return {
       ...toRefs(state),
       licence,
@@ -1016,76 +1086,16 @@ export default defineComponent({
       isVideo,
       isAudio,
       isImage,
+      icons,
       imageSize,
       pageTitle,
       buildData,
+      isNull,
+      isNil,
+      isEmpty,
     }
   },
-  // @ts-ignore
-  head() {
-    return {
-      title: this.pageTitle as string,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.pageTitle as string,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-        ...[
-          {
-            property: 'og:image',
-            hid: 'og:image',
-            content: this.isImage
-              ? this.$img(
-                  // @ts-ignore
-                  `${this.file.filename}`,
-                  { size: 'small' },
-                  {
-                    provider: 'geocollections',
-                  }
-                )
-              : undefined,
-          },
-          {
-            property: 'og:video',
-            hid: 'og:video',
-            content: this.isVideo
-              ? // @ts-ignore
-                `https://files.geocollections.info/${this.file.uuid_filename}`
-              : undefined,
-          },
-          {
-            property: 'og:audio',
-            hid: 'og:audio',
-            content: this.isAudio
-              ? // @ts-ignore
-                `https://files.geocollections.info/${this.file.uuid_filename}`
-              : undefined,
-          },
-        ],
-      ],
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiFileMusicOutline,
-        mdiFileVideoOutline,
-        mdiFileDownloadOutline,
-        mdiOpenInNew,
-      }
-    },
-  },
-  methods: {
-    isNull,
-    isNil,
-    isEmpty,
-  },
+  head: {},
 })
 </script>
 
