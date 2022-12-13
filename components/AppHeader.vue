@@ -1,12 +1,10 @@
 <template>
   <v-app-bar
-    v-slot="test"
     app
     dark
     clipped-right
-    absolute
-    height="48"
-    :elevation="0"
+    dense
+    elevate-on-scroll
     :color="transparent ? 'transparent' : 'accent darken-1'"
     :class="{
       'app-bar-full': $vuetify.breakpoint.mdAndUp,
@@ -30,16 +28,15 @@
       />
     </nuxt-link>
     <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-4 mr-md-2">
-      {{ test }}
       <v-btn
         id="browse_menu_btn"
         aria-label="browse"
         text
         class="montserrat"
-        style="text-transform: capitalize; font-size: 0.875rem"
+        style="text-transform: capitalize"
       >
         {{ $t('common.browse') }}
-        <v-icon color="accent lighten-2" class="ml-1">
+        <v-icon color="accent lighten-2" right>
           {{ icons.mdiChevronDown }}
         </v-icon>
       </v-btn>
@@ -60,7 +57,7 @@
                 :key="`browse-geography-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
-                :label="$t(item.label)"
+                :label="$t(item.label).toString()"
                 nuxt
                 :to="localePath({ name: item.routeName })"
               />
@@ -73,7 +70,7 @@
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
-                :label="$t(item.label)"
+                :label="$t(item.label).toString()"
                 nuxt
                 :to="localePath({ name: item.routeName })"
               />
@@ -85,7 +82,7 @@
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
-                :label="$t(item.label)"
+                :label="$t(item.label).toString()"
                 nuxt
                 :to="localePath({ name: item.routeName })"
               />
@@ -120,10 +117,10 @@
         aria-label="browse"
         text
         class="montserrat"
-        style="text-transform: capitalize; font-size: 0.875rem"
+        style="text-transform: capitalize"
       >
         {{ $t('common.services') }}
-        <v-icon color="accent lighten-2" class="ml-1">
+        <v-icon color="accent lighten-2" right>
           {{ icons.mdiChevronDown }}
         </v-icon>
       </v-btn>
@@ -149,7 +146,7 @@
                 target="_blank"
                 style="width: 250px"
                 :href="services[tabId].href"
-                :label="$t(services[tabId].title)"
+                :label="$t(services[tabId].title).toString()"
                 label-only
               />
             </v-list>
@@ -161,44 +158,105 @@
     <v-toolbar-items
       class="align-center"
       :style="{
-        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : 'inherit',
+        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : '100%',
       }"
     >
       <div
         v-if="showSearch"
         class="d-flex elevation-0 rounded mr-2"
+        style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
       >
-        <input-search
-          v-model="query"
-          class="rounded-r-0 montserrat"
-          background-color="white"
-          dense
-          flat
-          :autofocus="false"
-          :placeholder="$t('common.search')"
-          @enter="
-            $router.push(
-              localePath({ name: searchRouteName, query: { q: query } })
-            )
-          "
-        />
-        <v-hover v-slot="{ hover }">
-          <v-btn
-            height="38"
-            width="48"
-            elevation="0"
-            :color="hover ? 'warning' : 'grey lighten-2'"
-            class="rounded-l-0"
-            @click="
-              $router.push(
-                localePath({ name: searchRouteName, query: { q: query } })
-              )
-            "
-          >
-            <v-icon color="accent">{{ icons.mdiMagnify }}</v-icon>
-          </v-btn>
-        </v-hover>
+        <v-menu
+          v-model="searchFocused"
+          offset-y
+          nudge-left="12"
+          :close-on-content-click="false"
+          content-class="mt-2"
+          :open-on-focus="true"
+          max-width="600"
+        >
+          <template #activator="{ on, attrs }">
+            <input-search
+              v-model="query"
+              class="rounded-r-0 montserrat ml-auto"
+              background-color="white"
+              style="max-width: 600px"
+              dense
+              flat
+              :autofocus="false"
+              :placeholder="$t('common.search').toString()"
+              v-bind="attrs"
+              v-on="on"
+              @enter="
+                $router.push(
+                  localePath({ name: searchRouteName, query: { q: query } })
+                )
+              "
+            />
+            <v-hover v-slot="{ hover }">
+              <v-btn
+                height="38"
+                width="48"
+                elevation="0"
+                :color="hover ? 'warning' : 'grey lighten-2'"
+                class="rounded-l-0"
+                @click="
+                  $router.push(
+                    localePath({ name: searchRouteName, query: { q: query } })
+                  )
+                "
+              >
+                <v-icon color="accent">{{ icons.mdiMagnify }}</v-icon>
+              </v-btn>
+            </v-hover>
+          </template>
+          <v-card elevation="0">
+            <v-card-text>
+              <v-row no-gutters>
+                <v-col cols="12" sm="6">
+                  <div class="d-flex my-1 align-center">
+                    <code class="black--text font-weight-bold">"Viki"</code>
+                    <div class="ml-2">exact phrase</div>
+                  </div>
+                  <div class="d-flex my-1 align-center">
+                    <code class="black--text font-weight-bold">+Keila</code>
+                    <div class="ml-2">require term</div>
+                  </div>
+                  <div class="d-flex my-1 align-center">
+                    <code class="black--text font-weight-bold">-Tartu</code>
+                    <div class="ml-2">exclude term</div>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <div class="d-flex my-1 align-center">
+                    <code class="black--text font-weight-bold"
+                      >"Eesti" AND "Soome"</code
+                    >
+                    <div class="ml-2">both terms exist</div>
+                  </div>
+                  <div class="d-flex my-1 align-center">
+                    <code class="black--text font-weight-bold"
+                      >NOT "Eesti"</code
+                    >
+                    <div class="ml-2">term does not exist</div>
+                  </div>
+                </v-col>
+                <v-col cols="12">
+                  <div class="d-flex my-1">
+                    <code class="black--text font-weight-bold">
+                      GIT 155\-57
+                    </code>
+                    <div class="ml-2">
+                      escape special characters (<code>+-!(){}[]^"~*?:/</code>)
+                      using <code>\</code>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-menu>
       </div>
       <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
       <v-btn
@@ -217,8 +275,15 @@
   </v-app-bar>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiChevronDown, mdiMagnify, mdiMenu } from '@mdi/js'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRefs,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import InputSearch from './input/InputSearch.vue'
 import BaseMenuListItem from './base/BaseMenuListItem.vue'
 import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
@@ -228,7 +293,7 @@ import {
   BROWSE_TAXON_LIST,
   SERVICES,
 } from '~/constants'
-export default {
+export default defineComponent({
   name: 'AppHeader',
   components: { LanguageSwitcher, InputSearch, BaseMenuListItem },
   props: {
@@ -246,48 +311,46 @@ export default {
       default: 1785,
     },
   },
-  data() {
-    return {
+  setup(props) {
+    const route = useRoute()
+    const state = reactive({
       browseGeography: BROWSE_GEOLOGY_LIST,
       browseLab: BROWSE_LAB_LIST,
       browseTaxon: BROWSE_TAXON_LIST,
       logo: '/logos/emaapou5white.svg',
       logoCompact: '/logos/emaapou_short.svg',
       services: SERVICES,
-      query: '',
-    }
-  },
-  computed: {
-    icons() {
+      query: route.value.query.q ?? '',
+      searchFocused: false,
+    })
+    const icons = computed(() => {
       return {
         mdiMagnify,
         mdiMenu,
         mdiChevronDown,
       }
-    },
-    tabValue() {
+    })
+    const tabValue = computed(() => {
       // https://github.com/vuetifyjs/vuetify/issues/12265
-      const path = this.$route.path
-      const full = this.$route.fullPath
+      const path = route.value.path
+      const full = route.value.fullPath
       return path[path.length - 1] !== '/'
         ? `${path}/${full.substring(path.length)}`
         : `${full}/`
-    },
-    searchRouteName() {
-      return this.$route.name.includes('search')
-        ? this.$route.name.split('__')[0]
+    })
+    const searchRouteName = computed(() => {
+      return route.value.name?.includes('search')
+        ? route.value.name?.split('__')[0]
         : 'search'
-    },
-    cssProps() {
+    })
+    const cssProps = computed(() => {
       return {
-        '--max-width': `${this.maxWidth}px`,
+        '--max-width': `${props.maxWidth}px`,
       }
-    },
+    })
+    return { ...toRefs(state), icons, tabValue, searchRouteName, cssProps }
   },
-  created() {
-    this.query = this.$route.query.q
-  },
-}
+})
 </script>
 
 <style scoped lang="scss">

@@ -12,6 +12,8 @@
     v-bind="{ ...$props, ...$attrs }"
     @input="$emit('input', $event)"
     @keyup.enter="$emit('enter', $event)"
+    @focus="$emit('focus', $event)"
+    @blur="$emit('blur', $event)"
   >
   </v-text-field>
 </template>

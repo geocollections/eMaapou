@@ -6,11 +6,9 @@
     class="montserrat text-capitalize"
     :color="color"
   >
-    <v-icon class="mr-2" color="accent lighten-2">{{ icons.mdiWeb }}</v-icon>
+    <v-icon left color="accent lighten-2">{{ icons.mdiWeb }}</v-icon>
     {{ $i18n.localeProperties.name }}
-    <v-icon class="ml-1" color="accent lighten-2">{{
-      icons.mdiChevronDown
-    }}</v-icon>
+    <v-icon right color="accent lighten-2">{{ icons.mdiChevronDown }}</v-icon>
     <v-menu
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"

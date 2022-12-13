@@ -81,5 +81,20 @@ export const SERVICES = {
     'geocollections',
     'doi',
     'sarv',
-  ],
+  ] as
+    ('kirjandus' |
+    'fossiilid' |
+    'kivid' |
+    'fond' |
+    'maardlad' |
+    'stratigraphy' |
+    'gmre' |
+    'turba' |
+    'geocase' |
+    'eurocore' |
+    'geocollections' |
+    'doi' |
+    'sarv')[]
+
+  ,
 }
