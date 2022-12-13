@@ -156,7 +156,7 @@
     </v-toolbar-items>
     <v-spacer />
     <v-toolbar-items
-      class="align-center"
+      class="align-center ml-auto"
       :style="{
         width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : '100%',
       }"
@@ -258,11 +258,11 @@
           </v-card>
         </v-menu>
       </div>
-      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" />
+      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" class="ml-auto" />
       <v-btn
         v-if="!$vuetify.breakpoint.mdAndUp"
         text
-        class="montserrat"
+        class="montserrat ml-auto"
         aria-label="Open navigation drawer"
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
