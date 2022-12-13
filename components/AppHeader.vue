@@ -161,7 +161,7 @@
     <v-toolbar-items
       class="align-center"
       :style="{
-        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : '700px',
+        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : 'inherit',
       }"
     >
       <div
