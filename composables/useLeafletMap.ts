@@ -6,6 +6,7 @@ export interface MapState {
   map: Leaflet.Map | undefined
   options: any
   currentCenter: { lat: number; lng: number }
+  mapClickResponse: any
   [K: string]: any
 }
 export function useLeafletMap({
@@ -54,6 +55,7 @@ export function useLeafletMap({
       state.activeOverlays.value.splice(index, 1)
     }
   }
+
   return {
     ready,
     updateCenter,
@@ -209,13 +211,27 @@ const useEstonianOverlays = ({
   ]
 }
 
-export const useDataOverlays = ({
-  localityOverlay = false,
-  boreholeOverlay = false,
-  siteOverlay = false,
-  sampleOverlay = false,
-  summaryOverlay = false,
-}) => {
+export const useDataOverlays = (
+  {
+    localityOverlay = false,
+    boreholeOverlay = false,
+    siteOverlay = false,
+    sampleOverlay = false,
+    summaryOverlay = false,
+  }: {
+    localityOverlay: boolean
+    boreholeOverlay: boolean
+    siteOverlay: boolean
+    sampleOverlay: boolean
+    summaryOverlay: boolean
+  } = {
+    localityOverlay: false,
+    boreholeOverlay: false,
+    siteOverlay: false,
+    sampleOverlay: false,
+    summaryOverlay: false,
+  }
+) => {
   return [
     {
       id: 'locs',

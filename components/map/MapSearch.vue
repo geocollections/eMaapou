@@ -90,12 +90,6 @@
         <l-layer-group ref="popup">
           <map-click-popup :response="mapClickResponse" />
         </l-layer-group>
-
-        <!-- <map-legend
-          :active-base-layer="activeBaseLayer"
-          :active-overlays="activeOverlays"
-          :height="height"
-        />-->
       </l-map>
       <template #placeholder>
         <div
@@ -172,9 +166,13 @@ if (process.client) {
     shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
   })
 }
+
 interface State extends MapState {
   activeGeomanLayer: L.GeoJSON | L.Circle | null
+  nearMeRadius: number
+  gpsLocation: any
 }
+
 export default defineComponent({
   name: 'MapSearch',
   components: {
@@ -203,7 +201,7 @@ export default defineComponent({
     },
     center: {
       type: Object,
-      default() {
+      default: () => {
         return {
           latitude: 58.5,
           longitude: 25.5,
@@ -265,11 +263,10 @@ export default defineComponent({
       default: true,
     },
   },
-  // @ts-ignore
   setup(props, { emit }) {
     const { $services, i18n } = useContext()
     const accessor = useAccessor()
-    const state: MapState = reactive({
+    const state: State = reactive({
       gpsID: null as null | number,
       map: undefined,
       mapClickResponse: null as any,
@@ -294,7 +291,6 @@ export default defineComponent({
       },
       nearMeRadius: 5,
     })
-
     const popup = ref<LPopup>()
     const layerControl = ref<LControlLayers>()
     const map = ref<LMap>()
@@ -318,6 +314,7 @@ export default defineComponent({
       () => state.activeOverlays,
       (newVal) => {
         if (!checkableLayers.value) return
+
         if (document.getElementById('map')) {
           if (
             Object.keys(checkableLayers.value).some((el) => newVal.includes(el))
@@ -326,7 +323,8 @@ export default defineComponent({
           else
             document.getElementById('map')?.classList.remove('cursor-crosshair')
         }
-      }
+      },
+      { deep: true }
     )
 
     watch(
@@ -449,14 +447,20 @@ export default defineComponent({
         )
         state.map?.addLayer(state.activeGeomanLayer)
       }
+      if (isMapClickEnabled) {
+        state.map?.on('click', handleMapClick)
+        document.getElementById('map')?.classList.add('cursor-crosshair')
+      }
       fitBounds()
     }
     const mapZoom = computed(() => {
       return props.zoom ?? (props.estonianBedrockOverlay ? 9 : 11)
     })
-    const markersAsFitBoundsObject = computed(() => {
-      return props.markers.map((m: MapMarker) => [m.latitude, m.longitude])
-    })
+    const markersAsFitBoundsObject = computed(
+      (): Leaflet.LatLngBoundsLiteral => {
+        return props.markers.map((m: MapMarker) => [m.latitude, m.longitude])
+      }
+    )
     const fitBounds = () => {
       nextTick(() => {
         const geoJSON = accessor.search.globalFilters.byIds.geoJSON.value
@@ -478,6 +482,7 @@ export default defineComponent({
     }
     const checkableLayers = computed((): { [K: string]: Leaflet.Layer } => {
       const layerNames = dataOverlays.map((overlay: any) => overlay.name)
+
       // @ts-ignore
       return layerControl.value?.mapObject._layers.reduce(
         (layers: any, item: any) => {
