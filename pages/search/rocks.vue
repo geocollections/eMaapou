@@ -44,7 +44,14 @@ export default {
     this.count = analysisResponse.count
   },
   watch: {
-    '$route.query': '$fetch',
+    '$route.query': function (newQuery, oldQuery) {
+      if (
+        !this._inactive &&
+        JSON.stringify(newQuery) !== JSON.stringify(oldQuery)
+      ) {
+        this.$fetch()
+      }
+    },
   },
   methods: {
     handleUpdate(tableState) {

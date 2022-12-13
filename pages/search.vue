@@ -85,6 +85,8 @@ export default defineComponent({
                 },
               },
             },
+          }).catch(() => {
+            return { ...tab, count: 0 }
           })
         )
       )
