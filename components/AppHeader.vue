@@ -5,7 +5,7 @@
     dark
     clipped-right
     absolute
-    height="56"
+    height="48"
     :elevation="0"
     :color="transparent ? 'transparent' : 'accent darken-1'"
     :class="{
@@ -15,21 +15,20 @@
     style="z-index: 2060"
     :style="cssProps"
   >
-    <v-toolbar-title class="align-self-center">
-      <!--
+    <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-      <nuxt-link :to="localePath({ path: '/' })">
-        <v-img
-          :height="40"
-          :width="80"
-          contain
-          :src="$img(logo, null, { provider: 'static' })"
-        />
-      </nuxt-link>
-    </v-toolbar-title>
+    <nuxt-link :to="localePath({ path: '/' })">
+      <nuxt-img
+        :height="32"
+        contain
+        provider="static"
+        :src="logo"
+        style="vertical-align: middle"
+      />
+    </nuxt-link>
     <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-4 mr-md-2">
       {{ test }}
       <v-btn
@@ -162,7 +161,7 @@
     <v-toolbar-items
       class="align-center"
       :style="{
-        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : 'inherit',
+        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : '700px',
       }"
     >
       <div
