@@ -1027,4 +1027,7 @@ export default {
   quickSearch: {
     title: 'Tulemused päringule {query}',
   },
+  error: {
+    occurred: 'Päringul esines viga'
+  }
 }

@@ -77,7 +77,7 @@ export default {
     showSearch: 'Search',
     showInstitutions: 'Institutions',
     showSearchFields: 'Filters',
-    backToLanding: 'Go back to landing page',
+    backToLanding: 'Return home',
     resetSearch: 'Clear',
     resetSearchLong: 'Clear search fields',
     table: 'Table',
@@ -1025,4 +1025,7 @@ export default {
   quickSearch: {
     title: 'Results for {query}',
   },
+  error: {
+    occurred: 'An error occurred'
+  }
 }

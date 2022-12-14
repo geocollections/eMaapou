@@ -1,10 +1,31 @@
 <template>
   <v-row justify="center">
     <v-col sm="8" md="6" class="text-center">
-      <h1 class="text-h4">
+      <h1 class="text-h4 mb-5">
         {{ title }}
       </h1>
-      <div class="montserrat">{{ error.message }}</div>
+
+      <v-btn
+        text
+        large
+        elevation="0"
+        class="text-capitalize montserrat"
+        @click="$router.app.refresh()"
+      >
+        <v-icon left> {{ icons.mdiRefresh }} </v-icon>
+        Refresh
+      </v-btn>
+      <v-btn
+        large
+        text
+        elevation="0"
+        nuxt
+        to="/"
+        class="montserrat text-capitalize"
+      >
+        <v-icon left>{{ icons.mdiHome }}</v-icon>
+        {{ $t('common.backToLanding') }}
+      </v-btn>
       <v-form class="d-flex text-right my-4" @submit.prevent="handleSearch">
         <input-search
           v-model="query"
@@ -22,15 +43,12 @@
           <v-icon>{{ icons.mdiMagnify }}</v-icon>
         </v-btn>
       </v-form>
-      <NuxtLink to="/" class="text-link-grey montserrat">
-        {{ $t('common.backToLanding') }}
-      </NuxtLink>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import { mdiMagnify } from '@mdi/js'
+import { mdiMagnify, mdiRefresh, mdiHome } from '@mdi/js'
 import InputSearch from '~/components/input/InputSearch.vue'
 export default {
   name: 'DetailError',
@@ -45,24 +63,24 @@ export default {
   data() {
     return {
       query: '',
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred',
+      otherError: this.$t('error.occurred'),
     }
   },
   head() {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+    const title = this.otherError
     return {
       title,
     }
   },
   computed: {
     title() {
-      return this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      return this.otherError
     },
     icons() {
       return {
         mdiMagnify,
+        mdiRefresh,
+        mdiHome,
       }
     },
   },
