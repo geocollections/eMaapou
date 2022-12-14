@@ -6,7 +6,7 @@
     :close-on-content-click="false"
     content-class="mt-2 elevation-3"
     :open-on-focus="true"
-    max-width="500"
+    max-width="650"
     @input="$emit('input', $event)"
   >
     <v-card elevation="0">

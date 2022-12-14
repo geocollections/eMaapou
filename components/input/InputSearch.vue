@@ -1,5 +1,5 @@
 <template>
-  <div style="width: inherit">
+  <div style="display: contents">
     <v-text-field
       ref="searchInput"
       :value="value"
@@ -71,6 +71,7 @@ export default defineComponent({
     const inputStyle = computed(() => ({
       // @ts-ignore
       maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : 'inherit',
+      width: '100%',
     }))
     return { searchFocused, searchInput, inputStyle }
   },

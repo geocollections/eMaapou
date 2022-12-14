@@ -18,16 +18,17 @@
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-    <nuxt-link :to="localePath({ path: '/' })">
+    <nuxt-link class="logo-link" :to="localePath({ path: '/' })">
       <nuxt-img
         :height="32"
         contain
+        class="px-3"
         provider="static"
         :src="logo"
         style="vertical-align: middle"
       />
     </nuxt-link>
-    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="ml-4 mr-md-2">
+    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="mr-md-2">
       <v-btn
         id="browse_menu_btn"
         aria-label="browse"
@@ -154,7 +155,6 @@
         </v-card>
       </v-menu>
     </v-toolbar-items>
-    <v-spacer />
     <v-toolbar-items
       class="align-center ml-auto"
       :style="{
@@ -169,11 +169,11 @@
       >
         <input-search
           v-model="query"
-          input-class="rounded-r-0 montserrat ml-auto"
+          input-class="rounded-r-0 montserrat"
           background-color="white"
           dense
           flat
-          :max-width="$vuetify.breakpoint.mdAndUp ? 500 : -1"
+          :max-width="$vuetify.breakpoint.mdAndUp ? 650 : -1"
           :autofocus="false"
           :placeholder="$t('common.search').toString()"
           @enter="
@@ -344,5 +344,22 @@ export default defineComponent({
   & .v-icon {
     color: var(--v-accent-lighten1) !important;
   }
+}
+.logo-link {
+  height: 48px;
+  display: contents;
+}
+.logo-link::before {
+  content: '';
+  height: 48px;
+  width: 104px;
+  position: absolute;
+  opacity: 0;
+  color: #ffffff;
+  background-color: currentColor;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+}
+.logo-link:hover::before {
+  opacity: 0.08;
 }
 </style>
