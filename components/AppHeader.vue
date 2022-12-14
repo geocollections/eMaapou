@@ -4,7 +4,9 @@
     dark
     clipped-right
     dense
-    elevate-on-scroll
+    :elevation="getRouteBaseName() === 'index' ? 0 : 4"
+    :absolute="getRouteBaseName() === 'index'"
+    :elevate-on-scroll="getRouteBaseName() !== 'index'"
     :color="transparent ? 'transparent' : 'accent darken-1'"
     :class="{
       'app-bar-full': $vuetify.breakpoint.mdAndUp,
