@@ -65,7 +65,7 @@ export default defineComponent({
       default: -1,
     },
   },
-  setup(props) {
+  setup(props: any) {
     const searchFocused = ref(false)
     const searchInput = ref()
     const inputStyle = computed(() => ({
