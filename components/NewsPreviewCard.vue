@@ -1,9 +1,11 @@
 <template>
+  <!--  eslint-disable-next-line vue/no-unused-vars -->
   <v-hover v-slot="{ hover }">
     <v-card
       v-bind="$attrs"
       class="py-2"
-      :elevation="hover ? 2 : 1"
+      flat
+      :color="hover ? 'grey lighten-4' : 'transparent'"
       @click.stop="$emit('click')"
     >
       <div
@@ -28,7 +30,7 @@
         {{ extractContent(content) | truncate(previewLenght) }}
       </v-card-text>
 
-      <v-card-actions class="justify-self-end py-0">
+      <!-- <v-card-actions class="justify-self-end py-0">
         <v-spacer />
         <v-btn
           :color="dark ? 'white' : 'accent'"
@@ -38,7 +40,7 @@
         >
           {{ $t('common.readNewsArticle') }}
         </v-btn>
-      </v-card-actions>
+      </v-card-actions> -->
     </v-card>
   </v-hover>
 </template>
