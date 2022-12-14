@@ -4,7 +4,10 @@
     <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
 
     <v-main style="min-height: 100vh">
-      <v-container class="pt-1 pb-10" :fluid="$vuetify.breakpoint.lgAndDown">
+      <v-container
+        class="pt-1 pb-10 fill-height"
+        :fluid="$vuetify.breakpoint.lgAndDown"
+      >
         <v-row no-gutters>
           <v-col>
             <client-only>
