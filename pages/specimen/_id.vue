@@ -280,11 +280,10 @@ export default defineComponent({
     })
     const isRock = computed(() => !!state.specimenAlt?.rock)
     const isTaxon = computed(() => !!state.specimenAlt?.taxon)
-    const dateCollected = computed(() =>
-      state.specimen?.date_collected
-        ? state.specimen.date_collected
-        : state.specimen.date_collected_free
-    )
+    const dateCollected = computed(() => {
+      if (!state.specimen) return ''
+      return state.specimen.date_collected ?? state.specimen.date_collected_free
+    })
     const coll = computed(() => state.specimen?.coll)
     const type = computed(() => state.specimen?.type)
     const classification = computed(() => state.specimen?.classification)

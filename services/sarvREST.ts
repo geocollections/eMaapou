@@ -84,9 +84,13 @@ export default ($axios: NuxtAxiosInstance) => ({
     countParams: { [key: string]: any },
     fields = 'id'
   ) {
-    const response = await $axios.$get(`${resource}/`, {
-      params: { ...countParams, offset: 0, limit: 1, fields },
-    })
+    const response = await $axios
+      .$get(`${resource}/`, {
+        params: { ...countParams, offset: 0, limit: 1, fields },
+      })
+      .catch((err) => {
+        throw new Error(err.message)
+      })
     return {
       count: response.count,
     }
