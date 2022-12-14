@@ -167,96 +167,37 @@
         style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
       >
-        <v-menu
-          v-model="searchFocused"
-          offset-y
-          nudge-left="12"
-          :close-on-content-click="false"
-          content-class="mt-2"
-          :open-on-focus="true"
-          max-width="600"
-        >
-          <template #activator="{ on, attrs }">
-            <input-search
-              v-model="query"
-              class="rounded-r-0 montserrat ml-auto"
-              background-color="white"
-              style="max-width: 600px"
-              dense
-              flat
-              :autofocus="false"
-              :placeholder="$t('common.search').toString()"
-              v-bind="attrs"
-              v-on="on"
-              @enter="
-                $router.push(
-                  localePath({ name: searchRouteName, query: { q: query } })
-                )
-              "
-            />
-            <v-hover v-slot="{ hover }">
-              <v-btn
-                height="38"
-                width="48"
-                elevation="0"
-                :color="hover ? 'warning' : 'grey lighten-2'"
-                class="rounded-l-0"
-                @click="
-                  $router.push(
-                    localePath({ name: searchRouteName, query: { q: query } })
-                  )
-                "
-              >
-                <v-icon color="accent">{{ icons.mdiMagnify }}</v-icon>
-              </v-btn>
-            </v-hover>
-          </template>
-          <v-card elevation="0">
-            <v-card-text>
-              <v-row no-gutters>
-                <v-col cols="12" sm="6">
-                  <div class="d-flex my-1 align-center">
-                    <code class="black--text font-weight-bold">"Viki"</code>
-                    <div class="ml-2">exact phrase</div>
-                  </div>
-                  <div class="d-flex my-1 align-center">
-                    <code class="black--text font-weight-bold">+Keila</code>
-                    <div class="ml-2">require term</div>
-                  </div>
-                  <div class="d-flex my-1 align-center">
-                    <code class="black--text font-weight-bold">-Tartu</code>
-                    <div class="ml-2">exclude term</div>
-                  </div>
-                </v-col>
-                <v-col cols="12" sm="6">
-                  <div class="d-flex my-1 align-center">
-                    <code class="black--text font-weight-bold"
-                      >"Eesti" AND "Soome"</code
-                    >
-                    <div class="ml-2">both terms exist</div>
-                  </div>
-                  <div class="d-flex my-1 align-center">
-                    <code class="black--text font-weight-bold"
-                      >NOT "Eesti"</code
-                    >
-                    <div class="ml-2">term does not exist</div>
-                  </div>
-                </v-col>
-                <v-col cols="12">
-                  <div class="d-flex my-1">
-                    <code class="black--text font-weight-bold">
-                      GIT 155\-57
-                    </code>
-                    <div class="ml-2">
-                      escape special characters (<code>+-!(){}[]^"~*?:/</code>)
-                      using <code>\</code>
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-menu>
+        <input-search
+          v-model="query"
+          input-class="rounded-r-0 montserrat ml-auto"
+          background-color="white"
+          dense
+          flat
+          :max-width="$vuetify.breakpoint.mdAndUp ? 500 : -1"
+          :autofocus="false"
+          :placeholder="$t('common.search').toString()"
+          @enter="
+            $router.push(
+              localePath({ name: searchRouteName, query: { q: query } })
+            )
+          "
+        />
+        <v-hover v-slot="{ hover }">
+          <v-btn
+            height="38"
+            width="48"
+            elevation="0"
+            :color="hover ? 'warning' : 'grey lighten-2'"
+            class="rounded-l-0"
+            @click="
+              $router.push(
+                localePath({ name: searchRouteName, query: { q: query } })
+              )
+            "
+          >
+            <v-icon color="accent">{{ icons.mdiMagnify }}</v-icon>
+          </v-btn>
+        </v-hover>
       </div>
       <language-switcher v-if="$vuetify.breakpoint.mdAndUp" class="ml-auto" />
       <v-btn
@@ -320,7 +261,7 @@ export default defineComponent({
       logo: '/logos/emaapou5white.svg',
       logoCompact: '/logos/emaapou_short.svg',
       services: SERVICES,
-      query: route.value.query.q ?? '',
+      query: (route.value.query.q as string) ?? '',
       searchFocused: false,
     })
     const icons = computed(() => {
@@ -360,6 +301,9 @@ export default defineComponent({
 
 .mobile-search {
   width: 100%;
+}
+.app-bar-search {
+  max-width: 600px;
 }
 
 .active-tab {

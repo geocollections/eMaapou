@@ -1,26 +1,34 @@
 <template>
-  <v-text-field
-    :value="value"
-    color="accent"
-    light
-    :placeholder="placeholder"
-    single-line
-    hide-details
-    solo
-    clearable
-    :autofocus="autofocus"
-    v-bind="{ ...$props, ...$attrs }"
-    @input="$emit('input', $event)"
-    @keyup.enter="$emit('enter', $event)"
-    @focus="$emit('focus', $event)"
-    @blur="$emit('blur', $event)"
-  >
-  </v-text-field>
+  <div style="width: inherit">
+    <v-text-field
+      ref="searchInput"
+      :value="value"
+      color="accent"
+      light
+      :placeholder="placeholder"
+      single-line
+      hide-details
+      solo
+      clearable
+      :style="inputStyle"
+      :class="inputClass"
+      :autofocus="autofocus"
+      v-bind="{ ...$props, ...$attrs }"
+      @input="$emit('input', $event)"
+      @keyup.enter="$emit('enter', $event)"
+      @focus="$emit('focus', $event)"
+      @blur="$emit('blur', $event)"
+    />
+    <search-hints v-model="searchFocused" :activator="searchInput" />
+  </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { computed, defineComponent, ref } from '@nuxtjs/composition-api'
+import SearchHints from '../search/SearchHints.vue'
+export default defineComponent({
   name: 'InputSearch',
+  components: { SearchHints },
   props: {
     showButton: {
       type: Boolean,
@@ -40,16 +48,33 @@ export default {
     },
     placeholder: {
       type: String,
-      default() {
-        return this.$t('common.searchAlt')
+      default: function (): string {
+        return this.$t('common.searchAlt').toString()
       },
     },
     autofocus: {
       type: Boolean,
       default: false,
     },
+    inputClass: {
+      type: String,
+      default: '',
+    },
+    maxWidth: {
+      type: Number,
+      default: -1,
+    },
   },
-}
+  setup(props) {
+    const searchFocused = ref(false)
+    const searchInput = ref()
+    const inputStyle = computed(() => ({
+      // @ts-ignore
+      maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : 'inherit',
+    }))
+    return { searchFocused, searchInput, inputStyle }
+  },
+})
 </script>
 
 <style scoped lang="scss">
