@@ -155,10 +155,10 @@ export default defineComponent({
         tooltip: {
           trigger: 'item',
         },
-        grid: state.subCharts.grid,
-        xAxis: state.subCharts.xAxis,
-        yAxis: state.subCharts.yAxis,
-        series: state.subCharts.series,
+        grid: state.subCharts.grid as GridComponentOption[],
+        xAxis: state.subCharts.xAxis as XAXisComponentOption[],
+        yAxis: state.subCharts.yAxis as YAXisComponentOption[],
+        series: state.subCharts.series as BarSeriesOption[],
       }
     })
     onMounted(() => {
