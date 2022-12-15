@@ -432,6 +432,7 @@ export default defineComponent({
     const planArray = computed(() => state.area?.text1?.split(';') ?? [])
     const geojson = computed(() => {
       if (isEmpty(state.area)) return null
+      if (isEmpty(state.area.polygon)) return null
       const parsedPolygon =
         JSON.parse(
           // NOTE: Remove trailing commas from JSON object string
