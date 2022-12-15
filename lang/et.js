@@ -1034,9 +1034,9 @@ export default {
   hints: {
     escaping: 'erimärgile {specialCharacters} lisa ette {escapeCharacter}',
     exact: 'täpne fraas',
-    require: 'nõua termi',
-    exclude: 'välista term',
-    requireBoth: 'mõlemad termid olemas',
-    notExclude: 'termi ei ole'
+    require: 'nõua terminit',
+    exclude: 'välista termin',
+    requireBoth: 'mõlemad terminid olemas',
+    notExclude: 'terminit ei ole'
   }
 }
