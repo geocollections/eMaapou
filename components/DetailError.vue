@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" class="mt-10">
     <v-col sm="8" md="6" class="text-center">
       <h1 class="text-h4 mb-5">
         {{ title }}
@@ -10,7 +10,7 @@
         large
         elevation="0"
         class="text-capitalize montserrat"
-        @click="$router.app.refresh()"
+        @click="$router.go(0)"
       >
         <v-icon left> {{ icons.mdiRefresh }} </v-icon>
         Refresh

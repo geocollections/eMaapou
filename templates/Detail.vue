@@ -2,7 +2,9 @@
   <v-row no-gutters class="fill-height">
     <v-fade-transition hide-on-leave>
       <v-col v-if="error" key="detail-error" class="pt-5">
-        <detail-error :error="error" />
+        <div>
+          <detail-error :error="error" />
+        </div>
       </v-col>
       <v-col v-else-if="loading" key="detail-loading" class="pt-5">
         <div
@@ -15,7 +17,7 @@
             :size="150"
             :width="8"
           >
-            <div class="montserrat">Loading</div>
+            <div class="montserrat">{{ $t('common.loading') }}</div>
           </v-progress-circular>
         </div>
       </v-col>

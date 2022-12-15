@@ -111,6 +111,7 @@ export default {
     accept: 'Nõustun',
     depth: 'Sügavus',
     render: 'Väljund',
+    loading: 'Laadimine'
   },
   link: {
     sarvAPI: 'Avalik API',

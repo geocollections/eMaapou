@@ -662,12 +662,6 @@ export default defineComponent({
       return ['small', 'medium', 'large', 'original']
     })
     const showMap = computed(() => {
-      console.log(
-        state.file?.locality?.latitude && state.file?.locality?.longitude,
-        state.file?.specimen?.locality?.latitude &&
-          state.file?.specimen?.locality?.longitude,
-        state.file?.image_latitude && state?.file.image_longitude
-      )
       return (
         (state.file?.locality?.latitude && state.file?.locality?.longitude) ||
         (state.file?.specimen?.locality?.latitude &&

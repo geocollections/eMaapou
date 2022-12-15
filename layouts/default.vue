@@ -5,7 +5,8 @@
 
     <v-main style="min-height: 100vh">
       <v-container
-        class="pt-1 pb-10 fill-height"
+        class="pt-1 pb-10"
+        style="height: 100%"
         :fluid="$vuetify.breakpoint.lgAndDown"
       >
         <v-row no-gutters>
