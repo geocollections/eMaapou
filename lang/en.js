@@ -1028,5 +1028,13 @@ export default {
   },
   error: {
     occurred: 'An error occurred'
+  },
+  hints: {
+    escaping: 'escape special characters {specialCharacters} using {escapeCharacter}',
+    exact: 'exact phrase',
+    require: 'require term',
+    exclude: 'exclude term',
+    requireBoth: 'both terms exist',
+    notExclude: 'term not present'
   }
 }

@@ -1030,5 +1030,13 @@ export default {
   },
   error: {
     occurred: 'Päringul esines viga'
+  },
+  hints: {
+    escaping: 'erimärgile {specialCharacters} lisa ette {escapeCharacter}',
+    exact: 'täpne fraas',
+    require: 'nõua termi',
+    exclude: 'välista term',
+    requireBoth: 'mõlemad termid olemas',
+    notExclude: 'termi ei ole'
   }
 }
