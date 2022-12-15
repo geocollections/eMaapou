@@ -470,23 +470,19 @@ export default defineComponent({
           {
             property: 'description',
             hid: 'description',
-            // @ts-ignore
             content: state.site?.description ?? undefined,
           },
           {
             property: 'og:description',
             hid: 'og:description',
-            // @ts-ignore
             content: state.site?.description ?? undefined,
           },
           {
             property: 'og:image',
             hid: 'og:image',
-            // @ts-ignore
-            content: this.images[0]?.attachment.filename
+            content: state.images[0]?.attachment.filename
               ? $img(
-                  // @ts-ignore
-                  `${this.images[0]?.attachment.filename}`,
+                  `${state.images[0]?.attachment.filename}`,
                   { size: 'small' },
                   {
                     provider: 'geocollections',
