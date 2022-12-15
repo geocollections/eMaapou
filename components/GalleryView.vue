@@ -1,21 +1,23 @@
 <template>
   <v-card v-if="items && items.length > 0" flat>
-    <base-data-table-pagination
-      :options="options"
-      :pagination="pagination"
-      :items-per-page-options="footerProps['items-per-page-options']"
-      :items-per-page-text="footerProps['items-per-page-text']"
-      :page-select-text="
-        $t('common.pageSelect', {
-          current: options.page,
-          count: pagination.pageCount,
-        })
-      "
-      :go-to-text="$t('common.goTo')"
-      :go-to-button-text="$t('common.goToBtn')"
-      select-page-id="header-select-btn"
-      @update:options="updateOptions"
-    />
+    <div class="d-flex justify-end">
+      <base-data-table-pagination
+        :options="options"
+        :pagination="pagination"
+        :items-per-page-options="footerProps['items-per-page-options']"
+        :items-per-page-text="footerProps['items-per-page-text']"
+        :page-select-text="
+          $t('common.pageSelect', {
+            current: options.page,
+            count: pagination.pageCount,
+          })
+        "
+        :go-to-text="$t('common.goTo')"
+        :go-to-button-text="$t('common.goToBtn')"
+        select-page-id="header-select-btn"
+        @update:options="updateOptions"
+      />
+    </div>
 
     <v-card flat>
       <div class="px-4">

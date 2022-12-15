@@ -11,7 +11,7 @@
           :label="$t('common.containImages')"
         />
       </v-col>
-      <v-col>
+      <v-col class="d-flex justify-end">
         <base-data-table-pagination
           :options="options"
           :pagination="pagination"
