@@ -2,8 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('taxon.pageTitle')"
-        :subtitle="$t('common.count', { count: count })"
+        :title="$t('taxon.pageTitle').toString()"
         :icon="icons.mdiFamilyTree"
       />
     </template>
