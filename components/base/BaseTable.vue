@@ -18,15 +18,10 @@ export default {
 .v-data-table ::v-deep {
   border: 0px solid map-get($map: $grey, $key: 'lighten-2');
   tr {
-    // &:hover {
-    //   background-color: map-get($map: $grey, $key: 'lighten-5') !important;
-    // }
     td {
       padding-top: 8px !important;
       padding-bottom: 8px !important;
       &:first-child {
-        border-right: 2px solid map-get($map: $grey, $key: 'lighten-2');
-
         width: 200px;
       }
     }

@@ -138,6 +138,7 @@ export default {
     elevation: 'Kõrgus',
     coordx: 'X (m)',
     coordy: 'Y (m)',
+    coordinates: 'Koordinaadid',
     epsg: 'EPSG',
     name: 'Nimi',
     type: 'Tüüp',

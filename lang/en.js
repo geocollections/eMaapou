@@ -136,6 +136,7 @@ export default {
     elevation: 'Elevation',
     coordx: 'X (m)',
     coordy: 'Y (m)',
+    coordinates: 'Coordinates',
     epsg: 'EPSG',
     name: 'Name',
     type: 'Type',

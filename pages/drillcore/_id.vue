@@ -126,12 +126,8 @@
             "
           />
           <table-row
-            :title="$t('locality.latitude').toString()"
-            :value="locality.latitude"
-          />
-          <table-row
-            :title="$t('locality.longitude').toString()"
-            :value="locality.longitude"
+            :title="$t('locality.coordinates').toString()"
+            :value="`${locality.latitude}, ${locality.longitude}`"
           />
           <table-row
             :title="$t('locality.elevation').toString()"
