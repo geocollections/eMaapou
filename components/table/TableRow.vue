@@ -1,7 +1,7 @@
 <template>
   <tr v-if="!isInvalid || hasValueSlot">
     <td class="font-weight-medium">{{ title }}</td>
-    <td class="font-weight-bold">
+    <td>
       <slot name="value">
         {{ value }}
       </slot>
