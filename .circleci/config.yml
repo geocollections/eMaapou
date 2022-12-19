@@ -39,6 +39,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
+      - setup_remote_docker
       - run:
           name: Load archive Docker image
           command: docker load -i /tmp/workspace/image.tar
@@ -50,6 +51,7 @@ jobs:
   publish_production_image:
     executor: docker-publisher
     steps:
+      - setup_remote_docker
       - run:
           name: Publish `production` Docker image to Docker hub
           command: |
