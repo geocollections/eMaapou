@@ -86,7 +86,7 @@ workflows:
       - hold:
           type: approval
           requires:
-            - run_dev-container
+            - run_dev_container
       - publish_production_image:
           requires:
             - hold
