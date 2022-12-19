@@ -2,7 +2,7 @@
   <div style="max-width: 800px" class="mx-auto">
     <!-- template taken from https://gdpr.eu/privacy-notice/ -->
     <!-- TODO: need to complete the template -->
-    <h3>eMaapõu Privacy Policy</h3>
+    <h3>e-Maapõu Privacy Policy</h3>
 
     Our Company is part of the Our Company Group which includes Our Company
     International and Our Company Direct. This privacy policy will explain how
