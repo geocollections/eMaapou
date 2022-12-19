@@ -76,7 +76,7 @@ workflows:
     when:
       equal: [development, << pipeline.git.branch >>]
     jobs:
-      - build_docker_image:
+      - build_docker_image
       - publish_dev_image:
           requires:
             - build_docker_image
