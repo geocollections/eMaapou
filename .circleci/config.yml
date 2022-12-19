@@ -17,7 +17,7 @@ executors:
       - image: circleci/node:lts-stretch
 
 jobs:
-  build_docker_image:
+  build_image:
     executor: docker-publisher
     steps:
       - checkout
@@ -76,12 +76,12 @@ jobs:
 workflows:
   build_test_approve_deploy:
     when:
-      equal: [development, << pipeline.git.branch >>]
+      equal: [main, << pipeline.git.branch >>]
     jobs:
-      - build_docker_image
+      - build_image
       - publish_dev_image:
           requires:
-            - build_docker_image
+            - build_image
       - run_dev_container:
           requires:
             - publish_dev_image
