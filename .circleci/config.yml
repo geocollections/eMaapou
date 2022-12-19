@@ -82,7 +82,7 @@ workflows:
             - build_docker_image
       - run_dev_container:
           requires:
-            - publish_docker_image
+            - publish_dev_image
       - hold:
           type: approval
           requires:
