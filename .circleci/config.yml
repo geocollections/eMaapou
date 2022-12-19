@@ -23,95 +23,73 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - when:
-          condition:
-            equal: ['production', << pipeline.git.branch >>]
-          steps:
-            - run:
-                name: Build Docker image
-                command: |
-                  docker build -t $IMAGE_NAME:<< pipeline.parameters.package-version >> -t $IMAGE_NAME:latest .
-            - run:
-                name: Archive Docker image
-                command: docker save -o image.tar $IMAGE_NAME
-      - when:
-          condition:
-            equal: ['development', << pipeline.git.branch >>]
-          steps:
-            - run:
-                name: Build Docker dev image
-                command: |
-                  docker build -t $IMAGE_NAME_DEV:<< pipeline.parameters.package-version >> -t $IMAGE_NAME_DEV:latest .
-            - run:
-                name: Archive Docker dev image
-                command: docker save -o image.tar $IMAGE_NAME_DEV
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t $IMAGE_NAME:dev .
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
       - persist_to_workspace:
           root: .
           paths:
             - ./image.tar
-
-  publish_docker_image:
+  publish_dev_image:
     executor: docker-publisher
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Load archive Docker image
           command: docker load -i /tmp/workspace/image.tar
-      - when:
-          condition:
-            equal: ['production', << pipeline.git.branch >>]
-          steps:
-            - run:
-                name: Publish Docker image to Docker Hub
-                command: |
-                  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                  docker push $IMAGE_NAME
-      - when:
-          condition:
-            equal: ['development', << pipeline.git.branch >>]
-          steps:
-            - run:
-                name: Publish Docker dev image to Docker Hub
-                command: |
-                  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                  docker push $IMAGE_NAME_DEV
-
-  run_docker_image:
+      - run:
+          name: Publish `dev` Docker image to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker push $IMAGE_NAME
+  publish_production_image:
     executor: docker-publisher
     steps:
       - run:
-          name: Run Docker image
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_docker_image.sh"
-
-  run_docker_image_dev:
+          name: Publish `production` Docker image to Docker hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker pull $IMAGE_NAME:dev
+            docker tag $IMAGE_NAME:dev $IMAGE_NAME:latest
+            docker tag $IMAGE_NAME:dev $IMAGE_NAME:<< pipeline.parameters.package-version >>
+            docker rmi $IMAGE_NAME:dev
+            docker push $IMAGE_NAME
+  run_dev_container:
     executor: docker-publisher
     steps:
       - run:
-          name: Run Docker image
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia-dev/script && . run_docker_image.sh"
-
+          name: Run dev container
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_staging.sh"
+  run_production_container:
+    executor: docker-publisher
+    steps:
+      - run:
+          name: Run production container
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_production.sh"
 workflows:
-  build:
+  build_test_approve_deploy:
+    when:
+      equal: [development, << pipeline.git.branch >>]
     jobs:
       - build_docker_image:
-          filters:
-            branches:
-              only: [development, production]
-      - publish_docker_image:
+      - publish_dev_image:
           requires:
             - build_docker_image
-      - run_docker_image:
+      - run_dev_container:
           requires:
             - publish_docker_image
-          filters:
-            branches:
-              only: production
-      - run_docker_image_dev:
+      - hold:
+          type: approval
           requires:
-            - publish_docker_image
-          filters:
-            branches:
-              only: development
+            - run_dev-container
+      - publish_production_image:
+          requires:
+            - hold
+      - run_production_container:
+          requires:
+            - publish_production_image
