@@ -1,6 +1,6 @@
 <template>
-  <input-autocomplete-new
-    :title="$t('filters.fossilGroup').toString()"
+  <filter-input-autocomplete
+    :title="$t('filters.taxonHierarchy').toString()"
     query-field="taxon"
     :query-function="querySuggestions"
     :init-selection="selected"
@@ -12,15 +12,15 @@
     <template #suggestion="{ item }">
       {{ item.taxon }}
     </template>
-  </input-autocomplete-new>
+  </filter-input-autocomplete>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
-import InputAutocompleteNew from './InputAutocompleteNew.vue'
+import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
-  name: 'InputAutocompleteNewFossilGroup',
-  components: { InputAutocompleteNew },
+  name: 'FilterTaxon',
+  components: { FilterInputAutocomplete },
   props: {
     selected: {
       type: Array as PropType<any[]>,
@@ -35,7 +35,7 @@ export default defineComponent({
       options = { rows: 10, start: 0 }
     ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/taxon?q=${search}&fq=is_fossil_group:1&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,taxon`
+        `https://api.geoloogia.info/solr/taxon?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,taxon`
       )
     }
     return { querySuggestions }

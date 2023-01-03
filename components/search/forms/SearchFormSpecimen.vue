@@ -3,19 +3,19 @@
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper :active="$accessor.search.specimen.hasActiveFilters">
-      <input-checkbox
+      <filter-input-checkbox
         :value="hasImage"
         :label="$t('filters.hasImage').toString()"
         @input="handleHasImageFilterUpdate"
       />
-      <input-checkbox
+      <filter-input-checkbox
         :value="hasCoordinates"
         :label="$t('filters.hasCoordinates').toString()"
         @input="handleHasCoordinatesFilterUpdate"
       />
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
-          <input-autocomplete-new-locality
+          <filter-locality
             :selected="localities"
             @input="handleLocalityFilterUpdate"
           />
@@ -25,35 +25,34 @@
             :active="false"
             @update="handleMapUpdate"
           />
-          <input-autocomplete-new-stratigraphy
+          <filter-stratigraphy
             :selected="stratigraphyHierarchy"
             @input="handleStratigraphyHierarchyFilterUpdate"
           />
-          <input-autocomplete-new-taxon
+          <filter-taxon
             :selected="taxonHierarchy"
             @input="handleTaxonHierarchyFilterUpdate"
           />
-          <input-text-new
+          <filter-input-text
             :title="$t('filters.taxonName').toString()"
             :init-selection="taxonName"
             @input="handleTaxonNameFilterUpdate"
           />
-          <input-autocomplete-new-fossil-group
+          <filter-fossil-group
             v-if="false"
             :selected="fossilGroups"
             @input="handleFossilGroupFilterUpdate"
           />
-          <input-autocomplete-new-reference
+          <filter-reference
             :selected="references"
             @input="handleReferenceFilterUpdate"
           />
-          <input-text-new
+          <filter-input-text
             :title="$t('filters.collectionNumber').toString()"
             :init-selection="collectionNumber"
             @input="handleCollectionNumberFilterUpdate"
           />
-
-          <search-institution-filter
+          <filter-institution
             :institution="institutions"
             @change:institution="handleInstitutionsUpdate"
           />
@@ -74,31 +73,31 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
+import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import SearchMap from '~/components/search/SearchMap.vue'
-import InputCheckbox from '~/components/input/InputCheckbox.vue'
-import InputAutocompleteNewReference from '~/components/input/InputAutocompleteNewReference.vue'
-import InputAutocompleteNewLocality from '~/components/input/InputAutocompleteNewLocality.vue'
-import InputAutocompleteNewTaxon from '~/components/input/InputAutocompleteNewTaxon.vue'
-import InputAutocompleteNewStratigraphy from '~/components/input/InputAutocompleteNewStratigraphy.vue'
-import InputAutocompleteNewFossilGroup from '~/components/input/InputAutocompleteNewFossilGroup.vue'
-import InputTextNew from '~/components/input/InputTextNew.vue'
+import FilterInputCheckbox from '~/components/filter/input/FilterInputCheckbox.vue'
+import FilterFossilGroup from '~/components/filter/FilterFossilGroup.vue'
+import FilterLocality from '~/components/filter/FilterLocality.vue'
+import FilterReference from '~/components/filter/FilterReference.vue'
+import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
+import FilterTaxon from '~/components/filter/FilterTaxon.vue'
+import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 export default defineComponent({
   name: 'SearchFormSpecimen',
   components: {
-    InputCheckbox,
+    FilterInputCheckbox,
     SearchMap,
-    SearchInstitutionFilter,
     SearchFieldsWrapper,
     SearchActions,
     InputSearch,
-    InputAutocompleteNewReference,
-    InputAutocompleteNewLocality,
-    InputAutocompleteNewTaxon,
-    InputAutocompleteNewStratigraphy,
-    InputAutocompleteNewFossilGroup,
-    InputTextNew,
+    FilterInstitution,
+    FilterFossilGroup,
+    FilterLocality,
+    FilterReference,
+    FilterStratigraphy,
+    FilterTaxon,
+    FilterInputText,
   },
   setup(_props, { emit }) {
     const { $axios, $accessor } = useContext()

@@ -61,7 +61,7 @@
 import { mdiWarehouse } from '@mdi/js'
 
 export default {
-  name: 'SearchInstitutionFilter',
+  name: 'FilterInstitution',
   props: {
     institution: {
       type: Array,

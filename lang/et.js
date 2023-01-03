@@ -1045,7 +1045,7 @@ export default {
     map: 'Kaart',
     stratigraphyHierarchy: 'Stratigraafia hierarhia',
     taxonHierarchy: 'Taksoni hierarhia',
-    taxonName: 'Taxoni nimi',
+    taxonName: 'Taksoni nimi',
     reference: 'Kirjandus',
     collectionNumber: 'Kollektsiooni number',
     institutions: 'Asutused',
