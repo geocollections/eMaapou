@@ -39,11 +39,6 @@
         placeholder="Search"
         @keyup.enter="handleAdd"
       >
-        <template #append>
-          <v-icon @click="handleAdd">
-            {{ icons.mdiPlus }}
-          </v-icon>
-        </template>
       </v-text-field>
     </v-expansion-panel-content>
   </v-expansion-panel>
