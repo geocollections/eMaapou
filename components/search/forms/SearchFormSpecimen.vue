@@ -25,9 +25,9 @@
             :active="false"
             @update="handleMapUpdate"
           />
-          <input-autocomplete-new-reference
-            :selected="references"
-            @input="handleReferenceFilterUpdate"
+          <input-autocomplete-new-stratigraphy
+            :selected="stratigraphyHierarchy"
+            @input="handleStratigraphyHierarchyFilterUpdate"
           />
           <input-autocomplete-new-taxon
             :selected="taxonHierarchy"
@@ -38,9 +38,14 @@
             :init-selection="taxonName"
             @input="handleTaxonNameFilterUpdate"
           />
-          <input-autocomplete-new-stratigraphy
-            :selected="stratigraphyHierarchy"
-            @input="handleStratigraphyHierarchyFilterUpdate"
+          <input-autocomplete-new-fossil-group
+            v-if="false"
+            :selected="fossilGroups"
+            @input="handleFossilGroupFilterUpdate"
+          />
+          <input-autocomplete-new-reference
+            :selected="references"
+            @input="handleReferenceFilterUpdate"
           />
           <input-text-new
             title="Collection number"
@@ -77,6 +82,7 @@ import InputAutocompleteNewReference from '~/components/input/InputAutocompleteN
 import InputAutocompleteNewLocality from '~/components/input/InputAutocompleteNewLocality.vue'
 import InputAutocompleteNewTaxon from '~/components/input/InputAutocompleteNewTaxon.vue'
 import InputAutocompleteNewStratigraphy from '~/components/input/InputAutocompleteNewStratigraphy.vue'
+import InputAutocompleteNewFossilGroup from '~/components/input/InputAutocompleteNewFossilGroup.vue'
 import InputTextNew from '~/components/input/InputTextNew.vue'
 export default defineComponent({
   name: 'SearchFormSpecimen',
@@ -91,6 +97,7 @@ export default defineComponent({
     InputAutocompleteNewLocality,
     InputAutocompleteNewTaxon,
     InputAutocompleteNewStratigraphy,
+    InputAutocompleteNewFossilGroup,
     InputTextNew,
   },
   setup(_props, { emit }) {
@@ -197,6 +204,10 @@ export default defineComponent({
       stratigraphyHierarchy.value = event
       handleSearch()
     }
+    const handleFossilGroupFilterUpdate = (event: any) => {
+      fossilGroups.value = event
+      handleSearch()
+    }
     const handleHasImageFilterUpdate = (event: any) => {
       hasImage.value = event
       handleSearch()
@@ -264,6 +275,15 @@ export default defineComponent({
         })
       },
     })
+    const fossilGroups = computed({
+      get: () => $accessor.search.specimen.filters.byIds.fossilGroups.value,
+      set: (val) => {
+        $accessor.search.specimen.setFilterValue({
+          key: 'fossilGroups',
+          value: val,
+        })
+      },
+    })
     const hasImage = computed({
       get: () => $accessor.search.specimen.filters.byIds.hasImage.value,
       set: (val) => {
@@ -313,10 +333,12 @@ export default defineComponent({
       handleCollectionNumberFilterUpdate,
       handleHasCoordinatesFilterUpdate,
       handleHasImageFilterUpdate,
+      handleFossilGroupFilterUpdate,
       handleReset,
       handleSearch,
       localities,
       references,
+      fossilGroups,
       taxonHierarchy,
       stratigraphyHierarchy,
       taxonName,

@@ -32,9 +32,12 @@ export default defineComponent({
   setup() {
     const { $axios } = useContext()
 
-    const querySuggestions = (search: string) => {
+    const querySuggestions = (
+      search: string,
+      options = { rows: 10, start: 0 }
+    ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/reference?q=${search}&rows=10&fl=id,reference,title`
+        `https://api.geoloogia.info/solr/reference?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,reference,title`
       )
     }
     return { querySuggestions }

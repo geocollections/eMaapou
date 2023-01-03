@@ -33,7 +33,7 @@
       style="border-bottom: 1px solid lightgray !important"
     >
       <v-autocomplete
-        v-model="selectedItems"
+        :value="[]"
         item-value="value"
         return-object
         hide-details
@@ -55,6 +55,9 @@
           </span>
         </template>
         <template #selection> </template>
+        <template #append-item>
+          <div v-intersect="loadMore" />
+        </template>
       </v-autocomplete>
     </v-expansion-panel-content>
   </v-expansion-panel>
@@ -85,7 +88,12 @@ export default defineComponent({
       required: true,
     },
     queryFunction: {
-      type: Function as PropType<(search: string) => Promise<any>>,
+      type: Function as PropType<
+        (
+          search: string,
+          options?: { rows: number; start: number }
+        ) => Promise<any>
+      >,
       required: true,
     },
     initSelection: {
@@ -99,7 +107,10 @@ export default defineComponent({
       search: null as string | null,
       selectedItems: [] as any[],
       isLoading: false,
+      totalSuggestions: 0,
+      page: 1,
     })
+    const rowsPerPage = 10
     const icons = computed(() => {
       return {
         mdiClose,
@@ -130,12 +141,14 @@ export default defineComponent({
         //   `https://api.geoloogia.info/solr/locality?q=${search}&rows=10&fl=locality,id`
         // )
         state.suggestItems = response.response.docs
+        state.totalSuggestions = response.response.numFound
+        state.page = 1
         state.isLoading = false
       }, 300),
       { immediate: false }
     )
-    const handleInput = (event: any) => {
-      emit('input', event)
+    const handleInput = (event: any[]) => {
+      emit('input', [...state.selectedItems, event[event.length - 1]])
     }
     const handleRemove = (i: number) => {
       const cloneItems = cloneDeep(state.selectedItems)
@@ -143,11 +156,31 @@ export default defineComponent({
       state.selectedItems = cloneItems
       emit('input', state.selectedItems)
     }
+    const loadMore = async () => {
+      if (state.totalSuggestions < state.page * rowsPerPage) return
+      if (state.search === null || state.search.length < 1) return
+      let search = '*'
+      if (!isEmpty(state.search))
+        search = state.search
+          .trim()
+          .split(' ')
+          .map((term) => `${props.queryField}:*${term}*`)
+          .join(' AND ')
+      const newSuggestions = (
+        await props.queryFunction(search, {
+          rows: rowsPerPage,
+          start: rowsPerPage * state.page,
+        })
+      ).response.docs
+      state.page += 1
+      state.suggestItems = [...state.suggestItems, ...newSuggestions]
+    }
     return {
       ...toRefs(state),
-      icons,
       handleInput,
+      icons,
       handleRemove,
+      loadMore,
     }
   },
 })
@@ -162,5 +195,12 @@ export default defineComponent({
 
 .selected-item:hover {
   background-color: #eeeeee;
+}
+
+.v-select__selection {
+  display: none;
+}
+::v-deep .v-select.v-input--is-dirty ::placeholder {
+  color: back !important;
 }
 </style>

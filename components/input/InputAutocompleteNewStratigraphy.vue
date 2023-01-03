@@ -30,9 +30,12 @@ export default defineComponent({
   setup() {
     const { $axios } = useContext()
 
-    const querySuggestions = (search: string) => {
+    const querySuggestions = (
+      search: string,
+      options = { rows: 10, start: 0 }
+    ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/stratigraphy?q=${search}&rows=10&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
+        `https://api.geoloogia.info/solr/stratigraphy?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
       )
     }
     return { querySuggestions }

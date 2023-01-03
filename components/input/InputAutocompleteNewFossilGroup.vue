@@ -1,16 +1,16 @@
 <template>
   <input-autocomplete-new
-    title="Locality"
-    :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
+    title="Fossil group"
+    query-field="taxon"
     :query-function="querySuggestions"
     :init-selection="selected"
     v-on="$listeners"
   >
     <template #selection="{ item }">
-      {{ $i18n.locale == 'et' ? item.locality : item.locality_en }}
+      {{ item.taxon }}
     </template>
     <template #suggestion="{ item }">
-      {{ $i18n.locale == 'et' ? item.locality : item.locality_en }}
+      {{ item.taxon }}
     </template>
   </input-autocomplete-new>
 </template>
@@ -19,7 +19,7 @@
 import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
 import InputAutocompleteNew from './InputAutocompleteNew.vue'
 export default defineComponent({
-  name: 'InputAutocompleteNewLocality',
+  name: 'InputAutocompleteNewFossilGroup',
   components: { InputAutocompleteNew },
   props: {
     selected: {
@@ -35,7 +35,7 @@ export default defineComponent({
       options = { rows: 10, start: 0 }
     ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/locality?q=${search}&rows=${options.rows}&start=${options.start}&fl=locality,locality_en,id`
+        `https://api.geoloogia.info/solr/taxon?q=${search}&fq=is_fossil_group:1&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,taxon`
       )
     }
     return { querySuggestions }
