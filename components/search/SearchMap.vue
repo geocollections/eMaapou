@@ -19,6 +19,7 @@
           activate-search
           gps-enabled
           :show-links="false"
+          height="350px"
           :gesture-handling="$vuetify.breakpoint.smAndDown"
           @update="$emit('update')"
         />
