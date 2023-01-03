@@ -48,7 +48,7 @@
         @input="handleInput"
       >
         <template #item="{ item }">
-          <span>
+          <span class="text-body-2">
             <slot name="suggestion" :item="item">
               {{ item.id }}
             </slot>
