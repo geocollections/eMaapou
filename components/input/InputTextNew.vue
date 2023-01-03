@@ -36,7 +36,7 @@
         v-model="search"
         hide-details
         dense
-        placeholder="Search"
+        :placeholder="$t('filters.search')"
         @keyup.enter="handleAdd"
       >
       </v-text-field>

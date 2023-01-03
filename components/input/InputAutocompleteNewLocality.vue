@@ -1,6 +1,6 @@
 <template>
   <input-autocomplete-new
-    title="Locality"
+    :title="$t('filters.locality').toString()"
     :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
     :query-function="querySuggestions"
     :init-selection="selected"

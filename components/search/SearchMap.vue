@@ -4,7 +4,7 @@
       class="py-1 pl-2 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray"
     >
-      Map
+      {{ $t('filters.map') }}
     </v-expansion-panel-header>
     <v-expand-transition>
       <div

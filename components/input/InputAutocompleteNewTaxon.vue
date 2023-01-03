@@ -1,6 +1,6 @@
 <template>
   <input-autocomplete-new
-    title="Taxon hierarchy"
+    :title="$t('filters.taxonHierarchy').toString()"
     query-field="taxon"
     :query-function="querySuggestions"
     :init-selection="selected"

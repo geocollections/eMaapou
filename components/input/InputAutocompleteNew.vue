@@ -40,7 +40,7 @@
         dense
         :loading="isLoading"
         :no-filter="true"
-        placeholder="Search"
+        :placeholder="$t('filters.search')"
         :search-input.sync="search"
         multiple
         persistent-placeholder

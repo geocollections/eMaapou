@@ -5,12 +5,12 @@
     <search-fields-wrapper :active="$accessor.search.specimen.hasActiveFilters">
       <input-checkbox
         :value="hasImage"
-        label="With a image"
+        :label="$t('filters.hasImage').toString()"
         @input="handleHasImageFilterUpdate"
       />
       <input-checkbox
         :value="hasCoordinates"
-        label="With coordinates"
+        :label="$t('filters.hasCoordinates').toString()"
         @input="handleHasCoordinatesFilterUpdate"
       />
       <v-card class="mt-3" flat tile color="transparent">
@@ -34,7 +34,7 @@
             @input="handleTaxonHierarchyFilterUpdate"
           />
           <input-text-new
-            title="Taxon name"
+            :title="$t('filters.taxonName').toString()"
             :init-selection="taxonName"
             @input="handleTaxonNameFilterUpdate"
           />
@@ -48,7 +48,7 @@
             @input="handleReferenceFilterUpdate"
           />
           <input-text-new
-            title="Collection number"
+            :title="$t('filters.collectionNumber').toString()"
             :init-selection="collectionNumber"
             @input="handleCollectionNumberFilterUpdate"
           />

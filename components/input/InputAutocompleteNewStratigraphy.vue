@@ -1,6 +1,6 @@
 <template>
   <input-autocomplete-new
-    title="Stratigraphy hierarchy"
+    :title="$t('filters.stratigraphyHierarchy').toString()"
     :query-field="$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'"
     :query-function="querySuggestions"
     :init-selection="selected"

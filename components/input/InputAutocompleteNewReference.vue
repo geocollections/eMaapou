@@ -1,6 +1,6 @@
 <template>
   <input-autocomplete-new
-    title="Reference"
+    :title="$t('filters.reference').toString()"
     query-field="reference"
     :query-function="querySuggestions"
     :init-selection="selected"

@@ -1,6 +1,6 @@
 <template>
   <input-autocomplete-new
-    title="Fossil group"
+    :title="$t('filters.fossilGroup').toString()"
     query-field="taxon"
     :query-function="querySuggestions"
     :init-selection="selected"
