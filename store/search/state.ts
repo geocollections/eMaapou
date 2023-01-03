@@ -17,11 +17,13 @@ export const initState = (): SearchState => {
         institutions: {
           type: FilterType.ListOr,
           value: [],
+          label: '',
           fields: ['database_id'],
         },
         geoJSON: {
           type: FilterType.Geom,
           value: null,
+          label: '',
           fields: ['latlong'],
         },
       },
