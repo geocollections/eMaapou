@@ -1,24 +1,18 @@
 <template>
-  <base-card-expand
-    :active="active"
-    :show-body="showSearchViewForm"
-    @click="showSearchViewForm = $event"
-  >
-    <template #title>
-      <v-icon left>{{ icons.mdiFilterVariant }}</v-icon>
-      <span>{{ $t('common.showSearchFields') }}</span>
-    </template>
+  <div>
+    <div class="d-flex">
+      <!-- <v-icon left>{{ icons.mdiFilterVariant }}</v-icon> -->
+      <div class="text-h6">{{ $t('common.showSearchFields') }}</div>
+    </div>
     <slot></slot>
-  </base-card-expand>
+  </div>
 </template>
 
 <script>
 import { mdiFilterVariant } from '@mdi/js'
 import { mapFields } from 'vuex-map-fields'
-import BaseCardExpand from '~/components/base/BaseCardExpand.vue'
 export default {
   name: 'SearchFieldWrapper',
-  components: { BaseCardExpand },
   props: {
     active: {
       type: Boolean,

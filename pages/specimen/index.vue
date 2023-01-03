@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('specimen.pageTitle')"
+        :title="$t('specimen.pageTitle').toString()"
         :icon="icons.mdiMicroscope"
       />
     </template>
@@ -98,7 +98,6 @@ export default defineComponent({
         globalFilters,
         fetch,
       })
-
     return {
       handleFormReset,
       handleFormUpdate,

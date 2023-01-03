@@ -338,6 +338,7 @@ export default defineComponent({
       (newVal) => {
         if (newVal) {
           state.map?.invalidateSize()
+
           // HACK: This fixes initial bounds problem in search view (markers out of bounds)
           fitBounds()
         }

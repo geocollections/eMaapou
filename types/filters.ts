@@ -48,12 +48,30 @@ type ListFilter = {
 type ListOrFilter = {
   type: FilterType.ListOr
   value: any[]
+  label: string
   fields: string[]
 }
+type ListIdsFilter = {
+  type: FilterType.ListIds
+  value: any[]
+  label: string
+  fields: string[]
+  valueType: 'number' | 'string'
+  valueField: string
+  lookupType: 'none' | 'startswith'
+}
 
+type ListTextFilter = {
+  type: FilterType.ListText
+  value: any[]
+  label: string
+  fields: string[]
+  lookupType: 'none' | 'startswith'
+}
 type GeomFilter = {
   type: FilterType.Geom
   value: null | any
+  label: string
   fields: string[]
 }
 
@@ -66,3 +84,5 @@ export type Filter =
   | ListFilter
   | ListOrFilter
   | GeomFilter
+  | ListIdsFilter
+  | ListTextFilter

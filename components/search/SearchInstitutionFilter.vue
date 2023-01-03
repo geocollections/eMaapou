@@ -1,68 +1,75 @@
 <template>
-  <base-card-expand
-    :active="active"
-    :show-body="showInstitutions"
-    @click="showInstitutions = $event"
-  >
-    <template #title>
-      <v-icon left>{{ icons.mdiWarehouse }}</v-icon>
-      <span>{{ $t('common.showInstitutions') }}</span>
-    </template>
+  <v-expansion-panel style="background-color: transparent">
+    <v-expansion-panel-header
+      class="py-1 pl-2 pr-1 font-weight-medium"
+      style="min-height: 40px; border-bottom: 1px solid lightgray"
+    >
+      Institutions
+    </v-expansion-panel-header>
+    <v-expansion-panel-content
+      color="white"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <div class="flex-wrap d-flex flex-column justify-space-between">
+        <div v-for="(entity, key) in institutions" :key="key">
+          <v-tooltip
+            right
+            open-delay="200"
+            :nudge-left="
+              $vuetify.breakpoint.xs || $vuetify.breakpoint.mdAndUp
+                ? '200'
+                : '0'
+            "
+          >
+            <template #activator="{ on }">
+              <span v-on="on">
+                <v-checkbox
+                  multiple
+                  :value="entity.id"
+                  color="accent lighten-2"
+                  hide-details
+                  dense
+                  :input-value="institution"
+                  @change="$emit('change:institution', $event)"
+                >
+                  <template #label>
+                    <div
+                      class="font-weight-medium text-body-2"
+                      style="
+                        color: rgba(0, 0, 0, 0.87) !important;
+                        font-size: 0.9375rem !important;
+                      "
+                    >
+                      {{ entity.acronym }}
+                    </div>
+                  </template>
+                </v-checkbox>
+              </span>
+            </template>
 
-    <div class="flex-wrap d-flex flex-column justify-space-between">
-      <div v-for="(entity, key) in institutions" :key="key">
-        <v-tooltip
-          right
-          open-delay="200"
-          :nudge-left="
-            $vuetify.breakpoint.xs || $vuetify.breakpoint.mdAndUp ? '200' : '0'
-          "
-        >
-          <template #activator="{ on }">
-            <span v-on="on">
-              <v-checkbox
-                multiple
-                :value="entity.id"
-                color="accent lighten-2"
-                hide-details
-                dense
-                :label="entity.acronym"
-                :input-value="institution"
-                @change="$emit('change:institution', $event)"
-              />
-            </span>
-          </template>
-
-          <span>{{ $translate({ et: entity.name, en: entity.name_en }) }}</span>
-        </v-tooltip>
+            <span>{{
+              $translate({ et: entity.name, en: entity.name_en })
+            }}</span>
+          </v-tooltip>
+        </div>
       </div>
-    </div>
-  </base-card-expand>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
 </template>
 
 <script>
 import { mdiWarehouse } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
-import BaseCardExpand from '../base/BaseCardExpand.vue'
 
 export default {
   name: 'SearchInstitutionFilter',
-  components: { BaseCardExpand },
   props: {
     institution: {
       type: Array,
       required: true,
       default: () => [],
     },
-    active: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
-    ...mapFields('settings', {
-      showInstitutions: 'showInstitutionFilters',
-    }),
     icons() {
       return {
         mdiWarehouse,
@@ -119,12 +126,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.card-title--clickable {
-  transition: opacity 200ms ease-in-out;
-
-  &:hover {
-    cursor: pointer;
-    opacity: 0.7;
-  }
+::v-deep .v-expansion-panel-content__wrap {
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-bottom: 8px;
 }
 </style>

@@ -2,6 +2,7 @@
 import getters from './getters'
 import mutations from './mutations'
 import { initState as state } from './state'
+import actions from './actions'
 import analysis from './analysis'
 import analytical_data from './analytical_data'
 import area from './area'
@@ -19,6 +20,7 @@ export default {
   getters,
   mutations,
   state,
+  actions,
   namespaced: true,
   modules: {
     analysis,

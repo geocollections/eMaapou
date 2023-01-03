@@ -30,7 +30,8 @@ export default ({
     Object.entries(filters)
       .filter(([_, filter]) => isFilterValid(filter))
       .forEach(([key, filter]) => {
-        query[key] = serializeFilter(filter)
+        const serializedValue = serializeFilter(filter)
+        if (serializedValue.length > 0) query[key] = serializeFilter(filter)
       })
   }
   if (globalFilters) {
@@ -61,5 +62,13 @@ const serializeFilter = (filter: Filter) => {
     return `${filter.value}`
   } else if (filter.type === FilterType.List) {
     return filter.value.map((value) => JSON.stringify(value))
+  } else if (filter.type === FilterType.ListIds) {
+    return filter.value
+      .map((value) => encodeURIComponent(value[filter.valueField]))
+      .join(',')
+  } else if (filter.type === FilterType.ListText) {
+    return filter.value.map((value) => value).join(',')
+  } else {
+    return ''
   }
 }

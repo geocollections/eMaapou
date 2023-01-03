@@ -19,7 +19,7 @@
     <v-expand-transition>
       <slot name="body" :show-body="showBody">
         <div v-show="showBody">
-          <div class="px-3 pb-3 pt-1">
+          <div class="pb-3 pt-1">
             <slot></slot>
           </div>
         </div>

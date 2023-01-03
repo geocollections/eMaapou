@@ -4,6 +4,7 @@ import {
   computed,
   watch,
   ComputedRef,
+  Ref,
 } from '@nuxtjs/composition-api'
 import isEqual from 'lodash/isEqual'
 import { useAccessor } from './useAccessor'
@@ -21,7 +22,7 @@ export function useSearchQueryParams({
 }: {
   module: keyof typeof searchModule.modules
   qParamKey: string
-  filters: ComputedRef<SearchModuleState['filters']['byIds']>
+  filters: Ref<SearchModuleState['filters']['byIds']>
   globalFilters?: ComputedRef<SearchState['globalFilters']['byIds']>
   fetch: any
 }) {
@@ -83,8 +84,8 @@ export function useSearchQueryParams({
 
   watch(
     () => route.value.query,
-    async () => {
-      await accessor.search[module].resetFilters()
+    () => {
+      // await accessor.search[module].resetFilters()
       setStateFromQueryParams()
       fetch()
     }
@@ -93,7 +94,6 @@ export function useSearchQueryParams({
     accessor.search[module].SET_MODULE_OPTIONS({
       options: { ...accessor.search[module].options, page: 1 },
     })
-
     await accessor.search[module].resetFilters()
     if (!isEqual(queryParams.value, route.value.query)) {
       // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674

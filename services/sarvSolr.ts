@@ -264,6 +264,43 @@ const buildSolrParameters = (filters: { [key: string]: Filter }) => {
 
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
+        case FilterType.ListIds: {
+          if (filter.value.length < 1) return prev
+          const solrFilter = filter.fields
+            .map((field: string) => {
+              return filter.value
+                .map((v: any) => {
+                  if (filter.valueType === 'string') {
+                    if (filter.lookupType === 'startswith') {
+                      return `(${field}:${v[filter.valueField]}*)`
+                    }
+                    return `(${field}:"${v[filter.valueField]}")`
+                  }
+                  return `(${field}:${v[filter.valueField]})`
+                })
+                .join(' OR ')
+            })
+            .join(' OR ')
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+        }
+        case FilterType.ListText: {
+          if (filter.value.length < 1) return prev
+          const solrFilter = filter.fields
+            .map((field: string) => {
+              return filter.value
+                .map((v: any) => {
+                  if (filter.lookupType === 'startswith') {
+                    return `(${field}:${v}*)`
+                  }
+                  return `(${field}:"${v}")`
+                })
+                .join(' OR ')
+            })
+            .join(' OR ')
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+        }
         case FilterType.Geom: {
           if (filter.value.geometry.type === 'Polygon') {
             // LON LAT

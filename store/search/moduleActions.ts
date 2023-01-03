@@ -21,4 +21,16 @@ export const searchModuleActions = {
     commit(`search/${RESET_GEOJSON}`, null, { root: true })
     commit(`search/${RESET_INSTITUTIONS}`, null, { root: true })
   },
+  setFilterValue(
+    { commit }: ActionContext<SearchModuleState, any>,
+    { key, value }: { key: string; value: any }
+  ) {
+    commit('SET_MODULE_FILTER_VALUE', { key, value })
+  },
+  setQuery(
+    { commit }: ActionContext<SearchModuleState, any>,
+    newQuery: string
+  ) {
+    commit('SET_MODULE_QUERY', { query: newQuery })
+  },
 }
