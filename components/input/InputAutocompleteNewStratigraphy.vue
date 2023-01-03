@@ -1,0 +1,41 @@
+<template>
+  <input-autocomplete-new
+    title="Stratigraphy hierarchy"
+    :query-field="$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'"
+    :query-function="querySuggestions"
+    :init-selection="selected"
+    v-on="$listeners"
+  >
+    <template #selection="{ item }">
+      {{ $i18n.locale === 'et' ? item.stratigraphy : item.stratigraphy_en }}
+    </template>
+    <template #suggestion="{ item }">
+      {{ $i18n.locale === 'et' ? item.stratigraphy : item.stratigraphy_en }}
+    </template>
+  </input-autocomplete-new>
+</template>
+
+<script lang="ts">
+import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
+import InputAutocompleteNew from './InputAutocompleteNew.vue'
+export default defineComponent({
+  name: 'InputAutocompleteNewStratigraphy',
+  components: { InputAutocompleteNew },
+  props: {
+    selected: {
+      type: Array as PropType<any[]>,
+      required: true,
+    },
+  },
+  setup() {
+    const { $axios } = useContext()
+
+    const querySuggestions = (search: string) => {
+      return $axios.$get(
+        `https://api.geoloogia.info/solr/stratigraphy?q=${search}&rows=10&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
+      )
+    }
+    return { querySuggestions }
+  },
+})
+</script>

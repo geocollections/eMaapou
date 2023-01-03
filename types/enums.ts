@@ -7,6 +7,8 @@ export enum FilterType {
   ListOr = 'list_or',
   Boolean = 'boolean',
   Geom = 'geom',
+  ListIds = 'list_ids',
+  ListText = 'list_text',
 }
 
 export enum LookupType {

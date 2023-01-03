@@ -1,49 +1,49 @@
 <template>
-  <base-card-expand
-    :active="active"
-    :show-body="showMap"
-    @click="showMap = $event"
-  >
-    <template #title>
-      <v-icon left>{{ icons.mdiEarth }}</v-icon>
-      <span class="montserrat" style="font-size: 1rem">{{
-        $t('common.map')
-      }}</span>
-    </template>
-
-    <template #body="{ showBody }">
-      <map-search
-        v-show="showBody"
-        v-bind="$attrs"
-        :markers="mapMarkers"
-        :invalidate-size="showBody"
-        activate-search
-        gps-enabled
-        rounded
-        :show-links="false"
-        :gesture-handling="$vuetify.breakpoint.smAndDown"
-        @update="$emit('update')"
-      />
-    </template>
-  </base-card-expand>
+  <v-expansion-panel style="background-color: transparent" @change="handleOpen">
+    <v-expansion-panel-header
+      class="py-1 pl-2 pr-1 font-weight-medium"
+      style="min-height: 40px; border-bottom: 1px solid lightgray"
+    >
+      Map
+    </v-expansion-panel-header>
+    <v-expand-transition>
+      <div
+        v-show="show"
+        class="pa-0"
+        style="border-bottom: 1px solid lightgray !important"
+      >
+        <map-search
+          v-bind="$attrs"
+          :markers="mapMarkers"
+          :invalidate-size="show"
+          activate-search
+          gps-enabled
+          :show-links="false"
+          :gesture-handling="$vuetify.breakpoint.smAndDown"
+          @update="$emit('update')"
+        />
+      </div>
+    </v-expand-transition>
+  </v-expansion-panel>
 </template>
 
 <script lang="ts">
 import { mdiEarth } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
 import {
   computed,
   defineComponent,
   PropType,
+  ref,
   useContext,
   useRoute,
 } from '@nuxtjs/composition-api'
-import BaseCardExpand from '../base/BaseCardExpand.vue'
 import MapSearch from '~/components/map/MapSearch.vue'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
   name: 'SearchMap',
-  components: { MapSearch, BaseCardExpand },
+  components: {
+    MapSearch,
+  },
   props: {
     items: {
       type: Array as PropType<any[]>,
@@ -62,11 +62,16 @@ export default defineComponent({
   setup(props) {
     const { $translate } = useContext()
     const route = useRoute()
+    const show = ref(false)
     const icons = computed(() => {
       return {
         mdiEarth,
       }
     })
+
+    const handleOpen = () => {
+      show.value = !show.value
+    }
     const mapMarkers = computed(() => {
       if (props.useCustomMarkers) return props.items
 
@@ -103,12 +108,15 @@ export default defineComponent({
         return filtered
       }, [])
     })
-    return { icons, mapMarkers }
-  },
-  computed: {
-    ...mapFields('settings', {
-      showMap: 'showSearchViewMap',
-    }),
+    return { icons, mapMarkers, show, handleOpen }
   },
 })
 </script>
+
+<style scoped>
+::v-deep .v-expansion-panel-content__wrap {
+  padding-right: 0px;
+  padding-left: 0px;
+  padding-bottom: 0px;
+}
+</style>

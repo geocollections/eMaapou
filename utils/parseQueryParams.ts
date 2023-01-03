@@ -24,6 +24,7 @@ export default ({
   if (filters) {
     result.filters = Object.entries(filters)
       .filter(([key, _]) => route.query[key])
+      // .filter(([key, _]) => key !== 'localities')
       .reduce((prev, [key, filter]): { [K: string]: any } => {
         return {
           ...prev,
@@ -85,5 +86,14 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
     return (route.query[key] as string[]).map((value: string) =>
       JSON.parse(value)
     )
+  } else if (filter.type === FilterType.ListIds) {
+    if (filter.value.length < 1)
+      return (route.query[key] as string).split(',').map((queryValue) => ({
+        [filter.valueField]: decodeURIComponent(queryValue),
+      }))
+    return filter.value
+  } else if (filter.type === FilterType.ListText) {
+    if (filter.value.length < 1) return (route.query[key] as string).split(',')
+    return filter.value
   }
 }
