@@ -14,7 +14,7 @@
         @input="handleHasCoordinatesFilterUpdate"
       />
       <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile>
+        <v-expansion-panels accordion flat tile multiple>
           <input-autocomplete-new-locality
             :selected="localities"
             @input="handleLocalityFilterUpdate"
