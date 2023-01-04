@@ -1039,5 +1039,23 @@ export default {
     exclude: 'välista termin',
     requireBoth: 'mõlemad terminid olemas',
     notExclude: 'terminit ei ole'
+  },
+  filters: {
+    locality: 'Lokaliteet',
+    map: 'Kaart',
+    stratigraphyHierarchy: 'Stratigraafia hierarhia',
+    taxonHierarchy: 'Taksoni hierarhia',
+    taxonName: 'Taksoni nimi',
+    reference: 'Kirjandus',
+    collectionNumber: 'Kollektsiooni number',
+    institutions: 'Asutused',
+    fossilGroup: 'Fossiili rühm',
+    search: 'Otsi',
+    hasImage: 'Koos pildiga',
+    hasCoordinates: 'Koos koordinaatidega',
+    depth: 'Sügavus',
+    sampleNumber: 'Proovi number',
+    collector: 'Koguja',
+    country: 'Riik'
   }
 }

@@ -6,6 +6,20 @@
     >
       {{ $t('filters.map') }}
     </v-expansion-panel-header>
+    <div
+      v-if="value !== null"
+      class="white"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <div class="d-flex py-1 px-2">
+        <span class="text-body-2 font-weight-medium text-truncate">
+          {{ valueString }}
+        </span>
+        <v-btn class="ml-auto" x-small icon @click="handleRemove">
+          <v-icon small>{{ icons.mdiClose }}</v-icon>
+        </v-btn>
+      </div>
+    </div>
     <v-expand-transition>
       <div
         v-show="show"
@@ -14,6 +28,7 @@
       >
         <map-search
           v-bind="$attrs"
+          :value="value"
           :markers="mapMarkers"
           :invalidate-size="show"
           activate-search
@@ -22,6 +37,7 @@
           height="350px"
           :gesture-handling="$vuetify.breakpoint.smAndDown"
           @update="$emit('update')"
+          @input="$emit('input', $event)"
         />
       </div>
     </v-expand-transition>
@@ -29,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { mdiEarth } from '@mdi/js'
+import { mdiEarth, mdiClose } from '@mdi/js'
 import {
   computed,
   defineComponent,
@@ -41,37 +57,40 @@ import {
 import MapSearch from '~/components/map/MapSearch.vue'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
-  name: 'SearchMap',
+  name: 'FilterMap',
   components: {
     MapSearch,
   },
   props: {
     items: {
       type: Array as PropType<any[]>,
-      required: false,
       default: () => [],
     },
     useCustomMarkers: {
       type: Boolean,
       default: false,
     },
-    active: {
-      type: Boolean,
-      default: false,
+    value: {
+      type: Object as PropType<any>,
+      default: () => null,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const { $translate } = useContext()
     const route = useRoute()
     const show = ref(false)
     const icons = computed(() => {
       return {
         mdiEarth,
+        mdiClose,
       }
     })
 
     const handleOpen = () => {
       show.value = !show.value
+    }
+    const handleRemove = () => {
+      emit('input', null)
     }
     const mapMarkers = computed(() => {
       if (props.useCustomMarkers) return props.items
@@ -109,7 +128,10 @@ export default defineComponent({
         return filtered
       }, [])
     })
-    return { icons, mapMarkers, show, handleOpen }
+    const valueString = computed(() => {
+      return `${props.value.geometry.type} ${props.value.geometry.coordinates}`
+    })
+    return { icons, mapMarkers, show, handleOpen, handleRemove, valueString }
   },
 })
 </script>

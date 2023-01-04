@@ -1037,5 +1037,23 @@ export default {
     exclude: 'exclude term',
     requireBoth: 'both terms exist',
     notExclude: 'term not present'
+  },
+  filters: {
+    locality: 'Locality',
+    map: 'Map',
+    stratigraphyHierarchy: 'Stratigraphy hierarchy',
+    taxonHierarchy: 'Taxon hierarchy',
+    taxonName: 'Taxon name',
+    reference: 'Reference',
+    collectionNumber: 'Collection number',
+    institutions: 'Institutions',
+    fossilGroup: 'Fossil group',
+    search: 'Search',
+    hasImage: 'With image',
+    hasCoordinates: 'With coordinates',
+    depth: 'Depth',
+    sampleNumber: 'Sample number',
+    collector: 'Collector',
+    country: 'Country'
   }
 }

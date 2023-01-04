@@ -1,0 +1,132 @@
+<template>
+  <v-expansion-panel style="background-color: transparent">
+    <v-expansion-panel-header
+      class="py-1 pl-2 pr-1 font-weight-medium"
+      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+    >
+      {{ label }}
+    </v-expansion-panel-header>
+    <div
+      v-if="value[0] !== null || value[1] !== null"
+      class="white"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <div class="d-flex py-1 px-2">
+        <span class="text-body-2 font-weight-medium">
+          {{ valueString }}
+        </span>
+        <v-btn class="ml-auto" x-small icon @click="handleRemove">
+          <v-icon small>{{ icons.mdiClose }}</v-icon>
+        </v-btn>
+      </div>
+    </div>
+    <v-expansion-panel-content
+      class="pt-1"
+      color="white"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <v-row>
+        <v-col cols="6">
+          <v-text-field
+            :value="value[0]"
+            color="primary darken-3"
+            :label="fieldLabels.min"
+            hide-details
+            single-line
+            type="number"
+            @input="handleInput($event, true)"
+          >
+          </v-text-field>
+        </v-col>
+        <v-col cols="6">
+          <v-text-field
+            :value="value[1]"
+            color="primary darken-3"
+            :label="fieldLabels.max"
+            hide-details
+            single-line
+            type="number"
+            @input="handleInput($event, false)"
+          />
+        </v-col>
+      </v-row>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent } from '@nuxtjs/composition-api'
+import isEmpty from 'lodash/isEmpty'
+import { mdiClose } from '@mdi/js'
+export default defineComponent({
+  name: 'FilterInputRange',
+  props: {
+    value: {
+      type: Array,
+      default: () => {
+        return [null, null]
+      },
+    },
+    label: {
+      type: String,
+      default: null,
+    },
+    fieldLabels: {
+      type: Object,
+      default: () => {
+        return { min: 'min', max: 'max' }
+      },
+    },
+  },
+  setup(props, { emit }) {
+    const parseInput = (input: string) => {
+      if (isEmpty(input)) return null
+      else return parseInt(input)
+    }
+    const handleInput = (input: string, isMin: boolean) => {
+      if (isMin) {
+        emit('input', [parseInput(input), props.value[1]])
+      } else {
+        emit('input', [props.value[0], parseInput(input)])
+      }
+    }
+
+    const valueString = computed(() => {
+      const min = props.value[0] ?? '*'
+      const max = props.value[1] ?? '*'
+
+      if (props.value[0] === null && props.value[1] !== null) {
+        return `Below ${props.value[1]} (m)`
+      }
+
+      if (props.value[0] !== null && props.value[1] === null) {
+        return `Above ${props.value[0]} (m)`
+      }
+      return `Between ${min} and ${max} (m)`
+    })
+
+    const icons = computed(() => ({ mdiClose }))
+    const handleRemove = () => {
+      emit('input', [null, null])
+    }
+    return {
+      handleInput,
+      handleRemove,
+      valueString,
+      icons,
+    }
+  },
+})
+</script>
+
+<style lang="scss" scoped>
+::v-deep .v-expansion-panel-content__wrap {
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-bottom: 8px;
+}
+.v-text-field {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+</style>

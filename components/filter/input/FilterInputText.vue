@@ -16,7 +16,7 @@
         :key="i"
         class="d-flex py-1 selected-item px-2"
       >
-        <span class="text-body-2 font-weight-medium pr-1">
+        <span class="text-body-2 font-weight-medium">
           <slot name="selection" :item="item">
             {{ item }}
           </slot>
@@ -56,13 +56,13 @@ import {
 import { mdiClose, mdiPlus } from '@mdi/js'
 import cloneDeep from 'lodash/cloneDeep'
 export default defineComponent({
-  name: 'InputTextNew',
+  name: 'FilterInputText',
   props: {
     title: {
       type: String,
       required: true,
     },
-    initSelection: {
+    value: {
       type: Array as PropType<any[]>,
       default: () => [],
     },
@@ -81,7 +81,7 @@ export default defineComponent({
       }
     })
     watch(
-      () => props.initSelection,
+      () => props.value,
       (newVal) => {
         state.selectedItems = newVal
       },

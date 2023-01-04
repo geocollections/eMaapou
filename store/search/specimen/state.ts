@@ -149,6 +149,21 @@ export const initState = (): SearchModuleState => {
           valueField: 'hierarchy_string',
           lookupType: 'startswith',
         },
+        fossilGroups: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['fossilgroup_id'],
+          valueField: 'id',
+          valueType: 'number',
+          lookupType: 'none',
+        },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
+        },
       },
       allIds: [
         'number',

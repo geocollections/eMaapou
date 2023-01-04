@@ -2,56 +2,37 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="$accessor.search.specimen.hasActiveFilters">
-      <input-checkbox
-        :value="hasImage"
-        label="With a image"
-        @input="handleHasImageFilterUpdate"
+    <search-fields-wrapper>
+      <filter-input-checkbox
+        v-model="hasImage"
+        :label="$t('filters.hasImage').toString()"
       />
-      <input-checkbox
-        :value="hasCoordinates"
-        label="With coordinates"
-        @input="handleHasCoordinatesFilterUpdate"
+      <filter-input-checkbox
+        v-model="hasCoordinates"
+        :label="$t('filters.hasCoordinates').toString()"
       />
       <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile>
-          <input-autocomplete-new-locality
-            :selected="localities"
-            @input="handleLocalityFilterUpdate"
-          />
-          <search-map
+        <v-expansion-panels accordion flat tile multiple>
+          <filter-locality v-model="localities" />
+
+          <filter-map
+            v-model="map"
             sample-overlay
             :items="$accessor.search.specimen.items"
-            :active="false"
-            @update="handleMapUpdate"
           />
-          <input-autocomplete-new-reference
-            :selected="references"
-            @input="handleReferenceFilterUpdate"
+          <filter-stratigraphy v-model="stratigraphyHierarchy" />
+          <filter-taxon v-model="taxonHierarchy" />
+          <filter-input-text
+            v-model="taxonName"
+            :title="$t('filters.taxonName').toString()"
           />
-          <input-autocomplete-new-taxon
-            :selected="taxonHierarchy"
-            @input="handleTaxonHierarchyFilterUpdate"
+          <filter-fossil-group v-if="false" v-model="fossilGroups" />
+          <filter-reference v-model="references" />
+          <filter-input-text
+            v-model="collectionNumber"
+            :title="$t('filters.collectionNumber').toString()"
           />
-          <input-text-new
-            title="Taxon name"
-            :init-selection="taxonName"
-            @input="handleTaxonNameFilterUpdate"
-          />
-          <input-autocomplete-new-stratigraphy
-            :selected="stratigraphyHierarchy"
-            @input="handleStratigraphyHierarchyFilterUpdate"
-          />
-          <input-text-new
-            title="Collection number"
-            :init-selection="collectionNumber"
-            @input="handleCollectionNumberFilterUpdate"
-          />
-
-          <search-institution-filter
-            :institution="institutions"
-            @change:institution="handleInstitutionsUpdate"
-          />
+          <filter-institution v-model="institutions" />
         </v-expansion-panels>
       </v-card>
     </search-fields-wrapper>
@@ -69,67 +50,50 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
+import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
-import InputCheckbox from '~/components/input/InputCheckbox.vue'
-import InputAutocompleteNewReference from '~/components/input/InputAutocompleteNewReference.vue'
-import InputAutocompleteNewLocality from '~/components/input/InputAutocompleteNewLocality.vue'
-import InputAutocompleteNewTaxon from '~/components/input/InputAutocompleteNewTaxon.vue'
-import InputAutocompleteNewStratigraphy from '~/components/input/InputAutocompleteNewStratigraphy.vue'
-import InputTextNew from '~/components/input/InputTextNew.vue'
+import FilterInputCheckbox from '~/components/filter/input/FilterInputCheckbox.vue'
+import FilterFossilGroup from '~/components/filter/FilterFossilGroup.vue'
+import FilterLocality from '~/components/filter/FilterLocality.vue'
+import FilterReference from '~/components/filter/FilterReference.vue'
+import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
+import FilterTaxon from '~/components/filter/FilterTaxon.vue'
+import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import FilterMap from '~/components/filter/FilterMap.vue'
+import {
+  useHydrateFilterLocality,
+  useHydrateFilterReference,
+  useHydrateFilterStratigraphy,
+  useHydrateFilterTaxon,
+} from '~/composables/useHydrateFilter'
 export default defineComponent({
   name: 'SearchFormSpecimen',
   components: {
-    InputCheckbox,
-    SearchMap,
-    SearchInstitutionFilter,
+    FilterInputCheckbox,
+    FilterMap,
     SearchFieldsWrapper,
     SearchActions,
     InputSearch,
-    InputAutocompleteNewReference,
-    InputAutocompleteNewLocality,
-    InputAutocompleteNewTaxon,
-    InputAutocompleteNewStratigraphy,
-    InputTextNew,
+    FilterInstitution,
+    FilterFossilGroup,
+    FilterLocality,
+    FilterReference,
+    FilterStratigraphy,
+    FilterTaxon,
+    FilterInputText,
   },
   setup(_props, { emit }) {
-    const { $axios, $accessor } = useContext()
+    const { $accessor } = useContext()
     const route = useRoute()
-    const hydrateLocalitySelection = (selectedIds: number[]) => {
-      const idQuery = selectedIds.join(' ')
-      return $axios.get(
-        `https://api.geoloogia.info/solr/locality?q=id:(${idQuery})&rows=${selectedIds.length}&fl=locality,id,locality_en`
-      )
-    }
-    const hydrateReferenceSelection = (selectedReferences: string[]) => {
-      const query = selectedReferences
-        .map((reference) => `reference:"${reference}"`)
-        .join(' OR ')
-      return $axios.get(
-        `https://api.geoloogia.info/solr/reference?q=(${query})&rows=${selectedReferences.length}&fl=id,reference,title`
-      )
-    }
-    const hydrateTaxonSelection = (selectedTaxa: string[]) => {
-      const query = selectedTaxa
-        .map((taxa) => `hierarchy_string:"${taxa}"`)
-        .join(' OR ')
-      return $axios.get(
-        `https://api.geoloogia.info/solr/taxon?q=(${query})&rows=${selectedTaxa.length}&fl=id,taxon,hierarchy_string`
-      )
-    }
-    const hydrateStratigraphySelection = (selectedStratigraphy: string[]) => {
-      const query = selectedStratigraphy
-        .map((stratigraphy) => `hierarchy_string:"${stratigraphy}"`)
-        .join(' OR ')
-      return $axios.get(
-        `https://api.geoloogia.info/solr/stratigraphy?q=(${query})&rows=${selectedStratigraphy.length}&fl=id,stratigraphy,stratigraphy_en,hierarchy_string`
-      )
-    }
+    const hydrateFilterLocality = useHydrateFilterLocality()
+    const hydrateFilterReference = useHydrateFilterReference()
+    const hydrateFilterTaxon = useHydrateFilterTaxon()
+    const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
+
     useFetch(async () => {
       if (route.value.query.localities) {
         localities.value = (
-          await hydrateLocalitySelection(
+          await hydrateFilterLocality(
             (route.value.query.localities as string).split(',').map(Number)
           )
         ).data.response.docs
@@ -137,7 +101,7 @@ export default defineComponent({
 
       if (route.value.query.references) {
         references.value = (
-          await hydrateReferenceSelection(
+          await hydrateFilterReference(
             (route.value.query.references as string)
               .split(',')
               .map((encodedValue) => decodeURIComponent(encodedValue))
@@ -146,7 +110,7 @@ export default defineComponent({
       }
       if (route.value.query.taxonHierarchy) {
         taxonHierarchy.value = (
-          await hydrateTaxonSelection(
+          await hydrateFilterTaxon(
             (route.value.query.taxonHierarchy as string)
               .split(',')
               .map((encodedValue) => decodeURIComponent(encodedValue))
@@ -155,7 +119,7 @@ export default defineComponent({
       }
       if (route.value.query.stratigraphyHierarchy) {
         stratigraphyHierarchy.value = (
-          await hydrateStratigraphySelection(
+          await hydrateFilterStratigraphy(
             (route.value.query.stratigraphyHierarchy as string)
               .split(',')
               .map((encodedValue) => decodeURIComponent(encodedValue))
@@ -173,42 +137,6 @@ export default defineComponent({
           .map((encodedValue) => decodeURIComponent(encodedValue))
       }
     })
-    const handleLocalityFilterUpdate = (event: any) => {
-      localities.value = event
-      handleSearch()
-    }
-    const handleReferenceFilterUpdate = (event: any) => {
-      references.value = event
-      handleSearch()
-    }
-    const handleTaxonHierarchyFilterUpdate = (event: any) => {
-      taxonHierarchy.value = event
-      handleSearch()
-    }
-    const handleTaxonNameFilterUpdate = (event: any) => {
-      taxonName.value = event
-      handleSearch()
-    }
-    const handleCollectionNumberFilterUpdate = (event: any) => {
-      collectionNumber.value = event
-      handleSearch()
-    }
-    const handleStratigraphyHierarchyFilterUpdate = (event: any) => {
-      stratigraphyHierarchy.value = event
-      handleSearch()
-    }
-    const handleHasImageFilterUpdate = (event: any) => {
-      hasImage.value = event
-      handleSearch()
-    }
-    const handleHasCoordinatesFilterUpdate = (event: any) => {
-      hasCoordinates.value = event
-      handleSearch()
-    }
-    const handleInstitutionsUpdate = (newInstitutions: any[]) => {
-      institutions.value = newInstitutions
-      handleSearch()
-    }
     const localities = computed({
       get: () => $accessor.search.specimen.filters.byIds.localities.value,
       set: (val) => {
@@ -216,6 +144,7 @@ export default defineComponent({
           key: 'localities',
           value: val,
         })
+        handleSearch()
       },
     })
     const references = computed({
@@ -225,6 +154,7 @@ export default defineComponent({
           key: 'references',
           value: val,
         })
+        handleSearch()
       },
     })
     const taxonHierarchy = computed({
@@ -234,6 +164,7 @@ export default defineComponent({
           key: 'taxonHierarchy',
           value: val,
         })
+        handleSearch()
       },
     })
     const collectionNumber = computed({
@@ -243,6 +174,7 @@ export default defineComponent({
           key: 'collectionNumber',
           value: val,
         })
+        handleSearch()
       },
     })
     const taxonName = computed({
@@ -252,6 +184,7 @@ export default defineComponent({
           key: 'taxonName',
           value: val,
         })
+        handleSearch()
       },
     })
     const stratigraphyHierarchy = computed({
@@ -262,6 +195,17 @@ export default defineComponent({
           key: 'stratigraphyHierarchy',
           value: val,
         })
+        handleSearch()
+      },
+    })
+    const fossilGroups = computed({
+      get: () => $accessor.search.specimen.filters.byIds.fossilGroups.value,
+      set: (val) => {
+        $accessor.search.specimen.setFilterValue({
+          key: 'fossilGroups',
+          value: val,
+        })
+        handleSearch()
       },
     })
     const hasImage = computed({
@@ -271,6 +215,7 @@ export default defineComponent({
           key: 'hasImage',
           value: val,
         })
+        handleSearch()
       },
     })
     const hasCoordinates = computed({
@@ -280,12 +225,24 @@ export default defineComponent({
           key: 'hasCoordinates',
           value: val,
         })
+        handleSearch()
+      },
+    })
+    const map = computed({
+      get: () => $accessor.search.specimen.filters.byIds.map.value,
+      set: (val) => {
+        $accessor.search.specimen.setFilterValue({
+          key: 'map',
+          value: val,
+        })
+        handleMapUpdate()
       },
     })
     const institutions = computed({
       get: () => $accessor.search.globalFilters.byIds.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
+        handleSearch()
       },
     })
 
@@ -305,18 +262,11 @@ export default defineComponent({
       emit('update')
     }
     return {
-      handleLocalityFilterUpdate,
-      handleReferenceFilterUpdate,
-      handleTaxonHierarchyFilterUpdate,
-      handleStratigraphyHierarchyFilterUpdate,
-      handleTaxonNameFilterUpdate,
-      handleCollectionNumberFilterUpdate,
-      handleHasCoordinatesFilterUpdate,
-      handleHasImageFilterUpdate,
       handleReset,
       handleSearch,
       localities,
       references,
+      fossilGroups,
       taxonHierarchy,
       stratigraphyHierarchy,
       taxonName,
@@ -325,9 +275,9 @@ export default defineComponent({
       hasImage,
       institutions,
       query,
+      map,
       isEmpty,
       handleMapUpdate,
-      handleInstitutionsUpdate,
     }
   },
 })

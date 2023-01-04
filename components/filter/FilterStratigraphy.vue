@@ -1,9 +1,9 @@
 <template>
-  <input-autocomplete-new
-    title="Stratigraphy hierarchy"
+  <filter-input-autocomplete
+    :title="$t('filters.stratigraphyHierarchy').toString()"
     :query-field="$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'"
     :query-function="querySuggestions"
-    :init-selection="selected"
+    :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
@@ -12,17 +12,17 @@
     <template #suggestion="{ item }">
       {{ $i18n.locale === 'et' ? item.stratigraphy : item.stratigraphy_en }}
     </template>
-  </input-autocomplete-new>
+  </filter-input-autocomplete>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
-import InputAutocompleteNew from './InputAutocompleteNew.vue'
+import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
-  name: 'InputAutocompleteNewStratigraphy',
-  components: { InputAutocompleteNew },
+  name: 'FilterStratigraphy',
+  components: { FilterInputAutocomplete },
   props: {
-    selected: {
+    value: {
       type: Array as PropType<any[]>,
       required: true,
     },
@@ -30,9 +30,12 @@ export default defineComponent({
   setup() {
     const { $axios } = useContext()
 
-    const querySuggestions = (search: string) => {
+    const querySuggestions = (
+      search: string,
+      options = { rows: 10, start: 0 }
+    ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/stratigraphy?q=${search}&rows=10&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
+        `https://api.geoloogia.info/solr/stratigraphy?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
       )
     }
     return { querySuggestions }

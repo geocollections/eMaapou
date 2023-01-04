@@ -77,7 +77,7 @@ import isEmpty from 'lodash/isEmpty'
 import debounce from 'lodash/debounce'
 import cloneDeep from 'lodash/cloneDeep'
 export default defineComponent({
-  name: 'InputAutocompleteNew',
+  name: 'FilterInputAutocomplete',
   props: {
     title: {
       type: String,
@@ -96,7 +96,7 @@ export default defineComponent({
       >,
       required: true,
     },
-    initSelection: {
+    value: {
       type: Array as PropType<any[]>,
       default: () => [],
     },
@@ -117,7 +117,7 @@ export default defineComponent({
       }
     })
     watch(
-      () => props.initSelection,
+      () => props.value,
       (newVal) => {
         state.selectedItems = newVal
       }

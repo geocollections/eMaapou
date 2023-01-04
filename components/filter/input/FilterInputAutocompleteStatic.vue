@@ -18,7 +18,7 @@
       >
         <span class="text-body-2 font-weight-medium pr-1">
           <slot name="selection" :item="item">
-            {{ item }}
+            {{ item.id }}
           </slot>
         </span>
 
@@ -32,14 +32,28 @@
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
-      <v-text-field
-        v-model="search"
+      <v-autocomplete
+        :value="[]"
+        item-value="value"
+        return-object
         hide-details
         dense
         :placeholder="$t('filters.search')"
-        @keyup.enter="handleAdd"
+        :filter="filterFunc"
+        multiple
+        persistent-placeholder
+        :items="items"
+        @input="handleInput"
       >
-      </v-text-field>
+        <template #item="{ item }">
+          <span class="text-body-2">
+            <slot name="suggestion" :item="item">
+              {{ item.id }}
+            </slot>
+          </span>
+        </template>
+        <template #selection> </template>
+      </v-autocomplete>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
@@ -53,18 +67,26 @@ import {
   PropType,
   watch,
 } from '@nuxtjs/composition-api'
-import { mdiClose, mdiPlus } from '@mdi/js'
+import { mdiClose } from '@mdi/js'
 import cloneDeep from 'lodash/cloneDeep'
 export default defineComponent({
-  name: 'InputTextNew',
+  name: 'FilterInputAutocompleteStatic',
   props: {
     title: {
       type: String,
       required: true,
     },
-    initSelection: {
+    items: {
+      type: Array as PropType<any[]>,
+      required: true,
+    },
+    value: {
       type: Array as PropType<any[]>,
       default: () => [],
+    },
+    filterField: {
+      type: String,
+      required: true,
     },
   },
   setup(props, { emit }) {
@@ -73,27 +95,22 @@ export default defineComponent({
       search: null as string | null,
       selectedItems: [] as any[],
       isLoading: false,
+      totalSuggestions: 0,
+      page: 1,
     })
     const icons = computed(() => {
       return {
         mdiClose,
-        mdiPlus,
       }
     })
     watch(
-      () => props.initSelection,
+      () => props.value,
       (newVal) => {
         state.selectedItems = newVal
-      },
-      { immediate: true }
+      }
     )
-    const handleInput = (event: any) => {
-      emit('input', event)
-    }
-    const handleAdd = () => {
-      state.selectedItems = [...state.selectedItems, state.search]
-      state.search = ''
-      emit('input', state.selectedItems)
+    const handleInput = (event: any[]) => {
+      emit('input', [...state.selectedItems, event[event.length - 1]])
     }
     const handleRemove = (i: number) => {
       const cloneItems = cloneDeep(state.selectedItems)
@@ -101,12 +118,17 @@ export default defineComponent({
       state.selectedItems = cloneItems
       emit('input', state.selectedItems)
     }
+    const filterFunc = (item: any, queryText: string, _itemText: string) => {
+      return item[props.filterField]
+        .toLocaleLowerCase()
+        .includes(queryText.toLocaleLowerCase())
+    }
     return {
       ...toRefs(state),
-      icons,
       handleInput,
-      handleAdd,
+      icons,
       handleRemove,
+      filterFunc,
     }
   },
 })
@@ -121,5 +143,12 @@ export default defineComponent({
 
 .selected-item:hover {
   background-color: #eeeeee;
+}
+
+.v-select__selection {
+  display: none;
+}
+::v-deep .v-select.v-input--is-dirty ::placeholder {
+  color: back !important;
 }
 </style>

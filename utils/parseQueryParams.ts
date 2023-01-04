@@ -75,6 +75,7 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
   } else if (filter.type === FilterType.Object) {
     return JSON.parse(route.query[key] as string)
   } else if (filter.type === FilterType.ListOr) {
+    if (typeof route.query[key] === 'string') return [route.query[key]]
     return route.query[key]
   } else if (filter.type === FilterType.RangeAlt) {
     return route.query[key]
@@ -93,7 +94,10 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
       }))
     return filter.value
   } else if (filter.type === FilterType.ListText) {
-    if (filter.value.length < 1) return (route.query[key] as string).split(',')
+    if (filter.value.length < 1)
+      return (route.query[key] as string)
+        .split(',')
+        .map((val) => decodeURIComponent(val))
     return filter.value
   }
 }

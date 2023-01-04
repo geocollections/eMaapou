@@ -12,13 +12,6 @@ export const initState = (): SearchModuleState => {
     query: '',
     filters: {
       byIds: {
-        number: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'sample.number',
-          fields: ['number'],
-        },
         locality: {
           value: '',
           type: FilterType.Text,
@@ -45,13 +38,6 @@ export const initState = (): SearchModuleState => {
             'lithostratigraphy_hierarchy',
           ],
         },
-        collector: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'sample.collector',
-          fields: ['collector', 'collector_full_name'],
-        },
         depth: {
           type: FilterType.Range,
           value: [null, null],
@@ -72,6 +58,48 @@ export const initState = (): SearchModuleState => {
           lookUpType: LookupType.Equals,
           label: 'sample.project',
           fields: ['project_name', 'project_name_en'],
+        },
+        localities: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['locality_id'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
+        },
+        stratigraphyHierarchy: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: [
+            'stratigraphy_hierarchy',
+            'age_hierarchy',
+            'lithostratigraphy_hierarchy',
+          ],
+          valueType: 'string',
+          valueField: 'hierarchy_string',
+          lookupType: 'startswith',
+        },
+        collector: {
+          value: [],
+          type: FilterType.ListText,
+          label: '',
+          fields: ['collector', 'collector_full_name'],
+          lookupType: 'startswith',
+        },
+        number: {
+          value: [],
+          type: FilterType.ListText,
+          label: '',
+          fields: ['number'],
+          lookupType: 'none',
+        },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
         },
       },
       allIds: ['number', 'stratigraphy', 'hierarchy'],

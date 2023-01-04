@@ -1,9 +1,9 @@
 <template>
-  <input-autocomplete-new
-    title="Taxon hierarchy"
+  <filter-input-autocomplete
+    :title="$t('filters.taxonHierarchy').toString()"
     query-field="taxon"
     :query-function="querySuggestions"
-    :init-selection="selected"
+    :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
@@ -12,17 +12,17 @@
     <template #suggestion="{ item }">
       {{ item.taxon }}
     </template>
-  </input-autocomplete-new>
+  </filter-input-autocomplete>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
-import InputAutocompleteNew from './InputAutocompleteNew.vue'
+import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
-  name: 'InputAutocompleteNewTaxon',
-  components: { InputAutocompleteNew },
+  name: 'FilterTaxon',
+  components: { FilterInputAutocomplete },
   props: {
-    selected: {
+    value: {
       type: Array as PropType<any[]>,
       required: true,
     },
@@ -30,9 +30,12 @@ export default defineComponent({
   setup() {
     const { $axios } = useContext()
 
-    const querySuggestions = (search: string) => {
+    const querySuggestions = (
+      search: string,
+      options = { rows: 10, start: 0 }
+    ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/taxon?q=${search}&rows=10&fl=id,hierarchy_string,taxon`
+        `https://api.geoloogia.info/solr/taxon?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,taxon`
       )
     }
     return { querySuggestions }

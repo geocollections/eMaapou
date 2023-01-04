@@ -1,9 +1,9 @@
 <template>
-  <input-autocomplete-new
-    title="Reference"
+  <filter-input-autocomplete
+    :title="$t('filters.reference').toString()"
     query-field="reference"
     :query-function="querySuggestions"
-    :init-selection="selected"
+    :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
@@ -14,17 +14,17 @@
       {{ item.reference }}
       <span class="font-weight-light font-italic">{{ item.title }}</span>
     </template>
-  </input-autocomplete-new>
+  </filter-input-autocomplete>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
-import InputAutocompleteNew from './InputAutocompleteNew.vue'
+import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
-  name: 'InputAutocompleteNewReference',
-  components: { InputAutocompleteNew },
+  name: 'FilterReference',
+  components: { FilterInputAutocomplete },
   props: {
-    selected: {
+    value: {
       type: Array as PropType<any[]>,
       required: true,
     },
@@ -32,9 +32,12 @@ export default defineComponent({
   setup() {
     const { $axios } = useContext()
 
-    const querySuggestions = (search: string) => {
+    const querySuggestions = (
+      search: string,
+      options = { rows: 10, start: 0 }
+    ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/reference?q=${search}&rows=10&fl=id,reference,title`
+        `https://api.geoloogia.info/solr/reference?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,reference,title`
       )
     }
     return { querySuggestions }

@@ -46,13 +46,17 @@ export default defineComponent({
       required: false,
       default: () => [],
     },
+    maxPermanent: {
+      type: Number,
+      default: 5,
+    },
   },
   setup(props) {
     const { localePath } = useContext()
     const router = useRouter()
     const tooltipOptions = computed(() => {
       return {
-        permanent: props.markers.length <= 5,
+        permanent: props.markers.length <= props.maxPermanent,
         direction: 'top',
         offset: [1, -7],
       }
