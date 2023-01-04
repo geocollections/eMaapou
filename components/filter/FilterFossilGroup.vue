@@ -3,7 +3,7 @@
     :title="$t('filters.fossilGroup').toString()"
     query-field="taxon"
     :query-function="querySuggestions"
-    :init-selection="selected"
+    :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'FilterFossilGroup',
   components: { FilterInputAutocomplete },
   props: {
-    selected: {
+    value: {
       type: Array as PropType<any[]>,
       required: true,
     },

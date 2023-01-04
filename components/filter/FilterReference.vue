@@ -3,7 +3,7 @@
     :title="$t('filters.reference').toString()"
     query-field="reference"
     :query-function="querySuggestions"
-    :init-selection="selected"
+    :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
@@ -24,7 +24,7 @@ export default defineComponent({
   name: 'FilterReference',
   components: { FilterInputAutocomplete },
   props: {
-    selected: {
+    value: {
       type: Array as PropType<any[]>,
       required: true,
     },

@@ -3,7 +3,7 @@
     :title="$t('filters.locality').toString()"
     :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
     :query-function="querySuggestions"
-    :init-selection="selected"
+    :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'FilterLocality',
   components: { FilterInputAutocomplete },
   props: {
-    selected: {
+    value: {
       type: Array as PropType<any[]>,
       required: true,
     },

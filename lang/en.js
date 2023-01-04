@@ -1053,6 +1053,7 @@ export default {
     hasCoordinates: 'With coordinates',
     depth: 'Depth',
     sampleNumber: 'Sample number',
-    collector: 'Collector'
+    collector: 'Collector',
+    country: 'Country'
   }
 }

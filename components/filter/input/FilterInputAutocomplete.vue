@@ -96,7 +96,7 @@ export default defineComponent({
       >,
       required: true,
     },
-    initSelection: {
+    value: {
       type: Array as PropType<any[]>,
       default: () => [],
     },
@@ -117,7 +117,7 @@ export default defineComponent({
       }
     })
     watch(
-      () => props.initSelection,
+      () => props.value,
       (newVal) => {
         state.selectedItems = newVal
       }

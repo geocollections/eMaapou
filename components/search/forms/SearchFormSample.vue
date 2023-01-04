@@ -6,14 +6,10 @@
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
           <filter-input-text
+            v-model="number"
             :title="$t('filters.sampleNumber').toString()"
-            :init-selection="number"
-            @input="handleNumberFilterUpdate"
           />
-          <filter-locality
-            :selected="localities"
-            @input="handleLocalityFilterUpdate"
-          />
+          <filter-locality v-model="localities" />
           <search-map
             sample-overlay
             :items="$accessor.search.sample.items"
@@ -24,19 +20,12 @@
             v-model="depth"
             :label="$t('filters.depth').toString()"
           />
-          <filter-stratigraphy
-            :selected="stratigraphyHierarchy"
-            @input="handleStratigraphyHierarchyFilterUpdate"
-          />
+          <filter-stratigraphy v-model="stratigraphyHierarchy" />
           <filter-input-text
+            v-model="collector"
             :title="$t('filters.collector').toString()"
-            :init-selection="collector"
-            @input="handleCollectorFilterUpdate"
           />
-          <filter-institution
-            :institution="institution"
-            @change:institution="handleInstitutionsUpdate"
-          />
+          <filter-institution v-model="institutions" />
         </v-expansion-panels>
       </v-card>
       <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
@@ -65,8 +54,6 @@
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters } from 'vuex'
-import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
 import {
@@ -88,6 +75,10 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import {
+  useHydrateFilterLocality,
+  useHydrateFilterStratigraphy,
+} from '~/composables/useHydrateFilter'
 export default defineComponent({
   name: 'SearchFormSample',
   components: {
@@ -105,28 +96,15 @@ export default defineComponent({
     InputSearch,
   },
   setup(_props, { emit }) {
-    const { $accessor, $axios } = useContext()
+    const { $accessor } = useContext()
     const route = useRoute()
-    const hydrateLocalitySelection = (selectedIds: number[]) => {
-      const idQuery = selectedIds.join(' ')
-      return $axios.get(
-        `https://api.geoloogia.info/solr/locality?q=id:(${idQuery})&rows=${selectedIds.length}&fl=locality,id,locality_en`
-      )
-    }
 
-    const hydrateStratigraphySelection = (selectedStratigraphy: string[]) => {
-      const query = selectedStratigraphy
-        .map((stratigraphy) => `hierarchy_string:"${stratigraphy}"`)
-        .join(' OR ')
-      return $axios.get(
-        `https://api.geoloogia.info/solr/stratigraphy?q=(${query})&rows=${selectedStratigraphy.length}&fl=id,stratigraphy,stratigraphy_en,hierarchy_string`
-      )
-    }
-
+    const hydrateFilterLocality = useHydrateFilterLocality()
+    const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
       if (route.value.query.localities) {
         localities.value = (
-          await hydrateLocalitySelection(
+          await hydrateFilterLocality(
             (route.value.query.localities as string).split(',').map(Number)
           )
         ).data.response.docs
@@ -134,7 +112,7 @@ export default defineComponent({
 
       if (route.value.query.stratigraphyHierarchy) {
         stratigraphyHierarchy.value = (
-          await hydrateStratigraphySelection(
+          await hydrateFilterStratigraphy(
             (route.value.query.stratigraphyHierarchy as string)
               .split(',')
               .map((encodedValue) => decodeURIComponent(encodedValue))
@@ -169,6 +147,7 @@ export default defineComponent({
           key: 'number',
           value: val,
         })
+        handleSearch()
       },
     })
     const collector = computed({
@@ -178,6 +157,7 @@ export default defineComponent({
           key: 'collector',
           value: val,
         })
+        handleSearch()
       },
     })
     const depth = computed({
@@ -187,12 +167,14 @@ export default defineComponent({
           key: 'depth',
           value: val,
         })
+        handleSearch()
       },
     })
     const institutions = computed({
       get: () => $accessor.search.globalFilters.byIds.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
+        handleSearch()
       },
     })
     const handleReset = () => {
@@ -204,65 +186,25 @@ export default defineComponent({
     const handleMapUpdate = () => {
       emit('update')
     }
-    const handleLocalityFilterUpdate = (event: any) => {
-      localities.value = event
-      handleSearch()
-    }
-    const handleInstitutionsUpdate = (newInstitutions: any[]) => {
-      institutions.value = newInstitutions
-      emit('update')
-    }
-    const handleStratigraphyHierarchyFilterUpdate = (event: any) => {
-      stratigraphyHierarchy.value = event
-      handleSearch()
-    }
-    const handleNumberFilterUpdate = (event: any) => {
-      number.value = event
-      handleSearch()
-    }
-    const handleCollectorFilterUpdate = (event: any) => {
-      collector.value = event
-      handleSearch()
-    }
-    const handleDepthFilterUpdate = (event: any) => {
-      depth.value = event
-      handleSearch()
-    }
+    const query = computed({
+      get: () => $accessor.search.sample.query,
+      set: (val) => {
+        $accessor.search.sample.setQuery(val)
+      },
+    })
     return {
       localities,
       stratigraphyHierarchy,
       number,
+      depth,
       collector,
+      institutions,
+      query,
       handleReset,
       handleSearch,
       handleMapUpdate,
-      handleInstitutionsUpdate,
-      handleLocalityFilterUpdate,
-      handleStratigraphyHierarchyFilterUpdate,
-      handleDepthFilterUpdate,
-      handleNumberFilterUpdate,
-      handleCollectorFilterUpdate,
       isEmpty,
     }
-  },
-  computed: {
-    ...mapState('search/sample', ['filters', 'items']),
-    ...mapFields('search/sample', {
-      number: 'filters.byIds.number.value',
-      locality: 'filters.byIds.locality.value',
-      stratigraphy: 'filters.byIds.stratigraphy.value',
-      hierarchy: 'filters.byIds.hierarchy.value',
-      depth: 'filters.byIds.depth.value',
-      collector: 'filters.byIds.collector.value',
-      mass: 'filters.byIds.mass.value',
-      project: 'filters.byIds.project.value',
-      query: 'query',
-    }),
-    ...mapFields('search', {
-      institution: 'globalFilters.byIds.institutions.value',
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-    }),
-    ...mapGetters('search/sample', ['hasActiveFilters']),
   },
 })
 </script>

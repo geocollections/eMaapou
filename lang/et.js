@@ -1055,6 +1055,7 @@ export default {
     hasCoordinates: 'Koos koordinaatidega',
     depth: 'Sügavus',
     sampleNumber: 'Proovi number',
-    collector: 'Koguja'
+    collector: 'Koguja',
+    country: 'Riik'
   }
 }

@@ -29,8 +29,8 @@
                   color="accent"
                   hide-details
                   dense
-                  :input-value="institution"
-                  @change="$emit('change:institution', $event)"
+                  :input-value="value"
+                  @change="$emit('input', $event)"
                 >
                   <template #label>
                     <div
@@ -57,16 +57,15 @@
   </v-expansion-panel>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiWarehouse } from '@mdi/js'
-
-export default {
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
+export default defineComponent({
   name: 'FilterInstitution',
   props: {
-    institution: {
-      type: Array,
+    value: {
+      type: Array as PropType<any[]>,
       required: true,
-      default: () => [],
     },
   },
   computed: {
@@ -122,7 +121,7 @@ export default {
       ]
     },
   },
-}
+})
 </script>
 
 <style scoped lang="scss">
