@@ -67,7 +67,7 @@ const serializeFilter = (filter: Filter) => {
       .map((value) => encodeURIComponent(value[filter.valueField]))
       .join(',')
   } else if (filter.type === FilterType.ListText) {
-    return filter.value.map((value) => value).join(',')
+    return filter.value.map((value) => encodeURIComponent(value)).join(',')
   } else {
     return ''
   }

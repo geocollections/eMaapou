@@ -16,7 +16,7 @@
         :key="i"
         class="d-flex py-1 selected-item px-2"
       >
-        <span class="text-body-2 font-weight-medium pr-1">
+        <span class="text-body-2 font-weight-medium">
           <slot name="selection" :item="item">
             {{ item }}
           </slot>

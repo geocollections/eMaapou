@@ -1052,6 +1052,9 @@ export default {
     fossilGroup: 'Fossiili rühm',
     search: 'Otsi',
     hasImage: 'Koos pildiga',
-    hasCoordinates: 'Koos koordinaatidega'
+    hasCoordinates: 'Koos koordinaatidega',
+    depth: 'Sügavus',
+    sampleNumber: 'Proovi number',
+    collector: 'Koguja'
   }
 }

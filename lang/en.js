@@ -1050,6 +1050,9 @@ export default {
     fossilGroup: 'Fossil group',
     search: 'Search',
     hasImage: 'With image',
-    hasCoordinates: 'With coordinates'
+    hasCoordinates: 'With coordinates',
+    depth: 'Depth',
+    sampleNumber: 'Sample number',
+    collector: 'Collector'
   }
 }

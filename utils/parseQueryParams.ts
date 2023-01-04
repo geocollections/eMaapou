@@ -94,7 +94,10 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
       }))
     return filter.value
   } else if (filter.type === FilterType.ListText) {
-    if (filter.value.length < 1) return (route.query[key] as string).split(',')
+    if (filter.value.length < 1)
+      return (route.query[key] as string)
+        .split(',')
+        .map((val) => decodeURIComponent(val))
     return filter.value
   }
 }

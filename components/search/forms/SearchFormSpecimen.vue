@@ -2,7 +2,7 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="$accessor.search.specimen.hasActiveFilters">
+    <search-fields-wrapper>
       <filter-input-checkbox
         :value="hasImage"
         :label="$t('filters.hasImage').toString()"
