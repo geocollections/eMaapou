@@ -10,11 +10,10 @@
             :title="$t('filters.sampleNumber').toString()"
           />
           <filter-locality v-model="localities" />
-          <search-map
+          <filter-map
+            v-model="map"
             sample-overlay
             :items="$accessor.search.sample.items"
-            :active="false"
-            @update="handleMapUpdate"
           />
           <filter-input-range
             v-model="depth"
@@ -70,11 +69,11 @@ import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 // import InputRange from '~/components/input/InputRange.vue'
 // import InputText from '~/components/input/InputText.vue'
 // import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import FilterMap from '~/components/filter/FilterMap.vue'
 import {
   useHydrateFilterLocality,
   useHydrateFilterStratigraphy,
@@ -92,7 +91,7 @@ export default defineComponent({
     // InputRange,
     SearchFieldsWrapper,
     SearchActions,
-    SearchMap,
+    FilterMap,
     InputSearch,
   },
   setup(_props, { emit }) {
@@ -177,6 +176,16 @@ export default defineComponent({
         handleSearch()
       },
     })
+    const map = computed({
+      get: () => $accessor.search.sample.filters.byIds.map.value,
+      set: (val) => {
+        $accessor.search.sample.setFilterValue({
+          key: 'map',
+          value: val,
+        })
+        handleMapUpdate()
+      },
+    })
     const handleReset = () => {
       emit('reset')
     }
@@ -200,6 +209,7 @@ export default defineComponent({
       collector,
       institutions,
       query,
+      map,
       handleReset,
       handleSearch,
       handleMapUpdate,

@@ -14,11 +14,11 @@
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
           <filter-locality v-model="localities" />
-          <search-map
+
+          <filter-map
+            v-model="map"
             sample-overlay
             :items="$accessor.search.specimen.items"
-            :active="false"
-            @update="handleMapUpdate"
           />
           <filter-stratigraphy v-model="stratigraphyHierarchy" />
           <filter-taxon v-model="taxonHierarchy" />
@@ -52,7 +52,6 @@ import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
 import FilterInputCheckbox from '~/components/filter/input/FilterInputCheckbox.vue'
 import FilterFossilGroup from '~/components/filter/FilterFossilGroup.vue'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
@@ -60,6 +59,7 @@ import FilterReference from '~/components/filter/FilterReference.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterTaxon from '~/components/filter/FilterTaxon.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import FilterMap from '~/components/filter/FilterMap.vue'
 import {
   useHydrateFilterLocality,
   useHydrateFilterReference,
@@ -70,7 +70,7 @@ export default defineComponent({
   name: 'SearchFormSpecimen',
   components: {
     FilterInputCheckbox,
-    SearchMap,
+    FilterMap,
     SearchFieldsWrapper,
     SearchActions,
     InputSearch,
@@ -228,6 +228,16 @@ export default defineComponent({
         handleSearch()
       },
     })
+    const map = computed({
+      get: () => $accessor.search.specimen.filters.byIds.map.value,
+      set: (val) => {
+        $accessor.search.specimen.setFilterValue({
+          key: 'map',
+          value: val,
+        })
+        handleMapUpdate()
+      },
+    })
     const institutions = computed({
       get: () => $accessor.search.globalFilters.byIds.institutions.value,
       set: (val) => {
@@ -265,6 +275,7 @@ export default defineComponent({
       hasImage,
       institutions,
       query,
+      map,
       isEmpty,
       handleMapUpdate,
     }

@@ -22,10 +22,10 @@
               </div>
             </template>
           </filter-input-autocomplete-static>
-          <search-map
+          <filter-map
+            v-model="map"
             locality-overlay
             :items="$accessor.search.locality.items"
-            @update="handleMapUpdate"
           />
           <filter-reference v-model="references" />
         </v-expansion-panels>
@@ -46,8 +46,8 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
+import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterReference from '~/components/filter/FilterReference.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import { useHydrateFilterReference } from '~/composables/useHydrateFilter'
@@ -56,7 +56,7 @@ export default defineComponent({
   components: {
     SearchFieldsWrapper,
     SearchActions,
-    SearchMap,
+    FilterMap,
     InputSearch,
     FilterReference,
     FilterInputAutocompleteStatic,
@@ -90,6 +90,16 @@ export default defineComponent({
           value: val,
         })
         handleSearch()
+      },
+    })
+    const map = computed({
+      get: () => $accessor.search.locality.filters.byIds.map.value,
+      set: (val) => {
+        $accessor.search.locality.setFilterValue({
+          key: 'map',
+          value: val,
+        })
+        handleMapUpdate()
       },
     })
     const state = reactive({
@@ -145,6 +155,7 @@ export default defineComponent({
       query,
       references,
       countries,
+      map,
       handleReset,
       handleSearch,
       handleMapUpdate,

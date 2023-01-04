@@ -95,6 +95,12 @@ export const initState = (): SearchModuleState => {
           fields: ['number'],
           lookupType: 'none',
         },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
+        },
       },
       allIds: ['number', 'stratigraphy', 'hierarchy'],
     },

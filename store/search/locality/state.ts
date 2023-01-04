@@ -65,6 +65,12 @@ export const initState = (): SearchModuleState => {
           valueField: 'reference',
           lookupType: 'none',
         },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
+        },
       },
       allIds: ['name', 'country', 'stratigraphy', 'reference'],
     },

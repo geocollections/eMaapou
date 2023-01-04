@@ -60,7 +60,7 @@
           v-if="markers.length >= 250"
           :markers="markers"
         />
-        <l-circle-marker-wrapper v-else :markers="markers" />
+        <l-circle-marker-wrapper v-else :markers="markers" :max-permanent="0" />
         <l-marker
           v-if="gpsEnabled && gpsLocation"
           :lat-lng="gpsLocation"
@@ -135,7 +135,6 @@ import LCircleMarkerWrapper from '~/components/map/LCircleMarkerWrapper.vue'
 import VMarkerClusterWrapper from '~/components/map/VMarkerClusterWrapper.vue'
 import MapClickPopup from '~/components/map/MapClickPopup.vue'
 import { MapMarker } from '~/types/map'
-import { useAccessor } from '~/composables/useAccessor'
 import {
   MapState,
   useDataOverlays,
@@ -262,10 +261,13 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    value: {
+      type: Object as PropType<any>,
+      default: () => null,
+    },
   },
   setup(props, { emit }) {
     const { $services, i18n } = useContext()
-    const accessor = useAccessor()
     const state: State = reactive({
       gpsID: null as null | number,
       map: undefined,
@@ -326,7 +328,16 @@ export default defineComponent({
       },
       { deep: true }
     )
-
+    watch(
+      () => props.value,
+      (value) => {
+        if (value === null) {
+          state.activeGeomanLayer?.remove()
+          state.activeGeomanLayer = null
+        }
+      },
+      { immediate: true }
+    )
     watch(
       () => props.markers,
       () => {
@@ -360,11 +371,7 @@ export default defineComponent({
         // @ts-ignore
         json.properties.radius = state.activeGeomanLayer.getRadius()
       }
-      accessor.search.SET_GLOBAL_FILTER_VALUE({
-        key: 'geoJSON',
-        value: json,
-      })
-      emit('update')
+      emit('input', json)
     }, 200)
     const handlePmCreate: Leaflet.PM.CreateEventHandler = ({ layer }) => {
       if (state.activeGeomanLayer) {
@@ -377,18 +384,13 @@ export default defineComponent({
         // @ts-ignore
         json.properties.radius = state.activeGeomanLayer.getRadius()
       }
-      accessor.search.SET_GLOBAL_FILTER_VALUE({
-        key: 'geoJSON',
-        value: json,
-      })
-      emit('update')
+      emit('input', json)
     }
     const handlePmRemove: Leaflet.PM.RemoveEventHandler = () => {
       state.activeGeomanLayer?.remove()
       state.activeGeomanLayer = null
 
-      accessor.search.SET_GLOBAL_FILTER_VALUE({ key: 'geoJSON', value: null })
-      emit('update')
+      emit('input', null)
     }
     const handlePmGlobalDrawModeToggled: Leaflet.PM.GlobalDrawModeToggledEventHandler =
       (event) => {
@@ -437,15 +439,12 @@ export default defineComponent({
       state.map?.on('click', handleMapClick)
       if (props.gpsEnabled)
         state.map?.locate({ watch: true, enableHighAccuracy: true })
-      if (accessor.search.globalFilters.byIds.geoJSON.value) {
-        state.activeGeomanLayer = L.geoJSON(
-          accessor.search.globalFilters.byIds.geoJSON.value,
-          {
-            pointToLayer: function (feature, latlng) {
-              return L.circle(latlng, feature.properties.radius)
-            },
-          }
-        )
+      if (props.value) {
+        state.activeGeomanLayer = L.geoJSON(props.value, {
+          pointToLayer: function (feature, latlng) {
+            return L.circle(latlng, feature.properties.radius)
+          },
+        })
         state.map?.addLayer(state.activeGeomanLayer)
       }
       if (isMapClickEnabled) {
@@ -464,7 +463,7 @@ export default defineComponent({
     )
     const fitBounds = () => {
       nextTick(() => {
-        const geoJSON = accessor.search.globalFilters.byIds.geoJSON.value
+        const geoJSON = props.value
         if (geoJSON) {
           state.map?.fitBounds(
             (state.activeGeomanLayer as Leaflet.FeatureGroup).getBounds(),
