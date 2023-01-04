@@ -6,6 +6,23 @@
     >
       {{ $t('filters.institutions') }}
     </v-expansion-panel-header>
+    <div
+      v-if="value.length > 0"
+      class="white pt-1 px-2"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <v-chip
+        v-for="(institution, i) in selectedInstitutions"
+        :key="i"
+        color="accent"
+        class="mr-1 mb-1"
+        small
+        close
+        @click:close="handleRemove(i)"
+      >
+        {{ institution.acronym }}
+      </v-chip>
+    </div>
     <v-expansion-panel-content
       color="white"
       style="border-bottom: 1px solid lightgray !important"
@@ -59,7 +76,8 @@
 
 <script lang="ts">
 import { mdiWarehouse } from '@mdi/js'
-import { defineComponent, PropType } from '@nuxtjs/composition-api'
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
+import cloneDeep from 'lodash/cloneDeep'
 export default defineComponent({
   name: 'FilterInstitution',
   props: {
@@ -68,13 +86,13 @@ export default defineComponent({
       required: true,
     },
   },
-  computed: {
-    icons() {
+  setup(props, { emit }) {
+    const icons = computed(() => {
       return {
         mdiWarehouse,
       }
-    },
-    institutions() {
+    })
+    const institutions = computed(() => {
       return [
         {
           id: '1',
@@ -119,7 +137,18 @@ export default defineComponent({
           name_en: 'Geological Survey of Estonia',
         },
       ]
-    },
+    })
+    const selectedInstitutions = computed(() => {
+      return institutions.value
+        .filter((institution) => props.value.includes(institution.id))
+        .sort((a, b) => props.value.indexOf(a.id) - props.value.indexOf(b.id))
+    })
+    const handleRemove = (i: number) => {
+      const cloneItems = cloneDeep(props.value)
+      cloneItems.splice(i, 1)
+      emit('input', cloneItems)
+    }
+    return { icons, institutions, selectedInstitutions, handleRemove }
   },
 })
 </script>
