@@ -128,6 +128,7 @@ export default defineComponent({
           key: 'localities',
           value: val,
         })
+        handleSearch()
       },
     })
     const stratigraphyHierarchy = computed({
@@ -138,6 +139,7 @@ export default defineComponent({
           key: 'stratigraphyHierarchy',
           value: val,
         })
+        handleSearch()
       },
     })
     const number = computed({

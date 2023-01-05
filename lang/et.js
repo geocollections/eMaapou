@@ -1058,7 +1058,11 @@ export default {
     collector: 'Koguja',
     country: 'Riik',
     drillcoreRepository: 'Hoiukoht',
-    drillcoreBoxes: 'Südamikukaste'
+    drillcoreBoxes: 'Südamikukaste',
+    method: 'Metoodika',
+    lab: 'Labor',
+    agent: 'Agent',
+    sample: 'Proov'
   },
   intervals: {
     default: {

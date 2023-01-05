@@ -1056,7 +1056,11 @@ export default {
     collector: 'Collector',
     country: 'Country',
     drillcoreRepository: 'Repository',
-    drillcoreBoxes: 'Boxes'
+    drillcoreBoxes: 'Boxes',
+    method: 'Method',
+    lab: 'Lab',
+    agent: 'Agent',
+    sample: 'Sample'
   },
   intervals: {
     default: {
@@ -1069,6 +1073,5 @@ export default {
       lessThanEquals: 'Above {max} (m)',
       greaterThanEquals: 'Deeper than {min} (m)'
     }
-
   }
 }

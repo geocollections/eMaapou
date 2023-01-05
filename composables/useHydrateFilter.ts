@@ -48,3 +48,17 @@ export const useHydrateFilterStratigraphy = () => {
     )
   }
 }
+
+export const useHydrateFilterSample = () => {
+  const { $axios } = useContext()
+
+  return (selectedSamples: number[]) => {
+    const query = selectedSamples
+      .map((stratigraphy) => `id:"${stratigraphy}"`)
+
+      .join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/sample?q=(${query})&rows=${selectedSamples.length}&fl=id,number`
+    )
+  }
+}
