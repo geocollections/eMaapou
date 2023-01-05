@@ -1056,6 +1056,21 @@ export default {
     depth: 'Sügavus',
     sampleNumber: 'Proovi number',
     collector: 'Koguja',
-    country: 'Riik'
+    country: 'Riik',
+    drillcoreRepository: 'Hoiukoht',
+    drillcoreBoxes: 'Südamikukaste'
+  },
+  intervals: {
+    default: {
+      between: '{min} ja {max} vahel',
+      lessThanEquals: 'Väiksem või võrdne {max}',
+      greaterThanEquals: 'Suurm või võrdne {min}'
+    },
+    depth: {
+      between: ' {min} ja {max} (m) vahel',
+      lessThanEquals: 'Kõrgemal kui {max} (m)',
+      greaterThanEquals: 'Sügavamal kui {min} (m)'
+    }
+
   }
 }

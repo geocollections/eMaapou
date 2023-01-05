@@ -18,6 +18,7 @@
           <filter-input-range
             v-model="depth"
             :label="$t('filters.depth').toString()"
+            interval-labels="intervals.depth"
           />
           <filter-stratigraphy v-model="stratigraphyHierarchy" />
           <filter-input-text
