@@ -1,7 +1,7 @@
 import uniqueId from 'lodash/uniqueId'
 import { actionTree } from 'typed-vuex'
 import { searchModuleActions } from '../moduleActions'
-import state from './state'
+import state, { AnalyticalDataFilters } from './state'
 import getters from './getters'
 import mutations from './mutations'
 import {
@@ -13,7 +13,7 @@ import {
 export default actionTree(
   { state, getters, mutations },
   {
-    ...searchModuleActions,
+    ...searchModuleActions<AnalyticalDataFilters>(),
     addParameterFilter({ commit, dispatch, getters }) {
       const initParameter = getters.parameterList()[0]
 

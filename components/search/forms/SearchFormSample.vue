@@ -9,7 +9,7 @@
             v-model="number"
             :title="$t('filters.sampleNumber').toString()"
           />
-          <filter-locality v-model="localities" />
+          <filter-locality v-model="locality" />
           <filter-map
             v-model="map"
             sample-overlay
@@ -18,6 +18,7 @@
           <filter-input-range
             v-model="depth"
             :label="$t('filters.depth').toString()"
+            interval-labels="intervals.depth"
           />
           <filter-stratigraphy v-model="stratigraphyHierarchy" />
           <filter-input-text
@@ -102,7 +103,7 @@ export default defineComponent({
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
       if (route.value.query.localities) {
-        localities.value = (
+        locality.value = (
           await hydrateFilterLocality(
             (route.value.query.localities as string).split(',').map(Number)
           )
@@ -120,13 +121,14 @@ export default defineComponent({
       }
     })
 
-    const localities = computed({
-      get: () => $accessor.search.sample.filters.byIds.localities.value,
+    const locality = computed({
+      get: () => $accessor.search.sample.filters.byIds.locality.value,
       set: (val) => {
         $accessor.search.sample.setFilterValue({
-          key: 'localities',
+          key: 'locality',
           value: val,
         })
+        handleSearch()
       },
     })
     const stratigraphyHierarchy = computed({
@@ -137,6 +139,7 @@ export default defineComponent({
           key: 'stratigraphyHierarchy',
           value: val,
         })
+        handleSearch()
       },
     })
     const number = computed({
@@ -202,7 +205,7 @@ export default defineComponent({
       },
     })
     return {
-      localities,
+      locality,
       stratigraphyHierarchy,
       number,
       depth,

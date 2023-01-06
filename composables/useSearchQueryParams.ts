@@ -13,7 +13,7 @@ import parseQueryParams from '~/utils/parseQueryParams'
 import searchModule from '~/store/search'
 import { SearchModuleState } from '~/store/search/types'
 import { SearchState } from '~/store/search/state'
-export function useSearchQueryParams({
+export const useSearchQueryParams = <Filters extends string | number | symbol>({
   module,
   qParamKey,
   filters,
@@ -22,10 +22,10 @@ export function useSearchQueryParams({
 }: {
   module: keyof typeof searchModule.modules
   qParamKey: string
-  filters: Ref<SearchModuleState['filters']['byIds']>
+  filters: Ref<SearchModuleState<Filters>['filters']['byIds']>
   globalFilters?: ComputedRef<SearchState['globalFilters']['byIds']>
   fetch: any
-}) {
+}) => {
   const accessor = useAccessor()
   const route = useRoute()
   const router = useRouter()
@@ -47,14 +47,15 @@ export function useSearchQueryParams({
       qKey: qParamKey,
     })
     accessor.search[module].SET_MODULE_QUERY({ query: parsedValues.query })
-
     if (parsedValues.filters) {
-      Object.keys(parsedValues.filters).forEach((key) => {
-        accessor.search[module].SET_MODULE_FILTER_VALUE({
+      for (const key in parsedValues.filters) {
+        // ??? For some reason the `payload` for the action is of type `never`.
+        // This is the only action to be this way. May have something to do with the type of `key` set in the actions.
+        accessor.search[module].setFilterValue({
           key,
-          value: parsedValues.filters?.[key],
-        })
-      })
+          value: parsedValues.filters?.[key as Filters],
+        } as never)
+      }
     }
     if (parsedValues.globalFilters) {
       Object.keys(parsedValues.globalFilters).forEach((key) => {

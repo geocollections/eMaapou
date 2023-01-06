@@ -2,7 +2,19 @@ import { SearchModuleState } from '../types'
 import { ANALYSIS } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 
-export const initState = (): SearchModuleState => {
+export type AnalysisFilters =
+  | 'id'
+  | 'depth'
+  | 'stratigraphy'
+  | 'method'
+  | 'agent'
+  | 'dataset'
+  | 'lab'
+  | 'sample'
+  | 'locality'
+  | 'map'
+
+export const initState = (): SearchModuleState<AnalysisFilters> => {
   return {
     name: 'analysis',
     items: [],
@@ -39,19 +51,12 @@ export const initState = (): SearchModuleState => {
             'age_hierarchy',
           ],
         },
-        method: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.method',
-          fields: ['analysis_method', 'analysis_method_en'],
-        },
         agent: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.agent',
+          value: [],
+          type: FilterType.ListText,
+          label: '',
           fields: ['agent'],
+          lookupType: 'startswith',
         },
         dataset: {
           value: '',
@@ -60,27 +65,48 @@ export const initState = (): SearchModuleState => {
           label: 'analysis.dataset',
           fields: ['dataset_ids'],
         },
-        lab: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.lab',
-          fields: ['lab', 'lab_en'],
-        },
         sample: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.sample',
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
           fields: ['sample_id', 'sample_number'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
         },
 
+        lab: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['lab_id'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
+        },
+        method: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['method'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
+        },
         locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.locality',
-          fields: ['locality', 'locality_en'],
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['locality_id'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
+        },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
         },
       },
       allIds: ['id', 'depth'],

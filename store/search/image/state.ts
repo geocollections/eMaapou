@@ -2,7 +2,18 @@ import { SearchModuleState } from '../types'
 import { IMAGE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 
-type ImageSearchModuleState = SearchModuleState & {
+export type ImageFilters =
+  | 'locality'
+  | 'people'
+  | 'tags'
+  | 'country'
+  | 'date'
+  | 'dateFree'
+  | 'imageNumber'
+  | 'author'
+  | 'imageSize'
+
+type ImageSearchModuleState = SearchModuleState<ImageFilters> & {
   currentView: string // TODO: this can/should be a enum
   persistantFilters: {
     [K: string]: any

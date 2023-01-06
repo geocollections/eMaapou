@@ -6,7 +6,7 @@
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
           <filter-input-autocomplete-static
-            v-model="countries"
+            v-model="country"
             :title="$t('filters.country').toString()"
             :items="countrySuggestions"
             :filter-field="$translate({ et: 'country', en: 'country_en' })"
@@ -27,7 +27,7 @@
             locality-overlay
             :items="$accessor.search.locality.items"
           />
-          <filter-reference v-model="references" />
+          <filter-reference v-model="reference" />
         </v-expansion-panels>
       </v-card>
     </search-fields-wrapper>
@@ -71,22 +71,22 @@ export default defineComponent({
       },
     })
 
-    const countries = computed({
-      get: () => $accessor.search.locality.filters.byIds.countries.value,
+    const country = computed({
+      get: () => $accessor.search.locality.filters.byIds.country.value,
       set: (val) => {
         $accessor.search.locality.setFilterValue({
-          key: 'countries',
+          key: 'country',
           value: val,
         })
         handleSearch()
       },
     })
 
-    const references = computed({
-      get: () => $accessor.search.locality.filters.byIds.references.value,
+    const reference = computed({
+      get: () => $accessor.search.locality.filters.byIds.reference.value,
       set: (val) => {
         $accessor.search.locality.setFilterValue({
-          key: 'references',
+          key: 'reference',
           value: val,
         })
         handleSearch()
@@ -126,13 +126,13 @@ export default defineComponent({
         const countryIds = (route.value.query.countries as string)
           .split(',')
           .map(Number)
-        countries.value = state.countrySuggestions.filter((country) =>
+        country.value = state.countrySuggestions.filter((country) =>
           countryIds.includes(country.id)
         )
       }
 
       if (route.value.query.references) {
-        references.value = (
+        reference.value = (
           await hydrateFilterReference(
             (route.value.query.references as string)
               .split(',')
@@ -153,8 +153,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       query,
-      references,
-      countries,
+      reference,
+      country,
       map,
       handleReset,
       handleSearch,

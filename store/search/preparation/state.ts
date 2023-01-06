@@ -1,7 +1,10 @@
 import { SearchModuleState } from '../types'
 import { PREPARATION } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type PreparationFilters = 'number' | 'locality' | 'hierarchy' | 'depth'
+
+export const initState = (): SearchModuleState<PreparationFilters> => {
   return {
     name: 'preparation',
     items: [],

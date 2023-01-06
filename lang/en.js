@@ -1054,6 +1054,27 @@ export default {
     depth: 'Depth',
     sampleNumber: 'Sample number',
     collector: 'Collector',
-    country: 'Country'
+    country: 'Country',
+    drillcoreRepository: 'Repository',
+    drillcoreBoxes: 'Boxes',
+    method: 'Method',
+    lab: 'Lab',
+    agent: 'Agent',
+    sample: 'Sample',
+    analysisParameter: 'Analysed parameter',
+    owner: 'Owner',
+    date: 'Date'
+  },
+  intervals: {
+    default: {
+      between: 'Between {min} and {max}',
+      lessThanEquals: 'Less than or equal to {max}',
+      greaterThanEquals: 'Greater than or equal to {min}'
+    },
+    depth: {
+      between: 'Between {min} and {max} (m)',
+      lessThanEquals: 'Above {max} (m)',
+      greaterThanEquals: 'Deeper than {min} (m)'
+    }
   }
 }

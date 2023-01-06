@@ -1,7 +1,22 @@
 import { SearchModuleState } from '../types'
 import { SPECIMEN } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type SpecimenFilters =
+  | 'locality'
+  | 'number'
+  | 'collectionNumber'
+  | 'rock'
+  | 'reference'
+  | 'hasImage'
+  | 'hasCoordinates'
+  | 'taxonHierarchy'
+  | 'taxonName'
+  | 'stratigraphyHierarchy'
+  | 'fossilGroup'
+  | 'map'
+
+export const initState = (): SearchModuleState<SpecimenFilters> => {
   return {
     name: 'specimen',
     items: [],
@@ -12,13 +27,6 @@ export const initState = (): SearchModuleState => {
     query: '',
     filters: {
       byIds: {
-        locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'specimen.locality',
-          fields: ['locality', 'locality_en'],
-        },
         number: {
           value: '',
           type: FilterType.Text,
@@ -37,20 +45,6 @@ export const initState = (): SearchModuleState => {
           label: 'specimen.collectionNr',
           fields: ['collection_number'],
         },
-        fossil: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'specimen.fossilGroup',
-          fields: ['fossilgroup'],
-        },
-        fossilName: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'specimen.fossilName',
-          fields: ['taxon', 'taxon_txt', 'taxon_full'],
-        },
         rock: {
           value: '',
           type: FilterType.Text,
@@ -66,22 +60,6 @@ export const initState = (): SearchModuleState => {
         //   label: 'specimen.stratigraphyHierarchy',
         //   fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
         // },
-        hierarchy: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'hierarchy_string',
-          lookUpType: LookupType.StartsWith,
-          label: 'specimen.taxon',
-          fields: ['hierarchy_string'],
-        },
-        reference: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'reference',
-          lookUpType: LookupType.Equals,
-          label: 'specimen.reference',
-          fields: ['specimen_references'],
-        },
         hasImage: {
           value: false,
           type: FilterType.Boolean,
@@ -102,7 +80,7 @@ export const initState = (): SearchModuleState => {
         //   placeholders: ['mass.min', 'mass.max'],
         //   fields: ['mass'],
         // },
-        localities: {
+        locality: {
           value: [],
           type: FilterType.ListIds,
           label: '',
@@ -111,7 +89,7 @@ export const initState = (): SearchModuleState => {
           valueField: 'id',
           lookupType: 'none',
         },
-        references: {
+        reference: {
           value: [],
           type: FilterType.ListIds,
           label: '',
@@ -149,7 +127,7 @@ export const initState = (): SearchModuleState => {
           valueField: 'hierarchy_string',
           lookupType: 'startswith',
         },
-        fossilGroups: {
+        fossilGroup: {
           value: [],
           type: FilterType.ListIds,
           label: '',

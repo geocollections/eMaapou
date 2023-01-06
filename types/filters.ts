@@ -66,7 +66,7 @@ type ListTextFilter = {
   value: any[]
   label: string
   fields: string[]
-  lookupType: 'none' | 'startswith'
+  lookupType: 'none' | 'startswith' | 'contains'
 }
 type GeomFilter = {
   type: FilterType.Geom

@@ -2,14 +2,31 @@ import { SearchModuleState } from '../types'
 import { ANALYTICAL_DATA } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 
-type AnalyticalDataSearchModuleState = SearchModuleState & {
-  defaultParameters: string[]
-  parameters: { [K: string]: any }
-  parameterFilters: {
-    byIds: { [K: string]: any }
-    allIds: string[]
+export type AnalyticalDataFilters =
+  | 'locality'
+  | 'depth'
+  | 'stratigraphy'
+  | 'lithostratigraphy'
+  | 'analysis'
+  | 'method'
+  | 'lab'
+  | 'agentAnalysed'
+  | 'reference'
+  | 'dataset'
+  | 'stratigraphyBed'
+  | 'rock'
+  | 'sample'
+  | 'project'
+
+type AnalyticalDataSearchModuleState =
+  SearchModuleState<AnalyticalDataFilters> & {
+    defaultParameters: string[]
+    parameters: { [K: string]: any }
+    parameterFilters: {
+      byIds: { [K: string]: any }
+      allIds: string[]
+    }
   }
-}
 
 export const initState = (): AnalyticalDataSearchModuleState => {
   return {

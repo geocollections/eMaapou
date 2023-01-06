@@ -15,50 +15,61 @@ import state from './state'
 import { SearchModuleState } from './types'
 import { IOptions } from '~/services'
 
-export const searchModuleMutations = {
-  [SET_MODULE_ITEMS](state: SearchModuleState, { items }: { items: any[] }) {
+export const searchModuleMutations = <
+  Filters extends string | number | symbol
+>() => ({
+  [SET_MODULE_ITEMS](
+    state: SearchModuleState<Filters>,
+    { items }: { items: any[] }
+  ) {
     state.items = items
   },
-  [SET_MODULE_COUNT](state: SearchModuleState, { count }: { count: number }) {
+  [SET_MODULE_COUNT](
+    state: SearchModuleState<Filters>,
+    { count }: { count: number }
+  ) {
     state.count = count
   },
   [SET_MODULE_OPTIONS](
-    state: SearchModuleState,
+    state: SearchModuleState<Filters>,
     { options }: { options: IOptions }
   ) {
     state.options = options
   },
-  SET_MODULE_QUERY(state: SearchModuleState, { query }: { query: string }) {
+  SET_MODULE_QUERY(
+    state: SearchModuleState<Filters>,
+    { query }: { query: string }
+  ) {
     state.query = query
   },
   SET_MODULE_FILTER_VALUE(
-    state: SearchModuleState,
-    { key, value }: { key: string; value: any }
+    state: SearchModuleState<Filters>,
+    { key, value }: { key: Filters; value: any }
   ) {
     state.filters.byIds[key].value = value
   },
   [RESET_MODULE_QUERY](
-    state: SearchModuleState,
+    state: SearchModuleState<Filters>,
     { initQuery }: { initQuery: string }
   ) {
     state.query = initQuery
   },
   [RESET_MODULE_FILTERS](
-    state: SearchModuleState,
-    { initFilters }: { initFilters: SearchModuleState['filters'] }
+    state: SearchModuleState<Filters>,
+    { initFilters }: { initFilters: SearchModuleState<Filters>['filters'] }
   ) {
     state.filters = initFilters
   },
   [RESET_MODULE_OPTIONS](
-    state: SearchModuleState,
-    { initOptions }: { initOptions: SearchModuleState['options'] }
+    state: SearchModuleState<Filters>,
+    { initOptions }: { initOptions: SearchModuleState<Filters>['options'] }
   ) {
     state.options = {
       ...state.options,
       page: initOptions.page,
     }
   },
-}
+})
 
 export default mutationTree(state, {
   updateField,

@@ -1,7 +1,20 @@
 import { SearchModuleState } from '../types'
 import { SAMPLE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type SampleFilters =
+  | 'locality'
+  | 'stratigraphy'
+  | 'hierarchy'
+  | 'depth'
+  | 'mass'
+  | 'project'
+  | 'stratigraphyHierarchy'
+  | 'collector'
+  | 'number'
+  | 'map'
+
+export const initState = (): SearchModuleState<SampleFilters> => {
   return {
     name: 'sample',
     items: [],
@@ -12,13 +25,6 @@ export const initState = (): SearchModuleState => {
     query: '',
     filters: {
       byIds: {
-        locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'sample.locality',
-          fields: ['locality', 'locality_en', 'site_name', 'site_name_en'],
-        },
         stratigraphy: {
           value: '',
           type: FilterType.Text,
@@ -59,7 +65,7 @@ export const initState = (): SearchModuleState => {
           label: 'sample.project',
           fields: ['project_name', 'project_name_en'],
         },
-        localities: {
+        locality: {
           value: [],
           type: FilterType.ListIds,
           label: '',

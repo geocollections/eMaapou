@@ -13,7 +13,7 @@
       />
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
-          <filter-locality v-model="localities" />
+          <filter-locality v-model="locality" />
 
           <filter-map
             v-model="map"
@@ -26,8 +26,8 @@
             v-model="taxonName"
             :title="$t('filters.taxonName').toString()"
           />
-          <filter-fossil-group v-if="false" v-model="fossilGroups" />
-          <filter-reference v-model="references" />
+          <filter-fossil-group v-if="false" v-model="fossilGroup" />
+          <filter-reference v-model="reference" />
           <filter-input-text
             v-model="collectionNumber"
             :title="$t('filters.collectionNumber').toString()"
@@ -92,7 +92,7 @@ export default defineComponent({
 
     useFetch(async () => {
       if (route.value.query.localities) {
-        localities.value = (
+        locality.value = (
           await hydrateFilterLocality(
             (route.value.query.localities as string).split(',').map(Number)
           )
@@ -100,7 +100,7 @@ export default defineComponent({
       }
 
       if (route.value.query.references) {
-        references.value = (
+        reference.value = (
           await hydrateFilterReference(
             (route.value.query.references as string)
               .split(',')
@@ -137,21 +137,21 @@ export default defineComponent({
           .map((encodedValue) => decodeURIComponent(encodedValue))
       }
     })
-    const localities = computed({
-      get: () => $accessor.search.specimen.filters.byIds.localities.value,
+    const locality = computed({
+      get: () => $accessor.search.specimen.filters.byIds.locality.value,
       set: (val) => {
         $accessor.search.specimen.setFilterValue({
-          key: 'localities',
+          key: 'locality',
           value: val,
         })
         handleSearch()
       },
     })
-    const references = computed({
-      get: () => $accessor.search.specimen.filters.byIds.references.value,
+    const reference = computed({
+      get: () => $accessor.search.specimen.filters.byIds.reference.value,
       set: (val) => {
         $accessor.search.specimen.setFilterValue({
-          key: 'references',
+          key: 'reference',
           value: val,
         })
         handleSearch()
@@ -198,11 +198,11 @@ export default defineComponent({
         handleSearch()
       },
     })
-    const fossilGroups = computed({
-      get: () => $accessor.search.specimen.filters.byIds.fossilGroups.value,
+    const fossilGroup = computed({
+      get: () => $accessor.search.specimen.filters.byIds.fossilGroup.value,
       set: (val) => {
         $accessor.search.specimen.setFilterValue({
-          key: 'fossilGroups',
+          key: 'fossilGroup',
           value: val,
         })
         handleSearch()
@@ -264,9 +264,9 @@ export default defineComponent({
     return {
       handleReset,
       handleSearch,
-      localities,
-      references,
-      fossilGroups,
+      locality,
+      reference,
+      fossilGroup,
       taxonHierarchy,
       stratigraphyHierarchy,
       taxonName,

@@ -1,7 +1,16 @@
 import { SearchModuleState } from '../types'
 import { DATASET } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type DatasetFilters =
+  | 'name'
+  | 'owner'
+  | 'date'
+  | 'remarks'
+  | 'parameters'
+  | 'analysisParameter'
+
+export const initState = (): SearchModuleState<DatasetFilters> => {
   return {
     name: 'dataset',
     items: [],
@@ -20,10 +29,10 @@ export const initState = (): SearchModuleState => {
           fields: ['name', 'name_en'],
         },
         owner: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'dataset.owner',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'contains',
+          label: '',
           fields: [
             'owner_id',
             'owner_agent',
@@ -33,10 +42,10 @@ export const initState = (): SearchModuleState => {
           ],
         },
         date: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'dataset.date',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'contains',
+          label: '',
           fields: ['date', 'date_txt'],
         },
         remarks: {
@@ -51,6 +60,15 @@ export const initState = (): SearchModuleState => {
           type: FilterType.List,
           label: 'dataset.parameters',
           fields: ['parameter_index_list'],
+        },
+        analysisParameter: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['parameter_index_list'],
+          valueType: 'string',
+          valueField: 'parameter_index',
+          lookupType: 'none',
         },
       },
       allIds: ['name', 'owner', 'date', 'remarks'],

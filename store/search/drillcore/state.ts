@@ -1,7 +1,16 @@
 import { SearchModuleState } from '../types'
 import { DRILLCORE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type DrillcoreFilters =
+  | 'name'
+  | 'country'
+  | 'repository'
+  | 'storage'
+  | 'boxes'
+  | 'map'
+
+export const initState = (): SearchModuleState<DrillcoreFilters> => {
   return {
     name: 'drillcore',
     items: [],
@@ -19,20 +28,6 @@ export const initState = (): SearchModuleState => {
           label: 'drillcore.name',
           fields: ['drillcore', 'drillcore_en'],
         },
-        country: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'locality.country',
-          fields: ['country', 'country_en'],
-        },
-        repository: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'drillcore.repository',
-          fields: ['core_repository', 'core_repository_en'],
-        },
         storage: {
           value: '',
           type: FilterType.Text,
@@ -46,6 +41,30 @@ export const initState = (): SearchModuleState => {
           label: 'drillcore.boxes',
           placeholders: ['boxes.min', 'boxes.max'],
           fields: ['boxes'],
+        },
+        country: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['country_id'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
+        },
+        repository: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['core_repository_id'],
+          valueType: 'number',
+          valueField: 'id',
+          lookupType: 'none',
+        },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
         },
       },
       allIds: ['name', 'repository', 'country', 'storage', 'boxes'],

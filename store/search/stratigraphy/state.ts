@@ -1,7 +1,15 @@
 import { SearchModuleState } from '../types'
 import { STRATIGRAPHY } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type StratigraphyFilters =
+  | 'id'
+  | 'stratigraphy'
+  | 'index'
+  | 'age'
+  | 'hierarchy'
+
+export const initState = (): SearchModuleState<StratigraphyFilters> => {
   return {
     name: 'stratigraphy',
     items: [],

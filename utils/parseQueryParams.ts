@@ -3,26 +3,26 @@ import { IOptions } from '~/services'
 import { FilterType } from '~/types/enums'
 import { Filter } from '~/types/filters'
 
-export default ({
+export default function <Filters extends string | number | symbol>({
   route,
   filters,
   globalFilters,
   qKey,
 }: {
   route: Route
-  filters?: { [K: string]: Filter }
+  filters?: { [K in Filters]: Filter }
   globalFilters?: { [K: string]: Filter }
   qKey: string
-}) => {
+}) {
   const result = { query: '' } as {
     query: string
-    filters?: { [K: string]: Filter }
+    filters?: { [K in Filters]?: Filter }
     globalFilters?: { [K: string]: Filter }
     options: IOptions
   }
   result.query = (route.query[qKey] as string) ?? ''
   if (filters) {
-    result.filters = Object.entries(filters)
+    result.filters = Object.entries<Filter>(filters)
       .filter(([key, _]) => route.query[key])
       // .filter(([key, _]) => key !== 'localities')
       .reduce((prev, [key, filter]): { [K: string]: any } => {

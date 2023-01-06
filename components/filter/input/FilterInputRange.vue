@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from '@nuxtjs/composition-api'
+import { computed, defineComponent, useContext } from '@nuxtjs/composition-api'
 import isEmpty from 'lodash/isEmpty'
 import { mdiClose } from '@mdi/js'
 export default defineComponent({
@@ -77,8 +77,13 @@ export default defineComponent({
         return { min: 'min', max: 'max' }
       },
     },
+    intervalLabels: {
+      type: String,
+      default: 'intervals.default',
+    },
   },
   setup(props, { emit }) {
+    const { i18n } = useContext()
     const parseInput = (input: string) => {
       if (isEmpty(input)) return null
       else return parseInt(input)
@@ -90,19 +95,22 @@ export default defineComponent({
         emit('input', [props.value[0], parseInput(input)])
       }
     }
-
     const valueString = computed(() => {
-      const min = props.value[0] ?? '*'
-      const max = props.value[1] ?? '*'
-
       if (props.value[0] === null && props.value[1] !== null) {
-        return `Below ${props.value[1]} (m)`
+        return i18n.t(`${props.intervalLabels}.lessThanEquals`, {
+          max: props.value[1],
+        })
       }
 
       if (props.value[0] !== null && props.value[1] === null) {
-        return `Above ${props.value[0]} (m)`
+        return i18n.t(`${props.intervalLabels}.greaterThanEquals`, {
+          min: props.value[0],
+        })
       }
-      return `Between ${min} and ${max} (m)`
+      return i18n.t(`${props.intervalLabels}.between`, {
+        min: props.value[0],
+        max: props.value[1],
+      })
     })
 
     const icons = computed(() => ({ mdiClose }))
