@@ -1062,7 +1062,10 @@ export default {
     method: 'Metoodika',
     lab: 'Labor',
     agent: 'Agent',
-    sample: 'Proov'
+    sample: 'Proov',
+    analysisParameter: 'Analüüsitud parameeter',
+    owner: 'Omanik',
+    date: 'Kuupäev'
   },
   intervals: {
     default: {

@@ -8,6 +8,7 @@ export type DatasetFilters =
   | 'date'
   | 'remarks'
   | 'parameters'
+  | 'analysisParameter'
 
 export const initState = (): SearchModuleState<DatasetFilters> => {
   return {
@@ -28,10 +29,10 @@ export const initState = (): SearchModuleState<DatasetFilters> => {
           fields: ['name', 'name_en'],
         },
         owner: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'dataset.owner',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'contains',
+          label: '',
           fields: [
             'owner_id',
             'owner_agent',
@@ -41,10 +42,10 @@ export const initState = (): SearchModuleState<DatasetFilters> => {
           ],
         },
         date: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'dataset.date',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'contains',
+          label: '',
           fields: ['date', 'date_txt'],
         },
         remarks: {
@@ -59,6 +60,15 @@ export const initState = (): SearchModuleState<DatasetFilters> => {
           type: FilterType.List,
           label: 'dataset.parameters',
           fields: ['parameter_index_list'],
+        },
+        analysisParameter: {
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['parameter_index_list'],
+          valueType: 'string',
+          valueField: 'parameter_index',
+          lookupType: 'none',
         },
       },
       allIds: ['name', 'owner', 'date', 'remarks'],

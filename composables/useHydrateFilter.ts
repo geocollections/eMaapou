@@ -36,6 +36,7 @@ export const useHydrateFilterTaxon = () => {
     )
   }
 }
+
 export const useHydrateFilterStratigraphy = () => {
   const { $axios } = useContext()
 
@@ -45,6 +46,19 @@ export const useHydrateFilterStratigraphy = () => {
       .join(' OR ')
     return $axios.get(
       `https://api.geoloogia.info/solr/stratigraphy?q=(${query})&rows=${selectedStratigraphy.length}&fl=id,stratigraphy,stratigraphy_en,hierarchy_string`
+    )
+  }
+}
+
+export const useHydrateFilterAnalysisParameter = () => {
+  const { $axios } = useContext()
+
+  return (selectedAnalysisParameters: string[]) => {
+    const query = selectedAnalysisParameters
+      .map((parameter) => `parameter_index:"${parameter}"`)
+      .join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/analysis_parameter?q=(${query})&rows=${selectedAnalysisParameters.length}&fl=id,parameter,parameter_index`
     )
   }
 }

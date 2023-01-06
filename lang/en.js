@@ -1060,7 +1060,10 @@ export default {
     method: 'Method',
     lab: 'Lab',
     agent: 'Agent',
-    sample: 'Sample'
+    sample: 'Sample',
+    analysisParameter: 'Analysed parameter',
+    owner: 'Owner',
+    date: 'Date'
   },
   intervals: {
     default: {
