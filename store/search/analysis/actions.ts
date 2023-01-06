@@ -1,5 +1,11 @@
+import { actionTree } from 'typed-vuex'
 import { searchModuleActions } from '../moduleActions'
-
-export default {
-  ...searchModuleActions,
-}
+import state, { AnalysisFilters } from './state'
+import getters from './getters'
+import mutations from './mutations'
+export default actionTree(
+  { state, getters, mutations },
+  {
+    ...searchModuleActions<AnalysisFilters>(),
+  }
+)

@@ -1,7 +1,18 @@
 import { SearchModuleState } from '../types'
 import { DRILLCORE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type DrillcoreFilters =
+  | 'name'
+  | 'country'
+  | 'repository'
+  | 'storage'
+  | 'boxes'
+  | 'countries'
+  | 'repositories'
+  | 'map'
+
+export const initState = (): SearchModuleState<DrillcoreFilters> => {
   return {
     name: 'drillcore',
     items: [],

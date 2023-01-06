@@ -2,7 +2,22 @@ import { SearchModuleState } from '../types'
 import { ANALYSIS } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 
-export const initState = (): SearchModuleState => {
+export type AnalysisFilters =
+  | 'id'
+  | 'depth'
+  | 'stratigraphy'
+  | 'method'
+  | 'agent'
+  | 'dataset'
+  | 'lab'
+  | 'sample'
+  | 'locality'
+  | 'labs'
+  | 'methods'
+  | 'localities'
+  | 'map'
+
+export const initState = (): SearchModuleState<AnalysisFilters> => {
   return {
     name: 'analysis',
     items: [],

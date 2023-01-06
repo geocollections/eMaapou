@@ -1,7 +1,27 @@
 import { SearchModuleState } from '../types'
 import { SPECIMEN } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type SpecimenFilters =
+  | 'locality'
+  | 'number'
+  | 'collectionNumber'
+  | 'fossil'
+  | 'fossilName'
+  | 'rock'
+  | 'hierarchy'
+  | 'reference'
+  | 'hasImage'
+  | 'hasCoordinates'
+  | 'localities'
+  | 'references'
+  | 'taxonHierarchy'
+  | 'taxonName'
+  | 'stratigraphyHierarchy'
+  | 'fossilGroups'
+  | 'map'
+
+export const initState = (): SearchModuleState<SpecimenFilters> => {
   return {
     name: 'specimen',
     items: [],

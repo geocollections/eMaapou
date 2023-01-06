@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 import { mutationTree } from 'typed-vuex'
 import { searchModuleMutations } from '../mutations'
-import state from './state'
+import state, { AnalyticalDataFilters } from './state'
 import {
   SET_PARAMETERS,
   ADD_PARAMETER_FILTER,
@@ -12,7 +12,7 @@ import {
 } from '~/store/mutation_types'
 export default mutationTree(state, {
   updateField,
-  ...searchModuleMutations,
+  ...searchModuleMutations<AnalyticalDataFilters>(),
   [SET_PARAMETERS](state, parameters) {
     state.parameters = parameters
   },

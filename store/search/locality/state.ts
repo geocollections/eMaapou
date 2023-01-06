@@ -1,7 +1,17 @@
 import { SearchModuleState } from '../types'
 import { LOCALITY } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type LocalityFilters =
+  | 'name'
+  | 'country'
+  | 'stratigraphy'
+  | 'reference'
+  | 'countries'
+  | 'references'
+  | 'map'
+
+export const initState = (): SearchModuleState<LocalityFilters> => {
   return {
     name: 'locality',
     items: [],

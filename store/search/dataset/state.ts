@@ -1,7 +1,15 @@
 import { SearchModuleState } from '../types'
 import { DATASET } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-export const initState = (): SearchModuleState => {
+
+export type DatasetFilters =
+  | 'name'
+  | 'owner'
+  | 'date'
+  | 'remarks'
+  | 'parameters'
+
+export const initState = (): SearchModuleState<DatasetFilters> => {
   return {
     name: 'dataset',
     items: [],
