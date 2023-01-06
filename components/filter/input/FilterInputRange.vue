@@ -34,7 +34,10 @@
             hide-details
             single-line
             type="number"
+            :step="step"
             @input="handleInput($event, true)"
+            @keydown.enter.prevent.stop="handleEnter"
+            @blur="handleEnter"
           >
           </v-text-field>
         </v-col>
@@ -46,7 +49,10 @@
             hide-details
             single-line
             type="number"
+            :step="step"
             @input="handleInput($event, false)"
+            @keydown.enter.prevent.stop="handleEnter"
+            @blur="handleEnter"
           />
         </v-col>
       </v-row>
@@ -55,14 +61,21 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, useContext } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  ref,
+  useContext,
+  watch,
+} from '@nuxtjs/composition-api'
 import isEmpty from 'lodash/isEmpty'
 import { mdiClose } from '@mdi/js'
 export default defineComponent({
   name: 'FilterInputRange',
   props: {
     value: {
-      type: Array,
+      type: Array as PropType<(null | number)[]>,
       default: () => {
         return [null, null]
       },
@@ -81,18 +94,49 @@ export default defineComponent({
       type: String,
       default: 'intervals.default',
     },
+    numberType: {
+      type: String as PropType<'int' | 'float'>,
+      default: 'int',
+    },
+    step: {
+      type: Number,
+      default: 1,
+    },
   },
   setup(props, { emit }) {
     const { i18n } = useContext()
     const parseInput = (input: string) => {
       if (isEmpty(input)) return null
-      else return parseInt(input)
+
+      if (props.numberType === 'float') {
+        return parseFloat(input)
+      } else return parseInt(input)
+    }
+
+    const internalValue = ref<(null | number)[]>([null, null])
+
+    watch(
+      () => props.value,
+      (val) => {
+        internalValue.value = val
+      }
+    )
+    const handleEnter = () => {
+      if (
+        props.value[0] === internalValue.value[0] &&
+        props.value[1] === internalValue.value[1]
+      )
+        return
+
+      emit('input', internalValue.value)
     }
     const handleInput = (input: string, isMin: boolean) => {
       if (isMin) {
-        emit('input', [parseInput(input), props.value[1]])
+        internalValue.value = [parseInput(input), props.value[1]]
+        // emit('input', [parseInput(input), props.value[1]])
       } else {
-        emit('input', [props.value[0], parseInput(input)])
+        internalValue.value = [props.value[0], parseInput(input)]
+        // emit('input', [props.value[0], parseInput(input)])
       }
     }
     const valueString = computed(() => {
@@ -112,7 +156,6 @@ export default defineComponent({
         max: props.value[1],
       })
     })
-
     const icons = computed(() => ({ mdiClose }))
     const handleRemove = () => {
       emit('input', [null, null])
@@ -120,6 +163,8 @@ export default defineComponent({
     return {
       handleInput,
       handleRemove,
+      handleEnter,
+      internalValue,
       valueString,
       icons,
     }

@@ -1,7 +1,10 @@
 <template>
   <search>
     <template #title>
-      <base-header :title="$t('sample.pageTitle')" :icon="icons.mdiTestTube" />
+      <base-header
+        :title="$t('sample.pageTitle').toString()"
+        :icon="icons.mdiTestTube"
+      />
     </template>
 
     <template #form="{ closeMobileSearch }">

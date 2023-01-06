@@ -9,6 +9,7 @@
             v-model="depth"
             :label="$t('filters.depth').toString()"
             interval-labels="intervals.depth"
+            :step="0.01"
           />
           <filter-input-autocomplete-static
             v-model="method"
