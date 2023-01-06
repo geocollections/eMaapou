@@ -9,7 +9,6 @@ export type SampleFilters =
   | 'depth'
   | 'mass'
   | 'project'
-  | 'localities'
   | 'stratigraphyHierarchy'
   | 'collector'
   | 'number'
@@ -26,13 +25,6 @@ export const initState = (): SearchModuleState<SampleFilters> => {
     query: '',
     filters: {
       byIds: {
-        locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'sample.locality',
-          fields: ['locality', 'locality_en', 'site_name', 'site_name_en'],
-        },
         stratigraphy: {
           value: '',
           type: FilterType.Text,
@@ -73,7 +65,7 @@ export const initState = (): SearchModuleState<SampleFilters> => {
           label: 'sample.project',
           fields: ['project_name', 'project_name_en'],
         },
-        localities: {
+        locality: {
           value: [],
           type: FilterType.ListIds,
           label: '',

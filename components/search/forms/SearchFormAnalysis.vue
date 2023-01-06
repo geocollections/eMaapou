@@ -11,7 +11,7 @@
             interval-labels="intervals.depth"
           />
           <filter-input-autocomplete-static
-            v-model="methods"
+            v-model="method"
             :title="$t('filters.method').toString()"
             :items="methodSuggestions"
             :filter-field="$translate({ et: 'method', en: 'method_en' })"
@@ -28,7 +28,7 @@
             </template>
           </filter-input-autocomplete-static>
           <filter-input-autocomplete-static
-            v-model="labs"
+            v-model="lab"
             :title="$t('filters.lab').toString()"
             :items="labSuggestions"
             :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
@@ -45,7 +45,7 @@
             </template>
           </filter-input-autocomplete-static>
           <filter-sample v-model="sample" />
-          <filter-locality v-model="localities" />
+          <filter-locality v-model="locality" />
           <filter-map v-model="map" :items="$accessor.search.analysis.items" />
           <filter-input-text
             v-model="agent"
@@ -161,21 +161,21 @@ export default defineComponent({
         handleSearch()
       },
     })
-    const methods = computed({
-      get: () => $accessor.search.analysis.filters.byIds.methods.value,
+    const method = computed({
+      get: () => $accessor.search.analysis.filters.byIds.method.value,
       set: (val) => {
         $accessor.search.analysis.setFilterValue({
-          key: 'methods',
+          key: 'method',
           value: val,
         })
         handleSearch()
       },
     })
-    const labs = computed({
-      get: () => $accessor.search.analysis.filters.byIds.labs.value,
+    const lab = computed({
+      get: () => $accessor.search.analysis.filters.byIds.lab.value,
       set: (val) => {
         $accessor.search.analysis.setFilterValue({
-          key: 'labs',
+          key: 'lab',
           value: val,
         })
         handleSearch()
@@ -192,11 +192,11 @@ export default defineComponent({
       },
     })
 
-    const localities = computed({
-      get: () => $accessor.search.analysis.filters.byIds.localities.value,
+    const locality = computed({
+      get: () => $accessor.search.analysis.filters.byIds.locality.value,
       set: (val) => {
         $accessor.search.analysis.setFilterValue({
-          key: 'localities',
+          key: 'locality',
           value: val,
         })
         handleSearch()
@@ -267,7 +267,7 @@ export default defineComponent({
         const methodIds = (route.value.query.methods as string)
           .split(',')
           .map(Number)
-        methods.value = state.methodSuggestions.filter((method) =>
+        method.value = state.methodSuggestions.filter((method) =>
           methodIds.includes(method.id)
         )
       }
@@ -275,13 +275,13 @@ export default defineComponent({
         const methodIds = (route.value.query.labs as string)
           .split(',')
           .map(Number)
-        labs.value = state.labSuggestions.filter((lab) =>
+        lab.value = state.labSuggestions.filter((lab) =>
           methodIds.includes(lab.id)
         )
       }
 
       if (route.value.query.localities) {
-        localities.value = (
+        locality.value = (
           await hydrateFilterLocality(
             (route.value.query.localities as string).split(',').map(Number)
           )
@@ -303,11 +303,11 @@ export default defineComponent({
       handleMapUpdate,
       depth,
       query,
-      methods,
-      localities,
+      method,
+      locality,
       map,
       institutions,
-      labs,
+      lab,
       agent,
       sample,
     }

@@ -12,9 +12,6 @@ export type AnalysisFilters =
   | 'lab'
   | 'sample'
   | 'locality'
-  | 'labs'
-  | 'methods'
-  | 'localities'
   | 'map'
 
 export const initState = (): SearchModuleState<AnalysisFilters> => {
@@ -54,13 +51,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
             'age_hierarchy',
           ],
         },
-        method: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.method',
-          fields: ['analysis_method', 'analysis_method_en'],
-        },
         agent: {
           value: [],
           type: FilterType.ListText,
@@ -75,13 +65,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
           label: 'analysis.dataset',
           fields: ['dataset_ids'],
         },
-        lab: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.lab',
-          fields: ['lab', 'lab_en'],
-        },
         sample: {
           value: [],
           type: FilterType.ListIds,
@@ -92,14 +75,7 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
           lookupType: 'none',
         },
 
-        locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'analysis.locality',
-          fields: ['locality', 'locality_en'],
-        },
-        labs: {
+        lab: {
           value: [],
           type: FilterType.ListIds,
           label: '',
@@ -108,7 +84,7 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
           valueField: 'id',
           lookupType: 'none',
         },
-        methods: {
+        method: {
           value: [],
           type: FilterType.ListIds,
           label: '',
@@ -117,7 +93,7 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
           valueField: 'id',
           lookupType: 'none',
         },
-        localities: {
+        locality: {
           value: [],
           type: FilterType.ListIds,
           label: '',

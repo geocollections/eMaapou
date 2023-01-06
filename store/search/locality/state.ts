@@ -7,8 +7,6 @@ export type LocalityFilters =
   | 'country'
   | 'stratigraphy'
   | 'reference'
-  | 'countries'
-  | 'references'
   | 'map'
 
 export const initState = (): SearchModuleState<LocalityFilters> => {
@@ -29,13 +27,6 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
           label: 'locality.name',
           fields: ['locality', 'locality_en'],
         },
-        country: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'locality.country',
-          fields: ['country', 'country_en'],
-        },
         stratigraphy: {
           value: '',
           type: FilterType.Text,
@@ -50,14 +41,7 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
             'stratigraphy_top_free',
           ],
         },
-        reference: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'locality.reference',
-          fields: ['locality_references'],
-        },
-        countries: {
+        country: {
           value: [],
           type: FilterType.ListIds,
           label: '',
@@ -66,7 +50,7 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
           valueField: 'id',
           lookupType: 'none',
         },
-        references: {
+        reference: {
           value: [],
           type: FilterType.ListIds,
           label: '',

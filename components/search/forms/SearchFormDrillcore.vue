@@ -148,20 +148,20 @@ export default defineComponent({
       },
     })
     const countries = computed({
-      get: () => $accessor.search.drillcore.filters.byIds.countries.value,
+      get: () => $accessor.search.drillcore.filters.byIds.country.value,
       set: (val) => {
         $accessor.search.drillcore.setFilterValue({
-          key: 'countries',
+          key: 'country',
           value: val,
         })
         handleSearch()
       },
     })
     const repositories = computed({
-      get: () => $accessor.search.drillcore.filters.byIds.repositories.value,
+      get: () => $accessor.search.drillcore.filters.byIds.repository.value,
       set: (val) => {
         $accessor.search.drillcore.setFilterValue({
-          key: 'repositories',
+          key: 'repository',
           value: val,
         })
         handleSearch()

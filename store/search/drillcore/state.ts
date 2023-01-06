@@ -8,8 +8,6 @@ export type DrillcoreFilters =
   | 'repository'
   | 'storage'
   | 'boxes'
-  | 'countries'
-  | 'repositories'
   | 'map'
 
 export const initState = (): SearchModuleState<DrillcoreFilters> => {
@@ -30,20 +28,6 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
           label: 'drillcore.name',
           fields: ['drillcore', 'drillcore_en'],
         },
-        country: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'locality.country',
-          fields: ['country', 'country_en'],
-        },
-        repository: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'drillcore.repository',
-          fields: ['core_repository', 'core_repository_en'],
-        },
         storage: {
           value: '',
           type: FilterType.Text,
@@ -58,7 +42,7 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
           placeholders: ['boxes.min', 'boxes.max'],
           fields: ['boxes'],
         },
-        countries: {
+        country: {
           value: [],
           type: FilterType.ListIds,
           label: '',
@@ -67,7 +51,7 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
           valueField: 'id',
           lookupType: 'none',
         },
-        repositories: {
+        repository: {
           value: [],
           type: FilterType.ListIds,
           label: '',
