@@ -264,16 +264,16 @@ export default defineComponent({
           lab_en: lab.pivot[0].pivot[0].value,
         }
       })
-      if (route.value.query.methods) {
-        const methodIds = (route.value.query.methods as string)
+      if (route.value.query.method) {
+        const methodIds = (route.value.query.method as string)
           .split(',')
           .map(Number)
         method.value = state.methodSuggestions.filter((method) =>
           methodIds.includes(method.id)
         )
       }
-      if (route.value.query.labs) {
-        const methodIds = (route.value.query.labs as string)
+      if (route.value.query.lab) {
+        const methodIds = (route.value.query.lab as string)
           .split(',')
           .map(Number)
         lab.value = state.labSuggestions.filter((lab) =>
@@ -281,10 +281,10 @@ export default defineComponent({
         )
       }
 
-      if (route.value.query.localities) {
+      if (route.value.query.locality) {
         locality.value = (
           await hydrateFilterLocality(
-            (route.value.query.localities as string).split(',').map(Number)
+            (route.value.query.locality as string).split(',').map(Number)
           )
         ).data.response.docs
       }

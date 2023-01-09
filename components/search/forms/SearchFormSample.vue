@@ -103,10 +103,10 @@ export default defineComponent({
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
-      if (route.value.query.localities) {
+      if (route.value.query.locality) {
         locality.value = (
           await hydrateFilterLocality(
-            (route.value.query.localities as string).split(',').map(Number)
+            (route.value.query.locality as string).split(',').map(Number)
           )
         ).data.response.docs
       }

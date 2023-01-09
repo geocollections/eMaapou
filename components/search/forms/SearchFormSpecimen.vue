@@ -91,18 +91,18 @@ export default defineComponent({
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
 
     useFetch(async () => {
-      if (route.value.query.localities) {
+      if (route.value.query.locality) {
         locality.value = (
           await hydrateFilterLocality(
-            (route.value.query.localities as string).split(',').map(Number)
+            (route.value.query.locality as string).split(',').map(Number)
           )
         ).data.response.docs
       }
 
-      if (route.value.query.references) {
+      if (route.value.query.reference) {
         reference.value = (
           await hydrateFilterReference(
-            (route.value.query.references as string)
+            (route.value.query.reference as string)
               .split(',')
               .map((encodedValue) => decodeURIComponent(encodedValue))
           )
