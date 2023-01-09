@@ -67,12 +67,20 @@ export const useHydrateFilterSample = () => {
   const { $axios } = useContext()
 
   return (selectedSamples: number[]) => {
-    const query = selectedSamples
-      .map((stratigraphy) => `id:"${stratigraphy}"`)
-
-      .join(' OR ')
+    const query = selectedSamples.map((sample) => `id:"${sample}"`).join(' OR ')
     return $axios.get(
       `https://api.geoloogia.info/solr/sample?q=(${query})&rows=${selectedSamples.length}&fl=id,number`
+    )
+  }
+}
+
+export const useHydrateFilterArea = () => {
+  const { $axios } = useContext()
+
+  return (selectedAreas: number[]) => {
+    const query = selectedAreas.map((area) => `id:"${area}"`).join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/area?q=(${query})&rows=${selectedAreas.length}&fl=id,name,name_en`
     )
   }
 }

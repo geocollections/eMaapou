@@ -1066,7 +1066,9 @@ export default {
     date: 'Date',
     name: 'Name',
     county: 'County',
-    areaType: 'Area type'
+    areaType: 'Area type',
+    area: 'Area',
+    project: 'Project'
   },
   intervals: {
     default: {

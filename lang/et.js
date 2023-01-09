@@ -1068,7 +1068,9 @@ export default {
     date: 'Kuupäev',
     name: 'Nimi',
     county: 'Maakond',
-    areaType: 'Ala tüüp'
+    areaType: 'Ala tüüp',
+    area: 'Ala',
+    project: 'Projekt'
   },
   intervals: {
     default: {
