@@ -16,18 +16,20 @@ export const initState = (): SearchModuleState<AreaFilters> => {
     filters: {
       byIds: {
         name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'area.name',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['name', 'name_en'],
         },
         county: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'area.county',
-          fields: ['maakond'],
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['maakond_id'],
+          valueField: 'id',
+          valueType: 'number',
+          lookupType: 'none',
         },
         type: {
           value: '',
