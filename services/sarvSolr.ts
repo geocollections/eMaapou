@@ -296,7 +296,7 @@ const buildSolrParameters = (filters: { [key: string]: Filter }) => {
                   if (filter.lookupType === 'contains') {
                     return `(${field}:*${v}*)`
                   }
-                  return `(${field}:"${v}")`
+                  return `(${field}:${v})`
                 })
                 .join(' OR ')
             })
