@@ -12,12 +12,17 @@
       style="border-bottom: 1px solid lightgray !important"
     >
       <div class="d-flex py-1 px-2">
-        <span class="text-body-2 font-weight-medium">
+        <span>
+          <input
+            type="checkbox"
+            class="checkbox"
+            checked
+            @click.stop="handleRemove"
+          />
+        </span>
+        <span class="align-self-center pl-2 text-body-2 font-weight-medium">
           {{ valueString }}
         </span>
-        <v-btn class="ml-auto" x-small icon @click="handleRemove">
-          <v-icon small>{{ icons.mdiClose }}</v-icon>
-        </v-btn>
       </div>
     </div>
     <v-expansion-panel-content
@@ -181,5 +186,8 @@ export default defineComponent({
 .v-text-field {
   padding-top: 0px;
   margin-top: 0px;
+}
+.checkbox {
+  accent-color: var(--v-accent-base);
 }
 </style>
