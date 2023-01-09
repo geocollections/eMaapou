@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
+  <v-form @submit.prevent.stop="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
     <search-fields-wrapper>

@@ -1,7 +1,6 @@
 <template>
   <filter-input-autocomplete
     :title="$t('filters.reference').toString()"
-    query-field="reference"
     :query-function="querySuggestions"
     :value="value"
     v-on="$listeners"
@@ -37,7 +36,7 @@ export default defineComponent({
       options = { rows: 10, start: 0 }
     ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/reference?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,reference,title`
+        `https://api.geoloogia.info/solr/reference?defType=edismax&qf=reference^2.0+title^0.5&q=${search}&rows=${options.rows}&start=${options.start}&fl=id,reference,title`
       )
     }
     return { querySuggestions }

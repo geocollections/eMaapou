@@ -69,7 +69,10 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
       null,
       null,
     ]
-    return [start !== '*' ? start : null, end !== '*' ? end : null]
+    return [
+      start !== '*' ? Number(start) : null,
+      end !== '*' ? Number(end) : null,
+    ]
   } else if (filter.type === FilterType.Geom) {
     return JSON.parse(route.query[key] as string)
   } else if (filter.type === FilterType.Object) {

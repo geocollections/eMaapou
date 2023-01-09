@@ -16,15 +16,22 @@
         :key="i"
         class="d-flex py-1 selected-item px-2"
       >
-        <span class="text-body-2 font-weight-medium pr-1">
+        <span>
+          <input
+            type="checkbox"
+            class="checkbox"
+            checked
+            @click.stop="handleRemove(i)"
+          />
+        </span>
+        <span
+          class="align-self-center text-body-2 font-weight-medium pl-2"
+          style="word-break: break-word"
+        >
           <slot name="selection" :item="item">
             {{ item.id }}
           </slot>
         </span>
-
-        <v-btn class="ml-auto" x-small icon @click="handleRemove(i)">
-          <v-icon small>{{ icons.mdiClose }}</v-icon>
-        </v-btn>
       </div>
     </div>
     <v-expansion-panel-content
@@ -150,5 +157,8 @@ export default defineComponent({
 }
 ::v-deep .v-select.v-input--is-dirty ::placeholder {
   color: back !important;
+}
+.checkbox {
+  accent-color: var(--v-accent-base);
 }
 </style>

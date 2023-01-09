@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panel style="background-color: transparent">
+  <v-expansion-panel ref="panel" style="background-color: transparent">
     <v-expansion-panel-header
       class="py-1 pl-2 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
@@ -15,16 +15,24 @@
         v-for="(item, i) in selectedItems"
         :key="i"
         class="d-flex py-1 selected-item px-2"
+        @click="handleChange(i)"
       >
-        <span class="text-body-2 font-weight-medium">
+        <span>
+          <input
+            type="checkbox"
+            class="checkbox"
+            checked
+            @click.stop="handleRemove(i)"
+          />
+        </span>
+        <span
+          class="align-self-center text-body-2 font-weight-medium pl-2"
+          style="word-break: break-word"
+        >
           <slot name="selection" :item="item">
             {{ item }}
           </slot>
         </span>
-
-        <v-btn class="ml-auto" x-small icon @click="handleRemove(i)">
-          <v-icon small>{{ icons.mdiClose }}</v-icon>
-        </v-btn>
       </div>
     </div>
     <v-expansion-panel-content
@@ -33,11 +41,11 @@
       style="border-bottom: 1px solid lightgray !important"
     >
       <v-text-field
-        v-model="search"
+        v-model="internalValue"
         hide-details
         dense
         :placeholder="$t('filters.search')"
-        @keyup.enter="handleAdd"
+        @keydown.enter="handleAdd"
       >
       </v-text-field>
     </v-expansion-panel-content>
@@ -52,6 +60,7 @@ import {
   toRefs,
   PropType,
   watch,
+  ref,
 } from '@nuxtjs/composition-api'
 import { mdiClose, mdiPlus } from '@mdi/js'
 import cloneDeep from 'lodash/cloneDeep'
@@ -70,7 +79,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const state = reactive({
       suggestItems: [] as any[],
-      search: null as string | null,
+      internalValue: '' as string,
       selectedItems: [] as any[],
       isLoading: false,
     })
@@ -80,6 +89,7 @@ export default defineComponent({
         mdiPlus,
       }
     })
+    const panel = ref()
     watch(
       () => props.value,
       (newVal) => {
@@ -91,8 +101,9 @@ export default defineComponent({
       emit('input', event)
     }
     const handleAdd = () => {
-      state.selectedItems = [...state.selectedItems, state.search]
-      state.search = ''
+      if (state.internalValue === '') return
+      state.selectedItems = [...state.selectedItems, state.internalValue]
+      state.internalValue = ''
       emit('input', state.selectedItems)
     }
     const handleRemove = (i: number) => {
@@ -101,18 +112,27 @@ export default defineComponent({
       state.selectedItems = cloneItems
       emit('input', state.selectedItems)
     }
+    const handleChange = (i: number) => {
+      const cloneItems = cloneDeep(state.selectedItems)
+      state.internalValue = cloneItems.splice(i, 1)[0]
+      state.selectedItems = cloneItems
+      emit('input', state.selectedItems)
+      if (!panel.value.isActive) panel.value.toggle()
+    }
     return {
       ...toRefs(state),
+      panel,
       icons,
       handleInput,
       handleAdd,
       handleRemove,
+      handleChange,
     }
   },
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 ::v-deep .v-expansion-panel-content__wrap {
   padding-right: 8px;
   padding-left: 8px;
@@ -121,5 +141,10 @@ export default defineComponent({
 
 .selected-item:hover {
   background-color: #eeeeee;
+  cursor: pointer;
+}
+
+.checkbox {
+  accent-color: var(--v-accent-base);
 }
 </style>
