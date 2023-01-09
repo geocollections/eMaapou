@@ -1065,7 +1065,12 @@ export default {
     sample: 'Proov',
     analysisParameter: 'Analüüsitud parameeter',
     owner: 'Omanik',
-    date: 'Kuupäev'
+    date: 'Kuupäev',
+    name: 'Nimi',
+    county: 'Maakond',
+    areaType: 'Ala tüüp',
+    area: 'Ala',
+    project: 'Projekt'
   },
   intervals: {
     default: {
@@ -1078,6 +1083,8 @@ export default {
       lessThanEquals: 'Kõrgemal kui {max} (m)',
       greaterThanEquals: 'Sügavamal kui {min} (m)'
     }
-
+  },
+  autocomplete: {
+    searchHint: 'Sisesta märksõna valikute nägemiseks'
   }
 }

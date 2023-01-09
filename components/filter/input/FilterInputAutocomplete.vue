@@ -65,6 +65,14 @@
         <template #append-item>
           <div v-intersect="loadMore" />
         </template>
+        <template #no-data>
+          <div class="px-2">
+            <v-icon left color="info">{{ icons.mdiInformationOutline }}</v-icon>
+            <span class="font-weight-medium text-body-2">
+              {{ $t('autocomplete.searchHint') }}
+            </span>
+          </div>
+        </template>
       </v-autocomplete>
     </v-expansion-panel-content>
   </v-expansion-panel>
@@ -79,7 +87,7 @@ import {
   PropType,
   watch,
 } from '@nuxtjs/composition-api'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiInformationOutline } from '@mdi/js'
 import isEmpty from 'lodash/isEmpty'
 import debounce from 'lodash/debounce'
 import cloneDeep from 'lodash/cloneDeep'
@@ -121,6 +129,7 @@ export default defineComponent({
     const icons = computed(() => {
       return {
         mdiClose,
+        mdiInformationOutline,
       }
     })
     watch(

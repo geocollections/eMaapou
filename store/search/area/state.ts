@@ -1,6 +1,6 @@
 import { SearchModuleState } from '../types'
 import { AREA } from '~/constants'
-import { FilterType, LookupType } from '~/types/enums'
+import { FilterType } from '~/types/enums'
 
 export type AreaFilters = 'name' | 'county' | 'type'
 
@@ -16,25 +16,29 @@ export const initState = (): SearchModuleState<AreaFilters> => {
     filters: {
       byIds: {
         name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'area.name',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['name', 'name_en'],
         },
         county: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'area.county',
-          fields: ['maakond'],
+          value: [],
+          type: FilterType.ListIds,
+          label: '',
+          fields: ['maakond_id'],
+          valueField: 'id',
+          valueType: 'number',
+          lookupType: 'none',
         },
         type: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'area.areaType',
-          fields: ['area_type'],
+          value: [],
+          type: FilterType.ListIds,
+          lookupType: 'none',
+          label: '',
+          fields: ['area_type_id'],
+          valueField: 'id',
+          valueType: 'number',
         },
       },
       allIds: ['name', 'county', 'type'],

@@ -1,8 +1,8 @@
 import { SearchModuleState } from '../types'
 import { SITE } from '~/constants'
-import { FilterType, LookupType } from '~/types/enums'
+import { FilterType } from '~/types/enums'
 
-export type SiteFilters = 'name' | 'area' | 'project'
+export type SiteFilters = 'name' | 'area' | 'project' | 'map'
 
 export const initState = (): SearchModuleState<SiteFilters> => {
   return {
@@ -16,25 +16,35 @@ export const initState = (): SearchModuleState<SiteFilters> => {
     filters: {
       byIds: {
         name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'site.name',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['name'],
         },
         area: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'site.area',
-          fields: ['area_name', 'area_name_en'],
+          value: [],
+          type: FilterType.ListIds,
+          lookupType: 'none',
+          label: '',
+          fields: ['area_id'],
+          valueField: 'id',
+          valueType: 'number',
         },
         project: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'site.project',
-          fields: ['project_name', 'project_name_en'],
+          value: [],
+          type: FilterType.ListIds,
+          lookupType: 'none',
+          label: '',
+          fields: ['project_id'],
+          valueField: 'id',
+          valueType: 'number',
+        },
+        map: {
+          type: FilterType.Geom,
+          value: null,
+          label: '',
+          fields: ['latlong'],
         },
       },
       allIds: ['name'],

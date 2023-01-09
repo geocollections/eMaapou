@@ -1063,7 +1063,12 @@ export default {
     sample: 'Sample',
     analysisParameter: 'Analysed parameter',
     owner: 'Owner',
-    date: 'Date'
+    date: 'Date',
+    name: 'Name',
+    county: 'County',
+    areaType: 'Area type',
+    area: 'Area',
+    project: 'Project'
   },
   intervals: {
     default: {
@@ -1076,5 +1081,8 @@ export default {
       lessThanEquals: 'Above {max} (m)',
       greaterThanEquals: 'Deeper than {min} (m)'
     }
+  },
+  autocomplete: {
+    searchHint: 'Enter a keyword for suggestions'
   }
 }
