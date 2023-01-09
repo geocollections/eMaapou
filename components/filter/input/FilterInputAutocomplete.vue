@@ -92,7 +92,7 @@ export default defineComponent({
     },
     queryField: {
       type: String,
-      required: true,
+      default: '',
     },
     queryFunction: {
       type: Function as PropType<
@@ -140,7 +140,11 @@ export default defineComponent({
           search = state.search
             .trim()
             .split(' ')
-            .map((term) => `${props.queryField}:*${term}*`)
+            .map((term) =>
+              props.queryField.length > 0
+                ? `${props.queryField}:*${term}*`
+                : term
+            )
             .join(' AND ')
 
         const response = await props.queryFunction(search)
