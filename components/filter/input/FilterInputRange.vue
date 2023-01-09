@@ -17,7 +17,7 @@
             type="checkbox"
             class="checkbox"
             checked
-            @click.stop="handleRemove"
+            @click.prevent.stop="handleRemove"
           />
         </span>
         <span class="align-self-center pl-2 text-body-2 font-weight-medium">

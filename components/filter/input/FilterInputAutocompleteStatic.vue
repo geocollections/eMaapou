@@ -21,7 +21,7 @@
             type="checkbox"
             class="checkbox"
             checked
-            @click.stop="handleRemove(i)"
+            @click.prevent.stop="handleRemove(i)"
           />
         </span>
         <span
