@@ -1070,7 +1070,9 @@ export default {
     county: 'Maakond',
     areaType: 'Ala tüüp',
     area: 'Ala',
-    project: 'Projekt'
+    project: 'Projekt',
+    species: 'Liik',
+    author: 'Autor'
   },
   intervals: {
     default: {

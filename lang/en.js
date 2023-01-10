@@ -1068,7 +1068,9 @@ export default {
     county: 'County',
     areaType: 'Area type',
     area: 'Area',
-    project: 'Project'
+    project: 'Project',
+    species: 'Species',
+    author: 'Author'
   },
   intervals: {
     default: {
