@@ -76,6 +76,7 @@ import {
   useHydrateFilterStratigraphy,
   useHydrateFilterTaxon,
 } from '~/composables/useHydrateFilter'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormTaxon',
   components: {
@@ -109,58 +110,15 @@ export default defineComponent({
         $accessor.search.taxon.setQuery(val)
       },
     })
-    const stratigraphyHierarchy = computed({
-      get: () =>
-        $accessor.search.taxon.filters.byIds.stratigraphyHierarchy.value,
-      set: (value) => {
-        $accessor.search.taxon.setFilterValue({
-          key: 'stratigraphyHierarchy',
-          value,
-        })
-        handleSearch()
-      },
-    })
-
-    const author = computed({
-      get: () => $accessor.search.taxon.filters.byIds.author.value,
-      set: (value) => {
-        $accessor.search.taxon.setFilterValue({
-          key: 'author',
-          value,
-        })
-        handleSearch()
-      },
-    })
-    const species = computed({
-      get: () => $accessor.search.taxon.filters.byIds.species.value,
-      set: (value) => {
-        $accessor.search.taxon.setFilterValue({
-          key: 'species',
-          value,
-        })
-        handleSearch()
-      },
-    })
-    const taxonHierarchy = computed({
-      get: () => $accessor.search.taxon.filters.byIds.taxonHierarchy.value,
-      set: (value) => {
-        $accessor.search.taxon.setFilterValue({
-          key: 'taxonHierarchy',
-          value,
-        })
-        handleSearch()
-      },
-    })
-    const map = computed({
-      get: () => $accessor.search.taxon.filters.byIds.map.value,
-      set: (value) => {
-        $accessor.search.taxon.setFilterValue({
-          key: 'map',
-          value,
-        })
-        handleSearch()
-      },
-    })
+    const stratigraphyHierarchy = useFilter(
+      'taxon',
+      'stratigraphyHierarchy',
+      handleSearch
+    )
+    const author = useFilter('taxon', 'author', handleSearch)
+    const species = useFilter('taxon', 'species', handleSearch)
+    const taxonHierarchy = useFilter('taxon', 'taxonHierarchy', handleSearch)
+    const map = useFilter('taxon', 'map', handleSearch)
 
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterTaxon = useHydrateFilterTaxon()

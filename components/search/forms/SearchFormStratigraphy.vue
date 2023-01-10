@@ -37,6 +37,7 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useHydrateFilterStratigraphy } from '~/composables/useHydrateFilter'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
   components: {
@@ -64,38 +65,14 @@ export default defineComponent({
         $accessor.search.site.setQuery(val)
       },
     })
+    const stratigraphyHierarchy = useFilter(
+      'stratigraphy',
+      'stratigraphyHierarchy',
+      handleSearch
+    )
+    const index = useFilter('stratigraphy', 'index', handleSearch)
+    const age = useFilter('stratigraphy', 'age')
 
-    const stratigraphyHierarchy = computed({
-      get: () =>
-        $accessor.search.stratigraphy.filters.byIds.stratigraphyHierarchy.value,
-      set: (value) => {
-        $accessor.search.stratigraphy.setFilterValue({
-          key: 'stratigraphyHierarchy',
-          value,
-        })
-        handleSearch()
-      },
-    })
-    const index = computed({
-      get: () => $accessor.search.stratigraphy.filters.byIds.index.value,
-      set: (value) => {
-        $accessor.search.stratigraphy.setFilterValue({
-          key: 'index',
-          value,
-        })
-        handleSearch()
-      },
-    })
-    const age = computed({
-      get: () => $accessor.search.stratigraphy.filters.byIds.age.value,
-      set: (value) => {
-        $accessor.search.stratigraphy.setFilterValue({
-          key: 'age',
-          value,
-        })
-        handleSearch()
-      },
-    })
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
       if (route.value.query.stratigraphyHierarchy) {

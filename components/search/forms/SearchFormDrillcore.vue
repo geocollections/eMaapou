@@ -6,7 +6,7 @@
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
           <filter-input-autocomplete-static
-            v-model="countries"
+            v-model="country"
             :title="$t('filters.country').toString()"
             :items="countrySuggestions"
             :filter-field="$translate({ et: 'country', en: 'country_en' })"
@@ -29,7 +29,7 @@
             :items="$accessor.search.drillcore.items"
           />
           <filter-input-autocomplete-static
-            v-model="repositories"
+            v-model="repository"
             :title="$t('filters.drillcoreRepository').toString()"
             :items="repositorySuggestions"
             :filter-field="
@@ -104,6 +104,7 @@ import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInput
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormDrillcore',
   components: {
@@ -136,47 +137,10 @@ export default defineComponent({
         $accessor.search.drillcore.setQuery(val)
       },
     })
-
-    const boxes = computed({
-      get: () => $accessor.search.drillcore.filters.byIds.boxes.value,
-      set: (val) => {
-        $accessor.search.drillcore.setFilterValue({
-          key: 'boxes',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const countries = computed({
-      get: () => $accessor.search.drillcore.filters.byIds.country.value,
-      set: (val) => {
-        $accessor.search.drillcore.setFilterValue({
-          key: 'country',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const repositories = computed({
-      get: () => $accessor.search.drillcore.filters.byIds.repository.value,
-      set: (val) => {
-        $accessor.search.drillcore.setFilterValue({
-          key: 'repository',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const map = computed({
-      get: () => $accessor.search.drillcore.filters.byIds.map.value,
-      set: (val) => {
-        $accessor.search.drillcore.setFilterValue({
-          key: 'map',
-          value: val,
-        })
-        handleMapUpdate()
-      },
-    })
+    const boxes = useFilter('drillcore', 'boxes', handleSearch)
+    const country = useFilter('drillcore', 'country', handleSearch)
+    const repository = useFilter('drillcore', 'repository', handleSearch)
+    const map = useFilter('drillcore', 'map', handleSearch)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.byIds.institutions.value,
       set: (val) => {
@@ -232,8 +196,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       query,
-      countries,
-      repositories,
+      country,
+      repository,
       boxes,
       map,
       institutions,
