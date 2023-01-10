@@ -17,7 +17,7 @@ type RangeFilter = {
 }
 
 type RangeAltFilter = {
-  value: string
+  value: string[]
   type: FilterType.RangeAlt
   label: string
   placeholders: [string, string]

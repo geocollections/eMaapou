@@ -1070,7 +1070,9 @@ export default {
     area: 'Area',
     project: 'Project',
     species: 'Species',
-    author: 'Author'
+    author: 'Author',
+    index: 'Index',
+    age: 'Age (Ma)'
   },
   intervals: {
     default: {

@@ -57,7 +57,7 @@ const serializeFilter = (filter: Filter) => {
   } else if (filter.type === FilterType.ListOr) {
     return filter.value
   } else if (filter.type === FilterType.RangeAlt) {
-    return filter.value
+    return filter.value.join(',')
   } else if (filter.type === FilterType.Boolean) {
     return `${filter.value}`
   } else if (filter.type === FilterType.List) {

@@ -1,13 +1,12 @@
 import { SearchModuleState } from '../types'
 import { STRATIGRAPHY } from '~/constants'
-import { FilterType, LookupType } from '~/types/enums'
+import { FilterType } from '~/types/enums'
 
 export type StratigraphyFilters =
   | 'id'
-  | 'stratigraphy'
   | 'index'
   | 'age'
-  | 'hierarchy'
+  | 'stratigraphyHierarchy'
 
 export const initState = (): SearchModuleState<StratigraphyFilters> => {
   return {
@@ -21,40 +20,34 @@ export const initState = (): SearchModuleState<StratigraphyFilters> => {
     filters: {
       byIds: {
         id: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'stratigraphy.id',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['id'],
         },
-        stratigraphy: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'stratigraphy.stratigraphy',
-          fields: ['stratigraphy', 'stratigraphy_en'],
-        },
         index: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'stratigraphy.index',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['index_main', 'index_additional'],
         },
         age: {
-          value: '',
+          value: [],
           type: FilterType.RangeAlt,
-          label: 'stratigraphy.age',
+          label: '',
           placeholders: ['stratigraphy.min', 'stratigraphy.max'],
           fields: ['age_base', 'age_top'],
         },
-        hierarchy: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'hierarchy_string',
-          lookUpType: LookupType.Equals,
+        stratigraphyHierarchy: {
+          value: [],
+          type: FilterType.ListIds,
+          lookupType: 'startswith',
           label: 'stratigraphy.hierarchy',
           fields: ['hierarchy_string'],
+          valueField: 'hierarchy_string',
+          valueType: 'string',
         },
       },
       allIds: ['id', 'stratigraphy', 'age'],

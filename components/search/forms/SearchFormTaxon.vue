@@ -54,7 +54,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, useContext } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 // import InputText from '~/components/input/InputText.vue'
@@ -66,6 +72,10 @@ import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterTaxon from '~/components/filter/FilterTaxon.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import {
+  useHydrateFilterStratigraphy,
+  useHydrateFilterTaxon,
+} from '~/composables/useHydrateFilter'
 export default defineComponent({
   name: 'SearchFormTaxon',
   components: {
@@ -83,6 +93,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -149,6 +160,30 @@ export default defineComponent({
         })
         handleSearch()
       },
+    })
+
+    const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
+    const hydrateFilterTaxon = useHydrateFilterTaxon()
+    useFetch(async () => {
+      if (route.value.query.taxonHierarchy) {
+        taxonHierarchy.value = (
+          await hydrateFilterTaxon(
+            (route.value.query.taxonHierarchy as string)
+              .split(',')
+              .map((encodedValue) => decodeURIComponent(encodedValue))
+          )
+        ).data.response.docs
+      }
+
+      if (route.value.query.stratigraphyHierarchy) {
+        stratigraphyHierarchy.value = (
+          await hydrateFilterStratigraphy(
+            (route.value.query.stratigraphyHierarchy as string)
+              .split(',')
+              .map((encodedValue) => decodeURIComponent(encodedValue))
+          )
+        ).data.response.docs
+      }
     })
     return {
       query,

@@ -81,7 +81,10 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
     if (typeof route.query[key] === 'string') return [route.query[key]]
     return route.query[key]
   } else if (filter.type === FilterType.RangeAlt) {
-    return route.query[key]
+    if (filter.value.length < 1) {
+      return (route.query[key] as string).split(',')
+    }
+    return filter.value
   } else if (filter.type === FilterType.Boolean) {
     return route.query[key] === 'true'
   } else if (filter.type === FilterType.List) {

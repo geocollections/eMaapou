@@ -212,9 +212,11 @@ const buildSolrParameters = (filters: { [key: string]: Filter }) => {
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
         case FilterType.RangeAlt: {
-          const value = isNil(filter.value)
-
-          const solrFilter = `${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}]`
+          const solrFilter = filter.value
+            .map((value) => {
+              return `(${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}])`
+            })
+            .join(' OR ')
 
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }

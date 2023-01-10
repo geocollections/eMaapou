@@ -1072,7 +1072,9 @@ export default {
     area: 'Ala',
     project: 'Projekt',
     species: 'Liik',
-    author: 'Autor'
+    author: 'Autor',
+    index: 'Indeks',
+    age: 'Vanus (mln a)'
   },
   intervals: {
     default: {
