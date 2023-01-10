@@ -1072,7 +1072,8 @@ export default {
     species: 'Species',
     author: 'Author',
     index: 'Index',
-    age: 'Age (Ma)'
+    age: 'Age (Ma)',
+    preparationNumber: 'Number'
   },
   intervals: {
     default: {

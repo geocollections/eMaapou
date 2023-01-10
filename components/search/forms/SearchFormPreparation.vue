@@ -2,8 +2,29 @@
   <v-form @submit.prevent="handleSearch">
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper :active="hasActiveFilters">
-      <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
+    <search-fields-wrapper>
+      <v-card class="mt-3" flat tile color="transparent">
+        <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="number"
+            :title="$t('filters.preparationNumber').toString()"
+          />
+          <filter-locality v-model="locality" />
+          <filter-map
+            v-model="map"
+            :items="$accessor.search.preparation.items"
+          />
+
+          <filter-input-range
+            v-model="depth"
+            :label="$t('filters.depth').toString()"
+            interval-labels="intervals.depth"
+            :step="0.01"
+          />
+          <filter-stratigraphy v-model="stratigraphyHierarchy" />
+        </v-expansion-panels>
+      </v-card>
+      <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
       <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
@@ -14,10 +35,10 @@
         :label="$t(filters.byIds.hierarchy.label)"
       />
 
-      <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
+      <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" /> -->
     </search-fields-wrapper>
 
-    <search-map
+    <!-- <search-map
       :items="items"
       class="mt-2"
       :active="!!geoJSON"
@@ -28,66 +49,110 @@
       :active="!isEmpty(institution)"
       :institution="institution"
       @change:institution="handleInstitutionsUpdate"
-    />
+    /> -->
   </v-form>
 </template>
 
 <script lang="ts">
-import { mapState, mapGetters } from 'vuex'
-import { mapFields } from 'vuex-map-fields'
 import isEmpty from 'lodash/isEmpty'
 
-import Vue from 'vue'
+import {
+  computed,
+  defineComponent,
+  useContext,
+  useFetch,
+  useRoute,
+} from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import InputText from '~/components/input/InputText.vue'
-import InputRange from '~/components/input/InputRange.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
+// import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
+// import InputText from '~/components/input/InputText.vue'
+// import InputRange from '~/components/input/InputRange.vue'
+// import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
-export default Vue.extend({
+// import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
+import { useFilter } from '~/composables/useFilter'
+import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import FilterLocality from '~/components/filter/FilterLocality.vue'
+import FilterMap from '~/components/filter/FilterMap.vue'
+import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
+import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
+import {
+  useHydrateFilterLocality,
+  useHydrateFilterStratigraphy,
+} from '~/composables/useHydrateFilter'
+export default defineComponent({
   name: 'SearchFormPreparation',
   components: {
-    SearchInstitutionFilter,
-    InputAutocompleteStratigraphy,
-    InputText,
-    InputRange,
+    // SearchInstitutionFilter,
+    // InputAutocompleteStratigraphy,
+    // InputText,
+    // InputRange,
     SearchFieldsWrapper,
     SearchActions,
-    SearchMap,
+    // SearchMap,
+    FilterInputText,
+    FilterInputRange,
+    FilterStratigraphy,
+    FilterMap,
+    FilterLocality,
     InputSearch,
   },
-  computed: {
-    ...mapState('search/preparation', ['filters', 'items']),
-    ...mapFields('search/preparation', {
-      number: 'filters.byIds.number.value',
-      depth: 'filters.byIds.depth.value',
-      locality: 'filters.byIds.locality.value',
-      hierarchy: 'filters.byIds.hierarchy.value',
-      query: 'query',
-    }),
-    ...mapFields('search', {
-      institution: 'globalFilters.byIds.institutions.value',
-      geoJSON: 'globalFilters.byIds.geoJSON.value',
-    }),
-    ...mapGetters('search/preparation', ['hasActiveFilters']),
-  },
-  methods: {
-    isEmpty,
-    handleReset() {
-      this.$emit('reset')
-    },
-    handleSearch() {
-      this.$emit('update')
-    },
-    handleMapUpdate() {
-      this.$emit('update')
-    },
-    handleInstitutionsUpdate(newInstitutions: any[]) {
-      this.institution = newInstitutions
-      this.$emit('update')
-    },
+  setup(_props, { emit }) {
+    const { $accessor } = useContext()
+    const route = useRoute()
+    const handleReset = () => {
+      emit('reset')
+    }
+    const handleSearch = () => {
+      emit('update')
+    }
+    const query = computed({
+      get: () => $accessor.search.preparation.query,
+      set: (val) => {
+        $accessor.search.preparation.setQuery(val)
+      },
+    })
+    const number = useFilter('preparation', 'number', handleSearch)
+    const locality = useFilter('preparation', 'locality', handleSearch)
+    const stratigraphyHierarchy = useFilter(
+      'preparation',
+      'stratigraphyHierarchy',
+      handleSearch
+    )
+    const depth = useFilter('preparation', 'depth', handleSearch)
+    const map = useFilter('preparation', 'map', handleSearch)
+    const hydrateFilterLocality = useHydrateFilterLocality()
+    const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
+    useFetch(async () => {
+      if (route.value.query.locality) {
+        locality.value = (
+          await hydrateFilterLocality(
+            (route.value.query.locality as string).split(',').map(Number)
+          )
+        ).data.response.docs
+      }
+      if (route.value.query.stratigraphyHierarchy) {
+        stratigraphyHierarchy.value = (
+          await hydrateFilterStratigraphy(
+            (route.value.query.stratigraphyHierarchy as string)
+              .split(',')
+              .map((encodedValue) => decodeURIComponent(encodedValue))
+          )
+        ).data.response.docs
+      }
+    })
+    return {
+      handleReset,
+      query,
+      number,
+      locality,
+      stratigraphyHierarchy,
+      depth,
+      map,
+      handleSearch,
+      isEmpty,
+    }
   },
 })
 </script>

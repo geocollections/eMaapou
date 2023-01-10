@@ -1074,7 +1074,8 @@ export default {
     species: 'Liik',
     author: 'Autor',
     index: 'Indeks',
-    age: 'Vanus (mln a)'
+    age: 'Vanus (mln a)',
+    preparationNumber: 'Number'
   },
   intervals: {
     default: {
