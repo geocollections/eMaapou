@@ -1,11 +1,11 @@
 import { getField } from 'vuex-map-fields'
 import { getterTree } from 'typed-vuex'
-import { searchModuleGetters } from '../getters'
-import state, { AnalyticalDataFilters } from './state'
+import { searchModuleGetterTree } from '../getters'
+import state from './state'
 import { Filter } from '~/types/filters'
 export default getterTree(state, {
   getField,
-  ...searchModuleGetters<AnalyticalDataFilters>(),
+  ...searchModuleGetterTree(state),
   parameterList:
     (state) =>
     (filter: Filter | null = null) => {

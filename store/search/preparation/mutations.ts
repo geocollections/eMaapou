@@ -1,7 +1,3 @@
-import { updateField } from 'vuex-map-fields'
-import { searchModuleMutations } from '../mutations'
-import { PreparationFilters } from './state'
-export default {
-  updateField,
-  ...searchModuleMutations<PreparationFilters>(),
-}
+import { searchModuleMutationTree } from '../mutations'
+import state from './state'
+export default searchModuleMutationTree(state)

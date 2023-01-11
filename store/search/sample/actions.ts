@@ -1,6 +1,5 @@
-import { searchModuleActions } from '../moduleActions'
-import { SampleFilters } from './state'
-
-export default {
-  ...searchModuleActions<SampleFilters>(),
-}
+import { searchModuleActionTree } from '../actions'
+import state from './state'
+import getters from './getters'
+import mutations from './mutations'
+export default searchModuleActionTree({ state, getters, mutations })

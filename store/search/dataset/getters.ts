@@ -1,8 +1,4 @@
-import { getField } from 'vuex-map-fields'
-import { searchModuleGetters } from '../getters'
-import { DatasetFilters } from './state'
+import { searchModuleGetterTree } from '../getters'
+import state from './state'
 
-export default {
-  getField,
-  ...searchModuleGetters<DatasetFilters>(),
-}
+export default searchModuleGetterTree(state)

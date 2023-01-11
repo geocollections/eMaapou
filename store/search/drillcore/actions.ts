@@ -1,6 +1,5 @@
-import { searchModuleActions } from '../moduleActions'
-import { DrillcoreFilters } from './state'
-
-export default {
-  ...searchModuleActions<DrillcoreFilters>(),
-}
+import { searchModuleActionTree } from '../actions'
+import state from './state'
+import getters from './getters'
+import mutations from './mutations'
+export default searchModuleActionTree({ state, getters, mutations })
