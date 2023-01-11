@@ -22,10 +22,10 @@ export const initState = (): SearchModuleState<DatasetFilters> => {
     filters: {
       byIds: {
         name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'dataset.name',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['name', 'name_en'],
         },
         owner: {

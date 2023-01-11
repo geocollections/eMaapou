@@ -21,9 +21,9 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
     filters: {
       byIds: {
         name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
           label: 'locality.name',
           fields: ['locality', 'locality_en'],
         },

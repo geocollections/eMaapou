@@ -22,10 +22,10 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
     filters: {
       byIds: {
         name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'drillcore.name',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: ['drillcore', 'drillcore_en'],
         },
         storage: {

@@ -1073,7 +1073,11 @@ export default {
     author: 'Author',
     index: 'Index',
     age: 'Age (Ma)',
-    preparationNumber: 'Number'
+    preparationNumber: 'Number',
+    specimenNumber: 'Number',
+    localityName: 'Name',
+    drillcoreName: 'Name',
+    datasetName: 'Name'
   },
   intervals: {
     default: {

@@ -5,6 +5,10 @@
     <search-fields-wrapper>
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="name"
+            :title="$t('filters.drillcoreName').toString()"
+          />
           <filter-input-autocomplete-static
             v-model="country"
             :title="$t('filters.country').toString()"
@@ -104,6 +108,7 @@ import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInput
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
+import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormDrillcore',
@@ -115,6 +120,7 @@ export default defineComponent({
     FilterInputRange,
     FilterInstitution,
     FilterMap,
+    FilterInputText,
   },
   setup(_props, { emit }) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -137,6 +143,7 @@ export default defineComponent({
         $accessor.search.drillcore.setQuery(val)
       },
     })
+    const name = useFilter('drillcore', 'name', handleSearch)
     const boxes = useFilter('drillcore', 'boxes', handleSearch)
     const country = useFilter('drillcore', 'country', handleSearch)
     const repository = useFilter('drillcore', 'repository', handleSearch)
@@ -201,6 +208,7 @@ export default defineComponent({
       boxes,
       map,
       institutions,
+      name,
       handleReset,
       handleSearch,
       handleMapUpdate,

@@ -1075,7 +1075,11 @@ export default {
     author: 'Autor',
     index: 'Indeks',
     age: 'Vanus (mln a)',
-    preparationNumber: 'Number'
+    preparationNumber: 'Number',
+    specimenNumber: 'Number',
+    localityName: 'Nimi',
+    drillcoreName: 'Nimi',
+    datasetName: 'Nimi'
   },
   intervals: {
     default: {

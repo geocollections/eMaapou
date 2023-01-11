@@ -5,6 +5,10 @@
     <search-fields-wrapper>
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="name"
+            :title="$t('filters.datasetName').toString()"
+          />
           <filter-analysis-parameter v-model="analysisParameter" />
           <filter-input-text
             v-model="owner"
@@ -100,6 +104,7 @@ export default defineComponent({
         $accessor.search.dataset.setQuery(val)
       },
     })
+    const name = useFilter('dataset', 'name', handleSearch)
     const date = useFilter('dataset', 'date', handleSearch)
     const owner = useFilter('dataset', 'owner', handleSearch)
     const analysisParameter = useFilter(
@@ -120,6 +125,7 @@ export default defineComponent({
       institution,
       date,
       owner,
+      name,
       isEmpty,
       handleReset,
       handleSearch,

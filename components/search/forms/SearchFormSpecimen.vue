@@ -13,6 +13,10 @@
       />
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="number"
+            :title="$t('filters.specimenNumber').toString()"
+          />
           <filter-locality v-model="locality" />
 
           <filter-map
@@ -40,7 +44,6 @@
 </template>
 
 <script lang="ts">
-import isEmpty from 'lodash/isEmpty'
 import {
   computed,
   defineComponent,
@@ -93,6 +96,7 @@ export default defineComponent({
     const handleSearch = () => {
       emit('update')
     }
+    const number = useFilter('specimen', 'number', handleSearch)
     const locality = useFilter('specimen', 'locality', handleSearch)
     const reference = useFilter('specimen', 'reference', handleSearch)
     const taxonHierarchy = useFilter('specimen', 'taxonHierarchy', handleSearch)
@@ -193,7 +197,7 @@ export default defineComponent({
       institutions,
       query,
       map,
-      isEmpty,
+      number,
     }
   },
 })

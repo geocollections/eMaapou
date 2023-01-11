@@ -28,10 +28,10 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
     filters: {
       byIds: {
         number: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'specimen.number',
+          value: [],
+          type: FilterType.ListText,
+          lookupType: 'none',
+          label: '',
           fields: [
             'specimen_full_name',
             'specimen_number',

@@ -5,6 +5,10 @@
     <search-fields-wrapper>
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="name"
+            :title="$t('filters.localityName').toString()"
+          />
           <filter-input-autocomplete-static
             v-model="country"
             :title="$t('filters.country').toString()"
@@ -50,6 +54,7 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterReference from '~/components/filter/FilterReference.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useHydrateFilterReference } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
@@ -61,6 +66,7 @@ export default defineComponent({
     InputSearch,
     FilterReference,
     FilterInputAutocompleteStatic,
+    FilterInputText,
   },
   setup(_props, { emit }) {
     const { $accessor, $axios, i18n } = useContext()
@@ -78,6 +84,7 @@ export default defineComponent({
       },
     })
 
+    const name = useFilter('locality', 'name', handleSearch)
     const country = useFilter('locality', 'country', handleSearch)
     const reference = useFilter('locality', 'reference', handleSearch)
     const map = useFilter('locality', 'map', handleSearch)
@@ -122,6 +129,7 @@ export default defineComponent({
     })
     return {
       ...toRefs(state),
+      name,
       query,
       reference,
       country,
