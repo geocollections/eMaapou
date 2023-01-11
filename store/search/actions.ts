@@ -28,8 +28,8 @@ export const searchModuleActionTree = <F extends { [K: string]: Filter }>({
 
         this.app.$accessor.search.RESET_INSTITUTIONS()
       },
-      setFilterValue({ commit }, { key, value }) {
-        commit('SET_MODULE_FILTER_VALUE', { key, value })
+      setFilterValue({ commit }, { key, value }: { key: keyof F; value: any }) {
+        commit('SET_MODULE_FILTER_VALUE', { key: key as string, value })
       },
       setQuery({ commit }, newQuery) {
         commit('SET_MODULE_QUERY', { query: newQuery })

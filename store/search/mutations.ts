@@ -5,10 +5,8 @@ import { SearchModuleState } from './types'
 import { IOptions } from '~/services'
 import { Filter } from '~/types/filters'
 
-export const searchModuleMutationTree = <
-  Filters extends { [K: string]: Filter }
->(
-  state: () => SearchModuleState<Filters>
+export const searchModuleMutationTree = <F extends { [K: string]: Filter }>(
+  state: () => SearchModuleState<F>
 ) => {
   return mutationTree(state, {
     SET_MODULE_ITEMS(state, { items }: { items: any[] }) {
@@ -25,7 +23,7 @@ export const searchModuleMutationTree = <
     },
     SET_MODULE_FILTER_VALUE(
       state,
-      { key, value }: { key: keyof Filters; value: any }
+      { key, value }: { key: keyof F; value: any }
     ) {
       state.filters[key].value = value
     },
@@ -34,13 +32,13 @@ export const searchModuleMutationTree = <
     },
     RESET_MODULE_FILTERS(
       state,
-      { initFilters }: { initFilters: SearchModuleState<Filters>['filters'] }
+      { initFilters }: { initFilters: SearchModuleState<F>['filters'] }
     ) {
       state.filters = initFilters
     },
     RESET_MODULE_OPTIONS(
       state,
-      { initOptions }: { initOptions: SearchModuleState<Filters>['options'] }
+      { initOptions }: { initOptions: SearchModuleState<F>['options'] }
     ) {
       state.options = {
         ...state.options,
