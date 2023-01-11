@@ -9,7 +9,6 @@ export type SearchModuleState<Filters extends string | number | symbol> = {
   options: IOptions
   query: string
   filters: {
-    byIds: { [K in Filters]: Filter }
-    allIds: string[] // TODO: Remove
+    [K in Filters]: Filter
   }
 }

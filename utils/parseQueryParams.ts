@@ -1,5 +1,6 @@
 import type { Route } from 'vue-router'
 import { IOptions } from '~/services'
+import { SearchState } from '~/store/search/state'
 import { FilterType } from '~/types/enums'
 import { Filter } from '~/types/filters'
 
@@ -11,20 +12,19 @@ export default function <Filters extends string | number | symbol>({
 }: {
   route: Route
   filters?: { [K in Filters]: Filter }
-  globalFilters?: { [K: string]: Filter }
+  globalFilters?: { [K in keyof SearchState['globalFilters']]?: Filter }
   qKey: string
 }) {
   const result = { query: '' } as {
     query: string
     filters?: { [K in Filters]?: Filter }
-    globalFilters?: { [K: string]: Filter }
+    globalFilters?: { [K in keyof SearchState['globalFilters']]?: Filter }
     options: IOptions
   }
   result.query = (route.query[qKey] as string) ?? ''
   if (filters) {
     result.filters = Object.entries<Filter>(filters)
       .filter(([key, _]) => route.query[key])
-      // .filter(([key, _]) => key !== 'localities')
       .reduce((prev, [key, filter]): { [K: string]: any } => {
         return {
           ...prev,
@@ -35,12 +35,18 @@ export default function <Filters extends string | number | symbol>({
   if (globalFilters) {
     result.globalFilters = Object.entries(globalFilters)
       .filter(([key, _]) => route.query[key])
-      .reduce((prev, [key, filter]): { [K: string]: any } => {
-        return {
-          ...prev,
-          [key]: parseFilterValue(route, key, filter),
-        }
-      }, {})
+      .reduce(
+        (
+          prev,
+          [key, filter]
+        ): { [K in keyof SearchState['globalFilters']]?: any } => {
+          return {
+            ...prev,
+            [key]: parseFilterValue(route, key, filter as Filter),
+          }
+        },
+        {}
+      )
   }
   const options: any = {}
   if (route.query.page) {

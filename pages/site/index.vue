@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('site.pageTitle')"
+        :title="$t('site.pageTitle').toString()"
         :icon="icons.mdiMapMarkerStarOutline"
       />
     </template>
@@ -80,26 +80,20 @@ export default defineComponent({
         search: accessor.search.site.query,
         fields: getAPIFieldValues(HEADERS_SITE),
         searchFilters: {
-          ...accessor.search.site.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.site.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.site.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.site.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.site.filters.byIds)
-    const globalFilters = computed(() => {
-      return {
-        geoJSON: accessor.search.globalFilters.byIds.geoJSON,
-      }
-    })
+    const filters = computed(() => accessor.search.site.filters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({
         module: 'site',
         qParamKey: 'siteQ',
         filters,
-        globalFilters,
         fetch,
       })
 

@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('analysis.pageTitle')"
+        :title="$t('analysis.pageTitle').toString()"
         :icon="icons.mdiChartScatterPlot"
       />
     </template>
@@ -79,15 +79,15 @@ export default defineComponent({
         search: accessor.search.analysis.query,
         fields: getAPIFieldValues(HEADERS_ANALYSIS),
         searchFilters: {
-          ...accessor.search.analysis.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.analysis.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.analysis.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.analysis.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.analysis.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.analysis.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

@@ -86,8 +86,8 @@ export default defineComponent({
           search: accessor.search.analytical_data.query,
           fields: getAPIFieldValues(HEADERS_ANALYTICAL_DATA),
           searchFilters: {
-            ...accessor.search.analytical_data.filters.byIds,
-            ...accessor.search.globalFilters.byIds,
+            ...accessor.search.analytical_data.filters,
+            ...accessor.search.globalFilters,
             ...accessor.search.analytical_data.parameterFilters.byIds,
           },
         }
@@ -99,10 +99,8 @@ export default defineComponent({
         count: response.count,
       })
     })
-    const filters = computed(
-      () => accessor.search.analytical_data.filters.byIds
-    )
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.analytical_data.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
     const icons = computed(() => {
       return {
         mdiChartLine,

@@ -22,8 +22,8 @@ export const useSearchQueryParams = <Filters extends string | number | symbol>({
 }: {
   module: keyof typeof searchModule.modules
   qParamKey: string
-  filters: Ref<SearchModuleState<Filters>['filters']['byIds']>
-  globalFilters?: ComputedRef<SearchState['globalFilters']['byIds']>
+  filters: Ref<SearchModuleState<Filters>['filters']>
+  globalFilters?: ComputedRef<SearchState['globalFilters']>
   fetch: any
 }) => {
   const accessor = useAccessor()
@@ -59,9 +59,10 @@ export const useSearchQueryParams = <Filters extends string | number | symbol>({
     }
     if (parsedValues.globalFilters) {
       Object.keys(parsedValues.globalFilters).forEach((key) => {
+        const globalFilterKey = key as keyof SearchState['globalFilters']
         accessor.search.SET_GLOBAL_FILTER_VALUE({
-          key,
-          value: parsedValues.globalFilters?.[key],
+          key: globalFilterKey,
+          value: parsedValues.globalFilters?.[globalFilterKey],
         })
       })
     }

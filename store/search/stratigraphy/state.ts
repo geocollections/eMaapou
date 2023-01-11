@@ -18,39 +18,36 @@ export const initState = (): SearchModuleState<StratigraphyFilters> => {
     useInstitutions: false,
     query: '',
     filters: {
-      byIds: {
-        id: {
-          value: [],
-          type: FilterType.ListText,
-          lookupType: 'none',
-          label: '',
-          fields: ['id'],
-        },
-        index: {
-          value: [],
-          type: FilterType.ListText,
-          lookupType: 'none',
-          label: '',
-          fields: ['index_main', 'index_additional'],
-        },
-        age: {
-          value: [],
-          type: FilterType.RangeAlt,
-          label: '',
-          placeholders: ['stratigraphy.min', 'stratigraphy.max'],
-          fields: ['age_base', 'age_top'],
-        },
-        stratigraphyHierarchy: {
-          value: [],
-          type: FilterType.ListIds,
-          lookupType: 'startswith',
-          label: 'stratigraphy.hierarchy',
-          fields: ['hierarchy_string'],
-          valueField: 'hierarchy_string',
-          valueType: 'string',
-        },
+      id: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['id'],
       },
-      allIds: ['id', 'stratigraphy', 'age'],
+      index: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['index_main', 'index_additional'],
+      },
+      age: {
+        value: [],
+        type: FilterType.RangeAlt,
+        label: '',
+        placeholders: ['stratigraphy.min', 'stratigraphy.max'],
+        fields: ['age_base', 'age_top'],
+      },
+      stratigraphyHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'startswith',
+        label: 'stratigraphy.hierarchy',
+        fields: ['hierarchy_string'],
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+      },
     },
   }
 }

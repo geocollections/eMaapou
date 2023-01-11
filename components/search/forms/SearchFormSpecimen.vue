@@ -116,7 +116,7 @@ export default defineComponent({
     const hasCoordinates = useFilter('specimen', 'hasCoordinates', handleSearch)
     const map = useFilter('specimen', 'map', handleSearch)
     const institutions = computed({
-      get: () => $accessor.search.globalFilters.byIds.institutions.value,
+      get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
         handleSearch()

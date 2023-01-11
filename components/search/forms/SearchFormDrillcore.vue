@@ -149,7 +149,7 @@ export default defineComponent({
     const repository = useFilter('drillcore', 'repository', handleSearch)
     const map = useFilter('drillcore', 'map', handleSearch)
     const institutions = computed({
-      get: () => $accessor.search.globalFilters.byIds.institutions.value,
+      get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
         handleSearch()

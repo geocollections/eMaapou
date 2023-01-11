@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('stratigraphy.pageTitle')"
+        :title="$t('stratigraphy.pageTitle').toString()"
         :icon="icons.mdiLayersTriple"
       />
     </template>
@@ -80,14 +80,14 @@ export default defineComponent({
         search: accessor.search.stratigraphy.query,
         fields: getAPIFieldValues(HEADERS_STRATIGRAPHY),
         searchFilters: {
-          ...accessor.search.stratigraphy.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.stratigraphy.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.stratigraphy.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.stratigraphy.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.stratigraphy.filters.byIds)
+    const filters = computed(() => accessor.search.stratigraphy.filters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

@@ -80,16 +80,16 @@ export default defineComponent({
         search: accessor.search.taxon.query,
         fields: getAPIFieldValues(HEADERS_TAXON),
         searchFilters: {
-          ...accessor.search.taxon.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.taxon.filters,
+          ...accessor.search.globalFilters,
         },
       })
 
       accessor.search.taxon.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.taxon.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.taxon.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.taxon.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

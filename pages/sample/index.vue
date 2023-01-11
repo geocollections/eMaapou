@@ -80,15 +80,15 @@ export default defineComponent({
         search: accessor.search.sample.query,
         fields: getAPIFieldValues(HEADERS_SAMPLE),
         searchFilters: {
-          ...accessor.search.sample.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.sample.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.sample.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.sample.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.sample.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.sample.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

@@ -9,7 +9,7 @@ export const searchModuleGetters = <
   Filters extends string | number | symbol
 >() => ({
   hasActiveFilters: (state: SearchModuleState<Filters>) => {
-    return Object.values<Filter>(state.filters.byIds).some((filter) => {
+    return Object.values<Filter>(state.filters).some((filter) => {
       if (Array.isArray(filter.value))
         return filter.value.some(function (v) {
           return v !== null

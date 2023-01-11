@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('dataset.pageTitle')"
+        :title="$t('dataset.pageTitle').toString()"
         :icon="icons.mdiDatabaseOutline"
       />
     </template>
@@ -80,16 +80,16 @@ export default defineComponent({
         search: accessor.search.dataset.query,
         fields: getAPIFieldValues(HEADERS_DATASET),
         searchFilters: {
-          ...accessor.search.dataset.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.dataset.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.dataset.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.dataset.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.dataset.filters.byIds)
+    const filters = computed(() => accessor.search.dataset.filters)
     const globalFilters = computed(() => {
-      return { institutions: accessor.search.globalFilters.byIds.institutions }
+      return { institutions: accessor.search.globalFilters.institutions }
     })
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =

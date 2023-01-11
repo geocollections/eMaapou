@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('preparation.pageTitle')"
+        :title="$t('preparation.pageTitle').toString()"
         :icon="icons.mdiEyedropper"
       />
     </template>
@@ -81,15 +81,15 @@ export default defineComponent({
         search: accessor.search.preparation.query,
         fields: getAPIFieldValues(HEADERS_PREPARATION),
         searchFilters: {
-          ...accessor.search.preparation.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.preparation.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.preparation.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.preparation.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.preparation.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.preparation.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

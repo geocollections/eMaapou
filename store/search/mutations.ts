@@ -1,7 +1,6 @@
 import { updateField } from 'vuex-map-fields'
 import { mutationTree } from 'typed-vuex'
 import {
-  RESET_GEOJSON,
   RESET_INSTITUTIONS,
   RESET_MODULE_OPTIONS,
   RESET_MODULE_FILTERS,
@@ -11,7 +10,7 @@ import {
   SET_MODULE_ITEMS,
   SET_MODULE_OPTIONS,
 } from '../mutation_types'
-import state from './state'
+import state, { SearchState } from './state'
 import { SearchModuleState } from './types'
 import { IOptions } from '~/services'
 
@@ -46,7 +45,7 @@ export const searchModuleMutations = <
     state: SearchModuleState<Filters>,
     { key, value }: { key: Filters; value: any }
   ) {
-    state.filters.byIds[key].value = value
+    state.filters[key].value = value
   },
   [RESET_MODULE_QUERY](
     state: SearchModuleState<Filters>,
@@ -73,14 +72,14 @@ export const searchModuleMutations = <
 
 export default mutationTree(state, {
   updateField,
-  SET_GLOBAL_FILTER_VALUE(state, { key, value }) {
-    state.globalFilters.byIds[key].value = value
+  SET_GLOBAL_FILTER_VALUE(
+    state,
+    { key, value }: { key: keyof SearchState['globalFilters']; value: any }
+  ) {
+    state.globalFilters[key].value = value
   },
   [RESET_INSTITUTIONS](state) {
-    state.globalFilters.byIds.institutions.value = []
-  },
-  [RESET_GEOJSON](state) {
-    state.globalFilters.byIds.geoJSON.value = null
+    state.globalFilters.institutions.value = []
   },
   [RESET_QUERY](state) {
     state.query = ''

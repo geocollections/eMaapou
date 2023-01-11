@@ -118,7 +118,7 @@ export default defineComponent({
     const depth = useFilter('sample', 'depth', handleSearch)
     const map = useFilter('sample', 'map', handleSearch)
     const institutions = computed({
-      get: () => $accessor.search.globalFilters.byIds.institutions.value,
+      get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
         handleSearch()
