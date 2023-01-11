@@ -1,15 +1,22 @@
 import { SearchModuleState } from '../types'
 import { DRILLCORE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  RangeFilter,
+  TextFilter,
+} from '~/types/filters'
 
-export type DrillcoreFilters =
-  | 'name'
-  | 'country'
-  | 'repository'
-  | 'storage'
-  | 'boxes'
-  | 'map'
-
+export type DrillcoreFilters = {
+  name: ListTextFilter
+  storage: TextFilter
+  boxes: RangeFilter
+  country: ListIdsFilter
+  repository: ListIdsFilter
+  map: GeomFilter
+}
 export const initState = (): SearchModuleState<DrillcoreFilters> => {
   return {
     name: 'drillcore',

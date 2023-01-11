@@ -1,13 +1,14 @@
 import { SearchModuleState } from '../types'
 import { STRATIGRAPHY } from '~/constants'
 import { FilterType } from '~/types/enums'
+import { ListIdsFilter, ListTextFilter, RangeAltFilter } from '~/types/filters'
 
-export type StratigraphyFilters =
-  | 'id'
-  | 'index'
-  | 'age'
-  | 'stratigraphyHierarchy'
-
+export type StratigraphyFilters = {
+  id: ListTextFilter
+  index: ListTextFilter
+  age: RangeAltFilter
+  stratigraphyHierarchy: ListIdsFilter
+}
 export const initState = (): SearchModuleState<StratigraphyFilters> => {
   return {
     name: 'stratigraphy',

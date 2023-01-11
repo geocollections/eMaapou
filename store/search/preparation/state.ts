@@ -1,14 +1,20 @@
 import { SearchModuleState } from '../types'
 import { PREPARATION } from '~/constants'
 import { FilterType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  RangeFilter,
+} from '~/types/filters'
 
-export type PreparationFilters =
-  | 'number'
-  | 'locality'
-  | 'stratigraphyHierarchy'
-  | 'depth'
-  | 'map'
-
+export type PreparationFilters = {
+  number: ListTextFilter
+  locality: ListIdsFilter
+  stratigraphyHierarchy: ListIdsFilter
+  depth: RangeFilter
+  map: GeomFilter
+}
 export const initState = (): SearchModuleState<PreparationFilters> => {
   return {
     name: 'preparation',

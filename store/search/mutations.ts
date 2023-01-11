@@ -13,9 +13,10 @@ import {
 import state, { SearchState } from './state'
 import { SearchModuleState } from './types'
 import { IOptions } from '~/services'
+import { Filter } from '~/types/filters'
 
 export const searchModuleMutations = <
-  Filters extends string | number | symbol
+  Filters extends { [K: string]: Filter }
 >() => ({
   [SET_MODULE_ITEMS](
     state: SearchModuleState<Filters>,
@@ -43,7 +44,7 @@ export const searchModuleMutations = <
   },
   SET_MODULE_FILTER_VALUE(
     state: SearchModuleState<Filters>,
-    { key, value }: { key: Filters; value: any }
+    { key, value }: { key: keyof Filters; value: any }
   ) {
     state.filters[key].value = value
   },

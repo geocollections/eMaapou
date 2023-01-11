@@ -1,6 +1,6 @@
 import { FilterType, LookupType } from './enums'
 
-type TextFilter = {
+export type TextFilter = {
   type: FilterType.Text
   value: string
   lookUpType: LookupType
@@ -8,7 +8,7 @@ type TextFilter = {
   fields: string[]
 }
 
-type RangeFilter = {
+export type RangeFilter = {
   value: [null | number, null | number]
   type: FilterType.Range
   label: string
@@ -16,7 +16,7 @@ type RangeFilter = {
   fields: string[]
 }
 
-type RangeAltFilter = {
+export type RangeAltFilter = {
   value: string[]
   type: FilterType.RangeAlt
   label: string
@@ -24,7 +24,7 @@ type RangeAltFilter = {
   fields: string[]
 }
 
-type ObjectFilter = {
+export type ObjectFilter = {
   value: null | { [K: string]: any }
   type: FilterType.Object
   searchField: string
@@ -32,26 +32,26 @@ type ObjectFilter = {
   label: string
   fields: string[]
 }
-type BooleanFilter = {
+export type BooleanFilter = {
   type: FilterType.Boolean
   value: boolean
   label: string
   fields: string[]
 }
 
-type ListFilter = {
+export type ListFilter = {
   type: FilterType.List
   value: any[]
   label: string
   fields: string[]
 }
-type ListOrFilter = {
+export type ListOrFilter = {
   type: FilterType.ListOr
   value: any[]
   label: string
   fields: string[]
 }
-type ListIdsFilter = {
+export type ListIdsFilter = {
   type: FilterType.ListIds
   value: any[]
   label: string
@@ -61,14 +61,14 @@ type ListIdsFilter = {
   lookupType: 'none' | 'startswith'
 }
 
-type ListTextFilter = {
+export type ListTextFilter = {
   type: FilterType.ListText
   value: any[]
   label: string
   fields: string[]
   lookupType: 'none' | 'startswith' | 'contains'
 }
-type GeomFilter = {
+export type GeomFilter = {
   type: FilterType.Geom
   value: null | any
   label: string

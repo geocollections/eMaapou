@@ -1,8 +1,14 @@
 import { SearchModuleState } from '../types'
 import { SITE } from '~/constants'
 import { FilterType } from '~/types/enums'
+import { GeomFilter, ListIdsFilter, ListTextFilter } from '~/types/filters'
 
-export type SiteFilters = 'name' | 'area' | 'project' | 'map'
+export type SiteFilters = {
+  name: ListTextFilter
+  area: ListIdsFilter
+  project: ListIdsFilter
+  map: GeomFilter
+}
 
 export const initState = (): SearchModuleState<SiteFilters> => {
   return {

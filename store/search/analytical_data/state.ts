@@ -1,22 +1,24 @@
 import { SearchModuleState } from '../types'
 import { ANALYTICAL_DATA } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import { ObjectFilter, RangeFilter, TextFilter } from '~/types/filters'
 
-export type AnalyticalDataFilters =
-  | 'locality'
-  | 'depth'
-  | 'stratigraphy'
-  | 'lithostratigraphy'
-  | 'analysis'
-  | 'method'
-  | 'lab'
-  | 'agentAnalysed'
-  | 'reference'
-  | 'dataset'
-  | 'stratigraphyBed'
-  | 'rock'
-  | 'sample'
-  | 'project'
+export type AnalyticalDataFilters = {
+  locality: TextFilter
+  depth: RangeFilter
+  stratigraphy: ObjectFilter
+  lithostratigraphy: ObjectFilter
+  analysis: TextFilter
+  method: TextFilter
+  lab: TextFilter
+  agentAnalysed: TextFilter
+  reference: TextFilter
+  dataset: TextFilter
+  stratigraphyBed: TextFilter
+  rock: TextFilter
+  sample: TextFilter
+  project: TextFilter
+}
 
 type AnalyticalDataSearchModuleState =
   SearchModuleState<AnalyticalDataFilters> & {

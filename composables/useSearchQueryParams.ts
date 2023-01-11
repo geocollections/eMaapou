@@ -13,7 +13,8 @@ import parseQueryParams from '~/utils/parseQueryParams'
 import searchModule from '~/store/search'
 import { SearchModuleState } from '~/store/search/types'
 import { SearchState } from '~/store/search/state'
-export const useSearchQueryParams = <Filters extends string | number | symbol>({
+import { Filter } from '~/types/filters'
+export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
   module,
   qParamKey,
   filters,
@@ -53,7 +54,7 @@ export const useSearchQueryParams = <Filters extends string | number | symbol>({
         // This is the only action to be this way. May have something to do with the type of `key` set in the actions.
         accessor.search[module].setFilterValue({
           key,
-          value: parsedValues.filters?.[key as Filters],
+          value: parsedValues.filters?.[key],
         } as never)
       }
     }

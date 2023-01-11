@@ -6,7 +6,7 @@ import { SearchModuleState } from './types'
 import { Filter } from '~/types/filters'
 
 export const searchModuleGetters = <
-  Filters extends string | number | symbol
+  Filters extends { [K: string]: Filter }
 >() => ({
   hasActiveFilters: (state: SearchModuleState<Filters>) => {
     return Object.values<Filter>(state.filters).some((filter) => {

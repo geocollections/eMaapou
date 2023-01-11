@@ -1,18 +1,27 @@
 import { SearchModuleState } from '../types'
 import { ANALYSIS } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  ObjectFilter,
+  RangeFilter,
+  TextFilter,
+} from '~/types/filters'
 
-export type AnalysisFilters =
-  | 'id'
-  | 'depth'
-  | 'stratigraphy'
-  | 'method'
-  | 'agent'
-  | 'dataset'
-  | 'lab'
-  | 'sample'
-  | 'locality'
-  | 'map'
+export type AnalysisFilters = {
+  id: TextFilter
+  depth: RangeFilter
+  stratigraphy: ObjectFilter
+  agent: ListTextFilter
+  dataset: TextFilter
+  sample: ListIdsFilter
+  lab: ListIdsFilter
+  method: ListIdsFilter
+  locality: ListIdsFilter
+  map: GeomFilter
+}
 
 export const initState = (): SearchModuleState<AnalysisFilters> => {
   return {

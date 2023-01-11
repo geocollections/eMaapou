@@ -13,7 +13,6 @@ export const useFilter = <
     get: () => $accessor.search[module].filters[filterKey].value,
     set: (value) => {
       $accessor.search[module].setFilterValue({
-        // @ts-ignore
         key: filterKey,
         value,
       })

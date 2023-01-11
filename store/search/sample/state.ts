@@ -1,19 +1,27 @@
 import { SearchModuleState } from '../types'
 import { SAMPLE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  ObjectFilter,
+  RangeFilter,
+  TextFilter,
+} from '~/types/filters'
 
-export type SampleFilters =
-  | 'locality'
-  | 'stratigraphy'
-  | 'hierarchy'
-  | 'depth'
-  | 'mass'
-  | 'project'
-  | 'stratigraphyHierarchy'
-  | 'collector'
-  | 'number'
-  | 'map'
-
+export type SampleFilters = {
+  stratigraphy: TextFilter
+  hierarchy: ObjectFilter
+  depth: RangeFilter
+  mass: TextFilter
+  project: TextFilter
+  locality: ListIdsFilter
+  stratigraphyHierarchy: ListIdsFilter
+  collector: ListTextFilter
+  number: ListTextFilter
+  map: GeomFilter
+}
 export const initState = (): SearchModuleState<SampleFilters> => {
   return {
     name: 'sample',

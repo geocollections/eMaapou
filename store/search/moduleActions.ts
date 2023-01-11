@@ -7,8 +7,9 @@ import {
   RESET_MODULE_QUERY,
 } from '../mutation_types'
 import { SearchModuleState } from './types'
+import { Filter } from '~/types/filters'
 
-export type SearchModuleActions<Filters extends string | number | symbol> = {
+export type SearchModuleActions<Filters extends {[K: string]: Filter}> = {
   resetFilters: (
     ctx: ActionContext<SearchModuleState<Filters>, any>
   ) => Promise<void>
@@ -23,7 +24,7 @@ export type SearchModuleActions<Filters extends string | number | symbol> = {
 }
 
 export const searchModuleActions = <
-  T extends string | number | symbol
+  T extends {[K: string]: Filter}
 >(): SearchModuleActions<T> => ({
   async resetFilters({ commit, state }) {
     const { initState } = await import(`/${state.name}/state`)

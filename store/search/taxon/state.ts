@@ -1,14 +1,21 @@
 import { SearchModuleState } from '../types'
 import { TAXON } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  TextFilter,
+} from '~/types/filters'
 
-export type TaxonFilters =
-  | 'species'
-  | 'locality'
-  | 'stratigraphyHierarchy'
-  | 'taxonHierarchy'
-  | 'author'
-  | 'map'
+export type TaxonFilters = {
+  species: ListTextFilter
+  locality: TextFilter
+  stratigraphyHierarchy: ListIdsFilter
+  taxonHierarchy: ListIdsFilter
+  author: ListTextFilter
+  map: GeomFilter
+}
 
 export const initState = (): SearchModuleState<TaxonFilters> => {
   return {
