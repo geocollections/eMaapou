@@ -1,7 +1,3 @@
-import { updateField } from 'vuex-map-fields'
-import { searchModuleMutations } from '../mutations'
-import { DrillcoreFilters } from './state'
-export default {
-  updateField,
-  ...searchModuleMutations<DrillcoreFilters>(),
-}
+import { searchModuleMutationTree } from '../mutations'
+import state from './state'
+export default searchModuleMutationTree(state)

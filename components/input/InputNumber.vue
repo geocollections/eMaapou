@@ -14,7 +14,7 @@
 export default {
   name: 'InputNumber',
   props: {
-    value: { type: Number, default: 0 },
+    value: { type: Number, required: true },
     label: { type: String, default: '' },
   },
 }

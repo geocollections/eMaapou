@@ -1,5 +1,4 @@
 import { mutationTree, getterTree, actionTree } from 'typed-vuex'
-import { SET_BASE_LAYER } from './mutation_types'
 
 type MapState = {
   baseLayer: string // TODO: should be enum
@@ -12,7 +11,7 @@ export const state = (): MapState => {
 }
 
 export const mutations = mutationTree(state, {
-  [SET_BASE_LAYER](state, baseLayer) {
+  SET_BASE_LAYER(state, baseLayer) {
     if (state.baseLayer !== baseLayer) state.baseLayer = baseLayer
   },
 })
@@ -34,7 +33,7 @@ export const actions = actionTree(
   { state, mutations, getters },
   {
     setBaseLayer({ commit }, baseLayer) {
-      commit(SET_BASE_LAYER, baseLayer)
+      commit('SET_BASE_LAYER', baseLayer)
     },
   }
 )

@@ -1,6 +1,5 @@
-import { searchModuleActions } from '../moduleActions'
-import { StratigraphyFilters } from './state'
-
-export default {
-  ...searchModuleActions<StratigraphyFilters>(),
-}
+import { searchModuleActionTree } from '../actions'
+import state from './state'
+import mutations from './mutations'
+import getters from './getters'
+export default searchModuleActionTree({ state, mutations, getters })

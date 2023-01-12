@@ -23,8 +23,8 @@
     <template #result>
       <div class="py-1 pl-2 text-h6">
         {{
-          $accessor.search.analytical_data.count
-            ? $tc('common.count', $accessor.search.analytical_data.count)
+          $accessor.search.analyticalData.count
+            ? $tc('common.count', $accessor.search.analyticalData.count)
             : '&nbsp;'
         }}
       </div>
@@ -32,9 +32,9 @@
       <v-card>
         <data-table-analytical-data
           :show-search="false"
-          :items="$accessor.search.analytical_data.items"
-          :count="$accessor.search.analytical_data.count"
-          :options="$accessor.search.analytical_data.options"
+          :items="$accessor.search.analyticalData.items"
+          :count="$accessor.search.analyticalData.count"
+          :options="$accessor.search.analyticalData.options"
           dynamic-headers
           stateful-headers
           :is-loading="$fetchState.pending"
@@ -82,27 +82,25 @@ export default defineComponent({
       const response = await services.sarvSolr.getResourceList(
         'analytical_data',
         {
-          options: accessor.search.analytical_data.options,
-          search: accessor.search.analytical_data.query,
+          options: accessor.search.analyticalData.options,
+          search: accessor.search.analyticalData.query,
           fields: getAPIFieldValues(HEADERS_ANALYTICAL_DATA),
           searchFilters: {
-            ...accessor.search.analytical_data.filters.byIds,
-            ...accessor.search.globalFilters.byIds,
-            ...accessor.search.analytical_data.parameterFilters.byIds,
+            ...accessor.search.analyticalData.filters,
+            ...accessor.search.globalFilters,
+            ...accessor.search.analyticalData.parameterFilters.byId,
           },
         }
       )
-      accessor.search.analytical_data.SET_MODULE_ITEMS({
+      accessor.search.analyticalData.SET_MODULE_ITEMS({
         items: response.items,
       })
-      accessor.search.analytical_data.SET_MODULE_COUNT({
+      accessor.search.analyticalData.SET_MODULE_COUNT({
         count: response.count,
       })
     })
-    const filters = computed(
-      () => accessor.search.analytical_data.filters.byIds
-    )
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.analyticalData.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
     const icons = computed(() => {
       return {
         mdiChartLine,
@@ -110,7 +108,7 @@ export default defineComponent({
     })
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({
-        module: 'analytical_data',
+        module: 'analyticalData',
         qParamKey: 'analyticalDataQ',
         filters,
         globalFilters,

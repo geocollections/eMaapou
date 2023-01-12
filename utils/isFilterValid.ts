@@ -6,8 +6,9 @@ import { Filter } from '~/types/filters'
 export default (filter: Filter): boolean => {
   if (filter.type === FilterType.Range)
     return !(isNil(filter.value[0]) && isNil(filter.value[1]))
-  if (filter.type === FilterType.Text || filter.type === FilterType.RangeAlt)
-    return filter.value?.trim().length > 0
+  if (filter.type === FilterType.Text) return filter.value?.trim().length > 0
+  if (filter.type === FilterType.RangeAlt) return filter.value.length > 0
+
   if (filter.type === FilterType.Object)
     return (
       // @ts-ignore

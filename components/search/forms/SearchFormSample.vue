@@ -80,6 +80,7 @@ import {
   useHydrateFilterLocality,
   useHydrateFilterStratigraphy,
 } from '~/composables/useHydrateFilter'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormSample',
   components: {
@@ -100,6 +101,35 @@ export default defineComponent({
     const { $accessor } = useContext()
     const route = useRoute()
 
+    const handleReset = () => {
+      emit('reset')
+    }
+    const handleSearch = () => {
+      emit('update')
+    }
+    const locality = useFilter('sample', 'locality', handleSearch)
+    const stratigraphyHierarchy = useFilter(
+      'sample',
+      'stratigraphyHierarchy',
+      handleSearch
+    )
+    const number = useFilter('sample', 'number', handleSearch)
+    const collector = useFilter('sample', 'collector', handleSearch)
+    const depth = useFilter('sample', 'depth', handleSearch)
+    const map = useFilter('sample', 'map', handleSearch)
+    const institutions = computed({
+      get: () => $accessor.search.globalFilters.institutions.value,
+      set: (val) => {
+        $accessor.search.setInstitutionsFilter(val)
+        handleSearch()
+      },
+    })
+    const query = computed({
+      get: () => $accessor.search.sample.query,
+      set: (val) => {
+        $accessor.search.sample.setQuery(val)
+      },
+    })
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
@@ -121,90 +151,6 @@ export default defineComponent({
         ).data.response.docs
       }
     })
-
-    const locality = computed({
-      get: () => $accessor.search.sample.filters.byIds.locality.value,
-      set: (val) => {
-        $accessor.search.sample.setFilterValue({
-          key: 'locality',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const stratigraphyHierarchy = computed({
-      get: () =>
-        $accessor.search.sample.filters.byIds.stratigraphyHierarchy.value,
-      set: (val) => {
-        $accessor.search.sample.setFilterValue({
-          key: 'stratigraphyHierarchy',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const number = computed({
-      get: () => $accessor.search.sample.filters.byIds.number.value,
-      set: (val) => {
-        $accessor.search.sample.setFilterValue({
-          key: 'number',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const collector = computed({
-      get: () => $accessor.search.sample.filters.byIds.collector.value,
-      set: (val) => {
-        $accessor.search.sample.setFilterValue({
-          key: 'collector',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const depth = computed({
-      get: () => $accessor.search.sample.filters.byIds.depth.value,
-      set: (val) => {
-        $accessor.search.sample.setFilterValue({
-          key: 'depth',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const institutions = computed({
-      get: () => $accessor.search.globalFilters.byIds.institutions.value,
-      set: (val) => {
-        $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
-      },
-    })
-    const map = computed({
-      get: () => $accessor.search.sample.filters.byIds.map.value,
-      set: (val) => {
-        $accessor.search.sample.setFilterValue({
-          key: 'map',
-          value: val,
-        })
-        handleMapUpdate()
-      },
-    })
-    const handleReset = () => {
-      emit('reset')
-    }
-    const handleSearch = () => {
-      emit('update')
-    }
-    const handleMapUpdate = () => {
-      emit('update')
-    }
-    const query = computed({
-      get: () => $accessor.search.sample.query,
-      set: (val) => {
-        $accessor.search.sample.setQuery(val)
-      },
-    })
     return {
       locality,
       stratigraphyHierarchy,
@@ -216,7 +162,6 @@ export default defineComponent({
       map,
       handleReset,
       handleSearch,
-      handleMapUpdate,
       isEmpty,
     }
   },

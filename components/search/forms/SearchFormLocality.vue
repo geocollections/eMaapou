@@ -5,6 +5,10 @@
     <search-fields-wrapper>
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="name"
+            :title="$t('filters.localityName').toString()"
+          />
           <filter-input-autocomplete-static
             v-model="country"
             :title="$t('filters.country').toString()"
@@ -50,7 +54,9 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterReference from '~/components/filter/FilterReference.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useHydrateFilterReference } from '~/composables/useHydrateFilter'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormLocality',
   components: {
@@ -60,10 +66,17 @@ export default defineComponent({
     InputSearch,
     FilterReference,
     FilterInputAutocompleteStatic,
+    FilterInputText,
   },
   setup(_props, { emit }) {
     const { $accessor, $axios, i18n } = useContext()
     const route = useRoute()
+    const handleReset = () => {
+      emit('reset')
+    }
+    const handleSearch = () => {
+      emit('update')
+    }
     const query = computed({
       get: () => $accessor.search.locality.query,
       set: (val) => {
@@ -71,37 +84,10 @@ export default defineComponent({
       },
     })
 
-    const country = computed({
-      get: () => $accessor.search.locality.filters.byIds.country.value,
-      set: (val) => {
-        $accessor.search.locality.setFilterValue({
-          key: 'country',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-
-    const reference = computed({
-      get: () => $accessor.search.locality.filters.byIds.reference.value,
-      set: (val) => {
-        $accessor.search.locality.setFilterValue({
-          key: 'reference',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const map = computed({
-      get: () => $accessor.search.locality.filters.byIds.map.value,
-      set: (val) => {
-        $accessor.search.locality.setFilterValue({
-          key: 'map',
-          value: val,
-        })
-        handleMapUpdate()
-      },
-    })
+    const name = useFilter('locality', 'name', handleSearch)
+    const country = useFilter('locality', 'country', handleSearch)
+    const reference = useFilter('locality', 'reference', handleSearch)
+    const map = useFilter('locality', 'map', handleSearch)
     const state = reactive({
       countrySuggestions: [] as any[],
     })
@@ -141,24 +127,15 @@ export default defineComponent({
         ).data.response.docs
       }
     })
-    const handleReset = () => {
-      emit('reset')
-    }
-    const handleSearch = () => {
-      emit('update')
-    }
-    const handleMapUpdate = () => {
-      emit('update')
-    }
     return {
       ...toRefs(state),
+      name,
       query,
       reference,
       country,
       map,
       handleReset,
       handleSearch,
-      handleMapUpdate,
     }
   },
 })

@@ -1,13 +1,21 @@
 import { SearchModuleState } from '../types'
 import { TAXON } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  TextFilter,
+} from '~/types/filters'
 
-export type TaxonFilters =
-  | 'species'
-  | 'locality'
-  | 'stratigraphyHierarchy'
-  | 'taxonHierarchy'
-  | 'author'
+export type TaxonFilters = {
+  species: ListTextFilter
+  locality: TextFilter
+  stratigraphyHierarchy: ListIdsFilter
+  taxonHierarchy: ListIdsFilter
+  author: ListTextFilter
+  map: GeomFilter
+}
 
 export const initState = (): SearchModuleState<TaxonFilters> => {
   return {
@@ -19,53 +27,51 @@ export const initState = (): SearchModuleState<TaxonFilters> => {
     useInstitutions: false,
     query: '',
     filters: {
-      byIds: {
-        species: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'taxon.species',
-          fields: ['taxon'],
-        },
-        locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'taxon.locality',
-          fields: ['locality', 'locality_en'],
-        },
-        stratigraphyHierarchy: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'hierarchy_string',
-          lookUpType: LookupType.StartsWith,
-          label: 'taxon.stratigraphyHierarchy',
-          fields: ['stratigraphy_hierarchy'],
-        },
-        taxonHierarchy: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'hierarchy_string',
-          lookUpType: LookupType.StartsWith,
-          label: 'taxon.taxonHierarchy',
-          fields: ['hierarchy_string'],
-        },
-        author: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'taxon.author',
-          fields: ['author_year'],
-        },
+      species: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['taxon'],
       },
-      allIds: [
-        'species',
-        'stratigraphyHierarchy',
-        'taxonHierarchy',
-        'stratigraphy',
-        'locality',
-        'author',
-      ],
+      locality: {
+        value: '',
+        type: FilterType.Text,
+        lookUpType: LookupType.Contains,
+        label: 'taxon.locality',
+        fields: ['locality', 'locality_en'],
+      },
+      stratigraphyHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'startswith',
+        label: '',
+        fields: ['stratigraphy_hierarchy'],
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+      },
+      taxonHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'startswith',
+        label: '',
+        fields: ['hierarchy_string'],
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+      },
+      author: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['author_year'],
+      },
+      map: {
+        type: FilterType.Geom,
+        value: null,
+        label: '',
+        fields: ['latlong'],
+      },
     },
   }
 }

@@ -5,6 +5,10 @@
     <search-fields-wrapper>
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-text
+            v-model="name"
+            :title="$t('filters.datasetName').toString()"
+          />
           <filter-analysis-parameter v-model="analysisParameter" />
           <filter-input-text
             v-model="owner"
@@ -58,6 +62,7 @@ import FilterAnalysisParameter from '~/components/filter/FilterAnalysisParameter
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useHydrateFilterAnalysisParameter } from '~/composables/useHydrateFilter'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormDataset',
   components: {
@@ -99,38 +104,16 @@ export default defineComponent({
         $accessor.search.dataset.setQuery(val)
       },
     })
-    const date = computed({
-      get: () => $accessor.search.dataset.filters.byIds.date.value,
-      set: (val) => {
-        $accessor.search.dataset.setFilterValue({
-          key: 'date',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const owner = computed({
-      get: () => $accessor.search.dataset.filters.byIds.owner.value,
-      set: (val) => {
-        $accessor.search.dataset.setFilterValue({
-          key: 'owner',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const analysisParameter = computed({
-      get: () => $accessor.search.dataset.filters.byIds.analysisParameter.value,
-      set: (val) => {
-        $accessor.search.dataset.setFilterValue({
-          key: 'analysisParameter',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
+    const name = useFilter('dataset', 'name', handleSearch)
+    const date = useFilter('dataset', 'date', handleSearch)
+    const owner = useFilter('dataset', 'owner', handleSearch)
+    const analysisParameter = useFilter(
+      'dataset',
+      'analysisParameter',
+      handleSearch
+    )
     const institution = computed({
-      get: () => $accessor.search.globalFilters.byIds.institutions.value,
+      get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
         handleSearch()
@@ -142,6 +125,7 @@ export default defineComponent({
       institution,
       date,
       owner,
+      name,
       isEmpty,
       handleReset,
       handleSearch,

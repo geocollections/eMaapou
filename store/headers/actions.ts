@@ -1,27 +1,21 @@
 import { actionTree } from 'typed-vuex'
-import {
-  ADD_PARAMETER_HEADERS,
-  RESET_HEADERS,
-  SHOW_HEADER,
-  TOGGLE_HEADER,
-} from '../mutation_types'
 import state from './state'
 import mutations from './mutations'
 export default actionTree(
   { state, mutations },
   {
     toggleHeader({ commit }, { module, headerId }) {
-      commit(TOGGLE_HEADER, { module, headerId })
+      commit('TOGGLE_HEADER', { module, headerId })
     },
     showHeader({ commit }, { module, headerId }) {
-      commit(SHOW_HEADER, { module, headerId })
+      commit('SHOW_HEADER', { module, headerId })
     },
     async resetHeaders({ commit, dispatch, rootState }, { module, options }) {
       const { initState } = await import(`./state`)
 
       const initHeaders = initState()[module as keyof typeof initState]
 
-      commit(RESET_HEADERS, { module, initHeaders })
+      commit('RESET_HEADERS', { module, initHeaders })
 
       if (module === 'analytical_data') {
         dispatch('addParameterHeaders', {
@@ -29,7 +23,7 @@ export default actionTree(
         })
 
         Object.values(
-          rootState.search.analytical_data.parameterFilters.byIds
+          rootState.search.analytical_data.parameterFilters.byId
         ).forEach((filter: any) => {
           dispatch('showHeader', { module, headerId: filter.fields[0] })
         })
@@ -56,7 +50,7 @@ export default actionTree(
         },
         {}
       )
-      commit(ADD_PARAMETER_HEADERS, {
+      commit('ADD_PARAMETER_HEADERS', {
         parameters: parameterHeaders,
         ids: Object.keys(parameters),
       })

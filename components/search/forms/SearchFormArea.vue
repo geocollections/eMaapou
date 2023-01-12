@@ -86,6 +86,7 @@ import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import { useFilter } from '~/composables/useFilter'
 // import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
 export default defineComponent({
   name: 'SearchFormArea',
@@ -118,27 +119,9 @@ export default defineComponent({
         $accessor.search.area.setQuery(val)
       },
     })
-    const name = computed({
-      get: () => $accessor.search.area.filters.byIds.name.value,
-      set: (val) => {
-        $accessor.search.area.setFilterValue({ key: 'name', value: val })
-        handleSearch()
-      },
-    })
-    const type = computed({
-      get: () => $accessor.search.area.filters.byIds.type.value,
-      set: (value) => {
-        $accessor.search.area.setFilterValue({ key: 'type', value })
-        handleSearch()
-      },
-    })
-    const county = computed({
-      get: () => $accessor.search.area.filters.byIds.county.value,
-      set: (value) => {
-        $accessor.search.area.setFilterValue({ key: 'county', value })
-        handleSearch()
-      },
-    })
+    const name = useFilter('area', 'name', handleSearch)
+    const type = useFilter('area', 'type', handleSearch)
+    const county = useFilter('area', 'county', handleSearch)
     const state = reactive({
       countySuggestions: [] as any[],
       typeSuggestions: [] as any[],

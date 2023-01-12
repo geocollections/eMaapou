@@ -1,9 +1,20 @@
 import { SearchModuleState } from '../types'
 import { PREPARATION } from '~/constants'
-import { FilterType, LookupType } from '~/types/enums'
+import { FilterType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  RangeFilter,
+} from '~/types/filters'
 
-export type PreparationFilters = 'number' | 'locality' | 'hierarchy' | 'depth'
-
+export type PreparationFilters = {
+  number: ListTextFilter
+  locality: ListIdsFilter
+  stratigraphyHierarchy: ListIdsFilter
+  depth: RangeFilter
+  map: GeomFilter
+}
 export const initState = (): SearchModuleState<PreparationFilters> => {
   return {
     name: 'preparation',
@@ -14,42 +25,48 @@ export const initState = (): SearchModuleState<PreparationFilters> => {
     useInstitutions: true,
     query: '',
     filters: {
-      byIds: {
-        number: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'preparation.number',
-          fields: ['preparation_number'],
-        },
-        locality: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'preparation.locality',
-          fields: ['locality', 'locality_en'],
-        },
-        hierarchy: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'hierarchy_string',
-          lookUpType: LookupType.StartsWith,
-          label: 'preparation.hierarchy',
-          fields: [
-            'stratigraphy_hierarchy',
-            'lithostratigraphy_hierarchy',
-            'age_hierarchy',
-          ],
-        },
-        depth: {
-          value: [null, null],
-          type: FilterType.Range,
-          label: 'preparation.depth',
-          placeholders: ['depth.min', 'depth.max'],
-          fields: ['depth'],
-        },
+      number: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['preparation_number'],
       },
-      allIds: ['number', 'locality', 'depth', 'hierarchy'],
+      locality: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['locality_id'],
+        valueField: 'id',
+        valueType: 'number',
+      },
+      stratigraphyHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'startswith',
+        label: '',
+        fields: [
+          'stratigraphy_hierarchy',
+          'lithostratigraphy_hierarchy',
+          'age_hierarchy',
+        ],
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+      },
+      depth: {
+        value: [null, null],
+        type: FilterType.Range,
+        label: 'preparation.depth',
+        placeholders: ['depth.min', 'depth.max'],
+        fields: ['depth'],
+      },
+      map: {
+        type: FilterType.Geom,
+        value: null,
+        label: '',
+        fields: ['latlong'],
+      },
     },
   }
 }

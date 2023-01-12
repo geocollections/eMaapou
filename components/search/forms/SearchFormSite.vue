@@ -64,6 +64,7 @@ import FilterArea from '~/components/filter/FilterArea.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import { useHydrateFilterArea } from '~/composables/useHydrateFilter'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormSite',
   components: {
@@ -95,34 +96,10 @@ export default defineComponent({
         $accessor.search.site.setQuery(val)
       },
     })
-    const name = computed({
-      get: () => $accessor.search.site.filters.byIds.name.value,
-      set: (value) => {
-        $accessor.search.site.setFilterValue({ key: 'name', value })
-        handleSearch()
-      },
-    })
-    const area = computed({
-      get: () => $accessor.search.site.filters.byIds.area.value,
-      set: (value) => {
-        $accessor.search.site.setFilterValue({ key: 'area', value })
-        handleSearch()
-      },
-    })
-    const map = computed({
-      get: () => $accessor.search.site.filters.byIds.map.value,
-      set: (value) => {
-        $accessor.search.site.setFilterValue({ key: 'map', value })
-        handleSearch()
-      },
-    })
-    const project = computed({
-      get: () => $accessor.search.site.filters.byIds.project.value,
-      set: (value) => {
-        $accessor.search.site.setFilterValue({ key: 'project', value })
-        handleSearch()
-      },
-    })
+    const name = useFilter('site', 'name', handleSearch)
+    const area = useFilter('site', 'area', handleSearch)
+    const map = useFilter('site', 'map', handleSearch)
+    const project = useFilter('site', 'project', handleSearch)
     const hydrateFilterArea = useHydrateFilterArea()
     const state = reactive({
       projectSuggestions: [] as any[],

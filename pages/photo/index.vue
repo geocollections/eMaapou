@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('photo.pageTitle')"
+        :title="$t('photo.pageTitle').toString()"
         :icon="icons.mdiFileImageOutline"
       />
     </template>
@@ -129,8 +129,8 @@ export default defineComponent({
         search: accessor.search.image.query,
         fields: getAPIFieldValues(HEADERS_PHOTO),
         searchFilters: {
-          ...accessor.search.image.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.image.filters,
+          ...accessor.search.globalFilters,
           specimenImageAttachment: {
             value: '2',
             type: FilterType.Text,
@@ -143,8 +143,8 @@ export default defineComponent({
       accessor.search.image.SET_MODULE_COUNT({ count: response.count })
     })
 
-    const filters = computed(() => accessor.search.image.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.image.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
     const views = computed(() => [
       ViewType.Table,
       ViewType.Image,

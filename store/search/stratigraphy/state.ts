@@ -1,14 +1,14 @@
 import { SearchModuleState } from '../types'
 import { STRATIGRAPHY } from '~/constants'
-import { FilterType, LookupType } from '~/types/enums'
+import { FilterType } from '~/types/enums'
+import { ListIdsFilter, ListTextFilter, RangeAltFilter } from '~/types/filters'
 
-export type StratigraphyFilters =
-  | 'id'
-  | 'stratigraphy'
-  | 'index'
-  | 'age'
-  | 'hierarchy'
-
+export type StratigraphyFilters = {
+  id: ListTextFilter
+  index: ListTextFilter
+  age: RangeAltFilter
+  stratigraphyHierarchy: ListIdsFilter
+}
 export const initState = (): SearchModuleState<StratigraphyFilters> => {
   return {
     name: 'stratigraphy',
@@ -19,45 +19,36 @@ export const initState = (): SearchModuleState<StratigraphyFilters> => {
     useInstitutions: false,
     query: '',
     filters: {
-      byIds: {
-        id: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'stratigraphy.id',
-          fields: ['id'],
-        },
-        stratigraphy: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'stratigraphy.stratigraphy',
-          fields: ['stratigraphy', 'stratigraphy_en'],
-        },
-        index: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'stratigraphy.index',
-          fields: ['index_main', 'index_additional'],
-        },
-        age: {
-          value: '',
-          type: FilterType.RangeAlt,
-          label: 'stratigraphy.age',
-          placeholders: ['stratigraphy.min', 'stratigraphy.max'],
-          fields: ['age_base', 'age_top'],
-        },
-        hierarchy: {
-          value: null,
-          type: FilterType.Object,
-          searchField: 'hierarchy_string',
-          lookUpType: LookupType.Equals,
-          label: 'stratigraphy.hierarchy',
-          fields: ['hierarchy_string'],
-        },
+      id: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['id'],
       },
-      allIds: ['id', 'stratigraphy', 'age'],
+      index: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['index_main', 'index_additional'],
+      },
+      age: {
+        value: [],
+        type: FilterType.RangeAlt,
+        label: '',
+        placeholders: ['stratigraphy.min', 'stratigraphy.max'],
+        fields: ['age_base', 'age_top'],
+      },
+      stratigraphyHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'startswith',
+        label: 'stratigraphy.hierarchy',
+        fields: ['hierarchy_string'],
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+      },
     },
   }
 }

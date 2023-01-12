@@ -81,13 +81,13 @@ export default defineComponent({
         search: accessor.search.area.query,
         fields: getAPIFieldValues(HEADERS_AREA),
         searchFilters: {
-          ...accessor.search.area.filters.byIds,
+          ...accessor.search.area.filters,
         },
       })
       accessor.search.area.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.area.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.area.filters.byIds)
+    const filters = computed(() => accessor.search.area.filters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

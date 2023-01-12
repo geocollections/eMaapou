@@ -165,6 +165,7 @@ export default defineComponent({
     const handleRemove = () => {
       emit('input', [null, null])
     }
+
     return {
       handleInput,
       handleRemove,

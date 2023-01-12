@@ -1,8 +1,13 @@
 import { SearchModuleState } from '../types'
 import { AREA } from '~/constants'
 import { FilterType } from '~/types/enums'
+import { ListIdsFilter, ListTextFilter } from '~/types/filters'
 
-export type AreaFilters = 'name' | 'county' | 'type'
+export type AreaFilters = {
+  name: ListTextFilter
+  county: ListIdsFilter
+  type: ListIdsFilter
+}
 
 export const initState = (): SearchModuleState<AreaFilters> => {
   return {
@@ -14,34 +19,31 @@ export const initState = (): SearchModuleState<AreaFilters> => {
     useInstitutions: false,
     query: '',
     filters: {
-      byIds: {
-        name: {
-          value: [],
-          type: FilterType.ListText,
-          lookupType: 'none',
-          label: '',
-          fields: ['name', 'name_en'],
-        },
-        county: {
-          value: [],
-          type: FilterType.ListIds,
-          label: '',
-          fields: ['maakond_id'],
-          valueField: 'id',
-          valueType: 'number',
-          lookupType: 'none',
-        },
-        type: {
-          value: [],
-          type: FilterType.ListIds,
-          lookupType: 'none',
-          label: '',
-          fields: ['area_type_id'],
-          valueField: 'id',
-          valueType: 'number',
-        },
+      name: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['name', 'name_en'],
       },
-      allIds: ['name', 'county', 'type'],
+      county: {
+        value: [],
+        type: FilterType.ListIds,
+        label: '',
+        fields: ['maakond_id'],
+        valueField: 'id',
+        valueType: 'number',
+        lookupType: 'none',
+      },
+      type: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['area_type_id'],
+        valueField: 'id',
+        valueType: 'number',
+      },
     },
   }
 }

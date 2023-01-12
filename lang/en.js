@@ -1068,13 +1068,24 @@ export default {
     county: 'County',
     areaType: 'Area type',
     area: 'Area',
-    project: 'Project'
+    project: 'Project',
+    species: 'Species',
+    author: 'Author',
+    index: 'Index',
+    age: 'Age (Ma)',
+    preparationNumber: 'Number',
+    specimenNumber: 'Number',
+    localityName: 'Name',
+    drillcoreName: 'Name',
+    datasetName: 'Name',
+    parameter: 'Parameter'
   },
   intervals: {
     default: {
       between: 'Between {min} and {max}',
       lessThanEquals: 'Less than or equal to {max}',
-      greaterThanEquals: 'Greater than or equal to {min}'
+      greaterThanEquals: 'Greater than or equal to {min}',
+      exists: 'Exists'
     },
     depth: {
       between: 'Between {min} and {max} (m)',

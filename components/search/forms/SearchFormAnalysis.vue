@@ -114,6 +114,7 @@ import {
   useHydrateFilterSample,
 } from '~/composables/useHydrateFilter'
 import FilterSample from '~/components/filter/FilterSample.vue'
+import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormAnalysis',
   components: {
@@ -152,79 +153,17 @@ export default defineComponent({
         $accessor.search.analysis.setQuery(val)
       },
     })
-    const depth = computed({
-      get: () => $accessor.search.analysis.filters.byIds.depth.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'depth',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const method = computed({
-      get: () => $accessor.search.analysis.filters.byIds.method.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'method',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const lab = computed({
-      get: () => $accessor.search.analysis.filters.byIds.lab.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'lab',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const agent = computed({
-      get: () => $accessor.search.analysis.filters.byIds.agent.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'agent',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
+    const depth = useFilter('analysis', 'depth', handleSearch)
+    const method = useFilter('analysis', 'method', handleSearch)
+    const lab = useFilter('analysis', 'lab', handleSearch)
+    const agent = useFilter('analysis', 'agent', handleSearch)
 
-    const locality = computed({
-      get: () => $accessor.search.analysis.filters.byIds.locality.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'locality',
-          value: val,
-        })
-        handleSearch()
-      },
-    })
-    const sample = computed({
-      get: () => $accessor.search.analysis.filters.byIds.sample.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'sample',
-          value: val,
-        })
-        handleMapUpdate()
-      },
-    })
-    const map = computed({
-      get: () => $accessor.search.analysis.filters.byIds.map.value,
-      set: (val) => {
-        $accessor.search.analysis.setFilterValue({
-          key: 'map',
-          value: val,
-        })
-        handleMapUpdate()
-      },
-    })
+    const locality = useFilter('analysis', 'locality', handleSearch)
+    const sample = useFilter('analysis', 'sample', handleSearch)
+    const map = useFilter('analysis', 'map', handleSearch)
+
     const institutions = computed({
-      get: () => $accessor.search.globalFilters.byIds.institutions.value,
+      get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
         handleSearch()

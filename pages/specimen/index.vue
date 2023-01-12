@@ -80,15 +80,15 @@ export default defineComponent({
         search: accessor.search.specimen.query,
         fields: getAPIFieldValues(HEADERS_SPECIMEN),
         searchFilters: {
-          ...accessor.search.specimen.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.specimen.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.specimen.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.specimen.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.specimen.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.specimen.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

@@ -2,7 +2,7 @@
   <search>
     <template #title>
       <base-header
-        :title="$t('drillcore.pageTitle')"
+        :title="$t('drillcore.pageTitle').toString()"
         :icon="icons.mdiScrewMachineFlatTop"
       />
     </template>
@@ -79,15 +79,15 @@ export default defineComponent({
         search: accessor.search.drillcore.query,
         fields: getAPIFieldValues(HEADERS_DRILLCORE),
         searchFilters: {
-          ...accessor.search.drillcore.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.drillcore.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.drillcore.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.drillcore.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.drillcore.filters.byIds)
-    const globalFilters = computed(() => accessor.search.globalFilters.byIds)
+    const filters = computed(() => accessor.search.drillcore.filters)
+    const globalFilters = computed(() => accessor.search.globalFilters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({

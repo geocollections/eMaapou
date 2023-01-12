@@ -79,24 +79,20 @@ export default defineComponent({
         search: accessor.search.locality.query,
         fields: getAPIFieldValues(HEADERS_LOCALITY),
         searchFilters: {
-          ...accessor.search.locality.filters.byIds,
-          ...accessor.search.globalFilters.byIds,
+          ...accessor.search.locality.filters,
+          ...accessor.search.globalFilters,
         },
       })
       accessor.search.locality.SET_MODULE_ITEMS({ items: response.items })
       accessor.search.locality.SET_MODULE_COUNT({ count: response.count })
     })
-    const filters = computed(() => accessor.search.locality.filters.byIds)
-    const globalFilters = computed(() => {
-      return { geoJSON: accessor.search.globalFilters.byIds.geoJSON }
-    })
+    const filters = computed(() => accessor.search.locality.filters)
 
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({
         module: 'locality',
         qParamKey: 'localityQ',
         filters,
-        globalFilters,
         fetch,
       })
 

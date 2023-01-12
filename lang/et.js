@@ -1070,16 +1070,27 @@ export default {
     county: 'Maakond',
     areaType: 'Ala tüüp',
     area: 'Ala',
-    project: 'Projekt'
+    project: 'Projekt',
+    species: 'Liik',
+    author: 'Autor',
+    index: 'Indeks',
+    age: 'Vanus (mln a)',
+    preparationNumber: 'Number',
+    specimenNumber: 'Number',
+    localityName: 'Nimi',
+    drillcoreName: 'Nimi',
+    datasetName: 'Nimi',
+    parameter: 'Parameeter'
   },
   intervals: {
     default: {
-      between: '{min} ja {max} vahel',
+      between: 'Vahemikus {min} kuni {max}',
       lessThanEquals: 'Väiksem või võrdne {max}',
-      greaterThanEquals: 'Suurm või võrdne {min}'
+      greaterThanEquals: 'Suurem või võrdne {min}',
+      exists: 'Määratud'
     },
     depth: {
-      between: ' {min} ja {max} (m) vahel',
+      between: 'Vahemikus {min} kuni {max} (m)',
       lessThanEquals: 'Kõrgemal kui {max} (m)',
       greaterThanEquals: 'Sügavamal kui {min} (m)'
     }

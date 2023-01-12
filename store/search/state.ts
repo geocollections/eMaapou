@@ -4,8 +4,7 @@ import { Filter } from '~/types/filters'
 export type SearchState = {
   query: string
   globalFilters: {
-    byIds: { [K: string]: Filter }
-    allIds: string[]
+    institutions: Filter
   }
 }
 
@@ -13,21 +12,12 @@ export const initState = (): SearchState => {
   return {
     query: '',
     globalFilters: {
-      byIds: {
-        institutions: {
-          type: FilterType.ListOr,
-          value: [],
-          label: '',
-          fields: ['database_id'],
-        },
-        geoJSON: {
-          type: FilterType.Geom,
-          value: null,
-          label: '',
-          fields: ['latlong'],
-        },
+      institutions: {
+        type: FilterType.ListOr,
+        value: [],
+        label: '',
+        fields: ['database_id'],
       },
-      allIds: ['institutions', 'geoJSON'],
     },
   }
 }

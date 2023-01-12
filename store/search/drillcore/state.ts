@@ -1,15 +1,22 @@
 import { SearchModuleState } from '../types'
 import { DRILLCORE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  RangeFilter,
+  TextFilter,
+} from '~/types/filters'
 
-export type DrillcoreFilters =
-  | 'name'
-  | 'country'
-  | 'repository'
-  | 'storage'
-  | 'boxes'
-  | 'map'
-
+export type DrillcoreFilters = {
+  name: ListTextFilter
+  storage: TextFilter
+  boxes: RangeFilter
+  country: ListIdsFilter
+  repository: ListIdsFilter
+  map: GeomFilter
+}
 export const initState = (): SearchModuleState<DrillcoreFilters> => {
   return {
     name: 'drillcore',
@@ -20,54 +27,51 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
     useInstitutions: true,
     query: '',
     filters: {
-      byIds: {
-        name: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'drillcore.name',
-          fields: ['drillcore', 'drillcore_en'],
-        },
-        storage: {
-          value: '',
-          type: FilterType.Text,
-          lookUpType: LookupType.Contains,
-          label: 'drillcore.storage',
-          fields: ['location'],
-        },
-        boxes: {
-          type: FilterType.Range,
-          value: [null, null],
-          label: 'drillcore.boxes',
-          placeholders: ['boxes.min', 'boxes.max'],
-          fields: ['boxes'],
-        },
-        country: {
-          value: [],
-          type: FilterType.ListIds,
-          label: '',
-          fields: ['country_id'],
-          valueType: 'number',
-          valueField: 'id',
-          lookupType: 'none',
-        },
-        repository: {
-          value: [],
-          type: FilterType.ListIds,
-          label: '',
-          fields: ['core_repository_id'],
-          valueType: 'number',
-          valueField: 'id',
-          lookupType: 'none',
-        },
-        map: {
-          type: FilterType.Geom,
-          value: null,
-          label: '',
-          fields: ['latlong'],
-        },
+      name: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'none',
+        label: '',
+        fields: ['drillcore', 'drillcore_en'],
       },
-      allIds: ['name', 'repository', 'country', 'storage', 'boxes'],
+      storage: {
+        value: '',
+        type: FilterType.Text,
+        lookUpType: LookupType.Contains,
+        label: 'drillcore.storage',
+        fields: ['location'],
+      },
+      boxes: {
+        type: FilterType.Range,
+        value: [null, null],
+        label: 'drillcore.boxes',
+        placeholders: ['boxes.min', 'boxes.max'],
+        fields: ['boxes'],
+      },
+      country: {
+        value: [],
+        type: FilterType.ListIds,
+        label: '',
+        fields: ['country_id'],
+        valueType: 'number',
+        valueField: 'id',
+        lookupType: 'none',
+      },
+      repository: {
+        value: [],
+        type: FilterType.ListIds,
+        label: '',
+        fields: ['core_repository_id'],
+        valueType: 'number',
+        valueField: 'id',
+        lookupType: 'none',
+      },
+      map: {
+        type: FilterType.Geom,
+        value: null,
+        label: '',
+        fields: ['latlong'],
+      },
     },
   }
 }

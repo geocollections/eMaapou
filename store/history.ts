@@ -1,5 +1,4 @@
 import { mutationTree, actionTree } from 'typed-vuex'
-import { PUSH_HISTORY } from './mutation_types'
 const HISTORY_SIZE = 10
 
 export type HistoryEntry = {
@@ -14,7 +13,7 @@ export const state = () => {
 }
 
 export const mutations = mutationTree(state, {
-  [PUSH_HISTORY](state, historyObject) {
+  PUSH_HISTORY(state, historyObject) {
     // Remove duplicates from history
     state.historyEntries.forEach((h, i) => {
       if (h.to === historyObject.to) state.historyEntries.splice(i, 1)
@@ -29,7 +28,7 @@ export const actions = actionTree(
   { state, mutations },
   {
     pushHistory({ commit }, historyObject) {
-      commit(PUSH_HISTORY, historyObject)
+      commit('PUSH_HISTORY', historyObject)
     },
   }
 )

@@ -4,7 +4,7 @@ import mutations from './mutations'
 import { initState as state } from './state'
 import actions from './actions'
 import analysis from './analysis'
-import analytical_data from './analytical_data'
+import analyticalData from './analyticalData'
 import area from './area'
 import drillcore from './drillcore'
 import image from './image'
@@ -24,7 +24,7 @@ export default {
   namespaced: true,
   modules: {
     analysis,
-    analytical_data,
+    analyticalData,
     dataset,
     taxon,
     area,
