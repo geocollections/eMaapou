@@ -23,7 +23,7 @@ export default actionTree(
         })
 
         Object.values(
-          rootState.search.analytical_data.parameterFilters.byIds
+          rootState.search.analytical_data.parameterFilters.byId
         ).forEach((filter: any) => {
           dispatch('showHeader', { module, headerId: filter.fields[0] })
         })

@@ -75,6 +75,11 @@ export type GeomFilter = {
   fields: string[]
 }
 
+export type ParameterFilter = {
+  type: FilterType.Parameter
+  value: any[]
+}
+
 export type Filter =
   | TextFilter
   | RangeFilter
@@ -86,3 +91,4 @@ export type Filter =
   | GeomFilter
   | ListIdsFilter
   | ListTextFilter
+  | ParameterFilter

@@ -11,19 +11,19 @@ export default mutationTree(state, {
     state.parameters = parameters
   },
   ADD_PARAMETER_FILTER(state, filter) {
-    Vue.set(state.parameterFilters.byIds, filter.id, filter)
+    Vue.set(state.parameterFilters.byId, filter.id, filter)
     state.parameterFilters.allIds = [
       ...state.parameterFilters.allIds,
       filter.id,
     ]
   },
   UPDATE_PARAMETER_FILTER(state, { id, filter }) {
-    Vue.set(state.parameterFilters.byIds, id, filter)
+    Vue.set(state.parameterFilters.byId, id, filter)
   },
   REMOVE_PARAMETER_FILTER(state, removeId) {
     state.parameterFilters.allIds = state.parameterFilters.allIds.filter(
       (id) => id !== removeId
     )
-    Vue.delete(state.parameterFilters.byIds, removeId)
+    Vue.delete(state.parameterFilters.byId, removeId)
   },
 })

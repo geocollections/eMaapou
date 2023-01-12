@@ -9,6 +9,7 @@ export enum FilterType {
   Geom = 'geom',
   ListIds = 'list_ids',
   ListText = 'list_text',
+  Parameter = 'parameter',
 }
 
 export enum LookupType {

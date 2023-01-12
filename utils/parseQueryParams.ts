@@ -111,5 +111,17 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
         .split(',')
         .map((val) => decodeURIComponent(val))
     return filter.value
+  } else if (filter.type === FilterType.Parameter) {
+    return (route.query[key] as string).split(',').map((val) => {
+      const [parameter, valueStr] = val.split(':')
+      const [start, end] = valueStr.split('-')
+      return {
+        parameter,
+        value: [
+          start !== '*' ? Number(start) : null,
+          end !== '*' ? Number(end) : null,
+        ],
+      }
+    })
   }
 }

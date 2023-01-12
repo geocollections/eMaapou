@@ -1,3 +1,4 @@
+import isNull from 'lodash/isNull'
 import isFilterValid from './isFilterValid'
 import { IOptions } from '~/services'
 import { FilterType } from '~/types/enums'
@@ -68,6 +69,14 @@ const serializeFilter = (filter: Filter) => {
       .join(',')
   } else if (filter.type === FilterType.ListText) {
     return filter.value.map((value) => encodeURIComponent(value)).join(',')
+  } else if (filter.type === FilterType.Parameter) {
+    return filter.value
+      .filter((value) => !isNull(value.parameter))
+      .map(
+        (value) =>
+          `${value.parameter}:${value.value[0] ?? '*'}-${value.value[1] ?? '*'}`
+      )
+      .join(',')
   } else {
     return ''
   }

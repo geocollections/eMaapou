@@ -1,7 +1,6 @@
 <template>
   <v-autocomplete
     v-bind="$attrs"
-    class="pt-4"
     hide-details
     hide-no-data
     :clearable="clearable"

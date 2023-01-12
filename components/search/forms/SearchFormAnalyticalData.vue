@@ -3,8 +3,16 @@
     <input-search v-model="query" />
     <search-actions class="mb-3" @click="handleReset" />
 
-    <search-fields-wrapper :active="hasActiveFilters">
-      <v-row no-gutters>
+    <search-fields-wrapper>
+      <v-card class="mt-3" flat tile color="transparent">
+        <v-expansion-panels accordion flat tile multiple>
+          <filter-input-parameter
+            v-model="parameter"
+            :parameters="parameterSuggestions"
+          />
+        </v-expansion-panels>
+      </v-card>
+      <!-- <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
           <input-text
             v-model="locality"
@@ -122,9 +130,9 @@
             @remove:parameter="handleRemoveParameter(id)"
           />
         </v-col>
-      </v-row>
+      </v-row> -->
     </search-fields-wrapper>
-    <search-map
+    <!-- <search-map
       site-overlay
       locality-overlay
       :items="items"
@@ -141,43 +149,83 @@
           @change:institution="handleInstitutionsUpdate"
         />
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-form>
 </template>
 
-<script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import { mapFields } from 'vuex-map-fields'
-
-import isEmpty from 'lodash/isEmpty'
-
+<script lang="ts">
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRefs,
+  useContext,
+  useFetch,
+} from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-import InputText from '~/components/input/InputText.vue'
-import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
-import InputRange from '~/components/input/InputRange.vue'
-import InputParameter from '~/components/input/InputParameter.vue'
-import SearchMap from '~/components/search/SearchMap.vue'
+// import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
+// import InputText from '~/components/input/InputText.vue'
+// import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
+// import InputRange from '~/components/input/InputRange.vue'
+// import InputParameter from '~/components/input/InputParameter.vue'
+// import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-export default {
+import FilterInputParameter from '~/components/filter/input/FilterInputParameter.vue'
+import { useFilter } from '~/composables/useFilter'
+export default defineComponent({
   name: 'SearchFormAnalyticalData',
   fetchOnServer: false,
   components: {
-    SearchInstitutionFilter,
-    InputRange,
-    InputAutocompleteStratigraphy,
-    InputText,
-    InputParameter,
+    // SearchInstitutionFilter,
+    // InputRange,
+    // InputAutocompleteStratigraphy,
+    // InputText,
+    // InputParameter,
     SearchFieldsWrapper,
     SearchActions,
-    SearchMap,
+    // SearchMap,
     InputSearch,
+    FilterInputParameter,
   },
-  async fetch() {
-    if (isEmpty(this.parameters)) {
-      const listParametersResponse =
-        await this.$services.sarvSolr.getResourceList('analysis_parameter', {
+  // async fetch() {
+  //   if (isEmpty(this.parameters)) {
+  //     const listParametersResponse =
+  //       await this.$services.sarvSolr.getResourceList('analysis_parameter', {
+  //         defaultParams: {
+  //           fq: 'is_null:false',
+  //         },
+  //         options: {
+  //           page: 1,
+  //           itemsPerPage: 1000,
+  //         },
+  //       })
+  //     this.setParameters({ parameters: listParametersResponse?.items })
+  //   }
+  // },
+  setup(_props, { emit }) {
+    const { $accessor, $services } = useContext()
+    const handleSearch = () => {
+      emit('update')
+    }
+    const handleReset = () => {
+      emit('reset')
+    }
+    const query = computed({
+      get: () => $accessor.search.analyticalData.query,
+      set: (val) => {
+        $accessor.search.analyticalData.setQuery(val)
+      },
+    })
+    const parameter = useFilter('analyticalData', 'parameter', handleSearch)
+
+    const state = reactive({
+      parameterSuggestions: [] as any[],
+    })
+    useFetch(async () => {
+      const listParametersResponse = await $services.sarvSolr.getResourceList(
+        'analysis_parameter',
+        {
           defaultParams: {
             fq: 'is_null:false',
           },
@@ -185,73 +233,51 @@ export default {
             page: 1,
             itemsPerPage: 1000,
           },
-        })
-      this.setParameters({ parameters: listParametersResponse?.items })
+        }
+      )
+      state.parameterSuggestions = listParametersResponse.items.map(
+        (parameter: any) => {
+          return {
+            ...parameter,
+            // Issue #930
+            parameter_index: parameter.parameter_index.replace(/\W/g, '_'),
+          }
+        }
+      )
+    })
+    return {
+      ...toRefs(state),
+      query,
+      parameter,
+      handleSearch,
+      handleReset,
     }
   },
-  computed: {
-    ...mapState('search/analytical_data', [
-      'filters',
-      'items',
-      'parameters',
-      'parameterFilters',
-    ]),
-    ...mapGetters('search/analytical_data', ['parameterList']),
-    ...mapGetters('search/analytical_data', ['hasActiveFilters']),
-    ...mapFields('search/analytical_data', {
-      locality: 'filters.locality.value',
-      depth: 'filters.depth.value',
-      stratigraphy: 'filters.stratigraphy.value',
-      lithostratigraphy: 'filters.lithostratigraphy.value',
-      analysis: 'filters.analysis.value',
-      method: 'filters.method.value',
-      lab: 'filters.lab.value',
-      agentAnalysed: 'filters.agentAnalysed.value',
-      reference: 'filters.reference.value',
-      dataset: 'filters.dataset.value',
-      stratigraphyBed: 'filters.stratigraphyBed.value',
-      rock: 'filters.rock.value',
-      sample: 'filters.sample.value',
-      project: 'filters.project.value',
-      query: 'query',
-    }),
-    ...mapFields('search', {
-      institution: 'globalFilters.institutions.value',
-      geoJSON: 'globalFilters.geoJSON.value',
-    }),
-  },
-  methods: {
-    isEmpty,
-    ...mapActions('search', ['resetFilters']),
-    ...mapActions('search/analytical_data', [
-      'searchAnalyticalData',
-      'setParameters',
-      'addParameterFilter',
-      'updateParameterFilter',
-      'removeParameterFilter',
-    ]),
-    ...mapActions('headers/analytical_data', ['removeHeader']),
-    handleReset() {
-      this.$emit('reset')
-    },
-    handleSearch() {
-      this.$emit('update')
-    },
-    handleMapUpdate() {
-      this.$emit('update')
-    },
-    handleInstitutionsUpdate(newInstitutions) {
-      this.institution = newInstitutions
-      this.$emit('update')
-    },
-    handleParameterUpdate(e, id) {
-      this.updateParameterFilter({ id, filter: e })
-    },
-    handleRemoveParameter(id) {
-      this.removeParameterFilter(id)
-      // OLD
-      // removeActiveListParameter({ filterName: entity.id, index })
-    },
-  },
-}
+  // methods: {
+  //   ...mapActions('search', ['resetFilters']),
+  //   ...mapActions('search/analytical_data', [
+  //     'searchAnalyticalData',
+  //     'setParameters',
+  //     'addParameterFilter',
+  //     'updateParameterFilter',
+  //     'removeParameterFilter',
+  //   ]),
+  //   ...mapActions('headers/analytical_data', ['removeHeader']),
+  //   handleMapUpdate() {
+  //     this.$emit('update')
+  //   },
+  //   handleInstitutionsUpdate(newInstitutions) {
+  //     this.institution = newInstitutions
+  //     this.$emit('update')
+  //   },
+  //   handleParameterUpdate(e, id) {
+  //     this.updateParameterFilter({ id, filter: e })
+  //   },
+  //   handleRemoveParameter(id) {
+  //     this.removeParameterFilter(id)
+  //     // OLD
+  //     // removeActiveListParameter({ filterName: entity.id, index })
+  //   },
+  // },
+})
 </script>

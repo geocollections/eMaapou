@@ -1,7 +1,12 @@
 import { SearchModuleState } from '../types'
 import { ANALYTICAL_DATA } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-import { ObjectFilter, RangeFilter, TextFilter } from '~/types/filters'
+import {
+  ObjectFilter,
+  ParameterFilter,
+  RangeFilter,
+  TextFilter,
+} from '~/types/filters'
 
 export type AnalyticalDataFilters = {
   locality: TextFilter
@@ -18,6 +23,7 @@ export type AnalyticalDataFilters = {
   rock: TextFilter
   sample: TextFilter
   project: TextFilter
+  parameter: ParameterFilter
 }
 
 type AnalyticalDataSearchModuleState =
@@ -25,14 +31,14 @@ type AnalyticalDataSearchModuleState =
     defaultParameters: string[]
     parameters: { [K: string]: any }
     parameterFilters: {
-      byIds: { [K: string]: any }
+      byId: { [K: string]: any }
       allIds: string[]
     }
   }
 
 export const initState = (): AnalyticalDataSearchModuleState => {
   return {
-    name: 'analytical_data',
+    name: 'analyticalData',
     items: [],
     count: 0,
     options: ANALYTICAL_DATA.options,
@@ -40,6 +46,10 @@ export const initState = (): AnalyticalDataSearchModuleState => {
     useInstitutions: true,
     query: '',
     filters: {
+      parameter: {
+        value: [{ value: [null, null], parameter: null }],
+        type: FilterType.Parameter,
+      },
       locality: {
         value: '',
         type: FilterType.Text,
@@ -157,7 +167,7 @@ export const initState = (): AnalyticalDataSearchModuleState => {
     defaultParameters: ['CaO_pct', 'MgO_pct', 'SiO2_pct', 'Al2O3_pct'],
     parameters: {},
     parameterFilters: {
-      byIds: {},
+      byId: {},
       allIds: [],
     },
   }

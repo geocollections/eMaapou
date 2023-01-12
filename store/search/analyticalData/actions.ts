@@ -9,7 +9,7 @@ export default {
   ...actionTree(
     { state, getters, mutations },
     {
-      addParameterFilter({ commit, dispatch, getters }) {
+      addParameterFilter({ commit, getters }): void {
         const initParameter = getters.parameterList()[0]
 
         const id = uniqueId('parameter_')
@@ -26,32 +26,39 @@ export default {
         }
 
         commit('ADD_PARAMETER_FILTER', filter)
-
-        dispatch(
-          'headers/toggleHeader',
-          {
-            module: 'analytical_data',
-            headerId: initParameter.value,
-          },
-          { root: true }
-        )
+        this.app.$accessor.headers.toggleHeader({
+          module: 'analytical_data',
+          headerId: initParameter.value,
+        })
+        // dispatch(
+        //   'headers/toggleHeader',
+        //   {
+        //     module: 'analytical_data',
+        //     headerId: initParameter.value,
+        //   },
+        //   { root: true }
+        // )
       },
-      updateParameterFilter({ commit, dispatch }, { id, filter }) {
+      updateParameterFilter({ commit }, { id, filter }): void {
         commit('UPDATE_PARAMETER_FILTER', { id, filter })
 
-        dispatch(
-          'headers/toggleHeader',
-          {
-            module: 'analytical_data',
-            headerId: filter.fields[0],
-          },
-          { root: true }
-        )
+        this.app.$accessor.headers.toggleHeader({
+          module: 'analytical_data',
+          headerId: filter.fields[0],
+        })
+        // dispatch(
+        //   'headers/toggleHeader',
+        //   {
+        //     module: 'analytical_data',
+        //     headerId: filter.fields[0],
+        //   },
+        //   { root: true }
+        // )
       },
       removeParameterFilter({ commit }, id) {
         commit('REMOVE_PARAMETER_FILTER', id)
       },
-      setParameters({ commit, dispatch }, { parameters }) {
+      setParameters({ commit }, { parameters }): void {
         let parametersNew = {}
         if (parameters && parameters.length > 0) {
           parametersNew = parameters.reduce((prev: any, parameter: any) => {
@@ -67,16 +74,20 @@ export default {
 
         commit('SET_PARAMETERS', parametersNew)
 
-        dispatch(
-          'headers/addParameterHeaders',
-          {
-            parameters: parametersNew,
-          },
-          { root: true }
-        )
-        dispatch('initDefaultParameters')
+        this.app.$accessor.headers.addParameterHeaders({
+          parameters: parametersNew,
+        })
+
+        // dispatch(
+        //   'headers/addParameterHeaders',
+        //   {
+        //     parameters: parametersNew,
+        //   },
+        //   { root: true }
+        // )
+        // dispatch('initDefaultParameters')
       },
-      initDefaultParameters({ commit, state, dispatch }) {
+      initDefaultParameters({ commit, state }): void {
         state.defaultParameters.forEach((parameterId) => {
           const id = uniqueId('parameter_')
           const parameter = state.parameters[parameterId]
@@ -91,14 +102,18 @@ export default {
             isText: false,
           }
           commit('ADD_PARAMETER_FILTER', filter)
-          dispatch(
-            'headers/toggleHeader',
-            {
-              module: 'analytical_data',
-              headerId: parameter.value,
-            },
-            { root: true }
-          )
+          this.app.$accessor.headers.toggleHeader({
+            module: 'analytical_data',
+            headerId: parameter.value,
+          })
+          // dispatch(
+          //   'headers/toggleHeader',
+          //   {
+          //     module: 'analytical_data',
+          //     headerId: parameter.value,
+          //   },
+          //   { root: true }
+          // )
         })
       },
     }

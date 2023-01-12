@@ -7,6 +7,7 @@ import * as Wkt from 'wicket'
 import earcut from 'earcut'
 import type { NuxtAxiosInstance } from '@nuxtjs/axios'
 
+import isNull from 'lodash/isNull'
 import type { IOptions } from '.'
 
 import { FilterType, LookupType } from '~/types/enums'
@@ -210,6 +211,16 @@ const buildSolrParameters = (filters: { [key: string]: Filter }) => {
             .join(' OR ')
 
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+        }
+        case FilterType.Parameter: {
+          const solrFilter = filter.value
+            .filter((val) => !isNull(val.parameter))
+            .map((val) => {
+              const start = isNil(val.value[0]) ? '*' : val.value[0]
+              const end = isNil(val.value[1]) ? '*' : val.value[1]
+              return `${val.parameter}:[${start} TO ${end}]`
+            })
+          return { ...prev, fq: [...prev.fq, ...solrFilter] }
         }
         case FilterType.RangeAlt: {
           const solrFilter = filter.value

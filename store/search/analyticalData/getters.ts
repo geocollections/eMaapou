@@ -14,7 +14,7 @@ export default getterTree(state, {
       // so that it can be seen on in the list
 
       let usedParameters = state.parameterFilters.allIds.map(
-        (id) => state.parameterFilters.byIds[id].fields[0]
+        (id) => state.parameterFilters.byId[id].fields[0]
       )
 
       if (filter) {
