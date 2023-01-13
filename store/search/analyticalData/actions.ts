@@ -59,23 +59,10 @@ export default {
         commit('REMOVE_PARAMETER_FILTER', id)
       },
       setParameters({ commit }, { parameters }): void {
-        let parametersNew = {}
-        if (parameters && parameters.length > 0) {
-          parametersNew = parameters.reduce((prev: any, parameter: any) => {
-            return {
-              ...prev,
-              [parameter.parameter_index]: {
-                value: parameter.parameter_index,
-                text: parameter.parameter,
-              },
-            }
-          }, {})
-        }
-
-        commit('SET_PARAMETERS', parametersNew)
+        commit('SET_PARAMETERS', parameters)
 
         this.app.$accessor.headers.addParameterHeaders({
-          parameters: parametersNew,
+          parameters,
         })
 
         // dispatch(

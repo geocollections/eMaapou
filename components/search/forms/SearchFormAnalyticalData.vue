@@ -161,6 +161,7 @@ import {
   toRefs,
   useContext,
   useFetch,
+  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -205,6 +206,7 @@ export default defineComponent({
   // },
   setup(_props, { emit }) {
     const { $accessor, $services } = useContext()
+    const route = useRoute()
     const handleSearch = () => {
       emit('update')
     }
@@ -217,7 +219,12 @@ export default defineComponent({
         $accessor.search.analyticalData.setQuery(val)
       },
     })
-    const parameter = useFilter('analyticalData', 'parameter', handleSearch)
+    const parameter = useFilter('analyticalData', 'parameter', () => {
+      handleSearch()
+      $accessor.headers.setAnalyticalDataParameterHeader({
+        options: $accessor.search.analyticalData.options,
+      })
+    })
 
     const state = reactive({
       parameterSuggestions: [] as any[],
@@ -235,15 +242,34 @@ export default defineComponent({
           },
         }
       )
-      state.parameterSuggestions = listParametersResponse.items.map(
-        (parameter: any) => {
+      const parameters = listParametersResponse.items.reduce(
+        (prev: any, parameter: any) => {
+          const correctParameterIndex = parameter.parameter_index.replace(
+            /\W/g,
+            '_'
+          )
           return {
-            ...parameter,
-            // Issue #930
-            parameter_index: parameter.parameter_index.replace(/\W/g, '_'),
+            ...prev,
+            [correctParameterIndex]: {
+              value: correctParameterIndex,
+              text: parameter.parameter,
+            },
           }
-        }
+        },
+        {}
       )
+      $accessor.search.analyticalData.setParameters({ parameters })
+
+      if (route.value.query.parameter) {
+        for (const parameterFilter of $accessor.search.analyticalData.filters
+          .parameter.value) {
+          $accessor.headers.showHeader({
+            module: 'analytical_data',
+            headerId: parameterFilter.parameter,
+          })
+        }
+      }
+      state.parameterSuggestions = Object.values(parameters)
     })
     return {
       ...toRefs(state),
