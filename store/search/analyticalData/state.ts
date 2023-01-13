@@ -2,17 +2,18 @@ import { SearchModuleState } from '../types'
 import { ANALYTICAL_DATA } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 import {
-  ObjectFilter,
+  GeomFilter,
+  ListIdsFilter,
   ParameterFilter,
   RangeFilter,
   TextFilter,
 } from '~/types/filters'
 
 export type AnalyticalDataFilters = {
-  locality: TextFilter
+  locality: ListIdsFilter
   depth: RangeFilter
-  stratigraphy: ObjectFilter
-  lithostratigraphy: ObjectFilter
+  stratigraphyHierarchy: ListIdsFilter
+  lithostratigraphyHierarchy: ListIdsFilter
   analysis: TextFilter
   method: TextFilter
   lab: TextFilter
@@ -24,6 +25,7 @@ export type AnalyticalDataFilters = {
   sample: TextFilter
   project: TextFilter
   parameter: ParameterFilter
+  map: GeomFilter
 }
 
 type AnalyticalDataSearchModuleState =
@@ -51,10 +53,13 @@ export const initState = (): AnalyticalDataSearchModuleState => {
         type: FilterType.Parameter,
       },
       locality: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.locality',
+        // TODO: this should probably be divided into separate locality and site filters
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        valueField: 'id',
+        valueType: 'number',
         fields: [
           'locality',
           'locality_en',
@@ -66,24 +71,26 @@ export const initState = (): AnalyticalDataSearchModuleState => {
       depth: {
         type: FilterType.Range,
         value: [null, null],
-        label: 'analyticalData.depth',
+        label: '',
         placeholders: ['analyticalData.depthMin', 'analyticalData.depthMin'],
         fields: ['depth', 'depth_interval'],
       },
-      stratigraphy: {
-        value: null,
-        type: FilterType.Object,
-        searchField: 'hierarchy_string',
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.stratigraphy',
+      stratigraphyHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+        lookupType: 'startswith',
+        label: '',
         fields: ['stratigraphy_hierarchy', 'age_hierarchy'],
       },
-      lithostratigraphy: {
-        value: null,
-        type: FilterType.Object,
-        searchField: 'hierarchy_string',
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.lithostratigraphy',
+      lithostratigraphyHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        valueField: 'hierarchy_string',
+        valueType: 'string',
+        lookupType: 'startswith',
+        label: '',
         fields: ['lithostratigraphy_hierarchy'],
       },
       analysis: {
@@ -162,6 +169,12 @@ export const initState = (): AnalyticalDataSearchModuleState => {
         lookUpType: LookupType.Equals,
         label: 'analyticalData.project',
         fields: ['project_name', 'project_name_en'],
+      },
+      map: {
+        type: FilterType.Geom,
+        value: null,
+        label: '',
+        fields: ['latlong'],
       },
     },
     defaultParameters: ['CaO_pct', 'MgO_pct', 'SiO2_pct', 'Al2O3_pct'],

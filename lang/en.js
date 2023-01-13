@@ -1078,7 +1078,8 @@ export default {
     localityName: 'Name',
     drillcoreName: 'Name',
     datasetName: 'Name',
-    parameter: 'Parameter'
+    parameter: 'Parameter',
+    lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy'
   },
   intervals: {
     default: {

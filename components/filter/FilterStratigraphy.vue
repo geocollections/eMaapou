@@ -1,6 +1,6 @@
 <template>
   <filter-input-autocomplete
-    :title="$t('filters.stratigraphyHierarchy').toString()"
+    :title="label"
     :query-field="$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'"
     :query-function="querySuggestions"
     :value="value"
@@ -26,16 +26,33 @@ export default defineComponent({
       type: Array as PropType<any[]>,
       required: true,
     },
+    label: {
+      type: String,
+      default() {
+        return this.$i18n.t('filters.stratigraphyHierarchy').toString()
+      },
+    },
+    litho: {
+      type: Boolean,
+      default: false,
+    },
+    chrono: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup() {
+  setup(props) {
     const { $axios } = useContext()
 
     const querySuggestions = (
       search: string,
       options = { rows: 10, start: 0 }
     ) => {
+      let typeFilter = ''
+      if (props.litho) typeFilter = '&fq=type:2'
+      else if (props.chrono) typeFilter = '&fq=type:1'
       return $axios.$get(
-        `https://api.geoloogia.info/solr/stratigraphy?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
+        `https://api.geoloogia.info/solr/stratigraphy?q=${search}${typeFilter}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
       )
     }
     return { querySuggestions }

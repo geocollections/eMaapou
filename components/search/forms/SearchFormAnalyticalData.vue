@@ -6,10 +6,29 @@
     <search-fields-wrapper>
       <v-card class="mt-3" flat tile color="transparent">
         <v-expansion-panels accordion flat tile multiple>
+          <filter-input-range
+            v-model="depth"
+            :label="$t('filters.depth').toString()"
+            interval-labels="intervals.depth"
+            :step="0.01"
+          />
           <filter-input-parameter
             v-model="parameter"
             :parameters="parameterSuggestions"
           />
+          <filter-stratigraphy v-model="stratigraphyHierarchy" chrono />
+          <filter-stratigraphy
+            v-model="lithostratigraphyHierarchy"
+            litho
+            :label="$t('filters.lithostratigraphyHierarchy').toString()"
+          />
+          <filter-map
+            v-model="map"
+            locality-overlay
+            site-overlay
+            :items="$accessor.search.analyticalData.items"
+          />
+          <filter-institution v-model="institutions" />
         </v-expansion-panels>
       </v-card>
       <!-- <v-row no-gutters>
@@ -173,7 +192,12 @@ import SearchActions from '../SearchActions.vue'
 // import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputParameter from '~/components/filter/input/FilterInputParameter.vue'
+import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
+import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
+import FilterMap from '~/components/filter/FilterMap.vue'
+import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import { useFilter } from '~/composables/useFilter'
+import { useHydrateFilterStratigraphy } from '~/composables/useHydrateFilter'
 export default defineComponent({
   name: 'SearchFormAnalyticalData',
   fetchOnServer: false,
@@ -188,6 +212,10 @@ export default defineComponent({
     // SearchMap,
     InputSearch,
     FilterInputParameter,
+    FilterInputRange,
+    FilterStratigraphy,
+    FilterMap,
+    FilterInstitution,
   },
   // async fetch() {
   //   if (isEmpty(this.parameters)) {
@@ -225,10 +253,29 @@ export default defineComponent({
         options: $accessor.search.analyticalData.options,
       })
     })
-
+    const depth = useFilter('analyticalData', 'depth', handleSearch)
+    const stratigraphyHierarchy = useFilter(
+      'analyticalData',
+      'stratigraphyHierarchy',
+      handleSearch
+    )
+    const lithostratigraphyHierarchy = useFilter(
+      'analyticalData',
+      'lithostratigraphyHierarchy',
+      handleSearch
+    )
+    const map = useFilter('analyticalData', 'map', handleSearch)
+    const institutions = computed({
+      get: () => $accessor.search.globalFilters.institutions.value,
+      set: (val) => {
+        $accessor.search.setInstitutionsFilter(val)
+        handleSearch()
+      },
+    })
     const state = reactive({
       parameterSuggestions: [] as any[],
     })
+    const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
       const listParametersResponse = await $services.sarvSolr.getResourceList(
         'analysis_parameter',
@@ -269,12 +316,36 @@ export default defineComponent({
           })
         }
       }
+
+      if (route.value.query.stratigraphyHierarchy) {
+        stratigraphyHierarchy.value = (
+          await hydrateFilterStratigraphy(
+            (route.value.query.stratigraphyHierarchy as string)
+              .split(',')
+              .map((encodedValue) => decodeURIComponent(encodedValue))
+          )
+        ).data.response.docs
+      }
+      if (route.value.query.lithostratigraphyHierarchy) {
+        lithostratigraphyHierarchy.value = (
+          await hydrateFilterStratigraphy(
+            (route.value.query.lithostratigraphyHierarchy as string)
+              .split(',')
+              .map((encodedValue) => decodeURIComponent(encodedValue))
+          )
+        ).data.response.docs
+      }
       state.parameterSuggestions = Object.values(parameters)
     })
     return {
       ...toRefs(state),
       query,
       parameter,
+      depth,
+      stratigraphyHierarchy,
+      lithostratigraphyHierarchy,
+      map,
+      institutions,
       handleSearch,
       handleReset,
     }
