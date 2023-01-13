@@ -1080,7 +1080,8 @@ export default {
     localityName: 'Nimi',
     drillcoreName: 'Nimi',
     datasetName: 'Nimi',
-    parameter: 'Parameeter'
+    parameter: 'Parameeter',
+    lithostratigraphyHierarchy: 'Litostratigraafia hierarhia'
   },
   intervals: {
     default: {

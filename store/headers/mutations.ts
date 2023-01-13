@@ -1,6 +1,6 @@
 import { mutationTree } from 'typed-vuex'
+import uniq from 'lodash/uniq'
 import state, { HeadersState } from './state'
-
 export default mutationTree(state, {
   TOGGLE_HEADER(
     state,
@@ -25,6 +25,12 @@ export default mutationTree(state, {
       ...state.analytical_data.byIds,
       ...parameters,
     }
-    state.analytical_data.allIds = [...state.analytical_data.allIds, ...ids]
+    // NOTE: `uniq` is added currently because the search form from where the parameter headers are added is loaded twice, once for mobile and once for desktop.
+    // Therefore the headers appear twice if `uniq` is omitted.
+    // Could be removed after the search form rendering is redone, so that it renders only once.
+    state.analytical_data.allIds = uniq([
+      ...state.analytical_data.allIds,
+      ...ids,
+    ])
   },
 })

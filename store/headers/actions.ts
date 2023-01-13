@@ -10,27 +10,49 @@ export default actionTree(
     showHeader({ commit }, { module, headerId }) {
       commit('SHOW_HEADER', { module, headerId })
     },
-    async resetHeaders({ commit, dispatch, rootState }, { module, options }) {
+    async resetHeaders(
+      { commit, dispatch },
+      { module, options }
+    ): Promise<void> {
       const { initState } = await import(`./state`)
 
       const initHeaders = initState()[module as keyof typeof initState]
 
+      // if (module !== 'analytical_data')
       commit('RESET_HEADERS', { module, initHeaders })
 
       if (module === 'analytical_data') {
-        dispatch('addParameterHeaders', {
-          parameters: rootState.search.analytical_data.parameters,
+        this.app.$accessor.headers.addParameterHeaders({
+          parameters: this.app.$accessor.search.analyticalData.parameters,
         })
 
-        Object.values(
-          rootState.search.analytical_data.parameterFilters.byId
-        ).forEach((filter: any) => {
-          dispatch('showHeader', { module, headerId: filter.fields[0] })
-        })
+        this.app.$accessor.search.analyticalData.filters.parameter.value.forEach(
+          (filter: any) => {
+            dispatch('showHeader', { module, headerId: filter.parameter })
+          }
+        )
       }
 
       options.sortBy.forEach((headerId: string) => {
         dispatch('showHeader', { module, headerId })
+      })
+    },
+    setAnalyticalDataParameterHeader({ dispatch }, { options }): void {
+      this.app.$accessor.headers.addParameterHeaders({
+        parameters: this.app.$accessor.search.analyticalData.parameters,
+      })
+
+      this.app.$accessor.search.analyticalData.filters.parameter.value.forEach(
+        (filter: any) => {
+          if (filter.parameter !== null)
+            dispatch('showHeader', {
+              module: 'analytical_data',
+              headerId: filter.parameter,
+            })
+        }
+      )
+      options.sortBy.forEach((headerId: string) => {
+        dispatch('showHeader', { module: 'analytical_data', headerId })
       })
     },
     addParameterHeaders({ commit }, { parameters }: { parameters: any }) {

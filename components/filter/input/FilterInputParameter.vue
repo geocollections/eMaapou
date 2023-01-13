@@ -53,15 +53,10 @@
               :value="v.parameter"
               hide-details
               dense
-              :no-filter="true"
               :placeholder="$t('filters.parameter')"
-              item-value="parameter_index"
-              item-text="parameter"
               persistent-placeholder
               :items="parameters"
               @input="handleParameter($event, i)"
-              @keydown.enter.prevent.stop="handleEnter"
-              @blur="handleEnter"
             >
             </v-autocomplete>
           </v-col>
@@ -211,6 +206,7 @@ export default defineComponent({
     }
     const handleParameter = (value: IValue['parameter'], i: number) => {
       state.internalValue[i].parameter = value
+      emit('input', state.internalValue)
     }
 
     const handleAdd = () => {
@@ -257,7 +253,7 @@ export default defineComponent({
     const parameterIndex = computed(() => {
       return props.parameters.reduce(
         (prev: any, param: any): { [K: string]: string } => {
-          return { ...prev, [param.parameter_index]: param.parameter }
+          return { ...prev, [param.value]: param.text }
         },
         {}
       ) as { [K: string]: string }
@@ -337,5 +333,8 @@ export default defineComponent({
   padding-right: 0px;
   padding-left: 0px;
   padding-bottom: 8px;
+}
+.checkbox {
+  accent-color: var(--v-accent-base);
 }
 </style>
