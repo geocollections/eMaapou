@@ -1079,7 +1079,9 @@ export default {
     drillcoreName: 'Name',
     datasetName: 'Name',
     parameter: 'Parameter',
-    lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy'
+    lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy',
+    site: 'Site',
+    dataset: 'Dataset',
   },
   intervals: {
     default: {

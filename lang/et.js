@@ -1081,7 +1081,9 @@ export default {
     drillcoreName: 'Nimi',
     datasetName: 'Nimi',
     parameter: 'Parameeter',
-    lithostratigraphyHierarchy: 'Litostratigraafia hierarhia'
+    lithostratigraphyHierarchy: 'Litostratigraafia hierarhia',
+    site: 'Uuringupunkt',
+    dataset: 'Andmeset'
   },
   intervals: {
     default: {

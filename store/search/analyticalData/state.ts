@@ -11,19 +11,20 @@ import {
 
 export type AnalyticalDataFilters = {
   locality: ListIdsFilter
+  site: ListIdsFilter
   depth: RangeFilter
   stratigraphyHierarchy: ListIdsFilter
   lithostratigraphyHierarchy: ListIdsFilter
   analysis: TextFilter
-  method: TextFilter
-  lab: TextFilter
+  method: ListIdsFilter
+  lab: ListIdsFilter
   agentAnalysed: TextFilter
-  reference: TextFilter
-  dataset: TextFilter
+  reference: ListIdsFilter
+  dataset: ListIdsFilter
   stratigraphyBed: TextFilter
   rock: TextFilter
-  sample: TextFilter
-  project: TextFilter
+  sample: ListIdsFilter
+  project: ListIdsFilter
   parameter: ParameterFilter
   map: GeomFilter
 }
@@ -53,20 +54,22 @@ export const initState = (): AnalyticalDataSearchModuleState => {
         type: FilterType.Parameter,
       },
       locality: {
-        // TODO: this should probably be divided into separate locality and site filters
         value: [],
         type: FilterType.ListIds,
         lookupType: 'none',
         label: '',
         valueField: 'id',
         valueType: 'number',
-        fields: [
-          'locality',
-          'locality_en',
-          'locality_id_s',
-          'site',
-          'site_id_s',
-        ],
+        fields: ['locality_id'],
+      },
+      site: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        valueField: 'id',
+        valueType: 'number',
+        fields: ['site_id'],
       },
       depth: {
         type: FilterType.Range,
@@ -101,18 +104,22 @@ export const initState = (): AnalyticalDataSearchModuleState => {
         fields: ['id'],
       },
       method: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.method',
-        fields: ['analysis_method', 'analysis_method_en', 'method_details'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        valueField: 'id',
+        valueType: 'number',
+        fields: ['method_id'],
       },
       lab: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.lab',
-        fields: ['lab', 'lab_en'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        valueField: 'id',
+        valueType: 'number',
+        label: '',
+        fields: ['lab_id'],
       },
       agentAnalysed: {
         value: '',
@@ -122,18 +129,22 @@ export const initState = (): AnalyticalDataSearchModuleState => {
         fields: ['agent_analysed', 'agent_analysed_free'],
       },
       reference: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.reference',
-        fields: ['reference', 'reference_id_s'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['reference_id'],
+        valueField: 'id',
+        valueType: 'number',
       },
       dataset: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.dataset',
-        fields: ['dataset_name', 'dataset_id_s'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        valueField: 'id',
+        valueType: 'number',
+        fields: ['dataset_id'],
       },
       stratigraphyBed: {
         value: '',
@@ -157,18 +168,22 @@ export const initState = (): AnalyticalDataSearchModuleState => {
         fields: ['rock', 'rock_en', 'rock_txt', 'rock_en_txt', 'rock_id_s'],
       },
       sample: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'analyticalData.sample',
-        fields: ['sample_id_s', 'sample_number', 'sample_type'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['sample_id'],
+        valueField: 'id',
+        valueType: 'number',
       },
       project: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Equals,
-        label: 'analyticalData.project',
-        fields: ['project_name', 'project_name_en'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        valueField: 'id',
+        valueType: 'number',
+        fields: ['project_id'],
       },
       map: {
         type: FilterType.Geom,

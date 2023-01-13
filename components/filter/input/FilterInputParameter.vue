@@ -218,6 +218,7 @@ export default defineComponent({
     const handleRemove = (i: number) => {
       if (state.internalValue.length <= 1) {
         state.internalValue = [{ parameter: null, value: [null, null] }]
+        emit('input', state.internalValue)
         return
       }
       const cloneItems = cloneDeep(state.internalValue)
