@@ -1,6 +1,6 @@
 <template>
   <filter-input-autocomplete
-    :title="label"
+    :title="labelComputed"
     :query-field="$i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'"
     :query-function="querySuggestions"
     :value="value"
@@ -16,7 +16,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  useContext,
+} from '@nuxtjs/composition-api'
 import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
   name: 'FilterStratigraphy',
@@ -28,9 +33,7 @@ export default defineComponent({
     },
     label: {
       type: String,
-      default() {
-        return this.$i18n.t('filters.stratigraphyHierarchy').toString()
-      },
+      default: '',
     },
     litho: {
       type: Boolean,
@@ -42,7 +45,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { $axios } = useContext()
+    const { $axios, i18n } = useContext()
 
     const querySuggestions = (
       search: string,
@@ -55,7 +58,12 @@ export default defineComponent({
         `https://api.geoloogia.info/solr/stratigraphy?q=${search}${typeFilter}&rows=${options.rows}&start=${options.start}&fl=id,hierarchy_string,stratigraphy,stratigraphy_en`
       )
     }
-    return { querySuggestions }
+    const labelComputed = computed(() => {
+      if (props.label.length < 1)
+        return i18n.t('filters.stratigraphyHierarchy').toString()
+      return props.label
+    })
+    return { querySuggestions, labelComputed }
   },
 })
 </script>
