@@ -3,6 +3,7 @@
     app
     dark
     clipped-right
+    clipped-left
     dense
     :elevation="getRouteBaseName() === 'index' ? 0 : 4"
     :absolute="getRouteBaseName() === 'index'"
@@ -171,7 +172,7 @@
       >
         <input-search
           v-model="query"
-          input-class="rounded-r-0 montserrat"
+          input-class="rounded-l rounded-r-0 montserrat"
           background-color="white"
           dense
           flat

@@ -9,7 +9,10 @@
     <div
       v-if="value !== null"
       class="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <div class="d-flex py-1 px-2">
         <span>
@@ -31,7 +34,10 @@
       <div
         v-show="show"
         class="pa-0"
-        style="border-bottom: 1px solid lightgray !important"
+        style="
+          border-bottom: 1px solid lightgray !important;
+          border-right: 1px solid lightgray !important;
+        "
       >
         <map-search
           v-bind="$attrs"

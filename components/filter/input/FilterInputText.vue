@@ -9,7 +9,10 @@
     <div
       v-if="selectedItems.length > 0"
       class="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <div
         v-for="(item, i) in selectedItems"
@@ -38,7 +41,10 @@
     <v-expansion-panel-content
       class="pt-1"
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <v-text-field
         v-model="internalValue"

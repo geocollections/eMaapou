@@ -10,6 +10,26 @@ export const useHydrateFilterLocality = () => {
     )
   }
 }
+export const useHydrateFilterSite = () => {
+  const { $axios } = useContext()
+
+  return (selectedIds: number[]) => {
+    const idQuery = selectedIds.join(' ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/site?q=id:(${idQuery})&rows=${selectedIds.length}&fl=id,name`
+    )
+  }
+}
+export const useHydrateFilterDataset = () => {
+  const { $axios } = useContext()
+
+  return (selectedIds: number[]) => {
+    const idQuery = selectedIds.join(' ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/dataset?q=id:(${idQuery})&rows=${selectedIds.length}&fl=id,title`
+    )
+  }
+}
 
 export const useHydrateFilterReference = () => {
   const { $axios } = useContext()
@@ -17,6 +37,18 @@ export const useHydrateFilterReference = () => {
   return (selectedReferences: string[]) => {
     const query = selectedReferences
       .map((reference) => `reference:"${reference}"`)
+      .join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/reference?q=(${query})&rows=${selectedReferences.length}&fl=id,reference,title`
+    )
+  }
+}
+export const useHydrateFilterReferenceId = () => {
+  const { $axios } = useContext()
+
+  return (selectedReferences: number[]) => {
+    const query = selectedReferences
+      .map((reference) => `id:"${reference}"`)
       .join(' OR ')
     return $axios.get(
       `https://api.geoloogia.info/solr/reference?q=(${query})&rows=${selectedReferences.length}&fl=id,reference,title`

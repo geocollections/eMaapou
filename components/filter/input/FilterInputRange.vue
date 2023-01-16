@@ -9,7 +9,10 @@
     <div
       v-if="value[0] !== null || value[1] !== null"
       class="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <div class="d-flex py-1 px-2">
         <span>
@@ -28,7 +31,10 @@
     <v-expansion-panel-content
       class="pt-1"
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <v-row>
         <v-col cols="6">

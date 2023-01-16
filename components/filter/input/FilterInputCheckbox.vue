@@ -1,6 +1,7 @@
 <template>
   <div style="flex: 1 0 100%; max-width: 100%; position: relative">
     <v-checkbox
+      class="ml-2"
       hide-details
       color="accent"
       :input-value="value"

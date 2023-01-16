@@ -110,7 +110,10 @@ export default {
     accept: 'Accept',
     depth: 'Depth',
     render: 'Render',
-    loading: 'Loading'
+    loading: 'Loading',
+    hideFilters: 'Hide filters',
+    showFilters: 'Show filters'
+
   },
   link: {
     github: 'GitHub',
@@ -1079,7 +1082,9 @@ export default {
     drillcoreName: 'Name',
     datasetName: 'Name',
     parameter: 'Parameter',
-    lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy'
+    lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy',
+    site: 'Site',
+    dataset: 'Dataset',
   },
   intervals: {
     default: {

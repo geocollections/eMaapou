@@ -1,5 +1,5 @@
 <template>
-  <v-footer padless color="tertiary">
+  <div class="tertiary">
     <v-container :fluid="$vuetify.breakpoint.lgAndDown">
       <v-row no-gutters>
         <v-col cols="12" lg="auto">
@@ -157,7 +157,7 @@
         </v-row>
       </v-container>
     </v-container>
-  </v-footer>
+  </div>
 </template>
 
 <script>

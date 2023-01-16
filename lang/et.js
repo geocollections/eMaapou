@@ -111,7 +111,9 @@ export default {
     accept: 'Nõustun',
     depth: 'Sügavus',
     render: 'Väljund',
-    loading: 'Laadimine'
+    loading: 'Laadimine',
+    hideFilters: 'Peida filtrid',
+    showFilters: 'Ava filtrid'
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -1081,7 +1083,9 @@ export default {
     drillcoreName: 'Nimi',
     datasetName: 'Nimi',
     parameter: 'Parameeter',
-    lithostratigraphyHierarchy: 'Litostratigraafia hierarhia'
+    lithostratigraphyHierarchy: 'Litostratigraafia hierarhia',
+    site: 'Uuringupunkt',
+    dataset: 'Andmeset'
   },
   intervals: {
     default: {

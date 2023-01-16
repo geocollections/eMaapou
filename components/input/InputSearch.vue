@@ -5,6 +5,7 @@
       :value="value"
       color="accent"
       light
+      class="rounded-0"
       :placeholder="placeholder"
       single-line
       hide-details
