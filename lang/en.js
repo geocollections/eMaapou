@@ -1085,6 +1085,8 @@ export default {
     lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy',
     site: 'Site',
     dataset: 'Dataset',
+    people: 'People',
+    tags: 'Keywords'
   },
   intervals: {
     default: {

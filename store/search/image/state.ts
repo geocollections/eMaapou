@@ -1,21 +1,28 @@
 import { SearchModuleState } from '../types'
 import { IMAGE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
-import { RangeFilter, TextFilter } from '~/types/filters'
+import {
+  GeomFilter,
+  ListIdsFilter,
+  ListTextFilter,
+  RangeFilter,
+  TextFilter,
+} from '~/types/filters'
 
 export type ImageFilters = {
-  locality: TextFilter
-  people: TextFilter
-  tags: TextFilter
+  locality: ListIdsFilter
+  people: ListTextFilter
+  tags: ListTextFilter
   country: TextFilter
   date: RangeFilter
   dateFree: TextFilter
   imageNumber: TextFilter
   author: TextFilter
   imageSize: TextFilter
+  map: GeomFilter
 }
 type ImageSearchModuleState = SearchModuleState<ImageFilters> & {
-  currentView: string // TODO: this can/should be a enum
+  currentView: string // TODO: this can/should be a enum/string union
   persistantFilters: {
     [K: string]: any
   }
@@ -33,24 +40,26 @@ export const initState = (): ImageSearchModuleState => {
     query: '',
     filters: {
       locality: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'photo.locality',
-        fields: ['locality', 'locality_en'],
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['locality_id'],
+        valueField: 'id',
+        valueType: 'number',
       },
       people: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'photo.people',
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'contains',
+        label: '',
         fields: ['image_people'],
       },
       tags: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
-        label: 'photo.tags',
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'contains',
+        label: '',
         fields: ['tags'],
       },
       country: {
@@ -101,6 +110,12 @@ export const initState = (): ImageSearchModuleState => {
         lookUpType: LookupType.GreaterThan,
         label: 'photo.size',
         fields: ['image_width', 'image_height'],
+      },
+      map: {
+        type: FilterType.Geom,
+        value: null,
+        label: '',
+        fields: ['latlong'],
       },
     },
     // NOTE: Because this filter does not ever change, it was separated from the rest.

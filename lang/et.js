@@ -1085,7 +1085,9 @@ export default {
     parameter: 'Parameeter',
     lithostratigraphyHierarchy: 'Litostratigraafia hierarhia',
     site: 'Uuringupunkt',
-    dataset: 'Andmeset'
+    dataset: 'Andmeset',
+    people: 'Inimesed',
+    tags: 'Märksõnad'
   },
   intervals: {
     default: {
