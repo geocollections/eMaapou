@@ -21,7 +21,7 @@
     </template>
 
     <template #result>
-      <div class="py-1 pl-2 text-h6">
+      <div class="py-1 text-h6">
         {{
           $accessor.search.specimen.count
             ? $tc('common.count', $accessor.search.specimen.count)
