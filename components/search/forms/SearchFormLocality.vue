@@ -108,8 +108,8 @@ export default defineComponent({
         }
       )
 
-      if (route.value.query.countries) {
-        const countryIds = (route.value.query.countries as string)
+      if (route.value.query.country) {
+        const countryIds = (route.value.query.country as string)
           .split(',')
           .map(Number)
         country.value = state.countrySuggestions.filter((country) =>
@@ -117,10 +117,10 @@ export default defineComponent({
         )
       }
 
-      if (route.value.query.references) {
+      if (route.value.query.reference) {
         reference.value = (
           await hydrateFilterReference(
-            (route.value.query.references as string)
+            (route.value.query.reference as string)
               .split(',')
               .map((encodedValue) => decodeURIComponent(encodedValue))
           )
