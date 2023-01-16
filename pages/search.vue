@@ -1,35 +1,52 @@
 <template>
-  <div>
-    <v-row no-gutters justify="center" align="center">
-      <v-col class="pt-5">
-        <base-header :icon="icons.mdiMagnify">
-          <template #title>
-            <i18n path="quickSearch.title" tag="div">
-              <template #query>
-                <b v-text="$route.query.q" />
+  <v-main style="min-height: 100vh">
+    <v-container
+      class="pt-1 pb-10"
+      style="height: 100%"
+      :fluid="$vuetify.breakpoint.lgAndDown"
+    >
+      <v-row no-gutters>
+        <v-col>
+          <client-only>
+            <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
+          </client-only>
+        </v-col>
+      </v-row>
+      <div>
+        <v-row no-gutters justify="center" align="center">
+          <v-col class="pt-5">
+            <base-header :icon="icons.mdiMagnify">
+              <template #title>
+                <i18n path="quickSearch.title" tag="div">
+                  <template #query>
+                    <b v-text="$route.query.q" />
+                  </template>
+                </i18n>
               </template>
-            </i18n>
-          </template>
-        </base-header>
-      </v-col>
-    </v-row>
-    <v-row class="px-sm-3" no-gutters>
-      <v-col class="pt-2 pt-md-0">
-        <v-card flat color="transparent">
-          <v-card-actions class="pt-0">
-            <button-tabs :tabs="tabs" />
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row no-gutters class="px-sm-3" justify="center">
-      <v-col>
-        <v-card>
-          <nuxt-child :query="$route.query.q" keep-alive />
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
+            </base-header>
+          </v-col>
+        </v-row>
+        <v-row class="px-sm-3" no-gutters>
+          <v-col class="pt-2 pt-md-0">
+            <v-card flat color="transparent">
+              <v-card-actions class="pt-0">
+                <button-tabs :tabs="tabs" />
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row no-gutters class="px-sm-3" justify="center">
+          <v-col>
+            <v-card>
+              <nuxt-child :query="$route.query.q" keep-alive />
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
+      <fab-scroll-top />
+    </v-container>
+    <app-footer />
+  </v-main>
 </template>
 
 <script lang="ts">
@@ -53,10 +70,20 @@ import ButtonTabs from '~/components/ButtonTabs.vue'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import { Tab, TABS_QUICK_SEARCH } from '~/constants'
 import { useI18n } from '~/composables/useI18n'
+import FabScrollTop from '~/components/FabScrollTop.vue'
+import AppFooter from '~/components/AppFooter.vue'
+// import cookieconsent from '~/components/cookieconsent.vue'
+import HistoryViewer from '~/components/HistoryViewer.vue'
 
 export default defineComponent({
   name: 'QuickSearch',
-  components: { ButtonTabs, BaseHeader },
+  components: {
+    ButtonTabs,
+    BaseHeader,
+    FabScrollTop,
+    AppFooter,
+    HistoryViewer,
+  },
   setup() {
     const { $hydrateTab, from, $getMaxTab } = useContext()
     const i18n = useI18n()
