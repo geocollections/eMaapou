@@ -49,6 +49,7 @@
                 >
                   <input-search
                     v-model="query"
+                    input-class="rounded"
                     style="display: contents"
                     height="56"
                     :placeholder="$t('landing.searchPlaceholder')"
