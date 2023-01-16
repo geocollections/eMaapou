@@ -9,7 +9,10 @@
     <div
       v-if="value.length > 0"
       class="white pt-1 px-2"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <v-chip
         v-for="(institution, i) in selectedInstitutions"
@@ -25,7 +28,10 @@
     </div>
     <v-expansion-panel-content
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <div class="flex-wrap d-flex flex-column justify-space-between">
         <div v-for="(entity, key) in institutions" :key="key">

@@ -110,7 +110,10 @@ export default {
     accept: 'Accept',
     depth: 'Depth',
     render: 'Render',
-    loading: 'Loading'
+    loading: 'Loading',
+    hideFilters: 'Hide filters',
+    showFilters: 'Show filters'
+
   },
   link: {
     github: 'GitHub',

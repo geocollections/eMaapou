@@ -9,7 +9,10 @@
     <div
       v-if="validFilters.length > 0 && !isPanelOpen"
       class="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <div
         v-for="(item, i) in validFilters"
@@ -39,7 +42,10 @@
     </div>
     <v-expansion-panel-content
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
+      style="
+        border-bottom: 1px solid lightgray !important;
+        border-right: 1px solid lightgray !important;
+      "
     >
       <div
         v-for="(v, i) in internalValue"

@@ -111,7 +111,9 @@ export default {
     accept: 'Nõustun',
     depth: 'Sügavus',
     render: 'Väljund',
-    loading: 'Laadimine'
+    loading: 'Laadimine',
+    hideFilters: 'Peida filtrid',
+    showFilters: 'Ava filtrid'
   },
   link: {
     sarvAPI: 'Avalik API',
