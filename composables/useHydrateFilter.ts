@@ -68,6 +68,28 @@ export const useHydrateFilterTaxon = () => {
     )
   }
 }
+export const useHydrateFilterRock = () => {
+  const { $axios } = useContext()
+
+  return (selectedTaxa: string[]) => {
+    const query = selectedTaxa
+      .map((taxa) => `hierarchy_strings:"${taxa}"`)
+      .join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/rock?q=(${query})&rows=${selectedTaxa.length}&fl=id,name,name_en,hierarchy_strings`
+    )
+  }
+}
+export const useHydrateFilterTaxonId = () => {
+  const { $axios } = useContext()
+
+  return (selectedTaxa: number[]) => {
+    const query = selectedTaxa.map((taxa) => `id:"${taxa}"`).join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/taxon?q=(${query})&rows=${selectedTaxa.length}&fl=id,taxon,hierarchy_string`
+    )
+  }
+}
 
 export const useHydrateFilterStratigraphy = () => {
   const { $axios } = useContext()
@@ -95,6 +117,18 @@ export const useHydrateFilterAnalysisParameter = () => {
   }
 }
 
+export const useHydrateFilterCollection = () => {
+  const { $axios } = useContext()
+
+  return (selectedCollections: number[]) => {
+    const query = selectedCollections
+      .map((sample) => `id:"${sample}"`)
+      .join(' OR ')
+    return $axios.get(
+      `https://api.geoloogia.info/solr/collection?q=(${query})&rows=${selectedCollections.length}&fl=id,number`
+    )
+  }
+}
 export const useHydrateFilterSample = () => {
   const { $axios } = useContext()
 

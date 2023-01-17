@@ -17,25 +17,45 @@
             v-model="number"
             :title="$t('filters.specimenNumber').toString()"
           />
+          <filter-collection v-model="collection" />
+          <filter-taxon v-model="taxonHierarchy" />
+          <filter-input-text
+            v-model="taxonName"
+            :title="$t('filters.taxonName').toString()"
+          />
+          <filter-fossil-group v-model="fossilGroup" />
+          <filter-rock v-if="false" v-model="rockHierarchy" />
           <filter-locality v-model="locality" />
-
+          <filter-input-autocomplete-static
+            v-model="country"
+            :title="$t('filters.country').toString()"
+            :items="countrySuggestions"
+            :filter-field="$translate({ et: 'country', en: 'country_en' })"
+          >
+            <template #selection="{ item }">
+              <div>
+                {{ $translate({ et: item.country, en: item.country_en }) }}
+              </div>
+            </template>
+            <template #suggestion="{ item }">
+              <div>
+                {{ $translate({ et: item.country, en: item.country_en }) }}
+              </div>
+            </template>
+          </filter-input-autocomplete-static>
           <filter-map
             v-model="map"
             sample-overlay
             :items="$accessor.search.specimen.items"
           />
           <filter-stratigraphy v-model="stratigraphyHierarchy" />
-          <filter-taxon v-model="taxonHierarchy" />
-          <filter-input-text
-            v-model="taxonName"
-            :title="$t('filters.taxonName').toString()"
+          <filter-input-range
+            v-model="depth"
+            :label="$t('filters.depth').toString()"
+            interval-labels="intervals.depth"
+            :step="0.01"
           />
-          <filter-fossil-group v-if="false" v-model="fossilGroup" />
           <filter-reference v-model="reference" />
-          <filter-input-text
-            v-model="collectionNumber"
-            :title="$t('filters.collectionNumber').toString()"
-          />
           <filter-institution v-model="institutions" />
         </v-expansion-panels>
       </v-card>
@@ -47,6 +67,8 @@
 import {
   computed,
   defineComponent,
+  reactive,
+  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -63,11 +85,18 @@ import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterTaxon from '~/components/filter/FilterTaxon.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
+import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
+import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterRock from '~/components/filter/FilterRock.vue'
+import FilterCollection from '~/components/filter/FilterCollection.vue'
 import {
   useHydrateFilterLocality,
   useHydrateFilterReference,
   useHydrateFilterStratigraphy,
   useHydrateFilterTaxon,
+  useHydrateFilterTaxonId,
+  useHydrateFilterRock,
+  useHydrateFilterCollection,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
@@ -85,9 +114,13 @@ export default defineComponent({
     FilterStratigraphy,
     FilterTaxon,
     FilterInputText,
+    FilterInputRange,
+    FilterInputAutocompleteStatic,
+    FilterRock,
+    FilterCollection,
   },
   setup(_props, { emit }) {
-    const { $accessor } = useContext()
+    const { $accessor, i18n, $axios } = useContext()
     const route = useRoute()
 
     const handleReset = () => {
@@ -100,11 +133,7 @@ export default defineComponent({
     const locality = useFilter('specimen', 'locality', handleSearch)
     const reference = useFilter('specimen', 'reference', handleSearch)
     const taxonHierarchy = useFilter('specimen', 'taxonHierarchy', handleSearch)
-    const collectionNumber = useFilter(
-      'specimen',
-      'collectionNumber',
-      handleSearch
-    )
+    const collection = useFilter('specimen', 'collection', handleSearch)
     const taxonName = useFilter('specimen', 'taxonName', handleSearch)
     const stratigraphyHierarchy = useFilter(
       'specimen',
@@ -115,6 +144,9 @@ export default defineComponent({
     const hasImage = useFilter('specimen', 'hasImage', handleSearch)
     const hasCoordinates = useFilter('specimen', 'hasCoordinates', handleSearch)
     const map = useFilter('specimen', 'map', handleSearch)
+    const depth = useFilter('specimen', 'depth', handleSearch)
+    const country = useFilter('specimen', 'country', handleSearch)
+    const rockHierarchy = useFilter('specimen', 'rockHierarchy', handleSearch)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
@@ -133,12 +165,45 @@ export default defineComponent({
     const hydrateFilterReference = useHydrateFilterReference()
     const hydrateFilterTaxon = useHydrateFilterTaxon()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
-
+    const hydrateFilterTaxonId = useHydrateFilterTaxonId()
+    const hydrateFilterRock = useHydrateFilterRock()
+    const hydrateFilterCollection = useHydrateFilterCollection()
+    const state = reactive({
+      countrySuggestions: [] as any[],
+    })
     useFetch(async () => {
+      const sortField = i18n.locale === 'et' ? 'country' : 'country_en'
+      state.countrySuggestions = (
+        await $axios.$get(
+          `https://api.geoloogia.info/solr/locality?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${sortField}`
+        )
+      ).facet_counts.facet_pivot['country_id,country,country_en'].map(
+        (country: any) => {
+          return {
+            id: country.value,
+            country: country.pivot[0].value,
+            country_en: country.pivot[0].pivot[0].value,
+          }
+        }
+      )
       if (route.value.query.locality) {
         locality.value = (
           await hydrateFilterLocality(
             (route.value.query.locality as string).split(',').map(Number)
+          )
+        ).data.response.docs
+      }
+      if (route.value.query.collection) {
+        collection.value = (
+          await hydrateFilterCollection(
+            (route.value.query.collection as string).split(',').map(Number)
+          )
+        ).data.response.docs
+      }
+      if (route.value.query.fossilGroup) {
+        fossilGroup.value = (
+          await hydrateFilterTaxonId(
+            (route.value.query.fossilGroup as string).split(',').map(Number)
           )
         ).data.response.docs
       }
@@ -161,6 +226,15 @@ export default defineComponent({
           )
         ).data.response.docs
       }
+      if (route.value.query.rockHierarchy) {
+        rockHierarchy.value = (
+          await hydrateFilterRock(
+            (route.value.query.rockHierarchy as string)
+              .split(',')
+              .map((encodedValue) => decodeURIComponent(encodedValue))
+          )
+        ).data.response.docs
+      }
       if (route.value.query.stratigraphyHierarchy) {
         stratigraphyHierarchy.value = (
           await hydrateFilterStratigraphy(
@@ -175,14 +249,18 @@ export default defineComponent({
           .split(',')
           .map((encodedValue) => decodeURIComponent(encodedValue))
       }
-      if (route.value.query.collectionNumber) {
-        collectionNumber.value = (route.value.query.collectionNumber as string)
+      if (route.value.query.country) {
+        const countryIds = (route.value.query.country as string)
           .split(',')
-          .map((encodedValue) => decodeURIComponent(encodedValue))
+          .map(Number)
+        country.value = state.countrySuggestions.filter((country) =>
+          countryIds.includes(country.id)
+        )
       }
     })
 
     return {
+      ...toRefs(state),
       handleReset,
       handleSearch,
       locality,
@@ -191,13 +269,16 @@ export default defineComponent({
       taxonHierarchy,
       stratigraphyHierarchy,
       taxonName,
-      collectionNumber,
+      collection,
       hasCoordinates,
       hasImage,
       institutions,
       query,
       map,
       number,
+      depth,
+      country,
+      rockHierarchy,
     }
   },
 })

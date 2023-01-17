@@ -1,17 +1,16 @@
 <template>
   <filter-input-autocomplete
-    :title="$t('filters.reference').toString()"
+    :title="$t('filters.collection').toString()"
+    query-field="number"
     :query-function="querySuggestions"
     :value="value"
     v-on="$listeners"
   >
     <template #selection="{ item }">
-      {{ item.reference }}
-      <span class="font-weight-light font-italic">{{ item.title }}</span>
+      {{ item.number }}
     </template>
     <template #suggestion="{ item }">
-      {{ item.reference }}
-      <span class="font-weight-light font-italic">{{ item.title }}</span>
+      {{ item.number }}
     </template>
   </filter-input-autocomplete>
 </template>
@@ -20,7 +19,7 @@
 import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
 import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
-  name: 'FilterReference',
+  name: 'FilterCollection',
   components: { FilterInputAutocomplete },
   props: {
     value: {
@@ -36,7 +35,7 @@ export default defineComponent({
       options = { rows: 10, start: 0 }
     ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/reference?defType=edismax&qf=author^2.0+title^0.5&q=${search}&rows=${options.rows}&start=${options.start}&fl=id,reference,title`
+        `https://api.geoloogia.info/solr/collection?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,number`
       )
     }
     return { querySuggestions }

@@ -1088,7 +1088,8 @@ export default {
     site: 'Site',
     dataset: 'Dataset',
     people: 'People',
-    tags: 'Keywords'
+    tags: 'Keywords',
+    collection: 'Collection'
   },
   intervals: {
     default: {

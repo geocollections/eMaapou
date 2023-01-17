@@ -6,12 +6,13 @@ import {
   GeomFilter,
   ListIdsFilter,
   ListTextFilter,
+  RangeFilter,
   TextFilter,
 } from '~/types/filters'
 
 export type SpecimenFilters = {
   number: ListTextFilter
-  collectionNumber: ListTextFilter
+  collection: ListIdsFilter
   rock: TextFilter
   hasImage: BooleanFilter
   hasCoordinates: BooleanFilter
@@ -22,6 +23,9 @@ export type SpecimenFilters = {
   stratigraphyHierarchy: ListIdsFilter
   fossilGroup: ListIdsFilter
   map: GeomFilter
+  depth: RangeFilter
+  country: ListIdsFilter
+  rockHierarchy: ListIdsFilter
 }
 export const initState = (): SearchModuleState<SpecimenFilters> => {
   return {
@@ -44,12 +48,14 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
           'specimen_number_old',
         ],
       },
-      collectionNumber: {
+      collection: {
         value: [],
-        type: FilterType.ListText,
+        type: FilterType.ListIds,
         lookupType: 'none',
-        label: 'specimen.collectionNr',
-        fields: ['collection_number'],
+        label: '',
+        fields: ['collection_id'],
+        valueField: 'id',
+        valueType: 'number',
       },
       rock: {
         value: '',
@@ -113,6 +119,15 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         valueField: 'hierarchy_string',
         lookupType: 'startswith',
       },
+      rockHierarchy: {
+        value: [],
+        type: FilterType.ListIds,
+        label: '',
+        fields: ['hierarchy_string_rock'],
+        valueType: 'string',
+        valueField: 'hierarchy_strings',
+        lookupType: 'startswith',
+      },
       taxonName: {
         value: [],
         type: FilterType.ListText,
@@ -147,6 +162,22 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         value: null,
         label: '',
         fields: ['latlong'],
+      },
+      depth: {
+        type: FilterType.Range,
+        value: [null, null],
+        label: '',
+        fields: ['depth'],
+        placeholders: ['depth.min', 'depth.max'],
+      },
+      country: {
+        value: [],
+        type: FilterType.ListIds,
+        label: '',
+        fields: ['country_id'],
+        valueType: 'number',
+        valueField: 'id',
+        lookupType: 'none',
       },
     },
   }

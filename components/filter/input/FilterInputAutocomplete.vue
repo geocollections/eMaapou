@@ -158,10 +158,9 @@ export default defineComponent({
             .map((term) =>
               props.queryField.length > 0
                 ? `${props.queryField}:*${term}*`
-                : term
+                : `*${term}*`
             )
             .join(' AND ')
-
         const response = await props.queryFunction(search)
         // const response = await $axios.$get(
         //   `https://api.geoloogia.info/solr/locality?q=${search}&rows=10&fl=locality,id`
@@ -190,7 +189,11 @@ export default defineComponent({
         search = state.search
           .trim()
           .split(' ')
-          .map((term) => `${props.queryField}:*${term}*`)
+          .map((term) =>
+            props.queryField.length > 0
+              ? `${props.queryField}:*${term}*`
+              : `*${term}*`
+          )
           .join(' AND ')
       const newSuggestions = (
         await props.queryFunction(search, {

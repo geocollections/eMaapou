@@ -1089,7 +1089,8 @@ export default {
     site: 'Uuringupunkt',
     dataset: 'Andmeset',
     people: 'Inimesed',
-    tags: 'Märksõnad'
+    tags: 'Märksõnad',
+    collection: 'Kollektsioon'
   },
   intervals: {
     default: {
