@@ -346,7 +346,7 @@ export default {
     thickness: 'Thickness',
     image: 'Image',
     specimen: 'Specimen',
-    locality: 'Loc.',
+    locality: 'Locality',
     rock: 'Rock',
     collectionNr: 'Collection nr.',
     type: 'Type',
