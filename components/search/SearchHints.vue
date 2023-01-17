@@ -12,6 +12,36 @@
     <v-card elevation="0">
       <v-card-text class="pa-3">
         <v-row no-gutters>
+          <v-col cols="12" sm="5">
+            <div class="d-flex mb-1 align-center">
+              <code class="black--text font-weight-bold">"Viki puurauk"</code>
+              <div class="ml-2">{{ $t('hints.exact') }}</div>
+            </div>
+            <div class="d-flex mb-1 align-center">
+              <code class="black--text font-weight-bold">+Keila</code>
+              <div class="ml-2">{{ $t('hints.require') }}</div>
+            </div>
+            <div class="d-flex mb-1 align-center">
+              <code class="black--text font-weight-bold">-Tartu</code>
+              <div class="ml-2">{{ $t('hints.exclude') }}</div>
+            </div>
+          </v-col>
+          <v-col cols="12" sm="7">
+            <div class="d-flex mb-1 align-center">
+              <code class="black--text font-weight-bold">Viki*</code>
+              <div class="ml-2">{{ $t('hints.wildcard') }}</div>
+            </div>
+            <div class="d-flex mb-1 align-center">
+              <code class="black--text font-weight-bold">+Eesti +Soome</code>
+              <div class="ml-2">{{ $t('hints.requireBoth') }}</div>
+            </div>
+            <div class="d-flex mb-1 align-center">
+              <code class="black--text font-weight-bold"
+                >+"Keila lade" -Orthidae</code
+              >
+              <div class="ml-2">{{ $t('hints.combineOperators') }}</div>
+            </div>
+          </v-col>
           <v-col cols="12">
             <div class="d-flex">
               <code class="black--text font-weight-bold"> GIT 155\-57 </code>
@@ -23,32 +53,6 @@
                   <code>\</code>
                 </template>
               </i18n>
-            </div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="d-flex my-1 align-center">
-              <code class="black--text font-weight-bold">"Viki"</code>
-              <div class="ml-2">{{ $t('hints.exact') }}</div>
-            </div>
-            <div class="d-flex my-1 align-center">
-              <code class="black--text font-weight-bold">+Keila</code>
-              <div class="ml-2">{{ $t('hints.require') }}</div>
-            </div>
-            <div class="d-flex mt-1 align-center">
-              <code class="black--text font-weight-bold">-Tartu</code>
-              <div class="ml-2">{{ $t('hints.exclude') }}</div>
-            </div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="d-flex my-1 align-center">
-              <code class="black--text font-weight-bold"
-                >"Eesti" AND "Soome"</code
-              >
-              <div class="ml-2">{{ $t('hints.requireBoth') }}</div>
-            </div>
-            <div class="d-flex my-1 align-center">
-              <code class="black--text font-weight-bold">NOT "Eesti"</code>
-              <div class="ml-2">{{ $t('hints.notExclude') }}</div>
             </div>
           </v-col>
         </v-row>

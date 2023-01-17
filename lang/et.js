@@ -1040,7 +1040,9 @@ export default {
     require: 'nõua terminit',
     exclude: 'välista termin',
     requireBoth: 'mõlemad terminid olemas',
-    notExclude: 'terminit ei ole'
+    notExclude: 'terminit ei ole',
+    wildcard: 'metamärgiga otsing',
+    combineOperators: 'kombineeri operaatoreid'
   },
   filters: {
     locality: 'Lokaliteet',

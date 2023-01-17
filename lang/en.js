@@ -1036,10 +1036,12 @@ export default {
   hints: {
     escaping: 'escape special characters {specialCharacters} using {escapeCharacter}',
     exact: 'exact phrase',
-    require: 'require term',
-    exclude: 'exclude term',
-    requireBoth: 'both terms exist',
-    notExclude: 'term not present'
+    require: 'require keyword',
+    exclude: 'exclude keyword',
+    requireBoth: 'both keywords exist',
+    notExclude: 'keyword not present',
+    wildcard: 'wildcard search',
+    combineOperators: 'combine operators'
   },
   filters: {
     locality: 'Locality',
