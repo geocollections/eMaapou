@@ -424,8 +424,9 @@ export default defineComponent({
           },
         }
       )
-      const parameters = listParametersResponse.items.reduce(
-        (prev: any, parameter: any) => {
+      const parameters = listParametersResponse.items
+        .filter((parameter: any) => !!parameter.parameter_index)
+        .reduce((prev: any, parameter: any) => {
           const correctParameterIndex = parameter.parameter_index.replace(
             /\W/g,
             '_'
@@ -437,9 +438,7 @@ export default defineComponent({
               text: parameter.parameter,
             },
           }
-        },
-        {}
-      )
+        }, {})
       $accessor.search.analyticalData.setParameters({ parameters })
 
       if (route.value.query.parameter) {
