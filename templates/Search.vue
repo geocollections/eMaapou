@@ -10,12 +10,13 @@
       clipped
       app
       :mini-variant.sync="mini"
+      :mini-variant-width="48"
       :bottom="$vuetify.breakpoint.smAndDown"
     >
       <v-card style="height: 100%" color="grey lighten-5" tile>
-        <v-list v-if="!$vuetify.breakpoint.smAndDown" flat class="pa-0">
+        <v-list v-if="!$vuetify.breakpoint.smAndDown" dense flat class="pa-0">
           <v-list-item :ripple="false" @click="mini = !mini">
-            <v-list-item-icon class="mr-4">
+            <v-list-item-icon :class="{ 'mr-3': !mini }">
               <v-icon :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }">
                 {{ icons.mdiChevronDoubleLeft }}
               </v-icon>
@@ -32,11 +33,11 @@
         </div>
         <div v-show="mini">
           <div
-            class="montserrat font-weight-medium text--secondary"
+            class="montserrat font-weight-medium text--secondary ml-auto mr-auto"
             style="
-              transform: rotate(-90deg);
+              transform: scale(-1, -1);
               white-space: nowrap;
-              margin-top: 60px;
+              writing-mode: vertical-lr;
             "
           >
             {{ $t('common.showFilters') }}
