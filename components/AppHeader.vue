@@ -25,7 +25,7 @@
       <nuxt-img
         :height="32"
         contain
-        class="px-3"
+        class="px-0 px-sm-3"
         provider="static"
         :src="logo"
         style="vertical-align: middle"
@@ -166,7 +166,7 @@
     >
       <div
         v-if="showSearch"
-        class="d-flex elevation-0 rounded mr-2"
+        class="d-flex elevation-0 rounded mr-0 mr-sm-2"
         style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
       >
@@ -188,7 +188,7 @@
         <v-hover v-slot="{ hover }">
           <v-btn
             height="38"
-            width="48"
+            :width="$vuetify.breakpoint.xsOnly ? 32 : 48"
             elevation="0"
             :color="hover ? 'warning' : 'grey lighten-2'"
             class="rounded-l-0"
