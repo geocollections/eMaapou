@@ -1229,7 +1229,7 @@ export const HEADERS_SITE: Headers = {
 
 export const HEADERS_SPECIMEN: Headers = {
   byIds: {
-    id: { text: 'specimen.id', value: 'id', show: true, apiFieldValue: 'id' },
+    id: { text: 'specimen.id', value: 'id', show: false, apiFieldValue: 'id' },
     specimen_full_name: {
       text: 'specimen.number',
       value: 'specimen_full_name',
@@ -1251,7 +1251,7 @@ export const HEADERS_SPECIMEN: Headers = {
     depth_interval: {
       text: 'specimen.depthInterval',
       value: 'depth_interval',
-      show: true,
+      show: false,
       apiFieldValue: 'depth_interval',
     },
     stratigraphy: {
@@ -1263,7 +1263,7 @@ export const HEADERS_SPECIMEN: Headers = {
     lithostratigraphy: {
       text: 'sample.lithostratigraphy',
       value: 'lithostratigraphy',
-      show: true,
+      show: false,
       apiFieldValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
     },
     name: {
@@ -1284,12 +1284,12 @@ export const HEADERS_SPECIMEN: Headers = {
   allIds: [
     'id',
     'specimen_full_name',
+    'name',
     'locality',
     'depth',
     'depth_interval',
     'stratigraphy',
     'lithostratigraphy',
-    'name',
     'image',
   ],
 }
