@@ -198,6 +198,20 @@ export default defineComponent({
       originalStatusSuggestions: [] as any[],
     })
     useFetch(async () => {
+      const countySortField = i18n.locale === 'et' ? 'country' : 'country_en'
+      state.countrySuggestions = (
+        await $axios.$get(
+          `https://api.geoloogia.info/solr/specimen?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${countySortField}`
+        )
+      ).facet_counts.facet_pivot['country_id,country,country_en'].map(
+        (country: any) => {
+          return {
+            id: country.value,
+            country: country.pivot[0].value,
+            country_en: country.pivot[0].pivot[0].value,
+          }
+        }
+      )
       const originalStatusSortField =
         i18n.locale === 'et' ? 'original_status' : 'original_status'
       state.originalStatusSuggestions = (
