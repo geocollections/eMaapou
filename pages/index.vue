@@ -133,12 +133,12 @@
 <script>
 import {
   mdiMagnify,
-  mdiMicroscope,
-  mdiMapMarkerOutline,
-  mdiTestTube,
+  mdiMapMarker,
   mdiScrewMachineFlatTop,
   mdiChartLine,
   mdiFileImageOutline,
+  mdiBug,
+  mdiImageFilterHdr,
 } from '@mdi/js'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import TheNewsCard from '~/components/landing/TheNewsCard.vue'
@@ -301,19 +301,19 @@ export default {
       {
         routeName: 'specimen',
         text: 'specimen.landingCard',
-        icon: mdiMicroscope,
+        icon: mdiBug,
         count: specimenResponse.count,
       },
       {
         routeName: 'locality',
         text: 'locality.landingCard',
-        icon: mdiMapMarkerOutline,
+        icon: mdiMapMarker,
         count: localityResponse.count,
       },
       {
         routeName: 'sample',
         text: 'sample.landingCard',
-        icon: mdiTestTube,
+        icon: mdiImageFilterHdr,
         count: sampleResponse.count,
       },
       {

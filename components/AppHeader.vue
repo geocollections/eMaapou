@@ -57,8 +57,8 @@
           <v-card-actions class="d-flex align-baseline">
             <v-list class="mx-3" width="250">
               <base-menu-list-item
-                v-for="(item, index) in browseGeography"
-                :key="`browse-geography-item-${index}`"
+                v-for="(item, index) in browseTaxon"
+                :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
                 :label="$t(item.label).toString()"
@@ -66,7 +66,6 @@
                 :to="localePath({ name: item.routeName })"
               />
             </v-list>
-
             <v-divider class="mx-3 my-2" vertical />
             <v-list class="mx-3" width="250">
               <base-menu-list-item
@@ -79,11 +78,12 @@
                 :to="localePath({ name: item.routeName })"
               />
             </v-list>
+
             <v-divider class="mx-3 my-2" vertical />
             <v-list class="mx-3" width="250">
               <base-menu-list-item
-                v-for="(item, index) in browseTaxon"
-                :key="`browse-lab-item-${index}`"
+                v-for="(item, index) in browseGeography"
+                :key="`browse-geography-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
                 :label="$t(item.label).toString()"

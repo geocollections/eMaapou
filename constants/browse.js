@@ -1,29 +1,29 @@
 import {
   mdiMapMarkerOutline,
+  mdiMapMarker,
   mdiScrewMachineFlatTop,
   mdiMapMarkerRadiusOutline,
-  mdiBinoculars,
   mdiTestTube,
-  mdiChartScatterPlot,
   mdiChartLine,
   mdiDatabaseOutline,
   mdiEyedropper,
-  mdiMicroscope,
   mdiFamilyTree,
   mdiLayersTriple,
   mdiFileImageOutline,
+  mdiImageFilterHdr,
+  mdiBug
 } from '@mdi/js'
 
 export const BROWSE_GEOLOGY_LIST = [
   {
     routeName: 'locality',
     label: 'locality.pageTitle',
-    icon: mdiMapMarkerOutline,
+    icon: mdiMapMarker,
   },
   {
-    routeName: 'drillcore',
-    label: 'drillcore.pageTitle',
-    icon: mdiScrewMachineFlatTop,
+    routeName: 'site',
+    label: 'site.pageTitle',
+    icon: mdiMapMarkerOutline,
   },
   {
     routeName: 'area',
@@ -31,9 +31,9 @@ export const BROWSE_GEOLOGY_LIST = [
     icon: mdiMapMarkerRadiusOutline,
   },
   {
-    routeName: 'site',
-    label: 'site.pageTitle',
-    icon: mdiBinoculars,
+    routeName: 'drillcore',
+    label: 'drillcore.pageTitle',
+    icon: mdiScrewMachineFlatTop,
   },
 ]
 
@@ -41,12 +41,12 @@ export const BROWSE_LAB_LIST = [
   {
     routeName: 'sample',
     label: 'sample.pageTitle',
-    icon: mdiTestTube,
+    icon: mdiImageFilterHdr,
   },
   {
     routeName: 'analysis',
     label: 'analysis.pageTitle',
-    icon: mdiChartScatterPlot,
+    icon: mdiTestTube
   },
   {
     routeName: 'analytical-data',
@@ -69,7 +69,7 @@ export const BROWSE_TAXON_LIST = [
   {
     routeName: 'specimen',
     label: 'specimen.pageTitle',
-    icon: mdiMicroscope,
+    icon: mdiBug,
   },
   {
     routeName: 'taxon',

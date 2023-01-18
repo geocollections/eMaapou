@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('sample.pageTitle').toString()"
-        :icon="icons.mdiTestTube"
+        :icon="icons.mdiImageFilterHdr"
       />
     </template>
 
@@ -52,7 +52,7 @@ import {
   wrapProperty,
   computed,
 } from '@nuxtjs/composition-api'
-import { mdiTestTube } from '@mdi/js'
+import { mdiImageFilterHdr } from '@mdi/js'
 import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import Search from '~/templates/Search.vue'
@@ -125,7 +125,7 @@ export default defineComponent({
   computed: {
     icons(): any {
       return {
-        mdiTestTube,
+        mdiImageFilterHdr,
       }
     },
   },

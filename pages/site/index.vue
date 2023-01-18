@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('site.pageTitle').toString()"
-        :icon="icons.mdiMapMarkerStarOutline"
+        :icon="icons.mdiMapMarkerOutline"
       />
     </template>
 
@@ -52,7 +52,7 @@ import {
   wrapProperty,
   computed,
 } from '@nuxtjs/composition-api'
-import { mdiMapMarkerStarOutline } from '@mdi/js'
+import { mdiMapMarkerOutline } from '@mdi/js'
 import SearchFormSite from '~/components/search/forms/SearchFormSite.vue'
 import DataTableSite from '~/components/data-table/DataTableSite.vue'
 import Search from '~/templates/Search.vue'
@@ -123,7 +123,7 @@ export default defineComponent({
   computed: {
     icons(): any {
       return {
-        mdiMapMarkerStarOutline,
+        mdiMapMarkerOutline,
       }
     },
   },

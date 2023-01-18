@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('specimen.pageTitle').toString()"
-        :icon="icons.mdiMicroscope"
+        :icon="icons.mdiBug"
       />
     </template>
 
@@ -52,7 +52,7 @@ import {
   wrapProperty,
   computed,
 } from '@nuxtjs/composition-api'
-import { mdiMicroscope } from '@mdi/js'
+import { mdiBug } from '@mdi/js'
 import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 import Search from '~/templates/Search.vue'
@@ -124,7 +124,7 @@ export default defineComponent({
   computed: {
     icons(): any {
       return {
-        mdiMicroscope,
+        mdiBug,
       }
     },
   },

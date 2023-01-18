@@ -3,7 +3,7 @@
     <template #title>
       <base-header
         :title="$t('analysis.pageTitle').toString()"
-        :icon="icons.mdiChartScatterPlot"
+        :icon="icons.mdiTestTube"
       />
     </template>
 
@@ -51,7 +51,7 @@ import {
   wrapProperty,
   computed,
 } from '@nuxtjs/composition-api'
-import { mdiChartScatterPlot } from '@mdi/js'
+import { mdiTestTube } from '@mdi/js'
 import { useAccessor } from '~/composables/useAccessor'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
@@ -123,7 +123,7 @@ export default defineComponent({
   },
   computed: {
     icons() {
-      return { mdiChartScatterPlot }
+      return { mdiTestTube }
     },
   },
 })
