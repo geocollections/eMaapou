@@ -287,6 +287,7 @@ export default defineComponent({
                     },
                     api: {
                       default: { locality: state.drillcore?.locality?.id },
+                      boxes: { drillcore: route.value.params.id },
                       attachment_link: {
                         or_search: `drillcore:${state.drillcore.id} OR locality:${state.drillcore.locality.id}`,
                       },
