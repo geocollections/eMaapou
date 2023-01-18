@@ -29,7 +29,7 @@
           <filter-input-autocomplete-static
             v-model="country"
             :title="$t('filters.country').toString()"
-            :items="countrySuggestions"
+            :items="originalStatusSuggestions"
             :filter-field="$translate({ et: 'country', en: 'country_en' })"
           >
             <template #selection="{ item }">
@@ -56,6 +56,27 @@
             :step="0.01"
           />
           <filter-reference v-model="reference" />
+          <filter-input-text
+            v-model="collector"
+            :title="$t('filters.collector').toString()"
+          />
+          <filter-input-autocomplete-static
+            v-model="originalStatus"
+            :title="$t('filters.originalStatus').toString()"
+            :items="originalStatusSuggestions"
+            :filter-field="$translate({ et: 'status', en: 'status_en' })"
+          >
+            <template #selection="{ item }">
+              <div>
+                {{ $translate({ et: item.status, en: item.status_en }) }}
+              </div>
+            </template>
+            <template #suggestion="{ item }">
+              <div>
+                {{ $translate({ et: item.status, en: item.status_en }) }}
+              </div>
+            </template>
+          </filter-input-autocomplete-static>
           <filter-institution v-model="institutions" />
         </v-expansion-panels>
       </v-card>
@@ -147,6 +168,8 @@ export default defineComponent({
     const depth = useFilter('specimen', 'depth', handleSearch)
     const country = useFilter('specimen', 'country', handleSearch)
     const rockHierarchy = useFilter('specimen', 'rockHierarchy', handleSearch)
+    const originalStatus = useFilter('specimen', 'originalStatus', handleSearch)
+    const collector = useFilter('specimen', 'collector', handleSearch)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
@@ -170,12 +193,13 @@ export default defineComponent({
     const hydrateFilterCollection = useHydrateFilterCollection()
     const state = reactive({
       countrySuggestions: [] as any[],
+      originalStatusSuggestions: [] as any[],
     })
     useFetch(async () => {
-      const sortField = i18n.locale === 'et' ? 'country' : 'country_en'
+      const countySortField = i18n.locale === 'et' ? 'country' : 'country_en'
       state.countrySuggestions = (
         await $axios.$get(
-          `https://api.geoloogia.info/solr/locality?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${sortField}`
+          `https://api.geoloogia.info/solr/specimen?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${countySortField}`
         )
       ).facet_counts.facet_pivot['country_id,country,country_en'].map(
         (country: any) => {
@@ -186,6 +210,21 @@ export default defineComponent({
           }
         }
       )
+      const originalStatusSortField =
+        i18n.locale === 'et' ? 'original_status' : 'original_status'
+      state.originalStatusSuggestions = (
+        await $axios.$get(
+          `https://api.geoloogia.info/solr/specimen?q=%2A&start=0&rows=0&facet=true&facet.pivot=original_status_id,original_status,original_status_en&facet.limit=200&facet.sort=${originalStatusSortField}`
+        )
+      ).facet_counts.facet_pivot[
+        'original_status_id,original_status,original_status_en'
+      ].map((status: any) => {
+        return {
+          id: status.value,
+          status: status.pivot[0].value,
+          status_en: status.pivot[0].pivot[0].value,
+        }
+      })
       if (route.value.query.locality) {
         locality.value = (
           await hydrateFilterLocality(
@@ -257,6 +296,14 @@ export default defineComponent({
           countryIds.includes(country.id)
         )
       }
+      if (route.value.query.originalStatus) {
+        const statusIds = (route.value.query.originalStatus as string)
+          .split(',')
+          .map(Number)
+        originalStatus.value = state.originalStatusSuggestions.filter(
+          (status) => statusIds.includes(status.id)
+        )
+      }
     })
 
     return {
@@ -279,6 +326,8 @@ export default defineComponent({
       depth,
       country,
       rockHierarchy,
+      originalStatus,
+      collector,
     }
   },
 })

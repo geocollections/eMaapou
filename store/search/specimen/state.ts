@@ -26,6 +26,8 @@ export type SpecimenFilters = {
   depth: RangeFilter
   country: ListIdsFilter
   rockHierarchy: ListIdsFilter
+  originalStatus: ListIdsFilter
+  collector: ListTextFilter
 }
 export const initState = (): SearchModuleState<SpecimenFilters> => {
   return {
@@ -54,6 +56,15 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         lookupType: 'none',
         label: '',
         fields: ['collection_id'],
+        valueField: 'id',
+        valueType: 'number',
+      },
+      originalStatus: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['original_status_id'],
         valueField: 'id',
         valueType: 'number',
       },
@@ -178,6 +189,13 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         valueType: 'number',
         valueField: 'id',
         lookupType: 'none',
+      },
+      collector: {
+        value: [],
+        type: FilterType.ListText,
+        label: '',
+        fields: ['collector', 'collector_full_name'],
+        lookupType: 'contains',
       },
     },
   }

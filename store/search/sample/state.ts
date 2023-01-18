@@ -99,7 +99,7 @@ export const initState = (): SearchModuleState<SampleFilters> => {
         type: FilterType.ListText,
         label: '',
         fields: ['collector', 'collector_full_name'],
-        lookupType: 'startswith',
+        lookupType: 'contains',
       },
       number: {
         value: [],

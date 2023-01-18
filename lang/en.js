@@ -1090,7 +1090,8 @@ export default {
     dataset: 'Dataset',
     people: 'People',
     tags: 'Keywords',
-    collection: 'Collection'
+    collection: 'Collection',
+    originalStatus: 'Original status'
   },
   intervals: {
     default: {

@@ -1091,7 +1091,8 @@ export default {
     dataset: 'Andmeset',
     people: 'Inimesed',
     tags: 'Märksõnad',
-    collection: 'Kollektsioon'
+    collection: 'Kollektsioon',
+    originalStatus: 'Originaalne staatus'
   },
   intervals: {
     default: {
