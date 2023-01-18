@@ -1,87 +1,89 @@
 <template>
-  <v-form @submit.prevent.stop="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <filter-input-checkbox
-        v-model="hasImage"
-        :label="$t('filters.hasImage').toString()"
-      />
-      <filter-input-checkbox
-        v-model="hasCoordinates"
-        :label="$t('filters.hasCoordinates').toString()"
-      />
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-text
-            v-model="number"
-            :title="$t('filters.specimenNumber').toString()"
-          />
-          <filter-collection v-model="collection" />
-          <filter-taxon v-model="taxonHierarchy" />
-          <filter-input-text
-            v-model="taxonName"
-            :title="$t('filters.taxonName').toString()"
-          />
-          <filter-fossil-group v-model="fossilGroup" />
-          <filter-rock v-if="false" v-model="rockHierarchy" />
-          <filter-locality v-model="locality" />
-          <filter-input-autocomplete-static
-            v-model="country"
-            :title="$t('filters.country').toString()"
-            :items="originalStatusSuggestions"
-            :filter-field="$translate({ et: 'country', en: 'country_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.country, en: item.country_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.country, en: item.country_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-map
-            v-model="map"
-            sample-overlay
-            :items="$accessor.search.specimen.items"
-          />
-          <filter-stratigraphy v-model="stratigraphyHierarchy" />
-          <filter-input-range
-            v-model="depth"
-            :label="$t('filters.depth').toString()"
-            interval-labels="intervals.depth"
-            :step="0.01"
-          />
-          <filter-reference v-model="reference" />
-          <filter-input-text
-            v-model="collector"
-            :title="$t('filters.collector').toString()"
-          />
-          <filter-input-autocomplete-static
-            v-model="originalStatus"
-            :title="$t('filters.originalStatus').toString()"
-            :items="originalStatusSuggestions"
-            :filter-field="$translate({ et: 'status', en: 'status_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.status, en: item.status_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.status, en: item.status_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-institution v-model="institutions" />
-        </v-expansion-panels>
-      </v-card>
-    </search-fields-wrapper>
-  </v-form>
+  <div>
+    <v-form @submit.prevent.stop="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <filter-input-checkbox
+          v-model="hasImage"
+          :label="$t('filters.hasImage').toString()"
+        />
+        <filter-input-checkbox
+          v-model="hasCoordinates"
+          :label="$t('filters.hasCoordinates').toString()"
+        />
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-text
+              v-model="number"
+              :title="$t('filters.specimenNumber').toString()"
+            />
+            <filter-collection v-model="collection" />
+            <filter-taxon v-model="taxonHierarchy" />
+            <filter-input-text
+              v-model="taxonName"
+              :title="$t('filters.taxonName').toString()"
+            />
+            <filter-fossil-group v-model="fossilGroup" />
+            <filter-rock v-if="false" v-model="rockHierarchy" />
+            <filter-locality v-model="locality" />
+            <filter-input-autocomplete-static
+              v-model="country"
+              :title="$t('filters.country').toString()"
+              :items="originalStatusSuggestions"
+              :filter-field="$translate({ et: 'country', en: 'country_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.country, en: item.country_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.country, en: item.country_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-map
+              v-model="map"
+              sample-overlay
+              :items="$accessor.search.specimen.items"
+            />
+            <filter-stratigraphy v-model="stratigraphyHierarchy" />
+            <filter-input-range
+              v-model="depth"
+              :label="$t('filters.depth').toString()"
+              interval-labels="intervals.depth"
+              :step="0.01"
+            />
+            <filter-reference v-model="reference" />
+            <filter-input-text
+              v-model="collector"
+              :title="$t('filters.collector').toString()"
+            />
+            <filter-input-autocomplete-static
+              v-model="originalStatus"
+              :title="$t('filters.originalStatus').toString()"
+              :items="originalStatusSuggestions"
+              :filter-field="$translate({ et: 'status', en: 'status_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.status, en: item.status_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.status, en: item.status_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-institution v-model="institutions" />
+          </v-expansion-panels>
+        </v-card>
+      </search-fields-wrapper>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">
@@ -196,20 +198,6 @@ export default defineComponent({
       originalStatusSuggestions: [] as any[],
     })
     useFetch(async () => {
-      const countySortField = i18n.locale === 'et' ? 'country' : 'country_en'
-      state.countrySuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/specimen?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${countySortField}`
-        )
-      ).facet_counts.facet_pivot['country_id,country,country_en'].map(
-        (country: any) => {
-          return {
-            id: country.value,
-            country: country.pivot[0].value,
-            country_en: country.pivot[0].pivot[0].value,
-          }
-        }
-      )
       const originalStatusSortField =
         i18n.locale === 'et' ? 'original_status' : 'original_status'
       state.originalStatusSuggestions = (

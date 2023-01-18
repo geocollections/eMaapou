@@ -1,35 +1,36 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-text
-            v-model="number"
-            :title="$t('filters.sampleNumber').toString()"
-          />
-          <filter-locality v-model="locality" />
-          <filter-map
-            v-model="map"
-            sample-overlay
-            :items="$accessor.search.sample.items"
-          />
-          <filter-input-range
-            v-model="depth"
-            :label="$t('filters.depth').toString()"
-            interval-labels="intervals.depth"
-            :step="0.01"
-          />
-          <filter-stratigraphy v-model="stratigraphyHierarchy" />
-          <filter-input-text
-            v-model="collector"
-            :title="$t('filters.collector').toString()"
-          />
-          <filter-institution v-model="institutions" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-text
+              v-model="number"
+              :title="$t('filters.sampleNumber').toString()"
+            />
+            <filter-locality v-model="locality" />
+            <filter-map
+              v-model="map"
+              sample-overlay
+              :items="$accessor.search.sample.items"
+            />
+            <filter-input-range
+              v-model="depth"
+              :label="$t('filters.depth').toString()"
+              interval-labels="intervals.depth"
+              :step="0.01"
+            />
+            <filter-stratigraphy v-model="stratigraphyHierarchy" />
+            <filter-input-text
+              v-model="collector"
+              :title="$t('filters.collector').toString()"
+            />
+            <filter-institution v-model="institutions" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
 
       <input-text
         v-model="locality"
@@ -50,8 +51,9 @@
 
       <input-text v-model="mass" :label="$t(filters.byIds.mass.label)" />
       <input-text v-model="project" :label="$t(filters.byIds.project.label)" /> -->
-    </search-fields-wrapper>
-  </v-form>
+      </search-fields-wrapper>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

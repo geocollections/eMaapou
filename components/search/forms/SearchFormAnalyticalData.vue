@@ -1,93 +1,94 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
 
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-range
-            v-model="depth"
-            :label="$t('filters.depth').toString()"
-            interval-labels="intervals.depth"
-            :step="0.01"
-          />
-          <filter-input-autocomplete-static
-            v-model="method"
-            :title="$t('filters.method').toString()"
-            :items="methodSuggestions"
-            :filter-field="$translate({ et: 'method', en: 'method_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.method, en: item.method_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.method, en: item.method_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-input-autocomplete-static
-            v-model="lab"
-            :title="$t('filters.lab').toString()"
-            :items="labSuggestions"
-            :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.lab, en: item.lab_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.lab, en: item.lab_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-input-autocomplete-static
-            v-model="project"
-            :title="$t('filters.project').toString()"
-            :items="projectSuggestions"
-            :filter-field="$translate({ et: 'project', en: 'project_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.project, en: item.project_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.project, en: item.project_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-dataset v-model="dataset" />
-          <filter-sample v-model="sample" />
-          <filter-input-parameter
-            v-model="parameter"
-            :parameters="parameterSuggestions"
-          />
-          <filter-stratigraphy v-model="stratigraphyHierarchy" chrono />
-          <filter-stratigraphy
-            v-model="lithostratigraphyHierarchy"
-            litho
-            :label="$t('filters.lithostratigraphyHierarchy').toString()"
-          />
-          <filter-reference v-model="reference" />
-          <filter-locality v-model="locality" />
-          <filter-site v-model="site" />
-          <filter-map
-            v-model="map"
-            locality-overlay
-            site-overlay
-            :items="$accessor.search.analyticalData.items"
-          />
-          <filter-institution v-model="institutions" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <v-row no-gutters>
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-range
+              v-model="depth"
+              :label="$t('filters.depth').toString()"
+              interval-labels="intervals.depth"
+              :step="0.01"
+            />
+            <filter-input-autocomplete-static
+              v-model="method"
+              :title="$t('filters.method').toString()"
+              :items="methodSuggestions"
+              :filter-field="$translate({ et: 'method', en: 'method_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.method, en: item.method_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.method, en: item.method_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-input-autocomplete-static
+              v-model="lab"
+              :title="$t('filters.lab').toString()"
+              :items="labSuggestions"
+              :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-input-autocomplete-static
+              v-model="project"
+              :title="$t('filters.project').toString()"
+              :items="projectSuggestions"
+              :filter-field="$translate({ et: 'project', en: 'project_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.project, en: item.project_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.project, en: item.project_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-dataset v-model="dataset" />
+            <filter-sample v-model="sample" />
+            <filter-input-parameter
+              v-model="parameter"
+              :parameters="parameterSuggestions"
+            />
+            <filter-stratigraphy v-model="stratigraphyHierarchy" chrono />
+            <filter-stratigraphy
+              v-model="lithostratigraphyHierarchy"
+              litho
+              :label="$t('filters.lithostratigraphyHierarchy').toString()"
+            />
+            <filter-reference v-model="reference" />
+            <filter-locality v-model="locality" />
+            <filter-site v-model="site" />
+            <filter-map
+              v-model="map"
+              locality-overlay
+              site-overlay
+              :items="$accessor.search.analyticalData.items"
+            />
+            <filter-institution v-model="institutions" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <v-row no-gutters>
         <v-col cols="12" sm="6" md="12" class="pr-sm-3 pr-md-0">
           <input-text
             v-model="locality"
@@ -206,8 +207,8 @@
           />
         </v-col>
       </v-row> -->
-    </search-fields-wrapper>
-    <!-- <search-map
+      </search-fields-wrapper>
+      <!-- <search-map
       site-overlay
       locality-overlay
       :items="items"
@@ -225,7 +226,8 @@
         />
       </v-col>
     </v-row> -->
-  </v-form>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

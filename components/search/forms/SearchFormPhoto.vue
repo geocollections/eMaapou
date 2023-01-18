@@ -1,24 +1,25 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-locality v-model="locality" />
-          <filter-map v-model="map" :items="$accessor.search.image.items" />
-          <filter-input-text
-            v-model="people"
-            :title="$t('filters.people').toString()"
-          />
-          <filter-input-text
-            v-model="tags"
-            :title="$t('filters.tags').toString()"
-          />
-          <filter-institution v-model="institutions" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <input-text
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-locality v-model="locality" />
+            <filter-map v-model="map" :items="$accessor.search.image.items" />
+            <filter-input-text
+              v-model="people"
+              :title="$t('filters.people').toString()"
+            />
+            <filter-input-text
+              v-model="tags"
+              :title="$t('filters.tags').toString()"
+            />
+            <filter-institution v-model="institutions" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
       />
@@ -47,8 +48,8 @@
         v-model="imageSize"
         :label="$t(filters.byIds.imageSize.label)"
       /> -->
-    </search-fields-wrapper>
-    <!-- <search-map
+      </search-fields-wrapper>
+      <!-- <search-map
       use-custom-markers
       :items="markers"
       class="mt-2"
@@ -61,7 +62,8 @@
       :institution="institution"
       @change:institution="handleInstitutionsUpdate"
     /> -->
-  </v-form>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

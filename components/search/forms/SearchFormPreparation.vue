@@ -1,30 +1,31 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-text
-            v-model="number"
-            :title="$t('filters.preparationNumber').toString()"
-          />
-          <filter-locality v-model="locality" />
-          <filter-map
-            v-model="map"
-            :items="$accessor.search.preparation.items"
-          />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-text
+              v-model="number"
+              :title="$t('filters.preparationNumber').toString()"
+            />
+            <filter-locality v-model="locality" />
+            <filter-map
+              v-model="map"
+              :items="$accessor.search.preparation.items"
+            />
 
-          <filter-input-range
-            v-model="depth"
-            :label="$t('filters.depth').toString()"
-            interval-labels="intervals.depth"
-            :step="0.01"
-          />
-          <filter-stratigraphy v-model="stratigraphyHierarchy" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
+            <filter-input-range
+              v-model="depth"
+              :label="$t('filters.depth').toString()"
+              interval-labels="intervals.depth"
+              :step="0.01"
+            />
+            <filter-stratigraphy v-model="stratigraphyHierarchy" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
       <input-text
         v-model="locality"
         :label="$t(filters.byIds.locality.label)"
@@ -36,9 +37,9 @@
       />
 
       <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" /> -->
-    </search-fields-wrapper>
+      </search-fields-wrapper>
 
-    <!-- <search-map
+      <!-- <search-map
       :items="items"
       class="mt-2"
       :active="!!geoJSON"
@@ -50,7 +51,8 @@
       :institution="institution"
       @change:institution="handleInstitutionsUpdate"
     /> -->
-  </v-form>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

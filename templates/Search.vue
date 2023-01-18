@@ -13,7 +13,7 @@
       :mini-variant-width="48"
       :bottom="$vuetify.breakpoint.smAndDown"
     >
-      <v-card style="height: 100%" color="grey lighten-5" tile>
+      <div style="height: 100%" class="grey lighten-5" tile>
         <v-list v-if="!$vuetify.breakpoint.smAndDown" dense flat class="pa-0">
           <v-list-item :ripple="false" @click="mini = !mini">
             <v-list-item-icon :class="{ 'mr-3': !mini }">
@@ -46,7 +46,7 @@
         <div v-show="!mini">
           <slot name="form" :close-mobile-search="closeMobileSearch"></slot>
         </div>
-      </v-card>
+      </div>
     </v-navigation-drawer>
     <v-main>
       <v-container

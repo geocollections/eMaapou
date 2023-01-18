@@ -1,24 +1,26 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-stratigraphy v-model="stratigraphyHierarchy" />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-stratigraphy v-model="stratigraphyHierarchy" />
 
-          <filter-input-text
-            v-model="index"
-            :title="$t('filters.index').toString()"
-          />
-          <filter-input-text
-            v-model="age"
-            :title="$t('filters.age').toString()"
-          />
-        </v-expansion-panels>
-      </v-card>
-    </search-fields-wrapper>
-  </v-form>
+            <filter-input-text
+              v-model="index"
+              :title="$t('filters.index').toString()"
+            />
+            <filter-input-text
+              v-model="age"
+              :title="$t('filters.age').toString()"
+            />
+          </v-expansion-panels>
+        </v-card>
+      </search-fields-wrapper>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

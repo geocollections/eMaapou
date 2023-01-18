@@ -1,28 +1,29 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-text
-            v-model="name"
-            :title="$t('filters.datasetName').toString()"
-          />
-          <filter-analysis-parameter v-model="analysisParameter" />
-          <filter-input-text
-            v-model="owner"
-            :title="$t('filters.owner').toString()"
-          />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-text
+              v-model="name"
+              :title="$t('filters.datasetName').toString()"
+            />
+            <filter-analysis-parameter v-model="analysisParameter" />
+            <filter-input-text
+              v-model="owner"
+              :title="$t('filters.owner').toString()"
+            />
 
-          <filter-input-text
-            v-model="date"
-            :title="$t('filters.date').toString()"
-          />
-          <filter-institution v-model="institution" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
+            <filter-input-text
+              v-model="date"
+              :title="$t('filters.date').toString()"
+            />
+            <filter-institution v-model="institution" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text v-model="owner" :label="$t(filters.byIds.owner.label)" />
       <input-text v-model="date" :label="$t(filters.byIds.date.label)" />
       <input-text v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
@@ -31,15 +32,16 @@
         multi-select
         :label="$t('dataset.parameters')"
       /> -->
-    </search-fields-wrapper>
+      </search-fields-wrapper>
 
-    <!-- <search-institution-filter
+      <!-- <search-institution-filter
       class="mt-2"
       :active="!isEmpty(institution)"
       :institution="institution"
       @change:institution="handleInstitutionsUpdate"
     /> -->
-  </v-form>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

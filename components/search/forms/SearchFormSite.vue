@@ -1,47 +1,49 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-text
-            v-model="name"
-            :title="$t('filters.name').toString()"
-          />
-          <filter-input-autocomplete-static
-            v-model="project"
-            :title="$t('filters.project').toString()"
-            :items="projectSuggestions"
-            :filter-field="$translate({ et: 'project', en: 'project_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.project, en: item.project_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.project, en: item.project_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-area v-model="area" />
-          <filter-map v-model="map" :items="$accessor.search.site.items" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-text
+              v-model="name"
+              :title="$t('filters.name').toString()"
+            />
+            <filter-input-autocomplete-static
+              v-model="project"
+              :title="$t('filters.project').toString()"
+              :items="projectSuggestions"
+              :filter-field="$translate({ et: 'project', en: 'project_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.project, en: item.project_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.project, en: item.project_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-area v-model="area" />
+            <filter-map v-model="map" :items="$accessor.search.site.items" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
       <input-text v-model="area" :label="$t(filters.byIds.area.label)" />
       <input-text v-model="project" :label="$t(filters.byIds.project.label)" /> -->
-    </search-fields-wrapper>
-    <!-- <search-map
+      </search-fields-wrapper>
+      <!-- <search-map
       site-overlay
       :items="items"
       class="mt-2"
       :active="geoJSON != null"
       @update="handleMapUpdate"
     /> -->
-  </v-form>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

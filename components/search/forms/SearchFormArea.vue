@@ -1,73 +1,81 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-text
-            v-model="name"
-            :title="$t('filters.name').toString()"
-          />
-          <filter-input-autocomplete-static
-            v-model="county"
-            :title="$t('filters.county').toString()"
-            :items="countySuggestions"
-            :filter-field="$translate({ et: 'county', en: 'county_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.county, en: item.county_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.county, en: item.county_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-input-autocomplete-static
-            v-model="type"
-            :title="$t('filters.areaType').toString()"
-            :items="typeSuggestions"
-            :filter-field="$translate({ et: 'area_type', en: 'area_type_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.area_type, en: item.area_type_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.area_type, en: item.area_type_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-        </v-expansion-panels>
-      </v-card>
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-text
+              v-model="name"
+              :title="$t('filters.name').toString()"
+            />
+            <filter-input-autocomplete-static
+              v-model="county"
+              :title="$t('filters.county').toString()"
+              :items="countySuggestions"
+              :filter-field="$translate({ et: 'county', en: 'county_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.county, en: item.county_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.county, en: item.county_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-input-autocomplete-static
+              v-model="type"
+              :title="$t('filters.areaType').toString()"
+              :items="typeSuggestions"
+              :filter-field="
+                $translate({ et: 'area_type', en: 'area_type_en' })
+              "
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{
+                    $translate({ et: item.area_type, en: item.area_type_en })
+                  }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{
+                    $translate({ et: item.area_type, en: item.area_type_en })
+                  }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+          </v-expansion-panels>
+        </v-card>
 
-      <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" /> -->
-      <!--
+        <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" /> -->
+        <!--
         NOTE: Search on estonian county names. These don't contain spaces and therefore don't break the search.
         This probably won't be a problem in the future.
        -->
-      <!-- <input-autocomplete
+        <!-- <input-autocomplete
         v-model="county"
         :items="counties"
         :item-text="$i18n.locale === 'et' ? 'maakond' : 'maakond_en'"
         :item-value="'maakond'"
         :label="$t(filters.byIds.county.label)"
       /> -->
-      <!-- NOTE: Same as with counties above. But this might be a problem when new types are added. -->
-      <!-- <input-autocomplete
+        <!-- NOTE: Same as with counties above. But this might be a problem when new types are added. -->
+        <!-- <input-autocomplete
         v-model="type"
         :items="types"
         :item-text="$i18n.locale === 'et' ? 'name' : 'name_en'"
         :item-value="'name'"
         :label="$t(filters.byIds.type.label)"
       /> -->
-    </search-fields-wrapper>
-  </v-form>
+      </search-fields-wrapper>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">

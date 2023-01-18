@@ -1,61 +1,65 @@
 <template>
-  <v-form @submit.prevent="handleSearch">
-    <input-search v-model="query" />
-    <search-actions class="mb-3" @click="handleReset" />
-    <search-fields-wrapper>
-      <v-card class="mt-3" flat tile color="transparent">
-        <v-expansion-panels accordion flat tile multiple>
-          <filter-input-range
-            v-model="depth"
-            :label="$t('filters.depth').toString()"
-            interval-labels="intervals.depth"
-            :step="0.01"
-          />
-          <filter-input-autocomplete-static
-            v-model="method"
-            :title="$t('filters.method').toString()"
-            :items="methodSuggestions"
-            :filter-field="$translate({ et: 'method', en: 'method_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.method, en: item.method_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.method, en: item.method_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-input-autocomplete-static
-            v-model="lab"
-            :title="$t('filters.lab').toString()"
-            :items="labSuggestions"
-            :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
-          >
-            <template #selection="{ item }">
-              <div>
-                {{ $translate({ et: item.lab, en: item.lab_en }) }}
-              </div>
-            </template>
-            <template #suggestion="{ item }">
-              <div>
-                {{ $translate({ et: item.lab, en: item.lab_en }) }}
-              </div>
-            </template>
-          </filter-input-autocomplete-static>
-          <filter-sample v-model="sample" />
-          <filter-locality v-model="locality" />
-          <filter-map v-model="map" :items="$accessor.search.analysis.items" />
-          <filter-input-text
-            v-model="agent"
-            :title="$t('filters.agent').toString()"
-          />
-          <filter-institution v-model="institutions" />
-        </v-expansion-panels>
-      </v-card>
-      <!-- <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
+  <div>
+    <v-form @submit.prevent="handleSearch">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <search-fields-wrapper>
+        <v-card class="mt-3" flat tile color="transparent">
+          <v-expansion-panels accordion flat tile multiple>
+            <filter-input-range
+              v-model="depth"
+              :label="$t('filters.depth').toString()"
+              interval-labels="intervals.depth"
+              :step="0.01"
+            />
+            <filter-input-autocomplete-static
+              v-model="method"
+              :title="$t('filters.method').toString()"
+              :items="methodSuggestions"
+              :filter-field="$translate({ et: 'method', en: 'method_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.method, en: item.method_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.method, en: item.method_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-input-autocomplete-static
+              v-model="lab"
+              :title="$t('filters.lab').toString()"
+              :items="labSuggestions"
+              :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
+            >
+              <template #selection="{ item }">
+                <div>
+                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
+                </div>
+              </template>
+              <template #suggestion="{ item }">
+                <div>
+                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
+                </div>
+              </template>
+            </filter-input-autocomplete-static>
+            <filter-sample v-model="sample" />
+            <filter-locality v-model="locality" />
+            <filter-map
+              v-model="map"
+              :items="$accessor.search.analysis.items"
+            />
+            <filter-input-text
+              v-model="agent"
+              :title="$t('filters.agent').toString()"
+            />
+            <filter-institution v-model="institutions" />
+          </v-expansion-panels>
+        </v-card>
+        <!-- <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
       <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
       <input-text v-model="method" :label="$t(filters.byIds.method.label)" />
       <input-text
@@ -65,15 +69,15 @@
       <input-text v-model="sample" :label="$t(filters.byIds.sample.label)" />
       <input-text v-model="agent" :label="$t(filters.byIds.agent.label)" />
       <input-text v-model="lab" :label="$t(filters.byIds.lab.label)" /> -->
-      <!-- <input-autocomplete-stratigraphy
+        <!-- <input-autocomplete-stratigraphy
         v-model="stratigraphy"
         return-object
         :label="$t(filters.byIds.stratigraphy.label)"
       />
       <input-text v-model="dataset" :label="$t(filters.byIds.dataset.label)" /> -->
-    </search-fields-wrapper>
+      </search-fields-wrapper>
 
-    <!-- <search-map
+      <!-- <search-map
       :items="items"
       class="mt-2"
       :active="geoJSON !== null"
@@ -85,7 +89,8 @@
       :institution="institution"
       @change:institution="handleInstitutionsUpdate"
     /> -->
-  </v-form>
+    </v-form>
+  </div>
 </template>
 
 <script lang="ts">
