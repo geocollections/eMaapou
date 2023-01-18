@@ -1,6 +1,10 @@
 <template>
   <v-app dark>
-    <app-drawer :drawer="drawer" @update:navigationDrawer="drawer = $event" />
+    <app-drawer
+      v-if="!$vuetify.breakpoint.mdAndUp"
+      :drawer="drawer"
+      @update:navigationDrawer="drawer = $event"
+    />
     <app-header
       :drawer="drawer"
       transparent

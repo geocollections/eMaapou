@@ -12,16 +12,10 @@
     @input="$emit('update:navigationDrawer', $event)"
   >
     <v-container class="more-menu py-4 mb-6">
-      <!-- <div class="section-title montserrat pl-2">
-        {{ $t('common.home') }}
-      </div>
-
-      <hr /> -->
-
       <v-list class="py-1 px-2">
         <v-list-item
           v-for="route in routes"
-          :key="route.name"
+          :key="route.routeName"
           nuxt
           class="header-menu-item rounded my-1"
           color="accent darken-1"
@@ -47,7 +41,7 @@
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
-          :label="$t(item.label)"
+          :label="$t(item.label).toString()"
           nuxt
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
@@ -60,7 +54,7 @@
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
-          :label="$t(item.label)"
+          :label="$t(item.label).toString()"
           nuxt
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
@@ -74,7 +68,7 @@
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
-          :label="$t(item.label)"
+          :label="$t(item.label).toString()"
           nuxt
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
@@ -87,16 +81,16 @@
 
       <v-list class="py-1 px-2">
         <v-list-item
-          v-for="tabId in externalCards.ids"
-          :key="externalCards[tabId].href"
+          v-for="tabId in services.ids"
+          :key="services[tabId].href"
           tag="a"
           class="header-menu-item rounded my-1"
           color="accent darken-1"
           target="_blank"
-          :href="externalCards[tabId].href"
+          :href="services[tabId].href"
         >
           <v-list-item-title class="py-1">
-            <span class="montserrat">{{ $t(externalCards[tabId].title) }}</span>
+            <span class="montserrat">{{ $t(services[tabId].title) }}</span>
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -117,19 +111,14 @@ import {
   mdiMagnify,
   mdiInformationOutline,
   mdiNewspaperVariantOutline,
-  mdiMapMarkerOutline,
-  mdiBinoculars,
-  mdiScrewMachineFlatTop,
-  mdiTestTube,
-  mdiChartScatterPlot,
-  mdiChartLine,
-  mdiDatabaseOutline,
-  mdiFamilyTree,
-  mdiLayersTriple,
   mdiFileImageOutline,
-  mdiMicroscope,
 } from '@mdi/js'
-import Vue from 'vue'
+import {
+  computed,
+  defineComponent,
+  reactive,
+  toRefs,
+} from '@nuxtjs/composition-api'
 import LanguageList from '~/components/language/LanguageList.vue'
 import BaseMenuListItem from '~/components/base/BaseMenuListItem.vue'
 import {
@@ -139,7 +128,7 @@ import {
   SERVICES,
 } from '~/constants'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AppDrawer',
   components: { LanguageList, BaseMenuListItem },
   props: {
@@ -148,8 +137,9 @@ export default Vue.extend({
       required: true,
     },
   },
-  data() {
-    return {
+  setup() {
+    const icons = computed(() => ({ mdiFileImageOutline }))
+    const state = reactive({
       browseGeography: BROWSE_GEOLOGY_LIST,
       browseLab: BROWSE_LAB_LIST,
       browseTaxon: BROWSE_TAXON_LIST,
@@ -171,158 +161,8 @@ export default Vue.extend({
           icon: mdiNewspaperVariantOutline,
         },
       ],
-      searchRoutes: [
-        {
-          routeName: 'locality',
-          text: 'locality.pageTitle',
-          icon: mdiMapMarkerOutline,
-        },
-        {
-          routeName: 'site',
-          text: 'site.pageTitle',
-          icon: mdiBinoculars,
-        },
-        {
-          routeName: 'drillcore',
-          text: 'drillcore.pageTitle',
-          icon: mdiScrewMachineFlatTop,
-        },
-        {
-          routeName: 'sample',
-          text: 'sample.pageTitle',
-          icon: mdiTestTube,
-        },
-        {
-          routeName: 'analysis',
-          text: 'analysis.pageTitle',
-          icon: mdiChartScatterPlot,
-        },
-        {
-          routeName: 'analytical-data',
-          text: 'analyticalData.pageTitle',
-          icon: mdiChartLine,
-        },
-        {
-          routeName: 'dataset',
-          text: 'dataset.pageTitle',
-          icon: mdiDatabaseOutline,
-        },
-        {
-          routeName: 'taxon',
-          text: 'taxon.pageTitle',
-          icon: mdiFamilyTree,
-        },
-        {
-          routeName: 'stratigraphy',
-          text: 'stratigraphy.pageTitle',
-          icon: mdiLayersTriple,
-        },
-        {
-          routeName: 'photo',
-          text: 'photo.pageTitle',
-          icon: mdiFileImageOutline,
-        },
-        {
-          routeName: 'specimen',
-          text: 'specimen.pageTitle',
-          icon: mdiMicroscope,
-        },
-        { routeName: 'preparation', text: 'preparation.pageTitle' },
-        { routeName: 'area', text: 'area.pageTitle' },
-      ],
-      externalCards: {
-        geocollections: {
-          title: 'geocollections.title',
-          description: 'geocollections.description',
-          href: 'https://geocollections.info',
-        },
-        kirjandus: {
-          title: 'kirjandus.title',
-          description: 'kirjandus.description',
-          href: 'https://kirjandus.geoloogia.info',
-        },
-        gmre: {
-          title: 'gmre.title',
-          description: 'gmre.description',
-          href: 'https://geoloogia.info/geology',
-        },
-        fond: {
-          title: 'fond.title',
-          description: 'fond.description',
-          href: 'https://fond.egt.ee',
-        },
-        // Divider
-        fossiilid: {
-          title: 'fossiilid.title',
-          description: 'fossiilid.description',
-          href: 'https://fossiilid.info',
-        },
-        kivid: {
-          title: 'kivid.title',
-          description: 'kivid.description',
-          href: 'https://kivid.info',
-        },
-        stratigraphy: {
-          title: 'frontStratigraphy.title',
-          description: 'frontStratigraphy.description',
-          href: 'https://stratotuup.ut.ee',
-        },
-        // Divider
-        maardlad: {
-          title: 'maardlad.title',
-          description: 'maardlad.description',
-          href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
-        },
-        doi: {
-          title: 'doi.title',
-          description: 'doi.description',
-          href: 'https://doi.geocollections.info',
-        },
-        turba: {
-          title: 'turba.title',
-          description: 'turba.description',
-          href: 'https://turba.geoloogia.info',
-        },
-        // Divider
-        geocase: {
-          title: 'geocase.title',
-          description: 'geocase.description',
-          href: 'https://geocase.eu',
-        },
-        eurocore: {
-          title: 'eurocore.title',
-          description: 'eurocore.description',
-          href: 'https://eurocore.rocks',
-        },
-        sarv: {
-          title: 'sarv.title',
-          description: 'sarv.description',
-          href: 'https://edit.geocollections.info',
-        },
-        ids: [
-          'kirjandus',
-          'fossiilid',
-          'kivid',
-          'fond',
-          'maardlad',
-          'stratigraphy',
-          'gmre',
-          'turba',
-          'geocase',
-          'eurocore',
-          'geocollections',
-          'doi',
-          'sarv',
-        ],
-      },
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiFileImageOutline,
-      }
-    },
+    })
+    return { ...toRefs(state), icons }
   },
 })
 </script>
