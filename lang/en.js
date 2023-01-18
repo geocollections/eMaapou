@@ -1044,6 +1044,7 @@ export default {
     combineOperators: 'combine operators'
   },
   filters: {
+    filter: 'Filter',
     locality: 'Locality',
     map: 'Map',
     stratigraphyHierarchy: 'Stratigraphy hierarchy',

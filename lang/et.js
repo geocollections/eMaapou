@@ -1045,6 +1045,7 @@ export default {
     combineOperators: 'kombineeri operaatoreid'
   },
   filters: {
+    filter: 'Filtreeri',
     locality: 'Lokaliteet',
     map: 'Kaart',
     stratigraphyHierarchy: 'Stratigraafia hierarhia',

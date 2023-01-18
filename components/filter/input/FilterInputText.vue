@@ -50,7 +50,7 @@
         v-model="internalValue"
         hide-details
         dense
-        :placeholder="$t('filters.search')"
+        :placeholder="$t('filters.filter')"
         @keydown.enter="handleAdd"
       >
       </v-text-field>
