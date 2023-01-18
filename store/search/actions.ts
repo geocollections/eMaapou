@@ -32,7 +32,7 @@ export const searchModuleActionTree = <F extends { [K: string]: Filter }>({
         commit('SET_MODULE_FILTER_VALUE', { key: key as string, value })
       },
       setQuery({ commit }, newQuery) {
-        commit('SET_MODULE_QUERY', { query: newQuery })
+        commit('SET_MODULE_QUERY', { query: newQuery ?? '' })
       },
     }
   )
