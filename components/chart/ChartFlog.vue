@@ -504,7 +504,7 @@ export default defineComponent({
                 }
               } else {
                 state.nextGridIndex =
-                  chart?.getOption().grid.lenthisgth + parameterGridIndex
+                  chart?.getOption().grid.length + parameterGridIndex
                 newDataZoomYAxisIndices.push(state.nextGridIndex)
                 const newChartComponents = createParameterChartComponents(
                   groupedParameters.find((param: any) => {
