@@ -1275,7 +1275,7 @@ export const HEADERS_SPECIMEN: Headers = {
       apiFieldValue: { et: 'rock', en: 'rock_en' },
     },
     image: {
-      text: 'specimen.image',
+      text: '',
       value: 'image',
       show: true,
       apiFieldValue: 'image',
