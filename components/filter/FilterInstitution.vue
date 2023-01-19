@@ -1,14 +1,14 @@
 <template>
   <v-expansion-panel style="background-color: transparent">
     <v-expansion-panel-header
-      class="py-1 pl-2 pr-1 font-weight-medium"
+      class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray"
     >
       {{ $t('filters.institutions') }}
     </v-expansion-panel-header>
     <div
       v-if="value.length > 0"
-      class="white pt-1 px-2"
+      class="white pt-1 pl-4 pr-2"
       style="
         border-bottom: 1px solid lightgray !important;
         border-right: 1px solid lightgray !important;
@@ -161,8 +161,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 ::v-deep .v-expansion-panel-content__wrap {
-  padding-right: 8px;
-  padding-left: 8px;
+  padding-right: 16px;
+  padding-left: 16px;
   padding-bottom: 8px;
 }
 </style>

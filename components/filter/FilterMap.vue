@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel style="background-color: transparent" @change="handleOpen">
     <v-expansion-panel-header
-      class="py-1 pl-2 pr-1 font-weight-medium"
+      class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray"
     >
       {{ $t('filters.map') }}
@@ -14,7 +14,7 @@
         border-right: 1px solid lightgray !important;
       "
     >
-      <div class="d-flex py-1 px-2">
+      <div class="d-flex py-1 pl-4 pr-2">
         <span>
           <input
             type="checkbox"

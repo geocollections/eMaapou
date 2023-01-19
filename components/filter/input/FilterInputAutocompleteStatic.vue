@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel style="background-color: transparent">
     <v-expansion-panel-header
-      class="py-1 pl-2 pr-1 font-weight-medium"
+      class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
@@ -17,7 +17,7 @@
       <div
         v-for="(item, i) in selectedItems"
         :key="i"
-        class="d-flex py-1 selected-item px-2"
+        class="d-flex py-1 selected-item pl-4 pr-2"
       >
         <span>
           <input
@@ -149,8 +149,8 @@ export default defineComponent({
 
 <style scoped>
 ::v-deep .v-expansion-panel-content__wrap {
-  padding-right: 8px;
-  padding-left: 8px;
+  padding-right: 16px;
+  padding-left: 16px;
   padding-bottom: 8px;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel style="background-color: transparent">
     <v-expansion-panel-header
-      class="py-1 pl-2 pr-1 font-weight-medium"
+      class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ label }}
@@ -14,7 +14,7 @@
         border-right: 1px solid lightgray !important;
       "
     >
-      <div class="d-flex py-1 px-2">
+      <div class="d-flex py-1 pl-4 pr-2">
         <span>
           <input
             type="checkbox"
@@ -36,8 +36,8 @@
         border-right: 1px solid lightgray !important;
       "
     >
-      <v-row>
-        <v-col cols="6">
+      <v-row no-gutters>
+        <v-col cols="6" class="pl-r">
           <v-text-field
             :value="value[0]"
             color="primary darken-3"
@@ -52,7 +52,7 @@
           >
           </v-text-field>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="6" class="pl-1">
           <v-text-field
             :value="value[1]"
             color="primary darken-3"
@@ -186,8 +186,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 ::v-deep .v-expansion-panel-content__wrap {
-  padding-right: 8px;
-  padding-left: 8px;
+  padding-right: 16px;
+  padding-left: 16px;
   padding-bottom: 8px;
 }
 .v-text-field {

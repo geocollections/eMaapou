@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panel ref="panel" style="background-color: transparent">
     <v-expansion-panel-header
-      class="py-1 pl-2 pr-1 font-weight-medium"
+      class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ label }}
@@ -17,7 +17,7 @@
       <div
         v-for="(item, i) in validFilters"
         :key="i"
-        class="d-flex py-1 selected-item px-2"
+        class="d-flex py-1 selected-item pl-4 pr-2"
       >
         <span>
           <input
@@ -53,7 +53,7 @@
         class="pb-2"
         style="border-bottom: 1px solid lightgray !important"
       >
-        <v-row no-gutters class="px-2">
+        <v-row no-gutters class="pl-4 pr-2">
           <v-col cols="8">
             <v-autocomplete
               :value="v.parameter"
@@ -73,7 +73,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters>
-          <v-col cols="6" class="pl-2 pr-1">
+          <v-col cols="6" class="pl-4 pr-1">
             <v-text-field
               class="pt-4"
               hide-details
@@ -89,7 +89,7 @@
             />
           </v-col>
 
-          <v-col cols="6" class="pl-1 pr-2">
+          <v-col cols="6" class="pl-1 pr-4">
             <v-text-field
               class="pt-4"
               hide-details
@@ -106,7 +106,7 @@
           </v-col>
         </v-row>
       </div>
-      <v-row no-gutters class="pt-2 px-2">
+      <v-row no-gutters class="pt-2 px-4">
         <v-col cols="6">
           <v-btn
             small
