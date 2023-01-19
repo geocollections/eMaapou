@@ -63,7 +63,6 @@ export default actionTree(
             [key]: {
               text: parameter.text,
               value: parameter.value,
-              align: 'right',
               translate: false,
               apiFieldValue: parameter.value,
               show: false,
