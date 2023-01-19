@@ -335,7 +335,7 @@ export default {
   specimen: {
     landingCard: 'specimens',
     id: 'ID',
-    number: 'Specimen number',
+    number: 'Number',
     oldNumber: 'Old number',
     depth: 'Depth (m)',
     depthInterval: 'Depth to (m)',

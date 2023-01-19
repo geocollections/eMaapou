@@ -336,7 +336,7 @@ export default {
   specimen: {
     id: 'ID',
     landingCard: 'eksemplari',
-    number: 'Eksemplari nr.',
+    number: 'Number',
     oldNumber: 'Vana nr.',
     depth: 'Sügavus (m)',
     depthInterval: 'Süg. kuni (m)',
