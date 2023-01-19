@@ -129,6 +129,11 @@
         {{ item.taxon }}
       </base-link-external>
     </template>
+    <template #item.original_status="{ item }">
+      {{
+        $translate({ et: item.original_status, en: item.original_status_en })
+      }}
+    </template>
   </base-data-table>
 </template>
 

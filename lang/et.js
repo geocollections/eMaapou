@@ -373,6 +373,7 @@ export default {
     rockName: 'Kivim/mineraal',
     reference: 'Kirjandus',
     parent: 'Kuulub',
+    originalStatus: 'Originaalne staatus'
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',

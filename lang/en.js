@@ -372,6 +372,7 @@ export default {
     rockName: 'Rock/mineral',
     reference: 'Reference',
     parent: 'Belongs to',
+    originalStatus: 'Original status'
   },
   specimenIdentification: {
     rock: 'Mineral/rock',
