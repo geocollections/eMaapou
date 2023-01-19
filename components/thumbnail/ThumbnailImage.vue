@@ -3,7 +3,7 @@
     v-ripple="{ class: 'primary--text darken-2' }"
     class="thumbnail-image rounded"
     max-height="80px"
-    width="90px"
+    width="80px"
     aspect-ratio="1"
     :src="src"
     @click="$emit('click')"
@@ -27,7 +27,7 @@ export default {
 .thumbnail-image {
   transition: all 0.2s ease-in-out;
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1);
     cursor: pointer;
   }
 }

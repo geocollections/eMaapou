@@ -99,7 +99,7 @@
       <thumbnail-image
         v-if="item.image_preview_url"
         :src="item.image_preview_url"
-        class="ma-2"
+        class="my-1"
         @click="
           $router.push(
             localePath({
