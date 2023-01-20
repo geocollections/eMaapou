@@ -19,49 +19,7 @@
             <filter-institution v-model="institutions" />
           </v-expansion-panels>
         </v-card>
-        <!-- <input-text
-        v-model="locality"
-        :label="$t(filters.byIds.locality.label)"
-      />
-
-      <input-text v-model="people" :label="$t(filters.byIds.people.label)" />
-
-      <input-text v-model="tags" :label="$t(filters.byIds.tags.label)" />
-
-      <input-text v-model="country" :label="$t(filters.byIds.country.label)" />
-
-      <input-range v-model="date" :label="$t(filters.byIds.date.label)" />
-
-      <input-text
-        v-model="dateFree"
-        :label="$t(filters.byIds.dateFree.label)"
-      />
-
-      <input-text
-        v-model="imageNumber"
-        :label="$t(filters.byIds.imageNumber.label)"
-      />
-
-      <input-text v-model="author" :label="$t(filters.byIds.author.label)" />
-
-      <input-text
-        v-model="imageSize"
-        :label="$t(filters.byIds.imageSize.label)"
-      /> -->
       </search-fields-wrapper>
-      <!-- <search-map
-      use-custom-markers
-      :items="markers"
-      class="mt-2"
-      :active="geoJSON !== null"
-      @update="handleMapUpdate"
-    />
-    <search-institution-filter
-      class="mt-2"
-      :active="!isEmpty(institution)"
-      :institution="institution"
-      @change:institution="handleInstitutionsUpdate"
-    /> -->
     </v-form>
   </div>
 </template>
@@ -76,10 +34,6 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-// import InputText from '~/components/input/InputText.vue'
-// import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-// import InputRange from '~/components/input/InputRange.vue'
-// import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import { useFilter } from '~/composables/useFilter'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
@@ -90,12 +44,8 @@ import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 export default defineComponent({
   name: 'SearchFormPhoto',
   components: {
-    // InputRange,
-    // SearchInstitutionFilter,
-    // InputText,
     SearchFieldsWrapper,
     SearchActions,
-    // SearchMap,
     InputSearch,
     FilterLocality,
     FilterInputText,

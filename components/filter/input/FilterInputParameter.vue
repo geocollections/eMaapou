@@ -312,26 +312,6 @@ export default defineComponent({
       },
     }
   },
-  // methods: {
-  //   parseInput(input) {
-  //     if (isEmpty(input)) return null
-  //     else return parseFloat(input)
-  //   },
-  //   handleParameter(newParameter) {
-  //     if (newParameter) {
-  //       this.parameter = newParameter
-
-  //       this.$emit('input', {
-  //         ...this.value,
-  //         label: newParameter.text,
-  //         fields: [newParameter.value],
-  //       })
-  //     }
-  //   },
-  //   handleValue(value) {
-  //     this.$emit('input', { ...this.value, value })
-  //   },
-  // },
 })
 </script>
 

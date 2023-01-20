@@ -33,8 +33,6 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-// import InputText from '~/components/input/InputText.vue'
-// import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
@@ -43,8 +41,6 @@ import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
   components: {
-    // InputText,
-    // InputAutocompleteStratigraphy,
     SearchFieldsWrapper,
     SearchActions,
     InputSearch,

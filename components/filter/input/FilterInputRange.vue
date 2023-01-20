@@ -144,10 +144,8 @@ export default defineComponent({
     const handleInput = (input: string, isMin: boolean) => {
       if (isMin) {
         internalValue.value = [parseInput(input), props.value[1]]
-        // emit('input', [parseInput(input), props.value[1]])
       } else {
         internalValue.value = [props.value[0], parseInput(input)]
-        // emit('input', [props.value[0], parseInput(input)])
       }
     }
     const valueString = computed(() => {

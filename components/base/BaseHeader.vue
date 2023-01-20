@@ -41,18 +41,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-// .v-card {
-//   &::after {
-//     content: '';
-//     position: absolute;
-//     bottom: 0;
-//     left: 0;
-//     right: 0;
-//     background: var(--v-accent-base);
-//     height: 2px;
-//     border-radius: 2px 2px 2px 2px;
-//   }
-// }
-</style>

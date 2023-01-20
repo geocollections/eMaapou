@@ -23,23 +23,7 @@
             <filter-institution v-model="institution" />
           </v-expansion-panels>
         </v-card>
-        <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
-      <input-text v-model="owner" :label="$t(filters.byIds.owner.label)" />
-      <input-text v-model="date" :label="$t(filters.byIds.date.label)" />
-      <input-text v-model="remarks" :label="$t(filters.byIds.remarks.label)" />
-      <input-autocomplete-parameter
-        v-model="parameters"
-        multi-select
-        :label="$t('dataset.parameters')"
-      /> -->
       </search-fields-wrapper>
-
-      <!-- <search-institution-filter
-      class="mt-2"
-      :active="!isEmpty(institution)"
-      :institution="institution"
-      @change:institution="handleInstitutionsUpdate"
-    /> -->
     </v-form>
   </div>
 </template>
@@ -56,10 +40,7 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
-// import SearchInstitutionFilter from '~/components/search/SearchInstitutionFilter.vue'
-// import InputText from '~/components/input/InputText.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-// import InputAutocompleteParameter from '~/components/input/InputAutocompleteParameter.vue'
 import FilterAnalysisParameter from '~/components/filter/FilterAnalysisParameter.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
@@ -68,15 +49,12 @@ import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormDataset',
   components: {
-    // SearchInstitutionFilter,
-    // InputText,
     SearchActions,
     SearchFieldsWrapper,
     InputSearch,
     FilterAnalysisParameter,
     FilterInstitution,
     FilterInputText,
-    // InputAutocompleteParameter,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
@@ -133,34 +111,5 @@ export default defineComponent({
       handleSearch,
     }
   },
-  // data() {
-  //   return {
-  //     availableParameters: [],
-  //   }
-  // },
-  // async fetch() {
-  //   if (this.availableParameters.length === 0) {
-  //     const availableParametersResponse =
-  //       await this.$services.sarvSolr.getResourceList('analysis_parameter', {
-  //         defaultParams: {
-  //           fq: 'is_null:false',
-  //         },
-  //       })
-  //     this.availableParameters = availableParametersResponse?.items.map(
-  //       (parameter: any) => {
-  //         return { text: parameter.parameter, value: parameter.parameter_index }
-  //       }
-  //     )
-  //   }
-  // },
-  // methods: {
-  //   handleParameterInput(e: any) {
-  //     this.parameters = e
-  //   },
-  //   handleInstitutionsUpdate(newInstitutions: any[]) {
-  //     this.institution = newInstitutions
-  //     this.$emit('update')
-  //   },
-  // },
 })
 </script>

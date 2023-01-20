@@ -44,7 +44,6 @@
 </template>
 
 <script>
-// import { LPopup } from 'vue2-leaflet'
 let Vue2Leaflet = {}
 if (process.client) {
   Vue2Leaflet = require('vue2-leaflet')
@@ -61,7 +60,6 @@ export default {
   },
   computed: {
     features() {
-      // console.log(this?.response?.features ?? [])
       return this?.response?.features ?? []
     },
     featuresLength() {

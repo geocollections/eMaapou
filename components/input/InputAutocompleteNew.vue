@@ -137,9 +137,6 @@ export default defineComponent({
             .join(' AND ')
 
         const response = await props.queryFunction(search)
-        // const response = await $axios.$get(
-        //   `https://api.geoloogia.info/solr/locality?q=${search}&rows=10&fl=locality,id`
-        // )
         state.suggestItems = response.response.docs
         state.totalSuggestions = response.response.numFound
         state.page = 1

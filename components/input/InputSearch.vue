@@ -70,7 +70,6 @@ export default defineComponent({
     const searchFocused = ref(false)
     const searchInput = ref()
     const inputStyle = computed(() => ({
-      // @ts-ignore
       maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : 'inherit',
       width: '100%',
     }))

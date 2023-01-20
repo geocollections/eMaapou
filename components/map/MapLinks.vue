@@ -62,8 +62,6 @@ export default {
       const FE = 500000.0
       const B1 = (59.0 + 20.0 / 60.0) * (Math.PI / 180)
       const B2 = 58.0 * (Math.PI / 180)
-      // let xx = north - FN;
-      // let yy = east - FE;
       const f1 = 1 / RF
       const er = 2.0 * f1 - f1 * f1
       let e = Math.sqrt(er)

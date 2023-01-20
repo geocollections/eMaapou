@@ -30,35 +30,12 @@
             <filter-institution v-model="institutions" />
           </v-expansion-panels>
         </v-card>
-        <!-- <input-text v-model="number" :label="$t(filters.byIds.number.label)" />
-
-      <input-text
-        v-model="locality"
-        :label="$t(filters.byIds.locality.label)"
-      />
-
-      <input-autocomplete-stratigraphy
-        v-model="hierarchy"
-        return-object
-        :label="$t(filters.byIds.hierarchy.label)"
-      />
-
-      <input-text
-        v-model="collector"
-        :label="$t(filters.byIds.collector.label)"
-      />
-      <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
-
-      <input-text v-model="mass" :label="$t(filters.byIds.mass.label)" />
-      <input-text v-model="project" :label="$t(filters.byIds.project.label)" /> -->
       </search-fields-wrapper>
     </v-form>
   </div>
 </template>
 
 <script lang="ts">
-import isEmpty from 'lodash/isEmpty'
-
 import {
   computed,
   defineComponent,
@@ -70,9 +47,6 @@ import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
-// import InputRange from '~/components/input/InputRange.vue'
-// import InputText from '~/components/input/InputText.vue'
-// import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
@@ -91,9 +65,6 @@ export default defineComponent({
     FilterStratigraphy,
     FilterInputRange,
     FilterInputText,
-    // InputAutocompleteStratigraphy,
-    // InputText,
-    // InputRange,
     SearchFieldsWrapper,
     SearchActions,
     FilterMap,
@@ -164,7 +135,6 @@ export default defineComponent({
       map,
       handleReset,
       handleSearch,
-      isEmpty,
     }
   },
 })

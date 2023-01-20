@@ -346,66 +346,6 @@ export default defineComponent({
       table,
     }
   },
-  // data() {
-  //   return {
-  //     search: '',
-  //     footerProps: {
-  //       showFirstLastPage: true,
-  //       'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-  //       'items-per-page-text': this.$t('table.itemsPerPage'),
-  //     },
-  //     expanded: [],
-  //     // isLoading: false,
-  //     tableElement: null as HTMLElement | null,
-  //     canScrollLeft: false,
-  //     canScrollRight: false,
-  //     topOptionsHeight: 0,
-  //   }
-  // },
-  // mounted() {
-  //   this.tableElement = this.$el.querySelector('table')
-  //   this.$nextTick(() => {
-  //     this.topOptionsHeight = this.$el.querySelector('#top')?.clientHeight ?? 0
-  //   })
-  //   const dataTableWrapper = this.$el.querySelector(
-  //     '.v-data-table__wrapper'
-  //   ) as HTMLElement | null
-  //   dataTableWrapper?.addEventListener('scroll', () => {
-  //     if (
-  //       dataTableWrapper.scrollLeft + dataTableWrapper.clientWidth >=
-  //       dataTableWrapper.scrollWidth
-  //     ) {
-  //       this.canScrollRight = false
-  //     } else if (dataTableWrapper.scrollLeft === 0) {
-  //       this.canScrollLeft = false
-  //     } else {
-  //       this.canScrollLeft = true
-  //       this.canScrollRight = true
-  //     }
-  //   })
-
-  //   window.addEventListener('resize', () => {
-  //     this.topOptionsHeight = this.$el.querySelector('#top')?.clientHeight ?? 0
-  //     if (
-  //       dataTableWrapper?.offsetWidth &&
-  //       dataTableWrapper?.scrollWidth &&
-  //       dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
-  //     ) {
-  //       this.canScrollRight = true
-  //     } else {
-  //       this.canScrollLeft = false
-  //       this.canScrollRight = false
-  //     }
-  //   })
-
-  //   if (
-  //     dataTableWrapper?.offsetWidth &&
-  //     dataTableWrapper?.scrollWidth &&
-  //     dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
-  //   ) {
-  //     this.canScrollRight = true
-  //   }
-  // },
 })
 </script>
 

@@ -59,42 +59,12 @@
             <filter-institution v-model="institutions" />
           </v-expansion-panels>
         </v-card>
-        <!-- <input-text v-model="id" :label="$t(filters.byIds.id.label)" />
-      <input-range v-model="depth" :label="$t(filters.byIds.depth.label)" />
-      <input-text v-model="method" :label="$t(filters.byIds.method.label)" />
-      <input-text
-        v-model="locality"
-        :label="$t(filters.byIds.locality.label)"
-      />
-      <input-text v-model="sample" :label="$t(filters.byIds.sample.label)" />
-      <input-text v-model="agent" :label="$t(filters.byIds.agent.label)" />
-      <input-text v-model="lab" :label="$t(filters.byIds.lab.label)" /> -->
-        <!-- <input-autocomplete-stratigraphy
-        v-model="stratigraphy"
-        return-object
-        :label="$t(filters.byIds.stratigraphy.label)"
-      />
-      <input-text v-model="dataset" :label="$t(filters.byIds.dataset.label)" /> -->
       </search-fields-wrapper>
-
-      <!-- <search-map
-      :items="items"
-      class="mt-2"
-      :active="geoJSON !== null"
-      @update="handleMapUpdate"
-    />
-    <search-institution-filter
-      class="mt-2"
-      :active="!isEmpty(institution)"
-      :institution="institution"
-      @change:institution="handleInstitutionsUpdate"
-    /> -->
     </v-form>
   </div>
 </template>
 
 <script lang="ts">
-import isEmpty from 'lodash/isEmpty'
 import {
   computed,
   defineComponent,
@@ -107,7 +77,6 @@ import {
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-// import InputAutocompleteStratigraphy from '~/components/input/InputAutocompleteStratigraphy.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
@@ -123,14 +92,9 @@ import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormAnalysis',
   components: {
-    // SearchInstitutionFilter,
-    // InputText,
     SearchFieldsWrapper,
     SearchActions,
-    // SearchMap,
     InputSearch,
-    // InputRange,
-    // InputAutocompleteStratigraphy,
     FilterInputRange,
     FilterInputAutocompleteStatic,
     FilterLocality,
@@ -146,9 +110,6 @@ export default defineComponent({
       emit('reset')
     }
     const handleSearch = () => {
-      emit('update')
-    }
-    const handleMapUpdate = () => {
       emit('update')
     }
 
@@ -242,10 +203,8 @@ export default defineComponent({
     })
     return {
       ...toRefs(state),
-      isEmpty,
       handleReset,
       handleSearch,
-      handleMapUpdate,
       depth,
       query,
       method,

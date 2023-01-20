@@ -31,17 +31,7 @@
             <filter-map v-model="map" :items="$accessor.search.site.items" />
           </v-expansion-panels>
         </v-card>
-        <!-- <input-text v-model="name" :label="$t(filters.byIds.name.label)" />
-      <input-text v-model="area" :label="$t(filters.byIds.area.label)" />
-      <input-text v-model="project" :label="$t(filters.byIds.project.label)" /> -->
       </search-fields-wrapper>
-      <!-- <search-map
-      site-overlay
-      :items="items"
-      class="mt-2"
-      :active="geoJSON != null"
-      @update="handleMapUpdate"
-    /> -->
     </v-form>
   </div>
 </template>
@@ -56,10 +46,8 @@ import {
   useFetch,
   useRoute,
 } from '@nuxtjs/composition-api'
-// import InputText from '../../input/InputText.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
-// import SearchMap from '~/components/search/SearchMap.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterArea from '~/components/filter/FilterArea.vue'
@@ -70,14 +58,12 @@ import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormSite',
   components: {
-    // InputText,
     SearchFieldsWrapper,
     SearchActions,
     FilterInputText,
     FilterArea,
     FilterMap,
     FilterInputAutocompleteStatic,
-    // SearchMap,
     InputSearch,
   },
   setup(_props, { emit }) {
@@ -87,9 +73,6 @@ export default defineComponent({
       emit('reset')
     }
     const handleSearch = () => {
-      emit('update')
-    }
-    const handleMapUpdate = () => {
       emit('update')
     }
     const query = computed({
@@ -148,7 +131,6 @@ export default defineComponent({
       map,
       project,
       handleReset,
-      handleMapUpdate,
       handleSearch,
     }
   },

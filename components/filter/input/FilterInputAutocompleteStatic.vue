@@ -120,7 +120,8 @@ export default defineComponent({
       () => props.value,
       (newVal) => {
         state.selectedItems = newVal
-      }
+      },
+      { immediate: true }
     )
     const handleInput = (event: any[]) => {
       emit('input', [...state.selectedItems, event[event.length - 1]])
