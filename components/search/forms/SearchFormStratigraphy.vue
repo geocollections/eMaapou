@@ -58,9 +58,9 @@ export default defineComponent({
       emit('update')
     }
     const query = computed({
-      get: () => $accessor.search.site.query,
+      get: () => $accessor.search.stratigraphy.query,
       set: (val) => {
-        $accessor.search.site.setQuery(val)
+        $accessor.search.stratigraphy.setQuery(val)
       },
     })
     const stratigraphyHierarchy = useFilter(
