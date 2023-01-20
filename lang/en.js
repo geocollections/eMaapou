@@ -1092,7 +1092,10 @@ export default {
     people: 'People',
     tags: 'Keywords',
     collection: 'Collection',
-    originalStatus: 'Original status'
+    originalStatus: 'Original status',
+    scope: 'Scope',
+    type: 'Type',
+    rank: 'Rank'
   },
   intervals: {
     default: {

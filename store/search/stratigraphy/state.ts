@@ -8,6 +8,9 @@ export type StratigraphyFilters = {
   index: ListTextFilter
   age: RangeAltFilter
   stratigraphyHierarchy: ListIdsFilter
+  scope: ListIdsFilter
+  rank: ListIdsFilter
+  type: ListIdsFilter
 }
 export const initState = (): SearchModuleState<StratigraphyFilters> => {
   return {
@@ -48,6 +51,33 @@ export const initState = (): SearchModuleState<StratigraphyFilters> => {
         fields: ['hierarchy_string'],
         valueField: 'hierarchy_string',
         valueType: 'string',
+      },
+      rank: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['rank'],
+        valueField: 'id',
+        valueType: 'number',
+      },
+      type: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['type'],
+        valueField: 'id',
+        valueType: 'number',
+      },
+      scope: {
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
+        label: '',
+        fields: ['scope'],
+        valueField: 'id',
+        valueType: 'number',
       },
     },
   }

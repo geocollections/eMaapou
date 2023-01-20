@@ -1093,7 +1093,10 @@ export default {
     people: 'Inimesed',
     tags: 'Märksõnad',
     collection: 'Kollektsioon',
-    originalStatus: 'Originaali staatus'
+    originalStatus: 'Originaali staatus',
+    scope: 'Skoop',
+    type: 'Tüüp',
+    rank: 'Tase'
   },
   intervals: {
     default: {
