@@ -48,7 +48,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -57,7 +56,10 @@ import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterReference from '~/components/filter/FilterReference.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import { useHydrateFilterReference } from '~/composables/useHydrateFilter'
+import {
+  useHydrateFilterReference,
+  useHydrateFilterStatic,
+} from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormLocality',
@@ -72,7 +74,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, $axios, i18n } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -94,6 +95,7 @@ export default defineComponent({
       countrySuggestions: [] as any[],
     })
     const hydrateFilterReference = useHydrateFilterReference()
+    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
       const sortField = i18n.locale === 'et' ? 'country' : 'country_en'
       state.countrySuggestions = (
@@ -110,24 +112,8 @@ export default defineComponent({
         }
       )
 
-      if (route.value.query.country) {
-        const countryIds = (route.value.query.country as string)
-          .split(',')
-          .map(Number)
-        country.value = state.countrySuggestions.filter((country) =>
-          countryIds.includes(country.id)
-        )
-      }
-
-      if (route.value.query.reference) {
-        reference.value = (
-          await hydrateFilterReference(
-            (route.value.query.reference as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
+      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
+      await hydrateFilterReference(reference, 'reference')
     })
     return {
       ...toRefs(state),

@@ -94,7 +94,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -120,6 +119,7 @@ import {
   useHydrateFilterTaxonId,
   useHydrateFilterRock,
   useHydrateFilterCollection,
+  useHydrateFilterStatic,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
@@ -144,7 +144,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, i18n, $axios } = useContext()
-    const route = useRoute()
 
     const handleReset = () => {
       emit('reset')
@@ -190,13 +189,15 @@ export default defineComponent({
     const hydrateFilterReference = useHydrateFilterReference()
     const hydrateFilterTaxon = useHydrateFilterTaxon()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
-    const hydrateFilterTaxonId = useHydrateFilterTaxonId()
+    const hydrateFilterFossilGroup = useHydrateFilterTaxonId()
     const hydrateFilterRock = useHydrateFilterRock()
     const hydrateFilterCollection = useHydrateFilterCollection()
     const state = reactive({
       countrySuggestions: [] as any[],
       originalStatusSuggestions: [] as any[],
     })
+
+    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
       const countySortField = i18n.locale === 'et' ? 'country' : 'country_en'
       state.countrySuggestions = (
@@ -227,85 +228,24 @@ export default defineComponent({
           status_en: status.pivot[0].pivot[0].value,
         }
       })
-      if (route.value.query.locality) {
-        locality.value = (
-          await hydrateFilterLocality(
-            (route.value.query.locality as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.collection) {
-        collection.value = (
-          await hydrateFilterCollection(
-            (route.value.query.collection as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.fossilGroup) {
-        fossilGroup.value = (
-          await hydrateFilterTaxonId(
-            (route.value.query.fossilGroup as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
+      await hydrateFilterLocality(locality, 'locality')
+      await hydrateFilterCollection(collection, 'collection')
+      await hydrateFilterFossilGroup(fossilGroup, 'fossilGroup')
+      await hydrateFilterReference(reference, 'reference')
+      await hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy')
+      await hydrateFilterRock(rockHierarchy, 'rockHierarchy')
+      await hydrateFilterStratigraphy(
+        stratigraphyHierarchy,
+        'stratigraphyHierarchy'
+      )
 
-      if (route.value.query.reference) {
-        reference.value = (
-          await hydrateFilterReference(
-            (route.value.query.reference as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.taxonHierarchy) {
-        taxonHierarchy.value = (
-          await hydrateFilterTaxon(
-            (route.value.query.taxonHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.rockHierarchy) {
-        rockHierarchy.value = (
-          await hydrateFilterRock(
-            (route.value.query.rockHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.stratigraphyHierarchy) {
-        stratigraphyHierarchy.value = (
-          await hydrateFilterStratigraphy(
-            (route.value.query.stratigraphyHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.taxonName) {
-        taxonName.value = (route.value.query.taxonName as string)
-          .split(',')
-          .map((encodedValue) => decodeURIComponent(encodedValue))
-      }
-      if (route.value.query.country) {
-        const countryIds = (route.value.query.country as string)
-          .split(',')
-          .map(Number)
-        country.value = state.countrySuggestions.filter((country) =>
-          countryIds.includes(country.id)
-        )
-      }
-      if (route.value.query.originalStatus) {
-        const statusIds = (route.value.query.originalStatus as string)
-          .split(',')
-          .map(Number)
-        originalStatus.value = state.originalStatusSuggestions.filter(
-          (status) => statusIds.includes(status.id)
-        )
-      }
+      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
+      hydrateFilterStatic(
+        originalStatus,
+        'originalStatus',
+        state.originalStatusSuggestions,
+        Number
+      )
     })
 
     return {

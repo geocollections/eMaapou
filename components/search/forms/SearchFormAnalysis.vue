@@ -72,7 +72,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -86,6 +85,7 @@ import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import {
   useHydrateFilterLocality,
   useHydrateFilterSample,
+  useHydrateFilterStatic,
 } from '~/composables/useHydrateFilter'
 import FilterSample from '~/components/filter/FilterSample.vue'
 import { useFilter } from '~/composables/useFilter'
@@ -105,7 +105,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, $axios, i18n } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -141,6 +140,7 @@ export default defineComponent({
     })
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterSample = useHydrateFilterSample()
+    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
       const methodSortField =
         i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en'
@@ -169,37 +169,11 @@ export default defineComponent({
           lab_en: lab.pivot[0].pivot[0].value,
         }
       })
-      if (route.value.query.method) {
-        const methodIds = (route.value.query.method as string)
-          .split(',')
-          .map(Number)
-        method.value = state.methodSuggestions.filter((method) =>
-          methodIds.includes(method.id)
-        )
-      }
-      if (route.value.query.lab) {
-        const methodIds = (route.value.query.lab as string)
-          .split(',')
-          .map(Number)
-        lab.value = state.labSuggestions.filter((lab) =>
-          methodIds.includes(lab.id)
-        )
-      }
+      hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
+      hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)
 
-      if (route.value.query.locality) {
-        locality.value = (
-          await hydrateFilterLocality(
-            (route.value.query.locality as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.sample) {
-        sample.value = (
-          await hydrateFilterSample(
-            (route.value.query.sample as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
+      await hydrateFilterSample(sample, 'sample')
+      await hydrateFilterLocality(locality, 'locality')
     })
     return {
       ...toRefs(state),

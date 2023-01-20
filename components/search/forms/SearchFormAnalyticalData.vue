@@ -124,6 +124,7 @@ import {
   useHydrateFilterReferenceId,
   useHydrateFilterSample,
   useHydrateFilterSite,
+  useHydrateFilterStatic,
   useHydrateFilterStratigraphy,
 } from '~/composables/useHydrateFilter'
 export default defineComponent({
@@ -205,6 +206,7 @@ export default defineComponent({
     const hydrateFilterSite = useHydrateFilterSite()
     const hydrateFilterDataset = useHydrateFilterDataset()
     const hydrateFilterReference = useHydrateFilterReferenceId()
+    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
       const methodSortField =
         i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en'
@@ -288,85 +290,23 @@ export default defineComponent({
           })
         }
       }
+      await hydrateFilterStratigraphy(
+        stratigraphyHierarchy,
+        'stratigraphyHierarchy'
+      )
+      await hydrateFilterStratigraphy(
+        stratigraphyHierarchy,
+        'lithostratigraphyHierarchy'
+      )
+      await hydrateFilterSample(sample, 'sample')
+      await hydrateFilterDataset(dataset, 'dataset')
+      await hydrateFilterReference(reference, 'reference')
+      await hydrateFilterLocality(locality, 'locality')
+      await hydrateFilterSite(site, 'site')
+      hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
+      hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)
+      hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
 
-      if (route.value.query.stratigraphyHierarchy) {
-        stratigraphyHierarchy.value = (
-          await hydrateFilterStratigraphy(
-            (route.value.query.stratigraphyHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.lithostratigraphyHierarchy) {
-        lithostratigraphyHierarchy.value = (
-          await hydrateFilterStratigraphy(
-            (route.value.query.lithostratigraphyHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.sample) {
-        sample.value = (
-          await hydrateFilterSample(
-            (route.value.query.sample as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.dataset) {
-        dataset.value = (
-          await hydrateFilterDataset(
-            (route.value.query.dataset as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-
-      if (route.value.query.reference) {
-        reference.value = (
-          await hydrateFilterReference(
-            (route.value.query.reference as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.locality) {
-        locality.value = (
-          await hydrateFilterLocality(
-            (route.value.query.locality as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.site) {
-        site.value = (
-          await hydrateFilterSite(
-            (route.value.query.site as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.method) {
-        const methodIds = (route.value.query.method as string)
-          .split(',')
-          .map(Number)
-        method.value = state.methodSuggestions.filter((method) =>
-          methodIds.includes(method.id)
-        )
-      }
-      if (route.value.query.lab) {
-        const methodIds = (route.value.query.lab as string)
-          .split(',')
-          .map(Number)
-        lab.value = state.labSuggestions.filter((lab) =>
-          methodIds.includes(lab.id)
-        )
-      }
-      if (route.value.query.project) {
-        const methodIds = (route.value.query.project as string)
-          .split(',')
-          .map(Number)
-        project.value = state.projectSuggestions.filter((project) =>
-          methodIds.includes(project.id)
-        )
-      }
       state.parameterSuggestions = Object.values(parameters)
     })
     return {

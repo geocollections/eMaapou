@@ -65,7 +65,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -73,6 +72,7 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import { useFilter } from '~/composables/useFilter'
+import { useHydrateFilterStatic } from '~/composables/useHydrateFilter'
 export default defineComponent({
   name: 'SearchFormArea',
   components: {
@@ -84,7 +84,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, i18n, $axios } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -107,6 +106,7 @@ export default defineComponent({
       countySuggestions: [] as any[],
       typeSuggestions: [] as any[],
     })
+    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
       const countySortField = i18n.locale === 'et' ? 'maakond' : 'maakond_en'
       state.countySuggestions = (
@@ -122,15 +122,7 @@ export default defineComponent({
           }
         }
       )
-      if (route.value.query.county) {
-        const countyIds = (route.value.query.county as string)
-          .split(',')
-          .map(Number)
-        county.value = state.countySuggestions.filter((county) =>
-          countyIds.includes(county.id)
-        )
-      }
-      const typeSortField = i18n.locale === 'et' ? 'maakond' : 'maakond_en'
+      const typeSortField = i18n.locale === 'et' ? 'area_type' : 'area_type_en'
       state.typeSuggestions = (
         await $axios.$get(
           `https://api.geoloogia.info/solr/area?q=%2A&start=0&rows=0&facet=true&facet.pivot=area_type_id,area_type,area_type_en&facet.limit=100&facet.sort=${typeSortField}`
@@ -144,14 +136,8 @@ export default defineComponent({
           }
         }
       )
-      if (route.value.query.type) {
-        const typeIds = (route.value.query.type as string)
-          .split(',')
-          .map(Number)
-        type.value = state.typeSuggestions.filter((type) =>
-          typeIds.includes(type.id)
-        )
-      }
+      hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
+      hydrateFilterStatic(county, 'county', state.countySuggestions, Number)
     })
     return {
       ...toRefs(state),

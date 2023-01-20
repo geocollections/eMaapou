@@ -44,7 +44,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -53,7 +52,10 @@ import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterArea from '~/components/filter/FilterArea.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
-import { useHydrateFilterArea } from '~/composables/useHydrateFilter'
+import {
+  useHydrateFilterArea,
+  useHydrateFilterStatic,
+} from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormSite',
@@ -68,7 +70,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, i18n, $axios } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -86,6 +87,7 @@ export default defineComponent({
     const map = useFilter('site', 'map', handleSearch)
     const project = useFilter('site', 'project', handleSearch)
     const hydrateFilterArea = useHydrateFilterArea()
+    const hydrateFilterStatic = useHydrateFilterStatic()
     const state = reactive({
       projectSuggestions: [] as any[],
     })
@@ -107,21 +109,8 @@ export default defineComponent({
           }
         }
       )
-      if (route.value.query.area) {
-        area.value = (
-          await hydrateFilterArea(
-            (route.value.query.area as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.project) {
-        const methodIds = (route.value.query.project as string)
-          .split(',')
-          .map(Number)
-        project.value = state.projectSuggestions.filter((project) =>
-          methodIds.includes(project.id)
-        )
-      }
+      hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
+      await hydrateFilterArea(area, 'area')
     })
     return {
       ...toRefs(state),

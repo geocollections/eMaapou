@@ -36,7 +36,6 @@ import {
   defineComponent,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
@@ -58,26 +57,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
     const handleSearch = () => {
       emit('update')
     }
-    const hydrateFilterAnalysisParameter = useHydrateFilterAnalysisParameter()
-    useFetch(async () => {
-      if (route.value.query.analysisParameter) {
-        analysisParameter.value = (
-          await hydrateFilterAnalysisParameter(
-            (route.value.query.analysisParameter as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-    })
-
     const query = computed({
       get: () => $accessor.search.dataset.query,
       set: (val) => {
@@ -99,6 +84,14 @@ export default defineComponent({
         handleSearch()
       },
     })
+    const hydrateFilterAnalysisParameter = useHydrateFilterAnalysisParameter()
+    useFetch(async () => {
+      await hydrateFilterAnalysisParameter(
+        analysisParameter,
+        'analysisParameter'
+      )
+    })
+
     return {
       query,
       analysisParameter,

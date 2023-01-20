@@ -82,7 +82,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -90,7 +89,10 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
-import { useHydrateFilterStratigraphy } from '~/composables/useHydrateFilter'
+import {
+  useHydrateFilterStatic,
+  useHydrateFilterStratigraphy,
+} from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
@@ -104,7 +106,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, i18n, $axios } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -128,6 +129,7 @@ export default defineComponent({
     const scope = useFilter('stratigraphy', 'scope', handleSearch)
     const type = useFilter('stratigraphy', 'type', handleSearch)
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
+    const hydrateFilterStatic = useHydrateFilterStatic()
     const state = reactive({
       rankSuggestions: [] as any[],
       scopeSuggestions: [] as any[],
@@ -179,40 +181,14 @@ export default defineComponent({
           text_en: scope.pivot[0].pivot[0].value,
         }
       })
-      if (route.value.query.stratigraphyHierarchy) {
-        stratigraphyHierarchy.value = (
-          await hydrateFilterStratigraphy(
-            (route.value.query.stratigraphyHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-      if (route.value.query.type) {
-        const typeIds = (route.value.query.type as string)
-          .split(',')
-          .map(Number)
-        type.value = state.typeSuggestions.filter((tyoe) =>
-          typeIds.includes(tyoe.id)
-        )
-      }
 
-      if (route.value.query.rank) {
-        const rankIds = (route.value.query.rank as string)
-          .split(',')
-          .map(Number)
-        rank.value = state.rankSuggestions.filter((rank) =>
-          rankIds.includes(rank.id)
-        )
-      }
-      if (route.value.query.scope) {
-        const scopeIds = (route.value.query.scope as string)
-          .split(',')
-          .map(Number)
-        scope.value = state.scopeSuggestions.filter((scope) =>
-          scopeIds.includes(scope.id)
-        )
-      }
+      await hydrateFilterStratigraphy(
+        stratigraphyHierarchy,
+        'stratigraphyHierarchy'
+      )
+      hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
+      hydrateFilterStatic(rank, 'rank', state.rankSuggestions, Number)
+      hydrateFilterStatic(scope, 'scope', state.scopeSuggestions, Number)
     })
     return {
       ...toRefs(state),

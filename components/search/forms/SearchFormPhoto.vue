@@ -30,7 +30,6 @@ import {
   defineComponent,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -60,7 +59,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const handleSearch = () => {
       emit('update')
     }
@@ -88,13 +86,7 @@ export default defineComponent({
     })
     const hydrateFilterLocality = useHydrateFilterLocality()
     useFetch(async () => {
-      if (route.value.query.locality) {
-        locality.value = (
-          await hydrateFilterLocality(
-            (route.value.query.locality as string).split(',').map(Number)
-          )
-        ).data.response.docs
-      }
+      await hydrateFilterLocality(locality, 'locality')
     })
     return {
       handleSearch,

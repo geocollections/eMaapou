@@ -1,152 +1,236 @@
-import { useContext } from '@nuxtjs/composition-api'
-
-export const useHydrateFilterLocality = () => {
+import { useContext, useRoute } from '@nuxtjs/composition-api'
+import { Ref } from 'vue'
+type HydrationFunction = () => (
+  filter: Ref<any>,
+  queryParam: string
+) => Promise<void>
+export const useHydrateFilterLocality: HydrationFunction = () => {
   const { $axios } = useContext()
-
-  return (selectedIds: number[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedIds = (route.value.query[queryParam] as string).split(',')
     const idQuery = selectedIds.join(' ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/locality?q=id:(${idQuery})&rows=${selectedIds.length}&fl=locality,id,locality_en`
     )
+    filter.value = response.response.docs
   }
 }
-export const useHydrateFilterSite = () => {
-  const { $axios } = useContext()
 
-  return (selectedIds: number[]) => {
+export const useHydrateFilterSite: HydrationFunction = () => {
+  const { $axios } = useContext()
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedIds = (route.value.query[queryParam] as string).split(',')
     const idQuery = selectedIds.join(' ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/site?q=id:(${idQuery})&rows=${selectedIds.length}&fl=id,name`
     )
+    filter.value = response.response.docs
   }
 }
-export const useHydrateFilterDataset = () => {
+export const useHydrateFilterDataset: HydrationFunction = () => {
   const { $axios } = useContext()
-
-  return (selectedIds: number[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedIds = (route.value.query[queryParam] as string).split(',')
     const idQuery = selectedIds.join(' ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/dataset?q=id:(${idQuery})&rows=${selectedIds.length}&fl=id,title`
     )
+    filter.value = response.response.docs
   }
 }
 
-export const useHydrateFilterReference = () => {
+export const useHydrateFilterReference: HydrationFunction = () => {
   const { $axios } = useContext()
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
 
-  return (selectedReferences: string[]) => {
+    const selectedReferences = (route.value.query[queryParam] as string)
+      .split(',')
+      .map(decodeURIComponent)
+
     const query = selectedReferences
       .map((reference) => `reference:"${reference}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/reference?q=(${query})&rows=${selectedReferences.length}&fl=id,reference,title`
     )
+    filter.value = response.response.docs
   }
 }
-export const useHydrateFilterReferenceId = () => {
+export const useHydrateFilterReferenceId: HydrationFunction = () => {
   const { $axios } = useContext()
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
 
-  return (selectedReferences: number[]) => {
+    const selectedReferences = (route.value.query[queryParam] as string).split(
+      ','
+    )
+
     const query = selectedReferences
       .map((reference) => `id:"${reference}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/reference?q=(${query})&rows=${selectedReferences.length}&fl=id,reference,title`
     )
+    filter.value = response.response.docs
   }
 }
 
-export const useHydrateFilterTaxon = () => {
+export const useHydrateFilterTaxon: HydrationFunction = () => {
   const { $axios } = useContext()
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
 
-  return (selectedTaxa: string[]) => {
+    const selectedTaxa = (route.value.query[queryParam] as string)
+      .split(',')
+      .map(decodeURIComponent)
     const query = selectedTaxa
       .map((taxa) => `hierarchy_string:"${taxa}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/taxon?q=(${query})&rows=${selectedTaxa.length}&fl=id,taxon,hierarchy_string`
     )
+    filter.value = response.response.docs
   }
 }
-export const useHydrateFilterRock = () => {
+export const useHydrateFilterRock: HydrationFunction = () => {
   const { $axios } = useContext()
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
 
-  return (selectedTaxa: string[]) => {
+    const selectedTaxa = (route.value.query[queryParam] as string)
+      .split(',')
+      .map(decodeURIComponent)
     const query = selectedTaxa
       .map((taxa) => `hierarchy_strings:"${taxa}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/rock?q=(${query})&rows=${selectedTaxa.length}&fl=id,name,name_en,hierarchy_strings`
     )
+    filter.value = response.response.docs
   }
 }
-export const useHydrateFilterTaxonId = () => {
+export const useHydrateFilterTaxonId: HydrationFunction = () => {
   const { $axios } = useContext()
-
-  return (selectedTaxa: number[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedTaxa = (route.value.query[queryParam] as string).split(',')
     const query = selectedTaxa.map((taxa) => `id:"${taxa}"`).join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/taxon?q=(${query})&rows=${selectedTaxa.length}&fl=id,taxon,hierarchy_string`
     )
+    filter.value = response.response.docs
   }
 }
 
-export const useHydrateFilterStratigraphy = () => {
+export const useHydrateFilterStratigraphy: HydrationFunction = () => {
+  const route = useRoute()
   const { $axios } = useContext()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
 
-  return (selectedStratigraphy: string[]) => {
+    const selectedStratigraphy = (route.value.query[queryParam] as string)
+      .split(',')
+      .map(decodeURIComponent)
     const query = selectedStratigraphy
-      .map((stratigraphy) => `hierarchy_string:"${stratigraphy}"`)
+      .map((stratigraphy: string) => `hierarchy_string:"${stratigraphy}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/stratigraphy?q=(${query})&rows=${selectedStratigraphy.length}&fl=id,stratigraphy,stratigraphy_en,hierarchy_string`
     )
+    filter.value = response.response.docs
   }
 }
 
-export const useHydrateFilterAnalysisParameter = () => {
+export const useHydrateFilterAnalysisParameter: HydrationFunction = () => {
   const { $axios } = useContext()
-
-  return (selectedAnalysisParameters: string[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedAnalysisParameters = (route.value.query[queryParam] as string)
+      .split(',')
+      .map(decodeURIComponent)
     const query = selectedAnalysisParameters
       .map((parameter) => `parameter_index:"${parameter}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/analysis_parameter?q=(${query})&rows=${selectedAnalysisParameters.length}&fl=id,parameter,parameter_index`
     )
+    filter.value = response.response.docs
   }
 }
 
-export const useHydrateFilterCollection = () => {
+export const useHydrateFilterCollection: HydrationFunction = () => {
   const { $axios } = useContext()
 
-  return (selectedCollections: number[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedCollections = (route.value.query[queryParam] as string).split(
+      ','
+    )
     const query = selectedCollections
       .map((sample) => `id:"${sample}"`)
       .join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/collection?q=(${query})&rows=${selectedCollections.length}&fl=id,number`
     )
+    filter.value = response.response.docs
   }
 }
-export const useHydrateFilterSample = () => {
+export const useHydrateFilterSample: HydrationFunction = () => {
   const { $axios } = useContext()
-
-  return (selectedSamples: number[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedSamples = (route.value.query[queryParam] as string).split(',')
     const query = selectedSamples.map((sample) => `id:"${sample}"`).join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/sample?q=(${query})&rows=${selectedSamples.length}&fl=id,number`
     )
+    filter.value = response.response.docs
   }
 }
 
-export const useHydrateFilterArea = () => {
+export const useHydrateFilterArea: HydrationFunction = () => {
   const { $axios } = useContext()
-
-  return (selectedAreas: number[]) => {
+  const route = useRoute()
+  return async (filter, queryParam) => {
+    if (!route.value.query[queryParam]) return
+    const selectedAreas = (route.value.query[queryParam] as string).split(',')
     const query = selectedAreas.map((area) => `id:"${area}"`).join(' OR ')
-    return $axios.get(
+    const response = await $axios.$get(
       `https://api.geoloogia.info/solr/area?q=(${query})&rows=${selectedAreas.length}&fl=id,name,name_en`
+    )
+    filter.value = response.response.docs
+  }
+}
+
+export const useHydrateFilterStatic = () => {
+  const route = useRoute()
+  return (
+    filter: Ref<any>,
+    queryParam: string,
+    suggestions: any[],
+    parseFunc: (v: string) => any,
+    compareField = 'id'
+  ) => {
+    if (!route.value.query[queryParam]) return
+    const queryParamValue = route.value.query[queryParam] as string
+    const parsedValue = queryParamValue.split(',').map(parseFunc)
+    filter.value = suggestions.filter((v) =>
+      parsedValue.includes(v[compareField])
     )
   }
 }

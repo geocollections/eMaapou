@@ -35,7 +35,6 @@ import {
   defineComponent,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -62,7 +61,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -91,25 +89,11 @@ export default defineComponent({
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterTaxon = useHydrateFilterTaxon()
     useFetch(async () => {
-      if (route.value.query.taxonHierarchy) {
-        taxonHierarchy.value = (
-          await hydrateFilterTaxon(
-            (route.value.query.taxonHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
-
-      if (route.value.query.stratigraphyHierarchy) {
-        stratigraphyHierarchy.value = (
-          await hydrateFilterStratigraphy(
-            (route.value.query.stratigraphyHierarchy as string)
-              .split(',')
-              .map((encodedValue) => decodeURIComponent(encodedValue))
-          )
-        ).data.response.docs
-      }
+      await hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy')
+      await hydrateFilterStratigraphy(
+        stratigraphyHierarchy,
+        'stratigraphyHierarchy'
+      )
     })
     return {
       query,

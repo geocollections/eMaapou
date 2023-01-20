@@ -78,7 +78,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
 } from '@nuxtjs/composition-api'
 import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
@@ -89,6 +88,7 @@ import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useFilter } from '~/composables/useFilter'
+import { useHydrateFilterStatic } from '~/composables/useHydrateFilter'
 export default defineComponent({
   name: 'SearchFormDrillcore',
   components: {
@@ -103,7 +103,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor, $axios, i18n } = useContext()
-    const route = useRoute()
     const handleReset = () => {
       emit('reset')
     }
@@ -136,6 +135,7 @@ export default defineComponent({
       countrySuggestions: [] as any[],
       repositorySuggestions: [] as any[],
     })
+    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
       const sortField = i18n.locale === 'et' ? 'country' : 'country_en'
       state.countrySuggestions = (
@@ -166,22 +166,13 @@ export default defineComponent({
           repository_en: repository.pivot[0].pivot[0].value,
         }
       })
-      if (route.value.query.repository) {
-        const repositoryIds = (route.value.query.repository as string)
-          .split(',')
-          .map(Number)
-        repository.value = state.repositorySuggestions.filter((repository) =>
-          repositoryIds.includes(repository.id)
-        )
-      }
-      if (route.value.query.country) {
-        const countryIds = (route.value.query.country as string)
-          .split(',')
-          .map(Number)
-        country.value = state.countrySuggestions.filter((country) =>
-          countryIds.includes(country.id)
-        )
-      }
+      hydrateFilterStatic(
+        repository,
+        'repository',
+        state.repositorySuggestions,
+        Number
+      )
+      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
     })
     return {
       ...toRefs(state),

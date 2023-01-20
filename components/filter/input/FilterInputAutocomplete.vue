@@ -142,7 +142,8 @@ export default defineComponent({
       () => props.value,
       (newVal) => {
         state.selectedItems = newVal
-      }
+      },
+      {immediate: true}
     )
     watch(
       () => state.search,
