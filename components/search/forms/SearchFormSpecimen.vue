@@ -30,7 +30,7 @@
             <filter-input-autocomplete-static
               v-model="country"
               :title="$t('filters.country').toString()"
-              :items="originalStatusSuggestions"
+              :items="countrySuggestions"
               :filter-field="$translate({ et: 'country', en: 'country_en' })"
             >
               <template #selection="{ item }">
