@@ -16,36 +16,14 @@
               v-model="method"
               :title="$t('filters.method').toString()"
               :items="methodSuggestions"
-              :filter-field="$translate({ et: 'method', en: 'method_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.method, en: item.method_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.method, en: item.method_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-input-autocomplete-static
               v-model="lab"
               :title="$t('filters.lab').toString()"
               :items="labSuggestions"
-              :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-sample v-model="sample" />
             <filter-locality v-model="locality" />
             <filter-map
@@ -89,6 +67,7 @@ import {
 } from '~/composables/useHydrateFilter'
 import FilterSample from '~/components/filter/FilterSample.vue'
 import { useFilter } from '~/composables/useFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormAnalysis',
   components: {
@@ -104,7 +83,7 @@ export default defineComponent({
     FilterSample,
   },
   setup(_props, { emit }) {
-    const { $accessor, $axios, i18n } = useContext()
+    const { $accessor } = useContext()
     const handleReset = () => {
       emit('reset')
     }
@@ -141,39 +120,33 @@ export default defineComponent({
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterSample = useHydrateFilterSample()
     const hydrateFilterStatic = useHydrateFilterStatic()
+    const getSuggestions = useGetSuggestions()
     useFetch(async () => {
-      const methodSortField =
-        i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en'
-      state.methodSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/analysis?q=%2A&start=0&rows=0&facet=true&facet.pivot=method,analysis_method,analysis_method_en&facet.limit=200&facet.sort=${methodSortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'method,analysis_method,analysis_method_en'
-      ].map((method: any) => {
-        return {
-          id: method.value,
-          method: method.pivot[0].value,
-          method_en: method.pivot[0].pivot[0].value,
-        }
-      })
-      const labSortField = i18n.locale === 'et' ? 'lab' : 'lab_en'
-      state.labSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/analysis?q=%2A&start=0&rows=0&facet=true&facet.pivot=lab_id,lab,lab_en&facet.limit=200&facet.sort=${labSortField}`
-        )
-      ).facet_counts.facet_pivot['lab_id,lab,lab_en'].map((lab: any) => {
-        return {
-          id: lab.value,
-          lab: lab.pivot[0].value,
-          lab_en: lab.pivot[0].pivot[0].value,
-        }
-      })
+      const suggestionPromise = Promise.all([
+        getSuggestions(
+          'analysis',
+          'method,analysis_method,analysis_method_en',
+          { et: 'analysis_method', en: 'analysis_method_en' }
+        ),
+        getSuggestions('analysis', 'lab_id,lab,lab_en', {
+          et: 'lab',
+          en: 'lab_en',
+        }),
+      ])
+      const hydrationPromise = Promise.all([
+        hydrateFilterSample(sample, 'sample'),
+        hydrateFilterLocality(locality, 'locality'),
+      ])
+      const [suggestionResults] = await Promise.all([
+        suggestionPromise,
+        hydrationPromise,
+      ])
+
+      state.methodSuggestions = suggestionResults[0]
+      state.labSuggestions = suggestionResults[1]
+
       hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
       hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)
-
-      await hydrateFilterSample(sample, 'sample')
-      await hydrateFilterLocality(locality, 'locality')
     })
     return {
       ...toRefs(state),

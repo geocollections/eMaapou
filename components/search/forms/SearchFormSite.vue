@@ -14,19 +14,8 @@
               v-model="project"
               :title="$t('filters.project').toString()"
               :items="projectSuggestions"
-              :filter-field="$translate({ et: 'project', en: 'project_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.project, en: item.project_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.project, en: item.project_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-area v-model="area" />
             <filter-map v-model="map" :items="$accessor.search.site.items" />
           </v-expansion-panels>
@@ -57,6 +46,7 @@ import {
   useHydrateFilterStatic,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormSite',
   components: {
@@ -69,7 +59,7 @@ export default defineComponent({
     InputSearch,
   },
   setup(_props, { emit }) {
-    const { $accessor, i18n, $axios } = useContext()
+    const { $accessor } = useContext()
     const handleReset = () => {
       emit('reset')
     }
@@ -91,26 +81,20 @@ export default defineComponent({
     const state = reactive({
       projectSuggestions: [] as any[],
     })
+    const getSuggestions = useGetSuggestions()
     useFetch(async () => {
-      const projectSortField =
-        i18n.locale === 'et' ? 'project_name' : 'project_name_en'
-      state.projectSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/site?q=%2A&start=0&rows=0&facet=true&facet.pivot=project_id,project_name,project_name_en&facet.limit=200&facet.sort=${projectSortField}`
-        )
-      ).facet_counts.facet_pivot['project_id,project_name,project_name_en'].map(
-        (project: any) => {
-          return {
-            id: project.value,
-            project: project.pivot[0].value,
-            project_en: project.pivot[0].pivot?.[0].value
-              ? project.pivot[0].pivot?.[0].value
-              : project.pivot[0].value,
-          }
-        }
+      const projectSuggestionsPromise = getSuggestions(
+        'site',
+        'project_id,project_name,project_name_en',
+        { et: 'project_name', en: 'project_name_en' }
       )
+      const [projectSuggestions] = await Promise.all([
+        projectSuggestionsPromise,
+        hydrateFilterArea(area, 'area'),
+      ])
+
+      state.projectSuggestions = projectSuggestions
       hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
-      await hydrateFilterArea(area, 'area')
     })
     return {
       ...toRefs(state),

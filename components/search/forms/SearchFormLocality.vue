@@ -14,19 +14,8 @@
               v-model="country"
               :title="$t('filters.country').toString()"
               :items="countrySuggestions"
-              :filter-field="$translate({ et: 'country', en: 'country_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.country, en: item.country_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.country, en: item.country_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-map
               v-model="map"
               locality-overlay
@@ -61,6 +50,7 @@ import {
   useHydrateFilterStatic,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormLocality',
   components: {
@@ -73,7 +63,7 @@ export default defineComponent({
     FilterInputText,
   },
   setup(_props, { emit }) {
-    const { $accessor, $axios, i18n } = useContext()
+    const { $accessor } = useContext()
     const handleReset = () => {
       emit('reset')
     }
@@ -96,24 +86,20 @@ export default defineComponent({
     })
     const hydrateFilterReference = useHydrateFilterReference()
     const hydrateFilterStatic = useHydrateFilterStatic()
+    const getSuggestions = useGetSuggestions()
     useFetch(async () => {
-      const sortField = i18n.locale === 'et' ? 'country' : 'country_en'
-      state.countrySuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/locality?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${sortField}`
-        )
-      ).facet_counts.facet_pivot['country_id,country,country_en'].map(
-        (country: any) => {
-          return {
-            id: country.value,
-            country: country.pivot[0].value,
-            country_en: country.pivot[0].pivot[0].value,
-          }
-        }
+      const countrySuggestionPromise = getSuggestions(
+        'locality',
+        'country_id,country,country_en',
+        { et: 'country', en: 'country_en' }
       )
 
+      const [countrySuggestions] = await Promise.all([
+        countrySuggestionPromise,
+        hydrateFilterReference(reference, 'reference'),
+      ])
+      state.countrySuggestions = countrySuggestions
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
-      await hydrateFilterReference(reference, 'reference')
     })
     return {
       ...toRefs(state),

@@ -14,42 +14,14 @@
               v-model="county"
               :title="$t('filters.county').toString()"
               :items="countySuggestions"
-              :filter-field="$translate({ et: 'county', en: 'county_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.county, en: item.county_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.county, en: item.county_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-input-autocomplete-static
               v-model="type"
               :title="$t('filters.areaType').toString()"
               :items="typeSuggestions"
-              :filter-field="
-                $translate({ et: 'area_type', en: 'area_type_en' })
-              "
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{
-                    $translate({ et: item.area_type, en: item.area_type_en })
-                  }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{
-                    $translate({ et: item.area_type, en: item.area_type_en })
-                  }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
           </v-expansion-panels>
         </v-card>
       </search-fields-wrapper>
@@ -73,6 +45,7 @@ import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import { useFilter } from '~/composables/useFilter'
 import { useHydrateFilterStatic } from '~/composables/useHydrateFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormArea',
   components: {
@@ -83,14 +56,11 @@ export default defineComponent({
     FilterInputAutocompleteStatic,
   },
   setup(_props, { emit }) {
-    const { $accessor, i18n, $axios } = useContext()
+    const { $accessor } = useContext()
     const handleReset = () => {
       emit('reset')
     }
     const handleSearch = () => {
-      emit('update')
-    }
-    const handleMapUpdate = () => {
       emit('update')
     }
     const query = computed({
@@ -106,36 +76,21 @@ export default defineComponent({
       countySuggestions: [] as any[],
       typeSuggestions: [] as any[],
     })
+    const getSuggestions = useGetSuggestions()
     const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
-      const countySortField = i18n.locale === 'et' ? 'maakond' : 'maakond_en'
-      state.countySuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/area?q=%2A&start=0&rows=0&facet=true&facet.pivot=maakond_id,maakond,maakond_en&facet.limit=100&facet.sort=${countySortField}`
-        )
-      ).facet_counts.facet_pivot['maakond_id,maakond,maakond_en'].map(
-        (county: any) => {
-          return {
-            id: county.value,
-            county: county.pivot[0].value,
-            county_en: county.pivot[0].pivot[0].value,
-          }
-        }
-      )
-      const typeSortField = i18n.locale === 'et' ? 'area_type' : 'area_type_en'
-      state.typeSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/area?q=%2A&start=0&rows=0&facet=true&facet.pivot=area_type_id,area_type,area_type_en&facet.limit=100&facet.sort=${typeSortField}`
-        )
-      ).facet_counts.facet_pivot['area_type_id,area_type,area_type_en'].map(
-        (type: any) => {
-          return {
-            id: type.value,
-            area_type: type.pivot[0].value,
-            area_type_en: type.pivot[0].pivot[0].value,
-          }
-        }
-      )
+      const [countySuggestions, typeSuggestions] = await Promise.all([
+        getSuggestions('area', 'maakond_id,maakond,maakond_en', {
+          et: 'maakond',
+          en: 'maakond_en',
+        }),
+        getSuggestions('area', 'area_type_id,area_type,area_type_en', {
+          et: 'area_type',
+          en: 'area_type_en',
+        }),
+      ])
+      state.countySuggestions = countySuggestions
+      state.typeSuggestions = typeSuggestions
       hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
       hydrateFilterStatic(county, 'county', state.countySuggestions, Number)
     })
@@ -147,7 +102,6 @@ export default defineComponent({
       type,
       handleReset,
       handleSearch,
-      handleMapUpdate,
     }
   },
 })

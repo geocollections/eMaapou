@@ -14,19 +14,8 @@
               v-model="country"
               :title="$t('filters.country').toString()"
               :items="countrySuggestions"
-              :filter-field="$translate({ et: 'country', en: 'country_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.country, en: item.country_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.country, en: item.country_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
 
             <filter-map
               v-model="map"
@@ -37,25 +26,8 @@
               v-model="repository"
               :title="$t('filters.drillcoreRepository').toString()"
               :items="repositorySuggestions"
-              :filter-field="
-                $translate({ et: 'repository', en: 'repository_en' })
-              "
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{
-                    $translate({ et: item.repository, en: item.repository_en })
-                  }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{
-                    $translate({ et: item.repository, en: item.repository_en })
-                  }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
 
             <filter-input-range
               v-model="boxes"
@@ -89,6 +61,7 @@ import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useFilter } from '~/composables/useFilter'
 import { useHydrateFilterStatic } from '~/composables/useHydrateFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormDrillcore',
   components: {
@@ -102,7 +75,7 @@ export default defineComponent({
     FilterInputText,
   },
   setup(_props, { emit }) {
-    const { $accessor, $axios, i18n } = useContext()
+    const { $accessor } = useContext()
     const handleReset = () => {
       emit('reset')
     }
@@ -136,36 +109,21 @@ export default defineComponent({
       repositorySuggestions: [] as any[],
     })
     const hydrateFilterStatic = useHydrateFilterStatic()
+    const getSuggestions = useGetSuggestions()
     useFetch(async () => {
-      const sortField = i18n.locale === 'et' ? 'country' : 'country_en'
-      state.countrySuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/drillcore?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${sortField}`
-        )
-      ).facet_counts.facet_pivot['country_id,country,country_en'].map(
-        (country: any) => {
-          return {
-            id: country.value,
-            country: country.pivot[0].value,
-            country_en: country.pivot[0].pivot[0].value,
-          }
-        }
-      )
-      const repositorySortField =
-        i18n.locale === 'et' ? 'country' : 'country_en'
-      state.repositorySuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/drillcore?q=%2A&start=0&rows=0&facet=true&facet.pivot=core_repository_id,core_repository,core_repository_en&facet.limit=100&facet.sort=${repositorySortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'core_repository_id,core_repository,core_repository_en'
-      ].map((repository: any) => {
-        return {
-          id: repository.value,
-          repository: repository.pivot[0].value,
-          repository_en: repository.pivot[0].pivot[0].value,
-        }
-      })
+      const [countrySuggestions, repositorySuggestions] = await Promise.all([
+        getSuggestions('drillcore', 'country_id,country,country_en', {
+          et: 'country',
+          en: 'country_en',
+        }),
+        getSuggestions(
+          'drillcore',
+          'core_repository_id,core_repository,core_repository_en',
+          { et: 'core_repository', en: 'core_repository_en' }
+        ),
+      ])
+      state.repositorySuggestions = repositorySuggestions
+      state.countrySuggestions = countrySuggestions
       hydrateFilterStatic(
         repository,
         'repository',

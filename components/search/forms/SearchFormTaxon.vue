@@ -89,11 +89,13 @@ export default defineComponent({
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterTaxon = useHydrateFilterTaxon()
     useFetch(async () => {
-      await hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy')
-      await hydrateFilterStratigraphy(
-        stratigraphyHierarchy,
-        'stratigraphyHierarchy'
-      )
+      await Promise.all([
+        hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy'),
+        hydrateFilterStratigraphy(
+          stratigraphyHierarchy,
+          'stratigraphyHierarchy'
+        ),
+      ])
     })
     return {
       query,

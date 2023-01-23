@@ -104,11 +104,13 @@ export default defineComponent({
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
-      await hydrateFilterLocality(locality, 'locality')
-      await hydrateFilterStratigraphy(
-        stratigraphyHierarchy,
-        'stratigraphyHierarchy'
-      )
+      await Promise.all([
+        hydrateFilterLocality(locality, 'locality'),
+        hydrateFilterStratigraphy(
+          stratigraphyHierarchy,
+          'stratigraphyHierarchy'
+        ),
+      ])
     })
     return {
       locality,

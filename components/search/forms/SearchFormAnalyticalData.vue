@@ -17,53 +17,20 @@
               v-model="method"
               :title="$t('filters.method').toString()"
               :items="methodSuggestions"
-              :filter-field="$translate({ et: 'method', en: 'method_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.method, en: item.method_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.method, en: item.method_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-input-autocomplete-static
               v-model="lab"
               :title="$t('filters.lab').toString()"
               :items="labSuggestions"
-              :filter-field="$translate({ et: 'lab', en: 'lab_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.lab, en: item.lab_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-input-autocomplete-static
               v-model="project"
               :title="$t('filters.project').toString()"
               :items="projectSuggestions"
-              :filter-field="$translate({ et: 'project', en: 'project_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.project, en: item.project_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.project, en: item.project_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-dataset v-model="dataset" />
             <filter-sample v-model="sample" />
             <filter-input-parameter
@@ -127,6 +94,7 @@ import {
   useHydrateFilterStatic,
   useHydrateFilterStratigraphy,
 } from '~/composables/useHydrateFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormAnalyticalData',
   fetchOnServer: false,
@@ -147,7 +115,7 @@ export default defineComponent({
     FilterDataset,
   },
   setup(_props, { emit }) {
-    const { $accessor, $services, i18n, $axios } = useContext()
+    const { $accessor, $services } = useContext()
     const route = useRoute()
     const handleSearch = () => {
       emit('update')
@@ -207,52 +175,25 @@ export default defineComponent({
     const hydrateFilterDataset = useHydrateFilterDataset()
     const hydrateFilterReference = useHydrateFilterReferenceId()
     const hydrateFilterStatic = useHydrateFilterStatic()
+    const getSuggestions = useGetSuggestions()
     useFetch(async () => {
-      const methodSortField =
-        i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en'
-      state.methodSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/analytical_data?q=%2A&start=0&rows=0&facet=true&facet.pivot=method_id,analysis_method,analysis_method_en&facet.limit=200&facet.sort=${methodSortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'method_id,analysis_method,analysis_method_en'
-      ].map((method: any) => {
-        return {
-          id: method.value,
-          method: method.pivot[0].value,
-          method_en: method.pivot[0].pivot[0].value,
-        }
-      })
-      const labSortField = i18n.locale === 'et' ? 'lab' : 'lab_en'
-      state.labSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/analytical_data?q=%2A&start=0&rows=0&facet=true&facet.pivot=lab_id,lab,lab_en&facet.limit=200&facet.sort=${labSortField}`
-        )
-      ).facet_counts.facet_pivot['lab_id,lab,lab_en'].map((method: any) => {
-        return {
-          id: method.value,
-          lab: method.pivot[0].value,
-          lab_en: method.pivot[0].pivot[0].value,
-        }
-      })
-      const projectSortField =
-        i18n.locale === 'et' ? 'project_name' : 'project_name_en'
-      state.projectSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/site?q=%2A&start=0&rows=0&facet=true&facet.pivot=project_id,project_name,project_name_en&facet.limit=200&facet.sort=${projectSortField}`
-        )
-      ).facet_counts.facet_pivot['project_id,project_name,project_name_en'].map(
-        (project: any) => {
-          return {
-            id: project.value,
-            project: project.pivot[0].value,
-            project_en: project.pivot[0].pivot?.[0].value
-              ? project.pivot[0].pivot?.[0].value
-              : project.pivot[0].value,
-          }
-        }
-      )
-      const listParametersResponse = await $services.sarvSolr.getResourceList(
+      const suggestionPromise = Promise.all([
+        getSuggestions(
+          'analytical_data',
+          'method_id,analysis_method,analysis_method_en',
+          { et: 'analysis_method', en: 'analysis_method_en' }
+        ),
+        getSuggestions('analytical_data', 'lab_id,lab,lab_en', {
+          et: 'lab',
+          en: 'lab_en',
+        }),
+        getSuggestions(
+          'analytical_data',
+          'project_id,project_name,project_name_en',
+          { et: 'project_name', en: 'project_name' }
+        ),
+      ])
+      const listParametersPromise = $services.sarvSolr.getResourceList(
         'analysis_parameter',
         {
           defaultParams: {
@@ -264,6 +205,31 @@ export default defineComponent({
           },
         }
       )
+      const hydrationPromise = Promise.all([
+        hydrateFilterStratigraphy(
+          stratigraphyHierarchy,
+          'stratigraphyHierarchy'
+        ),
+        hydrateFilterStratigraphy(
+          stratigraphyHierarchy,
+          'lithostratigraphyHierarchy'
+        ),
+        hydrateFilterSample(sample, 'sample'),
+        hydrateFilterDataset(dataset, 'dataset'),
+        hydrateFilterReference(reference, 'reference'),
+        hydrateFilterLocality(locality, 'locality'),
+        hydrateFilterSite(site, 'site'),
+      ])
+      const [suggestionResults, listParametersResponse] = await Promise.all([
+        suggestionPromise,
+        listParametersPromise,
+        hydrationPromise,
+      ])
+
+      state.methodSuggestions = suggestionResults[0]
+      state.labSuggestions = suggestionResults[1]
+      state.projectSuggestions = suggestionResults[2]
+
       const parameters = listParametersResponse.items
         .filter((parameter: any) => !!parameter.parameter_index)
         .reduce((prev: any, parameter: any) => {
@@ -290,19 +256,6 @@ export default defineComponent({
           })
         }
       }
-      await hydrateFilterStratigraphy(
-        stratigraphyHierarchy,
-        'stratigraphyHierarchy'
-      )
-      await hydrateFilterStratigraphy(
-        stratigraphyHierarchy,
-        'lithostratigraphyHierarchy'
-      )
-      await hydrateFilterSample(sample, 'sample')
-      await hydrateFilterDataset(dataset, 'dataset')
-      await hydrateFilterReference(reference, 'reference')
-      await hydrateFilterLocality(locality, 'locality')
-      await hydrateFilterSite(site, 'site')
       hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
       hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)
       hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)

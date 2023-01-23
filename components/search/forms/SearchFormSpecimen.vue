@@ -31,19 +31,8 @@
               v-model="country"
               :title="$t('filters.country').toString()"
               :items="countrySuggestions"
-              :filter-field="$translate({ et: 'country', en: 'country_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.country, en: item.country_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.country, en: item.country_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-map
               v-model="map"
               sample-overlay
@@ -65,19 +54,8 @@
               v-model="originalStatus"
               :title="$t('filters.originalStatus').toString()"
               :items="originalStatusSuggestions"
-              :filter-field="$translate({ et: 'status', en: 'status_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.status, en: item.status_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.status, en: item.status_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-institution v-model="institutions" />
           </v-expansion-panels>
         </v-card>
@@ -121,6 +99,7 @@ import {
   useHydrateFilterCollection,
   useHydrateFilterStatic,
 } from '~/composables/useHydrateFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormSpecimen',
@@ -143,7 +122,7 @@ export default defineComponent({
     FilterCollection,
   },
   setup(_props, { emit }) {
-    const { $accessor, i18n, $axios } = useContext()
+    const { $accessor } = useContext()
 
     const handleReset = () => {
       emit('reset')
@@ -192,43 +171,28 @@ export default defineComponent({
     const hydrateFilterFossilGroup = useHydrateFilterTaxonId()
     const hydrateFilterRock = useHydrateFilterRock()
     const hydrateFilterCollection = useHydrateFilterCollection()
+    const hydrateFilterStatic = useHydrateFilterStatic()
+
     const state = reactive({
       countrySuggestions: [] as any[],
       originalStatusSuggestions: [] as any[],
     })
+    const getSuggestions = useGetSuggestions()
 
-    const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
-      const countySortField = i18n.locale === 'et' ? 'country' : 'country_en'
-      state.countrySuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/specimen?q=%2A&start=0&rows=0&facet=true&facet.pivot=country_id,country,country_en&facet.limit=200&facet.sort=${countySortField}`
-        )
-      ).facet_counts.facet_pivot['country_id,country,country_en'].map(
-        (country: any) => {
-          return {
-            id: country.value,
-            country: country.pivot[0].value,
-            country_en: country.pivot[0].pivot[0].value,
-          }
-        }
-      )
-      const originalStatusSortField =
-        i18n.locale === 'et' ? 'original_status' : 'original_status'
-      state.originalStatusSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/specimen?q=%2A&start=0&rows=0&facet=true&facet.pivot=original_status_id,original_status,original_status_en&facet.limit=200&facet.sort=${originalStatusSortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'original_status_id,original_status,original_status_en'
-      ].map((status: any) => {
-        return {
-          id: status.value,
-          status: status.pivot[0].value,
-          status_en: status.pivot[0].pivot[0].value,
-        }
-      })
-      await Promise.all([
+      const suggestionPromise = Promise.all([
+        getSuggestions('specimen', 'country_id,country,country_en', {
+          et: 'country',
+          en: 'country_en',
+        }),
+        getSuggestions(
+          'specimen',
+          'original_status_id,original_status,original_status_en',
+          { et: 'original_status', en: 'original_status_en' }
+        ),
+      ])
+
+      const hydrationPromise = Promise.all([
         hydrateFilterLocality(locality, 'locality'),
         hydrateFilterCollection(collection, 'collection'),
         hydrateFilterFossilGroup(fossilGroup, 'fossilGroup'),
@@ -240,6 +204,13 @@ export default defineComponent({
           'stratigraphyHierarchy'
         ),
       ])
+      const [suggestionResults] = await Promise.all([
+        suggestionPromise,
+        hydrationPromise,
+      ])
+
+      state.countrySuggestions = suggestionResults[0]
+      state.originalStatusSuggestions = suggestionResults[1]
 
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       hydrateFilterStatic(

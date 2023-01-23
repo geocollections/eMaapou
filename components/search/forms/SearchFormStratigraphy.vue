@@ -21,52 +21,19 @@
               :title="$t('filters.type').toString()"
               :items="typeSuggestions"
               :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.text, en: item.text_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.text, en: item.text_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+            />
             <filter-input-autocomplete-static
               v-model="rank"
               :title="$t('filters.rank').toString()"
               :items="rankSuggestions"
               :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.text, en: item.text_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.text, en: item.text_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+            />
             <filter-input-autocomplete-static
               v-model="scope"
               :title="$t('filters.scope').toString()"
               :items="scopeSuggestions"
               :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            >
-              <template #selection="{ item }">
-                <div>
-                  {{ $translate({ et: item.text, en: item.text_en }) }}
-                </div>
-              </template>
-              <template #suggestion="{ item }">
-                <div>
-                  {{ $translate({ et: item.text, en: item.text_en }) }}
-                </div>
-              </template>
-            </filter-input-autocomplete-static>
+            />
           </v-expansion-panels>
         </v-card>
       </search-fields-wrapper>
@@ -94,6 +61,7 @@ import {
   useHydrateFilterStratigraphy,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
   components: {
@@ -105,7 +73,7 @@ export default defineComponent({
     FilterInputAutocompleteStatic,
   },
   setup(_props, { emit }) {
-    const { $accessor, i18n, $axios } = useContext()
+    const { $accessor } = useContext()
     const handleReset = () => {
       emit('reset')
     }
@@ -135,57 +103,35 @@ export default defineComponent({
       scopeSuggestions: [] as any[],
       typeSuggestions: [] as any[],
     })
+    const getSuggestions = useGetSuggestions()
     useFetch(async () => {
-      const rankSortField =
-        i18n.locale === 'et' ? 'stratigraphy_rank' : 'stratigraphy_rank_en'
-      state.rankSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/stratigraphy?q=%2A&start=0&rows=0&facet=true&facet.pivot=rank,stratigraphy_rank,stratigraphy_rank_en&facet.limit=200&facet.sort=${rankSortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'rank,stratigraphy_rank,stratigraphy_rank_en'
-      ].map((rank: any) => {
-        return {
-          id: rank.value,
-          text: rank.pivot[0].value,
-          text_en: rank.pivot[0].pivot[0].value,
-        }
-      })
-      const scopeSortField =
-        i18n.locale === 'et' ? 'stratigraphy_scope' : 'stratigraphy_scope_en'
-      state.scopeSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/stratigraphy?q=%2A&start=0&rows=0&facet=true&facet.pivot=scope,stratigraphy_scope,stratigraphy_scope_en&facet.limit=200&facet.sort=${scopeSortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'scope,stratigraphy_scope,stratigraphy_scope_en'
-      ].map((scope: any) => {
-        return {
-          id: scope.value,
-          text: scope.pivot[0].value,
-          text_en: scope.pivot[0].pivot[0].value,
-        }
-      })
-      const typeSortField =
-        i18n.locale === 'et' ? 'stratigraphy_type' : 'stratigraphy_type_en'
-      state.typeSuggestions = (
-        await $axios.$get(
-          `https://api.geoloogia.info/solr/stratigraphy?q=%2A&start=0&rows=0&facet=true&facet.pivot=type,stratigraphy_type,stratigraphy_type_en&facet.limit=200&facet.sort=${typeSortField}`
-        )
-      ).facet_counts.facet_pivot[
-        'type,stratigraphy_type,stratigraphy_type_en'
-      ].map((scope: any) => {
-        return {
-          id: scope.value,
-          text: scope.pivot[0].value,
-          text_en: scope.pivot[0].pivot[0].value,
-        }
-      })
-
-      await hydrateFilterStratigraphy(
-        stratigraphyHierarchy,
-        'stratigraphyHierarchy'
-      )
+      const suggestionPromise = Promise.all([
+        getSuggestions(
+          'stratigraphy',
+          'rank,stratigraphy_rank,stratigraphy_rank_en',
+          { et: 'startigraphy_rank', en: 'stratigraphy_rank_en' }
+        ),
+        getSuggestions(
+          'stratigraphy',
+          'scope,stratigraphy_scope,stratigraphy_scope_en',
+          { et: 'startigraphy_scope', en: 'startigraphy_scope_en' }
+        ),
+        getSuggestions(
+          'startigraphy',
+          'type,stratigraphy_type,stratigraphy_type_en',
+          { et: 'stratigraphy_type', en: 'stratigraphy_type_en' }
+        ),
+      ])
+      const [suggestionResults] = await Promise.all([
+        suggestionPromise,
+        hydrateFilterStratigraphy(
+          stratigraphyHierarchy,
+          'stratigraphyHierarchy'
+        ),
+      ])
+      state.rankSuggestions = suggestionResults[0]
+      state.scopeSuggestions = suggestionResults[1]
+      state.rankSuggestions = suggestionResults[2]
       hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
       hydrateFilterStatic(rank, 'rank', state.rankSuggestions, Number)
       hydrateFilterStatic(scope, 'scope', state.scopeSuggestions, Number)

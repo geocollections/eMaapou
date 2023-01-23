@@ -32,7 +32,9 @@
           style="word-break: break-word"
         >
           <slot name="selection" :item="item">
-            {{ item.id }}
+            <div>
+              {{ $translate({ et: item.text, en: item.text_en }) }}
+            </div>
           </slot>
         </span>
       </div>
@@ -61,7 +63,9 @@
         <template #item="{ item }">
           <span class="text-body-2">
             <slot name="suggestion" :item="item">
-              {{ item.id }}
+              <div>
+                {{ $translate({ et: item.text, en: item.text_en }) }}
+              </div>
             </slot>
           </span>
         </template>
