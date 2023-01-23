@@ -7,11 +7,11 @@
   >
     <template #selection="{ item }">
       {{ item.reference }}
-      <span class="font-weight-light font-italic">{{ item.title[0] }}</span>
+      <span class="font-weight-light font-italic">{{ item.title }}</span>
     </template>
     <template #suggestion="{ item }">
       {{ item.reference }}
-      <span class="font-weight-light font-italic">{{ item.title[0] }}</span>
+      <span class="font-weight-light font-italic">{{ item.title }}</span>
     </template>
   </filter-input-autocomplete>
 </template>
