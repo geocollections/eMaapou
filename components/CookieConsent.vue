@@ -61,7 +61,6 @@ export default defineComponent({
     })
     const handleAcceptConsent = () => {
       accessor.settings.setCookiePolicy(false)
-      $matomo.rememberConsentGiven()
       $matomo.rememberCookieConsentGiven()
     }
     const handleRejectConsent = () => {

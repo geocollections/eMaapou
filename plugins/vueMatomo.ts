@@ -9,7 +9,7 @@ export default defineNuxtPlugin(({ app }) => {
     host: 'https://matomo.geoloogia.info/',
     siteId: 1,
     requireCookieConsent: true,
-    requireConsent: true,
+    requireConsent: false,
     debug: process.env.NODE_ENV !== 'production',
   })
 
