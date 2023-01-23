@@ -228,16 +228,18 @@ export default defineComponent({
           status_en: status.pivot[0].pivot[0].value,
         }
       })
-      await hydrateFilterLocality(locality, 'locality')
-      await hydrateFilterCollection(collection, 'collection')
-      await hydrateFilterFossilGroup(fossilGroup, 'fossilGroup')
-      await hydrateFilterReference(reference, 'reference')
-      await hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy')
-      await hydrateFilterRock(rockHierarchy, 'rockHierarchy')
-      await hydrateFilterStratigraphy(
-        stratigraphyHierarchy,
-        'stratigraphyHierarchy'
-      )
+      await Promise.all([
+        hydrateFilterLocality(locality, 'locality'),
+        hydrateFilterCollection(collection, 'collection'),
+        hydrateFilterFossilGroup(fossilGroup, 'fossilGroup'),
+        hydrateFilterReference(reference, 'reference'),
+        hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy'),
+        hydrateFilterRock(rockHierarchy, 'rockHierarchy'),
+        hydrateFilterStratigraphy(
+          stratigraphyHierarchy,
+          'stratigraphyHierarchy'
+        ),
+      ])
 
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       hydrateFilterStatic(
