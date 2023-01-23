@@ -109,7 +109,6 @@ export default {
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/image',
-    // '@nuxtjs/partytown',
   ],
 
   sitemap: {
@@ -229,15 +228,4 @@ export default {
       },
     },
   },
-  // partytown: {
-  //   forward: ['_paq', '_paq.push'],
-  //   resolveUrl: function (url, location, type) {
-  //     if (type === 'script') {
-  //       const proxyUrl = new URL('https://my-reverse-proxy.com/')
-  //       proxyUrl.searchParams.append('url', url.href)
-  //       return proxyUrl
-  //     }
-  //     return url
-  //   },
-  // },
 } as NuxtConfig
