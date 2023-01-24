@@ -7,6 +7,12 @@
         <v-card class="mt-3" flat tile color="transparent">
           <v-expansion-panels accordion flat tile multiple>
             <filter-locality v-model="locality" />
+            <filter-input-autocomplete-static
+              v-model="country"
+              :items="countrySuggestions"
+              :title="$t('filters.country').toString()"
+              :filter-field="$translate({ et: 'text', en: 'text_en' })"
+            />
             <filter-map v-model="map" :items="$accessor.search.image.items" />
             <filter-input-text
               v-model="people"
@@ -15,6 +21,22 @@
             <filter-input-text
               v-model="tags"
               :title="$t('filters.tags').toString()"
+            />
+            <filter-input-text
+              v-model="number"
+              :title="$t('filters.number').toString()"
+            />
+            <filter-input-text
+              v-model="author"
+              :title="$t('filters.author').toString()"
+            />
+            <filter-input-range
+              v-model="imageSize"
+              :label="$t('filters.imageSize').toString()"
+            />
+            <filter-input-date
+              v-model="date"
+              :title="$t('filters.date').toString()"
             />
             <filter-institution v-model="institutions" />
           </v-expansion-panels>
@@ -28,6 +50,8 @@
 import {
   computed,
   defineComponent,
+  reactive,
+  toRefs,
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
@@ -37,9 +61,16 @@ import InputSearch from '~/components/input/InputSearch.vue'
 import { useFilter } from '~/composables/useFilter'
 import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import { useHydrateFilterLocality } from '~/composables/useHydrateFilter'
+import {
+  useHydrateFilterLocality,
+  useHydrateFilterStatic,
+} from '~/composables/useHydrateFilter'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
+import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
+import FilterInputDate from '~/components/filter/input/FilterInputDate.vue'
+import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormPhoto',
   components: {
@@ -50,6 +81,9 @@ export default defineComponent({
     FilterInputText,
     FilterMap,
     FilterInstitution,
+    FilterInputAutocompleteStatic,
+    FilterInputRange,
+    FilterInputDate,
   },
   props: {
     markers: {
@@ -77,6 +111,12 @@ export default defineComponent({
     const people = useFilter('image', 'people', handleSearch)
     const tags = useFilter('image', 'tags', handleSearch)
     const map = useFilter('image', 'map', handleSearch)
+    const country = useFilter('image', 'country', handleSearch)
+    const number = useFilter('image', 'number', handleSearch)
+    const author = useFilter('image', 'author', handleSearch)
+    const imageSize = useFilter('image', 'imageSize', handleSearch)
+    const date = useFilter('image', 'date', handleSearch)
+
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
@@ -85,18 +125,42 @@ export default defineComponent({
       },
     })
     const hydrateFilterLocality = useHydrateFilterLocality()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const getSuggestions = useGetSuggestions()
+    const hydrateFilterStatic = useHydrateFilterStatic()
+    const state = reactive({
+      countrySuggestions: [] as any[],
+    })
     useFetch(async () => {
-      await hydrateFilterLocality(locality, 'locality')
+      // NOTE: enable when #948 is resolved
+      // const countrySuggestionsPromise = getSuggestions(
+      //   'image',
+      //   'county_id,country,country_en',
+      //   { et: 'country', en: 'country_en' }
+      // )
+      const countrySuggestionsPromise = Promise.resolve([])
+      const [countrySuggestions] = await Promise.all([
+        countrySuggestionsPromise,
+        hydrateFilterLocality(locality, 'locality'),
+      ])
+      state.countrySuggestions = countrySuggestions
+      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
     })
     return {
+      ...toRefs(state),
       handleSearch,
       handleReset,
       query,
       locality,
+      date,
+      author,
+      number,
       people,
       tags,
       map,
       institutions,
+      imageSize,
+      country,
     }
   },
 })

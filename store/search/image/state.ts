@@ -3,6 +3,7 @@ import { IMAGE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 import {
   GeomFilter,
+ListDateFilter,
   ListIdsFilter,
   ListTextFilter,
   RangeFilter,
@@ -13,12 +14,12 @@ export type ImageFilters = {
   locality: ListIdsFilter
   people: ListTextFilter
   tags: ListTextFilter
-  country: TextFilter
-  date: RangeFilter
+  country: ListIdsFilter
+  date: ListDateFilter
   dateFree: TextFilter
-  imageNumber: TextFilter
-  author: TextFilter
-  imageSize: TextFilter
+  number: ListTextFilter
+  author: ListTextFilter
+  imageSize: RangeFilter
   map: GeomFilter
 }
 type ImageSearchModuleState = SearchModuleState<ImageFilters> & {
@@ -60,23 +61,19 @@ export const initState = (): ImageSearchModuleState => {
         fields: ['tags'],
       },
       country: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
+        value: [],
+        type: FilterType.ListIds,
+        lookupType: 'none',
         fields: [
-          'country',
-          'country_en',
-          'maakond',
-          'maakond_en',
-          'vald',
-          'vald_en',
+          'country_id',
         ],
+        valueType: 'number',
+        valueField: 'id'
       },
       date: {
-        type: FilterType.Range,
-        value: [null, null],
-        placeholders: ['boxes.min', 'boxes.max'],
-        fields: ['date_created', 'date_created_free_year'],
+        type: FilterType.ListDate,
+        value: [],
+        fields: ['date_created'],
       },
       dateFree: {
         value: '',
@@ -84,23 +81,23 @@ export const initState = (): ImageSearchModuleState => {
         lookUpType: LookupType.Contains,
         fields: ['date_created_free'],
       },
-      imageNumber: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
+      number: {
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'contains',
         fields: ['image_number'],
       },
       author: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.Contains,
+        value: [],
+        type: FilterType.ListText,
+        lookupType: 'contains',
         fields: ['agent', 'author_free'],
       },
       imageSize: {
-        value: '',
-        type: FilterType.Text,
-        lookUpType: LookupType.GreaterThan,
+        value: [null, null],
+        type: FilterType.Range,
         fields: ['image_width', 'image_height'],
+        placeholders: ['boxes.min', 'boxes.max']
       },
       map: {
         type: FilterType.Geom,

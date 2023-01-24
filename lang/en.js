@@ -112,8 +112,7 @@ export default {
     render: 'Render',
     loading: 'Loading',
     hideFilters: 'Hide filters',
-    showFilters: 'Show filters'
-
+    showFilters: 'Show filters',
   },
   link: {
     github: 'GitHub',
@@ -372,7 +371,7 @@ export default {
     rockName: 'Rock/mineral',
     reference: 'Reference',
     parent: 'Belongs to',
-    originalStatus: 'Original status'
+    originalStatus: 'Original status',
   },
   specimenIdentification: {
     rock: 'Mineral/rock',
@@ -1032,17 +1031,18 @@ export default {
     title: 'Results for {query}',
   },
   error: {
-    occurred: 'An error occurred'
+    occurred: 'An error occurred',
   },
   hints: {
-    escaping: 'escape special characters {specialCharacters} using {escapeCharacter}',
+    escaping:
+      'escape special characters {specialCharacters} using {escapeCharacter}',
     exact: 'exact phrase',
     require: 'require keyword',
     exclude: 'exclude keyword',
     requireBoth: 'both keywords exist',
     notExclude: 'keyword not present',
     wildcard: 'wildcard search',
-    combineOperators: 'combine operators'
+    combineOperators: 'combine operators',
   },
   filters: {
     filter: 'Filter',
@@ -1095,22 +1095,24 @@ export default {
     originalStatus: 'Original status',
     scope: 'Scope',
     type: 'Type',
-    rank: 'Rank'
+    rank: 'Rank',
+    number: 'Number',
+    imageSize: 'Image size (px)',
   },
   intervals: {
     default: {
       between: 'Between {min} and {max}',
       lessThanEquals: 'Less than or equal to {max}',
       greaterThanEquals: 'Greater than or equal to {min}',
-      exists: 'Exists'
+      exists: 'Exists',
     },
     depth: {
       between: 'Between {min} and {max} (m)',
       lessThanEquals: 'Above {max} (m)',
-      greaterThanEquals: 'Deeper than {min} (m)'
-    }
+      greaterThanEquals: 'Deeper than {min} (m)',
+    },
   },
   autocomplete: {
-    searchHint: 'Enter a keyword for suggestions'
-  }
+    searchHint: 'Enter a keyword for suggestions',
+  },
 }

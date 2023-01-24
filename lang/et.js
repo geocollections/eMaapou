@@ -113,7 +113,7 @@ export default {
     render: 'Väljund',
     loading: 'Laadimine',
     hideFilters: 'Peida filtrid',
-    showFilters: 'Ava filtrid'
+    showFilters: 'Ava filtrid',
   },
   link: {
     sarvAPI: 'Avalik API',
@@ -373,7 +373,7 @@ export default {
     rockName: 'Kivim/mineraal',
     reference: 'Kirjandus',
     parent: 'Kuulub',
-    originalStatus: 'Originaali staatus'
+    originalStatus: 'Originaali staatus',
   },
   specimenIdentification: {
     rock: 'Mineraal/kivim',
@@ -1033,7 +1033,7 @@ export default {
     title: 'Tulemused päringule {query}',
   },
   error: {
-    occurred: 'Päringul esines viga'
+    occurred: 'Päringul esines viga',
   },
   hints: {
     escaping: 'erimärgile {specialCharacters} lisa ette {escapeCharacter}',
@@ -1043,7 +1043,7 @@ export default {
     requireBoth: 'mõlemad terminid olemas',
     notExclude: 'terminit ei ole',
     wildcard: 'metamärgiga otsing',
-    combineOperators: 'kombineeri operaatoreid'
+    combineOperators: 'kombineeri operaatoreid',
   },
   filters: {
     filter: 'Filtreeri',
@@ -1096,22 +1096,24 @@ export default {
     originalStatus: 'Originaali staatus',
     scope: 'Skoop',
     type: 'Tüüp',
-    rank: 'Tase'
+    rank: 'Tase',
+    number: 'Number',
+    imageSize: 'Pildi suurus (px)',
   },
   intervals: {
     default: {
       between: 'Vahemikus {min} kuni {max}',
       lessThanEquals: 'Väiksem või võrdne {max}',
       greaterThanEquals: 'Suurem või võrdne {min}',
-      exists: 'Määratud'
+      exists: 'Määratud',
     },
     depth: {
       between: 'Vahemikus {min} kuni {max} (m)',
       lessThanEquals: 'Kõrgemal kui {max} (m)',
-      greaterThanEquals: 'Sügavamal kui {min} (m)'
-    }
+      greaterThanEquals: 'Sügavamal kui {min} (m)',
+    },
   },
   autocomplete: {
-    searchHint: 'Sisesta märksõna valikute nägemiseks'
-  }
+    searchHint: 'Sisesta märksõna valikute nägemiseks',
+  },
 }

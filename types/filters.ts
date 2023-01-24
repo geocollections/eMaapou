@@ -59,6 +59,11 @@ export type ListTextFilter = {
   fields: string[]
   lookupType: 'none' | 'startswith' | 'contains'
 }
+export type ListDateFilter = {
+  type: FilterType.ListDate
+  value: any[][]
+  fields: string[]
+}
 export type GeomFilter = {
   type: FilterType.Geom
   value: null | any
@@ -82,3 +87,4 @@ export type Filter =
   | ListIdsFilter
   | ListTextFilter
   | ParameterFilter
+  | ListDateFilter

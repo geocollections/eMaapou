@@ -123,5 +123,9 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
         ],
       }
     })
+  } else if (filter.type === FilterType.ListDate) {
+    return (route.query[key] as string).split(',').map((val) => {
+      return val.split('~')
+    })
   }
 }

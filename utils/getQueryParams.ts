@@ -77,6 +77,8 @@ const serializeFilter = (filter: Filter) => {
           `${value.parameter}:${value.value[0] ?? '*'}-${value.value[1] ?? '*'}`
       )
       .join(',')
+  } else if (filter.type === FilterType.ListDate) {
+    return filter.value.map((value) => value.join('~')).join(',')
   } else {
     return ''
   }
