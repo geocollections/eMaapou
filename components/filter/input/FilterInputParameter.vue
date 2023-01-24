@@ -151,6 +151,7 @@ import {
   useContext,
   watch,
 } from '@nuxtjs/composition-api'
+import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import isNull from 'lodash/isNull'
@@ -212,6 +213,8 @@ export default defineComponent({
     }
     const handleParameter = (value: IValue['parameter'], i: number) => {
       state.internalValue[i].parameter = value
+
+      if (isEqual(props.value, state.internalValue)) return
       emit('input', state.internalValue)
     }
 
@@ -237,6 +240,7 @@ export default defineComponent({
       emit('input', state.internalValue)
     }
     const handleEnter = () => {
+      if (isEqual(props.value, state.internalValue)) return
       emit('input', state.internalValue)
     }
 
