@@ -85,6 +85,13 @@
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
+    <template #item.image="{ item }">
+      <thumbnail-image
+        v-if="item.image_preview_url"
+        :src="item.image_preview_url"
+        class="my-1"
+      />
+    </template>
   </base-data-table>
 </template>
 
@@ -95,10 +102,10 @@ import { mapState } from 'vuex'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE } from '~/constants'
-
+import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
 export default {
   name: 'DataTableSample',
-  components: { BaseDataTable },
+  components: { BaseDataTable, ThumbnailImage },
   mixins: [headersMixin],
   props: {
     items: {

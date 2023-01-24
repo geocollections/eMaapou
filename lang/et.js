@@ -508,6 +508,7 @@ export default {
     igsn: 'IGSN',
     parent: 'Kuulub',
     parentSpecimen: 'Kuulub eksemplari',
+    image: 'Pilt',
   },
   sampleData: {
     sampleNumber: 'Proov',

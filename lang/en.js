@@ -506,6 +506,7 @@ export default {
     igsn: 'IGSN',
     parent: 'Belongs to',
     parentSpecimen: 'Belongs to specimen',
+    image: 'Image',
   },
   sampleData: {
     sampleNumber: 'Sample',

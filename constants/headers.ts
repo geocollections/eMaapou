@@ -1057,7 +1057,7 @@ export const HEADERS_SAMPLE: Headers = {
     depth_interval: {
       text: 'sample.depthInterval',
       value: 'depth_interval',
-      show: true,
+      show: false,
       apiFieldValue: 'depth_interval',
     },
     stratigraphy: {
@@ -1069,7 +1069,7 @@ export const HEADERS_SAMPLE: Headers = {
     lithostratigraphy: {
       text: 'sample.lithostratigraphy',
       value: 'lithostratigraphy',
-      show: true,
+      show: false,
       apiFieldValue: { et: 'lithostratigraphy', en: 'lithostratigraphy_en' },
     },
     collector: {
@@ -1084,6 +1084,13 @@ export const HEADERS_SAMPLE: Headers = {
       show: true,
       apiFieldValue: 'date_collected',
     },
+    image: {
+      text: 'sample.image',
+      value: 'image',
+      show: true,
+      apiFieldValue: 'image',
+      sortable: true
+    },
   },
   allIds: [
     'id',
@@ -1095,6 +1102,7 @@ export const HEADERS_SAMPLE: Headers = {
     'lithostratigraphy',
     'collector',
     'date_collected',
+    'image',
   ],
 }
 
