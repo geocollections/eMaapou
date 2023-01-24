@@ -71,7 +71,7 @@
             :disabled="internalValue.length < 1"
             @click="handleClear"
           >
-            Clear
+            {{ $t('filter.clear') }}
           </v-btn>
         </v-col>
 
@@ -85,7 +85,7 @@
             :disabled="!isAddActive"
             @click="handleAdd"
           >
-            Add
+            {{ $t('filter.add') }}
           </v-btn>
         </v-col>
       </v-row>
@@ -142,6 +142,8 @@ export default defineComponent({
       emit('input', state.internalValue)
     }
     const handleAdd = () => {
+      if (state.currentDatePickerValue === undefined) return
+
       state.internalValue = [
         ...state.internalValue,
         state.currentDatePickerValue,
@@ -175,6 +177,7 @@ export default defineComponent({
       const startDate = new Date(dateArray[0])
       if (dateArray.length > 1) {
         const endDate = new Date(dateArray[1])
+        // @ts-ignore
         return dateFormat.formatRange(startDate, endDate)
       }
       return dateFormat.format(startDate)

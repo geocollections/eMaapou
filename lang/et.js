@@ -1116,4 +1116,8 @@ export default {
   autocomplete: {
     searchHint: 'Sisesta märksõna valikute nägemiseks',
   },
+  filter: {
+    add: 'Lisa',
+    clear: 'Puhasta',
+  },
 }

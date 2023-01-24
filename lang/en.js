@@ -1115,4 +1115,8 @@ export default {
   autocomplete: {
     searchHint: 'Enter a keyword for suggestions',
   },
+  filter: {
+    add: 'Add',
+    clear: 'Clear',
+  },
 }

@@ -117,7 +117,7 @@
             :disabled="validFilters.length < 1"
             @click="handleClear"
           >
-            Clear
+            {{ $t('filter.clear') }}
           </v-btn>
         </v-col>
 
@@ -131,7 +131,7 @@
             :disabled="!isAddActive"
             @click="handleAdd"
           >
-            Add
+            {{ $t('filter.add') }}
           </v-btn>
         </v-col>
       </v-row>
