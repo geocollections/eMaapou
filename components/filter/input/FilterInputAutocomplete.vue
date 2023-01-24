@@ -57,7 +57,7 @@
         :search-input.sync="search"
         multiple
         persistent-placeholder
-        :items="suggestItems"
+        :items="parsedSuggestionsItems"
         @input="handleInput"
       >
         <template #item="{ item }">
@@ -143,7 +143,7 @@ export default defineComponent({
       (newVal) => {
         state.selectedItems = newVal
       },
-      {immediate: true}
+      { immediate: true }
     )
     watch(
       () => state.search,
@@ -202,12 +202,24 @@ export default defineComponent({
       state.page += 1
       state.suggestItems = [...state.suggestItems, ...newSuggestions]
     }
+    const parsedSuggestionsItems = computed(() => {
+      return state.suggestItems.map((suggestion) => {
+        const disabled = state.selectedItems.some(
+          (item) => item.id === suggestion.id
+        )
+        return {
+          ...suggestion,
+          disabled,
+        }
+      })
+    })
     return {
       ...toRefs(state),
       handleInput,
       icons,
       handleRemove,
       loadMore,
+      parsedSuggestionsItems,
     }
   },
 })

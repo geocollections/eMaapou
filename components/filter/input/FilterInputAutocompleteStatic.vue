@@ -57,7 +57,7 @@
         :filter="filterFunc"
         multiple
         persistent-placeholder
-        :items="items"
+        :items="parsedSuggestionItems"
         @input="handleInput"
       >
         <template #item="{ item }">
@@ -141,12 +141,25 @@ export default defineComponent({
         .toLocaleLowerCase()
         .includes(queryText.toLocaleLowerCase())
     }
+    const parsedSuggestionItems = computed(() => {
+      // Disable already selected items in the suggestions
+      return props.items.map((suggestion) => {
+        const disabled = state.selectedItems.some(
+          (item) => item.id === suggestion.id
+        )
+        return {
+          ...suggestion,
+          disabled,
+        }
+      })
+    })
     return {
       ...toRefs(state),
       handleInput,
       icons,
       handleRemove,
       filterFunc,
+      parsedSuggestionItems,
     }
   },
 })
