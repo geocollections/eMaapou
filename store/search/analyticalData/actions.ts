@@ -30,14 +30,6 @@ export default {
           module: 'analytical_data',
           headerId: initParameter.value,
         })
-        // dispatch(
-        //   'headers/toggleHeader',
-        //   {
-        //     module: 'analytical_data',
-        //     headerId: initParameter.value,
-        //   },
-        //   { root: true }
-        // )
       },
       updateParameterFilter({ commit }, { id, filter }): void {
         commit('UPDATE_PARAMETER_FILTER', { id, filter })
@@ -46,14 +38,6 @@ export default {
           module: 'analytical_data',
           headerId: filter.fields[0],
         })
-        // dispatch(
-        //   'headers/toggleHeader',
-        //   {
-        //     module: 'analytical_data',
-        //     headerId: filter.fields[0],
-        //   },
-        //   { root: true }
-        // )
       },
       removeParameterFilter({ commit }, id) {
         commit('REMOVE_PARAMETER_FILTER', id)
@@ -64,15 +48,6 @@ export default {
         this.app.$accessor.headers.addParameterHeaders({
           parameters,
         })
-
-        // dispatch(
-        //   'headers/addParameterHeaders',
-        //   {
-        //     parameters: parametersNew,
-        //   },
-        //   { root: true }
-        // )
-        // dispatch('initDefaultParameters')
       },
       initDefaultParameters({ commit, state }): void {
         state.defaultParameters.forEach((parameterId) => {
@@ -93,14 +68,6 @@ export default {
             module: 'analytical_data',
             headerId: parameter.value,
           })
-          // dispatch(
-          //   'headers/toggleHeader',
-          //   {
-          //     module: 'analytical_data',
-          //     headerId: parameter.value,
-          //   },
-          //   { root: true }
-          // )
         })
       },
     }

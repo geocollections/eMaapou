@@ -43,7 +43,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         value: [],
         type: FilterType.ListText,
         lookupType: 'none',
-        label: '',
         fields: [
           'specimen_full_name',
           'specimen_number',
@@ -54,7 +53,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         value: [],
         type: FilterType.ListIds,
         lookupType: 'none',
-        label: '',
         fields: ['collection_id'],
         valueField: 'id',
         valueType: 'number',
@@ -63,7 +61,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         value: [],
         type: FilterType.ListIds,
         lookupType: 'none',
-        label: '',
         fields: ['original_status_id'],
         valueField: 'id',
         valueType: 'number',
@@ -72,7 +69,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Contains,
-        label: 'specimen.rockName',
         fields: ['rock', 'rock_en', 'rock_txt', 'rock_txt_en'],
       },
       // stratigraphyHierarchy: {
@@ -86,13 +82,11 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       hasImage: {
         value: false,
         type: FilterType.Boolean,
-        label: 'specimen.has_image',
         fields: ['has_image'],
       },
       hasCoordinates: {
         value: false,
         type: FilterType.Boolean,
-        label: 'specimen.has_map',
         fields: ['has_map'],
       },
       // mass: {
@@ -106,7 +100,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       locality: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['locality_id'],
         valueType: 'number',
         valueField: 'id',
@@ -115,7 +108,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       reference: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['specimen_references'],
         valueType: 'string',
         valueField: 'reference',
@@ -124,7 +116,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       taxonHierarchy: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['hierarchy_string'],
         valueType: 'string',
         valueField: 'hierarchy_string',
@@ -133,7 +124,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       rockHierarchy: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['hierarchy_string_rock'],
         valueType: 'string',
         valueField: 'hierarchy_strings',
@@ -142,14 +132,12 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       taxonName: {
         value: [],
         type: FilterType.ListText,
-        label: '',
         fields: ['taxon_txt'],
         lookupType: 'none',
       },
       stratigraphyHierarchy: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: [
           'stratigraphy_hierarchy',
           'age_hierarchy',
@@ -162,7 +150,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       fossilGroup: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['fossilgroup_id'],
         valueField: 'id',
         valueType: 'number',
@@ -171,20 +158,17 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       map: {
         type: FilterType.Geom,
         value: null,
-        label: '',
         fields: ['latlong'],
       },
       depth: {
         type: FilterType.Range,
         value: [null, null],
-        label: '',
         fields: ['depth'],
         placeholders: ['depth.min', 'depth.max'],
       },
       country: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['country_id'],
         valueType: 'number',
         valueField: 'id',
@@ -193,7 +177,6 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       collector: {
         value: [],
         type: FilterType.ListText,
-        label: '',
         fields: ['collector', 'collector_full_name'],
         lookupType: 'contains',
       },

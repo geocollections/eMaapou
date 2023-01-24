@@ -37,13 +37,11 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Contains,
-        label: 'analysis.id',
         fields: ['id'],
       },
       depth: {
         value: [null, null],
         type: FilterType.Range,
-        label: 'analysis.depth',
         placeholders: ['depth.min', 'depth.max'],
         fields: ['depth'],
       },
@@ -52,7 +50,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
         type: FilterType.Object,
         searchField: 'hierarchy_string',
         lookUpType: LookupType.StartsWith,
-        label: 'analysis.stratigraphy',
         fields: [
           'stratigraphy_hierarchy',
           'lithostratigraphy_hierarchy',
@@ -62,7 +59,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
       agent: {
         value: [],
         type: FilterType.ListText,
-        label: '',
         fields: ['agent'],
         lookupType: 'startswith',
       },
@@ -70,13 +66,11 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Contains,
-        label: 'analysis.dataset',
         fields: ['dataset_ids'],
       },
       sample: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['sample_id', 'sample_number'],
         valueType: 'number',
         valueField: 'id',
@@ -86,7 +80,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
       lab: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['lab_id'],
         valueType: 'number',
         valueField: 'id',
@@ -95,7 +88,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
       method: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['method'],
         valueType: 'number',
         valueField: 'id',
@@ -104,7 +96,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
       locality: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['locality_id'],
         valueType: 'number',
         valueField: 'id',
@@ -113,7 +104,6 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
       map: {
         type: FilterType.Geom,
         value: null,
-        label: '',
         fields: ['latlong'],
       },
     },

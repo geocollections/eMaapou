@@ -36,7 +36,6 @@ export const initState = (): SearchModuleState<SampleFilters> => {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Contains,
-        label: 'sample.stratigraphy',
         fields: ['stratigraphy', 'stratigraphy_en'],
       },
       hierarchy: {
@@ -44,7 +43,6 @@ export const initState = (): SearchModuleState<SampleFilters> => {
         type: FilterType.Object,
         searchField: 'hierarchy_string',
         lookUpType: LookupType.StartsWith,
-        label: 'sample.hierarchy',
         fields: [
           'stratigraphy_hierarchy',
           'age_hierarchy',
@@ -54,7 +52,6 @@ export const initState = (): SearchModuleState<SampleFilters> => {
       depth: {
         type: FilterType.Range,
         value: [null, null],
-        label: 'sample.depth',
         placeholders: ['depth.min', 'depth.max'],
         fields: ['depth'],
       },
@@ -62,20 +59,17 @@ export const initState = (): SearchModuleState<SampleFilters> => {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Equals,
-        label: 'sample.mass',
         fields: ['mass'],
       },
       project: {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Equals,
-        label: 'sample.project',
         fields: ['project_name', 'project_name_en'],
       },
       locality: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['locality_id'],
         valueType: 'number',
         valueField: 'id',
@@ -84,7 +78,6 @@ export const initState = (): SearchModuleState<SampleFilters> => {
       stratigraphyHierarchy: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: [
           'stratigraphy_hierarchy',
           'age_hierarchy',
@@ -97,21 +90,18 @@ export const initState = (): SearchModuleState<SampleFilters> => {
       collector: {
         value: [],
         type: FilterType.ListText,
-        label: '',
         fields: ['collector', 'collector_full_name'],
         lookupType: 'contains',
       },
       number: {
         value: [],
         type: FilterType.ListText,
-        label: '',
         fields: ['number'],
         lookupType: 'none',
       },
       map: {
         type: FilterType.Geom,
         value: null,
-        label: '',
         fields: ['latlong'],
       },
     },

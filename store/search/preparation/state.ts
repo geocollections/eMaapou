@@ -29,14 +29,12 @@ export const initState = (): SearchModuleState<PreparationFilters> => {
         value: [],
         type: FilterType.ListText,
         lookupType: 'none',
-        label: '',
         fields: ['preparation_number'],
       },
       locality: {
         value: [],
         type: FilterType.ListIds,
         lookupType: 'none',
-        label: '',
         fields: ['locality_id'],
         valueField: 'id',
         valueType: 'number',
@@ -45,7 +43,6 @@ export const initState = (): SearchModuleState<PreparationFilters> => {
         value: [],
         type: FilterType.ListIds,
         lookupType: 'startswith',
-        label: '',
         fields: [
           'stratigraphy_hierarchy',
           'lithostratigraphy_hierarchy',
@@ -57,14 +54,12 @@ export const initState = (): SearchModuleState<PreparationFilters> => {
       depth: {
         value: [null, null],
         type: FilterType.Range,
-        label: 'preparation.depth',
         placeholders: ['depth.min', 'depth.max'],
         fields: ['depth'],
       },
       map: {
         type: FilterType.Geom,
         value: null,
-        label: '',
         fields: ['latlong'],
       },
     },

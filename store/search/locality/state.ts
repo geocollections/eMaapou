@@ -29,14 +29,12 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
         value: [],
         type: FilterType.ListText,
         lookupType: 'none',
-        label: 'locality.name',
         fields: ['locality', 'locality_en'],
       },
       stratigraphy: {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Contains,
-        label: 'locality.stratigraphy',
         fields: [
           'stratigraphy_base',
           'stratigraphy_base_en',
@@ -49,7 +47,6 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
       country: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['country_id'],
         valueType: 'number',
         valueField: 'id',
@@ -58,7 +55,6 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
       reference: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['locality_references'],
         valueType: 'string',
         valueField: 'reference',
@@ -67,7 +63,6 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
       map: {
         type: FilterType.Geom,
         value: null,
-        label: '',
         fields: ['latlong'],
       },
     },

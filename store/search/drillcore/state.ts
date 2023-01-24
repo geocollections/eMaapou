@@ -31,27 +31,23 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
         value: [],
         type: FilterType.ListText,
         lookupType: 'none',
-        label: '',
         fields: ['drillcore', 'drillcore_en'],
       },
       storage: {
         value: '',
         type: FilterType.Text,
         lookUpType: LookupType.Contains,
-        label: 'drillcore.storage',
         fields: ['location'],
       },
       boxes: {
         type: FilterType.Range,
         value: [null, null],
-        label: 'drillcore.boxes',
         placeholders: ['boxes.min', 'boxes.max'],
         fields: ['boxes'],
       },
       country: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['country_id'],
         valueType: 'number',
         valueField: 'id',
@@ -60,7 +56,6 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
       repository: {
         value: [],
         type: FilterType.ListIds,
-        label: '',
         fields: ['core_repository_id'],
         valueType: 'number',
         valueField: 'id',
@@ -69,7 +64,6 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
       map: {
         type: FilterType.Geom,
         value: null,
-        label: '',
         fields: ['latlong'],
       },
     },

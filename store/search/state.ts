@@ -15,7 +15,6 @@ export const initState = (): SearchState => {
       institutions: {
         type: FilterType.ListOr,
         value: [],
-        label: '',
         fields: ['database_id'],
       },
     },
