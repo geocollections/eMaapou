@@ -50,7 +50,7 @@
                 hover
                 nuxt
                 :to="localePath({ name: 'photo-id', params: { id: image.id } })"
-                :class="{ 'elevation-4 image-hover-elevation': !!cropImages }"
+                :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
                 v-on="on"
               >
                 <v-img
