@@ -23,7 +23,8 @@ export type ImageFilters = {
   map: GeomFilter
 }
 type ImageSearchModuleState = SearchModuleState<ImageFilters> & {
-  currentView: string // TODO: this can/should be a enum/string union
+
+  currentView: number
   persistantFilters: {
     [K: string]: any
   }
@@ -35,7 +36,7 @@ export const initState = (): ImageSearchModuleState => {
     items: [],
     count: 0,
     options: IMAGE.options,
-    currentView: 'image',
+    currentView: 1,
     useMap: true,
     useInstitutions: true,
     query: '',

@@ -29,53 +29,73 @@
             : '&nbsp;'
         }}
       </div>
-      <v-card class="mt-0">
-        <v-radio-group
-          v-model="currentView"
-          row
-          dense
-          hide-details
-          class="mt-0 px-4 pt-3 pb-2"
-          mandatory
+
+      <v-tabs
+        v-model="currentView"
+        background-color="transparent"
+        color="accent"
+      >
+        <v-tab
+          v-for="view in views"
+          :key="view"
+          active-class="active-tab"
+          class="montserrat text-capitalize"
         >
-          <v-radio
-            v-for="view in views"
-            :key="view"
-            class="montserrat"
-            :label="$t(`common.${view}`)"
-            :value="view"
-            color="header"
-          />
-        </v-radio-group>
-
-        <data-table-photo
-          v-if="currentView === 'table'"
-          flat
-          :show-search="false"
-          :items="$accessor.search.image.items"
-          :count="$accessor.search.image.count"
-          :options="$accessor.search.image.options"
-          dynamic-headers
-          stateful-headers
-          :is-loading="$fetchState.pending"
-          @update="handleDataTableUpdate"
-        />
-
-        <image-view
-          v-if="currentView === 'image'"
-          :items="$accessor.search.image.items"
-          :count="$accessor.search.image.count"
-          :options="$accessor.search.image.options"
-          @update="handleDataTableUpdate"
-        />
-
-        <gallery-view
-          v-if="currentView === 'gallery'"
-          :items="$accessor.search.image.items"
-          :count="$accessor.search.image.count"
-          :options="$accessor.search.image.options"
-          @update="handleDataTableUpdate"
-        />
+          {{ $t(`common.${view}`) }}
+        </v-tab>
+        <!-- <v-tab class="montserrat text-capitalize">Table</v-tab> -->
+        <!-- <v-tab class="montserrat text-capitalize">Images</v-tab> -->
+        <!-- <v-tab class="montserrat text-capitalize">Gallery</v-tab> -->
+      </v-tabs>
+      <v-card class="mt-0">
+        <!-- <v-radio-group -->
+        <!--   v-model="currentView" -->
+        <!--   row -->
+        <!--   dense -->
+        <!--   hide-details -->
+        <!--   class="mt-0 px-4 pt-3 pb-2" -->
+        <!--   mandatory -->
+        <!-- > -->
+        <!--   <v-radio -->
+        <!--     v-for="view in views" -->
+        <!--     :key="view" -->
+        <!--     class="montserrat" -->
+        <!--     :label="$t(`common.${view}`)" -->
+        <!--     :value="view" -->
+        <!--     color="header" -->
+        <!--   /> -->
+        <!-- </v-radio-group> -->
+        <v-tabs-items v-model="currentView">
+          <v-tab-item :value="0">
+            <data-table-photo
+              flat
+              :show-search="false"
+              :items="$accessor.search.image.items"
+              :count="$accessor.search.image.count"
+              :options="$accessor.search.image.options"
+              dynamic-headers
+              stateful-headers
+              :is-loading="$fetchState.pending"
+              @update="handleDataTableUpdate"
+            />
+          </v-tab-item>
+          <v-tab-item :value="1">
+            <image-view
+              :items="$accessor.search.image.items"
+              :count="$accessor.search.image.count"
+              :options="$accessor.search.image.options"
+              @update="handleDataTableUpdate"
+            />
+          </v-tab-item>
+          <v-tab-item :value="2">
+            <gallery-view
+              :items="$accessor.search.image.items"
+              :count="$accessor.search.image.count"
+              :options="$accessor.search.image.options"
+              @update="handleDataTableUpdate"
+            />
+          </v-tab-item>
+        </v-tabs-items>
       </v-card>
     </template>
   </search>
@@ -87,16 +107,18 @@ import {
   useFetch,
   wrapProperty,
   computed,
+  useContext,
+  useMeta,
+  useRoute,
+  // ref,
 } from '@nuxtjs/composition-api'
 import { mdiFileImageOutline } from '@mdi/js'
-import { mapFields } from 'vuex-map-fields'
 import BaseHeader from '~/components/base/BaseHeader.vue'
 import Search from '~/templates/Search.vue'
 import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto.vue'
 import DataTablePhoto from '~/components/data-table/DataTablePhoto.vue'
 import ImageView from '~/components/ImageView.vue'
 import GalleryView from '~/components/GalleryView.vue'
-import { useAccessor } from '~/composables/useAccessor'
 import { HEADERS_PHOTO } from '~/constants'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 import { FilterType, LookupType } from '~/types/enums'
@@ -104,11 +126,6 @@ import { Filter } from '~/types/filters'
 
 const useServices = wrapProperty('$services', false)
 const useGetAPIFieldValues = wrapProperty('$getAPIFieldValues', false)
-enum ViewType {
-  Table = 'table',
-  Image = 'image',
-  Gallery = 'gallery',
-}
 
 export default defineComponent({
   components: {
@@ -120,17 +137,18 @@ export default defineComponent({
     BaseHeader,
   },
   setup() {
-    const accessor = useAccessor()
+    const { $accessor, $translate, i18n } = useContext()
+    const route = useRoute()
     const services = useServices()
     const getAPIFieldValues = useGetAPIFieldValues()
     const { fetch } = useFetch(async () => {
       const response = await services.sarvSolr.getResourceList('attachment', {
-        options: accessor.search.image.options,
-        search: accessor.search.image.query,
+        options: $accessor.search.image.options,
+        search: $accessor.search.image.query,
         fields: getAPIFieldValues(HEADERS_PHOTO),
         searchFilters: {
-          ...accessor.search.image.filters,
-          ...accessor.search.globalFilters,
+          ...$accessor.search.image.filters,
+          ...$accessor.search.globalFilters,
           specimenImageAttachment: {
             value: '2',
             type: FilterType.Text,
@@ -139,17 +157,18 @@ export default defineComponent({
           } as Filter,
         },
       })
-      accessor.search.image.SET_MODULE_ITEMS({ items: response.items })
-      accessor.search.image.SET_MODULE_COUNT({ count: response.count })
+      $accessor.search.image.SET_MODULE_ITEMS({ items: response.items })
+      $accessor.search.image.SET_MODULE_COUNT({ count: response.count })
     })
 
-    const filters = computed(() => accessor.search.image.filters)
-    const globalFilters = computed(() => accessor.search.globalFilters)
-    const views = computed(() => [
-      ViewType.Table,
-      ViewType.Image,
-      ViewType.Gallery,
-    ])
+    const filters = computed(() => $accessor.search.image.filters)
+    const globalFilters = computed(() => $accessor.search.globalFilters)
+    const views = computed(() => ['table', 'image', 'gallery'])
+
+    const currentView = computed({
+      get: () => $accessor.search.image.currentView,
+      set: (val) => $accessor.search.image.setView(val),
+    })
     const { handleFormReset, handleFormUpdate, handleDataTableUpdate } =
       useSearchQueryParams({
         module: 'image',
@@ -158,43 +177,10 @@ export default defineComponent({
         globalFilters,
         fetch,
       })
-
-    return {
-      handleFormReset,
-      handleFormUpdate,
-      handleDataTableUpdate,
-      views,
-    }
-  },
-  head() {
-    return {
-      title: this.$t('photo.pageTitle') as string,
-      meta: [
-        {
-          property: 'og:title',
-          hid: 'og:title',
-          content: this.$t('photo.pageTitle') as string,
-        },
-        {
-          property: 'og:url',
-          hid: 'og:url',
-          content: this.$route.path,
-        },
-      ],
-    }
-  },
-  computed: {
-    ...mapFields('search/image', {
-      currentView: 'currentView',
-    }),
-    icons(): any {
-      return {
-        mdiFileImageOutline,
-      }
-    },
-    mapMarkers(): any {
-      if (this.$accessor.search.image.items?.length > 0) {
-        return this.$accessor.search.image.items.reduce(
+    const icons = computed(() => ({ mdiFileImageOutline }))
+    const mapMarkers = computed(() => {
+      if ($accessor.search.image.items?.length > 0) {
+        return $accessor.search.image.items.reduce(
           (filtered: any[], item: any) => {
             if (
               (item.latitude && item.longitude) ||
@@ -204,7 +190,7 @@ export default defineComponent({
                 latitude: item.image_latitude ?? item.latitude,
                 longitude: item.image_longitude ?? item.longitude,
                 text:
-                  (this.$translate({
+                  ($translate({
                     et: item.locality,
                     en: item.locality_en,
                   }) ||
@@ -227,7 +213,48 @@ export default defineComponent({
         )
       }
       return []
-    },
+    })
+
+    useMeta(() => ({
+      title: i18n.t('photo.pageTitle').toString(),
+      meta: [
+        {
+          property: 'og:title',
+          hid: 'og:title',
+          content: i18n.t('photo.pageTitle').toString(),
+        },
+        {
+          property: 'og:url',
+          hid: 'og:url',
+          content: route.value.path,
+        },
+      ],
+    }))
+
+    return {
+      handleFormReset,
+      handleFormUpdate,
+      handleDataTableUpdate,
+      views,
+      currentView,
+      icons,
+      mapMarkers,
+    }
   },
+  head: {},
 })
 </script>
+
+<style scoped lang="scss">
+.active-tab {
+  // font-weight: bold;
+  color: var(--v-accent-darken1) !important;
+  &::before {
+    opacity: 0.2 !important;
+    background-color: var(--v-accent-base) !important;
+
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+}
+</style>
