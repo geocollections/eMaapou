@@ -79,6 +79,12 @@ const serializeFilter = (filter: Filter) => {
       .join(',')
   } else if (filter.type === FilterType.ListDate) {
     return filter.value.map((value) => value.join('~')).join(',')
+  } else if (filter.type === FilterType.ListIdsMulti) {
+    return filter.value
+      .map((value) => {
+        return `${value[filter.idValueField]}:${value[filter.valueField].join('|')}`
+      })
+      .join(',')
   } else {
     return ''
   }

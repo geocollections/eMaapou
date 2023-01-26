@@ -52,6 +52,15 @@ export type ListIdsFilter = {
   valueField: string
   lookupType: 'none' | 'startswith'
 }
+export type ListIdsMultiFilter = {
+  type: FilterType.ListIdsMulti
+  value: any[]
+  valueField: string
+  fields: string[]
+  valueType: 'number' | 'string'
+  idValueField: string
+  lookupType: 'none' | 'startswith'
+}
 
 export type ListTextFilter = {
   type: FilterType.ListText
@@ -88,3 +97,4 @@ export type Filter =
   | ListTextFilter
   | ParameterFilter
   | ListDateFilter
+  | ListIdsMultiFilter

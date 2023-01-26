@@ -10,7 +10,8 @@ export enum FilterType {
   ListIds = 'list_ids',
   ListText = 'list_text',
   Parameter = 'parameter',
-  ListDate = 'list_date'
+  ListDate = 'list_date',
+  ListIdsMulti = 'list_ids_multi'
 }
 
 export enum LookupType {

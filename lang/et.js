@@ -1100,6 +1100,7 @@ export default {
     rank: 'Tase',
     number: 'Number',
     imageSize: 'Pildi suurus (px)',
+    rockHierarchy: 'Kivimi hierarhia',
   },
   intervals: {
     default: {

@@ -108,14 +108,14 @@ export const useHydrateFilterRock: HydrationFunction = () => {
   return async (filter, queryParam) => {
     if (!route.value.query[queryParam]) return
 
-    const selectedTaxa = (route.value.query[queryParam] as string)
-      .split(',')
+    const selectedIds = (route.value.query[queryParam] as string)
+      .split(',').map((v) => v.split(':')[0])
       .map(decodeURIComponent)
-    const query = selectedTaxa
+    const query = selectedIds
       .map((taxa) => `hierarchy_strings:"${taxa}"`)
       .join(' OR ')
     const response = await $axios.$get(
-      `https://api.geoloogia.info/solr/rock?q=(${query})&rows=${selectedTaxa.length}&fl=id,name,name_en,hierarchy_strings`
+      `https://api.geoloogia.info/solr/rock?q=(${query})&rows=${selectedIds.length}&fl=id,name,name_en,hierarchy_strings`
     )
     filter.value = response.response.docs
   }

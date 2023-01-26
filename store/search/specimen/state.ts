@@ -5,6 +5,7 @@ import {
   BooleanFilter,
   GeomFilter,
   ListIdsFilter,
+ListIdsMultiFilter,
   ListTextFilter,
   RangeFilter,
   TextFilter,
@@ -25,7 +26,7 @@ export type SpecimenFilters = {
   map: GeomFilter
   depth: RangeFilter
   country: ListIdsFilter
-  rockHierarchy: ListIdsFilter
+  rockHierarchy: ListIdsMultiFilter
   originalStatus: ListIdsFilter
   collector: ListTextFilter
 }
@@ -123,10 +124,11 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       },
       rockHierarchy: {
         value: [],
-        type: FilterType.ListIds,
+        type: FilterType.ListIdsMulti,
+        valueField: 'hierarchy_strings',
         fields: ['hierarchy_string_rock'],
         valueType: 'string',
-        valueField: 'hierarchy_strings',
+        idValueField: 'id',
         lookupType: 'startswith',
       },
       taxonName: {

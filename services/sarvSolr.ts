@@ -314,6 +314,28 @@ const buildSolrParameters = (filters: { [key: string]: Filter }) => {
 
           return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
         }
+        case FilterType.ListIdsMulti: {
+          if (filter.value.length < 1) return prev
+          const solrFilter = filter.fields
+            .map((field: string) => {
+              return filter.value
+                .map((valueObject: any) => {
+                  return valueObject[filter.valueField]?.map((v: any) => {
+                    if (filter.valueType === 'string') {
+                      if (filter.lookupType === 'startswith') {
+                        return `(${field}:${v}*)`
+                      }
+                      return `(${field}:"${v}")`
+                    }
+                    return `(${field}:${v})`
+                  }).join(' OR ') ?? []
+                })
+                .join(' OR ')
+            })
+            .join(' OR ')
+
+          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+        }
         case FilterType.ListText: {
           if (filter.value.length < 1) return prev
           const solrFilter = filter.fields

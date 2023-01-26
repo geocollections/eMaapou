@@ -10,7 +10,7 @@ import {
 import isEqual from 'lodash/isEqual'
 import { useAccessor } from './useAccessor'
 import getQueryParams from '~/utils/getQueryParams'
-import parseQueryParams from '~/utils/parseQueryParams'
+import { parseQueryParams } from '~/utils/parseQueryParams'
 import searchModule from '~/store/search'
 import { SearchModuleState } from '~/store/search/types'
 import { SearchState } from '~/store/search/state'
@@ -89,7 +89,6 @@ export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
   watch(
     () => route.value.query,
     () => {
-      // await accessor.search[module].resetFilters(undefined)
       setStateFromQueryParams()
       fetch()
     }

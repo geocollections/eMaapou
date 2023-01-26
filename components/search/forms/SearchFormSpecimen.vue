@@ -24,8 +24,8 @@
               v-model="taxonName"
               :title="$t('filters.taxonName').toString()"
             />
+            <filter-rock v-model="rockHierarchy" />
             <filter-fossil-group v-model="fossilGroup" />
-            <filter-rock v-if="false" v-model="rockHierarchy" />
             <filter-locality v-model="locality" />
             <filter-input-autocomplete-static
               v-model="country"

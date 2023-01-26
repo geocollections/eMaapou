@@ -1099,6 +1099,7 @@ export default {
     rank: 'Rank',
     number: 'Number',
     imageSize: 'Image size (px)',
+    rockHierarchy: 'Rock hierarchy',
   },
   intervals: {
     default: {

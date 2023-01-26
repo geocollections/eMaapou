@@ -7,10 +7,10 @@
     v-on="$listeners"
   >
     <template #selection="{ item }">
-      {{ $i18n.locale == 'et' ? item.name : item.name }}
+      {{ $i18n.locale == 'et' ? item.name : item.name_en }}
     </template>
     <template #suggestion="{ item }">
-      {{ $i18n.locale == 'et' ? item.name : item.name }}
+      {{ $i18n.locale == 'et' ? item.name : item.name_en }}
     </template>
   </filter-input-autocomplete>
 </template>
@@ -35,7 +35,7 @@ export default defineComponent({
       options = { rows: 10, start: 0 }
     ) => {
       return $axios.$get(
-        `https://api.geoloogia.info/solr/rock?q=${search}&rows=${options.rows}&start=${options.start}&fl=id,name,name_en`
+        `https://api.geoloogia.info/solr/rock?q=${search}&fq=hierarchy_strings:*&rows=${options.rows}&start=${options.start}&fl=id,name,name_en,hierarchy_strings`
       )
     }
     return { querySuggestions }
