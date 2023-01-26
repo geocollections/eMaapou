@@ -11,7 +11,7 @@ import {
   mdiLayersTriple,
   mdiFileImageOutline,
   mdiImageFilterHdr,
-  mdiBug
+  mdiBug,
 } from '@mdi/js'
 
 export const BROWSE_GEOLOGY_LIST = [
@@ -44,11 +44,6 @@ export const BROWSE_LAB_LIST = [
     icon: mdiImageFilterHdr,
   },
   {
-    routeName: 'analysis',
-    label: 'analysis.pageTitle',
-    icon: mdiTestTube
-  },
-  {
     routeName: 'analytical-data',
     label: 'analyticalData.pageTitle',
     icon: mdiChartLine,
@@ -57,6 +52,11 @@ export const BROWSE_LAB_LIST = [
     routeName: 'dataset',
     label: 'dataset.pageTitle',
     icon: mdiDatabaseOutline,
+  },
+  {
+    routeName: 'analysis',
+    label: 'analysis.pageTitle',
+    icon: mdiTestTube,
   },
   {
     routeName: 'preparation',

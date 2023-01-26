@@ -37,7 +37,7 @@
 
       <v-list class="py-1 px-2">
         <base-menu-list-item
-          v-for="(item, index) in browseGeography"
+          v-for="(item, index) in browseTaxon"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
@@ -64,7 +64,7 @@
       <v-divider class="mx-3 my-1" />
       <v-list class="py-1 px-2">
         <base-menu-list-item
-          v-for="(item, index) in browseTaxon"
+          v-for="(item, index) in browseGeography"
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
