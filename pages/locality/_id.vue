@@ -214,11 +214,11 @@
         </v-btn>
       </v-card-text>
     </template>
-    <template #column-right>
-      <v-card-title class="subsection-title">{{
-        $t('locality.map')
-      }}</v-card-title>
-      <v-card-text v-if="locality.latitude && locality.longitude">
+    <template v-if="locality.latitude && locality.longitude" #column-right>
+      <v-card-title class="subsection-title">
+        {{ $t('locality.map') }}
+      </v-card-title>
+      <v-card-text>
         <v-card id="map-wrap" elevation="0">
           <map-detail
             rounded

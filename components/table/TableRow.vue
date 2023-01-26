@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import isNil from 'lodash/isNil'
+import isEmpty from 'lodash/isEmpty'
 
 export default {
   name: 'TableRow',
@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     isInvalid() {
-      return isNil(this.value)
+      return isEmpty(this.value)
     },
     hasValueSlot() {
       return this.$slots.value
