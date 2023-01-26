@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('specimen.pageTitle').toString()"
+        :count="$accessor.search.specimen.count"
         :icon="icons.mdiBug"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.specimen.count
-            ? $tc('common.count', $accessor.search.specimen.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-specimen
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiBug } from '@mdi/js'
 import SearchFormSpecimen from '~/components/search/forms/SearchFormSpecimen.vue'
 import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_SPECIMEN } from '~/constants'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -68,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormSpecimen,
     DataTableSpecimen,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

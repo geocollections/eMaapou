@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('preparation.pageTitle').toString()"
+        :count="$accessor.search.preparation.count"
         :icon="icons.mdiEyedropper"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.preparation.count
-            ? $tc('common.count', $accessor.search.preparation.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-preparation
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiEyedropper } from '@mdi/js'
 import DataTablePreparation from '~/components/data-table/DataTablePreparation.vue'
 import SearchFormPreparation from '~/components/search/forms/SearchFormPreparation.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_PREPARATION } from '~/constants'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 import { useAccessor } from '~/composables/useAccessor'
@@ -69,7 +62,7 @@ export default defineComponent({
     Search,
     SearchFormPreparation,
     DataTablePreparation,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

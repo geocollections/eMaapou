@@ -2,7 +2,7 @@
   <v-card flat color="transparent">
     <v-row no-gutters>
       <v-col>
-        <base-header :title="$t('common.news')" class="title-heading" />
+        <base-header :title="$t('common.news')" class="pb-2 title-heading" />
         <v-card-text class="d-flex flex-column pa-0">
           <news-preview-card
             v-for="(news, i) in newsList"

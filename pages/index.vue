@@ -109,7 +109,7 @@
           <the-news-card />
         </v-col>
         <v-col cols="12" md="4" class="pl-lg-5" order="0" order-md="0">
-          <base-header :title="$t('landing.otherServices')" />
+          <base-header class="pb-2" :title="$t('landing.otherServices')" />
 
           <v-row no-gutters>
             <v-col

@@ -1,8 +1,8 @@
 <template>
   <div v-if="historyEntries.length > 0" class="d-flex align-center">
-    <v-subheader style="height: 32px !important" class="pl-3 text-no-wrap">{{
-      `${$t('common.history')}:`
-    }}</v-subheader>
+    <v-subheader style="height: 32px !important" class="pl-0 text-no-wrap">
+      {{ `${$t('common.history')}:` }}
+    </v-subheader>
     <span class="pb-1 pt-2 history-viewer d-flex">
       <span
         v-for="(entry, index) in historyEntries"

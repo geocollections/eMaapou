@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('analyticalData.pageTitle').toString()"
+        :count="$accessor.search.analyticalData.count"
         :icon="icons.mdiChartLine"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.analyticalData.count
-            ? $tc('common.count', $accessor.search.analyticalData.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-analytical-data
           :show-search="false"
@@ -58,7 +51,7 @@ import { mdiChartLine } from '@mdi/js'
 import DataTableAnalyticalData from '~/components/data-table/DataTableAnalyticalData.vue'
 import SearchFormAnalyticalData from '~/components/search/forms/SearchFormAnalyticalData.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_ANALYTICAL_DATA } from '~/constants/headers'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -71,7 +64,7 @@ export default defineComponent({
     Search,
     SearchFormAnalyticalData,
     DataTableAnalyticalData,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const { i18n } = useContext()

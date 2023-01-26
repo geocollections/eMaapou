@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('taxon.pageTitle').toString()"
+        :count="$accessor.search.taxon.count"
         :icon="icons.mdiFamilyTree"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.taxon.count
-            ? $tc('common.count', $accessor.search.taxon.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-taxon
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiFamilyTree } from '@mdi/js'
 import Search from '~/templates/Search.vue'
 import SearchFormTaxon from '~/components/search/forms/SearchFormTaxon.vue'
 import DataTableTaxon from '~/components/data-table/DataTableTaxon.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_TAXON } from '~/constants'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -68,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormTaxon,
     DataTableTaxon,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

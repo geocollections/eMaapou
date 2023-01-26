@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('drillcore.pageTitle').toString()"
+        :count="$accessor.search.drillcore.count"
         :icon="icons.mdiScrewMachineFlatTop"
       />
     </template>
@@ -21,13 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.drillcore.count
-            ? $tc('common.count', $accessor.search.drillcore.count)
-            : '&nbsp;'
-        }}
-      </div>
       <v-card>
         <data-table-drillcore
           :show-search="false"
@@ -56,7 +50,7 @@ import { mdiScrewMachineFlatTop } from '@mdi/js'
 import SearchFormDrillcore from '~/components/search/forms/SearchFormDrillcore.vue'
 import DataTableDrillcore from '~/components/data-table/DataTableDrillcore.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_DRILLCORE } from '~/constants'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -66,8 +60,8 @@ export default defineComponent({
   components: {
     Search,
     SearchFormDrillcore,
+    HeaderSearch,
     DataTableDrillcore,
-    BaseHeader,
   },
   setup() {
     const accessor = useAccessor()

@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('site.pageTitle').toString()"
+        :count="$accessor.search.site.count"
         :icon="icons.mdiMapMarkerOutline"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.site.count
-            ? $tc('common.count', $accessor.search.site.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-site
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiMapMarkerOutline } from '@mdi/js'
 import SearchFormSite from '~/components/search/forms/SearchFormSite.vue'
 import DataTableSite from '~/components/data-table/DataTableSite.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_SITE } from '~/constants'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -68,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormSite,
     DataTableSite,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

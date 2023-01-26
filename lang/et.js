@@ -65,7 +65,7 @@ export default {
     history: 'Hiljuti vaadatud',
     quickSearch: 'Kiirpäring',
     description: 'Kirjeldus',
-    count: 'Leitud {count} kirjet',
+    count: '{count} tulemus | {count} tulemust',
     map: 'Kaart',
     more: 'Rohkem',
     close: 'Sulge',

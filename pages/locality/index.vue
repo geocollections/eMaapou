@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('locality.pageTitle').toString()"
+        :count="$accessor.search.locality.count"
         :icon="icons.mdiMapMarker"
       />
     </template>
@@ -21,13 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.locality.count
-            ? $tc('common.count', $accessor.search.locality.count)
-            : '&nbsp;'
-        }}
-      </div>
       <v-card>
         <data-table-locality
           :show-search="false"
@@ -55,7 +49,7 @@ import { mdiMapMarker } from '@mdi/js'
 import SearchFormLocality from '~/components/search/forms/SearchFormLocality.vue'
 import DataTableLocality from '~/components/data-table/DataTableLocality.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_LOCALITY } from '~/constants'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 import { useAccessor } from '~/composables/useAccessor'
@@ -67,7 +61,7 @@ export default defineComponent({
     Search,
     DataTableLocality,
     SearchFormLocality,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

@@ -64,7 +64,7 @@ export default {
     history: 'Recently viewed',
     quickSearch: 'Quick search',
     description: 'Description',
-    count: 'Found {count} records',
+    count: '{count} result | {count} results',
     map: 'Map',
     more: 'More',
     close: 'Close',

@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('dataset.pageTitle').toString()"
+        :count="$accessor.search.dataset.count"
         :icon="icons.mdiDatabaseOutline"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.dataset.count
-            ? $tc('common.count', $accessor.search.dataset.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-dataset
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiDatabaseOutline } from '@mdi/js'
 import DataTableDataset from '~/components/data-table/DataTableDataset.vue'
 import SearchFormDataset from '~/components/search/forms/SearchFormDataset.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_DATASET } from '~/constants'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 import { useAccessor } from '~/composables/useAccessor'
@@ -68,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormDataset,
     DataTableDataset,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

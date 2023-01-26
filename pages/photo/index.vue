@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('photo.pageTitle').toString()"
+        :count="$accessor.search.image.count"
         :icon="icons.mdiFileImageOutline"
       />
     </template>
@@ -22,14 +23,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.image.count
-            ? $tc('common.count', $accessor.search.image.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-tabs
         v-model="currentView"
         background-color="transparent"
@@ -43,28 +36,8 @@
         >
           {{ $t(`common.${view}`) }}
         </v-tab>
-        <!-- <v-tab class="montserrat text-capitalize">Table</v-tab> -->
-        <!-- <v-tab class="montserrat text-capitalize">Images</v-tab> -->
-        <!-- <v-tab class="montserrat text-capitalize">Gallery</v-tab> -->
       </v-tabs>
       <v-card class="mt-0">
-        <!-- <v-radio-group -->
-        <!--   v-model="currentView" -->
-        <!--   row -->
-        <!--   dense -->
-        <!--   hide-details -->
-        <!--   class="mt-0 px-4 pt-3 pb-2" -->
-        <!--   mandatory -->
-        <!-- > -->
-        <!--   <v-radio -->
-        <!--     v-for="view in views" -->
-        <!--     :key="view" -->
-        <!--     class="montserrat" -->
-        <!--     :label="$t(`common.${view}`)" -->
-        <!--     :value="view" -->
-        <!--     color="header" -->
-        <!--   /> -->
-        <!-- </v-radio-group> -->
         <v-tabs-items v-model="currentView">
           <v-tab-item :value="0">
             <data-table-photo
@@ -113,7 +86,7 @@ import {
   // ref,
 } from '@nuxtjs/composition-api'
 import { mdiFileImageOutline } from '@mdi/js'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import Search from '~/templates/Search.vue'
 import SearchFormPhoto from '~/components/search/forms/SearchFormPhoto.vue'
 import DataTablePhoto from '~/components/data-table/DataTablePhoto.vue'
@@ -134,7 +107,7 @@ export default defineComponent({
     DataTablePhoto,
     SearchFormPhoto,
     Search,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const { $accessor, $translate, i18n } = useContext()

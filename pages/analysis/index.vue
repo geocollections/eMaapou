@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('analysis.pageTitle').toString()"
+        :count="$accessor.search.analysis.count"
         :icon="icons.mdiTestTube"
       />
     </template>
@@ -21,13 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.analysis.count
-            ? $tc('common.count', $accessor.search.analysis.count)
-            : '&nbsp;'
-        }}
-      </div>
       <v-card>
         <data-table-analysis
           :show-search="false"
@@ -56,7 +50,7 @@ import { useAccessor } from '~/composables/useAccessor'
 import DataTableAnalysis from '~/components/data-table/DataTableAnalysis.vue'
 import SearchFormAnalysis from '~/components/search/forms/SearchFormAnalysis.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_ANALYSIS } from '~/constants'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
 const useServices = wrapProperty('$services', false)
@@ -67,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormAnalysis,
     DataTableAnalysis,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

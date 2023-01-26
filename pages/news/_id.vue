@@ -1,7 +1,7 @@
 <template>
   <div style="max-width: 800px" class="mx-auto">
     <v-row no-gutters>
-      <v-col class="mt-2">
+      <v-col class="my-4">
         <div class="text-right montserrat pr-4 text--secondary">
           {{ $formatDate(news.date_added) }}
         </div>
@@ -11,7 +11,7 @@
       </v-col>
     </v-row>
     <v-row no-gutters justify="center">
-      <v-col class="pl-4 pl-6">
+      <v-col>
         <div
           class="text-body-1"
           v-html="$translate({ et: news.text_et, en: news.text_en })"

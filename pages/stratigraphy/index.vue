@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('stratigraphy.pageTitle').toString()"
+        :count="$accessor.search.stratigraphy.count"
         :icon="icons.mdiLayersTriple"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.stratigraphy.count
-            ? $tc('common.count', $accessor.search.stratigraphy.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-stratigraphy
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiLayersTriple } from '@mdi/js'
 import Search from '~/templates/Search.vue'
 import SearchFormStratigraphy from '~/components/search/forms/SearchFormStratigraphy.vue'
 import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_STRATIGRAPHY } from '~/constants'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -68,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormStratigraphy,
     DataTableStratigraphy,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

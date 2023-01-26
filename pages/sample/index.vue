@@ -1,8 +1,9 @@
 <template>
   <search>
     <template #title>
-      <base-header
+      <header-search
         :title="$t('sample.pageTitle').toString()"
+        :count="$accessor.search.sample.count"
         :icon="icons.mdiImageFilterHdr"
       />
     </template>
@@ -21,14 +22,6 @@
     </template>
 
     <template #result>
-      <div class="py-1 text-h6">
-        {{
-          $accessor.search.sample.count
-            ? $tc('common.count', $accessor.search.sample.count)
-            : '&nbsp;'
-        }}
-      </div>
-
       <v-card>
         <data-table-sample
           :show-search="false"
@@ -56,7 +49,7 @@ import { mdiImageFilterHdr } from '@mdi/js'
 import SearchFormSample from '~/components/search/forms/SearchFormSample.vue'
 import DataTableSample from '~/components/data-table/DataTableSample.vue'
 import Search from '~/templates/Search.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
+import HeaderSearch from '~/components/HeaderSearch.vue'
 import { HEADERS_SAMPLE } from '~/constants'
 import { useAccessor } from '~/composables/useAccessor'
 import { useSearchQueryParams } from '~/composables/useSearchQueryParams'
@@ -68,7 +61,7 @@ export default defineComponent({
     Search,
     SearchFormSample,
     DataTableSample,
-    BaseHeader,
+    HeaderSearch,
   },
   setup() {
     const accessor = useAccessor()

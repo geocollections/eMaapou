@@ -14,7 +14,7 @@
       </v-row>
       <div>
         <v-row no-gutters justify="center" align="center">
-          <v-col class="pt-5">
+          <v-col class="my-4">
             <base-header :icon="icons.mdiMagnify">
               <template #title>
                 <i18n path="quickSearch.title" tag="div">
@@ -26,16 +26,12 @@
             </base-header>
           </v-col>
         </v-row>
-        <v-row class="px-sm-3" no-gutters>
-          <v-col class="pt-2 pt-md-0">
-            <v-card flat color="transparent">
-              <v-card-actions class="pt-0">
-                <button-tabs :tabs="tabs" />
-              </v-card-actions>
-            </v-card>
+        <v-row no-gutters>
+          <v-col class="">
+            <button-tabs :tabs="tabs" />
           </v-col>
         </v-row>
-        <v-row no-gutters class="px-sm-3" justify="center">
+        <v-row no-gutters justify="center">
           <v-col>
             <v-card>
               <nuxt-child :query="$route.query.q" keep-alive />

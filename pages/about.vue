@@ -2,6 +2,7 @@
   <div class="pt-5 mx-auto" style="max-width: 800px">
     <base-header
       :title="$t('about.title')"
+      class="mb-2 mx-3"
       style="border-color: var(--v-header-darken1)"
     />
     <v-card
