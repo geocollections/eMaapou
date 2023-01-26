@@ -2,6 +2,7 @@ import { SearchModuleState } from '../types'
 import { SAMPLE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 import {
+BooleanFilter,
   GeomFilter,
   ListIdsFilter,
   ListTextFilter,
@@ -21,6 +22,8 @@ export type SampleFilters = {
   collector: ListTextFilter
   number: ListTextFilter
   map: GeomFilter
+  hasImage: BooleanFilter
+  hasCoordinates: BooleanFilter
 }
 export const initState = (): SearchModuleState<SampleFilters> => {
   return {
@@ -48,6 +51,16 @@ export const initState = (): SearchModuleState<SampleFilters> => {
           'age_hierarchy',
           'lithostratigraphy_hierarchy',
         ],
+      },
+      hasImage: {
+        value: false,
+        type: FilterType.Boolean,
+        fields: ['has_image'],
+      },
+      hasCoordinates: {
+        value: false,
+        type: FilterType.Boolean,
+        fields: ['has_map'],
       },
       depth: {
         type: FilterType.Range,

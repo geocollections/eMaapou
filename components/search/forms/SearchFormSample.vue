@@ -4,6 +4,14 @@
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
+        <filter-input-checkbox
+          v-model="hasImage"
+          :label="$t('filters.hasImage').toString()"
+        />
+        <filter-input-checkbox
+          v-model="hasCoordinates"
+          :label="$t('filters.hasCoordinates').toString()"
+        />
         <v-card class="mt-3" flat tile color="transparent">
           <v-expansion-panels accordion flat tile multiple>
             <filter-input-text
@@ -51,6 +59,7 @@ import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
+import FilterInputCheckbox from '~/components/filter/input/FilterInputCheckbox.vue'
 import {
   useHydrateFilterLocality,
   useHydrateFilterStratigraphy,
@@ -68,6 +77,7 @@ export default defineComponent({
     SearchActions,
     FilterMap,
     InputSearch,
+    FilterInputCheckbox,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
@@ -88,6 +98,8 @@ export default defineComponent({
     const collector = useFilter('sample', 'collector', handleSearch)
     const depth = useFilter('sample', 'depth', handleSearch)
     const map = useFilter('sample', 'map', handleSearch)
+    const hasImage = useFilter('sample', 'hasImage', handleSearch)
+    const hasCoordinates = useFilter('sample', 'hasCoordinates', handleSearch)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
@@ -121,6 +133,8 @@ export default defineComponent({
       institutions,
       query,
       map,
+      hasImage,
+      hasCoordinates,
       handleReset,
       handleSearch,
     }
