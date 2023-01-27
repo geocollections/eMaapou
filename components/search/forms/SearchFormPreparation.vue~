@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
+    <v-form @submit.prevent="handleSearch">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -34,7 +34,7 @@
 import {
   computed,
   defineComponent,
-  ref,
+ref,
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
@@ -69,7 +69,7 @@ export default defineComponent({
     const handleReset = () => {
       emit('reset')
     }
-    const handleUpdate = () => {
+    const handleSearch = () => {
       if (!emitUpdate.value) return
       emit('update')
     }
@@ -79,15 +79,15 @@ export default defineComponent({
         $accessor.search.preparation.setQuery(val)
       },
     })
-    const number = useFilter('preparation', 'number', handleUpdate)
-    const locality = useFilter('preparation', 'locality', handleUpdate)
+    const number = useFilter('preparation', 'number', handleSearch)
+    const locality = useFilter('preparation', 'locality', handleSearch)
     const stratigraphyHierarchy = useFilter(
       'preparation',
       'stratigraphyHierarchy',
-      handleUpdate
+      handleSearch
     )
-    const depth = useFilter('preparation', 'depth', handleUpdate)
-    const map = useFilter('preparation', 'map', handleUpdate)
+    const depth = useFilter('preparation', 'depth', handleSearch)
+    const map = useFilter('preparation', 'map', handleSearch)
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     useFetch(async () => {
@@ -109,7 +109,7 @@ export default defineComponent({
       stratigraphyHierarchy,
       depth,
       map,
-      handleUpdate,
+      handleSearch,
     }
   },
 })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -33,6 +33,7 @@
 import {
   computed,
   defineComponent,
+  ref,
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
@@ -61,15 +62,15 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
-    const handleMapUpdate = () => {
-      emit('update')
-    }
+
     const query = computed({
       get: () => $accessor.search.taxon.query,
       set: (val) => {
@@ -79,16 +80,17 @@ export default defineComponent({
     const stratigraphyHierarchy = useFilter(
       'taxon',
       'stratigraphyHierarchy',
-      handleSearch
+      handleUpdate
     )
-    const author = useFilter('taxon', 'author', handleSearch)
-    const species = useFilter('taxon', 'species', handleSearch)
-    const taxonHierarchy = useFilter('taxon', 'taxonHierarchy', handleSearch)
-    const map = useFilter('taxon', 'map', handleSearch)
+    const author = useFilter('taxon', 'author', handleUpdate)
+    const species = useFilter('taxon', 'species', handleUpdate)
+    const taxonHierarchy = useFilter('taxon', 'taxonHierarchy', handleUpdate)
+    const map = useFilter('taxon', 'map', handleUpdate)
 
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterTaxon = useHydrateFilterTaxon()
     useFetch(async () => {
+      emitUpdate.value = false
       await Promise.all([
         hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy'),
         hydrateFilterStratigraphy(
@@ -96,6 +98,7 @@ export default defineComponent({
           'stratigraphyHierarchy'
         ),
       ])
+      emitUpdate.value = true
     })
     return {
       query,
@@ -105,8 +108,7 @@ export default defineComponent({
       species,
       author,
       handleReset,
-      handleSearch,
-      handleMapUpdate,
+      handleUpdate,
     }
   },
 })

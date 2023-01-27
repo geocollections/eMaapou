@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
 
@@ -65,6 +65,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -117,10 +118,12 @@ export default defineComponent({
   setup(_props, { emit }) {
     const { $accessor, $services } = useContext()
     const route = useRoute()
-    const handleSearch = () => {
+    const emitUpdate = ref(true)
+    const handleUpdate = () => {
       emit('update')
     }
     const handleReset = () => {
+      if (!emitUpdate.value) return
       emit('reset')
     }
     const query = computed({
@@ -130,36 +133,36 @@ export default defineComponent({
       },
     })
     const parameter = useFilter('analyticalData', 'parameter', () => {
-      handleSearch()
+      handleUpdate()
       $accessor.headers.setAnalyticalDataParameterHeader({
         options: $accessor.search.analyticalData.options,
       })
     })
-    const depth = useFilter('analyticalData', 'depth', handleSearch)
+    const depth = useFilter('analyticalData', 'depth', handleUpdate)
     const stratigraphyHierarchy = useFilter(
       'analyticalData',
       'stratigraphyHierarchy',
-      handleSearch
+      handleUpdate
     )
     const lithostratigraphyHierarchy = useFilter(
       'analyticalData',
       'lithostratigraphyHierarchy',
-      handleSearch
+      handleUpdate
     )
-    const map = useFilter('analyticalData', 'map', handleSearch)
-    const method = useFilter('analyticalData', 'method', handleSearch)
-    const sample = useFilter('analyticalData', 'sample', handleSearch)
-    const locality = useFilter('analyticalData', 'locality', handleSearch)
-    const site = useFilter('analyticalData', 'site', handleSearch)
-    const lab = useFilter('analyticalData', 'lab', handleSearch)
-    const project = useFilter('analyticalData', 'project', handleSearch)
-    const dataset = useFilter('analyticalData', 'dataset', handleSearch)
-    const reference = useFilter('analyticalData', 'reference', handleSearch)
+    const map = useFilter('analyticalData', 'map', handleUpdate)
+    const method = useFilter('analyticalData', 'method', handleUpdate)
+    const sample = useFilter('analyticalData', 'sample', handleUpdate)
+    const locality = useFilter('analyticalData', 'locality', handleUpdate)
+    const site = useFilter('analyticalData', 'site', handleUpdate)
+    const lab = useFilter('analyticalData', 'lab', handleUpdate)
+    const project = useFilter('analyticalData', 'project', handleUpdate)
+    const dataset = useFilter('analyticalData', 'dataset', handleUpdate)
+    const reference = useFilter('analyticalData', 'reference', handleUpdate)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const state = reactive({
@@ -177,6 +180,7 @@ export default defineComponent({
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
     useFetch(async () => {
+      emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions(
           'analytical_data',
@@ -261,6 +265,7 @@ export default defineComponent({
       hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
 
       state.parameterSuggestions = Object.values(parameters)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
@@ -279,7 +284,7 @@ export default defineComponent({
       project,
       dataset,
       reference,
-      handleSearch,
+      handleUpdate,
       handleReset,
     }
   },

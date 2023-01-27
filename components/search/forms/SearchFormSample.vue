@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -48,6 +48,7 @@
 import {
   computed,
   defineComponent,
+  ref,
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
@@ -86,31 +87,32 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
-    const locality = useFilter('sample', 'locality', handleSearch)
+    const locality = useFilter('sample', 'locality', handleUpdate)
     const stratigraphyHierarchy = useFilter(
       'sample',
       'stratigraphyHierarchy',
-      handleSearch
+      handleUpdate
     )
-    const number = useFilter('sample', 'number', handleSearch)
-    const collector = useFilter('sample', 'collector', handleSearch)
-    const depth = useFilter('sample', 'depth', handleSearch)
-    const map = useFilter('sample', 'map', handleSearch)
-    const hasImage = useFilter('sample', 'hasImage', handleSearch)
-    const hasCoordinates = useFilter('sample', 'hasCoordinates', handleSearch)
-    const rockHierarchy = useFilter('sample', 'rockHierarchy', handleSearch)
+    const number = useFilter('sample', 'number', handleUpdate)
+    const collector = useFilter('sample', 'collector', handleUpdate)
+    const depth = useFilter('sample', 'depth', handleUpdate)
+    const map = useFilter('sample', 'map', handleUpdate)
+    const hasImage = useFilter('sample', 'hasImage', handleUpdate)
+    const hasCoordinates = useFilter('sample', 'hasCoordinates', handleUpdate)
+    const rockHierarchy = useFilter('sample', 'rockHierarchy', handleUpdate)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const query = computed({
@@ -123,6 +125,7 @@ export default defineComponent({
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterRock = useHydrateFilterRock()
     useFetch(async () => {
+      emitUpdate.value = false
       await Promise.all([
         hydrateFilterLocality(locality, 'locality'),
         hydrateFilterStratigraphy(
@@ -131,6 +134,7 @@ export default defineComponent({
         ),
         hydrateFilterRock(rockHierarchy, 'rockHierarchy'),
       ])
+      emitUpdate.value = true
     })
     return {
       locality,
@@ -145,7 +149,7 @@ export default defineComponent({
       hasCoordinates,
       rockHierarchy,
       handleReset,
-      handleSearch,
+      handleUpdate,
     }
   },
 })

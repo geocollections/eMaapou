@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent.stop="handleSearch">
+    <v-form @submit.prevent.stop="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -69,6 +69,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -123,38 +124,39 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
-    const number = useFilter('specimen', 'number', handleSearch)
-    const locality = useFilter('specimen', 'locality', handleSearch)
-    const reference = useFilter('specimen', 'reference', handleSearch)
-    const taxonHierarchy = useFilter('specimen', 'taxonHierarchy', handleSearch)
-    const collection = useFilter('specimen', 'collection', handleSearch)
-    const taxonName = useFilter('specimen', 'taxonName', handleSearch)
+    const number = useFilter('specimen', 'number', handleUpdate)
+    const locality = useFilter('specimen', 'locality', handleUpdate)
+    const reference = useFilter('specimen', 'reference', handleUpdate)
+    const taxonHierarchy = useFilter('specimen', 'taxonHierarchy', handleUpdate)
+    const collection = useFilter('specimen', 'collection', handleUpdate)
+    const taxonName = useFilter('specimen', 'taxonName', handleUpdate)
     const stratigraphyHierarchy = useFilter(
       'specimen',
       'stratigraphyHierarchy',
-      handleSearch
+      handleUpdate
     )
-    const fossilGroup = useFilter('specimen', 'fossilGroup', handleSearch)
-    const hasImage = useFilter('specimen', 'hasImage', handleSearch)
-    const hasCoordinates = useFilter('specimen', 'hasCoordinates', handleSearch)
-    const map = useFilter('specimen', 'map', handleSearch)
-    const depth = useFilter('specimen', 'depth', handleSearch)
-    const country = useFilter('specimen', 'country', handleSearch)
-    const rockHierarchy = useFilter('specimen', 'rockHierarchy', handleSearch)
-    const originalStatus = useFilter('specimen', 'originalStatus', handleSearch)
-    const collector = useFilter('specimen', 'collector', handleSearch)
+    const fossilGroup = useFilter('specimen', 'fossilGroup', handleUpdate)
+    const hasImage = useFilter('specimen', 'hasImage', handleUpdate)
+    const hasCoordinates = useFilter('specimen', 'hasCoordinates', handleUpdate)
+    const map = useFilter('specimen', 'map', handleUpdate)
+    const depth = useFilter('specimen', 'depth', handleUpdate)
+    const country = useFilter('specimen', 'country', handleUpdate)
+    const rockHierarchy = useFilter('specimen', 'rockHierarchy', handleUpdate)
+    const originalStatus = useFilter('specimen', 'originalStatus', handleUpdate)
+    const collector = useFilter('specimen', 'collector', handleUpdate)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const query = computed({
@@ -180,6 +182,7 @@ export default defineComponent({
     const getSuggestions = useGetSuggestions()
 
     useFetch(async () => {
+      emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions('specimen', 'country_id,country,country_en', {
           et: 'country',
@@ -219,12 +222,13 @@ export default defineComponent({
         state.originalStatusSuggestions,
         Number
       )
+      emitUpdate.value = true
     })
 
     return {
       ...toRefs(state),
       handleReset,
-      handleSearch,
+      handleUpdate,
       locality,
       reference,
       fossilGroup,

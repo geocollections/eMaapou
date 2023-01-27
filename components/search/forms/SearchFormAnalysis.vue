@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -47,6 +47,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -84,10 +85,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
 
@@ -97,20 +100,20 @@ export default defineComponent({
         $accessor.search.analysis.setQuery(val)
       },
     })
-    const depth = useFilter('analysis', 'depth', handleSearch)
-    const method = useFilter('analysis', 'method', handleSearch)
-    const lab = useFilter('analysis', 'lab', handleSearch)
-    const agent = useFilter('analysis', 'agent', handleSearch)
+    const depth = useFilter('analysis', 'depth', handleUpdate)
+    const method = useFilter('analysis', 'method', handleUpdate)
+    const lab = useFilter('analysis', 'lab', handleUpdate)
+    const agent = useFilter('analysis', 'agent', handleUpdate)
 
-    const locality = useFilter('analysis', 'locality', handleSearch)
-    const sample = useFilter('analysis', 'sample', handleSearch)
-    const map = useFilter('analysis', 'map', handleSearch)
+    const locality = useFilter('analysis', 'locality', handleUpdate)
+    const sample = useFilter('analysis', 'sample', handleUpdate)
+    const map = useFilter('analysis', 'map', handleUpdate)
 
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const state = reactive({
@@ -122,6 +125,7 @@ export default defineComponent({
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
     useFetch(async () => {
+      emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions(
           'analysis',
@@ -147,11 +151,12 @@ export default defineComponent({
 
       hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
       hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
       handleReset,
-      handleSearch,
+      handleUpdate,
       depth,
       query,
       method,

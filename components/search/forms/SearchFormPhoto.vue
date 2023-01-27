@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -51,6 +51,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -93,10 +94,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const handleSearch = () => {
+    const emitUpdate = ref(true)
+    const handleUpdate = () => {
       emit('update')
     }
     const handleReset = () => {
+      if (!emitUpdate.value) return
       emit('reset')
     }
 
@@ -107,21 +110,21 @@ export default defineComponent({
       },
     })
 
-    const locality = useFilter('image', 'locality', handleSearch)
-    const people = useFilter('image', 'people', handleSearch)
-    const tags = useFilter('image', 'tags', handleSearch)
-    const map = useFilter('image', 'map', handleSearch)
-    const country = useFilter('image', 'country', handleSearch)
-    const number = useFilter('image', 'number', handleSearch)
-    const author = useFilter('image', 'author', handleSearch)
-    const imageSize = useFilter('image', 'imageSize', handleSearch)
-    const date = useFilter('image', 'date', handleSearch)
+    const locality = useFilter('image', 'locality', handleUpdate)
+    const people = useFilter('image', 'people', handleUpdate)
+    const tags = useFilter('image', 'tags', handleUpdate)
+    const map = useFilter('image', 'map', handleUpdate)
+    const country = useFilter('image', 'country', handleUpdate)
+    const number = useFilter('image', 'number', handleUpdate)
+    const author = useFilter('image', 'author', handleUpdate)
+    const imageSize = useFilter('image', 'imageSize', handleUpdate)
+    const date = useFilter('image', 'date', handleUpdate)
 
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const hydrateFilterLocality = useHydrateFilterLocality()
@@ -132,23 +135,23 @@ export default defineComponent({
       countrySuggestions: [] as any[],
     })
     useFetch(async () => {
-      // NOTE: enable when #948 is resolved
-      // const countrySuggestionsPromise = getSuggestions(
-      //   'image',
-      //   'county_id,country,country_en',
-      //   { et: 'country', en: 'country_en' }
-      // )
-      const countrySuggestionsPromise = Promise.resolve([])
+      emitUpdate.value = false
+      const countrySuggestionsPromise = getSuggestions(
+        'image',
+        'county_id,country,country_en',
+        { et: 'country', en: 'country_en' }
+      )
       const [countrySuggestions] = await Promise.all([
         countrySuggestionsPromise,
         hydrateFilterLocality(locality, 'locality'),
       ])
       state.countrySuggestions = countrySuggestions
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
-      handleSearch,
+      handleUpdate,
       handleReset,
       query,
       locality,

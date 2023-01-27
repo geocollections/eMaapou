@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -30,6 +30,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -60,10 +61,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
     const query = computed({
@@ -72,10 +75,10 @@ export default defineComponent({
         $accessor.search.site.setQuery(val)
       },
     })
-    const name = useFilter('site', 'name', handleSearch)
-    const area = useFilter('site', 'area', handleSearch)
-    const map = useFilter('site', 'map', handleSearch)
-    const project = useFilter('site', 'project', handleSearch)
+    const name = useFilter('site', 'name', handleUpdate)
+    const area = useFilter('site', 'area', handleUpdate)
+    const map = useFilter('site', 'map', handleUpdate)
+    const project = useFilter('site', 'project', handleUpdate)
     const hydrateFilterArea = useHydrateFilterArea()
     const hydrateFilterStatic = useHydrateFilterStatic()
     const state = reactive({
@@ -83,6 +86,7 @@ export default defineComponent({
     })
     const getSuggestions = useGetSuggestions()
     useFetch(async () => {
+      emitUpdate.value = false
       const projectSuggestionsPromise = getSuggestions(
         'site',
         'project_id,project_name,project_name_en',
@@ -95,6 +99,7 @@ export default defineComponent({
 
       state.projectSuggestions = projectSuggestions
       hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
@@ -104,7 +109,7 @@ export default defineComponent({
       map,
       project,
       handleReset,
-      handleSearch,
+      handleUpdate,
     }
   },
 })

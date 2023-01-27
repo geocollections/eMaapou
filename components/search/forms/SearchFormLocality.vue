@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -34,6 +34,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -64,10 +65,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
     const query = computed({
@@ -77,10 +80,10 @@ export default defineComponent({
       },
     })
 
-    const name = useFilter('locality', 'name', handleSearch)
-    const country = useFilter('locality', 'country', handleSearch)
-    const reference = useFilter('locality', 'reference', handleSearch)
-    const map = useFilter('locality', 'map', handleSearch)
+    const name = useFilter('locality', 'name', handleUpdate)
+    const country = useFilter('locality', 'country', handleUpdate)
+    const reference = useFilter('locality', 'reference', handleUpdate)
+    const map = useFilter('locality', 'map', handleUpdate)
     const state = reactive({
       countrySuggestions: [] as any[],
     })
@@ -88,6 +91,7 @@ export default defineComponent({
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
     useFetch(async () => {
+      emitUpdate.value = false
       const countrySuggestionPromise = getSuggestions(
         'locality',
         'country_id,country,country_en',
@@ -100,6 +104,7 @@ export default defineComponent({
       ])
       state.countrySuggestions = countrySuggestions
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
@@ -109,7 +114,7 @@ export default defineComponent({
       country,
       map,
       handleReset,
-      handleSearch,
+      handleUpdate,
     }
   },
 })

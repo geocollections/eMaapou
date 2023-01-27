@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -34,6 +34,7 @@ import isEmpty from 'lodash/isEmpty'
 import {
   computed,
   defineComponent,
+  ref,
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
@@ -57,10 +58,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
     const query = computed({
@@ -69,27 +72,29 @@ export default defineComponent({
         $accessor.search.dataset.setQuery(val)
       },
     })
-    const name = useFilter('dataset', 'name', handleSearch)
-    const date = useFilter('dataset', 'date', handleSearch)
-    const owner = useFilter('dataset', 'owner', handleSearch)
+    const name = useFilter('dataset', 'name', handleUpdate)
+    const date = useFilter('dataset', 'date', handleUpdate)
+    const owner = useFilter('dataset', 'owner', handleUpdate)
     const analysisParameter = useFilter(
       'dataset',
       'analysisParameter',
-      handleSearch
+      handleUpdate
     )
     const institution = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const hydrateFilterAnalysisParameter = useHydrateFilterAnalysisParameter()
     useFetch(async () => {
+      emitUpdate.value = false
       await hydrateFilterAnalysisParameter(
         analysisParameter,
         'analysisParameter'
       )
+      emitUpdate.value = true
     })
 
     return {
@@ -101,7 +106,7 @@ export default defineComponent({
       name,
       isEmpty,
       handleReset,
-      handleSearch,
+      handleUpdate,
     }
   },
 })

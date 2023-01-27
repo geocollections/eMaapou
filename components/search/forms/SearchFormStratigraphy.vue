@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -46,6 +46,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -74,10 +75,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
     const query = computed({
@@ -89,13 +92,13 @@ export default defineComponent({
     const stratigraphyHierarchy = useFilter(
       'stratigraphy',
       'stratigraphyHierarchy',
-      handleSearch
+      handleUpdate
     )
-    const index = useFilter('stratigraphy', 'index', handleSearch)
-    const age = useFilter('stratigraphy', 'age', handleSearch)
-    const rank = useFilter('stratigraphy', 'rank', handleSearch)
-    const scope = useFilter('stratigraphy', 'scope', handleSearch)
-    const type = useFilter('stratigraphy', 'type', handleSearch)
+    const index = useFilter('stratigraphy', 'index', handleUpdate)
+    const age = useFilter('stratigraphy', 'age', handleUpdate)
+    const rank = useFilter('stratigraphy', 'rank', handleUpdate)
+    const scope = useFilter('stratigraphy', 'scope', handleUpdate)
+    const type = useFilter('stratigraphy', 'type', handleUpdate)
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterStatic = useHydrateFilterStatic()
     const state = reactive({
@@ -105,6 +108,7 @@ export default defineComponent({
     })
     const getSuggestions = useGetSuggestions()
     useFetch(async () => {
+      emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions(
           'stratigraphy',
@@ -135,6 +139,7 @@ export default defineComponent({
       hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
       hydrateFilterStatic(rank, 'rank', state.rankSuggestions, Number)
       hydrateFilterStatic(scope, 'scope', state.scopeSuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
@@ -146,7 +151,7 @@ export default defineComponent({
       scope,
       type,
       handleReset,
-      handleSearch,
+      handleUpdate,
     }
   },
 })

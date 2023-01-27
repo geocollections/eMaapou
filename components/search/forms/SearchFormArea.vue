@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -34,6 +34,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -57,10 +58,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
     const query = computed({
@@ -69,9 +72,9 @@ export default defineComponent({
         $accessor.search.area.setQuery(val)
       },
     })
-    const name = useFilter('area', 'name', handleSearch)
-    const type = useFilter('area', 'type', handleSearch)
-    const county = useFilter('area', 'county', handleSearch)
+    const name = useFilter('area', 'name', handleUpdate)
+    const type = useFilter('area', 'type', handleUpdate)
+    const county = useFilter('area', 'county', handleUpdate)
     const state = reactive({
       countySuggestions: [] as any[],
       typeSuggestions: [] as any[],
@@ -79,6 +82,7 @@ export default defineComponent({
     const getSuggestions = useGetSuggestions()
     const hydrateFilterStatic = useHydrateFilterStatic()
     useFetch(async () => {
+      emitUpdate.value = false
       const [countySuggestions, typeSuggestions] = await Promise.all([
         getSuggestions('area', 'maakond_id,maakond,maakond_en', {
           et: 'maakond',
@@ -93,6 +97,7 @@ export default defineComponent({
       state.typeSuggestions = typeSuggestions
       hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
       hydrateFilterStatic(county, 'county', state.countySuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
@@ -101,7 +106,7 @@ export default defineComponent({
       county,
       type,
       handleReset,
-      handleSearch,
+      handleUpdate,
     }
   },
 })

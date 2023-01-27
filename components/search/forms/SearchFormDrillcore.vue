@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-form @submit.prevent="handleSearch">
+    <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <search-fields-wrapper>
@@ -47,6 +47,7 @@ import {
   computed,
   defineComponent,
   reactive,
+  ref,
   toRefs,
   useContext,
   useFetch,
@@ -76,13 +77,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
     }
-    const handleSearch = () => {
-      emit('update')
-    }
-    const handleMapUpdate = () => {
+    const handleUpdate = () => {
+      if (!emitUpdate.value) return
       emit('update')
     }
 
@@ -92,16 +92,16 @@ export default defineComponent({
         $accessor.search.drillcore.setQuery(val)
       },
     })
-    const name = useFilter('drillcore', 'name', handleSearch)
-    const boxes = useFilter('drillcore', 'boxes', handleSearch)
-    const country = useFilter('drillcore', 'country', handleSearch)
-    const repository = useFilter('drillcore', 'repository', handleSearch)
-    const map = useFilter('drillcore', 'map', handleSearch)
+    const name = useFilter('drillcore', 'name', handleUpdate)
+    const boxes = useFilter('drillcore', 'boxes', handleUpdate)
+    const country = useFilter('drillcore', 'country', handleUpdate)
+    const repository = useFilter('drillcore', 'repository', handleUpdate)
+    const map = useFilter('drillcore', 'map', handleUpdate)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
         $accessor.search.setInstitutionsFilter(val)
-        handleSearch()
+        handleUpdate()
       },
     })
     const state = reactive({
@@ -111,6 +111,7 @@ export default defineComponent({
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
     useFetch(async () => {
+      emitUpdate.value = false
       const [countrySuggestions, repositorySuggestions] = await Promise.all([
         getSuggestions('drillcore', 'country_id,country,country_en', {
           et: 'country',
@@ -131,6 +132,7 @@ export default defineComponent({
         Number
       )
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
+      emitUpdate.value = true
     })
     return {
       ...toRefs(state),
@@ -142,8 +144,7 @@ export default defineComponent({
       institutions,
       name,
       handleReset,
-      handleSearch,
-      handleMapUpdate,
+      handleUpdate,
       isEmpty,
     }
   },
