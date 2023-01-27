@@ -5,6 +5,7 @@ import {
 BooleanFilter,
   GeomFilter,
   ListIdsFilter,
+ListIdsMultiFilter,
   ListTextFilter,
   ObjectFilter,
   RangeFilter,
@@ -19,6 +20,7 @@ export type SampleFilters = {
   project: TextFilter
   locality: ListIdsFilter
   stratigraphyHierarchy: ListIdsFilter
+  rockHierarchy: ListIdsMultiFilter
   collector: ListTextFilter
   number: ListTextFilter
   map: GeomFilter
@@ -99,6 +101,15 @@ export const initState = (): SearchModuleState<SampleFilters> => {
         valueType: 'string',
         valueField: 'hierarchy_string',
         lookupType: 'startswith',
+      },
+      rockHierarchy: {
+        value: [],
+        type: FilterType.ListIdsMulti,
+        fields: ['hierarchy_string_rock'],
+        valueType: 'string',
+        valueField: 'hierarchy_strings',
+        idValueField: 'id',
+        lookupType: 'startswith'
       },
       collector: {
         value: [],

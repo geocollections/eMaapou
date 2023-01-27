@@ -31,6 +31,7 @@
               :step="0.01"
             />
             <filter-stratigraphy v-model="stratigraphyHierarchy" />
+            <filter-rock v-model="rockHierarchy" />
             <filter-input-text
               v-model="collector"
               :title="$t('filters.collector').toString()"
@@ -60,8 +61,11 @@ import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputCheckbox from '~/components/filter/input/FilterInputCheckbox.vue'
+import FilterRock from '~/components/filter/FilterRock.vue'
+
 import {
   useHydrateFilterLocality,
+  useHydrateFilterRock,
   useHydrateFilterStratigraphy,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
@@ -78,6 +82,7 @@ export default defineComponent({
     FilterMap,
     InputSearch,
     FilterInputCheckbox,
+    FilterRock,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
@@ -100,6 +105,7 @@ export default defineComponent({
     const map = useFilter('sample', 'map', handleSearch)
     const hasImage = useFilter('sample', 'hasImage', handleSearch)
     const hasCoordinates = useFilter('sample', 'hasCoordinates', handleSearch)
+    const rockHierarchy = useFilter('sample', 'rockHierarchy', handleSearch)
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
@@ -115,6 +121,7 @@ export default defineComponent({
     })
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
+    const hydrateFilterRock = useHydrateFilterRock()
     useFetch(async () => {
       await Promise.all([
         hydrateFilterLocality(locality, 'locality'),
@@ -122,6 +129,7 @@ export default defineComponent({
           stratigraphyHierarchy,
           'stratigraphyHierarchy'
         ),
+        hydrateFilterRock(rockHierarchy, 'rockHierarchy'),
       ])
     })
     return {
@@ -135,6 +143,7 @@ export default defineComponent({
       map,
       hasImage,
       hasCoordinates,
+      rockHierarchy,
       handleReset,
       handleSearch,
     }
