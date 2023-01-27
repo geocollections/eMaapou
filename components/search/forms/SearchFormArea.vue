@@ -3,28 +3,24 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="name"
-              :title="$t('filters.name').toString()"
-            />
-            <filter-input-autocomplete-static
-              v-model="county"
-              :title="$t('filters.county').toString()"
-              :items="countySuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-input-autocomplete-static
-              v-model="type"
-              :title="$t('filters.areaType').toString()"
-              :items="typeSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-input-text
+          v-model="name"
+          :title="$t('filters.name').toString()"
+        />
+        <filter-input-autocomplete-static
+          v-model="county"
+          :title="$t('filters.county').toString()"
+          :items="countySuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-input-autocomplete-static
+          v-model="type"
+          :title="$t('filters.areaType').toString()"
+          :items="typeSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -39,7 +35,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
@@ -50,7 +45,6 @@ import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormArea',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterInputText,

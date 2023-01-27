@@ -3,63 +3,59 @@
     <v-form @submit.prevent.stop="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <filter-input-checkbox
-          v-model="hasImage"
-          :label="$t('filters.hasImage').toString()"
+      <filter-input-checkbox
+        v-model="hasImage"
+        :label="$t('filters.hasImage').toString()"
+      />
+      <filter-input-checkbox
+        v-model="hasCoordinates"
+        :label="$t('filters.hasCoordinates').toString()"
+      />
+      <v-expansion-panels class="mt-3" accordion flat tile multiple>
+        <filter-input-text
+          v-model="number"
+          :title="$t('filters.specimenNumber').toString()"
         />
-        <filter-input-checkbox
-          v-model="hasCoordinates"
-          :label="$t('filters.hasCoordinates').toString()"
+        <filter-collection v-model="collection" />
+        <filter-taxon v-model="taxonHierarchy" />
+        <filter-input-text
+          v-model="taxonName"
+          :title="$t('filters.taxonName').toString()"
         />
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="number"
-              :title="$t('filters.specimenNumber').toString()"
-            />
-            <filter-collection v-model="collection" />
-            <filter-taxon v-model="taxonHierarchy" />
-            <filter-input-text
-              v-model="taxonName"
-              :title="$t('filters.taxonName').toString()"
-            />
-            <filter-rock v-model="rockHierarchy" />
-            <filter-fossil-group v-model="fossilGroup" />
-            <filter-locality v-model="locality" />
-            <filter-input-autocomplete-static
-              v-model="country"
-              :title="$t('filters.country').toString()"
-              :items="countrySuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-map
-              v-model="map"
-              sample-overlay
-              :items="$accessor.search.specimen.items"
-            />
-            <filter-stratigraphy v-model="stratigraphyHierarchy" />
-            <filter-input-range
-              v-model="depth"
-              :label="$t('filters.depth').toString()"
-              interval-labels="intervals.depth"
-              :step="0.01"
-            />
-            <filter-reference v-model="reference" />
-            <filter-input-text
-              v-model="collector"
-              :title="$t('filters.collector').toString()"
-            />
-            <filter-input-autocomplete-static
-              v-model="originalStatus"
-              :title="$t('filters.originalStatus').toString()"
-              :items="originalStatusSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-institution v-model="institutions" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+        <filter-rock v-model="rockHierarchy" />
+        <filter-fossil-group v-model="fossilGroup" />
+        <filter-locality v-model="locality" />
+        <filter-input-autocomplete-static
+          v-model="country"
+          :title="$t('filters.country').toString()"
+          :items="countrySuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-map
+          v-model="map"
+          sample-overlay
+          :items="$accessor.search.specimen.items"
+        />
+        <filter-stratigraphy v-model="stratigraphyHierarchy" />
+        <filter-input-range
+          v-model="depth"
+          :label="$t('filters.depth').toString()"
+          interval-labels="intervals.depth"
+          :step="0.01"
+        />
+        <filter-reference v-model="reference" />
+        <filter-input-text
+          v-model="collector"
+          :title="$t('filters.collector').toString()"
+        />
+        <filter-input-autocomplete-static
+          v-model="originalStatus"
+          :title="$t('filters.originalStatus').toString()"
+          :items="originalStatusSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-institution v-model="institutions" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -74,7 +70,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -107,7 +102,6 @@ export default defineComponent({
   components: {
     FilterInputCheckbox,
     FilterMap,
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterInstitution,

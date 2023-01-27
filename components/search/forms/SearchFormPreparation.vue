@@ -3,29 +3,22 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="number"
-              :title="$t('filters.preparationNumber').toString()"
-            />
-            <filter-locality v-model="locality" />
-            <filter-map
-              v-model="map"
-              :items="$accessor.search.preparation.items"
-            />
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-input-text
+          v-model="number"
+          :title="$t('filters.preparationNumber').toString()"
+        />
+        <filter-locality v-model="locality" />
+        <filter-map v-model="map" :items="$accessor.search.preparation.items" />
 
-            <filter-input-range
-              v-model="depth"
-              :label="$t('filters.depth').toString()"
-              interval-labels="intervals.depth"
-              :step="0.01"
-            />
-            <filter-stratigraphy v-model="stratigraphyHierarchy" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+        <filter-input-range
+          v-model="depth"
+          :label="$t('filters.depth').toString()"
+          interval-labels="intervals.depth"
+          :step="0.01"
+        />
+        <filter-stratigraphy v-model="stratigraphyHierarchy" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -38,7 +31,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import { useFilter } from '~/composables/useFilter'
@@ -54,7 +46,6 @@ import {
 export default defineComponent({
   name: 'SearchFormPreparation',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     FilterInputText,
     FilterInputRange,

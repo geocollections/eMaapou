@@ -3,40 +3,36 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-stratigraphy v-model="stratigraphyHierarchy" />
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-stratigraphy v-model="stratigraphyHierarchy" />
 
-            <filter-input-text
-              v-model="index"
-              :title="$t('filters.index').toString()"
-            />
-            <filter-input-text
-              v-model="age"
-              :title="$t('filters.age').toString()"
-            />
-            <filter-input-autocomplete-static
-              v-model="type"
-              :title="$t('filters.type').toString()"
-              :items="typeSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-input-autocomplete-static
-              v-model="rank"
-              :title="$t('filters.rank').toString()"
-              :items="rankSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-input-autocomplete-static
-              v-model="scope"
-              :title="$t('filters.scope').toString()"
-              :items="scopeSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+        <filter-input-text
+          v-model="index"
+          :title="$t('filters.index').toString()"
+        />
+        <filter-input-text
+          v-model="age"
+          :title="$t('filters.age').toString()"
+        />
+        <filter-input-autocomplete-static
+          v-model="type"
+          :title="$t('filters.type').toString()"
+          :items="typeSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-input-autocomplete-static
+          v-model="rank"
+          :title="$t('filters.rank').toString()"
+          :items="rankSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-input-autocomplete-static
+          v-model="scope"
+          :title="$t('filters.scope').toString()"
+          :items="scopeSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -51,7 +47,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
@@ -66,7 +61,6 @@ import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterStratigraphy,

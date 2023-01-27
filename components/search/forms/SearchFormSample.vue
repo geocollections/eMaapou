@@ -3,43 +3,39 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <filter-input-checkbox
-          v-model="hasImage"
-          :label="$t('filters.hasImage').toString()"
+      <filter-input-checkbox
+        v-model="hasImage"
+        :label="$t('filters.hasImage').toString()"
+      />
+      <filter-input-checkbox
+        v-model="hasCoordinates"
+        :label="$t('filters.hasCoordinates').toString()"
+      />
+      <v-expansion-panels class="mt-3" accordion flat tile multiple>
+        <filter-input-text
+          v-model="number"
+          :title="$t('filters.sampleNumber').toString()"
         />
-        <filter-input-checkbox
-          v-model="hasCoordinates"
-          :label="$t('filters.hasCoordinates').toString()"
+        <filter-locality v-model="locality" />
+        <filter-map
+          v-model="map"
+          sample-overlay
+          :items="$accessor.search.sample.items"
         />
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="number"
-              :title="$t('filters.sampleNumber').toString()"
-            />
-            <filter-locality v-model="locality" />
-            <filter-map
-              v-model="map"
-              sample-overlay
-              :items="$accessor.search.sample.items"
-            />
-            <filter-input-range
-              v-model="depth"
-              :label="$t('filters.depth').toString()"
-              interval-labels="intervals.depth"
-              :step="0.01"
-            />
-            <filter-stratigraphy v-model="stratigraphyHierarchy" />
-            <filter-rock v-model="rockHierarchy" />
-            <filter-input-text
-              v-model="collector"
-              :title="$t('filters.collector').toString()"
-            />
-            <filter-institution v-model="institutions" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+        <filter-input-range
+          v-model="depth"
+          :label="$t('filters.depth').toString()"
+          interval-labels="intervals.depth"
+          :step="0.01"
+        />
+        <filter-stratigraphy v-model="stratigraphyHierarchy" />
+        <filter-rock v-model="rockHierarchy" />
+        <filter-input-text
+          v-model="collector"
+          :title="$t('filters.collector').toString()"
+        />
+        <filter-institution v-model="institutions" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -52,7 +48,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
@@ -78,7 +73,6 @@ export default defineComponent({
     FilterStratigraphy,
     FilterInputRange,
     FilterInputText,
-    SearchFieldsWrapper,
     SearchActions,
     FilterMap,
     InputSearch,

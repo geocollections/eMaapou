@@ -3,40 +3,36 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="name"
-              :title="$t('filters.drillcoreName').toString()"
-            />
-            <filter-input-autocomplete-static
-              v-model="country"
-              :title="$t('filters.country').toString()"
-              :items="countrySuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-input-text
+          v-model="name"
+          :title="$t('filters.drillcoreName').toString()"
+        />
+        <filter-input-autocomplete-static
+          v-model="country"
+          :title="$t('filters.country').toString()"
+          :items="countrySuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
 
-            <filter-map
-              v-model="map"
-              borehole-overlay
-              :items="$accessor.search.drillcore.items"
-            />
-            <filter-input-autocomplete-static
-              v-model="repository"
-              :title="$t('filters.drillcoreRepository').toString()"
-              :items="repositorySuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
+        <filter-map
+          v-model="map"
+          borehole-overlay
+          :items="$accessor.search.drillcore.items"
+        />
+        <filter-input-autocomplete-static
+          v-model="repository"
+          :title="$t('filters.drillcoreRepository').toString()"
+          :items="repositorySuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
 
-            <filter-input-range
-              v-model="boxes"
-              :label="$t('filters.drillcoreBoxes').toString()"
-            />
-            <filter-institution v-model="institutions" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+        <filter-input-range
+          v-model="boxes"
+          :label="$t('filters.drillcoreBoxes').toString()"
+        />
+        <filter-institution v-model="institutions" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -52,7 +48,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
@@ -66,7 +61,6 @@ import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormDrillcore',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterInputAutocompleteStatic,

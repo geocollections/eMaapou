@@ -3,45 +3,41 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-locality v-model="locality" />
-            <filter-input-autocomplete-static
-              v-model="country"
-              :items="countrySuggestions"
-              :title="$t('filters.country').toString()"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-map v-model="map" :items="$accessor.search.image.items" />
-            <filter-input-text
-              v-model="people"
-              :title="$t('filters.people').toString()"
-            />
-            <filter-input-text
-              v-model="tags"
-              :title="$t('filters.tags').toString()"
-            />
-            <filter-input-text
-              v-model="number"
-              :title="$t('filters.number').toString()"
-            />
-            <filter-input-text
-              v-model="author"
-              :title="$t('filters.author').toString()"
-            />
-            <filter-input-range
-              v-model="imageSize"
-              :label="$t('filters.imageSize').toString()"
-            />
-            <filter-input-date
-              v-model="date"
-              :title="$t('filters.date').toString()"
-            />
-            <filter-institution v-model="institutions" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-locality v-model="locality" />
+        <filter-input-autocomplete-static
+          v-model="country"
+          :items="countrySuggestions"
+          :title="$t('filters.country').toString()"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-map v-model="map" :items="$accessor.search.image.items" />
+        <filter-input-text
+          v-model="people"
+          :title="$t('filters.people').toString()"
+        />
+        <filter-input-text
+          v-model="tags"
+          :title="$t('filters.tags').toString()"
+        />
+        <filter-input-text
+          v-model="number"
+          :title="$t('filters.number').toString()"
+        />
+        <filter-input-text
+          v-model="author"
+          :title="$t('filters.author').toString()"
+        />
+        <filter-input-range
+          v-model="imageSize"
+          :label="$t('filters.imageSize').toString()"
+        />
+        <filter-input-date
+          v-model="date"
+          :title="$t('filters.date').toString()"
+        />
+        <filter-institution v-model="institutions" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -56,7 +52,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import { useFilter } from '~/composables/useFilter'
@@ -75,7 +70,6 @@ import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormPhoto',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterLocality,

@@ -3,28 +3,24 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="name"
-              :title="$t('filters.localityName').toString()"
-            />
-            <filter-input-autocomplete-static
-              v-model="country"
-              :title="$t('filters.country').toString()"
-              :items="countrySuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-map
-              v-model="map"
-              locality-overlay
-              :items="$accessor.search.locality.items"
-            />
-            <filter-reference v-model="reference" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-input-text
+          v-model="name"
+          :title="$t('filters.localityName').toString()"
+        />
+        <filter-input-autocomplete-static
+          v-model="country"
+          :title="$t('filters.country').toString()"
+          :items="countrySuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-map
+          v-model="map"
+          locality-overlay
+          :items="$accessor.search.locality.items"
+        />
+        <filter-reference v-model="reference" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -39,7 +35,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
@@ -55,7 +50,6 @@ import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormLocality',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     FilterMap,
     InputSearch,

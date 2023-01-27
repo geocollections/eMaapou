@@ -3,41 +3,34 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-range
-              v-model="depth"
-              :label="$t('filters.depth').toString()"
-              interval-labels="intervals.depth"
-              :step="0.01"
-            />
-            <filter-input-autocomplete-static
-              v-model="method"
-              :title="$t('filters.method').toString()"
-              :items="methodSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-input-autocomplete-static
-              v-model="lab"
-              :title="$t('filters.lab').toString()"
-              :items="labSuggestions"
-              :filter-field="$translate({ et: 'text', en: 'text_en' })"
-            />
-            <filter-sample v-model="sample" />
-            <filter-locality v-model="locality" />
-            <filter-map
-              v-model="map"
-              :items="$accessor.search.analysis.items"
-            />
-            <filter-input-text
-              v-model="agent"
-              :title="$t('filters.agent').toString()"
-            />
-            <filter-institution v-model="institutions" />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-input-range
+          v-model="depth"
+          :label="$t('filters.depth').toString()"
+          interval-labels="intervals.depth"
+          :step="0.01"
+        />
+        <filter-input-autocomplete-static
+          v-model="method"
+          :title="$t('filters.method').toString()"
+          :items="methodSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-input-autocomplete-static
+          v-model="lab"
+          :title="$t('filters.lab').toString()"
+          :items="labSuggestions"
+          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+        />
+        <filter-sample v-model="sample" />
+        <filter-locality v-model="locality" />
+        <filter-map v-model="map" :items="$accessor.search.analysis.items" />
+        <filter-input-text
+          v-model="agent"
+          :title="$t('filters.agent').toString()"
+        />
+        <filter-institution v-model="institutions" />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -52,7 +45,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
@@ -72,7 +64,6 @@ import { useGetSuggestions } from '~/composables/useGetSuggestions'
 export default defineComponent({
   name: 'SearchFormAnalysis',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterInputRange,

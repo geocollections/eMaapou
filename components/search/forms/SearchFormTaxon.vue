@@ -3,28 +3,24 @@
     <v-form @submit.prevent="handleUpdate">
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
-      <search-fields-wrapper>
-        <v-card class="mt-3" flat tile color="transparent">
-          <v-expansion-panels accordion flat tile multiple>
-            <filter-input-text
-              v-model="species"
-              :title="$t('filters.species').toString()"
-            />
-            <filter-stratigraphy v-model="stratigraphyHierarchy" />
-            <filter-taxon v-model="taxonHierarchy" />
-            <filter-map
-              v-model="map"
-              locality-overlay
-              :items="$accessor.search.taxon.items"
-            />
+      <v-expansion-panels accordion flat tile multiple>
+        <filter-input-text
+          v-model="species"
+          :title="$t('filters.species').toString()"
+        />
+        <filter-stratigraphy v-model="stratigraphyHierarchy" />
+        <filter-taxon v-model="taxonHierarchy" />
+        <filter-map
+          v-model="map"
+          locality-overlay
+          :items="$accessor.search.taxon.items"
+        />
 
-            <filter-input-text
-              v-model="author"
-              :title="$t('filters.author').toString()"
-            />
-          </v-expansion-panels>
-        </v-card>
-      </search-fields-wrapper>
+        <filter-input-text
+          v-model="author"
+          :title="$t('filters.author').toString()"
+        />
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -37,7 +33,6 @@ import {
   useContext,
   useFetch,
 } from '@nuxtjs/composition-api'
-import SearchFieldsWrapper from '../SearchFieldsWrapper.vue'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
@@ -52,7 +47,6 @@ import { useFilter } from '~/composables/useFilter'
 export default defineComponent({
   name: 'SearchFormTaxon',
   components: {
-    SearchFieldsWrapper,
     SearchActions,
     InputSearch,
     FilterStratigraphy,
