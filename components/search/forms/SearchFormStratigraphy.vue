@@ -107,15 +107,15 @@ export default defineComponent({
         getSuggestions(
           'stratigraphy',
           'rank,stratigraphy_rank,stratigraphy_rank_en',
-          { et: 'startigraphy_rank', en: 'stratigraphy_rank_en' }
+          { et: 'stratigraphy_rank', en: 'stratigraphy_rank_en' }
         ),
         getSuggestions(
           'stratigraphy',
           'scope,stratigraphy_scope,stratigraphy_scope_en',
-          { et: 'startigraphy_scope', en: 'startigraphy_scope_en' }
+          { et: 'stratigraphy_scope', en: 'stratigraphy_scope_en' }
         ),
         getSuggestions(
-          'startigraphy',
+          'stratigraphy',
           'type,stratigraphy_type,stratigraphy_type_en',
           { et: 'stratigraphy_type', en: 'stratigraphy_type_en' }
         ),
