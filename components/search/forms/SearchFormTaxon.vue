@@ -32,8 +32,8 @@ import {
   ref,
   useContext,
   useFetch,
-useRoute,
-watch,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -87,9 +87,12 @@ export default defineComponent({
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
     const hydrateFilterTaxon = useHydrateFilterTaxon()
 
-    watch(() => route.value.query, () => fetch())
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
 
-    const {fetch} = useFetch(async () => {
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       await Promise.all([
         hydrateFilterTaxon(taxonHierarchy, 'taxonHierarchy'),

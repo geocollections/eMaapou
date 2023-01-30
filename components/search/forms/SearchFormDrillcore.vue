@@ -44,12 +44,12 @@ import {
   defineComponent,
   reactive,
   ref,
-toRef,
+  toRef,
   toRefs,
   useContext,
   useFetch,
-useRoute,
-watch,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -109,15 +109,23 @@ export default defineComponent({
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
 
-    watch(() => route.value.query, () => fetch())
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
 
-    const {fetch} = useFetch(async () => {
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       await Promise.all([
-        getSuggestions(toRef(state, 'countrySuggestions'),'drillcore', 'country_id,country,country_en', {
-          et: 'country',
-          en: 'country_en',
-        }),
+        getSuggestions(
+          toRef(state, 'countrySuggestions'),
+          'drillcore',
+          'country_id,country,country_en',
+          {
+            et: 'country',
+            en: 'country_en',
+          }
+        ),
         getSuggestions(
           toRef(state, 'repositorySuggestions'),
           'drillcore',

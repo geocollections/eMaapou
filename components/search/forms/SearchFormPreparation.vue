@@ -30,8 +30,8 @@ import {
   ref,
   useContext,
   useFetch,
-useRoute,
-watch,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -85,9 +85,12 @@ export default defineComponent({
     const hydrateFilterLocality = useHydrateFilterLocality()
     const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
 
-    watch(() => route.value.query, () => fetch())
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
 
-    const {fetch} = useFetch(async () => {
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       await Promise.all([
         hydrateFilterLocality(locality, 'locality'),

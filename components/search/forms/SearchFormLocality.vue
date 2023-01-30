@@ -31,12 +31,12 @@ import {
   defineComponent,
   reactive,
   ref,
-toRef,
+  toRef,
   toRefs,
   useContext,
   useFetch,
-useRoute,
-watch,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -89,9 +89,12 @@ export default defineComponent({
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
 
-    watch(() => route.value.query, () => fetch())
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
 
-    const {fetch} = useFetch(async () => {
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       const countrySuggestionPromise = getSuggestions(
         toRef(state, 'countrySuggestions'),

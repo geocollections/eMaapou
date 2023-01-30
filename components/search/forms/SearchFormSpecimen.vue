@@ -23,7 +23,10 @@
           v-model="taxonName"
           :title="$t('filters.taxonName').toString()"
         />
-        <filter-rock v-model="rockHierarchy" />
+        <filter-rock
+          v-model="rockHierarchy"
+          :title="$t('filters.rockHierarchySpecimen').toString()"
+        />
         <filter-locality v-model="locality" />
         <filter-input-autocomplete-static
           v-model="country"
