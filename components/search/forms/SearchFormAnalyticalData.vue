@@ -62,10 +62,12 @@ import {
   defineComponent,
   reactive,
   ref,
+  toRef,
   toRefs,
   useContext,
   useFetch,
   useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -173,19 +175,30 @@ export default defineComponent({
     const hydrateFilterReference = useHydrateFilterReferenceId()
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
-    useFetch(async () => {
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions(
+          toRef(state, 'methodSuggestions'),
           'analytical_data',
           'method_id,analysis_method,analysis_method_en',
           { et: 'analysis_method', en: 'analysis_method_en' }
         ),
-        getSuggestions('analytical_data', 'lab_id,lab,lab_en', {
-          et: 'lab',
-          en: 'lab_en',
-        }),
         getSuggestions(
+          toRef(state, 'labSuggestions'),
+          'analytical_data',
+          'lab_id,lab,lab_en',
+          {
+            et: 'lab',
+            en: 'lab_en',
+          }
+        ),
+        getSuggestions(
+          toRef(state, 'projectSuggestions'),
           'analytical_data',
           'project_id,project_name,project_name_en',
           { et: 'project_name', en: 'project_name' }
@@ -218,15 +231,11 @@ export default defineComponent({
         hydrateFilterLocality(locality, 'locality'),
         hydrateFilterSite(site, 'site'),
       ])
-      const [suggestionResults, listParametersResponse] = await Promise.all([
-        suggestionPromise,
+      const [listParametersResponse] = await Promise.all([
         listParametersPromise,
+        suggestionPromise,
         hydrationPromise,
       ])
-
-      state.methodSuggestions = suggestionResults[0]
-      state.labSuggestions = suggestionResults[1]
-      state.projectSuggestions = suggestionResults[2]
 
       const parameters = listParametersResponse.items
         .filter((parameter: any) => !!parameter.parameter_index)

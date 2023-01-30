@@ -88,7 +88,8 @@ export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
 
   watch(
     () => route.value.query,
-    () => {
+    async () => {
+      await accessor.search[module].resetFilters()
       setStateFromQueryParams()
       fetch()
     }

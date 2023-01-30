@@ -17,13 +17,13 @@
           :title="$t('filters.specimenNumber').toString()"
         />
         <filter-collection v-model="collection" />
+        <filter-fossil-group v-model="fossilGroup" />
         <filter-taxon v-model="taxonHierarchy" />
         <filter-input-text
           v-model="taxonName"
           :title="$t('filters.taxonName').toString()"
         />
         <filter-rock v-model="rockHierarchy" />
-        <filter-fossil-group v-model="fossilGroup" />
         <filter-locality v-model="locality" />
         <filter-input-autocomplete-static
           v-model="country"
@@ -66,9 +66,12 @@ import {
   defineComponent,
   reactive,
   ref,
+  toRef,
   toRefs,
   useContext,
   useFetch,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
@@ -118,6 +121,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -175,14 +179,25 @@ export default defineComponent({
     })
     const getSuggestions = useGetSuggestions()
 
-    useFetch(async () => {
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
+
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       const suggestionPromise = Promise.all([
-        getSuggestions('specimen', 'country_id,country,country_en', {
-          et: 'country',
-          en: 'country_en',
-        }),
         getSuggestions(
+          toRef(state, 'countrySuggestions'),
+          'specimen',
+          'country_id,country,country_en',
+          {
+            et: 'country',
+            en: 'country_en',
+          }
+        ),
+        getSuggestions(
+          toRef(state, 'originalStatusSuggestions'),
           'specimen',
           'original_status_id,original_status,original_status_en',
           { et: 'original_status', en: 'original_status_en' }
@@ -201,13 +216,10 @@ export default defineComponent({
           'stratigraphyHierarchy'
         ),
       ])
-      const [suggestionResults] = await Promise.all([
-        suggestionPromise,
-        hydrationPromise,
-      ])
+      await Promise.all([suggestionPromise, hydrationPromise])
 
-      state.countrySuggestions = suggestionResults[0]
-      state.originalStatusSuggestions = suggestionResults[1]
+      // state.countrySuggestions = suggestionResults[0]
+      // state.originalStatusSuggestions = suggestionResults[1]
 
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       hydrateFilterStatic(

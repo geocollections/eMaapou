@@ -48,9 +48,12 @@ import {
   defineComponent,
   reactive,
   ref,
+toRef,
   toRefs,
   useContext,
   useFetch,
+useRoute,
+watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -88,6 +91,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleUpdate = () => {
       emit('update')
@@ -128,18 +132,21 @@ export default defineComponent({
     const state = reactive({
       countrySuggestions: [] as any[],
     })
-    useFetch(async () => {
+
+    watch(() => route.value.query, () => fetch())
+
+    const {fetch} = useFetch(async () => {
       emitUpdate.value = false
       const countrySuggestionsPromise = getSuggestions(
+        toRef(state, 'countrySuggestions'),
         'image',
-        'county_id,country,country_en',
+        'country_id,country,country_en',
         { et: 'country', en: 'country_en' }
       )
-      const [countrySuggestions] = await Promise.all([
+      await Promise.all([
         countrySuggestionsPromise,
         hydrateFilterLocality(locality, 'locality'),
       ])
-      state.countrySuggestions = countrySuggestions
       hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       emitUpdate.value = true
     })

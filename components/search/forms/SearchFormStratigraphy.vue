@@ -43,9 +43,12 @@ import {
   defineComponent,
   reactive,
   ref,
+toRef,
   toRefs,
   useContext,
   useFetch,
+useRoute,
+watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -69,6 +72,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -101,35 +105,38 @@ export default defineComponent({
       typeSuggestions: [] as any[],
     })
     const getSuggestions = useGetSuggestions()
-    useFetch(async () => {
+
+    watch(() => route.value.query, () => fetch())
+
+    const {fetch} = useFetch(async () => {
       emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions(
+          toRef(state, 'rankSuggestions'),
           'stratigraphy',
           'rank,stratigraphy_rank,stratigraphy_rank_en',
           { et: 'stratigraphy_rank', en: 'stratigraphy_rank_en' }
         ),
         getSuggestions(
+          toRef(state, 'scopeSuggestions'),
           'stratigraphy',
           'scope,stratigraphy_scope,stratigraphy_scope_en',
           { et: 'stratigraphy_scope', en: 'stratigraphy_scope_en' }
         ),
         getSuggestions(
+          toRef(state, 'typeSuggestions'),
           'stratigraphy',
           'type,stratigraphy_type,stratigraphy_type_en',
           { et: 'stratigraphy_type', en: 'stratigraphy_type_en' }
         ),
       ])
-      const [suggestionResults] = await Promise.all([
+      await Promise.all([
         suggestionPromise,
         hydrateFilterStratigraphy(
           stratigraphyHierarchy,
           'stratigraphyHierarchy'
         ),
       ])
-      state.rankSuggestions = suggestionResults[0]
-      state.scopeSuggestions = suggestionResults[1]
-      state.rankSuggestions = suggestionResults[2]
       hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
       hydrateFilterStatic(rank, 'rank', state.rankSuggestions, Number)
       hydrateFilterStatic(scope, 'scope', state.scopeSuggestions, Number)

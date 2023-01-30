@@ -31,9 +31,12 @@ import {
   defineComponent,
   reactive,
   ref,
+  toRef,
   toRefs,
   useContext,
   useFetch,
+  useRoute,
+  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -52,6 +55,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -75,20 +79,34 @@ export default defineComponent({
     })
     const getSuggestions = useGetSuggestions()
     const hydrateFilterStatic = useHydrateFilterStatic()
-    useFetch(async () => {
+
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
+
+    const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const [countySuggestions, typeSuggestions] = await Promise.all([
-        getSuggestions('area', 'maakond_id,maakond,maakond_en', {
-          et: 'maakond',
-          en: 'maakond_en',
-        }),
-        getSuggestions('area', 'area_type_id,area_type,area_type_en', {
-          et: 'area_type',
-          en: 'area_type_en',
-        }),
+      await Promise.all([
+        getSuggestions(
+          toRef(state, 'countySuggestions'),
+          'area',
+          'maakond_id,maakond,maakond_en',
+          {
+            et: 'maakond',
+            en: 'maakond_en',
+          }
+        ),
+        getSuggestions(
+          toRef(state, 'typeSuggestions'),
+          'area',
+          'area_type_id,area_type,area_type_en',
+          {
+            et: 'area_type',
+            en: 'area_type_en',
+          }
+        ),
       ])
-      state.countySuggestions = countySuggestions
-      state.typeSuggestions = typeSuggestions
       hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
       hydrateFilterStatic(county, 'county', state.countySuggestions, Number)
       emitUpdate.value = true

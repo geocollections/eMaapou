@@ -33,6 +33,8 @@ import {
   ref,
   useContext,
   useFetch,
+useRoute,
+watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -52,6 +54,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -82,7 +85,10 @@ export default defineComponent({
       },
     })
     const hydrateFilterAnalysisParameter = useHydrateFilterAnalysisParameter()
-    useFetch(async () => {
+
+    watch(() => route.value.query, () => fetch())
+
+    const {fetch} = useFetch(async () => {
       emitUpdate.value = false
       await hydrateFilterAnalysisParameter(
         analysisParameter,

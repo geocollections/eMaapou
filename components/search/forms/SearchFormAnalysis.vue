@@ -41,9 +41,12 @@ import {
   defineComponent,
   reactive,
   ref,
+toRef,
   toRefs,
   useContext,
   useFetch,
+useRoute,
+watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -76,6 +79,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -115,15 +119,19 @@ export default defineComponent({
     const hydrateFilterSample = useHydrateFilterSample()
     const hydrateFilterStatic = useHydrateFilterStatic()
     const getSuggestions = useGetSuggestions()
-    useFetch(async () => {
+
+    watch(() => route.value.query, () => fetch())
+
+    const {fetch} = useFetch(async () => {
       emitUpdate.value = false
       const suggestionPromise = Promise.all([
         getSuggestions(
+          toRef(state, 'methodSuggestions'),
           'analysis',
           'method,analysis_method,analysis_method_en',
           { et: 'analysis_method', en: 'analysis_method_en' }
         ),
-        getSuggestions('analysis', 'lab_id,lab,lab_en', {
+        getSuggestions(toRef(state, 'labSuggestions'),'analysis', 'lab_id,lab,lab_en', {
           et: 'lab',
           en: 'lab_en',
         }),
@@ -132,13 +140,10 @@ export default defineComponent({
         hydrateFilterSample(sample, 'sample'),
         hydrateFilterLocality(locality, 'locality'),
       ])
-      const [suggestionResults] = await Promise.all([
+      await Promise.all([
         suggestionPromise,
         hydrationPromise,
       ])
-
-      state.methodSuggestions = suggestionResults[0]
-      state.labSuggestions = suggestionResults[1]
 
       hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
       hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)

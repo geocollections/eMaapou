@@ -27,9 +27,12 @@ import {
   defineComponent,
   reactive,
   ref,
+toRef,
   toRefs,
   useContext,
   useFetch,
+useRoute,
+watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -55,6 +58,7 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
+    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -79,19 +83,25 @@ export default defineComponent({
       projectSuggestions: [] as any[],
     })
     const getSuggestions = useGetSuggestions()
-    useFetch(async () => {
+
+    watch(
+      () => route.value.query,
+      () => fetch()
+    )
+
+    const {fetch} = useFetch(async () => {
       emitUpdate.value = false
       const projectSuggestionsPromise = getSuggestions(
+        toRef(state, 'projectSuggestions'),
         'site',
         'project_id,project_name,project_name_en',
         { et: 'project_name', en: 'project_name_en' }
       )
-      const [projectSuggestions] = await Promise.all([
+      await Promise.all([
         projectSuggestionsPromise,
         hydrateFilterArea(area, 'area'),
       ])
 
-      state.projectSuggestions = projectSuggestions
       hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
       emitUpdate.value = true
     })
