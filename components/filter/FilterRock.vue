@@ -1,6 +1,6 @@
 <template>
   <filter-input-autocomplete
-    :title="$t('filters.rockHierarchy').toString()"
+    :title="titleComputed"
     :query-field="$i18n.locale === 'et' ? 'name' : 'name_en'"
     :query-function="querySuggestions"
     :value="value"
@@ -16,7 +16,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, useContext } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  useContext,
+} from '@nuxtjs/composition-api'
 import FilterInputAutocomplete from './input/FilterInputAutocomplete.vue'
 export default defineComponent({
   name: 'FilterSample',
@@ -26,9 +31,13 @@ export default defineComponent({
       type: Array as PropType<any[]>,
       required: true,
     },
+    title: {
+      type: String,
+      default: '',
+    },
   },
-  setup() {
-    const { $axios } = useContext()
+  setup(props) {
+    const { $axios, i18n } = useContext()
 
     const querySuggestions = (
       search: string,
@@ -38,7 +47,13 @@ export default defineComponent({
         `https://api.geoloogia.info/solr/rock?q=${search}&fq=hierarchy_strings:*&rows=${options.rows}&start=${options.start}&fl=id,name,name_en,hierarchy_strings`
       )
     }
-    return { querySuggestions }
+
+    const titleComputed = computed(() => {
+      if (props.title.length < 1)
+        return i18n.t('filters.rockHierarchy').toString()
+      return props.title
+    })
+    return { querySuggestions, titleComputed }
   },
 })
 </script>

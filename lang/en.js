@@ -1049,7 +1049,7 @@ export default {
     filter: 'Filter',
     locality: 'Locality',
     map: 'Map',
-    stratigraphyHierarchy: 'Stratigraphy hierarchy',
+    stratigraphyHierarchy: 'Stratigraphy',
     taxonHierarchy: 'Taxon hierarchy',
     taxonName: 'Taxon name',
     reference: 'Reference',
@@ -1087,7 +1087,7 @@ export default {
     drillcoreName: 'Name',
     datasetName: 'Name',
     parameter: 'Parameter',
-    lithostratigraphyHierarchy: 'Lithostratigraphy hierarchy',
+    lithostratigraphyHierarchy: 'Lithostratigraphy',
     site: 'Site',
     dataset: 'Dataset',
     people: 'People',
@@ -1099,7 +1099,8 @@ export default {
     rank: 'Rank',
     number: 'Number',
     imageSize: 'Image size (px)',
-    rockHierarchy: 'Rock hierarchy',
+    rockHierarchy: 'Rock',
+    rockHierarchySpecimen: 'Rock/mineral',
   },
   intervals: {
     default: {

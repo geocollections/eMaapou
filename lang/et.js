@@ -1050,7 +1050,7 @@ export default {
     filter: 'Filtreeri',
     locality: 'Lokaliteet',
     map: 'Kaart',
-    stratigraphyHierarchy: 'Stratigraafia hierarhia',
+    stratigraphyHierarchy: 'Stratigraafia',
     taxonHierarchy: 'Taksoni hierarhia',
     taxonName: 'Taksoni nimi',
     reference: 'Kirjandus',
@@ -1088,7 +1088,7 @@ export default {
     drillcoreName: 'Nimi',
     datasetName: 'Nimi',
     parameter: 'Parameeter',
-    lithostratigraphyHierarchy: 'Litostratigraafia hierarhia',
+    lithostratigraphyHierarchy: 'Litostratigraafia',
     site: 'Uuringupunkt',
     dataset: 'Andmeset',
     people: 'Inimesed',
@@ -1100,7 +1100,8 @@ export default {
     rank: 'Tase',
     number: 'Number',
     imageSize: 'Pildi suurus (px)',
-    rockHierarchy: 'Kivimi hierarhia',
+    rockHierarchy: 'Kivim',
+    rockHierarchySpecimen: 'Kivim/mineraal'
   },
   intervals: {
     default: {
