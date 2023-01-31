@@ -88,7 +88,8 @@
     <template #item.image="{ item }">
       <thumbnail-image
         v-if="item.image_preview_url"
-        :src="item.image_preview_url"
+        :preview-src="item.image_preview_url"
+        :src="item.image_url"
         class="my-1"
       />
     </template>

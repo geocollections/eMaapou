@@ -1,26 +1,48 @@
 <template>
-  <v-img
-    v-ripple="{ class: 'primary--text darken-2' }"
-    class="thumbnail-image rounded"
-    max-height="80px"
-    width="80px"
-    aspect-ratio="1"
-    :src="src"
-    @click="$emit('click')"
-  />
+  <div>
+    <v-dialog v-model="open" content-class="elevation-0" offset-x>
+      <template #activator="{ on, attrs }">
+        <v-img
+          id="preview-img"
+          v-ripple="{ class: 'primary--text darken-2' }"
+          class="thumbnail-image rounded"
+          max-height="80px"
+          width="80px"
+          aspect-ratio="1"
+          :src="previewSrc"
+          v-bind="attrs"
+          v-on="on"
+        />
+      </template>
+      <v-img
+        content-class="rounded"
+        :max-height="600"
+        :contain="true"
+        :src="src"
+      />
+    </v-dialog>
+  </div>
 </template>
 
 <script>
-export default {
+import { defineComponent, ref } from '@nuxtjs/composition-api'
+export default defineComponent({
   name: 'ThumbnailImage',
   props: {
+    previewSrc: {
+      type: String,
+      required: true,
+    },
     src: {
       type: String,
-      default: null,
       required: true,
     },
   },
-}
+  setup() {
+    const open = ref(false)
+    return { open }
+  },
+})
 </script>
 
 <style lang="scss" scoped>
