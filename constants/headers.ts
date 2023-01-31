@@ -67,7 +67,7 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
   },
   allIds: [
     'parameter',
-    'analysis_method',
+    'analysis_methfalse',
     'depth',
     'depth_interval',
     'value',
@@ -236,7 +236,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
     lithostratigraphy: {
       text: 'analyticalData.lithostratigraphy',
       value: 'lithostratigraphy',
-      show: true,
+      show: false,
       apiFieldValue: {
         et: 'lithostratigraphy,lithostratigraphy_id_sl',
         en: 'lithostratigraphy_en,lithostratigraphy_id_sl',
@@ -251,7 +251,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
     depth_interval: {
       text: 'analyticalData.depthInterval',
       value: 'depth_interval',
-      show: true,
+      show: false,
       apiFieldValue: 'depth_interval',
     },
     rock: {
@@ -276,6 +276,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       apiFieldValue: 'dataset_id_sl,dataset_name',
     },
     analysis_id: {
+      // What is this for?
       text: 'analyticalData.analysis',
       value: 'analysis_id',
       show: true,
@@ -302,7 +303,7 @@ export const HEADERS_AREA: Headers = {
     id: {
       text: 'area.id',
       value: 'id',
-      show: true,
+      show: false,
       apiFieldValue: 'id',
     },
     name: {
@@ -419,7 +420,7 @@ export const HEADERS_DATASET: Headers = {
     id: {
       text: 'dataset.id',
       value: 'id',
-      show: true,
+      show: false,
       apiFieldValue: 'dataset_id',
     },
     name: {
@@ -694,7 +695,7 @@ export const HEADERS_DRILLCORE: Headers = {
     id: {
       text: 'drillcore.id',
       value: 'id',
-      show: true,
+      show: false,
       apiFieldValue: 'id_l',
     },
     drillcore: {
@@ -754,7 +755,12 @@ export const HEADERS_DRILLCORE: Headers = {
 
 export const HEADERS_LOCALITY: Headers = {
   byIds: {
-    id: { text: 'locality.id', value: 'id', show: true, apiFieldValue: 'id_l' },
+    id: {
+      text: 'locality.id',
+      value: 'id',
+      show: false,
+      apiFieldValue: 'id_l',
+    },
     locality: {
       text: 'locality.name',
       value: 'locality',
@@ -869,7 +875,7 @@ export const HEADERS_PREPARATION: Headers = {
     id: {
       text: 'preparation.id',
       value: 'id',
-      show: true,
+      show: false,
       apiFieldValue: 'id_l',
     },
     preparation_number: {
@@ -1089,7 +1095,7 @@ export const HEADERS_SAMPLE: Headers = {
       value: 'image',
       show: true,
       apiFieldValue: 'image',
-      sortable: true
+      sortable: true,
     },
   },
   allIds: [
@@ -1194,7 +1200,7 @@ export const HEADERS_SAMPLE_DATA: Headers = {
 
 export const HEADERS_SITE: Headers = {
   byIds: {
-    id: { text: 'site.id', value: 'id', show: true, apiFieldValue: 'id_l' },
+    id: { text: 'site.id', value: 'id', show: false, apiFieldValue: 'id_l' },
     name: {
       text: 'site.name',
       value: 'name',
@@ -1492,7 +1498,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
     id: {
       text: 'stratigraphy.id',
       value: 'id',
-      show: true,
+      show: false,
       apiFieldValue: 'id',
     },
     stratigraphy: {
@@ -1835,7 +1841,7 @@ export const HEADERS_TAXON_LIST: Headers = {
 
 export const HEADERS_TAXON: Headers = {
   byIds: {
-    id: { text: 'taxon.id', value: 'id', show: true, apiFieldValue: 'id' },
+    id: { text: 'taxon.id', value: 'id', show: false, apiFieldValue: 'id' },
     taxon: {
       text: 'taxon.taxon',
       value: 'taxon',

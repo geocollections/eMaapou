@@ -14,8 +14,8 @@ export const ANALYSIS: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
@@ -23,8 +23,8 @@ export const ANALYTICAL_DATA: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id_l'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
@@ -95,8 +95,8 @@ export const SAMPLE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
@@ -149,8 +149,8 @@ export const SITE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
@@ -167,8 +167,8 @@ export const LOCALITY: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
@@ -176,8 +176,8 @@ export const DRILLCORE: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
@@ -265,8 +265,8 @@ export const DATASET: ResourceDefaults = {
   options: {
     page: 1,
     itemsPerPage: 25,
-    sortBy: ['id'],
-    sortDesc: [true],
+    sortBy: [],
+    sortDesc: [],
   },
 }
 
