@@ -5,7 +5,7 @@ import state from './state'
 import getters from './getters'
 import mutations from './mutations'
 export default {
-  ...searchModuleActionTree({ state, getters, mutations }),
+  ...searchModuleActionTree({ initState: state, getters, mutations }),
   ...actionTree(
     { state, getters, mutations },
     {

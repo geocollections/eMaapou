@@ -64,11 +64,13 @@ export default defineComponent({
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
+    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
+      hydrateFilters.value = false
       emit('update')
     }
     const query = computed({
@@ -91,7 +93,13 @@ export default defineComponent({
 
     watch(
       () => route.value.query,
-      () => fetch()
+      () => {
+        if (!hydrateFilters.value) {
+          hydrateFilters.value = true
+          return
+        }
+        fetch()
+      }
     )
 
     const { fetch } = useFetch(async () => {

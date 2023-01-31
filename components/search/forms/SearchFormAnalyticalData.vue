@@ -115,11 +115,13 @@ export default defineComponent({
     const { $accessor, $services } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
+    const hydrateFilters = ref(true)
     const handleUpdate = () => {
+      if (!emitUpdate.value) return
+      hydrateFilters.value = false
       emit('update')
     }
     const handleReset = () => {
-      if (!emitUpdate.value) return
       emit('reset')
     }
     const query = computed({
@@ -177,7 +179,13 @@ export default defineComponent({
     const getSuggestions = useGetSuggestions()
     watch(
       () => route.value.query,
-      () => fetch()
+      () => {
+        if (!hydrateFilters.value) {
+          hydrateFilters.value = true
+          return
+        }
+        fetch()
+      }
     )
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false

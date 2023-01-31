@@ -8,6 +8,7 @@ import {
   onBeforeUnmount,
 } from '@nuxtjs/composition-api'
 import isEqual from 'lodash/isEqual'
+import difference from 'lodash/difference'
 import { useAccessor } from './useAccessor'
 import getQueryParams from '~/utils/getQueryParams'
 import { parseQueryParams } from '~/utils/parseQueryParams'
@@ -47,6 +48,13 @@ export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
       filters: filters.value,
       globalFilters: globalFilters?.value ?? {},
       qKey: qParamKey,
+    })
+    const resetFilterKeys = difference(
+      Object.keys(accessor.search[module].filters),
+      Object.keys(parsedValues.filters ?? {})
+    )
+    accessor.search[module].resetFiltersByKeys({
+      filterKeys: resetFilterKeys as any, // TODO: type correctly
     })
     accessor.search[module].SET_MODULE_QUERY({ query: parsedValues.query })
     if (parsedValues.filters) {
@@ -88,20 +96,20 @@ export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
 
   watch(
     () => route.value.query,
-    async () => {
-      await accessor.search[module].resetFilters()
+    () => {
+      // await accessor.search[module].resetFilters()
       setStateFromQueryParams()
       fetch()
     }
   )
-  onBeforeUnmount(async () => {
-    await accessor.search[module].resetFilters(undefined)
+  onBeforeUnmount(() => {
+    accessor.search[module].resetFilters(undefined)
   })
   const handleFormReset = async () => {
     accessor.search[module].SET_MODULE_OPTIONS({
       options: { ...accessor.search[module].options, page: 1 },
     })
-    await accessor.search[module].resetFilters(undefined)
+    accessor.search[module].resetFilters(undefined)
     if (!isEqual(queryParams.value, route.value.query)) {
       // NOTE: https://github.com/nuxt/nuxt.js/issues/6951#issuecomment-904655674
       await new Promise((resolve, reject) =>
