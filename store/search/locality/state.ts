@@ -5,6 +5,7 @@ import {
   GeomFilter,
   ListIdsFilter,
   ListTextFilter,
+  RangeAltFilter,
   TextFilter,
 } from '~/types/filters'
 
@@ -14,6 +15,7 @@ export type LocalityFilters = {
   country: ListIdsFilter
   reference: ListIdsFilter
   map: GeomFilter
+  stratigraphyAge: RangeAltFilter
 }
 export const initState = (): SearchModuleState<LocalityFilters> => {
   return {
@@ -64,6 +66,12 @@ export const initState = (): SearchModuleState<LocalityFilters> => {
         type: FilterType.Geom,
         value: null,
         fields: ['latlong'],
+      },
+      stratigraphyAge: {
+        value: [],
+        type: FilterType.RangeAlt,
+        placeholders: ['stratigraphy.min', 'stratigraphy.max'],
+        fields: ['age_base', 'age_top'],
       },
     },
   }

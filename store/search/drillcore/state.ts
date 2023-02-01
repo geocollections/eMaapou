@@ -5,6 +5,7 @@ import {
   GeomFilter,
   ListIdsFilter,
   ListTextFilter,
+  RangeAltFilter,
   RangeFilter,
   TextFilter,
 } from '~/types/filters'
@@ -16,6 +17,7 @@ export type DrillcoreFilters = {
   country: ListIdsFilter
   repository: ListIdsFilter
   map: GeomFilter
+  stratigraphyAge: RangeAltFilter
 }
 export const initState = (): SearchModuleState<DrillcoreFilters> => {
   return {
@@ -65,6 +67,12 @@ export const initState = (): SearchModuleState<DrillcoreFilters> => {
         type: FilterType.Geom,
         value: null,
         fields: ['latlong'],
+      },
+      stratigraphyAge: {
+        value: [],
+        type: FilterType.RangeAlt,
+        placeholders: ['stratigraphy.min', 'stratigraphy.max'],
+        fields: ['age_base', 'age_top'],
       },
     },
   }

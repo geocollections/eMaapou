@@ -22,7 +22,7 @@
 </template>
 
 <script>
-// TODO: Currently a dialog is created for every thumbnail image.
+// TODO: "Currently a dialog is created for every thumbnail image.
 // would be better if there was only one dialog that we pass the image url to.
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 export default defineComponent({

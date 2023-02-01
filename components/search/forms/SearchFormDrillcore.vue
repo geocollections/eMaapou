@@ -26,10 +26,13 @@
           :items="repositorySuggestions"
           :filter-field="$translate({ et: 'text', en: 'text_en' })"
         />
-
         <filter-input-range
           v-model="boxes"
           :label="$t('filters.drillcoreBoxes').toString()"
+        />
+        <filter-input-text
+          v-model="stratigraphyAge"
+          :title="$t('filters.stratigraphyAge').toString()"
         />
         <filter-institution v-model="institutions" />
       </v-expansion-panels>
@@ -38,7 +41,6 @@
 </template>
 
 <script lang="ts">
-import isEmpty from 'lodash/isEmpty'
 import {
   computed,
   defineComponent,
@@ -97,6 +99,11 @@ export default defineComponent({
     const country = useFilter('drillcore', 'country', handleUpdate)
     const repository = useFilter('drillcore', 'repository', handleUpdate)
     const map = useFilter('drillcore', 'map', handleUpdate)
+    const stratigraphyAge = useFilter(
+      'drillcore',
+      'stratigraphyAge',
+      handleUpdate
+    )
     const institutions = computed({
       get: () => $accessor.search.globalFilters.institutions.value,
       set: (val) => {
@@ -159,9 +166,9 @@ export default defineComponent({
       map,
       institutions,
       name,
+      stratigraphyAge,
       handleReset,
       handleUpdate,
-      isEmpty,
     }
   },
 })

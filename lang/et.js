@@ -1101,7 +1101,8 @@ export default {
     number: 'Number',
     imageSize: 'Pildi suurus (px)',
     rockHierarchy: 'Kivim',
-    rockHierarchySpecimen: 'Kivim/mineraal'
+    rockHierarchySpecimen: 'Kivim/mineraal',
+    stratigraphyAge: 'Stratigraafia vanus (mln a)',
   },
   intervals: {
     default: {

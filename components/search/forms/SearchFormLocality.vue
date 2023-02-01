@@ -19,6 +19,10 @@
           locality-overlay
           :items="$accessor.search.locality.items"
         />
+        <filter-input-text
+          v-model="stratigraphyAge"
+          :title="$t('filters.stratigraphyAge').toString()"
+        />
         <filter-reference v-model="reference" />
       </v-expansion-panels>
     </v-form>
@@ -84,6 +88,11 @@ export default defineComponent({
     const country = useFilter('locality', 'country', handleUpdate)
     const reference = useFilter('locality', 'reference', handleUpdate)
     const map = useFilter('locality', 'map', handleUpdate)
+    const stratigraphyAge = useFilter(
+      'locality',
+      'stratigraphyAge',
+      handleUpdate
+    )
     const state = reactive({
       countrySuggestions: [] as any[],
     })
@@ -125,6 +134,7 @@ export default defineComponent({
       reference,
       country,
       map,
+      stratigraphyAge,
       handleReset,
       handleUpdate,
     }

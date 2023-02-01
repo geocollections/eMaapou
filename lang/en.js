@@ -1101,6 +1101,7 @@ export default {
     imageSize: 'Image size (px)',
     rockHierarchy: 'Rock',
     rockHierarchySpecimen: 'Rock/mineral',
+    stratigraphyAge: 'Stratigraphy age (Ma)'
   },
   intervals: {
     default: {
