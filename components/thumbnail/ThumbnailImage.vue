@@ -14,17 +14,16 @@
           v-on="on"
         />
       </template>
-      <v-img
-        content-class="rounded"
-        :max-height="600"
-        :contain="true"
-        :src="src"
-      />
+      <div @click="open = !open">
+        <v-img content-class="rounded" contain :max-height="700" :src="src" />
+      </div>
     </v-dialog>
   </div>
 </template>
 
 <script>
+// TODO: Currently a dialog is created for every thumbnail image.
+// would be better if there was only one dialog that we pass the image url to.
 import { defineComponent, ref } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'ThumbnailImage',
