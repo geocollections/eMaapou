@@ -19,21 +19,25 @@ export default ($axios: NuxtAxiosInstance) => ({
     {
       defaultParams,
       fields = {},
+      tags = {},
       search = null,
       options,
       searchFilters = {},
+      returnRawQ = false,
     }: {
       options?: IOptions
       search?: string | null
       fields?: { [key: string]: string }
+      tags?: { [key: string]: string }
       defaultParams?: { [key: string]: any }
       searchFilters?: { [key: string]: Filter }
+      returnRawQ?: boolean
     }
   ) {
     const params = {
       ...defaultParams,
-      ...buildSolrQueryParameter(search),
-      ...buildSolrParameters(searchFilters),
+      ...buildSolrQueryParameter(search, returnRawQ),
+      ...buildSolrParameters(searchFilters, tags),
       ...(options && buildSolrPaginationParameters(options)),
       ...(options && buildSolrSortParameter(options, fields)),
     }
@@ -99,7 +103,15 @@ export default ($axios: NuxtAxiosInstance) => ({
   },
 })
 
-const buildSolrQueryParameter = (search: string | null) => {
+const buildSolrQueryParameter = (
+  search: string | null,
+  returnRaw: boolean = false
+) => {
+  if (returnRaw) {
+    return {
+      q: isEmpty(search) ? '*' : search,
+    }
+  }
   const s = search
     ? search
         .split(' ')
@@ -178,271 +190,292 @@ const createSolrFieldQuery = (
   }
 }
 
-const buildSolrParameters = (filters: { [key: string]: Filter }) => {
+const buildSolrParameters = (
+  filters: { [key: string]: Filter },
+  tags: { [key: string]: string }
+) => {
   const initialObject = { fq: [] } as { fq: string[]; d?: number; pt?: string }
 
   const solrParameters = Object.entries(filters)
     .filter(([_, filter]) => isFilterValid(filter))
-    .reduce((prev, [_, filter]): { fq: string[]; d?: number; pt?: string } => {
-      switch (filter.type) {
-        case FilterType.Text: {
-          // eslint-disable-next-line no-useless-escape
-          const pattern = /([\!\*\+\-\=\<\>\&\|\(\)\[\]\{\}\^\~\?\:\\/"])/g
+    .reduce(
+      (prev, [key, filter]): { fq: string[]; d?: number; pt?: string } => {
+        const tag = tags[key] ?? null
+        switch (filter.type) {
+          case FilterType.Text: {
+            // eslint-disable-next-line no-useless-escape
+            const pattern = /([\!\*\+\-\=\<\>\&\|\(\)\[\]\{\}\^\~\?\:\\/"])/g
 
-          const values = filter.value.replace(pattern, '\\$1').split(' ')
-
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return `(${values
-                .map((value: string) => {
-                  return createSolrFieldQuery(field, value, filter.lookUpType)
-                })
-                .join(' AND ')})`
-            })
-            .join(' OR ')
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.Range: {
-          const start = isNil(filter.value[0]) ? '*' : filter.value[0]
-          const end = isNil(filter.value[1]) ? '*' : filter.value[1]
-
-          const solrFilter = filter.fields
-            .map((field: string) => `${field}:[${start} TO ${end}]`)
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.Parameter: {
-          const solrFilter = filter.value
-            .filter((val) => !isNull(val.parameter))
-            .map((val) => {
-              const start = isNil(val.value[0]) ? '*' : val.value[0]
-              const end = isNil(val.value[1]) ? '*' : val.value[1]
-              return `${val.parameter}:[${start} TO ${end}]`
-            })
-          return { ...prev, fq: [...prev.fq, ...solrFilter] }
-        }
-        case FilterType.RangeAlt: {
-          const solrFilter = filter.value
-            .map((value) => {
-              return `(${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}])`
-            })
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.Boolean: {
-          const solrFilter = filter.fields
-            .map((field: string) => `${field}:${filter.value}`)
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.Object: {
-          const solrFilter = filter.fields
-            .map((field: string) =>
-              createSolrFieldQuery(
-                field,
-                filter.value?.[filter.searchField],
-                filter.lookUpType
-              )
-            )
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.List: {
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return filter.value
-                .map((v: any) => {
-                  return `(${field}:${v?.value ?? v})`
-                })
-                .join(' AND ')
-            })
-            .join(' AND ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.ListOr: {
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return filter.value
-                .map((v: any) => {
-                  return `(${field}:${v?.value ?? v})`
-                })
-                .join(' OR ')
-            })
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.ListDate: {
-          if (filter.value.length < 1) return prev
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return filter.value
-                .map((v: string[]) => {
-                  if (v.length > 1) {
-                  return `(${field}:[${v[0]}T00\\:00\\:00Z TO ${v[1]}T23\\:59\\:59Z])`
-                  }
-                  return `(${field}:[${v[0]}T00\\:00\\:00Z TO ${v[0]}T23\\:59\\:59Z])`
-                })
-                .join(' OR ')
-            })
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.ListIds: {
-          if (filter.value.length < 1) return prev
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return filter.value
-                .map((v: any) => {
-                  if (filter.valueType === 'string') {
-                    if (filter.lookupType === 'startswith') {
-                      return `(${field}:${v[filter.valueField]}*)`
-                    }
-                    return `(${field}:"${v[filter.valueField]}")`
-                  }
-                  return `(${field}:${v[filter.valueField]})`
-                })
-                .join(' OR ')
-            })
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.ListIdsMulti: {
-          if (filter.value.length < 1) return prev
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return filter.value
-                .map((valueObject: any) => {
-                  return valueObject[filter.valueField]?.map((v: any) => {
-                    if (filter.valueType === 'string') {
-                      if (filter.lookupType === 'startswith') {
-                        return `(${field}:${v}*)`
-                      }
-                      return `(${field}:"${v}")`
-                    }
-                    return `(${field}:${v})`
-                  }).join(' OR ') ?? []
-                })
-                .join(' OR ')
-            })
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.ListText: {
-          if (filter.value.length < 1) return prev
-          const solrFilter = filter.fields
-            .map((field: string) => {
-              return filter.value
-                .map((v: any) => {
-                  if (filter.lookupType === 'startswith') {
-                    return `(${field}:${v}*)`
-                  }
-                  if (filter.lookupType === 'contains') {
-                    return `(${field}:*${v}*)`
-                  }
-                  return `(${field}:${v})`
-                })
-                .join(' OR ')
-            })
-            .join(' OR ')
-
-          return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-        }
-        case FilterType.Geom: {
-          if (filter.value.geometry.type === 'Polygon') {
-            // LON LAT
-            const value = cloneDeep(filter.value)
-
-            // Polygon triangulation
-            const data = earcut.flatten(value.geometry.coordinates)
-            const triangles = earcut(data.vertices, data.holes, data.dimensions)
-
-            // Reversing triangles to geo coordinates
-            const coordinates = triangles.map((item: any) => {
-              const startIndex = item * 2
-              return [data.vertices[startIndex], data.vertices[startIndex + 1]]
-            })
-            const triangleCoordinates = coordinates.reduce(
-              (prev: any, _: any, index: number, arr: any[]) => {
-                if ((index + 1) % 3 === 0) {
-                  prev.push([
-                    arr[index - 2],
-                    arr[index - 1],
-                    arr[index],
-                    arr[index - 2],
-                  ])
-                }
-                return prev
-              },
-              []
-            )
-
-            // Creating WKT string for query
-            const wkt = new Wkt.Wkt()
-            wkt.read(
-              JSON.stringify({
-                coordinates:
-                  triangleCoordinates.length > 1
-                    ? [triangleCoordinates]
-                    : triangleCoordinates,
-                type:
-                  triangleCoordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
-              })
-            )
-            let wktString = wkt.write()
-            wktString = wktString.replaceAll('),(', ')),((')
+            const values = filter.value.replace(pattern, '\\$1').split(' ')
 
             const solrFilter = filter.fields
-              .map((field: string) => `${field}:"isWithin(${wktString})"`)
+              .map((field: string) => {
+                return `(${values
+                  .map((value: string) => {
+                    return createSolrFieldQuery(field, value, filter.lookUpType)
+                  })
+                  .join(' AND ')})`
+              })
+              .join(' OR ')
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.Range: {
+            const start = isNil(filter.value[0]) ? '*' : filter.value[0]
+            const end = isNil(filter.value[1]) ? '*' : filter.value[1]
+
+            const solrFilter = filter.fields
+              .map((field: string) => `${field}:[${start} TO ${end}]`)
               .join(' OR ')
 
             return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
-          } else {
-            // CIRCLE
-            const reversedCoordinates = [
-              ...filter.value.geometry.coordinates,
-            ].reverse()
-            // convert to km (from m) and round to 1 decimal place
-            const radius =
-              Math.round((filter.value.properties.radius / 1000) * 10) / 10
+          }
+          case FilterType.Parameter: {
+            const solrFilter = filter.value
+              .filter((val) => !isNull(val.parameter))
+              .map((val) => {
+                const start = isNil(val.value[0]) ? '*' : val.value[0]
+                const end = isNil(val.value[1]) ? '*' : val.value[1]
+                return `${val.parameter}:[${start} TO ${end}]`
+              })
+            return { ...prev, fq: [...prev.fq, ...solrFilter] }
+          }
+          case FilterType.RangeAlt: {
+            const solrFilter = filter.value
+              .map((value) => {
+                return `(${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}])`
+              })
+              .join(' OR ')
 
-            // NOTE:  Might cause trouble when multiple fields in fields array.
-            // Right now there is always one field in the fields array
-            const solrFilter = filter.fields.map(
-              (field: string) => `{!geofilt sfield=${field}}`
-            )
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.Boolean: {
+            const solrFilter = filter.fields
+              .map((field: string) => `${field}:${filter.value}`)
+              .join(' OR ')
 
-            return {
-              ...prev,
-              fq: [...prev.fq, `${solrFilter}`],
-              d: radius,
-              pt: `${reversedCoordinates[0]},${reversedCoordinates[1]}`,
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.Object: {
+            const solrFilter = filter.fields
+              .map((field: string) =>
+                createSolrFieldQuery(
+                  field,
+                  filter.value?.[filter.searchField],
+                  filter.lookUpType
+                )
+              )
+              .join(' OR ')
+
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.List: {
+            const solrFilter = filter.fields
+              .map((field: string) => {
+                return filter.value
+                  .map((v: any) => {
+                    return `(${field}:${v?.value ?? v})`
+                  })
+                  .join(' AND ')
+              })
+              .join(' AND ')
+
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.ListOr: {
+            const solrFilter = filter.fields
+              .map((field: string) => {
+                return filter.value
+                  .map((v: any) => {
+                    return `(${field}:${v?.value ?? v})`
+                  })
+                  .join(' OR ')
+              })
+              .join(' OR ')
+
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.ListDate: {
+            if (filter.value.length < 1) return prev
+            const solrFilter = filter.fields
+              .map((field: string) => {
+                return filter.value
+                  .map((v: string[]) => {
+                    if (v.length > 1) {
+                      return `(${field}:[${v[0]}T00\\:00\\:00Z TO ${v[1]}T23\\:59\\:59Z])`
+                    }
+                    return `(${field}:[${v[0]}T00\\:00\\:00Z TO ${v[0]}T23\\:59\\:59Z])`
+                  })
+                  .join(' OR ')
+              })
+              .join(' OR ')
+
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.ListIds: {
+            if (filter.value.length < 1) return prev
+            const solrFilter = filter.fields
+              .map((field: string) => {
+                return filter.value
+                  .map((v: any) => {
+                    if (filter.valueType === 'string') {
+                      if (filter.lookupType === 'startswith') {
+                        return `(${field}:${v[filter.valueField]}*)`
+                      }
+                      return `(${field}:"${v[filter.valueField]}")`
+                    }
+
+                    return `(${field}:${v[filter.valueField]})`
+                  })
+                  .join(' OR ')
+              })
+              .join(' OR ')
+            let filterStr = `(${solrFilter})`
+            if (tag) filterStr = `{!tag=${tag}}` + filterStr
+            return { ...prev, fq: [...prev.fq, filterStr] }
+          }
+          case FilterType.ListIdsMulti: {
+            if (filter.value.length < 1) return prev
+            const solrFilter = filter.fields
+              .map((field: string) => {
+                return filter.value
+                  .map((valueObject: any) => {
+                    return (
+                      valueObject[filter.valueField]
+                        ?.map((v: any) => {
+                          if (filter.valueType === 'string') {
+                            if (filter.lookupType === 'startswith') {
+                              return `(${field}:${v}*)`
+                            }
+                            return `(${field}:"${v}")`
+                          }
+                          return `(${field}:${v})`
+                        })
+                        .join(' OR ') ?? []
+                    )
+                  })
+                  .join(' OR ')
+              })
+              .join(' OR ')
+
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.ListText: {
+            if (filter.value.length < 1) return prev
+            const solrFilter = filter.fields
+              .map((field: string) => {
+                return filter.value
+                  .map((v: any) => {
+                    if (filter.lookupType === 'startswith') {
+                      return `(${field}:${v}*)`
+                    }
+                    if (filter.lookupType === 'contains') {
+                      return `(${field}:*${v}*)`
+                    }
+                    return `(${field}:${v})`
+                  })
+                  .join(' OR ')
+              })
+              .join(' OR ')
+
+            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+          }
+          case FilterType.Geom: {
+            if (filter.value.geometry.type === 'Polygon') {
+              // LON LAT
+              const value = cloneDeep(filter.value)
+
+              // Polygon triangulation
+              const data = earcut.flatten(value.geometry.coordinates)
+              const triangles = earcut(
+                data.vertices,
+                data.holes,
+                data.dimensions
+              )
+
+              // Reversing triangles to geo coordinates
+              const coordinates = triangles.map((item: any) => {
+                const startIndex = item * 2
+                return [
+                  data.vertices[startIndex],
+                  data.vertices[startIndex + 1],
+                ]
+              })
+              const triangleCoordinates = coordinates.reduce(
+                (prev: any, _: any, index: number, arr: any[]) => {
+                  if ((index + 1) % 3 === 0) {
+                    prev.push([
+                      arr[index - 2],
+                      arr[index - 1],
+                      arr[index],
+                      arr[index - 2],
+                    ])
+                  }
+                  return prev
+                },
+                []
+              )
+
+              // Creating WKT string for query
+              const wkt = new Wkt.Wkt()
+              wkt.read(
+                JSON.stringify({
+                  coordinates:
+                    triangleCoordinates.length > 1
+                      ? [triangleCoordinates]
+                      : triangleCoordinates,
+                  type:
+                    triangleCoordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
+                })
+              )
+              let wktString = wkt.write()
+              wktString = wktString.replaceAll('),(', ')),((')
+
+              const solrFilter = filter.fields
+                .map((field: string) => `${field}:"isWithin(${wktString})"`)
+                .join(' OR ')
+
+              return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+            } else {
+              // CIRCLE
+              const reversedCoordinates = [
+                ...filter.value.geometry.coordinates,
+              ].reverse()
+              // convert to km (from m) and round to 1 decimal place
+              const radius =
+                Math.round((filter.value.properties.radius / 1000) * 10) / 10
+
+              // NOTE:  Might cause trouble when multiple fields in fields array.
+              // Right now there is always one field in the fields array
+              const solrFilter = filter.fields.map(
+                (field: string) => `{!geofilt sfield=${field}}`
+              )
+
+              return {
+                ...prev,
+                fq: [...prev.fq, `${solrFilter}`],
+                d: radius,
+                pt: `${reversedCoordinates[0]},${reversedCoordinates[1]}`,
+              }
             }
           }
+          default: {
+            return { ...prev }
+          }
         }
-        default: {
-          return { ...prev }
-        }
-      }
-    }, initialObject)
+      },
+      initialObject
+    )
 
   const result = {
     d: solrParameters.d,
+    fq: solrParameters.fq,
     pt: solrParameters.pt,
-  } as { fq?: string; d?: number; pt?: string }
+  } as { fq?: string[]; d?: number; pt?: string }
 
   // Join fq array together if array has elements
   // If no elements in fq delete fq so that fq default parameter is not over written with null
-  if (solrParameters.fq.length > 0) {
-    result.fq = `(${solrParameters.fq.join(' AND ')})`
-  }
+  // if (solrParameters.fq.length > 0) {
+  //   result.fq = `(${solrParameters.fq.join(' AND ')})`
+  // }
   return result
 }

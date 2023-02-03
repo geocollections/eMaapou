@@ -109,7 +109,8 @@ export const useHydrateFilterRock: HydrationFunction = () => {
     if (!route.value.query[queryParam]) return
 
     const selectedIds = (route.value.query[queryParam] as string)
-      .split(',').map((v) => v.split(':')[0])
+      .split(',')
+      .map((v) => v.split(':')[0])
       .map(decodeURIComponent)
     const query = selectedIds
       .map((taxa) => `hierarchy_strings:"${taxa}"`)
@@ -232,5 +233,19 @@ export const useHydrateFilterStatic = () => {
     filter.value = suggestions.filter((v) =>
       parsedValue.includes(v[compareField])
     )
+  }
+}
+export const useHydrateFilter = () => {
+  const route = useRoute()
+  return async (
+    filter: Ref<any>,
+    queryParam: string,
+    hydrationFunc: (ids: any[]) => Promise<any[]>
+  ) => {
+    if (!route.value.query[queryParam]) return
+
+    const queryParamValue = route.value.query[queryParam] as string
+    const parsedValue = queryParamValue.split(',')
+    filter.value = await hydrationFunc(parsedValue)
   }
 }
