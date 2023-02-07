@@ -8,23 +8,26 @@
           v-model="name"
           :title="$t('filters.drillcoreName').toString()"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="country"
           :title="$t('filters.country').toString()"
-          :items="countrySuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'"
+          :query-function="querySuggestionsCountry"
         />
-
         <filter-map
           v-model="map"
           borehole-overlay
           :items="$accessor.search.drillcore.items"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="repository"
           :title="$t('filters.drillcoreRepository').toString()"
-          :items="repositorySuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="
+            $i18n.locale === 'et' ? 'core_repository' : 'core_repository_en'
+          "
+          :query-function="querySuggestionsRepository"
         />
         <filter-input-range
           v-model="boxes"
@@ -44,10 +47,8 @@
 import {
   computed,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -55,39 +56,44 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import { useFilter } from '~/composables/useFilter'
-import { useHydrateFilterStatic } from '~/composables/useHydrateFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import {
+  useHydrateFilterNew,
+  useHydrateStatic,
+} from '~/composables/useHydrateFilter'
+import { useQuerySuggestionsStatic } from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormDrillcore',
   components: {
     SearchActions,
     InputSearch,
-    FilterInputAutocompleteStatic,
     FilterInputRange,
     FilterInstitution,
     FilterMap,
     FilterInputText,
+    FilterInputAutocompleteNew,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
 
+    const filters = computed(() => ({
+      ...$accessor.search.drillcore.filters,
+      ...$accessor.search.globalFilters,
+    }))
     const query = computed({
       get: () => $accessor.search.drillcore.query,
       set: (val) => {
@@ -111,55 +117,67 @@ export default defineComponent({
         handleUpdate()
       },
     })
-    const state = reactive({
-      countrySuggestions: [] as any[],
-      repositorySuggestions: [] as any[],
-    })
-    const hydrateFilterStatic = useHydrateFilterStatic()
-    const getSuggestions = useGetSuggestions()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       await Promise.all([
-        getSuggestions(
-          toRef(state, 'countrySuggestions'),
-          'drillcore',
-          'country_id,country,country_en',
-          {
-            et: 'country',
-            en: 'country_en',
-          }
+        hydrateFilter(
+          country,
+          toRef(filters.value, 'country'),
+          'country',
+          hydrateCountry
         ),
-        getSuggestions(
-          toRef(state, 'repositorySuggestions'),
-          'drillcore',
-          'core_repository_id,core_repository,core_repository_en',
-          { et: 'core_repository', en: 'core_repository_en' }
+        hydrateFilter(
+          repository,
+          toRef(filters.value, 'repository'),
+          'repository',
+          hydrateRepository
         ),
       ])
-      hydrateFilterStatic(
-        repository,
-        'repository',
-        state.repositorySuggestions,
-        Number
-      )
-      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       emitUpdate.value = true
     })
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrateStatic = useHydrateStatic()
+    const hydrateCountry = hydrateStatic(query, {
+      pivot: ['country_id', 'country', 'country_en'],
+      countResourceRelatedIdKey: 'country_id',
+      countResource: 'drillcore',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'country',
+    })
+    const hydrateRepository = hydrateStatic(query, {
+      pivot: ['core_repository_id', 'core_repository', 'core_repository_en'],
+      countResourceRelatedIdKey: 'core_repository_id',
+      countResource: 'drillcore',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'repository',
+    })
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsCountry = querySuggestionsStatic(query, {
+      resource: 'drillcore',
+      excludeFilterKey: 'country',
+      pivot: ['country_id', 'country', 'country_en'],
+      limit: 200,
+      filters,
+    })
+    const querySuggestionsRepository = querySuggestionsStatic(query, {
+      resource: 'drillcore',
+      excludeFilterKey: 'repository',
+      pivot: ['core_repository_id', 'core_repository', 'core_repository_en'],
+      limit: 200,
+      filters,
+    })
     return {
-      ...toRefs(state),
       query,
+      querySuggestionsCountry,
+      querySuggestionsRepository,
       country,
       repository,
       boxes,
