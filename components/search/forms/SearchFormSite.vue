@@ -11,6 +11,7 @@
         <filter-input-autocomplete-new
           v-model="project"
           :title="$t('filters.project').toString()"
+          static
           :query-field="
             $i18n.locale === 'et' ? 'project_name' : 'project_name_en'
           "
@@ -32,10 +33,8 @@
 import {
   computed,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -87,9 +86,6 @@ export default defineComponent({
     const area = useFilter('site', 'area', handleUpdate)
     const map = useFilter('site', 'map', handleUpdate)
     const project = useFilter('site', 'project', handleUpdate)
-    const state = reactive({
-      projectSuggestions: [] as any[],
-    })
 
     watch(
       () => route.value.query,
@@ -161,7 +157,6 @@ export default defineComponent({
       filters,
     })
     return {
-      ...toRefs(state),
       querySuggestionsProject,
       querySuggestionsArea,
       query,

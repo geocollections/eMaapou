@@ -34,10 +34,8 @@
 import {
   computed,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -78,9 +76,9 @@ export default defineComponent({
       emit('update')
     }
 
-    const filters = computed(() => ({
-      ...$accessor.search.locality.filters,
-    }))
+    const filters = computed(() =>
+      $accessor.search.locality.filters,
+    )
     const query = computed({
       get: () => $accessor.search.locality.query,
       set: (val) => {
@@ -97,9 +95,6 @@ export default defineComponent({
       'stratigraphyAge',
       handleUpdate
     )
-    const state = reactive({
-      countrySuggestions: [] as any[],
-    })
     const hydrateFilterReference = useHydrateFilterReference()
 
     watch(
@@ -140,7 +135,6 @@ export default defineComponent({
       filters,
     })
     return {
-      ...toRefs(state),
       querySuggestionsCountry,
       name,
       query,
