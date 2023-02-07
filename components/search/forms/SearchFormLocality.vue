@@ -8,11 +8,12 @@
           v-model="name"
           :title="$t('filters.localityName').toString()"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="country"
           :title="$t('filters.country').toString()"
-          :items="countrySuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'"
+          :query-function="querySuggestionsCountry"
         />
         <filter-map
           v-model="map"
@@ -46,14 +47,15 @@ import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterReference from '~/components/filter/FilterReference.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import {
+  useHydrateFilterNew,
   useHydrateFilterReference,
-  useHydrateFilterStatic,
+  useHydrateStatic,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import { useQuerySuggestionsStatic } from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormLocality',
   components: {
@@ -61,22 +63,24 @@ export default defineComponent({
     FilterMap,
     InputSearch,
     FilterReference,
-    FilterInputAutocompleteStatic,
     FilterInputText,
+    FilterInputAutocompleteNew,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
+
+    const filters = computed(() => ({
+      ...$accessor.search.locality.filters,
+    }))
     const query = computed({
       get: () => $accessor.search.locality.query,
       set: (val) => {
@@ -97,38 +101,47 @@ export default defineComponent({
       countrySuggestions: [] as any[],
     })
     const hydrateFilterReference = useHydrateFilterReference()
-    const hydrateFilterStatic = useHydrateFilterStatic()
-    const getSuggestions = useGetSuggestions()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const countrySuggestionPromise = getSuggestions(
-        toRef(state, 'countrySuggestions'),
-        'locality',
-        'country_id,country,country_en',
-        { et: 'country', en: 'country_en' }
-      )
 
       await Promise.all([
-        countrySuggestionPromise,
         hydrateFilterReference(reference, 'reference'),
+        hydrateFilter(
+          country,
+          toRef(filters.value, 'country'),
+          'country',
+          hydrateCountry
+        ),
       ])
-      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       emitUpdate.value = true
+    })
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrateStatic = useHydrateStatic()
+    const hydrateCountry = hydrateStatic(query, {
+      pivot: ['country_id', 'country', 'country_en'],
+      countResourceRelatedIdKey: 'country_id',
+      countResource: 'locality',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'country',
+    })
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsCountry = querySuggestionsStatic(query, {
+      resource: 'locality',
+      excludeFilterKey: 'country',
+      pivot: ['country_id', 'country', 'country_en'],
+      limit: 200,
+      filters,
     })
     return {
       ...toRefs(state),
+      querySuggestionsCountry,
       name,
       query,
       reference,
