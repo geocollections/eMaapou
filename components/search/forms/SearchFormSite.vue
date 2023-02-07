@@ -8,13 +8,20 @@
           v-model="name"
           :title="$t('filters.name').toString()"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="project"
           :title="$t('filters.project').toString()"
-          :items="projectSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          :query-field="
+            $i18n.locale === 'et' ? 'project_name' : 'project_name_en'
+          "
+          :query-function="querySuggestionsProject"
         />
-        <filter-area v-model="area" />
+        <filter-input-autocomplete-new
+          v-model="area"
+          :title="$t('filters.area').toString()"
+          :query-field="$i18n.locale === 'et' ? 'area_name' : 'area_name_en'"
+          :query-function="querySuggestionsArea"
+        />
         <filter-map v-model="map" :items="$accessor.search.site.items" />
       </v-expansion-panels>
     </v-form>
@@ -37,38 +44,39 @@ import {
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import FilterArea from '~/components/filter/FilterArea.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import {
-  useHydrateFilterArea,
-  useHydrateFilterStatic,
+  useHydrate,
+  useHydrateFilterNew,
+  useHydrateStatic,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import {
+  useQuerySuggestions,
+  useQuerySuggestionsStatic,
+} from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormSite',
   components: {
     SearchActions,
     FilterInputText,
-    FilterArea,
     FilterMap,
-    FilterInputAutocompleteStatic,
     InputSearch,
+    FilterInputAutocompleteNew,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
+    const filters = computed(() => $accessor.search.site.filters)
     const query = computed({
       get: () => $accessor.search.site.query,
       set: (val) => {
@@ -79,42 +87,83 @@ export default defineComponent({
     const area = useFilter('site', 'area', handleUpdate)
     const map = useFilter('site', 'map', handleUpdate)
     const project = useFilter('site', 'project', handleUpdate)
-    const hydrateFilterArea = useHydrateFilterArea()
-    const hydrateFilterStatic = useHydrateFilterStatic()
     const state = reactive({
       projectSuggestions: [] as any[],
     })
-    const getSuggestions = useGetSuggestions()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const projectSuggestionsPromise = getSuggestions(
-        toRef(state, 'projectSuggestions'),
-        'site',
-        'project_id,project_name,project_name_en',
-        { et: 'project_name', en: 'project_name_en' }
-      )
       await Promise.all([
-        projectSuggestionsPromise,
-        hydrateFilterArea(area, 'area'),
+        hydrateFilter(area, toRef(filters.value, 'area'), 'area', hydrateArea),
+        hydrateFilter(
+          project,
+          toRef(filters.value, 'project'),
+          'project',
+          hydrateProject
+        ),
       ])
 
-      hydrateFilterStatic(project, 'project', state.projectSuggestions, Number)
       emitUpdate.value = true
+    })
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrateStatic = useHydrateStatic()
+    const hydrate = useHydrate()
+    const hydrateProject = hydrateStatic(query, {
+      pivot: ['project_id', 'project_name', 'project_name_en'],
+      countResourceRelatedIdKey: 'project_id',
+      countResource: 'site',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'project',
+    })
+    const hydrateArea = hydrate(
+      filters.value.area,
+      query,
+      {
+        itemResource: 'area',
+        itemFields: ['id', 'name', 'name_en'],
+        itemSearchField: 'id',
+        countResource: 'site',
+        countResourceRelatedIdKey: 'area_id',
+        countHierarchical: false,
+        tagFilterKey: 'area',
+        filters,
+      },
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: parseInt(item.id),
+          text: item.name,
+          text_en: item.name_en,
+          count: counts[item.id],
+        }))
+    )
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsProject = querySuggestionsStatic(query, {
+      resource: 'site',
+      excludeFilterKey: 'project',
+      pivot: ['project_id', 'project_name', 'project_name_en'],
+      limit: 200,
+      filters,
+    })
+    const querySuggestions = useQuerySuggestions()
+    const querySuggestionsArea = querySuggestions(query, {
+      resource: 'site',
+      pivot: ['area_id', 'area_name', 'area_name_en'],
+      pivotOffsetField: 'area_id',
+      countHierarchical: false,
+      countResourceRelatedKey: 'area_id',
+      excludeFilterKey: 'area',
+      filters,
     })
     return {
       ...toRefs(state),
+      querySuggestionsProject,
+      querySuggestionsArea,
       query,
       name,
       area,
