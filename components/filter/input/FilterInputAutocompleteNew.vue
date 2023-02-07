@@ -82,7 +82,7 @@
         </template>
 
         <template #append-item>
-          <div v-intersect="loadMore" />
+          <div v-if="!static" v-intersect="loadMore" />
         </template>
         <template #selection> </template>
       </v-autocomplete>
@@ -126,6 +126,10 @@ export default defineComponent({
         ) => Promise<any>
       >,
       required: true,
+    },
+    static: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, { emit }) {
@@ -227,6 +231,7 @@ export default defineComponent({
         }
       })
     })
+
     return {
       ...toRefs(state),
       handleInput,

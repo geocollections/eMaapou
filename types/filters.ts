@@ -98,3 +98,10 @@ export type Filter =
   | ParameterFilter
   | ListDateFilter
   | ListIdsMultiFilter
+
+export type DefaultFilterObject = {
+  id: number | string
+  text: string
+  text_en: string
+  count: number
+}

@@ -23,31 +23,35 @@ export const parseQueryParams = <Filters extends string | number | symbol>({
   }
   result.query = (route.query[qKey] as string) ?? ''
   if (filters) {
-    const filtered = Object.entries<Filter>(filters)
-    .filter(([key, _]) => route.query[key])
+    const filtered = Object.entries<Filter>(filters).filter(
+      ([key, _]) => route.query[key]
+    )
 
-    result.filters = filtered.reduce((prev, [key, filter]): { [K: string]: any } => {
-      return {
-        ...prev,
-        [key]: parseFilterValue(route, key, filter),
-      }
-    }, {})
-  }
-  if (globalFilters) {
-    result.globalFilters = Object.entries(globalFilters)
-    .filter(([key, _]) => route.query[key])
-    .reduce(
-      (
-        prev,
-        [key, filter]
-      ): { [K in keyof SearchState['globalFilters']]?: any } => {
+    result.filters = filtered.reduce(
+      (prev, [key, filter]): { [K: string]: any } => {
         return {
           ...prev,
-          [key]: parseFilterValue(route, key, filter as Filter),
+          [key]: parseFilterValue(route, key, filter),
         }
       },
       {}
     )
+  }
+  if (globalFilters) {
+    result.globalFilters = Object.entries(globalFilters)
+      .filter(([key, _]) => route.query[key])
+      .reduce(
+        (
+          prev,
+          [key, filter]
+        ): { [K in keyof SearchState['globalFilters']]?: any } => {
+          return {
+            ...prev,
+            [key]: parseFilterValue(route, key, filter as Filter),
+          }
+        },
+        {}
+      )
   }
   const options: any = {}
   if (route.query.page) {
@@ -61,14 +65,14 @@ export const parseQueryParams = <Filters extends string | number | symbol>({
   }
   if (route.query.sortDesc) {
     options.sortDesc = (route.query.sortDesc as string)
-    .split(',')
-    .map((value) => value === 'true')
+      .split(',')
+      .map((value) => value === 'true')
   }
   result.options = options
   return result
 }
 
-const parseFilterValue = (route: Route, key: string, filter: Filter) => {
+export const parseFilterValue = (route: Route, key: string, filter: Filter) => {
   if (filter.type === FilterType.Text) {
     return route.query[key] as string
   } else if (filter.type === FilterType.Range) {
@@ -86,7 +90,7 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
     return JSON.parse(route.query[key] as string)
   } else if (filter.type === FilterType.ListOr) {
     if (typeof route.query[key] === 'string') return [route.query[key]]
-      return route.query[key]
+    return route.query[key]
   } else if (filter.type === FilterType.RangeAlt) {
     if (filter.value.length < 1) {
       return (route.query[key] as string).split(',')
@@ -98,19 +102,19 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
     if (typeof route.query[key] === 'string')
       return [JSON.parse(route.query[key] as string)]
     return (route.query[key] as string[]).map((value: string) =>
-                                              JSON.parse(value)
-                                             )
+      JSON.parse(value)
+    )
   } else if (filter.type === FilterType.ListIds) {
     if (filter.value.length < 1)
       return (route.query[key] as string).split(',').map((queryValue) => ({
         [filter.valueField]: decodeURIComponent(queryValue),
       }))
-      return filter.value
+    return filter.value
   } else if (filter.type === FilterType.ListText) {
     if (filter.value.length < 1)
       return (route.query[key] as string)
-    .split(',')
-    .map((val) => decodeURIComponent(val))
+        .split(',')
+        .map((val) => decodeURIComponent(val))
     return filter.value
   } else if (filter.type === FilterType.Parameter) {
     return (route.query[key] as string).split(',').map((val) => {
@@ -130,12 +134,11 @@ const parseFilterValue = (route: Route, key: string, filter: Filter) => {
     })
   } else if (filter.type === FilterType.ListIdsMulti) {
     if (filter.value.length < 1) {
-
       return (route.query[key] as string).split(',').map((v) => {
         const [id, apiValue] = v.split(':')
         return {
           [filter.idValueField]: id,
-          [filter.valueField]: apiValue.split('|')
+          [filter.valueField]: apiValue.split('|'),
         }
       })
     }

@@ -1,5 +1,6 @@
-import { useContext, useRoute } from '@nuxtjs/composition-api'
-import { Ref } from 'vue'
+import { useContext, useRoute, ComputedRef, Ref } from '@nuxtjs/composition-api'
+import { Filter, ListIdsMultiFilter } from '~/types/filters'
+import { parseFilterValue } from '~/utils/parseQueryParams'
 type HydrationFunction = () => (
   filter: Ref<any>,
   queryParam: string
@@ -238,14 +239,230 @@ export const useHydrateFilterStatic = () => {
 export const useHydrateFilter = () => {
   const route = useRoute()
   return async (
-    filter: Ref<any>,
+    filterValue: Ref<any>,
+    queryParam: string,
+    hydrationFunc: (ids: any[]) => Promise<any[]>
+  ) => {
+    if (!route.value.query[queryParam]) return
+    const queryValue = route.value.query[queryParam] as string
+    const parsedValue = queryValue.split(',')
+    filterValue.value = await hydrationFunc(parsedValue)
+  }
+}
+export const useHydrateFilterNew = () => {
+  const route = useRoute()
+  return async (
+    filterValue: Ref<any>,
+    filter: Ref<Filter>,
     queryParam: string,
     hydrationFunc: (ids: any[]) => Promise<any[]>
   ) => {
     if (!route.value.query[queryParam]) return
 
-    const queryParamValue = route.value.query[queryParam] as string
-    const parsedValue = queryParamValue.split(',')
-    filter.value = await hydrationFunc(parsedValue)
+    const parsedValue = parseFilterValue(route.value, queryParam, filter.value)
+    filterValue.value = await hydrationFunc(parsedValue)
+  }
+}
+
+type DefaultFilterObject = {
+  id: number | string
+  text: string
+  text_en: string
+  count: number
+}
+export const useHydrate = () => {
+  const { $services } = useContext()
+  return <
+    FilterObject extends {
+      id: number | string
+      count: number
+      [K: string]: any
+    } = DefaultFilterObject
+  >(
+    config: {
+      itemResource: string
+      itemFields: string[]
+      itemSearchField: string
+      countResource: string
+      countResourceRelatedIdKey: string
+      tagFilterKey: string
+      countHierarchical: boolean
+      filters?: ComputedRef<{ [K: string]: Filter }>
+    },
+    parseFunc: (items: any[], counts: { [K: string]: number }) => FilterObject[]
+  ) => {
+    return async (filterValues: any[]): Promise<FilterObject[]> => {
+      const itemQueryString = filterValues.map((v) => `"${v}"`).join(' OR ')
+      const facetQueries = filterValues.reduce((prev, v) => {
+        if (config.countHierarchical) {
+          prev[`{!ex=dt}${config.countResourceRelatedIdKey}:${v}*`] = v
+          return prev
+        }
+        prev[`{!ex=dt}${config.countResourceRelatedIdKey}:${v}`] = v
+        return prev
+      }, {})
+      const [items, countQueries] = await Promise.all([
+        $services.sarvSolr.getResourceList(config.itemResource, {
+          search: `${config.itemSearchField}:(${itemQueryString})`,
+          defaultParams: {
+            rows: filterValues.length,
+            fl: config.itemFields.join(','),
+          },
+          returnRawQ: true,
+        }),
+        $services.sarvSolr.getResourceList(config.countResource, {
+          searchFilters: config.filters?.value,
+          tags: {
+            [config.tagFilterKey]: 'dt',
+          },
+          defaultParams: {
+            'facet.query': Object.keys(facetQueries),
+            rows: 0,
+            start: 0,
+            facet: true,
+            'facet.pivot': `{!ex=dt}${config.countResourceRelatedIdKey}`,
+            'facet.limit': filterValues.length,
+          },
+          returnRawQ: true,
+        }),
+      ])
+      const counts = Object.keys(countQueries.facet.facet_queries).reduce(
+        (prev, curr) => {
+          prev[facetQueries[curr]] = countQueries.facet.facet_queries[curr]
+          return prev
+        },
+        {} as { [K in string | number]: number }
+      )
+      return parseFunc(items.items, counts)
+    }
+  }
+}
+export const useHydrateMulti = () => {
+  const { $services } = useContext()
+  return <
+    FilterObject extends {
+      id: number | string
+      count: number
+      [K: string]: any
+    } = DefaultFilterObject
+  >(
+    filter: ListIdsMultiFilter,
+    config: {
+      itemResource: string
+      itemFields: string[]
+      itemSearchField: string
+      countResource: string
+      countResourceRelatedIdKey: string
+      tagFilterKey: string
+      countHierarchical: boolean
+      queryFilters?: ComputedRef<{ [K: string]: Filter }>
+    },
+    parseFunc: (items: any[], counts: { [K: string]: number }) => FilterObject[]
+  ) => {
+    return async (parsedQueryParamValues: any[]): Promise<FilterObject[]> => {
+      const idsQueryStr = parsedQueryParamValues
+        .map((parsedValue) => `"${parsedValue[filter.idValueField]}"`)
+        .join(' OR ')
+
+      const facetQueries = parsedQueryParamValues.reduce(
+        (prev, parsedValue) => {
+          const query = parsedValue[filter.valueField]
+            .map(
+              (hierarchyString: string) =>
+                `${config.countResourceRelatedIdKey}:${hierarchyString}*`
+            )
+            .join(' OR ')
+          prev[`{!ex=dt}${query}`] = parsedValue.id
+          return prev
+        },
+        {}
+      )
+      const [items, countQueries] = await Promise.all([
+        $services.sarvSolr.getResourceList(config.itemResource, {
+          search: `${config.itemSearchField}:(${idsQueryStr})`,
+          defaultParams: {
+            rows: parsedQueryParamValues.length,
+            fl: config.itemFields.join(','),
+          },
+          returnRawQ: true,
+        }),
+        $services.sarvSolr.getResourceList(config.countResource, {
+          searchFilters: config.queryFilters?.value,
+          tags: {
+            [config.tagFilterKey]: 'dt',
+          },
+          defaultParams: {
+            'facet.query': Object.keys(facetQueries),
+            rows: 0,
+            start: 0,
+            facet: true,
+            'facet.pivot': `{!ex=dt}${config.countResourceRelatedIdKey}`,
+            'facet.limit': parsedQueryParamValues.length,
+          },
+          returnRawQ: true,
+        }),
+      ])
+      const counts = Object.keys(countQueries.facet.facet_queries).reduce(
+        (prev, curr) => {
+          prev[facetQueries[curr]] = countQueries.facet.facet_queries[curr]
+          return prev
+        },
+        {} as { [K in string | number]: number }
+      )
+      return parseFunc(items.items, counts)
+    }
+  }
+}
+
+export const useHydrateStatic = () => {
+  const { $services } = useContext()
+  return <
+    FilterObject extends {
+      id: number | string
+      count: number
+      [K: string]: any
+    } = DefaultFilterObject
+  >(config: {
+    countResource: string
+    countResourceRelatedIdKey: string
+    pivot: string[]
+    tagFilterKey: string
+    countHierarchical: boolean
+    filters?: ComputedRef<{ [K: string]: Filter }>
+  }) => {
+    return async (ids: any[]): Promise<FilterObject[]> => {
+      const parsedIds = ids
+        .map((id) => `${config.countResourceRelatedIdKey}:"${id}"`)
+        .join(' OR ')
+      const pivotStr = config.pivot.join(',')
+      const [countQueries] = await Promise.all([
+        $services.sarvSolr.getResourceList(config.countResource, {
+          searchFilters: config.filters?.value,
+          tags: {
+            [config.tagFilterKey]: 'dt',
+          },
+          defaultParams: {
+            fq: parsedIds,
+            rows: 0,
+            start: 0,
+            facet: true,
+            'facet.pivot': `{!ex=dt}${pivotStr}`,
+            'facet.limit': ids.length,
+          },
+          returnRawQ: true,
+        }),
+      ])
+      return countQueries.facet.facet_pivot[pivotStr].map((item: any) => {
+        return {
+          id: item.value as number,
+          count: item.count,
+          text: item.pivot?.[0].value ?? item.value,
+          text_en:
+            item.pivot?.[0].pivot?.[0].value ??
+            item.pivot?.[0].value ??
+            item.value,
+        }
+      })
+    }
   }
 }

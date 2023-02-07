@@ -28,7 +28,6 @@
           query-field="taxon"
           :query-function="querySuggestionsFossilGroup"
         />
-        <!-- <filter-taxon v-model="taxonHierarchy" /> -->
         <filter-input-autocomplete-new
           v-model="taxonHierarchy"
           :title="$t('filters.taxonHierarchy').toString()"
@@ -40,9 +39,11 @@
           v-model="taxonName"
           :title="$t('filters.taxonName').toString()"
         />
-        <filter-rock
+        <filter-input-autocomplete-new
           v-model="rockHierarchy"
           :title="$t('filters.rockHierarchySpecimen').toString()"
+          :query-field="$i18n.locale === 'et' ? 'rock' : 'rock_en'"
+          :query-function="querySuggestionsRock"
         />
         <filter-input-autocomplete-new
           v-model="locality"
@@ -50,11 +51,12 @@
           :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
           :query-function="querySuggestionsLocality"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="country"
           :title="$t('filters.country').toString()"
-          :items="countrySuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'"
+          :query-function="querySuggestionsCountry"
         />
         <filter-map
           v-model="map"
@@ -76,15 +78,24 @@
           :step="0.01"
         />
         <filter-reference v-model="reference" />
+        <!--  TODO: replace reference filter when specimen index `specimen_references` field uses keyword tokenizer-->
+        <!-- <filter-input-autocomplete-new -->
+        <!--   v-model="reference" -->
+        <!--   :title="$t('filters.reference').toString()" -->
+        <!--   :query-function="querySuggestionsReference" -->
+        <!-- /> -->
         <filter-input-text
           v-model="collector"
           :title="$t('filters.collector').toString()"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="originalStatus"
           :title="$t('filters.originalStatus').toString()"
-          :items="originalStatusSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="
+            $i18n.locale === 'et' ? 'original_status' : 'original_status_en'
+          "
+          :query-function="querySuggestionsOriginalStatus"
         />
         <filter-institution v-model="institutions" />
       </v-expansion-panels>
@@ -95,12 +106,9 @@
 <script lang="ts">
 import {
   computed,
-  ComputedRef,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -111,29 +119,24 @@ import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputCheckbox from '~/components/filter/input/FilterInputCheckbox.vue'
 import FilterReference from '~/components/filter/FilterReference.vue'
-// import FilterTaxon from '~/components/filter/FilterTaxon.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
-import FilterRock from '~/components/filter/FilterRock.vue'
 import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import {
   useHydrateFilterReference,
-  useHydrateFilterRock,
-  useHydrateFilterStatic,
-  useHydrateFilter,
+  useHydrate,
+  useHydrateStatic,
+  useHydrateMulti,
+  useHydrateFilterNew,
 } from '~/composables/useHydrateFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
 import { useFilter } from '~/composables/useFilter'
-import { Filter } from '~/types/filters'
-
-type DefaultFilterObject = {
-  id: number | string
-  text: string
-  text_en: string
-  count: number
-}
+import { DefaultFilterObject } from '~/types/filters'
+import {
+  useQuerySuggestions,
+  useQuerySuggestionsMulti,
+  useQuerySuggestionsStatic,
+} from '~/composables/useQuerySuggestions'
 
 export default defineComponent({
   name: 'SearchFormSpecimen',
@@ -144,24 +147,19 @@ export default defineComponent({
     InputSearch,
     FilterInstitution,
     FilterReference,
-    // FilterTaxon,
     FilterInputText,
     FilterInputRange,
-    FilterInputAutocompleteStatic,
     FilterInputAutocompleteNew,
-    FilterRock,
   },
   setup(_props, { emit }) {
-    const { $accessor, $services } = useContext()
+    const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      // hydrateFilters.value = false
       emit('update')
     }
     const filters = computed(() => ({
@@ -204,143 +202,92 @@ export default defineComponent({
     })
 
     const hydrateFilterReference = useHydrateFilterReference()
-    const hydrateFilterRock = useHydrateFilterRock()
-    const hydrateFilterStatic = useHydrateFilterStatic()
-    const hydrateFilter = useHydrateFilter()
-    const state = reactive({
-      countrySuggestions: [] as any[],
-      originalStatusSuggestions: [] as any[],
-    })
-    const getSuggestions = useGetSuggestions()
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrate = useHydrate()
+    const hydrateStatic = useHydrateStatic()
+    const hydrateMulti = useHydrateMulti()
+
+    const querySuggestions = useQuerySuggestions()
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsMulti = useQuerySuggestionsMulti()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const suggestionPromise = Promise.all([
-        getSuggestions(
-          toRef(state, 'countrySuggestions'),
-          'specimen',
-          'country_id,country,country_en',
-          {
-            et: 'country',
-            en: 'country_en',
-          }
+      await Promise.all([
+        hydrateFilter(
+          locality,
+          toRef(filters.value, 'locality'),
+          'locality',
+          hydrateLocality
         ),
-        getSuggestions(
-          toRef(state, 'originalStatusSuggestions'),
-          'specimen',
-          'original_status_id,original_status,original_status_en',
-          { et: 'original_status', en: 'original_status_en' }
+        hydrateFilter(
+          collection,
+          toRef(filters.value, 'collection'),
+          'collection',
+          hydrateCollection
         ),
-      ])
-
-      const hydrationPromise = Promise.all([
-        hydrateFilter(locality, 'locality', hydrateLocality),
-        // hydrateFilterLocality(locality, 'locality'),
-        hydrateFilter(collection, 'collection', hydrateCollection),
-        hydrateFilter(fossilGroup, 'fossilGroup', hydrateFossilGroup),
+        hydrateFilter(
+          fossilGroup,
+          toRef(filters.value, 'fossilGroup'),
+          'fossilGroup',
+          hydrateFossilGroup
+        ),
         hydrateFilterReference(reference, 'reference'),
-        hydrateFilter(taxonHierarchy, 'taxonHierarchy', hydrateTaxonHierarchy),
-        hydrateFilterRock(rockHierarchy, 'rockHierarchy'),
+        hydrateFilter(
+          taxonHierarchy,
+          toRef(filters.value, 'taxonHierarchy'),
+          'taxonHierarchy',
+          hydrateTaxonHierarchy
+        ),
+        hydrateFilter(
+          rockHierarchy,
+          toRef(filters.value, 'rockHierarchy'),
+          'rockHierarchy',
+          hydrateRockHierarchy
+        ),
         hydrateFilter(
           stratigraphyHierarchy,
+          toRef(filters.value, 'stratigraphyHierarchy'),
           'stratigraphyHierarchy',
           hydrateStratigraphyHierarchy
         ),
+        hydrateFilter(
+          country,
+          toRef(filters.value, 'country'),
+          'country',
+          hydrateCountry
+        ),
+        hydrateFilter(
+          originalStatus,
+          toRef(filters.value, 'originalStatus'),
+          'originalStatus',
+          hydrateOriginalStatus
+        ),
       ])
-      await Promise.all([suggestionPromise, hydrationPromise])
-
-      // state.countrySuggestions = suggestionResults[0]
-      // state.originalStatusSuggestions = suggestionResults[1]
-
-      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
-      hydrateFilterStatic(
-        originalStatus,
-        'originalStatus',
-        state.originalStatusSuggestions,
-        Number
-      )
       emitUpdate.value = true
     })
-    const hydrate = <
-      FilterObject extends {
-        id: number | string
-        count: number
-        [K: string]: any
-      } = DefaultFilterObject
-    >(
-      config: {
-        itemResource: string
-        itemFields: string[]
-        itemSearchField: string
-        countResource: string
-        countResourceRelatedIdKey: string
-        tagFilterKey: string
-        countHierarchical: boolean
-        filters?: ComputedRef<{ [K: string]: Filter }>
-      },
-      parseFunc: (
-        items: any[],
-        counts: { [K: string]: number }
-      ) => FilterObject[]
-    ) => {
-      return async (ids: any[]): Promise<FilterObject[]> => {
-        const parsedIds = ids.map((id) => `"${id}"`).join(' OR ')
-        const facetQueries = ids.reduce((prev, id) => {
-          return {
-            ...prev,
-            [`{!ex=dt}${config.countResourceRelatedIdKey}:${id}${
-              config.countHierarchical ? '*' : ''
-            }`]: id,
-          }
-        }, {})
-        const [items, countQueries] = await Promise.all([
-          $services.sarvSolr.getResourceList(config.itemResource, {
-            search: `${config.itemSearchField}:(${parsedIds})`,
-            defaultParams: {
-              rows: ids.length,
-              fl: config.itemFields.join(','),
-            },
-            returnRawQ: true,
-          }),
-          $services.sarvSolr.getResourceList(config.countResource, {
-            searchFilters: config.filters?.value,
-            tags: {
-              [config.tagFilterKey]: 'dt',
-            },
-            defaultParams: {
-              'facet.query': Object.keys(facetQueries),
-              rows: 0,
-              start: 0,
-              facet: true,
-              'facet.pivot': `{!ex=dt}${config.countResourceRelatedIdKey}`,
-              'facet.limit': ids.length,
-            },
-            returnRawQ: true,
-          }),
-        ])
-        const counts = Object.keys(countQueries.facet.facet_queries).reduce(
-          (prev, curr) => {
-            return {
-              ...prev,
-              [facetQueries[curr]]: countQueries.facet.facet_queries[curr],
-            }
-          },
-          {}
-        )
-        return parseFunc(items.items, counts)
-      }
-    }
+
+    const hydrateCountry = hydrateStatic({
+      pivot: ['country_id', 'country', 'country_en'],
+      countResourceRelatedIdKey: 'country_id',
+      countResource: 'specimen',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'country',
+    })
+    const hydrateOriginalStatus = hydrateStatic({
+      pivot: ['original_status_id', 'original_status', 'original_status_en'],
+      countResourceRelatedIdKey: 'original_status_id',
+      countResource: 'specimen',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'originalStatus',
+    })
     const hydrateLocality = hydrate(
       {
         itemResource: 'locality',
@@ -459,137 +406,91 @@ export default defineComponent({
         })
       }
     )
-    const querySuggestions = <
-      FilterObject extends {
-        id: number | string
-        count: number
-        [K: string]: any
-      } = DefaultFilterObject
-    >(
-      config: {
-        module: string
-        pivot: string
-        pivotOffsetField: string
-        countResourceRelatedIdKey: string
-        countHierarchical: boolean
-        excludeFilterKey: string
-        filters?: ComputedRef<{ [key: string]: Filter }>
+    const hydrateRockHierarchy = hydrateMulti(
+      filters.value.rockHierarchy,
+      {
+        itemResource: 'rock',
+        itemFields: ['id', 'name', 'name_en', 'hierarchy_strings'],
+        itemSearchField: 'hierarchy_strings',
+        countResource: 'specimen',
+        countResourceRelatedIdKey: 'hierarchy_string_rock',
+        countHierarchical: true,
+        tagFilterKey: 'rockHierarchy',
+        queryFilters: filters,
       },
-      parseFunc: (
-        items: any,
-        counts: { [K: string]: number }
-      ) => FilterObject[] = (items, counts) => {
+      (items, counts) => {
         return items.map((item: any) => {
           return {
-            id: item.value as number,
-            count: counts[item.value] as number,
-            text: item.pivot?.[0].value ?? item.value,
-            text_en:
-              item.pivot?.[0].pivot?.[0].value ??
-              item.pivot?.[0].value ??
-              item.value,
-          } as unknown as FilterObject
+            id: item.id,
+            text: item.name,
+            text_en: item.name_en,
+            hierarchy_strings: item.hierarchy_strings,
+            count: counts[item.id],
+          }
         })
       }
-    ) => {
-      return async (
-        search: string,
-        options = { rows: 10, start: 0 }
-      ): Promise<FilterObject[]> => {
-        let items = (
-          await $services.sarvSolr.getResourceList(config.module, {
-            search,
-            searchFilters: config.filters?.value,
-            tags: {
-              [config.excludeFilterKey]: 'dt',
-            },
-            defaultParams: {
-              rows: 0,
-              start: 0,
-              facet: true,
-              'facet.pivot': `{!ex=dt}${config.pivot}`,
-              [`f.${config.pivotOffsetField}.facet.offset`]: options.start,
-              'facet.limit': options.rows,
-            },
-          })
-        ).facet.facet_pivot[config.pivot]
-        const facetQueries = items
-          .map((item: any) => item.value)
-          .reduce((prev: { [K: string]: any }, id: any) => {
-            return {
-              ...prev,
-              [`{!ex=dt}${config.countResourceRelatedIdKey}:${id}${
-                config.countHierarchical ? '*' : ''
-              }`]: id,
-            }
-          }, {})
-
-        const facetQueriesResponse = await $services.sarvSolr.getResourceList(
-          config.module,
-          {
-            searchFilters: config.filters?.value,
-            tags: {
-              [config.excludeFilterKey]: 'dt',
-            },
-            defaultParams: {
-              'facet.query': Object.keys(facetQueries),
-              rows: 0,
-              start: 0,
-              facet: true,
-            },
-          }
-        )
-
-        const counts = Object.keys(
-          facetQueriesResponse.facet.facet_queries
-        ).reduce((prev: { [K: string]: any }, curr): { [K: string]: any } => {
-          return {
-            ...prev,
-            [facetQueries[curr]]:
-              facetQueriesResponse.facet.facet_queries[curr],
-          }
-        }, {})
-        items = items.map((item: any) => ({
-          ...item,
-          count: counts[item[config.countResourceRelatedIdKey]],
-        }))
-
-        return parseFunc(items, counts)
-      }
-    }
+    )
     const querySuggestionsLocality = querySuggestions({
-      module: 'specimen',
-      pivot: 'locality_id,locality,locality_en',
+      resource: 'specimen',
+      pivot: ['locality_id', 'locality', 'locality_en'],
       pivotOffsetField: 'locality_id',
       countHierarchical: false,
-      countResourceRelatedIdKey: 'locality_id',
+      countResourceRelatedKey: 'locality_id',
       excludeFilterKey: 'locality',
       filters,
     })
     const querySuggestionsCollection = querySuggestions({
-      module: 'specimen',
-      pivot: 'collection_id,collection_number',
+      resource: 'specimen',
+      pivot: ['collection_id', 'collection_number'],
       pivotOffsetField: 'collection_id',
-      countResourceRelatedIdKey: 'collection_id',
+      countResourceRelatedKey: 'collection_id',
       countHierarchical: false,
       excludeFilterKey: 'collection',
       filters,
     })
     const querySuggestionsFossilGroup = querySuggestions({
-      module: 'specimen',
-      pivot: 'fossilgroup_id,fossilgroup',
+      resource: 'specimen',
+      pivot: ['fossilgroup_id', 'fossilgroup'],
       pivotOffsetField: 'fossilgroup_id',
-      countResourceRelatedIdKey: 'fossilgroup_id',
+      countResourceRelatedKey: 'fossilgroup_id',
       countHierarchical: false,
       excludeFilterKey: 'fossilGroup',
       filters,
     })
+
+    // TODO: `specimen_references` should be a strings field with keyword tokenizer in solr.
+    const querySuggestionsReference = querySuggestions({
+      resource: 'specimen',
+      pivot: ['specimen_references'],
+      pivotOffsetField: 'specimen_references',
+      countResourceRelatedKey: 'specimen_references',
+      countHierarchical: false,
+      excludeFilterKey: 'reference',
+      filters,
+    })
+
+    const querySuggestionsCountry = querySuggestionsStatic({
+      resource: 'specimen',
+      excludeFilterKey: 'country',
+      pivot: ['country_id', 'country', 'country_en'],
+      limit: 200,
+      filters,
+    })
+
+    const querySuggestionsOriginalStatus = querySuggestionsStatic({
+      resource: 'specimen',
+      excludeFilterKey: 'originalStatus',
+      pivot: ['original_status_id', 'original_status', 'original_status_en'],
+      limit: 100,
+      filters,
+    })
+
     const querySuggestionsTaxon = querySuggestions(
       {
-        module: 'specimen',
-        pivot: 'hierarchy_string,taxon,taxon_id',
+        resource: 'specimen',
+        pivot: ['hierarchy_string', 'taxon,taxon_id'],
         pivotOffsetField: 'hierarchy_string',
-        countResourceRelatedIdKey: 'hierarchy_string',
+        countResourceRelatedKey: 'hierarchy_string',
         countHierarchical: true,
         excludeFilterKey: 'taxonHierarchy',
         filters,
@@ -606,12 +507,34 @@ export default defineComponent({
         })
       }
     )
+    const querySuggestionsRock = querySuggestionsMulti(
+      {
+        resource: 'specimen',
+        pivot: ['rock_id'],
+        pivotOffsetField: 'rock_id',
+        countResourceRelatedKey: 'hierarchy_string_rock',
+        countHierarchical: true,
+        excludeFilterKey: 'rockHierarchy',
+        filters,
+      },
+      (items, counts) => {
+        return items.map((item: any) => {
+          return {
+            id: item.id as number,
+            count: counts[item.id] as number,
+            text: item.name,
+            text_en: item.name_en,
+            hierarchy_strings: item.hierarchy_strings,
+          }
+        })
+      }
+    )
     const querySuggestionsStratigraphy = querySuggestions(
       {
-        module: 'specimen',
-        pivot: 'stratigraphy_hierarchy,stratigraphy,stratigraphy_en',
+        resource: 'specimen',
+        pivot: ['stratigraphy_hierarchy', 'stratigraphy', 'stratigraphy_en'],
         pivotOffsetField: 'stratigraphy_hierarchy',
-        countResourceRelatedIdKey: 'stratigraphy_hierarchy',
+        countResourceRelatedKey: 'stratigraphy_hierarchy',
         countHierarchical: true,
         excludeFilterKey: 'stratigraphyHierarchy',
         filters,
@@ -632,13 +555,16 @@ export default defineComponent({
       }
     )
     return {
-      ...toRefs(state),
       handleReset,
       querySuggestionsLocality,
       querySuggestionsCollection,
       querySuggestionsTaxon,
       querySuggestionsFossilGroup,
       querySuggestionsStratigraphy,
+      querySuggestionsReference,
+      querySuggestionsCountry,
+      querySuggestionsOriginalStatus,
+      querySuggestionsRock,
       handleUpdate,
       locality,
       reference,

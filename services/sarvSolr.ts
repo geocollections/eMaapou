@@ -357,7 +357,9 @@ const buildSolrParameters = (
               })
               .join(' OR ')
 
-            return { ...prev, fq: [...prev.fq, `(${solrFilter})`] }
+            let filterStr = `(${solrFilter})`
+            if (tag) filterStr = `{!tag=${tag}}` + filterStr
+            return { ...prev, fq: [...prev.fq, filterStr] }
           }
           case FilterType.ListText: {
             if (filter.value.length < 1) return prev
@@ -468,14 +470,13 @@ const buildSolrParameters = (
 
   const result = {
     d: solrParameters.d,
-    fq: solrParameters.fq,
     pt: solrParameters.pt,
   } as { fq?: string[]; d?: number; pt?: string }
 
   // Join fq array together if array has elements
   // If no elements in fq delete fq so that fq default parameter is not over written with null
-  // if (solrParameters.fq.length > 0) {
-  //   result.fq = `(${solrParameters.fq.join(' AND ')})`
-  // }
+  if (solrParameters.fq.length > 0) {
+    result.fq = solrParameters.fq
+  }
   return result
 }
