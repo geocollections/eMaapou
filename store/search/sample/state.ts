@@ -2,10 +2,10 @@ import { SearchModuleState } from '../types'
 import { SAMPLE } from '~/constants'
 import { FilterType, LookupType } from '~/types/enums'
 import {
-BooleanFilter,
+  BooleanFilter,
   GeomFilter,
   ListIdsFilter,
-ListIdsMultiFilter,
+  ListIdsMultiFilter,
   ListTextFilter,
   ObjectFilter,
   RangeFilter,
@@ -109,7 +109,7 @@ export const initState = (): SearchModuleState<SampleFilters> => {
         valueType: 'string',
         valueField: 'hierarchy_strings',
         idValueField: 'id',
-        lookupType: 'startswith'
+        lookupType: 'startswith',
       },
       collector: {
         value: [],

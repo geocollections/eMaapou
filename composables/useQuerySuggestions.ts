@@ -1,5 +1,6 @@
-import { ComputedRef, useContext } from '@nuxtjs/composition-api'
+import { ComputedRef, Ref, useContext } from '@nuxtjs/composition-api'
 import { Filter, DefaultFilterObject } from '~/types/filters'
+import parseSearchParam from '~/utils/parseSearchParam'
 
 export const useQuerySuggestions = () => {
   const { $services } = useContext()
@@ -10,6 +11,7 @@ export const useQuerySuggestions = () => {
       [K: string]: any
     } = DefaultFilterObject
   >(
+    searchQuery: Ref<string>,
     config: {
       resource: string
       pivot: string[]
@@ -41,9 +43,14 @@ export const useQuerySuggestions = () => {
       options = { rows: 10, start: 0 }
     ): Promise<FilterObject[]> => {
       const pivotStr = config.pivot.join(',')
+
+      const searchString =
+        searchQuery.value.length > 0
+          ? `(${parseSearchParam(searchQuery.value)} AND ${search})`
+          : search
       let items = (
         await $services.sarvSolr.getResourceList(config.resource, {
-          search,
+          search: searchString,
           searchFilters: config.filters?.value,
           tags: {
             [config.excludeFilterKey]: 'dt',
@@ -112,6 +119,7 @@ export const useQuerySuggestionsMulti = () => {
       [K: string]: any
     } = DefaultFilterObject
   >(
+    searchQuery: Ref<string>,
     config: {
       resource: string
       pivot: string[]
@@ -194,9 +202,14 @@ export const useQuerySuggestionsMulti = () => {
         {}
       )
 
+      const searchString =
+        searchQuery.value.length > 0
+          ? `(${parseSearchParam(searchQuery.value)} AND ${search})`
+          : search
       const facetQueriesResponse = await $services.sarvSolr.getResourceList(
         config.resource,
         {
+          search: searchString,
           searchFilters: config.filters?.value,
           tags: {
             [config.excludeFilterKey]: 'dt',
@@ -230,17 +243,24 @@ export const useQuerySuggestionsMulti = () => {
 
 export const useQuerySuggestionsStatic = () => {
   const { $services } = useContext()
-  return (config: {
-    resource: string
-    pivot: string[]
-    excludeFilterKey: string
-    limit: number
-    filters?: ComputedRef<{ [K: string]: Filter }>
-  }) => {
+  return (
+    searchQuery: Ref<string>,
+    config: {
+      resource: string
+      pivot: string[]
+      excludeFilterKey: string
+      limit: number
+      filters?: ComputedRef<{ [K: string]: Filter }>
+    }
+  ) => {
     return async (search: string) => {
       const pivotStr = config.pivot.join(',')
+      const searchString =
+        searchQuery.value.length > 0
+          ? `(${parseSearchParam(searchQuery.value)} AND ${search})`
+          : search
       const items = await $services.sarvSolr.getResourceList(config.resource, {
-        search,
+        search: searchString,
         searchFilters: config.filters?.value,
         tags: {
           [config.excludeFilterKey]: 'dt',

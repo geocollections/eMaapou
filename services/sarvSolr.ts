@@ -13,6 +13,7 @@ import type { IOptions } from '.'
 import { FilterType, LookupType } from '~/types/enums'
 import { Filter } from '~/types/filters'
 import isFilterValid from '~/utils/isFilterValid'
+import parseSearchParam from '~/utils/parseSearchParam'
 export default ($axios: NuxtAxiosInstance) => ({
   async getResourceList(
     resource: string,
@@ -107,28 +108,17 @@ const buildSolrQueryParameter = (
   search: string | null,
   returnRaw: boolean = false
 ) => {
-  if (returnRaw) {
+  if (isEmpty(search))
     return {
-      q: isEmpty(search) ? '*' : search,
+      q: '*',
     }
-  }
-  const s = search
-    ? search
-        .split(' ')
-        .map((s) => {
-          if (
-            !s.startsWith('-') &&
-            s.includes('-') &&
-            !s.startsWith('"') &&
-            !s.endsWith('"')
-          )
-            return `"${s}"`
-          return s
-        })
-        .join(' ')
-    : null
+  if (returnRaw)
+    return {
+      q: search,
+    }
+
   return {
-    q: isEmpty(s) ? '*' : `${s}`,
+    q: parseSearchParam(search),
   }
 }
 

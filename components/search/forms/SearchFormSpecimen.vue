@@ -272,7 +272,7 @@ export default defineComponent({
       emitUpdate.value = true
     })
 
-    const hydrateCountry = hydrateStatic({
+    const hydrateCountry = hydrateStatic(query, {
       pivot: ['country_id', 'country', 'country_en'],
       countResourceRelatedIdKey: 'country_id',
       countResource: 'specimen',
@@ -280,7 +280,7 @@ export default defineComponent({
       filters,
       tagFilterKey: 'country',
     })
-    const hydrateOriginalStatus = hydrateStatic({
+    const hydrateOriginalStatus = hydrateStatic(query, {
       pivot: ['original_status_id', 'original_status', 'original_status_en'],
       countResourceRelatedIdKey: 'original_status_id',
       countResource: 'specimen',
@@ -289,6 +289,8 @@ export default defineComponent({
       tagFilterKey: 'originalStatus',
     })
     const hydrateLocality = hydrate(
+      filters.value.locality,
+      query,
       {
         itemResource: 'locality',
         itemFields: ['id', 'locality', 'locality_en'],
@@ -311,6 +313,8 @@ export default defineComponent({
       }
     )
     const hydrateCollection = hydrate(
+      filters.value.collection,
+      query,
       {
         itemResource: 'collection',
         itemFields: ['id', 'number'],
@@ -333,6 +337,8 @@ export default defineComponent({
       }
     )
     const hydrateFossilGroup = hydrate(
+      filters.value.fossilGroup,
+      query,
       {
         itemResource: 'taxon',
         itemFields: ['id', 'taxon'],
@@ -356,6 +362,8 @@ export default defineComponent({
     )
 
     const hydrateTaxonHierarchy = hydrate(
+      filters.value.taxonHierarchy,
+      query,
       {
         itemResource: 'taxon',
         itemFields: ['id', 'taxon', 'hierarchy_string'],
@@ -379,6 +387,8 @@ export default defineComponent({
       }
     )
     const hydrateStratigraphyHierarchy = hydrate(
+      filters.value.stratigraphyHierarchy,
+      query,
       {
         itemResource: 'stratigraphy',
         itemFields: [
@@ -408,6 +418,7 @@ export default defineComponent({
     )
     const hydrateRockHierarchy = hydrateMulti(
       filters.value.rockHierarchy,
+      query,
       {
         itemResource: 'rock',
         itemFields: ['id', 'name', 'name_en', 'hierarchy_strings'],
@@ -430,7 +441,7 @@ export default defineComponent({
         })
       }
     )
-    const querySuggestionsLocality = querySuggestions({
+    const querySuggestionsLocality = querySuggestions(query, {
       resource: 'specimen',
       pivot: ['locality_id', 'locality', 'locality_en'],
       pivotOffsetField: 'locality_id',
@@ -439,7 +450,7 @@ export default defineComponent({
       excludeFilterKey: 'locality',
       filters,
     })
-    const querySuggestionsCollection = querySuggestions({
+    const querySuggestionsCollection = querySuggestions(query, {
       resource: 'specimen',
       pivot: ['collection_id', 'collection_number'],
       pivotOffsetField: 'collection_id',
@@ -448,7 +459,7 @@ export default defineComponent({
       excludeFilterKey: 'collection',
       filters,
     })
-    const querySuggestionsFossilGroup = querySuggestions({
+    const querySuggestionsFossilGroup = querySuggestions(query, {
       resource: 'specimen',
       pivot: ['fossilgroup_id', 'fossilgroup'],
       pivotOffsetField: 'fossilgroup_id',
@@ -459,7 +470,7 @@ export default defineComponent({
     })
 
     // TODO: `specimen_references` should be a strings field with keyword tokenizer in solr.
-    const querySuggestionsReference = querySuggestions({
+    const querySuggestionsReference = querySuggestions(query, {
       resource: 'specimen',
       pivot: ['specimen_references'],
       pivotOffsetField: 'specimen_references',
@@ -469,7 +480,7 @@ export default defineComponent({
       filters,
     })
 
-    const querySuggestionsCountry = querySuggestionsStatic({
+    const querySuggestionsCountry = querySuggestionsStatic(query, {
       resource: 'specimen',
       excludeFilterKey: 'country',
       pivot: ['country_id', 'country', 'country_en'],
@@ -477,7 +488,7 @@ export default defineComponent({
       filters,
     })
 
-    const querySuggestionsOriginalStatus = querySuggestionsStatic({
+    const querySuggestionsOriginalStatus = querySuggestionsStatic(query, {
       resource: 'specimen',
       excludeFilterKey: 'originalStatus',
       pivot: ['original_status_id', 'original_status', 'original_status_en'],
@@ -486,6 +497,7 @@ export default defineComponent({
     })
 
     const querySuggestionsTaxon = querySuggestions(
+      query,
       {
         resource: 'specimen',
         pivot: ['hierarchy_string', 'taxon,taxon_id'],
@@ -508,6 +520,7 @@ export default defineComponent({
       }
     )
     const querySuggestionsRock = querySuggestionsMulti(
+      query,
       {
         resource: 'specimen',
         pivot: ['rock_id'],
@@ -530,6 +543,7 @@ export default defineComponent({
       }
     )
     const querySuggestionsStratigraphy = querySuggestions(
+      query,
       {
         resource: 'specimen',
         pivot: ['stratigraphy_hierarchy', 'stratigraphy', 'stratigraphy_en'],

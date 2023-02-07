@@ -1,5 +1,5 @@
 import { useContext, useRoute, ComputedRef, Ref } from '@nuxtjs/composition-api'
-import { Filter, ListIdsMultiFilter } from '~/types/filters'
+import { Filter, ListIdsFilter, ListIdsMultiFilter } from '~/types/filters'
 import { parseFilterValue } from '~/utils/parseQueryParams'
 type HydrationFunction = () => (
   filter: Ref<any>,
@@ -279,6 +279,8 @@ export const useHydrate = () => {
       [K: string]: any
     } = DefaultFilterObject
   >(
+    filter: ListIdsFilter,
+    query: Ref<string>,
     config: {
       itemResource: string
       itemFields: string[]
@@ -292,13 +294,21 @@ export const useHydrate = () => {
     parseFunc: (items: any[], counts: { [K: string]: number }) => FilterObject[]
   ) => {
     return async (filterValues: any[]): Promise<FilterObject[]> => {
-      const itemQueryString = filterValues.map((v) => `"${v}"`).join(' OR ')
+      const itemQueryString = filterValues
+        .map((v) => `"${v[filter.valueField]}"`)
+        .join(' OR ')
       const facetQueries = filterValues.reduce((prev, v) => {
         if (config.countHierarchical) {
-          prev[`{!ex=dt}${config.countResourceRelatedIdKey}:${v}*`] = v
+          prev[
+            `{!ex=dt}${config.countResourceRelatedIdKey}:${
+              v[filter.valueField]
+            }*`
+          ] = v[filter.valueField]
           return prev
         }
-        prev[`{!ex=dt}${config.countResourceRelatedIdKey}:${v}`] = v
+        prev[
+          `{!ex=dt}${config.countResourceRelatedIdKey}:${v[filter.valueField]}`
+        ] = v[filter.valueField]
         return prev
       }, {})
       const [items, countQueries] = await Promise.all([
@@ -311,6 +321,7 @@ export const useHydrate = () => {
           returnRawQ: true,
         }),
         $services.sarvSolr.getResourceList(config.countResource, {
+          search: query.value,
           searchFilters: config.filters?.value,
           tags: {
             [config.tagFilterKey]: 'dt',
@@ -347,6 +358,7 @@ export const useHydrateMulti = () => {
     } = DefaultFilterObject
   >(
     filter: ListIdsMultiFilter,
+    query: Ref<string>,
     config: {
       itemResource: string
       itemFields: string[]
@@ -387,6 +399,7 @@ export const useHydrateMulti = () => {
           returnRawQ: true,
         }),
         $services.sarvSolr.getResourceList(config.countResource, {
+          search: query.value,
           searchFilters: config.queryFilters?.value,
           tags: {
             [config.tagFilterKey]: 'dt',
@@ -422,14 +435,17 @@ export const useHydrateStatic = () => {
       count: number
       [K: string]: any
     } = DefaultFilterObject
-  >(config: {
-    countResource: string
-    countResourceRelatedIdKey: string
-    pivot: string[]
-    tagFilterKey: string
-    countHierarchical: boolean
-    filters?: ComputedRef<{ [K: string]: Filter }>
-  }) => {
+  >(
+    query: Ref<string>,
+    config: {
+      countResource: string
+      countResourceRelatedIdKey: string
+      pivot: string[]
+      tagFilterKey: string
+      countHierarchical: boolean
+      filters?: ComputedRef<{ [K: string]: Filter }>
+    }
+  ) => {
     return async (ids: any[]): Promise<FilterObject[]> => {
       const parsedIds = ids
         .map((id) => `${config.countResourceRelatedIdKey}:"${id}"`)
@@ -437,6 +453,7 @@ export const useHydrateStatic = () => {
       const pivotStr = config.pivot.join(',')
       const [countQueries] = await Promise.all([
         $services.sarvSolr.getResourceList(config.countResource, {
+          search: query.value,
           searchFilters: config.filters?.value,
           tags: {
             [config.tagFilterKey]: 'dt',
