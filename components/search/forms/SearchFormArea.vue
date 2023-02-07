@@ -8,17 +8,19 @@
           v-model="name"
           :title="$t('filters.name').toString()"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="county"
           :title="$t('filters.county').toString()"
-          :items="countySuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale == 'et' ? 'maakond' : 'maakond_en'"
+          :query-function="querySuggestionsCounty"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="type"
           :title="$t('filters.areaType').toString()"
-          :items="typeSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale == 'et' ? 'area_type' : 'area_type_en'"
+          :query-function="querySuggestionsType"
         />
       </v-expansion-panels>
     </v-form>
@@ -41,31 +43,33 @@ import {
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import { useFilter } from '~/composables/useFilter'
-import { useHydrateFilterStatic } from '~/composables/useHydrateFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import {
+  useHydrateFilterNew,
+  useHydrateStatic,
+} from '~/composables/useHydrateFilter'
+import { useQuerySuggestionsStatic } from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormArea',
   components: {
     SearchActions,
     InputSearch,
     FilterInputText,
-    FilterInputAutocompleteStatic,
+    FilterInputAutocompleteNew,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
+    const filters = computed(() => $accessor.search.area.filters)
     const query = computed({
       get: () => $accessor.search.area.query,
       set: (val) => {
@@ -79,48 +83,63 @@ export default defineComponent({
       countySuggestions: [] as any[],
       typeSuggestions: [] as any[],
     })
-    const getSuggestions = useGetSuggestions()
-    const hydrateFilterStatic = useHydrateFilterStatic()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       await Promise.all([
-        getSuggestions(
-          toRef(state, 'countySuggestions'),
-          'area',
-          'maakond_id,maakond,maakond_en',
-          {
-            et: 'maakond',
-            en: 'maakond_en',
-          }
+        hydrateFilter(
+          county,
+          toRef(filters.value, 'county'),
+          'county',
+          hydrateCounty
         ),
-        getSuggestions(
-          toRef(state, 'typeSuggestions'),
-          'area',
-          'area_type_id,area_type,area_type_en',
-          {
-            et: 'area_type',
-            en: 'area_type_en',
-          }
-        ),
+        hydrateFilter(type, toRef(filters.value, 'type'), 'type', hydrateType),
       ])
-      hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
-      hydrateFilterStatic(county, 'county', state.countySuggestions, Number)
       emitUpdate.value = true
+    })
+
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrateStatic = useHydrateStatic()
+    const hydrateCounty = hydrateStatic(query, {
+      pivot: ['maakond_id', 'maakond', 'maakond_en'],
+      countResourceRelatedIdKey: 'maakond_id',
+      countResource: 'area',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'county',
+    })
+    const hydrateType = hydrateStatic(query, {
+      pivot: ['area_type_id', 'area_type', 'area_type_en'],
+      countResourceRelatedIdKey: 'area_type_id',
+      countResource: 'area',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'type',
+    })
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsCounty = querySuggestionsStatic(query, {
+      resource: 'area',
+      excludeFilterKey: 'county',
+      pivot: ['maakond_id', 'maakond', 'maakond_en'],
+      limit: 20,
+      filters,
+    })
+    const querySuggestionsType = querySuggestionsStatic(query, {
+      resource: 'area',
+      excludeFilterKey: 'type',
+      pivot: ['area_type_id', 'area_type', 'area_type_en'],
+      limit: 20,
+      filters,
     })
     return {
       ...toRefs(state),
+      querySuggestionsCounty,
+      querySuggestionsType,
       query,
       name,
       county,
