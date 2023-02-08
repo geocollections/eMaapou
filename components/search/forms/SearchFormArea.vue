@@ -105,7 +105,7 @@ export default defineComponent({
 
     const hydrateFilter = useHydrateFilterNew()
     const hydrateStatic = useHydrateStatic()
-    const hydrateCounty = hydrateStatic(query, {
+    const hydrateCounty = hydrateStatic(filters.value.county, query, {
       pivot: ['maakond_id', 'maakond', 'maakond_en'],
       countResourceRelatedIdKey: 'maakond_id',
       countResource: 'area',
@@ -113,7 +113,7 @@ export default defineComponent({
       filters,
       tagFilterKey: 'county',
     })
-    const hydrateType = hydrateStatic(query, {
+    const hydrateType = hydrateStatic(filters.value.type, query, {
       pivot: ['area_type_id', 'area_type', 'area_type_en'],
       countResourceRelatedIdKey: 'area_type_id',
       countResource: 'area',

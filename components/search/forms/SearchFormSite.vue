@@ -109,7 +109,7 @@ export default defineComponent({
     const hydrateFilter = useHydrateFilterNew()
     const hydrateStatic = useHydrateStatic()
     const hydrate = useHydrate()
-    const hydrateProject = hydrateStatic(query, {
+    const hydrateProject = hydrateStatic(filters.value.project,query, {
       pivot: ['project_id', 'project_name', 'project_name_en'],
       countResourceRelatedIdKey: 'project_id',
       countResource: 'site',

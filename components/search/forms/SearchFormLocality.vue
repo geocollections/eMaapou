@@ -76,9 +76,7 @@ export default defineComponent({
       emit('update')
     }
 
-    const filters = computed(() =>
-      $accessor.search.locality.filters,
-    )
+    const filters = computed(() => $accessor.search.locality.filters)
     const query = computed({
       get: () => $accessor.search.locality.query,
       set: (val) => {
@@ -118,7 +116,7 @@ export default defineComponent({
     })
     const hydrateFilter = useHydrateFilterNew()
     const hydrateStatic = useHydrateStatic()
-    const hydrateCountry = hydrateStatic(query, {
+    const hydrateCountry = hydrateStatic(filters.value.country, query, {
       pivot: ['country_id', 'country', 'country_en'],
       countResourceRelatedIdKey: 'country_id',
       countResource: 'locality',

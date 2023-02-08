@@ -143,7 +143,7 @@ export default defineComponent({
     })
     const hydrateFilter = useHydrateFilterNew()
     const hydrateStatic = useHydrateStatic()
-    const hydrateCountry = hydrateStatic(query, {
+    const hydrateCountry = hydrateStatic(filters.value.country, query, {
       pivot: ['country_id', 'country', 'country_en'],
       countResourceRelatedIdKey: 'country_id',
       countResource: 'drillcore',
@@ -151,7 +151,7 @@ export default defineComponent({
       filters,
       tagFilterKey: 'country',
     })
-    const hydrateRepository = hydrateStatic(query, {
+    const hydrateRepository = hydrateStatic(filters.value.repository, query, {
       pivot: ['core_repository_id', 'core_repository', 'core_repository_en'],
       countResourceRelatedIdKey: 'core_repository_id',
       countResource: 'drillcore',
