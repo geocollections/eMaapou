@@ -4,8 +4,14 @@
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <v-expansion-panels accordion flat tile multiple>
-        <filter-stratigraphy v-model="stratigraphyHierarchy" />
-
+        <filter-input-autocomplete-new
+          v-model="stratigraphyHierarchy"
+          :title="$t('filters.stratigraphyHierarchy').toString()"
+          :query-field="
+            $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en'
+          "
+          :query-function="querySuggestionsStratigraphy"
+        />
         <filter-input-text
           v-model="index"
           :title="$t('filters.index').toString()"
@@ -14,23 +20,32 @@
           v-model="age"
           :title="$t('filters.age').toString()"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="type"
           :title="$t('filters.type').toString()"
-          :items="typeSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="
+            $i18n.locale === 'et' ? 'stratigraphy_type' : 'stratigraphy_type_en'
+          "
+          :query-function="querySuggestionsType"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="rank"
           :title="$t('filters.rank').toString()"
-          :items="rankSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="
+            $i18n.locale === 'et' ? 'stratigraphy_rank' : 'stratigraphy_rank_en'
+          "
+          :query-function="querySuggestionsRank"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="scope"
           :title="$t('filters.scope').toString()"
-          :items="scopeSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="
+            $i18n.locale === 'et' ? 'stratigraphy_scope' : 'stratigraphy_scope'
+          "
+          :query-function="querySuggestionsScope"
         />
       </v-expansion-panels>
     </v-form>
@@ -41,10 +56,8 @@
 import {
   computed,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -52,37 +65,39 @@ import {
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
-import FilterStratigraphy from '~/components/filter/FilterStratigraphy.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
+
 import {
-  useHydrateFilterStatic,
-  useHydrateFilterStratigraphy,
+  useHydrate,
+  useHydrateFilterNew,
+  useHydrateStatic,
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import {
+  useQuerySuggestions,
+  useQuerySuggestionsStatic,
+} from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
   components: {
     SearchActions,
     InputSearch,
-    FilterStratigraphy,
     FilterInputText,
-    FilterInputAutocompleteStatic,
+    FilterInputAutocompleteNew,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
+    const filters = computed(() => $accessor.search.stratigraphy.filters)
     const query = computed({
       get: () => $accessor.search.stratigraphy.query,
       set: (val) => {
@@ -99,63 +114,144 @@ export default defineComponent({
     const rank = useFilter('stratigraphy', 'rank', handleUpdate)
     const scope = useFilter('stratigraphy', 'scope', handleUpdate)
     const type = useFilter('stratigraphy', 'type', handleUpdate)
-    const hydrateFilterStratigraphy = useHydrateFilterStratigraphy()
-    const hydrateFilterStatic = useHydrateFilterStatic()
-    const state = reactive({
-      rankSuggestions: [] as any[],
-      scopeSuggestions: [] as any[],
-      typeSuggestions: [] as any[],
-    })
-    const getSuggestions = useGetSuggestions()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const suggestionPromise = Promise.all([
-        getSuggestions(
-          toRef(state, 'rankSuggestions'),
-          'stratigraphy',
-          'rank,stratigraphy_rank,stratigraphy_rank_en',
-          { et: 'stratigraphy_rank', en: 'stratigraphy_rank_en' }
-        ),
-        getSuggestions(
-          toRef(state, 'scopeSuggestions'),
-          'stratigraphy',
-          'scope,stratigraphy_scope,stratigraphy_scope_en',
-          { et: 'stratigraphy_scope', en: 'stratigraphy_scope_en' }
-        ),
-        getSuggestions(
-          toRef(state, 'typeSuggestions'),
-          'stratigraphy',
-          'type,stratigraphy_type,stratigraphy_type_en',
-          { et: 'stratigraphy_type', en: 'stratigraphy_type_en' }
-        ),
-      ])
       await Promise.all([
-        suggestionPromise,
-        hydrateFilterStratigraphy(
+        hydrateFilter(
           stratigraphyHierarchy,
-          'stratigraphyHierarchy'
+          toRef(filters.value, 'stratigraphyHierarchy'),
+          'stratigraphyHierarchy',
+          hydrateStratigraphyHierarchy
+        ),
+        hydrateFilter(type, toRef(filters.value, 'type'), 'type', hydrateType),
+        hydrateFilter(rank, toRef(filters.value, 'rank'), 'rank', hydrateRank),
+        hydrateFilter(
+          scope,
+          toRef(filters.value, 'scope'),
+          'scope',
+          hydrateScope
         ),
       ])
-      hydrateFilterStatic(type, 'type', state.typeSuggestions, Number)
-      hydrateFilterStatic(rank, 'rank', state.rankSuggestions, Number)
-      hydrateFilterStatic(scope, 'scope', state.scopeSuggestions, Number)
       emitUpdate.value = true
     })
-    return {
-      ...toRefs(state),
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrateStatic = useHydrateStatic()
+    const hydrate = useHydrate()
+    const hydrateStratigraphyHierarchy = hydrate(
+      filters.value.stratigraphyHierarchy,
       query,
+      {
+        itemResource: 'stratigraphy',
+        itemFields: [
+          'id',
+          'stratigraphy',
+          'stratigraphy_en',
+          'hierarchy_string',
+        ],
+        itemSearchField: 'hierarchy_string',
+        countResource: 'stratigraphy',
+        countResourceRelatedIdKey: 'hierarchy_string',
+        countHierarchical: true,
+        tagFilterKey: 'stratigraphyHierarchy',
+        filters,
+      },
+      (items, counts) => {
+        return items.map((item: any) => {
+          return {
+            id: item.hierarchy_string,
+            text: item.stratigraphy,
+            text_en: item.stratigraphy_en,
+            hierarchy_string: item.hierarchy_string,
+            count: counts[item.hierarchy_string],
+          }
+        })
+      }
+    )
+    const hydrateType = hydrateStatic(filters.value.type, query, {
+      pivot: ['type', 'stratigraphy_type', 'stratigraphy_type_en'],
+      countResourceRelatedIdKey: 'type',
+      countResource: 'stratigraphy',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'type',
+    })
+    const hydrateRank = hydrateStatic(filters.value.rank, query, {
+      pivot: ['rank', 'stratigraphy_rank', 'stratigraphy_rank_en'],
+      countResourceRelatedIdKey: 'rank',
+      countResource: 'stratigraphy',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'rank',
+    })
+    const hydrateScope = hydrateStatic(filters.value.scope, query, {
+      pivot: ['scope', 'stratigraphy_scope', 'stratigraphy_scope_en'],
+      countResourceRelatedIdKey: 'scope',
+      countResource: 'stratigraphy',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'scope',
+    })
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestions = useQuerySuggestions()
+    const querySuggestionsStratigraphy = querySuggestions(
+      query,
+      {
+        resource: 'stratigraphy',
+        pivot: ['hierarchy_string', 'stratigraphy', 'stratigraphy_en'],
+        pivotOffsetField: 'hierarchy_string',
+        countResourceRelatedKey: 'hierarchy_string',
+        countHierarchical: true,
+        excludeFilterKey: 'stratigraphyHierarchy',
+        filters,
+      },
+      (items, counts) => {
+        return items.map((item: any) => {
+          return {
+            id: item.value as number,
+            count: counts[item.value] as number,
+            text: item.pivot?.[0].value ?? item.value,
+            text_en:
+              item.pivot?.[0].pivot?.[0].value ??
+              item.pivot?.[0].value ??
+              item.value,
+            hierarchy_string: item.value,
+          }
+        })
+      }
+    )
+    const querySuggestionsType = querySuggestionsStatic(query, {
+      resource: 'stratigraphy',
+      excludeFilterKey: 'type',
+      pivot: ['type', 'stratigraphy_type', 'stratigraphy_type_en'],
+      limit: 20,
+      filters,
+    })
+    const querySuggestionsRank = querySuggestionsStatic(query, {
+      resource: 'stratigraphy',
+      excludeFilterKey: 'rank',
+      pivot: ['rank', 'stratigraphy_rank', 'stratigraphy_rank_en'],
+      limit: 20,
+      filters,
+    })
+    const querySuggestionsScope = querySuggestionsStatic(query, {
+      resource: 'stratigraphy',
+      excludeFilterKey: 'scope',
+      pivot: ['scope', 'stratigraphy_scope', 'stratigraphy_scope_en'],
+      limit: 20,
+      filters,
+    })
+    return {
+      query,
+      querySuggestionsType,
+      querySuggestionsRank,
+      querySuggestionsScope,
+      querySuggestionsStratigraphy,
       stratigraphyHierarchy,
       index,
       age,

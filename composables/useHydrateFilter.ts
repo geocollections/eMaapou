@@ -436,6 +436,7 @@ export const useHydrateStatic = () => {
       [K: string]: any
     } = DefaultFilterObject
   >(
+    filter: ListIdsFilter,
     query: Ref<string>,
     config: {
       countResource: string
@@ -446,33 +447,60 @@ export const useHydrateStatic = () => {
       filters?: ComputedRef<{ [K: string]: Filter }>
     }
   ) => {
-    return async (ids: any[]): Promise<FilterObject[]> => {
-      const parsedIds = ids
-        .map((id) => `${config.countResourceRelatedIdKey}:"${id}"`)
+    return async (parsedQueryParamValues: any[]): Promise<FilterObject[]> => {
+      const idQueryStr = parsedQueryParamValues
+        .map(
+          (id) =>
+            `${config.countResourceRelatedIdKey}:"${id[filter.valueField]}"`
+        )
         .join(' OR ')
       const pivotStr = config.pivot.join(',')
-      const [countQueries] = await Promise.all([
+      const facetQueries = parsedQueryParamValues.reduce((prev, v) => {
+        if (config.countHierarchical) {
+          prev[`{!ex=dt}${config.tagFilterKey}:${v[filter.valueField]}*`] =
+            v[filter.valueField]
+          return prev
+        }
+        prev[`{!ex=dt}${config.tagFilterKey}:${v[filter.valueField]}`] =
+          v[filter.valueField]
+        return prev
+      }, {})
+      const [items, countQueries] = await Promise.all([
         $services.sarvSolr.getResourceList(config.countResource, {
           search: query.value,
-          searchFilters: config.filters?.value,
-          tags: {
-            [config.tagFilterKey]: 'dt',
-          },
           defaultParams: {
-            fq: parsedIds,
+            fq: idQueryStr,
             rows: 0,
             start: 0,
             facet: true,
-            'facet.pivot': `{!ex=dt}${pivotStr}`,
-            'facet.limit': ids.length,
+            'facet.pivot': pivotStr,
+            'facet.limit': parsedQueryParamValues.length,
+          },
+          returnRawQ: true,
+        }),
+        $services.sarvSolr.getResourceList(config.countResource, {
+          search: query.value,
+          searchFilters: config.filters?.value,
+          defaultParams: {
+            rows: 0,
+            start: 0,
+            facet: true,
+            'facet.query': Object.keys(facetQueries),
           },
           returnRawQ: true,
         }),
       ])
-      return countQueries.facet.facet_pivot[pivotStr].map((item: any) => {
+      const counts = Object.keys(countQueries.facet.facet_queries).reduce(
+        (prev, curr) => {
+          prev[facetQueries[curr]] = countQueries.facet.facet_queries[curr]
+          return prev
+        },
+        {} as { [K in string | number]: number }
+      )
+      return items.facet.facet_pivot[pivotStr].map((item: any) => {
         return {
           id: item.value as number,
-          count: item.count,
+          count: counts[item.value],
           text: item.pivot?.[0].value ?? item.value,
           text_en:
             item.pivot?.[0].pivot?.[0].value ??
