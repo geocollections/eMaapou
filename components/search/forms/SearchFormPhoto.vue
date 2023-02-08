@@ -4,12 +4,18 @@
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <v-expansion-panels accordion flat tile multiple>
-        <filter-locality v-model="locality" />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
+          v-model="locality"
+          :title="$t('filters.locality').toString()"
+          :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
+          :query-function="querySuggestionsLocality"
+        />
+        <filter-input-autocomplete-new
           v-model="country"
-          :items="countrySuggestions"
           :title="$t('filters.country').toString()"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'"
+          :query-function="querySuggestionsCountry"
         />
         <filter-map v-model="map" :items="$accessor.search.image.items" />
         <filter-input-text
@@ -46,10 +52,8 @@
 import {
   computed,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -58,30 +62,32 @@ import {
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import { useFilter } from '~/composables/useFilter'
-import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import {
-  useHydrateFilterLocality,
-  useHydrateFilterStatic,
+  useHydrate,
+  useHydrateFilterNew,
+  useHydrateStatic,
 } from '~/composables/useHydrateFilter'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputDate from '~/components/filter/input/FilterInputDate.vue'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import {
+  useQuerySuggestions,
+  useQuerySuggestionsStatic,
+} from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormPhoto',
   components: {
     SearchActions,
     InputSearch,
-    FilterLocality,
     FilterInputText,
     FilterMap,
     FilterInstitution,
-    FilterInputAutocompleteStatic,
     FilterInputRange,
     FilterInputDate,
+    FilterInputAutocompleteNew,
   },
   props: {
     markers: {
@@ -93,15 +99,18 @@ export default defineComponent({
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
     const handleReset = () => {
       emit('reset')
     }
+
+    const filters = computed(() => ({
+      ...$accessor.search.image.filters,
+      ...$accessor.search.globalFilters,
+    }))
 
     const query = computed({
       get: () => $accessor.search.image.query,
@@ -127,42 +136,83 @@ export default defineComponent({
         handleUpdate()
       },
     })
-    const hydrateFilterLocality = useHydrateFilterLocality()
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const getSuggestions = useGetSuggestions()
-    const hydrateFilterStatic = useHydrateFilterStatic()
-    const state = reactive({
-      countrySuggestions: [] as any[],
-    })
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const countrySuggestionsPromise = getSuggestions(
-        toRef(state, 'countrySuggestions'),
-        'image',
-        'country_id,country,country_en',
-        { et: 'country', en: 'country_en' }
-      )
       await Promise.all([
-        countrySuggestionsPromise,
-        hydrateFilterLocality(locality, 'locality'),
+        hydrateFilter(
+          locality,
+          toRef(filters.value, 'locality'),
+          'locality',
+          hydrateLocality
+        ),
+        hydrateFilter(
+          country,
+          toRef(filters.value, 'country'),
+          'country',
+          hydrateCountry
+        ),
       ])
-      hydrateFilterStatic(country, 'country', state.countrySuggestions, Number)
       emitUpdate.value = true
     })
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrate = useHydrate()
+    const hydrateStatic = useHydrateStatic()
+    const hydrateLocality = hydrate(
+      filters.value.locality,
+      query,
+      {
+        itemResource: 'locality',
+        itemFields: ['id', 'locality', 'locality_en'],
+        itemSearchField: 'id',
+        countResource: 'image',
+        countResourceRelatedIdKey: 'locality_id',
+        countHierarchical: false,
+        tagFilterKey: 'locality',
+        filters,
+      },
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: parseInt(item.id),
+          text: item.locality,
+          text_en: item.locality_en,
+          count: counts[item.id],
+        }))
+    )
+    const hydrateCountry = hydrateStatic(filters.value.country, query, {
+      pivot: ['country_id', 'country', 'country_en'],
+      countResourceRelatedIdKey: 'country_id',
+      countResource: 'image',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'country',
+    })
+    const querySuggestions = useQuerySuggestions()
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsLocality = querySuggestions(query, {
+      resource: 'image',
+      pivot: ['locality_id', 'locality', 'locality_en'],
+      pivotOffsetField: 'locality_id',
+      countHierarchical: false,
+      countResourceRelatedKey: 'locality_id',
+      excludeFilterKey: 'locality',
+      filters,
+    })
+    const querySuggestionsCountry = querySuggestionsStatic(query, {
+      resource: 'image',
+      excludeFilterKey: 'country',
+      pivot: ['country_id', 'country', 'country_en'],
+      limit: 200,
+      filters,
+    })
     return {
-      ...toRefs(state),
+      querySuggestionsLocality,
+      querySuggestionsCountry,
       handleUpdate,
       handleReset,
       query,

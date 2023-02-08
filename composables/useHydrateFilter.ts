@@ -1,4 +1,5 @@
 import { useContext, useRoute, ComputedRef, Ref } from '@nuxtjs/composition-api'
+import orderBy from 'lodash/orderBy'
 import { Filter, ListIdsFilter, ListIdsMultiFilter } from '~/types/filters'
 import { parseFilterValue } from '~/utils/parseQueryParams'
 type HydrationFunction = () => (
@@ -295,7 +296,7 @@ export const useHydrate = () => {
   ) => {
     return async (filterValues: any[]): Promise<FilterObject[]> => {
       const itemQueryString = filterValues
-        .map((v) => `"${v[filter.valueField]}"`)
+        .map((v) => v[filter.valueField])
         .join(' OR ')
       const facetQueries = filterValues.reduce((prev, v) => {
         if (config.countHierarchical) {
@@ -344,7 +345,7 @@ export const useHydrate = () => {
         },
         {} as { [K in string | number]: number }
       )
-      return parseFunc(items.items, counts)
+      return orderBy(parseFunc(items.items, counts), 'count', 'desc')
     }
   }
 }
@@ -373,7 +374,7 @@ export const useHydrateMulti = () => {
   ) => {
     return async (parsedQueryParamValues: any[]): Promise<FilterObject[]> => {
       const idsQueryStr = parsedQueryParamValues
-        .map((parsedValue) => `"${parsedValue[filter.idValueField]}"`)
+        .map((parsedValue) => parsedValue[filter.idValueField])
         .join(' OR ')
 
       const facetQueries = parsedQueryParamValues.reduce(
@@ -384,7 +385,7 @@ export const useHydrateMulti = () => {
                 `${config.countResourceRelatedIdKey}:${hierarchyString}*`
             )
             .join(' OR ')
-          prev[`{!ex=dt}${query}`] = parsedValue.id
+          prev[`{!ex=dt}${query}`] = parsedValue[filter.idValueField]
           return prev
         },
         {}
@@ -409,7 +410,6 @@ export const useHydrateMulti = () => {
             rows: 0,
             start: 0,
             facet: true,
-            'facet.pivot': `{!ex=dt}${config.countResourceRelatedIdKey}`,
             'facet.limit': parsedQueryParamValues.length,
           },
           returnRawQ: true,
@@ -457,12 +457,16 @@ export const useHydrateStatic = () => {
       const pivotStr = config.pivot.join(',')
       const facetQueries = parsedQueryParamValues.reduce((prev, v) => {
         if (config.countHierarchical) {
-          prev[`{!ex=dt}${config.tagFilterKey}:${v[filter.valueField]}*`] =
-            v[filter.valueField]
+          prev[
+            `{!ex=dt}${config.countResourceRelatedIdKey}:${
+              v[filter.valueField]
+            }*`
+          ] = v[filter.valueField]
           return prev
         }
-        prev[`{!ex=dt}${config.tagFilterKey}:${v[filter.valueField]}`] =
-          v[filter.valueField]
+        prev[
+          `{!ex=dt}${config.countResourceRelatedIdKey}:${v[filter.valueField]}`
+        ] = v[filter.valueField]
         return prev
       }, {})
       const [items, countQueries] = await Promise.all([
@@ -481,6 +485,9 @@ export const useHydrateStatic = () => {
         $services.sarvSolr.getResourceList(config.countResource, {
           search: query.value,
           searchFilters: config.filters?.value,
+          tags: {
+            [config.tagFilterKey]: 'dt',
+          },
           defaultParams: {
             rows: 0,
             start: 0,
