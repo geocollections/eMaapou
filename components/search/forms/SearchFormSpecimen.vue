@@ -272,7 +272,7 @@ export default defineComponent({
       emitUpdate.value = true
     })
 
-    const hydrateCountry = hydrateStatic(query, {
+    const hydrateCountry = hydrateStatic(filters.value.country, query, {
       pivot: ['country_id', 'country', 'country_en'],
       countResourceRelatedIdKey: 'country_id',
       countResource: 'specimen',
@@ -280,7 +280,7 @@ export default defineComponent({
       filters,
       tagFilterKey: 'country',
     })
-    const hydrateOriginalStatus = hydrateStatic(query, {
+    const hydrateOriginalStatus = hydrateStatic(filters.value.country, query, {
       pivot: ['original_status_id', 'original_status', 'original_status_en'],
       countResourceRelatedIdKey: 'original_status_id',
       countResource: 'specimen',
