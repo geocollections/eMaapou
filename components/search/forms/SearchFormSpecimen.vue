@@ -301,16 +301,15 @@ export default defineComponent({
         tagFilterKey: 'locality',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any): DefaultFilterObject => {
-          return {
+      (items, counts) =>
+        items.map(
+          (item: any): DefaultFilterObject => ({
             id: parseInt(item.id),
             text: item.locality,
             text_en: item.locality_en,
             count: counts[item.id],
-          }
-        })
-      }
+          })
+        )
     )
     const hydrateCollection = hydrate(
       filters.value.collection,
@@ -325,16 +324,15 @@ export default defineComponent({
         tagFilterKey: 'collection',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any): DefaultFilterObject => {
-          return {
+      (items, counts) =>
+        items.map(
+          (item: any): DefaultFilterObject => ({
             id: parseInt(item.id),
             text: item.number,
             text_en: item.number,
             count: counts[item.id],
-          }
-        })
-      }
+          })
+        )
     )
     const hydrateFossilGroup = hydrate(
       filters.value.fossilGroup,
@@ -349,16 +347,15 @@ export default defineComponent({
         tagFilterKey: 'fossilGroup',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any): DefaultFilterObject => {
-          return {
+      (items, counts) =>
+        items.map(
+          (item: any): DefaultFilterObject => ({
             id: parseInt(item.id),
             text: item.taxon,
             text_en: item.taxon,
             count: counts[item.id],
-          }
-        })
-      }
+          })
+        )
     )
 
     const hydrateTaxonHierarchy = hydrate(
@@ -374,17 +371,14 @@ export default defineComponent({
         tagFilterKey: 'taxonHierarchy',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any) => {
-          return {
-            id: item.hierarchy_string,
-            text: item.taxon,
-            text_en: item.taxon,
-            hierarchy_string: item.hierarchy_string,
-            count: counts[item.hierarchy_string],
-          }
-        })
-      }
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: item.hierarchy_string,
+          text: item.taxon,
+          text_en: item.taxon,
+          hierarchy_string: item.hierarchy_string,
+          count: counts[item.hierarchy_string],
+        }))
     )
     const hydrateStratigraphyHierarchy = hydrate(
       filters.value.stratigraphyHierarchy,
@@ -404,17 +398,14 @@ export default defineComponent({
         tagFilterKey: 'stratigraphyHierarchy',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any) => {
-          return {
-            id: item.hierarchy_string,
-            text: item.stratigraphy,
-            text_en: item.stratigraphy_en,
-            hierarchy_string: item.hierarchy_string,
-            count: counts[item.hierarchy_string],
-          }
-        })
-      }
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: item.hierarchy_string,
+          text: item.stratigraphy,
+          text_en: item.stratigraphy_en,
+          hierarchy_string: item.hierarchy_string,
+          count: counts[item.hierarchy_string],
+        }))
     )
     const hydrateRockHierarchy = hydrateMulti(
       filters.value.rockHierarchy,
@@ -429,17 +420,14 @@ export default defineComponent({
         tagFilterKey: 'rockHierarchy',
         queryFilters: filters,
       },
-      (items, counts) => {
-        return items.map((item: any) => {
-          return {
-            id: item.id,
-            text: item.name,
-            text_en: item.name_en,
-            hierarchy_strings: item.hierarchy_strings,
-            count: counts[item.id],
-          }
-        })
-      }
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: item.id,
+          text: item.name,
+          text_en: item.name_en,
+          hierarchy_strings: item.hierarchy_strings,
+          count: counts[item.id],
+        }))
     )
     const querySuggestionsLocality = querySuggestions(query, {
       resource: 'specimen',
@@ -507,17 +495,14 @@ export default defineComponent({
         excludeFilterKey: 'taxonHierarchy',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any) => {
-          return {
-            id: item.value as number,
-            count: counts[item.value] as number,
-            text: item.pivot?.[0].value ?? item.value,
-            text_en: item.pivot?.[0].value ?? item.value,
-            hierarchy_string: item.value,
-          }
-        })
-      }
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: item.value as number,
+          count: counts[item.value] as number,
+          text: item.pivot?.[0].value ?? item.value,
+          text_en: item.pivot?.[0].value ?? item.value,
+          hierarchy_string: item.value,
+        }))
     )
     const querySuggestionsRock = querySuggestionsMulti(
       query,
@@ -530,17 +515,14 @@ export default defineComponent({
         excludeFilterKey: 'rockHierarchy',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any) => {
-          return {
-            id: item.id as number,
-            count: counts[item.id] as number,
-            text: item.name,
-            text_en: item.name_en,
-            hierarchy_strings: item.hierarchy_strings,
-          }
-        })
-      }
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: item.id as number,
+          count: counts[item.id] as number,
+          text: item.name,
+          text_en: item.name_en,
+          hierarchy_strings: item.hierarchy_strings,
+        }))
     )
     const querySuggestionsStratigraphy = querySuggestions(
       query,
@@ -553,20 +535,17 @@ export default defineComponent({
         excludeFilterKey: 'stratigraphyHierarchy',
         filters,
       },
-      (items, counts) => {
-        return items.map((item: any) => {
-          return {
-            id: item.value as number,
-            count: counts[item.value] as number,
-            text: item.pivot?.[0].value ?? item.value,
-            text_en:
-              item.pivot?.[0].pivot?.[0].value ??
-              item.pivot?.[0].value ??
-              item.value,
-            hierarchy_string: item.value,
-          }
-        })
-      }
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: item.value as number,
+          count: counts[item.value] as number,
+          text: item.pivot?.[0].value ?? item.value,
+          text_en:
+            item.pivot?.[0].pivot?.[0].value ??
+            item.pivot?.[0].value ??
+            item.value,
+          hierarchy_string: item.value,
+        }))
     )
     return {
       handleReset,
