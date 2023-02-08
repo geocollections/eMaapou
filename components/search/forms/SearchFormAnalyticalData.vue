@@ -38,6 +38,7 @@
           :query-function="querySuggestionsDataset"
         />
 
+        <!-- TODO: `analytical_data` index does not contain english translation of dataset. Currently only shows estonian name. After english name added to index update the hydration and querying accordingly. -->
         <filter-input-autocomplete-new
           v-model="dataset"
           :title="$t('filters.dataset').toString()"
@@ -77,7 +78,7 @@
           :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
           :query-function="querySuggestionsLocality"
         />
-
+        <!-- TODO: `analytical_data` index does not contain english translation of site. Currently only shows estonian name. After english name added to index update the hydration and querying accordingly. -->
         <filter-input-autocomplete-new
           v-model="site"
           :title="$t('filters.site').toString()"
