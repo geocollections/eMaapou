@@ -10,20 +10,40 @@
           interval-labels="intervals.depth"
           :step="0.01"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="method"
           :title="$t('filters.method').toString()"
-          :items="methodSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="
+            $i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en'
+          "
+          :query-function="querySuggestionsMethod"
         />
-        <filter-input-autocomplete-static
+        <filter-input-autocomplete-new
           v-model="lab"
           :title="$t('filters.lab').toString()"
-          :items="labSuggestions"
-          :filter-field="$translate({ et: 'text', en: 'text_en' })"
+          static
+          :query-field="$i18n.locale === 'et' ? 'lab' : 'lab_en'"
+          :query-function="querySuggestionsLab"
         />
-        <filter-sample v-model="sample" />
-        <filter-locality v-model="locality" />
+        <filter-input-autocomplete-new
+          v-model="sample"
+          :title="$t('filters.sample').toString()"
+          query-field="sample_number"
+          :query-function="querySuggestionsSample"
+        />
+        <filter-input-autocomplete-new
+          v-model="locality"
+          :title="$t('filters.locality').toString()"
+          :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'"
+          :query-function="querySuggestionsLocality"
+        />
+        <filter-input-autocomplete-new
+          v-model="site"
+          :title="$t('filters.site').toString()"
+          :query-field="$i18n.locale === 'et' ? 'name' : 'name_en'"
+          :query-function="querySuggestionsSite"
+        />
         <filter-map v-model="map" :items="$accessor.search.analysis.items" />
         <filter-input-text
           v-model="agent"
@@ -39,10 +59,8 @@
 import {
   computed,
   defineComponent,
-  reactive,
   ref,
   toRef,
-  toRefs,
   useContext,
   useFetch,
   useRoute,
@@ -51,45 +69,46 @@ import {
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
 import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
-import FilterInputAutocompleteStatic from '~/components/filter/input/FilterInputAutocompleteStatic.vue'
-import FilterLocality from '~/components/filter/FilterLocality.vue'
 import FilterMap from '~/components/filter/FilterMap.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import {
-  useHydrateFilterLocality,
-  useHydrateFilterSample,
-  useHydrateFilterStatic,
+  useHydrate,
+  useHydrateFilterNew,
+  useHydrateStatic,
 } from '~/composables/useHydrateFilter'
-import FilterSample from '~/components/filter/FilterSample.vue'
+import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import { useFilter } from '~/composables/useFilter'
-import { useGetSuggestions } from '~/composables/useGetSuggestions'
+import {
+  useQuerySuggestions,
+  useQuerySuggestionsStatic,
+} from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormAnalysis',
   components: {
     SearchActions,
     InputSearch,
     FilterInputRange,
-    FilterInputAutocompleteStatic,
-    FilterLocality,
     FilterMap,
     FilterInstitution,
     FilterInputText,
-    FilterSample,
+    FilterInputAutocompleteNew,
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
     const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
+    const filters = computed(() => ({
+      ...$accessor.search.analysis.filters,
+      ...$accessor.search.globalFilters,
+    }))
 
     const query = computed({
       get: () => $accessor.search.analysis.query,
@@ -103,6 +122,7 @@ export default defineComponent({
     const agent = useFilter('analysis', 'agent', handleUpdate)
 
     const locality = useFilter('analysis', 'locality', handleUpdate)
+    const site = useFilter('analysis', 'site', handleUpdate)
     const sample = useFilter('analysis', 'sample', handleUpdate)
     const map = useFilter('analysis', 'map', handleUpdate)
 
@@ -113,57 +133,171 @@ export default defineComponent({
         handleUpdate()
       },
     })
-    const state = reactive({
-      methodSuggestions: [] as any[],
-      labSuggestions: [] as any[],
-    })
-    const hydrateFilterLocality = useHydrateFilterLocality()
-    const hydrateFilterSample = useHydrateFilterSample()
-    const hydrateFilterStatic = useHydrateFilterStatic()
-    const getSuggestions = useGetSuggestions()
 
     watch(
       () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
+      () => fetch()
     )
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
-      const suggestionPromise = Promise.all([
-        getSuggestions(
-          toRef(state, 'methodSuggestions'),
-          'analysis',
-          'method,analysis_method,analysis_method_en',
-          { et: 'analysis_method', en: 'analysis_method_en' }
-        ),
-        getSuggestions(
-          toRef(state, 'labSuggestions'),
-          'analysis',
-          'lab_id,lab,lab_en',
-          {
-            et: 'lab',
-            en: 'lab_en',
-          }
-        ),
-      ])
       const hydrationPromise = Promise.all([
-        hydrateFilterSample(sample, 'sample'),
-        hydrateFilterLocality(locality, 'locality'),
+        hydrateFilter(
+          sample,
+          toRef(filters.value, 'sample'),
+          'sample',
+          hydrateSample
+        ),
+        hydrateFilter(
+          locality,
+          toRef(filters.value, 'locality'),
+          'locality',
+          hydrateLocality
+        ),
+        hydrateFilter(
+          method,
+          toRef(filters.value, 'method'),
+          'method',
+          hydrateMethod
+        ),
+        hydrateFilter(lab, toRef(filters.value, 'lab'), 'lab', hydrateLab),
+        hydrateFilter(site, toRef(filters.value, 'site'), 'site', hydrateSite),
       ])
-      await Promise.all([suggestionPromise, hydrationPromise])
+      await Promise.all([hydrationPromise])
 
-      hydrateFilterStatic(method, 'method', state.methodSuggestions, Number)
-      hydrateFilterStatic(lab, 'lab', state.labSuggestions, Number)
       emitUpdate.value = true
     })
+    const hydrateFilter = useHydrateFilterNew()
+    const hydrateStatic = useHydrateStatic()
+    const hydrate = useHydrate()
+    const hydrateMethod = hydrateStatic(filters.value.method, query, {
+      pivot: ['method', 'analysis_method', 'analysis_method_en'],
+      countResourceRelatedIdKey: 'method',
+      countResource: 'analysis',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'method',
+    })
+    const hydrateLab = hydrateStatic(filters.value.method, query, {
+      pivot: ['lab_id', 'lab', 'lab_en'],
+      countResourceRelatedIdKey: 'lab_id',
+      countResource: 'analysis',
+      countHierarchical: false,
+      filters,
+      tagFilterKey: 'lab',
+    })
+    const hydrateSample = hydrate(
+      filters.value.sample,
+      query,
+      {
+        itemResource: 'sample',
+        itemFields: ['id', 'number'],
+        itemSearchField: 'id',
+        countResource: 'analysis',
+        countResourceRelatedIdKey: 'sample_id',
+        countHierarchical: false,
+        tagFilterKey: 'sample',
+        filters,
+      },
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: parseInt(item.id),
+          text: item.number,
+          text_en: item.number,
+          count: counts[item.id],
+        }))
+    )
+    const hydrateLocality = hydrate(
+      filters.value.locality,
+      query,
+      {
+        itemResource: 'locality',
+        itemFields: ['id', 'locality', 'locality_en'],
+        itemSearchField: 'id',
+        countResource: 'analysis',
+        countResourceRelatedIdKey: 'locality_id',
+        countHierarchical: false,
+        tagFilterKey: 'locality',
+        filters,
+      },
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: parseInt(item.id),
+          text: item.locality,
+          text_en: item.locality_en,
+          count: counts[item.id],
+        }))
+    )
+    const hydrateSite = hydrate(
+      filters.value.site,
+      query,
+      {
+        itemResource: 'site',
+        itemFields: ['id', 'name', 'name_en'],
+        itemSearchField: 'id',
+        countResource: 'analysis',
+        countResourceRelatedIdKey: 'site_id',
+        countHierarchical: false,
+        tagFilterKey: 'site',
+        filters,
+      },
+      (items, counts) =>
+        items.map((item: any) => ({
+          id: parseInt(item.id),
+          text: item.name,
+          text_en: item.name_en,
+          count: counts[item.id],
+        }))
+    )
+    const querySuggestionsStatic = useQuerySuggestionsStatic()
+    const querySuggestionsMethod = querySuggestionsStatic(query, {
+      resource: 'analysis',
+      excludeFilterKey: 'method',
+      pivot: ['method', 'analysis_method', 'analysis_method_en'],
+      limit: 100,
+      filters,
+    })
+    const querySuggestionsLab = querySuggestionsStatic(query, {
+      resource: 'analysis',
+      excludeFilterKey: 'lab',
+      pivot: ['lab_id', 'lab', 'lab_en'],
+      limit: 100,
+      filters,
+    })
+    const querySuggestions = useQuerySuggestions()
+    const querySuggestionsSample = querySuggestions(query, {
+      resource: 'analysis',
+      pivot: ['sample_id', 'sample_number'],
+      pivotOffsetField: 'sample_id',
+      countResourceRelatedKey: 'sample_id',
+      countHierarchical: false,
+      excludeFilterKey: 'sample',
+      filters,
+    })
+    const querySuggestionsLocality = querySuggestions(query, {
+      resource: 'analysis',
+      pivot: ['locality_id', 'locality', 'locality_en'],
+      pivotOffsetField: 'locality_id',
+      countHierarchical: false,
+      countResourceRelatedKey: 'locality_id',
+      excludeFilterKey: 'locality',
+      filters,
+    })
+    const querySuggestionsSite = querySuggestions(query, {
+      resource: 'analysis',
+      pivot: ['site_id', 'name', 'name_en'],
+      pivotOffsetField: 'site_id',
+      countHierarchical: false,
+      countResourceRelatedKey: 'site_id',
+      excludeFilterKey: 'site',
+      filters,
+    })
     return {
-      ...toRefs(state),
+      querySuggestionsMethod,
+      querySuggestionsLab,
+      querySuggestionsSample,
+      querySuggestionsLocality,
+      querySuggestionsSite,
       handleReset,
       handleUpdate,
       depth,
@@ -175,6 +309,7 @@ export default defineComponent({
       lab,
       agent,
       sample,
+      site,
     }
   },
 })

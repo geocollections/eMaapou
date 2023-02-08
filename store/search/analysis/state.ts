@@ -20,6 +20,7 @@ export type AnalysisFilters = {
   lab: ListIdsFilter
   method: ListIdsFilter
   locality: ListIdsFilter
+  site: ListIdsFilter
   map: GeomFilter
 }
 
@@ -97,6 +98,14 @@ export const initState = (): SearchModuleState<AnalysisFilters> => {
         value: [],
         type: FilterType.ListIds,
         fields: ['locality_id'],
+        valueType: 'number',
+        valueField: 'id',
+        lookupType: 'none',
+      },
+      site: {
+        value: [],
+        type: FilterType.ListIds,
+        fields: ['site_id'],
         valueType: 'number',
         valueField: 'id',
         lookupType: 'none',
