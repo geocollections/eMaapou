@@ -33,8 +33,6 @@ import {
   ref,
   useContext,
   useFetch,
-  useRoute,
-  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -43,6 +41,7 @@ import FilterInstitution from '~/components/filter/FilterInstitution.vue'
 import FilterInputText from '~/components/filter/input/FilterInputText.vue'
 import { useHydrateFilterAnalysisParameter } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 export default defineComponent({
   name: 'SearchFormDataset',
   components: {
@@ -54,15 +53,12 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
-    const hydrateFilters = ref(true)
     const handleReset = () => {
       emit('reset')
     }
     const handleUpdate = () => {
       if (!emitUpdate.value) return
-      hydrateFilters.value = false
       emit('update')
     }
     const query = computed({
@@ -88,16 +84,7 @@ export default defineComponent({
     })
     const hydrateFilterAnalysisParameter = useHydrateFilterAnalysisParameter()
 
-    watch(
-      () => route.value.query,
-      () => {
-        if (!hydrateFilters.value) {
-          hydrateFilters.value = true
-          return
-        }
-        fetch()
-      }
-    )
+    useWatchSearchQueryParams(() => fetch())
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false

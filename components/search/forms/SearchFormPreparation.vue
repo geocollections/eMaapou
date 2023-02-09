@@ -42,8 +42,6 @@ import {
   toRef,
   useContext,
   useFetch,
-  useRoute,
-  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -54,6 +52,7 @@ import FilterInputRange from '~/components/filter/input/FilterInputRange.vue'
 import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
 import { useHydrate, useHydrateFilterNew } from '~/composables/useHydrateFilter'
 import { useQuerySuggestions } from '~/composables/useQuerySuggestions'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 export default defineComponent({
   name: 'SearchFormPreparation',
   components: {
@@ -66,7 +65,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -92,10 +90,7 @@ export default defineComponent({
     const map = useFilter('preparation', 'map', handleUpdate)
 
     const filters = computed(() => $accessor.search.preparation.filters)
-    watch(
-      () => route.value.query,
-      () => fetch()
-    )
+    useWatchSearchQueryParams(() => fetch())
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false

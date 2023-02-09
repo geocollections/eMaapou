@@ -64,8 +64,6 @@ import {
   ref,
   useContext,
   useFetch,
-  useRoute,
-  watch,
   toRef,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
@@ -86,6 +84,7 @@ import {
   useQuerySuggestions,
   useQuerySuggestionsMulti,
 } from '~/composables/useQuerySuggestions'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 export default defineComponent({
   name: 'SearchFormSample',
   components: {
@@ -100,7 +99,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -139,11 +137,7 @@ export default defineComponent({
         $accessor.search.sample.setQuery(val)
       },
     })
-
-    watch(
-      () => route.value.query,
-      () => fetch()
-    )
+    useWatchSearchQueryParams(() => fetch())
 
     const hydrateFilter = useHydrateFilterNew()
     const { fetch } = useFetch(async () => {

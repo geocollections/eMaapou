@@ -38,8 +38,6 @@ import {
   toRef,
   useContext,
   useFetch,
-  useRoute,
-  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -54,6 +52,7 @@ import {
 } from '~/composables/useHydrateFilter'
 import { useFilter } from '~/composables/useFilter'
 import { useQuerySuggestionsStatic } from '~/composables/useQuerySuggestions'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 export default defineComponent({
   name: 'SearchFormLocality',
   components: {
@@ -66,7 +65,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -95,10 +93,7 @@ export default defineComponent({
     )
     const hydrateFilterReference = useHydrateFilterReference()
 
-    watch(
-      () => route.value.query,
-      () => fetch()
-    )
+    useWatchSearchQueryParams(() => fetch())
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false

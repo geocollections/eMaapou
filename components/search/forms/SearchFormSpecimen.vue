@@ -111,8 +111,6 @@ import {
   toRef,
   useContext,
   useFetch,
-  useRoute,
-  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import FilterInstitution from '~/components/filter/FilterInstitution.vue'
@@ -130,6 +128,7 @@ import {
   useHydrateMulti,
   useHydrateFilterNew,
 } from '~/composables/useHydrateFilter'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 import { useFilter } from '~/composables/useFilter'
 import { DefaultFilterObject } from '~/types/filters'
 import {
@@ -137,7 +136,6 @@ import {
   useQuerySuggestionsMulti,
   useQuerySuggestionsStatic,
 } from '~/composables/useQuerySuggestions'
-
 export default defineComponent({
   name: 'SearchFormSpecimen',
   components: {
@@ -153,7 +151,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -211,11 +208,17 @@ export default defineComponent({
     const querySuggestionsStatic = useQuerySuggestionsStatic()
     const querySuggestionsMulti = useQuerySuggestionsMulti()
 
-    watch(
-      () => route.value.query,
-      () => fetch()
-    )
-
+    useWatchSearchQueryParams(() => fetch())
+    // watch(
+    //   () => route.value.query,
+    //   (newVal, oldVal) => {
+    //     if (newVal.page !== oldVal.page) return
+    //     if (newVal.itemsPerPage !== oldVal.itemsPerPage) return
+    //     if (newVal.sortBy !== oldVal.sortBy) return
+    //     if (newVal.sortDesc !== oldVal.sortDesc) return
+    //     fetch()
+    //   }
+    // )
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
       await Promise.all([

@@ -37,8 +37,6 @@ import {
   toRefs,
   useContext,
   useFetch,
-  useRoute,
-  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -49,6 +47,7 @@ import {
   useHydrateFilterNew,
   useHydrateStatic,
 } from '~/composables/useHydrateFilter'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 import { useQuerySuggestionsStatic } from '~/composables/useQuerySuggestions'
 export default defineComponent({
   name: 'SearchFormArea',
@@ -60,7 +59,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -83,11 +81,7 @@ export default defineComponent({
       countySuggestions: [] as any[],
       typeSuggestions: [] as any[],
     })
-
-    watch(
-      () => route.value.query,
-      () => fetch()
-    )
+    useWatchSearchQueryParams(() => fetch())
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false

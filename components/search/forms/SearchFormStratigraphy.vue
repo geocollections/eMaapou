@@ -60,8 +60,6 @@ import {
   toRef,
   useContext,
   useFetch,
-  useRoute,
-  watch,
 } from '@nuxtjs/composition-api'
 import SearchActions from '../SearchActions.vue'
 import InputSearch from '~/components/input/InputSearch.vue'
@@ -78,6 +76,7 @@ import {
   useQuerySuggestions,
   useQuerySuggestionsStatic,
 } from '~/composables/useQuerySuggestions'
+import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
 export default defineComponent({
   name: 'SearchFormStratigraphy',
   components: {
@@ -88,7 +87,6 @@ export default defineComponent({
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()
-    const route = useRoute()
     const emitUpdate = ref(true)
     const handleReset = () => {
       emit('reset')
@@ -115,10 +113,7 @@ export default defineComponent({
     const scope = useFilter('stratigraphy', 'scope', handleUpdate)
     const type = useFilter('stratigraphy', 'type', handleUpdate)
 
-    watch(
-      () => route.value.query,
-      () => fetch()
-    )
+    useWatchSearchQueryParams(() => fetch())
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false
