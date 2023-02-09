@@ -8,6 +8,7 @@ export default ({
   resultsCount?: number | boolean
 }) => {
   if (typeof window === 'undefined') return
+  if (!window._paq) return
 
   const categoryValue = category ?? false
   const resultsCountValue = resultsCount ?? false
