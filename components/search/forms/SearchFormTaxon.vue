@@ -92,7 +92,7 @@ export default defineComponent({
     const taxonHierarchy = useFilter('taxon', 'taxonHierarchy', handleUpdate)
     const map = useFilter('taxon', 'map', handleUpdate)
 
-    useWatchSearchQueryParams(()=> fetch())
+    useWatchSearchQueryParams(() => fetch())
 
     const { fetch } = useFetch(async () => {
       emitUpdate.value = false

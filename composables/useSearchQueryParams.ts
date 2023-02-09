@@ -16,6 +16,7 @@ import searchModule from '~/store/search'
 import { SearchModuleState } from '~/store/search/types'
 import { SearchState } from '~/store/search/state'
 import { Filter } from '~/types/filters'
+import trackSiteSearch from '~/utils/trackSiteSearch'
 export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
   module,
   qParamKey,
@@ -96,12 +97,20 @@ export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
 
   watch(
     () => route.value.query,
-    () => {
-      // await accessor.search[module].resetFilters()
+    async (newVal, oldVal) => {
       setStateFromQueryParams()
-      fetch()
+      await fetch()
+
+      if (newVal[qParamKey] !== oldVal[qParamKey])
+        // INFO: Track, if query shows any results.
+        // Currently updates only when the query string changes.
+        trackSiteSearch({
+          query: accessor.search[module].query,
+          resultsCount: accessor.search[module].count,
+        })
     }
   )
+
   onBeforeUnmount(() => {
     accessor.search[module].resetFilters(undefined)
   })
