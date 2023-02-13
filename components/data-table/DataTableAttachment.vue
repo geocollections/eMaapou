@@ -15,16 +15,18 @@
         :src="
           $img(
             `${item.attachment.filename}`,
+            { size: 'large' },
+            { provider: 'geocollections' }
+          )
+        "
+        :preview-src="
+          $img(
+            `${item.attachment.filename}`,
             { size: 'small' },
             { provider: 'geocollections' }
           )
         "
         :type="item.attachment.attachment_format.value"
-        @click="
-          $router.push(
-            localePath({ name: 'file-id', params: { id: item.attachment.id } })
-          )
-        "
       />
     </template>
     <template #item.description="{ item }">

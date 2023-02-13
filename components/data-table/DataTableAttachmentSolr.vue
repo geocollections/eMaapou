@@ -49,16 +49,18 @@
         :src="
           $img(
             `${item.uuid_filename}`,
-            { size: 'medium' },
+            { size: 'large' },
+            { provider: 'geocollections' }
+          )
+        "
+        :preview-src="
+          $img(
+            `${item.uuid_filename}`,
+            { size: 'small' },
             { provider: 'geocollections' }
           )
         "
         class="ma-2"
-        @click="
-          $router.push(
-            localePath({ name: 'file-id', params: { id: item.attachment_id } })
-          )
-        "
       />
     </template>
   </base-data-table>

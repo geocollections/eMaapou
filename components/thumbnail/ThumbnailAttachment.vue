@@ -1,6 +1,11 @@
 <template>
   <div class="py-2 d-flex justify-center">
-    <thumbnail-image v-if="isImage && src" :src="src" @click="$emit('click')" />
+    <thumbnail-image
+      v-if="isImage && src && previewSrc"
+      :src="src"
+      :preview-src="previewSrc"
+      @click="$emit('click')"
+    />
     <v-icon
       v-else-if="isImage"
       color="primary darken-2"
@@ -35,6 +40,10 @@ export default {
   components: { ThumbnailImage },
   props: {
     src: {
+      type: String,
+      default: null,
+    },
+    previewSrc: {
       type: String,
       default: null,
     },
