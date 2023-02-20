@@ -67,7 +67,7 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
   },
   allIds: [
     'parameter',
-    'analysis_methfalse',
+    'analysis_method',
     'depth',
     'depth_interval',
     'value',
