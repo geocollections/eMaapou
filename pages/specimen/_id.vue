@@ -60,6 +60,15 @@
             :value="`${specimen.specimen_nr}`"
           />
           <table-row
+            :title="$t('specimen.originalStatus').toString()"
+            :value="
+              $translate({
+                et: specimen.original_status.value,
+                en: specimen.original_status.value_en,
+              })
+            "
+          />
+          <table-row
             v-if="type"
             :title="$t('specimen.type').toString()"
             :value="
