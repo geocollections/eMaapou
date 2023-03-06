@@ -357,15 +357,23 @@ export default defineComponent({
           locality: route.value.params.id,
         },
       })
-      const attachmentPromise = $services.sarvSolr.getResourceList(
-        'attachment',
-        {
+
+      const localityImagesPromise = $services.sarvREST
+        .getResourceList('locality_image', {
           defaultParams: {
-            fq: `locality_id:${route.value.params.id} AND specimen_image_attachment:2`,
-            sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
+            locality: route.value.params.id,
+            nest: 2,
           },
-        }
-      )
+        })
+        .then((res) => {
+          return res.items.map((image: any) => ({
+            id: image.attachment.id,
+            filename: image.attachment.filename,
+            author: image.attachment.author?.agent ?? null,
+            date: image.attachment.date_created,
+            dateText: image.attachment.date_created_free,
+          }))
+        })
 
       // Checking if locality has a related .las file to show in graph tab
       const lasFilePromise = $services.sarvREST.getResourceList(
@@ -406,13 +414,13 @@ export default defineComponent({
       const [
         localityResponse,
         drillcoreResponse,
-        attachmentResponse,
+        localityImageResponse,
         lasFileResponse,
         hydratedTabsByIds,
       ] = await Promise.all([
         localityPromise,
         drillcorePromise,
-        attachmentPromise,
+        localityImagesPromise,
         lasFilePromise,
         hydratedTabsByIdsPromise,
       ])
@@ -448,7 +456,7 @@ export default defineComponent({
             )
           } else return tab.count > 0
         })
-      state.images = attachmentResponse?.items ?? []
+      state.images = localityImageResponse ?? []
     })
     const title = computed(() =>
       $translate({

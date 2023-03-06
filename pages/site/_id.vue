@@ -260,76 +260,7 @@
     </template>
 
     <template #bottom>
-      <image-bar v-if="images.length > 0" class="mt-4" :images="images">
-        <template #image="{ item, on, attrs }">
-          <v-hover v-slot="{ hover }">
-            <v-img
-              v-bind="attrs"
-              :src="
-                $img(
-                  `${item.attachment.uuid_filename}`,
-                  { size: 'small' },
-                  { provider: 'geocollections' }
-                )
-              "
-              :lazy-src="
-                $img(
-                  `${item.attachment.uuid_filename}`,
-                  { size: 'small' },
-                  { provider: 'geocollections' }
-                )
-              "
-              max-width="200"
-              max-height="200"
-              width="200"
-              height="200"
-              :class="{
-                'elevation-4': hover,
-                'elevation-2': !hover,
-              }"
-              class="rounded cursor-pointer grey lighten-2 transition-swing"
-              v-on="on"
-              @click="
-                $router.push(
-                  localePath({
-                    name: 'file-id',
-                    params: { id: item.attachment.id },
-                  })
-                )
-              "
-            >
-              <template #placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"
-                  ></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-          </v-hover>
-        </template>
-        <template #info="{ item }">
-          <div v-if="item.attachment.author">
-            <span class="font-weight-bold"
-              >{{ $t('attachment.author') }}:
-            </span>
-            <span>{{ item.attachment.author.agent }}</span>
-          </div>
-          <div
-            v-if="
-              item.attachment.date_created || item.attachment.date_created_free
-            "
-          >
-            <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
-            <span v-if="item.attachment.date_created">
-              {{ $formatDate(item.attachment.date_created) }}
-            </span>
-            <span v-else>{{ item.attachment.date_created_free }}</span>
-          </div>
-          <div v-else>{{ $t('common.clickToOpen') }}</div>
-        </template>
-      </image-bar>
+      <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
       <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
@@ -351,6 +282,7 @@ import {
   useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
+import isEmpty from 'lodash/isEmpty'
 import { Location } from 'vue-router'
 import MapDetail from '~/components/map/MapDetail.vue'
 import HeaderDetail from '~/components/HeaderDetail.vue'
@@ -416,17 +348,24 @@ export default defineComponent({
           },
         }
       )
-      const attachmentPromise = $services.sarvREST.getResourceList(
-        'attachment_link',
-        {
+      const attachmentPromise = $services.sarvREST
+        .getResourceList('attachment_link', {
           defaultParams: {
             site: route.value.params.id,
             attachment__attachment_format__value__istartswith: 'image',
-            nest: 1,
+            nest: 2,
           },
           fields: {},
-        }
-      )
+        })
+        .then((res) => {
+          return res.items.map((image: any) => ({
+            id: image.attachment.id,
+            filename: image.attachment.filename,
+            author: image.attachment.author?.agent ?? null,
+            date: image.attachment.date_created,
+            dateText: image.attachment.date_created_free,
+          }))
+        })
 
       const tabs = TABS_SITE.allIds.map((id) => TABS_SITE.byIds[id])
       const hydratedTabsPromise = Promise.all(
@@ -444,13 +383,16 @@ export default defineComponent({
 
       state.ids = siteResponse?.ids
       state.site = siteResponse
-      state.images = attachmentResponse.items ?? []
+      state.images = attachmentResponse ?? []
       state.tabs = hydratedTabs.filter((item) => item.count > 0)
     })
 
-    const title = computed(() =>
-      $translate({ et: state.site?.name, en: state.site?.name_en })
-    )
+    const title = computed(() => {
+      const engTitle = isEmpty(state.site?.name_en)
+        ? state.site?.name
+        : state.site?.name_en
+      return $translate({ et: state.site?.name, en: engTitle })
+    })
     useSlugRoute({
       slug: title,
       tabs: toRef(state, 'tabs'),
@@ -480,9 +422,9 @@ export default defineComponent({
           {
             property: 'og:image',
             hid: 'og:image',
-            content: state.images[0]?.attachment.filename
+            content: state.images[0]?.filename
               ? $img(
-                  `${state.images[0]?.attachment.filename}`,
+                  `${state.images[0]?.filename}`,
                   { size: 'small' },
                   {
                     provider: 'geocollections',

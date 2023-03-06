@@ -317,16 +317,23 @@ export default defineComponent({
         parseInt(route.value.params.id)
       )
 
-      const attachmentPromise = $services.sarvSolr.getResourceList(
-        'attachment',
-        {
+      const attachmentPromise = $services.sarvSolr
+        .getResourceList('attachment', {
           defaultParams: {
             fq: `specimen_id:${route.value.params.id} AND specimen_image_attachment:1`,
             sort: 'date_created_dt desc,date_created_free desc,stars desc,id desc',
             rows: 25,
           },
-        }
-      )
+        })
+        .then((res) => {
+          return res.items.map((attachment: any) => ({
+            id: attachment.id,
+            filename: attachment.filename,
+            author: attachment.agent,
+            date: attachment.date_created,
+            dateText: attachment.date_created_free,
+          }))
+        })
       const tabs = TABS_SPECIMEN.allIds.map((id) => TABS_SPECIMEN.byIds[id])
       const hydratedTabsPromise = Promise.all(
         tabs.map((tab) =>
@@ -356,7 +363,7 @@ export default defineComponent({
       state.ids = specimenResponse?.ids
       state.specimen = specimenResponse
       state.specimenAlt = specimenNameResponse?.[0]
-      state.images = attachmentResponse.items ?? []
+      state.images = attachmentResponse ?? []
       state.tabs = hydratedTabs.filter((item) => item.count > 0)
     })
     const title = computed(
