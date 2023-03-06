@@ -761,8 +761,26 @@ export const HEADERS_FOSSIL: Headers = {
       show: true,
       apiFieldValue: 'taxon',
     },
+    fossil_group: {
+      text: 'taxon.fossilGroup',
+      value: 'fossil_group',
+      show: true,
+      apiFieldValue: 'fossil_group',
+    },
+    lad: {
+      text: 'taxon.lad',
+      value: 'lad',
+      show: true,
+      apiFieldValue: 'lad',
+    },
+    fad: {
+      text: 'taxon.fad',
+      value: 'fad',
+      show: true,
+      apiFieldValue: 'fad',
+    },
   },
-  allIds: ['taxon'],
+  allIds: ['taxon', 'fossil_group', 'fad', 'lad'],
 }
 
 export const HEADERS_LOCALITY: Headers = {
