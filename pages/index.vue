@@ -14,21 +14,18 @@
       >
         <v-row class="mb-lg-5">
           <v-col>
-            <div
-              class="d-flex pt-sm-4 pt-md-8"
-              :style="{ 'max-width': '1000px' }"
-            >
+            <div class="pt-sm-4 pt-md-8" :style="{ 'max-width': '1000px' }">
               <i18n
                 path="title"
                 tag="div"
-                class="text-h4 text-sm-h3 text-md-h2 white--text font-weight-bold"
+                class="text-h3 text-sm-h2 text-md-h1 white--text font-weight-bold"
               >
-                <span
-                  class="text-h4 text-sm-h3 text-md-h2 font-weight-light white--text"
-                >
-                  {{ $t('subtitle') }}
-                </span>
               </i18n>
+              <span
+                class="text-h5 text-sm-h4 text-md-h3 font-weight-light white--text"
+              >
+                {{ $t('subtitle') }}
+              </span>
             </div>
           </v-col>
         </v-row>

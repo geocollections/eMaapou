@@ -1,5 +1,5 @@
 export default {
-  title: 'eMaapõu: {0}',
+  title: 'eMaapõu',
   subtitle: 'Geoloogilised andmed ja e\u2011teenused',
   slogan: 'Kogu info Eesti maapõuest',
   landing: {

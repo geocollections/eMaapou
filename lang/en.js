@@ -1,5 +1,5 @@
 export default {
-  title: 'eMaapõu: {0}',
+  title: 'eMaapõu',
   subtitle: 'Geoscience data and e\u2011services',
   slogan: 'Estonian geology data portal',
   landing: {
@@ -1101,7 +1101,7 @@ export default {
     imageSize: 'Image size (px)',
     rockHierarchy: 'Rock',
     rockHierarchySpecimen: 'Rock/mineral',
-    stratigraphyAge: 'Stratigraphy age (Ma)'
+    stratigraphyAge: 'Stratigraphy age (Ma)',
   },
   intervals: {
     default: {
