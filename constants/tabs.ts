@@ -457,6 +457,15 @@ export const TABS_LOCALITY: ResourceTabs = {
       count: 0,
       props: {},
     },
+    fossils: {
+      id: 'fossils',
+      routeName: 'locality-id-slug-fossils',
+      title: 'locality.fossils',
+      table: 'taxon_search',
+      isSolr: true,
+      count: 0,
+      props: {},
+    },
     specimen: {
       id: 'specimen',
       routeName: 'locality-id-slug-specimens',
@@ -503,6 +512,7 @@ export const TABS_LOCALITY: ResourceTabs = {
     'attachment_link',
     'sample',
     'boxes',
+    'fossils',
     'specimen',
     'locality_synonym',
     'stratigraphy_stratotype',

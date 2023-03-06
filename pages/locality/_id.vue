@@ -401,6 +401,9 @@ export default defineComponent({
                       ? `locality_id:${route.value.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`
                       : `locality_id:${route.value.params.id}`,
                 },
+                fossils: {
+                  fq: `locality_id:${route.value.params.id} AND rank:[14 TO 18]`,
+                },
               },
               api: { default: { locality: route.value.params.id } },
             },

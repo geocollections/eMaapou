@@ -753,6 +753,18 @@ export const HEADERS_DRILLCORE: Headers = {
   ],
 }
 
+export const HEADERS_FOSSIL: Headers = {
+  byIds: {
+    taxon: {
+      text: 'taxon.taxon',
+      value: 'taxon',
+      show: true,
+      apiFieldValue: 'taxon',
+    },
+  },
+  allIds: ['taxon'],
+}
+
 export const HEADERS_LOCALITY: Headers = {
   byIds: {
     id: {

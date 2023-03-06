@@ -157,6 +157,7 @@ export default {
     attachments: 'Attachments ({number})',
     samples: 'Samples ({number})',
     stratotypes: 'Stratotypes ({number})',
+    fossils: 'Fossil genera and species ({number})',
     coordinateSystem: 'Coordinate system',
     coordinateX: 'X',
     coordinateY: 'Y',

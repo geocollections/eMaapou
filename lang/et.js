@@ -159,6 +159,7 @@ export default {
     attachments: 'Failid ({number})',
     samples: 'Proovid ({number})',
     stratotypes: 'Stratotüübid ({number})',
+    fossils: 'Leitud fossiilid ({number})',
     coordinateSystem: 'Kordinaatsüsteem',
     coordinateX: 'X',
     coordinateY: 'Y',

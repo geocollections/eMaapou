@@ -82,6 +82,15 @@ export const DATASET_GEOLOCATIONS: ResourceDefaults = {
   },
 }
 
+export const FOSSILS: ResourceDefaults = {
+  options: {
+    page: 1,
+    itemsPerPage: 25,
+    sortBy: [],
+    sortDesc: [],
+  },
+}
+
 export const IMAGE: ResourceDefaults = {
   options: {
     page: 1,
