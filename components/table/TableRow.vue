@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="!isInvalid || hasValueSlot">
+  <tr v-if="!isInvalid || hasValueInSlot">
     <td class="font-weight-medium">{{ title }}</td>
     <td>
       <slot name="value">
@@ -9,26 +9,29 @@
   </tr>
 </template>
 
-<script>
+<script lang="ts">
+import { computed, defineComponent, PropType } from '@nuxtjs/composition-api'
 import isEmpty from 'lodash/isEmpty'
 
-export default {
+export default defineComponent({
   name: 'TableRow',
   props: {
     title: { type: String, default: null },
     value: {
-      type: null,
+      type: [String, Number] as PropType<string | number>,
       default: null,
       required: false,
     },
   },
-  computed: {
-    isInvalid() {
-      return isEmpty(this.value)
-    },
-    hasValueSlot() {
-      return this.$slots.value
-    },
+  setup(props, { slots }) {
+    const isInvalid = computed(() => {
+      if (typeof props.value === 'number') return false
+      return isEmpty(props.value)
+    })
+    const hasValueInSlot = computed(() => {
+      return slots.value
+    })
+    return { isInvalid, hasValueInSlot }
   },
-}
+})
 </script>
