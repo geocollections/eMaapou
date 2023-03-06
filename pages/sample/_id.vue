@@ -158,8 +158,9 @@
             :value="sample.mass"
           />
           <table-row
+            v-if="series"
             :title="$t('sample.series').toString()"
-            :value="sample.series.name"
+            :value="series.name"
           />
           <table-row
             v-if="samplePurpose"
@@ -407,6 +408,7 @@ export default defineComponent({
     const lithostratigraphy = computed(() => state.sample?.lithostratigraphy)
     const stratigraphy = computed(() => state.sample?.stratigraphy)
     const site = computed(() => state.sample?.site)
+    const series = computed(() => state.sample?.series)
     const locality = computed(() => state.sample?.locality)
 
     const { fetchState } = useFetch(async () => {
@@ -551,6 +553,7 @@ export default defineComponent({
       lithostratigraphy,
       stratigraphy,
       site,
+      series,
       locality,
       title,
       pageTitle,
