@@ -28,7 +28,7 @@
               <div class="ml-2">{{ $t('hints.wildcard') }}</div>
             </div>
             <div class="d-flex mb-1 align-center">
-              <code class="black--text font-weight-bold">-Tartu</code>
+              <code class="black--text font-weight-bold">-Pärnu</code>
               <div class="ml-2">{{ $t('hints.exclude') }}</div>
             </div>
             <!-- <div class="d-flex mb-1 align-center">
