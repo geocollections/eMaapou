@@ -509,6 +509,7 @@ export default {
     parent: 'Kuulub',
     parentSpecimen: 'Kuulub eksemplari',
     image: 'Pilt',
+    series: 'Seeria',
   },
   sampleData: {
     sampleNumber: 'Proov',

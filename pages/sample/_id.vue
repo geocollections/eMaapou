@@ -158,6 +158,10 @@
             :value="sample.mass"
           />
           <table-row
+            :title="$t('sample.series').toString()"
+            :value="sample.series.name"
+          />
+          <table-row
             v-if="samplePurpose"
             :title="$t('sample.samplePurpose').toString()"
             :value="

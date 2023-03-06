@@ -507,6 +507,7 @@ export default {
     parent: 'Belongs to',
     parentSpecimen: 'Belongs to specimen',
     image: 'Image',
+    series: 'Series',
   },
   sampleData: {
     sampleNumber: 'Sample',
