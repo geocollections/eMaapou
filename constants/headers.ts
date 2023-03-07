@@ -780,7 +780,7 @@ export const HEADERS_FOSSIL: Headers = {
       apiFieldValue: { et: 'src_txt', en: 'src_txt_en' },
     },
   },
-  allIds: ['taxon', 'fossil_group', 'parent', 'src'],
+  allIds: ['fossil_group', 'taxon', 'parent', 'src'],
 }
 
 export const HEADERS_LOCALITY: Headers = {
