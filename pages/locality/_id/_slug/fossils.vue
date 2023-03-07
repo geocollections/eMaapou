@@ -42,7 +42,7 @@ export default defineComponent({
           options: state.options,
           defaultParams: {
             fq: `locality_id:${route.value.params.id} AND rank:[14 TO 18]`,
-            sort: 'taxon ASC',
+            sort: 'fossil_group ASC,taxon ASC,',
           },
           fields: $getAPIFieldValues(HEADERS_FOSSIL),
         }

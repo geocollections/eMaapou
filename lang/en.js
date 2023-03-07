@@ -566,6 +566,7 @@ export default {
     pageTitle: 'Taxa',
     fad: 'First appearance datum',
     lad: 'Last appearance datum',
+    src: 'Occurrence based on',
   },
   infinite: {
     noMore: '',

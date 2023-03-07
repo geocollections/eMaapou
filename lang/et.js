@@ -557,7 +557,7 @@ export default {
     date_identified: 'Det. aeg',
     extra: 'Ekstra',
     remarks: 'Lisainfo',
-    fossilGroup: 'Fossiili grupp',
+    fossilGroup: 'Fossiilirühm',
     authorYear: 'Autor',
     parentTaxon: 'Kuulub: takson',
     species: 'Liik',
@@ -568,6 +568,7 @@ export default {
     pageTitle: 'Taksonid',
     fad: 'Ilmumine',
     lad: 'Kadumine',
+    src: 'Esinemine põhineb',
   },
   infinite: {
     noMore: '',

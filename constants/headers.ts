@@ -767,20 +767,20 @@ export const HEADERS_FOSSIL: Headers = {
       show: true,
       apiFieldValue: 'fossil_group',
     },
-    lad: {
-      text: 'taxon.lad',
-      value: 'lad',
+    parent: {
+      text: 'taxon.parentTaxon',
+      value: 'parent',
       show: true,
-      apiFieldValue: 'lad',
+      apiFieldValue: 'parent_taxon',
     },
-    fad: {
-      text: 'taxon.fad',
-      value: 'fad',
+    src: {
+      text: 'taxon.src',
+      value: 'src',
       show: true,
-      apiFieldValue: 'fad',
+      apiFieldValue: { et: 'src_txt', en: 'src_txt_en' },
     },
   },
-  allIds: ['taxon', 'fossil_group', 'fad', 'lad'],
+  allIds: ['taxon', 'fossil_group', 'parent', 'src'],
 }
 
 export const HEADERS_LOCALITY: Headers = {

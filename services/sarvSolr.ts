@@ -136,7 +136,7 @@ const buildSolrSortParameter = (
   fields: { [key: string]: string }
 ) => {
   if (!(options.sortBy && options.sortDesc)) return null
-
+  if (options.sortBy.length < 1) return null
   const orderBy = options.sortBy
     .map((field, i) => {
       // Support for multivalue fields #219
