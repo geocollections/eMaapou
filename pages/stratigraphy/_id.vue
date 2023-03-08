@@ -265,7 +265,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import DataTableStratigraphyStratotype from '~/components/data-table/DataTableStratigraphyStratotype.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
   components: {
@@ -396,8 +396,7 @@ export default defineComponent({
         en: state.stratigraphy?.stratigraphy_en,
       })
     )
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'stratigraphy'),
       pending: toRef(fetchState, 'pending'),

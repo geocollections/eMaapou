@@ -173,7 +173,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { Tab, TABS_COLLECTION } from '~/constants/tabs'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
     HeaderDetail,
@@ -239,8 +239,7 @@ export default defineComponent({
         en: state.collection?.name_en,
       })
     )
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'collection'),
       pending: toRef(fetchState, 'pending'),

@@ -293,7 +293,7 @@ import Detail from '~/templates/Detail.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { Tab, TABS_SITE } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
     HeaderDetail,
@@ -393,8 +393,7 @@ export default defineComponent({
         : state.site?.name_en
       return $translate({ et: state.site?.name, en: engTitle })
     })
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'site'),
       pending: toRef(fetchState, 'pending'),

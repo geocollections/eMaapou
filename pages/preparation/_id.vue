@@ -115,7 +115,10 @@
               })
             "
           />
-          <table-row :title="$t('sample.depth').toString()" :value="sample.depth" />
+          <table-row
+            :title="$t('sample.depth').toString()"
+            :value="sample.depth"
+          />
           <table-row
             :title="$t('sample.depthInterval').toString()"
             :value="sample.depth_interval"
@@ -156,7 +159,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { Tab, TABS_PREPARATION } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: { TableRowLink, TableRow, HeaderDetail, Tabs, Detail, BaseTable },
   setup() {
@@ -219,8 +222,7 @@ export default defineComponent({
     })
     const title = computed(() => state.preparation?.preparation_number)
 
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'preparation'),
       pending: toRef(fetchState, 'pending'),

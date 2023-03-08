@@ -32,7 +32,6 @@
     "lodash": "^4.17.21",
     "nuxt": "^2.15.8",
     "qs": "^6.11.0",
-    "slugify": "^1.6.0",
     "vue": "^2.7.10",
     "vue-echarts": "^6.0.0",
     "vue-infinite-loading": "^2.4.5",

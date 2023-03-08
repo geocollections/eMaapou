@@ -194,7 +194,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import MapDetail from '~/components/map/MapDetail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 import { Tab, TABS_DATASET } from '~/constants'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
   components: {
@@ -372,8 +372,7 @@ export default defineComponent({
     })
     const title = computed(() => state.dataset?.title)
 
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'dataset'),
       pending: toRef(fetchState, 'pending'),

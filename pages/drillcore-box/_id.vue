@@ -284,7 +284,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { Tab, TABS_DRILLCORE_BOX } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
     Tabs,
@@ -382,15 +382,7 @@ export default defineComponent({
       ).filter((item) => item.count > 0)
     })
 
-    const title = computed(
-      () =>
-        `${$translate({
-          et: state.drillcoreBox?.drillcore?.drillcore,
-          en: state.drillcoreBox?.drillcore?.drillcore_en,
-        })}-${state.drillcoreBox?.number}`
-    )
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'drillcoreBox'),
       pending: toRef(fetchState, 'pending'),

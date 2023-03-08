@@ -37,16 +37,6 @@ export default {
       news: newsResponse,
     }
   },
-  async fetch() {
-    const text = this.$translate({
-      et: this.news.title_et,
-      en: this.news.title_en,
-    })
-
-    const slugRoute = this.$createSlugRoute(this.$route, text)
-    if (slugRoute.path !== this.$route.path)
-      await this.$router.replace(slugRoute.path)
-  },
   head() {
     return {
       title: `${this.title} | ${this.$t('news.pageTitle')}}`,

@@ -538,7 +538,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import MapDetail from '~/components/map/MapDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 import ChartLas from '~/components/chart/ChartLas.vue'
 export default defineComponent({
   components: {
@@ -984,8 +984,7 @@ export default defineComponent({
           }`
       }
     })
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'file'),
       pending: toRef(fetchState, 'pending'),

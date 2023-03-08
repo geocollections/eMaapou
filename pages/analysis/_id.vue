@@ -193,7 +193,7 @@ import Tabs from '~/components/Tabs.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 import { Tab, TABS_ANALYSIS } from '~/constants'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 import ChartAnalysisResults from '~/components/chart/ChartAnalysisResults.vue'
 export default defineComponent({
   components: {
@@ -298,13 +298,7 @@ export default defineComponent({
           }
         }, {})
     })
-    const slugText = computed(
-      () =>
-        `${$translate({
-          et: state.analysis?.analysis_method.analysis_method,
-          en: state.analysis?.analysis_method.method_en,
-        })}-${state.analysis?.sample.number}`
-    )
+
     const pageTitle = computed(() =>
       i18n.t('analysis.title', {
         method: $translate({
@@ -314,13 +308,14 @@ export default defineComponent({
         sample: state.analysis?.sample?.number,
       })
     )
-    useSlugRoute({
-      slug: slugText,
+
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'analysis'),
       pending: toRef(fetchState, 'pending'),
       validRoute: toRef(state, 'validRoute'),
     })
+
     useMeta(() => {
       return {
         title: `${pageTitle.value} | ${i18n.t('analysis.pageTitle')}`,

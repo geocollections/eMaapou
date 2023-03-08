@@ -265,7 +265,7 @@ import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { Tab, TABS_SPECIMEN } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
     Detail,
@@ -386,8 +386,7 @@ export default defineComponent({
       }
       return null
     })
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       pending: toRef(fetchState, 'pending'),
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'specimen'),

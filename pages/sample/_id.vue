@@ -374,7 +374,7 @@ import HeaderDetail from '~/components/HeaderDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import { Tab, TABS_SAMPLE } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
     HeaderDetail,
@@ -516,8 +516,7 @@ export default defineComponent({
     const pageTitle = computed(
       () => `${i18n.t('sample.number')} ${title.value}`
     )
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'sample'),
       pending: toRef(fetchState, 'pending'),

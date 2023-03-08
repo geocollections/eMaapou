@@ -400,7 +400,7 @@ import { Tab, TABS_AREA } from '~/constants'
 import BaseBoolean from '~/components/base/BaseBoolean.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 import { MapMarker } from '~/types/map'
 export default defineComponent({
   components: {
@@ -538,8 +538,7 @@ export default defineComponent({
         mdiFileDownloadOutline,
       }
     })
-    useSlugRoute({
-      slug: pageTitle,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'area'),
       pending: toRef(fetchState, 'pending'),

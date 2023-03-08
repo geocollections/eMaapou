@@ -40,30 +40,6 @@ const plugin: Plugin = ({ app }, inject) => {
     return await hydrateCount(tab, options.countParams)
   }
 
-  const validateTabRoute = (route: Location, tabs: Tab[]): Location => {
-    if (!(tabs.length > 0)) return route
-    const currentTab = tabs.find(
-      (tab) =>
-        app.localePath({
-          name: route.name,
-          params: route.params,
-        }) ===
-        app.localePath({
-          name: tab.routeName,
-          params: route.params,
-        })
-    )
-    if (typeof currentTab !== 'undefined' && currentTab.count > 0) return route
-    // Find tab that has items
-    const initTab = tabs.find((tab) => tab.count > 0)
-    // Constuct route
-    // HACK: Right now we assume that tabs[0] return the base route, but this might not be the case always.
-    return {
-      name: initTab?.routeName ?? tabs[0].routeName,
-      params: route.params,
-    }
-  }
-
   const getMaxTab = (route: Location, tabs: any[]): Location => {
     if (!(tabs.length > 0)) return route
     const initTab = tabs.reduce((max, tab) =>
@@ -79,7 +55,6 @@ const plugin: Plugin = ({ app }, inject) => {
     return path
   }
   inject('hydrateTab', hydrateTab)
-  inject('validateTabRoute', validateTabRoute)
   inject('getMaxTab', getMaxTab)
 }
 

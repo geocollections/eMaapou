@@ -204,7 +204,7 @@ import TableRowLink from '~/components/table/TableRowLink.vue'
 import Detail from '~/templates/Detail.vue'
 import { Tab, TABS_DRILLCORE } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
-import { useSlugRoute } from '~/composables/useSlugRoute'
+import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
     HeaderDetail,
@@ -309,8 +309,7 @@ export default defineComponent({
         en: state.drillcore?.drillcore_en,
       })
     )
-    useSlugRoute({
-      slug: title,
+    useRedirectInvalidTabRoute({
       tabs: toRef(state, 'tabs'),
       watchableObject: toRef(state, 'drillcore'),
       pending: toRef(fetchState, 'pending'),

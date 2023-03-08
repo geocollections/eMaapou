@@ -28,9 +28,7 @@ declare module 'vue/types/vue' {
         countParams?: any
       }
     ): Promise<Tab>
-    $validateTabRoute(route: Location, tabs: any[]): Location
     $getMaxTab(route: Location, tabs: any[]): Location
-    $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
@@ -62,9 +60,7 @@ declare module '@nuxt/types' {
         countParams?: any
       }
     ): Promise<Tab>
-    $validateTabRoute(route: Location, tabs: any[]): Location
     $getMaxTab(route: Location, tabs: any[]): Location
-    $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void
@@ -95,9 +91,7 @@ declare module '@nuxt/types' {
         countParams?: any
       }
     ): Promise<Tab>
-    $validateTabRoute(route: Location, tabs: any[]): Location
     $getMaxTab(route: Location, tabs: any[]): Location
-    $createSlugRoute(route: Route, text: string): Location
     $openWindow(url: string): void
     $openNuxtWindow(location: Location | undefined): void
     $openImage(filename: string, size?: string): void

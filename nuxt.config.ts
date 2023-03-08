@@ -82,7 +82,6 @@ export default {
     { src: '~plugins/afterEach.ts', mode: 'client' },
     { src: '~plugins/xlsx.ts', mode: 'client' },
     '~/plugins/formatDate.ts',
-    '~/plugins/slug.ts', // this might be only called on server-side
     { src: '~/plugins/vueMatomo.ts', mode: 'client' },
     { src: '~/plugins/vue-stack-grid.js', mode: 'client' },
   ],
