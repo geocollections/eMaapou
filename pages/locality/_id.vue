@@ -250,7 +250,12 @@
     </template>
 
     <template #bottom>
-      <image-bar v-if="images.length > 0" class="mt-4" :images="images" />
+      <image-bar
+        v-if="images.length > 0"
+        class="mt-4"
+        :images="images"
+        @update="imageQuery"
+      />
       <v-card v-if="tabs.length > 0" class="mt-4 mb-4">
         <tabs :tabs="tabs" :init-active-tab="validRoute" />
       </v-card>
@@ -312,7 +317,11 @@ export default defineComponent({
       drillcore: null as any,
       validRoute: {} as Location,
       tabs: [] as Tab[],
+    })
+
+    const imageBarState = reactive({
       images: [] as any[],
+      imagesHasNext: true,
     })
 
     const icons = computed(() => {
@@ -342,6 +351,38 @@ export default defineComponent({
     const stratigraphyTop = computed(() => state.locality?.stratigraphy_top)
     const stratigraphyBase = computed(() => state.locality?.stratigraphy_base)
 
+    const imageQuery = async ({
+      rows,
+      page,
+    }: {
+      rows: number
+      page: number
+    }) => {
+      if (!imageBarState.imagesHasNext) return
+      // TODO: this request is defined in fetch also. Find a way to unify them.
+      const newImages = await $services.sarvREST
+        .getResourceList('locality_image', {
+          defaultParams: {
+            locality: route.value.params.id,
+            nest: 2,
+            limit: rows,
+            offset: rows * page,
+            ordering: 'sort',
+          },
+        })
+        .then((res) => {
+          imageBarState.imagesHasNext = !!res.next
+          return res.items.map((image: any) => ({
+            id: image.attachment.id,
+            filename: image.attachment.filename,
+            author: image.attachment.author?.agent ?? null,
+            date: image.attachment.date_created,
+            dateText: image.attachment.date_created_free,
+          }))
+        })
+      imageBarState.images = [...imageBarState.images, ...newImages]
+    }
+
     const { fetchState } = useFetch(async () => {
       const localityPromise = $services.sarvREST.getResource(
         'locality',
@@ -363,6 +404,7 @@ export default defineComponent({
           defaultParams: {
             locality: route.value.params.id,
             nest: 2,
+            ordering: 'sort',
           },
         })
         .then((res) => {
@@ -459,7 +501,7 @@ export default defineComponent({
             )
           } else return tab.count > 0
         })
-      state.images = localityImageResponse ?? []
+      imageBarState.images = localityImageResponse ?? []
     })
     const title = computed(() =>
       $translate({
@@ -508,9 +550,9 @@ export default defineComponent({
           {
             property: 'og:image',
             hid: 'og:image',
-            content: state.images[0]?.filename
+            content: imageBarState.images[0]?.filename
               ? $img(
-                  `${state.images[0]?.filename}`,
+                  `${imageBarState.images[0]?.filename}`,
                   { size: 'small' },
                   {
                     provider: 'geocollections',
@@ -523,6 +565,7 @@ export default defineComponent({
     })
     return {
       ...toRefs(state),
+      ...toRefs(imageBarState),
       title,
       analysisResultsCount,
       referenceCount,
@@ -539,6 +582,7 @@ export default defineComponent({
       goToAnalyticalData,
       isNil,
       isEmpty,
+      imageQuery,
       icons,
     }
   },
