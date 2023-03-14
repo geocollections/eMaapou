@@ -71,13 +71,10 @@
       </v-tooltip>
     </div>
     <div v-intersect="loadMore" />
-    <v-dialog
-      v-model="showOverlay"
-      content-class="elevation-0"
-      width="auto"
-      @click="showOverlay = !showOverlay"
-    >
-      <v-img contain :max-height="700" :src="overlayImageSrc" />
+    <v-dialog v-model="showOverlay" content-class="elevation-0" width="auto">
+      <div @click="showOverlay = !showOverlay">
+        <v-img contain :max-height="700" :src="overlayImageSrc" />
+      </div>
     </v-dialog>
   </div>
 </template>
