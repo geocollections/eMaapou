@@ -372,13 +372,15 @@ export default defineComponent({
         })
         .then((res) => {
           imageBarState.imagesHasNext = !!res.next
-          return res.items.map((image: any) => ({
-            id: image.attachment.id,
-            filename: image.attachment.filename,
-            author: image.attachment.author?.agent ?? null,
-            date: image.attachment.date_created,
-            dateText: image.attachment.date_created_free,
-          }))
+          return res.items
+            .filter((image: any) => !image.attachment.is_private)
+            .map((image: any) => ({
+              id: image.attachment.id,
+              filename: image.attachment.filename,
+              author: image.attachment.author?.agent ?? null,
+              date: image.attachment.date_created,
+              dateText: image.attachment.date_created_free,
+            }))
         })
       imageBarState.images = [...imageBarState.images, ...newImages]
     }
@@ -408,13 +410,15 @@ export default defineComponent({
           },
         })
         .then((res) => {
-          return res.items.map((image: any) => ({
-            id: image.attachment.id,
-            filename: image.attachment.filename,
-            author: image.attachment.author?.agent ?? null,
-            date: image.attachment.date_created,
-            dateText: image.attachment.date_created_free,
-          }))
+          return res.items
+            .filter((image: any) => !image.attachment.is_private)
+            .map((image: any) => ({
+              id: image.attachment.id,
+              filename: image.attachment.filename,
+              author: image.attachment.author?.agent ?? null,
+              date: image.attachment.date_created,
+              dateText: image.attachment.date_created_free,
+            }))
         })
 
       // Checking if locality has a related .las file to show in graph tab
