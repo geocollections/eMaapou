@@ -10,22 +10,16 @@
                 :src="
                   $img(
                     `${item.filename}`,
-                    { size: 'small' },
+                    { size: 'medium' },
                     { provider: 'geocollections' }
                   )
                 "
-                :lazy-src="
-                  $img(
-                    `${item.filename}`,
-                    { size: 'small' },
-                    { provider: 'geocollections' }
-                  )
-                "
-                width="200"
+                width="250"
+                aspect-ratio="1.4"
                 :class="{
                   'elevation-2': hover,
                 }"
-                class="grey lighten-2 rounded transition-swing cursor-pointer"
+                class="lighten-2 rounded transition-swing cursor-pointer"
                 v-on="on"
                 @click="
                   openOverlay(
