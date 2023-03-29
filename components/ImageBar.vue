@@ -82,7 +82,7 @@
           :to="
             localePath({
               name: 'photo-id',
-              params: { id: overlayImageId?.toString() },
+              params: { id: overlayImageId?.toString() ?? '' },
             })
           "
           color="info"
