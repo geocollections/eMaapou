@@ -14,7 +14,7 @@
       </v-row>
       <v-row no-gutters class="fill-height">
         <v-fade-transition hide-on-leave>
-          <v-col v-if="true" key="detail-error" class="pt-15">
+          <v-col v-if="error" key="detail-error" class="pt-15">
             <div>
               <detail-error :error="error" />
             </div>
