@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" class="mt-10">
+  <v-row justify="center">
     <v-col sm="8" md="6" class="text-center">
       <h1 class="text-h4 mb-5">
         {{ title }}
@@ -29,6 +29,7 @@
       <v-form class="d-flex text-right my-4" @submit.prevent="handleSearch">
         <input-search
           v-model="query"
+          input-class="rounded"
           height="56"
           :placeholder="$t('landing.searchPlaceholder')"
         />

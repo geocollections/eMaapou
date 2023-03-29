@@ -14,12 +14,12 @@
       </v-row>
       <v-row no-gutters class="fill-height">
         <v-fade-transition hide-on-leave>
-          <v-col v-if="error" key="detail-error" class="pt-5">
+          <v-col v-if="true" key="detail-error" class="pt-15">
             <div>
               <detail-error :error="error" />
             </div>
           </v-col>
-          <v-col v-else-if="loading" key="detail-loading" class="pt-5">
+          <v-col v-else-if="loading" key="detail-loading" class="pt-15">
             <div
               :style="`height: 100%; width: 100%`"
               class="d-flex align-center justify-center"
