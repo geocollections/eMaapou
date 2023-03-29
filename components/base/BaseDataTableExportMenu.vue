@@ -1,5 +1,5 @@
 <template>
-  <v-menu transition="slide-y-transition" offset-y bottom right>
+  <v-menu transition="slide-y-transition" offset-y bottom right z-index="4">
     <template #activator="menu">
       <v-tooltip bottom open-delay="500">
         <template #activator="tooltip">

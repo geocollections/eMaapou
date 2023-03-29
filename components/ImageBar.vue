@@ -27,7 +27,8 @@
                       `${item.filename}`,
                       { size: 'large' },
                       { provider: 'geocollections' }
-                    )
+                    ),
+                    item.id
                   )
                 "
               >
@@ -65,9 +66,31 @@
       </v-tooltip>
     </div>
     <div v-intersect="loadMore" />
-    <v-dialog v-model="showOverlay" content-class="elevation-0" width="auto">
+    <v-dialog
+      v-model="showOverlay"
+      overlay-opacity="0.80"
+      content-class="elevation-0"
+      width="auto"
+    >
       <div @click="showOverlay = !showOverlay">
-        <v-img contain :max-height="700" :src="overlayImageSrc" />
+        <v-img contain max-height="80vh" :src="overlayImageSrc" />
+        <v-btn
+          class="montserrat text-capitalize font-weight-regular"
+          absolute
+          style="bottom: 1rem"
+          nuxt
+          :to="
+            localePath({
+              name: 'photo-id',
+              params: { id: overlayImageId?.toString() },
+            })
+          "
+          color="info"
+          elevation="2"
+        >
+          <v-icon left>{{ icons.mdiInformationOutline }}</v-icon>
+          {{ $t('photo.viewDetail') }}
+        </v-btn>
       </div>
     </v-dialog>
   </div>
@@ -75,11 +98,13 @@
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   PropType,
   reactive,
   ref,
 } from '@nuxtjs/composition-api'
+import { mdiInformationOutline } from '@mdi/js'
 
 type Image = {
   id: number
@@ -104,15 +129,25 @@ export default defineComponent({
     })
     const showOverlay = ref(false)
     const overlayImageSrc = ref<String | null>(null)
+    const overlayImageId = ref<number>()
     const loadMore = () => {
       emit('update', { page: state.page, rows: rowsPerPage })
       state.page += 1
     }
-    const openOverlay = (src: String) => {
+    const openOverlay = (src: String, id: number) => {
       overlayImageSrc.value = src
+      overlayImageId.value = id
       showOverlay.value = true
     }
-    return { showOverlay, overlayImageSrc, loadMore, openOverlay }
+    const icons = computed(() => ({ mdiInformationOutline }))
+    return {
+      showOverlay,
+      overlayImageSrc,
+      loadMore,
+      openOverlay,
+      overlayImageId,
+      icons,
+    }
   },
 })
 </script>

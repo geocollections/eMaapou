@@ -90,6 +90,9 @@
         v-if="item.image_preview_url"
         :preview-src="item.image_preview_url"
         :src="item.image_url"
+        :detail-route="
+          localePath({ name: 'photo-id', params: { id: item.attachment_id } })
+        "
         class="my-1"
       />
     </template>

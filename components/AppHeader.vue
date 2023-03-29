@@ -13,7 +13,6 @@
       'app-bar-full': $vuetify.breakpoint.mdAndUp,
       'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
     }"
-    style="z-index: 2060"
     :style="cssProps"
   >
     <!--

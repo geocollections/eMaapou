@@ -984,6 +984,7 @@ export default {
     imageNumber: 'Number',
     author: 'Author',
     size: 'Image size',
+    viewDetail: 'Image info',
   },
   news: {
     pageTitle: 'News',

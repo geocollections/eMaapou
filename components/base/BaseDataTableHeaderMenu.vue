@@ -7,6 +7,7 @@
   <v-menu
     transition="slide-y-transition"
     offset-y
+    z-index="4"
     :close-on-content-click="false"
   >
     <template #activator="menu">

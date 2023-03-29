@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-dialog v-model="open" content-class="elevation-0" offset-x>
+    <v-dialog
+      v-model="open"
+      overlay-opacity="0.80"
+      content-class="elevation-0"
+      offset-x
+    >
       <template #activator="{ on, attrs }">
         <v-img
           id="preview-img"
@@ -15,16 +20,37 @@
         />
       </template>
       <div @click="open = !open">
-        <v-img content-class="rounded" contain :max-height="700" :src="src" />
+        <v-img content-class="rounded" contain max-height="80vh" :src="src" />
+        <v-btn
+          v-if="detailRoute"
+          class="montserrat text-capitalize font-weight-regular"
+          absolute
+          style="bottom: 1rem"
+          nuxt
+          :to="detailRoute"
+          color="info"
+          elevation="2"
+        >
+          <v-icon left>{{ icons.mdiInformationOutline }}</v-icon>
+          {{ $t('photo.viewDetail') }}
+        </v-btn>
       </div>
     </v-dialog>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // TODO: "Currently a dialog is created for every thumbnail image.
 // would be better if there was only one dialog that we pass the image url to.
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  ref,
+} from '@nuxtjs/composition-api'
+import { Route } from 'vue-router'
+
+import { mdiInformationOutline } from '@mdi/js'
 export default defineComponent({
   name: 'ThumbnailImage',
   props: {
@@ -36,10 +62,17 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    detailRoute: {
+      type: Object as PropType<Route | null>,
+      default: null,
+    },
   },
   setup() {
     const open = ref(false)
-    return { open }
+    const icons = computed(() => ({
+      mdiInformationOutline,
+    }))
+    return { open, icons }
   },
 })
 </script>

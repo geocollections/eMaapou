@@ -986,6 +986,7 @@ export default {
     imageNumber: 'Number',
     author: 'Autor',
     size: 'Pildi suurus',
+    viewDetail: 'Pildi info',
   },
   news: {
     pageTitle: 'Uudised',

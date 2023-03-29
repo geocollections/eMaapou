@@ -14,7 +14,7 @@
         hide-details
         :items="itemsPerPageOptions"
         :value="options.itemsPerPage"
-        :menu-props="{ bottom: true, offsetY: true }"
+        :menu-props="{ bottom: true, offsetY: true, zIndex: 4 }"
         @change="changeRowsPerPage"
       />
     </div>
@@ -26,7 +26,7 @@
         <v-icon>{{ icons.mdiChevronLeft }}</v-icon>
       </v-btn>
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
-      <v-menu offset-y :close-on-content-click="false">
+      <v-menu offset-y :close-on-content-click="false" z-index="4">
         <template #activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
