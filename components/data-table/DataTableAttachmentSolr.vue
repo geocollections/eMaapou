@@ -117,7 +117,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getAttachmentType(type) {
+    getAttachmentType(type: number) {
       switch (type) {
         case 1:
           return this.$t('attachment.typeSpecimen')
