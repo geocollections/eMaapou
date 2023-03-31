@@ -22,14 +22,12 @@
                 class="lighten-2 rounded transition-swing cursor-pointer"
                 v-on="on"
                 @click="
-                  openOverlay(
-                    $img(
-                      `${item.filename}`,
-                      { size: 'large' },
-                      { provider: 'geocollections' }
-                    ),
-                    item.id
-                  )
+                  openOverlay({
+                    src: item.filename,
+                    modifiers: { size: 'large' },
+                    options: { provider: 'geocollections' },
+                    id: item.id,
+                  })
                 "
               >
                 <template #placeholder>
@@ -66,33 +64,7 @@
       </v-tooltip>
     </div>
     <div v-intersect="loadMore" />
-    <v-dialog
-      v-model="showOverlay"
-      overlay-opacity="0.80"
-      content-class="elevation-0"
-      width="auto"
-    >
-      <div @click="showOverlay = !showOverlay">
-        <v-img contain max-height="80vh" :src="overlayImageSrc" />
-        <v-btn
-          class="montserrat text-capitalize font-weight-regular"
-          absolute
-          style="bottom: 1rem"
-          nuxt
-          :to="
-            localePath({
-              name: 'photo-id',
-              params: { id: overlayImageId?.toString() ?? '' },
-            })
-          "
-          color="info"
-          elevation="2"
-        >
-          <v-icon left>{{ icons.mdiInformationOutline }}</v-icon>
-          {{ $t('photo.viewDetail') }}
-        </v-btn>
-      </div>
-    </v-dialog>
+    <image-overlay v-model="showOverlay" :image="overlayImage" />
   </div>
 </template>
 
@@ -105,6 +77,7 @@ import {
   ref,
 } from '@nuxtjs/composition-api'
 import { mdiInformationOutline } from '@mdi/js'
+import ImageOverlay, { OverlayImage } from './ImageOverlay.vue'
 
 type Image = {
   id: number
@@ -116,6 +89,7 @@ type Image = {
 
 export default defineComponent({
   name: 'ImageBar',
+  components: { ImageOverlay },
   props: {
     images: {
       type: Array as PropType<Image[]>,
@@ -128,24 +102,21 @@ export default defineComponent({
       page: 1,
     })
     const showOverlay = ref(false)
-    const overlayImageSrc = ref<String | null>(null)
-    const overlayImageId = ref<number>()
+    const overlayImage = ref<OverlayImage>()
     const loadMore = () => {
       emit('update', { page: state.page, rows: rowsPerPage })
       state.page += 1
     }
-    const openOverlay = (src: String, id: number) => {
-      overlayImageSrc.value = src
-      overlayImageId.value = id
+    const openOverlay = (image: OverlayImage) => {
+      overlayImage.value = image
       showOverlay.value = true
     }
     const icons = computed(() => ({ mdiInformationOutline }))
     return {
       showOverlay,
-      overlayImageSrc,
+      overlayImage,
       loadMore,
       openOverlay,
-      overlayImageId,
       icons,
     }
   },
