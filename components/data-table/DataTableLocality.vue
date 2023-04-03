@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -31,17 +31,15 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
+<script lang="ts">
+import { toRef, defineComponent, PropType } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import { HEADERS_LOCALITY } from '~/constants'
-import headersMixin from '~/mixins/headersMixin'
-export default {
+import { IOptions } from '~/services'
+export default defineComponent({
   name: 'DataTableLocality',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -52,7 +50,7 @@ export default {
       default: 0,
     },
     options: {
-      type: Object,
+      type: Object as PropType<IOptions>,
       default: () => ({
         page: 1,
         itemsPerPage: 25,
@@ -60,18 +58,20 @@ export default {
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_LOCALITY),
-      module: 'locality',
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } =
+      useHeadersWithState({
+        module: 'locality',
+        localHeaders: HEADERS_LOCALITY,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'locality' }),
-  },
-  methods: {
-    round,
-  },
-}
+})
 </script>

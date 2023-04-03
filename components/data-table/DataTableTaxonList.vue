@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.taxon="{ item }">
       <base-link-external
@@ -31,19 +31,17 @@
   </base-data-table>
 </template>
 
-<script>
+<script lang="ts">
 import { mdiPlus, mdiMinus } from '@mdi/js'
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
+import { computed, defineComponent, toRef } from '@nuxtjs/composition-api'
+import { useHeaders } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_TAXON_LIST } from '~/constants'
 
-export default {
+export default defineComponent({
   name: 'DataTableTaxonList',
   components: { BaseLinkExternal, BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -63,21 +61,18 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_TAXON_LIST),
-    }
-  },
-  computed: {
-    icons() {
+  setup(props) {
+    const icons = computed(() => {
       return {
         mdiPlus,
         mdiMinus,
       }
-    },
+    })
+    const { headers, handleHeadersReset, handleHeadersChange } = useHeaders({
+      localHeaders: HEADERS_TAXON_LIST,
+      options: toRef(props, 'options'),
+    })
+    return { icons, headers, handleHeadersChange, handleHeadersReset }
   },
-  methods: {
-    round,
-  },
-}
+})
 </script>

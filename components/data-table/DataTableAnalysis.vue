@@ -6,8 +6,8 @@
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -76,17 +76,25 @@
   </base-data-table>
 </template>
 
-<script>
+<script lang="ts">
 import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
+// import cloneDeep from 'lodash/cloneDeep'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  // reactive,
+  toRef,
+  // useContext,
+} from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
+import { HEADERS_ANALYSIS, Header } from '~/constants'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
-import { HEADERS_ANALYSIS } from '~/constants'
-export default {
+import { IOptions } from '~/services'
+
+export default defineComponent({
   name: 'DataTableAnalysis',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -97,7 +105,7 @@ export default {
       default: 0,
     },
     options: {
-      type: Object,
+      type: Object as PropType<IOptions>,
       default: () => ({
         page: 1,
         itemsPerPage: 25,
@@ -105,29 +113,37 @@ export default {
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
     hideDepth: Boolean,
     hideLocality: Boolean,
     hideSample: Boolean,
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_ANALYSIS),
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeadersWithState({
       module: 'analysis',
-    }
-  },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'analysis' }),
-    filteredHeaders() {
-      return this.$_headers.filter((item) => {
-        if (item.value.includes('depth')) return !this.hideDepth
-        else if (item.value === 'locality') return !this.hideLocality
-        else if (item.value === 'sample_number') return !this.hideSample
+      localHeaders: HEADERS_ANALYSIS,
+      statefulHeaders: props.statefulHeaders,
+      options: toRef(props, 'options'),
+    })
+
+    const filteredHeaders = computed(() => {
+      return headers.value.filter((item: Header) => {
+        if (item.value.includes('depth')) return !props.hideDepth
+        else if (item.value === 'locality') return !props.hideLocality
+        else if (item.value === 'sample_number') return !props.hideSample
         else return item
       })
-    },
+    })
+    return {
+      headers,
+      filteredHeaders,
+      handleHeadersReset,
+      handleHeadersChange,
+      round,
+    }
   },
-  methods: {
-    round,
-  },
-}
+})
 </script>

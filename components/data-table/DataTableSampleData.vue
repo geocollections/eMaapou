@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.sample="{ item }">
       <nuxt-link
@@ -88,17 +88,16 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
 import cloneDeep from 'lodash/cloneDeep'
+import { useHeaders } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE_DATA } from '~/constants'
 
-export default {
+export default defineComponent({
   name: 'DataTableSampleData',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -124,28 +123,28 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      localHeaders: this.getHeaders(),
-    }
-  },
-  methods: {
-    round,
-    getHeaders() {
+  setup(props) {
+    const getHeaders = () => {
       const defaultHeaders = cloneDeep(HEADERS_SAMPLE_DATA)
       return {
         byIds: {
           ...defaultHeaders.byIds,
-          ...Object.entries(this.additionalHeaders.byIds).reduce(
+          ...Object.entries(props.additionalHeaders.byIds).reduce(
             (prev, [key, value]) => {
+              // @ts-ignore
               return { ...prev, [key]: { ...value, translate: false } }
             },
             {}
           ),
         },
-        allIds: [...defaultHeaders.allIds, ...this.additionalHeaders.allIds],
+        allIds: [...defaultHeaders.allIds, ...props.additionalHeaders.allIds],
       }
-    },
+    }
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: getHeaders(),
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-}
+})
 </script>

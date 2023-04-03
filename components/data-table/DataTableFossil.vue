@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.taxon="{ item }">
       <base-link-external
@@ -45,16 +45,17 @@
   </base-data-table>
 </template>
 
-<script>
-import cloneDeep from 'lodash/cloneDeep'
+<script lang="ts">
+import { defineComponent, toRef, PropType } from '@nuxtjs/composition-api'
+import { useHeaders } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_FOSSIL } from '~/constants'
-export default {
+import { IOptions } from '~/services'
+
+export default defineComponent({
   name: 'DataTableFossil',
   components: { BaseLinkExternal, BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -65,7 +66,7 @@ export default {
       default: 0,
     },
     options: {
-      type: Object,
+      type: Object as PropType<IOptions>,
       default: () => ({
         page: 1,
         itemsPerPage: 25,
@@ -74,10 +75,12 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_FOSSIL),
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_FOSSIL,
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-}
+})
 </script>

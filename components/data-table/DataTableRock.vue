@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.id="{ item }">
       <base-link-external
@@ -41,17 +41,16 @@
   </base-data-table>
 </template>
 
-<script>
-import cloneDeep from 'lodash/cloneDeep'
-import BaseBoolean from '../base/BaseBoolean.vue'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
+import { useHeaders } from '~/composables/useHeaders'
+import BaseBoolean from '~/components/base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ROCK } from '~/constants'
-export default {
+export default defineComponent({
   name: 'DataTableRock',
   components: { BaseLinkExternal, BaseDataTable, BaseBoolean },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -71,10 +70,12 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_ROCK),
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_ROCK,
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-}
+})
 </script>

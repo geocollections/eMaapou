@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -46,17 +46,14 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import { HEADERS_SITE } from '~/constants'
-import headersMixin from '~/mixins/headersMixin'
-export default {
+export default defineComponent({
   name: 'DataTableSite',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -75,18 +72,20 @@ export default {
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_SITE),
-      module: 'site',
-    }
+  setup(props) {
+    const { headers, handleHeadersReset, handleHeadersChange } =
+      useHeadersWithState({
+        module: 'site',
+        localHeaders: HEADERS_SITE,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
+    return { headers, handleHeadersChange, handleHeadersReset }
   },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'site' }),
-  },
-  methods: {
-    round,
-  },
-}
+})
 </script>

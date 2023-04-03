@@ -146,21 +146,17 @@
 </template>
 
 <script lang="ts">
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, ref, toRef } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
 
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import ImageOverlay, { OverlayImage } from '~/components/ImageOverlay.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN } from '~/constants'
 export default defineComponent({
   name: 'DataTableSpecimen',
   components: { BaseLinkExternal, BaseDataTable, ThumbnailImage, ImageOverlay },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -179,31 +175,37 @@ export default defineComponent({
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
     useDynamicHeaders: {
       type: Boolean,
       default: false,
     },
   },
-  setup() {
+  setup(props) {
     const showOverlay = ref(false)
     const overlayImage = ref<OverlayImage>()
     const openOverlay = (image: OverlayImage) => {
       overlayImage.value = image
       showOverlay.value = true
     }
-    return { showOverlay, overlayImage, openOverlay }
-  },
-  data() {
+    const { headers, handleHeadersReset, handleHeadersChange } =
+      useHeadersWithState({
+        module: 'specimen',
+        localHeaders: HEADERS_SPECIMEN,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
     return {
-      localHeaders: cloneDeep(HEADERS_SPECIMEN),
-      module: 'specimen',
+      showOverlay,
+      overlayImage,
+      openOverlay,
+      headers,
+      handleHeadersChange,
+      handleHeadersReset,
     }
-  },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'specimen' }),
-  },
-  methods: {
-    round,
   },
 })
 </script>

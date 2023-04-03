@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.drillcore="{ item }">
       <nuxt-link
@@ -20,17 +20,14 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
-import BaseDataTable from '../base/BaseDataTable.vue'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import { HEADERS_DRILLCORE } from '~/constants'
-import headersMixin from '~/mixins/headersMixin'
-export default {
+export default defineComponent({
   name: 'DataTableDrillcore',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -49,18 +46,20 @@ export default {
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_DRILLCORE),
-      module: 'drillcore',
-    }
+  setup(props) {
+    const { headers, handleHeadersReset, handleHeadersChange } =
+      useHeadersWithState({
+        module: 'drillcore',
+        localHeaders: HEADERS_DRILLCORE,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
+    return { headers, handleHeadersChange, handleHeadersReset }
   },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'drillcore' }),
-  },
-  methods: {
-    round,
-  },
-}
+})
 </script>

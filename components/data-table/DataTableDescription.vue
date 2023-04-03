@@ -2,13 +2,13 @@
   <base-data-table
     expandable
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <!-- eslint-disable-next-line vue/no-template-shadow -->
     <template #expanded-item="{ headers, item }">
@@ -117,19 +117,18 @@
   </base-data-table>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
 import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import TableRow from '../table/TableRow.vue'
-import TableRowLink from '../table/TableRowLink.vue'
-import BaseTable from '../base/BaseTable.vue'
+import { useHeaders } from '~/composables/useHeaders'
+import TableRow from '~/components/table/TableRow.vue'
+import TableRowLink from '~/components/table/TableRowLink.vue'
+import BaseTable from '~/components/base/BaseTable.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DESCRIPTION } from '~/constants'
-export default {
+export default defineComponent({
   name: 'DataTableDescription',
   components: { BaseDataTable, TableRow, TableRowLink, BaseTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -149,13 +148,12 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_DESCRIPTION),
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_DESCRIPTION,
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange, round }
   },
-  methods: {
-    round,
-  },
-}
+})
 </script>

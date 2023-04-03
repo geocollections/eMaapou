@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.taxon="{ item }">
       <base-link-external
@@ -77,19 +77,17 @@
   </base-data-table>
 </template>
 
-<script>
-import { mapState } from 'vuex'
-
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
+<script lang="ts">
+import { defineComponent, PropType, toRef } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_TAXON } from '~/constants'
-export default {
+import { IOptions } from '~/services'
+
+export default defineComponent({
   name: 'DataTableTaxon',
   components: { BaseLinkExternal, BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -100,7 +98,7 @@ export default {
       default: 0,
     },
     options: {
-      type: Object,
+      type: Object as PropType<IOptions>,
       default: () => ({
         page: 1,
         itemsPerPage: 25,
@@ -108,18 +106,20 @@ export default {
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_TAXON),
-      module: 'taxon',
-    }
+  setup(props) {
+    const { headers, handleHeadersReset, handleHeadersChange } =
+      useHeadersWithState({
+        module: 'taxon',
+        localHeaders: HEADERS_TAXON,
+        options: toRef(props, 'options'),
+        statefulHeaders: props.statefulHeaders,
+      })
+    return { headers, handleHeadersChange, handleHeadersReset }
   },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'taxon' }),
-  },
-  methods: {
-    round,
-  },
-}
+})
 </script>

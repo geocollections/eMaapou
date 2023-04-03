@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.file="{ item }">
       <thumbnail-attachment
@@ -53,17 +53,16 @@
   </base-data-table>
 </template>
 
-<script>
-import cloneDeep from 'lodash/cloneDeep'
-import BaseDataTable from '../base/BaseDataTable.vue'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
+import { useHeaders } from '~/composables/useHeaders'
+import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import ThumbnailAttachment from '~/components/thumbnail/ThumbnailAttachment.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ATTACHMENT } from '~/constants'
 
-export default {
+export default defineComponent({
   name: 'DataTableAttachment',
   components: { BaseDataTable, ThumbnailAttachment },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -83,10 +82,12 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_ATTACHMENT),
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_ATTACHMENT,
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-}
+})
 </script>

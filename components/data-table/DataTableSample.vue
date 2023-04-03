@@ -2,13 +2,13 @@
   <div>
     <base-data-table
       v-bind="$attrs"
-      :headers="$_headers"
+      :headers="headers"
       :items="items"
       :options="options"
       :count="count"
       v-on="$listeners"
-      @change:headers="$_handleHeadersChange"
-      @reset:headers="$_handleHeadersReset"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset"
     >
       <template #item.id="{ item }">
         <nuxt-link
@@ -110,12 +110,9 @@
 </template>
 
 <script lang="ts">
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { defineComponent, ref, toRef } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SAMPLE } from '~/constants'
 import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
 import ImageOverlay, { OverlayImage } from '~/components/ImageOverlay.vue'
@@ -123,7 +120,6 @@ import ImageOverlay, { OverlayImage } from '~/components/ImageOverlay.vue'
 export default defineComponent({
   name: 'DataTableSample',
   components: { BaseDataTable, ThumbnailImage, ImageOverlay },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -142,27 +138,33 @@ export default defineComponent({
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup() {
+  setup(props) {
     const showOverlay = ref(false)
     const overlayImage = ref<OverlayImage>()
     const openOverlay = (image: OverlayImage) => {
       overlayImage.value = image
       showOverlay.value = true
     }
-    return { showOverlay, overlayImage, openOverlay }
-  },
-  data() {
+    const { headers, handleHeadersChange, handleHeadersReset } =
+      useHeadersWithState({
+        module: 'sample',
+        localHeaders: HEADERS_SAMPLE,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
     return {
-      localHeaders: cloneDeep(HEADERS_SAMPLE),
-      module: 'sample',
+      showOverlay,
+      overlayImage,
+      openOverlay,
+      headers,
+      handleHeadersReset,
+      handleHeadersChange,
     }
-  },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'sample' }),
-  },
-  methods: {
-    round,
   },
 })
 </script>

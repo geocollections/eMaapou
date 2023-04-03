@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.id="{ item }">
       <nuxt-link
@@ -52,16 +52,13 @@
 </template>
 
 <script lang="ts">
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
-import Vue from 'vue'
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
+import { useHeadersWithState } from '~/composables/useHeaders'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET } from '~/constants'
-export default Vue.extend({
+export default defineComponent({
   name: 'DataTableDataset',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -80,15 +77,20 @@ export default Vue.extend({
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_DATASET),
-      module: 'dataset',
-    }
-  },
-  computed: {
-    ...mapState('headers', { stateHeaders: 'dataset' }),
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } =
+      useHeadersWithState({
+        module: 'dataset',
+        localHeaders: HEADERS_DATASET,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
 })
 </script>
