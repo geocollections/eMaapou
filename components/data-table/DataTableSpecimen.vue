@@ -2,13 +2,13 @@
   <div>
     <base-data-table
       v-bind="$attrs"
-      :headers="$_headers"
+      :headers="headers"
       :items="items"
       :options="options"
       :count="count"
       v-on="$listeners"
-      @change:headers="$_handleHeadersChange"
-      @reset:headers="$_handleHeadersReset"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset"
     >
       <template #item.id="{ item }">
         <nuxt-link

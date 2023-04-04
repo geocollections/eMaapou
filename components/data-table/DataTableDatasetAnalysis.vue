@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.analysis="{ item }">
       <nuxt-link
@@ -78,17 +78,15 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_DATASET_ANALYSIS } from '~/constants'
+import { useHeaders } from '~/composables/useHeaders'
 
-export default {
+export default defineComponent({
   name: 'DataTableDatasetAnalysis',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -114,20 +112,12 @@ export default {
       },
     },
   },
-  data() {
-    return { localHeaders: this.getHeaders() }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_DATASET_ANALYSIS,
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-  methods: {
-    round,
-    getHeaders() {
-      const defaultHeaders = cloneDeep(HEADERS_DATASET_ANALYSIS)
-      return {
-        byIds: {
-          ...defaultHeaders.byIds,
-        },
-        allIds: [...defaultHeaders.allIds],
-      }
-    },
-  },
-}
+})
 </script>

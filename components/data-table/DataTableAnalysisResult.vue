@@ -6,7 +6,8 @@
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.analysis_method="{ item }">{{
       $translate({ et: item.analysis_method, en: item.analysis_method_en })
@@ -14,16 +15,15 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
+<script lang="ts">
+import { computed, defineComponent, toRef } from '@nuxtjs/composition-api'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ANALYSIS_RESULT } from '~/constants'
-export default {
+import { useHeaders } from '~/composables/useHeaders'
+
+export default defineComponent({
   name: 'DataTableAnalysisResult',
   components: { BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -45,22 +45,20 @@ export default {
     hideDepth: Boolean,
     hideMethod: Boolean,
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_ANALYSIS_RESULT),
-    }
-  },
-  computed: {
-    computedHeaders() {
-      return this.$_headers.filter((item) => {
-        if (item.value.includes('depth')) return !this.hideDepth
-        if (item.value === 'analysis_method') return !this.hideMethod
-        else return item
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_ANALYSIS_RESULT,
+      options: toRef(props, 'options'),
+    })
+
+    const computedHeaders = computed(() => {
+      return headers.value.filter((header) => {
+        if (header.value.includes('depth')) return !props.hideDepth
+        if (header.value === 'analysis_method') return !props.hideMethod
+        else return header
       })
-    },
+    })
+    return { computedHeaders, handleHeadersReset, handleHeadersChange }
   },
-  methods: {
-    round,
-  },
-}
+})
 </script>

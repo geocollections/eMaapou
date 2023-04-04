@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.id_l="{ item }">
       <nuxt-link
@@ -122,18 +122,16 @@
   </base-data-table>
 </template>
 
-<script>
-import round from 'lodash/round'
-import cloneDeep from 'lodash/cloneDeep'
-import { mapState } from 'vuex'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_ANALYTICAL_DATA } from '~/constants'
-export default {
+import { useHeadersWithState } from '~/composables/useHeaders'
+
+export default defineComponent({
   name: 'DataTableAnalyticalData',
   components: { BaseLinkExternal, BaseDataTable },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -152,20 +150,20 @@ export default {
         sortDesc: [],
       }),
     },
+    statefulHeaders: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_ANALYTICAL_DATA),
-      module: 'analytical_data',
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } =
+      useHeadersWithState({
+        module: 'analytical_data',
+        localHeaders: HEADERS_ANALYTICAL_DATA,
+        statefulHeaders: props.statefulHeaders,
+        options: toRef(props, 'options'),
+      })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-  computed: {
-    ...mapState('headers', {
-      stateHeaders: 'analytical_data',
-    }),
-  },
-  methods: {
-    round,
-  },
-}
+})
 </script>

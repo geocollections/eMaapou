@@ -1,13 +1,13 @@
 <template>
   <base-data-table
     v-bind="$attrs"
-    :headers="$_headers"
+    :headers="headers"
     :items="items"
     :options="options"
     :count="count"
     v-on="$listeners"
-    @change:headers="$_handleHeadersChange"
-    @reset:headers="$_handleHeadersReset"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset"
   >
     <template #item.rock="{ item }">
       <base-link-external
@@ -54,17 +54,17 @@
   </base-data-table>
 </template>
 
-<script>
-import cloneDeep from 'lodash/cloneDeep'
+<script lang="ts">
+import { defineComponent, toRef } from '@nuxtjs/composition-api'
 import BaseLinkExternal from '../base/BaseLinkExternal.vue'
 import BaseBoolean from '../base/BaseBoolean.vue'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import headersMixin from '~/mixins/headersMixin'
 import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from '~/constants'
-export default {
+import { useHeaders } from '~/composables/useHeaders'
+
+export default defineComponent({
   name: 'DataTableSpecimenIdentificationGeology',
   components: { BaseDataTable, BaseLinkExternal, BaseBoolean },
-  mixins: [headersMixin],
   props: {
     showSearch: {
       type: Boolean,
@@ -88,10 +88,12 @@ export default {
       }),
     },
   },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY),
-    }
+  setup(props) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY,
+      options: toRef(props, 'options'),
+    })
+    return { headers, handleHeadersReset, handleHeadersChange }
   },
-}
+})
 </script>

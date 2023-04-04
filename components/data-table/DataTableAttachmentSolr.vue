@@ -2,13 +2,13 @@
   <div>
     <base-data-table
       v-bind="$attrs"
-      :headers="$_headers"
+      :headers="headers"
       :items="items"
       :options="options"
       :count="count"
       v-on="$listeners"
-      @change:headers="$_handleHeadersChange"
-      @reset:headers="$_handleHeadersReset"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset"
     >
       <template #item.id="{ item }">
         <nuxt-link
@@ -71,18 +71,22 @@
 </template>
 
 <script lang="ts">
-import cloneDeep from 'lodash/cloneDeep'
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  toRef,
+  useContext,
+} from '@nuxtjs/composition-api'
 import BaseDataTable from '~/components/base/BaseDataTable.vue'
 import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
 import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
 import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
-import headersMixin from '~/mixins/headersMixin'
 import ImageOverlay, { OverlayImage } from '~/components/ImageOverlay.vue'
+import { useHeaders } from '~/composables/useHeaders'
+
 export default defineComponent({
   name: 'DataTableAttachmentSolr',
   components: { BaseLinkExternal, BaseDataTable, ThumbnailImage, ImageOverlay },
-  mixins: [headersMixin],
   props: {
     items: {
       type: Array,
@@ -102,33 +106,40 @@ export default defineComponent({
       }),
     },
   },
-  setup() {
+  setup(props) {
+    const { i18n } = useContext()
     const showOverlay = ref(false)
     const overlayImage = ref<OverlayImage>()
     const openOverlay = (image: OverlayImage) => {
       overlayImage.value = image
       showOverlay.value = true
     }
-    return { showOverlay, overlayImage, openOverlay }
-  },
-  data() {
-    return {
-      localHeaders: cloneDeep(HEADERS_ATTACHMENT_SOLR),
-    }
-  },
-  methods: {
-    getAttachmentType(type: number) {
+    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
+      localHeaders: HEADERS_ATTACHMENT_SOLR,
+      options: toRef(props, 'options'),
+    })
+
+    const getAttachmentType = (type: number) => {
       switch (type) {
         case 1:
-          return this.$t('attachment.typeSpecimen')
+          return i18n.t('attachment.typespecimen')
         case 2:
-          return this.$t('attachment.typeImage')
+          return i18n.t('attachment.typeimage')
         case 4:
-          return this.$t('attachment.typeReference')
+          return i18n.t('attachment.typereference')
         default:
-          return this.$t('attachment.typeOther')
+          return i18n.t('attachment.typeother')
       }
-    },
+    }
+    return {
+      showOverlay,
+      overlayImage,
+      openOverlay,
+      headers,
+      handleHeadersReset,
+      handleHeadersChange,
+      getAttachmentType,
+    }
   },
 })
 </script>
