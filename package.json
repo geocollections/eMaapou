@@ -30,7 +30,7 @@
     "leaflet-gesture-handling": "^1.2.1",
     "leaflet.fullscreen": "^2.4.0",
     "lodash": "^4.17.21",
-    "nuxt": "^2.15.8",
+    "nuxt": "^2.16.3",
     "qs": "^6.11.0",
     "vue": "^2.7.10",
     "vue-echarts": "^6.0.0",
