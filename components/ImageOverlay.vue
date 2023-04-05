@@ -16,7 +16,11 @@
         :provider="image.options.provider"
       />
     </div>
-    <div v-if="image" class="d-flex" style="position: absolute; bottom: 1rem">
+    <div
+      v-if="image"
+      class="d-flex justify-center"
+      style="position: absolute; bottom: 1rem"
+    >
       <v-btn
         class="montserrat text-capitalize font-weight-regular mr-2"
         nuxt
