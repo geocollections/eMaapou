@@ -15,7 +15,7 @@
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.13.1",
     "@mdi/js": "^7.0.96",
-    "@nuxt/image": "0.6.0",
+    "@nuxt/image": "0.6.2",
     "@nuxt/typescript-runtime": "^2.1.0",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/eslint-module": "^3.1.0",
@@ -32,7 +32,6 @@
     "lodash": "^4.17.21",
     "nuxt": "^2.16.3",
     "qs": "^6.11.0",
-    "vue": "^2.7.10",
     "vue-echarts": "^6.0.0",
     "vue-infinite-loading": "^2.4.5",
     "vue-matomo": "^4.1.0",
