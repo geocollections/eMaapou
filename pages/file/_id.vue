@@ -14,7 +14,7 @@
           contain
           :lazy-src="
             $img(
-              `${file.filename}`,
+              file.filename,
               { size: 'small' },
               {
                 provider: 'geocollections',
@@ -23,7 +23,7 @@
           "
           :src="
             $img(
-              `${file.filename}`,
+              file.filename,
               { size: 'medium' },
               {
                 provider: 'geocollections',
