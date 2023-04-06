@@ -12,7 +12,7 @@
     <template #item.id="{ item }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'photo-id', params: { id: item.id } })"
+        :to="localePath({ name: 'file-id', params: { id: item.id } })"
       >
         {{ item.id }}
       </nuxt-link>
@@ -20,7 +20,7 @@
     <template #item.image_number="{ item }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'photo-id', params: { id: item.id } })"
+        :to="localePath({ name: 'file-id', params: { id: item.id } })"
       >
         {{ item.image_number }}
       </nuxt-link>

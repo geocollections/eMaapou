@@ -26,7 +26,7 @@
         nuxt
         :to="
           localePath({
-            name: 'photo-id',
+            name: 'file-id',
             params: { id: image?.id?.toString() ?? '' },
           })
         "

@@ -49,7 +49,7 @@
                 color="transparent"
                 hover
                 nuxt
-                :to="localePath({ name: 'photo-id', params: { id: image.id } })"
+                :to="localePath({ name: 'file-id', params: { id: image.id } })"
                 :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
                 v-on="on"
               >
