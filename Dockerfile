@@ -1,4 +1,4 @@
-FROM node:16.18.0-alpine AS build-stage
+FROM node:16.18.0-bullseye-slim AS build-stage
 
 # create destination directory
 RUN mkdir -p /src
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 RUN rm -Rf node_modules
 
-FROM node:16.18.0-alpine AS production-stage
+FROM node:16.18.0-bullseye-slim AS production-stage
 
 WORKDIR /app
 
