@@ -199,6 +199,13 @@ use([
   LegendComponent,
 ])
 
+type ChartComponents = {
+  grid: GridComponentOption
+  xAxis: XAXisComponentOption
+  yAxis: YAXisComponentOption
+  series: LineSeriesOption[]
+}
+
 export default defineComponent({
   name: 'ChartFlog',
   components: {
@@ -311,7 +318,8 @@ export default defineComponent({
     })
     const methods = computed(() => {
       return props.parameters.reduce((prev, method) => {
-        return { ...prev, [method.value]: method }
+        prev[method.value] = method
+        return prev
       }, {} as { [K: string]: IFlogMethod })
     })
     const selectedParametersGrouped = computed(() => {
@@ -437,19 +445,18 @@ export default defineComponent({
       state.totalWidth = calculateTotalWidth()
 
       if (addedParameters.length > 0) {
-        const newDataZoomYAxisIndices = [
-          ...chart?.getOption().dataZoom[0].yAxisIndex,
-        ]
+        const newDataZoomYAxisIndices =
+          chart?.getOption().dataZoom[0].yAxisIndex
+
         let parameterGridIndex = 0
         let fromIndex = 0
         let parameterGridPosition = 0
+
+        const groupedNewParameters = groupBy(newSelectedParameters, 'value')
         const newOptions = addedParameters.reduce(
           (prev, addedParameter) => {
             // if the `addedParameter` already has a chart, i.e. same parameter, different method. Update the series data.
-            if (
-              groupBy(newSelectedParameters, 'value')[addedParameter.value]
-                .length > 1
-            ) {
+            if (groupedNewParameters[addedParameter.value].length > 1) {
               const series = chart
                 ?.getOption()
                 .series.find((series: LineSeriesOption) =>
@@ -463,82 +470,48 @@ export default defineComponent({
                 -1,
                 { returnComponents: ['series'] }
               )
-              return {
-                ...prev,
-                series: [
-                  ...prev.series,
-                  ...(newChartComponents.series as LineSeriesOption[]),
-                  // {
-                  //   id: newChartComponents.series.id,
-                  //   data: newChartComponents.series.data,
-                  // },
-                ],
-              }
-            } else {
-              const nullGridIndex = chart
-                ?.getOption()
-                .grid.indexOf(null, fromIndex)
-
-              // if empty spot in echarts grid list, use the empty spot index as `gridIndex`, as echarts wants these empty spaces to be filled
-              if (nullGridIndex > -1) {
-                state.nextGridIndex = nullGridIndex
-                newDataZoomYAxisIndices.push(state.nextGridIndex)
-                fromIndex = nullGridIndex + 1
-                const newChartComponents = createParameterChartComponents(
-                  groupedParameters.find((param: any) => {
-                    return param.value === addedParameter.value
-                  }) as GroupedParameter,
-                  state.nextGridIndex,
-                  oldGroupedParameters.length + parameterGridPosition
-                )
-
-                parameterGridPosition += 1
-                return {
-                  grid: [...prev.grid, newChartComponents.grid],
-                  xAxis: [...prev.xAxis, newChartComponents.xAxis],
-                  yAxis: [...prev.yAxis, newChartComponents.yAxis],
-                  series: [
-                    ...prev.series,
-                    ...(newChartComponents.series as LineSeriesOption[]),
-                  ],
-                }
-              } else {
-                state.nextGridIndex =
-                  chart?.getOption().grid.length + parameterGridIndex
-                newDataZoomYAxisIndices.push(state.nextGridIndex)
-                const newChartComponents = createParameterChartComponents(
-                  groupedParameters.find((param: any) => {
-                    return param.value === addedParameter.value
-                  }) as GroupedParameter,
-                  state.nextGridIndex,
-                  oldGroupedParameters.length + parameterGridPosition
-                )
-                parameterGridIndex += 1
-                parameterGridPosition += 1
-                return {
-                  grid: [...prev.grid, newChartComponents.grid],
-                  xAxis: [...prev.xAxis, newChartComponents.xAxis],
-                  yAxis: [...prev.yAxis, newChartComponents.yAxis],
-                  series: [
-                    ...prev.series,
-                    ...(newChartComponents.series as LineSeriesOption[]),
-                  ],
-                }
-              }
+              prev.series.push(...newChartComponents.series)
+              return prev
             }
+
+            const nullGridIndex = chart
+              ?.getOption()
+              .grid.indexOf(null, fromIndex)
+            // if empty spot in echarts grid list, use the empty spot index as `gridIndex`, as echarts wants these empty spaces to be filled
+            if (nullGridIndex > -1) {
+              state.nextGridIndex = nullGridIndex
+              fromIndex = nullGridIndex + 1
+            } else {
+              state.nextGridIndex =
+                chart?.getOption().grid.length + parameterGridIndex
+              parameterGridIndex += 1
+            }
+
+            newDataZoomYAxisIndices.push(state.nextGridIndex)
+            const newChartComponents = createParameterChartComponents(
+              groupedParameters.find((param: any) => {
+                return param.value === addedParameter.value
+              }) as GroupedParameter,
+              state.nextGridIndex,
+              oldGroupedParameters.length + parameterGridPosition
+            )
+
+            parameterGridPosition += 1
+
+            prev.grid.push(newChartComponents.grid)
+            prev.xAxis.push(newChartComponents.xAxis)
+            prev.yAxis.push(newChartComponents.yAxis)
+            prev.series.push(...newChartComponents.series)
+            return prev
           },
           { grid: [], xAxis: [], yAxis: [], series: [] }
         )
         state.replace = false
-        state.option = {
-          ...newOptions,
-          dataZoom: [
-            {
-              id: chart?.getOption().dataZoom[0].id,
-              yAxisIndex: newDataZoomYAxisIndices,
-            },
-          ],
+        newOptions.dataZoom = {
+          id: chart?.getOption().dataZoom[0].id,
+          yAxisIndex: newDataZoomYAxisIndices,
         }
+        state.option = newOptions
       } else {
         const removed = differenceBy(
           oldGroupedParameters,
@@ -560,13 +533,11 @@ export default defineComponent({
             if (!grid.id.startsWith('parameter')) {
               // !!! using `i` is not correct as the grids have been reordered
               // this should not cause any problems right now but, could when other chart tpyes are added (taxon, stratigraphy) or when samples chart can be disabled
-              return {
-                ...prev,
-                grid: [...prev.grid, { id: grid.id }],
-                xAxis: [...prev.xAxis, { id: currentOption.xAxis[i].id }],
-                yAxis: [...prev.yAxis, { id: currentOption.yAxis[i].id }],
-                series: [...prev.series, { id: currentOption.series[i].id }],
-              }
+              prev.grid.push({ id: grid.id })
+              prev.xAxis.push({ id: currentOption.xAxis[i].id })
+              prev.yAxis.push({ id: currentOption.yAxis[i].id })
+              prev.series.push({ id: currentOption.series[i].id })
+              return prev
             }
             const parameterValueStr = grid.id.split('-')[2]
             const parameterValue = parseInt(parameterValueStr)
@@ -598,26 +569,14 @@ export default defineComponent({
               )
               position += 1
 
-              return {
-                ...prev,
-                grid: [
-                  ...prev.grid,
-                  {
-                    id: grid.id,
-                    left: newChartComponents.grid?.left,
-                  },
-                ],
-                xAxis: [...prev.xAxis, { id: xAxis.id }],
-                yAxis: [...prev.yAxis, { id: yAxis.id }],
-                series: [
-                  ...prev.series,
-                  ...(newChartComponents.series as LineSeriesOption[]),
-                  // {
-                  //   id: series.id,
-                  //   data: newChartComponents.series.data,
-                  // },
-                ],
-              }
+              prev.grid.push({
+                id: grid.id,
+                left: newChartComponents.grid?.left,
+              })
+              prev.xAxis.push({ id: xAxis.id })
+              prev.yAxis.push({ id: yAxis.id })
+              prev.series.push(...newChartComponents.series)
+              return prev
             }
             // if chart is not modified or removed, leave it as is, only update grid position.
             if (!removed.some((m) => m.value === parameterValue)) {
@@ -631,25 +590,19 @@ export default defineComponent({
                 { returnComponents: ['grid'] }
               )
               position += 1
-              return {
-                ...prev,
-                grid: [
-                  ...prev.grid,
-                  {
-                    id: grid.id,
-                    left: (newChartComponents.grid as GridComponentOption).left,
-                  },
-                ],
-                xAxis: [...prev.xAxis, { id: xAxis.id }],
-                yAxis: [...prev.yAxis, { id: yAxis.id }],
-                series: [...prev.series, ...series],
-              }
+              prev.grid.push({
+                id: grid.id,
+                left: newChartComponents.grid?.left,
+              })
+              prev.xAxis.push({ id: xAxis.id })
+              prev.yAxis.push({ id: yAxis.id })
+              prev.series.push(...series)
+              return prev
             }
             return prev
           },
           { grid: [], xAxis: [], yAxis: [], series: [] }
         )
-
         state.replace = true
         state.option = newOptions
       }
@@ -719,7 +672,10 @@ export default defineComponent({
         state.parameterModulePadding
       )
     }
-    const createParameterChartComponents = (
+    const createParameterChartComponents = <
+      T extends ChartComponents,
+      K extends keyof T
+    >(
       param: {
         id: any
         value: number
@@ -729,21 +685,16 @@ export default defineComponent({
       },
       index: number,
       position: number,
-      { returnComponents = ['grid', 'xAxis', 'yAxis', 'series'] } = {}
-    ): {
-      grid?: GridComponentOption
-      xAxis?: XAXisComponentOption
-      yAxis?: YAXisComponentOption
-      series?: LineSeriesOption[]
-    } => {
-      const result = {} as {
-        grid?: GridComponentOption
-        xAxis?: XAXisComponentOption
-        yAxis?: YAXisComponentOption
-        series?: LineSeriesOption[]
+      { returnComponents }: { returnComponents: K[] } = {
+        returnComponents: ['grid', 'xAxis', 'yAxis', 'series'] as K[],
       }
+    ): Pick<T, K> => {
+      const result = Object.assign(
+        {},
+        ...returnComponents.map((key) => ({ [key]: null }))
+      )
 
-      if (returnComponents.includes('grid')) {
+      if (returnComponents.includes('grid' as K)) {
         result.grid = {
           id: `parameter-grid-${param.value}`,
           show: true,
@@ -759,7 +710,7 @@ export default defineComponent({
           },
         }
       }
-      if (returnComponents.includes('xAxis')) {
+      if (returnComponents.includes('xAxis' as K)) {
         result.xAxis = {
           id: `parameter-x-axis-${param.value}`,
           show: true,
@@ -782,7 +733,7 @@ export default defineComponent({
           },
         }
       }
-      if (returnComponents.includes('yAxis')) {
+      if (returnComponents.includes('yAxis' as K)) {
         result.yAxis = {
           id: `parameter-y-axis-${param.value}`,
           type: 'value',
@@ -806,7 +757,7 @@ export default defineComponent({
           min: props.minDepth,
         }
       }
-      if (returnComponents.includes('series')) {
+      if (returnComponents.includes('series' as K)) {
         result.series = param.methods.map((method): LineSeriesOption => {
           return {
             id: `parameter-series-${method}-${param.value}`,
@@ -869,39 +820,17 @@ export default defineComponent({
       const selectedParameterChartComponents = groupParameters(
         state.selectedParameters
       ).reduce(
-        (
-          prev,
-          parameter,
-          i
-        ): {
-          grid: GridComponentOption[]
-          xAxis: XAXisComponentOption[]
-          yAxis: YAXisComponentOption[]
-          series: LineSeriesOption[]
-        } => {
+        (prev, parameter, i) => {
           const parameterComponents = createParameterChartComponents(
             parameter,
             i + 1,
             i
           )
-          return {
-            grid: [
-              ...prev.grid,
-              parameterComponents.grid as GridComponentOption,
-            ],
-            xAxis: [
-              ...prev.xAxis,
-              parameterComponents.xAxis as XAXisComponentOption,
-            ],
-            yAxis: [
-              ...prev.yAxis,
-              parameterComponents.yAxis as YAXisComponentOption,
-            ],
-            series: [
-              ...prev.series,
-              ...(parameterComponents.series as LineSeriesOption[]),
-            ],
-          }
+          prev.grid.push(parameterComponents.grid)
+          prev.xAxis.push(parameterComponents.xAxis)
+          prev.yAxis.push(parameterComponents.yAxis)
+          prev.series.push(...parameterComponents.series)
+          return prev
         },
         { grid: [], xAxis: [], yAxis: [], series: [] } as {
           grid: GridComponentOption[]
