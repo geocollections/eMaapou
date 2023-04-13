@@ -79,7 +79,7 @@
               v-for="(item, index) in items"
               :key="index"
               nuxt
-              :to="localePath({ name: 'photo-id', params: { id: item.id } })"
+              :to="localePath({ name: 'file-id', params: { id: item.id } })"
               :src="
                 $img(
                   `${item.uuid_filename}`,

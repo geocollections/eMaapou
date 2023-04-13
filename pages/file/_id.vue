@@ -14,7 +14,7 @@
           contain
           :lazy-src="
             $img(
-              `${file.filename}`,
+              file.filename,
               { size: 'small' },
               {
                 provider: 'geocollections',
@@ -23,7 +23,7 @@
           "
           :src="
             $img(
-              `${file.filename}`,
+              file.filename,
               { size: 'medium' },
               {
                 provider: 'geocollections',
@@ -76,6 +76,7 @@
         </div>
 
         <div
+          v-if="isImage"
           class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
           :class="{ 'mt-4': !isImage }"
         >
@@ -370,140 +371,7 @@
     </template>
 
     <template #bottom>
-      <v-row v-if="tabs.length > 0" class="mt-2">
-        <transition-group
-          appear
-          class="d-flex flex-wrap flex-grow-1"
-          name="fade"
-        >
-          <v-col
-            v-for="(item, index) in tabs"
-            :key="`${item.title}-${index}`"
-            cols="12"
-            md="6"
-          >
-            <v-card>
-              <v-card-title class="subsection-title"
-                >{{ $t(item.title) }}
-              </v-card-title>
-
-              <v-card-text>
-                <v-simple-table>
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>{{ $t(`${item.id}.${item.id}`) }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(row, key) in item.items" :key="key">
-                        <td>
-                          <template v-if="item.isLink">
-                            <nuxt-link
-                              v-if="item.isNuxtLink"
-                              class="text-link"
-                              :to="
-                                localePath({
-                                  name: `${
-                                    item.route ? item.route : item.id
-                                  }-id`,
-                                  params: { id: row[item.id].id },
-                                })
-                              "
-                              >{{ row[item.id].id }}
-                            </nuxt-link>
-                            <a
-                              v-else
-                              class="text-link"
-                              @click="
-                                $openWindow(
-                                  `${item.href}${
-                                    item.id === 'doi'
-                                      ? row.doi.identifier
-                                      : row[item.id].id
-                                  }`
-                                )
-                              "
-                              >{{
-                                item.id === 'doi'
-                                  ? row.doi.identifier
-                                  : row[item.id].id
-                              }}
-                              <v-icon small color="primary darken-2">
-                                {{ icons.mdiOpenInNew }}
-                              </v-icon>
-                            </a>
-                          </template>
-                          <template v-else>
-                            {{ row[item.id].id }}
-                          </template>
-                        </td>
-                        <td>{{ buildData(item.id, row) }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </transition-group>
-      </v-row>
-
-      <v-row v-if="!isEmpty(fileContent)" class="mt-2">
-        <v-col cols="12">
-          <v-card>
-            <v-card-title class="subsection-title">{{
-              $t('file.fileContents')
-            }}</v-card-title>
-
-            <v-card-text>
-              <v-expansion-panels v-model="expansionPanel" multiple>
-                <v-expansion-panel
-                  v-if="rawFileContent && file.uuid_filename.endsWith('.las')"
-                >
-                  <v-expansion-panel-header>
-                    {{ $t('file.lasGraph') }}
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <chart-las
-                      :chart-title="pageTitle"
-                      :file-data="rawFileContent"
-                    />
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-
-                <v-expansion-panel
-                  v-else-if="
-                    rawFileContent && file.uuid_filename.endsWith('.txt')
-                  "
-                >
-                  <v-expansion-panel-header>
-                    {{ $t('file.textTable') }}
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-data-table
-                      :headers="rawFileContent.headers"
-                      :items="rawFileContent.items"
-                    />
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-
-                <v-expansion-panel>
-                  <v-expansion-panel-header>
-                    {{ $t('file.lasText') }}
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <pre>
-                      {{ fileContent }}
-                    </pre>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+      <nuxt-child />
     </template>
   </detail>
 </template>
@@ -539,7 +407,7 @@ import MapDetail from '~/components/map/MapDetail.vue'
 import Detail from '~/templates/Detail.vue'
 import BaseTable from '~/components/base/BaseTable.vue'
 import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
-import ChartLas from '~/components/chart/ChartLas.vue'
+
 export default defineComponent({
   components: {
     HeaderDetail,
@@ -548,88 +416,15 @@ export default defineComponent({
     TableRowLink,
     Detail,
     BaseTable,
-    ChartLas,
   },
   setup() {
     const { $services, $translate, i18n, $img } = useContext()
     const route = useRoute()
     const state = reactive({
       expansionPanel: [1] as number[],
-      nameFields: {
-        collection: {
-          et: 'collection_name',
-          en: 'collection_name_en',
-        },
-        specimen: {
-          et: 'number',
-          en: 'number',
-        },
-        sample: {
-          et: 'number',
-          en: 'number',
-        },
-        sample_series: {
-          et: 'name',
-          en: 'name',
-        },
-        analysis: {
-          et: 'number',
-          en: 'number',
-        },
-        dataset: {
-          et: 'name',
-          en: 'name_en',
-        },
-        doi: {
-          et: 'identifier',
-          en: 'identifier',
-        },
-        locality: {
-          et: 'locality',
-          en: 'locality_en',
-        },
-        drillcore: {
-          et: 'drillcore',
-          en: 'drillcore_en',
-        },
-        drillcore_box: {
-          et: 'number',
-          en: 'number',
-        },
-        preparation: {
-          et: 'preparation_number',
-          en: 'preparation_number',
-        },
-        reference: {
-          et: 'reference',
-          en: 'reference',
-        },
-        storage: {
-          et: 'location',
-          en: 'location',
-        },
-        project: {
-          et: 'name',
-          en: 'name_en',
-        },
-        site: {
-          et: 'name',
-          en: 'name_en',
-        },
-        locality_description: {
-          et: 'description',
-          en: 'description',
-        },
-        taxon: {
-          et: 'taxon',
-          en: 'taxon',
-        },
-      } as any,
       specimenIdentification: [] as any[],
       specimenIdentificationGeology: [] as any[],
       attachmentKeywords: [] as any[],
-      fileContent: '',
-      rawFileContent: null as any,
       file: null as any,
       ids: {} as any,
       validRoute: {} as Location,
@@ -728,154 +523,6 @@ export default defineComponent({
           },
         }
       )
-      const tabs = [
-        {
-          id: 'collection',
-          title: 'related.collection',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'specimen',
-          title: 'related.specimen',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'sample',
-          title: 'related.sample',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'sample_series',
-          title: 'related.sample_series',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'analysis',
-          title: 'related.analysis',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'dataset',
-          title: 'related.dataset',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'doi',
-          title: 'related.doi',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://doi.geocollections.info/',
-        },
-        {
-          id: 'locality',
-          title: 'related.locality',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'drillcore',
-          title: 'related.drillcore',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'drillcore_box',
-          route: 'drillcore-box',
-          title: 'related.drillcore_box',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'preparation',
-          title: 'related.preparation',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'reference',
-          title: 'related.reference',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://kirjandus.geoloogia.info/reference/',
-        },
-        {
-          id: 'storage',
-          title: 'related.storage',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'project',
-          title: 'related.project',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'site',
-          title: 'related.site',
-          count: 0,
-          items: [],
-          isLink: true,
-          isNuxtLink: true,
-        },
-        {
-          id: 'locality_description',
-          title: 'related.locality_description',
-          count: 0,
-          items: [],
-          isLink: false,
-        },
-        {
-          id: 'taxon',
-          title: 'related.taxon',
-          count: 0,
-          items: [],
-          isLink: true,
-          href: 'https://fossiilid.info/',
-        },
-      ]
-      const hydratedTabsPromise = Promise.all(
-        tabs.map((tab) => {
-          return $services.sarvREST
-            .getResourceList('attachment_link', {
-              defaultParams: {
-                [`${tab.id}__isnull`]: false,
-                attachment: route.value.params.id,
-                nest: ['specimen', 'analysis'].includes(tab.id) ? 2 : 1,
-              },
-            })
-            .then((res) => {
-              return { ...tab, count: res.count, items: res.items }
-            })
-        })
-      )
       const attachmentKeywordsPromise = $services.sarvREST.getResourceList(
         'attachment_keyword',
         {
@@ -886,16 +533,13 @@ export default defineComponent({
         }
       )
 
-      const [fileResponse, attachmentKeywordsResponse, hydratedTabs] =
-        await Promise.all([
-          filePromise,
-          attachmentKeywordsPromise,
-          hydratedTabsPromise,
-        ])
+      const [fileResponse, attachmentKeywordsResponse] = await Promise.all([
+        filePromise,
+        attachmentKeywordsPromise,
+      ])
 
       state.ids = fileResponse?.ids
       state.file = fileResponse
-      state.tabs = hydratedTabs.filter((item) => item.count > 0)
       state.attachmentKeywords = attachmentKeywordsResponse.items
 
       if (state.file?.specimen) {
@@ -928,39 +572,6 @@ export default defineComponent({
         state.specimenIdentification = specimenIdentificationResponse.items
         state.specimenIdentificationGeology =
           specimenIdentificationGeologyResponse.items
-      }
-
-      if (
-        state.file?.uuid_filename?.endsWith('.txt') ||
-        state.file?.uuid_filename?.endsWith('.las')
-      ) {
-        // File content (e.g., .las in json format)
-        const fileContentPromise = $services.sarvREST.getResource(
-          'file',
-          parseInt(route.value.params.id)
-        )
-        // Raw file content in text format
-        const rawFileContentPromise = $services.sarvREST.getResource(
-          'file',
-          parseInt(route.value.params.id),
-          {
-            params: {
-              raw_content: 'true',
-            },
-          }
-        )
-        const [fileContentResponse, rawFileContentResponse] = await Promise.all(
-          [fileContentPromise, rawFileContentPromise]
-        )
-
-        state.fileContent = fileContentResponse
-        if (fileContentResponse.startsWith('Error: ')) state.fileContent = ''
-        state.rawFileContent = rawFileContentResponse
-        if (
-          typeof rawFileContentResponse === 'string' &&
-          rawFileContentResponse.startsWith('Error: ')
-        )
-          state.rawFileContent = ''
       }
     })
 
@@ -1005,21 +616,6 @@ export default defineComponent({
     })
     const pageTitle = computed(() => `${title.value} | ${pageType.value}`)
 
-    const buildData = (type: string, data: any) => {
-      if (type === 'specimen') {
-        return `${data[type].coll.number.split(' ')[0]} ${
-          data[type].specimen_id
-        }`
-      }
-      if (type === 'analysis') {
-        return data[type].sample.number
-      } else {
-        return $translate({
-          et: data[type][state.nameFields[type].et],
-          en: data[type][state.nameFields[type].en],
-        })
-      }
-    }
     useMeta(() => {
       return {
         title: pageTitle.value,
@@ -1087,7 +683,6 @@ export default defineComponent({
       icons,
       imageSize,
       pageTitle,
-      buildData,
       isNull,
       isNil,
       isEmpty,

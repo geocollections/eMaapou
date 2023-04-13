@@ -227,4 +227,5 @@ export default {
       },
     },
   },
+  serverMiddleware: [{ path: '/_ipx', handler: '~/server/middleware/ipx.js' }],
 } as NuxtConfig
