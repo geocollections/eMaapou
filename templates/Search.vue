@@ -8,6 +8,7 @@
       :fixed="$vuetify.breakpoint.smAndDown"
       width="320"
       clipped
+      touchless
       app
       color="grey lighten-5"
       :mini-variant.sync="mini"
