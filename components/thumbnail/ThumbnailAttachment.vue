@@ -4,7 +4,7 @@
       v-if="isImage && src && previewSrc"
       :src="src"
       :preview-src="previewSrc"
-      @click="$emit('click')"
+      @click="$emit('click:image')"
     />
     <v-icon
       v-else-if="isImage"
