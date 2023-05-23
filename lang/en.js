@@ -177,6 +177,7 @@ export default {
     linkToAnalyticalData: 'View analytical data',
     linkGeoscienceLiterature: 'Geoscience literature',
     linkLandBoard: 'Estonian Land Board ID',
+    number: 'Number',
   },
   localitySynonym: {
     synonym: 'Synonym',

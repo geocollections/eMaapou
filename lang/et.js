@@ -179,6 +179,7 @@ export default {
     linkToAnalyticalData: 'Analüüsitulemused',
     linkGeoscienceLiterature: 'Geoloogiline kirjandus',
     linkLandBoard: 'Maa-amet ID',
+    number: 'Number',
   },
   localitySynonym: {
     synonym: 'Sünonüüm',

@@ -23,6 +23,10 @@
             "
           />
           <table-row
+            :title="$t('locality.number').toString()"
+            :value="locality.number"
+          />
+          <table-row
             v-if="type"
             :title="$t('locality.type').toString()"
             :value="
