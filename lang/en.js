@@ -1,5 +1,5 @@
 export default {
-  title: 'eMaapõu',
+  title: 'eGeology',
   subtitle: 'Geoscience data and e\u2011services',
   slogan: 'Estonian geology data portal',
   landing: {
@@ -26,7 +26,7 @@ export default {
     goToFrontpage: 'To frontpage',
     showMenu: 'Show menu',
     routes: 'Routes',
-    searchRoutes: 'Browse e-Maapõu',
+    searchRoutes: 'Browse eGeology',
     eMaapouPages: 'e·Maapõu ecosystem',
     map: 'Data on map',
     quickSearch: 'Find quickly',
@@ -38,9 +38,9 @@ export default {
     statText3: 'Samples',
     otherEmaapouServices: 'Other e-maapõu services',
     otherServices: 'Other services',
-    searchPlaceholder: 'Search eMaapõu',
+    searchPlaceholder: 'Search eGeology',
     description:
-      'eMaapõu provides open access to geoscience data in Estonia. It is developed by the national research infrastructure NATARC.',
+      'Open access geoscience data in Estonia, provided by the national research infrastructure NATARC.',
   },
   common: {
     general: 'General info',
@@ -741,7 +741,7 @@ export default {
   },
   about: {
     pageTitle: 'About',
-    title: 'What is e·Maapõu?',
+    title: 'What is eGeology?',
   },
   map: {
     estonian_geoportal: 'Estonian Geoportal',
