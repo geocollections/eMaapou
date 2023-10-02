@@ -28,6 +28,33 @@
     <template #item.country="{ item }">
       {{ $translate({ et: item.country, en: item.country_en }) }}
     </template>
+    <template #item.references="{ item }">
+      {{ item.related_references }}
+    </template>
+    <template #item.specimens="{ item }">
+      {{ item.related_specimens }}
+    </template>
+    <template #item.samples="{ item }">
+      {{ item.related_samples }}
+    </template>
+    <template #item.analyses="{ item }">
+      {{ item.related_analyses }}
+    </template>
+    <template #item.drillcores="{ item }">
+      {{ item.related_drillcores }}
+    </template>
+    <template #item.files="{ item }">
+      {{ item.related_files }}
+    </template>
+    <template #item.images="{ item }">
+      {{ item.related_images }}
+    </template>
+    <template #item.stratotypes="{ item }">
+      {{ item.related_stratotypes }}
+    </template>
+    <template #item.taxonOccurrences="{ item }">
+      {{ item.related_taxon_occurrences }}
+    </template>
   </base-data-table>
 </template>
 
