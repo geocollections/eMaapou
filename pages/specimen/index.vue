@@ -196,3 +196,17 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped lang="scss">
+.active-tab {
+  // font-weight: bold;
+  color: var(--v-accent-darken1) !important;
+  &::before {
+    opacity: 0.2 !important;
+    background-color: var(--v-accent-base) !important;
+
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+}
+</style>
