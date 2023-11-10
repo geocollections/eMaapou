@@ -4,8 +4,10 @@
       <input-search v-model="query" />
       <search-actions class="mb-3" @click="handleReset" />
       <filter-input-checkbox
-        v-model="hasImage"
+        :value="resultView === 'image' ? true : hasImage"
         :label="$t('filters.hasImage').toString()"
+        :disabled="resultView === 'image'"
+        @input="hasImage = $event"
       />
       <filter-input-checkbox
         v-model="hasCoordinates"
@@ -148,6 +150,12 @@ export default defineComponent({
     FilterInputText,
     FilterInputRange,
     FilterInputAutocompleteNew,
+  },
+  props: {
+    resultView: {
+      type: String,
+      default: 'table',
+    },
   },
   setup(_props, { emit }) {
     const { $accessor } = useContext()

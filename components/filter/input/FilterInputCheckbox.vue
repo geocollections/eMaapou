@@ -7,6 +7,7 @@
       :input-value="value"
       dense
       false-value="null"
+      :disabled="disabled"
       @change="$emit('input', $event)"
     >
       <template #label>
@@ -30,6 +31,7 @@ export default {
   props: {
     value: { type: Boolean, default: false },
     label: { type: String, default: '' },
+    disabled: { type: Boolean, default: false },
   },
 }
 </script>
