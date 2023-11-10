@@ -5,7 +5,7 @@ import {
   BooleanFilter,
   GeomFilter,
   ListIdsFilter,
-ListIdsMultiFilter,
+  ListIdsMultiFilter,
   ListTextFilter,
   RangeFilter,
   TextFilter,
@@ -30,6 +30,7 @@ export type SpecimenFilters = {
   originalStatus: ListIdsFilter
   collector: ListTextFilter
 }
+
 export const initState = (): SearchModuleState<SpecimenFilters> => {
   return {
     name: 'specimen',

@@ -35,12 +35,23 @@
         <v-col
           v-for="(image, index) in items"
           :key="index"
-          class="d-flex child-flex pt-0 px-2 pb-4"
+          class="pt-0 px-2 pb-4"
           cols="6"
           sm="4"
           md="3"
           lg="2"
         >
+          <nuxt-link
+            class="text-link"
+            :to="
+              localePath({
+                name: 'specimen-id',
+                params: { id: image.specimen_id },
+              })
+            "
+          >
+            {{ image.specimen_full_name }}
+          </nuxt-link>
           <v-tooltip bottom color="header" z-index="51000" max-width="250">
             <template #activator="{ on }">
               <v-card
@@ -54,21 +65,21 @@
                 v-on="on"
               >
                 <v-img
-                  v-if="image.uuid_filename"
+                  v-if="image.image"
                   max-height="400"
                   min-width="72"
                   :contain="!cropImages"
                   aspect-ratio="1"
                   :lazy-src="
                     $img(
-                      `${image.uuid_filename}`,
+                      `${image.image}`,
                       { size: 'small' },
                       { provider: 'geocollections' }
                     )
                   "
                   :src="
                     $img(
-                      `${image.uuid_filename}`,
+                      `${image.image}`,
                       { size: 'small' },
                       { provider: 'geocollections' }
                     )
@@ -132,7 +143,7 @@
 import { mdiFileImageOutline } from '@mdi/js'
 import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
 export default {
-  name: 'ImageView',
+  name: 'SpecimenImageView',
   components: { BaseDataTablePagination },
   props: {
     items: {
