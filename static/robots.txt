@@ -1,4 +1,20 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://ema.geoloogia.info/sitemap.xml
+User-agent: bingbot
+User-agent: msnbot
+User-agent: msnbot-media
+User-agent: YandexBot
+User-agent: AhrefsBot
+User-agent: SeekportBot
+User-agent: discobot
+User-agent: dotbot
+User-agent: yacybot
+User-agent: PetalBot
+User-agent: SemrushBot
+User-agent: grapeshot
+User-agent: Barkrowler
+User-agent: FemtosearchBot
+Disallow: *
+
+Sitemap: https://geoloogia.info/sitemap.xml
