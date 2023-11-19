@@ -122,13 +122,13 @@ export default defineComponent({
     const getAttachmentType = (type: number) => {
       switch (type) {
         case 1:
-          return i18n.t('attachment.typespecimen')
+          return i18n.t('attachment.typeSpecimen')
         case 2:
-          return i18n.t('attachment.typeimage')
+          return i18n.t('attachment.typeImage')
         case 4:
-          return i18n.t('attachment.typereference')
+          return i18n.t('attachment.typeReference')
         default:
-          return i18n.t('attachment.typeother')
+          return i18n.t('attachment.typeOther')
       }
     }
     return {
