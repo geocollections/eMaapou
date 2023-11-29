@@ -357,13 +357,16 @@ const buildSolrParameters = (
               .map((field: string) => {
                 return filter.value
                   .map((v: any) => {
+                    const pattern = /([!*+-=<>&|()[\]{}^~?:/\s"])/g
+
+                    const escapedValue = v.replace(pattern, '\\$1')
                     if (filter.lookupType === 'startswith') {
-                      return `(${field}:${v}*)`
+                      return `(${field}:${escapedValue}*)`
                     }
                     if (filter.lookupType === 'contains') {
-                      return `(${field}:*${v}*)`
+                      return `(${field}:*${escapedValue}*)`
                     }
-                    return `(${field}:${v})`
+                    return `(${field}:${escapedValue})`
                   })
                   .join(' OR ')
               })
