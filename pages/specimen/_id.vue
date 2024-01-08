@@ -1,7 +1,7 @@
 <template>
   <detail :loading="$fetchState.pending" :error="$fetchState.error">
     <template #title>
-      <header-detail :ids="ids">
+      <header-detail class="mb-0" :ids="ids">
         <div>
           {{ title }}
         </div>
@@ -20,6 +20,19 @@
           :href="`https://fossiilid.info/${specimenAlt.taxon_id}`"
           >{{ titleAlt }}</a
         >
+        <template #sub>
+          <div v-if="specimen.fossil?.id === 9">
+            <v-icon color="warning lighten-2" right>
+              {{ icons.mdiContentCopy }}
+            </v-icon>
+            {{
+              $translate({
+                et: specimen.fossil.value,
+                en: specimen.fossil.value_en,
+              })
+            }}
+          </div>
+        </template>
       </header-detail>
     </template>
     <template #column-left>
@@ -255,6 +268,7 @@ import {
   useMeta,
   useRoute,
 } from '@nuxtjs/composition-api'
+import { mdiContentCopy } from '@mdi/js'
 import { Location } from 'vue-router'
 import TableRow from '~/components/table/TableRow.vue'
 import TableRowLink from '~/components/table/TableRowLink.vue'
@@ -265,6 +279,7 @@ import Tabs from '~/components/Tabs.vue'
 import ImageBar from '~/components/ImageBar.vue'
 import { Tab, TABS_SPECIMEN } from '~/constants'
 import BaseTable from '~/components/base/BaseTable.vue'
+
 import { useRedirectInvalidTabRoute } from '~/composables/useRedirectInvalidTabRoute'
 export default defineComponent({
   components: {
@@ -418,6 +433,12 @@ export default defineComponent({
         ],
       }
     })
+
+    const icons = computed(() => {
+      return {
+        mdiContentCopy,
+      }
+    })
     return {
       ...toRefs(state),
       title,
@@ -435,6 +456,7 @@ export default defineComponent({
       database,
       sample,
       parent,
+      icons,
     }
   },
   head: {},
