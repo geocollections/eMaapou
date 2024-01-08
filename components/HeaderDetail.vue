@@ -1,13 +1,18 @@
 <template>
   <base-header>
-    <v-card-title
-      class="d-flex align-start font-weight-medium text-h4 pt-1 px-0 pb-3 px-sm-3"
-      style="word-break: normal"
-    >
-      <slot>
-        {{ title }}
-      </slot>
-      <edit-button />
+    <v-card-title class="d-block pt-1 px-0 pb-3 px-sm-3">
+      <div
+        style="word-break: normal; flex-wrap: wrap"
+        class="d-flex align-start font-weight-medium text-h4"
+      >
+        <slot>
+          {{ title }}
+        </slot>
+        <edit-button />
+      </div>
+      <div>
+        <slot name="sub" />
+      </div>
     </v-card-title>
 
     <template #before>
