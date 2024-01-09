@@ -135,7 +135,7 @@ export const initState = (): SearchModuleState<SpecimenFilters> => {
       taxonName: {
         value: [],
         type: FilterType.ListText,
-        fields: ['taxon_txt'],
+        fields: ['taxon'],
         lookupType: 'none',
       },
       stratigraphyHierarchy: {
