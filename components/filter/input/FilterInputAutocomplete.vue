@@ -18,17 +18,17 @@
     >
       <div class="my-1">
         <div
-          v-for="(item, i) in selectedItems"
+          v-for="(item, i) in orderedSelectedItems"
           :key="i"
           class="d-flex selected-item px-4"
-          @click="handleRemove(i)"
+          @click="handleRemove(item.id)"
         >
           <span>
             <input
               type="checkbox"
               class="checkbox"
               checked
-              @click.prevent.stop="handleRemove(i)"
+              @click.prevent.stop="handleRemove(item.id)"
             />
           </span>
           <span
@@ -104,6 +104,7 @@
 </template>
 
 <script setup lang="ts">
+import orderBy from "lodash/orderBy";
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 type Suggestion = { id: number; name: string; count: number };
 
@@ -156,6 +157,10 @@ if (props.modelValue.length > 0) {
   selectedItems.value = await props.hydrationFunction(props.modelValue);
 }
 
+const orderedSelectedItems = computed(() => {
+  return orderBy(selectedItems.value, ["count", "name"], ["desc", "asc"]);
+});
+
 const component = getCurrentInstance();
 
 const { data: suggestions, refresh } = await useAsyncData(
@@ -199,8 +204,10 @@ function handleAdd(item: Suggestion) {
   emit("update:model-value", selectedIds.value);
 }
 
-function handleRemove(i: number) {
-  selectedItems.value.splice(i, 1);
+function handleRemove(id: number) {
+  const index = selectedIds.value.indexOf(id);
+  selectedItems.value.splice(index, 1);
+
   emit("update:model-value", selectedIds.value);
 }
 

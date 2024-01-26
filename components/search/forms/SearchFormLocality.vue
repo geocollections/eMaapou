@@ -13,8 +13,8 @@
           v-model="filters.country.value"
           ref="filterCountry"
           :title="$t('filters.country')"
-          :query-function="querySuggestionsCountry"
-          :hydration-function="hydrateSuggestionsCountry"
+          :query-function="suggestCountry"
+          :hydration-function="hydrateCountry"
           @update:model-value="handleUpdate"
         />
         <filter-map
@@ -30,8 +30,8 @@
           v-model="filters.reference.value"
           ref="filterReferences"
           :title="$t('filters.reference')"
-          :query-function="querySuggestionsReferences"
-          :hydration-function="hydrateSuggestionsReferences"
+          :query-function="suggestReference"
+          :hydration-function="hydrateReference"
           @update:model-value="handleUpdate"
         />
       </v-expansion-panels>
@@ -61,162 +61,22 @@ function handleUpdate() {
   });
 }
 
-const { locale } = useI18n();
-const { $solrFetch } = useNuxtApp();
-
-async function querySuggestionsCountry({
-  query,
-  pagination,
-  values,
-}: {
-  query: string;
-  pagination: { page: number; perPage: number };
-  values: string[];
-}) {
-  const nameField = locale.value === "et" ? "country" : "country_en";
-  const pivot = `${nameField},country_id_s`;
-  const res = await $solrFetch("/locality", {
-    query: {
-      facet: "true",
-      "facet.pivot": `{!ex=country}${pivot}`,
-      [`f.${nameField}.facet.contains`]: query,
-      [`f.${nameField}.facet.contains.ignoreCase`]: true,
-      [`f.${nameField}.facet.excludeTerms`]: values.join(","),
-      "facet.limit": pagination.perPage,
-      [`f.${nameField}.facet.offset`]:
-        (pagination.page - 1) * pagination.perPage,
-      json: {
-        query: solrQuery.value,
-        filter: solrFilters.value,
-        limit: 0,
-      },
-    },
+const { suggest: suggestCountry, hydrate: hydrateCountry } = useAutocomplete(
+  "/locality",
+  {
+    idField: "country_id_s",
+    nameField: { et: "country", en: "country_en" },
+    filterExclude: "country",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  }
+);
+const { suggest: suggestReference, hydrate: hydrateReference } =
+  useAutocomplete("/locality", {
+    idField: "locality_references_kws",
+    nameField: "locality_references",
+    filterExclude: "references",
+    solrParams: { query: solrQuery, filter: solrFilters },
+    primary: "id",
+    containsParser: removeNonAlphanumeric,
   });
-  return res.facet_counts.facet_pivot[pivot].map((item: any) => ({
-    id: item.pivot[0].value,
-    name: item.value,
-    count: item.count,
-  }));
-}
-
-async function hydrateSuggestionsCountry(values: string[]) {
-  const nameField = locale.value === "et" ? "country" : "country_en";
-
-  const facets = values.reduce((prev, id) => {
-    prev[id] = {
-      type: "query",
-      q: `country_id:${id}`,
-      facet: {
-        name: {
-          type: "terms",
-          field: nameField,
-          limit: 1,
-          domain: {
-            query: "*:*",
-            filter: `country_id:${id}`,
-          },
-        },
-      },
-    };
-    return prev;
-  }, {});
-
-  const res = await $solrFetch("/locality", {
-    query: {
-      json: {
-        limit: 0,
-        query: solrQuery.value,
-        filter: solrFilters.value,
-        facet: {
-          ...facets,
-        },
-      },
-    },
-  });
-
-  return values.map((id) => ({
-    id,
-    name: res.facets[id].name.buckets[0].val,
-    count: res.facets[id].count,
-  }));
-}
-async function querySuggestionsReferences({
-  query,
-  pagination,
-  values,
-}: {
-  query: string;
-  pagination: { page: number; perPage: number };
-  values: string[];
-}) {
-  const primaryField = "locality_references_kws";
-  const pivot = `${primaryField},locality_references`;
-  const res = await $solrFetch("/locality", {
-    query: {
-      facet: "true",
-      "facet.pivot": `{!ex=references}${pivot}`,
-      [`f.${primaryField}.facet.contains`]: removeNonAlphanumeric(query),
-      [`f.${primaryField}.facet.contains.ignoreCase`]: true,
-      [`f.${primaryField}.facet.excludeTerms`]: values
-        .map(removeNonAlphanumeric)
-        .join(","),
-      "facet.limit": pagination.perPage,
-      [`f.${primaryField}.facet.offset`]:
-        (pagination.page - 1) * pagination.perPage,
-      json: {
-        query: solrQuery.value,
-        filter: solrFilters.value,
-        limit: 0,
-      },
-    },
-  });
-  return res.facet_counts.facet_pivot[pivot].map((item: any) => {
-    return {
-      id: item.value,
-      name: item.pivot[0].value,
-      count: item.count,
-    };
-  });
-}
-async function hydrateSuggestionsReferences(values: string[]) {
-  const facets = values.reduce((prev, id) => {
-    prev[id] = {
-      type: "query",
-      q: `locality_references_kws:"${id}"`,
-      facet: {
-        name: {
-          type: "terms",
-          field: "locality_references",
-          limit: 1,
-          domain: {
-            query: "*:*",
-            filter: `locality_references_kws:${id}`,
-          },
-        },
-      },
-    };
-    return prev;
-  }, {});
-
-  const res = await $solrFetch("/locality", {
-    query: {
-      json: {
-        limit: 0,
-        query: solrQuery.value,
-        filter: solrFilters.value,
-        facet: {
-          ...facets,
-        },
-      },
-    },
-  });
-
-  return values.map((id) => {
-    return {
-      id,
-      name: res.facets[id].name.buckets[0].val,
-      count: res.facets[id].count,
-    };
-  });
-}
 </script>
