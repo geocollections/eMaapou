@@ -1,6 +1,6 @@
 <template>
   <v-menu
-    :value="value"
+    :model-value="modelValue"
     :activator="activator"
     offset-y
     :close-on-content-click="false"
@@ -15,21 +15,21 @@
           <v-col cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
               <code class="black--text font-weight-bold">"Viki puurauk"</code>
-              <div class="ml-2">{{ $t('hints.exact') }}</div>
+              <div class="ml-2">{{ $t("hints.exact") }}</div>
             </div>
             <div class="d-flex mb-1 align-center">
               <code class="black--text font-weight-bold">+Keila</code>
-              <div class="ml-2">{{ $t('hints.require') }}</div>
+              <div class="ml-2">{{ $t("hints.require") }}</div>
             </div>
           </v-col>
           <v-col cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
               <code class="black--text font-weight-bold">Viki*</code>
-              <div class="ml-2">{{ $t('hints.wildcard') }}</div>
+              <div class="ml-2">{{ $t("hints.wildcard") }}</div>
             </div>
             <div class="d-flex mb-1 align-center">
               <code class="black--text font-weight-bold">-Pärnu</code>
-              <div class="ml-2">{{ $t('hints.exclude') }}</div>
+              <div class="ml-2">{{ $t("hints.exclude") }}</div>
             </div>
             <!-- <div class="d-flex mb-1 align-center">
               <code class="black--text font-weight-bold">+Eesti +Soome</code>
@@ -47,7 +47,7 @@
               <code class="black--text font-weight-bold"
                 >+"Keila lade" -Bryozoa</code
               >
-              <div class="ml-2">{{ $t('hints.combineOperators') }}</div>
+              <div class="ml-2">{{ $t("hints.combineOperators") }}</div>
             </div>
           </v-col>
         </v-row>
@@ -56,20 +56,15 @@
   </v-menu>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from '@nuxtjs/composition-api'
-
-export default defineComponent({
-  name: 'SearchHints',
-  props: {
-    activator: {
-      type: Object as PropType<Node | undefined>,
-      default: undefined,
-    },
-    value: {
-      type: Boolean,
-      required: true,
-    },
+<script setup lang="ts">
+defineProps({
+  activator: {
+    type: Object as PropType<Node | undefined>,
+    default: undefined,
   },
-})
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+});
 </script>

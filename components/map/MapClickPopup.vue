@@ -1,15 +1,15 @@
 <template>
   <l-popup :options="{ minWidth: 175 }">
     <div style="max-height: 200px; overflow: auto">
-      <v-simple-table
-        dense
+      <v-table
+        density="compact"
         :fixed-header="featuresLength > 3"
         :height="featuresLength > 3 ? 200 : 'unset'"
       >
         <template #default>
           <thead>
             <tr>
-              <th>{{ $t('map.name') }}</th>
+              <th>{{ $t("map.name") }}</th>
               <!--              <th>{{ $t('map.relatedRecords') }}</th>-->
             </tr>
           </thead>
@@ -38,33 +38,26 @@
             </tr>
           </tbody>
         </template>
-      </v-simple-table>
+      </v-table>
     </div>
   </l-popup>
 </template>
 
-<script>
-let Vue2Leaflet = {}
-if (process.client) {
-  Vue2Leaflet = require('vue2-leaflet')
-}
-export default {
-  name: 'MapClickPopup',
-  components: { 'l-popup': Vue2Leaflet.LPopup },
-  props: {
-    response: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
+<script setup lang="ts">
+import { LPopup } from "@vue-leaflet/vue-leaflet";
+const props = defineProps({
+  response: {
+    type: Object,
+    required: false,
+    default: () => {},
   },
-  computed: {
-    features() {
-      return this?.response?.features ?? []
-    },
-    featuresLength() {
-      return this?.response?.features?.length ?? 0
-    },
-  },
-}
+});
+
+const features = computed(() => {
+  return props.response?.features ?? [];
+});
+const featuresLength = computed(() => {
+  return props.response?.features?.length ?? 0;
+});
+const localePath = useLocalePath();
 </script>

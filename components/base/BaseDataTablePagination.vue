@@ -1,39 +1,44 @@
 <template>
-  <div class="d-inline-flex justify-end mr-2 mr-sm-3">
-    <div class="d-inline-flex align-center mr-2 mr-sm-3" style="flex: 0 0 0">
-      <div
-        v-show="$vuetify.breakpoint.smAndUp"
-        class="mr-3 text-no-wrap text-caption"
-      >
-        {{ itemsPerPageText }}
-      </div>
+  <div class="d-inline-flex align-center mr-2 mr-sm-3">
+    <div class="">
       <v-select
-        class="mt-0 text-caption"
-        style="max-width: 100px"
-        dense
+        density="compact"
         hide-details
+        variant="underlined"
+        style="min-width: 50px"
         :items="itemsPerPageOptions"
-        :value="options.itemsPerPage"
+        :model-value="options.itemsPerPage"
         :menu-props="{ bottom: true, offsetY: true, zIndex: 4 }"
-        @change="changeRowsPerPage"
+        @update:modelValue="changeRowsPerPage"
       />
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
-      <v-btn :disabled="options.page === 1" icon @click="first">
-        <v-icon>{{ icons.mdiPageFirst }}</v-icon>
+      <v-btn
+        :disabled="options.page === 1"
+        variant="text"
+        :icon="mdiPageFirst"
+        @click="first"
+      >
       </v-btn>
-      <v-btn :disabled="options.page === 1" icon @click="previous">
-        <v-icon>{{ icons.mdiChevronLeft }}</v-icon>
+      <v-btn
+        :disabled="options.page === 1"
+        variant="text"
+        :icon="mdiChevronLeft"
+        @click="previous"
+      >
       </v-btn>
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
-      <v-menu offset-y :close-on-content-click="false" z-index="4">
-        <template #activator="{ on, attrs }">
+      <v-menu
+        location="bottom"
+        :offset="10"
+        :close-on-content-click="false"
+        z-index="4"
+      >
+        <template #activator="{ props }">
           <v-btn
-            v-bind="attrs"
-            small
-            text
+            v-bind="props"
+            variant="text"
             class="text-no-wrap text-caption"
-            v-on="on"
           >
             {{ pageSelectText }}
           </v-btn>
@@ -41,10 +46,11 @@
         <v-card class="px-2 py-2 d-flex align-center">
           <div class="mr-2 text-no-wrap text-caption">{{ goToText }}</div>
           <v-text-field
-            ref="go-to-field"
+            ref="goToField"
             class="mt-0 text-caption"
             style="width: 64px"
-            dense
+            density="compact"
+            variant="underlined"
             hide-details
             :value="goToValue"
             type="number"
@@ -56,179 +62,161 @@
           <v-btn
             :disabled="!pageLimitRule(goToValue)"
             class="px-2 ml-2"
-            small
-            text
+            size="small"
+            variant="text"
             @click="selectPage"
           >
             {{ goToButtonText }}
-            <v-icon small>{{ icons.mdiChevronRight }}</v-icon>
+            <v-icon size="small">{{ mdiChevronRight }}</v-icon>
           </v-btn>
         </v-card>
       </v-menu>
       <v-btn
-        :disabled="options.page === pagination.pageCount"
-        icon
+        :disabled="options.page === pageCount"
+        :icon="mdiChevronRight"
+        variant="text"
         @click="next"
       >
-        <v-icon>{{ icons.mdiChevronRight }}</v-icon>
       </v-btn>
       <v-btn
-        :disabled="options.page === pagination.pageCount"
-        icon
+        :disabled="options.page === pageCount"
+        variant="text"
+        :icon="mdiPageLast"
         @click="last"
       >
-        <v-icon>{{ icons.mdiPageLast }}</v-icon>
+        <v-icon>{{ mdiPageLast }}</v-icon>
       </v-btn>
     </div>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   mdiPageFirst,
   mdiPageLast,
   mdiChevronRight,
   mdiChevronLeft,
-} from '@mdi/js'
-export default {
-  name: 'BaseDataTablePagination',
-  props: {
-    options: {
-      type: Object,
-      default: () => {
-        return {
-          page: 0,
-          itemsPerPage: 0,
-          sortBy: [],
-          sortDesc: [],
-          groupBy: [],
-          groupDesc: [],
-          multiSort: false,
-          mustSort: false,
-        }
-      },
-    },
-    pagination: {
-      type: Object,
-      default: () => {
-        return {
-          itemsLength: 0,
-          itemsPerPage: 0,
-          page: 1,
-          pageCount: 1,
-          pageStart: 0,
-          pageStop: 0,
-        }
-      },
-    },
-    itemsPerPageOptions: {
-      type: Array,
-      default: () => [],
-    },
-    itemsPerPageText: {
-      type: String,
-      default: 'Items per page',
-    },
-    pageSelectText: {
-      type: String,
-      default: `Page 0 / 0`,
-    },
-    goToText: {
-      type: String,
-      default: 'Go to page',
-    },
-    goToButtonText: {
-      type: String,
-      default: 'Go',
-    },
-    selectPageId: {
-      type: String,
-      default: 'page-select-btn',
-    },
-  },
-  data() {
-    return {
-      goToValue: NaN,
-    }
-  },
-  computed: {
-    pages() {
-      return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    },
-    icons() {
+} from "@mdi/js";
+
+const props = defineProps({
+  options: {
+    type: Object,
+    default: () => {
       return {
-        mdiPageFirst,
-        mdiPageLast,
-        mdiChevronLeft,
-        mdiChevronRight,
-      }
+        page: 0,
+        itemsPerPage: 0,
+        sortBy: [],
+        sortDesc: [],
+        groupBy: [],
+        groupDesc: [],
+        multiSort: false,
+        mustSort: false,
+      };
     },
   },
-  methods: {
-    setGoToValue(e) {
-      if (isNaN(e)) this.goToValue = e
-      else this.goToValue = parseInt(e)
-    },
-    selectPage() {
-      if (this.$refs['go-to-field'].validate(true)) {
-        this.$emit('update:options', {
-          ...this.options,
-          page: this.goToValue,
-        })
-        this.goToValue = NaN
-      }
-    },
-    next() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: this.options.page + 1,
-      })
-    },
-    previous() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: this.options.page - 1,
-      })
-    },
-    first() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: 1,
-      })
-    },
-    last() {
-      this.$emit('update:options', {
-        ...this.options,
-        page: this.pagination.pageCount,
-      })
-    },
-    changeRowsPerPage(e) {
-      this.$emit('update:options', {
-        ...this.options,
-        itemsPerPage: e,
-        page: 1,
-      })
-    },
-    pageLimitRule(value) {
-      if (isNaN(value)) return false
-      if (parseInt(value) < 1) return false
-      if (parseInt(value) > this.pagination.pageCount) return false
-      return true
-    },
+  pageCount: {
+    type: Number,
+    default: 0,
   },
+  itemsPerPageOptions: {
+    type: Array,
+    default: () => [],
+  },
+  itemsPerPageText: {
+    type: String,
+    default: "Items per page",
+  },
+  pageSelectText: {
+    type: String,
+    default: `Page 0 / 0`,
+  },
+  goToText: {
+    type: String,
+    default: "Go to page",
+  },
+  goToButtonText: {
+    type: String,
+    default: "Go",
+  },
+  selectPageId: {
+    type: String,
+    default: "page-select-btn",
+  },
+});
+const emit = defineEmits(["update:options"]);
+
+const goToValue = ref(NaN);
+
+function setGoToValue(e) {
+  if (isNaN(e)) goToValue.value = e;
+  else goToValue.value = parseInt(e);
+}
+
+const goToField = ref();
+
+function selectPage() {
+  if (goToField.value.validate(true)) {
+    emit("update:options", {
+      ...props.options,
+      page: goToValue.value,
+    });
+    goToValue.value = NaN;
+  }
+}
+
+function first() {
+  emit("update:options", {
+    ...props.options,
+    page: 1,
+  });
+}
+function next() {
+  emit("update:options", {
+    ...props.options,
+    page: props.options.page + 1,
+  });
+}
+
+function previous() {
+  emit("update:options", {
+    ...props.options,
+    page: props.options.page - 1,
+  });
+}
+
+function last() {
+  emit("update:options", {
+    ...props.options,
+    page: props.pageCount,
+  });
+}
+
+function changeRowsPerPage(e) {
+  emit("update:options", {
+    ...props.options,
+    itemsPerPage: e,
+    page: 1,
+  });
+}
+
+function pageLimitRule(value) {
+  if (isNaN(value)) return false;
+  if (parseInt(value) < 1) return false;
+  if (parseInt(value) > props.pageCount) return false;
+  return true;
 }
 </script>
 
 <style lang="scss" scoped>
 // Removes arrows from number input
 /* Chrome, Safari, Edge, Opera */
-::v-deep input::-webkit-outer-spin-button,
-::v-deep input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+// :deep(input::-webkit-outer-spin-button),
+// :deep(input::-webkit-inner-spin-button) {
+//   -webkit-appearance: none;
+//   margin: 0;
+// }
 
 /* Firefox */
-::v-deep input[type='number'] {
-  -moz-appearance: textfield;
-}
+// :deep(input[type="number"]) {
+//   -moz-appearance: textfield;
+// }
 </style>

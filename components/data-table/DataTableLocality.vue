@@ -1,26 +1,19 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
-    <template #item.id="{ item }">
+  <base-data-table v-bind="$attrs">
+    <template #item.id="{ item, index }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'locality-id', params: { id: item.id } })"
+        :to="localePath(`/locality/${item.id}`)"
+        @click="emit('click:row', index)"
       >
         {{ item.id }}
       </nuxt-link>
     </template>
-    <template #item.locality="{ item }">
+    <template #item.locality="{ item, index }">
       <nuxt-link
         class="text-link"
-        :to="localePath({ name: 'locality-id', params: { id: item.id } })"
+        :to="localePath(`/locality/${item.id}`)"
+        @click="emit('click:row', index)"
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
@@ -58,47 +51,8 @@
   </base-data-table>
 </template>
 
-<script lang="ts">
-import { toRef, defineComponent, PropType } from '@nuxtjs/composition-api'
-import { useHeadersWithState } from '~/composables/useHeaders'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_LOCALITY } from '~/constants'
-import { IOptions } from '~/services'
-export default defineComponent({
-  name: 'DataTableLocality',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object as PropType<IOptions>,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } =
-      useHeadersWithState({
-        module: 'locality',
-        localHeaders: HEADERS_LOCALITY,
-        statefulHeaders: props.statefulHeaders,
-        options: toRef(props, 'options'),
-      })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+
+const localePath = useLocalePath();
 </script>

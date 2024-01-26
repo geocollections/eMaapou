@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="filteredHeaders"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs" :headers="filteredHeaders">
     <template #item.id="{ item }">
       <nuxt-link
         class="text-link"
@@ -76,74 +67,31 @@
   </base-data-table>
 </template>
 
-<script lang="ts">
-import round from 'lodash/round'
-// import cloneDeep from 'lodash/cloneDeep'
-import {
-  computed,
-  defineComponent,
-  PropType,
-  // reactive,
-  toRef,
-  // useContext,
-} from '@nuxtjs/composition-api'
-import { useHeadersWithState } from '~/composables/useHeaders'
-import { HEADERS_ANALYSIS, Header } from '~/constants'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { IOptions } from '~/services'
+<script setup lang="ts">
+import round from "lodash/round";
+import type { Header } from "~/constants";
 
-export default defineComponent({
-  name: 'DataTableAnalysis',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object as PropType<IOptions>,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-    hideDepth: Boolean,
-    hideLocality: Boolean,
-    hideSample: Boolean,
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeadersWithState({
-      module: 'analysis',
-      localHeaders: HEADERS_ANALYSIS,
-      statefulHeaders: props.statefulHeaders,
-      options: toRef(props, 'options'),
-    })
+const props = withDefaults(
+  defineProps<{
+    hideDepth?: boolean;
+    hideLocality?: boolean;
+    hideSample?: boolean;
+  }>(),
+  {
+    hideDepth: false,
+    hideLocality: false,
+    hideSample: false,
+  }
+);
 
-    const filteredHeaders = computed(() => {
-      return headers.value.filter((item: Header) => {
-        if (item.value.includes('depth')) return !props.hideDepth
-        else if (item.value === 'locality') return !props.hideLocality
-        else if (item.value === 'sample_number') return !props.hideSample
-        else return item
-      })
-    })
-    return {
-      headers,
-      filteredHeaders,
-      handleHeadersReset,
-      handleHeadersChange,
-      round,
-    }
-  },
-})
+const localePath = useLocalePath();
+const attrs = useAttrs();
+const filteredHeaders = computed(() => {
+  return attrs.headers.filter((item: Header) => {
+    if (item.value.includes("depth")) return !props.hideDepth;
+    else if (item.value === "locality") return !props.hideLocality;
+    else if (item.value === "sample_number") return !props.hideSample;
+    else return item;
+  });
+});
 </script>

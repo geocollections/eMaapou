@@ -1,5 +1,4 @@
 <template>
-  <!--  eslint-disable-next-line vue/no-unused-vars -->
   <v-hover v-slot="{ hover }">
     <v-card
       v-bind="$attrs"
@@ -15,7 +14,7 @@
         {{ $formatDate(date) }}
       </div>
       <v-card-title
-        class="montserrat pt-0"
+        class="pt-0 text-h6"
         :class="{ 'white--text': dark }"
         style="word-break: normal"
       >
@@ -27,53 +26,36 @@
         style="color: rgba(0, 0, 0, 0.7)"
         :class="{ 'white--text': dark }"
       >
-        {{ extractContent(content) | truncate(previewLenght) }}
+        {{ truncatedText }}
       </v-card-text>
-
-      <!-- <v-card-actions class="justify-self-end py-0">
-        <v-spacer />
-        <v-btn
-          :color="dark ? 'white' : 'accent'"
-          class="text-none"
-          text
-          @click="$emit('click')"
-        >
-          {{ $t('common.readNewsArticle') }}
-        </v-btn>
-      </v-card-actions> -->
     </v-card>
   </v-hover>
 </template>
 
-<script>
-import { decodeHTML } from 'entities'
-export default {
-  name: 'NewsPreviewCard',
-  filters: {
-    truncate(value, length) {
-      if (!value) return ''
-      value = value.toString()
-      if (value.length > length) {
-        return value.substring(0, length) + '...'
-      } else {
-        return value
-      }
-    },
-  },
-  props: {
-    dark: { type: Boolean, default: false },
-    title: { type: String, default: null },
-    content: { type: String, default: null },
-    date: { type: String, default: null },
-    previewLenght: { type: Number, default: 200 },
-  },
-  methods: {
-    extractContent(html) {
-      if (html) {
-        return decodeHTML(html).replace(/<[^>]+>/g, '')
-      }
-      return null
-    },
-  },
+<script setup lang="ts">
+import { decodeHTML } from "entities";
+const props = defineProps({
+  dark: { type: Boolean, default: false },
+  title: { type: String, default: null },
+  content: { type: String, default: null },
+  date: { type: String, default: null },
+  previewLenght: { type: Number, default: 200 },
+});
+const truncatedText = computed(() => {
+  let value = extractContent(props.content);
+  if (!value) return "";
+  value = value.toString();
+  if (value.length > props.previewLenght) {
+    return value.substring(0, props.previewLenght) + "...";
+  } else {
+    return value;
+  }
+});
+
+function extractContent(html: string) {
+  if (html) {
+    return decodeHTML(html).replace(/<[^>]+>/g, "");
+  }
+  return null;
 }
 </script>

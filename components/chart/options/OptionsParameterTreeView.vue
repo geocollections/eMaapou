@@ -1,28 +1,26 @@
 <template>
   <v-menu
     transition="slide-y-transition"
-    offset-y
+    :offset="10"
     content-class="white"
     :close-on-content-click="false"
   >
-    <template #activator="{ on, attrs }">
+    <template #activator="{ props }">
       <v-btn
         color="accent"
         class="montserrat text-none"
-        small
-        dark
-        outlined
-        v-bind="attrs"
-        v-on="on"
+        size="small"
+        variant="outlined"
+        v-bind="props"
       >
-        <v-icon left dark> {{ icons.mdiChartLineVariant }} </v-icon>
-        {{ $t('common.parameters') }}
+        <v-icon start> {{ icons.mdiChartLineVariant }} </v-icon>
+        {{ $t("common.parameters") }}
       </v-btn>
     </template>
     <v-card flat style="min-width: 400px">
       <v-card-title class="text-body-1 pb-0 px-2">
         <div class="montserrat">
-          {{ $t('common.parameters') }}
+          {{ $t("common.parameters") }}
         </div>
       </v-card-title>
       <v-card-text class="px-2">
@@ -30,35 +28,37 @@
           v-model="search"
           :label="$t('common.filter')"
           class="py-2"
-          dense
+          density="compact"
+          variant="underlined"
           hide-details
         />
-        <v-treeview
-          style="max-height: 500px"
-          dense
-          selectable
-          :search="search"
-          return-object
-          :items="parameters"
-          :value="initialSelection"
-          @input="handleInput"
-        >
-          <template #label="{ item }">
-            <div>
-              {{ $translate({ et: item.name, en: item.name_en }) }}
-              <v-chip small>{{ item.count }}</v-chip>
-            </div>
-          </template>
-        </v-treeview>
+        <!-- TODO: Reimplement treeview when vuetify 3 adds it -->
+        <!-- <v-treeview -->
+        <!--   style="max-height: 500px" -->
+        <!--   dense -->
+        <!--   selectable -->
+        <!--   :search="search" -->
+        <!--   return-object -->
+        <!--   :items="parameters" -->
+        <!--   :value="initialSelection" -->
+        <!--   @input="handleInput" -->
+        <!-- > -->
+        <!--   <template #label="{ item }"> -->
+        <!--     <div> -->
+        <!--       {{ $translate({ et: item.name, en: item.name_en }) }} -->
+        <!--       <v-chip small>{{ item.count }}</v-chip> -->
+        <!--     </div> -->
+        <!--   </template> -->
+        <!-- </v-treeview> -->
       </v-card-text>
     </v-card>
   </v-menu>
 </template>
 
 <script>
-import { mdiChartLineVariant } from '@mdi/js'
+import { mdiChartLineVariant } from "@mdi/js";
 export default {
-  name: 'OptionsParameterTreeView',
+  name: "OptionsParameterTreeView",
   props: {
     parameters: {
       type: Array,
@@ -71,20 +71,20 @@ export default {
   },
   data() {
     return {
-      search: '',
-    }
+      search: "",
+    };
   },
   computed: {
     icons() {
       return {
         mdiChartLineVariant,
-      }
+      };
     },
   },
   methods: {
     handleInput(event) {
-      this.$emit('input', event)
+      this.$emit("input", event);
     },
   },
-}
+};
 </script>

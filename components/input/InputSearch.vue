@@ -2,14 +2,13 @@
   <div style="display: contents">
     <v-text-field
       ref="searchInput"
-      :value="value"
+      :model-value="modelValue"
       color="accent"
-      light
       class="rounded-0"
       :placeholder="placeholder"
       single-line
       hide-details
-      solo
+      variant="solo"
       clearable
       :style="inputStyle"
       :class="inputClass"
@@ -24,58 +23,51 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from '@nuxtjs/composition-api'
-import SearchHints from '../search/SearchHints.vue'
-export default defineComponent({
-  name: 'InputSearch',
-  components: { SearchHints },
-  props: {
-    showButton: {
-      type: Boolean,
-      default: false,
-    },
-    iconButton: {
-      type: Boolean,
-      default: false,
-    },
-    dense: {
-      type: Boolean,
-      default: false,
-    },
-    value: {
-      type: String,
-      default: '',
-    },
-    placeholder: {
-      type: String,
-      default: function (): string {
-        return this.$t('common.searchAlt').toString()
-      },
-    },
-    autofocus: {
-      type: Boolean,
-      default: false,
-    },
-    inputClass: {
-      type: String,
-      default: '',
-    },
-    maxWidth: {
-      type: Number,
-      default: -1,
+<script setup lang="ts">
+const props = defineProps({
+  showButton: {
+    type: Boolean,
+    default: false,
+  },
+  iconButton: {
+    type: Boolean,
+    default: false,
+  },
+  dense: {
+    type: Boolean,
+    default: false,
+  },
+  modelValue: {
+    type: String,
+    default: "",
+  },
+  placeholder: {
+    type: String,
+    default: function (): string {
+      const { t } = useI18n();
+      return t("common.searchAlt").toString();
     },
   },
-  setup(props: any) {
-    const searchFocused = ref(false)
-    const searchInput = ref()
-    const inputStyle = computed(() => ({
-      maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : 'inherit',
-      width: '100%',
-    }))
-    return { searchFocused, searchInput, inputStyle }
+  autofocus: {
+    type: Boolean,
+    default: false,
   },
-})
+  inputClass: {
+    type: String,
+    default: "",
+  },
+  maxWidth: {
+    type: Number,
+    default: -1,
+  },
+});
+
+const searchFocused = ref(false);
+const searchInput = ref();
+const inputStyle = computed(() => ({
+  maxWidth: props.maxWidth > 0 ? `${props.maxWidth}px` : "inherit",
+  width: "100%",
+}));
 </script>
 
 <style scoped lang="scss">

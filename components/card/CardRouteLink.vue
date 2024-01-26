@@ -9,13 +9,11 @@
     >
       <div class="py-2 d-flex d-sm-block align-center">
         <v-icon
-          v-if="$vuetify.breakpoint.smAndUp"
-          class="pl-3"
-          color="accent lighten-2"
-          left
-        >
-          {{ route.icon }}
-        </v-icon>
+          :icon="route.icon"
+          v-if="$vuetify.display.smAndUp"
+          color="accent-lighten-2"
+          end
+        />
         <div
           class="text-h5 text-sm-h4 pl-2 pl-sm-3 pt-sm-2 font-weight-bold white--text"
         >
@@ -25,13 +23,13 @@
               Math.floor(route.count / 100) * 100
             )
               .toLocaleString()
-              .replace(/,/g, '\u00A0')
+              .replace(/,/g, "\u00A0")
           }}+
         </div>
         <div
           class="font-weight-regular text-h6 pl-3 pt-0 white--text"
           :class="{
-            'text-body-1': $vuetify.breakpoint.smAndDown,
+            'text-body-1': $vuetify.display.smAndDown,
           }"
         >
           <div class="montserrat">
@@ -39,29 +37,23 @@
           </div>
         </div>
       </div>
-      <v-icon color="accent lighten-2" class="ml-auto pr-2">
-        {{ icons.mdiArrowRight }}
-      </v-icon>
+      <v-icon
+        :icon="mdiArrowRight"
+        color="accent-lighten-2"
+        class="ml-auto my-auto"
+        start
+      />
     </v-card>
   </v-hover>
 </template>
 
-<script>
-import { mdiArrowRight } from '@mdi/js'
-export default {
-  name: 'CardRouteLink',
-  props: {
-    route: {
-      type: Object,
-      required: true,
-    },
+<script setup lang="ts">
+import { mdiArrowRight } from "@mdi/js";
+defineProps({
+  route: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    icons() {
-      return {
-        mdiArrowRight,
-      }
-    },
-  },
-}
+});
+const localePath = useLocalePath();
 </script>

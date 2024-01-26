@@ -1,40 +1,28 @@
 <template>
   <v-btn
-    outlined
+    variant="outlined"
     color="grey"
     class="reset-search mr-2 px-3 montserrat rounded text-body-1 text-capitalize"
-    :icon="$vuetify.breakpoint.mdOnly"
+    :icon="$vuetify.display.md"
     @click="$emit('click')"
   >
-    <v-tooltip v-if="$vuetify.breakpoint.mdOnly" bottom>
-      <template #activator="{ on }">
-        <v-icon :right="!$vuetify.breakpoint.mdOnly" v-on="on">
-          {{ icons.mdiEraser }}
-        </v-icon>
+    <v-tooltip v-if="$vuetify.display.md" position="bottom">
+      <template #activator="{ props }">
+        <v-icon :icon="mdiEraser" :end="!$vuetify.display.md" v-bind="props" />
       </template>
 
       <span>
-        {{ $t('common.resetSearchLong') }}
+        {{ $t("common.resetSearchLong") }}
       </span>
     </v-tooltip>
-    <v-icon v-else left>{{ icons.mdiEraser }}</v-icon>
+    <v-icon v-else :icon="mdiEraser" start />
     <span class="hidden-md-only montserrat">
-      {{ $t('common.resetSearch') }}
+      {{ $t("common.resetSearch") }}
     </span>
   </v-btn>
 </template>
-<script>
-import { mdiEraser } from '@mdi/js'
-export default {
-  name: 'SearchResetButton',
-  computed: {
-    icons() {
-      return {
-        mdiEraser,
-      }
-    },
-  },
-}
+<script setup lang="ts">
+import { mdiEraser } from "@mdi/js";
 </script>
 
 <style scoped>

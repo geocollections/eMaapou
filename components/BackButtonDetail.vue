@@ -1,37 +1,28 @@
 <template>
-  <v-btn id="back-btn-detail" icon @click="handleClick">
+  <v-btn
+    id="back-btn-detail"
+    icon
+    variant="text"
+    :to="localePath({ name: table })"
+  >
     <v-icon style="transform: rotate(90deg)">
-      {{ icons.mdiSubdirectoryArrowLeft }}
+      {{ mdiSubdirectoryArrowLeft }}
     </v-icon>
-    <v-tooltip bottom activator="#back-btn-detail">
-      <span>{{ $t('common.goBack') }}</span>
+    <v-tooltip location="bottom" activator="#back-btn-detail">
+      <span>{{ $t("common.goBack") }}</span>
     </v-tooltip>
   </v-btn>
 </template>
 
-<script>
-import { mdiSubdirectoryArrowLeft } from '@mdi/js'
-export default {
-  name: 'BackButtonDetail',
-  computed: {
-    table() {
-      return this.$route.name.substring(0, this.$route.name.indexOf('-'))
-    },
-    icons() {
-      return {
-        mdiSubdirectoryArrowLeft,
-      }
-    },
-  },
-  methods: {
-    handleClick() {
-      let table = this.table
-      if (table === 'photo' || table === 'file') table = 'photo'
+<script setup lang="ts">
+import { mdiSubdirectoryArrowLeft } from "@mdi/js";
 
-      this.$router.push(this.localePath({ name: table }))
-    },
-  },
-}
+const route = useRoute();
+const localePath = useLocalePath();
+const table = computed(() => {
+  let res = route.name?.substring(0, route.name?.indexOf("-"));
+  if (res === "file") res = "photo";
+
+  return res;
+});
 </script>
-
-<style scoped></style>

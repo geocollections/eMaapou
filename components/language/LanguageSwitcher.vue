@@ -6,9 +6,9 @@
     class="montserrat text-capitalize"
     :color="color"
   >
-    <v-icon left color="accent lighten-2">{{ icons.mdiWeb }}</v-icon>
+    <v-icon :icon="mdiWeb" start color="accent-lighten-2" />
     {{ $i18n.localeProperties.name }}
-    <v-icon right color="accent lighten-2">{{ icons.mdiChevronDown }}</v-icon>
+    <v-icon :icon="mdiChevronDown" end color="accent-lighten-2" />
     <v-menu
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"
@@ -22,28 +22,14 @@
   </v-btn>
 </template>
 
-<script lang="ts">
-import { mdiWeb, mdiChevronDown } from '@mdi/js'
-import Vue from 'vue'
-import LanguageList from '~/components/language/LanguageList.vue'
-export default Vue.extend({
-  name: 'LanguageSwitcher',
-  components: { LanguageList },
-  props: {
-    color: {
-      type: String,
-      default: 'white',
-    },
+<script setup lang="ts">
+import { mdiWeb, mdiChevronDown } from "@mdi/js";
+defineProps({
+  color: {
+    type: String,
+    default: "white",
   },
-  computed: {
-    icons(): any {
-      return {
-        mdiWeb,
-        mdiChevronDown,
-      }
-    },
-  },
-})
+});
 </script>
 
 <style scoped lang="scss">
@@ -64,14 +50,14 @@ export default Vue.extend({
 }
 
 .flag:before {
-  content: '\A0';
+  content: "\A0";
 }
 
 .flag-et {
-  background-image: url('~assets/et.svg');
+  background-image: url("~assets/et.svg");
 }
 
 .flag-en {
-  background-image: url('~assets/en.svg');
+  background-image: url("~assets/en.svg");
 }
 </style>

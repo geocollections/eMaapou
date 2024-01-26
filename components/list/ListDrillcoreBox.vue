@@ -12,18 +12,17 @@
           v-model="search"
           class="pt-0 mt-0"
           color="primary darken-2"
-          :append-icon="icons.mdiMagnify"
+          :append-icon="mdiMagnify"
           :label="$t('common.search')"
           single-line
           hide-details
           clearable
-          @input="handleSearch"
         ></v-text-field>
       </v-col>
       <v-col class="d-flex justify-end" align-self="center">
         <base-data-table-pagination
           :options="options"
-          :pagination="pagination"
+          :page-count="pagination.pageCount"
           :items-per-page-options="footerProps['items-per-page-options']"
           :items-per-page-text="footerProps['items-per-page-text']"
           :page-select-text="
@@ -50,15 +49,12 @@
         <v-hover v-slot="{ hover }">
           <v-card
             flat
-            tile
             :ripple="false"
-            @click="
-              $openNuxtWindow(
-                localeLocation({
-                  name: 'drillcore-box-id',
-                  params: { id: box.drillcore_box.id },
-                })
-              )
+            :to="
+              localeRoute({
+                name: 'drillcore-box-id',
+                params: { id: box.drillcore_box.id },
+              })
             "
           >
             <v-card-text class="drillcore-box__card">
@@ -75,14 +71,14 @@
                       max-height="800"
                       eager
                       :lazy-src="
-                        $img(
+                        img(
                           box.attachment.filename,
                           { size: 'small' },
                           { provider: 'geocollections' }
                         )
                       "
                       :src="
-                        $img(
+                        img(
                           box.attachment.filename,
                           { size: 'medium' },
                           { provider: 'geocollections' }
@@ -107,7 +103,7 @@
                 <v-col cols="12" sm="4">
                   <v-card-title class="px-0 pt-0 montserrat">
                     {{
-                      $t('drillcoreBox.nr', {
+                      $t("drillcoreBox.nr", {
                         number: box.drillcore_box.number,
                       })
                     }}
@@ -190,83 +186,70 @@
   </div>
 </template>
 
-<script>
-import debounce from 'lodash/debounce'
-import { mdiMagnify } from '@mdi/js'
-import TableRow from '~/components/table/TableRow.vue'
-import TableRowLink from '~/components/table/TableRowLink.vue'
-import BaseTable from '~/components/base/BaseTable.vue'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-export default {
-  name: 'ListDrillcoreBox',
-  components: { BaseDataTablePagination, TableRow, TableRowLink, BaseTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    options: {
-      type: Object,
-      default: () => {},
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      search: '',
-      isLoading: false,
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
-    }
-  },
-  computed: {
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
-    },
-    icons() {
-      return {
-        mdiMagnify,
-      }
-    },
-  },
-  watch: {
-    items() {
-      this.isLoading = false
-    },
-  },
-  methods: {
-    boxHasInfo(box) {
-      return (
-        box.drillcore_box?.depth_start ||
-        box.drillcore_box?.depth_end ||
-        box.drillcore_box?.stratigraphy_top ||
-        box.drillcore_box?.stratigraphy_base ||
-        box.drillcore_box?.depth_other ||
-        box.drillcore_box?.remarks
-      )
-    },
-    handleChange: debounce(function (options) {
-      this.$emit('update', { options, search: this.search })
-    }, 250),
-    handleSearch: debounce(function () {
-      const options = { ...this.options, page: 1 }
-      this.isLoading = true
-      this.$emit('update', {
-        options,
-        search: this.search,
-      })
-    }, 400),
-  },
+<script setup lang="ts">
+import { mdiMagnify } from "@mdi/js";
+import type { DataTableOptions } from "~/constants";
+
+const props = withDefaults(
+  defineProps<{
+    items: any[];
+    options: DataTableOptions;
+    count?: number;
+    showSearch?: boolean;
+  }>(),
+  { count: 0, showSearch: true }
+);
+
+const emit = defineEmits(["update"]);
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+const localeRoute = useLocaleRoute();
+const img = useImage();
+
+const search = ref("");
+const searchDebounced = useDebounce(search, 250);
+const isLoading = ref(false);
+const footerProps = ref({
+  showFirstLastPage: true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+});
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+watch(
+  () => props.items,
+  () => {
+    isLoading.value = false;
+  }
+);
+
+watch(searchDebounced, () => {
+  handleSearch();
+});
+
+function boxHasInfo(box) {
+  return (
+    box.drillcore_box?.depth_start ||
+    box.drillcore_box?.depth_end ||
+    box.drillcore_box?.stratigraphy_top ||
+    box.drillcore_box?.stratigraphy_base ||
+    box.drillcore_box?.depth_other ||
+    box.drillcore_box?.remarks
+  );
+}
+
+function handleChange(options) {
+  emit("update", { options, search: search.value });
+}
+
+function handleSearch() {
+  const options = { ...props.options, page: 1 };
+  isLoading.value = true;
+  emit("update", { options, search: search.value });
 }
 </script>
 

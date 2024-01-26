@@ -1,17 +1,13 @@
 <template>
   <v-app-bar
-    app
-    dark
-    clipped-right
-    clipped-left
-    dense
+    density="compact"
     :elevation="getRouteBaseName() === 'index' ? 0 : 4"
     :absolute="getRouteBaseName() === 'index'"
     :elevate-on-scroll="getRouteBaseName() !== 'index'"
-    :color="transparent ? 'transparent' : 'accent darken-1'"
+    :color="transparent ? 'transparent' : 'accent-darken-1'"
     :class="{
-      'app-bar-full': $vuetify.breakpoint.mdAndUp,
-      'app-bar-mobile': !$vuetify.breakpoint.mdAndUp,
+      'app-bar-full': $vuetify.display.mdAndUp,
+      'app-bar-mobile': !$vuetify.display.mdAndUp,
     }"
     :style="cssProps"
   >
@@ -25,21 +21,21 @@
         :height="32"
         contain
         class="px-0 px-sm-3"
-        provider="static"
-        :src="logo"
+        :src="state.logo"
         style="vertical-align: middle"
       />
     </nuxt-link>
-    <v-toolbar-items v-if="$vuetify.breakpoint.mdAndUp" class="mr-md-2">
+    <v-toolbar-items v-if="$vuetify.display.mdAndUp" class="mr-md-2">
       <v-btn
         id="browse_menu_btn"
         aria-label="browse"
         text
+        color="white"
         class="montserrat"
         style="text-transform: capitalize"
       >
-        {{ $t('common.browse') }}
-        <v-icon color="accent lighten-2" right>
+        {{ $t("common.browse") }}
+        <v-icon color="accent-lighten-2" end>
           {{ icons.mdiChevronDown }}
         </v-icon>
       </v-btn>
@@ -47,33 +43,29 @@
         activator="#browse_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
-        offset-y
-        bottom
-        right
-        attach=""
+        location="bottom"
+        offset="10"
       >
         <v-card max-width="1000">
           <v-card-actions class="d-flex align-baseline">
             <v-list class="mx-3" width="250">
               <base-menu-list-item
-                v-for="(item, index) in browseTaxon"
+                v-for="(item, index) in state.browseTaxon"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
                 :label="$t(item.label).toString()"
-                nuxt
                 :to="localePath({ name: item.routeName })"
               />
             </v-list>
             <v-divider class="mx-3 my-2" vertical />
             <v-list class="mx-3" width="250">
               <base-menu-list-item
-                v-for="(item, index) in browseLab"
+                v-for="(item, index) in state.browseLab"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
                 :label="$t(item.label).toString()"
-                nuxt
                 :to="localePath({ name: item.routeName })"
               />
             </v-list>
@@ -81,12 +73,11 @@
             <v-divider class="mx-3 my-2" vertical />
             <v-list class="mx-3" width="250">
               <base-menu-list-item
-                v-for="(item, index) in browseGeography"
+                v-for="(item, index) in state.browseGeography"
                 :key="`browse-geography-item-${index}`"
                 class="my-1"
                 :icon="item.icon"
                 :label="$t(item.label).toString()"
-                nuxt
                 :to="localePath({ name: item.routeName })"
               />
             </v-list>
@@ -95,46 +86,43 @@
       </v-menu>
 
       <v-btn
-        nuxt
         aria-label="about page"
         text
+        color="white"
         class="montserrat font-weight-medium"
         style="text-transform: capitalize"
         :to="localePath({ name: 'about' })"
       >
-        {{ $t('common.about') }}
+        {{ $t("common.about") }}
       </v-btn>
 
       <v-btn
-        nuxt
         aria-label="news page"
         text
+        color="white"
         class="montserrat font-weight-medium"
         style="text-transform: capitalize"
         :to="localePath({ name: 'news' })"
       >
-        {{ $t('common.news') }}
+        {{ $t("common.news") }}
       </v-btn>
       <v-btn
         id="services_menu_btn"
         aria-label="browse"
         text
         class="montserrat"
+        color="white"
         style="text-transform: capitalize"
       >
-        {{ $t('common.services') }}
-        <v-icon color="accent lighten-2" right>
-          {{ icons.mdiChevronDown }}
-        </v-icon>
+        {{ $t("common.services") }}
+        <v-icon :icon="mdiChevronDown" color="accent-lighten-2" end />
       </v-btn>
       <v-menu
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
-        offset-y
-        bottom
-        right
-        attach=""
+        location="bottom"
+        offset="10"
       >
         <v-card width="550">
           <v-card-actions class="d-block">
@@ -143,13 +131,13 @@
               class="d-flex"
             >
               <base-menu-list-item
-                v-for="(tabId, index) in services.ids"
+                v-for="(tabId, index) in state.services.ids"
                 :key="`service-${index}`"
                 class="my-1"
                 target="_blank"
                 style="width: 250px"
-                :href="services[tabId].href"
-                :label="$t(services[tabId].title).toString()"
+                :href="state.services[tabId].href"
+                :label="$t(state.services[tabId].title).toString()"
                 label-only
               />
             </v-list>
@@ -160,40 +148,40 @@
     <v-toolbar-items
       class="align-center ml-auto"
       :style="{
-        width: !$vuetify.breakpoint.mdAndUp && showSearch ? '100%' : '100%',
+        width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
       }"
     >
       <div
         v-if="showSearch"
         class="d-flex elevation-0 rounded mr-0 mr-sm-2"
         style="width: 100%"
-        :class="{ 'mobile-search mx-5': !$vuetify.breakpoint.mdAndUp }"
+        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
       >
         <input-search
-          v-model="query"
+          v-model="state.query"
           input-class="rounded-l rounded-r-0 montserrat"
           background-color="white"
-          dense
+          density="compact"
           flat
-          :max-width="$vuetify.breakpoint.mdAndUp ? 650 : -1"
+          :max-width="$vuetify.display.mdAndUp ? 650 : -1"
           :autofocus="false"
           :placeholder="$t('common.search').toString()"
           @enter="
             $router.push(
-              localePath({ name: searchRouteName, query: { q: query } })
+              localePath({ name: searchRouteName, query: { q: state.query } })
             )
           "
         />
         <v-hover v-slot="{ hover }">
           <v-btn
             height="38"
-            :width="$vuetify.breakpoint.xsOnly ? 32 : 48"
+            :width="$vuetify.display.xs ? 32 : 48"
             elevation="0"
-            :color="hover ? 'warning' : 'grey lighten-2'"
+            :color="hover ? 'warning' : 'grey-lighten-2'"
             class="rounded-l-0"
             @click="
               $router.push(
-                localePath({ name: searchRouteName, query: { q: query } })
+                localePath({ name: searchRouteName, query: { q: state.query } })
               )
             "
           >
@@ -201,16 +189,16 @@
           </v-btn>
         </v-hover>
       </div>
-      <language-switcher v-if="$vuetify.breakpoint.mdAndUp" class="ml-auto" />
+      <language-switcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
       <v-btn
-        v-if="!$vuetify.breakpoint.mdAndUp"
+        v-if="!$vuetify.display.mdAndUp"
         text
         class="montserrat ml-auto"
         aria-label="Open navigation drawer"
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <v-icon color="accent lighten-2" size="font-size: 24px">
+        <v-icon color="accent-lighten-2" size="font-size: 24px">
           {{ icons.mdiMenu }}
         </v-icon>
       </v-btn>
@@ -218,82 +206,62 @@
   </v-app-bar>
 </template>
 
-<script lang="ts">
-import { mdiChevronDown, mdiMagnify, mdiMenu } from '@mdi/js'
-import {
-  computed,
-  defineComponent,
-  reactive,
-  toRefs,
-  useRoute,
-} from '@nuxtjs/composition-api'
-import InputSearch from './input/InputSearch.vue'
-import BaseMenuListItem from './base/BaseMenuListItem.vue'
-import LanguageSwitcher from '~/components/language/LanguageSwitcher.vue'
+<script setup lang="ts">
+import { mdiChevronDown, mdiMagnify, mdiMenu } from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
   BROWSE_TAXON_LIST,
   SERVICES,
-} from '~/constants'
-export default defineComponent({
-  name: 'AppHeader',
-  components: { LanguageSwitcher, InputSearch, BaseMenuListItem },
-  props: {
-    drawer: Boolean,
-    showSearch: {
-      type: Boolean,
-      default: true,
-    },
-    transparent: {
-      type: Boolean,
-      default: false,
-    },
-    maxWidth: {
-      type: Number,
-      default: 1785,
-    },
+} from "~/constants";
+
+const props = defineProps({
+  drawer: {
+    type: Boolean,
+    required: true,
   },
-  setup(props) {
-    const route = useRoute()
-    const state = reactive({
-      browseGeography: BROWSE_GEOLOGY_LIST,
-      browseLab: BROWSE_LAB_LIST,
-      browseTaxon: BROWSE_TAXON_LIST,
-      logo: '/logos/emaapou5white.svg',
-      logoCompact: '/logos/emaapou_short.svg',
-      services: SERVICES,
-      query: (route.value.query.q as string) ?? '',
-      searchFocused: false,
-    })
-    const icons = computed(() => {
-      return {
-        mdiMagnify,
-        mdiMenu,
-        mdiChevronDown,
-      }
-    })
-    const tabValue = computed(() => {
-      // https://github.com/vuetifyjs/vuetify/issues/12265
-      const path = route.value.path
-      const full = route.value.fullPath
-      return path[path.length - 1] !== '/'
-        ? `${path}/${full.substring(path.length)}`
-        : `${full}/`
-    })
-    const searchRouteName = computed(() => {
-      return route.value.name?.includes('search')
-        ? route.value.name?.split('__')[0]
-        : 'search'
-    })
-    const cssProps = computed(() => {
-      return {
-        '--max-width': `${props.maxWidth}px`,
-      }
-    })
-    return { ...toRefs(state), icons, tabValue, searchRouteName, cssProps }
+  showSearch: {
+    type: Boolean,
+    default: true,
   },
-})
+  transparent: {
+    type: Boolean,
+    default: false,
+  },
+  maxWidth: {
+    type: Number,
+    default: 1785,
+  },
+});
+const route = useRoute();
+const getRouteBaseName = useRouteBaseName();
+const localePath = useLocalePath();
+const state = reactive({
+  browseGeography: BROWSE_GEOLOGY_LIST,
+  browseLab: BROWSE_LAB_LIST,
+  browseTaxon: BROWSE_TAXON_LIST,
+  logo: "/logos/emaapou5white.svg",
+  logoCompact: "/logos/emaapou_short.svg",
+  services: SERVICES,
+  query: (route.query.q as string) ?? "",
+  searchFocused: false,
+});
+const icons = computed(() => {
+  return {
+    mdiMagnify,
+    mdiMenu,
+    mdiChevronDown,
+  };
+});
+
+const searchRouteName = computed(() => {
+  return route.name?.includes("search") ? route.name?.split("__")[0] : "search";
+});
+const cssProps = computed(() => {
+  return {
+    "--max-width": `${props.maxWidth}px`,
+  };
+});
 </script>
 
 <style scoped lang="scss">
@@ -309,7 +277,7 @@ export default defineComponent({
 }
 
 .active-tab {
-  color: var(--v-accent-darken1) !important;
+  color: var(--v-theme-accent-darken1) !important;
   font-weight: 600 !important;
 }
 
@@ -340,11 +308,11 @@ export default defineComponent({
   background-color: rgba(9, 98, 124, 0.12) !important;
 
   & div {
-    color: var(--v-accent-lighten1) !important;
+    color: var(--v-theme-accent-lighten1) !important;
   }
 
   & .v-icon {
-    color: var(--v-accent-lighten1) !important;
+    color: var(--v-theme-accent-lighten1) !important;
   }
 }
 .logo-link {
@@ -352,7 +320,7 @@ export default defineComponent({
   display: contents;
 }
 .logo-link::before {
-  content: '';
+  content: "";
   height: 48px;
   width: 104px;
   position: absolute;

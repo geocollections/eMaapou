@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <app-drawer
-      v-if="!$vuetify.breakpoint.mdAndUp"
+      v-if="!$vuetify.display.mdAndUp"
       :drawer="drawer"
       @update:navigationDrawer="drawer = $event"
     />
@@ -13,7 +13,7 @@
       @toggle:navigationDrawer="drawer = !drawer"
     />
     <v-main class="pt-0 pb-10" style="min-height: 100vh">
-      <nuxt />
+      <slot />
       <fab-scroll-top />
       <client-only>
         <cookie-consent />
@@ -24,24 +24,6 @@
   </v-app>
 </template>
 
-<script>
-import AppFooter from '~/components/AppFooter.vue'
-import CookieConsent from '~/components/CookieConsent.vue'
-import AppDrawer from '~/components/AppDrawer.vue'
-import AppHeader from '~/components/AppHeader.vue'
-import FabScrollTop from '~/components/FabScrollTop.vue'
-export default {
-  components: {
-    AppDrawer,
-    AppHeader,
-    FabScrollTop,
-    CookieConsent,
-    AppFooter,
-  },
-  data() {
-    return {
-      drawer: false,
-    }
-  },
-}
+<script setup lang="ts">
+const drawer = ref(false);
 </script>

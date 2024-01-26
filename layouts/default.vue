@@ -1,38 +1,27 @@
 <template>
-  <v-app dark>
+  <v-app>
+    <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
     <app-drawer
-      v-if="!$vuetify.breakpoint.mdAndUp"
+      v-if="!mdAndUp"
       :drawer="drawer"
       @update:navigationDrawer="drawer = $event"
     />
-    <app-header :drawer="drawer" @toggle:navigationDrawer="drawer = !drawer" />
-    <nuxt />
+    <slot />
     <client-only>
       <cookie-consent />
     </client-only>
   </v-app>
 </template>
 
-<script>
-import AppHeader from '~/components/AppHeader.vue'
-import CookieConsent from '~/components/CookieConsent.vue'
-import AppDrawer from '~/components/AppDrawer.vue'
+<script setup lang="ts">
+import { useDisplay } from "vuetify/lib/framework.mjs";
 
-export default {
-  components: {
-    AppDrawer,
-    CookieConsent,
-    AppHeader,
-  },
-  data() {
-    return {
-      drawer: false,
-    }
-  },
-  watch: {
-    '$vuetify.breakpoint.mdAndUp'(newVal, oldVal) {
-      if (newVal && !oldVal) this.drawer = false
-    },
-  },
-}
+const drawer = ref(false);
+
+const { mdAndUp } = useDisplay();
+watchEffect(() => {
+  if (mdAndUp) {
+    drawer.value = false;
+  }
+});
 </script>

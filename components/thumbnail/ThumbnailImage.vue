@@ -11,24 +11,13 @@
   />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // TODO: "Currently a dialog is created for every thumbnail image.
 // would be better if there was only one dialog that we pass the image url to.
-import { defineComponent, ref } from '@nuxtjs/composition-api'
 
-export default defineComponent({
-  name: 'ThumbnailImage',
-  props: {
-    src: {
-      type: String,
-      required: true,
-    },
-  },
-  setup() {
-    const open = ref(false)
-    return { open }
-  },
-})
+defineProps<{
+  src: string;
+}>();
 </script>
 
 <style lang="scss" scoped>

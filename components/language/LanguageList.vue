@@ -11,32 +11,23 @@
       <v-list-item-title class="d-flex py-1">
         <v-icon
           v-show="$i18n.locale === locale.code"
-          class="mr-2"
+          :icon="mdiCheck"
+          start
           color="accent"
-        >
-          {{ icons.mdiCheck }}
-        </v-icon>
+        />
         <span class="align-self-center montserrat">{{ locale.name }}</span>
       </v-list-item-title>
     </v-list-item>
   </v-list>
 </template>
 
-<script>
-import { mdiCheck } from '@mdi/js'
-export default {
-  name: 'LanguageList',
-  computed: {
-    availableLocales() {
-      return this.$i18n.locales
-    },
-    icons() {
-      return {
-        mdiCheck,
-      }
-    },
-  },
-}
+<script setup lang="ts">
+import { mdiCheck } from "@mdi/js";
+import type { LocaleObject } from "@nuxtjs/i18n/dist/runtime/composables";
+
+const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
+
+const switchLocalePath = useSwitchLocalePath();
 </script>
 
 <style scoped>
@@ -57,14 +48,14 @@ export default {
 }
 
 .flag:before {
-  content: '\A0';
+  content: "\A0";
 }
 
 .flag-et {
-  background-image: url('~/assets/et.svg');
+  background-image: url("~/assets/et.svg");
 }
 
 .flag-en {
-  background-image: url('~/assets/en.svg');
+  background-image: url("~/assets/en.svg");
 }
 </style>

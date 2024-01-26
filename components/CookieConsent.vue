@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="$accessor.settings.cookiePolicy"
+    v-if="settings.showCookiePolicy"
     class="cookie-policy py-3 px-6 d-flex justify-center"
   >
     <v-card class="cookie-policy-card py-3 px-3" elevation="2">
@@ -11,16 +11,16 @@
         <div
           class="align-self-center pr-3"
           :class="{
-            'text-sm': $vuetify.breakpoint.xsOnly,
+            'text-sm': $vuetify.display.xs,
           }"
         >
-          {{ $t('cookiePolicy.introduction') }}
+          {{ $t("cookiePolicy.introduction") }}
 
           <nuxt-link
             class="text-link text-decoration-none"
             :to="localePath({ name: 'cookie-policy' })"
           >
-            {{ $t('cookiePolicy.readMoreButton') }}
+            {{ $t("cookiePolicy.readMoreButton") }}
           </nuxt-link>
         </div>
       </div>
@@ -32,7 +32,7 @@
           color="grey darken-1"
           @click="handleRejectConsent"
         >
-          {{ $t('cookiePolicy.reject') }}
+          {{ $t("cookiePolicy.reject") }}
         </v-btn>
         <v-btn
           width="100"
@@ -40,35 +40,30 @@
           class="text-none montserrat"
           @click="handleAcceptConsent"
         >
-          {{ $t('cookiePolicy.accept') }}
+          {{ $t("cookiePolicy.accept") }}
         </v-btn>
       </div>
     </v-card>
   </div>
 </template>
 
-<script lang="ts">
-import { mdiCookie } from '@mdi/js'
-import { computed, defineComponent, useContext } from '@nuxtjs/composition-api'
-import { useAccessor } from '~/composables/useAccessor'
-export default defineComponent({
-  name: 'CookieConsent',
-  setup() {
-    const { $matomo } = useContext()
-    const accessor = useAccessor()
-    const icons = computed(() => {
-      return { mdiCookie }
-    })
-    const handleAcceptConsent = () => {
-      accessor.settings.setCookiePolicy(false)
-      $matomo?.rememberCookieConsentGiven()
-    }
-    const handleRejectConsent = () => {
-      accessor.settings.setCookiePolicy(false)
-    }
-    return { icons, handleAcceptConsent, handleRejectConsent }
-  },
-})
+<script setup lang="ts">
+import { mdiCookie } from "@mdi/js";
+
+const { $matomo } = useNuxtApp();
+const settings = useSettings();
+const icons = computed(() => {
+  return { mdiCookie };
+});
+const localePath = useLocalePath();
+const handleAcceptConsent = () => {
+  settings.cookieConsent = true;
+  settings.showCookieConsent = false;
+  $matomo?.rememberCookieConsentGiven();
+};
+const handleRejectConsent = () => {
+  settings.showCookieConsent = false;
+};
 </script>
 
 <style scoped>
@@ -79,9 +74,11 @@ export default defineComponent({
   z-index: 100000;
   width: 100%;
 }
+
 .cookie-policy-card {
   pointer-events: auto;
 }
+
 .text-sm {
   font-size: 14px;
 }

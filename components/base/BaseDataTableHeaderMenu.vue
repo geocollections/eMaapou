@@ -6,7 +6,8 @@
   -->
   <v-menu
     transition="slide-y-transition"
-    offset-y
+    :offset="10"
+    position="bottom"
     z-index="4"
     :close-on-content-click="false"
   >
@@ -14,139 +15,122 @@
       <v-tooltip bottom open-delay="500">
         <template #activator="tooltip">
           <v-btn
-            icon
-            v-bind="{ ...menu.attrs, ...tooltip.attrs }"
-            v-on="{ ...menu.on, ...tooltip.on }"
+            variant="text"
+            :icon="mdiTableCog"
+            v-bind="{ ...menu.props, ...tooltip.props }"
           >
-            <v-icon>{{ icons.mdiTableCog }}</v-icon>
           </v-btn>
         </template>
-        <span>{{ $t('table.tooltipConfig') }}</span>
+        <span>{{ $t("table.tooltipConfig") }}</span>
       </v-tooltip>
     </template>
     <v-card>
-      <v-list flat class="">
+      <v-list flat>
         <v-list-item-title class="px-2 montserrat align-center">
-          {{ $t('common.headers') }}
+          {{ $t("common.headers") }}
           <v-tooltip bottom open-delay="500">
-            <template #activator="{ on, attrs }">
-              <v-btn v-bind="attrs" icon v-on="on" @click="$emit('reset')">
-                <v-icon>{{ icons.mdiRefresh }}</v-icon>
+            <template #activator="{ props }">
+              <v-btn
+                v-bind="props"
+                :icon="mdiRefresh"
+                variant="text"
+                @click="$emit('reset')"
+              >
               </v-btn>
             </template>
-            {{ $t('table.tooltipResetHeaders') }}
+            {{ $t("table.tooltipResetHeaders") }}
           </v-tooltip>
 
           <v-tooltip open-delay="500" bottom>
-            <template #activator="{ on, attrs }">
+            <template #activator="{ props }">
               <v-btn
-                v-bind="attrs"
-                icon
-                v-on="on"
+                v-bind="props"
+                variant="text"
+                :icon="!onlyVisible ? mdiEye : mdiEyeOff"
                 @click="onlyVisible = !onlyVisible"
               >
-                <v-icon v-if="!onlyVisible">{{ icons.mdiEye }}</v-icon>
-                <v-icon v-else>{{ icons.mdiEyeOff }}</v-icon>
               </v-btn>
             </template>
             <span v-if="!onlyVisible">
-              {{ $t('table.tooltipShowActiveHeaders') }}
+              {{ $t("table.tooltipShowActiveHeaders") }}
             </span>
-            <span v-else>{{ $t('table.tooltipShowAllHeaders') }}</span>
+            <span v-else>{{ $t("table.tooltipShowAllHeaders") }}</span>
           </v-tooltip>
           <v-text-field
             v-model="filter"
             class="py-2"
-            dense
+            density="compact"
+            variant="underlined"
             hide-details
             :label="$t('common.filter')"
           />
         </v-list-item-title>
-        <v-list-item-group :value="visibleHeaders" multiple>
-          <v-virtual-scroll
-            :items="
-              (onlyVisible ? visibleHeaders : headers) | filterHeaders(filter)
-            "
-            height="500"
-            item-height="35"
-            width="300"
-            :bench="20"
-            multiple
-          >
-            <template #default="{ item }">
-              <v-tooltip left :disabled="!sortBy.includes(item.value)">
-                <template #activator="{ on, attrs }">
-                  <div v-bind="attrs" v-on="on">
-                    <v-list-item
-                      dense
-                      :disabled="sortBy.includes(item.value)"
-                      :value="item"
-                      @click="$emit('change', item)"
-                    >
-                      <v-list-item-action class="my-2 mr-2">
-                        <v-checkbox
-                          dense
-                          :disabled="sortBy.includes(item.value)"
-                          :input-value="item.show"
-                          color="accent lighten-2"
-                        />
-                      </v-list-item-action>
-                      <v-list-item-content>
-                        <v-list-item-title>{{ item.text }}</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </div>
-                </template>
-                {{ $t('common.headerSelectDisabled') }}
-              </v-tooltip>
-            </template>
-          </v-virtual-scroll>
-        </v-list-item-group>
+        <v-virtual-scroll
+          :items="filteredHeaders"
+          :height="500"
+          :item-height="35"
+          :width="300"
+        >
+          <template #default="{ item }">
+            <v-tooltip left :disabled="!sortBy.includes(item.value)">
+              <template #activator="{ props }">
+                <v-list-item
+                  v-bind="props"
+                  density="compact"
+                  variant="text"
+                  :disabled="sortBy.includes(item.value)"
+                  @click="$emit('change', item)"
+                >
+                  <template #prepend>
+                    <v-list-item-action start class="mr-2">
+                      <v-checkbox-btn
+                        density="compact"
+                        :disabled="sortBy.includes(item.value)"
+                        :model-value="item.show"
+                        color="accent-lighten-2"
+                      />
+                    </v-list-item-action>
+                  </template>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </template>
+              {{ $t("common.headerSelectDisabled") }}
+            </v-tooltip>
+          </template>
+        </v-virtual-scroll>
       </v-list>
     </v-card>
   </v-menu>
 </template>
 
-<script>
-import { mdiTableCog, mdiRefresh, mdiEye, mdiEyeOff } from '@mdi/js'
-export default {
-  name: 'BaseDataTableHeaderMenu',
-  filters: {
-    filterHeaders(headers, filter) {
-      return headers.filter((header) =>
-        header.text.toLowerCase().includes(filter.toLowerCase())
-      )
-    },
+<script setup lang="ts">
+import { mdiTableCog, mdiRefresh, mdiEye, mdiEyeOff } from "@mdi/js";
+
+const props = defineProps({
+  headers: {
+    type: Array,
+    default: () => [],
   },
-  props: {
-    headers: {
-      type: Array,
-      default: () => [],
-    },
-    visibleHeaders: {
-      type: Array,
-      default: () => [],
-    },
-    sortBy: {
-      type: Array,
-      default: () => [],
-    },
+  visibleHeaders: {
+    type: Array,
+    default: () => [],
   },
-  data() {
-    return {
-      onlyVisible: false,
-      filter: '',
-    }
+  sortBy: {
+    type: Array,
+    default: () => [],
   },
-  computed: {
-    icons() {
-      return {
-        mdiTableCog,
-        mdiRefresh,
-        mdiEye,
-        mdiEyeOff,
-      }
-    },
-  },
-}
+});
+const filter = ref("");
+const onlyVisible = ref(false);
+
+const filteredHeaders = computed(() => {
+  if (onlyVisible.value) {
+    return props.visibleHeaders.filter((header) =>
+      header.title.toLowerCase().includes(filter.value.toLowerCase())
+    );
+  }
+  return props.headers.filter((header) =>
+    header.title.toLowerCase().includes(filter.value.toLowerCase())
+  );
+});
 </script>

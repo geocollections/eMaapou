@@ -5,7 +5,7 @@
         <base-header :title="$t('common.news')" class="pb-2 title-heading" />
         <v-card-text class="d-flex flex-column pa-0">
           <news-preview-card
-            v-for="(news, i) in newsList"
+            v-for="(news, i) in newsList.results"
             :key="i"
             class="mb-2"
             :preview-lenght="400"
@@ -23,7 +23,7 @@
             class="montserrat text-none"
             :to="localePath('news')"
             text
-            >{{ $t('common.viewNews') }}</v-btn
+            >{{ $t("common.viewNews") }}</v-btn
           >
         </v-card-actions>
       </v-col>
@@ -31,44 +31,27 @@
   </v-card>
 </template>
 
-<script>
-import NewsPreviewCard from '~/components/NewsPreviewCard.vue'
-import BaseHeader from '~/components/base/BaseHeader.vue'
-export default {
-  name: 'TheNewsSection',
-  components: { NewsPreviewCard, BaseHeader },
-  data() {
-    return {
-      newsList: [],
-    }
+<script setup lang="ts">
+import { useDisplay } from "vuetify/lib/framework.mjs";
+
+const { $translate } = useNuxtApp();
+const router = useRouter();
+const localePath = useLocalePath();
+const { lgAndUp } = useDisplay();
+
+const { data: newsList } = useApiFetch("/webnews", {
+  query: {
+    limit: 6,
+    order_by: "-date_added",
   },
-  async fetch() {
-    const newsResponse = await this.$services.sarvREST.getResourceList(
-      'web_news',
-      {
-        options: {
-          page: 1,
-          itemsPerPage: 6,
-          sortBy: ['date_added'],
-          sortDesc: [true],
-        },
-        fields: { date_added: 'date_added' },
-      }
-    )
-    this.newsList = newsResponse.items
-  },
-  computed: {
-    previewLength() {
-      if (this.$vuetify.breakpoint.lgAndUp) return 400
-      return 140
-    },
-  },
-  methods: {
-    openNews(news) {
-      this.$router.push(
-        this.localePath({ name: 'news-id', params: { id: news.id } })
-      )
-    },
-  },
+});
+
+const previewLength = computed(() => {
+  if (lgAndUp) return 400;
+  return 140;
+});
+
+function openNews(news) {
+  router.push(localePath({ name: "news-id", params: { id: news.id } }));
 }
 </script>

@@ -1,7 +1,9 @@
-import { Plugin } from '@nuxt/types'
-import generateServices from '~/services'
-const plugin: Plugin = (context, inject) => {
-  inject('services', generateServices(context))
-}
-
-export default plugin
+// import generateServices from "~/services";
+// TODO: Delete this file
+export default defineNuxtPlugin((nuxtApp) => {
+  return {
+    // provide: {
+    //   services: generateServices(nuxtApp),
+    // },
+  };
+});

@@ -2,6 +2,7 @@
   <v-row justify="center">
     <v-col sm="8" md="6" class="text-center">
       <h1 class="text-h4 mb-5">
+        {{ JSON.stringify(error) }}
         {{ title }}
       </h1>
 
@@ -24,7 +25,7 @@
         class="montserrat text-capitalize"
       >
         <v-icon left>{{ icons.mdiHome }}</v-icon>
-        {{ $t('common.backToLanding') }}
+        {{ $t("common.backToLanding") }}
       </v-btn>
       <v-form class="d-flex text-right my-4" @submit.prevent="handleSearch">
         <input-search
@@ -49,12 +50,12 @@
 </template>
 
 <script>
-import { mdiMagnify, mdiRefresh, mdiHome } from '@mdi/js'
-import InputSearch from '~/components/input/InputSearch.vue'
+import { mdiMagnify, mdiRefresh, mdiHome } from "@mdi/js";
+import InputSearch from "~/components/input/InputSearch.vue";
 export default {
-  name: 'DetailError',
+  name: "DetailError",
   components: { InputSearch },
-  layout: 'empty',
+  layout: "empty",
   props: {
     error: {
       type: Object,
@@ -63,36 +64,36 @@ export default {
   },
   data() {
     return {
-      query: '',
-      otherError: this.$t('error.occurred'),
-    }
+      query: "",
+      otherError: this.$t("error.occurred"),
+    };
   },
   head() {
-    const title = this.otherError
+    const title = this.otherError;
     return {
       title,
-    }
+    };
   },
   computed: {
     title() {
-      return this.otherError
+      return this.otherError;
     },
     icons() {
       return {
         mdiMagnify,
         mdiRefresh,
         mdiHome,
-      }
+      };
     },
   },
   methods: {
     handleSearch() {
       this.$router.push(
-        this.localePath({ name: 'search', query: { q: this.query } })
-      )
+        this.localePath({ name: "search", query: { q: this.query } })
+      );
     },
   },
-}
+};
 </script>
 
 <style scoped>

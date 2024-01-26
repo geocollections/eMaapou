@@ -1,12 +1,12 @@
 <template>
   <v-dialog
-    :value="value"
+    :model-value="modelValue"
     overlay-opacity="0.80"
     content-class="elevation-0"
     offset-x
-    @input="$emit('input', !value)"
+    @input="emit('input', !modelValue)"
   >
-    <div class="text-center" @click="$emit('input', !value)">
+    <div class="text-center" @click="emit('input', !modelValue)">
       <nuxt-img
         v-if="image"
         class="rounded"
@@ -33,84 +33,75 @@
         color="info"
         elevation="2"
       >
-        <v-icon left>{{ icons.mdiInformationOutline }}</v-icon>
-        {{ $t('photo.viewDetail') }}
+        <v-icon left>{{ mdiInformationOutline }}</v-icon>
+        {{ $t("photo.viewDetail") }}
       </v-btn>
       <div class="white rounded px-2">
-        <v-icon left>{{ icons.mdiFileDownloadOutline }}</v-icon>
+        <v-icon left>{{ mdiFileDownloadOutline }}</v-icon>
         <v-btn
           text
           class="text-capitalize"
-          :href="$img(image.src, { size: 'small' }, image.options)"
+          :href="img(image.src, { size: 'small' }, image.options)"
           target="_blank"
         >
-          {{ $t('common.small') }}
+          {{ $t("common.small") }}
         </v-btn>
         <v-btn
           text
           class="text-capitalize"
-          :href="$img(image.src, { size: 'medium' }, image.options)"
+          :href="img(image.src, { size: 'medium' }, image.options)"
           target="_blank"
         >
-          {{ $t('common.medium') }}
+          {{ $t("common.medium") }}
         </v-btn>
         <v-btn
           text
           class="text-capitalize"
-          :href="$img(image.src, { size: 'large' }, image.options)"
+          :href="img(image.src, { size: 'large' }, image.options)"
           target="_blank"
         >
-          {{ $t('common.large') }}
+          {{ $t("common.large") }}
         </v-btn>
         <v-btn
           text
           class="text-capitalize"
-          :href="$img(image.src, {}, image.options)"
+          :href="img(image.src, {}, image.options)"
           target="_blank"
         >
-          {{ $t('common.original') }}
+          {{ $t("common.original") }}
         </v-btn>
       </div>
     </div>
   </v-dialog>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from '@nuxtjs/composition-api'
-import { computed } from 'vue'
-import { Route } from 'vue-router'
-import { mdiInformationOutline, mdiFileDownloadOutline } from '@mdi/js'
-import { ImageModifiers, ImageOptions } from '@nuxt/image'
+<script setup lang="ts">
+import { mdiInformationOutline, mdiFileDownloadOutline } from "@mdi/js";
+import type { ImageModifiers, ImageOptions } from "@nuxt/image";
+import type { RouteLocationRaw } from "vue-router";
 
 export type OverlayImage = {
-  src: string
-  modifiers: Partial<ImageModifiers>
-  options: ImageOptions
-  id?: number
-}
+  src: string;
+  modifiers: Partial<ImageModifiers>;
+  options: ImageOptions;
+  id?: number;
+};
 
-export default defineComponent({
-  name: 'ImageOverlay',
-  props: {
-    value: {
-      type: Boolean,
-      required: true,
-    },
-    image: {
-      type: Object as PropType<OverlayImage>,
-      default: undefined,
-    },
-    detailRoute: {
-      type: Object as PropType<Route>,
-      default: undefined,
-    },
+const emit = defineEmits(["input"]);
+defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
   },
-  setup() {
-    const icons = computed(() => ({
-      mdiInformationOutline,
-      mdiFileDownloadOutline,
-    }))
-    return { icons }
+  image: {
+    type: Object as PropType<OverlayImage>,
+    default: undefined,
   },
-})
+  detailRoute: {
+    type: Object as PropType<RouteLocationRaw>,
+    default: undefined,
+  },
+});
+const img = useImage();
+const localePath = useLocalePath();
 </script>

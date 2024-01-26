@@ -1,37 +1,38 @@
 <template>
   <div>
     <v-navigation-drawer
-      v-model="showSearch"
+      :model-value="true"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
-      :permanent="!$vuetify.breakpoint.smAndDown"
-      :temporary="$vuetify.breakpoint.smAndDown"
-      :fixed="$vuetify.breakpoint.smAndDown"
+      :permanent="!$vuetify.display.smAndDown"
+      :temporary="$vuetify.display.smAndDown"
       width="320"
-      clipped
       touchless
-      app
-      color="grey lighten-5"
-      :mini-variant.sync="mini"
-      :mini-variant-width="48"
-      :bottom="$vuetify.breakpoint.smAndDown"
+      color="grey-lighten-5"
+      :rail="mini"
+      :rail-width="48"
+      :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
     >
       <div style="height: 100%" tile>
-        <v-list v-if="!$vuetify.breakpoint.smAndDown" dense flat class="pa-0">
+        <v-list
+          v-if="!$vuetify.display.smAndDown"
+          density="compact"
+          variant="plain"
+          class="pa-0"
+        >
           <v-list-item :ripple="false" @click="mini = !mini">
-            <v-list-item-icon :class="{ 'mr-3': !mini }">
-              <v-icon :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }">
-                {{ icons.mdiChevronDoubleLeft }}
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content
-              class="montserrat font-weight-medium text--secondary"
-            >
-              {{ $t('common.hideFilters') }}
-            </v-list-item-content>
+            <template #prepend>
+              <v-icon
+                :icon="mdiChevronDoubleLeft"
+                :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
+              />
+            </template>
+            <div class="montserrat font-weight-medium text--secondary">
+              {{ $t("common.hideFilters") }}
+            </div>
           </v-list-item>
         </v-list>
         <div v-else class="text-h6 py-2 pl-2">
-          {{ $t('common.showSearchFields') }}
+          {{ $t("common.showSearchFields") }}
         </div>
         <div v-show="mini">
           <div
@@ -42,7 +43,7 @@
               writing-mode: vertical-lr;
             "
           >
-            {{ $t('common.showFilters') }}
+            {{ $t("common.showFilters") }}
           </div>
         </div>
         <div v-show="!mini">
@@ -52,14 +53,14 @@
     </v-navigation-drawer>
     <v-main>
       <v-container
-        class="pt-1 pb-10"
+        class="pt-1 pb-10 px-0"
         style="min-height: 100vh"
-        :fluid="$vuetify.breakpoint.lgAndDown"
+        :fluid="true"
       >
         <v-row no-gutters>
           <v-col>
             <client-only>
-              <history-viewer v-if="$vuetify.breakpoint.smAndUp" />
+              <!-- <history-viewer v-if="$vuetify.display.smAndUp" /> -->
             </client-only>
           </v-col>
         </v-row>
@@ -71,7 +72,7 @@
             <slot name="result"></slot>
           </v-col>
         </v-row>
-        <v-fab-transition v-if="$vuetify.breakpoint.smAndDown">
+        <v-fab-transition v-if="$vuetify.display.smAndDown">
           <v-btn
             id="searchFab"
             class="mt-2 d-print-none d-md-none montserrat"
@@ -83,8 +84,8 @@
             style="left: 50%; transform: translateX(-50%); z-index: 4"
             @click="showSearch = !showSearch"
           >
-            <v-icon left>{{ icons.mdiMagnify }}</v-icon>
-            {{ $t('common.searchCommand') }}
+            <v-icon :icon="mdiMagnify" start />
+            {{ $t("common.searchCommand") }}
           </v-btn>
         </v-fab-transition>
         <fab-scroll-top />
@@ -93,39 +94,13 @@
     </v-main>
   </div>
 </template>
-<script>
-import { mdiChevronDoubleLeft, mdiMagnify } from '@mdi/js'
-import FabScrollTop from '~/components/FabScrollTop.vue'
-import AppFooter from '~/components/AppFooter.vue'
-// import cookieconsent from '~/components/cookieconsent.vue'
-import HistoryViewer from '~/components/HistoryViewer.vue'
-export default {
-  // NOTE: Should probably named something more descriptive
-  name: 'Search',
-  components: {
-    FabScrollTop,
-    AppFooter,
-    // CookieConsent,
-    HistoryViewer,
-  },
-  data() {
-    return {
-      showSearch: false,
-      mini: false,
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiMagnify,
-        mdiChevronDoubleLeft,
-      }
-    },
-  },
-  methods: {
-    closeMobileSearch() {
-      this.showSearch = false
-    },
-  },
+<script setup lang="ts">
+import { mdiChevronDoubleLeft, mdiMagnify } from "@mdi/js";
+
+const showSearch = ref(false);
+const mini = ref(false);
+
+function closeMobileSearch() {
+  showSearch.value = false;
 }
 </script>

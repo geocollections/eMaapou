@@ -9,35 +9,30 @@
       }"
     >
       <v-container
-        :fluid="$vuetify.breakpoint.smAndDown"
+        :fluid="$vuetify.display.smAndDown"
         style="max-width: 1185px !important"
       >
         <v-row class="mb-lg-5">
           <v-col>
             <div class="pt-sm-4 pt-md-8" :style="{ 'max-width': '1000px' }">
-              <i18n
-                path="title"
+              <i18n-t
+                keypath="title"
                 tag="div"
-                class="text-h3 text-sm-h2 text-md-h1 white--text font-weight-bold"
+                scope="global"
+                class="text-h3 text-sm-h2 text-md-h1 text-white font-weight-bold"
               >
-              </i18n>
+              </i18n-t>
               <span
-                class="text-h5 text-sm-h4 text-md-h3 font-weight-light white--text"
+                class="text-h5 text-sm-h4 text-md-h3 font-weight-light text-white"
               >
-                {{ $t('subtitle') }}
+                {{ $t("subtitle") }}
               </span>
             </div>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="5">
-            <v-card
-              class=""
-              :width="$vuetify.breakpoint.lgAndUp ? '660px' : 'unset'"
-              tile
-              flat
-              color="transparent"
-            >
+            <v-card class="" tile flat color="transparent">
               <v-card-actions class="px-0 pt-md-6">
                 <v-form
                   class="d-flex text-right"
@@ -47,7 +42,6 @@
                   <input-search
                     v-model="query"
                     input-class="rounded"
-                    style="display: contents"
                     height="56"
                     :placeholder="$t('landing.searchPlaceholder')"
                   />
@@ -56,23 +50,23 @@
                     width="84px"
                     class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
                     type="submit"
+                    variant="elevated"
                     color="warning"
-                    dark
                   >
-                    <v-icon>{{ icons.mdiMagnify }}</v-icon>
+                    <v-icon :icon="mdiMagnify" size="large" />
                   </v-btn>
                 </v-form>
               </v-card-actions>
-              <v-card-title
-                v-show="$vuetify.breakpoint.mdAndUp"
+              <v-card-text
+                v-show="$vuetify.display.mdAndUp"
                 style="word-break: break-word"
                 :class="{
-                  'font-small montserrat': $vuetify.breakpoint.smAndDown,
+                  'font-small montserrat': $vuetify.display.smAndDown,
                 }"
-                class="text-sm-h6 font-weight-regular white--text pr-0 pl-1"
+                class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
               >
-                {{ $t('landing.description') }}
-              </v-card-title>
+                {{ $t("landing.description") }}
+              </v-card-text>
             </v-card>
           </v-col>
           <v-col cols="12" md="7" class="pl-lg-10">
@@ -98,7 +92,7 @@
       </v-container>
     </div>
     <v-container
-      :fluid="$vuetify.breakpoint.smAndDown"
+      :fluid="$vuetify.display.smAndDown"
       style="max-width: 1185px !important"
     >
       <v-row justify="center" class="mt-4">
@@ -127,7 +121,7 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import {
   mdiMagnify,
   mdiMapMarker,
@@ -136,112 +130,133 @@ import {
   mdiFileImageOutline,
   mdiBug,
   mdiImageFilterHdr,
-} from '@mdi/js'
-import BaseHeader from '~/components/base/BaseHeader.vue'
-import TheNewsCard from '~/components/landing/TheNewsCard.vue'
-import CardExternalService from '~/components/card/CardExternalService.vue'
-import CardRouteLink from '~/components/card/CardRouteLink.vue'
-import InputSearch from '~/components/input/InputSearch.vue'
+} from "@mdi/js";
+import { useDisplay } from "vuetify/lib/framework.mjs";
+const { t } = useI18n();
+const img = useImage();
+const backgroundImg = computed(() => {
+  return img("/frontpage/header_img2.jpg");
+});
+const backgroundSvg = computed(() => {
+  return img("/frontpage/layered-peaks-haikei.svg");
+});
+definePageMeta({
+  layout: "landing",
+  // title: t("landing.title"),
+  // link: [
+  //   {
+  //     rel: "preload",
+  //     as: "image",
+  //     href: backgroundSvg.value,
+  //   },
+  //   {
+  //     rel: "preload",
+  //     as: "image",
+  //     href: backgroundImg.value,
+  //   },
+  // ],
+});
+const query = ref("");
+const otherServices = ref({
+  geocollections: {
+    title: "geocollections.title",
+    description: "geocollections.description",
+    href: "https://geocollections.info",
+  },
+  kirjandus: {
+    title: "kirjandus.title",
+    description: "kirjandus.description",
+    href: "https://kirjandus.geoloogia.info",
+  },
+  gmre: {
+    title: "gmre.title",
+    description: "gmre.description",
+    href: "https://geoloogia.info/geology",
+  },
+  fond: {
+    title: "fond.title",
+    description: "fond.description",
+    href: "https://fond.egt.ee",
+  },
+  fossiilid: {
+    title: "fossiilid.title",
+    description: "fossiilid.description",
+    href: "https://fossiilid.info",
+  },
+  kivid: {
+    title: "kivid.title",
+    description: "kivid.description",
+    href: "https://kivid.info",
+  },
+  stratigraphy: {
+    title: "frontStratigraphy.title",
+    description: "frontStratigraphy.description",
+    href: "https://stratotuup.ut.ee",
+  },
+  maardlad: {
+    title: "maardlad.title",
+    description: "maardlad.description",
+    href: "https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html",
+  },
+  doi: {
+    title: "doi.title",
+    description: "doi.description",
+    href: "https://doi.geocollections.info",
+  },
+  turba: {
+    title: "turba.title",
+    description: "turba.description",
+    href: "https://turba.geoloogia.info",
+  },
+  // Divider
+  geocase: {
+    title: "geocase.title",
+    description: "geocase.description",
+    href: "https://geocase.eu",
+  },
+  eurocore: {
+    title: "eurocore.title",
+    description: "eurocore.description",
+    href: "https://eurocore.rocks",
+  },
+  sarv: {
+    title: "sarv.title",
+    description: "sarv.description",
+    href: "https://edit.geocollections.info",
+  },
+  ids: [
+    "kirjandus",
+    "fossiilid",
+    "kivid",
+    "fond",
+    "maardlad",
+    "stratigraphy",
+    "gmre",
+    "turba",
+    "geocase",
+    "eurocore",
+    "geocollections",
+    "doi",
+    "sarv",
+  ] as const,
+});
 
-export default {
-  components: {
-    BaseHeader,
-    TheNewsCard,
-    CardExternalService,
-    CardRouteLink,
-    InputSearch,
-  },
-  layout: 'landing',
-  data() {
-    return {
-      query: '',
-      otherServices: {
-        geocollections: {
-          title: 'geocollections.title',
-          description: 'geocollections.description',
-          href: 'https://geocollections.info',
-        },
-        kirjandus: {
-          title: 'kirjandus.title',
-          description: 'kirjandus.description',
-          href: 'https://kirjandus.geoloogia.info',
-        },
-        gmre: {
-          title: 'gmre.title',
-          description: 'gmre.description',
-          href: 'https://geoloogia.info/geology',
-        },
-        fond: {
-          title: 'fond.title',
-          description: 'fond.description',
-          href: 'https://fond.egt.ee',
-        },
-        fossiilid: {
-          title: 'fossiilid.title',
-          description: 'fossiilid.description',
-          href: 'https://fossiilid.info',
-        },
-        kivid: {
-          title: 'kivid.title',
-          description: 'kivid.description',
-          href: 'https://kivid.info',
-        },
-        stratigraphy: {
-          title: 'frontStratigraphy.title',
-          description: 'frontStratigraphy.description',
-          href: 'https://stratotuup.ut.ee',
-        },
-        maardlad: {
-          title: 'maardlad.title',
-          description: 'maardlad.description',
-          href: 'https://geoportaal.maaamet.ee/est/Ruumiandmed/Geoloogilised-andmed-p115.html',
-        },
-        doi: {
-          title: 'doi.title',
-          description: 'doi.description',
-          href: 'https://doi.geocollections.info',
-        },
-        turba: {
-          title: 'turba.title',
-          description: 'turba.description',
-          href: 'https://turba.geoloogia.info',
-        },
-        // Divider
-        geocase: {
-          title: 'geocase.title',
-          description: 'geocase.description',
-          href: 'https://geocase.eu',
-        },
-        eurocore: {
-          title: 'eurocore.title',
-          description: 'eurocore.description',
-          href: 'https://eurocore.rocks',
-        },
-        sarv: {
-          title: 'sarv.title',
-          description: 'sarv.description',
-          href: 'https://edit.geocollections.info',
-        },
-        ids: [
-          'kirjandus',
-          'fossiilid',
-          'kivid',
-          'fond',
-          'maardlad',
-          'stratigraphy',
-          'gmre',
-          'turba',
-          'geocase',
-          'eurocore',
-          'geocollections',
-          'doi',
-          'sarv',
-        ],
-      },
-      searchRoutes: [],
-    }
-  },
-  async fetch() {
+type SearchRoute = {
+  routeName: string;
+  text: string;
+  icon: string;
+  count: number;
+};
+const { $solrFetch } = useNuxtApp();
+
+type NumFoundResponse = {
+  response: {
+    numFound: number;
+  };
+};
+const { data: searchRoutes } = await useAsyncData<SearchRoute[]>(
+  "routes",
+  async () => {
     const [
       specimenResponse,
       analysisResponse,
@@ -250,138 +265,118 @@ export default {
       photoResponse,
       drillcoreResponse,
     ] = await Promise.all([
-      this.$services.sarvSolr
-        .getResourceList('specimen', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return { count: 284000 }
-        }),
-      this.$services.sarvSolr
-        .getResourceList('analysis', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return { count: 249000 }
-        }),
-      this.$services.sarvSolr
-        .getResourceList('sample', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return { count: 156000 }
-        }),
-      this.$services.sarvSolr
-        .getResourceList('locality', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return { count: 13000 }
-        }),
-      this.$services.sarvSolr
-        .getResourceList('attachment', {
-          defaultParams: { rows: 0, fq: 'specimen_image_attachment:"2"' },
-        })
-        .catch((_) => {
-          return { count: 20000 }
-        }),
-      this.$services.sarvSolr
-        .getResourceList('drillcore', {
-          defaultParams: { rows: 0 },
-        })
-        .catch((_) => {
-          return { count: 500 }
-        }),
-    ])
+      $solrFetch<NumFoundResponse>("/specimen", {
+        query: {
+          q: "*:*",
+          rows: 0,
+        },
+      }).catch<NumFoundResponse>((_) => {
+        return { response: { numFound: 284000 } };
+      }),
+      $solrFetch<NumFoundResponse>("/analysis", {
+        query: {
+          q: "*:*",
+          rows: 0,
+        },
+      }).catch<NumFoundResponse>((_) => {
+        return { response: { numFound: 249000 } };
+      }),
+      $solrFetch<NumFoundResponse>("/sample", {
+        query: {
+          q: "*:*",
+          rows: 0,
+        },
+      }).catch<NumFoundResponse>((_) => {
+        return { response: { numFound: 156000 } };
+      }),
+      $solrFetch<NumFoundResponse>("/locality", {
+        query: {
+          q: "*:*",
+          rows: 0,
+        },
+      }).catch<NumFoundResponse>((_) => {
+        return { response: { numFound: 13000 } };
+      }),
+      $solrFetch<NumFoundResponse>("/attachment", {
+        query: {
+          q: "*:*",
+          fq: 'specimen_image_attachment:"2"',
+          rows: 0,
+        },
+      }).catch<NumFoundResponse>((_) => {
+        return { response: { numFound: 20000 } };
+      }),
+      $solrFetch<NumFoundResponse>("/drillcore", {
+        query: {
+          q: "*:*",
+          rows: 0,
+        },
+      }).catch<NumFoundResponse>((_) => {
+        return { response: { numFound: 500 } };
+      }),
+    ]);
 
-    this.searchRoutes = [
+    return [
       {
-        routeName: 'specimen',
-        text: 'specimen.landingCard',
+        routeName: "specimen",
+        text: "specimen.landingCard",
         icon: mdiBug,
-        count: specimenResponse.count,
+        count: specimenResponse.response.numFound,
       },
       {
-        routeName: 'locality',
-        text: 'locality.landingCard',
+        routeName: "locality",
+        text: "locality.landingCard",
         icon: mdiMapMarker,
-        count: localityResponse.count,
+        count: localityResponse.response.numFound,
       },
       {
-        routeName: 'sample',
-        text: 'sample.landingCard',
+        routeName: "sample",
+        text: "sample.landingCard",
         icon: mdiImageFilterHdr,
-        count: sampleResponse.count,
+        count: sampleResponse.response.numFound,
       },
       {
-        routeName: 'drillcore',
-        text: 'drillcore.landingCard',
+        routeName: "drillcore",
+        text: "drillcore.landingCard",
         icon: mdiScrewMachineFlatTop,
-        count: drillcoreResponse.count,
+        count: drillcoreResponse.response.numFound,
       },
       {
-        routeName: 'analytical-data',
-        text: 'analyticalData.landingCard',
+        routeName: "analytical-data",
+        text: "analyticalData.landingCard",
         icon: mdiChartLine,
-        count: analysisResponse.count,
+        count: analysisResponse.response.numFound,
       },
       {
-        routeName: 'photo',
-        text: 'photo.landingCard',
+        routeName: "photo",
+        text: "photo.landingCard",
         icon: mdiFileImageOutline,
-        count: photoResponse.count,
+        count: photoResponse.response.numFound,
       },
-    ]
-  },
-  head() {
-    return {
-      title: this.$t('landing.title'),
-      link: [
-        {
-          rel: 'preload',
-          as: 'image',
-          href: this.backgroundSvg,
-        },
-        {
-          rel: 'preload',
-          as: 'image',
-          href: this.backgroundImg,
-        },
-      ],
-    }
-  },
-  computed: {
-    icons() {
-      return {
-        mdiMagnify,
-      }
-    },
-    backgroundImg() {
-      return this.$img('/frontpage/header_img2.jpg')
-    },
-    backgroundSvg() {
-      return this.$img('/frontpage/layered-peaks-haikei.svg')
-    },
-    backgroundImage() {
-      return `url(${this.backgroundSvg}), url(${this.backgroundImg})`
-    },
-    topHeight() {
-      if (this.$vuetify.breakpoint.smAndUp) return '675px'
-      return '650px'
-    },
-  },
-  methods: {
-    handleSearch() {
-      this.$router.push(
-        this.localePath({ name: 'search', query: { q: this.query } })
-      )
-    },
-  },
+    ];
+  }
+);
+
+const backgroundImage = computed(() => {
+  return `url(${backgroundSvg.value}), url(${backgroundImg.value})`;
+});
+
+const { smAndUp } = useDisplay();
+const topHeight = computed(() => {
+  if (smAndUp) return "675px";
+  return "650px";
+});
+
+const router = useRouter();
+const localePath = useLocalePath();
+
+function handleSearch() {
+  router.push(localePath({ name: "search", query: { q: query.value } }));
 }
 </script>
 
 <style lang="scss" scoped>
-@import '~vuetify/src/styles/settings/_variables';
+@import "vuetify/settings";
 
 .spacer {
   aspect-ratio: 900/600;
@@ -390,7 +385,7 @@ export default {
   background-position: bottom, center;
   background-size: cover, cover;
 
-  @media #{map-get($display-breakpoints, 'xl-only')} {
+  @media #{map-get($display-breakpoints, 'xl-and-up')} {
     background-position: bottom -5rem right, center;
   }
 }

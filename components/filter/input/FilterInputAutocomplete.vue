@@ -1,232 +1,226 @@
 <template>
-  <v-expansion-panel style="background-color: transparent">
-    <v-expansion-panel-header
+  <v-expansion-panel
+    ref="panel"
+    bg-color="transparent"
+    elevation="0"
+    :rounded="0"
+  >
+    <v-expansion-panel-title
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
-    </v-expansion-panel-header>
+    </v-expansion-panel-title>
     <div
       v-if="selectedItems.length > 0"
       class="white"
-      style="
-        border-bottom: 1px solid lightgray !important;
-        border-right: 1px solid lightgray !important;
-      "
+      style="border-bottom: 1px solid lightgray !important"
     >
-      <div
-        v-for="(item, i) in selectedItems"
-        :key="i"
-        class="d-flex py-1 selected-item pl-4 pr-2"
-      >
-        <span>
-          <input
-            type="checkbox"
-            class="checkbox"
-            checked
-            @click.prevent.stop="handleRemove(i)"
-          />
-        </span>
-        <span
-          class="align-self-center text-body-2 font-weight-medium pl-2"
-          style="word-break: break-word"
+      <div class="my-1">
+        <div
+          v-for="(item, i) in selectedItems"
+          :key="i"
+          class="d-flex selected-item px-4"
+          @click="handleRemove(i)"
         >
-          <slot name="selection" :item="item">
-            {{ item.id }}
-          </slot>
-        </span>
-      </div>
-    </div>
-    <v-expansion-panel-content
-      class="pt-1"
-      color="white"
-      style="
-        border-bottom: 1px solid lightgray !important;
-        border-right: 1px solid lightgray !important;
-      "
-    >
-      <v-autocomplete
-        :value="[]"
-        item-value="value"
-        return-object
-        hide-details
-        dense
-        :loading="isLoading"
-        :no-filter="true"
-        :placeholder="$t('filters.search')"
-        :search-input.sync="search"
-        multiple
-        persistent-placeholder
-        :items="parsedSuggestionsItems"
-        @input="handleInput"
-      >
-        <template #item="{ item }">
-          <span class="text-body-2">
-            <slot name="suggestion" :item="item">
-              {{ item.id }}
+          <span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              checked
+              @click.prevent.stop="handleRemove(i)"
+            />
+          </span>
+          <span
+            class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
+            style="word-break: break-word"
+          >
+            <slot name="selection" :item="item">
+              <span>{{ item.name }}</span>
+              <span class="ml-auto">{{ item.count }}</span>
             </slot>
           </span>
-        </template>
-        <template #selection> </template>
-        <template #append-item>
-          <div v-intersect="loadMore" />
-        </template>
-        <template #no-data>
-          <div class="px-2">
-            <v-icon left color="info">{{ icons.mdiInformationOutline }}</v-icon>
-            <span class="font-weight-medium text-body-2">
-              {{ $t('autocomplete.searchHint') }}
-            </span>
-          </div>
-        </template>
-      </v-autocomplete>
-    </v-expansion-panel-content>
+        </div>
+      </div>
+    </div>
+    <v-expansion-panel-text
+      class="py-0"
+      color="white"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <v-text-field
+        v-model="query"
+        variant="underlined"
+        hide-details
+        density="compact"
+        :placeholder="$t('filters.filter')"
+      >
+      </v-text-field>
+      <div class="my-1">
+        <div
+          v-for="(item, i) in suggestions"
+          :key="i"
+          class="d-flex selected-item"
+          @click="handleAdd(item)"
+        >
+          <span>
+            <input
+              type="checkbox"
+              class="checkbox"
+              :checked="selectedIds.includes(item.id)"
+              @click.prevent.stop="handleAdd(item)"
+            />
+          </span>
+          <span
+            class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
+            style="word-break: break-word"
+          >
+            <slot name="selection" :item="item">
+              <span>{{ item.name }}</span>
+              <span class="ml-auto">{{ item.count }}</span>
+            </slot>
+          </span>
+        </div>
+        <div class="d-flex align-center justify-space-around">
+          <v-btn
+            :icon="mdiChevronLeft"
+            variant="text"
+            size="small"
+            :disabled="isFirstPage"
+            @click="prevPage"
+          />
+          <span>{{ pagination.page }}</span>
+          <v-btn
+            :icon="mdiChevronRight"
+            variant="text"
+            size="small"
+            :disabled="isLastPage"
+            @click="nextPage"
+          />
+        </div>
+      </div>
+    </v-expansion-panel-text>
   </v-expansion-panel>
 </template>
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  reactive,
-  toRefs,
-  PropType,
-  watch,
-} from '@nuxtjs/composition-api'
-import { mdiClose, mdiInformationOutline } from '@mdi/js'
-import isEmpty from 'lodash/isEmpty'
-import debounce from 'lodash/debounce'
-import cloneDeep from 'lodash/cloneDeep'
-export default defineComponent({
-  name: 'FilterInputAutocomplete',
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    queryField: {
-      type: String,
-      default: '',
-    },
-    queryFunction: {
-      type: Function as PropType<
-        (
-          search: string,
-          options?: { rows: number; start: number }
-        ) => Promise<any>
-      >,
-      required: true,
-    },
-    value: {
-      type: Array as PropType<any[]>,
-      default: () => [],
-    },
+<script setup lang="ts">
+import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
+type Suggestion = { id: number; name: string; count: number };
+
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
   },
-  setup(props, { emit }) {
-    const state = reactive({
-      suggestItems: [] as any[],
-      search: null as string | null,
-      selectedItems: [] as any[],
-      isLoading: false,
-      totalSuggestions: 0,
-      page: 1,
-    })
-    const rowsPerPage = 10
-    const icons = computed(() => {
-      return {
-        mdiClose,
-        mdiInformationOutline,
-      }
-    })
-    watch(
-      () => props.value,
-      (newVal) => {
-        state.selectedItems = newVal
-      },
-      { immediate: true }
-    )
-    watch(
-      () => state.search,
-      debounce(async () => {
-        if (state.isLoading) return
-        if (state.search === null || state.search.length < 1) return
-        state.isLoading = true
-        let search = '*'
-        if (!isEmpty(state.search))
-          search = state.search
-            .trim()
-            .split(' ')
-            .map((term) =>
-              props.queryField.length > 0
-                ? `${props.queryField}:*${term}*`
-                : `*${term}*`
-            )
-            .join(' AND ')
-        const response = await props.queryFunction(search)
-        state.suggestItems = response.response.docs
-        state.totalSuggestions = response.response.numFound
-        state.page = 1
-        state.isLoading = false
-      }, 300),
-      { immediate: false }
-    )
-    const handleInput = (event: any[]) => {
-      emit('input', [...state.selectedItems, event[event.length - 1]])
-    }
-    const handleRemove = (i: number) => {
-      const cloneItems = cloneDeep(state.selectedItems)
-      cloneItems.splice(i, 1)
-      state.selectedItems = cloneItems
-      emit('input', state.selectedItems)
-    }
-    const loadMore = async () => {
-      if (state.totalSuggestions < state.page * rowsPerPage) return
-      if (state.search === null || state.search.length < 1) return
-      let search = '*'
-      if (!isEmpty(state.search))
-        search = state.search
-          .trim()
-          .split(' ')
-          .map((term) =>
-            props.queryField.length > 0
-              ? `${props.queryField}:*${term}*`
-              : `*${term}*`
-          )
-          .join(' AND ')
-      const newSuggestions = (
-        await props.queryFunction(search, {
-          rows: rowsPerPage,
-          start: rowsPerPage * state.page,
-        })
-      ).response.docs
-      state.page += 1
-      state.suggestItems = [...state.suggestItems, ...newSuggestions]
-    }
-    const parsedSuggestionsItems = computed(() => {
-      return state.suggestItems.map((suggestion) => {
-        const disabled = state.selectedItems.some(
-          (item) => item.id === suggestion.id
-        )
-        return {
-          ...suggestion,
-          disabled,
-        }
-      })
-    })
-    return {
-      ...toRefs(state),
-      handleInput,
-      icons,
-      handleRemove,
-      loadMore,
-      parsedSuggestionsItems,
-    }
+  modelValue: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
-})
+  queryFunction: {
+    type: Function as PropType<
+      ({
+        query,
+        pagination,
+        values,
+      }: {
+        query: string;
+        pagination: { page: number; perPage: number };
+        values: string[];
+      }) => Promise<Suggestion[]>
+    >,
+    required: true,
+  },
+  hydrationFunction: {
+    type: Function as PropType<(values: string[]) => Promise<Suggestion[]>>,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["update:model-value"]);
+
+const query = ref("");
+const queryDebounced = refDebounced(query, 200);
+
+const pagination = ref({
+  page: 1,
+  perPage: 8,
+});
+
+const selectedItems = ref<Suggestion[]>([]);
+const panel = ref();
+
+const selectedIds = computed(() => selectedItems.value.map((i) => i.id));
+const selectedNames = computed(() => selectedItems.value.map((i) => i.name));
+
+if (props.modelValue.length > 0) {
+  selectedItems.value = await props.hydrationFunction(props.modelValue);
+}
+
+const component = getCurrentInstance();
+
+const { data: suggestions, refresh } = await useAsyncData(
+  `autocomplete-${component?.vnode.key?.toString() ?? component?.uid}`,
+  async () => {
+    return await props.queryFunction({
+      query: query.value,
+      pagination: pagination.value,
+      values: selectedNames.value,
+    });
+  }
+);
+
+watch(queryDebounced, () => {
+  pagination.value.page = 1;
+  refresh();
+});
+
+const isFirstPage = computed(() => pagination.value.page === 1);
+const isLastPage = computed(() => {
+  return (suggestions.value?.length ?? 0) < pagination.value.perPage;
+});
+
+function nextPage() {
+  pagination.value.page++;
+  refresh();
+}
+
+function prevPage() {
+  pagination.value.page--;
+  refresh();
+}
+
+function handleAdd(item: Suggestion) {
+  const index = selectedIds.value.indexOf(item.id);
+  if (index > -1) {
+    handleRemove(index);
+    return;
+  }
+  selectedItems.value.push(item);
+  emit("update:model-value", selectedIds.value);
+}
+
+function handleRemove(i: number) {
+  selectedItems.value.splice(i, 1);
+  emit("update:model-value", selectedIds.value);
+}
+
+async function hydrateSelected() {
+  if (props.modelValue.length < 1) return;
+  selectedItems.value = await props.hydrationFunction(props.modelValue);
+}
+
+function refreshSuggestions() {
+  hydrateSelected();
+  refresh();
+}
+
+defineExpose({
+  refreshSuggestions,
+});
 </script>
 
-<style scoped>
-::v-deep .v-expansion-panel-content__wrap {
+<style scoped lang="scss">
+:deep(.v-expansion-panel-text__wrapper) {
   padding-right: 16px;
   padding-left: 16px;
   padding-bottom: 8px;
@@ -234,14 +228,9 @@ export default defineComponent({
 
 .selected-item:hover {
   background-color: #eeeeee;
+  cursor: pointer;
 }
 
-.v-select__selection {
-  display: none;
-}
-::v-deep .v-select.v-input--is-dirty ::placeholder {
-  color: back !important;
-}
 .checkbox {
   accent-color: var(--v-accent-base);
 }

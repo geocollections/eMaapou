@@ -47,19 +47,19 @@
           <div v-if="item.author || item.date || item.dateText">
             <div v-if="item.author">
               <span class="font-weight-bold"
-                >{{ $t('locality.author') }}:
+                >{{ $t("locality.author") }}:
               </span>
               <span>{{ item.author }}</span>
             </div>
             <div v-if="item.date || item.dateText">
-              <span class="font-weight-bold">{{ $t('locality.date') }}: </span>
+              <span class="font-weight-bold">{{ $t("locality.date") }}: </span>
               <span v-if="item.date">
                 {{ $formatDate(item.date) }}
               </span>
               <span v-else>{{ item.dateText }}</span>
             </div>
           </div>
-          <div v-else>{{ $t('common.clickToOpen') }}</div>
+          <div v-else>{{ $t("common.clickToOpen") }}</div>
         </slot>
       </v-tooltip>
     </div>
@@ -68,57 +68,34 @@
   </div>
 </template>
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  PropType,
-  reactive,
-  ref,
-} from '@nuxtjs/composition-api'
-import { mdiInformationOutline } from '@mdi/js'
-import ImageOverlay, { OverlayImage } from './ImageOverlay.vue'
+<script setup lang="ts">
+import type { OverlayImage } from "./ImageOverlay.vue";
 
 type Image = {
-  id: number
-  filename: string
-  author?: string
-  date?: string
-  dateText?: string
-}
+  id: number;
+  filename: string;
+  author?: string;
+  date?: string;
+  dateText?: string;
+};
 
-export default defineComponent({
-  name: 'ImageBar',
-  components: { ImageOverlay },
-  props: {
-    images: {
-      type: Array as PropType<Image[]>,
-      default: () => [],
-    },
+defineProps({
+  images: {
+    type: Array as PropType<Image[]>,
+    default: () => [],
   },
-  setup(_props, { emit }) {
-    const rowsPerPage = 10
-    const state = reactive({
-      page: 1,
-    })
-    const showOverlay = ref(false)
-    const overlayImage = ref<OverlayImage>()
-    const loadMore = () => {
-      emit('update', { page: state.page, rows: rowsPerPage })
-      state.page += 1
-    }
-    const openOverlay = (image: OverlayImage) => {
-      overlayImage.value = image
-      showOverlay.value = true
-    }
-    const icons = computed(() => ({ mdiInformationOutline }))
-    return {
-      showOverlay,
-      overlayImage,
-      loadMore,
-      openOverlay,
-      icons,
-    }
-  },
-})
+});
+const emit = defineEmits(["update"]);
+const rowsPerPage = 10;
+const page = ref(1);
+const showOverlay = ref(false);
+const overlayImage = ref<OverlayImage>();
+const loadMore = () => {
+  emit("update", { page: page.value, rows: rowsPerPage });
+  page.value += 1;
+};
+const openOverlay = (image: OverlayImage) => {
+  overlayImage.value = image;
+  showOverlay.value = true;
+};
 </script>

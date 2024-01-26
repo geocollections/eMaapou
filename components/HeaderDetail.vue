@@ -16,28 +16,34 @@
     </v-card-title>
 
     <template #before>
-      <div v-if="$vuetify.breakpoint.smAndUp" class="d-flex px-0 px-sm-3 pb-0">
+      <div v-if="$vuetify.display.smAndUp" class="d-flex px-0 px-sm-3 pb-0">
         <v-btn
           id="previous-id"
-          nuxt
+          variant="plain"
           icon
-          :disabled="!computedPrevId"
-          :title="$t('common.previous', { id: computedPrevId })"
-          @click="
-            debouncedNavigation(
-              localePath({
-                params: { ...$route.params, id: computedPrevId },
-              })
-            )
+          :disabled="!ids?.prev"
+          :title="t('previous', { name: prevName })"
+          :to="
+            localePath({
+              params: { ...$route.params, id: ids?.prev?.id },
+            })
           "
+          @click="handlePrev"
         >
-          <v-icon>{{ icons.mdiChevronLeft }}</v-icon>
-          <v-tooltip bottom activator="#previous-id">
-            <span>{{ $t('common.previous', { id: computedPrevId }) }}</span>
+          <v-icon>{{ mdiChevronLeft }}</v-icon>
+          <v-tooltip location="bottom" activator="#previous-id">
+            <span>{{ t("previous", { name: prevName }) }}</span>
           </v-tooltip>
         </v-btn>
 
-        <back-button-detail />
+        <v-btn id="back-btn-detail" icon variant="plain" :to="searchTo">
+          <v-icon>
+            {{ mdiArrowUpLeft }}
+          </v-icon>
+          <v-tooltip location="bottom" activator="#back-btn-detail">
+            <span>{{ $t("common.goBack") }}</span>
+          </v-tooltip>
+        </v-btn>
         <div
           class="d-flex align-center montserrat grey--text text--darken-1 pt-0 px-0 px-sm-3"
         >
@@ -45,21 +51,20 @@
         </div>
         <v-btn
           id="next-id"
-          nuxt
           icon
-          :disabled="!computedNextId"
-          :title="$t('common.next', { id: computedNextId })"
-          @click="
-            debouncedNavigation(
-              localePath({
-                params: { ...$route.params, id: computedNextId },
-              })
-            )
+          variant="plain"
+          :disabled="!ids?.next"
+          :title="t('next', { name: nextName })"
+          :to="
+            localePath({
+              params: { ...$route.params, id: ids?.next?.id },
+            })
           "
+          @click="handleNext"
         >
-          <v-icon>{{ icons.mdiChevronRight }}</v-icon>
-          <v-tooltip bottom activator="#next-id">
-            <span>{{ $t('common.next', { id: computedNextId }) }}</span>
+          <v-icon>{{ mdiChevronRight }}</v-icon>
+          <v-tooltip location="bottom" activator="#next-id">
+            <span>{{ t("next", { name: nextName }) }}</span>
           </v-tooltip>
         </v-btn>
       </div>
@@ -67,118 +72,101 @@
   </base-header>
 </template>
 
-<script>
-import { mdiChevronRight, mdiChevronLeft } from '@mdi/js'
-import debounce from 'lodash/debounce'
-import BackButtonDetail from './BackButtonDetail.vue'
-import EditButton from './EditButton.vue'
-import BaseHeader from './base/BaseHeader.vue'
+<script setup lang="ts">
+import { mdiChevronRight, mdiChevronLeft, mdiArrowUpLeft } from "@mdi/js";
+const emit = defineEmits(["click:previous", "click:next"]);
 
-export default {
-  name: 'HeaderDetail',
-  components: {
-    EditButton,
-    BaseHeader,
-    BackButtonDetail,
+const props = defineProps({
+  arrowKeys: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
-  props: {
-    arrowKeys: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    listOfIds: {
-      type: Array,
-      required: false,
-      default: () => [],
-    },
-    ids: {
-      type: Object,
-      required: false,
-      default: () => {},
-    },
-    title: {
-      type: String,
-      required: false,
-      default: '',
-    },
+  ids: {
+    type: Object,
+    required: false,
+    default: () => ({}),
   },
-  computed: {
-    computedPrevId() {
-      return this.ids?.prev_id ?? 0
-    },
-    computedNextId() {
-      return this.ids?.next_id ?? 0
-    },
-    computedLastId() {
-      return this.ids?.last_id ?? 0
-    },
-    computedFirstId() {
-      return this.ids?.first_id ?? 0
-    },
-    routeName() {
-      return this.getRouteBaseName().split('-id')[0]
-    },
-    icons() {
-      return {
-        mdiChevronRight,
-        mdiChevronLeft,
-      }
-    },
+  title: {
+    type: String,
+    required: false,
+    default: "",
   },
-  beforeMount() {
-    if (this.arrowKeys) window.addEventListener('keyup', this.handleKeyup)
+  searchTo: {
+    type: String,
+    required: true,
   },
-  beforeDestroy() {
-    if (this.arrowKeys) window.removeEventListener('keyup', this.handleKeyup)
-  },
-  methods: {
-    handleKeyup: debounce(function (e) {
-      if (e.keyCode === 37) {
-        // ArrowLeft
-        if (this.computedPrevId) {
-          this.$router.push(
-            this.localePath({
-              params: { ...this.$route.params, id: this.computedPrevId },
-            })
-          )
-        }
-      } else if (e.keyCode === 39) {
-        // ArrowRight
-        if (this.computedNextId) {
-          this.$router.push(
-            this.localePath({
-              params: { ...this.$route.params, id: this.computedNextId },
-            })
-          )
-        }
-      }
-    }, 200),
+});
 
-    calculatePreviousId(listOfIds, currentId) {
-      if (listOfIds && listOfIds.length > 0 && currentId) {
-        const currentIndex = listOfIds.indexOf(parseInt(currentId))
-        const previousIndex = currentIndex - 1
+const getRouteBaseName = useRouteBaseName();
+const { $translate } = useNuxtApp();
+const { t } = useI18n({ useScope: "local" });
 
-        if (previousIndex >= 0) return listOfIds[previousIndex]
-        else return null
-      }
-    },
+const routeName = computed(() => {
+  return getRouteBaseName()?.split("-id")[0];
+});
 
-    calculateNextId(listOfIds, currentId) {
-      if (listOfIds && listOfIds.length > 0 && currentId) {
-        const currentIndex = listOfIds.indexOf(parseInt(currentId))
-        const nextIndex = currentIndex + 1
+const prevName = computed(() => {
+  if (typeof props.ids?.prev?.name === "object") {
+    return $translate(props.ids?.prev?.name);
+  }
+  return props.ids?.prev?.name;
+});
+const nextName = computed(() => {
+  if (typeof props.ids?.next?.name === "object") {
+    return $translate(props.ids?.next?.name);
+  }
+  return props.ids?.next?.name;
+});
 
-        if (nextIndex >= 0 && nextIndex < listOfIds.length)
-          return listOfIds[nextIndex]
-        else return null
-      }
-    },
+onBeforeMount(() => {
+  if (props.arrowKeys) window.addEventListener("keyup", handleKeyup);
+});
+onBeforeUnmount(() => {
+  if (props.arrowKeys) window.removeEventListener("keyup", handleKeyup);
+});
+const localePath = useLocalePath();
+const router = useRouter();
+const route = useRoute();
 
-    debouncedNavigation: debounce(function (path) {
-      this.$router.push(path)
-    }, 200),
-  },
+function handleKeyup(e) {
+  if (e.keyCode === 37) {
+    // ArrowLeft
+    if (props.ids?.prev) {
+      emit("click:previous");
+      router.push(
+        localePath({
+          params: { ...route.params, id: props.ids.prev.id },
+        })
+      );
+    }
+  } else if (e.keyCode === 39) {
+    // ArrowRight
+    if (props.ids?.next) {
+      emit("click:next");
+      router.push(
+        localePath({
+          params: { ...route.params, id: props.ids.next.id },
+        })
+      );
+    }
+  }
+}
+
+function handlePrev() {
+  emit("click:previous");
+}
+
+function handleNext() {
+  emit("click:next");
 }
 </script>
+
+<i18n lang="yaml">
+et:
+  previous: "Eelmine: {name}"
+  next: "Järgmine: {name}"
+en:
+  previous: "Previous: {name}"
+  next: "Next: {name}"
+</i18n>
