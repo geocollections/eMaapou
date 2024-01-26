@@ -17,14 +17,6 @@
           :hydration-function="hydrateSuggestionsCountry"
           @update:model-value="handleUpdate"
         />
-        <filter-input-autocomplete
-          v-model="filters.reference.value"
-          ref="filterReferences"
-          :title="$t('filters.reference')"
-          :query-function="querySuggestionsReferences"
-          :hydration-function="hydrateSuggestionsReferences"
-          @update:model-value="handleUpdate"
-        />
         <filter-map
           v-model="filters.geometry.value"
           @update:model-value="handleUpdate"
@@ -32,6 +24,14 @@
         <filter-input-range
           v-model="filters.stratigraphyAge.value"
           :title="$t('filters.stratigraphyAge')"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-autocomplete
+          v-model="filters.reference.value"
+          ref="filterReferences"
+          :title="$t('filters.reference')"
+          :query-function="querySuggestionsReferences"
+          :hydration-function="hydrateSuggestionsReferences"
           @update:model-value="handleUpdate"
         />
       </v-expansion-panels>
