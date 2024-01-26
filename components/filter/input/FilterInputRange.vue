@@ -11,7 +11,7 @@
       {{ title }}
     </v-expansion-panel-title>
     <div
-      v-if="modelValue[0] !== undefined || modelValue[1] !== undefined"
+      v-if="modelValue[0] !== null || modelValue[1] !== null"
       class="white"
       style="border-bottom: 1px solid lightgray !important"
     >
@@ -78,7 +78,7 @@ import isEmpty from "lodash/isEmpty";
 
 const props = withDefaults(
   defineProps<{
-    modelValue: [undefined | number, undefined | number];
+    modelValue: [null | number, null | number];
     title: string;
     fieldLabels?: { min: string; max: string };
     intervalLabels?: string;
@@ -103,7 +103,7 @@ const parseInput = (input: string) => {
   } else return parseInt(input);
 };
 
-const internalValue = ref<(undefined | number)[]>([undefined, undefined]);
+const internalValue = ref<(null | number)[]>([null, null]);
 
 watch(
   () => props.modelValue,
@@ -122,19 +122,19 @@ const handleEnter = () => {
 };
 const handleInput = (input: string, isMin: boolean) => {
   if (isMin) {
-    internalValue.value = [parseInput(input) ?? undefined, props.modelValue[1]];
+    internalValue.value = [parseInput(input) ?? null, props.modelValue[1]];
   } else {
-    internalValue.value = [props.modelValue[0], parseInput(input) ?? undefined];
+    internalValue.value = [props.modelValue[0], parseInput(input) ?? null];
   }
 };
 const valueString = computed(() => {
-  if (props.modelValue[0] === undefined && props.modelValue[1] !== undefined) {
+  if (props.modelValue[0] === null && props.modelValue[1] !== null) {
     return t(`${props.intervalLabels}.lessThanEquals`, {
       max: props.modelValue[1],
     });
   }
 
-  if (props.modelValue[0] !== undefined && props.modelValue[1] === undefined) {
+  if (props.modelValue[0] !== null && props.modelValue[1] === null) {
     return t(`${props.intervalLabels}.greaterThanEquals`, {
       min: props.modelValue[0],
     });
@@ -145,7 +145,7 @@ const valueString = computed(() => {
   });
 });
 const handleRemove = () => {
-  emit("update:model-value", [undefined, undefined]);
+  emit("update:model-value", [null, null]);
 };
 </script>
 

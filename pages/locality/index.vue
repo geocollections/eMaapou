@@ -103,21 +103,21 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   setQueryParamsFromState();
   await refreshLocalities();
-  resultsCount.value = data?.response.numFound ?? 0;
+  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleReset() {
   // TODO: reset filters
   setQueryParamsFromState();
   await refreshLocalities();
-  resultsCount.value = data?.response.numFound ?? 0;
+  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }) {
   setQueryParamsFromState();
   options.value = newOptions;
   await refreshLocalities();
-  resultsCount.value = data?.response.numFound ?? 0;
+  resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 function handleClickRow(index: number) {
