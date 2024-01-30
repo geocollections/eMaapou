@@ -36,8 +36,10 @@
             style="word-break: break-word"
           >
             <slot name="selection" :item="item">
-              <span>{{ item.name }}</span>
-              <span class="ml-auto">{{ item.count }}</span>
+              <span class="mr-2">{{ item.name }}</span>
+              <span class="ml-auto" style="word-break: keep-all">{{
+                item.count
+              }}</span>
             </slot>
           </span>
         </div>
@@ -84,8 +86,10 @@
               style="word-break: break-word"
             >
               <slot name="selection" :item="item">
-                <span>{{ item.name }}</span>
-                <span class="ml-auto">{{ item.count }}</span>
+                <span class="mr-2">{{ item.name }}</span>
+                <span class="ml-auto" style="word-break: keep-all">{{
+                  item.count
+                }}</span>
               </slot>
             </span>
           </div>

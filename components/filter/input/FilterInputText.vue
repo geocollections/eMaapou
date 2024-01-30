@@ -82,7 +82,7 @@ watch(
   (newVal) => {
     selectedItems.value = newVal;
   },
-  { immediate: true }
+  { immediate: true },
 );
 const handleAdd = () => {
   if (internalValue.value === "") return;
@@ -101,7 +101,7 @@ const handleChange = (i: number) => {
   internalValue.value = cloneItems.splice(i, 1)[0];
   selectedItems.value = cloneItems;
   emit("update:model-value", selectedItems.value);
-  if (!panel.value.isActive) panel.value.toggle();
+  // if (!panel.value.isActive) panel.value.toggle();
 };
 </script>
 

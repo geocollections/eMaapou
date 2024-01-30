@@ -1,26 +1,19 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
-    <template #item.id="{ item }">
+  <base-data-table v-bind="$attrs">
+    <template #item.id="{ item, index }">
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.id } })"
+        @click="emit('click:row', index)"
       >
         {{ item.id }}
       </nuxt-link>
     </template>
-    <template #item.name="{ item }">
+    <template #item.name="{ item, index }">
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.id } })"
+        @click="emit('click:row', index)"
       >
         {{
           $translate({
@@ -46,46 +39,8 @@
   </base-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import { useHeadersWithState } from '~/composables/useHeaders'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_SITE } from '~/constants'
-export default defineComponent({
-  name: 'DataTableSite',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersReset, handleHeadersChange } =
-      useHeadersWithState({
-        module: 'site',
-        localHeaders: HEADERS_SITE,
-        statefulHeaders: props.statefulHeaders,
-        options: toRef(props, 'options'),
-      })
-    return { headers, handleHeadersChange, handleHeadersReset }
-  },
-})
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+
+const localePath = useLocalePath();
 </script>
