@@ -48,40 +48,52 @@
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
-      <v-text-field
-        v-model="query"
-        variant="underlined"
-        hide-details
-        density="compact"
-        :placeholder="$t('filters.filter')"
-      >
-      </v-text-field>
       <div class="my-1">
-        <div
-          v-for="(item, i) in suggestions"
-          :key="i"
-          class="d-flex selected-item"
-          @click="handleAdd(item)"
+        <v-text-field
+          v-model="query"
+          variant="underlined"
+          hide-details
+          density="compact"
+          class="mb-2"
+          :placeholder="$t('filters.filter')"
         >
-          <span>
-            <input
-              type="checkbox"
-              class="checkbox"
-              :checked="selectedIds.includes(item.id)"
-              @click.prevent.stop="handleAdd(item)"
-            />
-          </span>
-          <span
-            class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
-            style="word-break: break-word"
-          >
-            <slot name="selection" :item="item">
-              <span>{{ item.name }}</span>
-              <span class="ml-auto">{{ item.count }}</span>
-            </slot>
-          </span>
+        </v-text-field>
+        <div
+          v-if="(suggestions?.length ?? 0) < 1"
+          class="text-medium-emphasis text-body-2"
+        >
+          No options available
         </div>
-        <div class="d-flex align-center justify-space-around">
+        <template v-else>
+          <div
+            v-for="(item, i) in suggestions"
+            :key="i"
+            class="d-flex selected-item"
+            @click="handleAdd(item)"
+          >
+            <span>
+              <input
+                type="checkbox"
+                class="checkbox"
+                :checked="selectedIds.includes(item.id)"
+                @click.prevent.stop="handleAdd(item)"
+              />
+            </span>
+            <span
+              class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
+              style="word-break: break-word"
+            >
+              <slot name="selection" :item="item">
+                <span>{{ item.name }}</span>
+                <span class="ml-auto">{{ item.count }}</span>
+              </slot>
+            </span>
+          </div>
+        </template>
+        <div
+          v-if="showPagination"
+          class="d-flex align-center justify-space-around"
+        >
           <v-btn
             :icon="mdiChevronLeft"
             variant="text"
@@ -103,10 +115,10 @@
   </v-expansion-panel>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import orderBy from "lodash/orderBy";
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
-type Suggestion = { id: number; name: string; count: number };
+export type Suggestion = { id: T; name: string; count: number };
 
 const props = defineProps({
   title: {
@@ -114,8 +126,12 @@ const props = defineProps({
     required: true,
   },
   modelValue: {
-    type: Array as PropType<string[]>,
-    default: () => [],
+    type: Array as PropType<T[]>,
+    required: true,
+  },
+  perPage: {
+    type: Number,
+    default: 8,
   },
   queryFunction: {
     type: Function as PropType<
@@ -126,13 +142,13 @@ const props = defineProps({
       }: {
         query: string;
         pagination: { page: number; perPage: number };
-        values: string[];
+        values: T[];
       }) => Promise<Suggestion[]>
     >,
     required: true,
   },
   hydrationFunction: {
-    type: Function as PropType<(values: string[]) => Promise<Suggestion[]>>,
+    type: Function as PropType<(values: T[]) => Promise<Suggestion[]>>,
     required: true,
   },
 });
@@ -144,8 +160,10 @@ const queryDebounced = refDebounced(query, 200);
 
 const pagination = ref({
   page: 1,
-  perPage: 8,
+  perPage: props.perPage,
 });
+
+const showPagination = computed(() => props.perPage > -1);
 
 const selectedItems = ref<Suggestion[]>([]);
 const panel = ref();
@@ -171,7 +189,7 @@ const { data: suggestions, refresh } = await useAsyncData(
       pagination: pagination.value,
       values: selectedNames.value,
     });
-  }
+  },
 );
 
 watch(queryDebounced, () => {

@@ -2,14 +2,14 @@
   <search>
     <template #title>
       <header-search
-        :title="$t('locality.pageTitle')"
+        :title="$t('sample.pageTitle')"
         :count="data?.response.numFound ?? 0"
-        :icon="mdiMapMarker"
+        :icon="mdiImageFilterHdr"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-locality
+      <search-form-sample
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -30,15 +30,15 @@
           border-bottom: 1px solid lightgray;
         "
       >
-        <data-table-locality
+        <data-table-sample
           :show-search="false"
           :items="data?.response.docs ?? []"
           :count="data?.response.numFound ?? 0"
           :headers="headers"
           :options="options"
           dynamic-headers
-          :is-loading="pending"
           stateful-headers
+          :is-loading="pending"
           @update="handleDataTableUpdate"
           @change:headers="handleHeadersChange"
           @reset:headers="handleHeadersReset(options)"
@@ -50,17 +50,17 @@
 </template>
 
 <script setup lang="ts">
-import { mdiMapMarker } from "@mdi/js";
-import type { LocationQueryRaw } from "vue-router";
+import { mdiImageFilterHdr } from "@mdi/js";
 
-// const { $getAPIFieldValues } = useNuxtApp();
-const localitiesStore = useLocalities();
+const route = useRoute();
+
+const samplesStore = useSamples();
 const {
   handleHeadersReset,
   handleHeadersChange,
   setStateFromQueryParams,
   getQueryParams,
-} = localitiesStore;
+} = samplesStore;
 const {
   solrSort,
   solrQuery,
@@ -69,10 +69,7 @@ const {
   headers,
   searchPosition,
   resultsCount,
-} = storeToRefs(localitiesStore);
-
-const route = useRoute();
-
+} = storeToRefs(samplesStore);
 setStateFromQueryParams(route);
 
 const {
@@ -81,7 +78,7 @@ const {
   refresh: refreshLocalities,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>("/locality", {
+}>("/sample", {
   query: computed(() => ({
     // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
@@ -89,12 +86,11 @@ const {
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
-      sort: solrSort.value ?? "locality asc",
+      sort: solrSort.value,
     },
   })),
   watch: false,
 });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() as LocationQueryRaw });
@@ -124,4 +120,24 @@ function handleClickRow(index: number) {
   searchPosition.value =
     index + getOffset(options.value.page, options.value.itemsPerPage);
 }
+
+// export default defineComponent({
+//   head() {
+//     return {
+//       title: this.$t('sample.pageTitle') as string,
+//       meta: [
+//         {
+//           property: 'og:title',
+//           hid: 'og:title',
+//           content: this.$t('sample.pageTitle') as string,
+//         },
+//         {
+//           property: 'og:url',
+//           hid: 'og:url',
+//           content: this.$route.path,
+//         },
+//       ],
+//     }
+//   },
+// })
 </script>

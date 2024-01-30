@@ -1,6 +1,6 @@
 <template>
   <v-hover v-slot="{ hover }">
-    <v-list-item color="red" class="rounded" v-bind="$attrs">
+    <v-list-item color="accent-lighten-1" class="rounded" v-bind="$attrs">
       <v-list-item-title class="d-flex py-1">
         <div v-if="!labelOnly">
           <v-icon v-if="icon" :icon="icon" start />

@@ -1,18 +1,20 @@
 <template>
   <base-data-table v-bind="$attrs">
-    <template #item.id="{ item }">
+    <template #item.id="{ item, index }">
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.id } })"
+        @click="emit('click:row', index)"
       >
         {{ item.id }}
       </nuxt-link>
     </template>
-    <template #item.number="{ item }">
+    <template #item.number="{ item, index }">
       <nuxt-link
         v-if="item.number"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.id } })"
+        @click="emit('click:row', index)"
       >
         {{ item.number }}
       </nuxt-link>
@@ -100,6 +102,8 @@
 
 <script setup lang="ts">
 import type { OverlayImage } from "~/components/ImageOverlay.vue";
+
+const emit = defineEmits(["click:row"]);
 
 const localePath = useLocalePath();
 const showOverlay = ref(false);

@@ -2,194 +2,15 @@ import { z } from "zod";
 import { LOCALITY, type SortItem } from "~/constants";
 import { HEADERS_LOCALITY } from "~/constants/headers";
 import uniq from "lodash/uniq";
-import cloneDeep from "lodash/cloneDeep";
 import type { LocationQueryRaw } from "vue-router";
 import type { RouteLocation } from "vue-router";
-import earcut from "earcut";
-import { geojsonToWKT } from "@terraformer/wkt";
-
-type LookupType = "contains" | "exact" | "startswith" | "endswith";
-type FilterType = "text" | "idList" | "textList" | "geom" | "rangeAlt";
-
-type BaseFilter = {
-  type: FilterType;
-  value: any;
-  fields: string[];
-  tag?: string;
-};
-
-type TextFilter = Omit<BaseFilter, "value"> & {
-  type: "text";
-  lookup?: LookupType;
-  value: string;
-};
-type TextListFilter = Omit<BaseFilter, "value"> & {
-  type: "textList";
-  lookup?: LookupType;
-  value: string[];
-};
-
-type IdListFilter = Omit<BaseFilter, "value"> & {
-  type: "idList";
-  value: string[];
-};
-
-type StringIdListFilter = Omit<BaseFilter, "value"> & {
-  type: "idList";
-  value: string[];
-  lookup?: LookupType;
-};
-
-type GeomFilter = Omit<BaseFilter, "value"> & {
-  type: "geom";
-  value: null | any;
-};
-type RangeAltFilter = Omit<BaseFilter, "value"> & {
-  type: "rangeAlt";
-  value: [null | number, null | number];
-};
-
-type FilterUnion =
-  | TextFilter
-  | TextListFilter
-  | IdListFilter
-  | StringIdListFilter
-  | GeomFilter
-  | RangeAltFilter;
-
-function getLookupFn(
-  lookup: LookupType | undefined
-): (field: string, value: string) => string {
-  switch (lookup) {
-    case "contains":
-      return (field, value) => `${field}:*${value}*`;
-    case "exact":
-      return (field, value) => `${field}:"${value}"`;
-    case "startswith":
-      return (field, value) => `${field}:${value}*`;
-    case "endswith":
-      return (field, value) => `${field}:*${value}`;
-    default:
-      return (field, value) => `${field}:${value}`;
-  }
-}
-
-function isStringArray(x: any[]): x is string[] {
-  return x.every((i) => typeof i === "string");
-}
-
-function isStringIdListFilter(
-  filter: FilterUnion
-): filter is StringIdListFilter {
-  return filter.type === "idList" && isStringArray(filter.value);
-}
-
-function isValidFilter(filter: FilterUnion): boolean {
-  switch (filter.type) {
-    case "text":
-      return filter.value.length > 0;
-    case "textList":
-      return filter.value.length > 0;
-    case "idList":
-      return filter.value.length > 0;
-    case "rangeAlt":
-      return filter.value.some((value) => value !== null);
-    case "geom": {
-      return filter.value !== null;
-    }
-    default:
-      return false;
-  }
-}
-
-function getSolrFilter(filter: FilterUnion) {
-  switch (filter.type) {
-    case "text": {
-      const lookupFn = getLookupFn(filter.lookup);
-      return filter.fields
-        .map((field) => lookupFn(field, filter.value))
-        .join(" OR ");
-    }
-    case "textList": {
-      const lookupFn = getLookupFn(filter.lookup);
-      return filter.fields
-        .map((field) =>
-          filter.value.map((v) => lookupFn(field, v)).join(" OR ")
-        )
-        .join(" OR ");
-    }
-    case "rangeAlt": {
-      return filter.value
-        .filter((value) => value !== null)
-        .map((value) => {
-          return `(${filter.fields[0]}: [${value} TO *] AND ${filter.fields[1]}: [* TO ${value}])`;
-        })
-        .join(" OR ");
-    }
-    case "idList": {
-      if (isStringIdListFilter(filter)) {
-        const lookupFn = getLookupFn(filter.lookup);
-        return filter.fields
-          .map((field) =>
-            filter.value
-              .map((v) => {
-                return lookupFn(field, removeNonAlphanumeric(v));
-              })
-              .join(" OR ")
-          )
-          .join(" OR ");
-      }
-      return filter.fields
-        .map((field) => filter.value.map((v) => `${field}:${v}`).join(" OR "))
-        .join(" OR ");
-    }
-    case "geom": {
-      if (filter.value.geometry.type === "Polygon") {
-        // LON LAT
-        const value = cloneDeep(filter.value);
-
-        // Polygon triangulation
-        const data = earcut.flatten(value.geometry.coordinates);
-        const triangles = earcut(data.vertices, data.holes, data.dimensions);
-
-        // Reversing triangles to geo coordinates
-        const coordinates = triangles.map((item: any) => {
-          const startIndex = item * 2;
-          return [data.vertices[startIndex], data.vertices[startIndex + 1]];
-        });
-        const triangleCoordinates = coordinates.reduce(
-          (prev: any, _: any, index: number, arr: any[]) => {
-            if ((index + 1) % 3 === 0) {
-              prev.push([
-                arr[index - 2],
-                arr[index - 1],
-                arr[index],
-                arr[index - 2],
-              ]);
-            }
-            return prev;
-          },
-          []
-        );
-
-        // Creating WKT string for query
-        let wktString = geojsonToWKT({
-          coordinates:
-            triangleCoordinates.length > 1
-              ? [triangleCoordinates]
-              : triangleCoordinates,
-          type: triangleCoordinates.length > 1 ? "MultiPolygon" : "Polygon",
-        });
-        wktString = wktString.replaceAll("), (", ")), ((");
-
-        return filter.fields
-          .map((field: string) => `${field}:"intersects(${wktString})"`)
-          .join(" OR ");
-      }
-      return undefined;
-    }
-  }
-}
+import type {
+  IdListFilter,
+  TextListFilter,
+  StringIdListFilter,
+  GeomFilter,
+  RangeAltFilter,
+} from "~/composables/useFilter";
 
 export const useLocalities = defineStore(
   "localities",
@@ -246,7 +67,7 @@ export const useLocalities = defineStore(
         .catch([]),
     });
 
-    const filters = ref({
+    const { filters, solrFilters } = useFilters({
       name: {
         value: [],
         type: "textList",
@@ -264,6 +85,7 @@ export const useLocalities = defineStore(
         type: "idList",
         fields: ["locality_references_kws"],
         tag: "references",
+        alphaNumeric: true,
       } as StringIdListFilter,
       geometry: {
         type: "geom",
@@ -275,23 +97,6 @@ export const useLocalities = defineStore(
         type: "rangeAlt",
         fields: ["age_base", "age_top"],
       } as RangeAltFilter,
-    } satisfies { [K: string]: FilterUnion });
-
-    const solrFilters = computed(() => {
-      return Object.entries<FilterUnion>(filters.value)
-        .filter(([_key, value]) => isValidFilter(value))
-        .reduce((acc, [_key, filter]) => {
-          const filterStr = getSolrFilter(filter);
-          if (!filterStr) {
-            return acc;
-          }
-          if (filter.tag) {
-            acc.push({ [`#${filter.tag}`]: filterStr });
-          } else {
-            acc.push(filterStr);
-          }
-          return acc;
-        }, [] as (string | { [K: string]: string })[]);
     });
 
     const routeQuerySchemaFilters = z.object({
@@ -333,7 +138,7 @@ export const useLocalities = defineStore(
     });
 
     const routeQuerySchema = routeQuerySchemaOptions.merge(
-      routeQuerySchemaFilters
+      routeQuerySchemaFilters,
     );
 
     function setStateFromQueryParams(route: RouteLocation) {
@@ -410,5 +215,5 @@ export const useLocalities = defineStore(
       paths: ["options", "filters", "headers", "query", "searchPosition"],
       storage: persistedState.sessionStorage,
     },
-  }
+  },
 );

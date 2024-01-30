@@ -189,7 +189,7 @@
               localePath({
                 name: 'drillcore-id',
                 params: { id: data?.drillcore.id },
-              })
+              }),
             )
           "
         >
@@ -305,18 +305,18 @@ const images = ref<any[]>([]);
 const imagesHasNext = ref(true);
 
 const analysisResultsCount = computed(
-  () => data.value?.tabs.find((tab) => tab.id === "graphs")?.count ?? 0
+  () => data.value?.tabs.find((tab) => tab.id === "graphs")?.count ?? 0,
 );
 const referenceCount = computed(
   () =>
-    data.value?.tabs.find((tab) => tab.id === "locality_reference")?.count ?? 0
+    data.value?.tabs.find((tab) => tab.id === "locality_reference")?.count ?? 0,
 );
 const type = computed(() => data.value?.locality.type);
 const country = computed(() => data.value?.locality.country);
 const municipality = computed(() => data.value?.locality.vald);
 const settlementUnit = computed(() => data.value?.locality.asustusyksus);
 const coordinatePrecision = computed(
-  () => data.value?.locality.coord_det_precision
+  () => data.value?.locality.coord_det_precision,
 );
 const coordinateMethod = computed(() => data.value?.locality.coord_det_method);
 const coordinateAgent = computed(() => data.value?.locality.coord_det_agent);
@@ -383,6 +383,7 @@ if (searchPosition.value > -1) {
 }
 
 const prevNextIds = computed(() => {
+  if (!idRes.value) return { prev: null, next: null };
   const items =
     idRes.value?.response.docs.map((doc) => ({
       id: doc.id,
@@ -463,8 +464,8 @@ const { data, pending, error } = await useLazyAsyncData(
             },
             api: { default: { locality: route.params.id } },
           },
-        })
-      )
+        }),
+      ),
     ).then((res): { [K: string]: Tab } => {
       return res.reduce((prev, tab) => {
         return { ...prev, [tab.objectId as string]: tab };
@@ -521,13 +522,13 @@ const { data, pending, error } = await useLazyAsyncData(
           } else return tab.count > 0;
         }),
     };
-  }
+  },
 );
 const title = computed(() =>
   $translate({
     et: data.value?.locality.locality,
     en: data.value?.locality.locality_en,
-  })
+  }),
 );
 useRedirectInvalidTabRoute({
   tabs: data.value?.tabs ?? [],
@@ -540,7 +541,7 @@ const goToGeoscienceLiterature = () => {
   window.open(
     `https://kirjandus.geoloogia.info/reference/?localities=${title.value}`,
     "_blank",
-    "height=800, width=800"
+    "height=800, width=800",
   );
 };
 const goToAnalyticalData = () => {
@@ -550,7 +551,7 @@ const goToAnalyticalData = () => {
       query: {
         locality: title.value,
       },
-    })
+    }),
   );
 };
 // export default defineComponent({

@@ -1,3 +1,5 @@
+import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
+
 export const useAutocomplete = (
   path: string,
   {
@@ -17,7 +19,7 @@ export const useAutocomplete = (
     };
     primary?: "id" | "name";
     containsParser?: (query: string) => string;
-  }
+  },
 ) => {
   const { locale } = useI18n();
   const { $solrFetch } = useNuxtApp();
@@ -85,7 +87,7 @@ export const useAutocomplete = (
     query: string;
     pagination: { page: number; perPage: number };
     values: string[];
-  }) {
+  }): Promise<Suggestion[]> {
     const pivot = filterExclude
       ? `{!ex=${filterExclude}}${suggestionsPivot.value}`
       : `${suggestionsPivot.value}`;
@@ -98,6 +100,7 @@ export const useAutocomplete = (
         [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
         [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
         "facet.limit": pagination.perPage,
+        "facet.sort": "count",
         [`f.${primaryField.value}.facet.offset`]:
           (pagination.page - 1) * pagination.perPage,
         json: {
@@ -108,11 +111,11 @@ export const useAutocomplete = (
       },
     });
     return res.facet_counts.facet_pivot[suggestionsPivot.value].map(
-      suggestMapper.value
+      suggestMapper.value,
     );
   }
 
-  async function hydrate(values: string[]) {
+  async function hydrate(values: string[]): Promise<Suggestion[]> {
     const facets = values.reduce((prev, id) => {
       prev[id] = {
         type: "query",
