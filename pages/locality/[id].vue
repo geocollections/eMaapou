@@ -2,7 +2,7 @@
   <detail v-if="!pending" :loading="pending" :error="error">
     <template #title>
       <header-detail
-        :ids="prevNextIds"
+        :ids="prevNext"
         :title="
           $translate({
             et: data?.locality.locality,
@@ -354,53 +354,22 @@ const { getQueryParams } = localitiesStore;
 const { solrFilters, solrQuery, solrSort, searchPosition, resultsCount } =
   storeToRefs(localitiesStore);
 
-function prevNextOffset(position: number, count: number) {
-  if (position === 0) return 0;
-  if (position === count - 1) return position - 2;
-  return position - 1;
-}
-
-const { data: idRes, refresh: refreshPrevNext } = await useSolrFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/locality", {
-  query: computed(() => ({
-    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
-    json: {
-      query: solrQuery.value,
-      limit: 3,
-      offset: prevNextOffset(searchPosition.value, resultsCount.value),
-      filter: solrFilters.value,
-      sort: solrSort.value ?? "locality asc",
-      fields: ["id", "locality", "locality_en"],
-    },
+const { prevNext } = await usePrevNext("/locality", {
+  searchPosition,
+  solrParams: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value ?? "locality asc",
+    fields: ["id", "locality", "locality_en"],
   })),
-  watch: false,
-  immediate: false,
-});
-
-if (searchPosition.value > -1) {
-  refreshPrevNext();
-}
-
-const prevNextIds = computed(() => {
-  if (!idRes.value) return { prev: null, next: null };
-  const items =
-    idRes.value?.response.docs.map((doc) => ({
-      id: doc.id,
-      name: {
-        et: doc.locality,
-        en: doc.locality_en,
-      },
-    })) ?? [];
-  const ids = items?.map((doc) => doc.id);
-  const index = ids?.indexOf(route.params.id);
-  if (index === -1) return { prev: null, next: null };
-  const prevId = ids?.[index - 1];
-  const nextId = ids?.[index + 1];
-  return {
-    prev: prevId ? items?.[index - 1] : null,
-    next: nextId ? items?.[index + 1] : null,
-  };
+  count: resultsCount.value,
+  mapper: (doc) => ({
+    id: doc.id,
+    name: {
+      et: doc.locality,
+      en: doc.locality_en,
+    },
+  }),
 });
 
 const { data, pending, error } = await useLazyAsyncData(

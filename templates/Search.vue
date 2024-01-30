@@ -65,7 +65,7 @@
           </v-col>
         </v-row>
         <v-row no-gutters>
-          <v-col>
+          <v-col class="ml-2">
             <slot name="title"></slot>
           </v-col>
           <v-col cols="12">

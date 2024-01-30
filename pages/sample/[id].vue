@@ -2,7 +2,7 @@
   <detail v-if="!pending" :loading="pending" :error="error">
     <template #title>
       <header-detail
-        :ids="prevNextIds"
+        :ids="prevNext"
         :title="pageTitle"
         :search-to="localePath({ path: '/locality', query: getQueryParams() })"
         @click:next="searchPosition++"
@@ -394,47 +394,19 @@ const series = computed(() => data.value?.sample.series);
 const locality = computed(() => data.value?.sample.locality);
 const { $geoloogiaFetch, $solrFetch, $hydrateTab, $translate } = useNuxtApp();
 
-function prevNextOffset(position: number, count: number) {
-  if (position === 0) return 0;
-  if (position === count - 1) return position - 2;
-  return position - 1;
-}
-
-const { data: idRes, refresh: refreshPrevNext } = await useSolrFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/sample", {
-  query: computed(() => ({
-    json: {
-      query: solrQuery.value,
-      limit: 3,
-      offset: prevNextOffset(searchPosition.value, resultsCount.value),
-      filter: solrFilters.value,
-      sort: solrSort.value,
-      fields: ["id", "number"],
-    },
+const { prevNext } = await usePrevNext("/locality", {
+  searchPosition,
+  solrParams: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    fields: ["id", "number"],
   })),
-  watch: false,
-  immediate: false,
-});
-if (searchPosition.value > -1) {
-  refreshPrevNext();
-}
-const prevNextIds = computed(() => {
-  if (!idRes.value) return { prev: null, next: null };
-  const items = [];
-  // idRes.value?.response.docs.map((doc) => ({
-  //   id: doc.id,
-  //   name: doc.number ?? doc.id,
-  // })) ?? [];
-  const ids = items?.map((doc) => doc.id);
-  const index = ids?.indexOf(route.params.id);
-  if (index === -1) return { prev: null, next: null };
-  const prevId = ids?.[index - 1];
-  const nextId = ids?.[index + 1];
-  return {
-    prev: prevId ? items?.[index - 1] : null,
-    next: nextId ? items?.[index + 1] : null,
-  };
+  count: resultsCount.value,
+  mapper: (doc) => ({
+    id: doc.id,
+    name: doc.number ?? doc.id,
+  }),
 });
 
 const { data, pending, error } = useLazyAsyncData("sample", async () => {
