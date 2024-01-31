@@ -1,5 +1,5 @@
 import { HEADERS_SAMPLE, SAMPLE } from "~/constants";
-import type { LocationQueryRaw, RouteLocation } from "vue-router";
+import type { RouteLocation } from "vue-router";
 import type {
   BooleanFilter,
   GeomFilter,
@@ -10,7 +10,6 @@ import type {
   TextListFilter,
 } from "~/composables/useFilter";
 import { z } from "zod";
-import uniq from "lodash/uniq";
 
 export const useSamples = defineStore(
   "samples",
@@ -23,13 +22,14 @@ export const useSamples = defineStore(
       handleHeadersReset,
       handleHeadersChange,
       solrSort,
-      routeQuerySchemaOptions,
+      routeQueryOptionsSchema,
+      stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
     } = useDataTable({
       initOptions: SAMPLE.options,
       initHeaders: HEADERS_SAMPLE,
     });
-    const resultsCount = ref(0);
 
+    const resultsCount = ref(0);
     const { searchPosition, fromSearch } = useSearchPosition();
 
     const { filters, solrFilters } = useFilters({
@@ -97,69 +97,26 @@ export const useSamples = defineStore(
         tag: "institution",
       } as IdListFilter,
     });
-    const routeQuerySchemaFilters = z.object({
+
+    const routeQueryFiltersSchema = z.object({
       q: z.string().catch(""),
-      number: z
-        .string()
-        .transform((val) => uniq(val.split(",")))
-        .catch([]),
-      locality: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      depth: z
-        .string()
-        .transform((val, ctx) => {
-          let [startStr, endStr] = val.split("-");
-          const start = parseInt(startStr) || null;
-          const end = parseInt(endStr) || null;
-
-          if (start && end && start > end) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Start cannot be larger than end",
-            });
-            return z.NEVER;
-          }
-
-          return [start, end] as [null | number, null | number];
-        })
-        .catch([null, null]),
-      stratigraphy: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      rock: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      collector: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      institution: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      geometry: z
-        .string()
-        .transform((val) => JSON.parse(val))
-        .catch(null),
-      hasImage: z
-        .string()
-        .transform((val) => val === "true")
-        .catch(false),
-      hasCoordinates: z
-        .string()
-        .transform((val) => val === "true")
-        .catch(false),
+      number: textParamParser,
+      locality: idParamParser(","),
+      depth: rangeParamParser,
+      stratigraphy: idParamParser(","),
+      rock: idParamParser(","),
+      collector: idParamParser(","),
+      institution: idParamParser(","),
+      geometry: geometryParamParser,
+      hasImage: booleanParamParser,
+      hasCoordinates: booleanParamParser,
     });
 
-    const routeQuerySchema = routeQuerySchemaOptions.merge(
-      routeQuerySchemaFilters,
+    const routeQuerySchema = routeQueryOptionsSchema.merge(
+      routeQueryFiltersSchema,
     );
 
-    function setStateFromQueryParams(route: RouteLocation) {
+    function setStateFromQueryParamsTest(route: RouteLocation) {
       const params = routeQuerySchema.parse(route.query);
 
       options.value.page = params.page;
@@ -167,66 +124,47 @@ export const useSamples = defineStore(
       options.value.sortBy = params.sortBy;
 
       query.value = params.q;
-      filters.value.number.value = params.number;
-      filters.value.locality.value = params.locality;
-      filters.value.depth.value = params.depth;
-      filters.value.stratigraphy.value = params.stratigraphy;
-      filters.value.rock.value = params.rock;
-      filters.value.collector.value = params.collector;
-      filters.value.institution.value = params.institution;
-      filters.value.geometry.value = params.geometry;
-      filters.value.hasImage.value = params.hasImage;
-      filters.value.hasCoordinates.value = params.hasCoordinates;
+
+      Object.entries(filters.value).forEach(([key, filter]) => {
+        filter.value = params[key as keyof typeof filters.value];
+      });
     }
 
+    const filtersStateToQueryParamsSchema = z.object({
+      q: stringValueParser,
+      number: stringArrayValueParser,
+      locality: idValueParser(","),
+      depth: rangeValueParser,
+      stratigraphy: idValueParser(","),
+      rock: idValueParser(","),
+      collector: idValueParser(","),
+      institution: idValueParser(","),
+      geometry: geometryValueParser,
+      hasImage: booleanValueParser,
+      hasCoordinates: booleanValueParser,
+    });
+
+    const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
+      filtersStateToQueryParamsSchema,
+    );
+
     function getQueryParams() {
-      const queryParams: LocationQueryRaw = {
-        page: options.value.page.toString(),
-        itemsPerPage: options.value.itemsPerPage.toString(),
-      };
-
-      if (options.value.sortBy.length > 0) {
-        queryParams.sortBy = options.value.sortBy
-          .map((sortItem) => `${sortItem.key} ${sortItem.order}`)
-          .join(",");
-      }
-      if (query.value.length > 0) {
-        queryParams.q = query.value;
-      }
-      if (filters.value.number.value.length > 0) {
-        queryParams.number = filters.value.number.value.join(",");
-      }
-      if (filters.value.locality.value.length > 0) {
-        queryParams.locality = filters.value.locality.value.join(",");
-      }
-      if (filters.value.depth.value.some((v) => v !== null)) {
-        queryParams.depth = filters.value.depth.value
-          .map((v) => (v === null ? "*" : v))
-          .join("-");
-      }
-      if (filters.value.stratigraphy.value.length > 0) {
-        queryParams.stratigraphy = filters.value.stratigraphy.value.join(",");
-      }
-      if (filters.value.rock.value.length > 0) {
-        queryParams.rock = filters.value.rock.value.join(",");
-      }
-      if (filters.value.collector.value.length > 0) {
-        queryParams.collector = filters.value.collector.value.join(",");
-      }
-      if (filters.value.institution.value.length > 0) {
-        queryParams.institution = filters.value.institution.value.join(",");
-      }
-      if (filters.value.geometry.value !== null) {
-        queryParams.geometry = JSON.stringify(filters.value.geometry.value);
-      }
-      if (filters.value.hasImage.value) {
-        queryParams.hasImage = "true";
-      }
-      if (filters.value.hasCoordinates.value) {
-        queryParams.hasCoordinates = "true";
-      }
-
-      return queryParams;
+      return stateToQueryParamsSchema.parse({
+        q: query.value,
+        number: filters.value.number.value,
+        locality: filters.value.locality.value,
+        depth: filters.value.depth.value,
+        stratigraphy: filters.value.stratigraphy.value,
+        rock: filters.value.rock.value,
+        collector: filters.value.collector.value,
+        institution: filters.value.institution.value,
+        geometry: filters.value.geometry.value,
+        hasImage: filters.value.hasImage.value,
+        hasCoordinates: filters.value.hasCoordinates.value,
+        page: options.value.page,
+        itemsPerPage: options.value.itemsPerPage,
+        sortBy: options.value.sortBy,
+      });
     }
 
     return {
@@ -237,7 +175,7 @@ export const useSamples = defineStore(
       handleHeadersReset,
       handleHeadersChange,
       options,
-      setStateFromQueryParams,
+      setStateFromQueryParams: setStateFromQueryParamsTest,
       getQueryParams,
       resultsCount,
       searchPosition,

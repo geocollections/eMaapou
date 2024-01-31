@@ -1,70 +1,32 @@
 import { z } from "zod";
-import { SITE, type SortItem } from "~/constants";
+import { SITE } from "~/constants";
 import { HEADERS_SITE } from "~/constants/headers";
-import uniq from "lodash/uniq";
-import type { LocationQueryRaw } from "vue-router";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
   TextListFilter,
-  StringIdListFilter,
   GeomFilter,
-  RangeAltFilter,
 } from "~/composables/useFilter";
 
 export const useSites = defineStore(
   "sites",
   () => {
     const resultsCount = ref(0);
+    const { searchPosition, fromSearch } = useSearchPosition();
 
-    const query = ref("");
-    const solrQuery = computed(() => {
-      return query.value.length > 0 ? query.value : "*";
-    });
-
-    const { headers, handleHeadersReset, handleHeadersChange } =
-      useHeaders(HEADERS_SITE);
-    const options = ref(SITE.options);
-
-    const { locale } = useI18n();
-    const solrSort = computed(() => {
-      return getSolrSort({
-        sortBy: options.value.sortBy,
-        headersMap: HEADERS_SITE.byIds,
-        locale: locale.value as "et" | "en",
-      });
-    });
-
-    const routeQuerySchemaOptions = z.object({
-      page: z
-        .string()
-        .transform((val) => parseInt(val))
-        .refine((val) => val > 0)
-        .catch(1),
-      itemsPerPage: z
-        .string()
-        .transform((val) => parseInt(val))
-        .refine((val) => val > 0)
-        .catch(25),
-      sortBy: z
-        .string()
-        .transform((val): SortItem[] => {
-          const sortStrings = val.split(",");
-          return sortStrings
-            .filter((sortString) => {
-              const [_key, order] = sortString.split(" ");
-              return order === "asc" || order === "desc";
-            })
-            .map((sortString): SortItem => {
-              const [key, order] = sortString.split(" ");
-
-              return {
-                key,
-                order: order as "asc" | "desc",
-              };
-            });
-        })
-        .catch([]),
+    const {
+      query,
+      options,
+      headers,
+      solrQuery,
+      handleHeadersReset,
+      handleHeadersChange,
+      solrSort,
+      routeQueryOptionsSchema,
+      stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+    } = useDataTable({
+      initOptions: SITE.options,
+      initHeaders: HEADERS_SITE,
     });
 
     const { filters, solrFilters } = useFilters({
@@ -95,73 +57,54 @@ export const useSites = defineStore(
 
     const routeQuerySchemaFilters = z.object({
       q: z.string().catch(""),
-      name: z
-        .string()
-        .transform((val) => uniq(val.split(",")))
-        .catch([]),
-      area: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      project: z
-        .string()
-        .transform((val) => uniq(val.split(",").map((v) => v)))
-        .catch([]),
-      geometry: z
-        .string()
-        .transform((val) => JSON.parse(val))
-        .catch(null),
+      name: textParamParser,
+      area: idParamParser(","),
+      project: idParamParser(","),
+      geometry: geometryParamParser,
     });
 
-    const routeQuerySchema = routeQuerySchemaOptions.merge(
+    const routeQuerySchema = routeQueryOptionsSchema.merge(
       routeQuerySchemaFilters,
     );
 
     function setStateFromQueryParams(route: RouteLocation) {
       const params = routeQuerySchema.parse(route.query);
 
-      query.value = params.q;
-      filters.value.name.value = params.name;
-      filters.value.area.value = params.area;
-      filters.value.project.value = params.project;
-      filters.value.geometry.value = params.geometry;
       options.value.page = params.page;
       options.value.itemsPerPage = params.itemsPerPage;
       options.value.sortBy = params.sortBy;
+
+      query.value = params.q;
+
+      Object.entries(filters.value).forEach(([key, filter]) => {
+        filter.value = params[key as keyof typeof filters.value];
+      });
     }
+
+    const filtersStateToQueryParamsSchema = z.object({
+      q: stringValueParser,
+      name: stringArrayValueParser,
+      area: idValueParser(","),
+      project: idValueParser(","),
+      geometry: geometryValueParser,
+    });
+
+    const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
+      filtersStateToQueryParamsSchema,
+    );
 
     function getQueryParams() {
-      const queryParams: LocationQueryRaw = {
-        page: options.value.page.toString(),
-        itemsPerPage: options.value.itemsPerPage.toString(),
-      };
-
-      if (query.value.length > 0) {
-        queryParams.q = query.value;
-      }
-      if (filters.value.name.value.length > 0) {
-        queryParams.name = filters.value.name.value.join(",");
-      }
-      if (filters.value.geometry.value !== null) {
-        queryParams.geometry = JSON.stringify(filters.value.geometry.value);
-      }
-      if (filters.value.area.value.length > 0) {
-        queryParams.area = filters.value.area.value.join(",");
-      }
-      if (filters.value.project.value.length > 0) {
-        queryParams.project = filters.value.project.value.join(",");
-      }
-
-      if (options.value.sortBy.length > 0) {
-        queryParams.sortBy = options.value.sortBy
-          .map((sortItem) => `${sortItem.key} ${sortItem.order}`)
-          .join(",");
-      }
-
-      return queryParams;
+      return stateToQueryParamsSchema.parse({
+        q: query.value,
+        name: filters.value.name.value,
+        area: filters.value.area.value,
+        project: filters.value.project.value,
+        geometry: filters.value.geometry.value,
+        page: options.value.page,
+        itemsPerPage: options.value.itemsPerPage,
+        sortBy: options.value.sortBy,
+      });
     }
-
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     return {
       query,

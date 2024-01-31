@@ -15,12 +15,7 @@
         :to="localePath({ name: 'site-id', params: { id: item.id } })"
         @click="emit('click:row', index)"
       >
-        {{
-          $translate({
-            et: item.name,
-            en: item.name_en,
-          })
-        }}
+        {{ item.name }}
       </nuxt-link>
     </template>
     <template #item.area="{ item }">

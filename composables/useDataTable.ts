@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod";
 import type { SortItem } from "~/constants";
 
 export function useDataTable({ initOptions, initHeaders }) {
@@ -15,7 +15,7 @@ export function useDataTable({ initOptions, initHeaders }) {
       locale: locale.value as "et" | "en",
     });
   });
-  const routeQuerySchemaOptions = z.object({
+  const routeQueryOptionsSchema = z.object({
     page: z
       .string()
       .transform((val) => parseInt(val))
@@ -47,6 +47,19 @@ export function useDataTable({ initOptions, initHeaders }) {
       .catch([]),
   });
 
+  const stateToQueryParamsSchema = z.object({
+    page: z.number().transform((val) => (val > 1 ? val.toString() : undefined)),
+    itemsPerPage: z.number().transform((val) => val.toString()),
+    sortBy: z
+      .object({ key: z.string(), order: z.string().optional() })
+      .array()
+      .transform((val) =>
+        val.length > 0
+          ? val.map((v) => `${v.key} ${v.order}`).join(",")
+          : undefined,
+      ),
+  });
+
   const query = ref("");
   const solrQuery = computed(() => {
     return query.value.length > 0 ? query.value : "*";
@@ -64,7 +77,9 @@ export function useDataTable({ initOptions, initHeaders }) {
     handleUpdate,
     handleHeadersReset,
     handleHeadersChange,
-    solrSort, routeQuerySchemaOptions
+    solrSort,
+    routeQueryOptionsSchema,
+    stateToQueryParamsSchema,
   };
 }
 export function useDataTableDetail({ initOptions, initHeaders }) {
