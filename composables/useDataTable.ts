@@ -49,7 +49,9 @@ export function useDataTable({ initOptions, initHeaders }) {
 
   const stateToQueryParamsSchema = z.object({
     page: z.number().transform((val) => (val > 1 ? val.toString() : undefined)),
-    itemsPerPage: z.number().transform((val) => val.toString()),
+    itemsPerPage: z
+      .number()
+      .transform((val) => (val !== 25 ? val.toString() : undefined)),
     sortBy: z
       .object({ key: z.string(), order: z.string().optional() })
       .array()
