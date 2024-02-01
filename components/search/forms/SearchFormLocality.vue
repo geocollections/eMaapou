@@ -8,6 +8,7 @@
           v-model="filters.name.value"
           :title="$t('filters.localityName')"
           @update:model-value="handleUpdate"
+          value="name"
         />
         <filter-input-autocomplete
           v-model="filters.country.value"
@@ -16,15 +17,18 @@
           :query-function="suggestCountry"
           :hydration-function="hydrateCountry"
           @update:model-value="handleUpdate"
+          value="country"
         />
         <filter-map
           v-model="filters.geometry.value"
           @update:model-value="handleUpdate"
+          value="map"
         />
         <filter-input-range
           v-model="filters.stratigraphyAge.value"
           :title="$t('filters.stratigraphyAge')"
           @update:model-value="handleUpdate"
+          value="stratigraphyAge"
         />
         <filter-input-autocomplete
           v-model="filters.reference.value"
@@ -33,6 +37,7 @@
           :query-function="suggestReference"
           :hydration-function="hydrateReference"
           @update:model-value="handleUpdate"
+          value="reference"
         />
       </v-expansion-panels>
     </v-form>
@@ -68,7 +73,7 @@ const { suggest: suggestCountry, hydrate: hydrateCountry } = useAutocomplete(
     nameField: { et: "country", en: "country_en" },
     filterExclude: "country",
     solrParams: { query: solrQuery, filter: solrFilters },
-  }
+  },
 );
 const { suggest: suggestReference, hydrate: hydrateReference } =
   useAutocomplete("/locality", {

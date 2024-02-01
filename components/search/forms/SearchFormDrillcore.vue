@@ -7,6 +7,7 @@
         <filter-input-text
           v-model="filters.name.value"
           :title="$t('filters.drillcoreName')"
+          value="name"
         />
         <filter-input-autocomplete
           v-model="filters.country.value"
@@ -15,10 +16,12 @@
           :query-function="suggestCountry"
           :hydration-function="hydrateCountry"
           @update:model-value="handleUpdate"
+          value="country"
         />
         <filter-map
           v-model="filters.geometry.value"
           @update:model-value="handleUpdate"
+          value="map"
         />
         <filter-input-autocomplete
           v-model="filters.repository.value"
@@ -27,16 +30,19 @@
           :query-function="suggestRepository"
           :hydration-function="hydrateRepository"
           @update:model-value="handleUpdate"
+          value="repository"
         />
         <filter-input-range
           v-model="filters.boxes.value"
           :title="$t('filters.drillcoreBoxes')"
           @update:model-value="handleUpdate"
+          value="boxes"
         />
         <filter-input-range
           v-model="filters.stratigraphyAge.value"
           :title="$t('filters.stratigraphyAge')"
           @update:model-value="handleUpdate"
+          value="stratigraphyAge"
         />
         <filter-input-autocomplete
           v-model="filters.institution.value"
@@ -46,6 +52,7 @@
           :hydration-function="hydrateInstitution"
           @update:model-value="handleUpdate"
           :per-page="-1"
+          value="institution"
         />
       </v-expansion-panels>
     </v-form>

@@ -8,6 +8,7 @@
           v-model="filters.name.value"
           :title="$t('filters.name')"
           @update:model-value="handleUpdate"
+          value="name"
         />
         <filter-input-autocomplete
           v-model="filters.area.value"
@@ -16,6 +17,7 @@
           :query-function="suggestArea"
           :hydration-function="hydrateArea"
           @update:model-value="handleUpdate"
+          value="area"
         />
         <filter-input-autocomplete
           v-model="filters.project.value"
@@ -24,10 +26,12 @@
           :query-function="suggestProject"
           :hydration-function="hydrateProject"
           @update:model-value="handleUpdate"
+          value="project"
         />
         <filter-map
           v-model="filters.geometry.value"
           @update:model-value="handleUpdate"
+          value="map"
         />
       </v-expansion-panels>
     </v-form>

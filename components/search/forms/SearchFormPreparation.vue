@@ -8,6 +8,7 @@
           v-model="filters.number.value"
           :title="$t('filters.sampleNumber')"
           @update:model-value="handleUpdate"
+          value="number"
         />
         <filter-input-autocomplete
           v-model="filters.locality.value"
@@ -16,15 +17,18 @@
           :query-function="suggestLocality"
           :hydration-function="hydrateLocality"
           @update:model-value="handleUpdate"
+          value="locality"
         />
         <filter-map
           v-model="filters.geometry.value"
           @update:model-value="handleUpdate"
+          value="map"
         />
         <filter-input-range
           v-model="filters.depth.value"
           :title="$t('filters.depth')"
           @update:model-value="handleUpdate"
+          value="depth"
         />
         <filter-input-autocomplete
           v-model="filters.stratigraphy.value"
@@ -33,6 +37,7 @@
           :query-function="suggestStratigraphy"
           :hydration-function="hydrateStratigraphy"
           @update:model-value="handleUpdate"
+          value="stratigraphy"
         />
       </v-expansion-panels>
     </v-form>

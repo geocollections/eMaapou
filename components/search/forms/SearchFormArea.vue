@@ -8,6 +8,7 @@
           v-model="filters.name.value"
           :title="$t('filters.name').toString()"
           @update:model-value="handleUpdate"
+          value="name"
         />
         <filter-input-autocomplete
           v-model="filters.county.value"
@@ -16,6 +17,7 @@
           :query-function="suggestCounty"
           :hydration-function="hydrateCounty"
           @update:model-value="handleUpdate"
+          value="county"
         />
         <filter-input-autocomplete
           v-model="filters.type.value"
@@ -24,6 +26,7 @@
           :query-function="suggestType"
           :hydration-function="hydrateType"
           @update:model-value="handleUpdate"
+          value="type"
         />
       </v-expansion-panels>
     </v-form>
