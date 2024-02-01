@@ -65,7 +65,7 @@ const { pending } = await useLazyAsyncData("data", async () => {
         query: {
           raw_content: "true",
         },
-      }
+      },
     );
 
     rawLasFileContent = rawLasfileContentResponse;
@@ -140,10 +140,10 @@ const { pending } = await useLazyAsyncData("data", async () => {
       sampleResponse.stats.stats_fields.depth.min,
       sampleResponse.stats.stats_fields.depth_interval.min,
       taxaResponse.stats.stats_fields.depth.min,
-    ]
+    ],
   );
   const _parameters = flogParameters(
-    analysisResultsResponse.facet_counts.facet_pivot
+    analysisResultsResponse.facet_counts.facet_pivot,
   );
   maxDepth.value = _maxDepth;
   minDepth.value = _minDepth;

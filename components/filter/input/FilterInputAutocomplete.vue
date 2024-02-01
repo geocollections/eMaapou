@@ -47,6 +47,7 @@
     >
       <div class="my-1">
         <v-text-field
+          v-if="showFilter"
           v-model="query"
           variant="underlined"
           hide-details
@@ -135,6 +136,10 @@ const props = defineProps({
   primary: {
     type: String,
     default: "name",
+  },
+  showFilter: {
+    type: Boolean,
+    default: true,
   },
   queryFunction: {
     type: Function as PropType<

@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs">
     <template #item.sample="{ item }">
       <nuxt-link
         class="text-link"
@@ -88,63 +79,6 @@
   </base-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import cloneDeep from 'lodash/cloneDeep'
-import { useHeaders } from '~/composables/useHeaders'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_SAMPLE_DATA } from '~/constants'
-
-export default defineComponent({
-  name: 'DataTableSampleData',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    additionalHeaders: {
-      type: Object,
-      default: () => {
-        return { byIds: {}, allIds: [] }
-      },
-    },
-  },
-  setup(props) {
-    const getHeaders = () => {
-      const defaultHeaders = cloneDeep(HEADERS_SAMPLE_DATA)
-      return {
-        byIds: {
-          ...defaultHeaders.byIds,
-          ...Object.entries(props.additionalHeaders.byIds).reduce(
-            (prev, [key, value]) => {
-              // @ts-ignore
-              return { ...prev, [key]: { ...value, translate: false } }
-            },
-            {}
-          ),
-        },
-        allIds: [...defaultHeaders.allIds, ...props.additionalHeaders.allIds],
-      }
-    }
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: getHeaders(),
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
+<script setup lang="ts">
+const localePath = useLocalePath();
 </script>
