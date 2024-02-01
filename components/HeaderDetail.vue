@@ -18,6 +18,7 @@
     <template #before>
       <div v-if="$vuetify.display.smAndUp" class="d-flex px-0 px-sm-3 pb-0">
         <v-btn
+          v-if="hasPrevNext"
           id="previous-id"
           variant="plain"
           icon
@@ -50,6 +51,7 @@
           {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
         </div>
         <v-btn
+          v-if="hasPrevNext"
           id="next-id"
           icon
           variant="plain"
@@ -84,7 +86,6 @@ const props = defineProps({
   },
   ids: {
     type: Object,
-    required: false,
     default: () => ({}),
   },
   title: {
@@ -119,6 +120,10 @@ const nextName = computed(() => {
   return props.ids?.next?.name;
 });
 
+const hasPrevNext = computed(() => {
+  return props.ids?.prev && props.ids?.next;
+});
+
 onBeforeMount(() => {
   if (props.arrowKeys) window.addEventListener("keyup", handleKeyup);
 });
@@ -137,7 +142,7 @@ function handleKeyup(e) {
       router.push(
         localePath({
           params: { ...route.params, id: props.ids.prev.id },
-        })
+        }),
       );
     }
   } else if (e.keyCode === 39) {
@@ -147,7 +152,7 @@ function handleKeyup(e) {
       router.push(
         localePath({
           params: { ...route.params, id: props.ids.next.id },
-        })
+        }),
       );
     }
   }
