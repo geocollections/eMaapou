@@ -1,9 +1,10 @@
 <template>
   <base-data-table v-bind="$attrs">
-    <template #item.preparation_number="{ item }">
+    <template #item.preparation_number="{ item, index }">
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'preparation-id', params: { id: item.id } })"
+        @click="emit('click:row', index)"
       >
         {{ item.preparation_number }}
       </nuxt-link>
@@ -69,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(["click:row"]);
 const localePath = useLocalePath();
 const { $translate } = useNuxtApp();
 </script>

@@ -6,7 +6,7 @@
         :title="
           $translate({ et: drillcore.drillcore, en: drillcore.drillcore_en })
         "
-        :search-to="localePath({ path: '/locality', query: getQueryParams() })"
+        :search-to="localePath({ path: '/drillcore', query: getQueryParams() })"
         @click:next="searchPosition++"
         @click:previous="searchPosition--"
       />
@@ -187,10 +187,8 @@
 </template>
 
 <script setup lang="ts">
-import isEmpty from "lodash/isEmpty";
-import isNull from "lodash/isNull";
 import type { RouteLocationRaw } from "vue-router";
-import { type Tab, TABS_DRILLCORE } from "~/constants";
+import { TABS_DRILLCORE } from "~/constants";
 const { $hydrateTab, $translate, $geoloogiaFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
