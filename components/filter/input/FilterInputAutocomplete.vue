@@ -1,10 +1,5 @@
 <template>
-  <v-expansion-panel
-    ref="panel"
-    bg-color="transparent"
-    elevation="0"
-    :rounded="0"
-  >
+  <v-expansion-panel bg-color="transparent" elevation="0" :rounded="0">
     <v-expansion-panel-title
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
@@ -137,6 +132,10 @@ const props = defineProps({
     type: Number,
     default: 8,
   },
+  primary: {
+    type: String,
+    default: "name",
+  },
   queryFunction: {
     type: Function as PropType<
       ({
@@ -170,10 +169,8 @@ const pagination = ref({
 const showPagination = computed(() => props.perPage > -1);
 
 const selectedItems = ref<Suggestion[]>([]);
-const panel = ref();
 
 const selectedIds = computed(() => selectedItems.value.map((i) => i.id));
-const selectedNames = computed(() => selectedItems.value.map((i) => i.name));
 
 if (props.modelValue.length > 0) {
   selectedItems.value = await props.hydrationFunction(props.modelValue);
@@ -191,7 +188,7 @@ const { data: suggestions, refresh } = await useAsyncData(
     return await props.queryFunction({
       query: query.value,
       pagination: pagination.value,
-      values: selectedNames.value,
+      values: selectedIds.value,
     });
   },
 );

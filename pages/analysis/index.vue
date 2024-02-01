@@ -2,14 +2,14 @@
   <search>
     <template #title>
       <header-search
-        :title="$t('locality.pageTitle')"
+        :title="$t('analysis.pageTitle')"
         :count="data?.response.numFound ?? 0"
-        :icon="mdiMapMarker"
+        :icon="mdiTestTube"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-locality
+      <search-form-analysis
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -30,7 +30,7 @@
           border-bottom: 1px solid lightgray;
         "
       >
-        <data-table-locality
+        <data-table-analysis
           :show-search="false"
           :items="data?.response.docs ?? []"
           :count="data?.response.numFound ?? 0"
@@ -50,16 +50,15 @@
 </template>
 
 <script setup lang="ts">
-import { mdiMapMarker } from "@mdi/js";
-import type { LocationQueryRaw } from "vue-router";
+import { mdiTestTube } from "@mdi/js";
 
-const localitiesStore = useLocalities();
+const analysesStore = useAnalyses();
 const {
   handleHeadersReset,
   handleHeadersChange,
   setStateFromQueryParams,
   getQueryParams,
-} = localitiesStore;
+} = analysesStore;
 const {
   solrSort,
   solrQuery,
@@ -68,7 +67,7 @@ const {
   headers,
   searchPosition,
   resultsCount,
-} = storeToRefs(localitiesStore);
+} = storeToRefs(analysesStore);
 
 const route = useRoute();
 
@@ -80,7 +79,7 @@ const {
   refresh: refreshLocalities,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>("/locality", {
+}>("/analysis", {
   query: computed(() => ({
     // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
@@ -88,12 +87,11 @@ const {
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
-      sort: solrSort.value ?? "locality asc",
+      sort: solrSort.value,
     },
   })),
   watch: false,
 });
-
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() as LocationQueryRaw });
@@ -123,4 +121,23 @@ function handleClickRow(index: number) {
   searchPosition.value =
     index + getOffset(options.value.page, options.value.itemsPerPage);
 }
+// export default defineComponent({
+//   head() {
+//     return {
+//       title: this.$t('analysis.pageTitle') as string,
+//       meta: [
+//         {
+//           property: 'og:title',
+//           content: this.$t('analysis.pageTitle') as string,
+//           hid: 'og:title',
+//         },
+//         {
+//           property: 'og:url',
+//           hid: 'og:url',
+//           content: this.$route.path,
+//         },
+//       ],
+//     }
+//   },
+// })
 </script>

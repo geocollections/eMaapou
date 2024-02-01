@@ -8,7 +8,7 @@ export const useAutocomplete = (
     filterExclude,
     solrParams,
     containsParser,
-    primary = "name",
+    primary = "id",
   }: {
     nameField: string | { et: string; en: string };
     idField: string;
@@ -91,13 +91,20 @@ export const useAutocomplete = (
     const pivot = filterExclude
       ? `{!ex=${filterExclude}}${suggestionsPivot.value}`
       : `${suggestionsPivot.value}`;
+    const filters =
+      query.length > 0
+        ? [
+            ...(solrParams?.filter?.value ?? []),
+            `${translatedNameField.value}:*${query}*`,
+          ]
+        : solrParams?.filter?.value ?? [];
 
     const res = await $solrFetch(path, {
       query: {
         facet: "true",
         "facet.pivot": pivot,
-        [`f.${primaryField.value}.facet.contains`]: parseContains(query),
-        [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
+        // [`f.${primaryField.value}.facet.contains`]: parseContains(query),
+        // [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
         [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
         "facet.limit": pagination.perPage,
         "facet.sort": "count",
@@ -105,7 +112,7 @@ export const useAutocomplete = (
           (pagination.page - 1) * pagination.perPage,
         json: {
           query: solrParams?.query?.value,
-          filter: solrParams?.filter?.value,
+          filter: filters,
           limit: 0,
         },
       },

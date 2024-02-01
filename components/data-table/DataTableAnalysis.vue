@@ -1,9 +1,10 @@
 <template>
   <base-data-table v-bind="$attrs" :headers="filteredHeaders">
-    <template #item.id="{ item }">
+    <template #item.id="{ item, index }">
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
+        @click="emit('click:row', index)"
       >
         {{ item.id }}
       </nuxt-link>
@@ -71,6 +72,8 @@
 import round from "lodash/round";
 import type { Header } from "~/constants";
 
+const emit = defineEmits(["click:row"]);
+
 const props = withDefaults(
   defineProps<{
     hideDepth?: boolean;
@@ -81,7 +84,7 @@ const props = withDefaults(
     hideDepth: false,
     hideLocality: false,
     hideSample: false,
-  }
+  },
 );
 
 const localePath = useLocalePath();

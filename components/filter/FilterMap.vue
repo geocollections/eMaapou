@@ -48,9 +48,6 @@
 </template>
 
 <script setup lang="ts">
-import MapSearch from "~/components/map/MapSearch.vue";
-import type { MapMarker } from "~/types/map";
-
 const props = defineProps({
   items: {
     type: Array as PropType<any[]>,

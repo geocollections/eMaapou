@@ -1,10 +1,5 @@
 <template>
-  <v-expansion-panel
-    ref="panel"
-    bg-color="transparent"
-    elevation="0"
-    :rounded="0"
-  >
+  <v-expansion-panel bg-color="transparent" elevation="0" :rounded="0">
     <v-expansion-panel-title
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
@@ -76,7 +71,6 @@ const emit = defineEmits(["update:model-value"]);
 
 const internalValue = ref("");
 const selectedItems = ref(props.modelValue);
-const panel = ref();
 watch(
   () => props.modelValue,
   (newVal) => {

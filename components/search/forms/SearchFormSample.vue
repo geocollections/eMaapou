@@ -69,42 +69,6 @@
           @update:model-value="handleUpdate"
           :per-page="-1"
         />
-        <!--   <filter-input-autocomplete-new -->
-        <!--     v-model="locality" -->
-        <!--     :title="$t('filters.locality').toString()" -->
-        <!--     :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
-        <!--     :query-function="querySuggestionsLocality" -->
-        <!--   /> -->
-        <!--   <filter-map -->
-        <!--     v-model="map" -->
-        <!--     sample-overlay -->
-        <!--     :items="$accessor.search.sample.items" -->
-        <!--   /> -->
-        <!--   <filter-input-range -->
-        <!--     v-model="depth" -->
-        <!--     :label="$t('filters.depth').toString()" -->
-        <!--     interval-labels="intervals.depth" -->
-        <!--     :step="0.01" -->
-        <!--   /> -->
-        <!--   <filter-input-autocomplete-new -->
-        <!--     v-model="stratigraphyHierarchy" -->
-        <!--     :title="$t('filters.stratigraphyHierarchy').toString()" -->
-        <!--     :query-field=" -->
-        <!--       $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
-        <!--     " -->
-        <!--     :query-function="querySuggestionsStratigraphy" -->
-        <!--   /> -->
-        <!--   <filter-input-autocomplete-new -->
-        <!--     v-model="rockHierarchy" -->
-        <!--     :title="$t('filters.rockHierarchySpecimen').toString()" -->
-        <!--     :query-field="$i18n.locale === 'et' ? 'rock' : 'rock_en'" -->
-        <!--     :query-function="querySuggestionsRock" -->
-        <!--   /> -->
-        <!--   <filter-input-text -->
-        <!--     v-model="collector" -->
-        <!--     :title="$t('filters.collector').toString()" -->
-        <!--   /> -->
-        <!--   <filter-institution v-model="institutions" /> -->
       </v-expansion-panels>
     </v-form>
   </div>
@@ -142,7 +106,7 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy } =
   });
 const { suggest: suggestInstitution, hydrate: hydrateInstitution } =
   useAutocomplete("/sample", {
-    idField: "database_id",
+    idField: "database_id_s",
     nameField: "acronym",
     filterExclude: "institution",
     solrParams: { query: solrQuery, filter: solrFilters },

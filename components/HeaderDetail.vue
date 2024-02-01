@@ -121,7 +121,7 @@ const nextName = computed(() => {
 });
 
 const hasPrevNext = computed(() => {
-  return props.ids?.prev && props.ids?.next;
+  return props.ids?.prev || props.ids?.next;
 });
 
 onBeforeMount(() => {
