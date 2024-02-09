@@ -21,6 +21,18 @@ export function idValueParser(separator: string) {
     );
 }
 
+export const dateArrayValueParser = z
+  .string()
+  .array()
+  .array()
+  .transform((val) =>
+    val.length > 0
+      ? uniq(val)
+          .map((v) => v.join("~"))
+          .join(",")
+      : undefined,
+  );
+
 export const rangeValueParser = z
   .number()
   .nullable()

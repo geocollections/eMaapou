@@ -57,20 +57,20 @@
                   v-if="image.uuid_filename"
                   max-height="400"
                   min-width="72"
-                  :contain="!cropImages"
+                  :cover="cropImages"
                   aspect-ratio="1"
                   :lazy-src="
-                    $img(
+                    img(
                       `${image.uuid_filename}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
                   :src="
-                    $img(
+                    img(
                       `${image.uuid_filename}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
                 >
@@ -101,22 +101,22 @@
             </template>
 
             <span>
-              <b>{{ $t('photo.id') }}: </b> {{ image.id }}<br />
+              <b>{{ $t("photo.id") }}: </b> {{ image.id }}<br />
               <span v-if="image.date_created || image.date_created_free">
-                <b>{{ $t('photo.date') }}: </b>
+                <b>{{ $t("photo.date") }}: </b>
                 <span v-if="image.date_created">{{
-                  image.date_created.split('T')[0]
+                  image.date_created.split("T")[0]
                 }}</span>
                 <span v-else>{{ image.date_created_free }}</span>
                 <br />
               </span>
               <span v-if="image.agent || image.author_free">
-                <b>{{ $t('photo.author') }}: </b
+                <b>{{ $t("photo.author") }}: </b
                 >{{ image.agent || image.author_free }}
                 <br />
               </span>
               <span v-if="image.image_number">
-                <b>{{ $t('photo.number') }}: </b>
+                <b>{{ $t("photo.number") }}: </b>
                 {{ image.image_number }}
                 <br />
               </span>
@@ -128,53 +128,44 @@
   </v-card>
 </template>
 
-<script>
-import { mdiFileImageOutline } from '@mdi/js'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
-export default {
-  name: 'ImageView',
-  components: { BaseDataTablePagination },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-      }),
-    },
+<script setup lang="ts">
+import { mdiFileImageOutline } from "@mdi/js";
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => [],
   },
-  data() {
-    return {
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
-      cropImages: true,
-    }
+  count: {
+    type: Number,
+    default: 0,
   },
-  computed: {
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
-    },
-    icons() {
-      return {
-        mdiFileImageOutline,
-      }
-    },
+  options: {
+    type: Object,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
   },
-  methods: {
-    updateOptions(event) {
-      this.$emit('update', { options: event })
-    },
-  },
-}
+});
+
+const emit = defineEmits(["update"]);
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+const img = useImage();
+
+const footerProps = {
+  showFirstLastPage: true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+};
+const cropImages = ref(true);
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+const updateOptions = (event) => {
+  emit("update", { options: event });
+};
 </script>

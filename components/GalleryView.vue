@@ -27,21 +27,21 @@
               <v-hover v-slot="{ hover }">
                 <v-img
                   :src="
-                    $img(
+                    img(
                       `${item.uuid_filename}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
                   :lazy-src="
-                    $img(
+                    img(
                       `${item.uuid_filename}`,
                       { size: 'small' },
-                      { provider: 'geocollections' }
+                      { provider: 'geocollections' },
                     )
                   "
-                  max-width="100"
-                  min-width="72"
+                  width="100"
+                  cover
                   aspect-ratio="1"
                   :class="{
                     'elevation-4': hover,
@@ -81,10 +81,10 @@
               nuxt
               :to="localePath({ name: 'file-id', params: { id: item.id } })"
               :src="
-                $img(
+                img(
                   `${item.uuid_filename}`,
                   { size: 'medium' },
-                  { provider: 'geocollections' }
+                  { provider: 'geocollections' },
                 )
               "
             />
@@ -100,7 +100,7 @@
                   items[activeIndex].agent || items[activeIndex].author_free
                 "
               >
-                <b>{{ $t('photo.author') }}: </b
+                <b>{{ $t("photo.author") }}: </b
                 >{{
                   items[activeIndex].agent || items[activeIndex].author_free
                 }}
@@ -111,9 +111,9 @@
                   items[activeIndex].date_created_free
                 "
               >
-                <b>{{ $t('photo.date') }}: </b>
+                <b>{{ $t("photo.date") }}: </b>
                 <span v-if="items[activeIndex].date_created">{{
-                  items[activeIndex].date_created.split('T')[0]
+                  items[activeIndex].date_created.split("T")[0]
                 }}</span>
                 <span v-else>{{ items[activeIndex].date_created_free }}</span>
               </div>
@@ -131,7 +131,7 @@
                     small
                     color="primary darken-2"
                   >
-                    {{ icons.mdiFileDownloadOutline }}
+                    {{ mdiFileDownloadOutline }}
                   </v-icon>
                 </a>
                 <span v-if="index < imageSizes.length - 1">| </span>
@@ -144,92 +144,88 @@
   </v-card>
 </template>
 
-<script>
-import { mdiFileDownloadOutline } from '@mdi/js'
-import BaseDataTablePagination from '~/components/base/BaseDataTablePagination.vue'
+<script setup lang="ts">
+import { mdiFileDownloadOutline } from "@mdi/js";
+import { useDisplay } from "vuetify";
 
-export default {
-  name: 'GalleryView',
-  components: { BaseDataTablePagination },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-      }),
-    },
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => [],
   },
-  data() {
-    return {
-      activeIndex: 0,
-      imageSizes: ['small', 'medium', 'large', 'original'],
-      footerProps: {
-        showFirstLastPage: true,
-        'items-per-page-options': [10, 25, 50, 100, 250, 500, 1000],
-        'items-per-page-text': this.$t('table.itemsPerPage'),
-      },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Object,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
+  },
+});
+
+const emit = defineEmits(["update"]);
+const { t } = useI18n();
+const localePath = useLocalePath();
+const img = useImage();
+
+const activeIndex = ref(0);
+const imageSizes = ref(["small", "medium", "large", "original"]);
+const footerProps = {
+  showFirstLastPage: true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+};
+
+const display = useDisplay();
+
+const carouselHeight = computed(() => {
+  console.log(display);
+  if (display.xs.value) return "35vh";
+  else if (display.sm.value) return "40vh";
+  else return "600px";
+});
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+watch(
+  () => props.items,
+  () => {
+    activeIndex.value = 0;
+  },
+);
+
+onBeforeMount(() => {
+  window.addEventListener("keyup", handleKeyup);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keyup", handleKeyup);
+});
+
+function handleThumbnailClick(newIndex) {
+  activeIndex.value = newIndex;
+}
+
+function handleKeyup(e) {
+  if (props.items?.length > 0) {
+    if (e.keyCode === 37) {
+      // ArrowLeft
+      if (activeIndex.value === 0) activeIndex.value = props.items.length - 1;
+      else activeIndex.value -= 1;
+    } else if (e.keyCode === 39) {
+      // ArrowRight
+      if (activeIndex.value === props.items.length - 1) activeIndex.value = 0;
+      else activeIndex.value += 1;
     }
-  },
-  computed: {
-    carouselHeight() {
-      if (this.$vuetify.breakpoint.xsOnly) return '35vh'
-      else if (this.$vuetify.breakpoint.smOnly) return '40vh'
-      else return '600px'
-    },
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) }
-    },
-    icons() {
-      return {
-        mdiFileDownloadOutline,
-      }
-    },
-  },
-  watch: {
-    items() {
-      this.activeIndex = 0
-    },
-  },
-  created() {
-    this.$emit('update', { options: { ...this.options } })
-  },
-  beforeMount() {
-    window.addEventListener('keyup', this.handleKeyup)
-  },
-  beforeDestroy() {
-    window.removeEventListener('keyup', this.handleKeyup)
-  },
-  methods: {
-    handleThumbnailClick(newIndex) {
-      this.activeIndex = newIndex
-    },
+  }
+}
 
-    handleKeyup(e) {
-      if (this.items?.length > 0) {
-        if (e.keyCode === 37) {
-          // ArrowLeft
-          if (this.activeIndex === 0) this.activeIndex = this.items.length - 1
-          else this.activeIndex -= 1
-        } else if (e.keyCode === 39) {
-          // ArrowRight
-          if (this.activeIndex === this.items.length - 1) this.activeIndex = 0
-          else this.activeIndex += 1
-        }
-      }
-    },
-    updateOptions(event) {
-      this.$emit('update', { options: event })
-    },
-  },
+function updateOptions(event) {
+  emit("update", { options: event });
 }
 </script>
 
@@ -239,8 +235,10 @@ export default {
   /*box-shadow: 0 2px 4px -1px rgba(1, 87, 155, 0.8),*/
   /*  0 4px 5px 0 rgba(1, 87, 155, 0.56), 0 1px 10px 0 rgba(1, 87, 155, 0.44) !important;*/
 
-  box-shadow: 0 2px 4px -1px rgba(48, 145, 181, 0.8),
-    0 2px 5px 0 rgba(48, 145, 181, 0.56), 0 1px 5px 0 rgba(48, 145, 181, 0.44) !important;
+  box-shadow:
+    0 2px 4px -1px rgba(48, 145, 181, 0.8),
+    0 2px 5px 0 rgba(48, 145, 181, 0.56),
+    0 1px 5px 0 rgba(48, 145, 181, 0.44) !important;
 
   /* elevation-2 */
   /*box-shadow: 0 3px 1px -2px rgba(62, 163, 202, 0.4),*/

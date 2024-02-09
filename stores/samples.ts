@@ -59,11 +59,7 @@ export const useSamples = defineStore(
       stratigraphy: {
         type: "idList",
         value: [],
-        fields: [
-          "stratigraphy_hierarchy",
-          "age_hierarchy",
-          "lithostratigraphy_hierarchy",
-        ],
+        fields: ["stratigraphy_hierarchy_descendent_paths"],
         tag: "stratigraphy",
         alphaNumeric: false,
       } as StringIdListFilter,

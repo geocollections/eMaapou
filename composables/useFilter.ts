@@ -16,7 +16,8 @@ export type FilterType =
   | "multiHierarchyList"
   | "boolean"
   | "range"
-  | "rangeAlt";
+  | "rangeAlt"
+  | "dateList";
 
 export type BaseFilter = {
   type: FilterType;
@@ -70,6 +71,10 @@ export type RangeAltFilter = Omit<BaseFilter, "value"> & {
   type: "rangeAlt";
   value: [null | number, null | number];
 };
+export type DateListFilter = Omit<BaseFilter, "value"> & {
+  type: "dateList";
+  value: string[][];
+};
 
 export type FilterUnion =
   | TextFilter
@@ -80,7 +85,8 @@ export type FilterUnion =
   | GeomFilter
   | RangeFilter
   | BooleanFilter
-  | RangeAltFilter;
+  | RangeAltFilter
+  | DateListFilter;
 
 export const useFilters = <T extends { [K: string]: FilterUnion }>(
   initFilters: T,
@@ -140,6 +146,8 @@ export const useFilters = <T extends { [K: string]: FilterUnion }>(
         return filter.value.length > 0;
       case "idList":
         return filter.value.length > 0;
+      case "dateList":
+        return filter.value.length > 0;
       case "multiHierarchyList":
         return filter.value.length > 0;
       case "range":
@@ -183,6 +191,20 @@ export const useFilters = <T extends { [K: string]: FilterUnion }>(
 
         return filter.fields
           .map((field: string) => `${field}:[${start} TO ${end}]`)
+          .join(" OR ");
+      }
+      case "dateList": {
+        return filter.fields
+          .map((field: string) => {
+            return filter.value
+              .map((v: string[]) => {
+                if (v.length > 1) {
+                  return `(${field}:[${v[0]}T00\\:00\\:00Z TO ${v[1]}T23\\:59\\:59Z])`;
+                }
+                return `(${field}:[${v[0]}T00\\:00\\:00Z TO ${v[0]}T23\\:59\\:59Z])`;
+              })
+              .join(" OR ");
+          })
           .join(" OR ");
       }
       case "rangeAlt": {

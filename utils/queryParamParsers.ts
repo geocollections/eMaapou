@@ -41,3 +41,8 @@ export const geometryParamParser = z
   .string()
   .transform((val) => JSON.parse(val))
   .catch(null);
+
+export const dateArrayParamParser = z
+  .string()
+  .transform((val) => val.split(",").map((v) => v.split("~")))
+  .catch((_ctx) => []);

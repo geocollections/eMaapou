@@ -40,24 +40,27 @@
           @update:model-value="handleUpdate"
           value="depth"
         />
-        <filter-input-autocomplete
+        <filter-input-hierarchy
           v-model="filters.stratigraphy.value"
           ref="filterStratigraphy"
+          root-value="1"
           :title="$t('filters.stratigraphyHierarchy')"
-          :query-function="suggestStratigraphy"
           :hydration-function="hydrateStratigraphy"
+          :get-children="getStratigraphyChildren"
           @update:model-value="handleUpdate"
           value="stratigraphy"
         />
-        <filter-input-autocomplete
-          v-model="filters.rock.value"
-          ref="filterRock"
-          :title="$t('filters.rockHierarchy')"
-          :query-function="suggestRock"
-          :hydration-function="hydrateRock"
-          @update:model-value="handleUpdate"
-          value="rock"
-        />
+        <!-- TODO: This is not finished, have to think how to handle multiple hierarchy string on one rock -->
+        <!-- <filter-input-hierarchy -->
+        <!--   v-model="filters.rock.value" -->
+        <!--   ref="filterRock" -->
+        <!--   root-value="" -->
+        <!--   :title="$t('filters.rockHierarchy')" -->
+        <!--   :hydration-function="hydrateRock" -->
+        <!--   :get-children="getRockChildren" -->
+        <!--   @update:model-value="handleUpdate" -->
+        <!--   value="rock" -->
+        <!-- /> -->
         <filter-input-autocomplete
           v-model="filters.collector.value"
           ref="filterCollector"
@@ -84,6 +87,7 @@
 
 <script setup lang="ts">
 import type { FilterInputAutocomplete } from "#build/components";
+import type { TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -103,13 +107,6 @@ const { suggest: suggestCollector, hydrate: hydrateCollector } =
     idField: "collector_id_s",
     nameField: "collector",
     filterExclude: "collector",
-    solrParams: { query: solrQuery, filter: solrFilters },
-  });
-const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy } =
-  useAutocomplete("/sample", {
-    idField: "stratigraphy_hierarchy",
-    nameField: { et: "stratigraphy", en: "stratigraphy_en" },
-    filterExclude: "stratigraphy",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
 const { suggest: suggestInstitution, hydrate: hydrateInstitution } =
@@ -180,46 +177,241 @@ async function suggestRock({
   });
 }
 
-async function hydrateRock(values: string[]) {
-  const nameField = locale.value === "et" ? "rock" : "rock_en";
-  const facets = values.reduce((prev, id) => {
-    prev[id] = {
+// async function hydrateRock(values: string[]) {
+//   const nameField = locale.value === "et" ? "rock" : "rock_en";
+//   const facets = values.reduce((prev, id) => {
+//     prev[id] = {
+//       type: "query",
+//       q: `rock_id:${id} OR hierarchy_string_rock:*-${id}-*`,
+//       facet: {
+//         name: {
+//           type: "terms",
+//           field: nameField,
+//           limit: 1,
+//           domain: {
+//             query: "*:*",
+//             filter: `rock_id:${id}`,
+//           },
+//         },
+//       },
+//     };
+//     return prev;
+//   }, {});
+//
+//   const res = await $solrFetch("/sample", {
+//     query: {
+//       json: {
+//         limit: 0,
+//         query: solrQuery.value,
+//         filter: solrFilters?.value,
+//         facet: {
+//           ...facets,
+//         },
+//       },
+//     },
+//   });
+//
+//   return values.map((id) => ({
+//     id,
+//     name: res.facets[id].name.buckets[0].val,
+//     count: res.facets[id].count,
+//   }));
+// }
+async function hydrateStratigraphy(values: string[]) {
+  if (values.length < 1) {
+    return [];
+  }
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_string:(${values.join(" ")})`],
+      limit: values.length,
+    },
+  });
+  const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    prev[doc.id] = {
       type: "query",
-      q: `rock_id:${id} OR hierarchy_string_rock:*-${id}-*`,
-      facet: {
-        name: {
-          type: "terms",
-          field: nameField,
-          limit: 1,
-          domain: {
-            query: "*:*",
-            filter: `rock_id:${id}`,
-          },
-        },
-      },
+      q: `stratigraphy_hierarchy_descendent_paths:${doc.hierarchy_string}`,
     };
     return prev;
   }, {});
 
-  const res = await $solrFetch("/sample", {
+  const countRes = await $solrFetch("/sample", {
     query: {
       json: {
         limit: 0,
         query: solrQuery.value,
-        filter: solrFilters?.value,
+        filter: solrFilters.value,
+        facet: facetQueries,
+      },
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.id,
+    name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+    value: doc.hierarchy_string,
+    count: countRes.facets[doc.id].count,
+  }));
+}
+
+async function getStratigraphyChildren(value: string) {
+  const depth = value.split("-").length;
+  const prefix = `${depth}/${value}`;
+
+  const countRes = await $solrFetch("/sample", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery.value,
+        filter: solrFilters.value,
         facet: {
-          ...facets,
+          categories: {
+            type: "terms",
+            prefix,
+            limit: -1,
+            field: "stratigraphy_categories",
+            domain: {
+              excludeTags: "stratigraphy",
+            },
+          },
         },
       },
     },
   });
 
-  return values.map((id) => ({
-    id,
-    name: res.facets[id].name.buckets[0].val,
-    count: res.facets[id].count,
+  if (countRes.facets.categories.buckets.length < 1) {
+    return [];
+  }
+
+  const values = countRes.facets.categories.buckets.map((bucket: any) => {
+    const [_depth, value] = bucket.val.split("/");
+    return value;
+  });
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_string:(${values.join(" OR ")})`],
+      rows: values.length,
+    },
+  });
+
+  return countRes.facets.categories.buckets.map((bucket: any) => {
+    const [_depth, value] = bucket.val.split("/");
+    const doc = res.response.docs.find(
+      (doc: any) => doc.hierarchy_string === value,
+    );
+    return {
+      id: doc.id,
+      name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+      children: [],
+      selected: filters.value.stratigraphy.value.includes(value),
+      childrenLoaded: false,
+      showChildren: false,
+      value,
+      count: bucket.count,
+      leaf: doc.leaf_node,
+    };
+  });
+}
+
+async function hydrateRock(values: string[]) {
+  if (values.length < 1) {
+    return [];
+  }
+  const res = await $solrFetch("/rock", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_strings:(${values.join(" ")})`],
+      limit: values.length,
+    },
+  });
+  const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    prev[doc.id] = {
+      type: "query",
+      q: `rock_categories:${doc.hierarchy_strings[0]}`,
+    };
+    return prev;
+  }, {});
+
+  const countRes = await $solrFetch("/sample", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery.value,
+        filter: solrFilters.value,
+        facet: facetQueries,
+      },
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.id,
+    name: { et: doc.name, en: doc.name_en },
+    value: doc.hierarchy_string,
+    count: countRes.facets[doc.id].count,
   }));
 }
+async function getRockChildren(value: string) {
+  const depth = value.split("-").length;
+  const prefix = value.length < 1 ? "0/" : `${depth}/${value}`;
+
+  const countRes = await $solrFetch("/sample", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery.value,
+        filter: solrFilters.value,
+        facet: {
+          categories: {
+            type: "terms",
+            prefix,
+            limit: -1,
+            field: "rock_categories",
+            domain: {
+              excludeTags: "rock",
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (countRes.facets.categories.buckets.length < 1) {
+    return [];
+  }
+
+  const values = countRes.facets.categories.buckets.map((bucket: any) => {
+    const [_depth, value] = bucket.val.split("/");
+    return value;
+  });
+  const res = await $solrFetch("/rock", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_strings:(${values.join(" OR ")})`],
+      rows: values.length,
+    },
+  });
+
+  return countRes.facets.categories.buckets.map((bucket: any) => {
+    const [_depth, value] = bucket.val.split("/");
+    const doc = res.response.docs.find((doc: any) =>
+      doc.hierarchy_strings.includes(value),
+    );
+    return {
+      id: doc.id,
+      name: { et: doc.name, en: doc.name_en },
+      children: [],
+      selected: filters.value.rock.value.includes(value),
+      childrenLoaded: false,
+      showChildren: false,
+      value,
+      count: bucket.count,
+      leaf: false,
+    };
+  });
+}
+console.log(await getRockChildren(""));
 
 function handleReset() {
   emit("reset");

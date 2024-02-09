@@ -263,6 +263,6 @@ defineExpose({
 }
 
 .checkbox {
-  accent-color: var(--v-accent-base);
+  accent-color: rgb(var(--v-theme-accent));
 }
 </style>
