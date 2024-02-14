@@ -346,7 +346,6 @@ const { data, pending, error } = useLazyAsyncData("site", async () => {
       nest: 2,
     },
   }).then((res) => {
-    console.log(res);
     return res.results.map((image: any) => ({
       id: image.attachment.id,
       filename: image.attachment.filename,

@@ -182,7 +182,6 @@ const footerProps = {
 const display = useDisplay();
 
 const carouselHeight = computed(() => {
-  console.log(display);
   if (display.xs.value) return "35vh";
   else if (display.sm.value) return "40vh";
   else return "600px";

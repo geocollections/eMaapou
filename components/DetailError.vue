@@ -2,7 +2,6 @@
   <v-row justify="center">
     <v-col sm="8" md="6" class="text-center">
       <h1 class="text-h4 mb-5">
-        {{ JSON.stringify(error) }}
         {{ title }}
       </h1>
 
@@ -89,7 +88,7 @@ export default {
   methods: {
     handleSearch() {
       this.$router.push(
-        this.localePath({ name: "search", query: { q: this.query } })
+        this.localePath({ name: "search", query: { q: this.query } }),
       );
     },
   },

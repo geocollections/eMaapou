@@ -114,6 +114,8 @@ export default {
     loading: "Laadimine",
     hideFilters: "Peida filtrid",
     showFilters: "Ava filtrid",
+    hideSimilar: "Peida sarnased",
+    showSimilar: "Ava sarnased",
   },
   link: {
     sarvAPI: "Avalik API",
@@ -469,6 +471,7 @@ export default {
   sample: {
     pageTitle: "Proovid",
     landingCard: "proovi",
+    general: "Üldinfo",
     id: "ID",
     name: "Name",
     area: "Area",

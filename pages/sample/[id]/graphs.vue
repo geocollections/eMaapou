@@ -7,54 +7,42 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import ChartTaxonPie from '~/components/chart/ChartTaxonPie.vue'
+<script setup lang="ts">
+const props = defineProps({
+  sampleObject: {
+    type: Object,
+    default: () => {},
+  },
+});
 
-export default defineComponent({
-  components: { ChartTaxonPie },
-  props: {
-    sampleObject: {
-      type: Object,
-      default: () => {},
+const { t } = useI18n();
+const route = useRoute();
+const { $geoloogiaFetch } = useNuxtApp();
+
+const chartTitle = computed(() => {
+  return `${t("sample.number")} ${
+    props.sampleObject?.number ||
+    props.sampleObject?.number_additional ||
+    props.sampleObject?.number_field ||
+    props.sampleObject?.id
+  }`;
+});
+
+const { data: taxons } = useAsyncData("taxons", async () => {
+  const resultsResponse = await $geoloogiaFetch("/taxon_list/", {
+    query: {
+      sample: route.params.id,
+      fields: "id,name,taxon,frequency",
+      nest: 1,
+      offset: 0,
+      limit: 1000,
     },
-  },
-  data() {
+  });
+  return resultsResponse.results.map((item: any) => {
     return {
-      taxons: [] as any[],
-    }
-  },
-  async fetch() {
-    const resultsResponse = await this.$services.sarvREST.getResourceList(
-      'taxon_list',
-      {
-        defaultParams: {
-          sample: this.$route.params.id,
-          fields: 'id,name,taxon,frequency',
-          nest: 1,
-        },
-        options: {
-          page: 1,
-          itemsPerPage: 1000,
-        },
-      }
-    )
-    this.taxons = resultsResponse.items.map((item: any) => {
-      return {
-        value: item.frequency,
-        name: item.taxon?.taxon ?? item.name,
-      }
-    })
-  },
-  computed: {
-    chartTitle(): string {
-      return `${this.$t('sample.number')} ${
-        this.sampleObject?.number ||
-        this.sampleObject?.number_additional ||
-        this.sampleObject?.number_field ||
-        this.sampleObject?.id
-      }`
-    },
-  },
-})
+      value: item.frequency,
+      name: item.taxon?.taxon ?? item.name,
+    };
+  });
+});
 </script>

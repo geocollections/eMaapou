@@ -51,16 +51,16 @@
           value="stratigraphy"
         />
         <!-- TODO: This is not finished, have to think how to handle multiple hierarchy string on one rock -->
-        <!-- <filter-input-hierarchy -->
-        <!--   v-model="filters.rock.value" -->
-        <!--   ref="filterRock" -->
-        <!--   root-value="" -->
-        <!--   :title="$t('filters.rockHierarchy')" -->
-        <!--   :hydration-function="hydrateRock" -->
-        <!--   :get-children="getRockChildren" -->
-        <!--   @update:model-value="handleUpdate" -->
-        <!--   value="rock" -->
-        <!-- /> -->
+        <filter-input-hierarchy
+          v-model="filters.rock.value"
+          ref="filterRock"
+          root-value=""
+          :title="$t('filters.rockHierarchy')"
+          :hydration-function="hydrateRock"
+          :get-children="getRockChildren"
+          @update:model-value="handleUpdate"
+          value="rock"
+        />
         <filter-input-autocomplete
           v-model="filters.collector.value"
           ref="filterCollector"
@@ -87,7 +87,6 @@
 
 <script setup lang="ts">
 import type { FilterInputAutocomplete } from "#build/components";
-import type { TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -329,7 +328,7 @@ async function hydrateRock(values: string[]) {
   const facetQueries = res.response.docs.reduce((prev, doc: any) => {
     prev[doc.id] = {
       type: "query",
-      q: `rock_categories:${doc.hierarchy_strings[0]}`,
+      q: `rock_categories:*/${doc.hierarchy_strings[0]}*`,
     };
     return prev;
   }, {});
@@ -348,7 +347,7 @@ async function hydrateRock(values: string[]) {
   return res.response.docs.map((doc: any) => ({
     id: doc.id,
     name: { et: doc.name, en: doc.name_en },
-    value: doc.hierarchy_string,
+    value: doc.hierarchy_strings[0],
     count: countRes.facets[doc.id].count,
   }));
 }
@@ -411,7 +410,6 @@ async function getRockChildren(value: string) {
     };
   });
 }
-console.log(await getRockChildren(""));
 
 function handleReset() {
   emit("reset");

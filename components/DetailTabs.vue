@@ -2,9 +2,9 @@
   <v-tabs
     ref="tabsEl"
     class="tabs"
+    density="compact"
     :show-arrows="$vuetify.display.smAndUp"
     :direction="$vuetify.display.xs ? 'vertical' : 'horizontal'"
-    grow
   >
     <v-tab
       v-for="(item, index) in tabs"
@@ -20,23 +20,18 @@
         })
       "
       @click="handleTabChange"
-      >{{ $t(item.title, { number: item.count }) }}</v-tab
+      >{{ item.title }}</v-tab
     >
   </v-tabs>
   <slot :activeTabProps="activeTabProps" />
 </template>
 
 <script setup lang="ts">
-import type { RouteLocationRaw } from "vue-router";
 import type { Tab } from "~/constants";
 
 const props = defineProps({
   tabs: {
     type: Array as PropType<Tab[]>,
-    required: true,
-  },
-  initActiveTab: {
-    type: Object as PropType<RouteLocationRaw>,
     required: true,
   },
 });
@@ -47,12 +42,15 @@ const route = useRoute();
 const tabsEl = ref();
 
 const tabsDict = ref(
-  props.tabs.reduce((prev, tab) => {
-    return {
-      ...prev,
-      [tab.routeName]: tab,
-    };
-  }, {} as { [K: string]: Tab })
+  props.tabs.reduce(
+    (prev, tab) => {
+      return {
+        ...prev,
+        [tab.routeName]: tab,
+      };
+    },
+    {} as { [K: string]: Tab },
+  ),
 );
 const tabProps =
   getRouteBaseName(route) &&
@@ -67,7 +65,7 @@ watch(
   () => {
     activeTabProps.value =
       tabsDict.value[getRouteBaseName(route) as string].props;
-  }
+  },
 );
 
 function handleTabChange() {
@@ -90,7 +88,7 @@ function handleTabChange() {
   //   background-color: var(--v-accent-darken1);
   //   opacity: 0.2;
   // }
-  border-bottom: lightgray solid 1px;
+  // border-bottom: lightgray solid 1px;
 }
 
 .tab {

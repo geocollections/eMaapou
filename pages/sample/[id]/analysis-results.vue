@@ -1,5 +1,6 @@
 <template>
   <data-table-sample-analysis-result
+    class="border-b"
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"
     :options="options"

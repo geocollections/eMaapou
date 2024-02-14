@@ -9,7 +9,7 @@ export type Tab = {
   fields?: string;
   objectId?: string;
 };
-type ResourceTabs = {
+export type ResourceTabs = {
   byIds: { [K: string]: Tab };
   allIds: string[];
 };
@@ -547,7 +547,7 @@ export const TABS_SAMPLE: ResourceTabs = {
     analysis: {
       id: "analysis",
       isSolr: true,
-      routeName: "sample-id",
+      routeName: "sample-id-analyses",
       title: "sample.analyses",
       count: 0,
       props: {},

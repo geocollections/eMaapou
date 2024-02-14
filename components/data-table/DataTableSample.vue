@@ -81,6 +81,16 @@
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
+    <template #item.depth="{ item }">
+      <span style="font-family: monospace">
+        {{
+          formatDepthRange({
+            depthFrom: item.depth,
+            depthTo: item.depth_interval,
+          })
+        }}
+      </span>
+    </template>
     <template #item.image="{ item }">
       <thumbnail-image
         v-if="item.image_preview_url"
@@ -112,4 +122,23 @@ const openOverlay = (image: OverlayImage) => {
   overlayImage.value = image;
   showOverlay.value = true;
 };
+
+function formatDepthRange({
+  depthFrom,
+  depthTo,
+}: {
+  depthFrom?: number;
+  depthTo?: number;
+}) {
+  if (!depthFrom) {
+    return depthTo?.toFixed(2);
+  }
+  if (!depthTo) {
+    return depthFrom.toFixed(2);
+  }
+  if (depthFrom === depthTo) {
+    return depthFrom.toFixed(2);
+  }
+  return `${depthFrom.toFixed(2)} - ${depthTo.toFixed(2)}`;
+}
 </script>

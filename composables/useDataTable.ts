@@ -5,7 +5,7 @@ export function useDataTable({ initOptions, initHeaders }) {
   const options = ref(initOptions);
 
   const { headers, handleHeadersReset, handleHeadersChange } =
-    useHeaders(initHeaders);
+    useHeadersNew(initHeaders);
 
   const { locale } = useI18n();
   const solrSort = computed(() => {
@@ -55,11 +55,11 @@ export function useDataTable({ initOptions, initHeaders }) {
     sortBy: z
       .object({ key: z.string(), order: z.string().optional() })
       .array()
-      .transform((val) =>
-        val.length > 0
+      .transform((val) => {
+        return val.length > 0
           ? val.map((v) => `${v.key} ${v.order}`).join(",")
-          : undefined,
-      ),
+          : undefined;
+      }),
   });
 
   const query = ref("");

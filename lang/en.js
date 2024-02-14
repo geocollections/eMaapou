@@ -113,6 +113,8 @@ export default {
     loading: "Loading",
     hideFilters: "Hide filters",
     showFilters: "Show filters",
+    hideSimilar: "Hide similar",
+    showSimilar: "Show similar",
   },
   link: {
     github: "GitHub",
@@ -467,6 +469,7 @@ export default {
   sample: {
     pageTitle: "Samples",
     landingCard: "samples",
+    general: "General info",
     id: "ID",
     name: "Name",
     area: "Area",

@@ -1,4 +1,5 @@
 import isEqual from "lodash/isEqual";
+import type { RouteLocationRaw } from "vue-router";
 import type { RouteLocationNamedRaw } from "vue-router";
 import type { Tab } from "~/constants";
 
@@ -41,7 +42,7 @@ export function useRedirectInvalidTabRoute({
 
   const getValidTabRoute = (
     currentRoute: RouteLocationNamedRaw,
-    tabs: Tab[]
+    tabs: Tab[],
   ): RouteLocationNamedRaw => {
     if (tabs.length < 1) return currentRoute;
     const currentTab = tabs.find((tab) =>
@@ -53,8 +54,8 @@ export function useRedirectInvalidTabRoute({
         {
           name: tab.routeName,
           params: currentRoute.params,
-        }
-      )
+        },
+      ),
     );
     // If current tab is valid and contains items return the current route
     if (currentTab !== undefined && currentTab.count > 0) return currentRoute;
@@ -72,4 +73,26 @@ export function useRedirectInvalidTabRoute({
       params: currentRoute.params,
     };
   };
+}
+
+export function redirectInvalidTab({
+  redirectRoute,
+  tabs,
+}: {
+  redirectRoute: RouteLocationRaw;
+  tabs: Tab[];
+}) {
+  const route = useRoute();
+  const router = useRouter();
+  const getRouteBaseName = useRouteBaseName();
+
+  const isCurrentRouteValid = computed(() => {
+    return tabs.some((tab) => {
+      return tab.routeName === getRouteBaseName(route);
+    });
+  });
+
+  if (!isCurrentRouteValid.value) {
+    router.replace(redirectRoute);
+  }
 }

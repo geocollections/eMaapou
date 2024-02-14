@@ -1,5 +1,6 @@
 <template>
   <data-table-taxon-list
+    class="border-b"
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

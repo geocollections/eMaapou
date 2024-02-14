@@ -10,19 +10,18 @@
   </div>
 </template>
 
-<script>
-import VChart from 'vue-echarts'
-import { use } from 'echarts/core'
-import { PieChart } from 'echarts/charts'
-import deepmerge from 'deepmerge'
-import { mapFields } from 'vuex-map-fields'
-import { CanvasRenderer } from 'echarts/renderers'
+<script setup lang="ts">
+import VChart from "vue-echarts";
+import { use } from "echarts/core";
+import { PieChart } from "echarts/charts";
+import deepmerge from "deepmerge";
+import { CanvasRenderer } from "echarts/renderers";
 import {
   GridComponent,
   TitleComponent,
   LegendComponent,
   ToolboxComponent,
-} from 'echarts/components'
+} from "echarts/components";
 import {
   LEGEND_TOP,
   TITLE_FONT_SIZE,
@@ -30,7 +29,8 @@ import {
   TITLE_TOP,
   TITLE_TOP_SMALL,
   TOOLBOX_RIGHT,
-} from '~/constants'
+} from "~/constants";
+import { useDisplay } from "vuetify";
 use([
   PieChart,
   CanvasRenderer,
@@ -38,93 +38,83 @@ use([
   TitleComponent,
   LegendComponent,
   ToolboxComponent,
-])
-export default {
-  name: 'ChartTaxonPie',
-  components: { VChart },
-  props: {
-    chartTitle: {
-      type: String,
-      required: true,
-      default: 'Chart title',
-    },
-    taxonData: {
-      type: Array,
-      required: true,
+]);
+
+const props = defineProps({
+  chartTitle: {
+    type: String,
+    required: true,
+    default: "Chart title",
+  },
+  taxonData: {
+    type: Array,
+    required: true,
+  },
+});
+
+const display = useDisplay();
+
+const defaultOptions = ref({
+  title: {
+    text: "Chart title",
+    left: "center",
+    top: display.xs.value ? TITLE_TOP_SMALL : TITLE_TOP,
+    textStyle: {
+      fontSize: display.xs.value ? TITLE_FONT_SIZE_SMALL : TITLE_FONT_SIZE,
     },
   },
-  data() {
-    return {
-      defaultOptions: {
-        // title also gets updated in watcher
-        title: {
-          text: 'Chart title',
-          left: 'center',
-          top: this.$vuetify.breakpoint.xsOnly ? TITLE_TOP_SMALL : TITLE_TOP,
-          textStyle: {
-            fontSize: this.$vuetify.breakpoint.xsOnly
-              ? TITLE_FONT_SIZE_SMALL
-              : TITLE_FONT_SIZE,
-          },
-        },
-        legend: {
-          type: 'scroll',
-          top: LEGEND_TOP,
-          padding: [5, 50],
-          animationDurationUpdate: 400,
-        },
-        toolbox: {
-          right: TOOLBOX_RIGHT,
-          feature: {
-            saveAsImage: {},
-            dataView: { readOnly: true },
-          },
-        },
+  legend: {
+    type: "scroll",
+    top: LEGEND_TOP,
+    padding: [5, 50],
+    animationDurationUpdate: 400,
+  },
+  toolbox: {
+    right: TOOLBOX_RIGHT,
+    feature: {
+      saveAsImage: {},
+      dataView: { readOnly: true },
+    },
+  },
+});
+
+const renderer = ref("canvas");
+
+const chartOptions = computed(() => {
+  return {
+    title: {
+      text: props.chartTitle,
+    },
+    legend: {},
+    grid: {
+      show: false,
+    },
+    series: buildChartSeries(),
+  };
+});
+
+const computedOptions = computed(() => {
+  const deepMergedObject = deepmerge(defaultOptions.value, chartOptions.value);
+  if (deepMergedObject?.series?.length > 0) return deepMergedObject;
+  else return {};
+});
+
+const initOptions = computed(() => {
+  return { renderer: renderer.value };
+});
+function buildChartSeries() {
+  return [
+    {
+      type: "pie",
+      radius: "50%",
+      itemStyle: {
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#fff",
       },
-    }
-  },
-  computed: {
-    ...mapFields('chart', ['renderer']),
-    chartOptions() {
-      return {
-        title: {
-          text: this.chartTitle,
-        },
-        legend: {},
-        grid: {
-          show: false,
-        },
-        series: this.buildChartSeries(),
-      }
+      data: props.taxonData,
     },
-    computedOptions() {
-      // Todo: Keep an eye on options if series or any other option which should/shouldn't exist then errors start showing,
-      const deepMergedObject = deepmerge(this.defaultOptions, this.chartOptions)
-      if (deepMergedObject?.series?.length > 0) return deepMergedObject
-      else return {}
-    },
-    initOptions() {
-      return {
-        renderer: this.renderer,
-      }
-    },
-  },
-  methods: {
-    buildChartSeries() {
-      return [
-        {
-          type: 'pie',
-          radius: '50%',
-          itemStyle: {
-            borderRadius: 8,
-            borderWidth: 1,
-            borderColor: '#fff',
-          },
-          data: this.taxonData,
-        },
-      ]
-    },
-  },
+  ];
 }
 </script>
 

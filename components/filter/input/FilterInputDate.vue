@@ -150,7 +150,6 @@ const isAddActive = computed(() => {
   return currentDatePickerValue.value !== undefined;
 });
 const getDateStr = (dateArray: string[]) => {
-  console.log(internalValue.value, dateArray);
   const dateFormat = new Intl.DateTimeFormat(locale.value, {
     year: "numeric",
     month: "numeric",

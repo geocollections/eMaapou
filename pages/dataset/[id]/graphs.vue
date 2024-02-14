@@ -70,7 +70,6 @@ const { pending } = await useLazyAsyncData("data", async () => {
 
   const _analysisResults = analysisResultsResponse?.response.docs;
   const _sampleResults = sampleResponse?.response.docs;
-  console.log(_analysisResults, _sampleResults);
 
   const [_maxDepth, _minDepth, _reversed] = chartRange(
     [

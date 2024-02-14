@@ -4,6 +4,7 @@
       <l-map
         id="map"
         ref="map"
+        class="elevation-2"
         :class="{
           rounded: rounded,
         }"
@@ -263,12 +264,12 @@ const fitBounds = () => {
 };
 const tileOverlays = computed(() => {
   return [...estonianOverlays, ...dataOverlays].filter(
-    (overlay) => !overlay.isWMS
+    (overlay) => !overlay.isWMS,
   );
 });
 const wmsOverlays = computed(() => {
   return [...estonianOverlays, ...dataOverlays].filter(
-    (overlay: any) => overlay.isWMS
+    (overlay: any) => overlay.isWMS,
   );
 });
 const latLngMarkers = computed(() => {
@@ -337,7 +338,7 @@ const checkableLayers = computed((): { [K: string]: Leaflet.Layer } => {
       }
       return layers;
     },
-    {}
+    {},
   );
 });
 watch(
@@ -350,7 +351,7 @@ watch(
       else document.getElementById("map")?.classList.remove("cursor-crosshair");
     }
   },
-  { deep: true }
+  { deep: true },
 );
 </script>
 

@@ -106,12 +106,6 @@ const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterSite = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterSample = ref<InstanceType<typeof FilterInputAutocomplete>>();
 
-const test = ref([]);
-
-watch(test, (val) => {
-  console.log(val);
-});
-
 function handleUpdate() {
   nextTick(() => {
     filterInstitution.value?.refreshSuggestions();

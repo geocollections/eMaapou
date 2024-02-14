@@ -1,4 +1,5 @@
-import { HEADERS_SAMPLE, SAMPLE } from "~/constants";
+import { SAMPLE } from "~/constants";
+import { HEADERS_SAMPLE } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 import type {
   BooleanFilter,
@@ -64,12 +65,12 @@ export const useSamples = defineStore(
         alphaNumeric: false,
       } as StringIdListFilter,
       rock: {
-        type: "multiHierarchyList",
+        type: "idList",
         value: [],
-        fields: ["hierarchy_string_rock"],
-        idField: "rock_id",
+        fields: ["rock_hierarchy_descendent_paths"],
+        alphaNumeric: false,
         tag: "rock",
-      } as MultiHierarchyListFilter,
+      } as StringIdListFilter,
       collector: {
         type: "idList",
         value: [],

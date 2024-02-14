@@ -2,7 +2,7 @@
   <div class="text-right text-no-wrap px-2">
     <span class="google-map">
       <a
-        class="text-link"
+        class="text-link text-body-2"
         :href="`https://www.google.com/maps/?q=${latitude},${longitude}`"
         :title="`https://www.google.com/maps/?q=${latitude},${longitude}`"
         target="GoogleMap"
@@ -12,14 +12,14 @@
     <span> | </span>
     <span class="xgis2">
       <a
-        class="text-link"
+        class="text-link text-body-2"
         :href="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
           latitude,
-          longitude
+          longitude,
         )}&moot=20000&tooltip=${tooltip}`"
         :title="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${geoToLest(
           latitude,
-          longitude
+          longitude,
         )}&moot=20000&tooltip=${tooltip}`"
         target="EstonianMap"
         >{{ $t("map.estonian_geoportal") }}</a
@@ -64,19 +64,19 @@ function geoToLest(north, east) {
   let e = Math.sqrt(er);
   const t1 = Math.sqrt(
     ((1.0 - Math.sin(B1)) / (1.0 + Math.sin(B1))) *
-      Math.pow((1.0 + e * Math.sin(B1)) / (1.0 - e * Math.sin(B1)), e)
+      Math.pow((1.0 + e * Math.sin(B1)) / (1.0 - e * Math.sin(B1)), e),
   );
   const t2 = Math.sqrt(
     ((1.0 - Math.sin(B2)) / (1.0 + Math.sin(B2))) *
-      Math.pow((1.0 + e * Math.sin(B2)) / (1.0 - e * Math.sin(B2)), e)
+      Math.pow((1.0 + e * Math.sin(B2)) / (1.0 - e * Math.sin(B2)), e),
   );
   const t0 = Math.sqrt(
     ((1.0 - Math.sin(B0)) / (1.0 + Math.sin(B0))) *
-      Math.pow((1.0 + e * Math.sin(B0)) / (1.0 - e * Math.sin(B0)), e)
+      Math.pow((1.0 + e * Math.sin(B0)) / (1.0 - e * Math.sin(B0)), e),
   );
   const t = Math.sqrt(
     ((1.0 - Math.sin(LAT)) / (1.0 + Math.sin(LAT))) *
-      Math.pow((1.0 + e * Math.sin(LAT)) / (1.0 - e * Math.sin(LAT)), e)
+      Math.pow((1.0 + e * Math.sin(LAT)) / (1.0 - e * Math.sin(LAT)), e),
   );
   const m1 =
     Math.cos(B1) / Math.pow(1.0 - er * Math.sin(B1) * Math.sin(B1), 0.5);

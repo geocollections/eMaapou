@@ -1,4 +1,5 @@
-import type { DataTableOptions, Header } from "~/constants";
+import type { DataTableOptions } from "~/constants";
+import type { Header } from "~/constants/headersNew";
 
 export default function ({
   sortBy,
@@ -11,23 +12,27 @@ export default function ({
 }) {
   if (sortBy.length === 0) return undefined;
   return sortBy
-    .filter((sortItem) => sortItem.order)
+    .filter(
+      (sortItem): sortItem is Required<typeof sortItem> => !!sortItem.order,
+    )
     .map((sortItem) => {
-      let sortField = sortItem.key;
-      if (typeof headersMap[sortItem.key].apiFieldValue === "string") {
-        sortField = headersMap[sortItem.key].apiFieldValue as string;
-      } else if (typeof headersMap[sortItem.key].apiFieldValue === "object") {
-        sortField = (
-          headersMap[sortItem.key].apiFieldValue as { et: string; en: string }
-        )[locale] as string;
-      }
+      const sortKey = sortItem.key;
+      const column = headersMap[sortKey];
 
-      if (typeof sortItem.order === "boolean") {
-        if (sortItem.order) return `${sortField} asc`;
-        return `${sortField} desc`;
+      if (column.sortField instanceof Array) {
+        return column.sortField
+          .map((field) => {
+            return `${field} ${sortItem.order === "asc" ? "asc" : "desc"}`;
+          })
+          .join(",");
+      } else if (typeof column.sortField === "object") {
+        return `${column.sortField[locale] ?? column.sortField["et"]} ${
+          sortItem.order === "asc" ? "asc" : "desc"
+        }`;
       }
-      if (sortItem.order === "asc") return `${sortField} ${sortItem.order}`;
-      if (sortItem.order === "desc") return `${sortField} ${sortItem.order}`;
+      return `${column.apiFieldValue ?? column.value} ${
+        sortItem.order === "asc" ? "asc" : "desc"
+      }`;
     })
     .join(",");
 }

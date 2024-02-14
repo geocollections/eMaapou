@@ -179,5 +179,4 @@ async function hydrateParameter(values: string[]) {
     count: res.facets[id].count,
   }));
 }
-console.log(await hydrateParameter(["MgO_pct"]));
 </script>

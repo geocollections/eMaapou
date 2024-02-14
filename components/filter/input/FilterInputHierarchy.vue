@@ -45,15 +45,15 @@
       style="border-bottom: 1px solid lightgray !important"
     >
       <ul class="ml-2">
-        <template v-for="(node, index) in tree" :key="`tree-item-${node.id}`">
-          <TreeItem
-            :disabled="false"
-            :node="node"
-            :add-children="addChildren"
-            :selected-values="selectedValues"
-            @select="handleSelect"
-          />
-        </template>
+        <TreeItem
+          v-for="(node, index) in tree"
+          :key="`tree-item-${index}`"
+          :disabled="false"
+          :node="node"
+          :add-children="addChildren"
+          :selected-values="selectedValues"
+          @select="handleSelect"
+        />
       </ul>
     </v-expansion-panel-text>
   </v-expansion-panel>
@@ -101,7 +101,7 @@ function translateName(name: string | { et: string; en: string }): string {
 }
 
 const { data: tree, refresh: refreshTree } = await useLazyAsyncData<TreeNode[]>(
-  "tree",
+  `tree-${getCurrentInstance()?.uid}`,
   async () => {
     return await props.getChildren(props.rootValue);
   },
@@ -191,7 +191,6 @@ function handleSelect(node: TreeNode) {
       count: node.count,
     });
   }
-  console.log(selectedItems.value);
 }
 async function hydrateSelected() {
   if (props.modelValue.length < 1) return;

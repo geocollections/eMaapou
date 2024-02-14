@@ -80,7 +80,6 @@ const {
   response: { numFound: number; docs: any[] };
 }>("/sample", {
   query: computed(() => ({
-    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
