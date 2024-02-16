@@ -52,12 +52,4 @@ defineProps({
 .flag:before {
   content: "\A0";
 }
-
-.flag-et {
-  background-image: url("~assets/et.svg");
-}
-
-.flag-en {
-  background-image: url("~assets/en.svg");
-}
 </style>
