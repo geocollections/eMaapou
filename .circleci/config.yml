@@ -1,0 +1,69 @@
+version: 2.1
+
+parameters:
+  package-version:
+    type: string
+    default: '1.0.5'
+
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: geocollections/geoloogia
+    docker:
+      - image: circleci/node:lts-stretch
+
+jobs:
+  build_image:
+    executor: docker-publisher
+    parameters:
+      tags:
+        description: "String of Docker image tags, defined using `-t`."
+        type: string
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: |
+            docker build << parameters.tags >> .
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  publish_image:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archive Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker image to Docker Hub
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker push $IMAGE_NAME
+  run_container:
+    executor: docker-publisher
+    steps:
+      - run:
+          name: Run next container
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_next.sh"
+workflows:
+  build_next:
+    when:
+      equal: [refactor/nuxt3, << pipeline.git.branch >>]
+    jobs:
+      - build_image:
+          tags: -t $IMAGE_NAME:next
+      - publish_image:
+          requires:
+            - build_image
+      - run_container:
+          requires:
+            - publish_image
