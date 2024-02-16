@@ -54,6 +54,7 @@ import { mdiImageFilterHdr } from "@mdi/js";
 
 const route = useRoute();
 
+const { setSearchPosition } = useSearchPosition();
 const samplesStore = useSamples();
 const {
   handleHeadersReset,
@@ -61,15 +62,8 @@ const {
   setStateFromQueryParams,
   getQueryParams,
 } = samplesStore;
-const {
-  solrSort,
-  solrQuery,
-  solrFilters,
-  options,
-  headers,
-  searchPosition,
-  resultsCount,
-} = storeToRefs(samplesStore);
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount } =
+  storeToRefs(samplesStore);
 setStateFromQueryParams(route);
 
 const {
@@ -115,9 +109,11 @@ async function handleDataTableUpdate({ options: newOptions }) {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-function handleClickRow(index: number) {
-  searchPosition.value =
-    index + getOffset(options.value.page, options.value.itemsPerPage);
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "sample-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+  );
 }
 
 // export default defineComponent({

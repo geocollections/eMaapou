@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { LOCALITY } from "~/constants";
-import { HEADERS_LOCALITY } from "~/constants/headers";
+import { HEADERS_LOCALITY } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
@@ -14,7 +14,7 @@ export const useLocalities = defineStore(
   "localities",
   () => {
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
+    const searchPositionStore = useSearchPosition();
 
     const {
       query,
@@ -129,14 +129,12 @@ export const useLocalities = defineStore(
       options,
       setStateFromQueryParams,
       getQueryParams,
-      searchPosition,
-      fromSearch,
       resultsCount,
     };
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query", "searchPosition"],
+      paths: ["options", "filters", "headers", "query"],
       storage: persistedState.sessionStorage,
     },
   },

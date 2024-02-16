@@ -16,8 +16,8 @@ type HydratedDynamicTab = BaseTab & {
   count: number;
 };
 
-type Tab = StaticTab | DynamicTab;
-type HydratedTab = StaticTab | HydratedDynamicTab;
+export type Tab = StaticTab | DynamicTab;
+export type HydratedTab = StaticTab | HydratedDynamicTab;
 
 export const useTabs = () => {
   const { t } = useI18n({ useScope: "global" });
@@ -42,14 +42,18 @@ export const useTabs = () => {
           {
             ...tab,
             count,
-            title: t(tab.title, { number: count }),
+            // title: t(tab.title, { number: count }),
             props: props[key as PK] ?? {},
           },
         ] as [string, HydratedDynamicTab];
       }
       return [
         key,
-        { ...tab, title: t(tab.title), props: props[key as PK] ?? {} },
+        {
+          ...tab,
+          // title: t(tab.title),
+          props: props[key as PK] ?? {},
+        },
       ] as [string, StaticTab];
     });
     const hydratedTabs = await Promise.all(promises);

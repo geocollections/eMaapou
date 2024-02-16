@@ -1,4 +1,4 @@
-export const useSearchPosition = () => {
+export const _useSearchPosition = () => {
   const searchPosition = ref(-1);
   const fromSearch = computed(() => searchPosition.value > -1);
 

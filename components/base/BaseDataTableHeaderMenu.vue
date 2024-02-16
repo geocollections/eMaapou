@@ -79,7 +79,7 @@
                   density="compact"
                   variant="text"
                   :disabled="sortBy.includes(item.value)"
-                  @click="$emit('change', item)"
+                  @click.prevent="$emit('change', item)"
                 >
                   <template #prepend>
                     <v-list-item-action start class="mr-2">
@@ -126,11 +126,11 @@ const onlyVisible = ref(false);
 const filteredHeaders = computed(() => {
   if (onlyVisible.value) {
     return props.visibleHeaders.filter((header) =>
-      header.title.toLowerCase().includes(filter.value.toLowerCase())
+      header.title.toLowerCase().includes(filter.value.toLowerCase()),
     );
   }
   return props.headers.filter((header) =>
-    header.title.toLowerCase().includes(filter.value.toLowerCase())
+    header.title.toLowerCase().includes(filter.value.toLowerCase()),
   );
 });
 </script>

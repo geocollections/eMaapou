@@ -4,7 +4,7 @@
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index: index, id: item.id })"
       >
         {{ item.id }}
       </nuxt-link>
@@ -14,7 +14,7 @@
         v-if="item.number"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index: index, id: item.id })"
       >
         {{ item.number }}
       </nuxt-link>

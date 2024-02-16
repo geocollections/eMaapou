@@ -1,5 +1,5 @@
 <template>
-  <detail-new :show-similar="searchPosition > -1">
+  <detail-new :show-similar="showDrawer">
     <template #title>
       <header-detail-new :title="pageTitle">
         <template #tabs>
@@ -9,74 +9,38 @@
     </template>
     <NuxtPage v-bind="activeTabProps" />
     <template #drawer>
-      <v-btn
-        variant="plain"
-        class="text-capitalize mx-2"
-        :prepend-icon="mdiArrowUpLeft"
-        :to="localePath({ path: '/sample', query: getQueryParams() })"
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarSamples"
+        :total-results="samplesRes?.response.numFound ?? 0"
+        :search-route="localePath({ path: '/sample', query: getQueryParams() })"
+        :get-result-route="
+          (item) => localePath({ name: 'sample-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
       >
-        Back to search
-      </v-btn>
-      <div class="d-flex align-center justify-space-around">
-        <v-btn
-          variant="plain"
-          size="small"
-          :icon="mdiChevronLeft"
-          :disabled="page <= 1"
-          @click="page--"
-        />
-        {{ page }}
-        <v-btn
-          variant="plain"
-          size="small"
-          :icon="mdiChevronRight"
-          :disabled="!hasNext"
-          @click="page++"
-        />
-      </div>
-      <v-list>
-        <template v-for="(sample, index) in similarSamples">
-          <v-list-item
-            class="pa-2 ma-1 text-body-2"
-            elevation="0"
-            rounded
-            :to="localePath({ name: 'sample-id', params: { id: sample.id } })"
-            active-class="active-item"
-          >
-            <template v-if="sample.depth" #subtitle>
-              <div class="d-flex align-center">
-                <v-icon start size="small">{{ mdiRuler }}</v-icon>
-                <span class="text--secondary">
-                  {{ getDepthRange(sample) }}
-                </span>
-              </div>
-            </template>
-            <template #title>
-              <div class="font-weight-medium">
-                {{ sample.number ?? sample.id }}
-              </div>
-            </template>
-            <template #append="{ isActive }">
-              <v-icon v-if="isActive" color="accent">
-                {{ mdiCheck }}
-              </v-icon>
-            </template>
-          </v-list-item>
-          <v-divider class="mx-1" v-if="index !== perPage - 1" />
+        <template #itemTitle="{ item: sample }">
+          <div class="font-weight-medium">
+            {{ sample.number ?? sample.id }}
+          </div>
         </template>
-      </v-list>
+        <template #itemSubtitle="{ item: sample }">
+          <div v-if="sample.depth" class="d-flex align-center">
+            <v-icon start size="small">{{ mdiRuler }}</v-icon>
+            <span class="text--secondary">
+              {{ getDepthRange(sample) }}
+            </span>
+          </div>
+        </template>
+      </SearchResultsDrawer>
     </template>
   </detail-new>
 </template>
 
 <script setup lang="ts">
-import {
-  mdiRuler,
-  mdiCheck,
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiArrowUpLeft,
-} from "@mdi/js";
+import { mdiRuler } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 const { $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const tabs = {
@@ -144,7 +108,6 @@ const tabs = {
   } satisfies Tab,
   reference: {
     type: "dynamic",
-    id: "sample_reference",
     routeName: "sample-id-references",
     title: "sample.sampleReferences",
     count: async () => {
@@ -190,37 +153,28 @@ const tabs = {
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
-const samplesStore = useSamples();
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
+const samplesStore = useSamples();
 const { getQueryParams } = samplesStore;
-const { solrFilters, solrQuery, solrSort, searchPosition, fromSearch } =
-  storeToRefs(samplesStore);
+const { solrFilters, solrQuery, solrSort } = storeToRefs(samplesStore);
 
 const activeTabProps = computed(() => {
   return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });
 
-const perPage = 10;
-
-const page = ref(
-  !fromSearch ? 1 : Math.floor(searchPosition.value / perPage) + 1,
-);
-
-const hasNext = computed(
-  () => page.value * perPage < (samplesRes.value?.response.numFound ?? 0),
-);
-
-const { data: samplesRes } = await useSolrFetch("/sample", {
-  query: computed(() => ({
-    q: solrQuery.value,
-    rows: perPage,
-    start: (page.value - 1) * perPage,
-    sort: solrSort.value,
-    json: {
-      filter: [...solrFilters.value],
-    },
-  })),
+const {
+  data: samplesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/sample", {
+  routeName: "sample-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
 });
 
 const similarSamples = computed(() => samplesRes.value?.response.docs ?? []);

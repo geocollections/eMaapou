@@ -31,7 +31,6 @@ export const useSamples = defineStore(
     });
 
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     const { filters, solrFilters } = useFilters({
       number: {
@@ -175,15 +174,13 @@ export const useSamples = defineStore(
       setStateFromQueryParams: setStateFromQueryParamsTest,
       getQueryParams,
       resultsCount,
-      searchPosition,
-      fromSearch,
       solrFilters,
       filters,
     };
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query", "searchPosition"],
+      paths: ["options", "filters", "headers", "query"],
       storage: persistedState.sessionStorage,
     },
   },

@@ -1,16 +1,15 @@
 <template>
   <v-tabs
+    v-if="$vuetify.display.smAndUp"
     ref="tabsEl"
     class="tabs"
-    density="compact"
-    :show-arrows="$vuetify.display.smAndUp"
-    :direction="$vuetify.display.xs ? 'vertical' : 'horizontal'"
+    height="32"
+    show-arrows
   >
     <v-tab
       v-for="(item, index) in tabs"
       :key="index"
-      :disabled="item.count === 0"
-      class="montserrat tab text-none"
+      class="montserrat tab text-none text-grey-darken-3"
       selected-class="active-tab font-weight-medium"
       exact
       :to="
@@ -19,19 +18,46 @@
           params: route.params,
         })
       "
-      @click="handleTabChange"
-      >{{ item.title }}</v-tab
+      >{{ translateTitle(item) }}</v-tab
     >
   </v-tabs>
-  <slot :activeTabProps="activeTabProps" />
+  <v-menu v-else>
+    <template v-slot:activator="{ props, isActive }">
+      <v-btn
+        class="text-capitalize mb-1 ml-auto"
+        variant="outlined"
+        color="accent"
+        dark
+        v-bind="props"
+        :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
+      >
+        {{ translateTitle(currentTab) }}
+      </v-btn>
+    </template>
+    <v-list>
+      <v-list-item
+        v-for="(item, index) in tabs"
+        :key="index"
+        :to="
+          localePath({
+            name: item.routeName,
+            params: route.params,
+          })
+        "
+      >
+        <v-list-item-title>{{ translateTitle(item) }}</v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
 </template>
 
 <script setup lang="ts">
-import type { Tab } from "~/constants";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import type { HydratedTab } from "~/composables/useTabs";
 
 const props = defineProps({
   tabs: {
-    type: Array as PropType<Tab[]>,
+    type: Array as PropType<HydratedTab[]>,
     required: true,
   },
 });
@@ -40,37 +66,20 @@ const localePath = useLocalePath();
 const getRouteBaseName = useRouteBaseName();
 const route = useRoute();
 const tabsEl = ref();
+const { t } = useI18n();
 
-const tabsDict = ref(
-  props.tabs.reduce(
-    (prev, tab) => {
-      return {
-        ...prev,
-        [tab.routeName]: tab,
-      };
-    },
-    {} as { [K: string]: Tab },
-  ),
-);
-const tabProps =
-  getRouteBaseName(route) &&
-  (getRouteBaseName(route) as string) in tabsDict.value
-    ? tabsDict.value[getRouteBaseName(route) as string].props
-    : props.tabs[0].props;
+const currentTab = computed(() => {
+  return props.tabs.find((tab) => tab.routeName === getRouteBaseName());
+});
 
-const activeTabProps = ref(tabProps);
-
-watch(
-  () => route.fullPath,
-  () => {
-    activeTabProps.value =
-      tabsDict.value[getRouteBaseName(route) as string].props;
-  },
-);
-
-function handleTabChange() {
-  activeTabProps.value =
-    tabsDict.value[getRouteBaseName(route) as string].props;
+function translateTitle(tab: HydratedTab) {
+  if (tab.type === "static") {
+    return t(tab.title);
+  }
+  if (tab.type === "dynamic") {
+    return t(tab.title, { number: tab.count });
+  }
+  return tab.title;
 }
 </script>
 
@@ -92,7 +101,6 @@ function handleTabChange() {
 }
 
 .tab {
-  color: #424242 !important;
   &::after {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -101,11 +109,13 @@ function handleTabChange() {
 
 .active-tab {
   // font-weight: bold;
-  color: rgb(var(--v-theme-accent-darken-1)) !important;
+  color: rgb(var(--v-theme-accent-darken-3)) !important;
   &::after {
-    background-color: rgb(var(--v-theme-accent-darken-1)) !important;
-    opacity: 0.2 !important;
+    border-color: rgb(var(--v-theme-accent-darken-4)) !important;
+    background-color: rgb(var(--v-theme-accent-darken-4)) !important;
+    opacity: 0.1 !important;
 
+    border-bottom: 0;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
   }

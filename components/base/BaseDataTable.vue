@@ -263,7 +263,7 @@ onMounted(() => {
       table.value?.querySelector("#top")?.clientHeight ?? 0;
   });
   const dataTableWrapper = table.value?.querySelector(
-    ".v-table__wrapper"
+    ".v-table__wrapper",
   ) as HTMLElement | null;
   dataTableWrapper?.addEventListener("scroll", () => {
     if (

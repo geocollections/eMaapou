@@ -4,7 +4,7 @@
       <nuxt-link
         class="text-link"
         :to="localePath(`/locality/${item.id}`)"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index: index, id: item.id })"
       >
         {{ item.id }}
       </nuxt-link>
@@ -13,10 +13,21 @@
       <nuxt-link
         class="text-link"
         :to="localePath(`/locality/${item.id}`)"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index: index, id: item.id })"
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
+    </template>
+
+    <template #item.latitude="{ item }">
+      <span v-if="item.latitude">
+        {{ item.latitude.toFixed(6) }}
+      </span>
+    </template>
+    <template #item.longitude="{ item }">
+      <span v-if="item.longitude">
+        {{ item.longitude.toFixed(6) }}
+      </span>
     </template>
     <template #item.country="{ item }">
       {{ $translate({ et: item.country, en: item.country_en }) }}

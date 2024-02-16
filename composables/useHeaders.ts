@@ -46,15 +46,25 @@ export const useHeadersNew = (initHeaders: HeadersNew) => {
 
   const translateHeader = (header: HeaderNew) => {
     if (header.titleTranslate === undefined || header.titleTranslate === true) {
-      header.title = t(header.title).toString();
+      return t(header.title);
     }
-    return header;
+    return header.title;
   };
 
   const headers = computed(() => {
     return headersMap.value.allIds.map((id: string) => {
-      const header = translateHeader(headersMap.value.byIds[id]);
-      return { ...header, sortable: header.sortable ? header.sortable : true };
+      const header = headersMap.value.byIds[id];
+      return {
+        ...header,
+        sortable: header.sortable !== undefined ? header.sortable : true,
+        title: translateHeader(header),
+        children: header.children?.map((child) => {
+          return {
+            ...child,
+            title: translateHeader(child),
+          };
+        }),
+      };
     });
   });
 

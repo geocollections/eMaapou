@@ -2,25 +2,24 @@
   <div class="d-flex align-center pb-0" style="overflow-x: auto">
     <div v-for="(item, index) in images" :key="index" class="mr-3 mb-1">
       <v-tooltip bottom color="accent">
-        <template #activator="{ on, attrs }">
-          <slot name="image" :item="item" :on="on" :attrs="attrs">
+        <template #activator="{ props }">
+          <slot name="image" :item="item">
             <v-hover v-slot="{ hover }">
               <v-img
-                v-bind="attrs"
+                v-bind="props"
                 :src="
-                  $img(
+                  img(
                     `${item.filename}`,
                     { size: 'medium' },
-                    { provider: 'geocollections' }
+                    { provider: 'geocollections' },
                   )
                 "
-                width="250"
+                min-width="250"
                 aspect-ratio="1.4"
                 :class="{
                   'elevation-2': hover,
                 }"
                 class="lighten-2 rounded transition-swing cursor-pointer"
-                v-on="on"
                 @click="
                   openOverlay({
                     src: item.filename,
@@ -85,6 +84,7 @@ defineProps({
     default: () => [],
   },
 });
+const img = useImage();
 const emit = defineEmits(["update"]);
 const rowsPerPage = 10;
 const page = ref(1);

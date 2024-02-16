@@ -130,6 +130,7 @@ export default {
   locality: {
     pageTitle: "Localities",
     landingCard: "localities",
+    general: "General info",
     id: "ID",
     locality: "Locality",
     country: "Country",

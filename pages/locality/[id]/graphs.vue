@@ -19,7 +19,9 @@
     <chart-las
       v-if="attachment && lasContent"
       class="pa-2"
-      :class="{ 'pt-4': analysisResultsCount === 0 }"
+      :class="{
+        'pt-4': analysisResults.length > 0 && sampleResults.length > 0,
+      }"
       :chart-title="chartTitle"
       :file-data="lasContent"
     />
@@ -36,11 +38,6 @@ const props = defineProps({
     type: String,
     required: false,
     default: "",
-  },
-  analysisResultsCount: {
-    type: Number,
-    required: false,
-    default: 0,
   },
 });
 

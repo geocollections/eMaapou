@@ -178,7 +178,7 @@ export const usePhotos = defineStore(
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query", "searchPosition"],
+      paths: ["options", "filters", "headers", "query"],
       storage: persistedState.sessionStorage,
     },
   },

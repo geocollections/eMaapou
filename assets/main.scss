@@ -50,19 +50,19 @@ $heading-font: "Montserrat", sans-serif;
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
-  color: rgb(var(--v-theme-accent)) !important;
+  color: rgb(var(--v-theme-accent-darken-1)) !important;
 
   .v-icon {
-    color: rgb(var(--v-theme-accent)) !important;
+    color: rgb(var(--v-theme-accent-darken-1)) !important;
   }
 
   @include transition(color 200ms ease);
 
   &:hover {
-    color: rgb(var(--v-theme-accent-darken3)) !important;
+    color: rgb(var(--v-theme-accent-darken-3)) !important;
     text-decoration: underline;
     .v-icon {
-      color: rgb(var(--v-theme-accent-darken3)) !important;
+      color: rgb(var(--v-theme-accent-darken-3)) !important;
     }
   }
 }

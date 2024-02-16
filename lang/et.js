@@ -132,6 +132,7 @@ export default {
   locality: {
     pageTitle: "Lokaliteedid",
     landingCard: "lokaliteeti",
+    general: "Üldinfo",
     id: "ID",
     locality: "Lokaliteet",
     country: "Riik",

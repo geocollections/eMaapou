@@ -51,20 +51,12 @@
     </div>
   </v-navigation-drawer>
   <v-main style="min-height: 100vh">
-    <slot name="title" />
-    <!-- <v-container -->
-    <!--   class="pt-0 pb-10 px-0" -->
-    <!--   style="min-height: 100vh" -->
-    <!--   :fluid="true" -->
-    <!-- > -->
-    <!--   <v-row no-gutters class="fill-height"> -->
-    <!--     <v-col key="detail"> -->
-    <slot />
-    <!--   </v-col> -->
-    <!-- </v-row> -->
-    <fab-scroll-top />
-    <!-- </v-container> -->
-    <app-footer class="mt-10" />
+    <div class="fill-height pb-10">
+      <slot name="title" />
+      <slot />
+      <fab-scroll-top />
+    </div>
+    <app-footer />
   </v-main>
 </template>
 <script setup lang="ts">

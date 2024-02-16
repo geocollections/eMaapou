@@ -422,7 +422,7 @@ export const TABS_LOCALITY: ResourceTabs = {
   byIds: {
     locality_reference: {
       id: "locality_reference",
-      routeName: "locality-id",
+      routeName: "locality-id-references",
       title: "locality.references",
       count: 0,
       props: {},

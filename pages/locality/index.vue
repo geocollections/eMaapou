@@ -53,6 +53,8 @@
 import { mdiMapMarker } from "@mdi/js";
 import type { LocationQueryRaw } from "vue-router";
 
+const { $translate } = useNuxtApp();
+
 const localitiesStore = useLocalities();
 const {
   handleHeadersReset,
@@ -88,7 +90,9 @@ const {
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: solrFilters.value,
-      sort: solrSort.value ?? "locality asc",
+      sort:
+        solrSort.value ??
+        $translate({ et: "locality asc", en: "locality_en asc" }),
     },
   })),
   watch: false,
@@ -119,8 +123,11 @@ async function handleDataTableUpdate({ options: newOptions }) {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-function handleClickRow(index: number) {
-  searchPosition.value =
-    index + getOffset(options.value.page, options.value.itemsPerPage);
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "locality-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+  );
 }
 </script>
