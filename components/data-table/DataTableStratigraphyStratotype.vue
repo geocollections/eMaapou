@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs">
     <template #item.locality="{ item }">
       <nuxt-link
         v-if="item.locality"
@@ -46,41 +37,6 @@
   </base-data-table>
 </template>
 
-<script>
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import BaseLinkExternal from '../base/BaseLinkExternal.vue'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_STRATIGRAPHY_STRATOTYPE } from '~/constants'
-import { useHeaders } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableStratigraphyStratotype',
-  components: { BaseDataTable, BaseLinkExternal },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_STRATIGRAPHY_STRATOTYPE,
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
+<script setup lang="ts">
+const localePath = useLocalePath();
 </script>

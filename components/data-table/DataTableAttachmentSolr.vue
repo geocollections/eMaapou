@@ -1,15 +1,6 @@
 <template>
   <div>
-    <base-data-table
-      v-bind="$attrs"
-      :headers="headers"
-      :items="items"
-      :options="options"
-      :count="count"
-      v-on="$listeners"
-      @change:headers="handleHeadersChange"
-      @reset:headers="handleHeadersReset"
-    >
+    <base-data-table v-bind="$attrs">
       <template #item.id="{ item }">
         <nuxt-link
           v-if="item.attachment_id"
@@ -49,10 +40,10 @@
           v-if="item.uuid_filename"
           class="my-1"
           :src="
-            $img(
+            img(
               `${item.uuid_filename}`,
               { size: 'small' },
-              { provider: 'geocollections' }
+              { provider: 'geocollections' },
             )
           "
           @click="
@@ -70,76 +61,27 @@
   </div>
 </template>
 
-<script lang="ts">
-import {
-  defineComponent,
-  ref,
-  toRef,
-  useContext,
-} from '@nuxtjs/composition-api'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import ThumbnailImage from '~/components/thumbnail/ThumbnailImage.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import { HEADERS_ATTACHMENT_SOLR } from '~/constants'
-import ImageOverlay, { OverlayImage } from '~/components/ImageOverlay.vue'
-import { useHeaders } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableAttachmentSolr',
-  components: { BaseLinkExternal, BaseDataTable, ThumbnailImage, ImageOverlay },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { i18n } = useContext()
-    const showOverlay = ref(false)
-    const overlayImage = ref<OverlayImage>()
-    const openOverlay = (image: OverlayImage) => {
-      overlayImage.value = image
-      showOverlay.value = true
-    }
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_ATTACHMENT_SOLR,
-      options: toRef(props, 'options'),
-    })
-
-    const getAttachmentType = (type: number) => {
-      switch (type) {
-        case 1:
-          return i18n.t('attachment.typeSpecimen')
-        case 2:
-          return i18n.t('attachment.typeImage')
-        case 4:
-          return i18n.t('attachment.typeReference')
-        default:
-          return i18n.t('attachment.typeOther')
-      }
-    }
-    return {
-      showOverlay,
-      overlayImage,
-      openOverlay,
-      headers,
-      handleHeadersReset,
-      handleHeadersChange,
-      getAttachmentType,
-    }
-  },
-})
+<script setup lang="ts">
+import type { OverlayImage } from "~/components/ImageOverlay.vue";
+const { t } = useI18n();
+const img = useImage();
+const localePath = useLocalePath();
+const showOverlay = ref(false);
+const overlayImage = ref<OverlayImage>();
+const openOverlay = (image: OverlayImage) => {
+  overlayImage.value = image;
+  showOverlay.value = true;
+};
+const getAttachmentType = (type: number) => {
+  switch (type) {
+    case 1:
+      return t("attachment.typeSpecimen");
+    case 2:
+      return t("attachment.typeImage");
+    case 4:
+      return t("attachment.typeReference");
+    default:
+      return t("attachment.typeOther");
+  }
+};
 </script>

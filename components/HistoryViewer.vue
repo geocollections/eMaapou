@@ -1,7 +1,7 @@
 <template>
   <div v-if="historyEntries.length > 0" class="d-flex align-center">
     <v-subheader style="height: 32px !important" class="pl-0 text-no-wrap">
-      {{ `${$t('common.history')}:` }}
+      {{ `${$t("common.history")}:` }}
     </v-subheader>
     <span class="pb-1 pt-2 history-viewer d-flex">
       <span
@@ -25,35 +25,24 @@
           class="mx-1 divider"
           x-small
         >
-          {{ icons.mdiArrowLeft }}
+          {{ mdiArrowLeft }}
         </v-icon>
       </span>
     </span>
   </div>
 </template>
 
-<script lang="ts">
-import { mdiArrowLeft } from '@mdi/js'
-import { defineComponent } from '@nuxtjs/composition-api'
-import { HistoryEntry } from '~/store/history'
+<script setup lang="ts">
+import { mdiArrowLeft } from "@mdi/js";
+import { useDisplay } from "vuetify";
 
-export default defineComponent({
-  name: 'HistoryViewer',
-  computed: {
-    historyEntries(): HistoryEntry[] {
-      return this.$accessor.history.historyEntries
-    },
-    linkWidth(): number {
-      if (this.$vuetify.breakpoint.lgAndUp) return 200
-      return 100
-    },
-    icons(): any {
-      return {
-        mdiArrowLeft,
-      }
-    },
-  },
-})
+const display = useDisplay();
+const localePath = useLocalePath();
+const historyEntries = ref<any[]>([]);
+const linkWidth = computed(() => {
+  if (display.lgAndUp.value) return 200;
+  return 100;
+});
 </script>
 <style scoped>
 .history-viewer {

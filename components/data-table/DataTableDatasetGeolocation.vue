@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs">
     <template #item.name="{ item }">
       <nuxt-link
         v-if="item.locality"
@@ -29,55 +20,14 @@
     <template #item.latitude="{ item }">{{ item.point_latitude }}</template>
     <template #item.is_polygon="{ item }">
       <v-icon v-if="item.polygon" color="green" small>
-        {{ icons.mdiCheckBold }}
+        {{ mdiCheckBold }}
       </v-icon>
-      <v-icon v-else color="red" small>{{ icons.mdiCloseThick }}</v-icon>
+      <v-icon v-else color="red" small>{{ mdiCloseThick }}</v-icon>
     </template>
   </base-data-table>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, toRef } from '@nuxtjs/composition-api'
-import { mdiCheckBold, mdiCloseThick } from '@mdi/js'
-import BaseDataTable from '../base/BaseDataTable.vue'
-import { HEADERS_DATASET_GEOLOCATION } from '~/constants'
-import { useHeaders } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableDatasetGeolocation',
-  components: { BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const icons = computed(() => {
-      return {
-        mdiCheckBold,
-        mdiCloseThick,
-      }
-    })
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_DATASET_GEOLOCATION,
-      options: toRef(props, 'options'),
-    })
-
-    return { icons, headers, handleHeadersReset, handleHeadersChange }
-  },
-})
+<script setup lang="ts">
+import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
+const localePath = useLocalePath();
 </script>

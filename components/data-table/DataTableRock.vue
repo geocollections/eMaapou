@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs">
     <template #item.id="{ item }">
       <base-link-external
         v-if="item.id"
@@ -40,42 +31,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import { useHeaders } from '~/composables/useHeaders'
-import BaseBoolean from '~/components/base/BaseBoolean.vue'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import { HEADERS_ROCK } from '~/constants'
-export default defineComponent({
-  name: 'DataTableRock',
-  components: { BaseLinkExternal, BaseDataTable, BaseBoolean },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_ROCK,
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
-</script>

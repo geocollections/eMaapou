@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs">
     <template #item.name="{ item }">
       <base-link-external
         v-if="item.taxon"
@@ -50,43 +41,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import BaseLinkExternal from '../base/BaseLinkExternal.vue'
-import BaseBoolean from '../base/BaseBoolean.vue'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import { HEADERS_SPECIMEN_IDENTIFICATION } from '~/constants'
-import { useHeaders } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableSpecimenIdentification',
-  components: { BaseDataTable, BaseLinkExternal, BaseBoolean },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } = useHeaders({
-      localHeaders: HEADERS_SPECIMEN_IDENTIFICATION,
-      options: toRef(props, 'options'),
-    })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
-</script>

@@ -19,3 +19,4 @@ FROM base
 COPY --from=build /code/.output /code/.output
 
 CMD [ "node", "./.output/server/index.mjs" ]
+

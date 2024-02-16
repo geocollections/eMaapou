@@ -10,7 +10,7 @@
         rounded
         exact
         :to="
-          localeRoute({
+          localePath({
             name: item.routeName,
             query: $route.query,
           })
@@ -29,18 +29,11 @@
   </v-chip-group>
 </template>
 
-<script>
-import { defineComponent } from '@nuxtjs/composition-api'
-
-export default defineComponent({
-  name: 'ButtonTabs',
-  props: {
-    tabs: {
-      type: Array,
-      required: true,
-    },
-  },
-})
+<script setup lang="ts">
+const props = defineProps<{
+  tabs: any[];
+}>();
+const localePath = useLocalePath();
 </script>
 
 <style lang="scss" scoped>

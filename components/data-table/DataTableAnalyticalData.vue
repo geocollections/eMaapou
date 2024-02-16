@@ -1,14 +1,5 @@
 <template>
-  <base-data-table
-    v-bind="$attrs"
-    :headers="headers"
-    :items="items"
-    :options="options"
-    :count="count"
-    v-on="$listeners"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset"
-  >
+  <base-data-table v-bind="$attrs">
     <template #item.id_l="{ item }">
       <nuxt-link
         v-if="item.id_l"
@@ -122,48 +113,6 @@
   </base-data-table>
 </template>
 
-<script lang="ts">
-import { defineComponent, toRef } from '@nuxtjs/composition-api'
-import BaseDataTable from '~/components/base/BaseDataTable.vue'
-import BaseLinkExternal from '~/components/base/BaseLinkExternal.vue'
-import { HEADERS_ANALYTICAL_DATA } from '~/constants'
-import { useHeadersWithState } from '~/composables/useHeaders'
-
-export default defineComponent({
-  name: 'DataTableAnalyticalData',
-  components: { BaseLinkExternal, BaseDataTable },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-        sortBy: [],
-        sortDesc: [],
-      }),
-    },
-    statefulHeaders: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  setup(props) {
-    const { headers, handleHeadersChange, handleHeadersReset } =
-      useHeadersWithState({
-        module: 'analytical_data',
-        localHeaders: HEADERS_ANALYTICAL_DATA,
-        statefulHeaders: props.statefulHeaders,
-        options: toRef(props, 'options'),
-      })
-    return { headers, handleHeadersReset, handleHeadersChange }
-  },
-})
+<script setup lang="ts">
+const localePath = useLocalePath();
 </script>

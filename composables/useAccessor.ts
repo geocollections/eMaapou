@@ -1,3 +1,3 @@
-import { wrapProperty } from '@nuxtjs/composition-api'
-
-export const useAccessor = wrapProperty('$accessor', false)
+// import { wrapProperty } from '@nuxtjs/composition-api'
+//
+// export const useAccessor = wrapProperty('$accessor', false)
