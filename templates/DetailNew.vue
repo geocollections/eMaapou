@@ -50,7 +50,7 @@
       </div>
     </div>
   </v-navigation-drawer>
-  <v-main style="min-height: 100vh">
+  <v-main style="min-height: 100vh; padding-top: 48px">
     <div class="fill-height pb-10">
       <slot name="title" />
       <slot />
