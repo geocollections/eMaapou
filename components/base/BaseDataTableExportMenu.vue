@@ -38,16 +38,17 @@
 
 <script setup lang="ts">
 import { mdiFileExportOutline } from "@mdi/js";
+import { writeFileXLSX, utils } from "xlsx";
 
 const props = defineProps<{
   tableElement: HTMLElement;
 }>();
-const { $writeFileXLSX, $xlsxUtils } = useNuxtApp();
+// const { $writeFileXLSX, $xlsxUtils } = useNuxtApp();
 const removeSortIndicators = (table: HTMLElement) => {
   const tableCopy = table.cloneNode(true);
   // @ts-ignore
   const sortIndicators = tableCopy.querySelectorAll(
-    "thead > tr > th > .v-data-table-header__sort-badge"
+    "thead > tr > th > .v-data-table-header__sort-badge",
   );
   sortIndicators.forEach((indicator: any) => {
     indicator.parentElement.removeChild(indicator);
@@ -56,21 +57,21 @@ const removeSortIndicators = (table: HTMLElement) => {
 };
 const createWorkbook = (table: HTMLElement) => {
   const tableCopy = removeSortIndicators(table);
-  const wb = $xlsxUtils.table_to_book(tableCopy);
+  const wb = utils.table_to_book(tableCopy);
   return wb;
 };
 const handleExportCsv = () => {
   try {
     const wb = createWorkbook(props.tableElement);
 
-    $writeFileXLSX(wb, "export.csv", { bookType: "csv" });
+    writeFileXLSX(wb, "export.csv", { bookType: "csv" });
   } catch (err) {}
 };
 const handleExportExcel = () => {
   try {
     const wb = createWorkbook(props.tableElement);
 
-    $writeFileXLSX(wb, "export.xlsx", { bookType: "xlsx" });
+    writeFileXLSX(wb, "export.xlsx", { bookType: "xlsx" });
   } catch (err) {}
 };
 const handleClipboard = () => {
