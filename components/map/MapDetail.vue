@@ -124,7 +124,6 @@ if (process.client) {
   L = await import("leaflet");
   import("leaflet-gesture-handling");
   import("leaflet.fullscreen");
-  import("@geoman-io/leaflet-geoman-free");
   type D = L.Icon.Default & {
     _getIconUrl?: string;
   };
