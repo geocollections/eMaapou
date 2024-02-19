@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { AREA } from "~/constants";
-import { HEADERS_AREA } from "~/constants/headers";
+import { HEADERS_AREA } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 
 import type { IdListFilter, TextListFilter } from "~/composables/useFilter";
@@ -9,7 +9,6 @@ export const useAreas = defineStore(
   "areas",
   () => {
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     const {
       query,
@@ -107,8 +106,6 @@ export const useAreas = defineStore(
       options,
       setStateFromQueryParams,
       getQueryParams,
-      searchPosition,
-      fromSearch,
       resultsCount,
     };
   },

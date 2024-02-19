@@ -29,6 +29,40 @@ const numberFieldProps: Partial<Header> = {
   },
 };
 
+export const HEADERS_AREA: Headers = {
+  byIds: {
+    id: {
+      title: "area.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
+    },
+    name: {
+      title: "area.name",
+      value: "name",
+      show: true,
+      apiFieldValue: { et: "name", en: "name_en" },
+      sortField: { et: ["name"], en: ["name_en"] },
+    },
+    county: {
+      title: "area.county",
+      value: "county",
+      show: true,
+      apiFieldValue: { et: "maakond", en: "maakond_en" },
+      sortField: { et: ["maakond"], en: ["maakond_en"] },
+    },
+    type: {
+      title: "area.areaType",
+      value: "type",
+      show: true,
+      apiFieldValue: { et: "area_type", en: "area_type_en" },
+      sortField: { et: ["area_type"], en: ["area_type_en"] },
+    },
+  },
+  allIds: ["id", "name", "county", "type"],
+};
+
 export const HEADERS_LOCALITY: Headers = {
   byIds: {
     id: {

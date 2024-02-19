@@ -43,7 +43,6 @@ import { writeFileXLSX, utils } from "xlsx";
 const props = defineProps<{
   tableElement: HTMLElement;
 }>();
-// const { $writeFileXLSX, $xlsxUtils } = useNuxtApp();
 const removeSortIndicators = (table: HTMLElement) => {
   const tableCopy = table.cloneNode(true);
   // @ts-ignore

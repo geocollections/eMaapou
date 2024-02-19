@@ -14,7 +14,6 @@ export const useLocalities = defineStore(
   "localities",
   () => {
     const resultsCount = ref(0);
-    const searchPositionStore = useSearchPosition();
 
     const {
       query,

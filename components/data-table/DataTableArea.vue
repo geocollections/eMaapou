@@ -4,7 +4,7 @@
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'area-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ $translate({ et: item.name, en: item.name_en }) }}
       </nuxt-link>
