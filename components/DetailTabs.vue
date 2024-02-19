@@ -2,7 +2,7 @@
   <v-tabs
     v-if="$vuetify.display.smAndUp"
     ref="tabsEl"
-    class="tabs"
+    class="tabs mt-1"
     height="32"
     show-arrows
   >
@@ -26,7 +26,9 @@
       <v-btn
         class="text-capitalize mb-1 ml-auto"
         variant="outlined"
+        height="32"
         color="accent"
+        style="background-color: #fafafa"
         dark
         v-bind="props"
         :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
