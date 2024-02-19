@@ -9,8 +9,8 @@
     <v-tab
       v-for="(item, index) in tabs"
       :key="index"
-      class="montserrat tab text-none text-grey-darken-3"
-      selected-class="active-tab font-weight-medium"
+      class="montserrat tab text-none text-grey-darken-3 text-body-2"
+      selected-class="bg-grey-lighten-5 active-tab font-weight-medium border-s border-e border-t"
       exact
       :to="
         localePath({
@@ -101,6 +101,8 @@ function translateTitle(tab: HydratedTab) {
 }
 
 .tab {
+  border-top-left-radius: 4px !important;
+  border-top-right-radius: 4px !important;
   &::after {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -110,12 +112,8 @@ function translateTitle(tab: HydratedTab) {
 .active-tab {
   // font-weight: bold;
   color: rgb(var(--v-theme-accent-darken-3)) !important;
-  &::after {
-    border-color: rgb(var(--v-theme-accent-darken-4)) !important;
-    background-color: rgb(var(--v-theme-accent-darken-4)) !important;
-    opacity: 0.1 !important;
 
-    border-bottom: 0;
+  &::after {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
   }
