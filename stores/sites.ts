@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { SITE } from "~/constants";
-import { HEADERS_SITE } from "~/constants/headers";
+import { HEADERS_SITE } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
@@ -12,7 +12,6 @@ export const useSites = defineStore(
   "sites",
   () => {
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     const {
       query,
@@ -118,8 +117,6 @@ export const useSites = defineStore(
       options,
       setStateFromQueryParams,
       getQueryParams,
-      searchPosition,
-      fromSearch,
       resultsCount,
     };
   },

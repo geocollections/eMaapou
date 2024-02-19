@@ -248,3 +248,69 @@ export const HEADERS_SAMPLE: Headers = {
     "image",
   ],
 };
+
+export const HEADERS_SITE: Headers = {
+  byIds: {
+    id: {
+      title: "site.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
+    },
+    name: {
+      title: "site.name",
+      value: "name",
+      show: true,
+      apiFieldValue: { et: "name", en: "name_en" },
+      sortField: ["name"],
+    },
+    area: {
+      title: "site.area",
+      value: "area",
+      show: true,
+      apiFieldValue: { et: "area_name", en: "area_name_en" },
+      sortField: { et: ["area_name"], en: ["area_name_en"] },
+    },
+    coordinates: {
+      title: "locality.coordinates",
+      value: "coordinates",
+      show: true,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "locality.latitude",
+          value: "latitude",
+          width: 75,
+          apiFieldValue: "latitude",
+          ...numberFieldProps,
+        },
+        {
+          title: "locality.longitude",
+          value: "longitude",
+          width: 75,
+          apiFieldValue: "longitude",
+          ...numberFieldProps,
+        },
+      ],
+    },
+    elevation: {
+      title: "site.elevation",
+      value: "elevation",
+      show: true,
+      apiFieldValue: "z",
+      sortField: ["z"],
+      ...numberFieldProps,
+    },
+    depth: {
+      title: "site.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth",
+      sortField: ["depth"],
+      ...numberFieldProps,
+    },
+  },
+  allIds: ["id", "name", "area", "coordinates", "elevation", "depth"],
+};
