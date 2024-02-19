@@ -11,7 +11,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
+      <v-col :sm="12" :md="6" :lg="7" :xl="5">
         <v-card>
           <base-table>
             <table-row
@@ -201,10 +201,12 @@
         </v-card>
       </v-col>
       <v-col
-        v-if="site && ((site.latitude && site.longitude) || site.locality_id)"
+        v-if="(site.latitude && site.longitude) || site.locality_id"
+        :xl="4"
       >
         <map-detail
           v-if="site.latitude && site.longitude"
+          height="300px"
           rounded
           :estonian-map="
             locality && locality.country
