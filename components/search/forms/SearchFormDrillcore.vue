@@ -101,7 +101,7 @@ const { suggest: suggestRepository, hydrate: hydrateRepository } =
   });
 const { suggest: suggestInstitution, hydrate: hydrateInstitution } =
   useAutocomplete("/drillcore", {
-    idField: "database_id",
+    idField: "database_id_s",
     nameField: "acronym",
     filterExclude: "institution",
     solrParams: { query: solrQuery, filter: solrFilters },

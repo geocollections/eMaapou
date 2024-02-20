@@ -9,7 +9,7 @@ type StaticTab = BaseTab & {
 };
 type DynamicTab = BaseTab & {
   type: "dynamic";
-  count: () => Promise<number>;
+  count: (ctx?: Record<string, any>) => Promise<number>;
 };
 type HydratedDynamicTab = BaseTab & {
   type: "dynamic";
@@ -31,11 +31,11 @@ export const useTabs = () => {
     PK extends keyof T,
   >(
     tabs: T,
-    { props }: { props: Record<PK, any> },
+    { props, ctx }: { props: Record<PK, any>; ctx?: Record<string, any> },
   ): Promise<Record<K, HydratedTab>> {
     const promises = Object.entries(tabs).map(async ([key, tab]) => {
       if (tab.type === "dynamic") {
-        const count = await tab.count();
+        const count = await tab.count(ctx);
 
         return [
           key,

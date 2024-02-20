@@ -59,15 +59,8 @@ const {
   setStateFromQueryParams,
   getQueryParams,
 } = drillcoresStore;
-const {
-  solrSort,
-  solrQuery,
-  solrFilters,
-  options,
-  headers,
-  searchPosition,
-  resultsCount,
-} = storeToRefs(drillcoresStore);
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount } =
+  storeToRefs(drillcoresStore);
 
 const route = useRoute();
 
@@ -118,8 +111,11 @@ async function handleDataTableUpdate({ options: newOptions }) {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-function handleClickRow(index: number) {
-  searchPosition.value =
-    index + getOffset(options.value.page, options.value.itemsPerPage);
+const { setSearchPosition } = useSearchPosition();
+function handleClickRow({ index, id }: { index: number; id: number }) {
+  setSearchPosition(
+    { name: "drillcore-id", params: { id } },
+    index + getOffset(options.value.page, options.value.itemsPerPage),
+  );
 }
 </script>

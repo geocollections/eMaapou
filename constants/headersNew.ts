@@ -71,6 +71,79 @@ export const HEADERS_AREA: Headers = {
   allIds: ["id", "name", "county", "type", "size"],
 };
 
+export const HEADERS_DRILLCORE: Headers = {
+  byIds: {
+    id: {
+      title: "drillcore.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
+    },
+    drillcore: {
+      title: "drillcore.name",
+      value: "drillcore",
+      show: true,
+      apiFieldValue: { et: "drillcore", en: "drillcore_en" },
+      sortField: { et: ["drillcore"], en: ["drillcore_en"] },
+    },
+    depth: {
+      title: "drillcore.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth",
+      sortField: ["depth"],
+    },
+    boxes: {
+      title: "drillcore.boxes",
+      value: "boxes",
+      show: true,
+      apiFieldValue: "boxes",
+      sortField: ["boxes"],
+      ...numberFieldProps,
+    },
+    box_numbers: {
+      title: "drillcore.boxNumbers",
+      value: "box_numbers",
+      show: true,
+      apiFieldValue: "box_numbers",
+      sortField: ["box_numbers"],
+      ...numberFieldProps,
+    },
+    year: {
+      title: "drillcore.year",
+      value: "year",
+      show: true,
+      apiFieldValue: "year",
+      sortField: ["year"],
+    },
+    core_repository: {
+      title: "drillcore.storage",
+      value: "core_repository",
+      show: true,
+      apiFieldValue: { et: "core_repository", en: "core_repository_en" },
+      sortField: { et: ["core_repository"], en: ["core_repository_en"] },
+    },
+    acronym: {
+      title: "drillcore.acronym",
+      value: "acronym",
+      show: true,
+      apiFieldValue: "acronym",
+      sortField: ["acronym"],
+    },
+  },
+  allIds: [
+    "id",
+    "drillcore",
+    "depth",
+    "boxes",
+    "box_numbers",
+    "year",
+    "core_repository",
+    "acronym",
+  ],
+};
+
 export const HEADERS_LOCALITY: Headers = {
   byIds: {
     id: {

@@ -4,7 +4,7 @@
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'drillcore-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ $translate({ et: item.drillcore, en: item.drillcore_en }) }}
       </nuxt-link>

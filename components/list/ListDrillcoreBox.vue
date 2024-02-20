@@ -12,8 +12,10 @@
           v-model="search"
           class="pt-0 mt-0"
           color="primary darken-2"
-          :append-icon="mdiMagnify"
           :label="$t('common.search')"
+          :prepend-inner-icon="mdiMagnify"
+          variant="underlined"
+          density="compact"
           single-line
           hide-details
           clearable
@@ -74,14 +76,14 @@
                         img(
                           box.attachment.filename,
                           { size: 'small' },
-                          { provider: 'geocollections' }
+                          { provider: 'geocollections' },
                         )
                       "
                       :src="
                         img(
                           box.attachment.filename,
                           { size: 'medium' },
-                          { provider: 'geocollections' }
+                          { provider: 'geocollections' },
                         )
                       "
                     >
@@ -197,7 +199,7 @@ const props = withDefaults(
     count?: number;
     showSearch?: boolean;
   }>(),
-  { count: 0, showSearch: true }
+  { count: 0, showSearch: true },
 );
 
 const emit = defineEmits(["update"]);
@@ -224,7 +226,7 @@ watch(
   () => props.items,
   () => {
     isLoading.value = false;
-  }
+  },
 );
 
 watch(searchDebounced, () => {

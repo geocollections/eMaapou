@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DRILLCORE } from "~/constants";
-import { HEADERS_DRILLCORE } from "~/constants/headers";
+import { HEADERS_DRILLCORE } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
@@ -15,7 +15,6 @@ export const useDrillcores = defineStore(
   "drillcores",
   () => {
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     const {
       query,
@@ -155,8 +154,6 @@ export const useDrillcores = defineStore(
       options,
       setStateFromQueryParams,
       getQueryParams,
-      searchPosition,
-      fromSearch,
       resultsCount,
     };
   },
