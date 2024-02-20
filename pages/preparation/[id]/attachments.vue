@@ -1,5 +1,5 @@
 <template>
-  <data-table-taxon-list
+  <data-table-attachment
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"
@@ -12,9 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { HEADERS_TAXON_LIST, TAXON_LIST } from "~/constants";
-import DataTableTaxonList from "~/components/data-table/DataTableTaxonList.vue";
-
+import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
 const route = useRoute();
 const {
   options,
@@ -24,24 +22,24 @@ const {
   handleHeadersReset,
   handleHeadersChange,
 } = useDataTableDetail({
-  initOptions: TAXON_LIST.options,
-  initHeaders: HEADERS_TAXON_LIST,
+  initOptions: ATTACHMENT_LINK.options,
+  initHeaders: HEADERS_ATTACHMENT,
 });
 
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
+const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
-    nest: 1,
     preparation: route.params.id,
+    nest: 2,
     search: search.value,
     search_fields: Object.values(
-      getAPIFieldValues(HEADERS_TAXON_LIST, locale.value),
+      getAPIFieldValues(HEADERS_ATTACHMENT, locale.value),
     ).join(","),
     ordering: getGeoloogiaApiSort({
       sortBy: options.value.sortBy,
-      headersMap: HEADERS_TAXON_LIST.byIds,
+      headersMap: HEADERS_ATTACHMENT.byIds,
       locale: locale.value as "et" | "en",
     }),
   },

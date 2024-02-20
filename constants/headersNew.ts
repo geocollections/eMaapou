@@ -283,6 +283,75 @@ export const HEADERS_LOCALITY: Headers = {
   ],
 };
 
+export const HEADERS_PREPARATION: Headers = {
+  byIds: {
+    id: {
+      title: "preparation.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
+    },
+    preparation_number: {
+      title: "preparation.preparation_number",
+      value: "preparation_number",
+      show: true,
+      apiFieldValue: "preparation_number",
+      sortField: ["preparation_number"],
+    },
+    locality: {
+      title: "preparation.locality",
+      value: "locality",
+      show: true,
+      apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
+    },
+    depth: {
+      title: "preparation.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth,depth_interval",
+      sortField: ["depth", "depth_interval"],
+    },
+    stratigraphy: {
+      title: "preparation.stratigraphy",
+      value: "stratigraphy",
+      show: true,
+      apiFieldValue: {
+        et: "stratigraphy,lithostratigraphy",
+        en: "stratigraphy_en,lithostratigraphy_en",
+      },
+      sortField: {
+        et: ["stratigraphy", "lithostratigraphy"],
+        en: ["stratigraphy_en", "lithostratigraphy_en"],
+      },
+    },
+    agent: {
+      title: "preparation.agent",
+      value: "agent",
+      show: true,
+      apiFieldValue: "agent",
+      sortField: ["agent"],
+    },
+    mass: {
+      title: "preparation.mass",
+      value: "mass",
+      show: true,
+      apiFieldValue: "mass",
+      sortField: ["mass"],
+    },
+  },
+  allIds: [
+    "id",
+    "preparation_number",
+    "locality",
+    "depth",
+    "stratigraphy",
+    "agent",
+    "mass",
+  ],
+};
+
 export const HEADERS_SAMPLE: Headers = {
   byIds: {
     id: {

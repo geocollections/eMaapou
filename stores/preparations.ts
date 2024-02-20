@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { PREPARATION } from "~/constants";
-import { HEADERS_PREPARATION } from "~/constants/headers";
+import { HEADERS_PREPARATION } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
@@ -14,7 +14,6 @@ export const usePreparations = defineStore(
   "preparations",
   () => {
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     const {
       query,
@@ -134,8 +133,6 @@ export const usePreparations = defineStore(
       options,
       setStateFromQueryParams,
       getQueryParams,
-      searchPosition,
-      fromSearch,
       resultsCount,
     };
   },

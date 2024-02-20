@@ -54,7 +54,6 @@ import { mdiImageFilterHdr } from "@mdi/js";
 
 const route = useRoute();
 
-const { setSearchPosition } = useSearchPosition();
 const samplesStore = useSamples();
 const {
   handleHeadersReset,
@@ -109,6 +108,7 @@ async function handleDataTableUpdate({ options: newOptions }) {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
+const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "sample-id", params: { id } },
