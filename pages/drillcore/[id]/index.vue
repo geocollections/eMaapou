@@ -155,6 +155,8 @@ const props = defineProps<{
   drillcore: any;
 }>();
 
+const localePath = useLocalePath();
+
 const drillcore = computed(() => props.drillcore);
 const depository = computed(() => props.drillcore.depository);
 const storage = computed(() => props.drillcore.storage);
