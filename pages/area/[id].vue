@@ -127,7 +127,7 @@ const tabs = {
     props: {},
   } satisfies Tab,
 };
-const { data, pending, error } = useAsyncData("area", async () => {
+const { data, pending, error } = await useAsyncData("area", async () => {
   const area = await $geoloogiaFetch(`/area/${route.params.id}`, {
     query: {
       nest: 1,

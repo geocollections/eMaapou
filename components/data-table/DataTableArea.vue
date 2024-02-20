@@ -17,6 +17,9 @@
         {{ $translate({ et: item.area_type, en: item.area_type_en }) }}
       </span>
     </template>
+    <template #item.size="{ item }">
+      <span v-if="item.area_ha">{{ item.area_ha.toFixed(2) }}</span>
+    </template>
   </base-data-table>
 </template>
 

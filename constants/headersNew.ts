@@ -59,8 +59,16 @@ export const HEADERS_AREA: Headers = {
       apiFieldValue: { et: "area_type", en: "area_type_en" },
       sortField: { et: ["area_type"], en: ["area_type_en"] },
     },
+    size: {
+      title: "area.areaHa",
+      value: "size",
+      show: true,
+      apiFieldValue: "area_ha",
+      sortField: ["area_ha"],
+      ...numberFieldProps,
+    },
   },
-  allIds: ["id", "name", "county", "type"],
+  allIds: ["id", "name", "county", "type", "size"],
 };
 
 export const HEADERS_LOCALITY: Headers = {

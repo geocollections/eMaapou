@@ -153,58 +153,60 @@
           >
             {{ $t("alert.estonianLandBoardDatabase") }}
           </v-alert>
-          <base-table>
-            <table-row-link
-              :title="$t('deposit.registrationNo')"
-              :value="deposit.id"
-              @link-click="
-                $openWindow(
-                  `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.id}`,
-                )
-              "
-            />
-            <table-row
-              :title="$t('deposit.name')"
-              :value="`${deposit.nimetus} ${
-                deposit.maardla_os ? `(${deposit.maardla_os})` : ''
-              }`"
-            />
-            <table-row
-              :title="$t('deposit.name')"
-              :value="deposit.maardla_os"
-            />
-            <table-row :title="$t('deposit.area')" :value="deposit.pindala" />
-            <table-row :title="$t('deposit.isBedrock')">
-              <template #value>
-                <base-boolean :value="deposit.aluspohja" />
-              </template>
-            </table-row>
-            <table-row
-              :title="$t('deposit.commodity')"
-              :value="deposit.maavara"
-            />
-            <table-row
-              :title="$t('deposit.usage')"
-              :value="deposit.pohimaavar"
-            />
-            <table-row
-              :title="$t('deposit.additionalCommodity')"
-              :value="deposit.kaasmaavar"
-            />
+          <v-card>
+            <base-table>
+              <table-row-link
+                :title="$t('deposit.registrationNo')"
+                :value="deposit.id"
+                @link-click="
+                  $openWindow(
+                    `https://xgis.maaamet.ee/xgis2/page/app/maardlad?showsearchlayer=1&searchid=FUU7966&REGISTRIKAART=${deposit.id}`,
+                  )
+                "
+              />
+              <table-row
+                :title="$t('deposit.name')"
+                :value="`${deposit.nimetus} ${
+                  deposit.maardla_os ? `(${deposit.maardla_os})` : ''
+                }`"
+              />
+              <table-row
+                :title="$t('deposit.name')"
+                :value="deposit.maardla_os"
+              />
+              <table-row :title="$t('deposit.area')" :value="deposit.pindala" />
+              <table-row :title="$t('deposit.isBedrock')">
+                <template #value>
+                  <base-boolean :value="deposit.aluspohja" />
+                </template>
+              </table-row>
+              <table-row
+                :title="$t('deposit.commodity')"
+                :value="deposit.maavara"
+              />
+              <table-row
+                :title="$t('deposit.usage')"
+                :value="deposit.pohimaavar"
+              />
+              <table-row
+                :title="$t('deposit.additionalCommodity')"
+                :value="deposit.kaasmaavar"
+              />
 
-            <table-row
-              :title="$t('deposit.miningConditions')"
-              :value="deposit.maeteh_ti"
-            />
-            <table-row
-              :title="$t('deposit.enviromentalRestrictions')"
-              :value="deposit.geookol_ti"
-            />
-            <table-row
-              :title="$t('deposit.dataExportDate')"
-              :value="deposit.eksporditi"
-            />
-          </base-table>
+              <table-row
+                :title="$t('deposit.miningConditions')"
+                :value="deposit.maeteh_ti"
+              />
+              <table-row
+                :title="$t('deposit.enviromentalRestrictions')"
+                :value="deposit.geookol_ti"
+              />
+              <table-row
+                :title="$t('deposit.dataExportDate')"
+                :value="deposit.eksporditi"
+              />
+            </base-table>
+          </v-card>
         </template>
         <template v-if="miningClaim">
           <div class="text-h6 py-2">{{ $t("area.miningClaim") }}</div>
@@ -313,7 +315,7 @@
           </v-card>
         </template>
       </v-col>
-      <v-col v-if="siteMarkers.length > 0 || geojson" :xl="4">
+      <v-col v-if="siteMarkers?.length > 0 || geojson" :xl="4">
         <map-detail
           rounded
           estonian-map
@@ -363,7 +365,7 @@ const route = useRoute();
 const localePath = useLocalePath();
 const { $solrFetch, $translate } = useNuxtApp();
 
-const { data: siteMarkers } = useAsyncData("siteMarkers", async () => {
+const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
   const sites = await $solrFetch<{
     response: { numFound: number; docs: any[] };
   }>("/site", {
