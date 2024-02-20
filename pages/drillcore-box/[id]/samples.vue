@@ -1,5 +1,5 @@
 <template>
-  <data-table-analysis
+  <data-table-sample
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"
     :options="options"
@@ -12,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { HEADERS_ANALYSIS, ANALYSIS } from "~/constants";
+import { HEADERS_SAMPLE, SAMPLE } from "~/constants";
+
 const props = defineProps<{
   locality: number;
   depthStart: number;
@@ -27,13 +28,15 @@ const {
   handleHeadersReset,
   handleHeadersChange,
 } = useDataTableDetail({
-  initOptions: ANALYSIS.options,
-  initHeaders: HEADERS_ANALYSIS,
+  initOptions: SAMPLE.options,
+  initHeaders: HEADERS_SAMPLE,
 });
+
 const { locale } = useI18n();
+
 const { data, pending } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>("/analysis", {
+}>("/sample", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -42,7 +45,7 @@ const { data, pending } = await useSolrFetch<{
       filter: `locality_id:${props.locality} AND (depth:[${props.depthStart} TO ${props.depthEnd}] OR depth_interval:[${props.depthStart} TO ${props.depthEnd}])`,
       sort: getSolrSort({
         sortBy: options.value.sortBy,
-        headersMap: HEADERS_ANALYSIS.byIds,
+        headersMap: HEADERS_SAMPLE.byIds,
         locale: locale.value as "et" | "en",
       }),
     },
