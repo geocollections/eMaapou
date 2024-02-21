@@ -12,18 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import isEmpty from "lodash/isEmpty";
-import isNil from "lodash/isNil";
-
 import type { RouteLocationRaw } from "vue-router";
-import sumBy from "lodash/sumBy";
-import sortBy from "lodash/sortBy";
 import type { Tab } from "~/composables/useTabs";
 const { $geoloogiaFetch, $solrFetch, $hydrateTab, $translate } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
-const validRoute = ref<RouteLocationRaw>({});
 
 const analysesStore = useAnalyses();
 const { getQueryParams } = analysesStore;

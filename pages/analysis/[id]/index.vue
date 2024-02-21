@@ -156,7 +156,6 @@ import sortBy from "lodash/sortBy";
 const props = defineProps<{
   analysis: any;
 }>();
-console.log(props.analysis);
 
 const resultChartData = computed(() => data.value?.resultChartData);
 const database = computed(() => props.analysis.database);
@@ -194,9 +193,6 @@ const { data } = await useAsyncData("results", async () => {
       if (unitKey === "6") {
         results.push({ name: "Other", value: 100 - valueSum });
       }
-      // if (unitKey === '7') {
-      //   results.push({ name: 'Other', value: 1000000 - valueSum })
-      // }
 
       return {
         ...prev,

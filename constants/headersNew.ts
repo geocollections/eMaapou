@@ -150,6 +150,40 @@ export const HEADERS_AREA: Headers = {
   allIds: ["id", "name", "county", "type", "size"],
 };
 
+export const HEADERS_DATASET: Headers = {
+  byIds: {
+    id: {
+      title: "dataset.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "dataset_id",
+      sortField: ["dataset_id"],
+    },
+    name: {
+      title: "dataset.name",
+      value: "name",
+      show: true,
+      apiFieldValue: { et: "name", en: "name_en" },
+      sortField: { et: ["name"], en: ["name_en"] },
+    },
+    date: {
+      title: "dataset.date",
+      value: "date",
+      show: true,
+      apiFieldValue: "date,date_txt",
+      sortField: ["date", "date_txt"],
+    },
+    database: {
+      title: "dataset.database",
+      value: "database_acronym",
+      show: true,
+      apiFieldValue: "database_acronym",
+      sortField: ["database_acronym"],
+    },
+  },
+  allIds: ["id", "name", "date", "database"],
+};
+
 export const HEADERS_DRILLCORE: Headers = {
   byIds: {
     id: {

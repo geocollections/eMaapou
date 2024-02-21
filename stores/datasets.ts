@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DATASET } from "~/constants";
-import { HEADERS_DATASET } from "~/constants/headers";
+import { HEADERS_DATASET } from "~/constants/headersNew";
 import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
@@ -14,7 +14,6 @@ export const useDatasets = defineStore(
   "datasets",
   () => {
     const resultsCount = ref(0);
-    const { searchPosition, fromSearch } = useSearchPosition();
 
     const {
       query,
@@ -136,8 +135,6 @@ export const useDatasets = defineStore(
       options,
       setStateFromQueryParams,
       getQueryParams,
-      searchPosition,
-      fromSearch,
       resultsCount,
     };
   },

@@ -1,284 +1,207 @@
 <template>
-  <detail v-if="!pending" :loading="pending" :error="error">
+  <detail-new :show-similar="showDrawer">
     <template #title>
-      <header-detail
-        :ids="prevNext"
-        :title="dataset.title"
-        :search-to="localePath({ path: '/dataset', query: getQueryParams() })"
-        @click:next="searchPosition++"
-        @click:previous="searchPosition--"
-      />
+      <header-detail-new :title="data?.dataset.title">
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </header-detail-new>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarDatasets"
+        :total-results="datasetsRes?.response.numFound ?? 0"
+        :search-route="
+          localePath({ path: '/dataset', query: getQueryParams() })
+        "
+        :get-result-route="
+          (item) => localePath({ name: 'dataset-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: dataset }">
+          <div class="font-weight-medium text-wrap">
+            {{ dataset.title }}
+          </div>
+        </template>
+      </SearchResultsDrawer>
     </template>
 
-    <template #column-left>
-      <v-card-title class="subsection-title">{{
-        $t("common.general")
-      }}</v-card-title>
-      <v-card-text>
-        <base-table>
-          <table-row
-            :title="$t('dataset.title').toString()"
-            :value="dataset.title"
-          />
-          <table-row
-            :title="$t('dataset.titleTranslated').toString()"
-            :value="dataset.title_translated"
-          />
-          <table-row
-            :title="$t('dataset.titleAlt').toString()"
-            :value="dataset.title_alternative"
-          />
-          <table-row
-            v-if="dataset.creators || dataset.owner_txt || dataset.owner"
-            :title="$t('dataset.creators').toString()"
-            :value="
-              dataset.creators || dataset.owner_txt || dataset.owner.agent
-            "
-          />
-          <table-row
-            :title="$t('dataset.publicationYear').toString()"
-            :value="dataset.publication_year"
-          />
-          <table-row
-            :title="$t('dataset.date').toString()"
-            :value="dataset.date"
-          />
-          <table-row
-            :title="$t('dataset.resourceTopic').toString()"
-            :value="dataset.resource"
-          />
-          <table-row
-            :title="$t('dataset.publisher').toString()"
-            :value="dataset.publisher"
-          />
-          <table-row
-            :title="$t('dataset.subjects').toString()"
-            :value="dataset.subjects"
-          />
-          <table-row
-            v-if="dataset.language"
-            :title="$t('dataset.language').toString()"
-            :value="
-              $translate({
-                et: dataset.language.value,
-                en: dataset.language.value_en,
-              })
-            "
-          />
-          <table-row
-            :title="$t('dataset.abstract').toString()"
-            :value="dataset.abstract"
-          />
-          <table-row
-            :title="$t('dataset.methods').toString()"
-            :value="dataset.methods"
-          />
-          <table-row
-            :title="$t('dataset.version').toString()"
-            :value="dataset.version"
-          />
-          <table-row-link
-            v-if="doi"
-            :title="$t('dataset.doi').toString()"
-            :value="doi"
-            :href="`https://doi.geocollections.info/${doi}`"
-          />
-          <table-row-link
-            v-if="reference"
-            :title="$t('dataset.reference').toString()"
-            :value="reference.reference"
-            :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
-          />
-          <table-row-link
-            v-if="dataset.locality"
-            :title="$t('dataset.locality').toString()"
-            :value="
-              $translate({
-                et: dataset.locality.locality,
-                en: dataset.locality.locality_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: dataset.locality.id },
-              })
-            "
-          />
-          <table-row
-            v-if="dataset.copyright_agent"
-            :title="$t('dataset.copyright').toString()"
-            :value="dataset.copyright_agent.agent"
-          />
-          <table-row-link
-            v-if="dataset.licence"
-            :title="$t('dataset.licence').toString()"
-            :value="
-              $translate({
-                et: dataset.licence.licence,
-                en: dataset.licence.licence_en,
-              })
-            "
-            :href="
-              $translate({
-                et: dataset.licence.licence_url,
-                en: dataset.licence.licence_url_en,
-              })
-            "
-          />
-          <table-row
-            v-if="dataset.date_added"
-            :title="$t('dataset.dateAdded').toString()"
-            :value="$formatDate(dataset.date_added)"
-          />
-          <table-row
-            v-if="dataset.date_changed"
-            :title="$t('dataset.dateChanged').toString()"
-            :value="$formatDate(dataset.date_changed)"
-          />
-          <table-row
-            v-if="parameters.length > 0"
-            :title="$t('dataset.parameters').toString()"
-            :value="parameters"
-          >
-            <template #value>
-              <v-chip
-                v-for="(parameter, i) in parameters"
-                :key="i"
-                size="small"
-                class="mr-1 mb-1"
-              >
-                {{ parameter.text }}
-              </v-chip>
-            </template>
-          </table-row>
-        </base-table>
-      </v-card-text>
-    </template>
-
-    <template v-if="locationMarkers.length > 0" #column-right>
-      <v-card-title class="subsection-title">{{
-        $t("locality.map")
-      }}</v-card-title>
-      <v-card-text>
-        <v-card id="map-wrap" elevation="0">
-          <map-detail rounded :markers="locationMarkers" />
-        </v-card>
-      </v-card-text>
-    </template>
-
-    <template #bottom>
-      <v-card v-if="data?.tabs.length > 0" class="mt-4 mb-4">
-        <DetailTabs :tabs="data?.tabs" :init-active-tab="validRoute">
-          <template #default="{ activeTabProps }">
-            <NuxtPage v-bind="activeTabProps" />
-          </template>
-        </DetailTabs>
-      </v-card>
-    </template>
-  </detail>
+    <NuxtPage v-bind="activeTabProps" />
+  </detail-new>
 </template>
 
 <script setup lang="ts">
-import isEmpty from "lodash/isEmpty";
-import type { RouteLocationRaw } from "vue-router";
-import { type Tab, TABS_DATASET } from "~/constants";
-import type { MapMarker } from "~/types/map";
+import type { Tab } from "~/composables/useTabs";
 
-const { $geoloogiaFetch, $solrFetch, $hydrateTab, $translate } = useNuxtApp();
+const { $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const route = useRoute();
-const validRoute = ref<RouteLocationRaw>({});
 const localePath = useLocalePath();
-
-const dataset = computed(() => data.value?.dataset);
-const doi = computed(() => data.value?.doi);
-const reference = computed(() => data.value?.reference);
-const parameters = computed(() => data.value?.parameters);
-const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
 
 const datasetsStore = useDatasets();
 const { getQueryParams } = datasetsStore;
-const { solrFilters, solrQuery, solrSort, searchPosition, resultsCount } =
-  storeToRefs(datasetsStore);
-const { prevNext } = await usePrevNext("/dataset", {
-  searchPosition,
-  solrParams: computed(() => ({
-    query: solrQuery.value,
-    filter: solrFilters.value,
-    sort: solrSort.value,
-    fields: ["id", "name", "name_en"],
-  })),
-  count: resultsCount.value,
-  mapper: (doc) => ({
-    id: doc.id,
-    name: { et: doc.name, en: doc.name_en },
-  }),
+const { solrFilters, solrQuery, solrSort } = storeToRefs(datasetsStore);
+
+const {
+  data: datasetsRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/dataset", {
+  routeName: "dataset-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
 });
-const { data, pending, error } = useLazyAsyncData("dataset", async () => {
-  const datasetPromise = $geoloogiaFetch(`/dataset/${route.params.id}/`, {
+const similarDatasets = computed(() => datasetsRes.value?.response.docs ?? []);
+
+const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+const tabs = {
+  general: {
+    type: "static",
+    routeName: "dataset-id",
+    title: "common.general",
+    props: {},
+  } satisfies Tab,
+  sample_results: {
+    type: "dynamic",
+    routeName: "dataset-id-samples",
+    title: "dataset.sampleResults",
+    count: async () => {
+      const res = await $solrFetch("/sample_data", {
+        query: {
+          q: `dataset_ids:${route.params.id}`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  graphs: {
+    type: "dynamic",
+    routeName: "dataset-id-graphs",
+    title: "locality.graphs",
+    count: async () => {
+      const res = await $solrFetch("/analysis_results", {
+        query: {
+          q: `dataset_ids:${route.params.id}`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  dataset_analysis: {
+    type: "dynamic",
+    routeName: "dataset-id-analyses",
+    title: "dataset.analyses",
+    count: async () => {
+      const res = await $solrFetch("/analytical_data", {
+        query: {
+          q: `dataset_ids:${route.params.id}`,
+          rows: 0,
+        },
+      });
+      return res.response.numFound;
+    },
+    props: {},
+  } satisfies Tab,
+  dataset_reference: {
+    type: "dynamic",
+    routeName: "dataset-id-references",
+    title: "dataset.references",
+    count: async () => {
+      const res = await $geoloogiaFetch("/dataset_reference/", {
+        query: {
+          dataset: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  attachment_link: {
+    type: "dynamic",
+    routeName: "dataset-id-attachments",
+    title: "dataset.attachments",
+    count: async () => {
+      const res = await $geoloogiaFetch("/attachment_link/", {
+        query: {
+          dataset: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  dataset_author: {
+    type: "dynamic",
+    routeName: "dataset-id-authors",
+    title: "dataset.authors",
+    count: async () => {
+      const res = await $geoloogiaFetch("/dataset_author/", {
+        query: {
+          dataset: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+  dataset_geolocation: {
+    type: "dynamic",
+    routeName: "dataset-id-geolocations",
+    title: "dataset.geolocations",
+    count: async () => {
+      const res = await $geoloogiaFetch("/dataset_geolocation/", {
+        query: {
+          dataset: route.params.id,
+          limit: 0,
+        },
+      });
+      return res.count;
+    },
+    props: {},
+  } satisfies Tab,
+};
+
+const { data } = await useAsyncData("dataset", async () => {
+  const dataset = await $geoloogiaFetch(`/dataset/${route.params.id}/`, {
     query: {
       nest: 1,
     },
+    onResponseError: (error) => {
+      if (error.response?.status === 404) {
+        throw createError({
+          statusCode: 404,
+          message: "Dataset not found",
+        });
+      }
+    },
   });
-  const parametersPromise = $solrFetch("/dataset", {
+
+  const parametersResponse = await $solrFetch("/dataset", {
     query: {
       q: `id:${route.params.id}`,
       fl: "parameter_index_list,parameter_list",
     },
   });
-  const doiPromise = $geoloogiaFetch("/doi/", {
-    query: {
-      dataset: route.params.id,
-      nest: 1,
-    },
-  });
-  const localityGroupedPromise = $solrFetch("/analysis", {
-    query: {
-      q: "*",
-      fq: `dataset_ids:${route.params.id}`,
-      fl: "locality_id,locality,locality_en,latitude,longitude,site_id,name,name_en",
-      group: true,
-      "group.field": ["locality_id", "site_id"],
-      rows: 10000,
-    },
-  });
 
-  const tabs = TABS_DATASET.allIds.map((id) => TABS_DATASET.byIds[id]);
-  const hydratedTabsPromise = Promise.all(
-    tabs.map((tab) => {
-      return $hydrateTab(tab, {
-        countParams: {
-          solr: {
-            default: { fq: `dataset_ids:${route.params.id}` },
-          },
-          api: {
-            default: { dataset: route.params.id },
-          },
-        },
-      });
-    }),
-  ).then((res): { [K: string]: any } => {
-    return res.reduce((prev, tab): { [K: string]: any } => {
-      return { ...prev, [tab.id]: tab };
-    }, {});
-  });
-  const [
-    datasetResponse,
-    parametersResponse,
-    doiResponse,
-    localityGroupedResponse,
-    hydratedTabsByIds,
-  ] = await Promise.all([
-    datasetPromise,
-    parametersPromise,
-    doiPromise,
-    localityGroupedPromise,
-    hydratedTabsPromise,
-  ]);
-
-  const ids = datasetResponse?.ids;
-  const dataset = datasetResponse;
+  // hydratedTabsByIds.graphs.count =
+  //   locationMarkers.length === 1 ? locationMarkers.length : 0;
 
   const parameterValues =
     parametersResponse.response.docs[0]?.parameter_index_list?.[0]?.split("; ");
@@ -292,85 +215,40 @@ const { data, pending, error } = useLazyAsyncData("dataset", async () => {
 
   const parameterHeaders = {
     byIds: parameters.reduce((prev, parameter) => {
-      return { ...prev, [parameter.value]: { ...parameter, show: false } };
+      return { ...prev, [parameter.value]: { ...parameter, show: true } };
     }, {}),
     allIds: parameterValues,
   };
-
-  const doi = doiResponse.results?.[0]?.identifier;
-  const reference = {
-    id: doiResponse.results?.[0]?.reference?.id,
-    reference: doiResponse.results?.[0]?.reference?.reference,
-  };
-
-  const localities = localityGroupedResponse?.grouped?.locality_id?.groups
-    ?.map((item: any) => item?.doclist?.docs?.[0])
-    .filter((item: any) => {
-      return !isEmpty(item) && item?.locality_id;
-    });
-  const sites = localityGroupedResponse?.grouped?.site_id?.groups
-    ?.map((item: any) => item?.doclist?.docs?.[0])
-    .filter((item: any) => {
-      return !isEmpty(item) && item?.site_id;
-    });
-  const locationMarkers = localities
-    .concat(sites)
-    .reduce((filtered: MapMarker[], item): MapMarker[] => {
-      if (!(item.latitude && item.longitude)) return filtered;
-      const isItemInArray = filtered.some(
-        (existingItem) =>
-          existingItem.latitude === item.latitude &&
-          existingItem.longitude === item.longitude,
-      );
-      if (isItemInArray) return filtered;
-
-      const newItem = {
-        latitude: item.latitude,
-        longitude: item.longitude,
-        text:
-          $translate({ et: item.locality, en: item.locality_en }) ??
-          (item.name || `ID: ${item.id}`),
-        routeName: item.locality_id ? "locality" : "site",
-        id: item.locality_id ?? item.site_id,
-      };
-
-      return [...filtered, newItem];
-    }, []);
-
-  hydratedTabsByIds.sample_results.props.parameterHeaders = {
-    ...parameterHeaders,
-    byIds: Object.fromEntries(
-      Object.entries(parameterHeaders.byIds).map(([k, v]) => {
-        return [k, { ...v, show: true }];
-      }),
-    ),
-  };
-
-  hydratedTabsByIds.graphs.count =
-    locationMarkers.length === 1 ? locationMarkers.length : 0;
-  hydratedTabsByIds.graphs.props.dataset = dataset;
+  const hydratedTabs = await hydrateTabs(tabs, {
+    props: {
+      general: { dataset, parameters },
+      sample_results: { parameterHeaders },
+      graphs: { dataset },
+    },
+  });
 
   return {
-    ids,
     dataset,
-    tabs: TABS_DATASET.allIds
-      .map((id) => hydratedTabsByIds[id])
-      .filter((tab) => tab.count > 0),
-    parameters,
-    parameterHeaders,
-    doi,
-    reference,
-    locationMarkers,
-    localities,
+    tabs: filterHydratedTabs(hydratedTabs, [
+      "general",
+      "sample_results",
+      "graphs",
+      "dataset_analysis",
+      "dataset_reference",
+      "attachment_link",
+      "dataset_author",
+      "dataset_geolocation",
+    ]),
   };
 });
 const title = computed(() => data.value?.dataset.title);
 
-useRedirectInvalidTabRoute({
+redirectInvalidTab({
+  redirectRoute: localePath({
+    name: "dataset-id",
+    params: { id: route.params.id },
+  }),
   tabs: data.value?.tabs ?? [],
-  watchableObject: data.value?.dataset,
-  pending: pending,
-  validRoute: validRoute,
 });
 
 // export default defineComponent({

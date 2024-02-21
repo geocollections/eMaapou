@@ -47,11 +47,9 @@ const tabs = {
     routeName: "drillcore-box-id-samples",
     title: "drillcore.samples",
     count: async (ctx) => {
-      console.log(ctx);
       if (!ctx?.drillcoreBox.drillcore?.locality) return 0;
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
-      console.log("here");
       const response = await $solrFetch("/sample", {
         query: {
           q: `locality_id:${ctx.drillcoreBox.drillcore.locality} AND (depth:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}] OR depth_interval:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}])`,

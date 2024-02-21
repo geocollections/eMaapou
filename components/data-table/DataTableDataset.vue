@@ -1,20 +1,22 @@
 <template>
   <base-data-table v-bind="$attrs">
-    <template #item.id="{ item }">
+    <template #item.id="{ item, index }">
       <nuxt-link
         v-if="item.id"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
+        @click="emit('click:row', { index: index, id: item.id })"
       >
         {{ item.id }}
       </nuxt-link>
     </template>
 
-    <template #item.name="{ item }">
+    <template #item.name="{ item, index }">
       <nuxt-link
         v-if="item.title"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
+        @click="emit('click:row', { index: index, id: item.id })"
       >
         {{ item.title }}
       </nuxt-link>
@@ -43,5 +45,6 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(["click:row"]);
 const localePath = useLocalePath();
 </script>

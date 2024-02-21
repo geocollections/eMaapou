@@ -36,7 +36,6 @@ export const useTabs = () => {
     const promises = Object.entries(tabs).map(async ([key, tab]) => {
       if (tab.type === "dynamic") {
         const count = await tab.count(ctx);
-
         return [
           key,
           {
