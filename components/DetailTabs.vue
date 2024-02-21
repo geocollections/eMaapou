@@ -4,13 +4,14 @@
     ref="tabsEl"
     class="tabs mt-1"
     height="32"
+    slider-color="accent"
     show-arrows
   >
     <v-tab
       v-for="(item, index) in tabs"
       :key="index"
       class="montserrat tab text-none text-grey-darken-3 text-body-2"
-      selected-class="bg-grey-lighten-5 active-tab font-weight-medium border-s border-e border-t"
+      selected-class="v-tab--selected bg-grey-lighten-5 active-tab font-weight-medium border-s border-e border-t"
       exact
       :to="
         localePath({
