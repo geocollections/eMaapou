@@ -1,5 +1,5 @@
 <template>
-  <DetailNew>
+  <DetailNew :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #tabs>
@@ -7,14 +7,44 @@
         </template>
       </HeaderDetailNew>
     </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarAnalysis"
+        :total-results="analysesRes?.response.numFound ?? 0"
+        :search-route="
+          localePath({ path: '/analysis', query: getQueryParams() })
+        "
+        :get-result-route="
+          (item) => localePath({ name: 'analysis-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: analysis }">
+          <div class="font-weight-medium">
+            {{ analysis.id }}
+          </div>
+        </template>
+        <template #itemSubtitle="{ item: analysis }">
+          <div v-if="analysis.sample_name" class="d-flex align-center">
+            <v-icon start size="small">{{ mdiImageFilterHdr }}</v-icon>
+            <span class="text--secondary">
+              {{ analysis.sample_name }}
+            </span>
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
     <NuxtPage v-bind="activeTabProps" />
   </DetailNew>
 </template>
 
 <script setup lang="ts">
-import type { RouteLocationRaw } from "vue-router";
 import type { Tab } from "~/composables/useTabs";
-const { $geoloogiaFetch, $solrFetch, $hydrateTab, $translate } = useNuxtApp();
+import { mdiImageFilterHdr } from "@mdi/js";
+const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
@@ -23,6 +53,22 @@ const analysesStore = useAnalyses();
 const { getQueryParams } = analysesStore;
 const { solrFilters, solrQuery, solrSort, resultsCount } =
   storeToRefs(analysesStore);
+
+const {
+  data: analysesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/analysis", {
+  routeName: "analysis-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarAnalysis = computed(() => analysesRes.value?.response.docs ?? []);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 const activeTabProps = computed(() => {

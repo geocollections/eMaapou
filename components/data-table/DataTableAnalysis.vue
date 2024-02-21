@@ -4,7 +4,7 @@
       <nuxt-link
         class="text-link"
         :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
       </nuxt-link>
