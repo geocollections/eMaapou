@@ -29,6 +29,85 @@ const numberFieldProps: Partial<Header> = {
   },
 };
 
+export const HEADERS_ANALYSIS: Headers = {
+  byIds: {
+    id: {
+      title: "analysis.id",
+      value: "id",
+      show: true,
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
+    },
+    sample_number: {
+      title: "analysis.sampleNumber",
+      value: "sample_number",
+      show: true,
+      apiFieldValue: "sample_number",
+      sortField: ["sample_number"],
+    },
+    locality: {
+      title: "analysis.locality",
+      value: "locality",
+      show: true,
+      apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
+    },
+    depth: {
+      title: "analysis.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth",
+      sortField: ["depth"],
+    },
+    depth_interval: {
+      title: "analysis.depthInterval",
+      value: "depth_interval",
+      show: true,
+      apiFieldValue: "depth_interval",
+      sortField: ["depth_interval"],
+    },
+    method: {
+      title: "analysis.method",
+      value: "method",
+      show: true,
+      apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
+      sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
+    },
+    method_details: {
+      title: "analysis.methodDetails",
+      value: "method_details",
+      show: true,
+      apiFieldValue: { et: "method_details", en: "method_details_en" },
+      sortField: { et: ["method_details"], en: ["method_details_en"] },
+    },
+    agent: {
+      title: "analysis.analysedBy",
+      value: "agent",
+      show: true,
+      apiFieldValue: "agent",
+      sortField: ["agent"],
+    },
+    date: {
+      title: "analysis.date",
+      value: "date",
+      show: true,
+      apiFieldValue: "date",
+      sortField: ["date"],
+    },
+  },
+  allIds: [
+    "id",
+    "sample_number",
+    "locality",
+    "depth",
+    "depth_interval",
+    "method",
+    "method_details",
+    "agent",
+    "date",
+  ],
+};
+
 export const HEADERS_AREA: Headers = {
   byIds: {
     id: {

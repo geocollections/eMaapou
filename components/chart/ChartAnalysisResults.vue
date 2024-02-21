@@ -4,7 +4,7 @@
       <v-chart
         id="chart-analysis-results"
         ref="chart"
-        :style="`height: ${totalHeight}px; width: 100%`"
+        :style="`height: ${state.chartOptions.totalHeight}px `"
         :init-options="initOptions"
         :option="option"
       />
