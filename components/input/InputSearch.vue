@@ -4,11 +4,14 @@
       ref="searchInput"
       :model-value="modelValue"
       color="accent"
-      class="rounded-0"
       :placeholder="placeholder"
       single-line
       hide-details
       variant="solo"
+      :rounded="0"
+      flat
+      density="comfortable"
+      class="border-t border-b"
       clearable
       :style="inputStyle"
       :class="inputClass"

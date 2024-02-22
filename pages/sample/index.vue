@@ -1,7 +1,7 @@
 <template>
-  <search>
+  <Search>
     <template #title>
-      <header-search
+      <HeaderSearch
         :title="$t('sample.pageTitle')"
         :count="data?.response.numFound ?? 0"
         :icon="mdiImageFilterHdr"
@@ -9,7 +9,7 @@
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-sample
+      <SearchFormSample
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -22,37 +22,56 @@
     </template>
 
     <template #result>
-      <v-card
-        flat
-        :rounded="0"
-        style="
-          border-top: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-        "
-      >
-        <data-table-sample
-          :show-search="false"
-          :items="data?.response.docs ?? []"
-          :count="data?.response.numFound ?? 0"
-          :headers="headers"
-          :options="options"
-          dynamic-headers
-          stateful-headers
-          :is-loading="pending"
-          @update="handleDataTableUpdate"
-          @change:headers="handleHeadersChange"
-          @reset:headers="handleHeadersReset(options)"
-          @click:row="handleClickRow"
-        />
-      </v-card>
+      <DataTableSample
+        class="border-t border-b"
+        :show-search="false"
+        :items="data?.response.docs ?? []"
+        :count="data?.response.numFound ?? 0"
+        :headers="headers"
+        :options="options"
+        dynamic-headers
+        stateful-headers
+        :is-loading="pending"
+        @update="handleDataTableUpdate"
+        @change:headers="handleHeadersChange"
+        @reset:headers="handleHeadersReset(options)"
+        @click:row="handleClickRow"
+      />
     </template>
-  </search>
+  </Search>
 </template>
 
 <script setup lang="ts">
 import { mdiImageFilterHdr } from "@mdi/js";
 
+const { t } = useI18n();
 const route = useRoute();
+
+useSeoMeta({
+  title: t("sample.pageTitle"),
+  ogTitle: t("sample.pageTitle"),
+  // ogUrl: route.fullPath,
+});
+
+// export default defineComponent({
+//   head() {
+//     return {
+//       title: this.$t('sample.pageTitle') as string,
+//       meta: [
+//         {
+//           property: 'og:title',
+//           hid: 'og:title',
+//           content: this.$t('sample.pageTitle') as string,
+//         },
+//         {
+//           property: 'og:url',
+//           hid: 'og:url',
+//           content: this.$route.path,
+//         },
+//       ],
+//     }
+//   },
+// })
 
 const samplesStore = useSamples();
 const {
@@ -115,24 +134,4 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     index + getOffset(options.value.page, options.value.itemsPerPage),
   );
 }
-
-// export default defineComponent({
-//   head() {
-//     return {
-//       title: this.$t('sample.pageTitle') as string,
-//       meta: [
-//         {
-//           property: 'og:title',
-//           hid: 'og:title',
-//           content: this.$t('sample.pageTitle') as string,
-//         },
-//         {
-//           property: 'og:url',
-//           hid: 'og:url',
-//           content: this.$route.path,
-//         },
-//       ],
-//     }
-//   },
-// })
 </script>

@@ -9,13 +9,13 @@
         {{ item.id }}
       </nuxt-link>
     </template>
-    <template #item.sample_number="{ item }">
+    <template #item.sample_name="{ item }">
       <nuxt-link
         v-if="item.sample_id"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
-        {{ item.sample_number }}
+        {{ item.sample_name }}
       </nuxt-link>
     </template>
     <template #item.locality="{ item }">

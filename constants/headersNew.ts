@@ -38,12 +38,12 @@ export const HEADERS_ANALYSIS: Headers = {
       apiFieldValue: "id_l",
       sortField: ["id_l"],
     },
-    sample_number: {
+    sample_name: {
       title: "analysis.sampleNumber",
-      value: "sample_number",
+      value: "sample_name",
       show: true,
       apiFieldValue: "sample_number",
-      sortField: ["sample_number"],
+      sortField: ["sample_name"],
     },
     locality: {
       title: "analysis.locality",
@@ -97,7 +97,7 @@ export const HEADERS_ANALYSIS: Headers = {
   },
   allIds: [
     "id",
-    "sample_number",
+    "sample_name",
     "locality",
     "depth",
     "depth_interval",
