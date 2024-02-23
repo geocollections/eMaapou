@@ -1,6 +1,6 @@
 import type { VDataTable } from "vuetify/components";
 
-type SortItem = { key: string; order: "asc" | "desc" };
+interface SortItem { key: string; order: "asc" | "desc" }
 type SortField = SortItem | { et: SortItem; en: SortItem };
 
 export type Header = NonNullable<
@@ -15,10 +15,10 @@ export type Header = NonNullable<
   //   };
   titleTranslate?: boolean;
 };
-export type Headers = {
+export interface Headers {
   byIds: { [K: string]: Header };
   allIds: string[];
-};
+}
 
 const numberFieldProps: Partial<Header> = {
   align: "end",

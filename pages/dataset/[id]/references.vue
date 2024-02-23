@@ -1,16 +1,3 @@
-<template>
-  <data-table-dataset-reference
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from "~/constants";
 
@@ -48,3 +35,16 @@ const { data, pending } = await useGeoloogiaApiFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-dataset-reference
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,18 +1,5 @@
-<template>
-  <data-table-sample-data
-    :items="data?.response.docs ?? []"
-    :count="data?.response.numFound ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
-import { SAMPLE_DATA, HEADERS_SAMPLE_DATA } from "~/constants";
+import { HEADERS_SAMPLE_DATA, SAMPLE_DATA } from "~/constants";
 
 const props = defineProps({
   parameterHeaders: {
@@ -64,3 +51,16 @@ const { data, pending } = await useSolrFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-sample-data
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

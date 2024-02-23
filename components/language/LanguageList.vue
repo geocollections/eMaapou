@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { mdiCheck } from "@mdi/js";
+import type { LocaleObject } from "@nuxtjs/i18n/dist/runtime/composables";
+
+const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
+
+const switchLocalePath = useSwitchLocalePath();
+</script>
+
 <template>
   <v-list class="py-1 px-2">
     <v-list-item
@@ -20,15 +29,6 @@
     </v-list-item>
   </v-list>
 </template>
-
-<script setup lang="ts">
-import { mdiCheck } from "@mdi/js";
-import type { LocaleObject } from "@nuxtjs/i18n/dist/runtime/composables";
-
-const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
-
-const switchLocalePath = useSwitchLocalePath();
-</script>
 
 <style scoped>
 .lang-icon {

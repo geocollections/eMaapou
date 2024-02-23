@@ -5,11 +5,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   const toBaseName = to.name?.toString().split("___")[0];
 
-  const isExitingDetailView =
-    searchPosition.value > -1 &&
-    !toBaseName?.startsWith(page.value?.name as string) &&
-    !to.params.id;
-  if (isExitingDetailView) {
+  const isExitingDetailView
+    = searchPosition.value > -1
+    && !toBaseName?.startsWith(page.value?.name as string)
+    && !to.params.id;
+  if (isExitingDetailView)
     $reset();
-  }
 });

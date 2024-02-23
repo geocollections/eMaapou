@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { mdiFilePdfBox } from "@mdi/js";
+
+function openPDF(link: string) {
+  window.open(link, "_blank", "height=800, width=800");
+}
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.reference="{ item }">
@@ -13,7 +21,9 @@
       <div v-if="item.journal__journal_name">
         {{ item.journal__journal_name }}
       </div>
-      <div v-else-if="item.book">{{ item.book }}</div>
+      <div v-else-if="item.book">
+        {{ item.book }}
+      </div>
     </template>
 
     <template #item.doi="{ item }">
@@ -29,24 +39,18 @@
         v-if="item.pdf"
         color="red "
         :ripple="false"
-        outlined
-        small
+        variant="outlined"
+        size="small"
         target="_blank"
         rel="noopener"
         class="d-print-none ml-1 my-1 link"
         @click.stop="openPDF(item.pdf)"
       >
-        <v-icon class="pr-1">{{ mdiFilePdfBox }}</v-icon>
+        <v-icon class="pr-1">
+          {{ mdiFilePdfBox }}
+        </v-icon>
         <b>PDF</b>
       </v-chip>
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-import { mdiFilePdfBox } from "@mdi/js";
-
-const openPDF = (link: string) => {
-  window.open(link, "_blank", "height=800, width=800");
-};
-</script>

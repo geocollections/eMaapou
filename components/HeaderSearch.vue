@@ -1,3 +1,11 @@
+<script setup lang="ts">
+defineProps<{
+  title: string;
+  icon: string;
+  count: number;
+}>();
+</script>
+
 <template>
   <div class="d-sm-flex align-center my-4">
     <base-header :title="title" :icon="icon" />
@@ -7,11 +15,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{
-  title: string;
-  icon: string;
-  count: number;
-}>();
-</script>

@@ -1,60 +1,10 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
-          v-model="filters.name.value"
-          :title="$t('filters.datasetName')"
-          @update:model-value="handleUpdate"
-          value="name"
-        />
-        <filter-input-autocomplete
-          v-model="filters.analysedParameter.value"
-          ref="filterAnalysedParameter"
-          :show-filter="false"
-          :title="$t('filters.analysisParameter')"
-          :query-function="suggestParameter"
-          :hydration-function="hydrateParameter"
-          @update:model-value="handleUpdate"
-          value="analysisParameter"
-        />
-        <filter-input-text
-          v-model="filters.owner.value"
-          :title="$t('filters.owner')"
-          @update:model-value="handleUpdate"
-          value="owner"
-        />
-        <filter-input-text
-          v-model="filters.date.value"
-          :title="$t('filters.date')"
-          @update:model-value="handleUpdate"
-          value="date"
-        />
-        <filter-input-autocomplete
-          v-model="filters.institution.value"
-          ref="filterInstitution"
-          :title="$t('filters.institution')"
-          :query-function="suggestInstitution"
-          :hydration-function="hydrateInstitution"
-          @update:model-value="handleUpdate"
-          value="institution"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import isEmpty from "lodash/isEmpty";
-
-import type FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset"]);
 
-const filterAnalysedParameter =
-  ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterAnalysedParameter
+  = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
 
 const datasetsStore = useDatasets();
@@ -71,15 +21,15 @@ function handleUpdate() {
   });
 }
 
-const { suggest: suggestAnalysedParameter, hydrate: hydrateAnalysedParameter } =
-  useAutocomplete("/dataset", {
+const { suggest: suggestAnalysedParameter, hydrate: hydrateAnalysedParameter }
+  = useAutocomplete("/dataset", {
     idField: "parameter_index_list",
     nameField: "parameter_list",
     filterExclude: "analysedParameter",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
-const { suggest: suggestInstitution, hydrate: hydrateInstitution } =
-  useAutocomplete("/dataset", {
+const { suggest: suggestInstitution, hydrate: hydrateInstitution }
+  = useAutocomplete("/dataset", {
     idField: "database_id_s",
     nameField: "database_acronym",
     filterExclude: "institution",
@@ -97,29 +47,29 @@ async function suggestParameter({
   values: string[];
 }): Promise<Suggestion[]> {
   const pivot = `{!ex=analysedParameter}parameter_index_list`;
-  const filters =
-    query.length > 0
+  const filters
+    = query.length > 0
       ? [...(solrFilters.value ?? []), `parameter_list:*${query}*`]
       : solrFilters.value ?? [];
 
   const res = await $solrFetch("/dataset", {
     query: {
-      facet: "true",
+      "facet": "true",
       "facet.pivot": pivot,
       [`f.parameter_index_list.facet.excludeTerms`]: values.join(","),
       "facet.limit": pagination.perPage,
       "facet.sort": "count",
       [`f.parameter_index_list.facet.offset`]:
         (pagination.page - 1) * pagination.perPage,
-      json: {
+      "json": {
         query: solrQuery?.value,
         filter: filters,
         limit: 0,
       },
     },
   });
-  const ids = res.facet_counts.facet_pivot["parameter_index_list"].map(
-    (item) => item.value,
+  const ids = res.facet_counts.facet_pivot.parameter_index_list.map(
+    item => item.value,
   );
 
   const nameRes = await $solrFetch("/analysis_parameter", {
@@ -132,10 +82,10 @@ async function suggestParameter({
     },
   });
 
-  return res.facet_counts.facet_pivot["parameter_index_list"].map((item) => ({
+  return res.facet_counts.facet_pivot.parameter_index_list.map(item => ({
     id: item.value,
     name:
-      nameRes.response.docs.find((doc) => doc.parameter_index === item.value)
+      nameRes.response.docs.find(doc => doc.parameter_index === item.value)
         ?.parameter ?? item.value,
     count: item.count,
   }));
@@ -171,12 +121,60 @@ async function hydrateParameter(values: string[]) {
     },
   });
 
-  return values.map((id) => ({
+  return values.map(id => ({
     id,
     name:
-      nameRes.response.docs.find((doc) => doc.parameter_index === id)
+      nameRes.response.docs.find(doc => doc.parameter_index === id)
         ?.parameter ?? id,
     count: res.facets[id].count,
   }));
 }
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <v-expansion-panels variant="accordion" multiple>
+        <filter-input-text
+          v-model="filters.name.value"
+          :title="$t('filters.datasetName')"
+          value="name"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterAnalysedParameter"
+          v-model="filters.analysedParameter.value"
+          :show-filter="false"
+          :title="$t('filters.analysisParameter')"
+          :query-function="suggestParameter"
+          :hydration-function="hydrateParameter"
+          value="analysisParameter"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-text
+          v-model="filters.owner.value"
+          :title="$t('filters.owner')"
+          value="owner"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-text
+          v-model="filters.date.value"
+          :title="$t('filters.date')"
+          value="date"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterInstitution"
+          v-model="filters.institution.value"
+          :title="$t('filters.institution')"
+          :query-function="suggestInstitution"
+          :hydration-function="hydrateInstitution"
+          value="institution"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

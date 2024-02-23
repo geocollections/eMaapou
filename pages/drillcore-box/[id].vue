@@ -1,17 +1,3 @@
-<template>
-  <detail-new>
-    <template #title>
-      <header-detail-new :title="pageTitle">
-        <template #tabs>
-          <DetailTabs :tabs="data?.tabs" />
-        </template>
-      </header-detail-new>
-    </template>
-
-    <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
-</template>
-
 <script setup lang="ts">
 import type { Tab } from "~/composables/useTabs";
 
@@ -47,7 +33,8 @@ const tabs = {
     routeName: "drillcore-box-id-samples",
     title: "drillcore.samples",
     count: async (ctx) => {
-      if (!ctx?.drillcoreBox.drillcore?.locality) return 0;
+      if (!ctx?.drillcoreBox.drillcore?.locality)
+        return 0;
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
       const response = await $solrFetch("/sample", {
@@ -66,7 +53,8 @@ const tabs = {
     routeName: "drillcore-box-id-analyses",
     title: "drillcore.analyses",
     count: async (ctx) => {
-      if (!ctx?.drillcoreBox.drillcore?.locality) return 0;
+      if (!ctx?.drillcoreBox.drillcore?.locality)
+        return 0;
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
 
@@ -86,7 +74,8 @@ const tabs = {
     routeName: "drillcore-box-id-specimens",
     title: "drillcore.specimens",
     count: async (ctx) => {
-      if (!ctx?.drillcoreBox.drillcore?.locality) return 0;
+      if (!ctx?.drillcoreBox.drillcore?.locality)
+        return 0;
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
 
@@ -200,3 +189,17 @@ redirectInvalidTab({
 //   head: {},
 // })
 </script>
+
+<template>
+  <detail-new>
+    <template #title>
+      <header-detail-new :title="pageTitle">
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </header-detail-new>
+    </template>
+
+    <NuxtPage v-bind="activeTabProps" />
+  </detail-new>
+</template>

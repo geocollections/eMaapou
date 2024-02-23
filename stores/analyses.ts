@@ -1,13 +1,12 @@
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import { ANALYSIS } from "~/constants";
 import { HEADERS_ANALYSIS } from "~/constants/headersNew";
-import type { RouteLocation } from "vue-router";
 import type {
-  IdListFilter,
-  TextListFilter,
-  StringIdListFilter,
   GeomFilter,
+  IdListFilter,
   RangeFilter,
+  TextListFilter,
 } from "~/composables/useFilter";
 
 export const useAnalyses = defineStore(

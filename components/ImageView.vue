@@ -1,10 +1,58 @@
+<script setup lang="ts">
+import { mdiFileImageOutline } from "@mdi/js";
+
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => [],
+  },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Object,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
+  },
+});
+
+const emit = defineEmits(["update"]);
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+const img = useImage();
+
+const footerProps = {
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+};
+const cropImages = ref(true);
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+function updateOptions(event) {
+  emit("update", { options: event });
+}
+</script>
+
 <template>
   <v-card flat>
     <v-row no-gutters>
-      <v-col cols="12" sm="auto" class="px-3 my-1 my-sm-4" align-self="center">
+      <v-col
+        cols="12"
+        sm="auto"
+        class="px-3 my-1 my-sm-4"
+        align-self="center"
+      >
         <v-switch
           v-model="cropImages"
-          dense
+          density="compact"
           class="mt-0 montserrat"
           hide-details
           color="header"
@@ -31,7 +79,11 @@
       </v-col>
     </v-row>
     <v-card flat>
-      <v-row v-if="count > 0" no-gutters class="px-2">
+      <v-row
+        v-if="count > 0"
+        no-gutters
+        class="px-2"
+      >
         <v-col
           v-for="(image, index) in items"
           :key="index"
@@ -41,8 +93,13 @@
           md="3"
           lg="2"
         >
-          <v-tooltip bottom color="header" z-index="51000" max-width="250">
-            <template #activator="{ on }">
+          <v-tooltip
+            location="bottom"
+            color="header"
+            z-index="51000"
+            max-width="250"
+          >
+            <template #activator="{ props }">
               <v-card
                 flat
                 class="d-flex image-hover"
@@ -51,7 +108,7 @@
                 nuxt
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
                 :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
-                v-on="on"
+                v-bind="props"
               >
                 <v-img
                   v-if="image.uuid_filename"
@@ -82,7 +139,7 @@
                     >
                       <v-progress-circular
                         indeterminate
-                        color="grey lighten-5"
+                        color="grey-lighten-5"
                       />
                     </v-row>
                   </template>
@@ -91,7 +148,7 @@
                 <v-row v-else align="center">
                   <v-col class="text-center">
                     <div class="py-3">
-                      <v-icon style="font-size: 6rem" class="grey--text">
+                      <v-icon style="font-size: 6rem" class="text-grey">
                         {{ mdiFileImageOutline }}
                       </v-icon>
                     </div>
@@ -101,24 +158,23 @@
             </template>
 
             <span>
-              <b>{{ $t("photo.id") }}: </b> {{ image.id }}<br />
+              <b>{{ $t("photo.id") }}: </b> {{ image.id }}<br>
               <span v-if="image.date_created || image.date_created_free">
                 <b>{{ $t("photo.date") }}: </b>
                 <span v-if="image.date_created">{{
                   image.date_created.split("T")[0]
                 }}</span>
                 <span v-else>{{ image.date_created_free }}</span>
-                <br />
+                <br>
               </span>
               <span v-if="image.agent || image.author_free">
-                <b>{{ $t("photo.author") }}: </b
-                >{{ image.agent || image.author_free }}
-                <br />
+                <b>{{ $t("photo.author") }}: </b>{{ image.agent || image.author_free }}
+                <br>
               </span>
               <span v-if="image.image_number">
                 <b>{{ $t("photo.number") }}: </b>
                 {{ image.image_number }}
-                <br />
+                <br>
               </span>
             </span>
           </v-tooltip>
@@ -127,45 +183,3 @@
     </v-card>
   </v-card>
 </template>
-
-<script setup lang="ts">
-import { mdiFileImageOutline } from "@mdi/js";
-const props = defineProps({
-  items: {
-    type: Array,
-    default: () => [],
-  },
-  count: {
-    type: Number,
-    default: 0,
-  },
-  options: {
-    type: Object,
-    default: () => ({
-      page: 1,
-      itemsPerPage: 25,
-    }),
-  },
-});
-
-const emit = defineEmits(["update"]);
-
-const { t } = useI18n();
-const localePath = useLocalePath();
-const img = useImage();
-
-const footerProps = {
-  showFirstLastPage: true,
-  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
-  "items-per-page-text": t("table.itemsPerPage"),
-};
-const cropImages = ref(true);
-
-const pagination = computed(() => ({
-  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
-}));
-
-const updateOptions = (event) => {
-  emit("update", { options: event });
-};
-</script>

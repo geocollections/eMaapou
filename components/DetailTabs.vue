@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import type { HydratedTab } from "~/composables/useTabs";
+
+const props = defineProps({
+  tabs: {
+    type: Array as PropType<HydratedTab[]>,
+    required: true,
+  },
+});
+
+const localePath = useLocalePath();
+const getRouteBaseName = useRouteBaseName();
+const route = useRoute();
+const tabsEl = ref();
+const { t } = useI18n();
+
+const currentTab = computed(() => {
+  return props.tabs.find(tab => tab.routeName === getRouteBaseName());
+});
+
+function translateTitle(tab: HydratedTab) {
+  if (tab.type === "static")
+    return t(tab.title);
+
+  if (tab.type === "dynamic")
+    return t(tab.title, { number: tab.count });
+
+  return tab.title;
+}
+</script>
+
 <template>
   <v-tabs
     v-if="$vuetify.display.smAndUp"
@@ -19,11 +51,12 @@
           params: route.params,
         })
       "
-      >{{ translateTitle(item) }}</v-tab
     >
+      {{ translateTitle(item) }}
+    </v-tab>
   </v-tabs>
   <v-menu v-else>
-    <template v-slot:activator="{ props, isActive }">
+    <template #activator="{ props, isActive }">
       <v-btn
         class="text-capitalize mb-1 ml-auto"
         variant="outlined"
@@ -53,38 +86,6 @@
     </v-list>
   </v-menu>
 </template>
-
-<script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
-import type { HydratedTab } from "~/composables/useTabs";
-
-const props = defineProps({
-  tabs: {
-    type: Array as PropType<HydratedTab[]>,
-    required: true,
-  },
-});
-
-const localePath = useLocalePath();
-const getRouteBaseName = useRouteBaseName();
-const route = useRoute();
-const tabsEl = ref();
-const { t } = useI18n();
-
-const currentTab = computed(() => {
-  return props.tabs.find((tab) => tab.routeName === getRouteBaseName());
-});
-
-function translateTitle(tab: HydratedTab) {
-  if (tab.type === "static") {
-    return t(tab.title);
-  }
-  if (tab.type === "dynamic") {
-    return t(tab.title, { number: tab.count });
-  }
-  return tab.title;
-}
-</script>
 
 <style lang="scss" scoped>
 .tabs {

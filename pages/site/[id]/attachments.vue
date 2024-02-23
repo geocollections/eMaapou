@@ -1,18 +1,6 @@
-<template>
-  <data-table-attachment
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
-import { HEADERS_ATTACHMENT, ATTACHMENT } from "~/constants";
+import { ATTACHMENT, HEADERS_ATTACHMENT } from "~/constants";
+
 const {
   options,
   search,
@@ -47,3 +35,16 @@ const { data, pending } = await useGeoloogiaApiFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-attachment
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

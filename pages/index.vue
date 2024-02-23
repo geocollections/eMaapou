@@ -1,138 +1,15 @@
-<template>
-  <div>
-    <div
-      class="spacer pt-16"
-      :style="{
-        'background-image': backgroundImage,
-        'background-color': '#333333',
-        height: topHeight,
-      }"
-    >
-      <v-container
-        :fluid="$vuetify.display.smAndDown"
-        style="max-width: 1185px !important"
-      >
-        <v-row class="mb-lg-5">
-          <v-col>
-            <div class="pt-sm-4 pt-md-8" :style="{ 'max-width': '1000px' }">
-              <i18n-t
-                keypath="title"
-                tag="div"
-                scope="global"
-                class="text-h3 text-sm-h2 text-md-h1 text-white font-weight-bold"
-              >
-              </i18n-t>
-              <span
-                class="text-h5 text-sm-h4 text-md-h3 font-weight-light text-white"
-              >
-                {{ $t("subtitle") }}
-              </span>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="5">
-            <v-card class="" tile flat color="transparent">
-              <v-card-actions class="px-0 pt-md-6">
-                <v-form
-                  class="d-flex text-right"
-                  style="width: 100%"
-                  @submit.prevent="handleSearch"
-                >
-                  <input-search
-                    v-model="query"
-                    input-class="rounded"
-                    height="56"
-                    :placeholder="$t('landing.searchPlaceholder')"
-                  />
-                  <v-btn
-                    height="56px"
-                    width="84px"
-                    class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
-                    type="submit"
-                    variant="elevated"
-                    color="warning"
-                  >
-                    <v-icon :icon="mdiMagnify" size="large" />
-                  </v-btn>
-                </v-form>
-              </v-card-actions>
-              <v-card-text
-                v-show="$vuetify.display.mdAndUp"
-                style="word-break: break-word"
-                :class="{
-                  'font-small montserrat': $vuetify.display.smAndDown,
-                }"
-                class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
-              >
-                {{ $t("landing.description") }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="7" class="pl-lg-10">
-            <v-card color="transparent" flat>
-              <v-row no-gutters justify="center">
-                <div class="col-12 col-xl-auto d-flex flex-wrap">
-                  <v-col
-                    v-for="(route, index) in searchRoutes"
-                    :key="`${route.routeName}-${index}`"
-                    cols="12"
-                    class="pa-0"
-                    sm="6"
-                    md="6"
-                    lg="6"
-                  >
-                    <card-route-link :route="route" />
-                  </v-col>
-                </div>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </div>
-    <v-container
-      :fluid="$vuetify.display.smAndDown"
-      style="max-width: 1185px !important"
-    >
-      <v-row justify="center" class="mt-4">
-        <v-col cols="12" md="8" class="pr-5" order="1" order-md="0">
-          <the-news-card />
-        </v-col>
-        <v-col cols="12" md="4" class="pl-lg-5" order="0" order-md="0">
-          <base-header class="pb-2" :title="$t('landing.otherServices')" />
-
-          <v-row no-gutters>
-            <v-col
-              v-for="(route, index) in otherServices.ids.map(
-                (id) => otherServices[id]
-              )"
-              :key="`external-card-${index}`"
-              cols="12"
-              lg="12"
-              class="pb-2 px-1"
-            >
-              <card-external-service :route="route" />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
-</template>
-
 <script setup lang="ts">
 import {
+  mdiBug,
+  mdiChartLine,
+  mdiFileImageOutline,
+  mdiImageFilterHdr,
   mdiMagnify,
   mdiMapMarker,
   mdiScrewMachineFlatTop,
-  mdiChartLine,
-  mdiFileImageOutline,
-  mdiBug,
-  mdiImageFilterHdr,
 } from "@mdi/js";
-import { useDisplay } from "vuetify/lib/framework.mjs";
-const { t } = useI18n();
+import { useDisplay } from "vuetify";
+
 const img = useImage();
 const backgroundImg = computed(() => {
   return img("/frontpage/header_img2.jpg");
@@ -241,19 +118,19 @@ const otherServices = ref({
   ] as const,
 });
 
-type SearchRoute = {
+interface SearchRoute {
   routeName: string;
   text: string;
   icon: string;
   count: number;
-};
+}
 const { $solrFetch } = useNuxtApp();
 
-type NumFoundResponse = {
+interface NumFoundResponse {
   response: {
     numFound: number;
   };
-};
+}
 const { data: searchRoutes } = await useAsyncData<SearchRoute[]>(
   "routes",
   async () => {
@@ -300,7 +177,7 @@ const { data: searchRoutes } = await useAsyncData<SearchRoute[]>(
       $solrFetch<NumFoundResponse>("/attachment", {
         query: {
           q: "*:*",
-          fq: 'specimen_image_attachment:"2"',
+          fq: "specimen_image_attachment:\"2\"",
           rows: 0,
         },
       }).catch<NumFoundResponse>((_) => {
@@ -354,7 +231,7 @@ const { data: searchRoutes } = await useAsyncData<SearchRoute[]>(
         count: photoResponse.response.numFound,
       },
     ];
-  }
+  },
 );
 
 const backgroundImage = computed(() => {
@@ -363,7 +240,8 @@ const backgroundImage = computed(() => {
 
 const { smAndUp } = useDisplay();
 const topHeight = computed(() => {
-  if (smAndUp) return "675px";
+  if (smAndUp)
+    return "675px";
   return "650px";
 });
 
@@ -374,6 +252,149 @@ function handleSearch() {
   router.push(localePath({ name: "search", query: { q: query.value } }));
 }
 </script>
+
+<template>
+  <div>
+    <div
+      class="spacer pt-16"
+      :style="{
+        'background-image': backgroundImage,
+        'background-color': '#333333',
+        'height': topHeight,
+      }"
+    >
+      <v-container
+        :fluid="$vuetify.display.smAndDown"
+        style="max-width: 1185px !important"
+      >
+        <v-row class="mb-lg-5">
+          <v-col>
+            <div class="pt-sm-4 pt-md-8" :style="{ 'max-width': '1000px' }">
+              <i18n-t
+                keypath="title"
+                tag="div"
+                scope="global"
+                class="text-h3 text-sm-h2 text-md-h1 text-white font-weight-bold"
+              />
+              <span
+                class="text-h5 text-sm-h4 text-md-h3 font-weight-light text-white"
+              >
+                {{ $t("subtitle") }}
+              </span>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="5">
+            <v-card
+              class=""
+              rounded="0"
+              flat
+              color="transparent"
+            >
+              <v-card-actions class="px-0 pt-md-6">
+                <v-form
+                  class="d-flex text-right"
+                  style="width: 100%"
+                  @submit.prevent="handleSearch"
+                >
+                  <input-search
+                    v-model="query"
+                    input-class="rounded"
+                    height="56"
+                    :placeholder="$t('landing.searchPlaceholder')"
+                  />
+                  <v-btn
+                    height="56px"
+                    width="84px"
+                    class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
+                    type="submit"
+                    variant="elevated"
+                    color="warning"
+                  >
+                    <v-icon :icon="mdiMagnify" size="large" />
+                  </v-btn>
+                </v-form>
+              </v-card-actions>
+              <v-card-text
+                v-show="$vuetify.display.mdAndUp"
+                style="word-break: break-word"
+                :class="{
+                  'font-small montserrat': $vuetify.display.smAndDown,
+                }"
+                class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
+              >
+                {{ $t("landing.description") }}
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col
+            cols="12"
+            md="7"
+            class="pl-lg-10"
+          >
+            <v-card color="transparent" flat>
+              <v-row no-gutters justify="center">
+                <div class="col-12 col-xl-auto d-flex flex-wrap">
+                  <v-col
+                    v-for="(route, index) in searchRoutes"
+                    :key="`${route.routeName}-${index}`"
+                    cols="12"
+                    class="pa-0"
+                    sm="6"
+                    md="6"
+                    lg="6"
+                  >
+                    <card-route-link :route="route" />
+                  </v-col>
+                </div>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <v-container
+      :fluid="$vuetify.display.smAndDown"
+      style="max-width: 1185px !important"
+    >
+      <v-row justify="center" class="mt-4">
+        <v-col
+          cols="12"
+          md="8"
+          class="pr-5"
+          order="1"
+          order-md="0"
+        >
+          <the-news-card />
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          class="pl-lg-5"
+          order="0"
+          order-md="0"
+        >
+          <base-header class="pb-2" :title="$t('landing.otherServices')" />
+
+          <v-row no-gutters>
+            <v-col
+              v-for="(route, index) in otherServices.ids.map(
+                (id) => otherServices[id],
+              )"
+              :key="`external-card-${index}`"
+              cols="12"
+              lg="12"
+              class="pb-2 px-1"
+            >
+              <card-external-service :route="route" />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @import "vuetify/settings";
@@ -386,7 +407,9 @@ function handleSearch() {
   background-size: cover, cover;
 
   @media #{map-get($display-breakpoints, 'xl-and-up')} {
-    background-position: bottom -5rem right, center;
+    background-position:
+      bottom -5rem right,
+      center;
   }
 }
 </style>

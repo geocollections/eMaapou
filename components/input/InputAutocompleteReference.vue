@@ -1,5 +1,45 @@
+<script>
+import InputAutocomplete from "~/components/input/InputAutocomplete.vue";
+
+export default {
+  name: "InputAutocompleteReference",
+  components: { InputAutocomplete },
+  props: {
+    label: {
+      type: String,
+      default: "Reference",
+    },
+  },
+  data() {
+    return {
+      items: [],
+    };
+  },
+  methods: {
+    itemText(item) {
+      return `${item.reference} (${item.title})`;
+    },
+    async handleItemsSearch(value) {
+      const query = `reference:(*${value}*)`;
+
+      const autocompleteResponse
+        = await this.$services.sarvSolr.getResourceList("reference", {
+          defaultParams: {
+            fq: query,
+          },
+          options: {
+            page: 1,
+            itemsPerPage: 25,
+          },
+        });
+      this.items = autocompleteResponse.items;
+    },
+  },
+};
+</script>
+
 <template>
-  <input-autocomplete
+  <InputAutocomplete
     v-bind="$attrs"
     :items="items"
     :label="label"
@@ -10,45 +50,6 @@
     v-on="$listeners"
   />
 </template>
-
-<script>
-import InputAutocomplete from '~/components/input/InputAutocomplete.vue'
-export default {
-  name: 'InputAutocompleteReference',
-  components: { InputAutocomplete },
-  props: {
-    label: {
-      type: String,
-      default: 'Reference',
-    },
-  },
-  data() {
-    return {
-      items: [],
-    }
-  },
-  methods: {
-    itemText(item) {
-      return `${item.reference} (${item.title})`
-    },
-    async handleItemsSearch(value) {
-      const query = `reference:(*${value}*)`
-
-      const autocompleteResponse =
-        await this.$services.sarvSolr.getResourceList('reference', {
-          defaultParams: {
-            fq: query,
-          },
-          options: {
-            page: 1,
-            itemsPerPage: 25,
-          },
-        })
-      this.items = autocompleteResponse.items
-    },
-  },
-}
-</script>
 
 <style scoped>
 .whitespace-nowrap {

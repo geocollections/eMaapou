@@ -1,171 +1,3 @@
-<template>
-  <div class="bg-tertiary">
-    <v-container :fluid="$vuetify.display.lgAndDown">
-      <v-row no-gutters>
-        <v-col cols="12" lg="auto">
-          <div class="d-md-flex justify-center">
-            <div class="ml-4 ml-md-0 mr-4 mb-6">
-              <nuxt-img
-                :src="logo"
-                height="24"
-                width="60"
-                format="webp"
-                style="margin-bottom: 10px"
-              />
-              <div
-                v-for="link in routes"
-                :key="link.routeName"
-                class="d-flex mb-1"
-              >
-                <v-icon
-                  class="align-self-center"
-                  :icon="mdiChevronRight"
-                  color="white"
-                  size="x-small"
-                />
-                <nuxt-link
-                  :to="localePath(link.routeName)"
-                  class="text-link text-body-2 text-grey-lighten-2 d-block ml-1"
-                  style="font-weight: 500 !important"
-                >
-                  {{ $t(link.text) }}
-                </nuxt-link>
-              </div>
-            </div>
-            <div class="mx-4 mb-6">
-              <div
-                class="section-title text-white font-weight-medium montserrat mb-4"
-              >
-                {{ $t("landing.searchRoutes") }}
-              </div>
-
-              <div class="d-sm-inline-block" style="column-count: 2">
-                <div
-                  v-for="link in searchRoutes"
-                  :key="link.routeName"
-                  class="d-flex mb-1"
-                >
-                  <v-icon
-                    class="align-self-center"
-                    :icon="mdiChevronRight"
-                    color="white"
-                    size="x-small"
-                  />
-                  <nuxt-link
-                    :to="localePath(link.routeName)"
-                    class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
-                    style="font-weight: 500 !important"
-                  >
-                    {{ $t(link.text) }}
-                  </nuxt-link>
-                </div>
-              </div>
-            </div>
-            <div class="ml-3 mb-6">
-              <div
-                class="section-title text-white font-weight-medium montserrat mb-4"
-              >
-                {{ $t("common.links") }}
-              </div>
-
-              <div class="d-sm-inline-block" style="column-count: 2">
-                <div v-for="link in links" :key="link.name" class="d-flex mb-1">
-                  <v-icon
-                    class="align-self-center"
-                    :icon="mdiChevronRight"
-                    color="white"
-                    size="x-small"
-                  />
-                  <a
-                    :href="link.url"
-                    class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
-                    style="font-weight: 500 !important"
-                  >
-                    {{ $t(link.name) }}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </v-col>
-        <v-col>
-          <div class="ml-3 mb-6">
-            <div
-              class="section-title text-white font-weight-medium montserrat mb-4"
-            >
-              {{ $t("common.partners") }}
-            </div>
-            <div>
-              <a
-                v-for="(item, index) in imageLinks"
-                :key="index"
-                :href="item.href"
-                target="FooterLink"
-                rel="noopener noreferrer"
-              >
-                <v-tooltip location="top">
-                  <template #activator="{ props }">
-                    <nuxt-img
-                      v-bind="props"
-                      :src="item.src"
-                      :alt="$t(item.alt)"
-                      :height="item.height"
-                      :width="item.width"
-                      class="footer-logo py-1 py-sm-0 px-3"
-                    />
-                  </template>
-
-                  <span>{{ $t(item.title) }}</span>
-                </v-tooltip>
-              </a>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container fluid style="background: #282828 !important">
-      <v-container :fluid="$vuetify.display.lgAndDown">
-        <v-row no-gutters>
-          <v-col cols="12" align-self="center">
-            <div class="text-center d-flex justify-center align-center">
-              <div style="max-width: 700px">
-                <i18n-t
-                  class="text-body-2 text-grey-lighten-1"
-                  keypath="footer"
-                  scope="global"
-                  tag="div"
-                >
-                  <a
-                    v-for="(item, index) in textLinks"
-                    :key="index"
-                    :href="item.href"
-                    class="text-link font-weight-bold text-gray-lighten-2"
-                    target="FooterLink"
-                  >
-                    {{ item.text }}
-                  </a>
-                </i18n-t>
-              </div>
-            </div>
-          </v-col>
-          <v-col cols="12" align-self="center" class="text-center mt-3">
-            <a href="https://github.com/geocollections/eMaapou">
-              <nuxt-img
-                src="/logos/GitHub-Mark-Light-64px.png"
-                alt="GitHub"
-                format="webp"
-                class="github-logo py-1 py-sm-0 px-3"
-                width="32"
-                height="32"
-              />
-            </a>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-container>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { mdiChevronRight } from "@mdi/js";
 
@@ -348,6 +180,182 @@ const routes = [
   },
 ];
 </script>
+
+<template>
+  <div class="bg-tertiary">
+    <v-container :fluid="$vuetify.display.lgAndDown">
+      <v-row no-gutters>
+        <v-col cols="12" lg="auto">
+          <div class="d-md-flex justify-center">
+            <div class="ml-4 ml-md-0 mr-4 mb-6">
+              <nuxt-img
+                :src="logo"
+                height="24"
+                width="60"
+                format="webp"
+                style="margin-bottom: 10px"
+              />
+              <div
+                v-for="link in routes"
+                :key="link.routeName"
+                class="d-flex mb-1"
+              >
+                <v-icon
+                  class="align-self-center"
+                  :icon="mdiChevronRight"
+                  color="white"
+                  size="x-small"
+                />
+                <nuxt-link
+                  :to="localePath(link.routeName)"
+                  class="text-link text-body-2 text-grey-lighten-2 d-block ml-1"
+                  style="font-weight: 500 !important"
+                >
+                  {{ $t(link.text) }}
+                </nuxt-link>
+              </div>
+            </div>
+            <div class="mx-4 mb-6">
+              <div
+                class="section-title text-white font-weight-medium montserrat mb-4"
+              >
+                {{ $t("landing.searchRoutes") }}
+              </div>
+
+              <div class="d-sm-inline-block" style="column-count: 2">
+                <div
+                  v-for="link in searchRoutes"
+                  :key="link.routeName"
+                  class="d-flex mb-1"
+                >
+                  <v-icon
+                    class="align-self-center"
+                    :icon="mdiChevronRight"
+                    color="white"
+                    size="x-small"
+                  />
+                  <nuxt-link
+                    :to="localePath(link.routeName)"
+                    class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
+                    style="font-weight: 500 !important"
+                  >
+                    {{ $t(link.text) }}
+                  </nuxt-link>
+                </div>
+              </div>
+            </div>
+            <div class="ml-3 mb-6">
+              <div
+                class="section-title text-white font-weight-medium montserrat mb-4"
+              >
+                {{ $t("common.links") }}
+              </div>
+
+              <div class="d-sm-inline-block" style="column-count: 2">
+                <div
+                  v-for="link in links"
+                  :key="link.name"
+                  class="d-flex mb-1"
+                >
+                  <v-icon
+                    class="align-self-center"
+                    :icon="mdiChevronRight"
+                    color="white"
+                    size="x-small"
+                  />
+                  <a
+                    :href="link.url"
+                    class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
+                    style="font-weight: 500 !important"
+                  >
+                    {{ $t(link.name) }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
+        <v-col>
+          <div class="ml-3 mb-6">
+            <div
+              class="section-title text-white font-weight-medium montserrat mb-4"
+            >
+              {{ $t("common.partners") }}
+            </div>
+            <div>
+              <a
+                v-for="(item, index) in imageLinks"
+                :key="index"
+                :href="item.href"
+                target="FooterLink"
+                rel="noopener noreferrer"
+              >
+                <v-tooltip location="top">
+                  <template #activator="{ props }">
+                    <nuxt-img
+                      v-bind="props"
+                      :src="item.src"
+                      :alt="$t(item.alt)"
+                      :height="item.height"
+                      :width="item.width"
+                      class="footer-logo py-1 py-sm-0 px-3"
+                    />
+                  </template>
+
+                  <span>{{ $t(item.title) }}</span>
+                </v-tooltip>
+              </a>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container fluid style="background: #282828 !important">
+      <v-container :fluid="$vuetify.display.lgAndDown">
+        <v-row no-gutters>
+          <v-col cols="12" align-self="center">
+            <div class="text-center d-flex justify-center align-center">
+              <div style="max-width: 700px">
+                <i18n-t
+                  class="text-body-2 text-grey-lighten-1"
+                  keypath="footer"
+                  scope="global"
+                  tag="div"
+                >
+                  <a
+                    v-for="(item, index) in textLinks"
+                    :key="index"
+                    :href="item.href"
+                    class="text-link font-weight-bold text-gray-lighten-2"
+                    target="FooterLink"
+                  >
+                    {{ item.text }}
+                  </a>
+                </i18n-t>
+              </div>
+            </div>
+          </v-col>
+          <v-col
+            cols="12"
+            align-self="center"
+            class="text-center mt-3"
+          >
+            <a href="https://github.com/geocollections/eMaapou">
+              <nuxt-img
+                src="/logos/GitHub-Mark-Light-64px.png"
+                alt="GitHub"
+                format="webp"
+                class="github-logo py-1 py-sm-0 px-3"
+                width="32"
+                height="32"
+              />
+            </a>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-container>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .footer {

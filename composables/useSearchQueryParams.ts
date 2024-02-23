@@ -1,10 +1,3 @@
-import isEqual from "lodash/isEqual";
-import difference from "lodash/difference";
-import { useAccessor } from "./useAccessor";
-import getQueryParams from "~/utils/getQueryParams";
-import { parseQueryParams } from "~/utils/parseQueryParams";
-import type { Filter } from "~/types/filters";
-import trackSiteSearch from "~/utils/trackSiteSearch";
 // export const useSearchQueryParams = <Filters extends { [K: string]: Filter }>({
 //   module,
 //   qParamKey,

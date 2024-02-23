@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import { mdiChevronDoubleLeft } from "@mdi/js";
+
+defineProps({
+  showSimilar: Boolean,
+});
+
+const showDrawer = ref(false);
+const mini = ref(false);
+
+function closeMobileSearch() {
+  showDrawer.value = false;
+}
+</script>
+
 <template>
   <v-navigation-drawer
     v-if="showSimilar"
@@ -20,10 +35,7 @@
       >
         <v-list-item :ripple="false" @click="mini = !mini">
           <template #prepend>
-            <v-icon
-              :icon="mdiChevronDoubleLeft"
-              :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
-            />
+            <v-icon :icon="mdiChevronDoubleLeft" :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }" />
           </template>
           <div class="montserrat font-weight-medium text--secondary">
             {{ $t("common.hideSimilar") }}
@@ -46,7 +58,7 @@
         </div>
       </div>
       <div v-show="!mini">
-        <slot name="drawer" :close-mobile-search="closeMobileSearch"></slot>
+        <slot name="drawer" :close-mobile-search="closeMobileSearch" />
       </div>
     </div>
   </v-navigation-drawer>
@@ -59,17 +71,3 @@
     <app-footer />
   </v-main>
 </template>
-<script setup lang="ts">
-import { mdiChevronDoubleLeft } from "@mdi/js";
-
-const props = defineProps({
-  showSimilar: Boolean,
-});
-
-const showDrawer = ref(false);
-const mini = ref(false);
-
-function closeMobileSearch() {
-  showDrawer.value = false;
-}
-</script>

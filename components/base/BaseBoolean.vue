@@ -1,13 +1,8 @@
-<template>
-  <v-icon :color="value ? 'green' : 'red'" small>
-    {{ value ? icons.mdiCheckBold : icons.mdiCloseThick }}
-  </v-icon>
-</template>
-
 <script>
-import { mdiCheckBold, mdiCloseThick } from '@mdi/js'
+import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
+
 export default {
-  name: 'BaseBoolean',
+  name: "BaseBoolean",
   props: {
     value: {
       type: Boolean,
@@ -19,8 +14,14 @@ export default {
       return {
         mdiCheckBold,
         mdiCloseThick,
-      }
+      };
     },
   },
-}
+};
 </script>
+
+<template>
+  <v-icon :color="value ? 'green' : 'red'" size="small">
+    {{ value ? icons.mdiCheckBold : icons.mdiCloseThick }}
+  </v-icon>
+</template>

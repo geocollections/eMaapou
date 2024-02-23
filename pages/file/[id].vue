@@ -1,5 +1,285 @@
+<script setup lang="ts">
+// NOTE: For some incomprehensible reason, using any echart based chart
+// and `v-data-table` together in this components results in the production build containing copies of echarts.
+import {
+  mdiFileDownloadOutline,
+  mdiFileMusicOutline,
+  mdiFileVideoOutline,
+} from "@mdi/js";
+
+const { $geoloogiaFetch, $translate } = useNuxtApp();
+const { t } = useI18n();
+const img = useImage();
+const localePath = useLocalePath();
+const route = useRoute();
+
+const { data, pending, error } = useLazyAsyncData("data", async () => {
+  const filePromise = $geoloogiaFetch(`/attachment/${route.params.id}/`, {
+    query: {
+      nest: 2,
+    },
+  });
+  const attachmentKeywordsPromise = $geoloogiaFetch("/attachment_keyword/", {
+    query: {
+      attachment: route.params.id,
+      nest: 1,
+    },
+  });
+
+  const [fileResponse, attachmentKeywordsResponse] = await Promise.all([
+    filePromise,
+    attachmentKeywordsPromise,
+  ]);
+
+  const ids = fileResponse?.ids;
+  const fileObj = fileResponse;
+  //
+  // if (fileObj?.specimen) {
+  //   const specimenIdentificationPromise = $geoloogiaFetch(
+  //     "/specimen_identification/",
+  //     {
+  //       query: {
+  //         current: true,
+  //         specimen: fileObj.specimen.id,
+  //         nest: 1,
+  //       },
+  //     },
+  //   );
+  //   const specimenIdentificationGeologyPromise = $geoloogiaFetch(
+  //     "/specimen_identification_geology/",
+  //     {
+  //       query: {
+  //         current: true,
+  //         specimen: fileObj.specimen.id,
+  //         nest: 1,
+  //       },
+  //     },
+  //   );
+  //   const [
+  //     specimenIdentificationResponse,
+  //     specimenIdentificationGeologyResponse,
+  //   ] = await Promise.all([
+  //     specimenIdentificationPromise,
+  //     specimenIdentificationGeologyPromise,
+  //   ]);
+  //   return {
+  //     file: fileObj,
+  //     ids,
+  //     attachmentKeywords: attachmentKeywordsResponse.results,
+  //     specimenIdentification: specimenIdentificationResponse.results,
+  //     specimenIdentificationGeology:
+  //       specimenIdentificationGeologyResponse.results,
+  //   };
+  // }
+  // return {
+  //   file: fileObj,
+  //   ids,
+  //   attachmentKeywords: attachmentKeywordsResponse.results,
+  //   specimenIdentification: [],
+  //   specimenIdentificationGeology: [],
+  // };
+  return {
+    file: fileObj,
+  };
+});
+
+const file = computed(() => data.value?.file);
+const attachmentKeywords = computed(() => data.value?.attachmentKeywords ?? []);
+const specimenIdentification = computed(
+  () => data.value?.specimenIdentification ?? [],
+);
+const specimenIdentificationGeology = computed(
+  () => data.value?.specimenIdentificationGeology ?? [],
+);
+const imageSize = computed(() => {
+  return file.value?.image_width && file.value?.image_height
+    ? `${file.value.image_width} × ${file.value.image_height} px`
+    : null;
+});
+const isImage = computed(() => file.value?.attachment_format.includes("image"));
+const isAudio = computed(() => file.value?.attachment_format.includes("audio"));
+const isVideo = computed(() => file.value?.attachment_format.includes("video"));
+const imageSizes = computed(() => {
+  if (!isImage)
+    return ["original"];
+  return ["small", "medium", "large", "original"];
+});
+const showMap = computed(() => {
+  return (
+    (file.value?.locality?.latitude && file.value?.locality?.longitude)
+    || (file.value?.specimen?.locality?.latitude
+    && file.value?.specimen?.locality?.longitude)
+    || (file.value?.image_latitude && state?.file.image_longitude)
+  );
+});
+
+const mapIsEstonian = computed(() => {
+  return (
+    file.value?.locality?.country?.value === "Eesti"
+    || file.value?.specimen?.locality?.country?.value === "Eesti"
+  );
+});
+
+const mapLatitude = computed(() => {
+  return (
+    file.value?.locality?.latitude
+    || file.value?.specimen?.locality?.latitude
+    || file.value?.image_latitude
+  );
+});
+const mapLongitude = computed(() => {
+  return (
+    file.value?.locality?.longitude
+    || file.value?.specimen?.locality?.longitude
+    || file.value?.image_longitude
+  );
+});
+
+const mapLocalityText = computed(() => {
+  return $translate({
+    et:
+      file.value?.locality?.locality
+      || file.value?.specimen?.locality?.locality
+      || file.value?.image_place
+      || file.value?.description,
+    en:
+      file.value?.locality?.locality_en
+      || file.value?.specimen?.locality?.locality_en
+      || file.value?.image_place
+      || file.value?.description_en,
+  });
+});
+
+const specimen = computed(() => file.value?.specimen);
+const imageset = computed(() => file.value?.imageset);
+const locality = computed(
+  () => file.value?.locality ?? file.value?.specimen?.locality,
+);
+const type = computed(() => file.value?.type);
+const agentDigitised = computed(() => file.value?.agent_digitised);
+const database = computed(() => file.value?.database);
+const licence = computed(() => file.value?.licence);
+
+const title = computed(() => {
+  if (!file.value)
+    return "";
+  switch (file.value.specimen_image_attachment) {
+    case 1:
+      return `${file.value?.specimen?.coll?.number?.split(" ")?.[0]} ${
+        file.value?.specimen?.specimen_id
+      } (ID: ${file.value?.specimen.id})`;
+    case 2:
+      return file.value?.image_number;
+    case 4:
+      return file.value?.reference?.reference;
+    default:
+      return `${
+        $translate({
+          et: file.value?.description,
+          en: file.value?.description_en,
+        }) ?? file.value?.id
+      }`;
+  }
+});
+const pageType = computed(() => {
+  if (!file.value)
+    return "";
+  switch (file.value.specimen_image_attachment) {
+    case 1:
+      return t("file.specimenTitle");
+    case 2:
+      return t("file.imageTitle");
+    case 4:
+      return t("file.referenceTitle");
+    default:
+      return t("file.fileTitle");
+  }
+});
+const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
+// export default defineComponent({
+//   setup() {
+//     useMeta(() => {
+//       return {
+//         title: pageTitle.value,
+//         meta: [
+//           {
+//             property: "og:title",
+//             hid: "og:title",
+//             content: pageTitle.value,
+//           },
+//           {
+//             property: "og:url",
+//             hid: "og:url",
+//             content: route.value.path,
+//           },
+//           ...[
+//             {
+//               property: "og:image",
+//               hid: "og:image",
+//               content: isImage.value
+//                 ? $img(
+//                     `${file.value.filename}`,
+//                     { size: "small" },
+//                     {
+//                       provider: "geocollections",
+//                     },
+//                   )
+//                 : "",
+//             },
+//             {
+//               property: "og:video",
+//               hid: "og:video",
+//               content: isVideo.value
+//                 ? `https://files.geocollections.info/${file.value.uuid_filename}`
+//                 : "",
+//             },
+//             {
+//               property: "og:audio",
+//               hid: "og:audio",
+//               content: isAudio.value
+//                 ? `https://files.geocollections.info/${file.value.uuid_filename}`
+//                 : "",
+//             },
+//           ],
+//         ],
+//       };
+//     });
+//     return {
+//       ...toRefs(state),
+//       licence,
+//       database,
+//       agentDigitised,
+//       type,
+//       locality,
+//       imageset,
+//       specimen,
+//       mapLocalityText,
+//       mapLongitude,
+//       mapLatitude,
+//       mapIsEstonian,
+//       showMap,
+//       imageSizes,
+//       isVideo,
+//       isAudio,
+//       isImage,
+//       icons,
+//       imageSize,
+//       pageTitle,
+//       isNull,
+//       isNil,
+//       isEmpty,
+//     };
+//   },
+//   head: {},
+// });
+</script>
+
 <template>
-  <detail v-if="!pending" :loading="pending" :error="error">
+  <detail
+    v-if="!pending"
+    :loading="pending"
+    :error="error"
+  >
     <template #title>
       <!-- <header-detail :ids="ids" :title="pageTitle" /> -->
       <header-detail
@@ -37,11 +317,15 @@
           "
         >
           <template #placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
               <v-progress-circular
                 indeterminate
-                color="grey lighten-5"
-              ></v-progress-circular>
+                color="grey-lighten-5"
+              />
             </v-row>
           </template>
         </v-img>
@@ -50,7 +334,7 @@
         <audio v-else-if="isAudio" controls>
           <source
             :src="`https://files.geocollections.info/${file.uuid_filename}`"
-          />
+          >
           Your browser does not support the audio element.
           <v-icon>{{ mdiFileMusicOutline }}</v-icon>
         </audio>
@@ -59,7 +343,7 @@
         <video v-else-if="isVideo" controls>
           <source
             :src="`https://files.geocollections.info/${file.uuid_filename}`"
-          />
+          >
           Your browser does not support the video element.
           <v-icon>{{ mdiFileVideoOutline }}</v-icon>
         </video>
@@ -67,14 +351,14 @@
         <!-- File -->
         <div
           v-else
-          class="rounded file-download primary--text"
+          class="rounded file-download text-primary"
           @click="
             $openWindow(
               `https://files.geocollections.info/${file.uuid_filename}`,
             )
           "
         >
-          <v-icon large color="primary darken-2">
+          <v-icon size="large" color="primary-darken-2">
             {{ mdiFileDownloadOutline }}
           </v-icon>
           {{ $t("file.download") }}
@@ -107,8 +391,8 @@
                 {{ $t(`common.${size}`) }}
                 <v-icon
                   v-if="size === 'original'"
-                  small
-                  color="primary darken-2"
+                  size="small"
+                  color="primary-darken-2"
                 >
                   {{ mdiFileDownloadOutline }}
                 </v-icon>
@@ -299,7 +583,9 @@
           >
             <template #value>
               <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                <li v-if="item.keyword">{{ item.keyword.keyword }}</li>
+                <li v-if="item.keyword">
+                  {{ item.keyword.keyword }}
+                </li>
               </ul>
             </template>
           </table-row>
@@ -350,9 +636,13 @@
           <!-- /> -->
         </base-table>
 
-        <v-card v-if="showMap" id="map-wrap" elevation="0">
-          <v-card-title class="pl-0 subsection-title"
-            >{{ $t("locality.map") }}
+        <v-card
+          v-if="showMap"
+          id="map-wrap"
+          elevation="0"
+        >
+          <v-card-title class="pl-0 subsection-title">
+            {{ $t("locality.map") }}
           </v-card-title>
           <map-detail
             rounded
@@ -380,278 +670,6 @@
     </template>
   </detail>
 </template>
-
-<script setup lang="ts">
-// NOTE: For some incomprehensible reason, using any echart based chart
-// and `v-data-table` together in this components results in the production build containing copies of echarts.
-import {
-  mdiFileMusicOutline,
-  mdiFileVideoOutline,
-  mdiFileDownloadOutline,
-} from "@mdi/js";
-
-const { $geoloogiaFetch, $translate } = useNuxtApp();
-const { t } = useI18n();
-const img = useImage();
-const localePath = useLocalePath();
-const route = useRoute();
-const file = computed(() => data.value?.file);
-const attachmentKeywords = computed(() => data.value?.attachmentKeywords ?? []);
-const specimenIdentification = computed(
-  () => data.value?.specimenIdentification ?? [],
-);
-const specimenIdentificationGeology = computed(
-  () => data.value?.specimenIdentificationGeology ?? [],
-);
-const imageSize = computed(() => {
-  return file.value?.image_width && file.value?.image_height
-    ? `${file.value.image_width} × ${file.value.image_height} px`
-    : null;
-});
-const isImage = computed(() => file.value?.attachment_format.includes("image"));
-const isAudio = computed(() => file.value?.attachment_format.includes("audio"));
-const isVideo = computed(() => file.value?.attachment_format.includes("video"));
-const imageSizes = computed(() => {
-  if (!isImage) return ["original"];
-  return ["small", "medium", "large", "original"];
-});
-const showMap = computed(() => {
-  return (
-    (file.value?.locality?.latitude && file.value?.locality?.longitude) ||
-    (file.value?.specimen?.locality?.latitude &&
-      file.value?.specimen?.locality?.longitude) ||
-    (file.value?.image_latitude && state?.file.image_longitude)
-  );
-});
-
-const mapIsEstonian = computed(() => {
-  return (
-    file.value?.locality?.country?.value === "Eesti" ||
-    file.value?.specimen?.locality?.country?.value === "Eesti"
-  );
-});
-
-const mapLatitude = computed(() => {
-  return (
-    file.value?.locality?.latitude ||
-    file.value?.specimen?.locality?.latitude ||
-    file.value?.image_latitude
-  );
-});
-const mapLongitude = computed(() => {
-  return (
-    file.value?.locality?.longitude ||
-    file.value?.specimen?.locality?.longitude ||
-    file.value?.image_longitude
-  );
-});
-
-const mapLocalityText = computed(() => {
-  return $translate({
-    et:
-      file.value?.locality?.locality ||
-      file.value?.specimen?.locality?.locality ||
-      file.value?.image_place ||
-      file.value?.description,
-    en:
-      file.value?.locality?.locality_en ||
-      file.value?.specimen?.locality?.locality_en ||
-      file.value?.image_place ||
-      file.value?.description_en,
-  });
-});
-
-const specimen = computed(() => file.value?.specimen);
-const imageset = computed(() => file.value?.imageset);
-const locality = computed(
-  () => file.value?.locality ?? file.value?.specimen?.locality,
-);
-const type = computed(() => file.value?.type);
-const agentDigitised = computed(() => file.value?.agent_digitised);
-const database = computed(() => file.value?.database);
-const licence = computed(() => file.value?.licence);
-
-const { data, pending, error } = useLazyAsyncData("data", async () => {
-  const filePromise = $geoloogiaFetch(`/attachment/${route.params.id}/`, {
-    query: {
-      nest: 2,
-    },
-  });
-  const attachmentKeywordsPromise = $geoloogiaFetch("/attachment_keyword/", {
-    query: {
-      attachment: route.params.id,
-      nest: 1,
-    },
-  });
-
-  const [fileResponse, attachmentKeywordsResponse] = await Promise.all([
-    filePromise,
-    attachmentKeywordsPromise,
-  ]);
-
-  const ids = fileResponse?.ids;
-  const fileObj = fileResponse;
-  //
-  // if (fileObj?.specimen) {
-  //   const specimenIdentificationPromise = $geoloogiaFetch(
-  //     "/specimen_identification/",
-  //     {
-  //       query: {
-  //         current: true,
-  //         specimen: fileObj.specimen.id,
-  //         nest: 1,
-  //       },
-  //     },
-  //   );
-  //   const specimenIdentificationGeologyPromise = $geoloogiaFetch(
-  //     "/specimen_identification_geology/",
-  //     {
-  //       query: {
-  //         current: true,
-  //         specimen: fileObj.specimen.id,
-  //         nest: 1,
-  //       },
-  //     },
-  //   );
-  //   const [
-  //     specimenIdentificationResponse,
-  //     specimenIdentificationGeologyResponse,
-  //   ] = await Promise.all([
-  //     specimenIdentificationPromise,
-  //     specimenIdentificationGeologyPromise,
-  //   ]);
-  //   return {
-  //     file: fileObj,
-  //     ids,
-  //     attachmentKeywords: attachmentKeywordsResponse.results,
-  //     specimenIdentification: specimenIdentificationResponse.results,
-  //     specimenIdentificationGeology:
-  //       specimenIdentificationGeologyResponse.results,
-  //   };
-  // }
-  // return {
-  //   file: fileObj,
-  //   ids,
-  //   attachmentKeywords: attachmentKeywordsResponse.results,
-  //   specimenIdentification: [],
-  //   specimenIdentificationGeology: [],
-  // };
-  return {
-    file: fileObj,
-  };
-});
-
-const title = computed(() => {
-  if (!file.value) return "";
-  switch (file.value.specimen_image_attachment) {
-    case 1:
-      return `${file.value?.specimen?.coll?.number?.split(" ")?.[0]} ${
-        file.value?.specimen?.specimen_id
-      } (ID: ${file.value?.specimen.id})`;
-    case 2:
-      return file.value?.image_number;
-    case 4:
-      return file.value?.reference?.reference;
-    default:
-      return `${
-        $translate({
-          et: file.value?.description,
-          en: file.value?.description_en,
-        }) ?? file.value?.id
-      }`;
-  }
-});
-const pageType = computed(() => {
-  if (!file.value) return "";
-  switch (file.value.specimen_image_attachment) {
-    case 1:
-      return t("file.specimenTitle");
-    case 2:
-      return t("file.imageTitle");
-    case 4:
-      return t("file.referenceTitle");
-    default:
-      return t("file.fileTitle");
-  }
-});
-const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: pageTitle.value,
-//         meta: [
-//           {
-//             property: "og:title",
-//             hid: "og:title",
-//             content: pageTitle.value,
-//           },
-//           {
-//             property: "og:url",
-//             hid: "og:url",
-//             content: route.value.path,
-//           },
-//           ...[
-//             {
-//               property: "og:image",
-//               hid: "og:image",
-//               content: isImage.value
-//                 ? $img(
-//                     `${file.value.filename}`,
-//                     { size: "small" },
-//                     {
-//                       provider: "geocollections",
-//                     },
-//                   )
-//                 : "",
-//             },
-//             {
-//               property: "og:video",
-//               hid: "og:video",
-//               content: isVideo.value
-//                 ? `https://files.geocollections.info/${file.value.uuid_filename}`
-//                 : "",
-//             },
-//             {
-//               property: "og:audio",
-//               hid: "og:audio",
-//               content: isAudio.value
-//                 ? `https://files.geocollections.info/${file.value.uuid_filename}`
-//                 : "",
-//             },
-//           ],
-//         ],
-//       };
-//     });
-//     return {
-//       ...toRefs(state),
-//       licence,
-//       database,
-//       agentDigitised,
-//       type,
-//       locality,
-//       imageset,
-//       specimen,
-//       mapLocalityText,
-//       mapLongitude,
-//       mapLatitude,
-//       mapIsEstonian,
-//       showMap,
-//       imageSizes,
-//       isVideo,
-//       isAudio,
-//       isImage,
-//       icons,
-//       imageSize,
-//       pageTitle,
-//       isNull,
-//       isNil,
-//       isEmpty,
-//     };
-//   },
-//   head: {},
-// });
-</script>
 
 <style scoped>
 .fade-enter-active,

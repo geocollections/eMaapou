@@ -1,52 +1,3 @@
-<template>
-  <v-expansion-panel
-    bg-color="transparent"
-    elevation="0"
-    :rounded="0"
-    style="background-color: transparent"
-    @change="handleOpen"
-  >
-    <v-expansion-panel-title
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray"
-    >
-      {{ $t("filters.map") }}
-    </v-expansion-panel-title>
-    <div
-      v-if="modelValue !== null"
-      class="white"
-      style="border-bottom: 1px solid lightgray !important"
-    >
-      <div class="d-flex py-1 pl-4 pr-2">
-        <span>
-          <input
-            type="checkbox"
-            class="checkbox"
-            checked
-            @click.prevent.stop="handleRemove"
-          />
-        </span>
-        <span
-          class="align-self-center pl-2 text-body-2 font-weight-medium text-truncate"
-        >
-          {{ valueString }}
-        </span>
-      </div>
-    </div>
-    <v-expansion-panel-text>
-      <div class="pa-0" style="border-bottom: 1px solid lightgray !important">
-        <MapSearchNew
-          :model-value="modelValue"
-          @update:model-value="$emit('update:model-value', $event)"
-        />
-        <!-- <map-search v-bind="$attrs" :value="value" :markers="mapMarkers" :invalidate-size="show" activate-search -->
-        <!--   gps-enabled :show-links="false" height="350px" :gesture-handling="$vuetify.display.smAndDown" -->
-        <!--   @update="$emit('update')" @input="$emit('input', $event)" /> -->
-      </div>
-    </v-expansion-panel-text>
-  </v-expansion-panel>
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
   items: {
@@ -67,12 +18,12 @@ const { $translate } = useNuxtApp();
 const route = useRoute();
 const show = ref(false);
 
-const handleOpen = () => {
+function handleOpen() {
   show.value = !show.value;
-};
-const handleRemove = () => {
+}
+function handleRemove() {
   emit("update:model-value", null);
-};
+}
 const mapMarkers = computed(() => {
   // if (props.useCustomMarkers) return props.items
   //
@@ -115,6 +66,55 @@ const valueString = computed(() => {
   return `${props.modelValue?.geometry.type} ${props.modelValue?.geometry.coordinates}`;
 });
 </script>
+
+<template>
+  <v-expansion-panel
+    bg-color="transparent"
+    elevation="0"
+    :rounded="0"
+    style="background-color: transparent"
+    @group:selected="handleOpen"
+  >
+    <v-expansion-panel-title
+      class="py-1 pl-4 pr-1 font-weight-medium"
+      style="min-height: 40px; border-bottom: 1px solid lightgray"
+    >
+      {{ $t("filters.map") }}
+    </v-expansion-panel-title>
+    <div
+      v-if="modelValue !== null"
+      class="bg-white"
+      style="border-bottom: 1px solid lightgray !important"
+    >
+      <div class="d-flex py-1 pl-4 pr-2">
+        <span>
+          <input
+            type="checkbox"
+            class="checkbox"
+            checked
+            @click.prevent.stop="handleRemove"
+          >
+        </span>
+        <span
+          class="align-self-center pl-2 text-body-2 font-weight-medium text-truncate"
+        >
+          {{ valueString }}
+        </span>
+      </div>
+    </div>
+    <v-expansion-panel-text>
+      <div class="pa-0" style="border-bottom: 1px solid lightgray !important">
+        <MapSearchNew
+          :model-value="modelValue"
+          @update:model-value="$emit('update:model-value', $event)"
+        />
+        <!-- <map-search v-bind="$attrs" :value="value" :markers="mapMarkers" :invalidate-size="show" activate-search -->
+        <!--   gps-enabled :show-links="false" height="350px" :gesture-handling="$vuetify.display.smAndDown" -->
+        <!--   @update="$emit('update')" @input="$emit('input', $event)" /> -->
+      </div>
+    </v-expansion-panel-text>
+  </v-expansion-panel>
+</template>
 
 <style scoped>
 :deep(.v-expansion-panel-text__wrapper) {

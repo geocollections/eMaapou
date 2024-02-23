@@ -1,21 +1,3 @@
-<template>
-  <div>
-    <renderer-switch
-      v-if="!hideRendererSwitch"
-      :renderer="renderer"
-      @update="renderer = $event"
-    />
-    <client-only>
-      <v-chart
-        class="chart"
-        autoresize
-        :init-options="initOptions"
-        :option="state.option"
-      />
-    </client-only>
-  </div>
-</template>
-
 <script setup lang="ts">
 import VChart from "vue-echarts";
 import {
@@ -29,7 +11,8 @@ import {
 } from "echarts/components";
 import { use } from "echarts/core";
 import { LineChart } from "echarts/charts";
-import { SVGRenderer, CanvasRenderer } from "echarts/renderers";
+import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
+import { useDisplay } from "vuetify/lib/framework.mjs";
 import {
   DATAZOOM_Y_SLIDER_LEFT,
   DATAZOOM_Y_SLIDER_LEFT_SMALL,
@@ -45,20 +28,6 @@ import {
   TITLE_TOP_SMALL,
   TOOLBOX_RIGHT,
 } from "~/constants";
-import { useDisplay } from "vuetify/lib/framework.mjs";
-
-use([
-  CanvasRenderer,
-  SVGRenderer,
-  LineChart,
-  GridComponent,
-  AxisPointerComponent,
-  TooltipComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-  TitleComponent,
-  LegendComponent,
-]);
 
 const props = defineProps({
   fileData: {
@@ -76,6 +45,19 @@ const props = defineProps({
     default: false,
   },
 });
+
+use([
+  CanvasRenderer,
+  SVGRenderer,
+  LineChart,
+  GridComponent,
+  AxisPointerComponent,
+  TooltipComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  TitleComponent,
+  LegendComponent,
+]);
 
 const display = useDisplay();
 const { renderer } = storeToRefs(useSettings());
@@ -150,12 +132,12 @@ const initOptions = computed(() => {
     renderer: renderer.value,
   };
 });
-const buildChartLegend = () => {
+function buildChartLegend() {
   return {
     data: Object.keys(props.fileData?.metadata?.Curves).slice(1),
   };
-};
-const buildXAxis = () => {
+}
+function buildXAxis() {
   // First item in data is always DEPTH
   return Object.entries(props.fileData?.data).reduce((prev, curr, currIdx) => {
     if (curr[0] !== "DEPTH") {
@@ -194,9 +176,9 @@ const buildXAxis = () => {
     }
     return prev;
   }, [] as any[]);
-};
+}
 
-const buildYAxis = () => {
+function buildYAxis() {
   return {
     type: "category",
     boundaryGap: false,
@@ -220,9 +202,9 @@ const buildYAxis = () => {
     // },
     data: props.fileData?.data?.DEPTH,
   };
-};
+}
 
-const buildChartSeries = () => {
+function buildChartSeries() {
   // First item in data is always DEPTH
   return Object.entries(props.fileData?.data).reduce((prev, curr, currIdx) => {
     if (curr[0] !== "DEPTH") {
@@ -239,7 +221,7 @@ const buildChartSeries = () => {
     }
     return prev;
   }, [] as any[]);
-};
+}
 const chartOptions = computed(() => {
   return {
     animation: false,
@@ -263,7 +245,7 @@ state.option = {
   yAxis: buildYAxis(),
   series: buildChartSeries(),
 };
-const updateChartDimensions = (isSmallChart: boolean) => {
+function updateChartDimensions(isSmallChart: boolean) {
   state.defaultOptions = {
     ...state.defaultOptions,
     title: {
@@ -301,14 +283,32 @@ const updateChartDimensions = (isSmallChart: boolean) => {
       },
     ],
   };
-};
+}
 watch(
   () => display.xs.value,
   (newVal) => {
     updateChartDimensions(newVal);
-  }
+  },
 );
 </script>
+
+<template>
+  <div>
+    <renderer-switch
+      v-if="!hideRendererSwitch"
+      :renderer="renderer"
+      @update="renderer = $event"
+    />
+    <client-only>
+      <VChart
+        class="chart"
+        autoresize
+        :init-options="initOptions"
+        :option="state.option"
+      />
+    </client-only>
+  </div>
+</template>
 
 <style scoped>
 .chart {

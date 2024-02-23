@@ -1,3 +1,38 @@
+<script>
+import { mdiChartLineVariant } from "@mdi/js";
+
+export default {
+  name: "OptionsParameterTreeView",
+  props: {
+    parameters: {
+      type: Array,
+      required: true,
+    },
+    initialSelection: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      search: "",
+    };
+  },
+  computed: {
+    icons() {
+      return {
+        mdiChartLineVariant,
+      };
+    },
+  },
+  methods: {
+    handleInput(event) {
+      this.$emit("input", event);
+    },
+  },
+};
+</script>
+
 <template>
   <v-menu
     transition="slide-y-transition"
@@ -13,7 +48,9 @@
         variant="outlined"
         v-bind="props"
       >
-        <v-icon start> {{ icons.mdiChartLineVariant }} </v-icon>
+        <v-icon start>
+          {{ icons.mdiChartLineVariant }}
+        </v-icon>
         {{ $t("common.parameters") }}
       </v-btn>
     </template>
@@ -54,37 +91,3 @@
     </v-card>
   </v-menu>
 </template>
-
-<script>
-import { mdiChartLineVariant } from "@mdi/js";
-export default {
-  name: "OptionsParameterTreeView",
-  props: {
-    parameters: {
-      type: Array,
-      required: true,
-    },
-    initialSelection: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  data() {
-    return {
-      search: "",
-    };
-  },
-  computed: {
-    icons() {
-      return {
-        mdiChartLineVariant,
-      };
-    },
-  },
-  methods: {
-    handleInput(event) {
-      this.$emit("input", event);
-    },
-  },
-};
-</script>

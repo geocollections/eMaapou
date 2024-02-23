@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+const localePath = useLocalePath();
+const { $translate } = useNuxtApp();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.preparation_number="{ item, index }">
@@ -68,9 +74,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const emit = defineEmits(["click:row"]);
-const localePath = useLocalePath();
-const { $translate } = useNuxtApp();
-</script>

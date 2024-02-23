@@ -1,7 +1,8 @@
 import type { RouteLocationRaw } from "vue-router";
+
 const EDIT_URL = "https://edit.geocollections.info";
-const DEPOSIT_URL =
-  "https://xgis.maaamet.ee/xGIS/bronx/maardlad/showdata.aspx?registrikaart=";
+const DEPOSIT_URL
+  = "https://xgis.maaamet.ee/xGIS/bronx/maardlad/showdata.aspx?registrikaart=";
 const EELIS_URL = "http://register.keskkonnainfo.ee/envreg/main?reg_kood=";
 const TURBA_URL = "https://turba.geoloogia.info";
 const EGF_URL = "https://fond.egt.ee/fond/egf/";
@@ -17,14 +18,14 @@ export default defineNuxtPlugin((_nuxtApp) => {
       window.open(
         `https://geocollections.info/${table}/${id}`,
         "_blank",
-        "height=800, width=800"
+        "height=800, width=800",
       );
     }
   };
   // TODO: `route` should be of type Route, not string
-  const openNuxtWindow = (location: RouteLocationRaw | undefined) => {
-    const resolvedRoute = router.resolve(location as RouteLocationRaw);
-    window.open(resolvedRoute?.href, "_blank", "height=800, width=800");
+  const openNuxtWindow = (_location: RouteLocationRaw | undefined) => {
+    // const resolvedRoute = router.resolve(location as RouteLocationRaw);
+    // window.open(resolvedRoute?.href, "_blank", "height=800, width=800");
   };
 
   const openImage = (filename: string, size = "large") => {
@@ -32,12 +33,13 @@ export default defineNuxtPlugin((_nuxtApp) => {
       if (size === "original") {
         window.open(
           `https://files.geocollections.info/${filename}`,
-          "ImageWindow"
+          "ImageWindow",
         );
-      } else {
+      }
+      else {
         window.open(
           `https://files.geocollections.info/${size}/${filename}`,
-          "ImageWindow"
+          "ImageWindow",
         );
       }
     }
@@ -45,11 +47,12 @@ export default defineNuxtPlugin((_nuxtApp) => {
 
   const openEdit = (table: string, id: string) => {
     if (table && id) {
-      if (table === "file") table = "attachment";
+      if (table === "file")
+        table = "attachment";
       window.open(
         `${EDIT_URL}/${table}/${id}`,
         "EditWindow",
-        "height=800, width=800"
+        "height=800, width=800",
       );
     }
   };
@@ -59,21 +62,19 @@ export default defineNuxtPlugin((_nuxtApp) => {
       window.open(
         `${DEPOSIT_URL}${id}`,
         "DepositWindow",
-        "height=800, width=800"
+        "height=800, width=800",
       );
     }
   };
 
   const openEelis = (id: string) => {
-    if (id) {
+    if (id)
       window.open(`${EELIS_URL}${id}`, "EelisWindow", "height=800, width=800");
-    }
   };
 
   const openEgf = (id: string) => {
-    if (id) {
+    if (id)
       window.open(`${EGF_URL}${id}`, "EgfWindow", "height=800, width=800");
-    }
   };
 
   const openTurba = (table: string, id: string, openNewWindow = true) => {
@@ -81,7 +82,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
       window.open(
         `${TURBA_URL}/${table}/${id}`,
         openNewWindow ? "TurbaWindow" : "_parent",
-        "height=800, width=800"
+        "height=800, width=800",
       );
     }
   };
@@ -91,7 +92,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
       window.open(
         `${GEOLOGY_URL}/${table}/${id}`,
         "GeologyWindow",
-        "height=800, width=800"
+        "height=800, width=800",
       );
     }
   };

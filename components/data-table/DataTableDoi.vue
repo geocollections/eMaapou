@@ -6,8 +6,9 @@
         @click.native="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "
-        >{{ item.identifier }}</base-link-external
       >
+        {{ item.identifier }}
+      </base-link-external>
     </template>
 
     <template #item.datacite_created="{ item }">
@@ -17,8 +18,8 @@
         </div>
         <div
           v-if="
-            item.datacite_updated &&
-            item.datacite_created !== item.datacite_updated
+            item.datacite_updated
+              && item.datacite_created !== item.datacite_updated
           "
         >
           ({{ $formatDate(item.datacite_updated) }})

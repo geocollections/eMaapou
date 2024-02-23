@@ -1,16 +1,3 @@
-<template>
-  <data-table-attachment
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
 
@@ -37,7 +24,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
     nest: 2,
     search: search.value,
     search_fields: Object.values(
-      getAPIFieldValues(HEADERS_ATTACHMENT, locale.value)
+      getAPIFieldValues(HEADERS_ATTACHMENT, locale.value),
     ).join(","),
     ordering: getGeoloogiaApiSort({
       sortBy: options.value.sortBy,
@@ -47,3 +34,16 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
   },
 });
 </script>
+
+<template>
+  <data-table-attachment
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

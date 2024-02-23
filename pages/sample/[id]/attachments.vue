@@ -1,19 +1,6 @@
-<template>
-  <data-table-attachment
-    class="border-b"
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
+
 const route = useRoute();
 const {
   options,
@@ -46,3 +33,17 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
   },
 });
 </script>
+
+<template>
+  <data-table-attachment
+    class="border-b"
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

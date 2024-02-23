@@ -1,9 +1,8 @@
+import type { Headers } from "~/constants";
+
 export default function (
-  headers: {
-    byIds: { [key: string]: any };
-    allIds: string[];
-  },
-  locale: string
+  headers: Headers,
+  locale: "et" | "en",
 ): { [key: string]: string } {
   return Object.entries(headers.byIds)
     .filter(([_, header]) => {

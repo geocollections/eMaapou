@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { OverlayImage } from "~/components/ImageOverlay.vue";
+
+const showOverlay = ref(false);
+const overlayImage = ref<OverlayImage>();
+function openOverlay(image: OverlayImage) {
+  overlayImage.value = image;
+  showOverlay.value = true;
+}
+const localePath = useLocalePath();
+const img = useImage();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.file="{ item }">
@@ -7,14 +20,14 @@
           img(
             `${item.attachment.filename}`,
             { size: 'large' },
-            { provider: 'geocollections' }
+            { provider: 'geocollections' },
           )
         "
         :preview-src="
           img(
             `${item.attachment.filename}`,
             { size: 'small' },
-            { provider: 'geocollections' }
+            { provider: 'geocollections' },
           )
         "
         :type="item.attachment.attachment_format.value"
@@ -52,16 +65,3 @@
   </base-data-table>
   <image-overlay v-model="showOverlay" :image="overlayImage" />
 </template>
-
-<script setup lang="ts">
-import type { OverlayImage } from "~/components/ImageOverlay.vue";
-
-const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-const openOverlay = (image: OverlayImage) => {
-  overlayImage.value = image;
-  showOverlay.value = true;
-};
-const localePath = useLocalePath();
-const img = useImage();
-</script>

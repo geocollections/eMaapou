@@ -1,54 +1,3 @@
-<template>
-  <search>
-    <template #title>
-      <header-search
-        :title="$t('dataset.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiDatabaseOutline"
-      />
-    </template>
-
-    <template #form="{ closeMobileSearch }">
-      <search-form-dataset
-        @update="
-          handleUpdate();
-          closeMobileSearch();
-        "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
-      />
-    </template>
-
-    <template #result>
-      <v-card
-        flat
-        :rounded="0"
-        style="
-          border-top: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-        "
-      >
-        <data-table-dataset
-          :show-search="false"
-          :items="data?.response.docs ?? []"
-          :count="data?.response.numFound ?? 0"
-          :headers="headers"
-          :options="options"
-          dynamic-headers
-          :is-loading="pending"
-          stateful-headers
-          @update="handleDataTableUpdate"
-          @change:headers="handleHeadersChange"
-          @reset:headers="handleHeadersReset(options)"
-          @click:row="handleClickRow"
-        />
-      </v-card>
-    </template>
-  </search>
-</template>
-
 <script setup lang="ts">
 import { mdiDatabaseOutline } from "@mdi/js";
 
@@ -59,8 +8,8 @@ const {
   setStateFromQueryParams,
   getQueryParams,
 } = datasetsStore;
-const { solrSort, solrQuery, solrFilters, options, headers, resultsCount } =
-  storeToRefs(datasetsStore);
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(datasetsStore);
 
 const route = useRoute();
 
@@ -118,3 +67,46 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   );
 }
 </script>
+
+<template>
+  <search>
+    <template #title>
+      <header-search
+        :title="$t('dataset.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiDatabaseOutline"
+      />
+    </template>
+
+    <template #form="{ closeMobileSearch }">
+      <search-form-dataset
+        @update="
+          handleUpdate();
+          closeMobileSearch();
+        "
+        @reset="
+          handleReset();
+          closeMobileSearch();
+        "
+      />
+    </template>
+
+    <template #result>
+      <data-table-dataset
+        class="border-t border-b"
+        :show-search="false"
+        :items="data?.response.docs ?? []"
+        :count="data?.response.numFound ?? 0"
+        :headers="headers"
+        :options="options"
+        dynamic-headers
+        :is-loading="pending"
+        stateful-headers
+        @update="handleDataTableUpdate"
+        @change:headers="handleHeadersChange"
+        @reset:headers="handleHeadersReset(options)"
+        @click:row="handleClickRow"
+      />
+    </template>
+  </search>
+</template>

@@ -1,3 +1,70 @@
+<script setup lang="ts">
+import { mdiMagnify } from "@mdi/js";
+import type { DataTableOptions } from "~/constants";
+
+const props = withDefaults(
+  defineProps<{
+    items: any[];
+    options: DataTableOptions;
+    count?: number;
+    showSearch?: boolean;
+  }>(),
+  { count: 0, showSearch: true },
+);
+
+const emit = defineEmits(["update"]);
+
+const { t } = useI18n();
+const localePath = useLocalePath();
+const localeRoute = useLocaleRoute();
+const img = useImage();
+
+const search = ref("");
+const searchDebounced = useDebounce(search, 250);
+const isLoading = ref(false);
+const footerProps = ref({
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+});
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+watch(
+  () => props.items,
+  () => {
+    isLoading.value = false;
+  },
+);
+
+watch(searchDebounced, () => {
+  handleSearch();
+});
+
+function boxHasInfo(box) {
+  return (
+    box.drillcore_box?.depth_start
+    || box.drillcore_box?.depth_end
+    || box.drillcore_box?.stratigraphy_top
+    || box.drillcore_box?.stratigraphy_base
+    || box.drillcore_box?.depth_other
+    || box.drillcore_box?.remarks
+  );
+}
+
+function handleChange(options) {
+  emit("update", { options, search: search.value });
+}
+
+function handleSearch() {
+  const options = { ...props.options, page: 1 };
+  isLoading.value = true;
+  emit("update", { options, search: search.value });
+}
+</script>
+
 <template>
   <div>
     <v-row class="py-2" no-gutters>
@@ -11,7 +78,7 @@
         <v-text-field
           v-model="search"
           class="pt-0 mt-0"
-          color="primary darken-2"
+          color="primary-darken-2"
           :label="$t('common.search')"
           :prepend-inner-icon="mdiMagnify"
           variant="underlined"
@@ -19,7 +86,7 @@
           single-line
           hide-details
           clearable
-        ></v-text-field>
+        />
       </v-col>
       <v-col class="d-flex justify-end" align-self="center">
         <base-data-table-pagination
@@ -61,7 +128,11 @@
           >
             <v-card-text class="drillcore-box__card">
               <v-row v-if="box.drillcore_box" align="start">
-                <v-col cols="12" sm="8" align-self="center">
+                <v-col
+                  cols="12"
+                  sm="8"
+                  align-self="center"
+                >
                   <client-only>
                     <v-img
                       class="mx-auto rounded transition-swing"
@@ -95,8 +166,8 @@
                         >
                           <v-progress-circular
                             indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
+                            color="grey-lighten-5"
+                          />
                         </v-row>
                       </template>
                     </v-img>
@@ -187,73 +258,6 @@
     </v-row>
   </div>
 </template>
-
-<script setup lang="ts">
-import { mdiMagnify } from "@mdi/js";
-import type { DataTableOptions } from "~/constants";
-
-const props = withDefaults(
-  defineProps<{
-    items: any[];
-    options: DataTableOptions;
-    count?: number;
-    showSearch?: boolean;
-  }>(),
-  { count: 0, showSearch: true },
-);
-
-const emit = defineEmits(["update"]);
-
-const { t } = useI18n();
-const localePath = useLocalePath();
-const localeRoute = useLocaleRoute();
-const img = useImage();
-
-const search = ref("");
-const searchDebounced = useDebounce(search, 250);
-const isLoading = ref(false);
-const footerProps = ref({
-  showFirstLastPage: true,
-  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
-  "items-per-page-text": t("table.itemsPerPage"),
-});
-
-const pagination = computed(() => ({
-  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
-}));
-
-watch(
-  () => props.items,
-  () => {
-    isLoading.value = false;
-  },
-);
-
-watch(searchDebounced, () => {
-  handleSearch();
-});
-
-function boxHasInfo(box) {
-  return (
-    box.drillcore_box?.depth_start ||
-    box.drillcore_box?.depth_end ||
-    box.drillcore_box?.stratigraphy_top ||
-    box.drillcore_box?.stratigraphy_base ||
-    box.drillcore_box?.depth_other ||
-    box.drillcore_box?.remarks
-  );
-}
-
-function handleChange(options) {
-  emit("update", { options, search: search.value });
-}
-
-function handleSearch() {
-  const options = { ...props.options, page: 1 };
-  isLoading.value = true;
-  emit("update", { options, search: search.value });
-}
-</script>
 
 <style scoped>
 .drillcore-box:nth-of-type(odd) > .v-card > .drillcore-box__card {

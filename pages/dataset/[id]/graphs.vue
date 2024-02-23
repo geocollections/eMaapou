@@ -1,18 +1,3 @@
-<template>
-  <div>
-    <chart-flog
-      v-if="analysisResults.length > 0 && sampleResults.length > 0"
-      :analyses="analysisResults"
-      :samples="sampleResults"
-      :min-depth="minDepth"
-      :max-depth="maxDepth"
-      :parameters="parameters"
-      :title="dataset.title"
-      :reverse="reversed"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
   dataset: {
@@ -34,15 +19,15 @@ const route = useRoute();
 const { pending } = await useLazyAsyncData("data", async () => {
   const analysisResultsPromise = $solrFetch("/analysis_results", {
     query: {
-      q: "*",
-      fq: `dataset_ids:${route.params.id}`,
-      start: 0,
-      rows: 50000,
-      fl: "id,analysis_id,depth,depth_interval,parameter,method_id,value",
-      sort: "depth asc",
-      stats: "on",
+      "q": "*",
+      "fq": `dataset_ids:${route.params.id}`,
+      "start": 0,
+      "rows": 50000,
+      "fl": "id,analysis_id,depth,depth_interval,parameter,method_id,value",
+      "sort": "depth asc",
+      "stats": "on",
       "stats.field": ["depth"],
-      facet: "on",
+      "facet": "on",
       "facet.pivot": [
         "method_id,analysis_method,analysis_method_en",
         "method_id,parameter_id,parameter",
@@ -51,13 +36,13 @@ const { pending } = await useLazyAsyncData("data", async () => {
   });
   const samplesPromise = $solrFetch("/sample_data", {
     query: {
-      q: "*",
-      fq: `dataset_ids:${route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
-      start: 0,
-      rows: 50000,
-      fl: "id,sample_id,sample_number,depth,depth_interval,",
-      sort: "depth asc",
-      stats: "on",
+      "q": "*",
+      "fq": `dataset_ids:${route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
+      "start": 0,
+      "rows": 50000,
+      "fl": "id,sample_id,sample_number,depth,depth_interval,",
+      "sort": "depth asc",
+      "stats": "on",
       "stats.field": ["depth", "depth_interval"],
     },
   });
@@ -97,3 +82,18 @@ const { pending } = await useLazyAsyncData("data", async () => {
 
 const title = computed(() => props.dataset?.title);
 </script>
+
+<template>
+  <div>
+    <chart-flog
+      v-if="analysisResults.length > 0 && sampleResults.length > 0"
+      :analyses="analysisResults"
+      :samples="sampleResults"
+      :min-depth="minDepth"
+      :max-depth="maxDepth"
+      :parameters="parameters"
+      :title="dataset.title"
+      :reverse="reversed"
+    />
+  </div>
+</template>

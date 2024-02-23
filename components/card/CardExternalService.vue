@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { mdiOpenInNew } from "@mdi/js";
+
+defineProps({
+  route: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
+
 <template>
   <v-hover v-slot="{ hover }">
     <v-card
@@ -9,8 +20,7 @@
       <div>
         <v-card-title
           style="width: 100%"
-          class="text-h6"
-          :class="{ 'py-0': true }"
+          class="text-h6 py-0"
         >
           {{ $t(route.title) }}
         </v-card-title>
@@ -22,18 +32,7 @@
         :icon="mdiOpenInNew"
         size="x-small"
         class="ml-auto mr-2 align-self-baseline"
-      >
-      </v-icon>
+      />
     </v-card>
   </v-hover>
 </template>
-
-<script setup lang="ts">
-import { mdiOpenInNew } from "@mdi/js";
-defineProps({
-  route: {
-    type: Object,
-    required: true,
-  },
-});
-</script>

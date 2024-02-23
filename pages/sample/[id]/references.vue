@@ -1,19 +1,6 @@
-<template>
-  <data-table-sample-reference
-    class="border-b"
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_SAMPLE_REFERENCE, SAMPLE_REFERENCE } from "~/constants";
+
 const route = useRoute();
 const {
   options,
@@ -46,3 +33,17 @@ const { data, pending } = await useGeoloogiaApiFetch("/sample_reference/", {
   },
 });
 </script>
+
+<template>
+  <data-table-sample-reference
+    class="border-b"
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

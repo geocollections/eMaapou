@@ -1,6 +1,19 @@
+<script setup lang="ts">
+import { mdiOpenInNew } from "@mdi/js";
+
+defineProps<{
+  href?: string | null;
+  target?: string;
+}>();
+</script>
+
 <template>
-  <a :href="href" :target="target" class="text-link">
-    <slot> </slot>
+  <a
+    :href="href"
+    :target="target"
+    class="text-link"
+  >
+    <slot />
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
         <v-icon class="open-new-icon" size="x-small">{{ mdiOpenInNew }}</v-icon>
@@ -8,14 +21,6 @@
     </span>
   </a>
 </template>
-
-<script setup lang="ts">
-import { mdiOpenInNew } from "@mdi/js";
-defineProps<{
-  href?: string | null;
-  target?: string;
-}>();
-</script>
 
 <style scoped>
 .open-new-icon {

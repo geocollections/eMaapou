@@ -1,40 +1,5 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
-          v-model="filters.name.value"
-          :title="$t('filters.name').toString()"
-          @update:model-value="handleUpdate"
-          value="name"
-        />
-        <filter-input-autocomplete
-          v-model="filters.county.value"
-          ref="filterCounty"
-          :title="$t('filters.county')"
-          :query-function="suggestCounty"
-          :hydration-function="hydrateCounty"
-          @update:model-value="handleUpdate"
-          value="county"
-        />
-        <filter-input-autocomplete
-          v-model="filters.type.value"
-          ref="filterType"
-          :title="$t('filters.type')"
-          :query-function="suggestType"
-          :hydration-function="hydrateType"
-          @update:model-value="handleUpdate"
-          value="type"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import type FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -74,3 +39,38 @@ const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
   },
 );
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <v-expansion-panels variant="accordion" multiple>
+        <filter-input-text
+          v-model="filters.name.value"
+          :title="$t('filters.name').toString()"
+          value="name"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterCounty"
+          v-model="filters.county.value"
+          :title="$t('filters.county')"
+          :query-function="suggestCounty"
+          :hydration-function="hydrateCounty"
+          value="county"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterType"
+          v-model="filters.type.value"
+          :title="$t('filters.type')"
+          :query-function="suggestType"
+          :hydration-function="hydrateType"
+          value="type"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

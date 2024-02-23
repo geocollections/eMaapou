@@ -1,31 +1,3 @@
-<template>
-  <div style="display: contents">
-    <v-text-field
-      ref="searchInput"
-      :model-value="modelValue"
-      color="accent"
-      :placeholder="placeholder"
-      single-line
-      hide-details
-      variant="solo"
-      :rounded="0"
-      flat
-      density="comfortable"
-      class="border-t border-b"
-      clearable
-      :style="inputStyle"
-      :class="inputClass"
-      :autofocus="autofocus"
-      v-bind="{ ...$props, ...$attrs }"
-      @input="$emit('input', $event)"
-      @keyup.enter="$emit('enter', $event)"
-      @focus="$emit('focus', $event)"
-      @blur="$emit('blur', $event)"
-    />
-    <search-hints v-model="searchFocused" :activator="searchInput" />
-  </div>
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
   showButton: {
@@ -46,7 +18,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: function (): string {
+    default(): string {
       const { t } = useI18n();
       return t("common.searchAlt").toString();
     },
@@ -72,6 +44,34 @@ const inputStyle = computed(() => ({
   width: "100%",
 }));
 </script>
+
+<template>
+  <div style="display: contents">
+    <v-text-field
+      ref="searchInput"
+      :model-value="modelValue"
+      color="accent"
+      :placeholder="placeholder"
+      single-line
+      hide-details
+      variant="solo"
+      :rounded="0"
+      flat
+      density="comfortable"
+      class="border-t border-b"
+      clearable
+      :style="inputStyle"
+      :class="inputClass"
+      :autofocus="autofocus"
+      v-bind="{ ...$props, ...$attrs }"
+      @update:model-value="$emit('input', $event)"
+      @keyup.enter="$emit('enter', $event)"
+      @focus="$emit('focus', $event)"
+      @blur="$emit('blur', $event)"
+    />
+    <search-hints v-model="searchFocused" :activator="searchInput" />
+  </div>
+</template>
 
 <style scoped lang="scss">
 $border-color: var(--v-accent-darken2);

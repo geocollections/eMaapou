@@ -809,7 +809,7 @@ export default {
   },
   cookiePolicy: {
     introduction:
-      'See veebileht kasutab küpsiseid. Vajutades "Nõustun", annate nõusoleku küpsiste kasutamiseks.',
+      "See veebileht kasutab küpsiseid. Vajutades \"Nõustun\", annate nõusoleku küpsiste kasutamiseks.",
     readMoreButton: "Privaatsustingimused",
     accept: "Nõustun",
     reject: "Ei nõustu",

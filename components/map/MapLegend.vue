@@ -1,34 +1,11 @@
-<template>
-  <v-card class="map-legend rounded" :style="{ maxHeight: `${maxHeight}px` }">
-    <v-card v-if="estBase" flat>
-      <v-card-title class="font-weight-bold py-1 text-body-1"
-        >Estonian map</v-card-title
-      >
-      <v-img :src="$img(`/map/${estBase}.png`, null, { provider: 'static' })" />
-    </v-card>
-
-    <v-divider />
-
-    <v-card v-if="estHyb" flat>
-      <v-card-title class="font-weight-bold py-1 text-body-1"
-        >Estonian hybrid</v-card-title
-      >
-      <v-img
-        v-if="estHyb"
-        :src="$img(`/map/${estHyb}.png`, null, { provider: 'static' })"
-      />
-    </v-card>
-  </v-card>
-</template>
-
 <script>
 export default {
-  name: 'MapLegend',
+  name: "MapLegend",
   props: {
     activeBaseLayer: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     activeOverlays: {
       type: Array,
@@ -43,17 +20,40 @@ export default {
   },
   computed: {
     estBase() {
-      return this.activeBaseLayer === 'Estonian map' ? 'est-base' : false
+      return this.activeBaseLayer === "Estonian map" ? "est-base" : false;
     },
     estHyb() {
-      return this.activeOverlays.includes('Estonian hybrid') ? 'est-hyb' : false
+      return this.activeOverlays.includes("Estonian hybrid") ? "est-hyb" : false;
     },
     maxHeight() {
-      return this.height / 3
+      return this.height / 3;
     },
   },
-}
+};
 </script>
+
+<template>
+  <v-card class="map-legend rounded" :style="{ maxHeight: `${maxHeight}px` }">
+    <v-card v-if="estBase" flat>
+      <v-card-title class="font-weight-bold py-1 text-body-1">
+        Estonian map
+      </v-card-title>
+      <v-img :src="$img(`/map/${estBase}.png`, null, { provider: 'static' })" />
+    </v-card>
+
+    <v-divider />
+
+    <v-card v-if="estHyb" flat>
+      <v-card-title class="font-weight-bold py-1 text-body-1">
+        Estonian hybrid
+      </v-card-title>
+      <v-img
+        v-if="estHyb"
+        :src="$img(`/map/${estHyb}.png`, null, { provider: 'static' })"
+      />
+    </v-card>
+  </v-card>
+</template>
 
 <style scoped>
 .map-legend {

@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import type { OverlayImage } from "~/components/ImageOverlay.vue";
+
+const img = useImage();
+const localePath = useLocalePath();
+const showOverlay = ref(false);
+const overlayImage = ref<OverlayImage>();
+function openOverlay(image: OverlayImage) {
+  overlayImage.value = image;
+  showOverlay.value = true;
+}
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.id="{ item }">
@@ -133,16 +146,3 @@
   </base-data-table>
   <image-overlay v-model="showOverlay" :image="overlayImage" />
 </template>
-
-<script setup lang="ts">
-import type { OverlayImage } from "~/components/ImageOverlay.vue";
-
-const img = useImage();
-const localePath = useLocalePath();
-const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-const openOverlay = (image: OverlayImage) => {
-  overlayImage.value = image;
-  showOverlay.value = true;
-};
-</script>

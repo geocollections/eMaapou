@@ -1,18 +1,5 @@
-<template>
-  <data-table-dataset-author
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
-import { HEADERS_DATASET_AUTHOR, DATASET_AUTHORS } from "~/constants";
+import { DATASET_AUTHORS, HEADERS_DATASET_AUTHOR } from "~/constants";
 
 const route = useRoute();
 const {
@@ -46,3 +33,16 @@ const { data, pending } = await useGeoloogiaApiFetch("/dataset_author/", {
   },
 });
 </script>
+
+<template>
+  <data-table-dataset-author
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

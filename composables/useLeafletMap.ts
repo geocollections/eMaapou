@@ -1,5 +1,6 @@
 import type { LMap } from "@vue-leaflet/vue-leaflet";
 import type Leaflet from "leaflet";
+
 export interface MapState {
   map: Ref<Leaflet.Map | undefined>;
   options: Ref<any>;
@@ -28,8 +29,9 @@ export function useLeafletMap({
   });
   const ready = () => {
     state.map.value = map.value?.mapObject;
-    // @ts-ignore
-    if (props.gestureHandling) state.map.value?.gestureHandling.enable();
+    // @ts-expect-error
+    if (props.gestureHandling)
+      state.map.value?.gestureHandling.enable();
     // Setting initial base layer for detail view
     if (!props.estonianMap && isBaseLayerEstonian.value)
       mapBaseLayer.value = "CartoDB";
@@ -44,15 +46,13 @@ export function useLeafletMap({
     mapBaseLayer.value = event.name;
   };
   const handleOverlayAdd = (event: Leaflet.LayersControlEvent) => {
-    if (!state.activeOverlays.value.includes(event.name)) {
+    if (!state.activeOverlays.value.includes(event.name))
       state.activeOverlays.value.push(event.name);
-    }
   };
   const handleOverlayRemove = (event: Leaflet.LayersControlEvent) => {
     const index = state.activeOverlays.value.indexOf(event.name);
-    if (index > -1) {
+    if (index > -1)
       state.activeOverlays.value.splice(index, 1);
-    }
   };
 
   return {
@@ -65,7 +65,7 @@ export function useLeafletMap({
     estonianOverlays,
   };
 }
-const useBaseLayers = ({ visibleLayer }: { visibleLayer: string }) => {
+function useBaseLayers({ visibleLayer }: { visibleLayer: string }) {
   const layers = [
     {
       id: "carto-base",
@@ -76,7 +76,7 @@ const useBaseLayers = ({ visibleLayer }: { visibleLayer: string }) => {
         maxNativeZoom: 18,
         maxZoom: 21,
         attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
       },
     },
     {
@@ -88,7 +88,7 @@ const useBaseLayers = ({ visibleLayer }: { visibleLayer: string }) => {
         maxNativeZoom: 18,
         maxZoom: 21,
         attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
       },
     },
     {
@@ -100,7 +100,7 @@ const useBaseLayers = ({ visibleLayer }: { visibleLayer: string }) => {
         maxNativeZoom: 18,
         maxZoom: 21,
         attribution:
-          'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+          "Map data: &copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a>, <a href=\"http://viewfinderpanoramas.org\">SRTM</a> | Map style: &copy; <a href=\"https://opentopomap.org\">OpenTopoMap</a> (<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC-BY-SA</a>)",
       },
     },
     {
@@ -140,8 +140,8 @@ const useBaseLayers = ({ visibleLayer }: { visibleLayer: string }) => {
       visible: layer.name === visibleLayer,
     };
   });
-};
-const useEstonianOverlays = ({
+}
+function useEstonianOverlays({
   estonianHybridOverlay,
   estonianBedrockOverlay,
   estonianBasementOverlay,
@@ -149,7 +149,7 @@ const useEstonianOverlays = ({
   estonianHybridOverlay: boolean;
   estonianBedrockOverlay: boolean;
   estonianBasementOverlay: boolean;
-}) => {
+}) {
   return [
     {
       id: "est-hyb-overlay",
@@ -208,29 +208,27 @@ const useEstonianOverlays = ({
       },
     },
   ];
-};
+}
 
-export const useDataOverlays = (
-  {
-    localityOverlay = false,
-    boreholeOverlay = false,
-    siteOverlay = false,
-    sampleOverlay = false,
-    summaryOverlay = false,
-  }: {
-    localityOverlay: boolean;
-    boreholeOverlay: boolean;
-    siteOverlay: boolean;
-    sampleOverlay: boolean;
-    summaryOverlay: boolean;
-  } = {
-    localityOverlay: false,
-    boreholeOverlay: false,
-    siteOverlay: false,
-    sampleOverlay: false,
-    summaryOverlay: false,
-  }
-) => {
+export function useDataOverlays({
+  localityOverlay = false,
+  boreholeOverlay = false,
+  siteOverlay = false,
+  sampleOverlay = false,
+  summaryOverlay = false,
+}: {
+  localityOverlay: boolean;
+  boreholeOverlay: boolean;
+  siteOverlay: boolean;
+  sampleOverlay: boolean;
+  summaryOverlay: boolean;
+} = {
+  localityOverlay: false,
+  boreholeOverlay: false,
+  siteOverlay: false,
+  sampleOverlay: false,
+  summaryOverlay: false,
+}) {
   return [
     {
       id: "locs",
@@ -337,4 +335,4 @@ export const useDataOverlays = (
       },
     },
   ];
-};
+}

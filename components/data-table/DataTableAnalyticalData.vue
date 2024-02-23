@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.id_l="{ item }">
@@ -86,7 +90,9 @@
       >
         {{ item.reference }}
       </base-link-external>
-      <div v-else>{{ item.reference_str }}</div>
+      <div v-else>
+        {{ item.reference_str }}
+      </div>
     </template>
     <template #item.dataset_id="{ item }">
       <nuxt-link
@@ -112,7 +118,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const localePath = useLocalePath();
-</script>

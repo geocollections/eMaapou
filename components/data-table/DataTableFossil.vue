@@ -18,7 +18,9 @@
       >
         {{ item.fossil_group }}
       </base-link-external>
-      <div v-else>{{ item.fossil_group }}</div>
+      <div v-else>
+        {{ item.fossil_group }}
+      </div>
     </template>
     <template #item.parent="{ item }">
       <base-link-external

@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { useDisplay } from "vuetify/lib/framework.mjs";
+
+const { $translate } = useNuxtApp();
+const router = useRouter();
+const localePath = useLocalePath();
+const { lgAndUp } = useDisplay();
+
+const { data: newsList } = useApiFetch("/webnews", {
+  query: {
+    limit: 6,
+    order_by: "-date_added",
+  },
+});
+
+const previewLength = computed(() => {
+  if (lgAndUp)
+    return 400;
+  return 140;
+});
+
+function openNews(news) {
+  router.push(localePath({ name: "news-id", params: { id: news.id } }));
+}
+</script>
+
 <template>
   <v-card flat color="transparent">
     <v-row no-gutters>
@@ -22,36 +48,12 @@
             color="accent"
             class="montserrat text-none"
             :to="localePath('news')"
-            text
-            >{{ $t("common.viewNews") }}</v-btn
+            variant="text"
           >
+            {{ $t("common.viewNews") }}
+          </v-btn>
         </v-card-actions>
       </v-col>
     </v-row>
   </v-card>
 </template>
-
-<script setup lang="ts">
-import { useDisplay } from "vuetify/lib/framework.mjs";
-
-const { $translate } = useNuxtApp();
-const router = useRouter();
-const localePath = useLocalePath();
-const { lgAndUp } = useDisplay();
-
-const { data: newsList } = useApiFetch("/webnews", {
-  query: {
-    limit: 6,
-    order_by: "-date_added",
-  },
-});
-
-const previewLength = computed(() => {
-  if (lgAndUp) return 400;
-  return 140;
-});
-
-function openNews(news) {
-  router.push(localePath({ name: "news-id", params: { id: news.id } }));
-}
-</script>

@@ -1,19 +1,6 @@
-<template>
-  <data-table-preparation
-    class="border-b"
-    :items="data?.response.docs ?? []"
-    :count="data?.response.numFound ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_PREPARATION, PREPARATION } from "~/constants";
+
 const {
   options,
   handleUpdate,
@@ -45,3 +32,17 @@ const { data, pending } = useSolrFetch("/preparation", {
   })),
 });
 </script>
+
+<template>
+  <data-table-preparation
+    class="border-b"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,18 +1,18 @@
-<template>
-  <v-table density="compact">
-    <template #default>
-      <tbody>
-        <slot></slot>
-      </tbody>
-    </template>
-  </v-table>
-</template>
-
 <script>
 export default {
   name: "BaseTable",
 };
 </script>
+
+<template>
+  <v-table density="compact">
+    <template #default>
+      <tbody>
+        <slot />
+      </tbody>
+    </template>
+  </v-table>
+</template>
 
 <style lang="scss" scoped>
 @import "vuetify/settings";

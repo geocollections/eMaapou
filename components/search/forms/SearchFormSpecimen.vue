@@ -1,116 +1,3 @@
-<template>
-  <div>
-    <!-- <v-form @submit.prevent.stop="handleUpdate"> -->
-    <!--   <input-search v-model="query" /> -->
-    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
-    <!--   <filter-input-checkbox -->
-    <!--     :value="resultView === 'image' ? true : hasImage" -->
-    <!--     :label="$t('filters.hasImage').toString()" -->
-    <!--     :disabled="resultView === 'image'" -->
-    <!--     @input="hasImage = $event" -->
-    <!--   /> -->
-    <!--   <filter-input-checkbox -->
-    <!--     v-model="hasCoordinates" -->
-    <!--     :label="$t('filters.hasCoordinates').toString()" -->
-    <!--   /> -->
-    <!--   <v-expansion-panels class="mt-3" accordion flat tile multiple> -->
-    <!--     <filter-input-text -->
-    <!--       v-model="number" -->
-    <!--       :title="$t('filters.specimenNumber').toString()" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="collection" -->
-    <!--       :title="$t('filters.collection').toString()" -->
-    <!--       query-field="collection_number" -->
-    <!--       :query-function="querySuggestionsCollection" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="fossilGroup" -->
-    <!--       :title="$t('filters.fossilGroup').toString()" -->
-    <!--       query-field="taxon" -->
-    <!--       :query-function="querySuggestionsFossilGroup" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="taxonHierarchy" -->
-    <!--       :title="$t('filters.taxonHierarchy').toString()" -->
-    <!--       query-field="taxon" -->
-    <!--       :query-function="querySuggestionsTaxon" -->
-    <!--     /> -->
-    <!---->
-    <!--     <filter-input-text -->
-    <!--       v-model="taxonName" -->
-    <!--       :title="$t('filters.taxonName').toString()" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="rockHierarchy" -->
-    <!--       :title="$t('filters.rockHierarchySpecimen').toString()" -->
-    <!--       :query-field="$i18n.locale === 'et' ? 'rock' : 'rock_en'" -->
-    <!--       :query-function="querySuggestionsRock" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="locality" -->
-    <!--       :title="$t('filters.locality').toString()" -->
-    <!--       :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
-    <!--       :query-function="querySuggestionsLocality" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="country" -->
-    <!--       :title="$t('filters.country').toString()" -->
-    <!--       static -->
-    <!--       :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'" -->
-    <!--       :query-function="querySuggestionsCountry" -->
-    <!--     /> -->
-    <!--     <filter-map -->
-    <!--       v-model="map" -->
-    <!--       sample-overlay -->
-    <!--       :items="$accessor.search.specimen.items" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="stratigraphyHierarchy" -->
-    <!--       :title="$t('filters.stratigraphyHierarchy').toString()" -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsStratigraphy" -->
-    <!--     /> -->
-    <!--     <filter-input-range -->
-    <!--       v-model="depth" -->
-    <!--       :label="$t('filters.depth').toString()" -->
-    <!--       interval-labels="intervals.depth" -->
-    <!--       :step="0.01" -->
-    <!--     /> -->
-    <!--     <filter-reference v-model="reference" /> -->
-    <!--     <!--  TODO: replace reference filter when specimen index `specimen_references` field uses keyword tokenizer-->
-    -->
-    <!--     <!-- <filter-input-autocomplete-new -->
-    -->
-    <!--     <!--   v-model="reference" -->
-    -->
-    <!--     <!--   :title="$t('filters.reference').toString()" -->
-    -->
-    <!--     <!--   :query-function="querySuggestionsReference" -->
-    -->
-    <!--     <!-- /> -->
-    -->
-    <!--     <filter-input-text -->
-    <!--       v-model="collector" -->
-    <!--       :title="$t('filters.collector').toString()" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="originalStatus" -->
-    <!--       :title="$t('filters.originalStatus').toString()" -->
-    <!--       static -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'original_status' : 'original_status_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsOriginalStatus" -->
-    <!--     /> -->
-    <!--     <filter-institution v-model="institutions" /> -->
-    <!--   </v-expansion-panels> -->
-    <!-- </v-form> -->
-  </div>
-</template>
-
 <script lang="ts">
 // import {
 //   computed,
@@ -598,3 +485,116 @@
 //   },
 // })
 </script>
+
+<template>
+  <div>
+    <!-- <v-form @submit.prevent.stop="handleUpdate"> -->
+    <!--   <input-search v-model="query" /> -->
+    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
+    <!--   <filter-input-checkbox -->
+    <!--     :value="resultView === 'image' ? true : hasImage" -->
+    <!--     :label="$t('filters.hasImage').toString()" -->
+    <!--     :disabled="resultView === 'image'" -->
+    <!--     @input="hasImage = $event" -->
+    <!--   /> -->
+    <!--   <filter-input-checkbox -->
+    <!--     v-model="hasCoordinates" -->
+    <!--     :label="$t('filters.hasCoordinates').toString()" -->
+    <!--   /> -->
+    <!--   <v-expansion-panels class="mt-3" accordion flat tile multiple> -->
+    <!--     <filter-input-text -->
+    <!--       v-model="number" -->
+    <!--       :title="$t('filters.specimenNumber').toString()" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="collection" -->
+    <!--       :title="$t('filters.collection').toString()" -->
+    <!--       query-field="collection_number" -->
+    <!--       :query-function="querySuggestionsCollection" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="fossilGroup" -->
+    <!--       :title="$t('filters.fossilGroup').toString()" -->
+    <!--       query-field="taxon" -->
+    <!--       :query-function="querySuggestionsFossilGroup" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="taxonHierarchy" -->
+    <!--       :title="$t('filters.taxonHierarchy').toString()" -->
+    <!--       query-field="taxon" -->
+    <!--       :query-function="querySuggestionsTaxon" -->
+    <!--     /> -->
+    <!---->
+    <!--     <filter-input-text -->
+    <!--       v-model="taxonName" -->
+    <!--       :title="$t('filters.taxonName').toString()" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="rockHierarchy" -->
+    <!--       :title="$t('filters.rockHierarchySpecimen').toString()" -->
+    <!--       :query-field="$i18n.locale === 'et' ? 'rock' : 'rock_en'" -->
+    <!--       :query-function="querySuggestionsRock" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="locality" -->
+    <!--       :title="$t('filters.locality').toString()" -->
+    <!--       :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
+    <!--       :query-function="querySuggestionsLocality" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="country" -->
+    <!--       :title="$t('filters.country').toString()" -->
+    <!--       static -->
+    <!--       :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'" -->
+    <!--       :query-function="querySuggestionsCountry" -->
+    <!--     /> -->
+    <!--     <filter-map -->
+    <!--       v-model="map" -->
+    <!--       sample-overlay -->
+    <!--       :items="$accessor.search.specimen.items" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="stratigraphyHierarchy" -->
+    <!--       :title="$t('filters.stratigraphyHierarchy').toString()" -->
+    <!--       :query-field=" -->
+    <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
+    <!--       " -->
+    <!--       :query-function="querySuggestionsStratigraphy" -->
+    <!--     /> -->
+    <!--     <filter-input-range -->
+    <!--       v-model="depth" -->
+    <!--       :label="$t('filters.depth').toString()" -->
+    <!--       interval-labels="intervals.depth" -->
+    <!--       :step="0.01" -->
+    <!--     /> -->
+    <!--     <filter-reference v-model="reference" /> -->
+    <!--     <!--  TODO: replace reference filter when specimen index `specimen_references` field uses keyword tokenizer -->
+    -->
+    <!--     <!-- <filter-input-autocomplete-new -->
+    -->
+    <!--     <!--   v-model="reference" -->
+    -->
+    <!--     <!--   :title="$t('filters.reference').toString()" -->
+    -->
+    <!--     <!--   :query-function="querySuggestionsReference" -->
+    -->
+    <!--     <!-- /> -->
+    -->
+    <!--     <filter-input-text -->
+    <!--       v-model="collector" -->
+    <!--       :title="$t('filters.collector').toString()" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="originalStatus" -->
+    <!--       :title="$t('filters.originalStatus').toString()" -->
+    <!--       static -->
+    <!--       :query-field=" -->
+    <!--         $i18n.locale === 'et' ? 'original_status' : 'original_status_en' -->
+    <!--       " -->
+    <!--       :query-function="querySuggestionsOriginalStatus" -->
+    <!--     /> -->
+    <!--     <filter-institution v-model="institutions" /> -->
+    <!--   </v-expansion-panels> -->
+    <!-- </v-form> -->
+  </div>
+</template>

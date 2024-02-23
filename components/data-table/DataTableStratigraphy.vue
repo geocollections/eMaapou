@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.stratigraphy="{ item }">
@@ -21,7 +25,9 @@
 
     <template #item.index_main="{ item }">
       <div v-if="item.index_main_html" v-html="item.index_main_html" />
-      <div v-else>{{ item.index_main }}</div>
+      <div v-else>
+        {{ item.index_main }}
+      </div>
     </template>
 
     <template #item.index_additional="{ item }">
@@ -29,7 +35,9 @@
         v-if="item.index_additional_html"
         v-html="item.index_additional_html"
       />
-      <div v-else>{{ item.index_additional }}</div>
+      <div v-else>
+        {{ item.index_additional }}
+      </div>
     </template>
 
     <template #item.stratigraphy_type="{ item }">
@@ -104,7 +112,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const localePath = useLocalePath();
-</script>

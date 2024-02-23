@@ -1,47 +1,44 @@
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-export const useAutocomplete = (
-  path: string,
-  {
-    nameField,
-    idField,
-    filterExclude,
-    solrParams,
-    containsParser,
-    primary = "id",
-  }: {
-    nameField: string | { et: string; en: string };
-    idField: string;
-    filterExclude?: string;
-    solrParams?: {
-      query?: Ref<string>;
-      filter?: Ref<(string | { [K: string]: string })[]>;
-    };
-    primary?: "id" | "name";
-    containsParser?: (query: string) => string;
-  },
-) => {
+export function useAutocomplete(path: string, {
+  nameField,
+  idField,
+  filterExclude,
+  solrParams,
+  containsParser,
+  primary = "id",
+}: {
+  nameField: string | { et: string; en: string };
+  idField: string;
+  filterExclude?: string;
+  solrParams?: {
+    query?: Ref<string>;
+    filter?: Ref<(string | { [K: string]: string })[]>;
+  };
+  primary?: "id" | "name";
+  containsParser?: (query: string) => string;
+}) {
   const { locale } = useI18n();
   const { $solrFetch } = useNuxtApp();
 
   const translatedNameField = computed(() => {
-    if (typeof nameField === "string") {
+    if (typeof nameField === "string")
       return nameField;
-    }
+
     return nameField[locale.value];
   });
 
   const primaryField = computed(() => {
-    if (primary === "id") {
+    if (primary === "id")
       return idField;
-    }
+
     return translatedNameField.value;
   });
 
   const secoundaryField = computed(() => {
-    if (primary === "id") {
+    if (primary === "id")
       return translatedNameField.value;
-    }
+
     return idField;
   });
 
@@ -66,16 +63,16 @@ export const useAutocomplete = (
   }
 
   const suggestMapper = computed(() => {
-    if (primary === "id") {
+    if (primary === "id")
       return primaryFieldIdMapper;
-    }
+
     return primaryFieldNameMapper;
   });
 
   function parseContains(query: string) {
-    if (containsParser) {
+    if (containsParser)
       return containsParser(query);
-    }
+
     return query;
   }
 
@@ -91,8 +88,8 @@ export const useAutocomplete = (
     const pivot = filterExclude
       ? `{!ex=${filterExclude}}${suggestionsPivot.value}`
       : `${suggestionsPivot.value}`;
-    const filters =
-      query.length > 0
+    const filters
+      = query.length > 0
         ? [
             ...(solrParams?.filter?.value ?? []),
             `${translatedNameField.value}:*${query}*`,
@@ -101,7 +98,7 @@ export const useAutocomplete = (
 
     const res = await $solrFetch(path, {
       query: {
-        facet: "true",
+        "facet": "true",
         "facet.pivot": pivot,
         // [`f.${primaryField.value}.facet.contains`]: parseContains(query),
         // [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
@@ -110,7 +107,7 @@ export const useAutocomplete = (
         "facet.sort": "count",
         [`f.${primaryField.value}.facet.offset`]:
           (pagination.page - 1) * pagination.perPage,
-        json: {
+        "json": {
           query: solrParams?.query?.value,
           filter: filters,
           limit: 0,
@@ -155,7 +152,7 @@ export const useAutocomplete = (
       },
     });
 
-    return values.map((id) => ({
+    return values.map(id => ({
       id,
       name: res.facets[id].name.buckets[0].val,
       count: res.facets[id].count,
@@ -163,4 +160,4 @@ export const useAutocomplete = (
   }
 
   return { suggest, hydrate };
-};
+}

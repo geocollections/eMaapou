@@ -1,9 +1,30 @@
+<script setup lang="ts">
+const props = defineProps<{ preparation: any }>();
+
+const localePath = useLocalePath();
+
+const sample = computed(() => props.preparation.sample);
+const analysis = computed(() => props.preparation.analysis);
+const taxon = computed(() => props.preparation.taxon);
+const agent = computed(() => props.preparation.agent);
+const identificationAgent = computed(
+  () => props.preparation.identification_agent,
+);
+const storage = computed(() => props.preparation.storage);
+const owner = computed(() => props.preparation.owner);
+</script>
+
 <template>
   <v-container style="margin: initial">
     <v-row>
-      <v-col :sm="12" :md="6" :lg="7" :xl="5">
-        <v-card
-          ><base-table>
+      <v-col
+        :sm="12"
+        :md="6"
+        :lg="7"
+        :xl="5"
+      >
+        <v-card>
+          <base-table>
             <table-row
               :title="$t('preparation.preparation_number')"
               :value="preparation.preparation_number"
@@ -95,10 +116,10 @@
               v-if="sample"
               :title="$t('sample.number').toString()"
               :value="
-                sample.number ||
-                sample.number_additional ||
-                sample.number_field ||
-                sample.id
+                sample.number
+                  || sample.number_additional
+                  || sample.number_field
+                  || sample.id
               "
               nuxt
               :href="
@@ -126,19 +147,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{ preparation: any }>();
-
-const localePath = useLocalePath();
-
-const sample = computed(() => props.preparation.sample);
-const analysis = computed(() => props.preparation.analysis);
-const taxon = computed(() => props.preparation.taxon);
-const agent = computed(() => props.preparation.agent);
-const identificationAgent = computed(
-  () => props.preparation.identification_agent,
-);
-const storage = computed(() => props.preparation.storage);
-const owner = computed(() => props.preparation.owner);
-</script>

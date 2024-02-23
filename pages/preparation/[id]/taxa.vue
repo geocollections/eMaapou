@@ -1,16 +1,3 @@
-<template>
-  <data-table-taxon-list
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_TAXON_LIST, TAXON_LIST } from "~/constants";
 import DataTableTaxonList from "~/components/data-table/DataTableTaxonList.vue";
@@ -47,3 +34,16 @@ const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
   },
 });
 </script>
+
+<template>
+  <DataTableTaxonList
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

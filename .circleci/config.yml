@@ -3,7 +3,7 @@ version: 2.1
 parameters:
   package-version:
     type: string
-    default: '1.0.5'
+    default: 1.0.5
 
 executors:
   docker-publisher:

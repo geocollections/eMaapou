@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import type { OverlayImage } from "~/components/ImageOverlay.vue";
+
+const { t } = useI18n();
+const img = useImage();
+const localePath = useLocalePath();
+const showOverlay = ref(false);
+const overlayImage = ref<OverlayImage>();
+function openOverlay(image: OverlayImage) {
+  overlayImage.value = image;
+  showOverlay.value = true;
+}
+function getAttachmentType(type: number) {
+  switch (type) {
+    case 1:
+      return t("attachment.typeSpecimen");
+    case 2:
+      return t("attachment.typeImage");
+    case 4:
+      return t("attachment.typeReference");
+    default:
+      return t("attachment.typeOther");
+  }
+}
+</script>
+
 <template>
   <div>
     <base-data-table v-bind="$attrs">
@@ -19,7 +45,9 @@
         <div v-if="item.date_created">
           {{ $formatDate(item.date_created) }}
         </div>
-        <div v-else>{{ item.date_created_free }}</div>
+        <div v-else>
+          {{ item.date_created_free }}
+        </div>
       </template>
 
       <template #item.reference="{ item }">
@@ -60,28 +88,3 @@
     <image-overlay v-model="showOverlay" :image="overlayImage" />
   </div>
 </template>
-
-<script setup lang="ts">
-import type { OverlayImage } from "~/components/ImageOverlay.vue";
-const { t } = useI18n();
-const img = useImage();
-const localePath = useLocalePath();
-const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-const openOverlay = (image: OverlayImage) => {
-  overlayImage.value = image;
-  showOverlay.value = true;
-};
-const getAttachmentType = (type: number) => {
-  switch (type) {
-    case 1:
-      return t("attachment.typeSpecimen");
-    case 2:
-      return t("attachment.typeImage");
-    case 4:
-      return t("attachment.typeReference");
-    default:
-      return t("attachment.typeOther");
-  }
-};
-</script>

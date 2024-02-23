@@ -1,18 +1,6 @@
-<template>
-  <data-table-locality-reference
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from "~/constants";
+
 const props = defineProps({
   locality: {
     type: Number,
@@ -52,3 +40,16 @@ const { data, pending } = await useGeoloogiaApiFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-locality-reference
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

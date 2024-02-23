@@ -1,19 +1,6 @@
-<template>
-  <data-table-sample-analysis-result
-    class="border-b"
-    :items="data?.response.docs ?? []"
-    :count="data?.response.numFound ?? 0"
-    :options="options"
-    :headers="filteredHeaders"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
-import { HEADERS_ANALYSIS_RESULT, ANALYSIS_RESULT } from "~/constants";
+import { ANALYSIS_RESULT, HEADERS_ANALYSIS_RESULT } from "~/constants";
+
 const {
   options,
   handleUpdate,
@@ -51,3 +38,17 @@ const { data, pending } = useSolrFetch("/analysis_results", {
   })),
 });
 </script>
+
+<template>
+  <data-table-sample-analysis-result
+    class="border-b"
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="filteredHeaders"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

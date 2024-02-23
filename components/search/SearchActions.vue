@@ -1,7 +1,9 @@
+<script setup lang="ts"></script>
+
 <template>
   <v-card
     flat
-    tile
+    rounded="0"
     color="transparent"
     class="mt-2 mr-2 d-flex justify-end align-center"
   >
@@ -9,5 +11,3 @@
     <search-button />
   </v-card>
 </template>
-
-<script setup lang="ts"></script>

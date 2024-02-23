@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { mdiSubdirectoryArrowLeft } from "@mdi/js";
+
+const route = useRoute();
+const localePath = useLocalePath();
+const table = computed(() => {
+  let res = route.name?.substring(0, route.name?.indexOf("-"));
+  if (res === "file")
+    res = "photo";
+
+  return res;
+});
+</script>
+
 <template>
   <v-btn
     id="back-btn-detail"
@@ -13,16 +27,3 @@
     </v-tooltip>
   </v-btn>
 </template>
-
-<script setup lang="ts">
-import { mdiSubdirectoryArrowLeft } from "@mdi/js";
-
-const route = useRoute();
-const localePath = useLocalePath();
-const table = computed(() => {
-  let res = route.name?.substring(0, route.name?.indexOf("-"));
-  if (res === "file") res = "photo";
-
-  return res;
-});
-</script>

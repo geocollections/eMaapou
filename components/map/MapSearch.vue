@@ -1,164 +1,23 @@
-<template>
-  <div>
-    <client-only>
-      <l-map
-        id="map"
-        ref="map"
-        :class="{
-          rounded: rounded,
-        }"
-        :style="{
-          height: height,
-          position: height === '100%' ? 'absolute' : 'relative',
-        }"
-        style="z-index: 0"
-        :options="options"
-        :zoom="mapZoom"
-        :center="currentCenter"
-        @update:center="updateCenter"
-        @baselayerchange="handleBaseLayerChange"
-        @overlayadd="handleOverlayAdd"
-        @overlayremove="handleOverlayRemove"
-        @ready="handleReady"
-      >
-        <l-control-layers ref="layerControl" />
-        <l-control-scale
-          position="bottomleft"
-          :metric="true"
-          :imperial="false"
-        />
-        <l-tile-layer
-          v-for="layer in baseLayers"
-          :key="layer.id"
-          layer-type="base"
-          :visible="layer.visible"
-          :name="layer.name"
-          :url="layer.url"
-          :options="layer.options"
-        />
-        <l-tile-layer
-          v-for="layer in tileOverlays"
-          :key="layer.id"
-          layer-type="overlay"
-          :visible="layer.visible"
-          :name="layer.name"
-          :url="layer.url"
-          :options="layer.options"
-        />
-        <l-wms-tile-layer
-          v-for="layer in wmsOverlays"
-          :key="layer.id"
-          layer-type="overlay"
-          :visible="layer.visible"
-          :name="layer.name"
-          :url="layer.url"
-          :layers="layer.layers"
-          :transparent="layer.transparent"
-          :options="layer.options"
-        />
-        <v-marker-cluster-wrapper
-          v-if="markers.length >= 250"
-          :markers="markers"
-        />
-        <l-circle-marker-wrapper v-else :markers="markers" :max-permanent="0" />
-        <l-marker
-          v-if="gpsEnabled && gpsLocation"
-          :lat-lng="gpsLocation"
-          @click="handleNearMeSliderChange(nearMeRadius)"
-        >
-          <l-tooltip :options="{ direction: 'top', offset: [-15, -15] }"
-            ><b>GPS</b> ({{ $t("map.clickToSearchNearMe") }})</l-tooltip
-          >
-          <l-popup>
-            <div class="d-flex flex-row">
-              <div class="align-self-center text-no-wrap">1 km</div>
-              <v-slider
-                v-model="nearMeRadius"
-                style="width: 150px"
-                :min="1"
-                :max="20"
-                hide-details
-                thumb-label="always"
-                color="header"
-                @input="handleNearMeSliderChange"
-              />
-              <div class="align-self-center text-no-wrap">20 km</div>
-            </div>
-          </l-popup>
-        </l-marker>
-
-        <l-layer-group ref="popup">
-          <map-click-popup :response="mapClickResponse" />
-        </l-layer-group>
-      </l-map>
-      <template #placeholder>
-        <div
-          :style="`height: ${height}; width: 100%`"
-          class="d-flex align-center justify-center rounded secondary"
-        >
-          <v-progress-circular
-            indeterminate
-            color="accent"
-            :size="100"
-            :width="6"
-          />
-        </div>
-      </template>
-    </client-only>
-    <map-links
-      v-if="showLinks"
-      :latitude="currentCenter.lat"
-      :longitude="currentCenter.lng"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 import debounce from "lodash/debounce";
 import intersection from "lodash/intersection";
 import {
   LControlLayers,
-  LMap,
-  LPopup,
   LControlScale,
   LLayerGroup,
+  LMap,
   LMarker,
+  LPopup,
   LTileLayer,
   LTooltip,
   LWmsTileLayer,
 } from "@vue-leaflet/vue-leaflet";
 import type Leaflet from "leaflet";
-import type { MapState, MapMarker } from "~/types/map";
+import type { MapMarker, MapState } from "~/types/map";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet.fullscreen/Control.FullScreen.css";
-
-let L: typeof Leaflet;
-if (process.client) {
-  L = await import("leaflet");
-  import("@geoman-io/leaflet-geoman-free");
-  import("leaflet-gesture-handling");
-  import("leaflet.fullscreen");
-  type D = L.Icon.Default & {
-    _getIconUrl?: string;
-  };
-  delete (L.Icon.Default.prototype as D)._getIconUrl;
-
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl: await import("leaflet/dist/images/marker-icon-2x.png"),
-    iconUrl: await import("leaflet/dist/images/marker-icon.png"),
-    shadowUrl: await import("leaflet/dist/images/marker-shadow.png"),
-  });
-}
-
-interface State extends MapState {
-  activeGeomanLayer: L.GeoJSON | L.Circle | null;
-  nearMeRadius: number;
-  gpsLocation: any;
-}
-
-const emit = defineEmits(["update", "input"]);
 
 const props = defineProps({
   zoom: {
@@ -179,7 +38,7 @@ const props = defineProps({
     },
   },
   markers: {
-    type: Array as PropType<MapMarker[]>, //TODO:  this is not working
+    type: Array as PropType<MapMarker[]>, // TODO:  this is not working
     default: () => [],
   },
   estonianMap: {
@@ -237,6 +96,30 @@ const props = defineProps({
     default: () => null,
   },
 });
+const emit = defineEmits(["update", "input"]);
+let L: typeof Leaflet;
+if (process.client) {
+  L = await import("leaflet");
+  import("@geoman-io/leaflet-geoman-free");
+  import("leaflet-gesture-handling");
+  import("leaflet.fullscreen");
+  type D = L.Icon.Default & {
+    _getIconUrl?: string;
+  };
+  delete (L.Icon.Default.prototype as D)._getIconUrl;
+
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: await import("leaflet/dist/images/marker-icon-2x.png"),
+    iconUrl: await import("leaflet/dist/images/marker-icon.png"),
+    shadowUrl: await import("leaflet/dist/images/marker-shadow.png"),
+  });
+}
+
+interface State extends MapState {
+  activeGeomanLayer: L.GeoJSON | L.Circle | null;
+  nearMeRadius: number;
+  gpsLocation: any;
+}
 
 const { t } = useI18n();
 
@@ -313,15 +196,16 @@ const dataOverlays = useDataOverlays({
 watch(
   activeOverlays,
   (newVal) => {
-    if (!checkableLayers.value) return;
+    if (!checkableLayers.value)
+      return;
 
     if (document.getElementById("map")) {
-      if (Object.keys(checkableLayers.value).some((el) => newVal.includes(el)))
+      if (Object.keys(checkableLayers.value).some(el => newVal.includes(el)))
         document.getElementById("map")?.classList.add("cursor-crosshair");
       else document.getElementById("map")?.classList.remove("cursor-crosshair");
     }
   },
-  { deep: true }
+  { deep: true },
 );
 watch(
   () => props.value,
@@ -331,13 +215,13 @@ watch(
       activeGeomanLayer.value = null;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 watch(
   () => props.markers,
   () => {
     fitBounds();
-  }
+  },
 );
 watch(
   () => props.invalidateSize,
@@ -348,34 +232,35 @@ watch(
       // HACK: This fixes initial bounds problem in search view (markers out of bounds)
       fitBounds();
     }
-  }
+  },
 );
 
 const handleNearMeSliderChange = debounce((val: number) => {
-  if (activeGeomanLayer.value) map.value?.removeLayer(activeGeomanLayer.value);
-  // eslint-disable-next-line no-use-before-define
+  if (activeGeomanLayer.value)
+    map.value?.removeLayer(activeGeomanLayer.value);
+
   const circle = L.circle(gpsLocation.value, { radius: val * 1000 }).addTo(
-    map.value
+    map.value,
   );
   // circle.addTo(this.allGeomanLayers)
   activeGeomanLayer.value = circle;
 
   const json = activeGeomanLayer.value?.toGeoJSON();
   if (activeGeomanLayer.value instanceof L.Circle) {
-    // @ts-ignore
+    // @ts-expect-error
     json.properties.radius = activeGeomanLayer.value.getRadius();
   }
   emit("input", json);
 }, 200);
 const handlePmCreate: Leaflet.PM.CreateEventHandler = ({ layer }) => {
-  if (activeGeomanLayer.value) {
+  if (activeGeomanLayer.value)
     map.value?.removeLayer(activeGeomanLayer.value);
-  }
+
   activeGeomanLayer.value = layer as State["activeGeomanLayer"];
   const json = activeGeomanLayer.value?.toGeoJSON();
   // Adding radius if Circle
   if (activeGeomanLayer.value instanceof L.Circle) {
-    // @ts-ignore
+    // @ts-expect-error
     json.properties.radius = activeGeomanLayer.value.getRadius();
   }
   emit("input", json);
@@ -386,17 +271,19 @@ const handlePmRemove: Leaflet.PM.RemoveEventHandler = () => {
 
   emit("input", null);
 };
-const handlePmGlobalDrawModeToggled: Leaflet.PM.GlobalDrawModeToggledEventHandler =
-  (event) => {
-    if (event.enabled) map.value?.off("click", handleMapClick);
+const handlePmGlobalDrawModeToggled: Leaflet.PM.GlobalDrawModeToggledEventHandler
+  = (event) => {
+    if (event.enabled)
+      map.value?.off("click", handleMapClick);
     else map.value?.on("click", handleMapClick);
   };
-const handlePmGlobalRemovalModeToggled: Leaflet.PM.GlobalRemovalModeToggledEventHandler =
-  (event) => {
-    if (event.enabled) map.value?.off("click", handleMapClick);
+const handlePmGlobalRemovalModeToggled: Leaflet.PM.GlobalRemovalModeToggledEventHandler
+  = (event) => {
+    if (event.enabled)
+      map.value?.off("click", handleMapClick);
     else map.value?.on("click", handleMapClick);
   };
-const initLeafletGeoman = () => {
+function initLeafletGeoman() {
   map.value?.pm.addControls({
     position: "topleft",
     drawMarker: false,
@@ -418,16 +305,16 @@ const initLeafletGeoman = () => {
   map.value?.on("pm:globaldrawmodetoggled", handlePmGlobalDrawModeToggled);
   map.value?.on(
     "pm:globalremovalmodetoggled",
-    handlePmGlobalRemovalModeToggled
+    handlePmGlobalRemovalModeToggled,
   );
   map.value?.on("pm:create", handlePmCreate);
   map.value?.on("pm:remove", handlePmRemove);
   map.value?.on("locationfound", successGeo);
-};
+}
 const successGeo: Leaflet.LocationEventHandlerFn = (event) => {
   gpsLocation.value = event.latlng;
 };
-const handleReady = () => {
+function handleReady() {
   ready();
   initLeafletGeoman();
   map.value?.on("click", handleMapClick);
@@ -435,7 +322,7 @@ const handleReady = () => {
     map.value?.locate({ watch: true, enableHighAccuracy: true });
   if (props.value) {
     activeGeomanLayer.value = L.geoJSON(props.value, {
-      pointToLayer: function (feature, latlng) {
+      pointToLayer(feature, latlng) {
         return L.circle(latlng, feature.properties.radius);
       },
     });
@@ -446,14 +333,14 @@ const handleReady = () => {
     document.getElementById("map")?.classList.add("cursor-crosshair");
   }
   fitBounds();
-};
+}
 const mapZoom = computed(() => {
   return props.zoom ?? (props.estonianBedrockOverlay ? 9 : 11);
 });
 const markersAsFitBoundsObject = computed((): Leaflet.LatLngBoundsLiteral => {
   return props.markers.map((m: MapMarker) => [m.latitude, m.longitude]);
 });
-const fitBounds = () => {
+function fitBounds() {
   nextTick(() => {
     const geoJSON = props.value;
     if (geoJSON) {
@@ -462,60 +349,63 @@ const fitBounds = () => {
         {
           padding: [50, 50],
           maxZoom: geoJSON.type === "Point" ? mapZoom.value : undefined,
-        }
+        },
       );
-    } else if (markersAsFitBoundsObject.value.length > 0) {
+    }
+    else if (markersAsFitBoundsObject.value.length > 0) {
       map.value?.fitBounds(markersAsFitBoundsObject.value, {
         padding: [50, 50],
         maxZoom: mapZoom.value,
       });
     }
   });
-};
+}
 const checkableLayers = computed((): { [K: string]: Leaflet.Layer } => {
   const layerNames = dataOverlays.map((overlay: any) => overlay.name);
 
-  // @ts-ignore
+  // @ts-expect-error
   return layerControl.value?.leafletObject._layers.reduce(
     (layers: any, item: any) => {
-      if (layerNames.includes(item.name)) {
+      if (layerNames.includes(item.name))
         layers[item.name] = item.layer;
-      }
+
       return layers;
     },
-    {}
+    {},
   );
 });
 const isMapClickEnabled = computed(() => {
   const layerNames = dataOverlays.map((overlay: any) => overlay.name);
   return intersection(layerNames, activeOverlays.value).length > 0;
 });
-const terminateLeafletGeoman = () => {
+function terminateLeafletGeoman() {
   map.value?.off("pm:create", handlePmCreate);
   map.value?.off("pm:remove", handlePmRemove);
-};
+}
 const queryLayers = computed(() => {
   const queryLayers = [];
-  if (activeOverlays.value.includes("Uuringupunktid / Sites")) {
+  if (activeOverlays.value.includes("Uuringupunktid / Sites"))
     queryLayers.push("sarv:site_summary");
-  }
-  if (activeOverlays.value.includes("Puursüdamikud / Drillcores")) {
+
+  if (activeOverlays.value.includes("Puursüdamikud / Drillcores"))
     queryLayers.push("sarv:locality_drillcores");
-  }
-  if (activeOverlays.value.includes("Lokaliteedid / Localities")) {
+
+  if (activeOverlays.value.includes("Lokaliteedid / Localities"))
     queryLayers.push("sarv:locality_summary1");
-  }
-  if (activeOverlays.value.includes("Proovid / Samples")) {
+
+  if (activeOverlays.value.includes("Proovid / Samples"))
     queryLayers.push("sarv:sample_summary");
-  }
-  if (activeOverlays.value.includes("Üldine / Summary")) {
+
+  if (activeOverlays.value.includes("Üldine / Summary"))
     queryLayers.push("sarv:locality_summary_front");
-  }
+
   return queryLayers.join(",");
 });
-const handleMapClick = async (event: Leaflet.LeafletMouseEvent) => {
-  if (!map.value) return;
-  if (!isMapClickEnabled.value) return;
+async function handleMapClick(event: Leaflet.LeafletMouseEvent) {
+  if (!map.value)
+    return;
+  if (!isMapClickEnabled.value)
+    return;
   const MAX_ZOOM = 21;
   const radius = (MAX_ZOOM + 0.25 - map.value.getZoom()) * 1000;
   const circle = L.circle(event.latlng, { radius });
@@ -538,21 +428,24 @@ const handleMapClick = async (event: Leaflet.LeafletMouseEvent) => {
       features: wmsResponse.features,
     };
     popup.value?.mapObject.openPopup(event.latlng);
-  } else mapClickResponse.value = null;
-};
+  }
+  else { mapClickResponse.value = null; }
+}
 onUnmounted(() => {
-  if (gpsID.value) navigator.geolocation.clearWatch(gpsID.value);
-  if (props.activateSearch) terminateLeafletGeoman();
+  if (gpsID.value)
+    navigator.geolocation.clearWatch(gpsID.value);
+  if (props.activateSearch)
+    terminateLeafletGeoman();
 });
 
 const tileOverlays = computed(() => {
   return [...estonianOverlays, ...dataOverlays].filter(
-    (overlay: any) => !overlay.isWMS
+    (overlay: any) => !overlay.isWMS,
   );
 });
 const wmsOverlays = computed(() => {
   return [...estonianOverlays, ...dataOverlays].filter(
-    (overlay: any) => overlay.isWMS
+    (overlay: any) => overlay.isWMS,
   );
 });
 const latLngMarkers = computed(() => {
@@ -561,6 +454,129 @@ const latLngMarkers = computed(() => {
   });
 });
 </script>
+
+<template>
+  <div>
+    <client-only>
+      <LMap
+        id="map"
+        ref="map"
+        :class="{
+          rounded,
+        }"
+        :style="{
+          height,
+          position: height === '100%' ? 'absolute' : 'relative',
+        }"
+        style="z-index: 0"
+        :options="options"
+        :zoom="mapZoom"
+        :center="currentCenter"
+        @update:center="updateCenter"
+        @baselayerchange="handleBaseLayerChange"
+        @overlayadd="handleOverlayAdd"
+        @overlayremove="handleOverlayRemove"
+        @ready="handleReady"
+      >
+        <LControlLayers ref="layerControl" />
+        <LControlScale
+          position="bottomleft"
+          :metric="true"
+          :imperial="false"
+        />
+        <LTileLayer
+          v-for="layer in baseLayers"
+          :key="layer.id"
+          layer-type="base"
+          :visible="layer.visible"
+          :name="layer.name"
+          :url="layer.url"
+          :options="layer.options"
+        />
+        <LTileLayer
+          v-for="layer in tileOverlays"
+          :key="layer.id"
+          layer-type="overlay"
+          :visible="layer.visible"
+          :name="layer.name"
+          :url="layer.url"
+          :options="layer.options"
+        />
+        <LWmsTileLayer
+          v-for="layer in wmsOverlays"
+          :key="layer.id"
+          layer-type="overlay"
+          :visible="layer.visible"
+          :name="layer.name"
+          :url="layer.url"
+          :layers="layer.layers"
+          :transparent="layer.transparent"
+          :options="layer.options"
+        />
+        <v-marker-cluster-wrapper
+          v-if="markers.length >= 250"
+          :markers="markers"
+        />
+        <l-circle-marker-wrapper
+          v-else
+          :markers="markers"
+          :max-permanent="0"
+        />
+        <LMarker
+          v-if="gpsEnabled && gpsLocation"
+          :lat-lng="gpsLocation"
+          @click="handleNearMeSliderChange(nearMeRadius)"
+        >
+          <LTooltip :options="{ direction: 'top', offset: [-15, -15] }">
+            <b>GPS</b> ({{ $t("map.clickToSearchNearMe") }})
+          </LTooltip>
+          <LPopup>
+            <div class="d-flex flex-row">
+              <div class="align-self-center text-no-wrap">
+                1 km
+              </div>
+              <v-slider
+                v-model="nearMeRadius"
+                style="width: 150px"
+                :min="1"
+                :max="20"
+                hide-details
+                thumb-label="always"
+                color="header"
+                @update:model-value="handleNearMeSliderChange"
+              />
+              <div class="align-self-center text-no-wrap">
+                20 km
+              </div>
+            </div>
+          </LPopup>
+        </LMarker>
+
+        <LLayerGroup ref="popup">
+          <map-click-popup :response="mapClickResponse" />
+        </LLayerGroup>
+      </LMap>
+      <template #placeholder>
+        <div
+          :style="`height: ${height}; width: 100%`"
+          class="d-flex align-center justify-center rounded bg-secondary"
+        >
+          <v-progress-circular
+            indeterminate
+            color="accent"
+            :size="100"
+            :width="6"
+          />
+        </div>
+      </template>
+    </client-only>
+    <map-links
+      v-if="showLinks"
+      :latitude="currentCenter.lat"
+      :longitude="currentCenter.lng"
+    />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .cursor-crosshair {

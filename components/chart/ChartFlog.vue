@@ -1,163 +1,43 @@
-<template>
-  <div class="">
-    <v-toolbar flat color="white" density="compact">
-      <options-parameter-tree-view
-        :parameters="parameters"
-        :initial-selection="state.selectedParameters"
-        @input="handleParametersUpdate"
-      />
-      <v-menu
-        transition="slide-y-transition"
-        offset="10"
-        content-class="white"
-        :close-on-content-click="false"
-      >
-        <template #activator="{ props }">
-          <v-btn class="ml-3" icon size="small" v-bind="props">
-            <v-icon> {{ icons.mdiCog }} </v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title class="montserrat pb-2">
-            {{ $t("flogChart.settings") }}
-          </v-card-title>
-          <v-card-text>
-            <renderer-switch
-              :renderer="renderer"
-              @update="handleRenderSwitch"
-            />
-            <v-divider class="my-2" />
-            <v-text-field
-              v-model="state.scale"
-              type="number"
-              :label="$t('flogChart.heightScale')"
-              prefix="1:"
-              variant="underlined"
-              hide-details
-              @change="handleScaleChange"
-            >
-              <template #append-inner>
-                <v-icon @click="handleScaleReset">
-                  {{ icons.mdiRefresh }}
-                </v-icon>
-              </template>
-              <template #append>
-                <v-btn-toggle
-                  density="compact"
-                  color="accent"
-                  :model-value="ppi"
-                  @update:model-value="handlePpiChange"
-                >
-                  <v-btn
-                    width="65"
-                    size="small"
-                    class="text-none montserrat"
-                    :outlined="ppi !== 96"
-                    :value="96"
-                  >
-                    96 PPI
-                  </v-btn>
-                  <v-btn
-                    width="65"
-                    size="small"
-                    class="text-none montserrat"
-                    :outlined="ppi !== 72"
-                    :value="72"
-                  >
-                    72 PPI
-                  </v-btn>
-                </v-btn-toggle>
-              </template>
-            </v-text-field>
-            <v-text-field
-              :value="state.parameterChartWidth"
-              type="number"
-              class="d-inline-flex"
-              variant="underlined"
-              hide-details
-              suffix="px"
-              :label="$t('flogChart.parameterChartWidth')"
-              @change="handleParameterChartWidthChange"
-            />
-          </v-card-text>
-        </v-card>
-      </v-menu>
-    </v-toolbar>
-    <v-divider />
-    <div ref="containerFlogChart" class="overflow-x-auto">
-      <client-only>
-        <v-chart
-          ref="flogChart"
-          class="chart pa-2"
-          :style="{
-            width: `${state.totalWidth}px`,
-            height: `${state.currentHeight + 200}px`,
-          }"
-          v-bind="$attrs"
-          autoresize
-          :init-options="initOptions"
-          :option="state.option"
-          :update-options="updateOptions"
-          @click="handleClick"
-          @datazoom="handleDataZoom"
-        />
-        <template #placeholder>
-          <div
-            :style="`height: ${state.initialHeight + 200}px; width: 100%`"
-            class="d-flex align-center justify-center"
-          >
-            <v-progress-circular
-              indeterminate
-              color="accent"
-              :size="100"
-              :width="6"
-            />
-          </div>
-        </template>
-      </client-only>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { mdiCog, mdiRefresh } from "@mdi/js";
 import groupBy from "lodash/groupBy";
 import orderBy from "lodash/orderBy";
 import differenceBy from "lodash/differenceBy";
 import type {
+  AxisPointerComponentOption,
   DataZoomComponentOption,
   GridComponentOption,
-  TooltipComponentOption,
   TitleComponentOption,
-  AxisPointerComponentOption,
+  TooltipComponentOption,
 } from "echarts/components";
 import {
-  TitleComponent,
-  TooltipComponent,
-  DataZoomComponent,
   AxisPointerComponent,
-  ToolboxComponent,
-  LegendComponent,
+  DataZoomComponent,
   GridComponent,
+  LegendComponent,
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
 } from "echarts/components";
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
 } from "echarts/types/dist/echarts";
-import type { LineSeriesOption, CustomSeriesOption } from "echarts/charts";
+import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
 import { CustomChart, LineChart } from "echarts/charts";
 import VChart from "vue-echarts";
 import type { ComposeOption } from "echarts/core";
 import { use } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
 import type { TitleOption } from "echarts/types/dist/shared";
+import { useTheme } from "vuetify/lib/framework.mjs";
 import range from "~/utils/range";
 import clipRectByRect from "~/utils/clipRectByRect";
 import mm2px from "~/utils/mm2px";
 import px2mm from "~/utils/px2mm";
 import type { IFlogMethod, IFlogParameter } from "~/utils/flogParameters";
 import type { Renderer } from "~/types/enums";
-import { useTheme } from "vuetify/lib/framework.mjs";
+
 type ECOption = ComposeOption<
   | GridComponentOption
   | LineSeriesOption
@@ -174,27 +54,6 @@ interface GroupedParameter {
   count: number;
   methods: any[];
 }
-use([
-  CanvasRenderer,
-  SVGRenderer,
-  CustomChart,
-  LineChart,
-  GridComponent,
-  TitleComponent,
-  TooltipComponent,
-  DataZoomComponent,
-  AxisPointerComponent,
-  ToolboxComponent,
-  LegendComponent,
-]);
-
-type ChartComponents = {
-  grid: GridComponentOption;
-  xAxis: XAXisComponentOption;
-  yAxis: YAXisComponentOption;
-  series: LineSeriesOption[];
-};
-
 const props = defineProps({
   title: {
     type: String,
@@ -229,6 +88,28 @@ const props = defineProps({
     default: false,
   },
 });
+
+use([
+  CanvasRenderer,
+  SVGRenderer,
+  CustomChart,
+  LineChart,
+  GridComponent,
+  TitleComponent,
+  TooltipComponent,
+  DataZoomComponent,
+  AxisPointerComponent,
+  ToolboxComponent,
+  LegendComponent,
+]);
+
+interface ChartComponents {
+  grid: GridComponentOption;
+  xAxis: XAXisComponentOption;
+  yAxis: YAXisComponentOption;
+  series: LineSeriesOption[];
+}
+
 const { $translate } = useNuxtApp();
 const theme = useTheme();
 const { t } = useI18n();
@@ -245,11 +126,11 @@ const state = reactive({
   initialHeight: 618,
   currentHeight: 618,
   totalWidth: 0,
-  scale: parseFloat(
-    (((props.maxDepth - props.minDepth) * 1000) / px2mm(618)).toFixed(0)
+  scale: Number.parseFloat(
+    (((props.maxDepth - props.minDepth) * 1000) / px2mm(618)).toFixed(0),
   ),
-  currentScale: parseFloat(
-    (((props.maxDepth - props.minDepth) * 1000) / px2mm(618)).toFixed(0)
+  currentScale: Number.parseFloat(
+    (((props.maxDepth - props.minDepth) * 1000) / px2mm(618)).toFixed(0),
   ),
   option: {},
   nextGridIndex: 4,
@@ -309,24 +190,24 @@ const selectedParametersGrouped = computed(() => {
 function calculateScale(
   maxDepth: number,
   minDepth: number,
-  chartHeight: number
+  chartHeight: number,
 ) {
   return ((maxDepth - minDepth) * 1000) / px2mm(chartHeight);
 }
 function calculateTotalWidth() {
-  const parameterModuleWidth =
-    selectedParametersGrouped.value.length *
-      (state.parameterChartWidth + state.parameterChartPadding) +
-    state.parameterModulePadding;
+  const parameterModuleWidth
+    = selectedParametersGrouped.value.length
+    * (state.parameterChartWidth + state.parameterChartPadding)
+    + state.parameterModulePadding;
 
-  const totalWidth =
-    state.sampleChartWidth +
-    state.sampleChartPaddingLeft +
-    parameterModuleWidth;
+  const totalWidth
+    = state.sampleChartWidth
+    + state.sampleChartPaddingLeft
+    + parameterModuleWidth;
 
   if (containerFlogChart.value) {
-    return containerFlogChart.value.clientWidth &&
-      containerFlogChart.value.clientWidth > totalWidth
+    return containerFlogChart.value.clientWidth
+      && containerFlogChart.value.clientWidth > totalWidth
       ? containerFlogChart.value.clientWidth
       : totalWidth;
   }
@@ -336,9 +217,9 @@ function calculateTotalWidth() {
 function scaleChartHeight() {
   return (
     mm2px(
-      (state.currentMaxDepth - state.currentMinDepth) * 1000 * (1 / state.scale)
-    ) *
-    (ppi.value / 96)
+      (state.currentMaxDepth - state.currentMinDepth) * 1000 * (1 / state.scale),
+    )
+    * (ppi.value / 96)
   );
 }
 const router = useRouter();
@@ -347,14 +228,15 @@ function handleClick(event: any) {
   // TODO: `any` should be replaced with the correct event type from echarts
   if (event.seriesId === "samples-series") {
     const sampleId = event.data[3];
-    if (sampleId)
+    if (sampleId) {
       window.open(
         router.resolve(
-          localeRoute({ name: "sample-id", params: { id: sampleId } })
+          localeRoute({ name: "sample-id", params: { id: sampleId } }),
         ).href,
         "_blank",
-        "height=800,width=800"
+        "height=800,width=800",
       );
+    }
   }
 }
 function handleDataZoom() {
@@ -364,7 +246,7 @@ function handleDataZoom() {
   state.currentScale = calculateScale(
     state.currentMaxDepth,
     state.currentMinDepth,
-    state.currentHeight
+    state.currentHeight,
   );
 
   state.replace = false;
@@ -381,14 +263,14 @@ function groupParameters(parameters: any[]): GroupedParameter[] {
     Object.entries(grouped).map(([paramId, params]) => {
       return {
         id: params[0].id,
-        value: parseInt(paramId),
+        value: Number.parseInt(paramId),
         name: params[0].name,
         count: params[0].count,
-        methods: grouped[paramId].map((p) => p.methodValue),
+        methods: grouped[paramId].map(p => p.methodValue),
       };
     }),
     ["id"],
-    ["asc"]
+    ["asc"],
   );
 }
 function handleRenderSwitch(newRenderer: Renderer) {
@@ -397,7 +279,7 @@ function handleRenderSwitch(newRenderer: Renderer) {
   state.option = flogChart.value?.getOption();
 }
 function handlePpiChange(newPpi: string) {
-  ppi.value = parseInt(newPpi);
+  ppi.value = Number.parseInt(newPpi);
   state.currentScale = state.scale;
   state.currentHeight = scaleChartHeight();
   state.replace = false;
@@ -412,10 +294,10 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
   const chart = flogChart.value;
 
   const addedParameters = newSelectedParameters.filter((newParam) => {
-    return !state.selectedParameters.some((param) => param.id === newParam.id);
+    return !state.selectedParameters.some(param => param.id === newParam.id);
   });
   const removedParameters = state.selectedParameters.filter((newParam) => {
-    return !newSelectedParameters.some((param) => param.id === newParam.id);
+    return !newSelectedParameters.some(param => param.id === newParam.id);
   });
   const oldGroupedParameters = groupParameters(state.selectedParameters);
 
@@ -440,7 +322,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
           const series = chart
             ?.getOption()
             .series.find((series: LineSeriesOption) =>
-              (series.id as string)?.endsWith(`-${addedParameter.value}`)
+              (series.id as string)?.endsWith(`-${addedParameter.value}`),
             );
           const newChartComponents = createParameterChartComponents(
             groupedParameters.find((param: any) => {
@@ -448,7 +330,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
             }) as GroupedParameter,
             series.xAxisIndex,
             -1,
-            { returnComponents: ["series"] }
+            { returnComponents: ["series"] },
           );
           prev.series.push(...newChartComponents.series);
           return prev;
@@ -459,9 +341,10 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
         if (nullGridIndex > -1) {
           state.nextGridIndex = nullGridIndex;
           fromIndex = nullGridIndex + 1;
-        } else {
-          state.nextGridIndex =
-            chart?.getOption().grid.length + parameterGridIndex;
+        }
+        else {
+          state.nextGridIndex
+            = chart?.getOption().grid.length + parameterGridIndex;
           parameterGridIndex += 1;
         }
 
@@ -471,7 +354,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
             return param.value === addedParameter.value;
           }) as GroupedParameter,
           state.nextGridIndex,
-          oldGroupedParameters.length + parameterGridPosition
+          oldGroupedParameters.length + parameterGridPosition,
         );
 
         parameterGridPosition += 1;
@@ -482,7 +365,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
         prev.series.push(...newChartComponents.series);
         return prev;
       },
-      { grid: [], xAxis: [], yAxis: [], series: [] }
+      { grid: [], xAxis: [], yAxis: [], series: [] },
     );
     state.replace = false;
     newOptions.dataZoom = {
@@ -490,11 +373,12 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
       yAxisIndex: newDataZoomYAxisIndices,
     };
     state.option = newOptions;
-  } else {
+  }
+  else {
     const removed = differenceBy(
       oldGroupedParameters,
       groupedParameters,
-      "value"
+      "value",
     );
     const modified = differenceBy(removedParameters, removed, "value");
 
@@ -504,9 +388,8 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
 
     const newOptions = gridsOrdered.reduce(
       (prev, grid, i) => {
-        if (grid == null) {
+        if (grid == null)
           return prev;
-        }
 
         if (!grid.id.startsWith("parameter")) {
           // !!! using `i` is not correct as the grids have been reordered
@@ -518,29 +401,29 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
           return prev;
         }
         const parameterValueStr = grid.id.split("-")[2];
-        const parameterValue = parseInt(parameterValueStr);
+        const parameterValue = Number.parseInt(parameterValueStr);
 
         const xAxis = currentOption.xAxis.find((xAxis: XAXisComponentOption) =>
-          (xAxis?.id as string)?.endsWith(`-${parameterValueStr}`)
+          (xAxis?.id as string)?.endsWith(`-${parameterValueStr}`),
         );
         const yAxis = currentOption.yAxis.find((yAxis: YAXisComponentOption) =>
-          (yAxis?.id as string)?.endsWith(`-${parameterValueStr}`)
+          (yAxis?.id as string)?.endsWith(`-${parameterValueStr}`),
         );
         const series = currentOption.series.filter((series: LineSeriesOption) =>
-          (series?.id as string)?.endsWith(`-${parameterValueStr}`)
+          (series?.id as string)?.endsWith(`-${parameterValueStr}`),
         );
 
         // if one of the parameter methods removed but some method, for that parameter, still selected,
         // update series data and grid position
-        if (modified.some((m) => m.value === parameterValue)) {
+        if (modified.some(m => m.value === parameterValue)) {
           const param = groupedParameters.find(
-            (m) => m.value === parameterValue
+            m => m.value === parameterValue,
           ) as GroupedParameter;
           const newChartComponents = createParameterChartComponents(
             param,
             xAxis.gridIndex,
             position,
-            { returnComponents: ["series", "grid"] }
+            { returnComponents: ["series", "grid"] },
           );
           position += 1;
 
@@ -554,15 +437,15 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
           return prev;
         }
         // if chart is not modified or removed, leave it as is, only update grid position.
-        if (!removed.some((m) => m.value === parameterValue)) {
+        if (!removed.some(m => m.value === parameterValue)) {
           const param = groupedParameters.find(
-            (m) => m.value === parameterValue
+            m => m.value === parameterValue,
           ) as GroupedParameter;
           const newChartComponents = createParameterChartComponents(
             param,
             -1,
             position,
-            { returnComponents: ["grid"] }
+            { returnComponents: ["grid"] },
           );
           position += 1;
           prev.grid.push({
@@ -576,7 +459,7 @@ function handleParametersUpdate(newSelectedParameters: any[]) {
         }
         return prev;
       },
-      { grid: [], xAxis: [], yAxis: [], series: [] }
+      { grid: [], xAxis: [], yAxis: [], series: [] },
     );
     state.replace = true;
     state.option = newOptions;
@@ -586,7 +469,7 @@ function handleScaleReset() {
   state.scale = calculateScale(
     props.maxDepth,
     props.minDepth,
-    state.initialHeight
+    state.initialHeight,
   );
   state.currentScale = state.scale;
   ppi.value = 96;
@@ -613,7 +496,7 @@ function handleScaleChange() {
   };
 }
 function handleParameterChartWidthChange(newParameterChartWidth: string) {
-  state.parameterChartWidth = parseInt(newParameterChartWidth);
+  state.parameterChartWidth = Number.parseInt(newParameterChartWidth);
 
   state.totalWidth = calculateTotalWidth();
   state.replace = false;
@@ -621,9 +504,9 @@ function handleParameterChartWidthChange(newParameterChartWidth: string) {
     grid: flogChart.value
       ?.getOption()
       .grid.map((grid: GridComponentOption, i: number) => {
-        if (!(grid.id as string)?.startsWith("parameter")) {
+        if (!(grid.id as string)?.startsWith("parameter"))
           return { id: grid.id };
-        }
+
         return {
           id: grid.id,
           width: state.parameterChartWidth,
@@ -635,15 +518,15 @@ function handleParameterChartWidthChange(newParameterChartWidth: string) {
 }
 function calcParameterChartLeft(position: number) {
   return (
-    state.sampleChartWidth +
-    state.sampleChartPaddingLeft +
-    position * (state.parameterChartWidth + state.parameterChartPadding) +
-    state.parameterModulePadding
+    state.sampleChartWidth
+    + state.sampleChartPaddingLeft
+    + position * (state.parameterChartWidth + state.parameterChartPadding)
+    + state.parameterModulePadding
   );
 }
 function createParameterChartComponents<
   T extends ChartComponents,
-  K extends keyof T
+  K extends keyof T,
 >(
   param: {
     id: any;
@@ -656,11 +539,11 @@ function createParameterChartComponents<
   position: number,
   { returnComponents }: { returnComponents: K[] } = {
     returnComponents: ["grid", "xAxis", "yAxis", "series"] as K[],
-  }
+  },
 ): Pick<T, K> {
   const result = Object.assign(
     {},
-    ...returnComponents.map((key) => ({ [key]: null }))
+    ...returnComponents.map(key => ({ [key]: null })),
   );
 
   if (returnComponents.includes("grid" as K)) {
@@ -743,7 +626,7 @@ function createParameterChartComponents<
         },
         tooltip: {
           formatter(params: any) {
-            // @ts-ignore
+            // @ts-expect-error
             const data: [number, number, number, number, string] = params.data;
             return `
                 <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
@@ -761,7 +644,7 @@ function createParameterChartComponents<
         data: props.analyses
           .filter(
             (result: any) =>
-              result.parameter === param.name && method === result.method_id
+              result.parameter === param.name && method === result.method_id,
           )
           .map((t) => {
             const avgDepth = t.depth_interval
@@ -786,13 +669,13 @@ function createParameterChartComponents<
 }
 function createOption(): ECOption {
   const selectedParameterChartComponents = groupParameters(
-    state.selectedParameters
+    state.selectedParameters,
   ).reduce(
     (prev, parameter, i) => {
       const parameterComponents = createParameterChartComponents(
         parameter,
         i + 1,
-        i
+        i,
       );
       prev.grid.push(parameterComponents.grid);
       prev.xAxis.push(parameterComponents.xAxis);
@@ -805,7 +688,7 @@ function createOption(): ECOption {
       xAxis: XAXisComponentOption[];
       yAxis: YAXisComponentOption[];
       series: LineSeriesOption[];
-    }
+    },
   );
 
   return {
@@ -943,7 +826,7 @@ function createOption(): ECOption {
         tooltip: {
           position: "bottom",
           formatter(params: any) {
-            // @ts-ignore
+            // @ts-expect-error
             const data: [number, number, number, number, string] = params.data;
 
             return `
@@ -966,7 +849,7 @@ function createOption(): ECOption {
           position: "right",
           color: "black",
           fontSize: 12,
-          // @ts-ignore
+          // @ts-expect-error
           formatter: "{@[4]}",
         },
         renderItem(params, api) {
@@ -984,8 +867,8 @@ function createOption(): ECOption {
             ? (api.size([0, 1]) as number[])[0]
             : 0;
           const dynamicHeight = end[1] - start[1];
-          const height =
-            api.value(2) || dynamicHeight < 10 ? dynamicHeight : 10;
+          const height
+            = api.value(2) || dynamicHeight < 10 ? dynamicHeight : 10;
           const x = start[0] - categoryWidth * 0.5;
           const y = api.value(2) ? start[1] : start[1] - height / 2;
           const rectShape = clipRectByRect(
@@ -996,15 +879,15 @@ function createOption(): ECOption {
               height,
             },
             {
-              // @ts-ignore
+              // @ts-expect-error
               x: params.coordSys.x,
-              // @ts-ignore
+              // @ts-expect-error
               y: params.coordSys.y,
-              // @ts-ignore
+              // @ts-expect-error
               width: params.coordSys.width,
-              // @ts-ignore
+              // @ts-expect-error
               height: params.coordSys.height,
-            }
+            },
           );
           return (
             rectShape && {
@@ -1038,12 +921,142 @@ if (props.parameters.length > 0) {
     0,
     props.parameters[0].children.length > 3
       ? 3
-      : props.parameters[0].children.length
+      : props.parameters[0].children.length,
   );
 }
 state.totalWidth = calculateTotalWidth();
 state.option = createOption();
 </script>
+
+<template>
+  <div class="">
+    <v-toolbar
+      flat
+      color="white"
+      density="compact"
+    >
+      <options-parameter-tree-view
+        :parameters="parameters"
+        :initial-selection="state.selectedParameters"
+        @input="handleParametersUpdate"
+      />
+      <v-menu
+        transition="slide-y-transition"
+        offset="10"
+        content-class="white"
+        :close-on-content-click="false"
+      >
+        <template #activator="{ props }">
+          <v-btn
+            class="ml-3"
+            icon
+            size="small"
+            v-bind="props"
+          >
+            <v-icon> {{ icons.mdiCog }} </v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="montserrat pb-2">
+            {{ $t("flogChart.settings") }}
+          </v-card-title>
+          <v-card-text>
+            <renderer-switch
+              :renderer="renderer"
+              @update="handleRenderSwitch"
+            />
+            <v-divider class="my-2" />
+            <v-text-field
+              v-model="state.scale"
+              type="number"
+              :label="$t('flogChart.heightScale')"
+              prefix="1:"
+              variant="underlined"
+              hide-details
+              @change="handleScaleChange"
+            >
+              <template #append-inner>
+                <v-icon @click="handleScaleReset">
+                  {{ icons.mdiRefresh }}
+                </v-icon>
+              </template>
+              <template #append>
+                <v-btn-toggle
+                  density="compact"
+                  color="accent"
+                  :model-value="ppi"
+                  @update:model-value="handlePpiChange"
+                >
+                  <v-btn
+                    width="65"
+                    size="small"
+                    class="text-none montserrat"
+                    :variant="ppi !== 96 && 'outlined'"
+                    :value="96"
+                  >
+                    96 PPI
+                  </v-btn>
+                  <v-btn
+                    width="65"
+                    size="small"
+                    class="text-none montserrat"
+                    :variant="ppi !== 72 && 'outlined'"
+                    :value="72"
+                  >
+                    72 PPI
+                  </v-btn>
+                </v-btn-toggle>
+              </template>
+            </v-text-field>
+            <v-text-field
+              :model-value="state.parameterChartWidth"
+              type="number"
+              class="d-inline-flex"
+              variant="underlined"
+              hide-details
+              suffix="px"
+              :label="$t('flogChart.parameterChartWidth')"
+              @change="handleParameterChartWidthChange"
+            />
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    </v-toolbar>
+    <v-divider />
+    <div ref="containerFlogChart" class="overflow-x-auto">
+      <client-only>
+        <VChart
+          ref="flogChart"
+          class="chart pa-2"
+          :style="{
+            width: `${state.totalWidth}px`,
+            height: `${state.currentHeight + 200}px`,
+          }"
+          v-bind="$attrs"
+          autoresize
+          :init-options="initOptions"
+          :option="state.option"
+          :update-options="updateOptions"
+          @click="handleClick"
+          @datazoom="handleDataZoom"
+        />
+        <template #placeholder>
+          <div
+            :style="`height: ${state.initialHeight + 200}px; width: 100%`"
+            class="d-flex align-center justify-center"
+          >
+            <v-progress-circular
+              indeterminate
+              color="accent"
+              :size="100"
+              :width="6"
+            />
+          </div>
+        </template>
+      </client-only>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 :deep(.v-input__append-inner) {

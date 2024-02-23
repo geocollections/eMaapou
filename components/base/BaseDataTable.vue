@@ -1,3 +1,162 @@
+<script setup lang="ts">
+import { mdiChevronDown, mdiChevronUp, mdiMagnify } from "@mdi/js";
+import isEqual from "lodash/isEqual";
+import debounce from "lodash/debounce";
+
+interface IHeader {
+  text: string;
+  value: string;
+  show: boolean;
+  apiFieldValue?: string | { et: string; en: string };
+}
+
+const props = defineProps({
+  onlyTable: {
+    type: Boolean,
+    default: false,
+  },
+  items: {
+    type: Array,
+    required: true,
+  },
+  headers: {
+    type: Array as PropType<IHeader[]>,
+    required: true,
+  },
+  options: {
+    type: Object,
+    required: true,
+  },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  showSearch: {
+    type: Boolean,
+    default: true,
+  },
+  expandable: {
+    type: Boolean,
+    default: false,
+  },
+  singleExpand: {
+    type: Boolean,
+    default: false,
+  },
+  dynamicHeaders: {
+    type: Boolean,
+    default: true,
+  },
+  isLoading: {
+    type: Boolean,
+    required: true,
+  },
+});
+const emit = defineEmits(["update", "reset:headers", "change:headers"]);
+const { t } = useI18n();
+const { $formatDate } = useNuxtApp();
+
+const search = ref("");
+const footerProps = ref({
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+});
+const expanded = ref([]);
+const tableElement = ref<HTMLTableElement | null>(null);
+const canScrollLeft = ref(false);
+const canScrollRight = ref(false);
+const topOptionsHeight = ref(0);
+const table = ref<HTMLElement>();
+const visibleHeaders = computed(() => {
+  return props.headers.filter(header => header.show);
+});
+
+const cssVars = computed(() => {
+  return {
+    "--top-options-height": `${topOptionsHeight.value}px`,
+  };
+});
+const handleChange = debounce((options) => {
+  if (
+    options.itemsPerPage === props.options.itemsPerPage
+    && options.page === props.options.page
+    && isEqual(options.sortBy, props.options.sortBy)
+    && isEqual(options.sortDesc, props.options.sortDesc)
+  )
+    return;
+  emit("update", { options, search: search.value });
+}, 250);
+function handleSortByChange(newSortBy) {
+  if (isEqual(newSortBy, props.options.sortBy))
+    return;
+  emit("update", {
+    options: { ...props.options, page: 1, sortBy: newSortBy },
+    search: search.value,
+  });
+}
+
+const handleSearch = debounce(() => {
+  const options = { ...props.options, page: 1 };
+  // this.isLoading = true
+  emit("update", {
+    options,
+    search: search.value,
+  });
+}, 400);
+function handleHeadersChange(e: any) {
+  emit("change:headers", e.value);
+}
+onMounted(() => {
+  tableElement.value = table.value?.querySelector("table") ?? null;
+  nextTick(() => {
+    topOptionsHeight.value
+      = table.value?.querySelector("#top")?.clientHeight ?? 0;
+  });
+  const dataTableWrapper = table.value?.querySelector(
+    ".v-table__wrapper",
+  ) as HTMLElement | null;
+  dataTableWrapper?.addEventListener("scroll", () => {
+    if (
+      dataTableWrapper.scrollLeft + dataTableWrapper.clientWidth
+      >= dataTableWrapper.scrollWidth
+    ) {
+      canScrollRight.value = false;
+    }
+    else if (dataTableWrapper.scrollLeft === 0) {
+      canScrollLeft.value = false;
+    }
+    else {
+      canScrollLeft.value = true;
+      canScrollRight.value = true;
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    topOptionsHeight.value
+      = table.value?.querySelector("#top")?.clientHeight ?? 0;
+    if (
+      dataTableWrapper?.offsetWidth
+      && dataTableWrapper?.scrollWidth
+      && dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
+    ) {
+      canScrollRight.value = true;
+    }
+    else {
+      canScrollLeft.value = false;
+      canScrollRight.value = false;
+    }
+  });
+
+  if (
+    dataTableWrapper?.offsetWidth
+    && dataTableWrapper?.scrollWidth
+    && dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
+  )
+    canScrollRight.value = true;
+});
+</script>
+
 <template>
   <div ref="table">
     <!-- HACK: `isLoading = !onlyTable`
@@ -9,6 +168,7 @@
 ' -->
     <v-data-table-server
       id="table"
+      v-model:expanded="expanded"
       item-key="id"
       mobile-breakpoint="0"
       density="compact"
@@ -24,12 +184,13 @@
       :items-per-page="options.itemsPerPage"
       :items-length="count"
       :footer-props="footerProps"
-      v-model:expanded="expanded"
       :can-scroll-right="canScrollRight"
       :can-scroll-left="canScrollLeft"
-      @update:sortBy="handleSortByChange"
+      @update:sort-by="handleSortByChange"
     >
-      <template #no-data>{{ $t("table.noData") }}</template>
+      <template #no-data>
+        {{ $t("table.noData") }}
+      </template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
       <template v-if="!onlyTable" #top="{ pageCount }">
         <div id="top">
@@ -55,7 +216,7 @@
                 density="compact"
                 single-line
                 clearable
-                @input="handleSearch"
+                @update:model-value="handleSearch"
               />
               <base-data-table-export-menu
                 v-if="tableElement"
@@ -131,8 +292,7 @@
           size="small"
           :class="{ active: isExpanded }"
           @click="toggleExpand(internalItem)"
-        >
-        </v-btn>
+        />
       </template>
       <template v-for="(_, slotName) in $slots" #[slotName]="context">
         <slot :name="slotName" v-bind="context" />
@@ -148,161 +308,6 @@
     </v-data-table-server>
   </div>
 </template>
-
-<script setup lang="ts">
-import { mdiMagnify, mdiChevronUp, mdiChevronDown } from "@mdi/js";
-import isEqual from "lodash/isEqual";
-import debounce from "lodash/debounce";
-interface IHeader {
-  text: string;
-  value: string;
-  show: boolean;
-  apiFieldValue?: string | { et: string; en: string };
-}
-
-const props = defineProps({
-  onlyTable: {
-    type: Boolean,
-    default: false,
-  },
-  items: {
-    type: Array,
-    required: true,
-  },
-  headers: {
-    type: Array as PropType<IHeader[]>,
-    required: true,
-  },
-  options: {
-    type: Object,
-    required: true,
-  },
-  count: {
-    type: Number,
-    default: 0,
-  },
-  showSearch: {
-    type: Boolean,
-    default: true,
-  },
-  expandable: {
-    type: Boolean,
-    default: false,
-  },
-  singleExpand: {
-    type: Boolean,
-    default: false,
-  },
-  dynamicHeaders: {
-    type: Boolean,
-    default: true,
-  },
-  isLoading: {
-    type: Boolean,
-    required: true,
-  },
-});
-const emit = defineEmits(["update", "reset:headers", "change:headers"]);
-const { t } = useI18n();
-const { $formatDate } = useNuxtApp();
-
-const search = ref("");
-const footerProps = ref({
-  showFirstLastPage: true,
-  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
-  "items-per-page-text": t("table.itemsPerPage"),
-});
-const expanded = ref([]);
-const tableElement = ref<HTMLTableElement | null>(null);
-const canScrollLeft = ref(false);
-const canScrollRight = ref(false);
-const topOptionsHeight = ref(0);
-const table = ref<HTMLElement>();
-const visibleHeaders = computed(() => {
-  return props.headers.filter((header) => header.show);
-});
-
-const cssVars = computed(() => {
-  return {
-    "--top-options-height": `${topOptionsHeight.value}px`,
-  };
-});
-const handleChange = debounce((options) => {
-  if (
-    options.itemsPerPage === props.options.itemsPerPage &&
-    options.page === props.options.page &&
-    isEqual(options.sortBy, props.options.sortBy) &&
-    isEqual(options.sortDesc, props.options.sortDesc)
-  )
-    return;
-  emit("update", { options, search: search.value });
-}, 250);
-const handleSortByChange = (newSortBy) => {
-  if (isEqual(newSortBy, props.options.sortBy)) return;
-  emit("update", {
-    options: { ...props.options, page: 1, sortBy: newSortBy },
-    search: search.value,
-  });
-};
-
-const handleSearch = debounce(() => {
-  const options = { ...props.options, page: 1 };
-  // this.isLoading = true
-  emit("update", {
-    options,
-    search: search.value,
-  });
-}, 400);
-const handleHeadersChange = (e: any) => {
-  emit("change:headers", e.value);
-};
-onMounted(() => {
-  tableElement.value = table.value?.querySelector("table") ?? null;
-  nextTick(() => {
-    topOptionsHeight.value =
-      table.value?.querySelector("#top")?.clientHeight ?? 0;
-  });
-  const dataTableWrapper = table.value?.querySelector(
-    ".v-table__wrapper",
-  ) as HTMLElement | null;
-  dataTableWrapper?.addEventListener("scroll", () => {
-    if (
-      dataTableWrapper.scrollLeft + dataTableWrapper.clientWidth >=
-      dataTableWrapper.scrollWidth
-    ) {
-      canScrollRight.value = false;
-    } else if (dataTableWrapper.scrollLeft === 0) {
-      canScrollLeft.value = false;
-    } else {
-      canScrollLeft.value = true;
-      canScrollRight.value = true;
-    }
-  });
-
-  window.addEventListener("resize", () => {
-    topOptionsHeight.value =
-      table.value?.querySelector("#top")?.clientHeight ?? 0;
-    if (
-      dataTableWrapper?.offsetWidth &&
-      dataTableWrapper?.scrollWidth &&
-      dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
-    ) {
-      canScrollRight.value = true;
-    } else {
-      canScrollLeft.value = false;
-      canScrollRight.value = false;
-    }
-  });
-
-  if (
-    dataTableWrapper?.offsetWidth &&
-    dataTableWrapper?.scrollWidth &&
-    dataTableWrapper?.offsetWidth < dataTableWrapper?.scrollWidth
-  ) {
-    canScrollRight.value = true;
-  }
-});
-</script>
 
 <style lang="scss" scoped>
 .v-data-table ::v-deep {

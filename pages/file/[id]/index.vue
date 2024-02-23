@@ -1,59 +1,6 @@
-<template>
-  <div v-for="(card, index) in cards" :key="`related-${index}`">
-    <v-card>
-      <v-card-title class="montserrat py-2">{{ $t(card.title) }} </v-card-title>
-
-      <v-table dense class="pb-3">
-        <template #default>
-          <tbody>
-            <tr v-for="(row, key) in card.items" :key="key">
-              <td>
-                <template v-if="card.isLink">
-                  <a
-                    class="text-link"
-                    @click="
-                      $openWindow(
-                        `${card.href}${
-                          card.id === 'doi'
-                            ? row.doi.identifier
-                            : row[card.id].id
-                        }`,
-                      )
-                    "
-                  >
-                    {{ buildData(card, row) }}
-                    <v-icon small color="primary darken-2">
-                      {{ mdiOpenInNew }}
-                    </v-icon>
-                  </a>
-                </template>
-                <template v-else-if="card.isNuxtLink">
-                  <nuxt-link
-                    class="text-link"
-                    :to="
-                      localePath({
-                        name: `${card.route ? card.route : card.id}-id`,
-                        params: { id: row[card.id].id },
-                      })
-                    "
-                  >
-                    {{ buildData(card, row) }}
-                  </nuxt-link>
-                </template>
-                <template v-else>
-                  {{ buildData(card, row) }}
-                </template>
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-table>
-    </v-card>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { mdiOpenInNew } from "@mdi/js";
+
 const relatedCards = [
   {
     id: "collection",
@@ -245,27 +192,24 @@ const relatedCards = [
 ];
 const { $translate, $geoloogiaFetch } = useNuxtApp();
 const localePath = useLocalePath();
-const cards = computed(() => data.value?.cards);
 const route = useRoute();
-const { data, pending, error } = useLazyAsyncData("data", async () => {
+const { data } = useLazyAsyncData("data", async () => {
   const hydratedTabs = await Promise.all(
     relatedCards.map(async (tab) => {
-      const res = await $geoloogiaFetch("/attachment_link/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
         query: {
           [`${tab.id}__isnull`]: false,
           attachment: route.params.id,
           nest: ["specimen", "analysis"].includes(tab.id) ? 2 : 1,
         },
       });
-      return { ...tab, count: res.count, items: res.items };
+      return { ...tab, count: res.count, items: res.results };
     }),
   );
-  return { cards: hydratedTabs.filter((item) => item.count > 0) };
+  return { cards: hydratedTabs.filter(item => item.count > 0) };
 });
-const buildData = (
-  tab: { id: string; field: { et: string; en: string } },
-  data: any,
-) => {
+const cards = computed(() => data.value?.cards);
+function buildData(tab: { id: string; field: { et: string; en: string } }, data: any) {
   if (tab.id === "specimen") {
     return `${data[tab.id].coll.number.split(" ")[0]} ${
       data[tab.id].specimen_id
@@ -273,11 +217,68 @@ const buildData = (
   }
   if (tab.id === "analysis") {
     return data[tab.id].sample.number;
-  } else {
+  }
+  else {
     return $translate({
       et: data[tab.id][tab.field.et],
       en: data[tab.id][tab.field.en],
     });
   }
-};
+}
 </script>
+
+<template>
+  <div v-for="(card, index) in cards" :key="`related-${index}`">
+    <v-card>
+      <v-card-title class="montserrat py-2">
+        {{ $t(card.title) }}
+      </v-card-title>
+
+      <v-table dense class="pb-3">
+        <template #default>
+          <tbody>
+            <tr v-for="(row, key) in card.items" :key="key">
+              <td>
+                <template v-if="card.isLink">
+                  <a
+                    class="text-link"
+                    @click="
+                      $openWindow(
+                        `${card.href}${
+                          card.id === 'doi'
+                            ? row.doi.identifier
+                            : row[card.id].id
+                        }`,
+                      )
+                    "
+                  >
+                    {{ buildData(card, row) }}
+                    <v-icon size="small" color="primary-darken-2">
+                      {{ mdiOpenInNew }}
+                    </v-icon>
+                  </a>
+                </template>
+                <template v-else-if="card.isNuxtLink">
+                  <nuxt-link
+                    class="text-link"
+                    :to="
+                      localePath({
+                        name: `${card.route ? card.route : card.id}-id`,
+                        params: { id: row[card.id].id },
+                      })
+                    "
+                  >
+                    {{ buildData(card, row) }}
+                  </nuxt-link>
+                </template>
+                <template v-else>
+                  {{ buildData(card, row) }}
+                </template>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-table>
+    </v-card>
+  </div>
+</template>

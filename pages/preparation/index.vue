@@ -1,54 +1,3 @@
-<template>
-  <search>
-    <template #title>
-      <header-search
-        :title="$t('preparation.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiEyedropper"
-      />
-    </template>
-
-    <template #form="{ closeMobileSearch }">
-      <search-form-preparation
-        @update="
-          handleUpdate();
-          closeMobileSearch();
-        "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
-      />
-    </template>
-
-    <template #result>
-      <v-card
-        flat
-        :rounded="0"
-        style="
-          border-top: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-        "
-      >
-        <data-table-preparation
-          :show-search="false"
-          :items="data?.response.docs ?? []"
-          :count="data?.response.numFound ?? 0"
-          :headers="headers"
-          :options="options"
-          dynamic-headers
-          :is-loading="pending"
-          stateful-headers
-          @update="handleDataTableUpdate"
-          @change:headers="handleHeadersChange"
-          @reset:headers="handleHeadersReset(options)"
-          @click:row="handleClickRow"
-        />
-      </v-card>
-    </template>
-  </search>
-</template>
-
 <script setup lang="ts">
 import { mdiEyedropper } from "@mdi/js";
 
@@ -65,7 +14,6 @@ const {
   solrFilters,
   options,
   headers,
-  searchPosition,
   resultsCount,
 } = storeToRefs(preparationsStore);
 
@@ -93,7 +41,7 @@ const {
 });
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() as LocationQueryRaw });
+  router.push({ query: getQueryParams() });
 }
 
 async function handleUpdate() {
@@ -109,7 +57,7 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshLocalities();
@@ -144,3 +92,46 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 //   },
 // });
 </script>
+
+<template>
+  <search>
+    <template #title>
+      <header-search
+        :title="$t('preparation.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiEyedropper"
+      />
+    </template>
+
+    <template #form="{ closeMobileSearch }">
+      <search-form-preparation
+        @update="
+          handleUpdate();
+          closeMobileSearch();
+        "
+        @reset="
+          handleReset();
+          closeMobileSearch();
+        "
+      />
+    </template>
+
+    <template #result>
+      <data-table-preparation
+        class="border-t border-b"
+        :show-search="false"
+        :items="data?.response.docs ?? []"
+        :count="data?.response.numFound ?? 0"
+        :headers="headers"
+        :options="options"
+        dynamic-headers
+        :is-loading="pending"
+        stateful-headers
+        @update="handleDataTableUpdate"
+        @change:headers="handleHeadersChange"
+        @reset:headers="handleHeadersReset(options)"
+        @click:row="handleClickRow"
+      />
+    </template>
+  </search>
+</template>

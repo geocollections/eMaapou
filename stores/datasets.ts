@@ -1,13 +1,10 @@
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import { DATASET } from "~/constants";
 import { HEADERS_DATASET } from "~/constants/headersNew";
-import type { RouteLocation } from "vue-router";
 import type {
   IdListFilter,
   TextListFilter,
-  StringIdListFilter,
-  GeomFilter,
-  RangeAltFilter,
 } from "~/composables/useFilter";
 
 export const useDatasets = defineStore(

@@ -1,15 +1,3 @@
-<template>
-  <div class="pa-2">
-    <v-chart
-      class="chart"
-      autoresize
-      :init-options="initOptions"
-      :option="computedOptions"
-      v-on="$listeners"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
@@ -18,10 +6,11 @@ import deepmerge from "deepmerge";
 import { CanvasRenderer } from "echarts/renderers";
 import {
   GridComponent,
-  TitleComponent,
   LegendComponent,
+  TitleComponent,
   ToolboxComponent,
 } from "echarts/components";
+import { useDisplay } from "vuetify";
 import {
   LEGEND_TOP,
   TITLE_FONT_SIZE,
@@ -30,15 +19,6 @@ import {
   TITLE_TOP_SMALL,
   TOOLBOX_RIGHT,
 } from "~/constants";
-import { useDisplay } from "vuetify";
-use([
-  PieChart,
-  CanvasRenderer,
-  GridComponent,
-  TitleComponent,
-  LegendComponent,
-  ToolboxComponent,
-]);
 
 const props = defineProps({
   chartTitle: {
@@ -51,6 +31,15 @@ const props = defineProps({
     required: true,
   },
 });
+
+use([
+  PieChart,
+  CanvasRenderer,
+  GridComponent,
+  TitleComponent,
+  LegendComponent,
+  ToolboxComponent,
+]);
 
 const display = useDisplay();
 
@@ -95,7 +84,8 @@ const chartOptions = computed(() => {
 
 const computedOptions = computed(() => {
   const deepMergedObject = deepmerge(defaultOptions.value, chartOptions.value);
-  if (deepMergedObject?.series?.length > 0) return deepMergedObject;
+  if (deepMergedObject?.series?.length > 0)
+    return deepMergedObject;
   else return {};
 });
 
@@ -117,6 +107,18 @@ function buildChartSeries() {
   ];
 }
 </script>
+
+<template>
+  <div class="pa-2">
+    <VChart
+      class="chart"
+      autoresize
+      :init-options="initOptions"
+      :option="computedOptions"
+      v-on="$listeners"
+    />
+  </div>
+</template>
 
 <style scoped>
 .chart {

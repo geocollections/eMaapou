@@ -1,54 +1,3 @@
-<template>
-  <search>
-    <template #title>
-      <header-search
-        :title="$t('analysis.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiTestTube"
-      />
-    </template>
-
-    <template #form="{ closeMobileSearch }">
-      <search-form-analysis
-        @update="
-          handleUpdate();
-          closeMobileSearch();
-        "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
-      />
-    </template>
-
-    <template #result>
-      <v-card
-        flat
-        :rounded="0"
-        style="
-          border-top: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-        "
-      >
-        <data-table-analysis
-          :show-search="false"
-          :items="data?.response.docs ?? []"
-          :count="data?.response.numFound ?? 0"
-          :headers="headers"
-          :options="options"
-          dynamic-headers
-          :is-loading="pending"
-          stateful-headers
-          @update="handleDataTableUpdate"
-          @change:headers="handleHeadersChange"
-          @reset:headers="handleHeadersReset(options)"
-          @click:row="handleClickRow"
-        />
-      </v-card>
-    </template>
-  </search>
-</template>
-
 <script setup lang="ts">
 import { mdiTestTube } from "@mdi/js";
 
@@ -59,8 +8,8 @@ const {
   setStateFromQueryParams,
   getQueryParams,
 } = analysesStore;
-const { solrSort, solrQuery, solrFilters, options, headers, resultsCount } =
-  storeToRefs(analysesStore);
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(analysesStore);
 
 const route = useRoute();
 
@@ -138,3 +87,46 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 //   },
 // })
 </script>
+
+<template>
+  <search>
+    <template #title>
+      <header-search
+        :title="$t('analysis.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiTestTube"
+      />
+    </template>
+
+    <template #form="{ closeMobileSearch }">
+      <search-form-analysis
+        @update="
+          handleUpdate();
+          closeMobileSearch();
+        "
+        @reset="
+          handleReset();
+          closeMobileSearch();
+        "
+      />
+    </template>
+
+    <template #result>
+      <data-table-analysis
+        class="border-t border-b"
+        :show-search="false"
+        :items="data?.response.docs ?? []"
+        :count="data?.response.numFound ?? 0"
+        :headers="headers"
+        :options="options"
+        dynamic-headers
+        :is-loading="pending"
+        stateful-headers
+        @update="handleDataTableUpdate"
+        @change:headers="handleHeadersChange"
+        @reset:headers="handleHeadersReset(options)"
+        @click:row="handleClickRow"
+      />
+    </template>
+  </search>
+</template>

@@ -1,33 +1,3 @@
-<template>
-  <div>
-    <chart-flog
-      v-if="analysisResults.length > 0 && sampleResults.length > 0"
-      :analyses="analysisResults"
-      :samples="sampleResults"
-      :min-depth="minDepth"
-      :max-depth="maxDepth"
-      :parameters="parameters"
-      :title="
-        $translate({
-          et: drillcoreObject.drillcore,
-          en: drillcoreObject.drillcore_en,
-        })
-      "
-      :reverse="reversed"
-    />
-
-    <chart-las
-      v-if="attachment && lasContent"
-      class="pa-2"
-      :class="{
-        'pt-4': analysisResults.length > 0 && sampleResults.length > 0,
-      }"
-      :chart-title="chartTitle"
-      :file-data="lasContent"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
   locality: { type: Number, required: true },
@@ -51,7 +21,7 @@ const parameters = ref<any[]>([]);
 const reversed = ref<boolean>(false);
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 
-const { pending } = await useLazyAsyncData("data", async () => {
+await useLazyAsyncData("data", async () => {
   let rawLasFileContent;
   if (props.attachment) {
     const rawLasfileContentResponse = await $geoloogiaFetch(
@@ -65,8 +35,8 @@ const { pending } = await useLazyAsyncData("data", async () => {
 
     rawLasFileContent = rawLasfileContentResponse;
     if (
-      typeof rawLasfileContentResponse === "string" &&
-      rawLasFileContent.startsWith("Error: ")
+      typeof rawLasfileContentResponse === "string"
+      && rawLasFileContent.startsWith("Error: ")
     )
       rawLasFileContent = "";
     lasContent.value = rawLasFileContent;
@@ -74,15 +44,15 @@ const { pending } = await useLazyAsyncData("data", async () => {
 
   const analysisResultsPromise = $solrFetch("/analysis_results", {
     query: {
-      q: "*",
-      fq: `locality_id:${props.locality}`,
-      start: 0,
-      rows: 50000,
-      fl: "id,analysis_id,depth,depth_interval,parameter,method_id,value",
-      sort: "depth asc",
-      stats: "on",
+      "q": "*",
+      "fq": `locality_id:${props.locality}`,
+      "start": 0,
+      "rows": 50000,
+      "fl": "id,analysis_id,depth,depth_interval,parameter,method_id,value",
+      "sort": "depth asc",
+      "stats": "on",
       "stats.field": ["depth"],
-      facet: "on",
+      "facet": "on",
       "facet.pivot": [
         "method_id,analysis_method,analysis_method_en",
         "method_id,parameter_id,parameter",
@@ -91,33 +61,33 @@ const { pending } = await useLazyAsyncData("data", async () => {
   });
   const samplesPromise = $solrFetch("/sample_data", {
     query: {
-      q: "*",
-      fq: `locality_id:${props.locality} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
-      start: 0,
-      rows: 50000,
-      fl: "id,sample_id,sample_number,depth,depth_interval,",
-      sort: "depth asc",
-      stats: "on",
+      "q": "*",
+      "fq": `locality_id:${props.locality} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
+      "start": 0,
+      "rows": 50000,
+      "fl": "id,sample_id,sample_number,depth,depth_interval,",
+      "sort": "depth asc",
+      "stats": "on",
       "stats.field": ["depth", "depth_interval"],
     },
   });
   const taxaPromise = $solrFetch("/taxon_frequency", {
     query: {
-      q: "*",
-      fq: `locality_id:${props.locality} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
-      start: 0,
-      rows: 50000,
-      fl: "depth,depth_interval,frequency,taxon,taxon_id,",
-      sort: "depth asc",
-      stats: "on",
+      "q": "*",
+      "fq": `locality_id:${props.locality} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,
+      "start": 0,
+      "rows": 50000,
+      "fl": "depth,depth_interval,frequency,taxon,taxon_id,",
+      "sort": "depth asc",
+      "stats": "on",
       "stats.field": ["taxon", "depth"],
       "stats.calcdistinct": true,
     },
   });
 
   // TODO: catch any failing promises
-  const [analysisResultsResponse, sampleResponse, taxaResponse] =
-    await Promise.all([analysisResultsPromise, samplesPromise, taxaPromise]);
+  const [analysisResultsResponse, sampleResponse, taxaResponse]
+    = await Promise.all([analysisResultsPromise, samplesPromise, taxaPromise]);
 
   analysisResults.value = analysisResultsResponse?.response.docs;
   sampleResults.value = sampleResponse?.response.docs;
@@ -152,3 +122,33 @@ const chartTitle = computed(() => {
   });
 });
 </script>
+
+<template>
+  <div>
+    <chart-flog
+      v-if="analysisResults.length > 0 && sampleResults.length > 0"
+      :analyses="analysisResults"
+      :samples="sampleResults"
+      :min-depth="minDepth"
+      :max-depth="maxDepth"
+      :parameters="parameters"
+      :title="
+        $translate({
+          et: drillcoreObject.drillcore,
+          en: drillcoreObject.drillcore_en,
+        })
+      "
+      :reverse="reversed"
+    />
+
+    <chart-las
+      v-if="attachment && lasContent"
+      class="pa-2"
+      :class="{
+        'pt-4': analysisResults.length > 0 && sampleResults.length > 0,
+      }"
+      :chart-title="chartTitle"
+      :file-data="lasContent"
+    />
+  </div>
+</template>

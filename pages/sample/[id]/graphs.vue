@@ -1,12 +1,3 @@
-<template>
-  <chart-taxon-pie
-    table-key="sample"
-    :table-id="$route.params.id.toString()"
-    :chart-title="chartTitle"
-    :taxon-data="taxons"
-  />
-</template>
-
 <script setup lang="ts">
 const props = defineProps({
   sampleObject: {
@@ -21,10 +12,10 @@ const { $geoloogiaFetch } = useNuxtApp();
 
 const chartTitle = computed(() => {
   return `${t("sample.number")} ${
-    props.sampleObject?.number ||
-    props.sampleObject?.number_additional ||
-    props.sampleObject?.number_field ||
-    props.sampleObject?.id
+    props.sampleObject?.number
+    || props.sampleObject?.number_additional
+    || props.sampleObject?.number_field
+    || props.sampleObject?.id
   }`;
 });
 
@@ -46,3 +37,12 @@ const { data: taxons } = useAsyncData("taxons", async () => {
   });
 });
 </script>
+
+<template>
+  <chart-taxon-pie
+    table-key="sample"
+    :table-id="$route.params.id.toString()"
+    :chart-title="chartTitle"
+    :taxon-data="taxons"
+  />
+</template>

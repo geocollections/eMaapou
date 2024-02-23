@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { mdiChevronDoubleLeft, mdiMagnify } from "@mdi/js";
+
+const showSearch = ref(false);
+const mini = ref(false);
+
+function closeMobileSearch() {
+  showSearch.value = false;
+}
+</script>
+
 <template>
   <div>
     <v-navigation-drawer
@@ -47,7 +58,7 @@
           </div>
         </div>
         <div v-show="!mini">
-          <slot name="form" :close-mobile-search="closeMobileSearch"></slot>
+          <slot name="form" :close-mobile-search="closeMobileSearch" />
         </div>
       </div>
     </v-navigation-drawer>
@@ -66,10 +77,10 @@
         </v-row>
         <v-row no-gutters>
           <v-col class="ml-2">
-            <slot name="title"></slot>
+            <slot name="title" />
           </v-col>
           <v-col cols="12">
-            <slot name="result"></slot>
+            <slot name="result" />
           </v-col>
         </v-row>
         <v-fab-transition v-if="$vuetify.display.smAndDown">
@@ -80,7 +91,7 @@
             fixed
             rounded
             dark
-            bottom
+            location="bottom"
             style="left: 50%; transform: translateX(-50%); z-index: 4"
             @click="showSearch = !showSearch"
           >
@@ -94,13 +105,3 @@
     </v-main>
   </div>
 </template>
-<script setup lang="ts">
-import { mdiChevronDoubleLeft, mdiMagnify } from "@mdi/js";
-
-const showSearch = ref(false);
-const mini = ref(false);
-
-function closeMobileSearch() {
-  showSearch.value = false;
-}
-</script>

@@ -1,57 +1,3 @@
-<template>
-  <div>
-    <!-- <v-form @submit.prevent="handleUpdate"> -->
-    <!--   <input-search v-model="query" /> -->
-    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
-    <!--   <v-expansion-panels accordion flat tile multiple> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="stratigraphyHierarchy" -->
-    <!--       :title="$t('filters.stratigraphyHierarchy').toString()" -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsStratigraphy" -->
-    <!--     /> -->
-    <!--     <filter-input-text -->
-    <!--       v-model="index" -->
-    <!--       :title="$t('filters.index').toString()" -->
-    <!--     /> -->
-    <!--     <filter-input-text -->
-    <!--       v-model="age" -->
-    <!--       :title="$t('filters.age').toString()" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="type" -->
-    <!--       :title="$t('filters.type').toString()" -->
-    <!--       static -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'stratigraphy_type' : 'stratigraphy_type_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsType" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="rank" -->
-    <!--       :title="$t('filters.rank').toString()" -->
-    <!--       static -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'stratigraphy_rank' : 'stratigraphy_rank_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsRank" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="scope" -->
-    <!--       :title="$t('filters.scope').toString()" -->
-    <!--       static -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'stratigraphy_scope' : 'stratigraphy_scope' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsScope" -->
-    <!--     /> -->
-    <!--   </v-expansion-panels> -->
-    <!-- </v-form> -->
-  </div>
-</template>
-
 <script lang="ts">
 // import {
 //   computed,
@@ -259,3 +205,57 @@
 //   },
 // })
 </script>
+
+<template>
+  <div>
+    <!-- <v-form @submit.prevent="handleUpdate"> -->
+    <!--   <input-search v-model="query" /> -->
+    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
+    <!--   <v-expansion-panels accordion flat tile multiple> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="stratigraphyHierarchy" -->
+    <!--       :title="$t('filters.stratigraphyHierarchy').toString()" -->
+    <!--       :query-field=" -->
+    <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
+    <!--       " -->
+    <!--       :query-function="querySuggestionsStratigraphy" -->
+    <!--     /> -->
+    <!--     <filter-input-text -->
+    <!--       v-model="index" -->
+    <!--       :title="$t('filters.index').toString()" -->
+    <!--     /> -->
+    <!--     <filter-input-text -->
+    <!--       v-model="age" -->
+    <!--       :title="$t('filters.age').toString()" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="type" -->
+    <!--       :title="$t('filters.type').toString()" -->
+    <!--       static -->
+    <!--       :query-field=" -->
+    <!--         $i18n.locale === 'et' ? 'stratigraphy_type' : 'stratigraphy_type_en' -->
+    <!--       " -->
+    <!--       :query-function="querySuggestionsType" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="rank" -->
+    <!--       :title="$t('filters.rank').toString()" -->
+    <!--       static -->
+    <!--       :query-field=" -->
+    <!--         $i18n.locale === 'et' ? 'stratigraphy_rank' : 'stratigraphy_rank_en' -->
+    <!--       " -->
+    <!--       :query-function="querySuggestionsRank" -->
+    <!--     /> -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="scope" -->
+    <!--       :title="$t('filters.scope').toString()" -->
+    <!--       static -->
+    <!--       :query-field=" -->
+    <!--         $i18n.locale === 'et' ? 'stratigraphy_scope' : 'stratigraphy_scope' -->
+    <!--       " -->
+    <!--       :query-function="querySuggestionsScope" -->
+    <!--     /> -->
+    <!--   </v-expansion-panels> -->
+    <!-- </v-form> -->
+  </div>
+</template>

@@ -1,117 +1,7 @@
-<template>
-  <v-navigation-drawer
-    :value="drawer"
-    app
-    clipped
-    right
-    temporary
-    color="white"
-    class="elevation-2"
-    :style="`z-index: 2050; margin-top: 48px`"
-    :class="{ 'use-padding-bottom': $vuetify.display.smAndDown }"
-    @input="$emit('update:navigationDrawer', $event)"
-  >
-    <v-container class="more-menu py-4 mb-6">
-      <v-list class="py-1 px-2">
-        <v-list-item
-          v-for="route in state.routes"
-          :key="route.routeName"
-          nuxt
-          class="header-menu-item rounded my-1"
-          color="accent darken-1"
-          :to="localePath({ name: route.routeName })"
-        >
-          <v-list-item-title class="d-flex py-1">
-            <v-icon class="mr-1">{{ route.icon }}</v-icon>
-            <span class="align-self-center montserrat">{{
-              $t(route.text)
-            }}</span>
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
-      <div class="montserrat font-weight-medium pl-2 mt-2">
-        {{ $t("landing.searchRoutes") }}
-      </div>
-
-      <v-divider class="primary" />
-
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
-          v-for="(item, index) in state.browseTaxon"
-          :key="`browse-geography-item-${index}`"
-          class="my-1"
-          :icon="item.icon"
-          :label="$t(item.label).toString()"
-          nuxt
-          trailing-icon=""
-          :to="localePath({ name: item.routeName })"
-        />
-      </v-list>
-      <v-divider class="mx-3 my-1" />
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
-          v-for="(item, index) in state.browseLab"
-          :key="`browse-geography-item-${index}`"
-          class="my-1"
-          :icon="item.icon"
-          :label="$t(item.label).toString()"
-          nuxt
-          trailing-icon=""
-          :to="localePath({ name: item.routeName })"
-        />
-      </v-list>
-
-      <v-divider class="mx-3 my-1" />
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
-          v-for="(item, index) in state.browseGeography"
-          :key="`browse-geography-item-${index}`"
-          class="my-1"
-          :icon="item.icon"
-          :label="$t(item.label).toString()"
-          nuxt
-          trailing-icon=""
-          :to="localePath({ name: item.routeName })"
-        />
-      </v-list>
-
-      <div class="montserrat font-weight-medium pl-2 mt-2">Services</div>
-
-      <v-divider class="primary" />
-
-      <v-list class="py-1 px-2">
-        <v-list-item
-          v-for="tabId in state.services.ids"
-          :key="state.services[tabId].href"
-          tag="a"
-          class="header-menu-item rounded my-1"
-          color="accent darken-1"
-          target="_blank"
-          :href="state.services[tabId].href"
-        >
-          <v-list-item-title class="py-1">
-            <span class="montserrat">{{
-              $t(state.services[tabId].title)
-            }}</span>
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
-
-      <div class="montserrat font-weight-medium pl-2 mt-2">
-        {{ $t("common.lang") }}
-      </div>
-
-      <v-divider class="primary" />
-
-      <language-list class="py-0" />
-    </v-container>
-  </v-navigation-drawer>
-</template>
-
 <script setup lang="ts">
 import {
-  mdiMagnify,
   mdiInformationOutline,
+  mdiMagnify,
   mdiNewspaperVariantOutline,
 } from "@mdi/js";
 import {
@@ -154,6 +44,120 @@ const state = reactive({
   ],
 });
 </script>
+
+<template>
+  <v-navigation-drawer
+    :model-value="drawer"
+    app
+    clipped
+    location="right"
+    temporary
+    color="white"
+    class="elevation-2"
+    style="z-index: 2050; margin-top: 48px"
+    :class="{ 'use-padding-bottom': $vuetify.display.smAndDown }"
+    @update:model-value="$emit('update:navigationDrawer', $event)"
+  >
+    <v-container class="more-menu py-4 mb-6">
+      <v-list class="py-1 px-2">
+        <v-list-item
+          v-for="route in state.routes"
+          :key="route.routeName"
+          nuxt
+          class="header-menu-item rounded my-1"
+          color="accent-darken-1"
+          :to="localePath({ name: route.routeName })"
+        >
+          <v-list-item-title class="d-flex py-1">
+            <v-icon class="mr-1">
+              {{ route.icon }}
+            </v-icon>
+            <span class="align-self-center montserrat">{{
+              $t(route.text)
+            }}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <div class="montserrat font-weight-medium pl-2 mt-2">
+        {{ $t("landing.searchRoutes") }}
+      </div>
+
+      <v-divider class="bg-primary" />
+
+      <v-list class="py-1 px-2">
+        <base-menu-list-item
+          v-for="(item, index) in state.browseTaxon"
+          :key="`browse-geography-item-${index}`"
+          class="my-1"
+          :icon="item.icon"
+          :label="$t(item.label).toString()"
+          nuxt
+          trailing-icon=""
+          :to="localePath({ name: item.routeName })"
+        />
+      </v-list>
+      <v-divider class="mx-3 my-1" />
+      <v-list class="py-1 px-2">
+        <base-menu-list-item
+          v-for="(item, index) in state.browseLab"
+          :key="`browse-geography-item-${index}`"
+          class="my-1"
+          :icon="item.icon"
+          :label="$t(item.label).toString()"
+          nuxt
+          trailing-icon=""
+          :to="localePath({ name: item.routeName })"
+        />
+      </v-list>
+
+      <v-divider class="mx-3 my-1" />
+      <v-list class="py-1 px-2">
+        <base-menu-list-item
+          v-for="(item, index) in state.browseGeography"
+          :key="`browse-geography-item-${index}`"
+          class="my-1"
+          :icon="item.icon"
+          :label="$t(item.label).toString()"
+          nuxt
+          trailing-icon=""
+          :to="localePath({ name: item.routeName })"
+        />
+      </v-list>
+
+      <div class="montserrat font-weight-medium pl-2 mt-2">
+        Services
+      </div>
+
+      <v-divider class="bg-primary" />
+
+      <v-list class="py-1 px-2">
+        <v-list-item
+          v-for="tabId in state.services.ids"
+          :key="state.services[tabId].href"
+          tag="a"
+          class="header-menu-item rounded my-1"
+          color="accent-darken-1"
+          target="_blank"
+          :href="state.services[tabId].href"
+        >
+          <v-list-item-title class="py-1">
+            <span class="montserrat">{{
+              $t(state.services[tabId].title)
+            }}</span>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+
+      <div class="montserrat font-weight-medium pl-2 mt-2">
+        {{ $t("common.lang") }}
+      </div>
+
+      <v-divider class="bg-primary" />
+
+      <language-list class="py-0" />
+    </v-container>
+  </v-navigation-drawer>
+</template>
 
 <style scoped>
 .more-menu .section-title {

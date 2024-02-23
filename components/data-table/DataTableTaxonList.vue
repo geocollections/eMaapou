@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { mdiMinus, mdiPlus } from "@mdi/js";
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.taxon="{ item }">
@@ -16,12 +20,12 @@
     </template>
 
     <template #item.extra="{ item }">
-      <v-icon v-if="item.extra">{{ mdiPlus }}</v-icon>
-      <v-icon v-else>{{ mdiMinus }}</v-icon>
+      <v-icon v-if="item.extra">
+        {{ mdiPlus }}
+      </v-icon>
+      <v-icon v-else>
+        {{ mdiMinus }}
+      </v-icon>
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-import { mdiPlus, mdiMinus } from "@mdi/js";
-</script>

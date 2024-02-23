@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { mdiCookie } from "@mdi/js";
+
+const { $matomo } = useNuxtApp();
+const settings = useSettings();
+const icons = computed(() => {
+  return { mdiCookie };
+});
+const localePath = useLocalePath();
+function handleAcceptConsent() {
+  settings.cookieConsent = true;
+  settings.showCookieConsent = false;
+  $matomo?.rememberCookieConsentGiven();
+}
+function handleRejectConsent() {
+  settings.showCookieConsent = false;
+}
+</script>
+
 <template>
   <div
     v-if="settings.showCookiePolicy"
@@ -5,7 +24,7 @@
   >
     <v-card class="cookie-policy-card py-3 px-3" elevation="2">
       <div class="d-flex justify-center mb-2">
-        <v-icon left color="accent">
+        <v-icon start color="accent">
           {{ icons.mdiCookie }}
         </v-icon>
         <div
@@ -28,8 +47,8 @@
         <v-btn
           class="text-none montserrat"
           width="100"
-          outlined
-          color="grey darken-1"
+          variant="outlined"
+          color="grey-darken-1"
           @click="handleRejectConsent"
         >
           {{ $t("cookiePolicy.reject") }}
@@ -46,25 +65,6 @@
     </v-card>
   </div>
 </template>
-
-<script setup lang="ts">
-import { mdiCookie } from "@mdi/js";
-
-const { $matomo } = useNuxtApp();
-const settings = useSettings();
-const icons = computed(() => {
-  return { mdiCookie };
-});
-const localePath = useLocalePath();
-const handleAcceptConsent = () => {
-  settings.cookieConsent = true;
-  settings.showCookieConsent = false;
-  $matomo?.rememberCookieConsentGiven();
-};
-const handleRejectConsent = () => {
-  settings.showCookieConsent = false;
-};
-</script>
 
 <style scoped>
 .cookie-policy {

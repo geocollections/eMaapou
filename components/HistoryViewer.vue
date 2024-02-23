@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { mdiArrowLeft } from "@mdi/js";
+import { useDisplay } from "vuetify";
+
+const display = useDisplay();
+const localePath = useLocalePath();
+const historyEntries = ref<any[]>([]);
+const linkWidth = computed(() => {
+  if (display.lgAndUp.value)
+    return 200;
+  return 100;
+});
+</script>
+
 <template>
   <div v-if="historyEntries.length > 0" class="d-flex align-center">
     <v-subheader style="height: 32px !important" class="pl-0 text-no-wrap">
@@ -16,14 +30,18 @@
           :to="localePath({ path: entry.to })"
         >
           {{ entry.title }}
-          <v-tooltip open-delay="500" bottom :activator="`#history-${index}`">
+          <v-tooltip
+            open-delay="500"
+            location="bottom"
+            :activator="`#history-${index}`"
+          >
             <span>{{ entry.title }}</span>
           </v-tooltip>
         </nuxt-link>
         <v-icon
           v-if="index !== historyEntries.length - 1"
           class="mx-1 divider"
-          x-small
+          size="x-small"
         >
           {{ mdiArrowLeft }}
         </v-icon>
@@ -32,18 +50,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { mdiArrowLeft } from "@mdi/js";
-import { useDisplay } from "vuetify";
-
-const display = useDisplay();
-const localePath = useLocalePath();
-const historyEntries = ref<any[]>([]);
-const linkWidth = computed(() => {
-  if (display.lgAndUp.value) return 200;
-  return 100;
-});
-</script>
 <style scoped>
 .history-viewer {
   white-space: nowrap;

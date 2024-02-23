@@ -1,7 +1,44 @@
+<script setup lang="ts">
+import type { OverlayImage } from "./ImageOverlay.vue";
+
+interface Image {
+  id: number;
+  filename: string;
+  author?: string;
+  date?: string;
+  dateText?: string;
+}
+
+defineProps({
+  images: {
+    type: Array as PropType<Image[]>,
+    default: () => [],
+  },
+});
+const emit = defineEmits(["update"]);
+const img = useImage();
+const rowsPerPage = 10;
+const page = ref(1);
+const showOverlay = ref(false);
+const overlayImage = ref<OverlayImage>();
+function loadMore() {
+  emit("update", { page: page.value, rows: rowsPerPage });
+  page.value += 1;
+}
+function openOverlay(image: OverlayImage) {
+  overlayImage.value = image;
+  showOverlay.value = true;
+}
+</script>
+
 <template>
   <div class="d-flex align-center pb-0" style="overflow-x: auto">
-    <div v-for="(item, index) in images" :key="index" class="mr-3 mb-1">
-      <v-tooltip bottom color="accent">
+    <div
+      v-for="(item, index) in images"
+      :key="index"
+      class="mr-3 mb-1"
+    >
+      <v-tooltip location="bottom" color="accent">
         <template #activator="{ props }">
           <slot name="image" :item="item">
             <v-hover v-slot="{ hover }">
@@ -35,7 +72,7 @@
                     align="center"
                     justify="center"
                   >
-                    <v-progress-circular indeterminate color="grey lighten-5" />
+                    <v-progress-circular indeterminate color="grey-lighten-5" />
                   </v-row>
                 </template>
               </v-img>
@@ -45,8 +82,7 @@
         <slot name="info" :item="item">
           <div v-if="item.author || item.date || item.dateText">
             <div v-if="item.author">
-              <span class="font-weight-bold"
-                >{{ $t("locality.author") }}:
+              <span class="font-weight-bold">{{ $t("locality.author") }}:
               </span>
               <span>{{ item.author }}</span>
             </div>
@@ -58,7 +94,9 @@
               <span v-else>{{ item.dateText }}</span>
             </div>
           </div>
-          <div v-else>{{ $t("common.clickToOpen") }}</div>
+          <div v-else>
+            {{ $t("common.clickToOpen") }}
+          </div>
         </slot>
       </v-tooltip>
     </div>
@@ -66,36 +104,3 @@
     <image-overlay v-model="showOverlay" :image="overlayImage" />
   </div>
 </template>
-
-<script setup lang="ts">
-import type { OverlayImage } from "./ImageOverlay.vue";
-
-type Image = {
-  id: number;
-  filename: string;
-  author?: string;
-  date?: string;
-  dateText?: string;
-};
-
-defineProps({
-  images: {
-    type: Array as PropType<Image[]>,
-    default: () => [],
-  },
-});
-const img = useImage();
-const emit = defineEmits(["update"]);
-const rowsPerPage = 10;
-const page = ref(1);
-const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-const loadMore = () => {
-  emit("update", { page: page.value, rows: rowsPerPage });
-  page.value += 1;
-};
-const openOverlay = (image: OverlayImage) => {
-  overlayImage.value = image;
-  showOverlay.value = true;
-};
-</script>

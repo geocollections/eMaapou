@@ -1,92 +1,5 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <filter-input-checkbox
-        v-model="filters.hasImage.value"
-        :label="$t('filters.hasImage')"
-        @update:model-value="handleUpdate"
-      />
-      <filter-input-checkbox
-        v-model="filters.hasCoordinates.value"
-        :label="$t('filters.hasCoordinates')"
-        @update:model-value="handleUpdate"
-      />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
-          v-model="filters.number.value"
-          :title="$t('filters.sampleNumber')"
-          @update:model-value="handleUpdate"
-          value="number"
-        />
-        <filter-input-autocomplete
-          v-model="filters.locality.value"
-          ref="filterLocality"
-          :title="$t('filters.locality')"
-          :query-function="suggestLocality"
-          :hydration-function="hydrateLocality"
-          @update:model-value="handleUpdate"
-          value="locality"
-        />
-        <filter-map
-          v-model="filters.geometry.value"
-          @update:model-value="handleUpdate"
-          value="map"
-        />
-        <filter-input-range
-          v-model="filters.depth.value"
-          :title="$t('filters.depth')"
-          @update:model-value="handleUpdate"
-          value="depth"
-        />
-        <filter-input-hierarchy
-          v-model="filters.stratigraphy.value"
-          ref="filterStratigraphy"
-          root-value="1"
-          :title="$t('filters.stratigraphyHierarchy')"
-          :hydration-function="hydrateStratigraphy"
-          :get-children="getStratigraphyChildren"
-          @update:model-value="handleUpdate"
-          value="stratigraphy"
-        />
-        <!-- TODO: This is not finished, have to think how to handle multiple hierarchy string on one rock -->
-        <filter-input-hierarchy
-          v-model="filters.rock.value"
-          ref="filterRock"
-          root-value=""
-          :title="$t('filters.rockHierarchy')"
-          :hydration-function="hydrateRock"
-          :get-children="getRockChildren"
-          @update:model-value="handleUpdate"
-          value="rock"
-        />
-        <filter-input-autocomplete
-          v-model="filters.collector.value"
-          ref="filterCollector"
-          :title="$t('filters.collector')"
-          :query-function="suggestCollector"
-          :hydration-function="hydrateCollector"
-          @update:model-value="handleUpdate"
-          value="collector"
-        />
-        <filter-input-autocomplete
-          v-model="filters.institution.value"
-          ref="filterInstitution"
-          :title="$t('filters.institution')"
-          :query-function="suggestInstitution"
-          :hydration-function="hydrateInstitution"
-          @update:model-value="handleUpdate"
-          :per-page="-1"
-          value="institution"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import type { FilterInputAutocomplete } from "#build/components";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -101,15 +14,15 @@ const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
-const { suggest: suggestCollector, hydrate: hydrateCollector } =
-  useAutocomplete("/sample", {
+const { suggest: suggestCollector, hydrate: hydrateCollector }
+  = useAutocomplete("/sample", {
     idField: "collector_id_s",
     nameField: "collector",
     filterExclude: "collector",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
-const { suggest: suggestInstitution, hydrate: hydrateInstitution } =
-  useAutocomplete("/sample", {
+const { suggest: suggestInstitution, hydrate: hydrateInstitution }
+  = useAutocomplete("/sample", {
     idField: "database_id_s",
     nameField: "acronym",
     filterExclude: "institution",
@@ -132,7 +45,7 @@ async function suggestRock({
 
   const res = await $solrFetch("/sample", {
     query: {
-      facet: "true",
+      "facet": "true",
       "facet.pivot": `{!ex=rock}${pivot}`,
       [`f.${primaryField}.facet.contains`]: query,
       [`f.${primaryField}.facet.contains.ignoreCase`]: true,
@@ -140,7 +53,7 @@ async function suggestRock({
       "facet.limit": pagination.perPage,
       [`f.${primaryField}.facet.offset`]:
         (pagination.page - 1) * pagination.perPage,
-      json: {
+      "json": {
         query: solrQuery.value,
         filter: solrFilters.value,
         limit: 0,
@@ -149,17 +62,17 @@ async function suggestRock({
   });
   const facetQueries = res.facet_counts.facet_pivot[pivot].reduce(
     (prev, item) => {
-      prev[item.value] =
-        `{!ex=rock}rock_id:${item.pivot[0].value} OR hierarchy_string_rock:*-${item.pivot[0].value}-*`;
+      prev[item.value]
+        = `{!ex=rock}rock_id:${item.pivot[0].value} OR hierarchy_string_rock:*-${item.pivot[0].value}-*`;
       return prev;
     },
     {},
   );
   const res2 = await $solrFetch("/sample", {
     query: {
-      facet: "true",
+      "facet": "true",
       "facet.query": Object.values(facetQueries),
-      json: {
+      "json": {
         query: solrQuery.value,
         filter: solrFilters.value,
         limit: 0,
@@ -169,7 +82,7 @@ async function suggestRock({
 
   return res.facet_counts.facet_pivot[pivot].map((item) => {
     return {
-      id: item.pivot[0].pivot?.map((p) => p.value) ?? item.pivot[0].value,
+      id: item.pivot[0].pivot?.map(p => p.value) ?? item.pivot[0].value,
       name: item.value,
       count: res2.facet_counts.facet_queries[facetQueries[item.value]],
     };
@@ -217,9 +130,9 @@ async function suggestRock({
 //   }));
 // }
 async function hydrateStratigraphy(values: string[]) {
-  if (values.length < 1) {
+  if (values.length < 1)
     return [];
-  }
+
   const res = await $solrFetch("/stratigraphy", {
     query: {
       q: "*",
@@ -279,9 +192,8 @@ async function getStratigraphyChildren(value: string) {
     },
   });
 
-  if (countRes.facets.categories.buckets.length < 1) {
+  if (countRes.facets.categories.buckets.length < 1)
     return [];
-  }
 
   const values = countRes.facets.categories.buckets.map((bucket: any) => {
     const [_depth, value] = bucket.val.split("/");
@@ -315,9 +227,9 @@ async function getStratigraphyChildren(value: string) {
 }
 
 async function hydrateRock(values: string[]) {
-  if (values.length < 1) {
+  if (values.length < 1)
     return [];
-  }
+
   const res = await $solrFetch("/rock", {
     query: {
       q: "*",
@@ -376,9 +288,8 @@ async function getRockChildren(value: string) {
     },
   });
 
-  if (countRes.facets.categories.buckets.length < 1) {
+  if (countRes.facets.categories.buckets.length < 1)
     return [];
-  }
 
   const values = countRes.facets.categories.buckets.map((bucket: any) => {
     const [_depth, value] = bucket.val.split("/");
@@ -431,3 +342,90 @@ function handleUpdate() {
   });
 }
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <filter-input-checkbox
+        v-model="filters.hasImage.value"
+        :label="$t('filters.hasImage')"
+        @update:model-value="handleUpdate"
+      />
+      <filter-input-checkbox
+        v-model="filters.hasCoordinates.value"
+        :label="$t('filters.hasCoordinates')"
+        @update:model-value="handleUpdate"
+      />
+      <v-expansion-panels variant="accordion" multiple>
+        <filter-input-text
+          v-model="filters.number.value"
+          :title="$t('filters.sampleNumber')"
+          value="number"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterLocality"
+          v-model="filters.locality.value"
+          :title="$t('filters.locality')"
+          :query-function="suggestLocality"
+          :hydration-function="hydrateLocality"
+          value="locality"
+          @update:model-value="handleUpdate"
+        />
+        <filter-map
+          v-model="filters.geometry.value"
+          value="map"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-range
+          v-model="filters.depth.value"
+          :title="$t('filters.depth')"
+          value="depth"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-hierarchy
+          ref="filterStratigraphy"
+          v-model="filters.stratigraphy.value"
+          root-value="1"
+          :title="$t('filters.stratigraphyHierarchy')"
+          :hydration-function="hydrateStratigraphy"
+          :get-children="getStratigraphyChildren"
+          value="stratigraphy"
+          @update:model-value="handleUpdate"
+        />
+        <!-- TODO: This is not finished, have to think how to handle multiple hierarchy string on one rock -->
+        <filter-input-hierarchy
+          ref="filterRock"
+          v-model="filters.rock.value"
+          root-value=""
+          :title="$t('filters.rockHierarchy')"
+          :hydration-function="hydrateRock"
+          :get-children="getRockChildren"
+          value="rock"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterCollector"
+          v-model="filters.collector.value"
+          :title="$t('filters.collector')"
+          :query-function="suggestCollector"
+          :hydration-function="hydrateCollector"
+          value="collector"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterInstitution"
+          v-model="filters.institution.value"
+          :title="$t('filters.institution')"
+          :query-function="suggestInstitution"
+          :hydration-function="hydrateInstitution"
+          :per-page="-1"
+          value="institution"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

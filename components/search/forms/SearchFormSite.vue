@@ -1,45 +1,5 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
-          v-model="filters.name.value"
-          :title="$t('filters.name')"
-          @update:model-value="handleUpdate"
-          value="name"
-        />
-        <filter-input-autocomplete
-          v-model="filters.area.value"
-          ref="filterArea"
-          :title="$t('filters.area')"
-          :query-function="suggestArea"
-          :hydration-function="hydrateArea"
-          @update:model-value="handleUpdate"
-          value="area"
-        />
-        <filter-input-autocomplete
-          v-model="filters.project.value"
-          ref="filterProject"
-          :title="$t('filters.project')"
-          :query-function="suggestProject"
-          :hydration-function="hydrateProject"
-          @update:model-value="handleUpdate"
-          value="project"
-        />
-        <filter-map
-          v-model="filters.geometry.value"
-          @update:model-value="handleUpdate"
-          value="map"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import type { FilterInputAutocomplete } from "#build/components";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 const sitesStore = useSites();
@@ -151,3 +111,43 @@ function handleUpdate() {
 //   },
 // });
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <v-expansion-panels variant="accordion" multiple>
+        <filter-input-text
+          v-model="filters.name.value"
+          :title="$t('filters.name')"
+          value="name"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterArea"
+          v-model="filters.area.value"
+          :title="$t('filters.area')"
+          :query-function="suggestArea"
+          :hydration-function="hydrateArea"
+          value="area"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterProject"
+          v-model="filters.project.value"
+          :title="$t('filters.project')"
+          :query-function="suggestProject"
+          :hydration-function="hydrateProject"
+          value="project"
+          @update:model-value="handleUpdate"
+        />
+        <filter-map
+          v-model="filters.geometry.value"
+          value="map"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import round from "lodash/round";
+
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table expandable v-bind="$attrs">
     <template #expanded-row="{ columns, item }">
@@ -90,7 +96,8 @@
     <template #item.author="{ item }">
       <a
         v-if="item.reference"
-        :class="{ 'is-preferred': !item.is_preferred, 'text-link': true }"
+        class="text-link"
+        :class="{ 'is-preferred': !item.is_preferred }"
         @click="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
@@ -107,9 +114,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-import round from "lodash/round";
-
-const localePath = useLocalePath();
-</script>

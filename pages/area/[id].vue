@@ -1,36 +1,3 @@
-<template>
-  <detail-new :show-similar="showDrawer">
-    <template #title>
-      <header-detail-new :title="pageTitle">
-        <template #tabs>
-          <DetailTabs :tabs="data?.tabs" />
-        </template>
-      </header-detail-new>
-    </template>
-    <template #drawer>
-      <SearchResultsDrawer
-        :page="page"
-        :results="similarAreas"
-        :total-results="areasRes?.response.numFound ?? 0"
-        :search-route="localePath({ path: '/area', query: getQueryParams() })"
-        :get-result-route="
-          (item) => localePath({ name: 'area-id', params: { id: item.id } })
-        "
-        @page:next="page++"
-        @page:previous="page--"
-        @select="handleSelect"
-      >
-        <template #itemTitle="{ item: area }">
-          <div class="font-weight-medium text-wrap">
-            {{ $translate({ et: area.name, en: area.name_en }) }}
-          </div>
-        </template>
-      </SearchResultsDrawer>
-    </template>
-    <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
-</template>
-
 <script setup lang="ts">
 import type { Tab } from "~/composables/useTabs";
 
@@ -196,3 +163,36 @@ redirectInvalidTab({
 //     });
 // });
 </script>
+
+<template>
+  <detail-new :show-similar="showDrawer">
+    <template #title>
+      <header-detail-new :title="pageTitle">
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </header-detail-new>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarAreas"
+        :total-results="areasRes?.response.numFound ?? 0"
+        :search-route="localePath({ path: '/area', query: getQueryParams() })"
+        :get-result-route="
+          (item) => localePath({ name: 'area-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: area }">
+          <div class="font-weight-medium text-wrap">
+            {{ $translate({ et: area.name, en: area.name_en }) }}
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
+    <NuxtPage v-bind="activeTabProps" />
+  </detail-new>
+</template>

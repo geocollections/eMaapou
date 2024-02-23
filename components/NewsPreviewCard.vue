@@ -1,3 +1,32 @@
+<script setup lang="ts">
+import { decodeHTML } from "entities";
+
+const props = defineProps({
+  dark: { type: Boolean, default: false },
+  title: { type: String, default: null },
+  content: { type: String, default: null },
+  date: { type: String, default: null },
+  previewLenght: { type: Number, default: 200 },
+});
+const truncatedText = computed(() => {
+  let value = extractContent(props.content);
+  if (!value)
+    return "";
+  value = value.toString();
+  if (value.length > props.previewLenght)
+    return `${value.substring(0, props.previewLenght)}...`;
+  else
+    return value;
+});
+
+function extractContent(html: string) {
+  if (html)
+    return decodeHTML(html).replace(/<[^>]+>/g, "");
+
+  return null;
+}
+</script>
+
 <template>
   <v-hover v-slot="{ hover }">
     <v-card
@@ -31,31 +60,3 @@
     </v-card>
   </v-hover>
 </template>
-
-<script setup lang="ts">
-import { decodeHTML } from "entities";
-const props = defineProps({
-  dark: { type: Boolean, default: false },
-  title: { type: String, default: null },
-  content: { type: String, default: null },
-  date: { type: String, default: null },
-  previewLenght: { type: Number, default: 200 },
-});
-const truncatedText = computed(() => {
-  let value = extractContent(props.content);
-  if (!value) return "";
-  value = value.toString();
-  if (value.length > props.previewLenght) {
-    return value.substring(0, props.previewLenght) + "...";
-  } else {
-    return value;
-  }
-});
-
-function extractContent(html: string) {
-  if (html) {
-    return decodeHTML(html).replace(/<[^>]+>/g, "");
-  }
-  return null;
-}
-</script>

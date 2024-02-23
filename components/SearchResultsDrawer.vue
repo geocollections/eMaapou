@@ -1,3 +1,33 @@
+<script setup lang="ts" generic="T">
+import {
+  mdiArrowUpLeft,
+  mdiCheck,
+  mdiChevronLeft,
+  mdiChevronRight,
+} from "@mdi/js";
+import type { RouteLocationRaw } from "vue-router";
+
+const props = withDefaults(
+  defineProps<{
+    results: T[];
+    page: number;
+    perPage?: number;
+    totalResults: number;
+    searchRoute: RouteLocationRaw;
+    getResultRoute: (item: T) => RouteLocationRaw;
+  }>(),
+  { perPage: 10 },
+);
+
+const emit = defineEmits<{
+  "page:previous": [number];
+  "page:next": [number];
+  "select": [{ index: number; id: number }];
+}>();
+
+const hasNext = computed(() => props.page * props.perPage < props.totalResults);
+</script>
+
 <template>
   <v-btn
     variant="plain"
@@ -35,10 +65,18 @@
         @click="emit('select', { index, id: item.id })"
       >
         <template #title>
-          <slot name="itemTitle" :item="item" :index="index" />
+          <slot
+            name="itemTitle"
+            :item="item"
+            :index="index"
+          />
         </template>
         <template #subtitle>
-          <slot name="itemSubtitle" :item="item" :index="index" />
+          <slot
+            name="itemSubtitle"
+            :item="item"
+            :index="index"
+          />
         </template>
         <template #append="{ isActive }">
           <v-icon v-if="isActive" color="accent">
@@ -46,40 +84,10 @@
           </v-icon>
         </template>
       </v-list-item>
-      <v-divider class="mx-1" v-if="index !== perPage - 1" />
+      <v-divider v-if="index !== perPage - 1" class="mx-1" />
     </template>
   </v-list>
 </template>
-
-<script setup lang="ts" generic="T">
-import {
-  mdiCheck,
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiArrowUpLeft,
-} from "@mdi/js";
-import type { RouteLocationRaw } from "vue-router";
-
-const props = withDefaults(
-  defineProps<{
-    results: T[];
-    page: number;
-    perPage?: number;
-    totalResults: number;
-    searchRoute: RouteLocationRaw;
-    getResultRoute: (item: T) => RouteLocationRaw;
-  }>(),
-  { perPage: 10 },
-);
-
-const emit = defineEmits<{
-  "page:previous": [number];
-  "page:next": [number];
-  select: [{ index: number; id: number }];
-}>();
-
-const hasNext = computed(() => props.page * props.perPage < props.totalResults);
-</script>
 
 <style scoped>
 .active-item {

@@ -1,3 +1,100 @@
+<script setup lang="ts">
+import { mdiArrowUpLeft, mdiChevronLeft, mdiChevronRight } from "@mdi/js";
+
+const props = defineProps({
+  arrowKeys: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+  ids: {
+    type: Object,
+    default: () => ({}),
+  },
+  title: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  searchTo: {
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(["click:previous", "click:next"]);
+
+const getRouteBaseName = useRouteBaseName();
+const { $translate } = useNuxtApp();
+const { t } = useI18n({ useScope: "local" });
+
+const routeName = computed(() => {
+  return getRouteBaseName()?.split("-id")[0];
+});
+
+const prevName = computed(() => {
+  if (typeof props.ids?.prev?.name === "object")
+    return $translate(props.ids?.prev?.name);
+
+  return props.ids?.prev?.name;
+});
+const nextName = computed(() => {
+  if (typeof props.ids?.next?.name === "object")
+    return $translate(props.ids?.next?.name);
+
+  return props.ids?.next?.name;
+});
+
+const hasPrevNext = computed(() => {
+  return props.ids?.prev || props.ids?.next;
+});
+
+onBeforeMount(() => {
+  if (props.arrowKeys)
+    window.addEventListener("keyup", handleKeyup);
+});
+onBeforeUnmount(() => {
+  if (props.arrowKeys)
+    window.removeEventListener("keyup", handleKeyup);
+});
+const localePath = useLocalePath();
+const router = useRouter();
+const route = useRoute();
+
+function handleKeyup(e) {
+  if (e.keyCode === 37) {
+    // ArrowLeft
+    if (props.ids?.prev) {
+      emit("click:previous");
+      router.push(
+        localePath({
+          params: { ...route.params, id: props.ids.prev.id },
+        }),
+      );
+    }
+  }
+  else if (e.keyCode === 39) {
+    // ArrowRight
+    if (props.ids?.next) {
+      emit("click:next");
+      router.push(
+        localePath({
+          params: { ...route.params, id: props.ids.next.id },
+        }),
+      );
+    }
+  }
+}
+
+function handlePrev() {
+  emit("click:previous");
+}
+
+function handleNext() {
+  emit("click:next");
+}
+</script>
+
 <template>
   <base-header>
     <v-card-title class="d-block pt-1 px-0 pb-3 px-sm-3">
@@ -37,7 +134,12 @@
           </v-tooltip>
         </v-btn>
 
-        <v-btn id="back-btn-detail" icon variant="plain" :to="searchTo">
+        <v-btn
+          id="back-btn-detail"
+          icon
+          variant="plain"
+          :to="searchTo"
+        >
           <v-icon>
             {{ mdiArrowUpLeft }}
           </v-icon>
@@ -46,7 +148,7 @@
           </v-tooltip>
         </v-btn>
         <div
-          class="d-flex align-center montserrat grey--text text--darken-1 pt-0 px-0 px-sm-3"
+          class="d-flex align-center montserrat text-grey-darken-1 pt-0 px-0 px-sm-3"
         >
           {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
         </div>
@@ -73,99 +175,6 @@
     </template>
   </base-header>
 </template>
-
-<script setup lang="ts">
-import { mdiChevronRight, mdiChevronLeft, mdiArrowUpLeft } from "@mdi/js";
-const emit = defineEmits(["click:previous", "click:next"]);
-
-const props = defineProps({
-  arrowKeys: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-  ids: {
-    type: Object,
-    default: () => ({}),
-  },
-  title: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  searchTo: {
-    type: String,
-    required: true,
-  },
-});
-
-const getRouteBaseName = useRouteBaseName();
-const { $translate } = useNuxtApp();
-const { t } = useI18n({ useScope: "local" });
-
-const routeName = computed(() => {
-  return getRouteBaseName()?.split("-id")[0];
-});
-
-const prevName = computed(() => {
-  if (typeof props.ids?.prev?.name === "object") {
-    return $translate(props.ids?.prev?.name);
-  }
-  return props.ids?.prev?.name;
-});
-const nextName = computed(() => {
-  if (typeof props.ids?.next?.name === "object") {
-    return $translate(props.ids?.next?.name);
-  }
-  return props.ids?.next?.name;
-});
-
-const hasPrevNext = computed(() => {
-  return props.ids?.prev || props.ids?.next;
-});
-
-onBeforeMount(() => {
-  if (props.arrowKeys) window.addEventListener("keyup", handleKeyup);
-});
-onBeforeUnmount(() => {
-  if (props.arrowKeys) window.removeEventListener("keyup", handleKeyup);
-});
-const localePath = useLocalePath();
-const router = useRouter();
-const route = useRoute();
-
-function handleKeyup(e) {
-  if (e.keyCode === 37) {
-    // ArrowLeft
-    if (props.ids?.prev) {
-      emit("click:previous");
-      router.push(
-        localePath({
-          params: { ...route.params, id: props.ids.prev.id },
-        }),
-      );
-    }
-  } else if (e.keyCode === 39) {
-    // ArrowRight
-    if (props.ids?.next) {
-      emit("click:next");
-      router.push(
-        localePath({
-          params: { ...route.params, id: props.ids.next.id },
-        }),
-      );
-    }
-  }
-}
-
-function handlePrev() {
-  emit("click:previous");
-}
-
-function handleNext() {
-  emit("click:next");
-}
-</script>
 
 <i18n lang="yaml">
 et:

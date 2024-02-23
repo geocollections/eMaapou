@@ -1,51 +1,5 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
-          v-model="filters.number.value"
-          :title="$t('filters.sampleNumber')"
-          @update:model-value="handleUpdate"
-          value="number"
-        />
-        <filter-input-autocomplete
-          v-model="filters.locality.value"
-          ref="filterLocality"
-          :title="$t('filters.locality')"
-          :query-function="suggestLocality"
-          :hydration-function="hydrateLocality"
-          @update:model-value="handleUpdate"
-          value="locality"
-        />
-        <filter-map
-          v-model="filters.geometry.value"
-          @update:model-value="handleUpdate"
-          value="map"
-        />
-        <filter-input-range
-          v-model="filters.depth.value"
-          :title="$t('filters.depth')"
-          @update:model-value="handleUpdate"
-          value="depth"
-        />
-        <filter-input-autocomplete
-          v-model="filters.stratigraphy.value"
-          ref="filterStratigraphy"
-          :title="$t('filters.stratigraphyHierarchy')"
-          :query-function="suggestStratigraphy"
-          :hydration-function="hydrateStratigraphy"
-          @update:model-value="handleUpdate"
-          value="stratigraphy"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import type { FilterInputAutocomplete } from "#build/components";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 function handleReset() {
@@ -63,8 +17,8 @@ function handleUpdate() {
 }
 
 const preparationsStore = usePreparations();
-const { filters, query, solrQuery, solrFilters } =
-  storeToRefs(preparationsStore);
+const { filters, query, solrQuery, solrFilters }
+  = storeToRefs(preparationsStore);
 
 const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
   "/preparation",
@@ -75,11 +29,57 @@ const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
-const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy } =
-  useAutocomplete("/preparation", {
+const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
+  = useAutocomplete("/preparation", {
     idField: "stratigraphy_hierarchy",
     nameField: { et: "stratigraphy", en: "stratigraphy_en" },
     filterExclude: "stratigraphy",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <v-expansion-panels variant="accordion" multiple>
+        <filter-input-text
+          v-model="filters.number.value"
+          :title="$t('filters.sampleNumber')"
+          value="number"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterLocality"
+          v-model="filters.locality.value"
+          :title="$t('filters.locality')"
+          :query-function="suggestLocality"
+          :hydration-function="hydrateLocality"
+          value="locality"
+          @update:model-value="handleUpdate"
+        />
+        <filter-map
+          v-model="filters.geometry.value"
+          value="map"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-range
+          v-model="filters.depth.value"
+          :title="$t('filters.depth')"
+          value="depth"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterStratigraphy"
+          v-model="filters.stratigraphy.value"
+          :title="$t('filters.stratigraphyHierarchy')"
+          :query-function="suggestStratigraphy"
+          :hydration-function="hydrateStratigraphy"
+          value="stratigraphy"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

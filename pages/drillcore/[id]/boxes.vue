@@ -1,15 +1,5 @@
-<template>
-  <list-drillcore-box
-    :options="options"
-    :count="data?.count ?? 0"
-    :items="data?.results ?? []"
-    :is-loading="pending"
-    @update="handleUpdate"
-  />
-</template>
-
 <script setup lang="ts">
-import { HEADERS_ATTACHMENT, ATTACHMENT_LINK } from "~/constants";
+import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
 
 const { options, search, handleUpdate } = useDataTableDetail({
   initOptions: ATTACHMENT_LINK.options,
@@ -33,3 +23,13 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
   },
 });
 </script>
+
+<template>
+  <list-drillcore-box
+    :options="options"
+    :count="data?.count ?? 0"
+    :items="data?.results ?? []"
+    :is-loading="pending"
+    @update="handleUpdate"
+  />
+</template>

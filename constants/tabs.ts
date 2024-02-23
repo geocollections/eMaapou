@@ -1,4 +1,4 @@
-export type Tab = {
+export interface Tab {
   id: string;
   isSolr?: boolean;
   table?: string;
@@ -8,11 +8,11 @@ export type Tab = {
   props: { [K: string]: any };
   fields?: string;
   objectId?: string;
-};
-export type ResourceTabs = {
+}
+export interface ResourceTabs {
   byIds: { [K: string]: Tab };
   allIds: string[];
-};
+}
 
 export const TABS_QUICK_SEARCH: ResourceTabs = {
   byIds: {

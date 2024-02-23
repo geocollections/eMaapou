@@ -1,120 +1,10 @@
-<template>
-  <detail-new :show-similar="showDrawer">
-    <template #title>
-      <header-detail-new
-        :title="
-          $translate({
-            et: data?.locality.locality,
-            en: data?.locality.locality_en,
-          })
-        "
-      >
-        <template #sub>
-          <v-btn
-            v-if="data?.drillcore"
-            size="small"
-            rounded
-            color="accent"
-            class="mt-2 mr-2 montserrat text-none"
-            @click="
-              $router.push(
-                localePath({
-                  name: 'drillcore-id',
-                  params: { id: data?.drillcore.id },
-                }),
-              )
-            "
-          >
-            <v-icon start>{{ mdiScrewMachineFlatTop }}</v-icon>
-            {{
-              $translate({
-                et: data?.drillcore.drillcore,
-                en: data?.drillcore.drillcore_en,
-              })
-            }}
-          </v-btn>
-          <v-btn
-            v-if="data?.analysisResultsCount > 0"
-            size="small"
-            rounded
-            color="accent"
-            class="mt-2 mr-2 montserrat text-none"
-            :to="
-              localePath({
-                path: '/analytical-data',
-                query: { locality: route.params.id },
-              })
-            "
-          >
-            <v-icon start>{{ mdiChartScatterPlot }}</v-icon>
-            {{ $t("locality.linkToAnalyticalData") }}
-          </v-btn>
-          <v-btn
-            v-if="data?.referenceCount > 0"
-            size="small"
-            rounded
-            color="accent"
-            class="mt-2 montserrat text-none"
-            :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
-          >
-            <v-icon start>{{ mdiBookOpenPageVariantOutline }}</v-icon>
-            {{ $t("locality.linkGeoscienceLiterature") }}
-            <v-icon end>{{ mdiOpenInNew }}</v-icon>
-          </v-btn>
-        </template>
-        <template #tabs>
-          <DetailTabs :tabs="data?.tabs" />
-        </template>
-      </header-detail-new>
-    </template>
-    <template #drawer>
-      <SearchResultsDrawer
-        :page="page"
-        :results="similarLocalities"
-        :total-results="localitiesRes?.response.numFound ?? 0"
-        :search-route="
-          localePath({ path: '/locality', query: getQueryParams() })
-        "
-        :get-result-route="
-          (item) => localePath({ name: 'locality-id', params: { id: item.id } })
-        "
-        @page:next="page++"
-        @page:previous="page--"
-        @select="handleSelect"
-      >
-        <template #itemTitle="{ item: locality }">
-          <div class="font-weight-medium text-wrap">
-            {{
-              $translate({ et: locality.locality, en: locality.locality_en })
-            }}
-          </div>
-        </template>
-        <template #itemSubtitle="{ item: locality }">
-          <div v-if="locality.country_id" class="d-flex align-center">
-            <v-icon start size="small">{{ mdiEarth }}</v-icon>
-            <span class="text--secondary">
-              {{
-                $translate({
-                  et: locality.country,
-                  en: locality.country_en,
-                })
-              }}
-            </span>
-          </div>
-        </template>
-      </SearchResultsDrawer>
-    </template>
-    <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
-</template>
-
 <script setup lang="ts">
 import {
-  mdiScrewMachineFlatTop,
-  mdiChartScatterPlot,
   mdiBookOpenPageVariantOutline,
-  mdiOpenInNew,
+  mdiChartScatterPlot,
   mdiEarth,
+  mdiOpenInNew,
+  mdiScrewMachineFlatTop,
 } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
@@ -129,9 +19,6 @@ const { solrFilters, solrQuery, solrSort } = storeToRefs(localitiesStore);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
-const activeTabProps = computed(() => {
-  return getCurrentTabRouteProps(data.value?.tabs ?? []);
-});
 const {
   data: localitiesRes,
   page,
@@ -144,8 +31,8 @@ const {
     filter: solrFilters,
     sort: computed(
       () =>
-        solrSort.value ??
-        $translate({ et: "locality asc", en: "locality_en asc" }),
+        solrSort.value
+        ?? $translate({ et: "locality asc", en: "locality_en asc" }),
     ),
   },
 });
@@ -166,7 +53,7 @@ const tabs = {
     routeName: "locality-id-references",
     title: "locality.references",
     count: async () => {
-      const res = await $geoloogiaFetch("/locality_reference/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
         query: {
           locality: route.params.id,
           limit: 0,
@@ -181,7 +68,7 @@ const tabs = {
     routeName: "locality-id-descriptions",
     title: "locality.descriptions",
     count: async () => {
-      const res = await $geoloogiaFetch("/locality_description/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
         query: {
           locality: route.params.id,
           limit: 0,
@@ -196,7 +83,7 @@ const tabs = {
     routeName: "locality-id-attachments",
     title: "locality.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch("/attachment_link/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
         query: {
           locality: route.params.id,
           limit: 0,
@@ -211,7 +98,7 @@ const tabs = {
     routeName: "locality-id-samples",
     title: "locality.samples",
     count: async () => {
-      const res = await $solrFetch("/sample", {
+      const res = await $solrFetch<SolrResponse>("/sample", {
         query: {
           q: `locality_id:${route.params.id}`,
           rows: 0,
@@ -225,8 +112,10 @@ const tabs = {
     type: "dynamic",
     routeName: "locality-id-drillcore-boxes",
     title: "locality.drillcoreBoxes",
-    count: async () => {
-      return 0;
+    count: async (ctx) => {
+      if (!ctx?.drillcore)
+        return 0;
+      return ctx.drillcore.boxes;
     },
     props: {},
   } satisfies Tab,
@@ -235,7 +124,7 @@ const tabs = {
     routeName: "locality-id-fossils",
     title: "locality.fossils",
     count: async () => {
-      const res = await $solrFetch("/taxon_search", {
+      const res = await $solrFetch<SolrResponse>("/taxon_search", {
         query: {
           q: `locality_id:${route.params.id} AND rank:[14 TO 18]`,
           rows: 0,
@@ -250,7 +139,7 @@ const tabs = {
     routeName: "locality-id-specimens",
     title: "locality.specimens",
     count: async () => {
-      const res = await $solrFetch("/specimen", {
+      const res = await $solrFetch<SolrResponse>("/specimen", {
         query: {
           q: `locality_id:${route.params.id}`,
           rows: 0,
@@ -265,7 +154,7 @@ const tabs = {
     routeName: "locality-id-synonyms",
     title: "locality.synonyms",
     count: async () => {
-      const res = await $geoloogiaFetch("/locality_synonym/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_synonym/", {
         query: {
           locality: route.params.id,
           limit: 0,
@@ -280,7 +169,7 @@ const tabs = {
     routeName: "locality-id-stratotypes",
     title: "locality.stratotypes",
     count: async () => {
-      const res = await $geoloogiaFetch("/stratigraphy_stratotype/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_stratotype/", {
         query: {
           locality: route.params.id,
           limit: 0,
@@ -295,7 +184,7 @@ const tabs = {
     routeName: "locality-id-analyses",
     title: "locality.analyses",
     count: async () => {
-      const res = await $solrFetch("/analysis", {
+      const res = await $solrFetch<SolrResponse>("/analysis", {
         query: {
           q: `locality_id:${route.params.id}`,
           rows: 0,
@@ -310,19 +199,20 @@ const tabs = {
     routeName: "locality-id-graphs",
     title: "locality.graphs",
     count: async () => {
-      return $solrFetch("/analysis_results", {
+      const res = await $solrFetch<SolrResponse>("/analysis_results", {
         query: {
           q: `locality_id:${route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
           rows: 0,
         },
-      }).then((res) => res.response.numFound);
+      });
+      return res.response.numFound;
     },
     props: {},
   } satisfies Tab,
 };
 
-const { data, pending } = await useAsyncData("locality", async () => {
-  const locality = await $geoloogiaFetch(`/locality/${route.params.id}/`, {
+const { data } = await useAsyncData("locality", async () => {
+  const locality = await $geoloogiaFetch<any>(`/locality/${route.params.id}/`, {
     query: {
       nest: 1,
     },
@@ -336,13 +226,13 @@ const { data, pending } = await useAsyncData("locality", async () => {
     },
   });
 
-  const drillcorePromise = $geoloogiaFetch("/drillcore/", {
+  const drillcorePromise = $geoloogiaFetch<any>("/drillcore/", {
     query: {
       locality: route.params.id,
     },
   });
   // Checking if locality has a related .las file to show in graph tab
-  const lasFilePromise = $geoloogiaFetch("/attachment_link/", {
+  const lasFilePromise = $geoloogiaFetch<any>("/attachment_link/", {
     query: {
       attachment__uuid_filename__iendswith: ".las",
       locality: route.params.id,
@@ -354,8 +244,8 @@ const { data, pending } = await useAsyncData("locality", async () => {
     drillcorePromise,
     lasFilePromise,
   ]);
-  const drillcore =
-    drillcoreResponse.results.length > 0 ? drillcoreResponse.results[0] : null;
+  const drillcore
+    = drillcoreResponse.results.length > 0 ? drillcoreResponse.results[0] : null;
 
   const hydratedTabs = await hydrateTabs(tabs, {
     props: {
@@ -366,13 +256,14 @@ const { data, pending } = await useAsyncData("locality", async () => {
         attachment: lasFileResponse?.results?.[0]?.attachment,
       },
     },
+    ctx: { drillcore },
   });
-  hydratedTabs.boxes.count = drillcore?.boxes || 0;
-  hydratedTabs.analysis_results.count =
-    hydratedTabs.analysis_results.count +
-    hydratedTabs.locality_description.count +
-    hydratedTabs.sample.count +
-    (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
+
+  hydratedTabs.analysis_results.count
+    = hydratedTabs.analysis_results.count
+    + hydratedTabs.locality_description.count
+    + hydratedTabs.sample.count
+    + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
   return {
     locality,
@@ -395,6 +286,11 @@ const { data, pending } = await useAsyncData("locality", async () => {
     ]),
   };
 });
+
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+
 const title = computed(() =>
   $translate({
     et: data.value?.locality.locality,
@@ -467,3 +363,123 @@ redirectInvalidTab({
 //   head: {},
 // })
 </script>
+
+<template>
+  <detail-new :show-similar="showDrawer">
+    <template #title>
+      <header-detail-new
+        :title="
+          $translate({
+            et: data?.locality.locality,
+            en: data?.locality.locality_en,
+          })
+        "
+      >
+        <template #sub>
+          <v-btn
+            v-if="data?.drillcore"
+            size="small"
+            rounded
+            color="accent"
+            class="mt-2 mr-2 montserrat text-none"
+            @click="
+              $router.push(
+                localePath({
+                  name: 'drillcore-id',
+                  params: { id: data?.drillcore.id },
+                }),
+              )
+            "
+          >
+            <v-icon start>
+              {{ mdiScrewMachineFlatTop }}
+            </v-icon>
+            {{
+              $translate({
+                et: data?.drillcore.drillcore,
+                en: data?.drillcore.drillcore_en,
+              })
+            }}
+          </v-btn>
+          <v-btn
+            v-if="data?.analysisResultsCount > 0"
+            size="small"
+            rounded
+            color="accent"
+            class="mt-2 mr-2 montserrat text-none"
+            :to="
+              localePath({
+                path: '/analytical-data',
+                query: { locality: route.params.id },
+              })
+            "
+          >
+            <v-icon start>
+              {{ mdiChartScatterPlot }}
+            </v-icon>
+            {{ $t("locality.linkToAnalyticalData") }}
+          </v-btn>
+          <v-btn
+            v-if="data?.referenceCount > 0"
+            size="small"
+            rounded
+            color="accent"
+            class="mt-2 montserrat text-none"
+            :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
+          >
+            <v-icon start>
+              {{ mdiBookOpenPageVariantOutline }}
+            </v-icon>
+            {{ $t("locality.linkGeoscienceLiterature") }}
+            <v-icon end>
+              {{ mdiOpenInNew }}
+            </v-icon>
+          </v-btn>
+        </template>
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </header-detail-new>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarLocalities"
+        :total-results="localitiesRes?.response.numFound ?? 0"
+        :search-route="
+          localePath({ path: '/locality', query: getQueryParams() })
+        "
+        :get-result-route="
+          (item) => localePath({ name: 'locality-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: locality }">
+          <div class="font-weight-medium text-wrap">
+            {{
+              $translate({ et: locality.locality, en: locality.locality_en })
+            }}
+          </div>
+        </template>
+        <template #itemSubtitle="{ item: locality }">
+          <div v-if="locality.country_id" class="d-flex align-center">
+            <v-icon start size="small">
+              {{ mdiEarth }}
+            </v-icon>
+            <span class="text--secondary">
+              {{
+                $translate({
+                  et: locality.country,
+                  en: locality.country_en,
+                })
+              }}
+            </span>
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
+    <NuxtPage v-bind="activeTabProps" />
+  </detail-new>
+</template>

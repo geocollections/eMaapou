@@ -1,7 +1,86 @@
+<script setup lang="ts">
+import { mdiFileDownloadOutline } from "@mdi/js";
+import isEmpty from "lodash/isEmpty";
+import type { MapMarker } from "~/types/map";
+
+const props = defineProps<{ area: any }>();
+
+const area = computed(() => props.area);
+const deposit = computed(() => props.area.maaamet_maardla);
+const miningClaim = computed(() => props.area.maaamet_maeeraldis);
+const eelisArray = computed(() => props.area.eelis?.split(";") ?? []);
+const egfArray = computed(() => props.area.egf?.split(";") ?? []);
+const planArray = computed(() => props.area.text1?.split(";") ?? []);
+const geojson = computed(() => {
+  if (isEmpty(props.area))
+    return null;
+  if (isEmpty(props.area.polygon))
+    return null;
+  const parsedPolygon
+    = JSON.parse(
+      // NOTE: Remove trailing commas from JSON object string
+
+      props.area.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, ""),
+    ) ?? null;
+  if (parsedPolygon === null)
+    return null;
+  if (!(Array.isArray(parsedPolygon))) { return parsedPolygon; }
+  else {
+    return {
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: parsedPolygon,
+      },
+    };
+  }
+});
+const route = useRoute();
+const localePath = useLocalePath();
+const { $solrFetch, $translate } = useNuxtApp();
+
+const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
+  const sites = await $solrFetch<{
+    response: { numFound: number; docs: any[] };
+  }>("/site", {
+    query: {
+      json: {
+        query: `area_id:${route.params.id}`,
+      },
+    },
+  });
+  return sites.response.docs.reduce((filtered: MapMarker[], item: any) => {
+    if (!(item.longitude && item.latitude))
+      return filtered;
+    const isItemInArray = filtered.some(
+      (existingItem: any) =>
+        existingItem.latitude === item.latitude
+        && existingItem.longitude === item.longitude,
+    );
+    if (isItemInArray)
+      return filtered;
+    const newItem = {
+      longitude: item.longitude,
+      latitude: item.latitude,
+      text: $translate({ et: item.name, en: item.name_en }) ?? `ID: ${item.id}`,
+      routeName: "site",
+      id: item.id,
+    };
+
+    return [...filtered, newItem];
+  }, []);
+});
+</script>
+
 <template>
   <v-container style="margin: initial">
     <v-row>
-      <v-col :sm="12" :md="6" :lg="7" :xl="5">
+      <v-col
+        :sm="12"
+        :md="6"
+        :lg="7"
+        :xl="5"
+      >
         <v-card>
           <base-table>
             <table-row
@@ -66,9 +145,7 @@
                   <a class="text-link" @click="$openEgf(item)">
                     {{ item }}
                   </a>
-                  <span v-if="index !== egfArray.length - 1" class="mr-1"
-                    >|</span
-                  >
+                  <span v-if="index !== egfArray.length - 1" class="mr-1">|</span>
                 </span>
               </template>
             </table-row>
@@ -86,9 +163,7 @@
                   <a class="text-link" @click="$openEelis(item)">
                     {{ item }}
                   </a>
-                  <span v-if="index !== eelisArray.length - 1" class="mr-1"
-                    >|</span
-                  >
+                  <span v-if="index !== eelisArray.length - 1" class="mr-1">|</span>
                 </span>
               </template>
             </table-row>
@@ -106,13 +181,11 @@
                     @click="$openTurba('plaanid', item.trim(), false)"
                   >
                     {{ item }}
-                    <v-icon small color="primary darken-2">
+                    <v-icon size="small" color="primary-darken-2">
                       {{ mdiFileDownloadOutline }}
                     </v-icon>
                   </a>
-                  <span v-if="index !== planArray.length - 1" class="mr-1"
-                    >|</span
-                  >
+                  <span v-if="index !== planArray.length - 1" class="mr-1">|</span>
                 </span>
               </template>
             </table-row>
@@ -131,7 +204,9 @@
         <template
           v-if="$translate({ et: area.description, en: area.description_en })"
         >
-          <div class="text-h6 py-2">{{ $t("area.description") }}</div>
+          <div class="text-h6 py-2">
+            {{ $t("area.description") }}
+          </div>
           <div
             v-html="
               $translate({
@@ -143,7 +218,9 @@
         </template>
 
         <template v-if="deposit">
-          <div class="text-h6 py-2">{{ $t("area.deposit") }}</div>
+          <div class="text-h6 py-2">
+            {{ $t("area.deposit") }}
+          </div>
           <v-alert
             density="compact"
             type="info"
@@ -209,7 +286,9 @@
           </v-card>
         </template>
         <template v-if="miningClaim">
-          <div class="text-h6 py-2">{{ $t("area.miningClaim") }}</div>
+          <div class="text-h6 py-2">
+            {{ $t("area.miningClaim") }}
+          </div>
           <v-alert
             density="compact"
             type="info"
@@ -327,71 +406,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup lang="ts">
-import { mdiFileDownloadOutline } from "@mdi/js";
-import isEmpty from "lodash/isEmpty";
-import type { MapMarker } from "~/types/map";
-
-const props = defineProps<{ area: any }>();
-
-const area = computed(() => props.area);
-const deposit = computed(() => props.area.maaamet_maardla);
-const miningClaim = computed(() => props.area.maaamet_maeeraldis);
-const eelisArray = computed(() => props.area.eelis?.split(";") ?? []);
-const egfArray = computed(() => props.area.egf?.split(";") ?? []);
-const planArray = computed(() => props.area.text1?.split(";") ?? []);
-const geojson = computed(() => {
-  if (isEmpty(props.area)) return null;
-  if (isEmpty(props.area.polygon)) return null;
-  const parsedPolygon =
-    JSON.parse(
-      // NOTE: Remove trailing commas from JSON object string
-      // eslint-disable-next-line no-useless-escape
-      props.area.polygon?.replace(/\,(?!\s*?[\{\[\"\'\w])/g, ""),
-    ) ?? null;
-  if (parsedPolygon === null) return null;
-  if (!(parsedPolygon instanceof Array)) return parsedPolygon;
-  else
-    return {
-      type: "Feature",
-      geometry: {
-        type: "Polygon",
-        coordinates: parsedPolygon,
-      },
-    };
-});
-const route = useRoute();
-const localePath = useLocalePath();
-const { $solrFetch, $translate } = useNuxtApp();
-
-const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
-  const sites = await $solrFetch<{
-    response: { numFound: number; docs: any[] };
-  }>("/site", {
-    query: {
-      json: {
-        query: `area_id:${route.params.id}`,
-      },
-    },
-  });
-  return sites.response.docs.reduce((filtered: MapMarker[], item: any) => {
-    if (!(item.longitude && item.latitude)) return filtered;
-    const isItemInArray = filtered.some(
-      (existingItem: any) =>
-        existingItem.latitude === item.latitude &&
-        existingItem.longitude === item.longitude,
-    );
-    if (isItemInArray) return filtered;
-    const newItem = {
-      longitude: item.longitude,
-      latitude: item.latitude,
-      text: $translate({ et: item.name, en: item.name_en }) ?? `ID: ${item.id}`,
-      routeName: "site",
-      id: item.id,
-    };
-
-    return [...filtered, newItem];
-  }, []);
-});
-</script>

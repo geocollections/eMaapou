@@ -1,12 +1,12 @@
 import type { Map } from "leaflet";
 
-export type MapMarker = {
+export interface MapMarker {
   text: string;
   longitude: number;
   latitude: number;
   routeName?: string;
   id?: number; // TODO: should rename to `routeId`
-};
+}
 
 export interface MapState {
   map: Map | undefined;

@@ -1,12 +1,12 @@
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import { IMAGE } from "~/constants";
 import { HEADERS_PHOTO } from "~/constants/headers";
-import type { RouteLocation } from "vue-router";
 import type {
+  DateListFilter,
+  GeomFilter,
   IdListFilter,
   TextListFilter,
-  GeomFilter,
-  DateListFilter,
 } from "~/composables/useFilter";
 
 export const usePhotos = defineStore(

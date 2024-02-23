@@ -1,12 +1,22 @@
+<script>
+export default {
+  name: "InputCheckbox",
+  props: {
+    value: { type: Boolean, default: false },
+    label: { type: String, default: "" },
+  },
+};
+</script>
+
 <template>
   <div style="flex: 1 0 100%; max-width: 100%; position: relative">
     <v-checkbox
       hide-details
       color="accent"
-      :input-value="value"
+      :model-value="value"
       dense
       false-value="null"
-      @change="$emit('input', $event)"
+      @update:model-value="$emit('input', $event)"
     >
       <template #label>
         <div
@@ -22,13 +32,3 @@
     </v-checkbox>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'InputCheckbox',
-  props: {
-    value: { type: Boolean, default: false },
-    label: { type: String, default: '' },
-  },
-}
-</script>

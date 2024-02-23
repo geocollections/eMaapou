@@ -1,7 +1,7 @@
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import { AREA } from "~/constants";
 import { HEADERS_AREA } from "~/constants/headersNew";
-import type { RouteLocation } from "vue-router";
 
 import type { IdListFilter, TextListFilter } from "~/composables/useFilter";
 

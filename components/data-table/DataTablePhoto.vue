@@ -1,3 +1,8 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.id="{ item, index }">
@@ -31,12 +36,9 @@
       <div v-if="item.date_created">
         {{ $formatDate(item.date_created) }}
       </div>
-      <div v-else>{{ item.date_created_free }}</div>
+      <div v-else>
+        {{ item.date_created_free }}
+      </div>
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const localePath = useLocalePath();
-const emit = defineEmits(["click:row"]);
-</script>

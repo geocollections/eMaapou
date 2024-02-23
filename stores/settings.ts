@@ -2,7 +2,7 @@ import { Renderer } from "~/types/enums";
 
 export const useSettings = defineStore("settings", () => {
   const cookieConsent = ref(false);
-  const showCookieConsent = ref(true);
+  const _showCookieConsent = ref(true);
   const showSearchViewMap = ref(false);
   const showSearchViewForm = ref(true);
   const showInstitutionFilters = ref(false);
@@ -12,8 +12,8 @@ export const useSettings = defineStore("settings", () => {
 
   const isBaseLayerEstonian = computed(() => {
     return (
-      mapBaseLayer.value === "Estonian satellite" ||
-      mapBaseLayer.value === "Estonian map"
+      mapBaseLayer.value === "Estonian satellite"
+      || mapBaseLayer.value === "Estonian map"
     );
   });
 

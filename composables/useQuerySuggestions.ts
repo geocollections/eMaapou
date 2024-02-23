@@ -287,6 +287,6 @@
 //   }
 // }
 
-export const useQuerySuggestionsStatic = () => {
+export function useQuerySuggestionsStatic() {
   return {};
-};
+}

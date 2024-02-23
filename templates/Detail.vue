@@ -1,3 +1,16 @@
+<script setup lang="ts">
+defineProps({
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  error: {
+    type: Object as PropType<Error | null>,
+    default: null,
+  },
+});
+</script>
+
 <template>
   <v-main>
     <v-container
@@ -14,7 +27,11 @@
       </v-row>
       <v-row no-gutters class="fill-height">
         <v-fade-transition hide-on-leave>
-          <v-col v-if="error" key="detail-error" class="pt-15">
+          <v-col
+            v-if="error"
+            key="detail-error"
+            class="pt-15"
+          >
             <div>
               <detail-error :error="error" />
             </div>
@@ -34,7 +51,11 @@
           <!--     </v-progress-circular> -->
           <!--   </div> -->
           <!-- </v-col> -->
-          <v-col v-else key="detail" class="pt-5">
+          <v-col
+            v-else
+            key="detail"
+            class="pt-5"
+          >
             <slot name="title" />
             <div class="px-0 px-sm-3">
               <slot name="top" />
@@ -44,7 +65,11 @@
                     <v-col v-if="$slots['column-left']" cols>
                       <slot name="column-left" />
                     </v-col>
-                    <v-col v-if="$slots['column-right']" cols="12" md="6">
+                    <v-col
+                      v-if="$slots['column-right']"
+                      cols="12"
+                      md="6"
+                    >
                       <slot name="column-right" />
                     </v-col>
                   </v-row>
@@ -60,16 +85,3 @@
     <app-footer />
   </v-main>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  error: {
-    type: Object as PropType<Error | null>,
-    default: null,
-  },
-});
-</script>

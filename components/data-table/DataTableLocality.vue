@@ -1,10 +1,16 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.id="{ item, index }">
       <nuxt-link
         class="text-link"
         :to="localePath(`/locality/${item.id}`)"
-        @click="emit('click:row', { index: index, id: item.id })"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
       </nuxt-link>
@@ -13,7 +19,7 @@
       <nuxt-link
         class="text-link"
         :to="localePath(`/locality/${item.id}`)"
-        @click="emit('click:row', { index: index, id: item.id })"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </nuxt-link>
@@ -61,9 +67,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const emit = defineEmits(["click:row"]);
-
-const localePath = useLocalePath();
-</script>

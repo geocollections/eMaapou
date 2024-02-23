@@ -1,16 +1,3 @@
-<template>
-  <data-table-locality-reference
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from "~/constants";
 
@@ -37,7 +24,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
     nest: 1,
     search: search.value,
     search_fields: Object.values(
-      getAPIFieldValues(HEADERS_LOCALITY_REFERENCE, locale.value)
+      getAPIFieldValues(HEADERS_LOCALITY_REFERENCE, locale.value),
     ).join(","),
     // TODO: implement sorting
     ordering: getGeoloogiaApiSort({
@@ -48,3 +35,16 @@ const { data, pending } = await useGeoloogiaApiFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-locality-reference
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

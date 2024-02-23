@@ -1,3 +1,92 @@
+<script setup lang="ts">
+import { mdiFileDownloadOutline } from "@mdi/js";
+import { useDisplay } from "vuetify";
+
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => [],
+  },
+  count: {
+    type: Number,
+    default: 0,
+  },
+  options: {
+    type: Object,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
+  },
+});
+
+const emit = defineEmits(["update"]);
+const { t } = useI18n();
+const localePath = useLocalePath();
+const img = useImage();
+
+const activeIndex = ref(0);
+const imageSizes = ref(["small", "medium", "large", "original"]);
+const footerProps = {
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+};
+
+const display = useDisplay();
+
+const carouselHeight = computed(() => {
+  if (display.xs.value)
+    return "35vh";
+  else if (display.sm.value)
+    return "40vh";
+  else return "600px";
+});
+
+const pagination = computed(() => ({
+  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
+}));
+
+watch(
+  () => props.items,
+  () => {
+    activeIndex.value = 0;
+  },
+);
+
+onBeforeMount(() => {
+  window.addEventListener("keyup", handleKeyup);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keyup", handleKeyup);
+});
+
+function handleThumbnailClick(newIndex) {
+  activeIndex.value = newIndex;
+}
+
+function handleKeyup(e) {
+  if (props.items?.length > 0) {
+    if (e.keyCode === 37) {
+      // ArrowLeft
+      if (activeIndex.value === 0)
+        activeIndex.value = props.items.length - 1;
+      else activeIndex.value -= 1;
+    }
+    else if (e.keyCode === 39) {
+      // ArrowRight
+      if (activeIndex.value === props.items.length - 1)
+        activeIndex.value = 0;
+      else activeIndex.value += 1;
+    }
+  }
+}
+
+function updateOptions(event) {
+  emit("update", { options: event });
+}
+</script>
+
 <template>
   <v-card v-if="items && items.length > 0" flat>
     <div class="d-flex justify-end">
@@ -23,7 +112,11 @@
       <div class="px-4">
         <v-card-text v-if="items && items.length > 1" class="px-0 pt-0">
           <div class="d-flex align-center" style="overflow-x: auto">
-            <div v-for="(item, index) in items" :key="index" class="my-2 mx-2">
+            <div
+              v-for="(item, index) in items"
+              :key="index"
+              class="my-2 mx-2"
+            >
               <v-hover v-slot="{ hover }">
                 <v-img
                   :src="
@@ -59,8 +152,8 @@
                     >
                       <v-progress-circular
                         indeterminate
-                        color="grey lighten-5"
-                      ></v-progress-circular>
+                        color="grey-lighten-5"
+                      />
                     </v-row>
                   </template>
                 </v-img>
@@ -100,15 +193,14 @@
                   items[activeIndex].agent || items[activeIndex].author_free
                 "
               >
-                <b>{{ $t("photo.author") }}: </b
-                >{{
+                <b>{{ $t("photo.author") }}: </b>{{
                   items[activeIndex].agent || items[activeIndex].author_free
                 }}
               </div>
               <div
                 v-if="
-                  items[activeIndex].date_created ||
-                  items[activeIndex].date_created_free
+                  items[activeIndex].date_created
+                    || items[activeIndex].date_created_free
                 "
               >
                 <b>{{ $t("photo.date") }}: </b>
@@ -128,8 +220,8 @@
                   {{ $t(`common.${size}`) }}
                   <v-icon
                     v-if="size === 'original'"
-                    small
-                    color="primary darken-2"
+                    size="small"
+                    color="primary-darken-2"
                   >
                     {{ mdiFileDownloadOutline }}
                   </v-icon>
@@ -143,90 +235,6 @@
     </v-card>
   </v-card>
 </template>
-
-<script setup lang="ts">
-import { mdiFileDownloadOutline } from "@mdi/js";
-import { useDisplay } from "vuetify";
-
-const props = defineProps({
-  items: {
-    type: Array,
-    default: () => [],
-  },
-  count: {
-    type: Number,
-    default: 0,
-  },
-  options: {
-    type: Object,
-    default: () => ({
-      page: 1,
-      itemsPerPage: 25,
-    }),
-  },
-});
-
-const emit = defineEmits(["update"]);
-const { t } = useI18n();
-const localePath = useLocalePath();
-const img = useImage();
-
-const activeIndex = ref(0);
-const imageSizes = ref(["small", "medium", "large", "original"]);
-const footerProps = {
-  showFirstLastPage: true,
-  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
-  "items-per-page-text": t("table.itemsPerPage"),
-};
-
-const display = useDisplay();
-
-const carouselHeight = computed(() => {
-  if (display.xs.value) return "35vh";
-  else if (display.sm.value) return "40vh";
-  else return "600px";
-});
-
-const pagination = computed(() => ({
-  pageCount: Math.ceil(props.count / props.options.itemsPerPage),
-}));
-
-watch(
-  () => props.items,
-  () => {
-    activeIndex.value = 0;
-  },
-);
-
-onBeforeMount(() => {
-  window.addEventListener("keyup", handleKeyup);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("keyup", handleKeyup);
-});
-
-function handleThumbnailClick(newIndex) {
-  activeIndex.value = newIndex;
-}
-
-function handleKeyup(e) {
-  if (props.items?.length > 0) {
-    if (e.keyCode === 37) {
-      // ArrowLeft
-      if (activeIndex.value === 0) activeIndex.value = props.items.length - 1;
-      else activeIndex.value -= 1;
-    } else if (e.keyCode === 39) {
-      // ArrowRight
-      if (activeIndex.value === props.items.length - 1) activeIndex.value = 0;
-      else activeIndex.value += 1;
-    }
-  }
-}
-
-function updateOptions(event) {
-  emit("update", { options: event });
-}
-</script>
 
 <style scoped lang="scss">
 .active-thumbnail {

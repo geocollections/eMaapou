@@ -1,7 +1,27 @@
+<script setup lang="ts">
+const props = defineProps<{
+  drillcore: any;
+}>();
+
+const localePath = useLocalePath();
+
+const drillcore = computed(() => props.drillcore);
+const depository = computed(() => props.drillcore.depository);
+const storage = computed(() => props.drillcore.storage);
+const agent = computed(() => props.drillcore.agent);
+const database = computed(() => props.drillcore.database);
+const locality = computed(() => props.drillcore.locality);
+</script>
+
 <template>
   <v-container style="margin: initial">
     <v-row>
-      <v-col :sm="12" :md="6" :lg="7" :xl="5">
+      <v-col
+        :sm="12"
+        :md="6"
+        :lg="7"
+        :xl="5"
+      >
         <v-card>
           <base-table>
             <table-row
@@ -72,7 +92,9 @@
           </base-table>
         </v-card>
         <div v-if="drillcore.remarks">
-          <div class="text-h6 py-2">{{ $t("drillcore.remarks") }}</div>
+          <div class="text-h6 py-2">
+            {{ $t("drillcore.remarks") }}
+          </div>
           <div>{{ drillcore.remarks }}</div>
         </div>
       </v-col>
@@ -149,18 +171,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{
-  drillcore: any;
-}>();
-
-const localePath = useLocalePath();
-
-const drillcore = computed(() => props.drillcore);
-const depository = computed(() => props.drillcore.depository);
-const storage = computed(() => props.drillcore.storage);
-const agent = computed(() => props.drillcore.agent);
-const database = computed(() => props.drillcore.database);
-const locality = computed(() => props.drillcore.locality);
-</script>

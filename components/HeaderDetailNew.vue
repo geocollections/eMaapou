@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const props = defineProps<{
+  title: string;
+}>();
+</script>
+
 <template>
   <div
     style="word-break: normal; flex-wrap: wrap"
@@ -17,9 +23,3 @@
     <slot name="tabs" />
   </div>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{
-  title: string;
-}>();
-</script>

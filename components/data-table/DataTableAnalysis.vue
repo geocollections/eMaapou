@@ -1,3 +1,37 @@
+<script setup lang="ts">
+import round from "lodash/round";
+import type { Header } from "~/constants";
+
+const props = withDefaults(
+  defineProps<{
+    hideDepth?: boolean;
+    hideLocality?: boolean;
+    hideSample?: boolean;
+  }>(),
+  {
+    hideDepth: false,
+    hideLocality: false,
+    hideSample: false,
+  },
+);
+
+const emit = defineEmits(["click:row"]);
+
+const localePath = useLocalePath();
+const attrs = useAttrs();
+const filteredHeaders = computed(() => {
+  return attrs.headers.filter((item: Header) => {
+    if (item.value.includes("depth"))
+      return !props.hideDepth;
+    else if (item.value === "locality")
+      return !props.hideLocality;
+    else if (item.value === "sample_number")
+      return !props.hideSample;
+    else return item;
+  });
+});
+</script>
+
 <template>
   <base-data-table v-bind="$attrs" :headers="filteredHeaders">
     <template #item.id="{ item, index }">
@@ -63,38 +97,9 @@
       <div v-if="item.date">
         {{ item.date ? $formatDate(item.date) : null }}
       </div>
-      <div v-else>{{ item.date_free }}</div>
+      <div v-else>
+        {{ item.date_free }}
+      </div>
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-import round from "lodash/round";
-import type { Header } from "~/constants";
-
-const emit = defineEmits(["click:row"]);
-
-const props = withDefaults(
-  defineProps<{
-    hideDepth?: boolean;
-    hideLocality?: boolean;
-    hideSample?: boolean;
-  }>(),
-  {
-    hideDepth: false,
-    hideLocality: false,
-    hideSample: false,
-  },
-);
-
-const localePath = useLocalePath();
-const attrs = useAttrs();
-const filteredHeaders = computed(() => {
-  return attrs.headers.filter((item: Header) => {
-    if (item.value.includes("depth")) return !props.hideDepth;
-    else if (item.value === "locality") return !props.hideLocality;
-    else if (item.value === "sample_number") return !props.hideSample;
-    else return item;
-  });
-});
-</script>

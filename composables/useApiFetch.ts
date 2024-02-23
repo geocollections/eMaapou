@@ -12,7 +12,7 @@ export function useApiFetch<T>(url: string, options: UseFetchOptions<T> = {}) {
 
 export function useGeoloogiaApiFetch<T>(
   url: string,
-  options: UseFetchOptions<T> = {}
+  options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
     baseURL: "https://api.geoloogia.info",
@@ -24,7 +24,7 @@ export function useGeoloogiaApiFetch<T>(
 
 export function useGeoserverFetch<T>(
   url: string,
-  options: UseFetchOptions<T> = {}
+  options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
     baseURL: "https://gis.geocollections.info/geoserver/sarv",
@@ -50,7 +50,7 @@ export function useGeoserverFetch<T>(
 
 export function useNewApiFetch<T>(
   url: string,
-  options: UseFetchOptions<T> = {}
+  options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
     baseURL: "https://rwapi.geoloogia.info/api/v1/public",

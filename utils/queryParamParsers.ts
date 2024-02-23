@@ -4,21 +4,21 @@ import uniq from "lodash/uniq";
 export function idParamParser(separator: string) {
   return z
     .string()
-    .transform((val) => uniq(val.split(separator)))
-    .catch((_ctx) => []);
+    .transform(val => uniq(val.split(separator)))
+    .catch(_ctx => []);
 }
 
 export const textParamParser = z
   .string()
-  .transform((val) => uniq(val.split(",")))
-  .catch((_ctx) => []);
+  .transform(val => uniq(val.split(",")))
+  .catch(_ctx => []);
 
 export const rangeParamParser = z
   .string()
   .transform((val, ctx) => {
-    let [startStr, endStr] = val.split("-");
-    const start = parseInt(startStr) || null;
-    const end = parseInt(endStr) || null;
+    const [startStr, endStr] = val.split("-");
+    const start = Number.parseInt(startStr) || null;
+    const end = Number.parseInt(endStr) || null;
 
     if (start && end && start > end) {
       ctx.addIssue({
@@ -30,19 +30,19 @@ export const rangeParamParser = z
 
     return [start, end] as [null | number, null | number];
   })
-  .catch((_ctx) => [null, null]);
+  .catch(_ctx => [null, null]);
 
 export const booleanParamParser = z
   .string()
-  .transform((val) => val === "true")
+  .transform(val => val === "true")
   .catch(false);
 
 export const geometryParamParser = z
   .string()
-  .transform((val) => JSON.parse(val))
+  .transform(val => JSON.parse(val) as GeoJSON.Geometry | null)
   .catch(null);
 
 export const dateArrayParamParser = z
   .string()
-  .transform((val) => val.split(",").map((v) => v.split("~")))
-  .catch((_ctx) => []);
+  .transform(val => val.split(",").map(v => v.split("~")))
+  .catch(_ctx => []);

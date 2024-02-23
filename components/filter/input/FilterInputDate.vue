@@ -1,3 +1,83 @@
+<script setup lang="ts">
+import cloneDeep from "lodash/cloneDeep";
+
+const props = defineProps({
+  modelValue: {
+    type: Array as PropType<string[][]>,
+    required: true,
+  },
+  title: {
+    type: String,
+    default: null,
+  },
+});
+
+const emit = defineEmits(["update:model-value"]);
+
+const { t, locale } = useI18n();
+const panel = ref();
+const currentDatePickerValue = ref<string[]>();
+const internalValue = ref<string[][]>(props.modelValue);
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    internalValue.value = newVal;
+  },
+  { immediate: true },
+);
+
+function handleRemove(i: number) {
+  const cloneItems = cloneDeep(internalValue.value);
+  cloneItems.splice(i, 1);
+  internalValue.value = cloneItems;
+  emit("update:model-value", internalValue.value);
+}
+function handleAdd() {
+  if (currentDatePickerValue.value === undefined)
+    return;
+
+  internalValue.value = [...internalValue.value, currentDatePickerValue.value];
+  emit("update:model-value", internalValue.value);
+  currentDatePickerValue.value = undefined;
+}
+function handleClear() {
+  internalValue.value = [];
+  emit("update:model-value", internalValue.value);
+}
+function handleDatePickerInput(e: string[]) {
+  currentDatePickerValue.value = e.sort();
+}
+function handleChange(i: number) {
+  const cloneItems = cloneDeep(internalValue.value);
+  currentDatePickerValue.value = cloneItems.splice(i, 1)[0];
+  internalValue.value = cloneItems;
+  emit("update:model-value", internalValue.value);
+  if (!panel.value.isActive)
+    panel.value.toggle();
+}
+const isAddActive = computed(() => {
+  return currentDatePickerValue.value !== undefined;
+});
+function getDateStr(dateArray: string[]) {
+  const dateFormat = new Intl.DateTimeFormat(locale.value, {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+  const startDate = new Date(dateArray[0]);
+  if (dateArray.length > 1) {
+    const endDate = new Date(dateArray[1]);
+    // @ts-expect-error
+    return dateFormat.formatRange(startDate, endDate);
+  }
+  return dateFormat.format(startDate);
+}
+const maxDate = computed(() => {
+  return new Date().toISOString().substr(0, 10);
+});
+</script>
+
 <template>
   <v-expansion-panel
     ref="panel"
@@ -13,7 +93,7 @@
     </v-expansion-panel-title>
     <div
       v-if="internalValue.length > 0"
-      class="white"
+      class="bg-white"
       style="border-bottom: 1px solid lightgray !important"
     >
       <div
@@ -28,7 +108,7 @@
             class="checkbox"
             checked
             @click.prevent.stop="handleRemove(i)"
-          />
+          >
         </span>
         <span
           class="align-self-center text-body-2 font-weight-medium pl-2"
@@ -89,84 +169,6 @@
     </v-expansion-panel-text>
   </v-expansion-panel>
 </template>
-
-<script setup lang="ts">
-import cloneDeep from "lodash/cloneDeep";
-
-const props = defineProps({
-  modelValue: {
-    type: Array as PropType<string[][]>,
-    required: true,
-  },
-  title: {
-    type: String,
-    default: null,
-  },
-});
-
-const emit = defineEmits(["update:model-value"]);
-
-const { t, locale } = useI18n();
-const panel = ref();
-const currentDatePickerValue = ref<string[]>();
-const internalValue = ref<string[][]>(props.modelValue);
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    internalValue.value = newVal;
-  },
-  { immediate: true },
-);
-
-const handleRemove = (i: number) => {
-  const cloneItems = cloneDeep(internalValue.value);
-  cloneItems.splice(i, 1);
-  internalValue.value = cloneItems;
-  emit("update:model-value", internalValue.value);
-};
-const handleAdd = () => {
-  if (currentDatePickerValue.value === undefined) return;
-
-  internalValue.value = [...internalValue.value, currentDatePickerValue.value];
-  emit("update:model-value", internalValue.value);
-  currentDatePickerValue.value = undefined;
-};
-const handleClear = () => {
-  internalValue.value = [];
-  emit("update:model-value", internalValue.value);
-};
-const handleDatePickerInput = (e: string[]) => {
-  currentDatePickerValue.value = e.sort();
-};
-const handleChange = (i: number) => {
-  const cloneItems = cloneDeep(internalValue.value);
-  currentDatePickerValue.value = cloneItems.splice(i, 1)[0];
-  internalValue.value = cloneItems;
-  emit("update:model-value", internalValue.value);
-  if (!panel.value.isActive) panel.value.toggle();
-};
-const isAddActive = computed(() => {
-  return currentDatePickerValue.value !== undefined;
-});
-const getDateStr = (dateArray: string[]) => {
-  const dateFormat = new Intl.DateTimeFormat(locale.value, {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
-  const startDate = new Date(dateArray[0]);
-  if (dateArray.length > 1) {
-    const endDate = new Date(dateArray[1]);
-    // @ts-ignore
-    return dateFormat.formatRange(startDate, endDate);
-  }
-  return dateFormat.format(startDate);
-};
-const maxDate = computed(() => {
-  return new Date().toISOString().substr(0, 10);
-});
-</script>
 
 <style scoped>
 :deep(.v-expansion-panel-text__wrapper) {

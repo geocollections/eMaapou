@@ -1,3 +1,16 @@
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    modelValue: boolean;
+    label: string;
+    disabled?: boolean;
+  }>(),
+  { disabled: false },
+);
+
+const emit = defineEmits(["update:modelValue"]);
+</script>
+
 <template>
   <v-checkbox
     class="ml-2"
@@ -21,16 +34,3 @@
     </template>
   </v-checkbox>
 </template>
-
-<script setup lang="ts">
-withDefaults(
-  defineProps<{
-    modelValue: boolean;
-    label: string;
-    disabled?: boolean;
-  }>(),
-  { disabled: false },
-);
-
-const emit = defineEmits(["update:modelValue"]);
-</script>

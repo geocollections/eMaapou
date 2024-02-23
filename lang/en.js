@@ -807,7 +807,7 @@ export default {
   },
   cookiePolicy: {
     introduction:
-      'This website uses cookies in order to deliver the best possible web experience. By clicking "Accept", you consent to our use of cookies.',
+      "This website uses cookies in order to deliver the best possible web experience. By clicking \"Accept\", you consent to our use of cookies.",
     readMoreButton: "Cookie policy",
     accept: "Accept",
     reject: "Reject",

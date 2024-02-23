@@ -1,63 +1,12 @@
-<template>
-  <detail-new :show-similar="showDrawer">
-    <template #title>
-      <header-detail-new :title="title">
-        <template #tabs>
-          <DetailTabs :tabs="data?.tabs" />
-        </template>
-      </header-detail-new>
-    </template>
-    <template #drawer>
-      <SearchResultsDrawer
-        :page="page"
-        :results="similarSites"
-        :total-results="sitesRes?.response.numFound ?? 0"
-        :search-route="localePath({ path: '/site', query: getQueryParams() })"
-        :get-result-route="
-          (item) => localePath({ name: 'site-id', params: { id: item.id } })
-        "
-        @page:next="page++"
-        @page:previous="page--"
-        @select="handleSelect"
-      >
-        <template #itemTitle="{ item: site }">
-          <div class="font-weight-medium text-wrap">
-            {{ site.name }}
-          </div>
-        </template>
-        <template #itemSubtitle="{ item: site }">
-          <div v-if="site.area_id" class="d-flex align-center">
-            <v-icon start size="small">{{ mdiTextureBox }}</v-icon>
-            <span class="text--secondary">
-              {{
-                $translate({
-                  et: site.area_name,
-                  en: site.area_name_en,
-                })
-              }}
-            </span>
-          </div>
-        </template>
-      </SearchResultsDrawer>
-    </template>
-    <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
-</template>
-
 <script setup lang="ts">
 import { mdiTextureBox } from "@mdi/js";
 import isEmpty from "lodash/isEmpty";
-import type { RouteLocationRaw } from "vue-router";
-import type { Tab } from "~/composables/useTabs";
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
-const activeTabProps = computed(() => {
-  return getCurrentTabRouteProps(data.value?.tabs ?? []);
-});
 
 const sitesStore = useSites();
 const { getQueryParams } = sitesStore;
@@ -84,13 +33,13 @@ const tabs = {
     routeName: "site-id",
     title: "common.general",
     props: {},
-  } satisfies Tab,
+  } satisfies StaticTab,
   attachment: {
     type: "dynamic",
     routeName: "site-id-attachments",
     title: "site.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch("/attachment_link/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
         query: {
           site: route.params.id,
           limit: 0,
@@ -99,13 +48,13 @@ const tabs = {
       return res.count;
     },
     props: {},
-  } satisfies Tab,
+  } satisfies DynamicTab,
   sample: {
     type: "dynamic",
     routeName: "site-id-samples",
     title: "site.samples",
     count: async () => {
-      const res = await $solrFetch("/sample", {
+      const res = await $solrFetch<SolrResponse>("/sample", {
         query: {
           q: `site_id:${route.params.id}`,
           rows: 0,
@@ -114,13 +63,13 @@ const tabs = {
       return res.response.numFound;
     },
     props: {},
-  } satisfies Tab,
+  } satisfies DynamicTab,
   locality_description: {
     type: "dynamic",
     routeName: "site-id-descriptions",
     title: "site.localityDescriptions",
     count: async () => {
-      const res = await $geoloogiaFetch("/locality_description/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_description/", {
         query: {
           site: route.params.id,
           limit: 0,
@@ -129,13 +78,13 @@ const tabs = {
       return res.count;
     },
     props: {},
-  } satisfies Tab,
+  } satisfies DynamicTab,
   locality_reference: {
     type: "dynamic",
     routeName: "site-id-references",
     title: "site.localityReferences",
     count: async () => {
-      const res = await $geoloogiaFetch("/locality_reference/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
         query: {
           site: route.params.id,
           limit: 0,
@@ -144,11 +93,11 @@ const tabs = {
       return res.count;
     },
     props: {},
-  } satisfies Tab,
+  } satisfies DynamicTab,
 };
 
-const { data, pending, error } = useAsyncData("site", async () => {
-  const site = await $geoloogiaFetch(`/site/${route.params.id}/`, {
+const { data } = useAsyncData("site", async () => {
+  const site = await $geoloogiaFetch<any>(`/site/${route.params.id}/`, {
     query: {
       nest: 2,
     },
@@ -178,6 +127,11 @@ const { data, pending, error } = useAsyncData("site", async () => {
       "locality_reference",
     ]),
   };
+}, {
+  default: () => ({
+    site: null,
+    tabs: [] as HydratedTab[],
+  }),
 });
 const title = computed(() => {
   const engTitle = isEmpty(data.value?.site.name_en)
@@ -185,6 +139,11 @@ const title = computed(() => {
     : data.value?.site.name_en;
   return $translate({ et: data.value?.site.name, en: engTitle });
 });
+
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+
 redirectInvalidTab({
   redirectRoute: localePath({
     name: "site-id",
@@ -353,3 +312,50 @@ redirectInvalidTab({
 //   computed: {},
 // });
 </script>
+
+<template>
+  <detail-new :show-similar="showDrawer">
+    <template #title>
+      <header-detail-new :title="title">
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </header-detail-new>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarSites"
+        :total-results="sitesRes?.response.numFound ?? 0"
+        :search-route="localePath({ path: '/site', query: getQueryParams() })"
+        :get-result-route="(item) => localePath({ name: 'site-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: site }">
+          <div class="font-weight-medium text-wrap">
+            {{ site.name }}
+          </div>
+        </template>
+        <template #itemSubtitle="{ item: site }">
+          <div v-if="site.area_id" class="d-flex align-center">
+            <v-icon start size="small">
+              {{ mdiTextureBox }}
+            </v-icon>
+            <span class="text--secondary">
+              {{
+                $translate({
+                  et: site.area_name,
+                  en: site.area_name_en,
+                })
+              }}
+            </span>
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
+    <NuxtPage v-bind="activeTabProps" />
+  </detail-new>
+</template>

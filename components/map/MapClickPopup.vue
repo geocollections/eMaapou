@@ -1,5 +1,25 @@
+<script setup lang="ts">
+import { LPopup } from "@vue-leaflet/vue-leaflet";
+
+const props = defineProps({
+  response: {
+    type: Object,
+    required: false,
+    default: () => {},
+  },
+});
+
+const features = computed(() => {
+  return props.response?.features ?? [];
+});
+const featuresLength = computed(() => {
+  return props.response?.features?.length ?? 0;
+});
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <l-popup :options="{ minWidth: 175 }">
+  <LPopup :options="{ minWidth: 175 }">
     <div style="max-height: 200px; overflow: auto">
       <v-table
         density="compact"
@@ -10,7 +30,7 @@
           <thead>
             <tr>
               <th>{{ $t("map.name") }}</th>
-              <!--              <th>{{ $t('map.relatedRecords') }}</th>-->
+              <!--              <th>{{ $t('map.relatedRecords') }}</th> -->
             </tr>
           </thead>
           <tbody>
@@ -34,30 +54,11 @@
                   }}
                 </nuxt-link>
               </td>
-              <!--              <td>{{ item.properties.total_related_records }}</td>-->
+              <!--              <td>{{ item.properties.total_related_records }}</td> -->
             </tr>
           </tbody>
         </template>
       </v-table>
     </div>
-  </l-popup>
+  </LPopup>
 </template>
-
-<script setup lang="ts">
-import { LPopup } from "@vue-leaflet/vue-leaflet";
-const props = defineProps({
-  response: {
-    type: Object,
-    required: false,
-    default: () => {},
-  },
-});
-
-const features = computed(() => {
-  return props.response?.features ?? [];
-});
-const featuresLength = computed(() => {
-  return props.response?.features?.length ?? 0;
-});
-const localePath = useLocalePath();
-</script>

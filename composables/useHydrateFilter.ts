@@ -518,12 +518,12 @@
 //     }
 //   }
 // }
-export const useHydrateFilterNew = () => {
+export function useHydrateFilterNew() {
   return {};
-};
-export const useHydrateFilterReference = () => {
+}
+export function useHydrateFilterReference() {
   return {};
-};
-export const useHydrateStatic = () => {
+}
+export function useHydrateStatic() {
   return {};
-};
+}

@@ -1,19 +1,16 @@
-export const useSearchResultsDrawer = async (
-  url: string,
-  {
-    routeName,
-    perPage = 10,
-    solrParams,
-  }: {
-    routeName: string;
-    perPage?: number;
-    solrParams: {
-      query: Ref<string>;
-      filter: Ref<(string | { [K: string]: string })[]>;
-      sort: Ref<string | undefined>;
-    };
-  },
-) => {
+export async function useSearchResultsDrawer<T = any>(url: string, {
+  routeName,
+  perPage = 10,
+  solrParams,
+}: {
+  routeName: string;
+  perPage?: number;
+  solrParams: {
+    query: Ref<string>;
+    filter: Ref<(string | { [K: string]: string })[]>;
+    sort: Ref<string | undefined>;
+  };
+}) {
   const searchPositionStore = useSearchPosition();
   const { setSearchPosition } = searchPositionStore;
   const {
@@ -27,13 +24,14 @@ export const useSearchResultsDrawer = async (
   );
 
   function handleSelect({ index, id }: { index: number; id: number }) {
-    if (searchPosition.value < 0) return;
+    if (searchPosition.value < 0)
+      return;
     setSearchPosition(
       { name: routeName, params: { id } },
       index + (page.value - 1) * perPage,
     );
   }
-  const { data } = await useSolrFetch(url, {
+  const { data } = await useSolrFetch<SolrResponse<T>>(url, {
     query: computed(() => ({
       q: solrParams.query.value,
       rows: perPage,
@@ -48,9 +46,12 @@ export const useSearchResultsDrawer = async (
   const getRouteBaseName = useRouteBaseName();
 
   const showDrawer = computed(() => {
-    if (!rootDetailRoute.value) return false;
-    if (!rootDetailRoute.value.name) return false;
-    if (searchPosition.value < 0) return false;
+    if (!rootDetailRoute.value)
+      return false;
+    if (!rootDetailRoute.value.name)
+      return false;
+    if (searchPosition.value < 0)
+      return false;
     if (
       !getRouteBaseName(route)?.startsWith(
         rootDetailRoute.value.name.toString(),
@@ -61,4 +62,4 @@ export const useSearchResultsDrawer = async (
   });
 
   return { data, page, handleSelect, showDrawer };
-};
+}

@@ -1,19 +1,19 @@
 import cloneDeep from "lodash/cloneDeep";
-import type { Headers, Header, DataTableOptions } from "~/constants";
+import type { DataTableOptions, Header, Headers } from "~/constants";
 import type {
-  Headers as HeadersNew,
   Header as HeaderNew,
+  Headers as HeadersNew,
 } from "~/constants/headersNew";
 
-export const useHeaders = (initHeaders: Headers) => {
+export function useHeaders(initHeaders: Headers) {
   const { t } = useI18n();
 
   const headersMap = ref(cloneDeep(initHeaders));
 
   const translateHeader = (header: Header) => {
-    if (header.translate === undefined || header.translate === true) {
+    if (header.translate === undefined || header.translate === true)
       header.title = t(header.text).toString();
-    }
+
     return header;
   };
 
@@ -37,17 +37,17 @@ export const useHeaders = (initHeaders: Headers) => {
     });
   };
   return { headers, handleHeadersChange, handleHeadersReset };
-};
+}
 
-export const useHeadersNew = (initHeaders: HeadersNew) => {
+export function useHeadersNew(initHeaders: HeadersNew) {
   const { t } = useI18n();
 
   const headersMap = ref(cloneDeep(initHeaders));
 
   const translateHeader = (header: HeaderNew) => {
-    if (header.titleTranslate === undefined || header.titleTranslate === true) {
+    if (header.titleTranslate === undefined || header.titleTranslate === true)
       return t(header.title);
-    }
+
     return header.title;
   };
 
@@ -78,4 +78,4 @@ export const useHeadersNew = (initHeaders: HeadersNew) => {
     });
   };
   return { headers, handleHeadersChange, handleHeadersReset };
-};
+}

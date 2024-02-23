@@ -1,14 +1,13 @@
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import { DRILLCORE } from "~/constants";
 import { HEADERS_DRILLCORE } from "~/constants/headersNew";
-import type { RouteLocation } from "vue-router";
 import type {
-  IdListFilter,
-  TextListFilter,
-  StringIdListFilter,
   GeomFilter,
+  IdListFilter,
   RangeAltFilter,
   RangeFilter,
+  TextListFilter,
 } from "~/composables/useFilter";
 
 export const useDrillcores = defineStore(

@@ -1,3 +1,8 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.id="{ item, index }">
@@ -53,9 +58,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const emit = defineEmits(["click:row"]);
-
-const localePath = useLocalePath();
-</script>

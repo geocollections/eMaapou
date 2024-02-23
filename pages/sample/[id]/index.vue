@@ -1,7 +1,92 @@
+<script setup lang="ts">
+const props = defineProps<{
+  sample: any;
+}>();
+
+const localePath = useLocalePath();
+const route = useRoute();
+
+const { data: images } = await useGeoloogiaApiFetch("/attachment_link/", {
+  query: {
+    limit: 8,
+    sample: route.params.id,
+    nest: 1,
+  },
+});
+
+const parentSpecimen = computed(() => props.sample.parent_specimen);
+const parent = computed(() => props.sample.parent_sample);
+const project = computed(() => props.sample.project);
+const database = computed(() => props.sample.database);
+const owner = computed(() => props.sample.owner);
+const classificationRock = computed(() => props.sample.classification_rock);
+const samplePurpose = computed(() => props.sample.sample_purpose);
+const agentCollected = computed(() => props.sample.agent_collected);
+const lithostratigraphy = computed(() => props.sample.lithostratigraphy);
+const stratigraphy = computed(() => props.sample.stratigraphy);
+const site = computed(() => props.sample.site);
+const series = computed(() => props.sample.series);
+const locality = computed(() => props.sample.locality);
+
+const showMap = computed(() => {
+  return (
+    (locality.value && locality.value.latitude && locality.value.longitude)
+    || (site.value && site.value.latitude && site.value.longitude)
+  );
+});
+
+const mapCenter = computed(() => {
+  if (locality.value) {
+    return {
+      latitude: locality.value.latitude,
+      longitude: locality.value.longitude,
+    };
+  }
+  if (site.value) {
+    return {
+      latitude: site.value.latitude,
+      longitude: site.value.longitude,
+    };
+  }
+  return null;
+});
+const { $translate } = useNuxtApp();
+
+const mapMarkers = computed(() => {
+  if (locality.value) {
+    return [
+      {
+        latitude: locality.value.latitude,
+        longitude: locality.value.longitude,
+        text: $translate({
+          et: props.sample.drillcore,
+          en: props.sample.drillcore_en,
+        }),
+      },
+    ];
+  }
+  if (site.value) {
+    return [
+      {
+        latitude: site.value.latitude,
+        longitude: site.value.longitude,
+        text: site.value.name,
+      },
+    ];
+  }
+  return [];
+});
+</script>
+
 <template>
   <v-container style="margin: initial">
     <v-row>
-      <v-col :sm="12" :md="6" :lg="7" :xl="5">
+      <v-col
+        :sm="12"
+        :md="6"
+        :lg="7"
+        :xl="5"
+      >
         <v-card>
           <base-table>
             <table-row
@@ -58,8 +143,7 @@
                     params: { id: sample.locality.id },
                   })
                 "
-              >
-              </table-row-link>
+              />
               <table-row
                 :title="$t('sample.localityFree').toString()"
                 :value="sample.locality_free"
@@ -281,89 +365,9 @@
             v-for="(item, i) in images.results"
             :key="i"
             :src="`https://files.geocollections.info/medium/${item.attachment.filename}`"
-          ></v-carousel-item>
+          />
         </v-carousel>
       </v-col>
     </v-row>
   </v-container>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{
-  sample: any;
-}>();
-
-const localePath = useLocalePath();
-const route = useRoute();
-
-const { data: images } = await useGeoloogiaApiFetch("/attachment_link/", {
-  query: {
-    limit: 8,
-    sample: route.params.id,
-    nest: 1,
-  },
-});
-
-const parentSpecimen = computed(() => props.sample.parent_specimen);
-const parent = computed(() => props.sample.parent_sample);
-const project = computed(() => props.sample.project);
-const database = computed(() => props.sample.database);
-const owner = computed(() => props.sample.owner);
-const classificationRock = computed(() => props.sample.classification_rock);
-const samplePurpose = computed(() => props.sample.sample_purpose);
-const agentCollected = computed(() => props.sample.agent_collected);
-const lithostratigraphy = computed(() => props.sample.lithostratigraphy);
-const stratigraphy = computed(() => props.sample.stratigraphy);
-const site = computed(() => props.sample.site);
-const series = computed(() => props.sample.series);
-const locality = computed(() => props.sample.locality);
-
-const showMap = computed(() => {
-  return (
-    (locality.value && locality.value.latitude && locality.value.longitude) ||
-    (site.value && site.value.latitude && site.value.longitude)
-  );
-});
-
-const mapCenter = computed(() => {
-  if (locality.value) {
-    return {
-      latitude: locality.value.latitude,
-      longitude: locality.value.longitude,
-    };
-  }
-  if (site.value) {
-    return {
-      latitude: site.value.latitude,
-      longitude: site.value.longitude,
-    };
-  }
-  return null;
-});
-const { $translate } = useNuxtApp();
-
-const mapMarkers = computed(() => {
-  if (locality.value) {
-    return [
-      {
-        latitude: locality.value.latitude,
-        longitude: locality.value.longitude,
-        text: $translate({
-          et: props.sample.drillcore,
-          en: props.sample.drillcore_en,
-        }),
-      },
-    ];
-  }
-  if (site.value) {
-    return [
-      {
-        latitude: site.value.latitude,
-        longitude: site.value.longitude,
-        text: site.value.name,
-      },
-    ];
-  }
-  return [];
-});
-</script>

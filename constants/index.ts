@@ -8,15 +8,15 @@ export * from "./services";
 
 export type SortItem = InstanceType<typeof VDataTable>["sortBy"][0];
 
-export type DataTableOptions = {
+export interface DataTableOptions {
   page: number;
   itemsPerPage: number;
   sortBy: SortItem[];
-};
+}
 
-type ResourceDefaults = {
+interface ResourceDefaults {
   options: DataTableOptions;
-};
+}
 
 export const ANALYSIS: ResourceDefaults = {
   options: {

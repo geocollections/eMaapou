@@ -1,5 +1,36 @@
+<script>
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+
+export default {
+  name: "BaseCardExpand",
+  props: {
+    showBody: {
+      type: Boolean,
+      default: false,
+      require: true,
+    },
+    title: {
+      type: String,
+      default: "Title",
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    icons() {
+      return {
+        mdiChevronUp,
+        mdiChevronDown,
+      };
+    },
+  },
+};
+</script>
+
 <template>
-  <v-card :class="{ active: active }">
+  <v-card :class="{ active }">
     <!-- NOTE: Font size should be set with class 'text-body-1', but it overrides font-family -->
     <v-card-title
       class="px-2 py-1 montserrat card-title--clickable"
@@ -20,43 +51,13 @@
       <slot name="body" :show-body="showBody">
         <div v-show="showBody">
           <div class="pb-3 pt-1">
-            <slot></slot>
+            <slot />
           </div>
         </div>
       </slot>
     </v-expand-transition>
   </v-card>
 </template>
-
-<script>
-import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
-export default {
-  name: 'BaseCardExpand',
-  props: {
-    showBody: {
-      type: Boolean,
-      default: false,
-      require: true,
-    },
-    title: {
-      type: String,
-      default: 'Title',
-    },
-    active: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    icons() {
-      return {
-        mdiChevronUp,
-        mdiChevronDown,
-      }
-    },
-  },
-}
-</script>
 
 <style scoped lang="scss">
 .card-title--clickable {

@@ -1,19 +1,6 @@
-<template>
-  <data-table-dataset-geolocation
-    id-field="dataset"
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
-import { HEADERS_DATASET_GEOLOCATION, DATASET_GEOLOCATIONS } from "~/constants";
+import { DATASET_GEOLOCATIONS, HEADERS_DATASET_GEOLOCATION } from "~/constants";
+
 const {
   options,
   search,
@@ -48,3 +35,17 @@ const { data, pending } = await useGeoloogiaApiFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-dataset-geolocation
+    id-field="dataset"
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

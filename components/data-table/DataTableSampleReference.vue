@@ -5,8 +5,7 @@
         v-if="item.reference"
         class="text-link"
         @click="$openGeology('reference', item.reference.id)"
-        >{{ item.reference.id }}</a
-      >
+      >{{ item.reference.id }}</a>
     </template>
 
     <template #item.reference__title="{ item }">
@@ -14,8 +13,7 @@
         v-if="item.reference"
         class="text-link"
         @click="$openGeology('reference', item.reference.id)"
-        >{{ item.reference.reference }}</a
-      >
+      >{{ item.reference.reference }}</a>
     </template>
   </base-data-table>
 </template>

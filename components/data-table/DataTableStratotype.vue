@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.stratigraphy="{ item }">
@@ -39,7 +43,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const localePath = useLocalePath();
-</script>

@@ -1,18 +1,6 @@
-<template>
-  <data-table-specimen
-    :items="data?.response.docs ?? []"
-    :count="data?.response.numFound ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_SPECIMEN, SPECIMEN } from "~/constants";
+
 const props = defineProps<{
   locality: number;
   depthStart: number;
@@ -51,3 +39,16 @@ const { data, pending } = await useSolrFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-specimen
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,16 +1,3 @@
-<template>
-  <data-table-stratotype
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_STRATOTYPE, STRATOTYPE } from "~/constants";
 
@@ -38,7 +25,7 @@ const { data, pending } = await useGeoloogiaApiFetch(
       nest: 1,
       search: search.value,
       search_fields: Object.values(
-        getAPIFieldValues(HEADERS_STRATOTYPE, locale.value)
+        getAPIFieldValues(HEADERS_STRATOTYPE, locale.value),
       ).join(","),
       ordering: getGeoloogiaApiSort({
         sortBy: options.value.sortBy,
@@ -46,6 +33,19 @@ const { data, pending } = await useGeoloogiaApiFetch(
         locale: locale.value as "et" | "en",
       }),
     },
-  }
+  },
 );
 </script>
+
+<template>
+  <data-table-stratotype
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

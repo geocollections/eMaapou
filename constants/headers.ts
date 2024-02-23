@@ -1,4 +1,5 @@
 import type { VDataTable } from "vuetify/components";
+
 /*
   DOCS: File for the headers of each tabels.
 
@@ -22,10 +23,10 @@ export type Header = NonNullable<InstanceType<typeof VDataTable>["headers"]>[0] 
   class?: string;
   cellClass?: string;
 };
-export type Headers = {
+export interface Headers {
   byIds: { [K: string]: Header };
   allIds: string[];
-};
+}
 export const HEADERS_ANALYSIS_RESULT: Headers = {
   byIds: {
     parameter: {

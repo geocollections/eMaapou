@@ -1,56 +1,6 @@
-<template>
-  <search>
-    <template #title>
-      <header-search
-        :title="$t('site.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiMapMarkerOutline"
-      />
-    </template>
-
-    <template #form="{ closeMobileSearch }">
-      <search-form-site
-        @update="
-          handleUpdate();
-          closeMobileSearch();
-        "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
-      />
-    </template>
-
-    <template #result>
-      <v-card
-        flat
-        :rounded="0"
-        style="
-          border-top: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-        "
-      >
-        <data-table-site
-          :show-search="false"
-          :items="data?.response.docs ?? []"
-          :count="data?.response.numFound ?? 0"
-          :headers="headers"
-          :options="options"
-          dynamic-headers
-          :is-loading="pending"
-          stateful-headers
-          @update="handleDataTableUpdate"
-          @change:headers="handleHeadersChange"
-          @reset:headers="handleHeadersReset(options)"
-          @click:row="handleClickRow"
-        />
-      </v-card>
-    </template>
-  </search>
-</template>
-
 <script setup lang="ts">
 import { mdiMapMarkerOutline } from "@mdi/js";
+import type { DataTableOptions } from "~/constants";
 
 const sitesStore = useSites();
 const {
@@ -65,7 +15,6 @@ const {
   solrFilters,
   options,
   headers,
-  searchPosition,
   resultsCount,
 } = storeToRefs(sitesStore);
 
@@ -94,7 +43,7 @@ const {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() as LocationQueryRaw });
+  router.push({ query: getQueryParams() });
 }
 
 async function handleUpdate() {
@@ -110,7 +59,7 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshSites();
@@ -144,3 +93,46 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 //   },
 // })
 </script>
+
+<template>
+  <search>
+    <template #title>
+      <header-search
+        :title="$t('site.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiMapMarkerOutline"
+      />
+    </template>
+
+    <template #form="{ closeMobileSearch }">
+      <search-form-site
+        @update="
+          handleUpdate();
+          closeMobileSearch();
+        "
+        @reset="
+          handleReset();
+          closeMobileSearch();
+        "
+      />
+    </template>
+
+    <template #result>
+      <data-table-site
+        class="border-t border-b"
+        :show-search="false"
+        :items="data?.response.docs ?? []"
+        :count="data?.response.numFound ?? 0"
+        :headers="headers"
+        :options="options"
+        dynamic-headers
+        :is-loading="pending"
+        stateful-headers
+        @update="handleDataTableUpdate"
+        @change:headers="handleHeadersChange"
+        @reset:headers="handleHeadersReset(options)"
+        @click:row="handleClickRow"
+      />
+    </template>
+  </search>
+</template>

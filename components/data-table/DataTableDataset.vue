@@ -1,3 +1,8 @@
+<script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.id="{ item, index }">
@@ -5,7 +10,7 @@
         v-if="item.id"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
-        @click="emit('click:row', { index: index, id: item.id })"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
       </nuxt-link>
@@ -16,7 +21,7 @@
         v-if="item.title"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
-        @click="emit('click:row', { index: index, id: item.id })"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.title }}
       </nuxt-link>
@@ -26,7 +31,9 @@
       <div v-if="item.date">
         {{ $formatDate(item.date) }}
       </div>
-      <div v-else>{{ item.date_txt }}</div>
+      <div v-else>
+        {{ item.date_txt }}
+      </div>
     </template>
 
     <template #item.database_acronym="{ item }">
@@ -43,8 +50,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const emit = defineEmits(["click:row"]);
-const localePath = useLocalePath();
-</script>

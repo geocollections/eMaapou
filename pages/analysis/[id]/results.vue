@@ -1,18 +1,6 @@
-<template>
-  <data-table-analysis-result
-    :items="data?.response.docs ?? []"
-    :count="data?.response.numFound ?? 0"
-    :options="options"
-    :headers="filteredHeaders"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { ANALYSIS_RESULT, HEADERS_ANALYSIS_RESULT } from "~/constants";
+
 const {
   options,
   handleUpdate,
@@ -31,9 +19,9 @@ const { locale } = useI18n();
 const filteredHeaders = computed(() =>
   headers.value.filter((header) => {
     return (
-      (!header.value?.includes("depth") &&
-        !(header.value === "analysis_method")) ??
-      true
+      (!header.value?.includes("depth")
+      && !(header.value === "analysis_method"))
+      ?? true
     );
   }),
 );
@@ -54,3 +42,16 @@ const { data, pending } = useSolrFetch("/analysis_results", {
   })),
 });
 </script>
+
+<template>
+  <data-table-analysis-result
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="filteredHeaders"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

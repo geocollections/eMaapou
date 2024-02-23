@@ -1,16 +1,3 @@
-<template>
-  <data-table-description
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
 import { DESCRIPTION, HEADERS_DESCRIPTION } from "~/constants";
@@ -54,18 +41,31 @@ const { data, pending } = await useGeoloogiaApiFetch<{
         return {
           ...item,
           canExpand:
-            !isEmpty(item.description) ||
-            item?.rock?.name ||
-            item?.rock?.name__en ||
-            item.zero_level ||
-            item.author_free ||
-            item.reference ||
-            item.year ||
-            item.stratigraphy_free ||
-            item.remarks,
+            !isEmpty(item.description)
+            || item?.rock?.name
+            || item?.rock?.name__en
+            || item.zero_level
+            || item.author_free
+            || item.reference
+            || item.year
+            || item.stratigraphy_free
+            || item.remarks,
         };
       }),
     };
   },
 });
 </script>
+
+<template>
+  <data-table-description
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

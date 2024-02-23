@@ -1,17 +1,3 @@
-<template>
-  <data-table-taxon-list
-    class="border-b"
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_TAXON_LIST, TAXON_LIST } from "~/constants";
 
@@ -47,3 +33,17 @@ const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
   },
 });
 </script>
+
+<template>
+  <data-table-taxon-list
+    class="border-b"
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,18 +1,6 @@
-<template>
-  <data-table-analysis
-    :items="data?.response.docs ?? []"
-    :count="data?.response.numFound ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { ANALYSIS, HEADERS_ANALYSIS } from "~/constants";
+
 const {
   options,
   solrQuery,
@@ -44,3 +32,16 @@ const { data, pending } = await useSolrFetch<{
   })),
 });
 </script>
+
+<template>
+  <data-table-analysis
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

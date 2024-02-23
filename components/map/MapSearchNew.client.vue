@@ -1,7 +1,3 @@
-<template>
-  <div id="map" style="height: 300px"></div>
-</template>
-
 <script setup lang="ts">
 import intersection from "lodash/intersection";
 import L from "leaflet";
@@ -12,14 +8,14 @@ import "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
-const emit = defineEmits(["update:model-value"]);
+
 const props = defineProps({
   modelValue: {
     type: Object as PropType<any | null>,
     default: null,
   },
 });
-
+const emit = defineEmits(["update:model-value"]);
 const map = ref<L.Map | null>(null);
 const mapClickResponse = ref(null as any);
 const activeOverlays = ref([] as string[]);
@@ -40,21 +36,21 @@ const dataOverlays = useDataOverlays({
 });
 const queryLayers = computed(() => {
   const queryLayers = [];
-  if (activeOverlays.value.includes("Uuringupunktid / Sites")) {
+  if (activeOverlays.value.includes("Uuringupunktid / Sites"))
     queryLayers.push("sarv:site_summary");
-  }
-  if (activeOverlays.value.includes("Puursüdamikud / Drillcores")) {
+
+  if (activeOverlays.value.includes("Puursüdamikud / Drillcores"))
     queryLayers.push("sarv:locality_drillcores");
-  }
-  if (activeOverlays.value.includes("Lokaliteedid / Localities")) {
+
+  if (activeOverlays.value.includes("Lokaliteedid / Localities"))
     queryLayers.push("sarv:locality_summary1");
-  }
-  if (activeOverlays.value.includes("Proovid / Samples")) {
+
+  if (activeOverlays.value.includes("Proovid / Samples"))
     queryLayers.push("sarv:sample_summary");
-  }
-  if (activeOverlays.value.includes("Üldine / Summary")) {
+
+  if (activeOverlays.value.includes("Üldine / Summary"))
     queryLayers.push("sarv:locality_summary_front");
-  }
+
   return queryLayers.join(",");
 });
 
@@ -66,18 +62,18 @@ onMounted(() => {
 
     if (props.modelValue) {
       activeGeomanLayer.value = L.geoJSON(props.modelValue, {
-        pointToLayer: function (feature, latlng) {
+        pointToLayer(feature, latlng) {
           return L.circle(latlng, feature.properties.radius);
         },
       });
-      if (map.value) {
+      if (map.value)
         activeGeomanLayer.value?.addTo(map.value);
-      }
     }
   });
 });
 function loadMap() {
-  if (map.value) return;
+  if (map.value)
+    return;
   map.value = L.map("map", {
     center: [58.5, 25.5],
     zoom: 7,
@@ -92,17 +88,18 @@ function loadMap() {
 function handlePmCreate(
   ...[{ layer }]: Parameters<L.PM.CreateEventHandler>
 ): ReturnType<L.PM.CreateEventHandler> {
-  if (activeGeomanLayer.value) {
+  if (activeGeomanLayer.value)
     map.value?.removeLayer(activeGeomanLayer.value);
-  }
+
   activeGeomanLayer.value = layer as L.Polygon | L.Circle;
 
   if (activeGeomanLayer.value instanceof L.Polygon) {
     emit("update:model-value", activeGeomanLayer.value.toGeoJSON());
-  } else if (activeGeomanLayer.value instanceof L.Circle) {
+  }
+  else if (activeGeomanLayer.value instanceof L.Circle) {
     emit(
       "update:model-value",
-      L.PM.Utils.circleToPolygon(activeGeomanLayer.value).toGeoJSON()
+      L.PM.Utils.circleToPolygon(activeGeomanLayer.value).toGeoJSON(),
     );
   }
 }
@@ -193,3 +190,7 @@ const isMapClickEnabled = computed(() => {
 //   } else mapClickResponse.value = null;
 // };
 </script>
+
+<template>
+  <div id="map" style="height: 300px" />
+</template>

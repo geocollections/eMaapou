@@ -1,20 +1,5 @@
-<template>
-  <div>
-    <data-table-analysis
-      :items="data?.response.docs ?? []"
-      :count="data?.response.numFound ?? 0"
-      :options="options"
-      :headers="filteredHeaders"
-      :is-loading="pending"
-      @update="handleUpdate"
-      @change:headers="handleHeadersChange"
-      @reset:headers="handleHeadersReset(options)"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
-import { HEADERS_ANALYSIS, ANALYSIS } from "~/constants";
+import { ANALYSIS, HEADERS_ANALYSIS } from "~/constants";
 
 const props = defineProps({
   locality: {
@@ -60,3 +45,18 @@ const { data, pending } = await useSolrFetch<{
   })),
 });
 </script>
+
+<template>
+  <div>
+    <data-table-analysis
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :options="options"
+      :headers="filteredHeaders"
+      :is-loading="pending"
+      @update="handleUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+    />
+  </div>
+</template>

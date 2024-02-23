@@ -1,3 +1,35 @@
+<script setup lang="ts">
+const props = defineProps<{ drillcoreBox: any }>();
+
+const img = useImage();
+const localePath = useLocalePath();
+const route = useRoute();
+const { $geoloogiaFetch } = useNuxtApp();
+
+const drillcore = computed(() => props.drillcoreBox.drillcore);
+const imageSizes = ["small", "medium", "large", "original"];
+const drillcoreBoxImages = computed(() => data.value?.drillcoreBoxImages);
+const activeImage = computed(() => data.value?.activeImage);
+
+const { data } = await useAsyncData("images", async () => {
+  const attachmentLinks = await $geoloogiaFetch("/attachment_link/", {
+    query: {
+      drillcore_box: route.params.id,
+      nest: 2,
+      ordering: "-attachment__is_preferred",
+    },
+  });
+
+  const drillcoreBoxImages = attachmentLinks.results;
+  const activeImage = drillcoreBoxImages[0];
+
+  return {
+    activeImage,
+    drillcoreBoxImages,
+  };
+});
+</script>
+
 <template>
   <v-container style="margin: initial">
     <v-row>
@@ -30,11 +62,15 @@
             @click="$openImage(activeImage.attachment.uuid_filename)"
           >
             <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
                 <v-progress-circular
                   indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
+                  color="grey-lighten-5"
+                />
               </v-row>
             </template>
           </v-img>
@@ -83,7 +119,7 @@
                   'elevation-4': isHovering,
                   'elevation-2': !isHovering,
                 }"
-                class="rounded cursor-pointer grey lighten-2 transition-swing"
+                class="rounded cursor-pointer bg-grey-lighten-2 transition-swing"
                 @click="activeImage = drillcoreBoxImages[index]"
               >
                 <template #placeholder>
@@ -94,8 +130,8 @@
                   >
                     <v-progress-circular
                       indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
+                      color="grey-lighten-5"
+                    />
                   </v-row>
                 </template>
               </v-img>
@@ -202,35 +238,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{ drillcoreBox: any }>();
-
-const img = useImage();
-const localePath = useLocalePath();
-const route = useRoute();
-const { $geoloogiaFetch } = useNuxtApp();
-
-const drillcore = computed(() => props.drillcoreBox.drillcore);
-const imageSizes = ["small", "medium", "large", "original"];
-const drillcoreBoxImages = computed(() => data.value?.drillcoreBoxImages);
-const activeImage = computed(() => data.value?.activeImage);
-
-const { data } = await useAsyncData("images", async () => {
-  const attachmentLinks = await $geoloogiaFetch("/attachment_link/", {
-    query: {
-      drillcore_box: route.params.id,
-      nest: 2,
-      ordering: "-attachment__is_preferred",
-    },
-  });
-
-  const drillcoreBoxImages = attachmentLinks.results;
-  const activeImage = drillcoreBoxImages[0];
-
-  return {
-    activeImage,
-    drillcoreBoxImages,
-  };
-});
-</script>

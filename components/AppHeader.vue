@@ -1,211 +1,3 @@
-<template>
-  <v-app-bar
-    density="compact"
-    :elevation="getRouteBaseName() === 'index' ? 0 : 4"
-    :absolute="getRouteBaseName() === 'index'"
-    :elevate-on-scroll="getRouteBaseName() !== 'index'"
-    :color="transparent ? 'transparent' : 'accent-darken-1'"
-    :class="{
-      'app-bar-full': $vuetify.display.mdAndUp,
-      'app-bar-mobile': !$vuetify.display.mdAndUp,
-    }"
-    :style="cssProps"
-  >
-    <!--
-          NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
-          Using v-slot:activator added a transition that made the title disappear when clicked.
-          https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
-         -->
-    <nuxt-link class="logo-link" :to="localePath({ path: '/' })">
-      <nuxt-img
-        :height="32"
-        contain
-        class="px-0 px-sm-3"
-        :src="state.logo"
-        style="vertical-align: middle"
-      />
-    </nuxt-link>
-    <v-toolbar-items v-if="$vuetify.display.mdAndUp" class="mr-md-2">
-      <v-btn
-        id="browse_menu_btn"
-        aria-label="browse"
-        text
-        color="white"
-        class="montserrat"
-        style="text-transform: capitalize"
-      >
-        {{ $t("common.browse") }}
-        <v-icon color="accent-lighten-2" end>
-          {{ icons.mdiChevronDown }}
-        </v-icon>
-      </v-btn>
-      <v-menu
-        activator="#browse_menu_btn"
-        content-class="elevation-2 mt-1"
-        transition="slide-y-transition"
-        location="bottom"
-        offset="10"
-      >
-        <v-card max-width="1000">
-          <v-card-actions class="d-flex align-baseline">
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
-                v-for="(item, index) in state.browseTaxon"
-                :key="`browse-lab-item-${index}`"
-                class="my-1"
-                :icon="item.icon"
-                :label="$t(item.label).toString()"
-                :to="localePath({ name: item.routeName })"
-              />
-            </v-list>
-            <v-divider class="mx-3 my-2" vertical />
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
-                v-for="(item, index) in state.browseLab"
-                :key="`browse-lab-item-${index}`"
-                class="my-1"
-                :icon="item.icon"
-                :label="$t(item.label).toString()"
-                :to="localePath({ name: item.routeName })"
-              />
-            </v-list>
-
-            <v-divider class="mx-3 my-2" vertical />
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
-                v-for="(item, index) in state.browseGeography"
-                :key="`browse-geography-item-${index}`"
-                class="my-1"
-                :icon="item.icon"
-                :label="$t(item.label).toString()"
-                :to="localePath({ name: item.routeName })"
-              />
-            </v-list>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
-
-      <v-btn
-        aria-label="about page"
-        text
-        color="white"
-        class="montserrat font-weight-medium"
-        style="text-transform: capitalize"
-        :to="localePath({ name: 'about' })"
-      >
-        {{ $t("common.about") }}
-      </v-btn>
-
-      <v-btn
-        aria-label="news page"
-        text
-        color="white"
-        class="montserrat font-weight-medium"
-        style="text-transform: capitalize"
-        :to="localePath({ name: 'news' })"
-      >
-        {{ $t("common.news") }}
-      </v-btn>
-      <v-btn
-        id="services_menu_btn"
-        aria-label="browse"
-        text
-        class="montserrat"
-        color="white"
-        style="text-transform: capitalize"
-      >
-        {{ $t("common.services") }}
-        <v-icon :icon="mdiChevronDown" color="accent-lighten-2" end />
-      </v-btn>
-      <v-menu
-        activator="#services_menu_btn"
-        content-class="elevation-2 mt-1"
-        transition="slide-y-transition"
-        location="bottom"
-        offset="10"
-      >
-        <v-card width="550">
-          <v-card-actions class="d-block">
-            <v-list
-              style="max-height: 450px; flex-flow: column wrap"
-              class="d-flex"
-            >
-              <base-menu-list-item
-                v-for="(tabId, index) in state.services.ids"
-                :key="`service-${index}`"
-                class="my-1"
-                target="_blank"
-                style="width: 250px"
-                :href="state.services[tabId].href"
-                :label="$t(state.services[tabId].title).toString()"
-                label-only
-              />
-            </v-list>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
-    </v-toolbar-items>
-    <v-toolbar-items
-      class="align-center ml-auto"
-      :style="{
-        width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
-      }"
-    >
-      <div
-        v-if="showSearch"
-        class="d-flex elevation-0 rounded mr-0 mr-sm-2"
-        style="width: 100%"
-        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
-      >
-        <input-search
-          v-model="state.query"
-          input-class="rounded-l rounded-r-0 montserrat"
-          background-color="white"
-          density="compact"
-          flat
-          :max-width="$vuetify.display.mdAndUp ? 650 : -1"
-          :autofocus="false"
-          :placeholder="$t('common.search').toString()"
-          @enter="
-            $router.push(
-              localePath({ name: searchRouteName, query: { q: state.query } })
-            )
-          "
-        />
-        <v-hover v-slot="{ hover }">
-          <v-btn
-            height="38"
-            :width="$vuetify.display.xs ? 32 : 48"
-            elevation="0"
-            :color="hover ? 'warning' : 'grey-lighten-2'"
-            class="rounded-l-0"
-            @click="
-              $router.push(
-                localePath({ name: searchRouteName, query: { q: state.query } })
-              )
-            "
-          >
-            <v-icon color="accent">{{ icons.mdiMagnify }}</v-icon>
-          </v-btn>
-        </v-hover>
-      </div>
-      <language-switcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
-      <v-btn
-        v-if="!$vuetify.display.mdAndUp"
-        text
-        class="montserrat ml-auto"
-        aria-label="Open navigation drawer"
-        style="text-transform: capitalize"
-        @click.stop="$emit('toggle:navigationDrawer')"
-      >
-        <v-icon color="accent-lighten-2" size="font-size: 24px">
-          {{ icons.mdiMenu }}
-        </v-icon>
-      </v-btn>
-    </v-toolbar-items>
-  </v-app-bar>
-</template>
-
 <script setup lang="ts">
 import { mdiChevronDown, mdiMagnify, mdiMenu } from "@mdi/js";
 import {
@@ -263,6 +55,223 @@ const cssProps = computed(() => {
   };
 });
 </script>
+
+<template>
+  <v-app-bar
+    density="compact"
+    :elevation="getRouteBaseName() === 'index' ? 0 : 4"
+    :absolute="getRouteBaseName() === 'index'"
+    :scroll-behavior="getRouteBaseName() !== 'index' ? 'elevate' : 'hide'"
+    :color="transparent ? 'transparent' : 'accent-darken-1'"
+    :class="{
+      'app-bar-full': $vuetify.display.mdAndUp,
+      'app-bar-mobile': !$vuetify.display.mdAndUp,
+    }"
+    :style="cssProps"
+  >
+    <!--
+          NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
+          Using v-slot:activator added a transition that made the title disappear when clicked.
+          https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
+         -->
+    <nuxt-link class="logo-link" :to="localePath({ path: '/' })">
+      <nuxt-img
+        :height="32"
+        contain
+        class="px-0 px-sm-3"
+        :src="state.logo"
+        style="vertical-align: middle"
+      />
+    </nuxt-link>
+    <v-toolbar-items v-if="$vuetify.display.mdAndUp" class="mr-md-2">
+      <v-btn
+        id="browse_menu_btn"
+        aria-label="browse"
+        variant="text"
+        color="white"
+        class="montserrat"
+        style="text-transform: capitalize"
+      >
+        {{ $t("common.browse") }}
+        <v-icon color="accent-lighten-2" end>
+          {{ icons.mdiChevronDown }}
+        </v-icon>
+      </v-btn>
+      <v-menu
+        activator="#browse_menu_btn"
+        content-class="mt-1"
+        transition="slide-y-transition"
+        location="bottom"
+        offset="10"
+      >
+        <v-card max-width="1000">
+          <v-card-actions class="d-flex align-baseline">
+            <v-list class="mx-3" width="250">
+              <base-menu-list-item
+                v-for="(item, index) in state.browseTaxon"
+                :key="`browse-lab-item-${index}`"
+                class="my-1"
+                :icon="item.icon"
+                :label="$t(item.label)"
+                :to="localePath({ name: item.routeName })"
+              />
+            </v-list>
+            <v-divider class="mx-3 my-2" vertical />
+            <v-list class="mx-3" width="250">
+              <base-menu-list-item
+                v-for="(item, index) in state.browseLab"
+                :key="`browse-lab-item-${index}`"
+                class="my-1"
+                :icon="item.icon"
+                :label="$t(item.label)"
+                :to="localePath({ name: item.routeName })"
+              />
+            </v-list>
+
+            <v-divider class="mx-3 my-2" vertical />
+            <v-list class="mx-3" width="250">
+              <base-menu-list-item
+                v-for="(item, index) in state.browseGeography"
+                :key="`browse-geography-item-${index}`"
+                class="my-1"
+                :icon="item.icon"
+                :label="$t(item.label)"
+                :to="localePath({ name: item.routeName })"
+              />
+            </v-list>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+
+      <v-btn
+        aria-label="about page"
+        variant="text"
+        color="white"
+        class="montserrat font-weight-medium"
+        style="text-transform: capitalize"
+        :to="localePath({ name: 'about' })"
+      >
+        {{ $t("common.about") }}
+      </v-btn>
+
+      <v-btn
+        aria-label="news page"
+        variant="text"
+        color="white"
+        class="montserrat font-weight-medium"
+        style="text-transform: capitalize"
+        :to="localePath({ name: 'news' })"
+      >
+        {{ $t("common.news") }}
+      </v-btn>
+      <v-btn
+        id="services_menu_btn"
+        aria-label="browse"
+        variant="text"
+        class="montserrat"
+        color="white"
+        style="text-transform: capitalize"
+      >
+        {{ $t("common.services") }}
+        <v-icon
+          :icon="mdiChevronDown"
+          color="accent-lighten-2"
+          end
+        />
+      </v-btn>
+      <v-menu
+        activator="#services_menu_btn"
+        content-class="elevation-2 mt-1"
+        transition="slide-y-transition"
+        location="bottom"
+        offset="10"
+      >
+        <v-card width="550">
+          <v-card-actions class="d-block">
+            <v-list
+              style="max-height: 450px; flex-flow: column wrap"
+              class="d-flex"
+            >
+              <base-menu-list-item
+                v-for="(tabId, index) in state.services.ids"
+                :key="`service-${index}`"
+                class="my-1"
+                target="_blank"
+                style="width: 250px"
+                :href="state.services[tabId].href"
+                :label="$t(state.services[tabId].title)"
+                label-only
+              />
+            </v-list>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+    </v-toolbar-items>
+    <v-toolbar-items
+      class="align-center ml-auto"
+      :style="{
+        width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
+      }"
+    >
+      <div
+        v-if="showSearch"
+        class="d-flex elevation-0 rounded mr-0 mr-sm-2"
+        style="width: 100%"
+        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
+      >
+        <input-search
+          v-model="state.query"
+          input-class="rounded-l rounded-r-0 montserrat"
+          background-color="white"
+          density="compact"
+          flat
+          :max-width="$vuetify.display.mdAndUp ? 650 : -1"
+          :autofocus="false"
+          :placeholder="$t('common.search')"
+          @enter="
+            $router.push(
+              localePath({ name: searchRouteName, query: { q: state.query } }),
+            )
+          "
+        />
+        <v-hover v-slot="{ hover }">
+          <v-btn
+            height="38"
+            :width="$vuetify.display.xs ? 32 : 48"
+            elevation="0"
+            :color="hover ? 'warning' : 'grey-lighten-2'"
+            class="rounded-s-0"
+            @click="
+              $router.push(
+                localePath({
+                  name: searchRouteName,
+                  query: { q: state.query },
+                }),
+              )
+            "
+          >
+            <v-icon color="accent">
+              {{ icons.mdiMagnify }}
+            </v-icon>
+          </v-btn>
+        </v-hover>
+      </div>
+      <language-switcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
+      <v-btn
+        v-if="!$vuetify.display.mdAndUp"
+        variant="text"
+        class="montserrat ml-auto"
+        aria-label="Open navigation drawer"
+        style="text-transform: capitalize"
+        @click.stop="$emit('toggle:navigationDrawer')"
+      >
+        <v-icon color="accent-lighten-2" size="font-size: 24px">
+          {{ icons.mdiMenu }}
+        </v-icon>
+      </v-btn>
+    </v-toolbar-items>
+  </v-app-bar>
+</template>
 
 <style scoped lang="scss">
 .tab {

@@ -1,3 +1,12 @@
+<script setup lang="ts">
+// TODO: "Currently a dialog is created for every thumbnail image.
+// would be better if there was only one dialog that we pass the image url to.
+
+defineProps<{
+  src: string;
+}>();
+</script>
+
 <template>
   <v-img
     id="preview-img"
@@ -10,15 +19,6 @@
     @click="$emit('click')"
   />
 </template>
-
-<script setup lang="ts">
-// TODO: "Currently a dialog is created for every thumbnail image.
-// would be better if there was only one dialog that we pass the image url to.
-
-defineProps<{
-  src: string;
-}>();
-</script>
 
 <style lang="scss" scoped>
 .thumbnail-image {

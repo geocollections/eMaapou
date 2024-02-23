@@ -1,13 +1,13 @@
-type BaseTab = {
+interface BaseTab {
   title: string;
   routeName: string;
-  props: any;
-};
+  props: Record<string, any>;
+}
 
-type StaticTab = BaseTab & {
+export type StaticTab = BaseTab & {
   type: "static";
 };
-type DynamicTab = BaseTab & {
+export type DynamicTab = BaseTab & {
   type: "dynamic";
   count: (ctx?: Record<string, any>) => Promise<number>;
 };
@@ -19,20 +19,19 @@ type HydratedDynamicTab = BaseTab & {
 export type Tab = StaticTab | DynamicTab;
 export type HydratedTab = StaticTab | HydratedDynamicTab;
 
-export const useTabs = () => {
-  const { t } = useI18n({ useScope: "global" });
+type HydratedTabs<T extends Record<string, Tab>> = { [K in keyof T]: T[K] extends StaticTab ? StaticTab : HydratedDynamicTab };
+
+export function useTabs() {
   const getRouteBaseName = useRouteBaseName();
   const route = useRoute();
-  // const tabs = ref(await hydrateTabs(initTabs));
 
   async function hydrateTabs<
-    T extends Record<string | number | symbol, Tab>,
+    T extends Record<string, Tab>,
     K extends keyof T,
-    PK extends keyof T,
   >(
     tabs: T,
-    { props, ctx }: { props: Record<PK, any>; ctx?: Record<string, any> },
-  ): Promise<Record<K, HydratedTab>> {
+    { props, ctx }: { props: Record<K, any>; ctx?: Record<string, any> },
+  ) {
     const promises = Object.entries(tabs).map(async ([key, tab]) => {
       if (tab.type === "dynamic") {
         const count = await tab.count(ctx);
@@ -42,7 +41,7 @@ export const useTabs = () => {
             ...tab,
             count,
             // title: t(tab.title, { number: count }),
-            props: props[key as PK] ?? {},
+            props: props[key as K] ?? {},
           },
         ] as [string, HydratedDynamicTab];
       }
@@ -51,13 +50,13 @@ export const useTabs = () => {
         {
           ...tab,
           // title: t(tab.title),
-          props: props[key as PK] ?? {},
+          props: props[key as K] ?? {},
         },
       ] as [string, StaticTab];
     });
     const hydratedTabs = await Promise.all(promises);
 
-    return Object.fromEntries(hydratedTabs);
+    return Object.fromEntries(hydratedTabs) as HydratedTabs<T>;
   }
 
   function filterHydratedTabs<
@@ -65,21 +64,22 @@ export const useTabs = () => {
     K extends keyof T,
   >(tabs: T, order: K[]): HydratedTab[] {
     return order
-      .map((key) => tabs[key])
+      .map(key => tabs[key])
       .filter((tab) => {
-        if (tab.type === "dynamic") {
+        if (tab.type === "dynamic")
           return tab.count > 0;
-        }
+
         return true;
       });
   }
 
   function getCurrentTabRouteProps(tabs: HydratedTab[]) {
     const routeTab = tabs.find(
-      (tab) => tab.routeName === getRouteBaseName(route),
+      tab => tab.routeName === getRouteBaseName(route),
     );
 
-    if (routeTab === undefined) return {};
+    if (routeTab === undefined)
+      return {};
     return routeTab.props;
   }
 
@@ -88,4 +88,4 @@ export const useTabs = () => {
     filterHydratedTabs,
     getCurrentTabRouteProps,
   };
-};
+}

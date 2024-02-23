@@ -1,7 +1,67 @@
+<script setup lang="ts">
+import sumBy from "lodash/sumBy";
+import sortBy from "lodash/sortBy";
+
+const props = defineProps<{
+  analysis: any;
+}>();
+
+const resultChartData = computed(() => data.value?.resultChartData);
+const database = computed(() => props.analysis.database);
+const analysisMethod = computed(() => props.analysis.analysis_method ?? "");
+const sample = computed(() => props.analysis.sample);
+const agent = computed(() => props.analysis.agent);
+const reference = computed(() => props.analysis.reference);
+const dataset = computed(() => props.analysis.dataset);
+
+const { $solrFetch } = useNuxtApp();
+const route = useRoute();
+const { data } = await useAsyncData("results", async () => {
+  const analysisResultResponse = await $solrFetch("/analysis_results", {
+    query: {
+      "q": `analysis_id:${route.params.id}`,
+      "group": true,
+      "group.field": "unit_id",
+      "group.sort": "value desc",
+      "group.limit": 100,
+    },
+  });
+  const resultChartData = analysisResultResponse.grouped.unit_id.groups
+    .map((group: any) => [group.groupValue, group.doclist.docs])
+    .reduce((prev: any, [unitKey, unitResults]: any) => {
+      const results = unitResults
+        .filter((result: any) => result.value && result.value >= 0)
+        .map((result: any) => {
+          return {
+            name: result.parameter,
+            value: result.value,
+          };
+        });
+
+      const valueSum = sumBy(results, "value");
+      if (unitKey === "6")
+        results.push({ name: "Other", value: 100 - valueSum });
+
+      return {
+        ...prev,
+        [unitKey]: sortBy(results, "value"),
+      };
+    }, {});
+  return {
+    resultChartData,
+  };
+});
+</script>
+
 <template>
   <v-container style="margin: initial">
     <v-row>
-      <v-col :sm="12" :md="6" :lg="7" :xl="5">
+      <v-col
+        :sm="12"
+        :md="6"
+        :lg="7"
+        :xl="5"
+      >
         <v-card>
           <base-table>
             <table-row
@@ -140,7 +200,12 @@
           </base-table>
         </v-card>
       </v-col>
-      <v-col v-if="resultChartData" :md="6" :lg="5" :xl="4">
+      <v-col
+        v-if="resultChartData"
+        :md="6"
+        :lg="5"
+        :xl="4"
+      >
         <div class="d-block">
           <chart-analysis-results :data="resultChartData" />
         </div>
@@ -148,59 +213,3 @@
     </v-row>
   </v-container>
 </template>
-
-<script setup lang="ts">
-import sumBy from "lodash/sumBy";
-import sortBy from "lodash/sortBy";
-
-const props = defineProps<{
-  analysis: any;
-}>();
-
-const resultChartData = computed(() => data.value?.resultChartData);
-const database = computed(() => props.analysis.database);
-const analysisMethod = computed(() => props.analysis.analysis_method ?? "");
-const sample = computed(() => props.analysis.sample);
-const agent = computed(() => props.analysis.agent);
-const reference = computed(() => props.analysis.reference);
-const dataset = computed(() => props.analysis.dataset);
-
-const { $solrFetch } = useNuxtApp();
-const route = useRoute();
-const { data } = await useAsyncData("results", async () => {
-  const analysisResultResponse = await $solrFetch("/analysis_results", {
-    query: {
-      q: `analysis_id:${route.params.id}`,
-      group: true,
-      "group.field": "unit_id",
-      "group.sort": "value desc",
-      "group.limit": 100,
-    },
-  });
-  const resultChartData = analysisResultResponse.grouped.unit_id.groups
-    .map((group: any) => [group.groupValue, group.doclist.docs])
-    .reduce((prev: any, [unitKey, unitResults]: any) => {
-      const results = unitResults
-        .filter((result: any) => result.value && result.value >= 0)
-        .map((result: any) => {
-          return {
-            name: result.parameter,
-            value: result.value,
-          };
-        });
-
-      const valueSum = sumBy(results, "value");
-      if (unitKey === "6") {
-        results.push({ name: "Other", value: 100 - valueSum });
-      }
-
-      return {
-        ...prev,
-        [unitKey]: sortBy(results, "value"),
-      };
-    }, {});
-  return {
-    resultChartData,
-  };
-});
-</script>

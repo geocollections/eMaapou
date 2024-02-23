@@ -1,17 +1,3 @@
-<template>
-  <div>
-    <client-only>
-      <v-chart
-        id="chart-analysis-results"
-        ref="chart"
-        :style="`height: ${state.chartOptions.totalHeight}px `"
-        :init-options="initOptions"
-        :option="option"
-      />
-    </client-only>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { BarChart } from "echarts/charts";
 import {
@@ -35,8 +21,6 @@ type ECOption = ComposeOption<
   | YAXisComponentOption
   | GridComponentOption
 >;
-use([CanvasRenderer, BarChart, GridComponent, TooltipComponent]);
-
 const props = defineProps({
   data: {
     type: Object as PropType<{
@@ -46,12 +30,14 @@ const props = defineProps({
   },
 });
 
+use([CanvasRenderer, BarChart, GridComponent, TooltipComponent]);
+
 const chart = ref<typeof VChart>();
 const initOptions = computed(() => {
   return { renderer: "canvas" as "canvas" | "svg" };
 });
 
-const createSubCharts = (data: (typeof props)["data"]) => {
+function createSubCharts(data: (typeof props)["data"]) {
   let topPosition = 20;
   let totalHeight = 60;
   return {
@@ -98,8 +84,8 @@ const createSubCharts = (data: (typeof props)["data"]) => {
                   : 50,
                 overflow: "truncate",
               },
-              data: group?.map((val) => ({
-                // @ts-ignore
+              data: group?.map(val => ({
+                // @ts-expect-error
                 value: val.name,
               })),
 
@@ -133,7 +119,7 @@ const createSubCharts = (data: (typeof props)["data"]) => {
     ),
     chartOptions: { totalHeight },
   };
-};
+}
 const { subCharts, chartOptions } = createSubCharts(props.data);
 const state = reactive({
   subCharts,
@@ -161,3 +147,17 @@ onMounted(() => {
   });
 });
 </script>
+
+<template>
+  <div>
+    <client-only>
+      <VChart
+        id="chart-analysis-results"
+        ref="chart"
+        :style="`height: ${state.chartOptions.totalHeight}px `"
+        :init-options="initOptions"
+        :option="option"
+      />
+    </client-only>
+  </div>
+</template>

@@ -1,51 +1,5 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
-          v-model="filters.name.value"
-          :title="$t('filters.localityName')"
-          @update:model-value="handleUpdate"
-          value="name"
-        />
-        <filter-input-autocomplete
-          v-model="filters.country.value"
-          ref="filterCountry"
-          :title="$t('filters.country')"
-          :query-function="suggestCountry"
-          :hydration-function="hydrateCountry"
-          @update:model-value="handleUpdate"
-          value="country"
-        />
-        <filter-map
-          v-model="filters.geometry.value"
-          @update:model-value="handleUpdate"
-          value="map"
-        />
-        <filter-input-range
-          v-model="filters.stratigraphyAge.value"
-          :title="$t('filters.stratigraphyAge')"
-          @update:model-value="handleUpdate"
-          value="stratigraphyAge"
-        />
-        <filter-input-autocomplete
-          v-model="filters.reference.value"
-          ref="filterReferences"
-          :title="$t('filters.reference')"
-          :query-function="suggestReference"
-          :hydration-function="hydrateReference"
-          @update:model-value="handleUpdate"
-          value="reference"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import type FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -75,8 +29,8 @@ const { suggest: suggestCountry, hydrate: hydrateCountry } = useAutocomplete(
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
-const { suggest: suggestReference, hydrate: hydrateReference } =
-  useAutocomplete("/locality", {
+const { suggest: suggestReference, hydrate: hydrateReference }
+  = useAutocomplete("/locality", {
     idField: "locality_references_kws",
     nameField: "locality_references",
     filterExclude: "references",
@@ -85,3 +39,49 @@ const { suggest: suggestReference, hydrate: hydrateReference } =
     containsParser: removeNonAlphanumeric,
   });
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <v-expansion-panels variant="accordion" multiple>
+        <filter-input-text
+          v-model="filters.name.value"
+          :title="$t('filters.localityName')"
+          value="name"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterCountry"
+          v-model="filters.country.value"
+          :title="$t('filters.country')"
+          :query-function="suggestCountry"
+          :hydration-function="hydrateCountry"
+          value="country"
+          @update:model-value="handleUpdate"
+        />
+        <filter-map
+          v-model="filters.geometry.value"
+          value="map"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-range
+          v-model="filters.stratigraphyAge.value"
+          :title="$t('filters.stratigraphyAge')"
+          value="stratigraphyAge"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterReferences"
+          v-model="filters.reference.value"
+          :title="$t('filters.reference')"
+          :query-function="suggestReference"
+          :hydration-function="hydrateReference"
+          value="reference"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

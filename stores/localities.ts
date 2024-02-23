@@ -1,13 +1,13 @@
 import { z } from "zod";
+import type { RouteLocation } from "vue-router";
 import { LOCALITY } from "~/constants";
 import { HEADERS_LOCALITY } from "~/constants/headersNew";
-import type { RouteLocation } from "vue-router";
 import type {
-  IdListFilter,
-  TextListFilter,
-  StringIdListFilter,
   GeomFilter,
+  IdListFilter,
   RangeAltFilter,
+  StringIdListFilter,
+  TextListFilter,
 } from "~/composables/useFilter";
 
 export const useLocalities = defineStore(

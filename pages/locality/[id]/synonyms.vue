@@ -1,18 +1,6 @@
-<template>
-  <data-table-synonym
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
 import { HEADERS_SYNONYM, SYNONYM } from "~/constants";
+
 const route = useRoute();
 const {
   options,
@@ -35,7 +23,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/locality_synonym/", {
     nest: 1,
     search: search.value,
     search_fields: Object.values(
-      getAPIFieldValues(HEADERS_SYNONYM, locale.value)
+      getAPIFieldValues(HEADERS_SYNONYM, locale.value),
     ).join(","),
     ordering: getGeoloogiaApiSort({
       sortBy: options.value.sortBy,
@@ -45,3 +33,16 @@ const { data, pending } = await useGeoloogiaApiFetch("/locality_synonym/", {
   },
 });
 </script>
+
+<template>
+  <data-table-synonym
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,104 +1,3 @@
-<template>
-  <div>
-    <!--   <v-form @submit.prevent="handleUpdate"> -->
-    <!--     <input-search v-model="query" /> -->
-    <!--     <search-actions class="mb-3" @click="handleReset" /> -->
-    <!---->
-    <!--     <v-expansion-panels accordion flat tile multiple> -->
-    <!--       <filter-input-range -->
-    <!--         v-model="depth" -->
-    <!--         :label="$t('filters.depth').toString()" -->
-    <!--         interval-labels="intervals.depth" -->
-    <!--         :step="0.01" -->
-    <!--       /> -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="method" -->
-    <!--         :title="$t('filters.method').toString()" -->
-    <!--         static -->
-    <!--         :query-field=" -->
-    <!--           $i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en' -->
-    <!--         " -->
-    <!--         :query-function="querySuggestionsMethod" -->
-    <!--       /> -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="lab" -->
-    <!--         :title="$t('filters.lab').toString()" -->
-    <!--         static -->
-    <!--         :query-field="$i18n.locale === 'et' ? 'lab' : 'lab_en'" -->
-    <!--         :query-function="querySuggestionsLab" -->
-    <!--       /> -->
-    <!---->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="project" -->
-    <!--         :title="$t('filters.project').toString()" -->
-    <!--         static -->
-    <!--         :query-field=" -->
-    <!--           $i18n.locale === 'et' ? 'project_name' : 'project_name_en' -->
-    <!--         " -->
-    <!--         :query-function="querySuggestionsDataset" -->
-    <!--       /> -->
-    <!---->
-    <!--       <!-- TODO: `analytical_data` index does not contain english translation of dataset. Currently only shows estonian name. After english name added to index update the hydration and querying accordingly. -->
-    -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="dataset" -->
-    <!--         :title="$t('filters.dataset').toString()" -->
-    <!--         query-field="dataset_name" -->
-    <!--         :query-function="querySuggestionsDataset" -->
-    <!--       /> -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="sample" -->
-    <!--         :title="$t('filters.sample').toString()" -->
-    <!--         query-field="sample_number" -->
-    <!--         :query-function="querySuggestionsSample" -->
-    <!--       /> -->
-    <!--       <filter-input-parameter -->
-    <!--         v-model="parameter" -->
-    <!--         :parameters="parameterSuggestions" -->
-    <!--       /> -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="stratigraphyHierarchy" -->
-    <!--         :title="$t('filters.stratigraphyHierarchy').toString()" -->
-    <!--         :query-field=" -->
-    <!--           $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
-    <!--         " -->
-    <!--         :query-function="querySuggestionsStratigraphy" -->
-    <!--       /> -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="lithostratigraphyHierarchy" -->
-    <!--         :title="$t('filters.lithostratigraphyHierarchy').toString()" -->
-    <!--         :query-field=" -->
-    <!--           $i18n.locale === 'et' ? 'lithostratigraphy' : 'lithostratigraphy_en' -->
-    <!--         " -->
-    <!--         :query-function="querySuggestionsLithostratigraphy" -->
-    <!--       /> -->
-    <!--       <filter-reference v-model="reference" /> -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="locality" -->
-    <!--         :title="$t('filters.locality').toString()" -->
-    <!--         :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
-    <!--         :query-function="querySuggestionsLocality" -->
-    <!--       /> -->
-    <!--       <!-- TODO: `analytical_data` index does not contain english translation of site. Currently only shows estonian name. After english name added to index update the hydration and querying accordingly. -->
-    -->
-    <!--       <filter-input-autocomplete-new -->
-    <!--         v-model="site" -->
-    <!--         :title="$t('filters.site').toString()" -->
-    <!--         query-field="site" -->
-    <!--         :query-function="querySuggestionsSite" -->
-    <!--       /> -->
-    <!--       <filter-map -->
-    <!--         v-model="map" -->
-    <!--         locality-overlay -->
-    <!--         site-overlay -->
-    <!--         :items="$accessor.search.analyticalData.items" -->
-    <!--       /> -->
-    <!--       <filter-institution v-model="institutions" /> -->
-    <!--     </v-expansion-panels> -->
-    <!--   </v-form> -->
-  </div>
-</template>
-
 <script lang="ts">
 // import {
 //   computed,
@@ -617,3 +516,104 @@
 //   },
 // })
 </script>
+
+<template>
+  <div>
+    <!--   <v-form @submit.prevent="handleUpdate"> -->
+    <!--     <input-search v-model="query" /> -->
+    <!--     <search-actions class="mb-3" @click="handleReset" /> -->
+    <!---->
+    <!--     <v-expansion-panels accordion flat tile multiple> -->
+    <!--       <filter-input-range -->
+    <!--         v-model="depth" -->
+    <!--         :label="$t('filters.depth').toString()" -->
+    <!--         interval-labels="intervals.depth" -->
+    <!--         :step="0.01" -->
+    <!--       /> -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="method" -->
+    <!--         :title="$t('filters.method').toString()" -->
+    <!--         static -->
+    <!--         :query-field=" -->
+    <!--           $i18n.locale === 'et' ? 'analysis_method' : 'analysis_method_en' -->
+    <!--         " -->
+    <!--         :query-function="querySuggestionsMethod" -->
+    <!--       /> -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="lab" -->
+    <!--         :title="$t('filters.lab').toString()" -->
+    <!--         static -->
+    <!--         :query-field="$i18n.locale === 'et' ? 'lab' : 'lab_en'" -->
+    <!--         :query-function="querySuggestionsLab" -->
+    <!--       /> -->
+    <!---->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="project" -->
+    <!--         :title="$t('filters.project').toString()" -->
+    <!--         static -->
+    <!--         :query-field=" -->
+    <!--           $i18n.locale === 'et' ? 'project_name' : 'project_name_en' -->
+    <!--         " -->
+    <!--         :query-function="querySuggestionsDataset" -->
+    <!--       /> -->
+    <!---->
+    <!--       <!-- TODO: `analytical_data` index does not contain english translation of dataset. Currently only shows estonian name. After english name added to index update the hydration and querying accordingly. -->
+    -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="dataset" -->
+    <!--         :title="$t('filters.dataset').toString()" -->
+    <!--         query-field="dataset_name" -->
+    <!--         :query-function="querySuggestionsDataset" -->
+    <!--       /> -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="sample" -->
+    <!--         :title="$t('filters.sample').toString()" -->
+    <!--         query-field="sample_number" -->
+    <!--         :query-function="querySuggestionsSample" -->
+    <!--       /> -->
+    <!--       <filter-input-parameter -->
+    <!--         v-model="parameter" -->
+    <!--         :parameters="parameterSuggestions" -->
+    <!--       /> -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="stratigraphyHierarchy" -->
+    <!--         :title="$t('filters.stratigraphyHierarchy').toString()" -->
+    <!--         :query-field=" -->
+    <!--           $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
+    <!--         " -->
+    <!--         :query-function="querySuggestionsStratigraphy" -->
+    <!--       /> -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="lithostratigraphyHierarchy" -->
+    <!--         :title="$t('filters.lithostratigraphyHierarchy').toString()" -->
+    <!--         :query-field=" -->
+    <!--           $i18n.locale === 'et' ? 'lithostratigraphy' : 'lithostratigraphy_en' -->
+    <!--         " -->
+    <!--         :query-function="querySuggestionsLithostratigraphy" -->
+    <!--       /> -->
+    <!--       <filter-reference v-model="reference" /> -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="locality" -->
+    <!--         :title="$t('filters.locality').toString()" -->
+    <!--         :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
+    <!--         :query-function="querySuggestionsLocality" -->
+    <!--       /> -->
+    <!--       <!-- TODO: `analytical_data` index does not contain english translation of site. Currently only shows estonian name. After english name added to index update the hydration and querying accordingly. -->
+    -->
+    <!--       <filter-input-autocomplete-new -->
+    <!--         v-model="site" -->
+    <!--         :title="$t('filters.site').toString()" -->
+    <!--         query-field="site" -->
+    <!--         :query-function="querySuggestionsSite" -->
+    <!--       /> -->
+    <!--       <filter-map -->
+    <!--         v-model="map" -->
+    <!--         locality-overlay -->
+    <!--         site-overlay -->
+    <!--         :items="$accessor.search.analyticalData.items" -->
+    <!--       /> -->
+    <!--       <filter-institution v-model="institutions" /> -->
+    <!--     </v-expansion-panels> -->
+    <!--   </v-form> -->
+  </div>
+</template>

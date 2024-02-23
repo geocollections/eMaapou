@@ -1,10 +1,41 @@
+<script setup lang="ts">
+import { mdiFileDownloadOutline, mdiInformationOutline } from "@mdi/js";
+import type { ImageModifiers, ImageOptions } from "@nuxt/image";
+import type { RouteLocationRaw } from "vue-router";
+
+export interface OverlayImage {
+  src: string;
+  modifiers: Partial<ImageModifiers>;
+  options: ImageOptions;
+  id?: number;
+}
+
+defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+  image: {
+    type: Object as PropType<OverlayImage>,
+    default: undefined,
+  },
+  detailRoute: {
+    type: Object as PropType<RouteLocationRaw>,
+    default: undefined,
+  },
+});
+const emit = defineEmits(["input"]);
+const img = useImage();
+const localePath = useLocalePath();
+</script>
+
 <template>
   <v-dialog
     :model-value="modelValue"
     overlay-opacity="0.80"
     content-class="elevation-0"
     offset-x
-    @input="emit('input', !modelValue)"
+    @update:model-value="emit('input', !modelValue)"
   >
     <div class="text-center" @click="emit('input', !modelValue)">
       <nuxt-img
@@ -33,13 +64,17 @@
         color="info"
         elevation="2"
       >
-        <v-icon left>{{ mdiInformationOutline }}</v-icon>
+        <v-icon start>
+          {{ mdiInformationOutline }}
+        </v-icon>
         {{ $t("photo.viewDetail") }}
       </v-btn>
-      <div class="white rounded px-2">
-        <v-icon left>{{ mdiFileDownloadOutline }}</v-icon>
+      <div class="bg-white rounded px-2">
+        <v-icon start>
+          {{ mdiFileDownloadOutline }}
+        </v-icon>
         <v-btn
-          text
+          variant="text"
           class="text-capitalize"
           :href="img(image.src, { size: 'small' }, image.options)"
           target="_blank"
@@ -47,7 +82,7 @@
           {{ $t("common.small") }}
         </v-btn>
         <v-btn
-          text
+          variant="text"
           class="text-capitalize"
           :href="img(image.src, { size: 'medium' }, image.options)"
           target="_blank"
@@ -55,7 +90,7 @@
           {{ $t("common.medium") }}
         </v-btn>
         <v-btn
-          text
+          variant="text"
           class="text-capitalize"
           :href="img(image.src, { size: 'large' }, image.options)"
           target="_blank"
@@ -63,7 +98,7 @@
           {{ $t("common.large") }}
         </v-btn>
         <v-btn
-          text
+          variant="text"
           class="text-capitalize"
           :href="img(image.src, {}, image.options)"
           target="_blank"
@@ -74,34 +109,3 @@
     </div>
   </v-dialog>
 </template>
-
-<script setup lang="ts">
-import { mdiInformationOutline, mdiFileDownloadOutline } from "@mdi/js";
-import type { ImageModifiers, ImageOptions } from "@nuxt/image";
-import type { RouteLocationRaw } from "vue-router";
-
-export type OverlayImage = {
-  src: string;
-  modifiers: Partial<ImageModifiers>;
-  options: ImageOptions;
-  id?: number;
-};
-
-const emit = defineEmits(["input"]);
-defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-  image: {
-    type: Object as PropType<OverlayImage>,
-    default: undefined,
-  },
-  detailRoute: {
-    type: Object as PropType<RouteLocationRaw>,
-    default: undefined,
-  },
-});
-const img = useImage();
-const localePath = useLocalePath();
-</script>

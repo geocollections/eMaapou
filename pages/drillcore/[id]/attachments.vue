@@ -1,20 +1,4 @@
-<template>
-  <data-table-attachment
-    :items="data?.results ?? []"
-    :count="data?.count ?? 0"
-    :options="options"
-    :headers="headers"
-    :is-loading="pending"
-    id-field="attachment"
-    @update="handleUpdate"
-    @change:headers="handleHeadersChange"
-    @reset:headers="handleHeadersReset(options)"
-  />
-</template>
-
 <script setup lang="ts">
-import isNil from "lodash/isNil";
-
 import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
 
 const props = defineProps<{
@@ -54,3 +38,17 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
   },
 });
 </script>
+
+<template>
+  <data-table-attachment
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    id-field="attachment"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

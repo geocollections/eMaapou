@@ -8,7 +8,9 @@
         {{ item.taxon.taxon }}
       </base-link-external>
 
-      <div v-if="item.name">| {{ item.name }}</div>
+      <div v-if="item.name">
+        | {{ item.name }}
+      </div>
     </template>
     <template #item.agent="{ item }">
       <div v-if="item.agent">

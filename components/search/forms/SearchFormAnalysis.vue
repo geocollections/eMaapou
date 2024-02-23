@@ -1,97 +1,5 @@
-<template>
-  <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels v-model="test" variant="accordion" multiple>
-        <filter-input-range
-          v-model="filters.depth.value"
-          :title="$t('filters.depth')"
-          interval-labels="intervals.depth"
-          :step="0.01"
-          @update:model-value="handleUpdate"
-          value="depth"
-        />
-        <filter-input-autocomplete
-          v-model="filters.method.value"
-          ref="filterMethod"
-          :title="$t('filters.method')"
-          :query-function="suggestMethod"
-          :hydration-function="hydrateMethod"
-          @update:model-value="handleUpdate"
-          value="method"
-        />
-        <filter-input-autocomplete
-          v-model="filters.lab.value"
-          ref="filterLab"
-          :title="$t('filters.lab')"
-          :query-function="suggestLab"
-          :hydration-function="hydrateLab"
-          @update:model-value="handleUpdate"
-          value="lab"
-        />
-        <filter-input-autocomplete
-          v-model="filters.sample.value"
-          ref="filterSample"
-          :title="$t('filters.sample')"
-          :query-function="suggestSample"
-          :hydration-function="hydrateSample"
-          primary="id"
-          @update:model-value="handleUpdate"
-          value="sample"
-        />
-        <filter-input-autocomplete
-          v-model="filters.locality.value"
-          ref="filterLocality"
-          :title="$t('filters.locality')"
-          :query-function="suggestLocality"
-          :hydration-function="hydrateLocality"
-          @update:model-value="handleUpdate"
-          value="locality"
-        />
-        <filter-input-autocomplete
-          v-model="filters.site.value"
-          ref="filterSite"
-          :title="$t('filters.site')"
-          :query-function="suggestSite"
-          :hydration-function="hydrateSite"
-          @update:model-value="handleUpdate"
-          value="site"
-        />
-        <filter-input-text
-          v-model="filters.agent.value"
-          :title="$t('filters.agent')"
-          @update:model-value="handleUpdate"
-          value="agent"
-        />
-        <filter-map
-          v-model="filters.geometry.value"
-          @update:model-value="handleUpdate"
-          value="map"
-        />
-        <filter-input-text
-          v-model="filters.agent.value"
-          :title="$t('filters.agent')"
-          @update:model-value="handleUpdate"
-          value="agent"
-        />
-        <filter-input-autocomplete
-          v-model="filters.institution.value"
-          ref="filterInstitution"
-          :title="$t('filters.institution')"
-          :query-function="suggestInstitution"
-          :hydration-function="hydrateInstitution"
-          @update:model-value="handleUpdate"
-          :per-page="-1"
-          value="institution"
-        />
-      </v-expansion-panels>
-    </v-form>
-  </div>
-</template>
-
 <script setup lang="ts">
-import type { FilterInputAutocomplete } from "#build/components";
+import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -165,11 +73,107 @@ const { suggest: suggestSite, hydrate: hydrateSite } = useAutocomplete(
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
-const { suggest: suggestInstitution, hydrate: hydrateInstitution } =
-  useAutocomplete("/analysis", {
+const { suggest: suggestInstitution, hydrate: hydrateInstitution }
+  = useAutocomplete("/analysis", {
     idField: "database_id_s",
     nameField: "acronym",
     filterExclude: "institution",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
 </script>
+
+<template>
+  <div>
+    <v-form @submit.prevent="handleUpdate">
+      <input-search v-model="query" />
+      <search-actions class="mb-3" @click="handleReset" />
+      <v-expansion-panels
+        v-model="test"
+        variant="accordion"
+        multiple
+      >
+        <filter-input-range
+          v-model="filters.depth.value"
+          :title="$t('filters.depth')"
+          interval-labels="intervals.depth"
+          :step="0.01"
+          value="depth"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterMethod"
+          v-model="filters.method.value"
+          :title="$t('filters.method')"
+          :query-function="suggestMethod"
+          :hydration-function="hydrateMethod"
+          value="method"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterLab"
+          v-model="filters.lab.value"
+          :title="$t('filters.lab')"
+          :query-function="suggestLab"
+          :hydration-function="hydrateLab"
+          value="lab"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterSample"
+          v-model="filters.sample.value"
+          :title="$t('filters.sample')"
+          :query-function="suggestSample"
+          :hydration-function="hydrateSample"
+          primary="id"
+          value="sample"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterLocality"
+          v-model="filters.locality.value"
+          :title="$t('filters.locality')"
+          :query-function="suggestLocality"
+          :hydration-function="hydrateLocality"
+          value="locality"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterSite"
+          v-model="filters.site.value"
+          :title="$t('filters.site')"
+          :query-function="suggestSite"
+          :hydration-function="hydrateSite"
+          value="site"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-text
+          v-model="filters.agent.value"
+          :title="$t('filters.agent')"
+          value="agent"
+          @update:model-value="handleUpdate"
+        />
+        <filter-map
+          v-model="filters.geometry.value"
+          value="map"
+          @update:model-value="handleUpdate"
+        />
+        <filter-input-text
+          v-model="filters.agent.value"
+          :title="$t('filters.agent')"
+          value="agent"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterInstitution"
+          v-model="filters.institution.value"
+          :title="$t('filters.institution')"
+          :query-function="suggestInstitution"
+          :hydration-function="hydrateInstitution"
+          :per-page="-1"
+          value="institution"
+          @update:model-value="handleUpdate"
+        />
+      </v-expansion-panels>
+    </v-form>
+  </div>
+</template>

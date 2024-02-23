@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
+
 <template>
   <base-data-table v-bind="$attrs">
     <template #item.taxon="{ item }">
@@ -18,7 +22,9 @@
       >
         {{ item.fossil_group }}
       </base-link-external>
-      <div v-else>{{ item.fossil_group }}</div>
+      <div v-else>
+        {{ item.fossil_group }}
+      </div>
     </template>
 
     <template #item.parent_taxon="{ item }">
@@ -28,7 +34,9 @@
       >
         {{ item.parent_taxon }}
       </base-link-external>
-      <div v-else>{{ item.parent_taxon }}</div>
+      <div v-else>
+        {{ item.parent_taxon }}
+      </div>
     </template>
 
     <template #item.locality="{ item }">
@@ -67,7 +75,3 @@
     </template>
   </base-data-table>
 </template>
-
-<script setup lang="ts">
-const localePath = useLocalePath();
-</script>

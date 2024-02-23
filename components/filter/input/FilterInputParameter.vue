@@ -1,144 +1,3 @@
-<template>
-  <!-- <v-expansion-panel ref="panel" style="background-color: transparent"> -->
-  <!--   <v-expansion-panel-header -->
-  <!--     class="py-1 pl-4 pr-1 font-weight-medium" -->
-  <!--     style="min-height: 40px; border-bottom: 1px solid lightgray !important" -->
-  <!--   > -->
-  <!--     {{ label }} -->
-  <!--   </v-expansion-panel-header> -->
-  <!--   <div -->
-  <!--     v-if="validFilters.length > 0 && !isPanelOpen" -->
-  <!--     class="white" -->
-  <!--     style=" -->
-  <!--       border-bottom: 1px solid lightgray !important; -->
-  <!--       border-right: 1px solid lightgray !important; -->
-  <!--     " -->
-  <!--   > -->
-  <!--     <div -->
-  <!--       v-for="(item, i) in validFilters" -->
-  <!--       :key="i" -->
-  <!--       class="d-flex py-1 selected-item pl-4 pr-2" -->
-  <!--     > -->
-  <!--       <span> -->
-  <!--         <input -->
-  <!--           type="checkbox" -->
-  <!--           class="checkbox" -->
-  <!--           checked -->
-  <!--           @click.prevent.stop="handleRemove(i)" -->
-  <!--         /> -->
-  <!--       </span> -->
-  <!--       <span -->
-  <!--         class="align-self-center text-body-2 font-weight-medium pl-2" -->
-  <!--         style="word-break: break-word" -->
-  <!--       > -->
-  <!--         <slot name="selection" :item="item"> -->
-  <!--           <div>{{ parameterIndex[item.parameter] }}</div> -->
-  <!--           <div class="font-weight-regular font-italic"> -->
-  <!--             {{ valueString(item.value) }} -->
-  <!--           </div> -->
-  <!--         </slot> -->
-  <!--       </span> -->
-  <!--     </div> -->
-  <!--   </div> -->
-  <!--   <v-expansion-panel-content -->
-  <!--     color="white" -->
-  <!--     style=" -->
-  <!--       border-bottom: 1px solid lightgray !important; -->
-  <!--       border-right: 1px solid lightgray !important; -->
-  <!--     " -->
-  <!--   > -->
-  <!--     <div -->
-  <!--       v-for="(v, i) in internalValue" -->
-  <!--       :key="i" -->
-  <!--       class="pb-2" -->
-  <!--       style="border-bottom: 1px solid lightgray !important" -->
-  <!--     > -->
-  <!--       <v-row no-gutters class="pl-4 pr-2"> -->
-  <!--         <v-col cols="8"> -->
-  <!--           <v-autocomplete -->
-  <!--             :value="v.parameter" -->
-  <!--             hide-details -->
-  <!--             dense -->
-  <!--             :placeholder="$t('filters.parameter')" -->
-  <!--             persistent-placeholder -->
-  <!--             :items="parameters" -->
-  <!--             @input="handleParameter($event, i)" -->
-  <!--           > -->
-  <!--           </v-autocomplete> -->
-  <!--         </v-col> -->
-  <!--         <v-col class="d-flex justify-end"> -->
-  <!--           <v-btn class="mt-1" icon small @click="handleRemove(i)"> -->
-  <!--             <v-icon small>{{ icons.mdiClose }}</v-icon> -->
-  <!--           </v-btn> -->
-  <!--         </v-col> -->
-  <!--       </v-row> -->
-  <!--       <v-row no-gutters> -->
-  <!--         <v-col cols="6" class="pl-4 pr-1"> -->
-  <!--           <v-text-field -->
-  <!--             class="pt-4" -->
-  <!--             hide-details -->
-  <!--             type="number" -->
-  <!--             :value="v.value[0]" -->
-  <!--             step="0.1" -->
-  <!--             dense -->
-  <!--             persistent-placeholder -->
-  <!--             :label="$t('common.from').toString()" -->
-  <!--             @input="handleValue([parseInput($event), v.value[1]], i)" -->
-  <!--             @keydown.enter.prevent.stop="handleEnter" -->
-  <!--             @blur="handleEnter" -->
-  <!--           /> -->
-  <!--         </v-col> -->
-  <!---->
-  <!--         <v-col cols="6" class="pl-1 pr-4"> -->
-  <!--           <v-text-field -->
-  <!--             class="pt-4" -->
-  <!--             hide-details -->
-  <!--             type="number" -->
-  <!--             :value="v.value[1]" -->
-  <!--             step="0.1" -->
-  <!--             persistent-placeholder -->
-  <!--             dense -->
-  <!--             :label="$t('common.to').toString()" -->
-  <!--             @input="handleValue([v.value[0], parseInput($event)], i)" -->
-  <!--             @keydown.enter.prevent.stop="handleEnter" -->
-  <!--             @blur="handleEnter" -->
-  <!--           /> -->
-  <!--         </v-col> -->
-  <!--       </v-row> -->
-  <!--     </div> -->
-  <!--     <v-row no-gutters class="pt-2 px-4"> -->
-  <!--       <v-col cols="6"> -->
-  <!--         <v-btn -->
-  <!--           small -->
-  <!--           text -->
-  <!--           block -->
-  <!--           class="text-center" -->
-  <!--           color="accent" -->
-  <!--           :disabled="validFilters.length < 1" -->
-  <!--           @click="handleClear" -->
-  <!--         > -->
-  <!--           {{ $t('filter.clear') }} -->
-  <!--         </v-btn> -->
-  <!--       </v-col> -->
-  <!---->
-  <!--       <v-col cols="6"> -->
-  <!--         <v-btn -->
-  <!--           small -->
-  <!--           text -->
-  <!--           block -->
-  <!--           class="text-center" -->
-  <!--           color="accent" -->
-  <!--           :disabled="!isAddActive" -->
-  <!--           @click="handleAdd" -->
-  <!--         > -->
-  <!--           {{ $t('filter.add') }} -->
-  <!--         </v-btn> -->
-  <!--       </v-col> -->
-  <!--     </v-row> -->
-  <!--   </v-expansion-panel-content> -->
-  <!-- </v-expansion-panel> -->
-</template>
-
 <script lang="ts">
 // import { mdiPlus, mdiMinus, mdiClose } from '@mdi/js'
 // import {
@@ -318,6 +177,147 @@
 //   },
 // })
 </script>
+
+<template>
+  <!-- <v-expansion-panel ref="panel" style="background-color: transparent"> -->
+  <!--   <v-expansion-panel-header -->
+  <!--     class="py-1 pl-4 pr-1 font-weight-medium" -->
+  <!--     style="min-height: 40px; border-bottom: 1px solid lightgray !important" -->
+  <!--   > -->
+  <!--     {{ label }} -->
+  <!--   </v-expansion-panel-header> -->
+  <!--   <div -->
+  <!--     v-if="validFilters.length > 0 && !isPanelOpen" -->
+  <!--     class="white" -->
+  <!--     style=" -->
+  <!--       border-bottom: 1px solid lightgray !important; -->
+  <!--       border-right: 1px solid lightgray !important; -->
+  <!--     " -->
+  <!--   > -->
+  <!--     <div -->
+  <!--       v-for="(item, i) in validFilters" -->
+  <!--       :key="i" -->
+  <!--       class="d-flex py-1 selected-item pl-4 pr-2" -->
+  <!--     > -->
+  <!--       <span> -->
+  <!--         <input -->
+  <!--           type="checkbox" -->
+  <!--           class="checkbox" -->
+  <!--           checked -->
+  <!--           @click.prevent.stop="handleRemove(i)" -->
+  <!--         /> -->
+  <!--       </span> -->
+  <!--       <span -->
+  <!--         class="align-self-center text-body-2 font-weight-medium pl-2" -->
+  <!--         style="word-break: break-word" -->
+  <!--       > -->
+  <!--         <slot name="selection" :item="item"> -->
+  <!--           <div>{{ parameterIndex[item.parameter] }}</div> -->
+  <!--           <div class="font-weight-regular font-italic"> -->
+  <!--             {{ valueString(item.value) }} -->
+  <!--           </div> -->
+  <!--         </slot> -->
+  <!--       </span> -->
+  <!--     </div> -->
+  <!--   </div> -->
+  <!--   <v-expansion-panel-content -->
+  <!--     color="white" -->
+  <!--     style=" -->
+  <!--       border-bottom: 1px solid lightgray !important; -->
+  <!--       border-right: 1px solid lightgray !important; -->
+  <!--     " -->
+  <!--   > -->
+  <!--     <div -->
+  <!--       v-for="(v, i) in internalValue" -->
+  <!--       :key="i" -->
+  <!--       class="pb-2" -->
+  <!--       style="border-bottom: 1px solid lightgray !important" -->
+  <!--     > -->
+  <!--       <v-row no-gutters class="pl-4 pr-2"> -->
+  <!--         <v-col cols="8"> -->
+  <!--           <v-autocomplete -->
+  <!--             :value="v.parameter" -->
+  <!--             hide-details -->
+  <!--             dense -->
+  <!--             :placeholder="$t('filters.parameter')" -->
+  <!--             persistent-placeholder -->
+  <!--             :items="parameters" -->
+  <!--             @input="handleParameter($event, i)" -->
+  <!--           > -->
+  <!--           </v-autocomplete> -->
+  <!--         </v-col> -->
+  <!--         <v-col class="d-flex justify-end"> -->
+  <!--           <v-btn class="mt-1" icon small @click="handleRemove(i)"> -->
+  <!--             <v-icon small>{{ icons.mdiClose }}</v-icon> -->
+  <!--           </v-btn> -->
+  <!--         </v-col> -->
+  <!--       </v-row> -->
+  <!--       <v-row no-gutters> -->
+  <!--         <v-col cols="6" class="pl-4 pr-1"> -->
+  <!--           <v-text-field -->
+  <!--             class="pt-4" -->
+  <!--             hide-details -->
+  <!--             type="number" -->
+  <!--             :value="v.value[0]" -->
+  <!--             step="0.1" -->
+  <!--             dense -->
+  <!--             persistent-placeholder -->
+  <!--             :label="$t('common.from').toString()" -->
+  <!--             @input="handleValue([parseInput($event), v.value[1]], i)" -->
+  <!--             @keydown.enter.prevent.stop="handleEnter" -->
+  <!--             @blur="handleEnter" -->
+  <!--           /> -->
+  <!--         </v-col> -->
+  <!---->
+  <!--         <v-col cols="6" class="pl-1 pr-4"> -->
+  <!--           <v-text-field -->
+  <!--             class="pt-4" -->
+  <!--             hide-details -->
+  <!--             type="number" -->
+  <!--             :value="v.value[1]" -->
+  <!--             step="0.1" -->
+  <!--             persistent-placeholder -->
+  <!--             dense -->
+  <!--             :label="$t('common.to').toString()" -->
+  <!--             @input="handleValue([v.value[0], parseInput($event)], i)" -->
+  <!--             @keydown.enter.prevent.stop="handleEnter" -->
+  <!--             @blur="handleEnter" -->
+  <!--           /> -->
+  <!--         </v-col> -->
+  <!--       </v-row> -->
+  <!--     </div> -->
+  <!--     <v-row no-gutters class="pt-2 px-4"> -->
+  <!--       <v-col cols="6"> -->
+  <!--         <v-btn -->
+  <!--           small -->
+  <!--           text -->
+  <!--           block -->
+  <!--           class="text-center" -->
+  <!--           color="accent" -->
+  <!--           :disabled="validFilters.length < 1" -->
+  <!--           @click="handleClear" -->
+  <!--         > -->
+  <!--           {{ $t('filter.clear') }} -->
+  <!--         </v-btn> -->
+  <!--       </v-col> -->
+  <!---->
+  <!--       <v-col cols="6"> -->
+  <!--         <v-btn -->
+  <!--           small -->
+  <!--           text -->
+  <!--           block -->
+  <!--           class="text-center" -->
+  <!--           color="accent" -->
+  <!--           :disabled="!isAddActive" -->
+  <!--           @click="handleAdd" -->
+  <!--         > -->
+  <!--           {{ $t('filter.add') }} -->
+  <!--         </v-btn> -->
+  <!--       </v-col> -->
+  <!--     </v-row> -->
+  <!--   </v-expansion-panel-content> -->
+  <!-- </v-expansion-panel> -->
+</template>
 
 <style scoped>
 ::v-deep .v-expansion-panel-content__wrap {

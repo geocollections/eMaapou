@@ -1,46 +1,3 @@
-<template>
-  <Search>
-    <template #title>
-      <HeaderSearch
-        :title="$t('sample.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiImageFilterHdr"
-      />
-    </template>
-
-    <template #form="{ closeMobileSearch }">
-      <SearchFormSample
-        @update="
-          handleUpdate();
-          closeMobileSearch();
-        "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
-      />
-    </template>
-
-    <template #result>
-      <DataTableSample
-        class="border-t border-b"
-        :show-search="false"
-        :items="data?.response.docs ?? []"
-        :count="data?.response.numFound ?? 0"
-        :headers="headers"
-        :options="options"
-        dynamic-headers
-        stateful-headers
-        :is-loading="pending"
-        @update="handleDataTableUpdate"
-        @change:headers="handleHeadersChange"
-        @reset:headers="handleHeadersReset(options)"
-        @click:row="handleClickRow"
-      />
-    </template>
-  </Search>
-</template>
-
 <script setup lang="ts">
 import { mdiImageFilterHdr } from "@mdi/js";
 
@@ -80,8 +37,8 @@ const {
   setStateFromQueryParams,
   getQueryParams,
 } = samplesStore;
-const { solrSort, solrQuery, solrFilters, options, headers, resultsCount } =
-  storeToRefs(samplesStore);
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+  = storeToRefs(samplesStore);
 setStateFromQueryParams(route);
 
 const {
@@ -135,3 +92,46 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   );
 }
 </script>
+
+<template>
+  <Search>
+    <template #title>
+      <HeaderSearch
+        :title="$t('sample.pageTitle')"
+        :count="data?.response.numFound ?? 0"
+        :icon="mdiImageFilterHdr"
+      />
+    </template>
+
+    <template #form="{ closeMobileSearch }">
+      <SearchFormSample
+        @update="
+          handleUpdate();
+          closeMobileSearch();
+        "
+        @reset="
+          handleReset();
+          closeMobileSearch();
+        "
+      />
+    </template>
+
+    <template #result>
+      <DataTableSample
+        class="border-t border-b"
+        :show-search="false"
+        :items="data?.response.docs ?? []"
+        :count="data?.response.numFound ?? 0"
+        :headers="headers"
+        :options="options"
+        dynamic-headers
+        stateful-headers
+        :is-loading="pending"
+        @update="handleDataTableUpdate"
+        @change:headers="handleHeadersChange"
+        @reset:headers="handleHeadersReset(options)"
+        @click:row="handleClickRow"
+      />
+    </template>
+  </Search>
+</template>

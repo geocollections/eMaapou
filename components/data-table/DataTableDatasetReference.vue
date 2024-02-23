@@ -9,14 +9,18 @@
       </base-link-external>
     </template>
     <template #item.title="{ item }">
-      <div v-if="item.reference">{{ item.reference.title }}</div>
+      <div v-if="item.reference">
+        {{ item.reference.title }}
+      </div>
     </template>
 
     <template #item.journal="{ item }">
       <div v-if="item.reference && item.reference.journal">
         {{ item.reference.journal.journal_name }}
       </div>
-      <div v-else-if="item.reference.book">{{ item.reference.book }}</div>
+      <div v-else-if="item.reference.book">
+        {{ item.reference.book }}
+      </div>
     </template>
     <template #item.pages="{ item }">
       <div v-if="item.reference">

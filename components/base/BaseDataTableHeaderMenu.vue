@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { mdiEye, mdiEyeOff, mdiRefresh, mdiTableCog } from "@mdi/js";
+
+const props = defineProps({
+  headers: {
+    type: Array,
+    default: () => [],
+  },
+  visibleHeaders: {
+    type: Array,
+    default: () => [],
+  },
+  sortBy: {
+    type: Array,
+    default: () => [],
+  },
+});
+const filter = ref("");
+const onlyVisible = ref(false);
+
+const filteredHeaders = computed(() => {
+  if (onlyVisible.value) {
+    return props.visibleHeaders.filter(header =>
+      header.title.toLowerCase().includes(filter.value.toLowerCase()),
+    );
+  }
+  return props.headers.filter(header =>
+    header.title.toLowerCase().includes(filter.value.toLowerCase()),
+  );
+});
+</script>
+
 <template>
   <!-- NOTE: Using activator now for v-menu.
     Using the #id based implementation broke BaseDataTableHeaderMenu when switching between tabs.
@@ -12,14 +44,13 @@
     :close-on-content-click="false"
   >
     <template #activator="menu">
-      <v-tooltip bottom open-delay="500">
+      <v-tooltip location="bottom" open-delay="500">
         <template #activator="tooltip">
           <v-btn
             variant="text"
             :icon="mdiTableCog"
             v-bind="{ ...menu.props, ...tooltip.props }"
-          >
-          </v-btn>
+          />
         </template>
         <span>{{ $t("table.tooltipConfig") }}</span>
       </v-tooltip>
@@ -28,28 +59,26 @@
       <v-list flat>
         <v-list-item-title class="px-2 montserrat align-center">
           {{ $t("common.headers") }}
-          <v-tooltip bottom open-delay="500">
+          <v-tooltip location="bottom" open-delay="500">
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
                 :icon="mdiRefresh"
                 variant="text"
                 @click="$emit('reset')"
-              >
-              </v-btn>
+              />
             </template>
             {{ $t("table.tooltipResetHeaders") }}
           </v-tooltip>
 
-          <v-tooltip open-delay="500" bottom>
+          <v-tooltip open-delay="500" location="bottom">
             <template #activator="{ props }">
               <v-btn
                 v-bind="props"
                 variant="text"
                 :icon="!onlyVisible ? mdiEye : mdiEyeOff"
                 @click="onlyVisible = !onlyVisible"
-              >
-              </v-btn>
+              />
             </template>
             <span v-if="!onlyVisible">
               {{ $t("table.tooltipShowActiveHeaders") }}
@@ -72,7 +101,7 @@
           :width="300"
         >
           <template #default="{ item }">
-            <v-tooltip left :disabled="!sortBy.includes(item.value)">
+            <v-tooltip location="left" :disabled="!sortBy.includes(item.value)">
               <template #activator="{ props }">
                 <v-list-item
                   v-bind="props"
@@ -102,35 +131,3 @@
     </v-card>
   </v-menu>
 </template>
-
-<script setup lang="ts">
-import { mdiTableCog, mdiRefresh, mdiEye, mdiEyeOff } from "@mdi/js";
-
-const props = defineProps({
-  headers: {
-    type: Array,
-    default: () => [],
-  },
-  visibleHeaders: {
-    type: Array,
-    default: () => [],
-  },
-  sortBy: {
-    type: Array,
-    default: () => [],
-  },
-});
-const filter = ref("");
-const onlyVisible = ref(false);
-
-const filteredHeaders = computed(() => {
-  if (onlyVisible.value) {
-    return props.visibleHeaders.filter((header) =>
-      header.title.toLowerCase().includes(filter.value.toLowerCase()),
-    );
-  }
-  return props.headers.filter((header) =>
-    header.title.toLowerCase().includes(filter.value.toLowerCase()),
-  );
-});
-</script>

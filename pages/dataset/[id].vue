@@ -1,39 +1,3 @@
-<template>
-  <detail-new :show-similar="showDrawer">
-    <template #title>
-      <header-detail-new :title="data?.dataset.title">
-        <template #tabs>
-          <DetailTabs :tabs="data?.tabs" />
-        </template>
-      </header-detail-new>
-    </template>
-    <template #drawer>
-      <SearchResultsDrawer
-        :page="page"
-        :results="similarDatasets"
-        :total-results="datasetsRes?.response.numFound ?? 0"
-        :search-route="
-          localePath({ path: '/dataset', query: getQueryParams() })
-        "
-        :get-result-route="
-          (item) => localePath({ name: 'dataset-id', params: { id: item.id } })
-        "
-        @page:next="page++"
-        @page:previous="page--"
-        @select="handleSelect"
-      >
-        <template #itemTitle="{ item: dataset }">
-          <div class="font-weight-medium text-wrap">
-            {{ dataset.title }}
-          </div>
-        </template>
-      </SearchResultsDrawer>
-    </template>
-
-    <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
-</template>
-
 <script setup lang="ts">
 import type { Tab } from "~/composables/useTabs";
 
@@ -203,13 +167,13 @@ const { data } = await useAsyncData("dataset", async () => {
   // hydratedTabsByIds.graphs.count =
   //   locationMarkers.length === 1 ? locationMarkers.length : 0;
 
-  const parameterValues =
-    parametersResponse.response.docs[0]?.parameter_index_list?.[0]?.split("; ");
-  const parameterText =
-    parametersResponse.response.docs[0]?.parameter_list?.[0]?.split("; ");
+  const parameterValues
+    = parametersResponse.response.docs[0]?.parameter_index_list?.[0]?.split("; ");
+  const parameterText
+    = parametersResponse.response.docs[0]?.parameter_list?.[0]?.split("; ");
 
-  const parameters =
-    parameterValues?.map((v: string, i: number) => {
+  const parameters
+    = parameterValues?.map((v: string, i: number) => {
       return { text: parameterText[i], value: v };
     }) ?? [];
 
@@ -279,6 +243,42 @@ redirectInvalidTab({
 // });
 //
 </script>
+
+<template>
+  <detail-new :show-similar="showDrawer">
+    <template #title>
+      <header-detail-new :title="data?.dataset.title">
+        <template #tabs>
+          <DetailTabs :tabs="data?.tabs" />
+        </template>
+      </header-detail-new>
+    </template>
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarDatasets"
+        :total-results="datasetsRes?.response.numFound ?? 0"
+        :search-route="
+          localePath({ path: '/dataset', query: getQueryParams() })
+        "
+        :get-result-route="
+          (item) => localePath({ name: 'dataset-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: dataset }">
+          <div class="font-weight-medium text-wrap">
+            {{ dataset.title }}
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
+
+    <NuxtPage v-bind="activeTabProps" />
+  </detail-new>
+</template>
 
 <style lang="scss" scoped>
 .active-tab {

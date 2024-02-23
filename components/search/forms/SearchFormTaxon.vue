@@ -1,50 +1,3 @@
-<template>
-  <div>
-    <!-- <v-form @submit.prevent="handleUpdate"> -->
-    <!--   <input-search v-model="query" /> -->
-    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
-    <!--   <v-expansion-panels accordion flat tile multiple> -->
-    <!--     <filter-input-text -->
-    <!--       v-model="species" -->
-    <!--       :title="$t('filters.species').toString()" -->
-    <!--     /> -->
-    <!--     <!-- <filter-input-autocomplete-new -->
-    -->
-    <!--     <!--   v-model="stratigraphyHierarchy" -->
-    -->
-    <!--     <!--   :title="$t('filters.stratigraphyHierarchy').toString()" -->
-    -->
-    <!--     <!--   :query-field=" -->
-    -->
-    <!--     <!--     $i18n.locale === 'et' ? 'stratigraphy' : 'startigraphy_en' -->
-    -->
-    <!--     <!--   " -->
-    -->
-    <!--     <!--   :query-function="querySuggestionsStratigraphy" -->
-    -->
-    <!--     <!-- /> -->
-    -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="taxonHierarchy" -->
-    <!--       :title="$t('filters.taxonHierarchy').toString()" -->
-    <!--       query-field="taxon" -->
-    <!--       :query-function="querySuggestionsTaxon" -->
-    <!--     /> -->
-    <!--     <filter-map -->
-    <!--       v-model="map" -->
-    <!--       locality-overlay -->
-    <!--       :items="$accessor.search.taxon.items" -->
-    <!--     /> -->
-    <!---->
-    <!--     <filter-input-text -->
-    <!--       v-model="author" -->
-    <!--       :title="$t('filters.author').toString()" -->
-    <!--     /> -->
-    <!--   </v-expansion-panels> -->
-    <!-- </v-form> -->
-  </div>
-</template>
-
 <script lang="ts">
 // import {
 //   computed,
@@ -232,3 +185,50 @@
 //   },
 // })
 </script>
+
+<template>
+  <div>
+    <!-- <v-form @submit.prevent="handleUpdate"> -->
+    <!--   <input-search v-model="query" /> -->
+    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
+    <!--   <v-expansion-panels accordion flat tile multiple> -->
+    <!--     <filter-input-text -->
+    <!--       v-model="species" -->
+    <!--       :title="$t('filters.species').toString()" -->
+    <!--     /> -->
+    <!--     <!-- <filter-input-autocomplete-new -->
+    -->
+    <!--     <!--   v-model="stratigraphyHierarchy" -->
+    -->
+    <!--     <!--   :title="$t('filters.stratigraphyHierarchy').toString()" -->
+    -->
+    <!--     <!--   :query-field=" -->
+    -->
+    <!--     <!--     $i18n.locale === 'et' ? 'stratigraphy' : 'startigraphy_en' -->
+    -->
+    <!--     <!--   " -->
+    -->
+    <!--     <!--   :query-function="querySuggestionsStratigraphy" -->
+    -->
+    <!--     <!-- /> -->
+    -->
+    <!--     <filter-input-autocomplete-new -->
+    <!--       v-model="taxonHierarchy" -->
+    <!--       :title="$t('filters.taxonHierarchy').toString()" -->
+    <!--       query-field="taxon" -->
+    <!--       :query-function="querySuggestionsTaxon" -->
+    <!--     /> -->
+    <!--     <filter-map -->
+    <!--       v-model="map" -->
+    <!--       locality-overlay -->
+    <!--       :items="$accessor.search.taxon.items" -->
+    <!--     /> -->
+    <!---->
+    <!--     <filter-input-text -->
+    <!--       v-model="author" -->
+    <!--       :title="$t('filters.author').toString()" -->
+    <!--     /> -->
+    <!--   </v-expansion-panels> -->
+    <!-- </v-form> -->
+  </div>
+</template>

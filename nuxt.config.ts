@@ -1,4 +1,5 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -31,6 +32,9 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
   ],
+  imports: {
+    dirs: ["types", "constants"],
+  },
   i18n: {
     locales: [
       {
@@ -60,8 +64,8 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      Roboto: false,
-      Montserrat: [300, 400, 500, 700],
+      "Roboto": false,
+      "Montserrat": [300, 400, 500, 700],
       "Open+Sans": [400, 500, 700],
     },
   },

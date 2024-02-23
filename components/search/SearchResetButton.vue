@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { mdiEraser } from "@mdi/js";
+</script>
+
 <template>
   <v-btn
     variant="outlined"
@@ -8,22 +12,27 @@
   >
     <v-tooltip v-if="$vuetify.display.md" position="bottom">
       <template #activator="{ props }">
-        <v-icon :icon="mdiEraser" :end="!$vuetify.display.md" v-bind="props" />
+        <v-icon
+          :icon="mdiEraser"
+          :end="!$vuetify.display.md"
+          v-bind="props"
+        />
       </template>
 
       <span>
         {{ $t("common.resetSearchLong") }}
       </span>
     </v-tooltip>
-    <v-icon v-else :icon="mdiEraser" start />
-    <span class="hidden-md-only montserrat">
+    <v-icon
+      v-else
+      :icon="mdiEraser"
+      start
+    />
+    <span class="hidden-md montserrat">
       {{ $t("common.resetSearch") }}
     </span>
   </v-btn>
 </template>
-<script setup lang="ts">
-import { mdiEraser } from "@mdi/js";
-</script>
 
 <style scoped>
 .reset-search {

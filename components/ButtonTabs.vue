@@ -1,5 +1,12 @@
+<script setup lang="ts">
+const props = defineProps<{
+  tabs: any[];
+}>();
+const localePath = useLocalePath();
+</script>
+
 <template>
-  <v-chip-group column active-class="active-tab  elevation-1">
+  <v-chip-group column selected-class="active-tab  elevation-1">
     <transition-group name="flip-list">
       <v-chip
         v-for="(item, index) in tabs"
@@ -17,9 +24,9 @@
         "
       >
         <v-chip
-          small
+          size="small"
           :ripple="false"
-          class="accent darken-2 font-weight-regular mr-1 ma-0"
+          class="bg-accent-darken-2 font-weight-regular mr-1 ma-0"
         >
           {{ item.count }}
         </v-chip>
@@ -28,13 +35,6 @@
     </transition-group>
   </v-chip-group>
 </template>
-
-<script setup lang="ts">
-const props = defineProps<{
-  tabs: any[];
-}>();
-const localePath = useLocalePath();
-</script>
 
 <style lang="scss" scoped>
 .tabs {
