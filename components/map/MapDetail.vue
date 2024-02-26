@@ -309,9 +309,6 @@ export default defineComponent({
       if (state.activeOverlays.includes('Puursüdamikud / Drillcores')) {
         queryLayers.push('sarv:locality_drillcores')
       }
-      if (state.activeOverlays.includes('Lokaliteedid / Localities')) {
-        queryLayers.push('sarv:locality_summary1')
-      }
       if (state.activeOverlays.includes('Proovid / Samples')) {
         queryLayers.push('sarv:sample_summary')
       }
@@ -333,7 +330,7 @@ export default defineComponent({
       const wmsResponse = await $services.geoserver.getWMSData({
         QUERY_LAYERS: queryLayers.value,
         LAYERS:
-          'sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary,sarv:locality_summary_front',
+          'sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary,sarv:locality_summary_front',
         BBOX: bbox,
       })
 
