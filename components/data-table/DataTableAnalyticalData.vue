@@ -17,14 +17,16 @@ function formatDepthRange({
   if (depthFrom === depthTo)
     return depthFrom.toFixed(2);
 
-  return `${depthFrom.toFixed(2)} - ${depthTo.toFixed(2)}`;
+  return `${depthFrom.toFixed(2)} – ${depthTo.toFixed(2)}`;
 }
 </script>
 
 <template>
   <BaseDataTable v-bind="$attrs">
     <template #item.depth="{ item }">
-      <span style="font-family: monospace">
+      <span
+        style="font-family: monospace"
+      >
         {{
           formatDepthRange({
             depthFrom: item.depth,
