@@ -14,17 +14,17 @@ const locality = computed(() => props.drillcore.locality);
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row>
-      <v-col
+  <VContainer style="margin: initial">
+    <VRow>
+      <VCol
         :sm="12"
         :md="6"
         :lg="7"
         :xl="5"
       >
-        <v-card>
-          <base-table>
-            <table-row
+        <VCard>
+          <BaseTable>
+            <TableRow
               :title="$t('drillcore.name')"
               :value="
                 $translate({
@@ -33,15 +33,15 @@ const locality = computed(() => props.drillcore.locality);
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('drillcore.boxes')"
               :value="drillcore.boxes"
             />
-            <table-row
+            <TableRow
               :title="$t('drillcore.boxNumbers')"
               :value="drillcore.box_numbers"
             />
-            <table-row
+            <TableRow
               v-if="depository"
               :title="$t('drillcore.repository')"
               :value="
@@ -51,23 +51,23 @@ const locality = computed(() => props.drillcore.locality);
                 })
               "
             />
-            <table-row
+            <TableRow
               v-if="storage"
               :title="$t('drillcore.storage')"
               :value="storage.location"
             />
-            <table-row
+            <TableRow
               v-if="agent"
               :title="$t('drillcore.driller')"
               :value="agent.agent"
             />
-            <table-row :title="$t('drillcore.year')" :value="drillcore.year" />
-            <table-row
+            <TableRow :title="$t('drillcore.year')" :value="drillcore.year" />
+            <TableRow
               :title="$t('drillcore.metersInBox')"
               :value="drillcore.number_meters"
             />
 
-            <table-row-link
+            <TableRowLink
               v-if="database"
               :title="$t('drillcore.database')"
               :value="
@@ -79,29 +79,29 @@ const locality = computed(() => props.drillcore.locality);
               :href="database.url"
               target="DatabaseWindow"
             />
-            <table-row
+            <TableRow
               v-if="drillcore.date_added"
               :title="$t('drillcore.dateAdded')"
               :value="$formatDate(drillcore.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="drillcore.date_changed"
               :title="$t('drillcore.dateChanged')"
               :value="$formatDate(drillcore.date_changed)"
             />
-          </base-table>
-        </v-card>
+          </BaseTable>
+        </VCard>
         <div v-if="drillcore.remarks">
           <div class="text-h6 py-2">
             {{ $t("drillcore.remarks") }}
           </div>
           <div>{{ drillcore.remarks }}</div>
         </div>
-      </v-col>
-      <v-col :xl="4">
-        <v-card class="mb-4">
-          <base-table>
-            <table-row-link
+      </VCol>
+      <VCol :xl="4">
+        <VCard class="mb-4">
+          <BaseTable>
+            <TableRowLink
               :title="$t('locality.locality').toString()"
               :value="
                 $translate({
@@ -117,7 +117,7 @@ const locality = computed(() => props.drillcore.locality);
                 })
               "
             />
-            <table-row
+            <TableRow
               v-if="locality.country"
               :title="$t('locality.country').toString()"
               :value="
@@ -127,21 +127,21 @@ const locality = computed(() => props.drillcore.locality);
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('locality.coordinates').toString()"
               :value="`${locality.latitude}, ${locality.longitude}`"
             />
-            <table-row
+            <TableRow
               :title="$t('locality.elevation').toString()"
               :value="locality.elevation"
             />
-            <table-row
+            <TableRow
               :title="$t('locality.depth').toString()"
               :value="locality.depth"
             />
-          </base-table>
-        </v-card>
-        <map-detail
+          </BaseTable>
+        </VCard>
+        <MapDetail
           v-if="locality.latitude && locality.longitude"
           :estonian-map="
             locality.country ? locality.country.value === 'Eesti' : false
@@ -167,7 +167,7 @@ const locality = computed(() => props.drillcore.locality);
             },
           ]"
         />
-      </v-col>
-    </v-row>
-  </v-container>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>

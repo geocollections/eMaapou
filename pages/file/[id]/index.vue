@@ -229,12 +229,12 @@ function buildData(tab: { id: string; field: { et: string; en: string } }, data:
 
 <template>
   <div v-for="(card, index) in cards" :key="`related-${index}`">
-    <v-card>
-      <v-card-title class="montserrat py-2">
+    <VCard>
+      <VCardTitle class="montserrat py-2">
         {{ $t(card.title) }}
-      </v-card-title>
+      </VCardTitle>
 
-      <v-table dense class="pb-3">
+      <VTable dense class="pb-3">
         <template #default>
           <tbody>
             <tr v-for="(row, key) in card.items" :key="key">
@@ -253,13 +253,13 @@ function buildData(tab: { id: string; field: { et: string; en: string } }, data:
                     "
                   >
                     {{ buildData(card, row) }}
-                    <v-icon size="small" color="primary-darken-2">
+                    <VIcon size="small" color="primary-darken-2">
                       {{ mdiOpenInNew }}
-                    </v-icon>
+                    </VIcon>
                   </a>
                 </template>
                 <template v-else-if="card.isNuxtLink">
-                  <nuxt-link
+                  <NuxtLink
                     class="text-link"
                     :to="
                       localePath({
@@ -269,7 +269,7 @@ function buildData(tab: { id: string; field: { et: string; en: string } }, data:
                     "
                   >
                     {{ buildData(card, row) }}
-                  </nuxt-link>
+                  </NuxtLink>
                 </template>
                 <template v-else>
                   {{ buildData(card, row) }}
@@ -278,7 +278,7 @@ function buildData(tab: { id: string; field: { et: string; en: string } }, data:
             </tr>
           </tbody>
         </template>
-      </v-table>
-    </v-card>
+      </VTable>
+    </VCard>
   </div>
 </template>

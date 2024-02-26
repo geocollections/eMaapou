@@ -14,17 +14,17 @@ export default {
 </script>
 
 <template>
-  <v-btn
+  <VBtn
     type="submit"
     color="warning"
     dark
     class="px-3 text-body-1 text-capitalize"
   >
-    <v-icon start>
+    <VIcon start>
       {{ icons.mdiMagnify }}
-    </v-icon>
+    </VIcon>
     <div class="montserrat">
       {{ $t('common.searchCommand') }}
     </div>
-  </v-btn>
+  </VBtn>
 </template>

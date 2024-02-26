@@ -44,7 +44,7 @@ const { data, pending } = useSolrFetch("/analysis_results", {
 </script>
 
 <template>
-  <data-table-analysis-result
+  <DataTableAnalysisResult
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"
     :options="options"

@@ -191,15 +191,15 @@ redirectInvalidTab({
 </script>
 
 <template>
-  <detail-new>
+  <DetailNew>
     <template #title>
-      <header-detail-new :title="pageTitle">
+      <HeaderDetailNew :title="pageTitle">
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </header-detail-new>
+      </HeaderDetailNew>
     </template>
 
     <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
+  </DetailNew>
 </template>

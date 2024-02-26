@@ -34,34 +34,34 @@ export default {
 </script>
 
 <template>
-  <v-menu
+  <VMenu
     transition="slide-y-transition"
     :offset="10"
     content-class="white"
     :close-on-content-click="false"
   >
     <template #activator="{ props }">
-      <v-btn
+      <VBtn
         color="accent"
         class="montserrat text-none"
         size="small"
         variant="outlined"
         v-bind="props"
       >
-        <v-icon start>
+        <VIcon start>
           {{ icons.mdiChartLineVariant }}
-        </v-icon>
+        </VIcon>
         {{ $t("common.parameters") }}
-      </v-btn>
+      </VBtn>
     </template>
-    <v-card flat style="min-width: 400px">
-      <v-card-title class="text-body-1 pb-0 px-2">
+    <VCard flat style="min-width: 400px">
+      <VCardTitle class="text-body-1 pb-0 px-2">
         <div class="montserrat">
           {{ $t("common.parameters") }}
         </div>
-      </v-card-title>
-      <v-card-text class="px-2">
-        <v-text-field
+      </VCardTitle>
+      <VCardText class="px-2">
+        <VTextField
           v-model="search"
           :label="$t('common.filter')"
           class="py-2"
@@ -87,7 +87,7 @@ export default {
         <!--     </div> -->
         <!--   </template> -->
         <!-- </v-treeview> -->
-      </v-card-text>
-    </v-card>
-  </v-menu>
+      </VCardText>
+    </VCard>
+  </VMenu>
 </template>

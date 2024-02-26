@@ -1,5 +1,5 @@
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.name="{ item }">
       {{ item.agent.agent }}
     </template>
@@ -11,5 +11,5 @@
         {{ item.agent_type.value }}
       </div>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

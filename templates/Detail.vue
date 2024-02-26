@@ -12,30 +12,30 @@ defineProps({
 </script>
 
 <template>
-  <v-main>
-    <v-container
+  <VMain>
+    <VContainer
       class="pt-1 pb-10"
       style="min-height: 100vh"
       :fluid="$vuetify.display.lgAndDown"
     >
-      <v-row no-gutters>
-        <v-col>
-          <client-only>
+      <VRow no-gutters>
+        <VCol>
+          <ClientOnly>
             <!-- <history-viewer v-if="$vuetify.display.smAndUp" /> -->
-          </client-only>
-        </v-col>
-      </v-row>
-      <v-row no-gutters class="fill-height">
-        <v-fade-transition hide-on-leave>
-          <v-col
+          </ClientOnly>
+        </VCol>
+      </VRow>
+      <VRow no-gutters class="fill-height">
+        <VFadeTransition hide-on-leave>
+          <VCol
             v-if="error"
             key="detail-error"
             class="pt-15"
           >
             <div>
-              <detail-error :error="error" />
+              <DetailError :error="error" />
             </div>
-          </v-col>
+          </VCol>
           <!-- <v-col v-else-if="loading" key="detail-loading" class="pt-15"> -->
           <!--   <div -->
           <!--     :style="`height: 100%; width: 100%`" -->
@@ -51,7 +51,7 @@ defineProps({
           <!--     </v-progress-circular> -->
           <!--   </div> -->
           <!-- </v-col> -->
-          <v-col
+          <VCol
             v-else
             key="detail"
             class="pt-5"
@@ -60,28 +60,28 @@ defineProps({
             <div class="px-0 px-sm-3">
               <slot name="top" />
               <slot>
-                <v-card>
-                  <v-row no-gutters justify="center">
-                    <v-col v-if="$slots['column-left']" cols>
+                <VCard>
+                  <VRow no-gutters justify="center">
+                    <VCol v-if="$slots['column-left']" cols>
                       <slot name="column-left" />
-                    </v-col>
-                    <v-col
+                    </VCol>
+                    <VCol
                       v-if="$slots['column-right']"
                       cols="12"
                       md="6"
                     >
                       <slot name="column-right" />
-                    </v-col>
-                  </v-row>
-                </v-card>
+                    </VCol>
+                  </VRow>
+                </VCard>
               </slot>
               <slot name="bottom" />
             </div>
-          </v-col>
-        </v-fade-transition>
-      </v-row>
-      <fab-scroll-top />
-    </v-container>
-    <app-footer />
-  </v-main>
+          </VCol>
+        </VFadeTransition>
+      </VRow>
+      <FabScrollTop />
+    </VContainer>
+    <AppFooter />
+  </VMain>
 </template>

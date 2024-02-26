@@ -5,13 +5,13 @@ export default {
 </script>
 
 <template>
-  <v-table density="compact">
+  <VTable density="compact">
     <template #default>
       <tbody>
         <slot />
       </tbody>
     </template>
-  </v-table>
+  </VTable>
 </template>
 
 <style lang="scss" scoped>

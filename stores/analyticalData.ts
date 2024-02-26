@@ -3,12 +3,10 @@ import { z } from "zod";
 import { ANALYTICAL_DATA } from "~/constants";
 import { HEADERS_ANALYTICAL_DATA } from "~/constants/headersNew";
 import type {
-  BooleanFilter,
   GeomFilter,
   IdListFilter,
   RangeFilter,
   StringIdListFilter,
-  TextListFilter,
 } from "~/composables/useFilter";
 
 console.log(HEADERS_ANALYTICAL_DATA);

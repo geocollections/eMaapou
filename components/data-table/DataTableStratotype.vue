@@ -3,9 +3,9 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy"
         class="text-link"
         :to="
@@ -21,7 +21,7 @@ const localePath = useLocalePath();
             en: item.stratigraphy.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.type="{ item }">
       <div v-if="item.stratotype_type">
@@ -34,12 +34,12 @@ const localePath = useLocalePath();
       </div>
     </template>
     <template #item.reference="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.reference"
         @click.native="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

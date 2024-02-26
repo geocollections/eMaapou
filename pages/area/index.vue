@@ -85,9 +85,9 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 </script>
 
 <template>
-  <search>
+  <Search>
     <template #title>
-      <header-search
+      <HeaderSearch
         :title="$t('area.pageTitle').toString()"
         :count="data?.response.numFound ?? 0"
         :icon="mdiMapMarkerRadiusOutline"
@@ -95,7 +95,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-area
+      <SearchFormArea
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -108,7 +108,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #result>
-      <data-table-area
+      <DataTableArea
         class="border-t border-b"
         :show-search="false"
         :items="data?.response.docs ?? []"
@@ -124,5 +124,5 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
         @click:row="handleClickRow"
       />
     </template>
-  </search>
+  </Search>
 </template>

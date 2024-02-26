@@ -84,15 +84,15 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
 
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels
+    <VForm @submit.prevent="handleUpdate">
+      <InputSearch v-model="query" />
+      <SearchActions class="mb-3" @click="handleReset" />
+      <VExpansionPanels
         v-model="test"
         variant="accordion"
         multiple
       >
-        <filter-input-range
+        <FilterInputRange
           v-model="filters.depth.value"
           :title="$t('filters.depth')"
           interval-labels="intervals.depth"
@@ -146,18 +146,18 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
           value="site"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.agent.value"
           :title="$t('filters.agent')"
           value="agent"
           @update:model-value="handleUpdate"
         />
-        <filter-map
+        <FilterMap
           v-model="filters.geometry.value"
           value="map"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.agent.value"
           :title="$t('filters.agent')"
           value="agent"
@@ -173,7 +173,7 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
           value="institution"
           @update:model-value="handleUpdate"
         />
-      </v-expansion-panels>
-    </v-form>
+      </VExpansionPanels>
+    </VForm>
   </div>
 </template>

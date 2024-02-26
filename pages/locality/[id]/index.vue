@@ -55,27 +55,27 @@ const _ = await useAsyncData("image", async () => {
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row v-if="images.length > 0">
-      <v-col>
-        <image-bar
+  <VContainer style="margin: initial">
+    <VRow v-if="images.length > 0">
+      <VCol>
+        <ImageBar
           v-if="images.length > 0"
           class="mt-4"
           :images="images"
           @update="imageQuery"
         />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol
         :sm="12"
         :md="6"
         :lg="7"
         :xl="5"
       >
-        <v-card>
-          <base-table>
-            <table-row
+        <VCard>
+          <BaseTable>
+            <TableRow
               :title="$t('locality.name').toString()"
               :value="$translate({
                 et: locality.locality,
@@ -83,8 +83,8 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row :title="$t('locality.number').toString()" :value="locality.number" />
-            <table-row
+            <TableRow :title="$t('locality.number').toString()" :value="locality.number" />
+            <TableRow
               v-if="type"
               :title="$t('locality.type').toString()"
               :value="$translate({
@@ -93,7 +93,7 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row
+            <TableRow
               v-if="country"
               :title="$t('locality.country').toString()"
               :value="$translate({
@@ -102,7 +102,7 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row
+            <TableRow
               v-if="municipality"
               :title="$t('locality.parish').toString()"
               :value="$translate({
@@ -111,7 +111,7 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row
+            <TableRow
               v-if="settlementUnit"
               :title="$t('locality.settlement').toString()"
               :value="$translate({
@@ -120,20 +120,20 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row :title="$t('locality.elevation').toString()" :value="locality.elevation" />
-            <table-row
+            <TableRow :title="$t('locality.elevation').toString()" :value="locality.elevation" />
+            <TableRow
               :title="$t('locality.coordinates').toString()"
               :value="`${locality.latitude}, ${locality.longitude}`"
             />
-            <table-row :title="$t('locality.coordinateSystem').toString()" :value="locality.coord_system" />
-            <table-row :title="$t('locality.coordinateX').toString()" :value="locality.coordx" />
-            <table-row :title="$t('locality.coordinateY').toString()" :value="locality.coordy" />
-            <table-row
+            <TableRow :title="$t('locality.coordinateSystem').toString()" :value="locality.coord_system" />
+            <TableRow :title="$t('locality.coordinateX').toString()" :value="locality.coordx" />
+            <TableRow :title="$t('locality.coordinateY').toString()" :value="locality.coordy" />
+            <TableRow
               v-if="coordinatePrecision"
               :title="$t('locality.coordinatePrecision').toString()"
               :value="coordinatePrecision.value"
             />
-            <table-row
+            <TableRow
               v-if="coordinateMethod"
               :title="$t('locality.coordinateMethod').toString()"
               :value="$translate({
@@ -142,13 +142,13 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row
+            <TableRow
               v-if="coordinateAgent"
               :title="$t('locality.coordinateAgent').toString()"
               :value="coordinateAgent.agent"
             />
-            <table-row :title="$t('locality.locationRemarks').toString()" :value="locality.remarks_location" />
-            <table-row-link
+            <TableRow :title="$t('locality.locationRemarks').toString()" :value="locality.remarks_location" />
+            <TableRowLink
               v-if="stratigraphyTop"
               :title="$t('locality.stratigraphyTop').toString()"
               :value="$translate({
@@ -163,7 +163,7 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row-link
+            <TableRowLink
               v-if="stratigraphyBase"
               :title="$t('locality.stratigraphyBase').toString()"
               :value="$translate({
@@ -178,28 +178,28 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row :title="$t('locality.remarks').toString()" :value="locality.remarks" />
-            <table-row-link
+            <TableRow :title="$t('locality.remarks').toString()" :value="locality.remarks" />
+            <TableRowLink
               v-if="locality.maaamet_pa_id"
               :title="$t('locality.linkLandBoard').toString()"
               :value="locality.maaamet_pa_id"
               :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
             />
-            <table-row
+            <TableRow
               v-if="locality.date_added"
               :title="$t('locality.dateAdded').toString()"
               :value="$formatDate(locality.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="locality.date_changed"
               :title="$t('locality.dateChanged').toString()"
               :value="$formatDate(locality.date_changed)"
             />
-          </base-table>
-        </v-card>
-      </v-col>
-      <v-col v-if="showMap" :xl="4">
-        <map-detail
+          </BaseTable>
+        </VCard>
+      </VCol>
+      <VCol v-if="showMap" :xl="4">
+        <MapDetail
           v-if="showMap"
           rounded
           :estonian-map="country ? country.value === 'Eesti' : false"
@@ -222,7 +222,7 @@ const _ = await useAsyncData("image", async () => {
             },
           ]"
         />
-      </v-col>
-    </v-row>
-  </v-container>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>

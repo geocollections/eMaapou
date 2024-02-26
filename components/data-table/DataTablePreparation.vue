@@ -5,18 +5,18 @@ const { $translate } = useNuxtApp();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.preparation_number="{ item, index }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'preparation-id', params: { id: item.id } })"
         @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.preparation_number }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_en"
         class="text-link"
         :to="
@@ -27,14 +27,14 @@ const { $translate } = useNuxtApp();
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.depth="{ item }">
       <span>{{ item.depth }}</span>
     </template>
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
-        <nuxt-link
+        <NuxtLink
           v-if="item.stratigraphy_id"
           class="text-link"
           :to="
@@ -50,10 +50,10 @@ const { $translate } = useNuxtApp();
               en: item.stratigraphy_en,
             })
           }}
-        </nuxt-link>
+        </NuxtLink>
 
         <span v-if="item.lithostratigraphy_id"> | </span>
-        <nuxt-link
+        <NuxtLink
           v-if="item.lithostratigraphy_id"
           class="text-link"
           :to="
@@ -69,8 +69,8 @@ const { $translate } = useNuxtApp();
               en: item.lithostratigraphy_en,
             })
           }}
-        </nuxt-link>
+        </NuxtLink>
       </span>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

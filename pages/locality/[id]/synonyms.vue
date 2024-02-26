@@ -35,7 +35,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/locality_synonym/", {
 </script>
 
 <template>
-  <data-table-synonym
+  <DataTableSynonym
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

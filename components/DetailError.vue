@@ -47,8 +47,8 @@ export default {
 </script>
 
 <template>
-  <v-row justify="center">
-    <v-col
+  <VRow justify="center">
+    <VCol
       sm="8"
       md="6"
       class="text-center"
@@ -57,19 +57,19 @@ export default {
         {{ title }}
       </h1>
 
-      <v-btn
+      <VBtn
         variant="text"
         size="large"
         elevation="0"
         class="text-capitalize montserrat"
         @click="$router.go(0)"
       >
-        <v-icon start>
+        <VIcon start>
           {{ icons.mdiRefresh }}
-        </v-icon>
+        </VIcon>
         Refresh
-      </v-btn>
-      <v-btn
+      </VBtn>
+      <VBtn
         size="large"
         variant="text"
         elevation="0"
@@ -77,19 +77,19 @@ export default {
         to="/"
         class="montserrat text-capitalize"
       >
-        <v-icon start>
+        <VIcon start>
           {{ icons.mdiHome }}
-        </v-icon>
+        </VIcon>
         {{ $t("common.backToLanding") }}
-      </v-btn>
-      <v-form class="d-flex text-right my-4" @submit.prevent="handleSearch">
+      </VBtn>
+      <VForm class="d-flex text-right my-4" @submit.prevent="handleSearch">
         <InputSearch
           v-model="query"
           input-class="rounded"
           height="56"
           :placeholder="$t('landing.searchPlaceholder')"
         />
-        <v-btn
+        <VBtn
           height="56px"
           width="84px"
           class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
@@ -97,11 +97,11 @@ export default {
           color="warning"
           dark
         >
-          <v-icon>{{ icons.mdiMagnify }}</v-icon>
-        </v-btn>
-      </v-form>
-    </v-col>
-  </v-row>
+          <VIcon>{{ icons.mdiMagnify }}</VIcon>
+        </VBtn>
+      </VForm>
+    </VCol>
+  </VRow>
 </template>
 
 <style scoped>

@@ -33,27 +33,27 @@ const filteredHeaders = computed(() => {
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs" :headers="filteredHeaders">
+  <BaseDataTable v-bind="$attrs" :headers="filteredHeaders">
     <template #item.id="{ item, index }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
         @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.sample_name="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.sample_id"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
         {{ item.sample_name }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -61,14 +61,14 @@ const filteredHeaders = computed(() => {
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-      <nuxt-link
+      </NuxtLink>
+      <NuxtLink
         v-else-if="item.site_id"
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
       >
         {{ $translate({ et: item.name, en: item.name_en }) }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.thickness="{ item }">
       {{
@@ -101,5 +101,5 @@ const filteredHeaders = computed(() => {
         {{ item.date_free }}
       </div>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

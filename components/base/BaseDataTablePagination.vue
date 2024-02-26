@@ -122,7 +122,7 @@ function pageLimitRule(value) {
 <template>
   <div class="d-inline-flex align-center mr-2 mr-sm-3">
     <div class="">
-      <v-select
+      <VSelect
         density="compact"
         hide-details
         variant="underlined"
@@ -134,39 +134,39 @@ function pageLimitRule(value) {
       />
     </div>
     <div class="justify-end my-1 d-inline-flex align-center">
-      <v-btn
+      <VBtn
         :disabled="options.page === 1"
         variant="text"
         :icon="mdiPageFirst"
         @click="first"
       />
-      <v-btn
+      <VBtn
         :disabled="options.page === 1"
         variant="text"
         :icon="mdiChevronLeft"
         @click="previous"
       />
       <!-- NOTE: Template activator based menu is not visible on page load. For more info look at note in BaseDataTableHeaderMenu.vue -->
-      <v-menu
+      <VMenu
         location="bottom"
         :offset="10"
         :close-on-content-click="false"
         z-index="4"
       >
         <template #activator="{ props }">
-          <v-btn
+          <VBtn
             v-bind="props"
             variant="text"
             class="text-no-wrap text-caption"
           >
             {{ pageSelectText }}
-          </v-btn>
+          </VBtn>
         </template>
-        <v-card class="px-2 py-2 d-flex align-center">
+        <VCard class="px-2 py-2 d-flex align-center">
           <div class="mr-2 text-no-wrap text-caption">
             {{ goToText }}
           </div>
-          <v-text-field
+          <VTextField
             ref="goToField"
             class="mt-0 text-caption"
             style="width: 64px"
@@ -179,7 +179,7 @@ function pageLimitRule(value) {
             @keyup.enter="selectPage"
             @update:model-value="setGoToValue"
           />
-          <v-btn
+          <VBtn
             :disabled="!pageLimitRule(goToValue)"
             class="px-2 ml-2"
             size="small"
@@ -187,26 +187,26 @@ function pageLimitRule(value) {
             @click="selectPage"
           >
             {{ goToButtonText }}
-            <v-icon size="small">
+            <VIcon size="small">
               {{ mdiChevronRight }}
-            </v-icon>
-          </v-btn>
-        </v-card>
-      </v-menu>
-      <v-btn
+            </VIcon>
+          </VBtn>
+        </VCard>
+      </VMenu>
+      <VBtn
         :disabled="options.page === pageCount"
         :icon="mdiChevronRight"
         variant="text"
         @click="next"
       />
-      <v-btn
+      <VBtn
         :disabled="options.page === pageCount"
         variant="text"
         :icon="mdiPageLast"
         @click="last"
       >
-        <v-icon>{{ mdiPageLast }}</v-icon>
-      </v-btn>
+        <VIcon>{{ mdiPageLast }}</VIcon>
+      </VBtn>
     </div>
   </div>
 </template>

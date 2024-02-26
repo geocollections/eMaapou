@@ -128,7 +128,7 @@ const chartTitle = computed(() => {
 
 <template>
   <div>
-    <chart-flog
+    <ChartFlog
       v-if="analysisResults.length > 0 && sampleResults.length > 0"
       :analyses="analysisResults"
       :samples="sampleResults"
@@ -144,7 +144,7 @@ const chartTitle = computed(() => {
       "
       :reverse="reversed"
     />
-    <chart-las
+    <ChartLas
       v-if="attachment && lasContent"
       class="pa-2"
       :class="{

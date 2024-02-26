@@ -35,7 +35,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
 </script>
 
 <template>
-  <data-table-taxon-list
+  <DataTableTaxonList
     class="border-b"
     :items="data?.results ?? []"
     :count="data?.count ?? 0"

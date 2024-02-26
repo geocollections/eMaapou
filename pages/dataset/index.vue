@@ -69,9 +69,9 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 </script>
 
 <template>
-  <search>
+  <Search>
     <template #title>
-      <header-search
+      <HeaderSearch
         :title="$t('dataset.pageTitle')"
         :count="data?.response.numFound ?? 0"
         :icon="mdiDatabaseOutline"
@@ -79,7 +79,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-dataset
+      <SearchFormDataset
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -92,7 +92,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #result>
-      <data-table-dataset
+      <DataTableDataset
         class="border-t border-b"
         :show-search="false"
         :items="data?.response.docs ?? []"
@@ -108,5 +108,5 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
         @click:row="handleClickRow"
       />
     </template>
-  </search>
+  </Search>
 </template>

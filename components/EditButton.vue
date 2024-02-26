@@ -17,7 +17,7 @@ function handleClick() {
 </script>
 
 <template>
-  <v-btn
+  <VBtn
     id="edit-btn"
     :icon="mdiSquareEditOutline"
     size="small"
@@ -25,7 +25,7 @@ function handleClick() {
     color="deep-orange-darken-2"
     @click="handleClick"
   />
-  <v-tooltip location="bottom" activator="#edit-btn">
+  <VTooltip location="bottom" activator="#edit-btn">
     <span>{{ $t("common.linkToEdit") }}</span>
-  </v-tooltip>
+  </VTooltip>
 </template>

@@ -21,7 +21,7 @@ const localePath = useLocalePath();
 <template>
   <LPopup :options="{ minWidth: 175 }">
     <div style="max-height: 200px; overflow: auto">
-      <v-table
+      <VTable
         density="compact"
         :fixed-header="featuresLength > 3"
         :height="featuresLength > 3 ? 200 : 'unset'"
@@ -36,7 +36,7 @@ const localePath = useLocalePath();
           <tbody>
             <tr v-for="(item, index) in features" :key="index">
               <td>
-                <nuxt-link
+                <NuxtLink
                   class="text-link"
                   :to="
                     localePath({
@@ -52,13 +52,13 @@ const localePath = useLocalePath();
                         item.properties.locality_en || item.properties.name_en,
                     })
                   }}
-                </nuxt-link>
+                </NuxtLink>
               </td>
               <!--              <td>{{ item.properties.total_related_records }}</td> -->
             </tr>
           </tbody>
         </template>
-      </v-table>
+      </VTable>
     </div>
   </LPopup>
 </template>

@@ -30,7 +30,7 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <v-dialog
+  <VDialog
     :model-value="modelValue"
     overlay-opacity="0.80"
     content-class="elevation-0"
@@ -38,7 +38,7 @@ const localePath = useLocalePath();
     @update:model-value="emit('input', !modelValue)"
   >
     <div class="text-center" @click="emit('input', !modelValue)">
-      <nuxt-img
+      <NuxtImg
         v-if="image"
         class="rounded"
         style="max-height: 80vh; max-width: 100%; object-fit: contain"
@@ -52,7 +52,7 @@ const localePath = useLocalePath();
       class="d-flex justify-center"
       style="position: absolute; bottom: 1rem"
     >
-      <v-btn
+      <VBtn
         class="montserrat text-capitalize font-weight-regular mr-2"
         nuxt
         :to="
@@ -64,48 +64,48 @@ const localePath = useLocalePath();
         color="info"
         elevation="2"
       >
-        <v-icon start>
+        <VIcon start>
           {{ mdiInformationOutline }}
-        </v-icon>
+        </VIcon>
         {{ $t("photo.viewDetail") }}
-      </v-btn>
+      </VBtn>
       <div class="bg-white rounded px-2">
-        <v-icon start>
+        <VIcon start>
           {{ mdiFileDownloadOutline }}
-        </v-icon>
-        <v-btn
+        </VIcon>
+        <VBtn
           variant="text"
           class="text-capitalize"
           :href="img(image.src, { size: 'small' }, image.options)"
           target="_blank"
         >
           {{ $t("common.small") }}
-        </v-btn>
-        <v-btn
+        </VBtn>
+        <VBtn
           variant="text"
           class="text-capitalize"
           :href="img(image.src, { size: 'medium' }, image.options)"
           target="_blank"
         >
           {{ $t("common.medium") }}
-        </v-btn>
-        <v-btn
+        </VBtn>
+        <VBtn
           variant="text"
           class="text-capitalize"
           :href="img(image.src, { size: 'large' }, image.options)"
           target="_blank"
         >
           {{ $t("common.large") }}
-        </v-btn>
-        <v-btn
+        </VBtn>
+        <VBtn
           variant="text"
           class="text-capitalize"
           :href="img(image.src, {}, image.options)"
           target="_blank"
         >
           {{ $t("common.original") }}
-        </v-btn>
+        </VBtn>
       </div>
     </div>
-  </v-dialog>
+  </VDialog>
 </template>

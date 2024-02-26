@@ -106,50 +106,50 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row>
-      <v-col
+  <VContainer style="margin: initial">
+    <VRow>
+      <VCol
         :sm="12"
         :md="6"
         :lg="7"
         :xl="5"
       >
-        <v-card>
-          <base-table>
-            <table-row :title="$t('dataset.title')" :value="dataset.title" />
-            <table-row
+        <VCard>
+          <BaseTable>
+            <TableRow :title="$t('dataset.title')" :value="dataset.title" />
+            <TableRow
               :title="$t('dataset.titleTranslated')"
               :value="dataset.title_translated"
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.titleAlt')"
               :value="dataset.title_alternative"
             />
-            <table-row
+            <TableRow
               v-if="dataset.creators || dataset.owner_txt || dataset.owner"
               :title="$t('dataset.creators')"
               :value="
                 dataset.creators || dataset.owner_txt || dataset.owner.agent
               "
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.publicationYear')"
               :value="dataset.publication_year"
             />
-            <table-row :title="$t('dataset.date')" :value="dataset.date" />
-            <table-row
+            <TableRow :title="$t('dataset.date')" :value="dataset.date" />
+            <TableRow
               :title="$t('dataset.resourceTopic')"
               :value="dataset.resource"
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.publisher')"
               :value="dataset.publisher"
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.subjects')"
               :value="dataset.subjects"
             />
-            <table-row
+            <TableRow
               v-if="dataset.language"
               :title="$t('dataset.language')"
               :value="
@@ -159,31 +159,31 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.abstract')"
               :value="dataset.abstract"
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.methods')"
               :value="dataset.methods"
             />
-            <table-row
+            <TableRow
               :title="$t('dataset.version')"
               :value="dataset.version"
             />
-            <table-row-link
+            <TableRowLink
               v-if="doi"
               :title="$t('dataset.doi')"
               :value="doi"
               :href="`https://doi.geocollections.info/${doi}`"
             />
-            <table-row-link
+            <TableRowLink
               v-if="reference"
               :title="$t('dataset.reference')"
               :value="reference.reference"
               :href="`https://kirjandus.geoloogia.info/reference/${reference.id}`"
             />
-            <table-row-link
+            <TableRowLink
               v-if="dataset.locality"
               :title="$t('dataset.locality')"
               :value="
@@ -200,12 +200,12 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               v-if="dataset.copyright_agent"
               :title="$t('dataset.copyright')"
               :value="dataset.copyright_agent.agent"
             />
-            <table-row-link
+            <TableRowLink
               v-if="dataset.licence"
               :title="$t('dataset.licence')"
               :value="
@@ -221,38 +221,38 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               v-if="dataset.date_added"
               :title="$t('dataset.dateAdded')"
               :value="$formatDate(dataset.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="dataset.date_changed"
               :title="$t('dataset.dateChanged')"
               :value="$formatDate(dataset.date_changed)"
             />
-            <table-row
+            <TableRow
               v-if="parameters.length > 0"
               :title="$t('dataset.parameters')"
               :value="parameters"
             >
               <template #value>
-                <v-chip
+                <VChip
                   v-for="(parameter, i) in parameters"
                   :key="i"
                   size="small"
                   class="mr-1 mb-1"
                 >
                   {{ parameter.text }}
-                </v-chip>
+                </VChip>
               </template>
-            </table-row>
-          </base-table>
-        </v-card>
-      </v-col>
-      <v-col v-if="locationMarkers.length > 0">
-        <map-detail rounded :markers="locationMarkers" />
-      </v-col>
-    </v-row>
-  </v-container>
+            </TableRow>
+          </BaseTable>
+        </VCard>
+      </VCol>
+      <VCol v-if="locationMarkers.length > 0">
+        <MapDetail rounded :markers="locationMarkers" />
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>

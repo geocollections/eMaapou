@@ -75,17 +75,17 @@ function handleRemove() {
 </script>
 
 <template>
-  <v-expansion-panel
+  <VExpansionPanel
     style="background-color: transparent"
     elevation="0"
     :rounded="0"
   >
-    <v-expansion-panel-title
+    <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
-    </v-expansion-panel-title>
+    </VExpansionPanelTitle>
     <div
       v-if="modelValue[0] !== null || modelValue[1] !== null"
       class="bg-white"
@@ -105,14 +105,14 @@ function handleRemove() {
         </span>
       </div>
     </div>
-    <v-expansion-panel-text
+    <VExpansionPanelText
       class="pt-1"
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
-      <v-row no-gutters>
-        <v-col cols="6" class="pl-r">
-          <v-text-field
+      <VRow no-gutters>
+        <VCol cols="6" class="pl-r">
+          <VTextField
             :model-value="modelValue[0]"
             color="primary-darken-3"
             :label="fieldLabels.min"
@@ -126,9 +126,9 @@ function handleRemove() {
             @keydown.enter.prevent.stop="handleEnter"
             @blur="handleEnter"
           />
-        </v-col>
-        <v-col cols="6" class="pl-1">
-          <v-text-field
+        </VCol>
+        <VCol cols="6" class="pl-1">
+          <VTextField
             :model-value="modelValue[1]"
             color="primary-darken-3"
             :label="fieldLabels.max"
@@ -142,10 +142,10 @@ function handleRemove() {
             @keydown.enter.prevent.stop="handleEnter"
             @blur="handleEnter"
           />
-        </v-col>
-      </v-row>
-    </v-expansion-panel-text>
-  </v-expansion-panel>
+        </VCol>
+      </VRow>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style lang="scss" scoped>

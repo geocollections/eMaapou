@@ -245,13 +245,13 @@ redirectInvalidTab({
 </script>
 
 <template>
-  <detail-new :show-similar="showDrawer">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
-      <header-detail-new :title="data?.dataset.title">
+      <HeaderDetailNew :title="data?.dataset.title">
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </header-detail-new>
+      </HeaderDetailNew>
     </template>
     <template #drawer>
       <SearchResultsDrawer
@@ -277,7 +277,7 @@ redirectInvalidTab({
     </template>
 
     <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
+  </DetailNew>
 </template>
 
 <style lang="scss" scoped>

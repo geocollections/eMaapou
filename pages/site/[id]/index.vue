@@ -53,27 +53,27 @@ const _ = await useAsyncData("image", async () => {
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row v-if="images.length > 0">
-      <v-col>
-        <image-bar
+  <VContainer style="margin: initial">
+    <VRow v-if="images.length > 0">
+      <VCol>
+        <ImageBar
           v-if="images.length > 0"
           class="mt-4"
           :images="images"
           @update="imageQuery"
         />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol
         :sm="12"
         :md="6"
         :lg="7"
         :xl="5"
       >
-        <v-card>
-          <base-table>
-            <table-row
+        <VCard>
+          <BaseTable>
+            <TableRow
               :title="$t('site.name')"
               :value="$translate({
                 et: site.name,
@@ -81,7 +81,7 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row
+            <TableRow
               v-if="area"
               :value="area"
               :title="$t('site.area')"
@@ -98,11 +98,11 @@ const _ = await useAsyncData("image", async () => {
                       en: area.name_en,
                     })
                   }}
-                  <v-icon size="small" color="primary-darken-2">{{
+                  <VIcon size="small" color="primary-darken-2">{{
                     mdiOpenInNew
-                  }}</v-icon>
+                  }}</VIcon>
                 </a>
-                <nuxt-link
+                <NuxtLink
                   v-else
                   class="text-link"
                   :to="localePath({
@@ -117,11 +117,11 @@ const _ = await useAsyncData("image", async () => {
                       en: area.name_en,
                     })
                   }}
-                </nuxt-link>
+                </NuxtLink>
               </template>
-            </table-row>
+            </TableRow>
 
-            <table-row
+            <TableRow
               v-if="area && area.area_type === 2"
               :value="area"
               :title="$t('site.areaText1')"
@@ -134,15 +134,15 @@ const _ = await useAsyncData("image", async () => {
                     @click="$openTurba('plaanid', item.trim(), false)"
                   >
                     {{ item }}
-                    <v-icon size="small" color="primary-darken-2">
+                    <VIcon size="small" color="primary-darken-2">
                       {{ mdiFileDownloadOutline }}
-                    </v-icon>
+                    </VIcon>
                   </a>
                   <span v-if="index !== planArray.length - 1" class="mr-1">|</span>
                 </span>
               </template>
-            </table-row>
-            <table-row
+            </TableRow>
+            <TableRow
               v-if="site.project"
               :title="$t('site.project')"
               :value="$translate({
@@ -151,12 +151,12 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row :title="$t('site.coordx')" :value="site.coordx" />
-            <table-row :title="$t('site.coordy')" :value="site.coordy" />
-            <table-row :title="$t('site.extent')" :value="site.extent" />
-            <table-row :title="$t('site.depth')" :value="site.depth" />
+            <TableRow :title="$t('site.coordx')" :value="site.coordx" />
+            <TableRow :title="$t('site.coordy')" :value="site.coordy" />
+            <TableRow :title="$t('site.extent')" :value="site.extent" />
+            <TableRow :title="$t('site.depth')" :value="site.depth" />
 
-            <table-row-link
+            <TableRowLink
               v-if="locality"
               :title="$t('locality.locality')"
               :value="$translate({
@@ -171,7 +171,7 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row
+            <TableRow
               v-if="locality && locality.country"
               :title="$t('locality.country')"
               :value="$translate({
@@ -192,24 +192,24 @@ const _ = await useAsyncData("image", async () => {
                   })
                 }}
               </template>
-            </table-row>
-            <table-row :title="$t('locality.coordinates')" :value="`${site.latitude}, ${site.longitude}`" />
-            <table-row
+            </TableRow>
+            <TableRow :title="$t('locality.coordinates')" :value="`${site.latitude}, ${site.longitude}`" />
+            <TableRow
               v-if="elevation"
               :title="$t('site.elevation')"
               :value="elevation"
             />
-            <table-row
+            <TableRow
               v-if="locality"
               :title="$t('locality.depth')"
               :value="locality.depth"
             />
-            <table-row
+            <TableRow
               v-if="site.location_accuracy"
               :title="$t('site.locationAccuracy')"
               :value="site.location_accuracy"
             />
-            <table-row
+            <TableRow
               v-if="site.coord_det_method"
               :title="$t('site.coordDetMethod')"
               :value="$translate({
@@ -218,37 +218,37 @@ const _ = await useAsyncData("image", async () => {
               })
               "
             />
-            <table-row :title="$t('site.description')" :value="site.description" />
-            <table-row
+            <TableRow :title="$t('site.description')" :value="site.description" />
+            <TableRow
               v-if="site.remarks"
               :title="$t('site.remarks')"
               :value="site.remarks"
             />
-            <table-row
+            <TableRow
               v-if="site.remarks_location"
               :title="$t('site.remarksLocation')"
               :value="site.remarks_location"
             />
-            <table-row
+            <TableRow
               v-if="studied"
               :title="$t('site.studied')"
               :value="studied"
             />
-            <table-row
+            <TableRow
               v-if="site.date_added"
               :title="$t('site.dateAdded')"
               :value="$formatDate(site.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="site.date_changed"
               :title="$t('site.dateChanged')"
               :value="$formatDate(site.date_changed)"
             />
-          </base-table>
-        </v-card>
-      </v-col>
-      <v-col v-if="(site.latitude && site.longitude) || site.locality_id" :xl="4">
-        <map-detail
+          </BaseTable>
+        </VCard>
+      </VCol>
+      <VCol v-if="(site.latitude && site.longitude) || site.locality_id" :xl="4">
+        <MapDetail
           v-if="site.latitude && site.longitude"
           height="300px"
           rounded
@@ -276,7 +276,7 @@ const _ = await useAsyncData("image", async () => {
             },
           ]"
         />
-      </v-col>
-    </v-row>
-  </v-container>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>

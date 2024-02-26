@@ -37,7 +37,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
 </script>
 
 <template>
-  <data-table-locality-reference
+  <DataTableLocalityReference
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

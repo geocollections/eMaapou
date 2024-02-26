@@ -206,13 +206,13 @@ function getDepthRange(sample: any) {
 </script>
 
 <template>
-  <detail-new :show-similar="showDrawer">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
-      <header-detail-new :title="pageTitle">
+      <HeaderDetailNew :title="pageTitle">
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>
-      </header-detail-new>
+      </HeaderDetailNew>
     </template>
     <NuxtPage v-bind="activeTabProps" />
     <template #drawer>
@@ -234,9 +234,9 @@ function getDepthRange(sample: any) {
         </template>
         <template #itemSubtitle="{ item: sample }">
           <div v-if="sample.depth" class="d-flex align-center">
-            <v-icon start size="small">
+            <VIcon start size="small">
               {{ mdiRuler }}
-            </v-icon>
+            </VIcon>
             <span class="text--secondary">
               {{ getDepthRange(sample) }}
             </span>
@@ -244,7 +244,7 @@ function getDepthRange(sample: any) {
         </template>
       </SearchResultsDrawer>
     </template>
-  </detail-new>
+  </DetailNew>
 </template>
 
 <style scoped>

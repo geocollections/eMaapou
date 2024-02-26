@@ -37,7 +37,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
 </script>
 
 <template>
-  <data-table-dataset-geolocation
+  <DataTableDatasetGeolocation
     id-field="dataset"
     :items="data?.results ?? []"
     :count="data?.count ?? 0"

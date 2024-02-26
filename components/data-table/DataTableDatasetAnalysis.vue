@@ -3,17 +3,17 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.analysis="{ item }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.sample="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.sample_id"
         class="text-link"
         :to="
@@ -24,10 +24,10 @@ const localePath = useLocalePath();
         "
       >
         {{ item.sample_id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -38,17 +38,17 @@ const localePath = useLocalePath();
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-      <nuxt-link
+      </NuxtLink>
+      <NuxtLink
         v-else-if="item.site_id"
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
       >
         {{ item.site }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy_id"
         class="text-link"
         :to="
@@ -59,7 +59,7 @@ const localePath = useLocalePath();
         "
       >
         {{ $translate({ et: item.stratigraphy, en: item.stratigraphy_en }) }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
 
     <template #item.analysis_method="{ item }">
@@ -70,5 +70,5 @@ const localePath = useLocalePath();
     <template #item.lab="{ item }">
       {{ $translate({ et: item.lab, en: item.lab_en }) }}
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

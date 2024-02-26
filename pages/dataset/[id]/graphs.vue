@@ -85,7 +85,7 @@ const title = computed(() => props.dataset?.title);
 
 <template>
   <div>
-    <chart-flog
+    <ChartFlog
       v-if="analysisResults.length > 0 && sampleResults.length > 0"
       :analyses="analysisResults"
       :samples="sampleResults"

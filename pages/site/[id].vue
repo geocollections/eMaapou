@@ -314,13 +314,13 @@ redirectInvalidTab({
 </script>
 
 <template>
-  <detail-new :show-similar="showDrawer">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
-      <header-detail-new :title="title">
+      <HeaderDetailNew :title="title">
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </header-detail-new>
+      </HeaderDetailNew>
     </template>
     <template #drawer>
       <SearchResultsDrawer
@@ -341,9 +341,9 @@ redirectInvalidTab({
         </template>
         <template #itemSubtitle="{ item: site }">
           <div v-if="site.area_id" class="d-flex align-center">
-            <v-icon start size="small">
+            <VIcon start size="small">
               {{ mdiTextureBox }}
-            </v-icon>
+            </VIcon>
             <span class="text--secondary">
               {{
                 $translate({
@@ -357,5 +357,5 @@ redirectInvalidTab({
       </SearchResultsDrawer>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
+  </DetailNew>
 </template>

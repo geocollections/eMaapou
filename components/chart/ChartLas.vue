@@ -294,19 +294,19 @@ watch(
 
 <template>
   <div>
-    <renderer-switch
+    <RendererSwitch
       v-if="!hideRendererSwitch"
       :renderer="renderer"
       @update="renderer = $event"
     />
-    <client-only>
+    <ClientOnly>
       <VChart
         class="chart"
         autoresize
         :init-options="initOptions"
         :option="state.option"
       />
-    </client-only>
+    </ClientOnly>
   </div>
 </template>
 

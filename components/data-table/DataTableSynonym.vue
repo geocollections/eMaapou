@@ -1,12 +1,12 @@
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.reference="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.reference"
         @click.native="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

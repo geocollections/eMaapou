@@ -3,14 +3,14 @@ import { mdiMinus, mdiPlus } from "@mdi/js";
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.taxon="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.taxon"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
         {{ item.taxon.taxon }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
 
     <template #item.agent="{ item }">
@@ -20,12 +20,12 @@ import { mdiMinus, mdiPlus } from "@mdi/js";
     </template>
 
     <template #item.extra="{ item }">
-      <v-icon v-if="item.extra">
+      <VIcon v-if="item.extra">
         {{ mdiPlus }}
-      </v-icon>
-      <v-icon v-else>
+      </VIcon>
+      <VIcon v-else>
         {{ mdiMinus }}
-      </v-icon>
+      </VIcon>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

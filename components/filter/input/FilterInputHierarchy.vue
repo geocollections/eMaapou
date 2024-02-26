@@ -147,17 +147,17 @@ defineExpose({
 </script>
 
 <template>
-  <v-expansion-panel
+  <VExpansionPanel
     bg-color="transparent"
     elevation="0"
     :rounded="0"
   >
-    <v-expansion-panel-title
+    <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
-    </v-expansion-panel-title>
+    </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
@@ -192,7 +192,7 @@ defineExpose({
         </div>
       </div>
     </div>
-    <v-expansion-panel-text
+    <VExpansionPanelText
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
@@ -207,8 +207,8 @@ defineExpose({
           @select="handleSelect"
         />
       </ul>
-    </v-expansion-panel-text>
-  </v-expansion-panel>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style scoped>

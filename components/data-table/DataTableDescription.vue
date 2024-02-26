@@ -5,60 +5,60 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table expandable v-bind="$attrs">
+  <BaseDataTable expandable v-bind="$attrs">
     <template #expanded-row="{ columns, item }">
       <tr>
         <td class="py-2" :colspan="columns.length">
-          <v-row no-gutters>
-            <v-col class="pt-2 pb-4 pr-2">
+          <VRow no-gutters>
+            <VCol class="pt-2 pb-4 pr-2">
               <div class="font-weight-bold">
                 {{ $t("drillcore.description") }}
               </div>
               <div>
                 {{ item.description }}
               </div>
-            </v-col>
-            <v-col cols="12" md="6">
-              <base-table>
-                <table-row
+            </VCol>
+            <VCol cols="12" md="6">
+              <BaseTable>
+                <TableRow
                   :title="$t('localityDescription.zeroLevel')"
                   :value="item.zero_level"
                 />
-                <table-row
+                <TableRow
                   :title="$t('localityDescription.authorFree')"
                   :value="item.author_free"
                 />
-                <table-row-link
+                <TableRowLink
                   v-if="item.reference"
                   :title="$t('localityDescription.reference')"
                   :value="item.reference.reference"
                   @link-click="$openGeology('reference', item.reference.id)"
                 />
-                <table-row
+                <TableRow
                   :title="$t('localityDescription.year')"
                   :value="item.year"
                 />
-                <table-row
+                <TableRow
                   :title="$t('localityDescription.stratigraphyFree')"
                   :value="item.stratigraphy_free"
                 />
-                <table-row
+                <TableRow
                   v-if="item.rock"
                   :title="$t('localityDescription.rockEt')"
                   :value="item.rock.name"
                 />
-                <table-row
+                <TableRow
                   v-if="item.rock"
                   :title="$t('localityDescription.rockEn')"
                   :value="item.rock.name_en"
                 />
-                <table-row
+                <TableRow
                   :title="$t('localityDescription.remarks')"
                   :value="item.remarks"
                 />
-              </base-table>
-            </v-col>
-          </v-row>
+              </BaseTable>
+            </VCol>
+          </VRow>
         </td>
       </tr>
     </template>
@@ -75,7 +75,7 @@ const localePath = useLocalePath();
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy"
         class="text-link"
         :to="
@@ -91,7 +91,7 @@ const localePath = useLocalePath();
             en: item.stratigraphy.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.author="{ item }">
       <a
@@ -112,5 +112,5 @@ const localePath = useLocalePath();
         {{ item.author_free }}
       </div>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

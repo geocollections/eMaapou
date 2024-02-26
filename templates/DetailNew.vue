@@ -14,7 +14,7 @@ function closeMobileSearch() {
 </script>
 
 <template>
-  <v-navigation-drawer
+  <VNavigationDrawer
     v-if="showSimilar"
     :model-value="true"
     :style="{ cursor: mini ? 'pointer' : 'auto' }"
@@ -27,21 +27,21 @@ function closeMobileSearch() {
     :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
   >
     <div style="height: 100%" tile>
-      <v-list
+      <VList
         v-if="!$vuetify.display.smAndDown"
         density="compact"
         variant="plain"
         class="pa-0"
       >
-        <v-list-item :ripple="false" @click="mini = !mini">
+        <VListItem :ripple="false" @click="mini = !mini">
           <template #prepend>
-            <v-icon :icon="mdiChevronDoubleLeft" :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }" />
+            <VIcon :icon="mdiChevronDoubleLeft" :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }" />
           </template>
           <div class="montserrat font-weight-medium text--secondary">
             {{ $t("common.hideSimilar") }}
           </div>
-        </v-list-item>
-      </v-list>
+        </VListItem>
+      </VList>
       <div v-else class="text-h6 py-2 pl-2">
         {{ $t("common.showSimilar") }}
       </div>
@@ -61,13 +61,13 @@ function closeMobileSearch() {
         <slot name="drawer" :close-mobile-search="closeMobileSearch" />
       </div>
     </div>
-  </v-navigation-drawer>
-  <v-main style="min-height: 100vh; padding-top: 48px">
+  </VNavigationDrawer>
+  <VMain style="min-height: 100vh; padding-top: 48px">
     <div class="fill-height pb-10">
       <slot name="title" />
       <slot />
-      <fab-scroll-top />
+      <FabScrollTop />
     </div>
-    <app-footer />
-  </v-main>
+    <AppFooter />
+  </VMain>
 </template>

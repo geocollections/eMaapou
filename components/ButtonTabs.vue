@@ -6,9 +6,9 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <v-chip-group column selected-class="active-tab  elevation-1">
-    <transition-group name="flip-list">
-      <v-chip
+  <VChipGroup column selected-class="active-tab  elevation-1">
+    <TransitionGroup name="flip-list">
+      <VChip
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
         class="mx-1 mb-1 pl-1"
@@ -23,17 +23,17 @@ const localePath = useLocalePath();
           })
         "
       >
-        <v-chip
+        <VChip
           size="small"
           :ripple="false"
           class="bg-accent-darken-2 font-weight-regular mr-1 ma-0"
         >
           {{ item.count }}
-        </v-chip>
+        </VChip>
         {{ $t(item.title, { number: item.count }) }}
-      </v-chip>
-    </transition-group>
-  </v-chip-group>
+      </VChip>
+    </TransitionGroup>
+  </VChipGroup>
 </template>
 
 <style lang="scss" scoped>

@@ -35,7 +35,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/dataset_author/", {
 </script>
 
 <template>
-  <data-table-dataset-author
+  <DataTableDatasetAuthor
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

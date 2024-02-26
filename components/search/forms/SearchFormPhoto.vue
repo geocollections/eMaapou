@@ -55,10 +55,10 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
 
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
+    <VForm @submit.prevent="handleUpdate">
+      <InputSearch v-model="query" />
+      <SearchActions class="mb-3" @click="handleReset" />
+      <VExpansionPanels variant="accordion" multiple>
         <FilterInputAutocomplete
           ref="filterLocality"
           v-model="filters.locality.value"
@@ -77,36 +77,36 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
           value="country"
           @update:model-value="handleUpdate"
         />
-        <filter-map
+        <FilterMap
           v-model="filters.geometry.value"
           value="map"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.people.value"
           :title="$t('filters.people')"
           value="people"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.tags.value"
           :title="$t('filters.tags')"
           value="tags"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.number.value"
           :title="$t('filters.number')"
           value="number"
           @update:model-value="handleUpdate"
         />
-        <filter-input-range
+        <FilterInputRange
           v-model="filters.size.value"
           :title="$t('filters.imageSize')"
           value="imageSize"
           @update:model-value="handleUpdate"
         />
-        <filter-input-date
+        <FilterInputDate
           v-model="filters.date.value"
           :title="$t('filters.date')"
           value="date"
@@ -121,7 +121,7 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
           value="institution"
           @update:model-value="handleUpdate"
         />
-      </v-expansion-panels>
-    </v-form>
+      </VExpansionPanels>
+    </VForm>
   </div>
 </template>

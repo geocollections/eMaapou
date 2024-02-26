@@ -34,7 +34,7 @@ const { data, pending } = useSolrFetch("/preparation", {
 </script>
 
 <template>
-  <data-table-preparation
+  <DataTablePreparation
     class="border-b"
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"

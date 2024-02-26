@@ -96,8 +96,8 @@ function handleNext() {
 </script>
 
 <template>
-  <base-header>
-    <v-card-title class="d-block pt-1 px-0 pb-3 px-sm-3">
+  <BaseHeader>
+    <VCardTitle class="d-block pt-1 px-0 pb-3 px-sm-3">
       <div
         style="word-break: normal; flex-wrap: wrap"
         class="d-flex align-start font-weight-medium text-h4"
@@ -105,16 +105,16 @@ function handleNext() {
         <slot>
           {{ title }}
         </slot>
-        <edit-button />
+        <EditButton />
       </div>
       <div>
         <slot name="sub" />
       </div>
-    </v-card-title>
+    </VCardTitle>
 
     <template #before>
       <div v-if="$vuetify.display.smAndUp" class="d-flex px-0 px-sm-3 pb-0">
-        <v-btn
+        <VBtn
           v-if="hasPrevNext"
           id="previous-id"
           variant="plain"
@@ -128,31 +128,31 @@ function handleNext() {
           "
           @click="handlePrev"
         >
-          <v-icon>{{ mdiChevronLeft }}</v-icon>
-          <v-tooltip location="bottom" activator="#previous-id">
+          <VIcon>{{ mdiChevronLeft }}</VIcon>
+          <VTooltip location="bottom" activator="#previous-id">
             <span>{{ t("previous", { name: prevName }) }}</span>
-          </v-tooltip>
-        </v-btn>
+          </VTooltip>
+        </VBtn>
 
-        <v-btn
+        <VBtn
           id="back-btn-detail"
           icon
           variant="plain"
           :to="searchTo"
         >
-          <v-icon>
+          <VIcon>
             {{ mdiArrowUpLeft }}
-          </v-icon>
-          <v-tooltip location="bottom" activator="#back-btn-detail">
+          </VIcon>
+          <VTooltip location="bottom" activator="#back-btn-detail">
             <span>{{ $t("common.goBack") }}</span>
-          </v-tooltip>
-        </v-btn>
+          </VTooltip>
+        </VBtn>
         <div
           class="d-flex align-center montserrat text-grey-darken-1 pt-0 px-0 px-sm-3"
         >
           {{ $t(`breadcrumbs.${routeName}-id`, { id: $route.params.id }) }}
         </div>
-        <v-btn
+        <VBtn
           v-if="hasPrevNext"
           id="next-id"
           icon
@@ -166,14 +166,14 @@ function handleNext() {
           "
           @click="handleNext"
         >
-          <v-icon>{{ mdiChevronRight }}</v-icon>
-          <v-tooltip location="bottom" activator="#next-id">
+          <VIcon>{{ mdiChevronRight }}</VIcon>
+          <VTooltip location="bottom" activator="#next-id">
             <span>{{ t("next", { name: nextName }) }}</span>
-          </v-tooltip>
-        </v-btn>
+          </VTooltip>
+        </VBtn>
       </div>
     </template>
-  </base-header>
+  </BaseHeader>
 </template>
 
 <i18n lang="yaml">

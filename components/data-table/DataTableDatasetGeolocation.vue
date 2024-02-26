@@ -5,9 +5,9 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.name="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality"
         class="text-link"
         :to="
@@ -20,7 +20,7 @@ const localePath = useLocalePath();
             en: item.locality.locality_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.longitude="{ item }">
       {{ item.point_longitude }}
@@ -29,20 +29,20 @@ const localePath = useLocalePath();
       {{ item.point_latitude }}
     </template>
     <template #item.is_polygon="{ item }">
-      <v-icon
+      <VIcon
         v-if="item.polygon"
         color="green"
         size="small"
       >
         {{ mdiCheckBold }}
-      </v-icon>
-      <v-icon
+      </VIcon>
+      <VIcon
         v-else
         color="red"
         size="small"
       >
         {{ mdiCloseThick }}
-      </v-icon>
+      </VIcon>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

@@ -8,8 +8,8 @@ const switchLocalePath = useSwitchLocalePath();
 </script>
 
 <template>
-  <v-list class="py-1 px-2">
-    <v-list-item
+  <VList class="py-1 px-2">
+    <VListItem
       v-for="(locale, i) in availableLocales"
       :key="i"
       nuxt
@@ -17,17 +17,17 @@ const switchLocalePath = useSwitchLocalePath();
       :class="{ 'header-menu-item-active': $i18n.locale === locale.code }"
       :to="switchLocalePath(locale.code)"
     >
-      <v-list-item-title class="d-flex py-1">
-        <v-icon
+      <VListItemTitle class="d-flex py-1">
+        <VIcon
           v-show="$i18n.locale === locale.code"
           :icon="mdiCheck"
           start
           color="accent"
         />
         <span class="align-self-center montserrat">{{ locale.name }}</span>
-      </v-list-item-title>
-    </v-list-item>
-  </v-list>
+      </VListItemTitle>
+    </VListItem>
+  </VList>
 </template>
 
 <style scoped>

@@ -40,7 +40,7 @@ const { data, pending } = useSolrFetch("/analysis_results", {
 </script>
 
 <template>
-  <data-table-sample-analysis-result
+  <DataTableSampleAnalysisResult
     class="border-b"
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"

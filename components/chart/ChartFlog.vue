@@ -930,43 +930,43 @@ state.option = createOption();
 
 <template>
   <div class="">
-    <v-toolbar
+    <VToolbar
       flat
       color="white"
       density="compact"
     >
-      <options-parameter-tree-view
+      <OptionsParameterTreeView
         :parameters="parameters"
         :initial-selection="state.selectedParameters"
         @input="handleParametersUpdate"
       />
-      <v-menu
+      <VMenu
         transition="slide-y-transition"
         offset="10"
         content-class="white"
         :close-on-content-click="false"
       >
         <template #activator="{ props }">
-          <v-btn
+          <VBtn
             class="ml-3"
             icon
             size="small"
             v-bind="props"
           >
-            <v-icon> {{ icons.mdiCog }} </v-icon>
-          </v-btn>
+            <VIcon> {{ icons.mdiCog }} </VIcon>
+          </VBtn>
         </template>
-        <v-card>
-          <v-card-title class="montserrat pb-2">
+        <VCard>
+          <VCardTitle class="montserrat pb-2">
             {{ $t("flogChart.settings") }}
-          </v-card-title>
-          <v-card-text>
-            <renderer-switch
+          </VCardTitle>
+          <VCardText>
+            <RendererSwitch
               :renderer="renderer"
               @update="handleRenderSwitch"
             />
-            <v-divider class="my-2" />
-            <v-text-field
+            <VDivider class="my-2" />
+            <VTextField
               v-model="state.scale"
               type="number"
               :label="$t('flogChart.heightScale')"
@@ -976,18 +976,18 @@ state.option = createOption();
               @change="handleScaleChange"
             >
               <template #append-inner>
-                <v-icon @click="handleScaleReset">
+                <VIcon @click="handleScaleReset">
                   {{ icons.mdiRefresh }}
-                </v-icon>
+                </VIcon>
               </template>
               <template #append>
-                <v-btn-toggle
+                <VBtnToggle
                   density="compact"
                   color="accent"
                   :model-value="ppi"
                   @update:model-value="handlePpiChange"
                 >
-                  <v-btn
+                  <VBtn
                     width="65"
                     size="small"
                     class="text-none montserrat"
@@ -995,8 +995,8 @@ state.option = createOption();
                     :value="96"
                   >
                     96 PPI
-                  </v-btn>
-                  <v-btn
+                  </VBtn>
+                  <VBtn
                     width="65"
                     size="small"
                     class="text-none montserrat"
@@ -1004,11 +1004,11 @@ state.option = createOption();
                     :value="72"
                   >
                     72 PPI
-                  </v-btn>
-                </v-btn-toggle>
+                  </VBtn>
+                </VBtnToggle>
               </template>
-            </v-text-field>
-            <v-text-field
+            </VTextField>
+            <VTextField
               :model-value="state.parameterChartWidth"
               type="number"
               class="d-inline-flex"
@@ -1018,13 +1018,13 @@ state.option = createOption();
               :label="$t('flogChart.parameterChartWidth')"
               @change="handleParameterChartWidthChange"
             />
-          </v-card-text>
-        </v-card>
-      </v-menu>
-    </v-toolbar>
-    <v-divider />
+          </VCardText>
+        </VCard>
+      </VMenu>
+    </VToolbar>
+    <VDivider />
     <div ref="containerFlogChart" class="overflow-x-auto">
-      <client-only>
+      <ClientOnly>
         <VChart
           ref="flogChart"
           class="chart pa-2"
@@ -1045,7 +1045,7 @@ state.option = createOption();
             :style="`height: ${state.initialHeight + 200}px; width: 100%`"
             class="d-flex align-center justify-center"
           >
-            <v-progress-circular
+            <VProgressCircular
               indeterminate
               color="accent"
               :size="100"
@@ -1053,7 +1053,7 @@ state.option = createOption();
             />
           </div>
         </template>
-      </client-only>
+      </ClientOnly>
     </div>
   </div>
 </template>

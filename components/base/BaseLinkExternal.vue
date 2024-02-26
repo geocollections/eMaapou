@@ -16,7 +16,7 @@ defineProps<{
     <slot />
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
-        <v-icon class="open-new-icon" size="x-small">{{ mdiOpenInNew }}</v-icon>
+        <VIcon class="open-new-icon" size="x-small">{{ mdiOpenInNew }}</VIcon>
       </slot>
     </span>
   </a>

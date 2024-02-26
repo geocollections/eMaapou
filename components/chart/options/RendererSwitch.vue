@@ -13,13 +13,13 @@ defineProps({
 <template>
   <div>
     <div class="text-caption" v-text="$t('common.render')" />
-    <v-btn-toggle
+    <VBtnToggle
       density="compact"
       color="accent"
       :model-value="renderer"
       @update:model-value="$emit('update', $event)"
     >
-      <v-btn
+      <VBtn
         width="65"
         size="small"
         class="text-none montserrat"
@@ -27,8 +27,8 @@ defineProps({
         value="canvas"
       >
         Canvas
-      </v-btn>
-      <v-btn
+      </VBtn>
+      <VBtn
         width="65"
         size="small"
         class="text-none montserrat"
@@ -36,7 +36,7 @@ defineProps({
         value="svg"
       >
         SVG
-      </v-btn>
-    </v-btn-toggle>
+      </VBtn>
+    </VBtnToggle>
   </div>
 </template>

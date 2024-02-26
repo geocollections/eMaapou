@@ -1,12 +1,12 @@
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.name="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.taxon"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
         {{ item.taxon.taxon }}
-      </base-link-external>
+      </BaseLinkExternal>
 
       <div v-if="item.name">
         | {{ item.name }}
@@ -21,12 +21,12 @@
       {{ item.date_identified }}
     </template>
     <template #item.reference="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.reference"
         @click.native="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
     <template #item.type="{ item }">
       <div v-if="item.identification_type">
@@ -39,7 +39,7 @@
       </div>
     </template>
     <template #item.current="{ item }">
-      <base-boolean :value="item.current" />
+      <BaseBoolean :value="item.current" />
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

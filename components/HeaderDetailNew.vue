@@ -14,7 +14,7 @@ const props = defineProps<{
         <slot>
           {{ title }}
         </slot>
-        <edit-button />
+        <EditButton />
       </div>
       <div>
         <slot name="sub" />

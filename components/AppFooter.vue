@@ -183,12 +183,12 @@ const routes = [
 
 <template>
   <div class="bg-tertiary">
-    <v-container :fluid="$vuetify.display.lgAndDown">
-      <v-row no-gutters>
-        <v-col cols="12" lg="auto">
+    <VContainer :fluid="$vuetify.display.lgAndDown">
+      <VRow no-gutters>
+        <VCol cols="12" lg="auto">
           <div class="d-md-flex justify-center">
             <div class="ml-4 ml-md-0 mr-4 mb-6">
-              <nuxt-img
+              <NuxtImg
                 :src="logo"
                 height="24"
                 width="60"
@@ -200,19 +200,19 @@ const routes = [
                 :key="link.routeName"
                 class="d-flex mb-1"
               >
-                <v-icon
+                <VIcon
                   class="align-self-center"
                   :icon="mdiChevronRight"
                   color="white"
                   size="x-small"
                 />
-                <nuxt-link
+                <NuxtLink
                   :to="localePath(link.routeName)"
                   class="text-link text-body-2 text-grey-lighten-2 d-block ml-1"
                   style="font-weight: 500 !important"
                 >
                   {{ $t(link.text) }}
-                </nuxt-link>
+                </NuxtLink>
               </div>
             </div>
             <div class="mx-4 mb-6">
@@ -228,19 +228,19 @@ const routes = [
                   :key="link.routeName"
                   class="d-flex mb-1"
                 >
-                  <v-icon
+                  <VIcon
                     class="align-self-center"
                     :icon="mdiChevronRight"
                     color="white"
                     size="x-small"
                   />
-                  <nuxt-link
+                  <NuxtLink
                     :to="localePath(link.routeName)"
                     class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.text) }}
-                  </nuxt-link>
+                  </NuxtLink>
                 </div>
               </div>
             </div>
@@ -257,7 +257,7 @@ const routes = [
                   :key="link.name"
                   class="d-flex mb-1"
                 >
-                  <v-icon
+                  <VIcon
                     class="align-self-center"
                     :icon="mdiChevronRight"
                     color="white"
@@ -274,8 +274,8 @@ const routes = [
               </div>
             </div>
           </div>
-        </v-col>
-        <v-col>
+        </VCol>
+        <VCol>
           <div class="ml-3 mb-6">
             <div
               class="section-title text-white font-weight-medium montserrat mb-4"
@@ -290,9 +290,9 @@ const routes = [
                 target="FooterLink"
                 rel="noopener noreferrer"
               >
-                <v-tooltip location="top">
+                <VTooltip location="top">
                   <template #activator="{ props }">
-                    <nuxt-img
+                    <NuxtImg
                       v-bind="props"
                       :src="item.src"
                       :alt="$t(item.alt)"
@@ -303,20 +303,20 @@ const routes = [
                   </template>
 
                   <span>{{ $t(item.title) }}</span>
-                </v-tooltip>
+                </VTooltip>
               </a>
             </div>
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container fluid style="background: #282828 !important">
-      <v-container :fluid="$vuetify.display.lgAndDown">
-        <v-row no-gutters>
-          <v-col cols="12" align-self="center">
+        </VCol>
+      </VRow>
+    </VContainer>
+    <VContainer fluid style="background: #282828 !important">
+      <VContainer :fluid="$vuetify.display.lgAndDown">
+        <VRow no-gutters>
+          <VCol cols="12" align-self="center">
             <div class="text-center d-flex justify-center align-center">
               <div style="max-width: 700px">
-                <i18n-t
+                <I18nT
                   class="text-body-2 text-grey-lighten-1"
                   keypath="footer"
                   scope="global"
@@ -331,17 +331,17 @@ const routes = [
                   >
                     {{ item.text }}
                   </a>
-                </i18n-t>
+                </I18nT>
               </div>
             </div>
-          </v-col>
-          <v-col
+          </VCol>
+          <VCol
             cols="12"
             align-self="center"
             class="text-center mt-3"
           >
             <a href="https://github.com/geocollections/eMaapou">
-              <nuxt-img
+              <NuxtImg
                 src="/logos/GitHub-Mark-Light-64px.png"
                 alt="GitHub"
                 format="webp"
@@ -350,10 +350,10 @@ const routes = [
                 height="32"
               />
             </a>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-container>
+          </VCol>
+        </VRow>
+      </VContainer>
+    </VContainer>
   </div>
 </template>
 

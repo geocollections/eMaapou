@@ -29,16 +29,16 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
 </script>
 
 <template>
-  <v-btn
+  <VBtn
     variant="plain"
     class="text-capitalize mx-2"
     :prepend-icon="mdiArrowUpLeft"
     :to="searchRoute"
   >
     Back to search
-  </v-btn>
+  </VBtn>
   <div class="d-flex align-center justify-space-around">
-    <v-btn
+    <VBtn
       variant="plain"
       size="small"
       :icon="mdiChevronLeft"
@@ -46,7 +46,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
       @click="emit('page:previous', page + 1)"
     />
     {{ page }}
-    <v-btn
+    <VBtn
       variant="plain"
       size="small"
       :icon="mdiChevronRight"
@@ -54,9 +54,9 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
       @click="emit('page:next', page + 1)"
     />
   </div>
-  <v-list>
+  <VList>
     <template v-for="(item, index) in results">
-      <v-list-item
+      <VListItem
         class="pa-2 ma-1 text-body-2"
         elevation="0"
         rounded
@@ -79,14 +79,14 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
           />
         </template>
         <template #append="{ isActive }">
-          <v-icon v-if="isActive" color="accent">
+          <VIcon v-if="isActive" color="accent">
             {{ mdiCheck }}
-          </v-icon>
+          </VIcon>
         </template>
-      </v-list-item>
-      <v-divider v-if="index !== perPage - 1" class="mx-1" />
+      </VListItem>
+      <VDivider v-if="index !== perPage - 1" class="mx-1" />
     </template>
-  </v-list>
+  </VList>
 </template>
 
 <style scoped>

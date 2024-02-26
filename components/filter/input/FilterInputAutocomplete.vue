@@ -135,17 +135,17 @@ defineExpose({
 </script>
 
 <template>
-  <v-expansion-panel
+  <VExpansionPanel
     bg-color="transparent"
     elevation="0"
     :rounded="0"
   >
-    <v-expansion-panel-title
+    <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
-    </v-expansion-panel-title>
+    </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
@@ -180,13 +180,13 @@ defineExpose({
         </div>
       </div>
     </div>
-    <v-expansion-panel-text
+    <VExpansionPanelText
       class="py-0"
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
       <div class="my-1">
-        <v-text-field
+        <VTextField
           v-if="showFilter"
           v-model="query"
           variant="underlined"
@@ -233,7 +233,7 @@ defineExpose({
           v-if="showPagination"
           class="d-flex align-center justify-space-around"
         >
-          <v-btn
+          <VBtn
             :icon="mdiChevronLeft"
             variant="text"
             size="small"
@@ -241,7 +241,7 @@ defineExpose({
             @click="prevPage"
           />
           <span>{{ pagination.page }}</span>
-          <v-btn
+          <VBtn
             :icon="mdiChevronRight"
             variant="text"
             size="small"
@@ -250,8 +250,8 @@ defineExpose({
           />
         </div>
       </div>
-    </v-expansion-panel-text>
-  </v-expansion-panel>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style scoped lang="scss">

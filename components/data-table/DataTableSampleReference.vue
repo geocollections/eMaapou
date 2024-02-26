@@ -1,5 +1,5 @@
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.reference="{ item }">
       <a
         v-if="item.reference"
@@ -15,5 +15,5 @@
         @click="$openGeology('reference', item.reference.id)"
       >{{ item.reference.reference }}</a>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

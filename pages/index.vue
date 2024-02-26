@@ -263,14 +263,14 @@ function handleSearch() {
         'height': topHeight,
       }"
     >
-      <v-container
+      <VContainer
         :fluid="$vuetify.display.smAndDown"
         style="max-width: 1185px !important"
       >
-        <v-row class="mb-lg-5">
-          <v-col>
+        <VRow class="mb-lg-5">
+          <VCol>
             <div class="pt-sm-4 pt-md-8" :style="{ 'max-width': '1000px' }">
-              <i18n-t
+              <I18nT
                 keypath="title"
                 tag="div"
                 scope="global"
@@ -282,29 +282,29 @@ function handleSearch() {
                 {{ $t("subtitle") }}
               </span>
             </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="5">
-            <v-card
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol cols="12" md="5">
+            <VCard
               class=""
               rounded="0"
               flat
               color="transparent"
             >
-              <v-card-actions class="px-0 pt-md-6">
-                <v-form
+              <VCardActions class="px-0 pt-md-6">
+                <VForm
                   class="d-flex text-right"
                   style="width: 100%"
                   @submit.prevent="handleSearch"
                 >
-                  <input-search
+                  <InputSearch
                     v-model="query"
                     input-class="rounded"
                     height="56"
                     :placeholder="$t('landing.searchPlaceholder')"
                   />
-                  <v-btn
+                  <VBtn
                     height="56px"
                     width="84px"
                     class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
@@ -312,11 +312,11 @@ function handleSearch() {
                     variant="elevated"
                     color="warning"
                   >
-                    <v-icon :icon="mdiMagnify" size="large" />
-                  </v-btn>
-                </v-form>
-              </v-card-actions>
-              <v-card-text
+                    <VIcon :icon="mdiMagnify" size="large" />
+                  </VBtn>
+                </VForm>
+              </VCardActions>
+              <VCardText
                 v-show="$vuetify.display.mdAndUp"
                 style="word-break: break-word"
                 :class="{
@@ -325,18 +325,18 @@ function handleSearch() {
                 class="text-sm-h6 font-weight-regular text-white pr-0 pl-1"
               >
                 {{ $t("landing.description") }}
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col
+              </VCardText>
+            </VCard>
+          </VCol>
+          <VCol
             cols="12"
             md="7"
             class="pl-lg-10"
           >
-            <v-card color="transparent" flat>
-              <v-row no-gutters justify="center">
+            <VCard color="transparent" flat>
+              <VRow no-gutters justify="center">
                 <div class="col-12 col-xl-auto d-flex flex-wrap">
-                  <v-col
+                  <VCol
                     v-for="(route, index) in searchRoutes"
                     :key="`${route.routeName}-${index}`"
                     cols="12"
@@ -345,40 +345,40 @@ function handleSearch() {
                     md="6"
                     lg="6"
                   >
-                    <card-route-link :route="route" />
-                  </v-col>
+                    <CardRouteLink :route="route" />
+                  </VCol>
                 </div>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+              </VRow>
+            </VCard>
+          </VCol>
+        </VRow>
+      </VContainer>
     </div>
-    <v-container
+    <VContainer
       :fluid="$vuetify.display.smAndDown"
       style="max-width: 1185px !important"
     >
-      <v-row justify="center" class="mt-4">
-        <v-col
+      <VRow justify="center" class="mt-4">
+        <VCol
           cols="12"
           md="8"
           class="pr-5"
           order="1"
           order-md="0"
         >
-          <the-news-card />
-        </v-col>
-        <v-col
+          <TheNewsCard />
+        </VCol>
+        <VCol
           cols="12"
           md="4"
           class="pl-lg-5"
           order="0"
           order-md="0"
         >
-          <base-header class="pb-2" :title="$t('landing.otherServices')" />
+          <BaseHeader class="pb-2" :title="$t('landing.otherServices')" />
 
-          <v-row no-gutters>
-            <v-col
+          <VRow no-gutters>
+            <VCol
               v-for="(route, index) in otherServices.ids.map(
                 (id) => otherServices[id],
               )"
@@ -387,12 +387,12 @@ function handleSearch() {
               lg="12"
               class="pb-2 px-1"
             >
-              <card-external-service :route="route" />
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
+              <CardExternalService :route="route" />
+            </VCol>
+          </VRow>
+        </VCol>
+      </VRow>
+    </VContainer>
   </div>
 </template>
 

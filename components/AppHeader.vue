@@ -57,7 +57,7 @@ const cssProps = computed(() => {
 </script>
 
 <template>
-  <v-app-bar
+  <VAppBar
     density="compact"
     :elevation="getRouteBaseName() === 'index' ? 0 : 4"
     :absolute="getRouteBaseName() === 'index'"
@@ -74,17 +74,17 @@ const cssProps = computed(() => {
           Using v-slot:activator added a transition that made the title disappear when clicked.
           https://github.com/vuetifyjs/vuetify/issues/10578 comment by eduardo76 Nov 9, 2020
          -->
-    <nuxt-link class="logo-link" :to="localePath({ path: '/' })">
-      <nuxt-img
+    <NuxtLink class="logo-link" :to="localePath({ path: '/' })">
+      <NuxtImg
         :height="32"
         contain
         class="px-0 px-sm-3"
         :src="state.logo"
         style="vertical-align: middle"
       />
-    </nuxt-link>
-    <v-toolbar-items v-if="$vuetify.display.mdAndUp" class="mr-md-2">
-      <v-btn
+    </NuxtLink>
+    <VToolbarItems v-if="$vuetify.display.mdAndUp" class="mr-md-2">
+      <VBtn
         id="browse_menu_btn"
         aria-label="browse"
         variant="text"
@@ -93,21 +93,21 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
-        <v-icon color="accent-lighten-2" end>
+        <VIcon color="accent-lighten-2" end>
           {{ icons.mdiChevronDown }}
-        </v-icon>
-      </v-btn>
-      <v-menu
+        </VIcon>
+      </VBtn>
+      <VMenu
         activator="#browse_menu_btn"
         content-class="mt-1"
         transition="slide-y-transition"
         location="bottom"
         offset="10"
       >
-        <v-card max-width="1000">
-          <v-card-actions class="d-flex align-baseline">
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
+        <VCard max-width="1000">
+          <VCardActions class="d-flex align-baseline">
+            <VList class="mx-3" width="250">
+              <BaseMenuListItem
                 v-for="(item, index) in state.browseTaxon"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
@@ -115,10 +115,10 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               />
-            </v-list>
-            <v-divider class="mx-3 my-2" vertical />
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
+            </VList>
+            <VDivider class="mx-3 my-2" vertical />
+            <VList class="mx-3" width="250">
+              <BaseMenuListItem
                 v-for="(item, index) in state.browseLab"
                 :key="`browse-lab-item-${index}`"
                 class="my-1"
@@ -126,11 +126,11 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               />
-            </v-list>
+            </VList>
 
-            <v-divider class="mx-3 my-2" vertical />
-            <v-list class="mx-3" width="250">
-              <base-menu-list-item
+            <VDivider class="mx-3 my-2" vertical />
+            <VList class="mx-3" width="250">
+              <BaseMenuListItem
                 v-for="(item, index) in state.browseGeography"
                 :key="`browse-geography-item-${index}`"
                 class="my-1"
@@ -138,12 +138,12 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               />
-            </v-list>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
+            </VList>
+          </VCardActions>
+        </VCard>
+      </VMenu>
 
-      <v-btn
+      <VBtn
         aria-label="about page"
         variant="text"
         color="white"
@@ -152,9 +152,9 @@ const cssProps = computed(() => {
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
-      </v-btn>
+      </VBtn>
 
-      <v-btn
+      <VBtn
         aria-label="news page"
         variant="text"
         color="white"
@@ -163,8 +163,8 @@ const cssProps = computed(() => {
         :to="localePath({ name: 'news' })"
       >
         {{ $t("common.news") }}
-      </v-btn>
-      <v-btn
+      </VBtn>
+      <VBtn
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
@@ -173,26 +173,26 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
       >
         {{ $t("common.services") }}
-        <v-icon
+        <VIcon
           :icon="mdiChevronDown"
           color="accent-lighten-2"
           end
         />
-      </v-btn>
-      <v-menu
+      </VBtn>
+      <VMenu
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
         location="bottom"
         offset="10"
       >
-        <v-card width="550">
-          <v-card-actions class="d-block">
-            <v-list
+        <VCard width="550">
+          <VCardActions class="d-block">
+            <VList
               style="max-height: 450px; flex-flow: column wrap"
               class="d-flex"
             >
-              <base-menu-list-item
+              <BaseMenuListItem
                 v-for="(tabId, index) in state.services.ids"
                 :key="`service-${index}`"
                 class="my-1"
@@ -202,12 +202,12 @@ const cssProps = computed(() => {
                 :label="$t(state.services[tabId].title)"
                 label-only
               />
-            </v-list>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
-    </v-toolbar-items>
-    <v-toolbar-items
+            </VList>
+          </VCardActions>
+        </VCard>
+      </VMenu>
+    </VToolbarItems>
+    <VToolbarItems
       class="align-center ml-auto"
       :style="{
         width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
@@ -219,7 +219,7 @@ const cssProps = computed(() => {
         style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
       >
-        <input-search
+        <InputSearch
           v-model="state.query"
           input-class="rounded-l rounded-r-0 montserrat"
           background-color="white"
@@ -234,8 +234,8 @@ const cssProps = computed(() => {
             )
           "
         />
-        <v-hover v-slot="{ hover }">
-          <v-btn
+        <VHover v-slot="{ hover }">
+          <VBtn
             height="38"
             :width="$vuetify.display.xs ? 32 : 48"
             elevation="0"
@@ -250,14 +250,14 @@ const cssProps = computed(() => {
               )
             "
           >
-            <v-icon color="accent">
+            <VIcon color="accent">
               {{ icons.mdiMagnify }}
-            </v-icon>
-          </v-btn>
-        </v-hover>
+            </VIcon>
+          </VBtn>
+        </VHover>
       </div>
-      <language-switcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
-      <v-btn
+      <LanguageSwitcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
+      <VBtn
         v-if="!$vuetify.display.mdAndUp"
         variant="text"
         class="montserrat ml-auto"
@@ -265,12 +265,12 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <v-icon color="accent-lighten-2" size="font-size: 24px">
+        <VIcon color="accent-lighten-2" size="font-size: 24px">
           {{ icons.mdiMenu }}
-        </v-icon>
-      </v-btn>
-    </v-toolbar-items>
-  </v-app-bar>
+        </VIcon>
+      </VBtn>
+    </VToolbarItems>
+  </VAppBar>
 </template>
 
 <style scoped lang="scss">

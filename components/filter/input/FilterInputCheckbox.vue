@@ -12,7 +12,7 @@ const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <template>
-  <v-checkbox
+  <VCheckbox
     class="ml-2"
     hide-details
     color="accent"
@@ -32,5 +32,5 @@ const emit = defineEmits(["update:modelValue"]);
         {{ label }}
       </div>
     </template>
-  </v-checkbox>
+  </VCheckbox>
 </template>

@@ -65,16 +65,16 @@ function handleClipboard() {
 </script>
 
 <template>
-  <v-menu
+  <VMenu
     transition="slide-y-transition"
     offset="10"
     position="bottom"
     z-index="4"
   >
     <template #activator="menu">
-      <v-tooltip location="bottom" open-delay="500">
+      <VTooltip location="bottom" open-delay="500">
         <template #activator="tooltip">
-          <v-btn
+          <VBtn
             aria-label="export table"
             variant="text"
             class="mr-1"
@@ -83,20 +83,20 @@ function handleClipboard() {
           />
         </template>
         <span>{{ $t("table.tooltipExport") }}</span>
-      </v-tooltip>
+      </VTooltip>
     </template>
-    <v-list>
-      <v-list-item @click="handleExportCsv">
-        <v-list-item-title>CSV</v-list-item-title>
-      </v-list-item>
-      <v-list-item @click="handleExportExcel">
-        <v-list-item-title>XLSX (Excel)</v-list-item-title>
-      </v-list-item>
-      <v-list-item @click="handleClipboard">
-        <v-list-item-title>
+    <VList>
+      <VListItem @click="handleExportCsv">
+        <VListItemTitle>CSV</VListItemTitle>
+      </VListItem>
+      <VListItem @click="handleExportExcel">
+        <VListItemTitle>XLSX (Excel)</VListItemTitle>
+      </VListItem>
+      <VListItem @click="handleClipboard">
+        <VListItemTitle>
           {{ $t("common.clipboard") }}
-        </v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-menu>
+        </VListItemTitle>
+      </VListItem>
+    </VList>
+  </VMenu>
 </template>

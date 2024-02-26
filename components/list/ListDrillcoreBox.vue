@@ -67,15 +67,15 @@ function handleSearch() {
 
 <template>
   <div>
-    <v-row class="py-2" no-gutters>
-      <v-col
+    <VRow class="py-2" no-gutters>
+      <VCol
         v-if="showSearch"
         align-self="center"
         cols="12"
         sm="4"
         class="px-3"
       >
-        <v-text-field
+        <VTextField
           v-model="search"
           class="pt-0 mt-0"
           color="primary-darken-2"
@@ -87,9 +87,9 @@ function handleSearch() {
           hide-details
           clearable
         />
-      </v-col>
-      <v-col class="d-flex justify-end" align-self="center">
-        <base-data-table-pagination
+      </VCol>
+      <VCol class="d-flex justify-end" align-self="center">
+        <BaseDataTablePagination
           :options="options"
           :page-count="pagination.pageCount"
           :items-per-page-options="footerProps['items-per-page-options']"
@@ -105,18 +105,18 @@ function handleSearch() {
           select-page-id="header-select-btn"
           @update:options="handleChange"
         />
-      </v-col>
-    </v-row>
-    <v-row no-gutters>
-      <v-col
+      </VCol>
+    </VRow>
+    <VRow no-gutters>
+      <VCol
         v-for="box in items"
         :key="box.id"
         cols="12"
         class="pa-0 drillcore-box"
       >
-        <v-divider />
-        <v-hover v-slot="{ hover }">
-          <v-card
+        <VDivider />
+        <VHover v-slot="{ hover }">
+          <VCard
             flat
             :ripple="false"
             :to="
@@ -126,15 +126,15 @@ function handleSearch() {
               })
             "
           >
-            <v-card-text class="drillcore-box__card">
-              <v-row v-if="box.drillcore_box" align="start">
-                <v-col
+            <VCardText class="drillcore-box__card">
+              <VRow v-if="box.drillcore_box" align="start">
+                <VCol
                   cols="12"
                   sm="8"
                   align-self="center"
                 >
-                  <client-only>
-                    <v-img
+                  <ClientOnly>
+                    <VImg
                       class="mx-auto rounded transition-swing"
                       :class="{
                         'elevation-2': hover,
@@ -159,29 +159,29 @@ function handleSearch() {
                       "
                     >
                       <template #placeholder>
-                        <v-row
+                        <VRow
                           class="fill-height ma-0"
                           align="center"
                           justify="center"
                         >
-                          <v-progress-circular
+                          <VProgressCircular
                             indeterminate
                             color="grey-lighten-5"
                           />
-                        </v-row>
+                        </VRow>
                       </template>
-                    </v-img>
-                  </client-only>
-                </v-col>
-                <v-col cols="12" sm="4">
-                  <v-card-title class="px-0 pt-0 montserrat">
+                    </VImg>
+                  </ClientOnly>
+                </VCol>
+                <VCol cols="12" sm="4">
+                  <VCardTitle class="px-0 pt-0 montserrat">
                     {{
                       $t("drillcoreBox.nr", {
                         number: box.drillcore_box.number,
                       })
                     }}
-                  </v-card-title>
-                  <base-table
+                  </VCardTitle>
+                  <BaseTable
                     v-if="boxHasInfo(box)"
                     class="transition-swing"
                     :class="{
@@ -192,15 +192,15 @@ function handleSearch() {
                       'background-color': hover ? 'white' : 'transparent',
                     }"
                   >
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.depthStart')"
                       :value="box.drillcore_box.depth_start"
                     />
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.depthEnd')"
                       :value="box.drillcore_box.depth_end"
                     />
-                    <table-row-link
+                    <TableRowLink
                       v-if="box.drillcore_box.stratigraphy_top"
                       :title="$t('drillcoreBox.stratigraphyTop')"
                       :value="
@@ -220,7 +220,7 @@ function handleSearch() {
                         })
                       "
                     />
-                    <table-row-link
+                    <TableRowLink
                       v-if="box.drillcore_box.stratigraphy_base"
                       :title="$t('drillcoreBox.stratigraphyBase')"
                       :value="
@@ -240,22 +240,22 @@ function handleSearch() {
                         })
                       "
                     />
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.depthOther')"
                       :value="box.drillcore_box.depth_other"
                     />
-                    <table-row
+                    <TableRow
                       :title="$t('drillcoreBox.remarks')"
                       :value="box.drillcore_box.remarks"
                     />
-                  </base-table>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-hover>
-      </v-col>
-    </v-row>
+                  </BaseTable>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VHover>
+      </VCol>
+    </VRow>
   </div>
 </template>
 

@@ -22,36 +22,36 @@ defineProps({
 </script>
 
 <template>
-  <v-hover v-slot="{ isHovering, props }">
-    <v-list-item
+  <VHover v-slot="{ isHovering, props }">
+    <VListItem
 
       color="accent"
       base-color="grey-darken-3"
       class="rounded"
       v-bind="{ ...$attrs, ...props }"
     >
-      <v-list-item-title class="d-flex py-1">
+      <VListItemTitle class="d-flex py-1">
         <div v-if="!labelOnly">
-          <v-icon
+          <VIcon
             v-if="icon"
             :icon="icon"
             start
           />
-          <v-icon
+          <VIcon
             v-else
             style="height: 24px; width: 24px"
             start
           />
         </div>
         <span class="align-self-center montserrat">{{ label }}</span>
-        <v-icon
+        <VIcon
           v-show="isHovering && !labelOnly"
           :icon="mdiArrowRight"
           class="ml-auto"
         />
-      </v-list-item-title>
-    </v-list-item>
-  </v-hover>
+      </VListItemTitle>
+    </VListItem>
+  </VHover>
 </template>
 
 <style lang="scss" scoped>

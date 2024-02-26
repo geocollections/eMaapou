@@ -4,27 +4,27 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.id="{ item, index }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.id } })"
         @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.name="{ item, index }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.id } })"
         @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.name }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.area="{ item }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'area-id', params: { id: item.area_id } })"
       >
@@ -34,7 +34,7 @@ const localePath = useLocalePath();
             en: item.area_name_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.latitude="{ item }">
       <span v-if="item.latitude">
@@ -56,5 +56,5 @@ const localePath = useLocalePath();
         {{ item.z.toFixed(2) }}
       </span>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

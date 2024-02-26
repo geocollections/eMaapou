@@ -150,7 +150,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <client-only>
+    <ClientOnly>
       <VChart
         id="chart-analysis-results"
         ref="chart"
@@ -158,6 +158,6 @@ onMounted(() => {
         :init-options="initOptions"
         :option="option"
       />
-    </client-only>
+    </ClientOnly>
   </div>
 </template>

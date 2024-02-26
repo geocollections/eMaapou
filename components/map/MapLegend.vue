@@ -33,26 +33,26 @@ export default {
 </script>
 
 <template>
-  <v-card class="map-legend rounded" :style="{ maxHeight: `${maxHeight}px` }">
-    <v-card v-if="estBase" flat>
-      <v-card-title class="font-weight-bold py-1 text-body-1">
+  <VCard class="map-legend rounded" :style="{ maxHeight: `${maxHeight}px` }">
+    <VCard v-if="estBase" flat>
+      <VCardTitle class="font-weight-bold py-1 text-body-1">
         Estonian map
-      </v-card-title>
-      <v-img :src="$img(`/map/${estBase}.png`, null, { provider: 'static' })" />
-    </v-card>
+      </VCardTitle>
+      <VImg :src="$img(`/map/${estBase}.png`, null, { provider: 'static' })" />
+    </VCard>
 
-    <v-divider />
+    <VDivider />
 
-    <v-card v-if="estHyb" flat>
-      <v-card-title class="font-weight-bold py-1 text-body-1">
+    <VCard v-if="estHyb" flat>
+      <VCardTitle class="font-weight-bold py-1 text-body-1">
         Estonian hybrid
-      </v-card-title>
-      <v-img
+      </VCardTitle>
+      <VImg
         v-if="estHyb"
         :src="$img(`/map/${estHyb}.png`, null, { provider: 'static' })"
       />
-    </v-card>
-  </v-card>
+    </VCard>
+  </VCard>
 </template>
 
 <style scoped>

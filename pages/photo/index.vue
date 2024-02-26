@@ -92,9 +92,9 @@ function handleClickRow(index: number) {
 </script>
 
 <template>
-  <search>
+  <Search>
     <template #title>
-      <header-search
+      <HeaderSearch
         :title="$t('photo.pageTitle')"
         :count="data?.response.numFound ?? 0"
         :icon="mdiFileImageOutline"
@@ -102,7 +102,7 @@ function handleClickRow(index: number) {
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-photo
+      <SearchFormPhoto
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -115,21 +115,21 @@ function handleClickRow(index: number) {
     </template>
 
     <template #result>
-      <v-tabs
+      <VTabs
         v-model="currentView"
         bg-color="transparent"
         color="accent"
       >
-        <v-tab
+        <VTab
           v-for="view in views"
           :key="view"
           selected-class="active-tab"
           class="montserrat text-capitalize"
         >
           {{ $t(`common.${view}`) }}
-        </v-tab>
-      </v-tabs>
-      <v-card
+        </VTab>
+      </VTabs>
+      <VCard
         flat
         :rounded="0"
         style="
@@ -138,9 +138,9 @@ function handleClickRow(index: number) {
         "
         class="mt-0"
       >
-        <v-window v-model="currentView">
-          <v-window-item :value="0">
-            <data-table-photo
+        <VWindow v-model="currentView">
+          <VWindowItem :value="0">
+            <DataTablePhoto
               flat
               :show-search="false"
               :items="data?.response.docs ?? []"
@@ -155,27 +155,27 @@ function handleClickRow(index: number) {
               @reset:headers="handleHeadersReset(options)"
               @click:row="handleClickRow"
             />
-          </v-window-item>
-          <v-window-item :value="1">
-            <image-view
+          </VWindowItem>
+          <VWindowItem :value="1">
+            <ImageView
               :items="data?.response.docs ?? []"
               :count="data?.response.numFound ?? 0"
               :options="options"
               @update="handleDataTableUpdate"
             />
-          </v-window-item>
-          <v-window-item :value="2">
-            <gallery-view
+          </VWindowItem>
+          <VWindowItem :value="2">
+            <GalleryView
               :items="data?.response.docs ?? []"
               :count="data?.response.numFound ?? 0"
               :options="options"
               @update="handleDataTableUpdate"
             />
-          </v-window-item>
-        </v-window>
-      </v-card>
+          </VWindowItem>
+        </VWindow>
+      </VCard>
     </template>
-  </search>
+  </Search>
 </template>
 
 <style scoped lang="scss">

@@ -38,7 +38,7 @@ const { data, pending } = await useGeoloogiaApiFetch(
 </script>
 
 <template>
-  <data-table-stratotype
+  <DataTableStratotype
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

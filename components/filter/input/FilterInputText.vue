@@ -46,17 +46,17 @@ function handleChange(i: number) {
 </script>
 
 <template>
-  <v-expansion-panel
+  <VExpansionPanel
     bg-color="transparent"
     elevation="0"
     :rounded="0"
   >
-    <v-expansion-panel-title
+    <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
-    </v-expansion-panel-title>
+    </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
@@ -86,12 +86,12 @@ function handleChange(i: number) {
         </span>
       </div>
     </div>
-    <v-expansion-panel-text
+    <VExpansionPanelText
       class="py-0"
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
-      <v-text-field
+      <VTextField
         v-model="internalValue"
         variant="underlined"
         hide-details
@@ -99,8 +99,8 @@ function handleChange(i: number) {
         :placeholder="$t('filters.filter')"
         @keydown.enter="handleAdd"
       />
-    </v-expansion-panel-text>
-  </v-expansion-panel>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style scoped lang="scss">

@@ -345,21 +345,21 @@ function handleUpdate() {
 
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <filter-input-checkbox
+    <VForm @submit.prevent="handleUpdate">
+      <InputSearch v-model="query" />
+      <SearchActions class="mb-3" @click="handleReset" />
+      <FilterInputCheckbox
         v-model="filters.hasImage.value"
         :label="$t('filters.hasImage')"
         @update:model-value="handleUpdate"
       />
-      <filter-input-checkbox
+      <FilterInputCheckbox
         v-model="filters.hasCoordinates.value"
         :label="$t('filters.hasCoordinates')"
         @update:model-value="handleUpdate"
       />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
+      <VExpansionPanels variant="accordion" multiple>
+        <FilterInputText
           v-model="filters.number.value"
           :title="$t('filters.sampleNumber')"
           value="number"
@@ -374,18 +374,18 @@ function handleUpdate() {
           value="locality"
           @update:model-value="handleUpdate"
         />
-        <filter-map
+        <FilterMap
           v-model="filters.geometry.value"
           value="map"
           @update:model-value="handleUpdate"
         />
-        <filter-input-range
+        <FilterInputRange
           v-model="filters.depth.value"
           :title="$t('filters.depth')"
           value="depth"
           @update:model-value="handleUpdate"
         />
-        <filter-input-hierarchy
+        <FilterInputHierarchy
           ref="filterStratigraphy"
           v-model="filters.stratigraphy.value"
           root-value="1"
@@ -396,7 +396,7 @@ function handleUpdate() {
           @update:model-value="handleUpdate"
         />
         <!-- TODO: This is not finished, have to think how to handle multiple hierarchy string on one rock -->
-        <filter-input-hierarchy
+        <FilterInputHierarchy
           ref="filterRock"
           v-model="filters.rock.value"
           root-value=""
@@ -425,7 +425,7 @@ function handleUpdate() {
           value="institution"
           @update:model-value="handleUpdate"
         />
-      </v-expansion-panels>
-    </v-form>
+      </VExpansionPanels>
+    </VForm>
   </div>
 </template>

@@ -70,7 +70,7 @@ export default {
 </script>
 
 <template>
-  <v-autocomplete
+  <VAutocomplete
     v-bind="$attrs"
     v-model:search-input="search"
     hide-details

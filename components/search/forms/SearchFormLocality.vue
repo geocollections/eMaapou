@@ -42,11 +42,11 @@ const { suggest: suggestReference, hydrate: hydrateReference }
 
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
+    <VForm @submit.prevent="handleUpdate">
+      <InputSearch v-model="query" />
+      <SearchActions class="mb-3" @click="handleReset" />
+      <VExpansionPanels variant="accordion" multiple>
+        <FilterInputText
           v-model="filters.name.value"
           :title="$t('filters.localityName')"
           value="name"
@@ -61,12 +61,12 @@ const { suggest: suggestReference, hydrate: hydrateReference }
           value="country"
           @update:model-value="handleUpdate"
         />
-        <filter-map
+        <FilterMap
           v-model="filters.geometry.value"
           value="map"
           @update:model-value="handleUpdate"
         />
-        <filter-input-range
+        <FilterInputRange
           v-model="filters.stratigraphyAge.value"
           :title="$t('filters.stratigraphyAge')"
           value="stratigraphyAge"
@@ -81,7 +81,7 @@ const { suggest: suggestReference, hydrate: hydrateReference }
           value="reference"
           @update:model-value="handleUpdate"
         />
-      </v-expansion-panels>
-    </v-form>
+      </VExpansionPanels>
+    </VForm>
   </div>
 </template>

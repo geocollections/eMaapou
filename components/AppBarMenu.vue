@@ -25,15 +25,15 @@ export default {
 
 <template>
   <span>
-    <v-btn
+    <VBtn
       :id="id"
       variant="text"
       class="montserrat"
       style="text-transform: capitalize; font-size: 0.875rem"
     >
       {{ label }}
-      <v-icon class="ml-1">{{ icons.mdiChevronDown }}</v-icon>
-      <v-menu
+      <VIcon class="ml-1">{{ icons.mdiChevronDown }}</VIcon>
+      <VMenu
         :activator="`#${id}`"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
@@ -43,7 +43,7 @@ export default {
         attach=""
       >
         <slot />
-      </v-menu>
-    </v-btn>
+      </VMenu>
+    </VBtn>
   </span>
 </template>

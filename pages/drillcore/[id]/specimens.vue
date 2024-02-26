@@ -36,7 +36,7 @@ const { data, pending } = await useSolrFetch<{
 </script>
 
 <template>
-  <data-table-specimen
+  <DataTableSpecimen
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"
     :options="options"

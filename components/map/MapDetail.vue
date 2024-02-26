@@ -263,7 +263,7 @@ watch(
 
 <template>
   <div>
-    <client-only>
+    <ClientOnly>
       <LMap
         id="map"
         ref="map"
@@ -320,11 +320,11 @@ watch(
           :transparent="layer.transparent"
           :options="layer.options"
         />
-        <v-marker-cluster-wrapper
+        <VMarkerClusterWrapper
           v-if="markers.length >= 250"
           :markers="markers"
         />
-        <l-circle-marker-wrapper v-else :markers="markers" />
+        <LCircleMarkerWrapper v-else :markers="markers" />
         <LGeoJson
           v-if="geojson"
           :geojson="geojson"
@@ -335,7 +335,7 @@ watch(
         />
 
         <LLayerGroup ref="popup">
-          <map-click-popup :response="mapClickResponse" />
+          <MapClickPopup :response="mapClickResponse" />
         </LLayerGroup>
       </LMap>
       <template #placeholder>
@@ -343,7 +343,7 @@ watch(
           :style="`height: ${height}; width: 100%`"
           class="d-flex align-center justify-center rounded bg-secondary"
         >
-          <v-progress-circular
+          <VProgressCircular
             indeterminate
             color="accent"
             :size="100"
@@ -351,8 +351,8 @@ watch(
           />
         </div>
       </template>
-    </client-only>
-    <map-links
+    </ClientOnly>
+    <MapLinks
       v-if="showLinks"
       :latitude="currentCenter.lat"
       :longitude="currentCenter.lng"

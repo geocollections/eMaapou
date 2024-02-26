@@ -88,9 +88,9 @@ function updateOptions(event) {
 </script>
 
 <template>
-  <v-card v-if="items && items.length > 0" flat>
+  <VCard v-if="items && items.length > 0" flat>
     <div class="d-flex justify-end">
-      <base-data-table-pagination
+      <BaseDataTablePagination
         :options="options"
         :pagination="pagination"
         :items-per-page-options="footerProps['items-per-page-options']"
@@ -108,17 +108,17 @@ function updateOptions(event) {
       />
     </div>
 
-    <v-card flat>
+    <VCard flat>
       <div class="px-4">
-        <v-card-text v-if="items && items.length > 1" class="px-0 pt-0">
+        <VCardText v-if="items && items.length > 1" class="px-0 pt-0">
           <div class="d-flex align-center" style="overflow-x: auto">
             <div
               v-for="(item, index) in items"
               :key="index"
               class="my-2 mx-2"
             >
-              <v-hover v-slot="{ hover }">
-                <v-img
+              <VHover v-slot="{ hover }">
+                <VImg
                   :src="
                     img(
                       `${item.uuid_filename}`,
@@ -145,22 +145,22 @@ function updateOptions(event) {
                   @click="handleThumbnailClick(index)"
                 >
                   <template #placeholder>
-                    <v-row
+                    <VRow
                       class="fill-height ma-0"
                       align="center"
                       justify="center"
                     >
-                      <v-progress-circular
+                      <VProgressCircular
                         indeterminate
                         color="grey-lighten-5"
                       />
-                    </v-row>
+                    </VRow>
                   </template>
-                </v-img>
-              </v-hover>
+                </VImg>
+              </VHover>
             </div>
           </div>
-          <v-carousel
+          <VCarousel
             v-model="activeIndex"
             style="max-width: 1000px"
             :height="carouselHeight"
@@ -168,7 +168,7 @@ function updateOptions(event) {
             hide-delimiter-background
             class="mt-2 rounded mx-auto gallery__v-carousel"
           >
-            <v-carousel-item
+            <VCarouselItem
               v-for="(item, index) in items"
               :key="index"
               nuxt
@@ -181,7 +181,7 @@ function updateOptions(event) {
                 )
               "
             />
-          </v-carousel>
+          </VCarousel>
 
           <div
             class="d-flex justify-center flex-column justify-sm-space-between flex-sm-row"
@@ -218,22 +218,22 @@ function updateOptions(event) {
                   @click="$openImage(items[activeIndex].uuid_filename, size)"
                 >
                   {{ $t(`common.${size}`) }}
-                  <v-icon
+                  <VIcon
                     v-if="size === 'original'"
                     size="small"
                     color="primary-darken-2"
                   >
                     {{ mdiFileDownloadOutline }}
-                  </v-icon>
+                  </VIcon>
                 </a>
                 <span v-if="index < imageSizes.length - 1">| </span>
               </span>
             </div>
           </div>
-        </v-card-text>
+        </VCardText>
       </div>
-    </v-card>
-  </v-card>
+    </VCard>
+  </VCard>
 </template>
 
 <style scoped lang="scss">

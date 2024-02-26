@@ -28,8 +28,8 @@ function extractContent(html: string) {
 </script>
 
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-card
+  <VHover v-slot="{ hover }">
+    <VCard
       v-bind="$attrs"
       class="py-2"
       flat
@@ -42,21 +42,21 @@ function extractContent(html: string) {
       >
         {{ $formatDate(date) }}
       </div>
-      <v-card-title
+      <VCardTitle
         class="pt-0 text-h6"
         :class="{ 'white--text': dark }"
         style="word-break: normal"
       >
         {{ title }}
-      </v-card-title>
+      </VCardTitle>
 
-      <v-card-text
+      <VCardText
         class="pb-0 text-body-1"
         style="color: rgba(0, 0, 0, 0.7)"
         :class="{ 'white--text': dark }"
       >
         {{ truncatedText }}
-      </v-card-text>
-    </v-card>
-  </v-hover>
+      </VCardText>
+    </VCard>
+  </VHover>
 </template>

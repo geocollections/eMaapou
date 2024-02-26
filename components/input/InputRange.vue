@@ -50,16 +50,16 @@ export default {
 
 <template>
   <div class="pt-1">
-    <v-subheader
+    <VSubheader
       v-if="label"
       class="px-0 d-inline"
       :class="{ 'primary--text text--darken-3': isFocused }"
     >
       {{ label }}
-    </v-subheader>
-    <v-row>
-      <v-col cols="6">
-        <v-text-field
+    </VSubheader>
+    <VRow>
+      <VCol cols="6">
+        <VTextField
           :model-value="value[0]"
           color="primary-darken-3"
           :label="fieldLabels.min"
@@ -70,9 +70,9 @@ export default {
           @focus="handleFocus"
           @blur="handleBlur"
         />
-      </v-col>
-      <v-col cols="6">
-        <v-text-field
+      </VCol>
+      <VCol cols="6">
+        <VTextField
           :model-value="value[1]"
           color="primary-darken-3"
           :label="fieldLabels.max"
@@ -83,8 +83,8 @@ export default {
           @focus="handleFocus"
           @blur="handleBlur"
         />
-      </v-col>
-    </v-row>
+      </VCol>
+    </VRow>
   </div>
 </template>
 

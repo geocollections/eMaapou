@@ -25,12 +25,12 @@ function openNews(news) {
 </script>
 
 <template>
-  <v-card flat color="transparent">
-    <v-row no-gutters>
-      <v-col>
-        <base-header :title="$t('common.news')" class="pb-2 title-heading" />
-        <v-card-text class="d-flex flex-column pa-0">
-          <news-preview-card
+  <VCard flat color="transparent">
+    <VRow no-gutters>
+      <VCol>
+        <BaseHeader :title="$t('common.news')" class="pb-2 title-heading" />
+        <VCardText class="d-flex flex-column pa-0">
+          <NewsPreviewCard
             v-for="(news, i) in newsList.results"
             :key="i"
             class="mb-2"
@@ -40,10 +40,10 @@ function openNews(news) {
             :content="$translate({ et: news.text_et, en: news.text_en })"
             @click="openNews(news)"
           />
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
+        </VCardText>
+        <VCardActions>
+          <VSpacer />
+          <VBtn
             nuxt
             color="accent"
             class="montserrat text-none"
@@ -51,9 +51,9 @@ function openNews(news) {
             variant="text"
           >
             {{ $t("common.viewNews") }}
-          </v-btn>
-        </v-card-actions>
-      </v-col>
-    </v-row>
-  </v-card>
+          </VBtn>
+        </VCardActions>
+      </VCol>
+    </VRow>
+  </VCard>
 </template>

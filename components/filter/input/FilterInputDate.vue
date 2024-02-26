@@ -79,18 +79,18 @@ const maxDate = computed(() => {
 </script>
 
 <template>
-  <v-expansion-panel
+  <VExpansionPanel
     ref="panel"
     bg-color="transparent"
     elevation="0"
     :rounded="0"
   >
-    <v-expansion-panel-title
+    <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray !important"
     >
       {{ title }}
-    </v-expansion-panel-title>
+    </VExpansionPanelTitle>
     <div
       v-if="internalValue.length > 0"
       class="bg-white"
@@ -118,11 +118,11 @@ const maxDate = computed(() => {
         </span>
       </div>
     </div>
-    <v-expansion-panel-text
+    <VExpansionPanelText
       color="white"
       style="border-bottom: 1px solid lightgray !important"
     >
-      <v-date-picker
+      <VDatePicker
         :model-value="currentDatePickerValue"
         color="accent"
         multiple="range"
@@ -133,13 +133,13 @@ const maxDate = computed(() => {
         :locale="$i18n.locale === 'et' ? 'et-EE' : 'en-US'"
         @update:model-value="handleDatePickerInput"
       />
-      <v-row
+      <VRow
         style="border-top: 1px solid lightgray !important"
         no-gutters
         class="py-2 px-4"
       >
-        <v-col cols="6">
-          <v-btn
+        <VCol cols="6">
+          <VBtn
             size="small"
             variant="text"
             block
@@ -149,11 +149,11 @@ const maxDate = computed(() => {
             @click="handleClear"
           >
             {{ $t("filter.clear") }}
-          </v-btn>
-        </v-col>
+          </VBtn>
+        </VCol>
 
-        <v-col cols="6">
-          <v-btn
+        <VCol cols="6">
+          <VBtn
             size="small"
             variant="text"
             block
@@ -163,11 +163,11 @@ const maxDate = computed(() => {
             @click="handleAdd"
           >
             {{ $t("filter.add") }}
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-expansion-panel-text>
-  </v-expansion-panel>
+          </VBtn>
+        </VCol>
+      </VRow>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style scoped>

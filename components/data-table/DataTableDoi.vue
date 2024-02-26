@@ -1,14 +1,14 @@
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.identifier="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.identifier"
         @click.native="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "
       >
         {{ item.identifier }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
 
     <template #item.datacite_created="{ item }">
@@ -26,5 +26,5 @@
         </div>
       </div>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

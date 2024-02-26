@@ -35,7 +35,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
 </script>
 
 <template>
-  <data-table-attachment
+  <DataTableAttachment
     class="border-b"
     :items="data?.results ?? []"
     :count="data?.count ?? 0"

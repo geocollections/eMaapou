@@ -3,26 +3,26 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.sample="{ item }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
         {{ item.sample_number }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.number="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.number"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.id } })"
       >
         {{ item.number }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -30,17 +30,17 @@ const localePath = useLocalePath();
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-      <nuxt-link
+      </NuxtLink>
+      <NuxtLink
         v-else-if="item.site_id"
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
       >
         {{ item.site }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy_id"
         class="text-link"
         :to="
@@ -56,10 +56,10 @@ const localePath = useLocalePath();
             en: item.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.lithostratigraphy"
         class="text-link"
         :to="
@@ -75,10 +75,10 @@ const localePath = useLocalePath();
             en: item.lithostratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

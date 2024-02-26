@@ -457,7 +457,7 @@ const latLngMarkers = computed(() => {
 
 <template>
   <div>
-    <client-only>
+    <ClientOnly>
       <LMap
         id="map"
         ref="map"
@@ -513,11 +513,11 @@ const latLngMarkers = computed(() => {
           :transparent="layer.transparent"
           :options="layer.options"
         />
-        <v-marker-cluster-wrapper
+        <VMarkerClusterWrapper
           v-if="markers.length >= 250"
           :markers="markers"
         />
-        <l-circle-marker-wrapper
+        <LCircleMarkerWrapper
           v-else
           :markers="markers"
           :max-permanent="0"
@@ -535,7 +535,7 @@ const latLngMarkers = computed(() => {
               <div class="align-self-center text-no-wrap">
                 1 km
               </div>
-              <v-slider
+              <VSlider
                 v-model="nearMeRadius"
                 style="width: 150px"
                 :min="1"
@@ -553,7 +553,7 @@ const latLngMarkers = computed(() => {
         </LMarker>
 
         <LLayerGroup ref="popup">
-          <map-click-popup :response="mapClickResponse" />
+          <MapClickPopup :response="mapClickResponse" />
         </LLayerGroup>
       </LMap>
       <template #placeholder>
@@ -561,7 +561,7 @@ const latLngMarkers = computed(() => {
           :style="`height: ${height}; width: 100%`"
           class="d-flex align-center justify-center rounded bg-secondary"
         >
-          <v-progress-circular
+          <VProgressCircular
             indeterminate
             color="accent"
             :size="100"
@@ -569,8 +569,8 @@ const latLngMarkers = computed(() => {
           />
         </div>
       </template>
-    </client-only>
-    <map-links
+    </ClientOnly>
+    <MapLinks
       v-if="showLinks"
       :latitude="currentCenter.lat"
       :longitude="currentCenter.lng"

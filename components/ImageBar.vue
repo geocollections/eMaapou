@@ -38,11 +38,11 @@ function openOverlay(image: OverlayImage) {
       :key="index"
       class="mr-3 mb-1"
     >
-      <v-tooltip location="bottom" color="accent">
+      <VTooltip location="bottom" color="accent">
         <template #activator="{ props }">
           <slot name="image" :item="item">
-            <v-hover v-slot="{ hover }">
-              <v-img
+            <VHover v-slot="{ hover }">
+              <VImg
                 v-bind="props"
                 :src="
                   img(
@@ -67,16 +67,16 @@ function openOverlay(image: OverlayImage) {
                 "
               >
                 <template #placeholder>
-                  <v-row
+                  <VRow
                     class="fill-height ma-0"
                     align="center"
                     justify="center"
                   >
-                    <v-progress-circular indeterminate color="grey-lighten-5" />
-                  </v-row>
+                    <VProgressCircular indeterminate color="grey-lighten-5" />
+                  </VRow>
                 </template>
-              </v-img>
-            </v-hover>
+              </VImg>
+            </VHover>
           </slot>
         </template>
         <slot name="info" :item="item">
@@ -98,9 +98,9 @@ function openOverlay(image: OverlayImage) {
             {{ $t("common.clickToOpen") }}
           </div>
         </slot>
-      </v-tooltip>
+      </VTooltip>
     </div>
     <div v-intersect="loadMore" />
-    <image-overlay v-model="showOverlay" :image="overlayImage" />
+    <ImageOverlay v-model="showOverlay" :image="overlayImage" />
   </div>
 </template>

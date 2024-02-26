@@ -46,7 +46,7 @@ const state = reactive({
 </script>
 
 <template>
-  <v-navigation-drawer
+  <VNavigationDrawer
     :model-value="drawer"
     app
     clipped
@@ -58,9 +58,9 @@ const state = reactive({
     :class="{ 'use-padding-bottom': $vuetify.display.smAndDown }"
     @update:model-value="$emit('update:navigationDrawer', $event)"
   >
-    <v-container class="more-menu py-4 mb-6">
-      <v-list class="py-1 px-2">
-        <v-list-item
+    <VContainer class="more-menu py-4 mb-6">
+      <VList class="py-1 px-2">
+        <VListItem
           v-for="route in state.routes"
           :key="route.routeName"
           nuxt
@@ -68,24 +68,24 @@ const state = reactive({
           color="accent-darken-1"
           :to="localePath({ name: route.routeName })"
         >
-          <v-list-item-title class="d-flex py-1">
-            <v-icon class="mr-1">
+          <VListItemTitle class="d-flex py-1">
+            <VIcon class="mr-1">
               {{ route.icon }}
-            </v-icon>
+            </VIcon>
             <span class="align-self-center montserrat">{{
               $t(route.text)
             }}</span>
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+          </VListItemTitle>
+        </VListItem>
+      </VList>
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t("landing.searchRoutes") }}
       </div>
 
-      <v-divider class="bg-primary" />
+      <VDivider class="bg-primary" />
 
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
+      <VList class="py-1 px-2">
+        <BaseMenuListItem
           v-for="(item, index) in state.browseTaxon"
           :key="`browse-geography-item-${index}`"
           class="my-1"
@@ -95,10 +95,10 @@ const state = reactive({
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-      </v-list>
-      <v-divider class="mx-3 my-1" />
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
+      </VList>
+      <VDivider class="mx-3 my-1" />
+      <VList class="py-1 px-2">
+        <BaseMenuListItem
           v-for="(item, index) in state.browseLab"
           :key="`browse-geography-item-${index}`"
           class="my-1"
@@ -108,11 +108,11 @@ const state = reactive({
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-      </v-list>
+      </VList>
 
-      <v-divider class="mx-3 my-1" />
-      <v-list class="py-1 px-2">
-        <base-menu-list-item
+      <VDivider class="mx-3 my-1" />
+      <VList class="py-1 px-2">
+        <BaseMenuListItem
           v-for="(item, index) in state.browseGeography"
           :key="`browse-geography-item-${index}`"
           class="my-1"
@@ -122,16 +122,16 @@ const state = reactive({
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
         />
-      </v-list>
+      </VList>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">
         Services
       </div>
 
-      <v-divider class="bg-primary" />
+      <VDivider class="bg-primary" />
 
-      <v-list class="py-1 px-2">
-        <v-list-item
+      <VList class="py-1 px-2">
+        <VListItem
           v-for="tabId in state.services.ids"
           :key="state.services[tabId].href"
           tag="a"
@@ -140,23 +140,23 @@ const state = reactive({
           target="_blank"
           :href="state.services[tabId].href"
         >
-          <v-list-item-title class="py-1">
+          <VListItemTitle class="py-1">
             <span class="montserrat">{{
               $t(state.services[tabId].title)
             }}</span>
-          </v-list-item-title>
-        </v-list-item>
-      </v-list>
+          </VListItemTitle>
+        </VListItem>
+      </VList>
 
       <div class="montserrat font-weight-medium pl-2 mt-2">
         {{ $t("common.lang") }}
       </div>
 
-      <v-divider class="bg-primary" />
+      <VDivider class="bg-primary" />
 
-      <language-list class="py-0" />
-    </v-container>
-  </v-navigation-drawer>
+      <LanguageList class="py-0" />
+    </VContainer>
+  </VNavigationDrawer>
 </template>
 
 <style scoped>

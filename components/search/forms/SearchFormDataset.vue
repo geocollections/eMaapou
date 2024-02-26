@@ -133,11 +133,11 @@ async function hydrateParameter(values: string[]) {
 
 <template>
   <div>
-    <v-form @submit.prevent="handleUpdate">
-      <input-search v-model="query" />
-      <search-actions class="mb-3" @click="handleReset" />
-      <v-expansion-panels variant="accordion" multiple>
-        <filter-input-text
+    <VForm @submit.prevent="handleUpdate">
+      <InputSearch v-model="query" />
+      <SearchActions class="mb-3" @click="handleReset" />
+      <VExpansionPanels variant="accordion" multiple>
+        <FilterInputText
           v-model="filters.name.value"
           :title="$t('filters.datasetName')"
           value="name"
@@ -153,13 +153,13 @@ async function hydrateParameter(values: string[]) {
           value="analysisParameter"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.owner.value"
           :title="$t('filters.owner')"
           value="owner"
           @update:model-value="handleUpdate"
         />
-        <filter-input-text
+        <FilterInputText
           v-model="filters.date.value"
           :title="$t('filters.date')"
           value="date"
@@ -174,7 +174,7 @@ async function hydrateParameter(values: string[]) {
           value="institution"
           @update:model-value="handleUpdate"
         />
-      </v-expansion-panels>
-    </v-form>
+      </VExpansionPanels>
+    </VForm>
   </div>
 </template>

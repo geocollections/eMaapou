@@ -50,29 +50,29 @@ export default {
       :preview-src="previewSrc"
       @click="$emit('click:image')"
     />
-    <v-icon
+    <VIcon
       v-else-if="isImage"
       color="primary-darken-2"
       size="large"
       @click="$emit('click')"
     >
       {{ icons.mdiFileImageOutline }}
-    </v-icon>
-    <v-icon
+    </VIcon>
+    <VIcon
       v-else-if="isVideo"
       color="primary-darken-2"
       size="large"
       @click="$emit('click')"
     >
       {{ icons.mdiFileVideoOutline }}
-    </v-icon>
-    <v-icon
+    </VIcon>
+    <VIcon
       v-else
       color="primary-darken-2"
       size="large"
       @click="$emit('click')"
     >
       {{ icons.mdiFileOutline }}
-    </v-icon>
+    </VIcon>
   </div>
 </template>

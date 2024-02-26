@@ -11,16 +11,16 @@ watchEffect(() => {
 </script>
 
 <template>
-  <v-app>
-    <app-header :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
-    <app-drawer
+  <VApp>
+    <AppHeader :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
+    <AppDrawer
       v-if="!mdAndUp"
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
     <slot />
-    <client-only>
-      <cookie-consent />
-    </client-only>
-  </v-app>
+    <ClientOnly>
+      <CookieConsent />
+    </ClientOnly>
+  </VApp>
 </template>

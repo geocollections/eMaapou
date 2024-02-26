@@ -39,7 +39,7 @@ const { data: taxons } = useAsyncData("taxons", async () => {
 </script>
 
 <template>
-  <chart-taxon-pie
+  <ChartTaxonPie
     table-key="sample"
     :table-id="$route.params.id.toString()"
     :chart-title="chartTitle"

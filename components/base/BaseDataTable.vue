@@ -166,7 +166,7 @@ onMounted(() => {
       To fix this for now, tables that have onlyTable prop do not
       enable loading indicator when created.
 ' -->
-    <v-data-table-server
+    <VDataTableServer
       id="table"
       v-model:expanded="expanded"
       item-key="id"
@@ -194,8 +194,8 @@ onMounted(() => {
       <!-- eslint-disable-next-line vue/no-template-shadow -->
       <template v-if="!onlyTable" #top="{ pageCount }">
         <div id="top">
-          <v-row class="pl-3" no-gutters>
-            <v-col
+          <VRow class="pl-3" no-gutters>
+            <VCol
               cols="12"
               sm="5"
               md="4"
@@ -203,7 +203,7 @@ onMounted(() => {
               align-self="center"
               class="pr-3 d-flex align-center"
             >
-              <v-text-field
+              <VTextField
                 v-if="showSearch"
                 v-model="search"
                 style="max-width: 400px"
@@ -218,11 +218,11 @@ onMounted(() => {
                 clearable
                 @update:model-value="handleSearch"
               />
-              <base-data-table-export-menu
+              <BaseDataTableExportMenu
                 v-if="tableElement"
                 :table-element="tableElement"
               />
-              <base-data-table-header-menu
+              <BaseDataTableHeaderMenu
                 v-if="dynamicHeaders"
                 :headers="headers"
                 :visible-headers="visibleHeaders"
@@ -230,9 +230,9 @@ onMounted(() => {
                 @change="handleHeadersChange"
                 @reset="$emit('reset:headers')"
               />
-            </v-col>
-            <v-col class="d-flex justify-end" align-self="center">
-              <base-data-table-pagination
+            </VCol>
+            <VCol class="d-flex justify-end" align-self="center">
+              <BaseDataTablePagination
                 :options="options"
                 :page-count="pageCount"
                 :items-per-page-options="footerProps['items-per-page-options']"
@@ -248,16 +248,16 @@ onMounted(() => {
                 select-page-id="footer-select-btn"
                 @update:options="handleChange"
               />
-            </v-col>
-          </v-row>
+            </VCol>
+          </VRow>
         </div>
-        <v-divider />
+        <VDivider />
       </template>
       <template v-if="!onlyTable" #bottom="{ pageCount }">
-        <v-divider />
-        <v-row no-gutters>
-          <v-col class="d-flex justify-end" align-self="center">
-            <base-data-table-pagination
+        <VDivider />
+        <VRow no-gutters>
+          <VCol class="d-flex justify-end" align-self="center">
+            <BaseDataTablePagination
               :options="options"
               :page-count="pageCount"
               :items-per-page-options="footerProps['items-per-page-options']"
@@ -273,8 +273,8 @@ onMounted(() => {
               select-page-id="footer-select-btn"
               @update:options="handleChange($event)"
             />
-          </v-col>
-        </v-row>
+          </VCol>
+        </VRow>
       </template>
       <template
         v-if="expandable"
@@ -285,7 +285,7 @@ onMounted(() => {
           internalItem,
         }"
       >
-        <v-btn
+        <VBtn
           v-if="item.canExpand"
           :icon="!isExpanded(internalItem) ? mdiChevronDown : mdiChevronUp"
           variant="text"
@@ -305,7 +305,7 @@ onMounted(() => {
       <template #item.date_changed="{ item }">
         {{ $formatDate(item.date_changed) }}
       </template>
-    </v-data-table-server>
+    </VDataTableServer>
   </div>
 </template>
 

@@ -10,29 +10,29 @@ defineProps({
 </script>
 
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-card
+  <VHover v-slot="{ hover }">
+    <VCard
       :href="route.href"
       class="d-flex py-2"
       :elevation="hover ? 2 : 1"
       :color="hover ? 'grey-lighten-2' : 'grey-lighten-3'"
     >
       <div>
-        <v-card-title
+        <VCardTitle
           style="width: 100%"
           class="text-h6 py-0"
         >
           {{ $t(route.title) }}
-        </v-card-title>
-        <v-card-text class="py-0 montserrat text-grey">
+        </VCardTitle>
+        <VCardText class="py-0 montserrat text-grey">
           {{ $t(route.description) }}
-        </v-card-text>
+        </VCardText>
       </div>
-      <v-icon
+      <VIcon
         :icon="mdiOpenInNew"
         size="x-small"
         class="ml-auto mr-2 align-self-baseline"
       />
-    </v-card>
-  </v-hover>
+    </VCard>
+  </VHover>
 </template>

@@ -273,9 +273,9 @@ redirectInvalidTab({
 </script>
 
 <template>
-  <detail-new :show-similar="showDrawer">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
-      <header-detail-new
+      <HeaderDetailNew
         :title="
           $translate({
             et: data?.drillcore.drillcore,
@@ -286,7 +286,7 @@ redirectInvalidTab({
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </header-detail-new>
+      </HeaderDetailNew>
     </template>
     <template #drawer>
       <SearchResultsDrawer
@@ -318,5 +318,5 @@ redirectInvalidTab({
     </template>
 
     <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
+  </DetailNew>
 </template>

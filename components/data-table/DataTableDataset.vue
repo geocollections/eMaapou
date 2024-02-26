@@ -4,27 +4,27 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.id="{ item, index }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.id"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
         @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
 
     <template #item.name="{ item, index }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.title"
         class="text-link"
         :to="localePath({ name: 'dataset-id', params: { id: item.id } })"
         @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.title }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
 
     <template #item.date="{ item }">
@@ -37,7 +37,7 @@ const localePath = useLocalePath();
     </template>
 
     <template #item.database_acronym="{ item }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="
           localePath({
@@ -46,7 +46,7 @@ const localePath = useLocalePath();
         "
       >
         {{ item.database_acronym }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

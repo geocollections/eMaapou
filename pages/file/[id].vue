@@ -275,23 +275,23 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
 </script>
 
 <template>
-  <detail
+  <Detail
     v-if="!pending"
     :loading="pending"
     :error="error"
   >
     <template #title>
       <!-- <header-detail :ids="ids" :title="pageTitle" /> -->
-      <header-detail
+      <HeaderDetail
         :title="pageTitle"
         show-prev-next
         :search-to="localePath({ path: '/photo' })"
       />
     </template>
     <template #column-left>
-      <v-card-text class="text-center">
+      <VCardText class="text-center">
         <!-- Image -->
-        <v-img
+        <VImg
           v-if="isImage"
           class="rounded"
           content-class="image-content"
@@ -317,18 +317,18 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           "
         >
           <template #placeholder>
-            <v-row
+            <VRow
               class="fill-height ma-0"
               align="center"
               justify="center"
             >
-              <v-progress-circular
+              <VProgressCircular
                 indeterminate
                 color="grey-lighten-5"
               />
-            </v-row>
+            </VRow>
           </template>
-        </v-img>
+        </VImg>
 
         <!-- Audio -->
         <audio v-else-if="isAudio" controls>
@@ -336,7 +336,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             :src="`https://files.geocollections.info/${file.uuid_filename}`"
           >
           Your browser does not support the audio element.
-          <v-icon>{{ mdiFileMusicOutline }}</v-icon>
+          <VIcon>{{ mdiFileMusicOutline }}</VIcon>
         </audio>
 
         <!-- Video -->
@@ -345,7 +345,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             :src="`https://files.geocollections.info/${file.uuid_filename}`"
           >
           Your browser does not support the video element.
-          <v-icon>{{ mdiFileVideoOutline }}</v-icon>
+          <VIcon>{{ mdiFileVideoOutline }}</VIcon>
         </video>
 
         <!-- File -->
@@ -358,9 +358,9 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             )
           "
         >
-          <v-icon size="large" color="primary-darken-2">
+          <VIcon size="large" color="primary-darken-2">
             {{ mdiFileDownloadOutline }}
-          </v-icon>
+          </VIcon>
           {{ $t("file.download") }}
         </div>
 
@@ -389,25 +389,25 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
                 @click="$openImage(file.uuid_filename, size)"
               >
                 {{ $t(`common.${size}`) }}
-                <v-icon
+                <VIcon
                   v-if="size === 'original'"
                   size="small"
                   color="primary-darken-2"
                 >
                   {{ mdiFileDownloadOutline }}
-                </v-icon>
+                </VIcon>
               </a>
               <span v-if="index < imageSizes.length - 1">| </span>
             </span>
           </div>
         </div>
-      </v-card-text>
+      </VCardText>
     </template>
 
     <template #column-right>
-      <v-card-text>
-        <base-table>
-          <table-row-link
+      <VCardText>
+        <BaseTable>
+          <TableRowLink
             v-if="specimen && specimen.coll"
             :title="$t('file.collectionNr').toString()"
             :value="specimen.coll.number"
@@ -419,7 +419,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
               })
             "
           />
-          <table-row-link
+          <TableRowLink
             v-if="specimen"
             :title="$t('file.specimenNr').toString()"
             :value="file.specimen.specimen_id"
@@ -432,7 +432,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             "
           />
           <template v-for="(item, index) in specimenIdentification">
-            <table-row-link
+            <TableRowLink
               v-if="item.taxon"
               :key="index"
               :title="$t('file.name').toString()"
@@ -444,7 +444,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             />
           </template>
           <template v-for="(item, index) in specimenIdentificationGeology">
-            <table-row-link
+            <TableRowLink
               v-if="item.taxon"
               :key="index"
               :title="$t('file.name').toString()"
@@ -455,7 +455,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
               "
             />
           </template>
-          <table-row-link
+          <TableRowLink
             v-if="specimen && specimen.locality"
             :title="$t('file.locality').toString()"
             :value="
@@ -472,7 +472,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
               })
             "
           />
-          <table-row-link
+          <TableRowLink
             v-if="specimen && specimen.stratigraphy"
             :title="$t('file.stratigraphy').toString()"
             :value="
@@ -537,7 +537,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           <!--   :title="$t('file.imagePlace').toString()" -->
           <!--   :value="file.image_place" -->
           <!-- /> -->
-          <table-row-link
+          <TableRowLink
             v-if="locality"
             :title="$t('file.locality').toString()"
             :value="
@@ -562,7 +562,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           <!--   :title="$t('file.imageLongitude').toString()" -->
           <!--   :value="file.image_longitude" -->
           <!-- /> -->
-          <table-row
+          <TableRow
             v-if="type"
             :title="$t('file.type').toString()"
             :value="
@@ -576,7 +576,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           <!--   :title="$t('file.format').toString()" -->
           <!--   :value="file.attachment_format" -->
           <!-- /> -->
-          <table-row
+          <TableRow
             v-if="attachmentKeywords.length > 0"
             :title="$t('file.keywords').toString()"
             :value="attachmentKeywords"
@@ -588,8 +588,8 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
                 </li>
               </ul>
             </template>
-          </table-row>
-          <table-row
+          </TableRow>
+          <TableRow
             v-if="agentDigitised"
             :title="$t('file.personDigitised').toString()"
             :value="agentDigitised.agent"
@@ -598,11 +598,11 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           <!--   :title="$t('file.dateDigitised').toString()" -->
           <!--   :value="file.date_digitised || file.date_digitised_free" -->
           <!-- /> -->
-          <table-row
+          <TableRow
             :title="$t('file.imageSize').toString()"
             :value="imageSize"
           />
-          <table-row-link
+          <TableRowLink
             v-if="database"
             :title="$t('file.institution').toString()"
             :value="
@@ -614,7 +614,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             :href="database.url"
             target="DatabaseWindow"
           />
-          <table-row-link
+          <TableRowLink
             v-if="licence"
             :title="$t('file.licence').toString()"
             :value="licence.licence_en"
@@ -634,17 +634,17 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           <!--   :title="$t('file.dateChanged').toString()" -->
           <!--   :value="$formatDate(file.date_changed)" -->
           <!-- /> -->
-        </base-table>
+        </BaseTable>
 
-        <v-card
+        <VCard
           v-if="showMap"
           id="map-wrap"
           elevation="0"
         >
-          <v-card-title class="pl-0 subsection-title">
+          <VCardTitle class="pl-0 subsection-title">
             {{ $t("locality.map") }}
-          </v-card-title>
-          <map-detail
+          </VCardTitle>
+          <MapDetail
             rounded
             :estonian-map="mapIsEstonian"
             :estonian-bedrock-overlay="mapIsEstonian"
@@ -661,14 +661,14 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
               },
             ]"
           />
-        </v-card>
-      </v-card-text>
+        </VCard>
+      </VCardText>
     </template>
 
     <template #bottom>
-      <nuxt-page />
+      <NuxtPage />
     </template>
-  </detail>
+  </Detail>
 </template>
 
 <style scoped>

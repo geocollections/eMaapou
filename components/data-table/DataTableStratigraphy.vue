@@ -3,9 +3,9 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         class="text-link"
         :to="
           localePath({
@@ -20,7 +20,7 @@ const localePath = useLocalePath();
             en: item.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
 
     <template #item.index_main="{ item }">
@@ -92,7 +92,7 @@ const localePath = useLocalePath();
     </template>
 
     <template #item.parent_stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.parent_id"
         class="text-link"
         :to="
@@ -108,7 +108,7 @@ const localePath = useLocalePath();
             en: item.parent_stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

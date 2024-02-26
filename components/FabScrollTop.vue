@@ -28,8 +28,8 @@ export default {
 </script>
 
 <template>
-  <v-fab-transition>
-    <v-btn
+  <VFabTransition>
+    <VBtn
       v-show="showFab"
       v-scroll="onScroll"
       position="fixed"
@@ -39,7 +39,7 @@ export default {
       color="accent"
       @click="toTop"
     >
-      <v-icon>{{ icons.mdiChevronUp }}</v-icon>
-    </v-btn>
-  </v-fab-transition>
+      <VIcon>{{ icons.mdiChevronUp }}</VIcon>
+    </VBtn>
+  </VFabTransition>
 </template>

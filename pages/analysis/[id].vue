@@ -188,9 +188,9 @@ redirectInvalidTab({
         </template>
         <template #itemSubtitle="{ item: analysis }">
           <div v-if="analysis.sample_name" class="d-flex align-center">
-            <v-icon start size="small">
+            <VIcon start size="small">
               {{ mdiImageFilterHdr }}
-            </v-icon>
+            </VIcon>
             <span class="text--secondary">
               {{ analysis.sample_name }}
             </span>

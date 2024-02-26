@@ -7,14 +7,14 @@ function openPDF(link: string) {
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.reference="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.id"
         @click.native="$openGeology('reference', item.id)"
       >
         {{ item.reference }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
 
     <template #item.journal="{ item }">
@@ -27,15 +27,15 @@ function openPDF(link: string) {
     </template>
 
     <template #item.doi="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.doi"
         @click.native="$openWindow(`https://doi.org/${item.doi}`)"
       >
         {{ item.doi }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
     <template #item.pdf="{ item }">
-      <v-chip
+      <VChip
         v-if="item.pdf"
         color="red "
         :ripple="false"
@@ -46,11 +46,11 @@ function openPDF(link: string) {
         class="d-print-none ml-1 my-1 link"
         @click.stop="openPDF(item.pdf)"
       >
-        <v-icon class="pr-1">
+        <VIcon class="pr-1">
           {{ mdiFilePdfBox }}
-        </v-icon>
+        </VIcon>
         <b>PDF</b>
-      </v-chip>
+      </VChip>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

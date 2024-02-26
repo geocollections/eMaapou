@@ -68,19 +68,19 @@ const valueString = computed(() => {
 </script>
 
 <template>
-  <v-expansion-panel
+  <VExpansionPanel
     bg-color="transparent"
     elevation="0"
     :rounded="0"
     style="background-color: transparent"
     @group:selected="handleOpen"
   >
-    <v-expansion-panel-title
+    <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
       style="min-height: 40px; border-bottom: 1px solid lightgray"
     >
       {{ $t("filters.map") }}
-    </v-expansion-panel-title>
+    </VExpansionPanelTitle>
     <div
       v-if="modelValue !== null"
       class="bg-white"
@@ -102,7 +102,7 @@ const valueString = computed(() => {
         </span>
       </div>
     </div>
-    <v-expansion-panel-text>
+    <VExpansionPanelText>
       <div class="pa-0" style="border-bottom: 1px solid lightgray !important">
         <MapSearchNew
           :model-value="modelValue"
@@ -112,8 +112,8 @@ const valueString = computed(() => {
         <!--   gps-enabled :show-links="false" height="350px" :gesture-handling="$vuetify.display.smAndDown" -->
         <!--   @update="$emit('update')" @input="$emit('input', $event)" /> -->
       </div>
-    </v-expansion-panel-text>
-  </v-expansion-panel>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style scoped>

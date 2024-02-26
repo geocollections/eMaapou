@@ -8,16 +8,16 @@ defineProps<{
 
 <template>
   <NuxtLayout>
-    <v-main>
-      <v-container :fluid="$vuetify.display.lgAndDown">
-        <v-row no-gutters>
-          <v-col>
+    <VMain>
+      <VContainer :fluid="$vuetify.display.lgAndDown">
+        <VRow no-gutters>
+          <VCol>
             <div class="pt-15">
-              <detail-error :error="error" />
+              <DetailError :error="error" />
             </div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
+          </VCol>
+        </VRow>
+      </VContainer>
+    </VMain>
   </NuxtLayout>
 </template>

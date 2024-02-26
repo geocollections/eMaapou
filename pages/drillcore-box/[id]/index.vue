@@ -31,12 +31,12 @@ const { data } = await useAsyncData("images", async () => {
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row>
-      <v-col>
-        <v-hover v-slot="{ isHovering }">
+  <VContainer style="margin: initial">
+    <VRow>
+      <VCol>
+        <VHover v-slot="{ isHovering }">
           <!-- TODO: Add placeholder, for case when box does not have a picture (filename check) -->
-          <v-img
+          <VImg
             contain
             class="rounded cursor-pointer transition-swing"
             :class="{
@@ -62,19 +62,19 @@ const { data } = await useAsyncData("images", async () => {
             @click="$openImage(activeImage.attachment.uuid_filename)"
           >
             <template #placeholder>
-              <v-row
+              <VRow
                 class="fill-height ma-0"
                 align="center"
                 justify="center"
               >
-                <v-progress-circular
+                <VProgressCircular
                   indeterminate
                   color="grey-lighten-5"
                 />
-              </v-row>
+              </VRow>
             </template>
-          </v-img>
-        </v-hover>
+          </VImg>
+        </VHover>
 
         <div class="text-end">
           <span v-for="(size, index) in imageSizes" :key="index">
@@ -97,8 +97,8 @@ const { data } = await useAsyncData("images", async () => {
             :key="index"
             class="ma-2"
           >
-            <v-hover v-slot="{ isHovering }">
-              <v-img
+            <VHover v-slot="{ isHovering }">
+              <VImg
                 :src="
                   img(
                     item.attachment.uuid_filename,
@@ -123,26 +123,26 @@ const { data } = await useAsyncData("images", async () => {
                 @click="activeImage = drillcoreBoxImages[index]"
               >
                 <template #placeholder>
-                  <v-row
+                  <VRow
                     class="fill-height ma-0"
                     align="center"
                     justify="center"
                   >
-                    <v-progress-circular
+                    <VProgressCircular
                       indeterminate
                       color="grey-lighten-5"
                     />
-                  </v-row>
+                  </VRow>
                 </template>
-              </v-img>
-            </v-hover>
+              </VImg>
+            </VHover>
           </div>
         </div>
-      </v-col>
-      <v-col :cols="12" :xl="4">
-        <v-card>
-          <base-table>
-            <table-row-link
+      </VCol>
+      <VCol :cols="12" :xl="4">
+        <VCard>
+          <BaseTable>
+            <TableRowLink
               v-if="drillcore"
               nuxt
               :title="$t('drillcoreBox.drillcore')"
@@ -159,23 +159,23 @@ const { data } = await useAsyncData("images", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.depthStart')"
               :value="drillcoreBox.depth_start"
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.depthEnd')"
               :value="drillcoreBox.depth_end"
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.depthOther')"
               :value="drillcoreBox.depth_other"
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.diameter')"
               :value="drillcoreBox.diameter"
             />
-            <table-row-link
+            <TableRowLink
               v-if="drillcoreBox.stratigraphy_top"
               :title="$t('drillcoreBox.stratigraphyTop')"
               :value="
@@ -192,11 +192,11 @@ const { data } = await useAsyncData("images", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.stratigraphyTopFree')"
               :value="drillcoreBox.stratigraphy_top_free"
             />
-            <table-row-link
+            <TableRowLink
               v-if="drillcoreBox.stratigraphy_base"
               :title="$t('drillcoreBox.stratigraphyBase')"
               :value="
@@ -213,28 +213,28 @@ const { data } = await useAsyncData("images", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.stratigraphyBaseFree')"
               :value="drillcoreBox.stratigraphy_base_free"
             />
 
-            <table-row
+            <TableRow
               v-if="drillcoreBox.date_added"
               :title="$t('drillcoreBox.dateAdded')"
               :value="$formatDate(drillcoreBox.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="drillcoreBox.date_changed"
               :title="$t('drillcoreBox.dateChanged')"
               :value="$formatDate(drillcoreBox.date_changed)"
             />
-            <table-row
+            <TableRow
               :title="$t('drillcoreBox.remarks')"
               :value="drillcoreBox.remarks"
             />
-          </base-table>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+          </BaseTable>
+        </VCard>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>

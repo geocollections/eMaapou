@@ -11,7 +11,7 @@ function closeMobileSearch() {
 
 <template>
   <div>
-    <v-navigation-drawer
+    <VNavigationDrawer
       :model-value="true"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
       :permanent="!$vuetify.display.smAndDown"
@@ -24,15 +24,15 @@ function closeMobileSearch() {
       :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
     >
       <div style="height: 100%" tile>
-        <v-list
+        <VList
           v-if="!$vuetify.display.smAndDown"
           density="compact"
           variant="plain"
           class="pa-0"
         >
-          <v-list-item :ripple="false" @click="mini = !mini">
+          <VListItem :ripple="false" @click="mini = !mini">
             <template #prepend>
-              <v-icon
+              <VIcon
                 :icon="mdiChevronDoubleLeft"
                 :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
               />
@@ -40,8 +40,8 @@ function closeMobileSearch() {
             <div class="montserrat font-weight-medium text--secondary">
               {{ $t("common.hideFilters") }}
             </div>
-          </v-list-item>
-        </v-list>
+          </VListItem>
+        </VList>
         <div v-else class="text-h6 py-2 pl-2">
           {{ $t("common.showSearchFields") }}
         </div>
@@ -61,30 +61,30 @@ function closeMobileSearch() {
           <slot name="form" :close-mobile-search="closeMobileSearch" />
         </div>
       </div>
-    </v-navigation-drawer>
-    <v-main>
-      <v-container
+    </VNavigationDrawer>
+    <VMain>
+      <VContainer
         class="pt-1 pb-10 px-0"
         style="min-height: 100vh"
         :fluid="true"
       >
-        <v-row no-gutters>
-          <v-col>
-            <client-only>
+        <VRow no-gutters>
+          <VCol>
+            <ClientOnly>
               <!-- <history-viewer v-if="$vuetify.display.smAndUp" /> -->
-            </client-only>
-          </v-col>
-        </v-row>
-        <v-row no-gutters>
-          <v-col class="ml-2">
+            </ClientOnly>
+          </VCol>
+        </VRow>
+        <VRow no-gutters>
+          <VCol class="ml-2">
             <slot name="title" />
-          </v-col>
-          <v-col cols="12">
+          </VCol>
+          <VCol cols="12">
             <slot name="result" />
-          </v-col>
-        </v-row>
-        <v-fab-transition v-if="$vuetify.display.smAndDown">
-          <v-btn
+          </VCol>
+        </VRow>
+        <VFabTransition v-if="$vuetify.display.smAndDown">
+          <VBtn
             id="searchFab"
             class="mt-2 d-print-none d-md-none montserrat"
             color="warning"
@@ -95,13 +95,13 @@ function closeMobileSearch() {
             style="left: 50%; transform: translateX(-50%); z-index: 4"
             @click="showSearch = !showSearch"
           >
-            <v-icon :icon="mdiMagnify" start />
+            <VIcon :icon="mdiMagnify" start />
             {{ $t("common.searchCommand") }}
-          </v-btn>
-        </v-fab-transition>
-        <fab-scroll-top />
-      </v-container>
-      <app-footer />
-    </v-main>
+          </VBtn>
+        </VFabTransition>
+        <FabScrollTop />
+      </VContainer>
+      <AppFooter />
+    </VMain>
   </div>
 </template>

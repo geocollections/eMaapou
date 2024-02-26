@@ -1,5 +1,5 @@
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.reference="{ item }">
       <a
         v-if="item.reference"
@@ -12,5 +12,5 @@
         {{ item.reference.title }}
       </div>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

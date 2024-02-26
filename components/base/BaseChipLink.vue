@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <v-chip
+  <VChip
     class="pa-4 align-center d-flex font-weight-bold"
     :class="`${cardClass}`"
     hover
@@ -40,7 +40,7 @@ export default {
     <div class="text-none">
       {{ title }}
     </div>
-  </v-chip>
+  </VChip>
 </template>
 
 <style lang="scss" scoped>

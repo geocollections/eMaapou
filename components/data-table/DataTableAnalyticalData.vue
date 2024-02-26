@@ -22,7 +22,7 @@ function formatDepthRange({
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.depth="{ item }">
       <span style="font-family: monospace">
         {{
@@ -39,16 +39,16 @@ function formatDepthRange({
       }}
     </template>
     <template #item.sample_number="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.sample_id"
         class="text-link"
         :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
       >
         {{ item.sample_number || item.sample_id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -56,17 +56,17 @@ function formatDepthRange({
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
-      <nuxt-link
+      </NuxtLink>
+      <NuxtLink
         v-else-if="item.site_id"
         class="text-link"
         :to="localePath({ name: 'site-id', params: { id: item.site_id } })"
       >
         {{ item.site }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy_id"
         class="text-link"
         :to="
@@ -82,10 +82,10 @@ function formatDepthRange({
             en: item.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.lithostratigraphy_id"
         class="text-link font-italic"
         :to="
@@ -101,21 +101,21 @@ function formatDepthRange({
             en: item.lithostratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.reference="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.reference_id"
         @click.native="$openGeology('reference', item.reference_id)"
       >
         {{ item.reference }}
-      </base-link-external>
+      </BaseLinkExternal>
       <div v-else>
         {{ item.reference_str }}
       </div>
     </template>
     <template #item.dataset_id="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.dataset_id"
         class="text-link"
         :to="
@@ -123,10 +123,10 @@ function formatDepthRange({
         "
       >
         {{ item.dataset_id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.analysis_id="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.analysis_id"
         class="text-link"
         :to="
@@ -134,7 +134,7 @@ function formatDepthRange({
         "
       >
         {{ item.analysis_id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
-  </base-data-table>
+  </BaseDataTable>
 </template>

@@ -3,16 +3,16 @@ import { mdiEraser } from "@mdi/js";
 </script>
 
 <template>
-  <v-btn
+  <VBtn
     variant="outlined"
     color="grey"
     class="reset-search mr-2 px-3 montserrat rounded text-body-1 text-capitalize"
     :icon="$vuetify.display.md"
     @click="$emit('click')"
   >
-    <v-tooltip v-if="$vuetify.display.md" position="bottom">
+    <VTooltip v-if="$vuetify.display.md" position="bottom">
       <template #activator="{ props }">
-        <v-icon
+        <VIcon
           :icon="mdiEraser"
           :end="!$vuetify.display.md"
           v-bind="props"
@@ -22,8 +22,8 @@ import { mdiEraser } from "@mdi/js";
       <span>
         {{ $t("common.resetSearchLong") }}
       </span>
-    </v-tooltip>
-    <v-icon
+    </VTooltip>
+    <VIcon
       v-else
       :icon="mdiEraser"
       start
@@ -31,7 +31,7 @@ import { mdiEraser } from "@mdi/js";
     <span class="hidden-md montserrat">
       {{ $t("common.resetSearch") }}
     </span>
-  </v-btn>
+  </VBtn>
 </template>
 
 <style scoped>

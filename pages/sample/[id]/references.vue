@@ -35,7 +35,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/sample_reference/", {
 </script>
 
 <template>
-  <data-table-sample-reference
+  <DataTableSampleReference
     class="border-b"
     :items="data?.results ?? []"
     :count="data?.count ?? 0"

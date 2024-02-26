@@ -86,18 +86,18 @@ export default {
 </script>
 
 <template>
-  <v-card
+  <VCard
     v-if="!isLoading || true"
     flat
     rounded="0"
   >
-    <v-card-text class="pb-0" :class="{ 'pt-0': paddingTopZero }">
+    <VCardText class="pb-0" :class="{ 'pt-0': paddingTopZero }">
       <div v-if="enableCheckboxes">
         <div v-if="checkboxesTitle" class="text-body-1 font-weight-bold">
           {{ $t(checkboxesTitle) }}
         </div>
         <div class="d-flex flex-row flex-wrap">
-          <v-checkbox
+          <VCheckbox
             v-for="(entity, id) in Object.keys(checkboxesObject)"
             :key="id"
             class="px-3 mt-0"
@@ -118,7 +118,7 @@ export default {
         >
           {{ $t(selectFieldTitle) }}
         </div>
-        <v-autocomplete
+        <VAutocomplete
           v-model="selectedItems"
           :items="allItems"
           multiple
@@ -132,10 +132,10 @@ export default {
           "
         />
       </div>
-    </v-card-text>
-  </v-card>
+    </VCardText>
+  </VCard>
 
-  <v-skeleton-loader
+  <VSkeletonLoader
     v-else
     class="px-4"
     width="100%"

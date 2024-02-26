@@ -12,9 +12,9 @@ const img = useImage();
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.file="{ item }">
-      <thumbnail-attachment
+      <ThumbnailAttachment
         v-if="item.attachment"
         :src="
           img(
@@ -42,7 +42,7 @@ const img = useImage();
       />
     </template>
     <template #item.description="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.attachment"
         class="text-link"
         :to="
@@ -55,13 +55,13 @@ const img = useImage();
             en: item.attachment.description_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.agent="{ item }">
       <div v-if="item.attachment && item.attachment.author">
         {{ item.attachment.author.agent }}
       </div>
     </template>
-  </base-data-table>
-  <image-overlay v-model="showOverlay" :image="overlayImage" />
+  </BaseDataTable>
+  <ImageOverlay v-model="showOverlay" :image="overlayImage" />
 </template>

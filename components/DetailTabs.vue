@@ -31,7 +31,7 @@ function translateTitle(tab: HydratedTab) {
 </script>
 
 <template>
-  <v-tabs
+  <VTabs
     v-if="$vuetify.display.smAndUp"
     ref="tabsEl"
     class="tabs mt-1"
@@ -39,7 +39,7 @@ function translateTitle(tab: HydratedTab) {
     slider-color="accent"
     show-arrows
   >
-    <v-tab
+    <VTab
       v-for="(item, index) in tabs"
       :key="index"
       class="montserrat tab text-none text-grey-darken-3 text-body-2"
@@ -53,11 +53,11 @@ function translateTitle(tab: HydratedTab) {
       "
     >
       {{ translateTitle(item) }}
-    </v-tab>
-  </v-tabs>
-  <v-menu v-else>
+    </VTab>
+  </VTabs>
+  <VMenu v-else>
     <template #activator="{ props, isActive }">
-      <v-btn
+      <VBtn
         class="text-capitalize mb-1 ml-auto"
         variant="outlined"
         height="32"
@@ -68,10 +68,10 @@ function translateTitle(tab: HydratedTab) {
         :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
       >
         {{ translateTitle(currentTab) }}
-      </v-btn>
+      </VBtn>
     </template>
-    <v-list>
-      <v-list-item
+    <VList>
+      <VListItem
         v-for="(item, index) in tabs"
         :key="index"
         :to="
@@ -81,10 +81,10 @@ function translateTitle(tab: HydratedTab) {
           })
         "
       >
-        <v-list-item-title>{{ translateTitle(item) }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-menu>
+        <VListItemTitle>{{ translateTitle(item) }}</VListItemTitle>
+      </VListItem>
+    </VList>
+  </VMenu>
 </template>
 
 <style lang="scss" scoped>

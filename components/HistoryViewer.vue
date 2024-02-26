@@ -14,37 +14,37 @@ const linkWidth = computed(() => {
 
 <template>
   <div v-if="historyEntries.length > 0" class="d-flex align-center">
-    <v-subheader style="height: 32px !important" class="pl-0 text-no-wrap">
+    <VSubheader style="height: 32px !important" class="pl-0 text-no-wrap">
       {{ `${$t("common.history")}:` }}
-    </v-subheader>
+    </VSubheader>
     <span class="pb-1 pt-2 history-viewer d-flex">
       <span
         v-for="(entry, index) in historyEntries"
         :key="index"
         class="d-flex align-center"
       >
-        <nuxt-link
+        <NuxtLink
           :id="`history-${index}`"
           class="text-link-grey history-link d-inline-block text-truncate"
           :style="`max-width: ${linkWidth}px`"
           :to="localePath({ path: entry.to })"
         >
           {{ entry.title }}
-          <v-tooltip
+          <VTooltip
             open-delay="500"
             location="bottom"
             :activator="`#history-${index}`"
           >
             <span>{{ entry.title }}</span>
-          </v-tooltip>
-        </nuxt-link>
-        <v-icon
+          </VTooltip>
+        </NuxtLink>
+        <VIcon
           v-if="index !== historyEntries.length - 1"
           class="mx-1 divider"
           size="x-small"
         >
           {{ mdiArrowLeft }}
-        </v-icon>
+        </VIcon>
       </span>
     </span>
   </div>

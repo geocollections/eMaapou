@@ -15,26 +15,26 @@ const owner = computed(() => props.preparation.owner);
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row>
-      <v-col
+  <VContainer style="margin: initial">
+    <VRow>
+      <VCol
         :sm="12"
         :md="6"
         :lg="7"
         :xl="5"
       >
-        <v-card>
-          <base-table>
-            <table-row
+        <VCard>
+          <BaseTable>
+            <TableRow
               :title="$t('preparation.preparation_number')"
               :value="preparation.preparation_number"
             />
 
-            <table-row
+            <TableRow
               :title="$t('preparation.sample_number')"
               :value="preparation.sample_number"
             />
-            <table-row-link
+            <TableRowLink
               v-if="analysis"
               :title="$t('preparation.analysis')"
               :value="analysis.id"
@@ -46,7 +46,7 @@ const owner = computed(() => props.preparation.owner);
                 })
               "
             />
-            <table-row-link
+            <TableRowLink
               v-if="taxon"
               :title="$t('preparation.taxon')"
               :value="taxon.taxon"
@@ -54,65 +54,65 @@ const owner = computed(() => props.preparation.owner);
                 $openWindow(`https://fossiilid.info/${preparation.taxon.id}`)
               "
             />
-            <table-row
+            <TableRow
               v-if="agent"
               :title="$t('preparation.agent')"
               :value="agent.agent || preparation.agent_txt"
             />
-            <table-row
+            <TableRow
               v-if="identificationAgent"
               :title="$t('preparation.identification_agent')"
               :value="identificationAgent.agent"
             />
-            <table-row
+            <TableRow
               :title="$t('preparation.date_prepared')"
               :value="
                 preparation.date_prepared || preparation.date_prepared_txt
               "
             />
-            <table-row
+            <TableRow
               :title="$t('preparation.identification_date')"
               :value="preparation.identification_date"
             />
-            <table-row
+            <TableRow
               :title="$t('preparation.identification_remarks')"
               :value="preparation.identification_remarks"
             />
-            <table-row
+            <TableRow
               :title="$t('preparation.location')"
               :value="preparation.location"
             />
-            <table-row
+            <TableRow
               v-if="storage"
               :title="$t('preparation.storage')"
               :value="storage.location"
             />
-            <table-row
+            <TableRow
               v-if="owner"
               :title="$t('preparation.owner')"
               :value="owner.agent"
             />
-            <table-row
+            <TableRow
               v-if="preparation.date_added"
               :title="$t('preparation.dateAdded')"
               :value="$formatDate(preparation.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="preparation.date_changed"
               :title="$t('preparation.dateChanged')"
               :value="$formatDate(preparation.date_changed)"
             />
-            <table-row
+            <TableRow
               :title="$t('preparation.remarks')"
               :value="preparation.remarks"
             />
-          </base-table>
-        </v-card>
-      </v-col>
-      <v-col :xl="4">
-        <v-card>
-          <base-table>
-            <table-row-link
+          </BaseTable>
+        </VCard>
+      </VCol>
+      <VCol :xl="4">
+        <VCard>
+          <BaseTable>
+            <TableRowLink
               v-if="sample"
               :title="$t('sample.number').toString()"
               :value="
@@ -129,21 +129,21 @@ const owner = computed(() => props.preparation.owner);
                 })
               "
             />
-            <table-row
+            <TableRow
               :title="$t('sample.depth').toString()"
               :value="sample.depth"
             />
-            <table-row
+            <TableRow
               :title="$t('sample.depthInterval').toString()"
               :value="sample.depth_interval"
             />
-            <table-row
+            <TableRow
               :title="$t('sample.dateCollected').toString()"
               :value="sample.date_collected || sample.date_collected_free"
             />
-          </base-table>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+          </BaseTable>
+        </VCard>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>

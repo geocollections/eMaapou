@@ -365,9 +365,9 @@ redirectInvalidTab({
 </script>
 
 <template>
-  <detail-new :show-similar="showDrawer">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
-      <header-detail-new
+      <HeaderDetailNew
         :title="
           $translate({
             et: data?.locality.locality,
@@ -376,7 +376,7 @@ redirectInvalidTab({
         "
       >
         <template #sub>
-          <v-btn
+          <VBtn
             v-if="data?.drillcore"
             size="small"
             rounded
@@ -391,17 +391,17 @@ redirectInvalidTab({
               )
             "
           >
-            <v-icon start>
+            <VIcon start>
               {{ mdiScrewMachineFlatTop }}
-            </v-icon>
+            </VIcon>
             {{
               $translate({
                 et: data?.drillcore.drillcore,
                 en: data?.drillcore.drillcore_en,
               })
             }}
-          </v-btn>
-          <v-btn
+          </VBtn>
+          <VBtn
             v-if="data?.analysisResultsCount > 0"
             size="small"
             rounded
@@ -414,12 +414,12 @@ redirectInvalidTab({
               })
             "
           >
-            <v-icon start>
+            <VIcon start>
               {{ mdiChartScatterPlot }}
-            </v-icon>
+            </VIcon>
             {{ $t("locality.linkToAnalyticalData") }}
-          </v-btn>
-          <v-btn
+          </VBtn>
+          <VBtn
             v-if="data?.referenceCount > 0"
             size="small"
             rounded
@@ -427,19 +427,19 @@ redirectInvalidTab({
             class="mt-2 montserrat text-none"
             :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
           >
-            <v-icon start>
+            <VIcon start>
               {{ mdiBookOpenPageVariantOutline }}
-            </v-icon>
+            </VIcon>
             {{ $t("locality.linkGeoscienceLiterature") }}
-            <v-icon end>
+            <VIcon end>
               {{ mdiOpenInNew }}
-            </v-icon>
-          </v-btn>
+            </VIcon>
+          </VBtn>
         </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
-      </header-detail-new>
+      </HeaderDetailNew>
     </template>
     <template #drawer>
       <SearchResultsDrawer
@@ -465,9 +465,9 @@ redirectInvalidTab({
         </template>
         <template #itemSubtitle="{ item: locality }">
           <div v-if="locality.country_id" class="d-flex align-center">
-            <v-icon start size="small">
+            <VIcon start size="small">
               {{ mdiEarth }}
-            </v-icon>
+            </VIcon>
             <span class="text--secondary">
               {{
                 $translate({
@@ -481,5 +481,5 @@ redirectInvalidTab({
       </SearchResultsDrawer>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </detail-new>
+  </DetailNew>
 </template>

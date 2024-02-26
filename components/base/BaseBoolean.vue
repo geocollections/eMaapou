@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-  <v-icon :color="value ? 'green' : 'red'" size="small">
+  <VIcon :color="value ? 'green' : 'red'" size="small">
     {{ value ? icons.mdiCheckBold : icons.mdiCloseThick }}
-  </v-icon>
+  </VIcon>
 </template>

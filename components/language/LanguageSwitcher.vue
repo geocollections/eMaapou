@@ -10,34 +10,34 @@ defineProps({
 </script>
 
 <template>
-  <v-btn
+  <VBtn
     id="lang_switch_btn"
     aria-label="select language"
     variant="text"
     class="montserrat text-capitalize"
     :color="color"
   >
-    <v-icon
+    <VIcon
       :icon="mdiWeb"
       start
       color="accent-lighten-2"
     />
     {{ $i18n.localeProperties.name }}
-    <v-icon
+    <VIcon
       :icon="mdiChevronDown"
       end
       color="accent-lighten-2"
     />
-    <v-menu
+    <VMenu
       activator="#lang_switch_btn"
       content-class="elevation-2 mt-1"
       transition="slide-y-transition"
       offset-y
       location="bottom right"
     >
-      <language-list />
-    </v-menu>
-  </v-btn>
+      <LanguageList />
+    </VMenu>
+  </VBtn>
 </template>
 
 <style scoped lang="scss">

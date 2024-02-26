@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <v-text-field
+  <VTextField
     class="pt-4"
     :label="label"
     hide-details

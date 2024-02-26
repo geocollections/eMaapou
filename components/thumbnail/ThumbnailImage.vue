@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <v-img
+  <VImg
     id="preview-img"
     v-ripple="{ class: 'primary--text darken-2' }"
     class="thumbnail-image rounded"

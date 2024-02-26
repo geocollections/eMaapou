@@ -13,17 +13,17 @@ const table = computed(() => {
 </script>
 
 <template>
-  <v-btn
+  <VBtn
     id="back-btn-detail"
     icon
     variant="text"
     :to="localePath({ name: table })"
   >
-    <v-icon style="transform: rotate(90deg)">
+    <VIcon style="transform: rotate(90deg)">
       {{ mdiSubdirectoryArrowLeft }}
-    </v-icon>
-    <v-tooltip location="bottom" activator="#back-btn-detail">
+    </VIcon>
+    <VTooltip location="bottom" activator="#back-btn-detail">
       <span>{{ $t("common.goBack") }}</span>
-    </v-tooltip>
-  </v-btn>
+    </VTooltip>
+  </VBtn>
 </template>

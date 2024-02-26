@@ -25,7 +25,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
 </script>
 
 <template>
-  <list-drillcore-box
+  <ListDrillcoreBox
     :options="options"
     :count="data?.count ?? 0"
     :items="data?.results ?? []"

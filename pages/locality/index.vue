@@ -80,9 +80,9 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 </script>
 
 <template>
-  <search>
+  <Search>
     <template #title>
-      <header-search
+      <HeaderSearch
         :title="$t('locality.pageTitle')"
         :count="data?.response.numFound ?? 0"
         :icon="mdiMapMarker"
@@ -90,7 +90,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <search-form-locality
+      <SearchFormLocality
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -103,7 +103,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #result>
-      <data-table-locality
+      <DataTableLocality
         class="border-t border-t"
         :show-search="false"
         :items="data?.response.docs ?? []"
@@ -119,5 +119,5 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
         @click:row="handleClickRow"
       />
     </template>
-  </search>
+  </Search>
 </template>

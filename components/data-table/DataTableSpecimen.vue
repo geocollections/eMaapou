@@ -12,27 +12,27 @@ function openOverlay(image: OverlayImage) {
 </script>
 
 <template>
-  <base-data-table v-bind="$attrs">
+  <BaseDataTable v-bind="$attrs">
     <template #item.id="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.id"
         class="text-link"
         :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
       >
         {{ item.id }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.specimen_full_name="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.specimen_full_name"
         class="text-link"
         :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
       >
         {{ item.specimen_full_name }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.locality="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.locality_id"
         class="text-link"
         :to="
@@ -43,7 +43,7 @@ function openOverlay(image: OverlayImage) {
         "
       >
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
-      </nuxt-link>
+      </NuxtLink>
       <div v-else>
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </div>
@@ -57,7 +57,7 @@ function openOverlay(image: OverlayImage) {
       }}
     </template>
     <template #item.stratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.stratigraphy_id"
         class="text-link"
         :to="
@@ -73,10 +73,10 @@ function openOverlay(image: OverlayImage) {
             en: item.stratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.lithostratigraphy="{ item }">
-      <nuxt-link
+      <NuxtLink
         v-if="item.lithostratigraphy_id"
         class="text-link"
         :to="
@@ -92,18 +92,18 @@ function openOverlay(image: OverlayImage) {
             en: item.lithostratigraphy_en,
           })
         }}
-      </nuxt-link>
+      </NuxtLink>
     </template>
     <template #item.taxon="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.taxon_id"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
     <template #item.image="{ item }">
-      <thumbnail-image
+      <ThumbnailImage
         v-if="item.image_preview_url"
         class="my-1"
         :src="
@@ -120,7 +120,7 @@ function openOverlay(image: OverlayImage) {
       />
     </template>
     <template #item.name="{ item }">
-      <base-link-external
+      <BaseLinkExternal
         v-if="item.rock_id"
         @click.native="$openWindow(`https://kivid.info/${item.rock_id}`)"
       >
@@ -130,19 +130,19 @@ function openOverlay(image: OverlayImage) {
             en: item.rock_en,
           })
         }}
-      </base-link-external>
-      <base-link-external
+      </BaseLinkExternal>
+      <BaseLinkExternal
         v-if="item.taxon_id"
         @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
-      </base-link-external>
+      </BaseLinkExternal>
     </template>
     <template #item.original_status="{ item }">
       {{
         $translate({ et: item.original_status, en: item.original_status_en })
       }}
     </template>
-  </base-data-table>
-  <image-overlay v-model="showOverlay" :image="overlayImage" />
+  </BaseDataTable>
+  <ImageOverlay v-model="showOverlay" :image="overlayImage" />
 </template>

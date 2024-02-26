@@ -51,15 +51,15 @@ export default {
 </script>
 
 <template>
-  <v-card flat>
-    <v-row no-gutters>
-      <v-col
+  <VCard flat>
+    <VRow no-gutters>
+      <VCol
         cols="12"
         sm="auto"
         class="px-3 my-1 my-sm-4"
         align-self="center"
       >
-        <v-switch
+        <VSwitch
           v-model="cropImages"
           density="compact"
           class="mt-0 montserrat"
@@ -67,8 +67,8 @@ export default {
           color="header"
           :label="$t('common.containImages')"
         />
-      </v-col>
-      <v-col class="d-flex justify-end">
+      </VCol>
+      <VCol class="d-flex justify-end">
         <BaseDataTablePagination
           :options="options"
           :pagination="pagination"
@@ -85,15 +85,15 @@ export default {
           select-page-id="header-select-btn"
           @update:options="updateOptions"
         />
-      </v-col>
-    </v-row>
-    <v-card flat>
-      <v-row
+      </VCol>
+    </VRow>
+    <VCard flat>
+      <VRow
         v-if="count > 0"
         no-gutters
         class="px-2"
       >
-        <v-col
+        <VCol
           v-for="(image, index) in items"
           :key="index"
           class="pt-0 px-2 pb-4"
@@ -102,7 +102,7 @@ export default {
           md="3"
           lg="2"
         >
-          <nuxt-link
+          <NuxtLink
             class="text-link"
             :to="
               localePath({
@@ -112,15 +112,15 @@ export default {
             "
           >
             {{ image.specimen_full_name }}
-          </nuxt-link>
-          <v-tooltip
+          </NuxtLink>
+          <VTooltip
             location="bottom"
             color="header"
             z-index="51000"
             max-width="250"
           >
             <template #activator="{ props }">
-              <v-card
+              <VCard
                 flat
                 class="d-flex image-hover"
                 color="transparent"
@@ -130,7 +130,7 @@ export default {
                 :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
                 v-bind="props"
               >
-                <v-img
+                <VImg
                   v-if="image.image"
                   max-height="400"
                   min-width="72"
@@ -152,29 +152,29 @@ export default {
                   "
                 >
                   <template #placeholder>
-                    <v-row
+                    <VRow
                       class="fill-height ma-0"
                       align="center"
                       justify="center"
                     >
-                      <v-progress-circular
+                      <VProgressCircular
                         indeterminate
                         color="grey-lighten-5"
                       />
-                    </v-row>
+                    </VRow>
                   </template>
-                </v-img>
+                </VImg>
 
-                <v-row v-else align="center">
-                  <v-col class="text-center">
+                <VRow v-else align="center">
+                  <VCol class="text-center">
                     <div class="py-3">
-                      <v-icon style="font-size: 6rem" class="text-grey">
+                      <VIcon style="font-size: 6rem" class="text-grey">
                         {{ mdiFileImageOutline }}
-                      </v-icon>
+                      </VIcon>
                     </div>
-                  </v-col>
-                </v-row>
-              </v-card>
+                  </VCol>
+                </VRow>
+              </VCard>
             </template>
 
             <span>
@@ -197,9 +197,9 @@ export default {
                 <br>
               </span>
             </span>
-          </v-tooltip>
-        </v-col>
-      </v-row>
-    </v-card>
-  </v-card>
+          </VTooltip>
+        </VCol>
+      </VRow>
+    </VCard>
+  </VCard>
 </template>

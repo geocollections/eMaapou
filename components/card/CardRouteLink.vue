@@ -11,8 +11,8 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-card
+  <VHover v-slot="{ hover }">
+    <VCard
       nuxt
       :to="localePath(route.routeName)"
       class="mx-sm-1 mb-1 mb-sm-2 d-flex"
@@ -20,7 +20,7 @@ const localePath = useLocalePath();
       :color="hover ? 'accent lighten-1' : 'accent'"
     >
       <div class="py-2 d-flex d-sm-block align-center">
-        <v-icon
+        <VIcon
           v-if="$vuetify.display.smAndUp"
           :icon="route.icon"
           color="accent-lighten-2"
@@ -49,12 +49,12 @@ const localePath = useLocalePath();
           </div>
         </div>
       </div>
-      <v-icon
+      <VIcon
         :icon="mdiArrowRight"
         color="accent-lighten-2"
         class="ml-auto my-auto"
         start
       />
-    </v-card>
-  </v-hover>
+    </VCard>
+  </VHover>
 </template>

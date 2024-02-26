@@ -36,7 +36,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
 </script>
 
 <template>
-  <data-table-area
+  <DataTableArea
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

@@ -26,9 +26,9 @@ function getAttachmentType(type: number) {
 
 <template>
   <div>
-    <base-data-table v-bind="$attrs">
+    <BaseDataTable v-bind="$attrs">
       <template #item.id="{ item }">
-        <nuxt-link
+        <NuxtLink
           v-if="item.attachment_id"
           class="text-link"
           :to="
@@ -39,7 +39,7 @@ function getAttachmentType(type: number) {
           "
         >
           {{ item.attachment_id }}
-        </nuxt-link>
+        </NuxtLink>
       </template>
       <template #item.date="{ item }">
         <div v-if="item.date_created">
@@ -51,12 +51,12 @@ function getAttachmentType(type: number) {
       </template>
 
       <template #item.reference="{ item }">
-        <base-link-external
+        <BaseLinkExternal
           v-if="item.reference_id"
           @click.native="$openGeology('reference', item.reference_id)"
         >
           {{ item.reference }}
-        </base-link-external>
+        </BaseLinkExternal>
       </template>
 
       <template #item.type="{ item }">
@@ -64,7 +64,7 @@ function getAttachmentType(type: number) {
       </template>
 
       <template #item.image="{ item }">
-        <thumbnail-image
+        <ThumbnailImage
           v-if="item.uuid_filename"
           class="my-1"
           :src="
@@ -84,7 +84,7 @@ function getAttachmentType(type: number) {
           "
         />
       </template>
-    </base-data-table>
-    <image-overlay v-model="showOverlay" :image="overlayImage" />
+    </BaseDataTable>
+    <ImageOverlay v-model="showOverlay" :image="overlayImage" />
   </div>
 </template>

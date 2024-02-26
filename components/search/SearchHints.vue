@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-  <v-menu
+  <VMenu
     :model-value="modelValue"
     :activator="activator"
     offset-y
@@ -22,10 +22,10 @@ defineProps({
     max-width="650"
     @update:model-value="$emit('input', $event)"
   >
-    <v-card elevation="0">
-      <v-card-text class="pa-3">
-        <v-row no-gutters>
-          <v-col cols="12" sm="6">
+    <VCard elevation="0">
+      <VCardText class="pa-3">
+        <VRow no-gutters>
+          <VCol cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
               <code class="text-black font-weight-bold">"Viki puurauk"</code>
               <div class="ml-2">
@@ -38,8 +38,8 @@ defineProps({
                 {{ $t("hints.require") }}
               </div>
             </div>
-          </v-col>
-          <v-col cols="12" sm="6">
+          </VCol>
+          <VCol cols="12" sm="6">
             <div class="d-flex mb-1 align-center">
               <code class="text-black font-weight-bold">Viki*</code>
               <div class="ml-2">
@@ -62,17 +62,17 @@ defineProps({
               >
               <div class="ml-2">{{ $t('hints.combineOperators') }}</div>
             </div> -->
-          </v-col>
-          <v-col cols="12">
+          </VCol>
+          <VCol cols="12">
             <div class="d-flex">
               <code class="text-black font-weight-bold">+"Keila lade" -Bryozoa</code>
               <div class="ml-2">
                 {{ $t("hints.combineOperators") }}
               </div>
             </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
-    </v-card>
-  </v-menu>
+          </VCol>
+        </VRow>
+      </VCardText>
+    </VCard>
+  </VMenu>
 </template>

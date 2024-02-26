@@ -54,17 +54,17 @@ const { data } = await useAsyncData("results", async () => {
 </script>
 
 <template>
-  <v-container style="margin: initial">
-    <v-row>
-      <v-col
+  <VContainer style="margin: initial">
+    <VRow>
+      <VCol
         :sm="12"
         :md="6"
         :lg="7"
         :xl="5"
       >
-        <v-card>
-          <base-table>
-            <table-row
+        <VCard>
+          <BaseTable>
+            <TableRow
               v-if="analysisMethod"
               :title="$t('analysis.method')"
               :value="
@@ -74,13 +74,13 @@ const { data } = await useAsyncData("results", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               v-if="agent"
               :title="$t('analysis.analysedBy')"
               :value="agent.agent"
             />
 
-            <table-row-link
+            <TableRowLink
               v-if="sample"
               :title="$t('analysis.sampleNumber')"
               :value="sample.number"
@@ -93,17 +93,17 @@ const { data } = await useAsyncData("results", async () => {
               "
             />
 
-            <table-row
+            <TableRow
               :title="$t('analysis.remarks')"
               :value="analysis.remarks"
             />
-            <table-row-link
+            <TableRowLink
               v-if="reference"
               :title="$t('analysis.reference')"
               :value="reference.reference"
               @link-click="$openGeology('reference', reference.id)"
             />
-            <table-row
+            <TableRow
               v-if="dataset"
               :title="$t('analysis.dataset')"
               :value="
@@ -113,7 +113,7 @@ const { data } = await useAsyncData("results", async () => {
                 })
               "
             />
-            <table-row-link
+            <TableRowLink
               v-if="sample && sample.locality"
               :title="$t('analysis.locality')"
               :value="
@@ -130,17 +130,17 @@ const { data } = await useAsyncData("results", async () => {
                 })
               "
             />
-            <table-row
+            <TableRow
               v-if="sample"
               :title="$t('analysis.depth')"
               :value="sample.depth"
             />
-            <table-row
+            <TableRow
               v-if="sample"
               :title="$t('analysis.depthInterval')"
               :value="sample.depth_interval"
             />
-            <table-row-link
+            <TableRowLink
               v-if="sample && sample.stratigraphy"
               :title="$t('analysis.stratigraphy')"
               :value="
@@ -157,7 +157,7 @@ const { data } = await useAsyncData("results", async () => {
                 })
               "
             />
-            <table-row-link
+            <TableRowLink
               v-if="sample && sample.lithostratigraphy"
               :title="$t('analysis.lithostratigraphy')"
               :value="
@@ -174,7 +174,7 @@ const { data } = await useAsyncData("results", async () => {
                 })
               "
             />
-            <table-row-link
+            <TableRowLink
               v-if="database"
               :title="$t('analysis.institution')"
               :value="
@@ -187,29 +187,29 @@ const { data } = await useAsyncData("results", async () => {
               target="DatabaseWindow"
             />
 
-            <table-row
+            <TableRow
               v-if="analysis.date_added"
               :title="$t('analysis.dateAdded')"
               :value="$formatDate(analysis.date_added)"
             />
-            <table-row
+            <TableRow
               v-if="analysis.date_changed"
               :title="$t('analysis.dateChanged')"
               :value="$formatDate(analysis.date_changed)"
             />
-          </base-table>
-        </v-card>
-      </v-col>
-      <v-col
+          </BaseTable>
+        </VCard>
+      </VCol>
+      <VCol
         v-if="resultChartData"
         :md="6"
         :lg="5"
         :xl="4"
       >
         <div class="d-block">
-          <chart-analysis-results :data="resultChartData" />
+          <ChartAnalysisResults :data="resultChartData" />
         </div>
-      </v-col>
-    </v-row>
-  </v-container>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
