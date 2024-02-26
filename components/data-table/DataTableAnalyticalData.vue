@@ -1,17 +1,37 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
+
+function formatDepthRange({
+  depthFrom,
+  depthTo,
+}: {
+  depthFrom?: number;
+  depthTo?: number;
+}) {
+  if (!depthFrom)
+    return depthTo?.toFixed(2);
+
+  if (!depthTo)
+    return depthFrom.toFixed(2);
+
+  if (depthFrom === depthTo)
+    return depthFrom.toFixed(2);
+
+  return `${depthFrom.toFixed(2)} - ${depthTo.toFixed(2)}`;
+}
 </script>
 
 <template>
   <base-data-table v-bind="$attrs">
-    <template #item.id_l="{ item }">
-      <nuxt-link
-        v-if="item.id_l"
-        class="text-link"
-        :to="localePath({ name: 'analysis-id', params: { id: item.id_l } })"
-      >
-        {{ item.id_l }}
-      </nuxt-link>
+    <template #item.depth="{ item }">
+      <span style="font-family: monospace">
+        {{
+          formatDepthRange({
+            depthFrom: item.depth,
+            depthTo: item.depth_interval,
+          })
+        }}
+      </span>
     </template>
     <template #item.analysis_method="{ item }">
       {{

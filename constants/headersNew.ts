@@ -108,6 +108,111 @@ export const HEADERS_ANALYSIS: Headers = {
   ],
 };
 
+export const HEADERS_ANALYTICAL_DATA: Headers = {
+  byIds: {
+    analysis_id: {
+      title: "analyticalData.analysis",
+      value: "analysis_id",
+      show: true,
+      apiFieldValue: "analysis_id_sl",
+      sortField: ["analysis_id_sl"],
+    },
+    analysis_method: {
+      title: "analyticalData.analysisMethod",
+      value: "analysis_method",
+      show: true,
+      apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
+      sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
+    },
+    sample_number: {
+      title: "analyticalData.sample",
+      value: "sample_number",
+      show: true,
+      apiFieldValue: "sample_number,sample_id_sl",
+      sortField: ["sample_number", "sample_id_sl"], // TODO: need to combine these two fields in Solr index
+    },
+    locality: {
+      title: "analyticalData.locality",
+      value: "locality",
+      show: true,
+      apiFieldValue: "locality,locality_id_sl,site,site_id_sl",
+      sortField: ["locality", "site"], // TODO: need to combine these two fields in Solr index, not sure how it should be done. Can one document have both fields defined?
+    },
+    stratigraphy: {
+      title: "analyticalData.stratigraphy",
+      value: "stratigraphy",
+      show: true,
+      apiFieldValue: {
+        et: "stratigraphy,stratigraphy_id_sl",
+        en: "stratigraphy_en,stratigraphy_id_sl",
+      },
+      sortField: {
+        et: ["stratigraphy"],
+        en: ["stratigraphy_en"],
+      },
+    },
+    lithostratigraphy: {
+      title: "analyticalData.lithostratigraphy",
+      value: "lithostratigraphy",
+      show: false,
+      apiFieldValue: {
+        et: "lithostratigraphy,lithostratigraphy_id_sl",
+        en: "lithostratigraphy_en,lithostratigraphy_id_sl",
+      },
+      sortField: {
+        et: ["lithostratigraphy"],
+        en: ["lithostratigraphy_en"],
+      },
+    },
+    depth: {
+      title: "analyticalData.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth,depth_interval",
+      sortField: ["depth", "depth_interval"],
+    },
+    rock: {
+      title: "analyticalData.rock",
+      value: "rock",
+      show: true,
+      apiFieldValue: {
+        et: "rock,rock_txt,rock_id_sl",
+        en: "rock_en,rock_en_txt,rock_id_sl",
+      },
+      sortField: {
+        et: ["rock", "rock_txt"],
+        en: ["rock_en", "rock_en_txt"],
+      },
+    },
+    reference: {
+      title: "analyticalData.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference,reference_id_sl",
+      sortField: ["reference"],
+    },
+    dataset_id: {
+      title: "analyticalData.dataset",
+      value: "dataset_id",
+      show: true,
+      apiFieldValue: "dataset_id_sl,dataset_name",
+      sortField: ["dataset_name"],
+    },
+  },
+  allIds: [
+    "analysis_id",
+    "analysis_method",
+    "sample_number",
+    "locality",
+    "stratigraphy",
+    "lithostratigraphy",
+    "depth",
+    "rock",
+    "reference",
+    "dataset_id",
+  ],
+};
+
 export const HEADERS_AREA: Headers = {
   byIds: {
     id: {
