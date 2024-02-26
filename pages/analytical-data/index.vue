@@ -20,7 +20,7 @@ const {
   refresh: refreshLocalities,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>("/analysis_results", {
+}>("/analytical_data", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
