@@ -153,17 +153,16 @@ defineExpose({
     :rounded="0"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+      class="py-1 pl-4 pr-1 font-weight-medium border-b"
+      style="min-height: 40px;"
     >
       {{ title }}
     </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
-      class="bg-white"
-      style="border-bottom: 1px solid lightgray !important"
+      class="bg-white border-b"
     >
-      <div class="my-1">
+      <div class="py-1">
         <div
           v-for="(item, i) in orderedSelectedItems"
           :key="i"
@@ -194,7 +193,6 @@ defineExpose({
     </div>
     <VExpansionPanelText
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
     >
       <ul class="ml-2">
         <TreeItem

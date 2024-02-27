@@ -141,15 +141,14 @@ defineExpose({
     :rounded="0"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+      class="py-1 pl-4 pr-1 font-weight-medium border-b"
+      style="min-height: 40px;"
     >
       {{ title }}
     </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
-      class="bg-white"
-      style="border-bottom: 1px solid lightgray !important"
+      class="bg-white border-b"
     >
       <div class="my-1">
         <div
@@ -183,7 +182,6 @@ defineExpose({
     <VExpansionPanelText
       class="py-0"
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
     >
       <div class="my-1">
         <VTextField
