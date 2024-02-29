@@ -493,57 +493,57 @@
     <!--   <search-actions class="mb-3" @click="handleReset" /> -->
     <!--   <filter-input-checkbox -->
     <!--     :value="resultView === 'image' ? true : hasImage" -->
-    <!--     :label="$t('filters.hasImage').toString()" -->
+    <!--     :label="$t('filters.hasImage')" -->
     <!--     :disabled="resultView === 'image'" -->
     <!--     @input="hasImage = $event" -->
     <!--   /> -->
     <!--   <filter-input-checkbox -->
     <!--     v-model="hasCoordinates" -->
-    <!--     :label="$t('filters.hasCoordinates').toString()" -->
+    <!--     :label="$t('filters.hasCoordinates')" -->
     <!--   /> -->
     <!--   <v-expansion-panels class="mt-3" accordion flat tile multiple> -->
     <!--     <filter-input-text -->
     <!--       v-model="number" -->
-    <!--       :title="$t('filters.specimenNumber').toString()" -->
+    <!--       :title="$t('filters.specimenNumber')" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="collection" -->
-    <!--       :title="$t('filters.collection').toString()" -->
+    <!--       :title="$t('filters.collection')" -->
     <!--       query-field="collection_number" -->
     <!--       :query-function="querySuggestionsCollection" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="fossilGroup" -->
-    <!--       :title="$t('filters.fossilGroup').toString()" -->
+    <!--       :title="$t('filters.fossilGroup')" -->
     <!--       query-field="taxon" -->
     <!--       :query-function="querySuggestionsFossilGroup" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="taxonHierarchy" -->
-    <!--       :title="$t('filters.taxonHierarchy').toString()" -->
+    <!--       :title="$t('filters.taxonHierarchy')" -->
     <!--       query-field="taxon" -->
     <!--       :query-function="querySuggestionsTaxon" -->
     <!--     /> -->
     <!---->
     <!--     <filter-input-text -->
     <!--       v-model="taxonName" -->
-    <!--       :title="$t('filters.taxonName').toString()" -->
+    <!--       :title="$t('filters.taxonName')" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="rockHierarchy" -->
-    <!--       :title="$t('filters.rockHierarchySpecimen').toString()" -->
+    <!--       :title="$t('filters.rockHierarchySpecimen')" -->
     <!--       :query-field="$i18n.locale === 'et' ? 'rock' : 'rock_en'" -->
     <!--       :query-function="querySuggestionsRock" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="locality" -->
-    <!--       :title="$t('filters.locality').toString()" -->
+    <!--       :title="$t('filters.locality')" -->
     <!--       :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
     <!--       :query-function="querySuggestionsLocality" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="country" -->
-    <!--       :title="$t('filters.country').toString()" -->
+    <!--       :title="$t('filters.country')" -->
     <!--       static -->
     <!--       :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'" -->
     <!--       :query-function="querySuggestionsCountry" -->
@@ -555,7 +555,7 @@
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="stratigraphyHierarchy" -->
-    <!--       :title="$t('filters.stratigraphyHierarchy').toString()" -->
+    <!--       :title="$t('filters.stratigraphyHierarchy')" -->
     <!--       :query-field=" -->
     <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
     <!--       " -->
@@ -563,7 +563,7 @@
     <!--     /> -->
     <!--     <filter-input-range -->
     <!--       v-model="depth" -->
-    <!--       :label="$t('filters.depth').toString()" -->
+    <!--       :label="$t('filters.depth')" -->
     <!--       interval-labels="intervals.depth" -->
     <!--       :step="0.01" -->
     <!--     /> -->
@@ -574,7 +574,7 @@
     -->
     <!--     <!--   v-model="reference" -->
     -->
-    <!--     <!--   :title="$t('filters.reference').toString()" -->
+    <!--     <!--   :title="$t('filters.reference')" -->
     -->
     <!--     <!--   :query-function="querySuggestionsReference" -->
     -->
@@ -582,11 +582,11 @@
     -->
     <!--     <filter-input-text -->
     <!--       v-model="collector" -->
-    <!--       :title="$t('filters.collector').toString()" -->
+    <!--       :title="$t('filters.collector')" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="originalStatus" -->
-    <!--       :title="$t('filters.originalStatus').toString()" -->
+    <!--       :title="$t('filters.originalStatus')" -->
     <!--       static -->
     <!--       :query-field=" -->
     <!--         $i18n.locale === 'et' ? 'original_status' : 'original_status_en' -->

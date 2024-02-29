@@ -91,7 +91,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   <Search>
     <template #title>
       <HeaderSearch
-        :title="$t('area.pageTitle').toString()"
+        :title="$t('area.pageTitle')"
         :count="data?.response.numFound ?? 0"
         :icon="mdiMapMarkerRadiusOutline"
       />

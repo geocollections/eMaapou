@@ -409,7 +409,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
         <BaseTable>
           <TableRowLink
             v-if="specimen && specimen.coll"
-            :title="$t('file.collectionNr').toString()"
+            :title="$t('file.collectionNr')"
             :value="specimen.coll.number"
             nuxt
             :href="
@@ -421,7 +421,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           />
           <TableRowLink
             v-if="specimen"
-            :title="$t('file.specimenNr').toString()"
+            :title="$t('file.specimenNr')"
             :value="file.specimen.specimen_id"
             nuxt
             :href="
@@ -435,7 +435,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             <TableRowLink
               v-if="item.taxon"
               :key="index"
-              :title="$t('file.name').toString()"
+              :title="$t('file.name')"
               :value="item.taxon.taxon"
               :suffix="item.name ? `| ${item.name}` : ''"
               @link-click="
@@ -447,7 +447,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             <TableRowLink
               v-if="item.taxon"
               :key="index"
-              :title="$t('file.name').toString()"
+              :title="$t('file.name')"
               :value="item.taxon.taxon"
               :suffix="item.name ? `| ${item.name}` : ''"
               @link-click="
@@ -457,7 +457,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           </template>
           <TableRowLink
             v-if="specimen && specimen.locality"
-            :title="$t('file.locality').toString()"
+            :title="$t('file.locality')"
             :value="
               $translate({
                 et: specimen.locality.locality,
@@ -474,7 +474,7 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           />
           <TableRowLink
             v-if="specimen && specimen.stratigraphy"
-            :title="$t('file.stratigraphy').toString()"
+            :title="$t('file.stratigraphy')"
             :value="
               $translate({
                 et: specimen.stratigraphy.stratigraphy,
@@ -491,11 +491,11 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           />
           <!-- <table-row -->
           <!--   v-if="file.image_scalebar" -->
-          <!--   :title="$t('file.scalebar').toString()" -->
+          <!--   :title="$t('file.scalebar')" -->
           <!--   :value="file.image_scalebar" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.description').toString()" -->
+          <!--   :title="$t('file.description')" -->
           <!--   :value=" -->
           <!--     $translate({ -->
           <!--       et: file.description, -->
@@ -504,42 +504,42 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           <!--   " -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.imageNumber').toString()" -->
+          <!--   :title="$t('file.imageNumber')" -->
           <!--   :value="file.image_number" -->
           <!-- /> -->
           <!-- <table-row -->
           <!--   v-if="imageset" -->
-          <!--   :title="$t('file.imagesetNumber').toString()" -->
+          <!--   :title="$t('file.imagesetNumber')" -->
           <!--   :value="imageset.imageset_number" -->
           <!-- /> -->
           <!-- <table-row -->
           <!--   v-if="imageset" -->
-          <!--   :title="$t('file.imagesetDescription').toString()" -->
+          <!--   :title="$t('file.imagesetDescription')" -->
           <!--   :value="imageset.description" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.author').toString()" -->
+          <!--   :title="$t('file.author')" -->
           <!--   :value="file.author" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.author').toString()" -->
+          <!--   :title="$t('file.author')" -->
           <!--   :value="file.author_free" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.imagePeople').toString()" -->
+          <!--   :title="$t('file.imagePeople')" -->
           <!--   :value="file.image_people" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.date').toString()" -->
+          <!--   :title="$t('file.date')" -->
           <!--   :value="file.date_created || file.date_created_free" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.imagePlace').toString()" -->
+          <!--   :title="$t('file.imagePlace')" -->
           <!--   :value="file.image_place" -->
           <!-- /> -->
           <TableRowLink
             v-if="locality"
-            :title="$t('file.locality').toString()"
+            :title="$t('file.locality')"
             :value="
               $translate({
                 et: locality.locality,
@@ -555,16 +555,16 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             "
           />
           <!-- <table-row -->
-          <!--   :title="$t('file.imageLatitude').toString()" -->
+          <!--   :title="$t('file.imageLatitude')" -->
           <!--   :value="file.image_latitude" -->
           <!-- /> -->
           <!-- <table-row -->
-          <!--   :title="$t('file.imageLongitude').toString()" -->
+          <!--   :title="$t('file.imageLongitude')" -->
           <!--   :value="file.image_longitude" -->
           <!-- /> -->
           <TableRow
             v-if="type"
-            :title="$t('file.type').toString()"
+            :title="$t('file.type')"
             :value="
               $translate({
                 et: type.value,
@@ -573,12 +573,12 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
             "
           />
           <!-- <table-row -->
-          <!--   :title="$t('file.format').toString()" -->
+          <!--   :title="$t('file.format')" -->
           <!--   :value="file.attachment_format" -->
           <!-- /> -->
           <TableRow
             v-if="attachmentKeywords.length > 0"
-            :title="$t('file.keywords').toString()"
+            :title="$t('file.keywords')"
             :value="attachmentKeywords"
           >
             <template #value>
@@ -591,20 +591,20 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           </TableRow>
           <TableRow
             v-if="agentDigitised"
-            :title="$t('file.personDigitised').toString()"
+            :title="$t('file.personDigitised')"
             :value="agentDigitised.agent"
           />
           <!-- <table-row -->
-          <!--   :title="$t('file.dateDigitised').toString()" -->
+          <!--   :title="$t('file.dateDigitised')" -->
           <!--   :value="file.date_digitised || file.date_digitised_free" -->
           <!-- /> -->
           <TableRow
-            :title="$t('file.imageSize').toString()"
+            :title="$t('file.imageSize')"
             :value="imageSize"
           />
           <TableRowLink
             v-if="database"
-            :title="$t('file.institution').toString()"
+            :title="$t('file.institution')"
             :value="
               $translate({
                 et: database.name,
@@ -616,22 +616,22 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
           />
           <TableRowLink
             v-if="licence"
-            :title="$t('file.licence').toString()"
+            :title="$t('file.licence')"
             :value="licence.licence_en"
             @link-click="$openWindow(licence.licence_url_en)"
           />
           <!-- <table-row -->
-          <!--   :title="$t('file.remarks').toString()" -->
+          <!--   :title="$t('file.remarks')" -->
           <!--   :value="file.remarks" -->
           <!-- /> -->
           <!-- <table-row -->
           <!--   v-if="file.date_added" -->
-          <!--   :title="$t('file.dateAdded').toString()" -->
+          <!--   :title="$t('file.dateAdded')" -->
           <!--   :value="$formatDate(file.date_added)" -->
           <!-- /> -->
           <!-- <table-row -->
           <!--   v-if="file.date_changed" -->
-          <!--   :title="$t('file.dateChanged').toString()" -->
+          <!--   :title="$t('file.dateChanged')" -->
           <!--   :value="$formatDate(file.date_changed)" -->
           <!-- /> -->
         </BaseTable>

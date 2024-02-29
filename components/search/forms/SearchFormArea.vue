@@ -48,7 +48,7 @@ const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
       <VExpansionPanels variant="accordion" multiple>
         <FilterInputText
           v-model="filters.name.value"
-          :title="$t('filters.name').toString()"
+          :title="$t('filters.name')"
           value="name"
           @update:model-value="handleUpdate"
         />

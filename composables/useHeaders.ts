@@ -12,7 +12,7 @@ export function useHeaders(initHeaders: Headers) {
 
   const translateHeader = (header: Header) => {
     if (header.translate === undefined || header.translate === true)
-      header.title = t(header.text).toString();
+      header.title = t(header.text);
 
     return header;
   };

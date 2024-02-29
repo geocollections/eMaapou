@@ -20,7 +20,7 @@ const props = defineProps({
     type: String,
     default(): string {
       const { t } = useI18n();
-      return t("common.searchAlt").toString();
+      return t("common.searchAlt");
     },
   },
   autofocus: {

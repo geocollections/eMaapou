@@ -89,12 +89,12 @@ const mapMarkers = computed(() => {
       >
         <BaseTable class="border rounded">
           <TableRow
-            :title="$t('sample.number').toString()"
+            :title="$t('sample.number')"
             :value="sample.number"
           />
           <TableRowLink
             v-if="parent"
-            :title="$t('sample.parent').toString()"
+            :title="$t('sample.parent')"
             nuxt
             :href="
               localePath({ name: 'sample-id', params: { id: parent.id } })
@@ -103,7 +103,7 @@ const mapMarkers = computed(() => {
           />
           <TableRowLink
             v-if="parentSpecimen"
-            :title="$t('sample.parentSpecimen').toString()"
+            :title="$t('sample.parentSpecimen')"
             nuxt
             :href="
               localePath({
@@ -114,21 +114,21 @@ const mapMarkers = computed(() => {
             :value="parentSpecimen.specimen_id"
           />
           <TableRowLink
-            :title="$t('sample.igsn').toString()"
+            :title="$t('sample.igsn')"
             :value="sample.igsn"
             :href="`http://igsn.org/${sample.igsn}`"
           />
           <TableRow
-            :title="$t('sample.numberAdditional').toString()"
+            :title="$t('sample.numberAdditional')"
             :value="sample.number_additional"
           />
           <TableRow
-            :title="$t('sample.numberField').toString()"
+            :title="$t('sample.numberField')"
             :value="sample.number_field"
           />
           <template v-if="locality">
             <TableRowLink
-              :title="$t('locality.locality').toString()"
+              :title="$t('locality.locality')"
               :value="
                 $translate({
                   et: locality.locality,
@@ -144,12 +144,12 @@ const mapMarkers = computed(() => {
               "
             />
             <TableRow
-              :title="$t('sample.localityFree').toString()"
+              :title="$t('sample.localityFree')"
               :value="sample.locality_free"
             />
             <TableRow
               v-if="locality.country"
-              :title="$t('locality.country').toString()"
+              :title="$t('locality.country')"
               :value="
                 $translate({
                   et: locality.country.value,
@@ -158,21 +158,21 @@ const mapMarkers = computed(() => {
               "
             />
             <TableRow
-              :title="$t('locality.coordinates').toString()"
+              :title="$t('locality.coordinates')"
               :value="`${locality.latitude}, ${locality.longitude}`"
             />
             <TableRow
-              :title="$t('locality.elevation').toString()"
+              :title="$t('locality.elevation')"
               :value="locality.elevation"
             />
             <TableRow
-              :title="$t('locality.depth').toString()"
+              :title="$t('locality.depth')"
               :value="locality.depth"
             />
           </template>
           <template v-if="site">
             <TableRowLink
-              :title="$t('sample.site').toString()"
+              :title="$t('sample.site')"
               :value="site.name"
               nuxt
               :href="
@@ -183,21 +183,21 @@ const mapMarkers = computed(() => {
               "
             />
             <TableRow
-              :title="$t('locality.coordinates').toString()"
+              :title="$t('locality.coordinates')"
               :value="`${site.latitude}, ${site.longitude}`"
             />
           </template>
           <TableRow
-            :title="$t('sample.depth').toString()"
+            :title="$t('sample.depth')"
             :value="sample.depth"
           />
           <TableRow
-            :title="$t('sample.depthInterval').toString()"
+            :title="$t('sample.depthInterval')"
             :value="sample.depth_interval"
           />
           <TableRowLink
             v-if="stratigraphy"
-            :title="$t('sample.stratigraphy').toString()"
+            :title="$t('sample.stratigraphy')"
             :value="
               $translate({
                 et: stratigraphy.stratigraphy,
@@ -214,7 +214,7 @@ const mapMarkers = computed(() => {
           />
           <TableRowLink
             v-if="lithostratigraphy"
-            :title="$t('sample.lithostratigraphy').toString()"
+            :title="$t('sample.lithostratigraphy')"
             :value="
               $translate({
                 et: lithostratigraphy.stratigraphy,
@@ -230,34 +230,34 @@ const mapMarkers = computed(() => {
             "
           />
           <TableRow
-            :title="$t('sample.stratigraphyFree').toString()"
+            :title="$t('sample.stratigraphyFree')"
             :value="sample.stratigraphy_free"
           />
           <TableRow
-            :title="$t('sample.stratigraphyBed').toString()"
+            :title="$t('sample.stratigraphyBed')"
             :value="sample.stratigraphy_bed"
           />
           <TableRow
-            :title="$t('sample.dateCollected').toString()"
+            :title="$t('sample.dateCollected')"
             :value="sample.date_collected || sample.date_collected_free"
           />
           <TableRow
             v-if="agentCollected || sample.agent_collected_txt"
-            :title="$t('sample.agentCollected').toString()"
+            :title="$t('sample.agentCollected')"
             :value="agentCollected.agent || sample.agent_collected_txt"
           />
           <TableRow
-            :title="$t('sample.mass').toString()"
+            :title="$t('sample.mass')"
             :value="sample.mass"
           />
           <TableRow
             v-if="series"
-            :title="$t('sample.series').toString()"
+            :title="$t('sample.series')"
             :value="series.name"
           />
           <TableRow
             v-if="samplePurpose"
-            :title="$t('sample.samplePurpose').toString()"
+            :title="$t('sample.samplePurpose')"
             :value="
               $translate({
                 et: samplePurpose.value,
@@ -266,7 +266,7 @@ const mapMarkers = computed(() => {
             "
           />
           <TableRow
-            :title="$t('sample.rock').toString()"
+            :title="$t('sample.rock')"
             :value="
               $translate({
                 et: sample.rock,
@@ -276,7 +276,7 @@ const mapMarkers = computed(() => {
           />
           <TableRow
             v-if="classificationRock"
-            :title="$t('sample.classificationRock').toString()"
+            :title="$t('sample.classificationRock')"
             :value="
               $translate({
                 et: classificationRock.name,
@@ -285,25 +285,25 @@ const mapMarkers = computed(() => {
             "
           />
           <TableRow
-            :title="$t('sample.palaeontology').toString()"
+            :title="$t('sample.palaeontology')"
             :value="sample.palaeontology"
           />
           <TableRow
-            :title="$t('sample.fossils').toString()"
+            :title="$t('sample.fossils')"
             :value="sample.fossils"
           />
           <TableRow
-            :title="$t('sample.remarks').toString()"
+            :title="$t('sample.remarks')"
             :value="sample.remarks"
           />
           <TableRow
             v-if="owner"
-            :title="$t('sample.owner').toString()"
+            :title="$t('sample.owner')"
             :value="owner.agent"
           />
           <TableRowLink
             v-if="database"
-            :title="$t('sample.database').toString()"
+            :title="$t('sample.database')"
             :value="
               $translate({
                 et: database.name,
@@ -315,7 +315,7 @@ const mapMarkers = computed(() => {
           />
           <TableRow
             v-if="project"
-            :title="$t('sample.project').toString()"
+            :title="$t('sample.project')"
             :value="
               $translate({
                 et: sample.project.name,
@@ -325,14 +325,14 @@ const mapMarkers = computed(() => {
           />
           <TableRow
             v-if="sample.date_added"
-            :title="$t('sample.dateAdded').toString()"
+            :title="$t('sample.dateAdded')"
             :value="$formatDate(sample.date_added)"
           />
           <TableRow
             v-if="
               sample.date_changed && sample.date_changed !== sample.date_added
             "
-            :title="$t('sample.dateChanged').toString()"
+            :title="$t('sample.dateChanged')"
             :value="$formatDate(sample.date_changed)"
           />
         </BaseTable>

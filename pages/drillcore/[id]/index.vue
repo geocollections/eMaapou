@@ -99,7 +99,7 @@ const locality = computed(() => props.drillcore.locality);
       <VCol :xl="4">
         <BaseTable class="border rounded mb-4">
           <TableRowLink
-            :title="$t('locality.locality').toString()"
+            :title="$t('locality.locality')"
             :value="
               $translate({
                 et: locality.locality,
@@ -116,7 +116,7 @@ const locality = computed(() => props.drillcore.locality);
           />
           <TableRow
             v-if="locality.country"
-            :title="$t('locality.country').toString()"
+            :title="$t('locality.country')"
             :value="
               $translate({
                 et: locality.country.value,
@@ -125,15 +125,15 @@ const locality = computed(() => props.drillcore.locality);
             "
           />
           <TableRow
-            :title="$t('locality.coordinates').toString()"
+            :title="$t('locality.coordinates')"
             :value="`${locality.latitude}, ${locality.longitude}`"
           />
           <TableRow
-            :title="$t('locality.elevation').toString()"
+            :title="$t('locality.elevation')"
             :value="locality.elevation"
           />
           <TableRow
-            :title="$t('locality.depth').toString()"
+            :title="$t('locality.depth')"
             :value="locality.depth"
           />
         </BaseTable>

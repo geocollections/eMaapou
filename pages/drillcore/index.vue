@@ -76,7 +76,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   <Search>
     <template #title>
       <HeaderSearch
-        :title="$t('drillcore.pageTitle').toString()"
+        :title="$t('drillcore.pageTitle')"
         :count="data?.response.numFound ?? 0"
         :icon="mdiScrewMachineFlatTop"
       />

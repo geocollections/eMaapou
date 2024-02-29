@@ -214,7 +214,7 @@
     <!--   <v-expansion-panels accordion flat tile multiple> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="stratigraphyHierarchy" -->
-    <!--       :title="$t('filters.stratigraphyHierarchy').toString()" -->
+    <!--       :title="$t('filters.stratigraphyHierarchy')" -->
     <!--       :query-field=" -->
     <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
     <!--       " -->
@@ -222,15 +222,15 @@
     <!--     /> -->
     <!--     <filter-input-text -->
     <!--       v-model="index" -->
-    <!--       :title="$t('filters.index').toString()" -->
+    <!--       :title="$t('filters.index')" -->
     <!--     /> -->
     <!--     <filter-input-text -->
     <!--       v-model="age" -->
-    <!--       :title="$t('filters.age').toString()" -->
+    <!--       :title="$t('filters.age')" -->
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="type" -->
-    <!--       :title="$t('filters.type').toString()" -->
+    <!--       :title="$t('filters.type')" -->
     <!--       static -->
     <!--       :query-field=" -->
     <!--         $i18n.locale === 'et' ? 'stratigraphy_type' : 'stratigraphy_type_en' -->
@@ -239,7 +239,7 @@
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="rank" -->
-    <!--       :title="$t('filters.rank').toString()" -->
+    <!--       :title="$t('filters.rank')" -->
     <!--       static -->
     <!--       :query-field=" -->
     <!--         $i18n.locale === 'et' ? 'stratigraphy_rank' : 'stratigraphy_rank_en' -->
@@ -248,7 +248,7 @@
     <!--     /> -->
     <!--     <filter-input-autocomplete-new -->
     <!--       v-model="scope" -->
-    <!--       :title="$t('filters.scope').toString()" -->
+    <!--       :title="$t('filters.scope')" -->
     <!--       static -->
     <!--       :query-field=" -->
     <!--         $i18n.locale === 'et' ? 'stratigraphy_scope' : 'stratigraphy_scope' -->

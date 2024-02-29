@@ -90,7 +90,7 @@ const state = reactive({
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
-          :label="$t(item.label).toString()"
+          :label="$t(item.label)"
           nuxt
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
@@ -103,7 +103,7 @@ const state = reactive({
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
-          :label="$t(item.label).toString()"
+          :label="$t(item.label)"
           nuxt
           trailing-icon=""
           :to="localePath({ name: item.routeName })"
@@ -117,7 +117,7 @@ const state = reactive({
           :key="`browse-geography-item-${index}`"
           class="my-1"
           :icon="item.icon"
-          :label="$t(item.label).toString()"
+          :label="$t(item.label)"
           nuxt
           trailing-icon=""
           :to="localePath({ name: item.routeName })"

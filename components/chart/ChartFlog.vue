@@ -168,7 +168,7 @@ const titleSubtext = computed(() => {
     scale: state.currentScale,
     minDepth: state.currentMaxDepth.toFixed(2),
     maxDepth: state.currentMinDepth.toFixed(2),
-  }).toString();
+  });
 });
 const chartTitle = computed((): TitleOption => {
   return {
