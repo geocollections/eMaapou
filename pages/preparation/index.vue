@@ -2,6 +2,7 @@
 import { mdiEyedropper } from "@mdi/js";
 
 const preparationsStore = usePreparations();
+const { resetFilters, resetDataTable } = preparationsStore;
 const {
   handleHeadersReset,
   handleHeadersChange,
@@ -51,7 +52,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshLocalities();
   resultsCount.value = data.value?.response.numFound ?? 0;

@@ -53,6 +53,14 @@ const { data: tree, refresh: refreshTree } = await useLazyAsyncData<TreeNode[]>(
 const selectedItems = ref<SelectedItem[]>([]);
 selectedItems.value = await props.hydrationFunction(props.modelValue);
 
+watch(() => props.modelValue, (newVal) => {
+  if (newVal.length > 0)
+    return;
+
+  selectedItems.value = [];
+  refreshTree();
+});
+
 const filteredSelectedItems = computed(() => {
   return [...selectedItems.value].filter((item) => {
     return !selectedItems.value.some(i => item.value.includes(`${i.value}-`));

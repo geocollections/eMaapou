@@ -2,6 +2,7 @@
 import { mdiTestTube } from "@mdi/js";
 
 const analysesStore = useAnalyses();
+const { resetFilters, resetDataTable } = analysesStore;
 const {
   handleHeadersReset,
   handleHeadersChange,
@@ -36,7 +37,7 @@ const {
 });
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() as LocationQueryRaw });
+  router.push({ query: getQueryParams() });
 }
 
 async function handleUpdate() {
@@ -46,7 +47,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshLocalities();
   resultsCount.value = data.value?.response.numFound ?? 0;

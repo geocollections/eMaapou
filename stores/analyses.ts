@@ -24,12 +24,13 @@ export const useAnalyses = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: ANALYSIS.options,
       initHeaders: HEADERS_ANALYSIS,
     });
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       depth: {
         type: "range",
         value: [null, null],
@@ -164,6 +165,8 @@ export const useAnalyses = defineStore(
       setStateFromQueryParams,
       getQueryParams,
       resultsCount,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

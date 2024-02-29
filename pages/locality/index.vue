@@ -5,6 +5,7 @@ import { mdiMapMarker } from "@mdi/js";
 const { $translate } = useNuxtApp();
 
 const localitiesStore = useLocalities();
+const { resetFilters, resetDataTable } = localitiesStore;
 const {
   handleHeadersReset,
   handleHeadersChange,
@@ -52,7 +53,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshLocalities();
   resultsCount.value = data.value?.response.numFound ?? 0;

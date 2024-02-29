@@ -90,6 +90,14 @@ watch(queryDebounced, () => {
   refresh();
 });
 
+watch(() => props.modelValue, (newVal) => {
+  if (newVal.length > 0)
+    return;
+
+  selectedItems.value = [];
+  refresh();
+});
+
 const isFirstPage = computed(() => pagination.value.page === 1);
 const isLastPage = computed(() => {
   return (suggestions.value?.length ?? 0) < pagination.value.perPage;
@@ -150,7 +158,7 @@ function refreshSuggestions() {
       v-if="selectedItems.length > 0"
       class="bg-white border-b"
     >
-      <div class="my-1">
+      <div class="py-1">
         <div
           v-for="(item, i) in orderedSelectedItems"
           :key="i"

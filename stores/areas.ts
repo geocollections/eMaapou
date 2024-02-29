@@ -20,12 +20,13 @@ export const useAreas = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: AREA.options,
       initHeaders: HEADERS_AREA,
     });
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       name: {
         value: [],
         type: "textList",
@@ -107,6 +108,8 @@ export const useAreas = defineStore(
       setStateFromQueryParams,
       getQueryParams,
       resultsCount,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

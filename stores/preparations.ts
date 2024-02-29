@@ -25,12 +25,13 @@ export const usePreparations = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: PREPARATION.options,
       initHeaders: HEADERS_PREPARATION,
     });
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       number: {
         type: "textList",
         value: [],
@@ -134,6 +135,8 @@ export const usePreparations = defineStore(
       setStateFromQueryParams,
       getQueryParams,
       resultsCount,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

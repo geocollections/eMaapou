@@ -22,12 +22,13 @@ export const useDatasets = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: DATASET.options,
       initHeaders: HEADERS_DATASET,
     });
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       name: {
         value: [],
         type: "textList",
@@ -133,6 +134,8 @@ export const useDatasets = defineStore(
       setStateFromQueryParams,
       getQueryParams,
       resultsCount,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

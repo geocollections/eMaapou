@@ -101,7 +101,7 @@ export type FilterUnion =
   | ParameterFilter;
 
 export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: T) {
-  const filters = ref<T>(initFilters);
+  const filters = ref<T>(cloneDeep(initFilters));
   const solrFilters = computed(() => {
     return Object.entries<FilterUnion>(filters.value)
       .filter(([_key, value]) => isValidFilter(value))
@@ -121,6 +121,11 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
         [] as (string | { [K: string]: string })[],
       );
   });
+
+  function reset() {
+    filters.value = cloneDeep(initFilters);
+  }
+
   function getLookupFn(
     lookup: LookupType | undefined,
   ): (field: string, value: string) => string {
@@ -312,5 +317,6 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
   return {
     filters,
     solrFilters,
+    reset,
   };
 }

@@ -7,6 +7,8 @@ const {
   handleHeadersChange,
   setStateFromQueryParams,
   getQueryParams,
+  resetFilters,
+  resetDataTable,
 } = drillcoresStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(drillcoresStore);
@@ -47,7 +49,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshLocalities();
   resultsCount.value = data.value?.response.numFound ?? 0;

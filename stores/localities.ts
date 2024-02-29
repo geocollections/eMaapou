@@ -25,12 +25,13 @@ export const useLocalities = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: LOCALITY.options,
       initHeaders: HEADERS_LOCALITY,
     });
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       name: {
         value: [],
         type: "textList",
@@ -129,6 +130,8 @@ export const useLocalities = defineStore(
       setStateFromQueryParams,
       getQueryParams,
       resultsCount,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

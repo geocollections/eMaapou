@@ -72,6 +72,12 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     options.value = tableState.options;
     query.value = tableState.search;
   }
+
+  function reset() {
+    query.value = "";
+    options.value.page = 1;
+  }
+
   return {
     options,
     headers,
@@ -83,6 +89,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     solrSort,
     routeQueryOptionsSchema,
     stateToQueryParamsSchema,
+    reset,
   };
 }
 export function useDataTableDetail({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: HeadersOld }) {

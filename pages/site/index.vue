@@ -8,6 +8,8 @@ const {
   handleHeadersChange,
   setStateFromQueryParams,
   getQueryParams,
+  resetFilters,
+  resetDataTable,
 } = sitesStore;
 const {
   solrSort,
@@ -53,7 +55,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshSites();
   resultsCount.value = data.value?.response.numFound ?? 0;

@@ -67,6 +67,12 @@ watch(
     internalValue.value = cloneDeep(newVal);
   },
 );
+watch(() => props.modelValue, (newVal) => {
+  if (newVal.length > 0)
+    return;
+
+  internalValue.value = [];
+});
 
 function parseInput(input: string) {
   if (isEmpty(input))

@@ -31,6 +31,7 @@ useSeoMeta({
 // })
 
 const samplesStore = useSamples();
+const { resetFilters, resetDataTable } = samplesStore;
 const {
   handleHeadersReset,
   handleHeadersChange,
@@ -71,7 +72,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshLocalities();
   resultsCount.value = data.value?.response.numFound ?? 0;

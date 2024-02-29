@@ -24,6 +24,7 @@ export const useSamples = defineStore(
       solrSort,
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
+      reset: resetDataTable,
     } = useDataTable({
       initOptions: SAMPLE.options,
       initHeaders: HEADERS_SAMPLE,
@@ -31,7 +32,7 @@ export const useSamples = defineStore(
 
     const resultsCount = ref(0);
 
-    const { filters, solrFilters } = useFilters({
+    const { filters, solrFilters, reset: resetFilters } = useFilters({
       number: {
         type: "textList",
         value: [],
@@ -175,6 +176,8 @@ export const useSamples = defineStore(
       resultsCount,
       solrFilters,
       filters,
+      resetFilters,
+      resetDataTable,
     };
   },
   {

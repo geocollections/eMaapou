@@ -4,6 +4,7 @@ import { mdiChartLine } from "@mdi/js";
 const route = useRoute();
 
 const analyticalDataStore = useAnalyticalData();
+const { resetFilters, resetDataTable } = analyticalDataStore;
 const {
   handleHeadersReset,
   handleHeadersChange,
@@ -44,7 +45,8 @@ async function handleUpdate() {
 }
 
 async function handleReset() {
-  // TODO: reset filters
+  resetFilters();
+  resetDataTable();
   setQueryParamsFromState();
   await refreshLocalities();
   resultsCount.value = data.value?.response.numFound ?? 0;
