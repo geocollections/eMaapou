@@ -22,75 +22,73 @@ const locality = computed(() => props.drillcore.locality);
         :lg="7"
         :xl="5"
       >
-        <VCard>
-          <BaseTable>
-            <TableRow
-              :title="$t('drillcore.name')"
-              :value="
-                $translate({
-                  et: drillcore.drillcore,
-                  en: drillcore.drillcore_en,
-                })
-              "
-            />
-            <TableRow
-              :title="$t('drillcore.boxes')"
-              :value="drillcore.boxes"
-            />
-            <TableRow
-              :title="$t('drillcore.boxNumbers')"
-              :value="drillcore.box_numbers"
-            />
-            <TableRow
-              v-if="depository"
-              :title="$t('drillcore.repository')"
-              :value="
-                $translate({
-                  et: depository.value,
-                  en: depository.value_en,
-                })
-              "
-            />
-            <TableRow
-              v-if="storage"
-              :title="$t('drillcore.storage')"
-              :value="storage.location"
-            />
-            <TableRow
-              v-if="agent"
-              :title="$t('drillcore.driller')"
-              :value="agent.agent"
-            />
-            <TableRow :title="$t('drillcore.year')" :value="drillcore.year" />
-            <TableRow
-              :title="$t('drillcore.metersInBox')"
-              :value="drillcore.number_meters"
-            />
+        <BaseTable class="border rounded">
+          <TableRow
+            :title="$t('drillcore.name')"
+            :value="
+              $translate({
+                et: drillcore.drillcore,
+                en: drillcore.drillcore_en,
+              })
+            "
+          />
+          <TableRow
+            :title="$t('drillcore.boxes')"
+            :value="drillcore.boxes"
+          />
+          <TableRow
+            :title="$t('drillcore.boxNumbers')"
+            :value="drillcore.box_numbers"
+          />
+          <TableRow
+            v-if="depository"
+            :title="$t('drillcore.repository')"
+            :value="
+              $translate({
+                et: depository.value,
+                en: depository.value_en,
+              })
+            "
+          />
+          <TableRow
+            v-if="storage"
+            :title="$t('drillcore.storage')"
+            :value="storage.location"
+          />
+          <TableRow
+            v-if="agent"
+            :title="$t('drillcore.driller')"
+            :value="agent.agent"
+          />
+          <TableRow :title="$t('drillcore.year')" :value="drillcore.year" />
+          <TableRow
+            :title="$t('drillcore.metersInBox')"
+            :value="drillcore.number_meters"
+          />
 
-            <TableRowLink
-              v-if="database"
-              :title="$t('drillcore.database')"
-              :value="
-                $translate({
-                  et: database.name,
-                  en: database.name_en,
-                })
-              "
-              :href="database.url"
-              target="DatabaseWindow"
-            />
-            <TableRow
-              v-if="drillcore.date_added"
-              :title="$t('drillcore.dateAdded')"
-              :value="$formatDate(drillcore.date_added)"
-            />
-            <TableRow
-              v-if="drillcore.date_changed"
-              :title="$t('drillcore.dateChanged')"
-              :value="$formatDate(drillcore.date_changed)"
-            />
-          </BaseTable>
-        </VCard>
+          <TableRowLink
+            v-if="database"
+            :title="$t('drillcore.database')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            :href="database.url"
+            target="DatabaseWindow"
+          />
+          <TableRow
+            v-if="drillcore.date_added"
+            :title="$t('drillcore.dateAdded')"
+            :value="$formatDate(drillcore.date_added)"
+          />
+          <TableRow
+            v-if="drillcore.date_changed"
+            :title="$t('drillcore.dateChanged')"
+            :value="$formatDate(drillcore.date_changed)"
+          />
+        </BaseTable>
         <div v-if="drillcore.remarks">
           <div class="text-h6 py-2">
             {{ $t("drillcore.remarks") }}
@@ -99,48 +97,46 @@ const locality = computed(() => props.drillcore.locality);
         </div>
       </VCol>
       <VCol :xl="4">
-        <VCard class="mb-4">
-          <BaseTable>
-            <TableRowLink
-              :title="$t('locality.locality').toString()"
-              :value="
-                $translate({
-                  et: locality.locality,
-                  en: locality.locality_en,
-                })
-              "
-              nuxt
-              :href="
-                localePath({
-                  name: 'locality-id',
-                  params: { id: drillcore.locality.id },
-                })
-              "
-            />
-            <TableRow
-              v-if="locality.country"
-              :title="$t('locality.country').toString()"
-              :value="
-                $translate({
-                  et: locality.country.value,
-                  en: locality.country.value_en,
-                })
-              "
-            />
-            <TableRow
-              :title="$t('locality.coordinates').toString()"
-              :value="`${locality.latitude}, ${locality.longitude}`"
-            />
-            <TableRow
-              :title="$t('locality.elevation').toString()"
-              :value="locality.elevation"
-            />
-            <TableRow
-              :title="$t('locality.depth').toString()"
-              :value="locality.depth"
-            />
-          </BaseTable>
-        </VCard>
+        <BaseTable class="border rounded mb-4">
+          <TableRowLink
+            :title="$t('locality.locality').toString()"
+            :value="
+              $translate({
+                et: locality.locality,
+                en: locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: drillcore.locality.id },
+              })
+            "
+          />
+          <TableRow
+            v-if="locality.country"
+            :title="$t('locality.country').toString()"
+            :value="
+              $translate({
+                et: locality.country.value,
+                en: locality.country.value_en,
+              })
+            "
+          />
+          <TableRow
+            :title="$t('locality.coordinates').toString()"
+            :value="`${locality.latitude}, ${locality.longitude}`"
+          />
+          <TableRow
+            :title="$t('locality.elevation').toString()"
+            :value="locality.elevation"
+          />
+          <TableRow
+            :title="$t('locality.depth').toString()"
+            :value="locality.depth"
+          />
+        </BaseTable>
         <MapDetail
           v-if="locality.latitude && locality.longitude"
           :estonian-map="

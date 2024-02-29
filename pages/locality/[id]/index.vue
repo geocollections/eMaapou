@@ -73,130 +73,128 @@ const _ = await useAsyncData("image", async () => {
         :lg="7"
         :xl="5"
       >
-        <VCard>
-          <BaseTable>
-            <TableRow
-              :title="$t('locality.name').toString()"
-              :value="$translate({
-                et: locality.locality,
-                en: locality.locality_en,
-              })
-              "
-            />
-            <TableRow :title="$t('locality.number').toString()" :value="locality.number" />
-            <TableRow
-              v-if="type"
-              :title="$t('locality.type').toString()"
-              :value="$translate({
-                et: type.value,
-                en: type.value_en,
-              })
-              "
-            />
-            <TableRow
-              v-if="country"
-              :title="$t('locality.country').toString()"
-              :value="$translate({
-                et: country.value,
-                en: country.value_en,
-              })
-              "
-            />
-            <TableRow
-              v-if="municipality"
-              :title="$t('locality.parish').toString()"
-              :value="$translate({
-                et: municipality.vald,
-                en: municipality.vald_en,
-              })
-              "
-            />
-            <TableRow
-              v-if="settlementUnit"
-              :title="$t('locality.settlement').toString()"
-              :value="$translate({
-                et: settlementUnit.asustusyksus,
-                en: settlementUnit.asustusyksus_en,
-              })
-              "
-            />
-            <TableRow :title="$t('locality.elevation').toString()" :value="locality.elevation" />
-            <TableRow
-              :title="$t('locality.coordinates').toString()"
-              :value="`${locality.latitude}, ${locality.longitude}`"
-            />
-            <TableRow :title="$t('locality.coordinateSystem').toString()" :value="locality.coord_system" />
-            <TableRow :title="$t('locality.coordinateX').toString()" :value="locality.coordx" />
-            <TableRow :title="$t('locality.coordinateY').toString()" :value="locality.coordy" />
-            <TableRow
-              v-if="coordinatePrecision"
-              :title="$t('locality.coordinatePrecision').toString()"
-              :value="coordinatePrecision.value"
-            />
-            <TableRow
-              v-if="coordinateMethod"
-              :title="$t('locality.coordinateMethod').toString()"
-              :value="$translate({
-                et: coordinateMethod.value,
-                en: coordinateMethod.value_en,
-              })
-              "
-            />
-            <TableRow
-              v-if="coordinateAgent"
-              :title="$t('locality.coordinateAgent').toString()"
-              :value="coordinateAgent.agent"
-            />
-            <TableRow :title="$t('locality.locationRemarks').toString()" :value="locality.remarks_location" />
-            <TableRowLink
-              v-if="stratigraphyTop"
-              :title="$t('locality.stratigraphyTop').toString()"
-              :value="$translate({
-                et: stratigraphyTop.stratigraphy,
-                en: stratigraphyTop.stratigraphy_en,
-              })
-              "
-              nuxt
-              :href="localePath({
-                name: 'stratigraphy-id',
-                params: { id: locality.stratigraphy_top.id },
-              })
-              "
-            />
-            <TableRowLink
-              v-if="stratigraphyBase"
-              :title="$t('locality.stratigraphyBase').toString()"
-              :value="$translate({
-                et: stratigraphyBase.stratigraphy,
-                en: stratigraphyBase.stratigraphy_en,
-              })
-              "
-              nuxt
-              :href="localePath({
-                name: 'stratigraphy-id',
-                params: { id: locality.stratigraphy_base.id },
-              })
-              "
-            />
-            <TableRow :title="$t('locality.remarks').toString()" :value="locality.remarks" />
-            <TableRowLink
-              v-if="locality.maaamet_pa_id"
-              :title="$t('locality.linkLandBoard').toString()"
-              :value="locality.maaamet_pa_id"
-              :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
-            />
-            <TableRow
-              v-if="locality.date_added"
-              :title="$t('locality.dateAdded').toString()"
-              :value="$formatDate(locality.date_added)"
-            />
-            <TableRow
-              v-if="locality.date_changed"
-              :title="$t('locality.dateChanged').toString()"
-              :value="$formatDate(locality.date_changed)"
-            />
-          </BaseTable>
-        </VCard>
+        <BaseTable class="border rounded">
+          <TableRow
+            :title="$t('locality.name')"
+            :value="$translate({
+              et: locality.locality,
+              en: locality.locality_en,
+            })
+            "
+          />
+          <TableRow :title="$t('locality.number')" :value="locality.number" />
+          <TableRow
+            v-if="type"
+            :title="$t('locality.type')"
+            :value="$translate({
+              et: type.value,
+              en: type.value_en,
+            })
+            "
+          />
+          <TableRow
+            v-if="country"
+            :title="$t('locality.country')"
+            :value="$translate({
+              et: country.value,
+              en: country.value_en,
+            })
+            "
+          />
+          <TableRow
+            v-if="municipality"
+            :title="$t('locality.parish')"
+            :value="$translate({
+              et: municipality.vald,
+              en: municipality.vald_en,
+            })
+            "
+          />
+          <TableRow
+            v-if="settlementUnit"
+            :title="$t('locality.settlement')"
+            :value="$translate({
+              et: settlementUnit.asustusyksus,
+              en: settlementUnit.asustusyksus_en,
+            })
+            "
+          />
+          <TableRow :title="$t('locality.elevation')" :value="locality.elevation" />
+          <TableRow
+            :title="$t('locality.coordinates')"
+            :value="`${locality.latitude}, ${locality.longitude}`"
+          />
+          <TableRow :title="$t('locality.coordinateSystem')" :value="locality.coord_system" />
+          <TableRow :title="$t('locality.coordinateX')" :value="locality.coordx" />
+          <TableRow :title="$t('locality.coordinateY')" :value="locality.coordy" />
+          <TableRow
+            v-if="coordinatePrecision"
+            :title="$t('locality.coordinatePrecision')"
+            :value="coordinatePrecision.value"
+          />
+          <TableRow
+            v-if="coordinateMethod"
+            :title="$t('locality.coordinateMethod')"
+            :value="$translate({
+              et: coordinateMethod.value,
+              en: coordinateMethod.value_en,
+            })
+            "
+          />
+          <TableRow
+            v-if="coordinateAgent"
+            :title="$t('locality.coordinateAgent')"
+            :value="coordinateAgent.agent"
+          />
+          <TableRow :title="$t('locality.locationRemarks')" :value="locality.remarks_location" />
+          <TableRowLink
+            v-if="stratigraphyTop"
+            :title="$t('locality.stratigraphyTop')"
+            :value="$translate({
+              et: stratigraphyTop.stratigraphy,
+              en: stratigraphyTop.stratigraphy_en,
+            })
+            "
+            nuxt
+            :href="localePath({
+              name: 'stratigraphy-id',
+              params: { id: locality.stratigraphy_top.id },
+            })
+            "
+          />
+          <TableRowLink
+            v-if="stratigraphyBase"
+            :title="$t('locality.stratigraphyBase')"
+            :value="$translate({
+              et: stratigraphyBase.stratigraphy,
+              en: stratigraphyBase.stratigraphy_en,
+            })
+            "
+            nuxt
+            :href="localePath({
+              name: 'stratigraphy-id',
+              params: { id: locality.stratigraphy_base.id },
+            })
+            "
+          />
+          <TableRow :title="$t('locality.remarks')" :value="locality.remarks" />
+          <TableRowLink
+            v-if="locality.maaamet_pa_id"
+            :title="$t('locality.linkLandBoard')"
+            :value="locality.maaamet_pa_id"
+            :href="`https://geoportaal.maaamet.ee/index.php?lang_id=1&action=viewPA&pa_id=${locality.maaamet_pa_id}&fr=o&bk=1&page_id=382`"
+          />
+          <TableRow
+            v-if="locality.date_added"
+            :title="$t('locality.dateAdded')"
+            :value="$formatDate(locality.date_added)"
+          />
+          <TableRow
+            v-if="locality.date_changed"
+            :title="$t('locality.dateChanged')"
+            :value="$formatDate(locality.date_changed)"
+          />
+        </BaseTable>
       </VCol>
       <VCol v-if="showMap" :xl="4">
         <MapDetail

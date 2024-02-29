@@ -15,6 +15,7 @@ const reference = computed(() => props.analysis.reference);
 const dataset = computed(() => props.analysis.dataset);
 
 const { $solrFetch } = useNuxtApp();
+const localePath = useLocalePath();
 const route = useRoute();
 const { data } = await useAsyncData("results", async () => {
   const analysisResultResponse = await $solrFetch("/analysis_results", {
@@ -62,143 +63,141 @@ const { data } = await useAsyncData("results", async () => {
         :lg="7"
         :xl="5"
       >
-        <VCard>
-          <BaseTable>
-            <TableRow
-              v-if="analysisMethod"
-              :title="$t('analysis.method')"
-              :value="
-                $translate({
-                  et: analysisMethod.analysis_method,
-                  en: analysisMethod.method_en,
-                })
-              "
-            />
-            <TableRow
-              v-if="agent"
-              :title="$t('analysis.analysedBy')"
-              :value="agent.agent"
-            />
+        <BaseTable class="border rounded">
+          <TableRow
+            v-if="analysisMethod"
+            :title="$t('analysis.method')"
+            :value="
+              $translate({
+                et: analysisMethod.analysis_method,
+                en: analysisMethod.method_en,
+              })
+            "
+          />
+          <TableRow
+            v-if="agent"
+            :title="$t('analysis.analysedBy')"
+            :value="agent.agent"
+          />
 
-            <TableRowLink
-              v-if="sample"
-              :title="$t('analysis.sampleNumber')"
-              :value="sample.number"
-              nuxt
-              :href="
-                localePath({
-                  name: 'sample-id',
-                  params: { id: analysis.sample.id },
-                })
-              "
-            />
+          <TableRowLink
+            v-if="sample"
+            :title="$t('analysis.sampleNumber')"
+            :value="sample.number"
+            nuxt
+            :href="
+              localePath({
+                name: 'sample-id',
+                params: { id: analysis.sample.id },
+              })
+            "
+          />
 
-            <TableRow
-              :title="$t('analysis.remarks')"
-              :value="analysis.remarks"
-            />
-            <TableRowLink
-              v-if="reference"
-              :title="$t('analysis.reference')"
-              :value="reference.reference"
-              @link-click="$openGeology('reference', reference.id)"
-            />
-            <TableRow
-              v-if="dataset"
-              :title="$t('analysis.dataset')"
-              :value="
-                $translate({
-                  et: dataset.name,
-                  en: dataset.name_en,
-                })
-              "
-            />
-            <TableRowLink
-              v-if="sample && sample.locality"
-              :title="$t('analysis.locality')"
-              :value="
-                $translate({
-                  et: sample.locality.locality,
-                  en: sample.locality.locality_en,
-                })
-              "
-              nuxt
-              :href="
-                localePath({
-                  name: 'locality-id',
-                  params: { id: sample.locality.id },
-                })
-              "
-            />
-            <TableRow
-              v-if="sample"
-              :title="$t('analysis.depth')"
-              :value="sample.depth"
-            />
-            <TableRow
-              v-if="sample"
-              :title="$t('analysis.depthInterval')"
-              :value="sample.depth_interval"
-            />
-            <TableRowLink
-              v-if="sample && sample.stratigraphy"
-              :title="$t('analysis.stratigraphy')"
-              :value="
-                $translate({
-                  et: sample.stratigraphy.stratigraphy,
-                  en: sample.stratigraphy.stratigraphy_en,
-                })
-              "
-              nuxt
-              :href="
-                localePath({
-                  name: 'stratigraphy-id',
-                  params: { id: sample.stratigraphy.id },
-                })
-              "
-            />
-            <TableRowLink
-              v-if="sample && sample.lithostratigraphy"
-              :title="$t('analysis.lithostratigraphy')"
-              :value="
-                $translate({
-                  et: sample.lithostratigraphy.stratigraphy,
-                  en: sample.lithostratigraphy.stratigraphy_en,
-                })
-              "
-              nuxt
-              :href="
-                localePath({
-                  name: 'stratigraphy-id',
-                  params: { id: sample.lithostratigraphy.id },
-                })
-              "
-            />
-            <TableRowLink
-              v-if="database"
-              :title="$t('analysis.institution')"
-              :value="
-                $translate({
-                  et: database.name,
-                  en: database.name_en,
-                })
-              "
-              :href="database.url"
-              target="DatabaseWindow"
-            />
+          <TableRow
+            :title="$t('analysis.remarks')"
+            :value="analysis.remarks"
+          />
+          <TableRowLink
+            v-if="reference"
+            :title="$t('analysis.reference')"
+            :value="reference.reference"
+            @link-click="$openGeology('reference', reference.id)"
+          />
+          <TableRow
+            v-if="dataset"
+            :title="$t('analysis.dataset')"
+            :value="
+              $translate({
+                et: dataset.name,
+                en: dataset.name_en,
+              })
+            "
+          />
+          <TableRowLink
+            v-if="sample && sample.locality"
+            :title="$t('analysis.locality')"
+            :value="
+              $translate({
+                et: sample.locality.locality,
+                en: sample.locality.locality_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'locality-id',
+                params: { id: sample.locality.id },
+              })
+            "
+          />
+          <TableRow
+            v-if="sample"
+            :title="$t('analysis.depth')"
+            :value="sample.depth"
+          />
+          <TableRow
+            v-if="sample"
+            :title="$t('analysis.depthInterval')"
+            :value="sample.depth_interval"
+          />
+          <TableRowLink
+            v-if="sample && sample.stratigraphy"
+            :title="$t('analysis.stratigraphy')"
+            :value="
+              $translate({
+                et: sample.stratigraphy.stratigraphy,
+                en: sample.stratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: sample.stratigraphy.id },
+              })
+            "
+          />
+          <TableRowLink
+            v-if="sample && sample.lithostratigraphy"
+            :title="$t('analysis.lithostratigraphy')"
+            :value="
+              $translate({
+                et: sample.lithostratigraphy.stratigraphy,
+                en: sample.lithostratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: sample.lithostratigraphy.id },
+              })
+            "
+          />
+          <TableRowLink
+            v-if="database"
+            :title="$t('analysis.institution')"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            :href="database.url"
+            target="DatabaseWindow"
+          />
 
-            <TableRow
-              v-if="analysis.date_added"
-              :title="$t('analysis.dateAdded')"
-              :value="$formatDate(analysis.date_added)"
-            />
-            <TableRow
-              v-if="analysis.date_changed"
-              :title="$t('analysis.dateChanged')"
-              :value="$formatDate(analysis.date_changed)"
-            />
-          </BaseTable>
-        </VCard>
+          <TableRow
+            v-if="analysis.date_added"
+            :title="$t('analysis.dateAdded')"
+            :value="$formatDate(analysis.date_added)"
+          />
+          <TableRow
+            v-if="analysis.date_changed"
+            :title="$t('analysis.dateChanged')"
+            :value="$formatDate(analysis.date_changed)"
+          />
+        </BaseTable>
       </VCol>
       <VCol
         v-if="resultChartData"

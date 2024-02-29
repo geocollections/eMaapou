@@ -87,257 +87,255 @@ const mapMarkers = computed(() => {
         :lg="7"
         :xl="5"
       >
-        <VCard>
-          <BaseTable>
-            <TableRow
-              :title="$t('sample.number').toString()"
-              :value="sample.number"
-            />
+        <BaseTable class="border rounded">
+          <TableRow
+            :title="$t('sample.number').toString()"
+            :value="sample.number"
+          />
+          <TableRowLink
+            v-if="parent"
+            :title="$t('sample.parent').toString()"
+            nuxt
+            :href="
+              localePath({ name: 'sample-id', params: { id: parent.id } })
+            "
+            :value="parent.number"
+          />
+          <TableRowLink
+            v-if="parentSpecimen"
+            :title="$t('sample.parentSpecimen').toString()"
+            nuxt
+            :href="
+              localePath({
+                name: 'specimen-id',
+                params: { id: parentSpecimen.id },
+              })
+            "
+            :value="parentSpecimen.specimen_id"
+          />
+          <TableRowLink
+            :title="$t('sample.igsn').toString()"
+            :value="sample.igsn"
+            :href="`http://igsn.org/${sample.igsn}`"
+          />
+          <TableRow
+            :title="$t('sample.numberAdditional').toString()"
+            :value="sample.number_additional"
+          />
+          <TableRow
+            :title="$t('sample.numberField').toString()"
+            :value="sample.number_field"
+          />
+          <template v-if="locality">
             <TableRowLink
-              v-if="parent"
-              :title="$t('sample.parent').toString()"
-              nuxt
-              :href="
-                localePath({ name: 'sample-id', params: { id: parent.id } })
-              "
-              :value="parent.number"
-            />
-            <TableRowLink
-              v-if="parentSpecimen"
-              :title="$t('sample.parentSpecimen').toString()"
-              nuxt
-              :href="
-                localePath({
-                  name: 'specimen-id',
-                  params: { id: parentSpecimen.id },
-                })
-              "
-              :value="parentSpecimen.specimen_id"
-            />
-            <TableRowLink
-              :title="$t('sample.igsn').toString()"
-              :value="sample.igsn"
-              :href="`http://igsn.org/${sample.igsn}`"
-            />
-            <TableRow
-              :title="$t('sample.numberAdditional').toString()"
-              :value="sample.number_additional"
-            />
-            <TableRow
-              :title="$t('sample.numberField').toString()"
-              :value="sample.number_field"
-            />
-            <template v-if="locality">
-              <TableRowLink
-                :title="$t('locality.locality').toString()"
-                :value="
-                  $translate({
-                    et: locality.locality,
-                    en: locality.locality_en,
-                  })
-                "
-                nuxt
-                :href="
-                  localePath({
-                    name: 'locality-id',
-                    params: { id: sample.locality.id },
-                  })
-                "
-              />
-              <TableRow
-                :title="$t('sample.localityFree').toString()"
-                :value="sample.locality_free"
-              />
-              <TableRow
-                v-if="locality.country"
-                :title="$t('locality.country').toString()"
-                :value="
-                  $translate({
-                    et: locality.country.value,
-                    en: locality.country.value_en,
-                  })
-                "
-              />
-              <TableRow
-                :title="$t('locality.coordinates').toString()"
-                :value="`${locality.latitude}, ${locality.longitude}`"
-              />
-              <TableRow
-                :title="$t('locality.elevation').toString()"
-                :value="locality.elevation"
-              />
-              <TableRow
-                :title="$t('locality.depth').toString()"
-                :value="locality.depth"
-              />
-            </template>
-            <template v-if="site">
-              <TableRowLink
-                :title="$t('sample.site').toString()"
-                :value="site.name"
-                nuxt
-                :href="
-                  localePath({
-                    name: 'site-id',
-                    params: { id: site.id },
-                  })
-                "
-              />
-              <TableRow
-                :title="$t('locality.coordinates').toString()"
-                :value="`${site.latitude}, ${site.longitude}`"
-              />
-            </template>
-            <TableRow
-              :title="$t('sample.depth').toString()"
-              :value="sample.depth"
-            />
-            <TableRow
-              :title="$t('sample.depthInterval').toString()"
-              :value="sample.depth_interval"
-            />
-            <TableRowLink
-              v-if="stratigraphy"
-              :title="$t('sample.stratigraphy').toString()"
+              :title="$t('locality.locality').toString()"
               :value="
                 $translate({
-                  et: stratigraphy.stratigraphy,
-                  en: stratigraphy.stratigraphy_en,
+                  et: locality.locality,
+                  en: locality.locality_en,
                 })
               "
               nuxt
               :href="
                 localePath({
-                  name: 'stratigraphy-id',
-                  params: { id: sample.stratigraphy.id },
+                  name: 'locality-id',
+                  params: { id: sample.locality.id },
                 })
               "
             />
-            <TableRowLink
-              v-if="lithostratigraphy"
-              :title="$t('sample.lithostratigraphy').toString()"
+            <TableRow
+              :title="$t('sample.localityFree').toString()"
+              :value="sample.locality_free"
+            />
+            <TableRow
+              v-if="locality.country"
+              :title="$t('locality.country').toString()"
               :value="
                 $translate({
-                  et: lithostratigraphy.stratigraphy,
-                  en: lithostratigraphy.stratigraphy_en,
+                  et: locality.country.value,
+                  en: locality.country.value_en,
                 })
               "
+            />
+            <TableRow
+              :title="$t('locality.coordinates').toString()"
+              :value="`${locality.latitude}, ${locality.longitude}`"
+            />
+            <TableRow
+              :title="$t('locality.elevation').toString()"
+              :value="locality.elevation"
+            />
+            <TableRow
+              :title="$t('locality.depth').toString()"
+              :value="locality.depth"
+            />
+          </template>
+          <template v-if="site">
+            <TableRowLink
+              :title="$t('sample.site').toString()"
+              :value="site.name"
               nuxt
               :href="
                 localePath({
-                  name: 'stratigraphy-id',
-                  params: { id: sample.lithostratigraphy.id },
+                  name: 'site-id',
+                  params: { id: site.id },
                 })
               "
             />
             <TableRow
-              :title="$t('sample.stratigraphyFree').toString()"
-              :value="sample.stratigraphy_free"
+              :title="$t('locality.coordinates').toString()"
+              :value="`${site.latitude}, ${site.longitude}`"
             />
-            <TableRow
-              :title="$t('sample.stratigraphyBed').toString()"
-              :value="sample.stratigraphy_bed"
-            />
-            <TableRow
-              :title="$t('sample.dateCollected').toString()"
-              :value="sample.date_collected || sample.date_collected_free"
-            />
-            <TableRow
-              v-if="agentCollected || sample.agent_collected_txt"
-              :title="$t('sample.agentCollected').toString()"
-              :value="agentCollected.agent || sample.agent_collected_txt"
-            />
-            <TableRow
-              :title="$t('sample.mass').toString()"
-              :value="sample.mass"
-            />
-            <TableRow
-              v-if="series"
-              :title="$t('sample.series').toString()"
-              :value="series.name"
-            />
-            <TableRow
-              v-if="samplePurpose"
-              :title="$t('sample.samplePurpose').toString()"
-              :value="
-                $translate({
-                  et: samplePurpose.value,
-                  en: samplePurpose.value_en,
-                })
-              "
-            />
-            <TableRow
-              :title="$t('sample.rock').toString()"
-              :value="
-                $translate({
-                  et: sample.rock,
-                  en: sample.rock_en,
-                })
-              "
-            />
-            <TableRow
-              v-if="classificationRock"
-              :title="$t('sample.classificationRock').toString()"
-              :value="
-                $translate({
-                  et: classificationRock.name,
-                  en: classificationRock.name_en,
-                })
-              "
-            />
-            <TableRow
-              :title="$t('sample.palaeontology').toString()"
-              :value="sample.palaeontology"
-            />
-            <TableRow
-              :title="$t('sample.fossils').toString()"
-              :value="sample.fossils"
-            />
-            <TableRow
-              :title="$t('sample.remarks').toString()"
-              :value="sample.remarks"
-            />
-            <TableRow
-              v-if="owner"
-              :title="$t('sample.owner').toString()"
-              :value="owner.agent"
-            />
-            <TableRowLink
-              v-if="database"
-              :title="$t('sample.database').toString()"
-              :value="
-                $translate({
-                  et: database.name,
-                  en: database.name_en,
-                })
-              "
-              :href="database.url"
-              target="DatabaseWindow"
-            />
-            <TableRow
-              v-if="project"
-              :title="$t('sample.project').toString()"
-              :value="
-                $translate({
-                  et: sample.project.name,
-                  en: sample.project.name_en,
-                })
-              "
-            />
-            <TableRow
-              v-if="sample.date_added"
-              :title="$t('sample.dateAdded').toString()"
-              :value="$formatDate(sample.date_added)"
-            />
-            <TableRow
-              v-if="
-                sample.date_changed && sample.date_changed !== sample.date_added
-              "
-              :title="$t('sample.dateChanged').toString()"
-              :value="$formatDate(sample.date_changed)"
-            />
-          </BaseTable>
-        </VCard>
+          </template>
+          <TableRow
+            :title="$t('sample.depth').toString()"
+            :value="sample.depth"
+          />
+          <TableRow
+            :title="$t('sample.depthInterval').toString()"
+            :value="sample.depth_interval"
+          />
+          <TableRowLink
+            v-if="stratigraphy"
+            :title="$t('sample.stratigraphy').toString()"
+            :value="
+              $translate({
+                et: stratigraphy.stratigraphy,
+                en: stratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: sample.stratigraphy.id },
+              })
+            "
+          />
+          <TableRowLink
+            v-if="lithostratigraphy"
+            :title="$t('sample.lithostratigraphy').toString()"
+            :value="
+              $translate({
+                et: lithostratigraphy.stratigraphy,
+                en: lithostratigraphy.stratigraphy_en,
+              })
+            "
+            nuxt
+            :href="
+              localePath({
+                name: 'stratigraphy-id',
+                params: { id: sample.lithostratigraphy.id },
+              })
+            "
+          />
+          <TableRow
+            :title="$t('sample.stratigraphyFree').toString()"
+            :value="sample.stratigraphy_free"
+          />
+          <TableRow
+            :title="$t('sample.stratigraphyBed').toString()"
+            :value="sample.stratigraphy_bed"
+          />
+          <TableRow
+            :title="$t('sample.dateCollected').toString()"
+            :value="sample.date_collected || sample.date_collected_free"
+          />
+          <TableRow
+            v-if="agentCollected || sample.agent_collected_txt"
+            :title="$t('sample.agentCollected').toString()"
+            :value="agentCollected.agent || sample.agent_collected_txt"
+          />
+          <TableRow
+            :title="$t('sample.mass').toString()"
+            :value="sample.mass"
+          />
+          <TableRow
+            v-if="series"
+            :title="$t('sample.series').toString()"
+            :value="series.name"
+          />
+          <TableRow
+            v-if="samplePurpose"
+            :title="$t('sample.samplePurpose').toString()"
+            :value="
+              $translate({
+                et: samplePurpose.value,
+                en: samplePurpose.value_en,
+              })
+            "
+          />
+          <TableRow
+            :title="$t('sample.rock').toString()"
+            :value="
+              $translate({
+                et: sample.rock,
+                en: sample.rock_en,
+              })
+            "
+          />
+          <TableRow
+            v-if="classificationRock"
+            :title="$t('sample.classificationRock').toString()"
+            :value="
+              $translate({
+                et: classificationRock.name,
+                en: classificationRock.name_en,
+              })
+            "
+          />
+          <TableRow
+            :title="$t('sample.palaeontology').toString()"
+            :value="sample.palaeontology"
+          />
+          <TableRow
+            :title="$t('sample.fossils').toString()"
+            :value="sample.fossils"
+          />
+          <TableRow
+            :title="$t('sample.remarks').toString()"
+            :value="sample.remarks"
+          />
+          <TableRow
+            v-if="owner"
+            :title="$t('sample.owner').toString()"
+            :value="owner.agent"
+          />
+          <TableRowLink
+            v-if="database"
+            :title="$t('sample.database').toString()"
+            :value="
+              $translate({
+                et: database.name,
+                en: database.name_en,
+              })
+            "
+            :href="database.url"
+            target="DatabaseWindow"
+          />
+          <TableRow
+            v-if="project"
+            :title="$t('sample.project').toString()"
+            :value="
+              $translate({
+                et: sample.project.name,
+                en: sample.project.name_en,
+              })
+            "
+          />
+          <TableRow
+            v-if="sample.date_added"
+            :title="$t('sample.dateAdded').toString()"
+            :value="$formatDate(sample.date_added)"
+          />
+          <TableRow
+            v-if="
+              sample.date_changed && sample.date_changed !== sample.date_added
+            "
+            :title="$t('sample.dateChanged').toString()"
+            :value="$formatDate(sample.date_changed)"
+          />
+        </BaseTable>
       </VCol>
       <VCol v-if="showMap || images.results.length > 0" :xl="4">
         <MapDetail

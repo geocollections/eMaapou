@@ -267,7 +267,7 @@ watch(
       <LMap
         id="map"
         ref="map"
-        class="elevation-2"
+        class="border"
         :class="{
           rounded,
         }"
