@@ -17,6 +17,7 @@ export type FilterType =
   | "boolean"
   | "range"
   | "rangeAlt"
+  | "parameter"
   | "dateList";
 
 export interface BaseFilter {
@@ -76,6 +77,16 @@ export type DateListFilter = Omit<BaseFilter, "value"> & {
   value: string[][];
 };
 
+export interface ParameterValue {
+  value: [null | number, null | number];
+  parameter: null | string;
+}
+
+export type ParameterFilter = Omit<BaseFilter, "value" | "fields"> & {
+  type: "parameter";
+  value: ParameterValue[];
+};
+
 export type FilterUnion =
   | TextFilter
   | TextListFilter
@@ -86,7 +97,8 @@ export type FilterUnion =
   | RangeFilter
   | BooleanFilter
   | RangeAltFilter
-  | DateListFilter;
+  | DateListFilter
+  | ParameterFilter;
 
 export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: T) {
   const filters = ref<T>(initFilters);
@@ -154,6 +166,9 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
         return filter.value.some(value => value !== null);
       case "geom": {
         return filter.value !== null;
+      }
+      case "parameter": {
+        return filter.value.filter(val => val.parameter !== null).length > 0;
       }
       case "boolean":
         return filter.value;
@@ -239,6 +254,13 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
             return `${filter.idField}:${v} OR ${filter.fields.map(field => `${field}:*-${v}-*`).join(" OR ")}`;
           })
           .join(" OR ");
+      }
+      case "parameter": {
+        return filter.value.filter(val => val.parameter !== null).map((val) => {
+          const start = isNil(val.value[0]) ? "*" : val.value[0];
+          const end = isNil(val.value[1]) ? "*" : val.value[1];
+          return `${val.parameter}:[${start} TO ${end}]`;
+        }).join(" AND ");
       }
       case "geom": {
         if (filter.value.geometry.type === "Polygon") {

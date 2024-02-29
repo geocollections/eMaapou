@@ -1,5 +1,6 @@
 import { z } from "zod";
 import uniq from "lodash/uniq";
+import isNil from "lodash/isNil";
 
 // Parsers that convert values to URL params
 
@@ -51,3 +52,22 @@ export const booleanValueParser = z
 export const geometryValueParser = (z
   .any() satisfies z.ZodType<GeoJSON.Geometry | null>)
   .transform(val => (val !== null ? JSON.stringify(val) : undefined));
+
+export const parameterValueParser = z
+  .object({
+    value: z.array(z.number().nullable()).length(2),
+    parameter: z.string().nullable(),
+  }).array()
+  .transform((val) => {
+    const validValues = val.filter(v => v.parameter !== null);
+
+    if (validValues.length < 1)
+      return undefined;
+
+    return validValues.map((val) => {
+      const start = isNil(val.value[0]) ? "*" : val.value[0];
+      const end = isNil(val.value[1]) ? "*" : val.value[1];
+      return `${val.parameter}:${start}-${end}`;
+    }).join(",");
+  },
+  );

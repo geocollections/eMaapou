@@ -1,331 +1,335 @@
-<script lang="ts">
-// import { mdiPlus, mdiMinus, mdiClose } from '@mdi/js'
-// import {
-//   computed,
-//   defineComponent,
-//   PropType,
-//   reactive,
-//   ref,
-//   toRefs,
-//   useContext,
-//   watch,
-// } from '@nuxtjs/composition-api'
-// import isEqual from 'lodash/isEqual'
-// import cloneDeep from 'lodash/cloneDeep'
-// import isEmpty from 'lodash/isEmpty'
-// import isNull from 'lodash/isNull'
-//
-// interface IValue {
-//   value: (number | null)[]
-//   parameter: string | null
-// }
-//
-// export default defineComponent({
-//   name: 'FilterInputParameter',
-//   props: {
-//     disableRemove: {
-//       type: Boolean,
-//       default: false,
-//     },
-//     disableAdd: {
-//       type: Boolean,
-//       default: false,
-//     },
-//     parameters: {
-//       type: Array,
-//       default: () => [],
-//     },
-//     value: {
-//       type: Array as PropType<IValue[]>,
-//       required: true,
-//     },
-//     label: {
-//       type: String,
-//       default: 'Parameter',
-//     },
-//   },
-//   setup(props, { emit }) {
-//     const { i18n } = useContext()
-//     const icons = computed(() => ({ mdiPlus, mdiMinus, mdiClose }))
-//     const panel = ref()
-//     const state = reactive({
-//       internalValue: [{ value: [null, null], parameter: null }] as IValue[],
-//     })
-//     watch(
-//       () => props.value,
-//       (newVal) => {
-//         state.internalValue = cloneDeep(newVal)
-//       },
-//       { immediate: true }
-//     )
-//     const parseInput = (input: string) => {
-//       if (isEmpty(input)) return null
-//       return parseFloat(input)
-//     }
-//
-//     const validateFilter = (filter: IValue) => {
-//       return !isNull(filter.parameter)
-//     }
-//
-//     const handleValue = (value: IValue['value'], i: number) => {
-//       state.internalValue[i].value = value
-//     }
-//     const handleParameter = (value: IValue['parameter'], i: number) => {
-//       state.internalValue[i].parameter = value
-//
-//       if (isEqual(props.value, state.internalValue)) return
-//       emit('input', state.internalValue)
-//     }
-//
-//     const handleAdd = () => {
-//       state.internalValue = [
-//         ...state.internalValue,
-//         { value: [null, null], parameter: null },
-//       ]
-//     }
-//     const handleRemove = (i: number) => {
-//       if (state.internalValue.length <= 1) {
-//         state.internalValue = [{ parameter: null, value: [null, null] }]
-//         emit('input', state.internalValue)
-//         return
-//       }
-//       const cloneItems = cloneDeep(state.internalValue)
-//       cloneItems.splice(i, 1)
-//       state.internalValue = cloneItems
-//       emit('input', state.internalValue)
-//     }
-//     const handleClear = () => {
-//       state.internalValue = [{ parameter: null, value: [null, null] }]
-//       emit('input', state.internalValue)
-//     }
-//     const handleEnter = () => {
-//       if (isEqual(props.value, state.internalValue)) return
-//       emit('input', state.internalValue)
-//     }
-//
-//     const isAddActive = computed(() => {
-//       if (state.internalValue.length >= 10) return false
-//
-//       return !state.internalValue.some((v) => {
-//         return isNull(v.parameter) // || (isNull(v.value[0]) && isNull(v.value[1]))
-//       })
-//     })
-//
-//     const validFilters = computed(() => {
-//       return state.internalValue.filter((v) => {
-//         return validateFilter(v)
-//       }) as { value: (number | null)[]; parameter: string }[]
-//     })
-//
-//     const isPanelOpen = computed(() => {
-//       return panel.value?.isActive ?? false
-//     })
-//     const parameterIndex = computed(() => {
-//       return props.parameters.reduce(
-//         (prev: any, param: any): { [K: string]: string } => {
-//           return { ...prev, [param.value]: param.text }
-//         },
-//         {}
-//       ) as { [K: string]: string }
-//     })
-//
-//     const valueString = (value: IValue['value']) => {
-//       if (value[0] === null && value[1] === null) {
-//         return i18n.t(`intervals.default.exists`)
-//       }
-//       if (value[0] === null && value[1] !== null) {
-//         return i18n.t(`intervals.default.lessThanEquals`, {
-//           max: value[1],
-//         })
-//       }
-//
-//       if (value[0] !== null && value[1] === null) {
-//         return i18n.t(`intervals.default.greaterThanEquals`, {
-//           min: value[0],
-//         })
-//       }
-//       return i18n.t(`intervals.default.between`, {
-//         min: value[0],
-//         max: value[1],
-//       })
-//     }
-//     return {
-//       ...toRefs(state),
-//       icons,
-//       isAddActive,
-//       validFilters,
-//       panel,
-//       isPanelOpen,
-//       parameterIndex,
-//       valueString,
-//       parseInput,
-//       handleValue,
-//       handleParameter,
-//       handleAdd,
-//       handleRemove,
-//       handleClear,
-//       handleEnter,
-//     }
-//   },
-//   data() {
-//     return {
-//       parameter: {
-//         value: 'Ag_ppm',
-//         text: 'Ag (ppm)',
-//       },
-//     }
-//   },
-// })
+<script setup lang="ts">
+import { mdiClose, mdiMinus, mdiPlus } from "@mdi/js";
+import isEqual from "lodash/isEqual";
+import cloneDeep from "lodash/cloneDeep";
+import isEmpty from "lodash/isEmpty";
+import isNull from "lodash/isNull";
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
+import type { ParameterValue } from "~/composables/useFilter";
+
+const props = defineProps({
+  queryFunction: {
+    type: Function as PropType<
+      ({
+        query,
+        pagination,
+        values,
+      }: {
+        query: string;
+        pagination: { page: number; perPage: number };
+        values: ParameterValue[];
+      }) => Promise<Suggestion[]>
+    >,
+    required: true,
+  },
+  disableRemove: {
+    type: Boolean,
+    default: false,
+  },
+  disableAdd: {
+    type: Boolean,
+    default: false,
+  },
+  modelValue: {
+    type: Array as PropType<ParameterValue[]>,
+    required: true,
+  },
+  label: {
+    type: String,
+    default: "Parameter",
+  },
+});
+
+const emit = defineEmits(["update:model-value"]);
+
+const { t } = useI18n();
+const panel = ref();
+
+const internalValue = ref<ParameterValue[]>(cloneDeep(props.modelValue));
+
+const pagination = ref({
+  page: 1,
+  perPage: 10,
+});
+
+const query = ref("");
+
+const suggestions = ref<Suggestion[]>(await props.queryFunction({
+  query: query.value,
+  pagination: pagination.value,
+  values: [],
+})
+?? []);
+
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    internalValue.value = cloneDeep(newVal);
+  },
+);
+
+function parseInput(input: string) {
+  if (isEmpty(input))
+    return null;
+  return Number.parseFloat(input);
+}
+
+function validateFilter(filter: ParameterValue) {
+  return !isNull(filter.parameter);
+}
+
+function handleValue(value: ParameterValue["value"], i: number) {
+  internalValue.value[i].value = value;
+}
+function handleParameter(value: ParameterValue["parameter"], i: number) {
+  internalValue.value[i].parameter = value;
+
+  if (isEqual(props.modelValue, internalValue.value))
+    return;
+  emit("update:model-value", internalValue.value);
+}
+
+function handleAdd() {
+  internalValue.value = [
+    ...internalValue.value,
+    { value: [null, null], parameter: null },
+  ];
+}
+function handleRemove(i: number) {
+  if (internalValue.value.length <= 1) {
+    internalValue.value = [{ parameter: null, value: [null, null] }];
+    emit("update:model-value", internalValue.value);
+    return;
+  }
+  const cloneItems = cloneDeep(internalValue.value);
+  cloneItems.splice(i, 1);
+  internalValue.value = cloneItems;
+  emit("update:model-value", internalValue.value);
+}
+function handleClear() {
+  internalValue.value = [{ parameter: null, value: [null, null] }];
+  emit("update:model-value", internalValue.value);
+}
+function handleEnter() {
+  if (isEqual(props.modelValue, internalValue.value))
+    return;
+  emit("update:model-value", internalValue.value);
+}
+function handleFocus(focus: boolean) {
+  if (focus)
+    return;
+
+  emit("update:model-value", internalValue.value);
+}
+
+function handleSearch(newQuery: string) {
+  pagination.value.page = 1;
+  query.value = newQuery;
+}
+
+const isAddActive = computed(() => {
+  if (internalValue.value.length >= 10)
+    return false;
+
+  return !internalValue.value.some((v) => {
+    return isNull(v.parameter); // || (isNull(v.value[0]) && isNull(v.value[1]))
+  });
+});
+
+const validFilters = computed(() => {
+  return internalValue.value.filter((v) => {
+    return validateFilter(v);
+  }) as ParameterValue[];
+});
+
+const isPanelOpen = computed(() => {
+  return panel.value?.isActive ?? false;
+});
+const parameterIndex = computed(() => {
+  return suggestions.value.reduce(
+    (prev: any, param: any): { [K: string]: string } => {
+      return { ...prev, [param.id]: param.name };
+    },
+    {},
+  ) as { [K: string]: string };
+});
+
+function valueString(value: ParameterValue["value"]) {
+  if (value[0] === null && value[1] === null)
+    return t(`intervals.default.exists`);
+
+  if (value[0] === null && value[1] !== null) {
+    return t(`intervals.default.lessThanEquals`, {
+      max: value[1],
+    });
+  }
+
+  if (value[0] !== null && value[1] === null) {
+    return t(`intervals.default.greaterThanEquals`, {
+      min: value[0],
+    });
+  }
+  return t(`intervals.default.between`, {
+    min: value[0],
+    max: value[1],
+  });
+}
 </script>
 
 <template>
-  <!-- <v-expansion-panel ref="panel" style="background-color: transparent"> -->
-  <!--   <v-expansion-panel-header -->
-  <!--     class="py-1 pl-4 pr-1 font-weight-medium" -->
-  <!--     style="min-height: 40px; border-bottom: 1px solid lightgray !important" -->
-  <!--   > -->
-  <!--     {{ label }} -->
-  <!--   </v-expansion-panel-header> -->
-  <!--   <div -->
-  <!--     v-if="validFilters.length > 0 && !isPanelOpen" -->
-  <!--     class="white" -->
-  <!--     style=" -->
-  <!--       border-bottom: 1px solid lightgray !important; -->
-  <!--       border-right: 1px solid lightgray !important; -->
-  <!--     " -->
-  <!--   > -->
-  <!--     <div -->
-  <!--       v-for="(item, i) in validFilters" -->
-  <!--       :key="i" -->
-  <!--       class="d-flex py-1 selected-item pl-4 pr-2" -->
-  <!--     > -->
-  <!--       <span> -->
-  <!--         <input -->
-  <!--           type="checkbox" -->
-  <!--           class="checkbox" -->
-  <!--           checked -->
-  <!--           @click.prevent.stop="handleRemove(i)" -->
-  <!--         /> -->
-  <!--       </span> -->
-  <!--       <span -->
-  <!--         class="align-self-center text-body-2 font-weight-medium pl-2" -->
-  <!--         style="word-break: break-word" -->
-  <!--       > -->
-  <!--         <slot name="selection" :item="item"> -->
-  <!--           <div>{{ parameterIndex[item.parameter] }}</div> -->
-  <!--           <div class="font-weight-regular font-italic"> -->
-  <!--             {{ valueString(item.value) }} -->
-  <!--           </div> -->
-  <!--         </slot> -->
-  <!--       </span> -->
-  <!--     </div> -->
-  <!--   </div> -->
-  <!--   <v-expansion-panel-content -->
-  <!--     color="white" -->
-  <!--     style=" -->
-  <!--       border-bottom: 1px solid lightgray !important; -->
-  <!--       border-right: 1px solid lightgray !important; -->
-  <!--     " -->
-  <!--   > -->
-  <!--     <div -->
-  <!--       v-for="(v, i) in internalValue" -->
-  <!--       :key="i" -->
-  <!--       class="pb-2" -->
-  <!--       style="border-bottom: 1px solid lightgray !important" -->
-  <!--     > -->
-  <!--       <v-row no-gutters class="pl-4 pr-2"> -->
-  <!--         <v-col cols="8"> -->
-  <!--           <v-autocomplete -->
-  <!--             :value="v.parameter" -->
-  <!--             hide-details -->
-  <!--             dense -->
-  <!--             :placeholder="$t('filters.parameter')" -->
-  <!--             persistent-placeholder -->
-  <!--             :items="parameters" -->
-  <!--             @input="handleParameter($event, i)" -->
-  <!--           > -->
-  <!--           </v-autocomplete> -->
-  <!--         </v-col> -->
-  <!--         <v-col class="d-flex justify-end"> -->
-  <!--           <v-btn class="mt-1" icon small @click="handleRemove(i)"> -->
-  <!--             <v-icon small>{{ icons.mdiClose }}</v-icon> -->
-  <!--           </v-btn> -->
-  <!--         </v-col> -->
-  <!--       </v-row> -->
-  <!--       <v-row no-gutters> -->
-  <!--         <v-col cols="6" class="pl-4 pr-1"> -->
-  <!--           <v-text-field -->
-  <!--             class="pt-4" -->
-  <!--             hide-details -->
-  <!--             type="number" -->
-  <!--             :value="v.value[0]" -->
-  <!--             step="0.1" -->
-  <!--             dense -->
-  <!--             persistent-placeholder -->
-  <!--             :label="$t('common.from').toString()" -->
-  <!--             @input="handleValue([parseInput($event), v.value[1]], i)" -->
-  <!--             @keydown.enter.prevent.stop="handleEnter" -->
-  <!--             @blur="handleEnter" -->
-  <!--           /> -->
-  <!--         </v-col> -->
-  <!---->
-  <!--         <v-col cols="6" class="pl-1 pr-4"> -->
-  <!--           <v-text-field -->
-  <!--             class="pt-4" -->
-  <!--             hide-details -->
-  <!--             type="number" -->
-  <!--             :value="v.value[1]" -->
-  <!--             step="0.1" -->
-  <!--             persistent-placeholder -->
-  <!--             dense -->
-  <!--             :label="$t('common.to').toString()" -->
-  <!--             @input="handleValue([v.value[0], parseInput($event)], i)" -->
-  <!--             @keydown.enter.prevent.stop="handleEnter" -->
-  <!--             @blur="handleEnter" -->
-  <!--           /> -->
-  <!--         </v-col> -->
-  <!--       </v-row> -->
-  <!--     </div> -->
-  <!--     <v-row no-gutters class="pt-2 px-4"> -->
-  <!--       <v-col cols="6"> -->
-  <!--         <v-btn -->
-  <!--           small -->
-  <!--           text -->
-  <!--           block -->
-  <!--           class="text-center" -->
-  <!--           color="accent" -->
-  <!--           :disabled="validFilters.length < 1" -->
-  <!--           @click="handleClear" -->
-  <!--         > -->
-  <!--           {{ $t('filter.clear') }} -->
-  <!--         </v-btn> -->
-  <!--       </v-col> -->
-  <!---->
-  <!--       <v-col cols="6"> -->
-  <!--         <v-btn -->
-  <!--           small -->
-  <!--           text -->
-  <!--           block -->
-  <!--           class="text-center" -->
-  <!--           color="accent" -->
-  <!--           :disabled="!isAddActive" -->
-  <!--           @click="handleAdd" -->
-  <!--         > -->
-  <!--           {{ $t('filter.add') }} -->
-  <!--         </v-btn> -->
-  <!--       </v-col> -->
-  <!--     </v-row> -->
-  <!--   </v-expansion-panel-content> -->
-  <!-- </v-expansion-panel> -->
+  <VExpansionPanel
+    ref="panel"
+    bg-color="transparent"
+    elevation="0"
+    :rounded="0"
+  >
+    <VExpansionPanelTitle
+      class="py-1 pl-4 pr-1 font-weight-medium border-b"
+      style="min-height: 40px; "
+    >
+      {{ label }}
+    </VExpansionPanelTitle>
+    <div
+      v-if="validFilters.length > 0 && !isPanelOpen"
+      class="bg-white border-b"
+    >
+      <div
+        v-for="(item, i) in validFilters"
+        :key="i"
+        class="d-flex py-1 selected-item pl-4 pr-2"
+      >
+        <span>
+          <input
+            type="checkbox"
+            class="checkbox"
+            checked
+            @click.prevent.stop="handleRemove(i)"
+          >
+        </span>
+        <span
+          class="align-self-center text-body-2 font-weight-medium pl-2"
+          style="word-break: break-word"
+        >
+          <slot name="selection" :item="item">
+            <div>{{ parameterIndex[item.parameter] }}</div>
+            <div class="font-weight-regular font-italic">
+              {{ valueString(item.value) }}
+            </div>
+          </slot>
+        </span>
+      </div>
+    </div>
+    <VExpansionPanelText
+      class="py-0"
+      color="white"
+    >
+      <div
+        v-for="(v, i) in internalValue"
+        :key="i"
+        class="pb-2 border-b"
+      >
+        <VRow no-gutters class="px-2 ">
+          <VCol cols="8">
+            <VAutocomplete
+              :model-value="v.parameter"
+              hide-details
+              density="compact"
+              item-title="name"
+              item-value="id"
+              variant="underlined"
+              :placeholder="$t('filters.parameter')"
+              persistent-placeholder
+              :items="suggestions ?? []"
+              @update:model-value="handleParameter($event, i)"
+              @update:search="handleSearch"
+            />
+          </VCol>
+          <VCol class="d-flex justify-end">
+            <VBtn
+              class="mt-1"
+              :icon="mdiClose"
+              size="x-small"
+              variant="text"
+              @click="handleRemove(i)"
+            />
+          </VCol>
+        </VRow>
+        <VRow no-gutters>
+          <VCol cols="6" class="pl-2 pr-1">
+            <VTextField
+              class="pt-4"
+              hide-details
+              type="number"
+              :value="v.value[0]"
+              step="0.1"
+              density="compact"
+              variant="underlined"
+              persistent-placeholder
+              :label="$t('common.from')"
+              @update:model-value="handleValue([parseInput($event), v.value[1]], i)"
+              @keydown.enter="handleEnter"
+              @update:focused="handleFocus"
+            />
+          </VCol>
+
+          <VCol cols="6" class="pl-1 pr-2">
+            <VTextField
+              class="pt-4"
+              hide-details
+              type="number"
+              :value="v.value[1]"
+              step="0.1"
+              persistent-placeholder
+              density="compact"
+              variant="underlined"
+              :label="$t('common.to')"
+              @update:model-value="handleValue([v.value[0], parseInput($event)], i)"
+              @keydown.enter="handleEnter"
+              @update:focused="handleFocus"
+            />
+          </VCol>
+        </VRow>
+      </div>
+      <VRow no-gutters class="pt-2 px-4">
+        <VCol cols="6">
+          <VBtn
+            size="small"
+            variant="text"
+            block
+            class="text-center"
+            color="accent"
+            :disabled="validFilters.length < 1"
+            @click="handleClear"
+          >
+            {{ $t('filter.clear') }}
+          </VBtn>
+        </VCol>
+
+        <VCol cols="6">
+          <VBtn
+            size="small"
+            variant="text"
+            block
+            class="text-center"
+            color="accent"
+            :disabled="!isAddActive"
+            @click="handleAdd"
+          >
+            {{ $t('filter.add') }}
+          </VBtn>
+        </VCol>
+      </VRow>
+    </VExpansionPanelText>
+  </VExpansionPanel>
 </template>
 
 <style scoped>
-::v-deep .v-expansion-panel-content__wrap {
+:deep(.v-expansion-panel-text__wrapper) {
   padding-right: 0px;
   padding-left: 0px;
   padding-bottom: 8px;
 }
 .checkbox {
-  accent-color: var(--v-accent-base);
+  accent-color: rgb(var(--v-theme-accent));
 }
 </style>

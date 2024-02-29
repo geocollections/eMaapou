@@ -203,6 +203,39 @@ function handleUpdate() {
     emit("update");
   });
 }
+
+async function suggestParameters({
+  query,
+  _pagination,
+  _values,
+}: {
+  query: string;
+  pagination: { page: number; perPage: number };
+  values: string[];
+}): Promise<Suggestion[]> {
+  const nameField = "parameter";
+
+  const queryValue = query.trim() === "" ? "*" : `${nameField}:*${query}*`;
+
+  const res = await $solrFetch("/analysis_parameter", {
+    query: {
+      json: {
+        query: queryValue,
+        limit: 1000,
+      },
+    },
+  });
+
+  return res.response.docs.map(
+    (doc: any) => {
+      return {
+        id: doc.parameter_index,
+        name: doc.parameter,
+        count: 1,
+      };
+    },
+  );
+}
 </script>
 
 <template>
@@ -259,6 +292,11 @@ function handleUpdate() {
         :query-function="suggestSample"
         :hydration-function="hydrateSample"
         value="sample"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputParameter
+        v-model="filters.parameter.value"
+        :query-function="suggestParameters"
         @update:model-value="handleUpdate"
       />
       <FilterInputHierarchy

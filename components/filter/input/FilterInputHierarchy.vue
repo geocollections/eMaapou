@@ -30,6 +30,10 @@ const props = defineProps<{
 
 const emit = defineEmits(["update:model-value"]);
 
+defineExpose({
+  refreshSuggestions,
+});
+
 const { locale } = useI18n();
 
 function translateName(name: string | { et: string; en: string }): string {
@@ -136,14 +140,11 @@ async function hydrateSelected() {
     return;
   selectedItems.value = await props.hydrationFunction(selectedValues.value);
 }
+
 function refreshSuggestions() {
   hydrateSelected();
   refreshTree();
 }
-
-defineExpose({
-  refreshSuggestions,
-});
 </script>
 
 <template>

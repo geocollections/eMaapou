@@ -46,3 +46,19 @@ export const dateArrayParamParser = z
   .string()
   .transform(val => val.split(",").map(v => v.split("~")))
   .catch(_ctx => []);
+
+export const parameterParamParser = z
+  .string()
+  .transform(val =>
+    val.split(",").map((v) => {
+      const [parameter, values] = v.split(":");
+      const [startStr, endStr] = values.split("-");
+      const start = startStr === "*" ? null : Number.parseInt(startStr);
+      const end = endStr === "*" ? null : Number.parseInt(endStr);
+      return {
+        parameter,
+        value: [start, end],
+      };
+    }),
+  )
+  .catch(_ctx => []);

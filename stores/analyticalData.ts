@@ -9,8 +9,6 @@ import type {
   StringIdListFilter,
 } from "~/composables/useFilter";
 
-console.log(HEADERS_ANALYTICAL_DATA);
-
 export const useAnalyticalData = defineStore(
   "analyticalData",
   () => {
@@ -104,6 +102,11 @@ export const useAnalyticalData = defineStore(
         fields: ["database_id"],
         tag: "institution",
       } as IdListFilter,
+      parameter: {
+        type: "parameter",
+        value: [{ value: [null, null], parameter: null }],
+        tag: "parameter",
+      } as ParameterFilter,
     });
 
     const routeQueryFiltersSchema = z.object({
@@ -120,6 +123,7 @@ export const useAnalyticalData = defineStore(
       lab: idParamParser(","),
       sample: idParamParser(","),
       geometry: geometryParamParser,
+      parameter: parameterParamParser,
     });
 
     const routeQuerySchema = routeQueryOptionsSchema.merge(
@@ -136,6 +140,8 @@ export const useAnalyticalData = defineStore(
       query.value = params.q;
 
       Object.entries(filters.value).forEach(([key, filter]) => {
+        if (!params[key as keyof typeof filters.value])
+          return;
         filter.value = params[key as keyof typeof filters.value];
       });
     }
@@ -154,6 +160,7 @@ export const useAnalyticalData = defineStore(
       dataset: idValueParser(","),
       lab: idValueParser(","),
       sample: idValueParser(","),
+      parameter: parameterValueParser,
     });
 
     const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
@@ -174,6 +181,7 @@ export const useAnalyticalData = defineStore(
         reference: filters.value.reference.value,
         dataset: filters.value.dataset.value,
         sample: filters.value.sample.value,
+        parameter: filters.value.parameter.value,
         lab: filters.value.lab.value,
         page: options.value.page,
         itemsPerPage: options.value.itemsPerPage,

@@ -47,6 +47,10 @@ const props = defineProps({
 
 const emit = defineEmits(["update:model-value"]);
 
+defineExpose({
+  refreshSuggestions,
+});
+
 const query = ref("");
 const queryDebounced = refDebounced(query, 200);
 
@@ -128,10 +132,6 @@ function refreshSuggestions() {
   hydrateSelected();
   refresh();
 }
-
-defineExpose({
-  refreshSuggestions,
-});
 </script>
 
 <template>
