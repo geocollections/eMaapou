@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_SAMPLE, SAMPLE } from "~/constants";
+import { SAMPLE } from "~/constants";
+import { HEADERS_SAMPLE } from "~/constants/headersNew";
 
 const props = defineProps<{
   locality: number;

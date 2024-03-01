@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
-import { DESCRIPTION, HEADERS_DESCRIPTION } from "~/constants";
+import { DESCRIPTION } from "~/constants";
+import { HEADERS_DESCRIPTION } from "~/constants/headersNew";
 
 const {
   options,
@@ -20,7 +21,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
   count: number;
   results: any[];
 }>("/locality_description/", {
-  query: {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     locality: route.params.id,
@@ -34,7 +35,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
       headersMap: HEADERS_DESCRIPTION.byIds,
       locale: locale.value as "et" | "en",
     }),
-  },
+  })),
   transform: (res) => {
     return {
       ...res,

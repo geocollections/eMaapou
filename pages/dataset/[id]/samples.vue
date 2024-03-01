@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_SAMPLE_DATA, SAMPLE_DATA } from "~/constants";
+import { SAMPLE_DATA } from "~/constants";
+import { HEADERS_SAMPLE_DATA } from "~/constants/headersNew";
 
 const props = defineProps({
   parameterHeaders: {

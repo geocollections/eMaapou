@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DATASET_AUTHORS, HEADERS_DATASET_AUTHOR } from "~/constants";
+import { DATASET_AUTHORS } from "~/constants";
+import { HEADERS_DATASET_AUTHOR } from "~/constants/headersNew";
 
 const route = useRoute();
 const {
@@ -15,8 +16,8 @@ const {
 });
 
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch("/dataset_author/", {
-  query: {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dataset_author/", {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     dataset: route.params.id,
@@ -30,7 +31,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/dataset_author/", {
       headersMap: HEADERS_DATASET_AUTHOR.byIds,
       locale: locale.value as "et" | "en",
     }),
-  },
+  })),
 });
 </script>
 

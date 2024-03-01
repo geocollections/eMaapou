@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_TAXON_LIST, TAXON_LIST } from "~/constants";
+import { TAXON_LIST } from "~/constants";
+import { HEADERS_TAXON_LIST } from "~/constants/headersNew";
 
 const route = useRoute();
 const {
@@ -15,8 +16,8 @@ const {
 });
 
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
-  query: {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/taxon_list/", {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     sample: route.params.id,
@@ -30,7 +31,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
       headersMap: HEADERS_TAXON_LIST.byIds,
       locale: locale.value as "et" | "en",
     }),
-  },
+  })),
 });
 </script>
 

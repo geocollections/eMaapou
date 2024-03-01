@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from "~/constants";
+import { LOCALITY_REFERENCE } from "~/constants";
+import { HEADERS_LOCALITY_REFERENCE } from "~/constants/headersNew";
 
 const {
   options,
@@ -15,9 +16,7 @@ const {
 
 const route = useRoute();
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/locality_reference/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_reference/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

@@ -96,7 +96,7 @@ export function useDataTableDetail({ initOptions, initHeaders }: { initOptions: 
   const options = ref(initOptions);
 
   const { headers, handleHeadersReset, handleHeadersChange }
-    = useHeaders(initHeaders);
+    = useHeadersNew(initHeaders);
   const search = ref("");
 
   const solrQuery = computed(() => {

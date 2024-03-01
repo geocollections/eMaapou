@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_PREPARATION, PREPARATION } from "~/constants";
+import { PREPARATION } from "~/constants";
+import { HEADERS_PREPARATION } from "~/constants/headersNew";
 
 const {
   options,

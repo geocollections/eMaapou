@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
+import { ATTACHMENT_LINK } from "~/constants";
+import { HEADERS_ATTACHMENT } from "~/constants/headersNew";
 
 const {
   options,
@@ -16,8 +17,8 @@ const {
 const route = useRoute();
 const { locale } = useI18n();
 
-const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
-  query: {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     locality: route.params.id,
@@ -31,7 +32,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
       headersMap: HEADERS_ATTACHMENT.byIds,
       locale: locale.value as "et" | "en",
     }),
-  },
+  })),
 });
 </script>
 

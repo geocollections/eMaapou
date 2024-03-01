@@ -69,9 +69,9 @@ const localePath = useLocalePath();
     </template>
     <template #item.thickness="{ item }">
       {{
-        !item.depth_base || !item.depth_top
-          ? null
-          : Math.abs(round(item.depth_base - item.depth_top, 3))
+        item.depth_base !== null && item.depth_top !== null
+          ? Math.abs(round(item.depth_base - item.depth_top, 3)).toFixed(2)
+          : null
       }}
     </template>
     <template #item.stratigraphy="{ item }">
@@ -111,6 +111,12 @@ const localePath = useLocalePath();
       <div v-else :class="{ 'is-preferred': !item.is_preferred }">
         {{ item.author_free }}
       </div>
+    </template>
+    <template #item.depth_top="{ item }">
+      {{ item.depth_top.toFixed(2) }}
+    </template>
+    <template #item.depth_base="{ item }">
+      {{ item.depth_base.toFixed(2) }}
     </template>
   </BaseDataTable>
 </template>

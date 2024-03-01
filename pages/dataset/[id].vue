@@ -174,7 +174,7 @@ const { data } = await useAsyncData("dataset", async () => {
 
   const parameters
     = parameterValues?.map((v: string, i: number) => {
-      return { text: parameterText[i], value: v };
+      return { title: parameterText[i], value: v };
     }) ?? [];
 
   const parameterHeaders = {

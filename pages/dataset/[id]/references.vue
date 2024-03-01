@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DATASET_REFERENCE, HEADERS_DATASET_REFERENCE } from "~/constants";
+import { DATASET_REFERENCE } from "~/constants";
+import { HEADERS_DATASET_REFERENCE } from "~/constants/headersNew";
 
 const {
   options,
@@ -15,9 +16,7 @@ const {
 
 const route = useRoute();
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/dataset_reference/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dataset_reference/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

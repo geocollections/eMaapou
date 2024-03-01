@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_SPECIMEN, SPECIMEN } from "~/constants";
+import { SPECIMEN } from "~/constants";
+import { HEADERS_SPECIMEN } from "~/constants/headersNew";
 
 const {
   options,

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_SAMPLE_REFERENCE, SAMPLE_REFERENCE } from "~/constants";
+import { SAMPLE_REFERENCE } from "~/constants";
+import { HEADERS_SAMPLE_REFERENCE } from "~/constants/headersNew";
 
 const route = useRoute();
 const {
@@ -16,7 +17,7 @@ const {
 
 const { locale } = useI18n();
 const { data, pending } = await useGeoloogiaApiFetch("/sample_reference/", {
-  query: {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     sample: route.params.id,
@@ -30,7 +31,7 @@ const { data, pending } = await useGeoloogiaApiFetch("/sample_reference/", {
       headersMap: HEADERS_SAMPLE_REFERENCE.byIds,
       locale: locale.value as "et" | "en",
     }),
-  },
+  })),
 });
 </script>
 

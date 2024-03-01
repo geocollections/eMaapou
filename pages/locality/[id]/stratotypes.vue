@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_STRATOTYPE, STRATOTYPE } from "~/constants";
+import { STRATOTYPE } from "~/constants";
+import { HEADERS_LOCALITY_STRATOTYPE } from "~/constants/headersNew";
 
 const {
   options,
@@ -10,29 +11,29 @@ const {
   headers,
 } = useDataTableDetail({
   initOptions: STRATOTYPE.options,
-  initHeaders: HEADERS_STRATOTYPE,
+  initHeaders: HEADERS_LOCALITY_STRATOTYPE,
 });
 const route = useRoute();
 const { locale } = useI18n();
 
-const { data, pending } = await useGeoloogiaApiFetch(
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
   "/stratigraphy_stratotype/",
   {
-    query: {
+    query: computed(() => ({
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       locality: route.params.id,
       nest: 1,
       search: search.value,
       search_fields: Object.values(
-        getAPIFieldValues(HEADERS_STRATOTYPE, locale.value),
+        getAPIFieldValues(HEADERS_LOCALITY_STRATOTYPE, locale.value),
       ).join(","),
       ordering: getGeoloogiaApiSort({
         sortBy: options.value.sortBy,
-        headersMap: HEADERS_STRATOTYPE.byIds,
+        headersMap: HEADERS_LOCALITY_STRATOTYPE.byIds,
         locale: locale.value as "et" | "en",
       }),
-    },
+    })),
   },
 );
 </script>

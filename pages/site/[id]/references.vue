@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_LOCALITY_REFERENCE, LOCALITY_REFERENCE } from "~/constants";
+import { LOCALITY_REFERENCE } from "~/constants";
+import { HEADERS_LOCALITY_REFERENCE } from "~/constants/headersNew";
 
 const {
   options,

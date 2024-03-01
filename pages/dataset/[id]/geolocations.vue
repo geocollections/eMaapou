@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DATASET_GEOLOCATIONS, HEADERS_DATASET_GEOLOCATION } from "~/constants";
+import { DATASET_GEOLOCATIONS } from "~/constants";
+import { HEADERS_DATASET_GEOLOCATION } from "~/constants/headersNew";
 
 const {
   options,
@@ -15,9 +16,7 @@ const {
 
 const route = useRoute();
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/locality_reference/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dataset_geolocation/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

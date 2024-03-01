@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_SYNONYM, SYNONYM } from "~/constants";
+import { SYNONYM } from "~/constants";
+import { HEADERS_LOCALITY_SYNONYM } from "~/constants/headersNew";
 
 const route = useRoute();
 const {
@@ -11,26 +12,26 @@ const {
   handleHeadersChange,
 } = useDataTableDetail({
   initOptions: SYNONYM.options,
-  initHeaders: HEADERS_SYNONYM,
+  initHeaders: HEADERS_LOCALITY_SYNONYM,
 });
 
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch("/locality_synonym/", {
-  query: {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_synonym/", {
+  query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     locality: route.params.id,
     nest: 1,
     search: search.value,
     search_fields: Object.values(
-      getAPIFieldValues(HEADERS_SYNONYM, locale.value),
+      getAPIFieldValues(HEADERS_LOCALITY_SYNONYM, locale.value),
     ).join(","),
     ordering: getGeoloogiaApiSort({
       sortBy: options.value.sortBy,
-      headersMap: HEADERS_SYNONYM.byIds,
+      headersMap: HEADERS_LOCALITY_SYNONYM.byIds,
       locale: locale.value as "et" | "en",
     }),
-  },
+  })),
 });
 </script>
 

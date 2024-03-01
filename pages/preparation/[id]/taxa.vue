@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { HEADERS_TAXON_LIST, TAXON_LIST } from "~/constants";
-import DataTableTaxonList from "~/components/data-table/DataTableTaxonList.vue";
+import { TAXON_LIST } from "~/constants";
+import { HEADERS_TAXON_LIST } from "~/constants/headersNew";
 
 const route = useRoute();
 const {
@@ -16,7 +16,7 @@ const {
 });
 
 const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch("/taxon_list/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/taxon_list/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

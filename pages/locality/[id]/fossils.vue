@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { FOSSILS, HEADERS_FOSSIL } from "~/constants";
+import { FOSSILS } from "~/constants";
+import { HEADERS_FOSSIL } from "~/constants/headersNew";
 
 const {
   options,

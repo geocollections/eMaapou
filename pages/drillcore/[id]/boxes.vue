@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ATTACHMENT_LINK, HEADERS_ATTACHMENT } from "~/constants";
+import { ATTACHMENT_LINK } from "~/constants";
+import { HEADERS_ATTACHMENT } from "~/constants/headersNew";
 
 const { options, search, handleUpdate } = useDataTableDetail({
   initOptions: ATTACHMENT_LINK.options,
@@ -8,7 +9,7 @@ const { options, search, handleUpdate } = useDataTableDetail({
 const route = useRoute();
 const { locale } = useI18n();
 
-const { data, pending } = await useGeoloogiaApiFetch("/attachment_link/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: {
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),

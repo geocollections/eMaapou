@@ -11,7 +11,7 @@ function openPDF(link: string) {
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.id"
-        @click.native="$openGeology('reference', item.id)"
+        @click="$openGeology('reference', item.id)"
       >
         {{ item.reference }}
       </BaseLinkExternal>
@@ -29,7 +29,7 @@ function openPDF(link: string) {
     <template #item.doi="{ item }">
       <BaseLinkExternal
         v-if="item.doi"
-        @click.native="$openWindow(`https://doi.org/${item.doi}`)"
+        @click="$openWindow(`https://doi.org/${item.doi}`)"
       >
         {{ item.doi }}
       </BaseLinkExternal>
