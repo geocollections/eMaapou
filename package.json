@@ -58,7 +58,7 @@
     "@nuxtjs/eslint-module": "^3.1.0",
     "@nuxtjs/google-fonts": "^2.0.0",
     "@nuxtjs/vuetify": "^1.12.3",
-    "@types/earcut": "^2.1.1",
+    "@types/earcut": "^2.1.4",
     "@types/echarts": "^4.9.16",
     "@types/leaflet": "^1.9.0",
     "@types/lodash": "^4.14.186",
