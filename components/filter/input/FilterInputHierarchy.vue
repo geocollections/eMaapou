@@ -25,7 +25,7 @@ const props = defineProps<{
   modelValue: string[];
   rootValue: string;
   hydrationFunction: (values: string[]) => Promise<SelectedItem[]>;
-  getChildren: (value: string) => Promise<TreeNode[]>;
+  getChildren: (value: string, { page, perPage }: { page: number; perPage: number }) => Promise<[TreeNode[], number]>;
 }>();
 
 const emit = defineEmits(["update:model-value"]);
@@ -43,10 +43,17 @@ function translateName(name: string | { et: string; en: string }): string {
   return locale.value === "et" ? name.et : name.en;
 }
 
+const numBucketsMap = ref<{ [key: string]: number }>({});
+const paginationMap = ref<{ [key: string]: number }>({});
+
 const { data: tree, refresh: refreshTree } = await useLazyAsyncData<TreeNode[]>(
   `tree-${getCurrentInstance()?.uid}`,
   async () => {
-    return await props.getChildren(props.rootValue);
+    const res = await props.getChildren(props.rootValue, { page: 1, perPage: 15 });
+    const [tree, numBuckets] = res;
+    numBucketsMap.value[props.rootValue] = numBuckets;
+    paginationMap.value[props.rootValue] = 1;
+    return tree;
   },
 );
 
@@ -113,16 +120,18 @@ const orderedSelectedItems = computed(() => {
 });
 
 async function addChildren(node: TreeNode) {
-  if (node.childrenLoaded) {
-    node.showChildren = !node.showChildren;
-    return;
-  }
+  const page = paginationMap.value[node.value] ? paginationMap.value[node.value] + 1 : 1;
 
-  const children = await props.getChildren(node.value);
+  const [children, numBuckets] = await props.getChildren(node.value, { page, perPage: 15 });
 
-  node.children = children;
+  numBucketsMap.value[node.value] = numBuckets;
+  paginationMap.value[node.value] = page;
+
+  node.children = [...node.children, ...children];
   node.childrenLoaded = true;
   node.showChildren = true;
+
+  return numBuckets ?? 0;
 }
 
 function handleRemove(index: number) {
@@ -209,6 +218,7 @@ function refreshSuggestions() {
           :key="`tree-item-${index}`"
           :disabled="false"
           :node="node"
+          :num-children="numBucketsMap[node.value] ?? 0"
           :add-children="addChildren"
           :selected-values="selectedValues"
           @select="handleSelect"

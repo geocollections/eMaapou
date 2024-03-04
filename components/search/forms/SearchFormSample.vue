@@ -167,7 +167,7 @@ async function hydrateStratigraphy(values: string[]) {
   }));
 }
 
-async function getStratigraphyChildren(value: string) {
+async function getStratigraphyChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
   const depth = value.split("-").length;
   const prefix = `${depth}/${value}`;
 
@@ -181,7 +181,9 @@ async function getStratigraphyChildren(value: string) {
           categories: {
             type: "terms",
             prefix,
-            limit: -1,
+            offset: (page - 1) * perPage,
+            limit: perPage,
+            numBuckets: true,
             field: "stratigraphy_categories",
             domain: {
               excludeTags: "stratigraphy",
@@ -207,7 +209,7 @@ async function getStratigraphyChildren(value: string) {
     },
   });
 
-  return countRes.facets.categories.buckets.map((bucket: any) => {
+  return [countRes.facets.categories.buckets.map((bucket: any) => {
     const [_depth, value] = bucket.val.split("/");
     const doc = res.response.docs.find(
       (doc: any) => doc.hierarchy_string === value,
@@ -223,7 +225,7 @@ async function getStratigraphyChildren(value: string) {
       count: bucket.count,
       leaf: doc.leaf_node,
     };
-  });
+  }), countRes.facets.categories.numBuckets];
 }
 
 async function hydrateRock(values: string[]) {
@@ -263,7 +265,7 @@ async function hydrateRock(values: string[]) {
     count: countRes.facets[doc.id].count,
   }));
 }
-async function getRockChildren(value: string) {
+async function getRockChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
   const depth = value.split("-").length;
   const prefix = value.length < 1 ? "0/" : `${depth}/${value}`;
 
@@ -277,7 +279,9 @@ async function getRockChildren(value: string) {
           categories: {
             type: "terms",
             prefix,
-            limit: -1,
+            offset: (page - 1) * perPage,
+            limit: perPage,
+            numBuckets: true,
             field: "rock_categories",
             domain: {
               excludeTags: "rock",
@@ -303,7 +307,7 @@ async function getRockChildren(value: string) {
     },
   });
 
-  return countRes.facets.categories.buckets.map((bucket: any) => {
+  return [countRes.facets.categories.buckets.map((bucket: any) => {
     const [_depth, value] = bucket.val.split("/");
     const doc = res.response.docs.find((doc: any) =>
       doc.hierarchy_strings.includes(value),
@@ -319,7 +323,7 @@ async function getRockChildren(value: string) {
       count: bucket.count,
       leaf: false,
     };
-  });
+  }), countRes.facets.categories.numBuckets];
 }
 
 function handleReset() {

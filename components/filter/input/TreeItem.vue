@@ -5,14 +5,17 @@ import type { TreeNode } from "./FilterInputHierarchy.vue";
 const props = defineProps<{
   node: TreeNode;
   selectedValues: string[];
-  addChildren: (node: TreeNode) => void;
+  addChildren: (node: TreeNode) => Promise<number>;
+  addSiblings: () => Promise<number>;
   disabled?: boolean;
-  child?: boolean;
+  hasChildren?: boolean;
 }>();
 
 const emit = defineEmits(["select"]);
 
 const checkbox = ref<HTMLInputElement>();
+
+const { t } = useI18n({ useScope: "local" });
 
 const selected = computed(() => {
   return props.selectedValues.includes(props.node.value);
@@ -48,6 +51,21 @@ function translateName(name: string | { et: string; en: string }): string {
 function select(node: TreeNode) {
   emit("select", node);
 }
+
+const numChildren = ref(0);
+async function handleAddChildren(node: TreeNode) {
+  node.showChildren = !node.showChildren;
+  if (node.children.length > 0)
+    return;
+  const _numChildren = await props.addChildren(node);
+  numChildren.value = _numChildren;
+  return _numChildren ?? 0;
+}
+
+async function handleAddSiblings() {
+  const _numChildren = await props.addChildren(props.node);
+  return _numChildren;
+}
 </script>
 
 <template>
@@ -56,7 +74,7 @@ function select(node: TreeNode) {
       <div style="position: relative">
         <div
           class="d-flex align-center px-1"
-          :class="{ 'child-node': child }"
+          :class="{ 'child-node': hasChildren }"
           style="min-height: 28px"
         >
           <input
@@ -89,7 +107,7 @@ function select(node: TreeNode) {
         width="28"
         style="text-transform: none"
         :disabled="node.childrenLoaded && node.children.length < 1"
-        @click="addChildren(node)"
+        @click="handleAddChildren(node)"
       />
     </div>
     <ul v-if="node.showChildren" class="border-s ml-2">
@@ -104,10 +122,20 @@ function select(node: TreeNode) {
           :selected-values="selectedValues"
           :node="child"
           :add-children="addChildren"
+          :add-siblings="handleAddSiblings"
           :child="true"
           @select="select"
         />
       </div>
+      <VBtn
+        v-if="node.children.length < numChildren"
+        class="ml-1 text-none text-body-2"
+        variant="text"
+        color="accent"
+        @click="handleAddSiblings"
+      >
+        {{ t("more") }}
+      </VBtn>
     </ul>
   </li>
 </template>
@@ -129,3 +157,10 @@ function select(node: TreeNode) {
   }
 }
 </style>
+
+<i18n lang="yaml">
+et:
+  more: "...rohkem"
+en:
+  more: "...more"
+</i18n>
