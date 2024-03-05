@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import orderBy from "lodash/orderBy";
 import difference from "lodash/difference";
+import type { Suggestion } from "./FilterInputAutocomplete.vue";
 
 export interface TreeNode {
   id: number;
@@ -26,6 +27,7 @@ const props = defineProps<{
   rootValue: string;
   hydrationFunction: (values: string[]) => Promise<SelectedItem[]>;
   getChildren: (value: string, { page, perPage }: { page: number; perPage: number }) => Promise<[TreeNode[], number]>;
+  suggestionFunction: (query: string, { page, perPage }: { page: number; perPage: number }) => Promise<Suggestion[]>;
 }>();
 
 const emit = defineEmits(["update:model-value"]);
@@ -34,7 +36,7 @@ defineExpose({
   refreshSuggestions,
 });
 
-const { locale } = useI18n();
+const { locale, t } = useI18n({ useScope: "local" });
 
 function translateName(name: string | { et: string; en: string }): string {
   if (typeof name === "string")
@@ -46,7 +48,7 @@ function translateName(name: string | { et: string; en: string }): string {
 const numBucketsMap = ref<{ [key: string]: number }>({});
 const paginationMap = ref<{ [key: string]: number }>({});
 
-const { data: tree, refresh: refreshTree } = await useLazyAsyncData<TreeNode[]>(
+const { data: tree, refresh: refreshTree } = await useAsyncData<TreeNode[]>(
   `tree-${getCurrentInstance()?.uid}`,
   async () => {
     const res = await props.getChildren(props.rootValue, { page: 1, perPage: 15 });
@@ -54,6 +56,24 @@ const { data: tree, refresh: refreshTree } = await useLazyAsyncData<TreeNode[]>(
     numBucketsMap.value[props.rootValue] = numBuckets;
     paginationMap.value[props.rootValue] = 1;
     return tree;
+  },
+);
+
+const autocompletePage = ref(1);
+const autocompletePerPage = ref(10);
+const suggestions = ref<Suggestion[]>([]);
+const suggestionsEnd = ref(false);
+
+const query = ref("");
+const queryDebounced = refDebounced(query, 200);
+const { refresh: refreshAutocomplete, pending } = await useAsyncData<Suggestion[]>(
+  `autocomplete-${getCurrentInstance()?.uid}`,
+  async () => {
+    const res = await props.suggestionFunction(query.value, { page: autocompletePage.value, perPage: 10 });
+    if (res.length < 10)
+      suggestionsEnd.value = true;
+
+    suggestions.value = [...suggestions.value, ...res];
   },
 );
 
@@ -162,6 +182,41 @@ function refreshSuggestions() {
   hydrateSelected();
   refreshTree();
 }
+
+function handleSearch(value: string) {
+  query.value = value;
+}
+
+watch(queryDebounced, () => {
+  autocompletePage.value = 1;
+  suggestionsEnd.value = false;
+  suggestions.value = [];
+  refreshAutocomplete();
+});
+
+function handleAdd(item: Suggestion) {
+  if (selectedItems.value.some(i => i.id === item.id))
+    return;
+
+  selectedItems.value.push({
+    id: item.id,
+    name: item.name,
+    value: item.id,
+    count: 0,
+  });
+}
+
+function handleListEnd(isIntersecting: boolean) {
+  if (!isIntersecting)
+    return;
+  if (pending.value)
+    return;
+  if (suggestionsEnd.value)
+    return;
+
+  autocompletePage.value++;
+  refreshAutocomplete();
+}
 </script>
 
 <template>
@@ -212,6 +267,27 @@ function refreshSuggestions() {
     <VExpansionPanelText
       color="white"
     >
+      <VAutocomplete
+        class="mx-3"
+        :model-value="null"
+        :search="query"
+        hide-details
+        density="compact"
+        :item-title="locale === 'et' ? 'name.et' : 'name.en'"
+        item-value="id"
+        variant="underlined"
+        :placeholder="t('search')"
+        persistent-placeholder
+        no-filter
+        return-object
+        :items="suggestions ?? []"
+        @update:model-value="handleAdd"
+        @update:search="handleSearch"
+      >
+        <template #append-item>
+          <div v-intersect="handleListEnd" />
+        </template>
+      </VAutocomplete>
       <ul class="ml-2">
         <TreeItem
           v-for="(node, index) in tree"
@@ -237,3 +313,10 @@ function refreshSuggestions() {
   accent-color: rgb(var(--v-theme-accent));
 }
 </style>
+
+<i18n lang="yaml">
+et:
+  search: Otsi
+en:
+  search: Search
+  </i18n>

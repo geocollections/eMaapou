@@ -31,63 +31,6 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
 
 const { $solrFetch } = useNuxtApp();
 const { locale } = useI18n();
-async function suggestRock({
-  query,
-  pagination,
-  values,
-}: {
-  query: string;
-  pagination: { page: number; perPage: number };
-  values: string[];
-}) {
-  const primaryField = locale.value === "et" ? "rock" : "rock_en";
-  const pivot = `${primaryField},rock_id`;
-
-  const res = await $solrFetch("/sample", {
-    query: {
-      "facet": "true",
-      "facet.pivot": `{!ex=rock}${pivot}`,
-      [`f.${primaryField}.facet.contains`]: query,
-      [`f.${primaryField}.facet.contains.ignoreCase`]: true,
-      [`f.${primaryField}.facet.excludeTerms`]: values.join(","),
-      "facet.limit": pagination.perPage,
-      [`f.${primaryField}.facet.offset`]:
-        (pagination.page - 1) * pagination.perPage,
-      "json": {
-        query: solrQuery.value,
-        filter: solrFilters.value,
-        limit: 0,
-      },
-    },
-  });
-  const facetQueries = res.facet_counts.facet_pivot[pivot].reduce(
-    (prev, item) => {
-      prev[item.value]
-        = `{!ex=rock}rock_id:${item.pivot[0].value} OR hierarchy_string_rock:*-${item.pivot[0].value}-*`;
-      return prev;
-    },
-    {},
-  );
-  const res2 = await $solrFetch("/sample", {
-    query: {
-      "facet": "true",
-      "facet.query": Object.values(facetQueries),
-      "json": {
-        query: solrQuery.value,
-        filter: solrFilters.value,
-        limit: 0,
-      },
-    },
-  });
-
-  return res.facet_counts.facet_pivot[pivot].map((item) => {
-    return {
-      id: item.pivot[0].pivot?.map(p => p.value) ?? item.pivot[0].value,
-      name: item.value,
-      count: res2.facet_counts.facet_queries[facetQueries[item.value]],
-    };
-  });
-}
 
 // async function hydrateRock(values: string[]) {
 //   const nameField = locale.value === "et" ? "rock" : "rock_en";
@@ -228,6 +171,28 @@ async function getStratigraphyChildren(value: string, { page, perPage }: { page:
   }), countRes.facets.categories.numBuckets];
 }
 
+async function suggestStratigraphy(
+  query: string,
+  pagination: { page: number; perPage: number },
+) {
+  const searchField = locale.value === "et" ? "stratigraphy" : "stratigraphy_en";
+  const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: queryStr,
+      rows: pagination.perPage,
+      start: (pagination.page - 1) * pagination.perPage,
+      sort: `${searchField} asc`,
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.hierarchy_string,
+    name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+    value: doc.hierarchy_string,
+  }));
+}
+
 async function hydrateRock(values: string[]) {
   if (values.length < 1)
     return [];
@@ -326,6 +291,28 @@ async function getRockChildren(value: string, { page, perPage }: { page: number;
   }), countRes.facets.categories.numBuckets];
 }
 
+async function suggestRock(
+  query: string,
+  pagination: { page: number; perPage: number },
+) {
+  const searchField = locale.value === "et" ? "name" : "name_en";
+  const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+  const res = await $solrFetch("/rock", {
+    query: {
+      q: queryStr,
+      rows: pagination.perPage,
+      start: (pagination.page - 1) * pagination.perPage,
+      sort: `${searchField} asc`,
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.hierarchy_strings[0],
+    name: { et: doc.name, en: doc.name_en },
+    value: doc.hierarchy_strings[0],
+  }));
+}
+
 function handleReset() {
   emit("reset");
 }
@@ -396,6 +383,7 @@ function handleUpdate() {
           :title="$t('filters.stratigraphyHierarchy')"
           :hydration-function="hydrateStratigraphy"
           :get-children="getStratigraphyChildren"
+          :suggestion-function="suggestStratigraphy"
           value="stratigraphy"
           @update:model-value="handleUpdate"
         />
@@ -407,6 +395,7 @@ function handleUpdate() {
           :title="$t('filters.rockHierarchy')"
           :hydration-function="hydrateRock"
           :get-children="getRockChildren"
+          :suggestion-function="suggestRock"
           value="rock"
           @update:model-value="handleUpdate"
         />
