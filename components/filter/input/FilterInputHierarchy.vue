@@ -179,6 +179,7 @@ async function hydrateSelected() {
 }
 
 function refreshSuggestions() {
+  paginationMap.value = {};
   hydrateSelected();
   refreshTree();
 }
