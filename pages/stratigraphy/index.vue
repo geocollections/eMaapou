@@ -1,54 +1,27 @@
 <script setup lang="ts">
-import { mdiImageFilterHdr } from "@mdi/js";
+import { mdiLayersTriple } from "@mdi/js";
 
-const { t } = useI18n();
 const route = useRoute();
 
-useSeoMeta({
-  title: t("sample.pageTitle"),
-  ogTitle: t("sample.pageTitle"),
-  // ogUrl: route.fullPath,
-});
-
-// export default defineComponent({
-//   head() {
-//     return {
-//       title: this.$t('sample.pageTitle') as string,
-//       meta: [
-//         {
-//           property: 'og:title',
-//           hid: 'og:title',
-//           content: this.$t('sample.pageTitle') as string,
-//         },
-//         {
-//           property: 'og:url',
-//           hid: 'og:url',
-//           content: this.$route.path,
-//         },
-//       ],
-//     }
-//   },
-// })
-
-const samplesStore = useSamples();
-const { resetFilters, resetDataTable } = samplesStore;
+const stratigraphiesStore = useStratigraphies();
+const { resetFilters, resetDataTable } = stratigraphiesStore;
 const {
   handleHeadersReset,
   handleHeadersChange,
   setStateFromQueryParams,
   getQueryParams,
-} = samplesStore;
+} = stratigraphiesStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
-  = storeToRefs(samplesStore);
+  = storeToRefs(stratigraphiesStore);
 setStateFromQueryParams(route);
 
 const {
   data,
   pending,
-  refresh: refreshSamples,
+  refresh: refreshStratigraphies,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>("/sample", {
+}>("/stratigraphy", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -67,7 +40,7 @@ function setQueryParamsFromState() {
 
 async function handleUpdate() {
   setQueryParamsFromState();
-  await refreshSamples();
+  await refreshStratigraphies();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -75,39 +48,59 @@ async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshSamples();
+  await refreshStratigraphies();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshSamples();
+  await refreshStratigraphies();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
-    { name: "sample-id", params: { id } },
+    { name: "stratigraphy-id", params: { id } },
     index + getOffset(options.value.page, options.value.itemsPerPage),
-    "sample",
+    "stratigraphy",
   );
 }
+
+// export default defineComponent({
+//   head() {
+//     return {
+//       title: this.$t("stratigraphy.pageTitle").toString(),
+//       meta: [
+//         {
+//           property: "og:title",
+//           hid: "og:title",
+//           content: this.$t("stratigraphy.pageTitle").toString(),
+//         },
+//         {
+//           property: "og:url",
+//           hid: "og:url",
+//           content: this.$route.path,
+//         },
+//       ],
+//     };
+//   },
+// });
 </script>
 
 <template>
   <Search>
     <template #title>
       <HeaderSearch
-        :title="$t('sample.pageTitle')"
+        :title="$t('stratigraphy.pageTitle').toString()"
         :count="data?.response.numFound ?? 0"
-        :icon="mdiImageFilterHdr"
+        :icon="mdiLayersTriple"
       />
     </template>
 
     <template #form="{ closeMobileSearch }">
-      <SearchFormSample
+      <SearchFormStratigraphy
         @update="
           handleUpdate();
           closeMobileSearch();
@@ -120,7 +113,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #result>
-      <DataTableSample
+      <DataTableStratigraphy
         class="border-t border-b"
         :show-search="false"
         :items="data?.response.docs ?? []"

@@ -1464,6 +1464,162 @@ export const HEADERS_SPECIMEN: Headers = {
   ],
 };
 
+export const HEADERS_STRATIGRAPHY: Headers = {
+  byIds: {
+    id: {
+      title: "stratigraphy.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
+    },
+    stratigraphy: {
+      title: "stratigraphy.stratigraphy",
+      value: "stratigraphy",
+      show: true,
+      apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
+      sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
+    },
+    index_main: {
+      title: "stratigraphy.index_main",
+      value: "index_main",
+      show: true,
+      apiFieldValue: "index_main",
+      sortField: ["index_main"],
+    },
+    index_additional: {
+      title: "stratigraphy.index_additional",
+      value: "index_additional",
+      show: true,
+      apiFieldValue: "index_additional",
+      sortField: ["index_additional"],
+    },
+    stratigraphy_type: {
+      title: "stratigraphy.stratigraphy_type",
+      value: "stratigraphy_type",
+      show: true,
+      apiFieldValue: { et: "stratigraphy_type", en: "stratigraphy_type_en" },
+      sortField: { et: ["stratigraphy_type"], en: ["stratigraphy_type_en"] },
+    },
+    stratigraphy_rank: {
+      title: "stratigraphy.stratigraphy_rank",
+      value: "stratigraphy_rank",
+      show: true,
+      apiFieldValue: { et: "stratigraphy_rank", en: "stratigraphy_rank_en" },
+      sortField: { et: ["stratigraphy_rank"], en: ["stratigraphy_rank_en"] },
+    },
+    stratigraphy_scope: {
+      title: "stratigraphy.stratigraphy_scope",
+      value: "stratigraphy_scope",
+      show: true,
+      apiFieldValue: { et: "stratigraphy_scope", en: "stratigraphy_scope_en" },
+      sortField: { et: ["stratigraphy_scope"], en: ["stratigraphy_scope_en"] },
+    },
+    parent_stratigraphy: {
+      title: "stratigraphy.parent_stratigraphy",
+      value: "parent_stratigraphy",
+      show: true,
+      apiFieldValue: {
+        et: "parent_stratigraphy",
+        en: "parent_stratigraphy_en",
+      },
+      sortField: { et: ["parent_stratigraphy"], en: ["parent_stratigraphy_en"] },
+    },
+    ageBase: {
+      title: "stratigraphy.ageBase",
+      value: "ageBase",
+      show: true,
+      apiFieldValue: "age_base",
+      sortField: ["age_base"],
+    },
+    ageTop: {
+      title: "stratigraphy.ageTop",
+      value: "ageTop",
+      show: true,
+      apiFieldValue: "age_top",
+      sortField: ["age_top"],
+    },
+    age_stratigraphy: {
+      title: "stratigraphy.age_stratigraphy",
+      value: "age_stratigraphy",
+      show: true,
+      apiFieldValue: { et: "age_stratigraphy", en: "age_stratigraphy_en" },
+      sortField: { et: ["age_stratigraphy"], en: ["age_stratigraphy_en"] },
+    },
+  },
+  allIds: [
+    "id",
+    "stratigraphy",
+    "index_main",
+    "index_additional",
+    "stratigraphy_type",
+    "stratigraphy_rank",
+    "stratigraphy_scope",
+    "parent_stratigraphy",
+    "ageBase",
+    "ageTop",
+    "age_stratigraphy",
+  ],
+};
+
+export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
+  byIds: {
+    locality: {
+      title: "stratotype.locality",
+      value: "locality",
+      show: true,
+      apiFieldValue: { et: "locality__locality", en: "locality_locality_en" },
+      sortField: { et: ["locality__locality"], en: ["locality_locality_en"] },
+    },
+    type: {
+      title: "stratotype.type",
+      value: "type",
+      show: true,
+      apiFieldValue: {
+        et: "stratotype_type__value",
+        en: "stratotype_type__value_en",
+      },
+      sortField: { et: ["stratotype_type__value"], en: ["stratotype_type__value_en"] },
+    },
+    depth_top: {
+      title: "stratotype.depthTop",
+      value: "depth_top",
+      show: true,
+      apiFieldValue: "depth_top",
+      sortField: ["depth_top"],
+    },
+    depth_base: {
+      title: "stratotype.depthBase",
+      value: "depth_base",
+      show: true,
+      apiFieldValue: "depth_base",
+      sortField: ["depth_base"],
+    },
+    reference: {
+      title: "stratotype.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    remarks: {
+      title: "stratotype.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: [
+    "locality",
+    "type",
+    "depth_top",
+    "depth_base",
+    "reference",
+    "remarks",
+  ],
+};
+
 export const HEADERS_TAXON_LIST: Headers = {
   byIds: {
     taxon: {
