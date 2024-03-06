@@ -186,7 +186,7 @@ redirectInvalidTab({
 const searchRoute = computed(() => {
   if (searchModule.value === "analyticalData") {
     return localePath({
-      path: "/analytical_data",
+      path: "/analytical-data",
       query: getQueryParamsAnalyticalData(),
     });
   }
