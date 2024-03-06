@@ -74,6 +74,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "site-id", params: { id } },
     index + getOffset(options.value.page, options.value.itemsPerPage),
+    "site",
   );
 }
 // export default defineComponent({

@@ -5,6 +5,7 @@ export const useSearchPosition = defineStore(
   () => {
     const page = ref<RouteLocationNamedRaw>();
     const searchPosition = ref(-1);
+    const searchModule = ref<string>();
 
     const fromSearch = computed(() => searchPosition.value > -1);
 
@@ -16,14 +17,17 @@ export const useSearchPosition = defineStore(
     function setSearchPosition(
       newPage: RouteLocationNamedRaw,
       newPosition: number,
+      newModule: string,
     ) {
       page.value = newPage;
       searchPosition.value = newPosition;
+      searchModule.value = newModule;
     }
 
     return {
       page,
       searchPosition,
+      searchModule,
       fromSearch,
       setSearchPosition,
       $reset,
@@ -31,7 +35,7 @@ export const useSearchPosition = defineStore(
   },
   {
     persist: {
-      paths: ["page", "searchPosition"],
+      paths: ["page", "searchPosition", "searchModule"],
       storage: persistedState.sessionStorage,
     },
   },

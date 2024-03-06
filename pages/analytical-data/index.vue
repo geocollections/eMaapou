@@ -64,6 +64,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "analysis-id", params: { id } },
     index + getOffset(options.value.page, options.value.itemsPerPage),
+    "analyticalData",
   );
 }
 

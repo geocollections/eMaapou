@@ -8,22 +8,49 @@ const route = useRoute();
 const localePath = useLocalePath();
 
 const analysesStore = useAnalyses();
-const { getQueryParams } = analysesStore;
-const { solrFilters, solrQuery, solrSort, resultsCount }
+const { getQueryParams: getQueryParamsAnalysis } = analysesStore;
+const { solrFilters: analysisSolrFilters, solrQuery: analysisSolrQuery, solrSort: analysisSolrSort }
   = storeToRefs(analysesStore);
+
+const analyticalDataStore = useAnalyticalData();
+const { getQueryParams: getQueryParamsAnalyticalData } = analyticalDataStore;
+const { solrFilters: analyticalDataSolrFilters, solrQuery: analyticalDataSolrQuery, solrSort: analyticalDataSolrSort }
+  = storeToRefs(analyticalDataStore);
+
+const searchPositionStore = useSearchPosition();
+const { searchModule } = storeToRefs(searchPositionStore);
+
+const searchUrl = computed(() => {
+  if (searchModule.value === "analyticalData")
+    return "/analytical_data";
+
+  return "/analysis";
+});
+
+const searchParams = computed(() => {
+  if (searchModule.value === "analyticalData") {
+    return {
+      query: analyticalDataSolrQuery,
+      filter: analyticalDataSolrFilters,
+      sort: analyticalDataSolrSort,
+    };
+  }
+
+  return {
+    query: analysisSolrQuery,
+    filter: analysisSolrFilters,
+    sort: analysisSolrSort,
+  };
+});
 
 const {
   data: analysesRes,
   page,
   handleSelect,
   showDrawer,
-} = await useSearchResultsDrawer("/analysis", {
+} = await useSearchResultsDrawer(searchUrl.value, {
   routeName: "analysis-id",
-  solrParams: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-  },
+  solrParams: searchParams.value,
 });
 
 const similarAnalysis = computed(() => analysesRes.value?.response.docs ?? []);
@@ -155,6 +182,20 @@ redirectInvalidTab({
 //   },
 //   head: {},
 // })
+
+const searchRoute = computed(() => {
+  if (searchModule.value === "analyticalData") {
+    return localePath({
+      path: "/analytical_data",
+      query: getQueryParamsAnalyticalData(),
+    });
+  }
+
+  return localePath({
+    path: "/analysis",
+    query: getQueryParamsAnalysis(),
+  });
+});
 </script>
 
 <template>
@@ -172,7 +213,7 @@ redirectInvalidTab({
         :results="similarAnalysis"
         :total-results="analysesRes?.response.numFound ?? 0"
         :search-route="
-          localePath({ path: '/analysis', query: getQueryParams() })
+          searchRoute
         "
         :get-result-route="
           (item) => localePath({ name: 'analysis-id', params: { id: item.id } })

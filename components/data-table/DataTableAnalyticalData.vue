@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+
 const localePath = useLocalePath();
 
 function formatDepthRange({
@@ -127,13 +129,14 @@ function formatDepthRange({
         {{ item.dataset_id }}
       </NuxtLink>
     </template>
-    <template #item.analysis_id="{ item }">
+    <template #item.analysis_id="{ item, index }">
       <NuxtLink
         v-if="item.analysis_id"
         class="text-link"
         :to="
           localePath({ name: 'analysis-id', params: { id: item.analysis_id } })
         "
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.analysis_id }}
       </NuxtLink>

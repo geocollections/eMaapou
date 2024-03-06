@@ -91,6 +91,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   setSearchPosition(
     { name: "sample-id", params: { id } },
     index + getOffset(options.value.page, options.value.itemsPerPage),
+    "sample",
   );
 }
 </script>
