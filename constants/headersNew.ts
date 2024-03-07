@@ -1562,6 +1562,81 @@ export const HEADERS_STRATIGRAPHY: Headers = {
   ],
 };
 
+export const HEADERS_STRATIGRAPHY_REFERENCE: Headers = {
+  byIds: {
+    reference: {
+      title: "stratigraphyReference.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    content: {
+      title: "stratigraphyReference.content",
+      value: "content",
+      show: true,
+      apiFieldValue: "reference__year",
+      sortField: ["reference__year"],
+    },
+    year: {
+      title: "stratigraphyReference.year",
+      value: "year",
+      show: true,
+      apiFieldValue: "pages",
+      sortField: ["pages"],
+    },
+    pages: {
+      title: "stratigraphyReference.pages",
+      value: "pages",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+    remarks: {
+      title: "stratigraphyReference.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: { et: "content", en: "content_en" },
+      sortField: { et: ["content"], en: ["content_en"] },
+    },
+  },
+  allIds: ["reference", "content", "year", "pages", "remarks"],
+};
+
+export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
+  byIds: {
+    synonym: {
+      title: "stratigraphySynonym.synonym",
+      value: "synonym",
+      show: true,
+      apiFieldValue: "synonym",
+      sortField: ["synonym"],
+    },
+    language: {
+      title: "stratigraphySynonym.language",
+      value: "language",
+      show: true,
+      apiFieldValue: { et: "language__value", en: "language__value_en" },
+      sortField: { et: ["language__value"], en: ["language__value_en"] },
+    },
+    reference: {
+      title: "stratigraphySynonym.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    remarks: {
+      title: "stratigraphySynonym.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: ["synonym", "language", "reference", "remarks"],
+};
+
 export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
   byIds: {
     locality: {
@@ -1618,6 +1693,40 @@ export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
     "reference",
     "remarks",
   ],
+};
+
+export const HEADERS_TAXON: Headers = {
+  byIds: {
+    id: {
+      title: "taxon.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
+    },
+    taxon: {
+      title: "taxon.taxon",
+      value: "taxon",
+      show: true,
+      apiFieldValue: "taxon",
+      sortField: ["taxon"],
+    },
+    parent_taxon: {
+      title: "taxon.parentTaxon",
+      value: "parent_taxon",
+      show: true,
+      apiFieldValue: "parent_taxon",
+      sortField: ["parent_taxon"],
+    },
+    fossil_group: {
+      title: "taxon.fossilGroup",
+      value: "fossil_group",
+      show: true,
+      apiFieldValue: "fossil_group",
+      sortField: ["fossil_group"],
+    },
+  },
+  allIds: ["id", "taxon", "parent_taxon", "fossil_group"],
 };
 
 export const HEADERS_TAXON_LIST: Headers = {

@@ -33,12 +33,6 @@ export const useStratigraphies = defineStore(
     const resultsCount = ref(0);
 
     const { filters, solrFilters, reset: resetFilters } = useFilters({
-      age: {
-        type: "range",
-        value: [null, null],
-        placeholders: ["depth.min", "depth.max"],
-        fields: ["depth"],
-      } as RangeFilter,
       stratigraphy: {
         type: "idList",
         value: [],
@@ -49,16 +43,42 @@ export const useStratigraphies = defineStore(
       type: {
         type: "idList",
         value: [],
-        fields: ["type_id"],
+        fields: ["type"],
         tag: "type",
       } as IdListFilter,
+      scope: {
+        type: "idList",
+        value: [],
+        fields: ["scope"],
+        tag: "scope",
+      } as IdListFilter,
+      rank: {
+        type: "idList",
+        value: [],
+        fields: ["rank"],
+        tag: "rank",
+      } as IdListFilter,
+      index: {
+        type: "textList",
+        value: [],
+        fields: ["index_main", "index_additional"],
+      } as TextListFilter,
+      age: {
+        type: "rangeAlt",
+        value: [null, null],
+        placeholders: ["stratigraphy.min", "stratigraphy.max"],
+        fields: ["age_base", "age_top"],
+      } as RangeAltFilter,
     });
 
     const routeQueryFiltersSchema = z.object({
       q: z.string().catch(""),
+      index: textParamParser,
       age: rangeParamParser,
       stratigraphy: idParamParser(","),
       type: idParamParser(","),
+      scope: idParamParser(","),
+      rank: idParamParser(","),
     });
 
     const routeQuerySchema = routeQueryOptionsSchema.merge(
@@ -81,9 +101,12 @@ export const useStratigraphies = defineStore(
 
     const filtersStateToQueryParamsSchema = z.object({
       q: stringValueParser,
+      index: stringArrayValueParser,
       age: rangeValueParser,
       stratigraphy: idValueParser(","),
       type: idValueParser(","),
+      scope: idValueParser(","),
+      rank: idValueParser(","),
     });
 
     const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
@@ -93,9 +116,12 @@ export const useStratigraphies = defineStore(
     function getQueryParams() {
       return stateToQueryParamsSchema.parse({
         q: query.value,
+        index: filters.value.index.value,
         age: filters.value.age.value,
         stratigraphy: filters.value.stratigraphy.value,
         type: filters.value.type.value,
+        scope: filters.value.type.value,
+        rank: filters.value.type.value,
         page: options.value.page,
         itemsPerPage: options.value.itemsPerPage,
         sortBy: options.value.sortBy,

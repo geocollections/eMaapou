@@ -144,10 +144,10 @@ function openOverlay(image: OverlayImage) {
       }}
     </template>
     <template #item.depth="{ item }">
-      {{ item.depth.toFixed(2) }}
+      {{ item.depth?.toFixed(2) }}
     </template>
     <template #item.depth_interval="{ item }">
-      {{ item.depth_interval.toFixed(2) }}
+      {{ item.depth_interval?.toFixed(2) }}
     </template>
   </BaseDataTable>
   <ImageOverlay v-model="showOverlay" :image="overlayImage" />

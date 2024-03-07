@@ -1,55 +1,51 @@
-<template>
-  <div>
-    <data-table-stratigraphy-reference
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
-
-<script>
+<script setup lang="ts">
 import {
-  HEADERS_STRATIGRAPHY_REFERENCE,
   STRATIGRAPHY_REFERENCE,
-} from '~/constants'
-import DataTableStratigraphyReference from '~/components/data-table/DataTableStratigraphyReference.vue'
+} from "~/constants";
+import { HEADERS_STRATIGRAPHY_REFERENCE } from "~/constants/headersNew";
 
-export default {
-  components: { DataTableStratigraphyReference },
-  data() {
-    return {
-      options: STRATIGRAPHY_REFERENCE.options,
-      items: [],
-      count: 0,
-      search: '',
-    }
-  },
-  async fetch() {
-    const referenceResponse = await this.$services.sarvREST.getResourceList(
-      'stratigraphy_reference',
-      {
-        search: this.search,
-        options: this.options,
-        defaultParams: {
-          stratigraphy: this.$route.params.id,
-          nest: 1,
-        },
-        fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY_REFERENCE),
-      }
-    )
+const {
+  options,
+  search,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+} = useDataTableDetail({
+  initOptions: STRATIGRAPHY_REFERENCE.options,
+  initHeaders: HEADERS_STRATIGRAPHY_REFERENCE,
+});
+const route = useRoute();
+const { locale } = useI18n();
 
-    this.items = referenceResponse.items
-    this.count = referenceResponse.count
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.search = tableState.search
-      this.$fetch()
-    },
-  },
-}
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/stratigraphy_reference/", {
+  query: computed(() => ({
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    stratigraphy: route.params.id,
+    nest: 1,
+    search: search.value,
+    search_fields: Object.values(
+      getAPIFieldValues(HEADERS_STRATIGRAPHY_REFERENCE, locale.value),
+    ).join(","),
+    ordering: getGeoloogiaApiSort({
+      sortBy: options.value.sortBy,
+      headersMap: HEADERS_STRATIGRAPHY_REFERENCE.byIds,
+      locale: locale.value as "et" | "en",
+    }),
+  })),
+});
 </script>
+
+<template>
+  <DataTableStratigraphyReference
+    :items="data?.results ?? []"
+    :count="data?.count ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

@@ -1,57 +1,52 @@
-<template>
-  <div>
-    <data-table-specimen
-      :items="specimens"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+import { SPECIMEN } from "~/constants";
+import { HEADERS_SPECIMEN } from "~/constants/headersNew";
 
-<script>
-import DataTableSpecimen from '~/components/data-table/DataTableSpecimen.vue'
+const props = defineProps<{
+  stratigraphy: any;
+}>();
 
-import { HEADERS_SPECIMEN, SPECIMEN } from '~/constants'
-export default {
-  components: { DataTableSpecimen },
-  props: {
-    stratigraphy: {
-      type: Object,
-      required: true,
+const {
+  options,
+  solrQuery,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+} = useDataTableDetail({
+  initOptions: SPECIMEN.options,
+  initHeaders: HEADERS_SPECIMEN,
+});
+const { locale } = useI18n();
+
+const { data, pending } = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/specimen", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: `(stratigraphy_hierarchy:(${props.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${props.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${props.stratigraphy.hierarchy_string}*))`,
+      sort: getSolrSort({
+        sortBy: options.value.sortBy,
+        headersMap: HEADERS_SPECIMEN.byIds,
+        locale: locale.value as "et" | "en",
+      }),
     },
-  },
-  data() {
-    return {
-      specimens: [],
-      count: 0,
-      options: SPECIMEN.options,
-      search: '',
-    }
-  },
-  async fetch() {
-    const specimenResponse = await this.$services.sarvSolr.getResourceList(
-      'specimen',
-      {
-        search: this.search,
-        options: this.options,
-        defaultParams: {
-          fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
-          // fq: `stratigraphy_id:${this.stratigraphy}`,
-        },
-        fields: this.$getAPIFieldValues(HEADERS_SPECIMEN),
-      }
-    )
-    this.specimens = specimenResponse.items
-    this.count = specimenResponse.count
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.search = tableState.search
-      this.$fetch()
-    },
-  },
-}
+  })),
+});
 </script>
+
+<template>
+  <DataTableSpecimen
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

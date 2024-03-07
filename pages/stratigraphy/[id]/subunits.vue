@@ -1,50 +1,49 @@
-<template>
-  <div>
-    <data-table-stratigraphy
-      :items="items"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+import { STRATIGRAPHY } from "~/constants";
+import { HEADERS_STRATIGRAPHY } from "~/constants/headersNew";
 
-<script>
-import { HEADERS_STRATIGRAPHY, STRATIGRAPHY } from '~/constants'
-import DataTableStratigraphy from '~/components/data-table/DataTableStratigraphy.vue'
+const {
+  options,
+  solrQuery,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+} = useDataTableDetail({
+  initOptions: STRATIGRAPHY.options,
+  initHeaders: HEADERS_STRATIGRAPHY,
+});
+const route = useRoute();
+const { locale } = useI18n();
 
-export default {
-  components: { DataTableStratigraphy },
-  data() {
-    return {
-      options: STRATIGRAPHY.options,
-      items: [],
-      count: 0,
-      search: '',
-    }
-  },
-  async fetch() {
-    const analysisResponse = await this.$services.sarvSolr.getResourceList(
-      'stratigraphy',
-      {
-        search: this.search,
-        options: this.options,
-        defaultParams: {
-          fq: `parent_id:${this.$route.params.id}`,
-        },
-        fields: this.$getAPIFieldValues(HEADERS_STRATIGRAPHY),
-      }
-    )
-    this.items = analysisResponse.items
-    this.count = analysisResponse.count
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.search = tableState.search
-      this.$fetch()
+const { data, pending } = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/stratigraphy", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: `parent_id:${route.params.id}`,
+      sort: getSolrSort({
+        sortBy: options.value.sortBy,
+        headersMap: HEADERS_SAMPLE.byIds,
+        locale: locale.value as "et" | "en",
+      }),
     },
-  },
-}
+  })),
+});
 </script>
+
+<template>
+  <DataTableStratigraphy
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

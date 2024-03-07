@@ -215,18 +215,64 @@ const { filters, query, solrQuery, solrFilters } = storeToRefs(stratigraphiesSto
 const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
   "/stratigraphy",
   {
-    idField: "type_id_s",
+    idField: "type_s",
     nameField: { et: "stratigraphy_type", en: "stratigraphy_type_en" },
     filterExclude: "type",
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
+const { suggest: suggestScope, hydrate: hydrateScope } = useAutocomplete(
+  "/stratigraphy",
+  {
+    idField: "scope_s",
+    nameField: { et: "stratigraphy_scope", en: "stratigraphy_scope_en" },
+    filterExclude: "scope",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+const { suggest: suggestRank, hydrate: hydrateRank } = useAutocomplete(
+  "/stratigraphy",
+  {
+    idField: "rank_s",
+    nameField: { et: "stratigraphy_rank", en: "stratigraphy_rank_en" },
+    filterExclude: "rank",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+
+const { $solrFetch } = useNuxtApp();
+
+async function suggestStratigraphy(
+  query: string,
+  pagination: { page: number; perPage: number },
+) {
+  const searchField = locale.value === "et" ? "stratigraphy" : "stratigraphy_en";
+  const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: queryStr,
+      rows: pagination.perPage,
+      start: (pagination.page - 1) * pagination.perPage,
+      sort: `${searchField} asc`,
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.hierarchy_string,
+    name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+    value: doc.hierarchy_string,
+  }));
+}
 
 const filterType = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterScope = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterRank = ref<InstanceType<typeof FilterInputAutocomplete>>();
 
 function handleUpdate() {
   nextTick(() => {
     filterType.value?.refreshSuggestions();
+    filterScope.value?.refreshSuggestions();
+    filterRank.value?.refreshSuggestions();
     emit("update");
   });
 }
@@ -241,6 +287,19 @@ function handleReset() {
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <VExpansionPanels variant="accordion" multiple>
+      <!-- TODO: Stratigraphy filter, need to update solr index -->
+      <FilterInputText
+        v-model="filters.index.value"
+        :title="$t('filters.index')"
+        value="index"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputRange
+        v-model="filters.age.value"
+        :title="$t('filters.age')"
+        value="age"
+        @update:model-value="handleUpdate"
+      />
       <FilterInputAutocomplete
         ref="filterType"
         v-model="filters.type.value"
@@ -248,6 +307,24 @@ function handleReset() {
         :query-function="suggestType"
         :hydration-function="hydrateType"
         value="type"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterRank"
+        v-model="filters.rank.value"
+        :title="$t('filters.rank')"
+        :query-function="suggestRank"
+        :hydration-function="hydrateRank"
+        value="rank"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterScope"
+        v-model="filters.scope.value"
+        :title="$t('filters.scope')"
+        :query-function="suggestScope"
+        :hydration-function="hydrateScope"
+        value="scope"
         @update:model-value="handleUpdate"
       />
     </VExpansionPanels>

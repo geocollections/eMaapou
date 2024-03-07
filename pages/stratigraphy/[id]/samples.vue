@@ -1,59 +1,52 @@
-<template>
-  <div>
-    <data-table-sample
-      :items="samples"
-      :count="count"
-      :options="options"
-      :is-loading="$fetchState.pending"
-      @update="handleUpdate"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+import { SAMPLE } from "~/constants";
+import { HEADERS_SAMPLE } from "~/constants/headersNew";
 
-<script>
-import isNil from 'lodash/isNil'
-import DataTableSample from '~/components/data-table/DataTableSample.vue'
+const props = defineProps<{
+  stratigraphy: any;
+}>();
 
-import { HEADERS_SAMPLE, SAMPLE } from '~/constants'
-export default {
-  components: { DataTableSample },
-  props: {
-    stratigraphy: {
-      type: Object,
-      default: () => {},
+const {
+  options,
+  solrQuery,
+  handleUpdate,
+  headers,
+  handleHeadersReset,
+  handleHeadersChange,
+} = useDataTableDetail({
+  initOptions: SAMPLE.options,
+  initHeaders: HEADERS_SAMPLE,
+});
+const { locale } = useI18n();
+
+const { data, pending } = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/sample", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: options.value.itemsPerPage,
+      offset: getOffset(options.value.page, options.value.itemsPerPage),
+      filter: `(stratigraphy_hierarchy:(${props.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${props.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${props.stratigraphy.hierarchy_string}*))`,
+      sort: getSolrSort({
+        sortBy: options.value.sortBy,
+        headersMap: HEADERS_SAMPLE.byIds,
+        locale: locale.value as "et" | "en",
+      }),
     },
-  },
-  data() {
-    return {
-      samples: [],
-      count: 0,
-      options: SAMPLE.options,
-      search: '',
-    }
-  },
-  async fetch() {
-    if (isNil(this.stratigraphy)) return
-    const sampleResponse = await this.$services.sarvSolr.getResourceList(
-      'sample',
-      {
-        search: this.search,
-        options: this.options,
-        defaultParams: {
-          // fq: `stratigraphy_id:${this.stratigraphy}`,
-          fq: `(stratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR age_hierarchy:(${this.stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${this.stratigraphy.hierarchy_string}*))`,
-        },
-        fields: this.$getAPIFieldValues(HEADERS_SAMPLE),
-      }
-    )
-    this.samples = sampleResponse.items
-    this.count = sampleResponse.count
-  },
-  methods: {
-    handleUpdate(tableState) {
-      this.options = tableState.options
-      this.search = tableState.search
-      this.$fetch()
-    },
-  },
-}
+  })),
+});
 </script>
+
+<template>
+  <DataTableSample
+    :items="data?.response.docs ?? []"
+    :count="data?.response.numFound ?? 0"
+    :options="options"
+    :headers="headers"
+    :is-loading="pending"
+    @update="handleUpdate"
+    @change:headers="handleHeadersChange"
+    @reset:headers="handleHeadersReset(options)"
+  />
+</template>

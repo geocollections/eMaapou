@@ -2,6 +2,7 @@
 import isEmpty from "lodash/isEmpty";
 import isNull from "lodash/isNull";
 import type { MapMarker } from "~/types/map";
+import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
 
@@ -12,6 +13,98 @@ const tabs = {
     type: "static",
     routeName: "stratigraphy-id",
     title: "common.general",
+    props: {},
+  } satisfies Tab,
+  reference: {
+    type: "dynamic",
+    routeName: "stratigraphy-id-references",
+    title: "stratigraphy.references",
+    count: async () => {
+      return $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_reference/", {
+        query: {
+          stratigraphy: route.params.id,
+          limit: 0,
+        },
+      }).then(res => res.count);
+    },
+    props: {},
+  } satisfies Tab,
+  synonym: {
+    type: "dynamic",
+    routeName: "stratigraphy-id-synonyms",
+    title: "stratigraphy.synonyms",
+    count: async () => {
+      return $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
+        query: {
+          stratigraphy: route.params.id,
+          limit: 0,
+        },
+      }).then(res => res.count);
+    },
+    props: {},
+  } satisfies Tab,
+  subunits: {
+    type: "dynamic",
+    routeName: "stratigraphy-id-subunits",
+    title: "stratigraphy.subUnits",
+    count: async () => {
+      return $solrFetch<SolrResponse>("/stratigraphy", {
+        query: {
+          q: `parent_id:${route.params.id}`,
+          rows: 0,
+        },
+      }).then(res => res.response.numFound);
+    },
+    props: {},
+  } satisfies Tab,
+  lithostratigraphy: {
+    type: "dynamic",
+    routeName: "stratigraphy-id-related-units",
+    title: "stratigraphy.relatedUnits",
+    count: async () => {
+      return $solrFetch<SolrResponse>("/stratigraphy", {
+        query: {
+          q: `age_chronostratigraphy:${route.params.id}`,
+          rows: 0,
+        },
+      }).then(res => res.response.numFound);
+    },
+    props: {},
+  } satisfies Tab,
+  specimen: {
+    type: "dynamic",
+    routeName: "stratigraphy-id-specimens",
+    title: "stratigraphy.specimens",
+    count: async (ctx) => {
+      if (!ctx?.stratigraphy.hierarchy_string)
+        return 0;
+
+      const stratigraphy = ctx.stratigraphy;
+      return $solrFetch<SolrResponse>("/specimen", {
+        query: {
+          q: `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*) OR age_hierarchy:(${stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`,
+          rows: 0,
+        },
+      }).then(res => res.response.numFound);
+    },
+    props: {},
+  } satisfies Tab,
+  sample: {
+    type: "dynamic",
+    routeName: "stratigraphy-id-samples",
+    title: "stratigraphy.samples",
+    count: async (ctx) => {
+      if (!ctx?.stratigraphy.hierarchy_string)
+        return 0;
+
+      const stratigraphy = ctx.stratigraphy;
+      return $solrFetch<SolrResponse>("/sample", {
+        query: {
+          q: `(stratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*) OR age_hierarchy:(${stratigraphy.hierarchy_string}*) OR lithostratigraphy_hierarchy:(${stratigraphy.hierarchy_string}*))`,
+          rows: 0,
+        },
+      }).then(res => res.response.numFound);
+    },
     props: {},
   } satisfies Tab,
 };
@@ -32,13 +125,20 @@ const { data } = await useAsyncData("stratigraphy", async () => {
   });
 
   const hydratedTabs = await hydrateTabs(tabs, {
-    props: { general: { stratigraphy } },
+    props: { general: { stratigraphy }, sample: { stratigraphy }, specimen: { stratigraphy } },
+    ctx: { stratigraphy },
   });
 
   return {
     stratigraphy,
     tabs: filterHydratedTabs(hydratedTabs, [
       "general",
+      "reference",
+      "synonym",
+      "subunits",
+      "lithostratigraphy",
+      "specimen",
+      "sample",
     ]),
   };
 }, {
