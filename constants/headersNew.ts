@@ -1464,6 +1464,193 @@ export const HEADERS_SPECIMEN: Headers = {
   ],
 };
 
+export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
+  byIds: {
+    name: {
+      title: "specimenIdentification.name",
+      value: "name",
+      show: true,
+      apiFieldValue: "taxon__taxon",
+      sortField: ["taxon__taxon"],
+    },
+    agent: {
+      title: "specimenIdentification.agent",
+      value: "agent",
+      show: true,
+      apiFieldValue: "agent__agent",
+      sortField: ["agent__agent"],
+    },
+    dateIdentified: {
+      title: "specimenIdentification.dateIdentified",
+      value: "dateIdentified",
+      show: true,
+      apiFieldValue: "date_identified",
+      sortField: ["date_identified"],
+    },
+    reference: {
+      title: "specimenIdentification.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    type: {
+      title: "specimenIdentification.type",
+      value: "type",
+      show: true,
+      apiFieldValue: {
+        et: "identification_type__value",
+        en: "identification_type__value_en",
+      },
+      sortField: {
+        et: ["identification_type__value"],
+        en: ["identification_type__value_en"],
+      },
+    },
+    remarks: {
+      title: "specimenIdentification.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+    current: {
+      title: "specimenIdentification.current",
+      value: "current",
+      show: true,
+      apiFieldValue: "current",
+      sortField: ["current"],
+    },
+  },
+  allIds: [
+    "name",
+    "agent",
+    "dateIdentified",
+    "reference",
+    "type",
+    "remarks",
+    "current",
+  ],
+};
+
+export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
+  byIds: {
+    rock: {
+      title: "specimenIdentification.rock",
+      value: "rock",
+      show: true,
+      apiFieldValue: "rock__name,rock__name_en",
+      sortField: ["rock__name", "rock__name_en"],
+    },
+    name: {
+      title: "specimenIdentification.name",
+      value: "name",
+      show: true,
+      apiFieldValue: "name",
+      sortField: ["name"],
+    },
+    name_en: {
+      title: "specimenIdentification.name_en",
+      value: "name_en",
+      show: true,
+      apiFieldValue: "name_en",
+      sortField: ["name_en"],
+    },
+    agent: {
+      title: "specimenIdentification.agent",
+      value: "agent",
+      show: true,
+      apiFieldValue: "agent__agent",
+      sortField: ["agent__agent"],
+    },
+    dateIdentified: {
+      title: "specimenIdentification.dateIdentified",
+      value: "dateIdentified",
+      show: true,
+      apiFieldValue: "date_identified",
+      sortField: ["date_identified"],
+    },
+    reference: {
+      title: "specimenIdentification.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    type: {
+      title: "specimenIdentification.type",
+      value: "type",
+      show: true,
+      apiFieldValue: { et: "type__value", en: "type__value_en" },
+      sortField: { et: ["type__value"], en: ["type__value_en"] },
+    },
+    remarks: {
+      title: "specimenIdentification.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+    current: {
+      title: "specimenIdentification.current",
+      value: "current",
+      show: true,
+      apiFieldValue: "current",
+      sortField: ["current"],
+    },
+    // pages: {
+    //   title: 'stratigraphyReference.pages',
+    //   value: 'pages',
+    //   show: true,
+    // },
+  },
+  allIds: [
+    "rock",
+    "name",
+    "name_en",
+    "agent",
+    "dateIdentified",
+    "reference",
+    "type",
+    "remarks",
+    "current",
+  ],
+};
+
+export const HEADERS_SPECIMEN_REFERENCE: Headers = {
+  byIds: {
+    reference: {
+      title: "specimenReference.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    pages: {
+      title: "specimenReference.pages",
+      value: "pages",
+      show: true,
+      apiFieldValue: "pages",
+      sortField: ["pages"],
+    },
+    figures: {
+      title: "specimenReference.figures",
+      value: "figures",
+      show: true,
+      apiFieldValue: "figures",
+      sortField: ["figures"],
+    },
+    remarks: {
+      title: "specimenReference.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: ["reference", "pages", "figures", "remarks"],
+};
+
 export const HEADERS_STRATIGRAPHY: Headers = {
   byIds: {
     id: {

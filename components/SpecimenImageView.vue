@@ -1,53 +1,43 @@
-<script>
+<script setup lang="ts">
 import { mdiFileImageOutline } from "@mdi/js";
-import BaseDataTablePagination from "~/components/base/BaseDataTablePagination.vue";
 
-export default {
-  name: "SpecimenImageView",
-  components: { BaseDataTablePagination },
-  props: {
-    items: {
-      type: Array,
-      default: () => [],
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
-    options: {
-      type: Object,
-      default: () => ({
-        page: 1,
-        itemsPerPage: 25,
-      }),
-    },
+const props = defineProps({
+  items: {
+    type: Array,
+    default: () => [],
   },
-  data() {
-    return {
-      footerProps: {
-        "showFirstLastPage": true,
-        "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
-        "items-per-page-text": this.$t("table.itemsPerPage"),
-      },
-      cropImages: true,
-    };
+  count: {
+    type: Number,
+    default: 0,
   },
-  computed: {
-    pagination() {
-      return { pageCount: Math.ceil(this.count / this.options.itemsPerPage) };
-    },
-    icons() {
-      return {
-        mdiFileImageOutline,
-      };
-    },
+  options: {
+    type: Object,
+    default: () => ({
+      page: 1,
+      itemsPerPage: 25,
+    }),
   },
-  methods: {
-    updateOptions(event) {
-      this.$emit("update", { options: event });
-    },
-  },
-};
+});
+const emit = defineEmits(["update"]);
+const localePath = useLocalePath();
+const img = useImage();
+const { t } = useI18n();
+
+const footerProps = ref({
+  "showFirstLastPage": true,
+  "items-per-page-options": [10, 25, 50, 100, 250, 500, 1000],
+  "items-per-page-text": t("table.itemsPerPage"),
+});
+
+const cropImages = ref(true);
+
+const pagination = computed(() => {
+  return { pageCount: Math.ceil(props.count / props.options.itemsPerPage) };
+});
+
+function updateOptions(event) {
+  emit("update", { options: event });
+}
 </script>
 
 <template>
@@ -119,7 +109,7 @@ export default {
             z-index="51000"
             max-width="250"
           >
-            <template #activator="{ props }">
+            <template #activator="{ props: tooltipProps }">
               <VCard
                 flat
                 class="d-flex image-hover"
@@ -128,7 +118,7 @@ export default {
                 nuxt
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
                 :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
-                v-bind="props"
+                v-bind="tooltipProps"
               >
                 <VImg
                   v-if="image.image"
@@ -137,14 +127,14 @@ export default {
                   :contain="!cropImages"
                   aspect-ratio="1"
                   :lazy-src="
-                    $img(
+                    img(
                       `${image.image}`,
                       { size: 'small' },
                       { provider: 'geocollections' },
                     )
                   "
                   :src="
-                    $img(
+                    img(
                       `${image.image}`,
                       { size: 'small' },
                       { provider: 'geocollections' },
