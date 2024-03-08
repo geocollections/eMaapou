@@ -44,7 +44,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 const emit = defineEmits(["update:model-value"]);
 
 defineExpose({

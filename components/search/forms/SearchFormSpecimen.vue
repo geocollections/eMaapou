@@ -3,17 +3,15 @@ import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 
-const samplesStore = useSamples();
-const { filters, query, solrQuery, solrFilters } = storeToRefs(samplesStore);
-const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
-  "/specimen",
-  {
+const specimensStore = useSpecimens();
+const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);
+const { suggest: suggestLocality, hydrate: hydrateLocality }
+  = useAutocomplete("/specimen", {
     idField: "locality_id_s",
     nameField: { et: "locality", en: "locality_en" },
     filterExclude: "locality",
     solrParams: { query: solrQuery, filter: solrFilters },
-  },
-);
+  });
 const { suggest: suggestCollector, hydrate: hydrateCollector }
   = useAutocomplete("/specimen", {
     idField: "collector_id_s",
@@ -28,6 +26,34 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
     filterExclude: "institution",
     solrParams: { query: solrQuery, filter: solrFilters },
   });
+const { suggest: suggestCollection, hydrate: hydrateCollection }
+  = useAutocomplete("/specimen", {
+    idField: "collection_id_s",
+    nameField: "collection_number",
+    filterExclude: "collection",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+const { suggest: suggestFossilGroup, hydrate: hydrateFossilGroup }
+  = useAutocomplete("/specimen", {
+    idField: "fossilgroup_id_s",
+    nameField: "fossilgroup",
+    filterExclude: "fossilGroup",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+const { suggest: suggestCountry, hydrate: hydrateCountry }
+  = useAutocomplete("/specimen", {
+    idField: "country_id_s",
+    nameField: { et: "country", en: "country_en" },
+    filterExclude: "country",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+const { suggest: suggestOriginalStatus, hydrate: hydrateOriginalStatus }
+  = useAutocomplete("/specimen", {
+    idField: "original_status_id_s",
+    nameField: { et: "original_status", en: "original_status_en" },
+    filterExclude: "originalStatus",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
 
 function handleReset() {
   emit("reset");
@@ -36,11 +62,20 @@ function handleReset() {
 const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterCollector = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterCollection = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterFossilGroup = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterCountry = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterOriginalStatus = ref<InstanceType<typeof FilterInputAutocomplete>>();
+
 function handleUpdate() {
   nextTick(() => {
     filterLocality.value?.refreshSuggestions();
     filterCollector.value?.refreshSuggestions();
     filterInstitution.value?.refreshSuggestions();
+    filterCollection.value?.refreshSuggestions();
+    filterFossilGroup.value?.refreshSuggestions();
+    filterCountry.value?.refreshSuggestions();
+    filterOriginalStatus.value?.refreshSuggestions();
     emit("update");
   });
 }
@@ -548,8 +583,26 @@ function handleUpdate() {
     <VExpansionPanels variant="accordion" multiple>
       <FilterInputText
         v-model="filters.number.value"
-        :title="$t('filters.sampleNumber')"
+        :title="$t('filters.number')"
         value="number"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterCollection"
+        v-model="filters.collection.value"
+        :title="$t('filters.collection')"
+        :query-function="suggestCollection"
+        :hydration-function="hydrateCollection"
+        value="collection"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterFossilGroup"
+        v-model="filters.fossilGroup.value"
+        :title="$t('filters.fossilGroup')"
+        :query-function="suggestFossilGroup"
+        :hydration-function="hydrateFossilGroup"
+        value="fossilGroup"
         @update:model-value="handleUpdate"
       />
       <FilterInputAutocomplete
@@ -559,6 +612,15 @@ function handleUpdate() {
         :query-function="suggestLocality"
         :hydration-function="hydrateLocality"
         value="locality"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterCountry"
+        v-model="filters.country.value"
+        :title="$t('filters.country')"
+        :query-function="suggestCountry"
+        :hydration-function="hydrateCountry"
+        value="country"
         @update:model-value="handleUpdate"
       />
       <FilterMap
@@ -579,6 +641,15 @@ function handleUpdate() {
         :query-function="suggestCollector"
         :hydration-function="hydrateCollector"
         value="collector"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterOriginalStatus"
+        v-model="filters.originalStatus.value"
+        :title="$t('filters.originalStatus')"
+        :query-function="suggestOriginalStatus"
+        :hydration-function="hydrateOriginalStatus"
+        value="originalStatus"
         @update:model-value="handleUpdate"
       />
       <FilterInputAutocomplete

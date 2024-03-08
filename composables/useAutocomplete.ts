@@ -57,7 +57,7 @@ export function useAutocomplete(path: string, {
   function primaryFieldIdMapper(item: any) {
     return {
       id: item.value,
-      name: item.pivot[0].value,
+      name: item.pivot?.[0].value ?? item.value,
       count: item.count,
     };
   }
