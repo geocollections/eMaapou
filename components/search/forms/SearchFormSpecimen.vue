@@ -1,4 +1,49 @@
-<script lang="ts">
+<script setup lang="ts">
+import { FilterInputAutocomplete } from "#components";
+
+const emit = defineEmits(["update", "reset"]);
+
+const samplesStore = useSamples();
+const { filters, query, solrQuery, solrFilters } = storeToRefs(samplesStore);
+const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
+  "/specimen",
+  {
+    idField: "locality_id_s",
+    nameField: { et: "locality", en: "locality_en" },
+    filterExclude: "locality",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+const { suggest: suggestCollector, hydrate: hydrateCollector }
+  = useAutocomplete("/specimen", {
+    idField: "collector_id_s",
+    nameField: "collector",
+    filterExclude: "collector",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+const { suggest: suggestInstitution, hydrate: hydrateInstitution }
+  = useAutocomplete("/specimen", {
+    idField: "database_id_s",
+    nameField: "acronym",
+    filterExclude: "institution",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+
+function handleReset() {
+  emit("reset");
+}
+
+const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterCollector = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
+function handleUpdate() {
+  nextTick(() => {
+    filterLocality.value?.refreshSuggestions();
+    filterCollector.value?.refreshSuggestions();
+    filterInstitution.value?.refreshSuggestions();
+    emit("update");
+  });
+}
 // import {
 //   computed,
 //   defineComponent,
@@ -487,114 +532,65 @@
 </script>
 
 <template>
-  <div>
-    <!-- <v-form @submit.prevent.stop="handleUpdate"> -->
-    <!--   <input-search v-model="query" /> -->
-    <!--   <search-actions class="mb-3" @click="handleReset" /> -->
-    <!--   <filter-input-checkbox -->
-    <!--     :value="resultView === 'image' ? true : hasImage" -->
-    <!--     :label="$t('filters.hasImage')" -->
-    <!--     :disabled="resultView === 'image'" -->
-    <!--     @input="hasImage = $event" -->
-    <!--   /> -->
-    <!--   <filter-input-checkbox -->
-    <!--     v-model="hasCoordinates" -->
-    <!--     :label="$t('filters.hasCoordinates')" -->
-    <!--   /> -->
-    <!--   <v-expansion-panels class="mt-3" accordion flat tile multiple> -->
-    <!--     <filter-input-text -->
-    <!--       v-model="number" -->
-    <!--       :title="$t('filters.specimenNumber')" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="collection" -->
-    <!--       :title="$t('filters.collection')" -->
-    <!--       query-field="collection_number" -->
-    <!--       :query-function="querySuggestionsCollection" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="fossilGroup" -->
-    <!--       :title="$t('filters.fossilGroup')" -->
-    <!--       query-field="taxon" -->
-    <!--       :query-function="querySuggestionsFossilGroup" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="taxonHierarchy" -->
-    <!--       :title="$t('filters.taxonHierarchy')" -->
-    <!--       query-field="taxon" -->
-    <!--       :query-function="querySuggestionsTaxon" -->
-    <!--     /> -->
-    <!---->
-    <!--     <filter-input-text -->
-    <!--       v-model="taxonName" -->
-    <!--       :title="$t('filters.taxonName')" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="rockHierarchy" -->
-    <!--       :title="$t('filters.rockHierarchySpecimen')" -->
-    <!--       :query-field="$i18n.locale === 'et' ? 'rock' : 'rock_en'" -->
-    <!--       :query-function="querySuggestionsRock" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="locality" -->
-    <!--       :title="$t('filters.locality')" -->
-    <!--       :query-field="$i18n.locale === 'et' ? 'locality' : 'locality_en'" -->
-    <!--       :query-function="querySuggestionsLocality" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="country" -->
-    <!--       :title="$t('filters.country')" -->
-    <!--       static -->
-    <!--       :query-field="$i18n.locale === 'et' ? 'country' : 'country_en'" -->
-    <!--       :query-function="querySuggestionsCountry" -->
-    <!--     /> -->
-    <!--     <filter-map -->
-    <!--       v-model="map" -->
-    <!--       sample-overlay -->
-    <!--       :items="$accessor.search.specimen.items" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="stratigraphyHierarchy" -->
-    <!--       :title="$t('filters.stratigraphyHierarchy')" -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'stratigraphy' : 'stratigraphy_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsStratigraphy" -->
-    <!--     /> -->
-    <!--     <filter-input-range -->
-    <!--       v-model="depth" -->
-    <!--       :label="$t('filters.depth')" -->
-    <!--       interval-labels="intervals.depth" -->
-    <!--       :step="0.01" -->
-    <!--     /> -->
-    <!--     <filter-reference v-model="reference" /> -->
-    <!--     <!--  TODO: replace reference filter when specimen index `specimen_references` field uses keyword tokenizer -->
-    -->
-    <!--     <!-- <filter-input-autocomplete-new -->
-    -->
-    <!--     <!--   v-model="reference" -->
-    -->
-    <!--     <!--   :title="$t('filters.reference')" -->
-    -->
-    <!--     <!--   :query-function="querySuggestionsReference" -->
-    -->
-    <!--     <!-- /> -->
-    -->
-    <!--     <filter-input-text -->
-    <!--       v-model="collector" -->
-    <!--       :title="$t('filters.collector')" -->
-    <!--     /> -->
-    <!--     <filter-input-autocomplete-new -->
-    <!--       v-model="originalStatus" -->
-    <!--       :title="$t('filters.originalStatus')" -->
-    <!--       static -->
-    <!--       :query-field=" -->
-    <!--         $i18n.locale === 'et' ? 'original_status' : 'original_status_en' -->
-    <!--       " -->
-    <!--       :query-function="querySuggestionsOriginalStatus" -->
-    <!--     /> -->
-    <!--     <filter-institution v-model="institutions" /> -->
-    <!--   </v-expansion-panels> -->
-    <!-- </v-form> -->
-  </div>
+  <VForm @submit.prevent="handleUpdate">
+    <InputSearch v-model="query" />
+    <SearchActions class="mb-3" @click="handleReset" />
+    <FilterInputCheckbox
+      v-model="filters.hasImage.value"
+      :label="$t('filters.hasImage')"
+      @update:model-value="handleUpdate"
+    />
+    <FilterInputCheckbox
+      v-model="filters.hasCoordinates.value"
+      :label="$t('filters.hasCoordinates')"
+      @update:model-value="handleUpdate"
+    />
+    <VExpansionPanels variant="accordion" multiple>
+      <FilterInputText
+        v-model="filters.number.value"
+        :title="$t('filters.sampleNumber')"
+        value="number"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterLocality"
+        v-model="filters.locality.value"
+        :title="$t('filters.locality')"
+        :query-function="suggestLocality"
+        :hydration-function="hydrateLocality"
+        value="locality"
+        @update:model-value="handleUpdate"
+      />
+      <FilterMap
+        v-model="filters.geometry.value"
+        value="map"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputRange
+        v-model="filters.depth.value"
+        :title="$t('filters.depth')"
+        value="depth"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterCollector"
+        v-model="filters.collector.value"
+        :title="$t('filters.collector')"
+        :query-function="suggestCollector"
+        :hydration-function="hydrateCollector"
+        value="collector"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterInstitution"
+        v-model="filters.institution.value"
+        :title="$t('filters.institution')"
+        :query-function="suggestInstitution"
+        :hydration-function="hydrateInstitution"
+        :per-page="-1"
+        value="institution"
+        @update:model-value="handleUpdate"
+      />
+    </VExpansionPanels>
+  </VForm>
 </template>
