@@ -310,15 +310,15 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.v-data-table ::v-deep {
-  .v-data-table__wrapper tbody tr.v-data-table__expanded__content {
+.v-data-table  {
+  :deep(.v-data-table__wrapper) tbody tr.v-data-table__expanded__content {
     box-shadow: none;
   }
-  tbody > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
+  :deep(tbody) > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
     background-color: rgba(0, 0, 0, 0.03);
   }
 
-  th {
+  :deep(th) {
     // position: sticky;
     // top: 0px;
     background-color: white;

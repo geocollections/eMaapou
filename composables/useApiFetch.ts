@@ -1,17 +1,19 @@
 import type { UseFetchOptions } from "nuxt/app";
 import { defu } from "defu";
 
-export function useApiFetch<T>(url: string, options: UseFetchOptions<T> = {}) {
+type Request = Parameters<typeof useFetch>[0];
+
+export function useApiFetch<T>(request: Request, options: UseFetchOptions<T> = {}) {
   const defaults: UseFetchOptions<T> = {
     baseURL: "https://rwapi.geoloogia.info/api/v0/public",
   };
   const params = defu(options, defaults);
 
-  return useFetch(url, params);
+  return useFetch(request, params);
 }
 
 export function useGeoloogiaApiFetch<T>(
-  url: string,
+  request: Request,
   options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
@@ -19,11 +21,11 @@ export function useGeoloogiaApiFetch<T>(
   };
   const params = defu(options, defaults);
 
-  return useFetch(url, params);
+  return useFetch(request, params);
 }
 
 export function useGeoserverFetch<T>(
-  url: string,
+  request: Request,
   options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
@@ -45,11 +47,11 @@ export function useGeoserverFetch<T>(
   };
   const params = defu(options, defaults);
 
-  return useFetch(url, params);
+  return useFetch(request, params);
 }
 
 export function useNewApiFetch<T>(
-  url: string,
+  request: Request,
   options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
@@ -57,14 +59,14 @@ export function useNewApiFetch<T>(
   };
   const params = defu(options, defaults);
 
-  return useFetch(url, params);
+  return useFetch(request, params);
 }
 
-export function useSolrFetch<T>(url: string, options: UseFetchOptions<T> = {}) {
+export function useSolrFetch<T>(request: Request, options: UseFetchOptions<T> = {}) {
   const defaults: UseFetchOptions<T> = {
     baseURL: "https://api.geoloogia.info/solr",
   };
   const params = defu(options, defaults);
 
-  return useFetch(url, params);
+  return useFetch(request, params);
 }

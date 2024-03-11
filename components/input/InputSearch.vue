@@ -80,7 +80,7 @@ $border-width: 0px;
 $transition: border 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 
 .global-search {
-  ::v-deep .v-input__slot {
+  :deep(.v-input__slot) {
     padding-right: 0 !important;
 
     fieldset {

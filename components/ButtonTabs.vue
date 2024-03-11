@@ -47,15 +47,15 @@ const localePath = useLocalePath();
   -webkit-transition: all 0.4s ease;
 }
 
-.v-chip-group ::v-deep .v-slide-group__wrapper {
+.v-chip-group :deep(.v-slide-group__wrapper) {
   touch-action: auto;
 }
 .active-tab {
-  background-color: var(--v-accent-darken1) !important;
+  background-color: rgb(var(--v-theme-accent-darken-1)) !important;
   color: #ffffff !important;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: var(--v-accent-darken2) !important;
+  border-bottom-color: rgb(var(--v-theme-accent-darken-2)) !important;
 
   &:before {
     background-color: white !important;

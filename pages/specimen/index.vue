@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { mdiBug } from "@mdi/js";
 
-const currentView = ref(0);
+const route = useRoute();
+
 const views = computed(() => ["table", "image"]);
 
 const { t } = useI18n();
-const route = useRoute();
 
+const currentView = ref(0);
 const specimensStore = useSpecimens();
 const { resetFilters, resetDataTable } = specimensStore;
 const {
@@ -25,14 +26,13 @@ const solrIndexUrl = computed(() => {
 
   return "/specimen";
 });
-
 const {
   data,
   pending,
-  refresh: refreshSamples,
+  refresh: refreshSpecimens,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>(solrIndexUrl.value, {
+}>(solrIndexUrl, {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -44,6 +44,11 @@ const {
   })),
   watch: false,
 });
+
+watch(currentView, () => {
+  refreshSpecimens();
+});
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });
@@ -51,7 +56,7 @@ function setQueryParamsFromState() {
 
 async function handleUpdate() {
   setQueryParamsFromState();
-  await refreshSamples();
+  await refreshSpecimens();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -59,14 +64,14 @@ async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshSamples();
+  await refreshSpecimens();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshSamples();
+  await refreshSpecimens();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -110,45 +115,47 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
         background-color="transparent"
         color="accent"
       >
-        <VTab active-class="active-tab" class="montserrat text-capitalize">
+        <VTab
+          :value="0"
+          active-class="active-tab"
+          class="montserrat text-capitalize"
+        >
           {{ $t(`common.table`) }}
         </VTab>
         <VTab
+          :value="1"
           active-class="active-tab"
           class="montserrat text-capitalize"
         >
           {{ $t(`common.image`) }}
         </VTab>
       </VTabs>
-      <VCard class="mt-0">
-        <VTabsItems v-model="currentView">
-          <VTabItem :value="0">
-            <DataTableSpecimen
-              class="border-t border-b"
-              :show-search="false"
-              :items="data?.response.docs ?? []"
-              :count="data?.response.numFound ?? 0"
-              :headers="headers"
-              :options="options"
-              dynamic-headers
-              stateful-headers
-              :is-loading="pending"
-              @update="handleDataTableUpdate"
-              @change:headers="handleHeadersChange"
-              @reset:headers="handleHeadersReset(options)"
-              @click:row="handleClickRow"
-            />
-          </VTabItem>
-          <VTabItem :value="1">
-            <SpecimenImageView
-              :items="data?.response.docs ?? []"
-              :count="data?.response.numFound ?? 0"
-              :options="options"
-              @update="handleDataTableUpdate"
-            />
-          </VTabItem>
-        </VTabsItems>
-      </VCard>
+      <VWindow v-model="currentView">
+        <VWindowItem :value="0">
+          <DataTableSpecimen
+            class="border-t border-b"
+            :show-search="false"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :headers="headers"
+            :options="options"
+            :is-loading="pending"
+            @update="handleDataTableUpdate"
+            @change:headers="handleHeadersChange"
+            @reset:headers="handleHeadersReset(options)"
+            @click:row="handleClickRow"
+          />
+        </VWindowItem>
+        <VWindowItem :value="1">
+          <SpecimenImageView
+            class="border-t border-b"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :options="options"
+            @update="handleDataTableUpdate"
+          />
+        </VWindowItem>
+      </VWindow>
     </template>
   </Search>
 </template>
@@ -156,10 +163,10 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 <style scoped lang="scss">
 .active-tab {
   // font-weight: bold;
-  color: var(--v-accent-darken1) !important;
+  color: rgb(var(--v-theme-accent-darken-1)) !important;
   &::before {
     opacity: 0.2 !important;
-    background-color: var(--v-accent-base) !important;
+    background-color: rgb(var(--v-theme-accent)) !important;
 
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;

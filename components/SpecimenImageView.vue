@@ -41,7 +41,7 @@ function updateOptions(event) {
 </script>
 
 <template>
-  <VCard flat>
+  <div class="bg-white">
     <VRow no-gutters>
       <VCol
         cols="12"
@@ -117,7 +117,7 @@ function updateOptions(event) {
                 hover
                 nuxt
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
-                :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
+                :class="{ 'border image-hover-elevation': !!cropImages }"
                 v-bind="tooltipProps"
               >
                 <VImg
@@ -191,5 +191,5 @@ function updateOptions(event) {
         </VCol>
       </VRow>
     </VCard>
-  </VCard>
+  </div>
 </template>

@@ -286,11 +286,11 @@ const cssProps = computed(() => {
 }
 
 .active-tab {
-  color: var(--v-theme-accent-darken1) !important;
+  color: rgb(var(--v-theme-accent-darken1)) !important;
   font-weight: 600 !important;
 }
 
-.app-bar-mobile ::v-deep .v-toolbar__content {
+.app-bar-mobile :deep(.v-toolbar__content) {
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
@@ -304,7 +304,7 @@ const cssProps = computed(() => {
   }
 }
 
-.app-bar-full ::v-deep .v-toolbar__content {
+.app-bar-full :deep(.v-toolbar__content) {
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
@@ -317,11 +317,11 @@ const cssProps = computed(() => {
   background-color: rgba(9, 98, 124, 0.12) !important;
 
   & div {
-    color: var(--v-theme-accent-lighten1) !important;
+    color: rgb(var(--v-theme-accent-lighten1)) !important;
   }
 
   & .v-icon {
-    color: var(--v-theme-accent-lighten1) !important;
+    color: rgb(var(--v-theme-accent-lighten1)) !important;
   }
 }
 .logo-link {

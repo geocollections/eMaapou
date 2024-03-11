@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { FilterInputAutocomplete } from "#components";
 
+const props = defineProps<{ resultView: "table" | "image" }>();
+
 const emit = defineEmits(["update", "reset"]);
 
 const specimensStore = useSpecimens();
@@ -564,6 +566,11 @@ function handleUpdate() {
 //     }
 //   },
 // })
+
+function handleHasImageUpdate(value: boolean) {
+  filters.value.hasImage.value = value;
+  handleUpdate();
+}
 </script>
 
 <template>
@@ -571,9 +578,10 @@ function handleUpdate() {
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <FilterInputCheckbox
-      v-model="filters.hasImage.value"
+      :model-value="resultView === 'image' ? true : filters.hasImage.value"
       :label="$t('filters.hasImage')"
-      @update:model-value="handleUpdate"
+      :disabled="resultView === 'image'"
+      @update:model-value="handleHasImageUpdate"
     />
     <FilterInputCheckbox
       v-model="filters.hasCoordinates.value"
