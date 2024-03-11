@@ -115,17 +115,14 @@ function updateOptions(event) {
                 class="d-flex image-hover"
                 color="transparent"
                 hover
-                nuxt
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
-                :class="{ 'border image-hover-elevation': !!cropImages }"
+                :class="{ 'image-hover-elevation': !!cropImages }"
                 v-bind="tooltipProps"
               >
                 <VImg
                   v-if="image.image"
-                  max-height="400"
-                  min-width="72"
+                  position="top"
                   :contain="!cropImages"
-                  aspect-ratio="1"
                   :lazy-src="
                     img(
                       `${image.image}`,
