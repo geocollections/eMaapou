@@ -106,11 +106,20 @@ async function handleImageUpdate({ options: newOptions }) {
 
 const { setSearchPosition } = useSearchPosition();
 function handleClickRow({ index, id }: { index: number; id: number }) {
-  setSearchPosition(
-    { name: "specimen-id", params: { id } },
-    index + getOffset(options.value.page, options.value.itemsPerPage),
-    "specimen",
-  );
+  if (views.value[currentView.value] === "image") {
+    setSearchPosition(
+      { name: "specimen-id", params: { id } },
+      index + getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
+      "specimenImage",
+    );
+  }
+  else {
+    setSearchPosition(
+      { name: "specimen-id", params: { id } },
+      index + getOffset(options.value.page, options.value.itemsPerPage),
+      "specimen",
+    );
+  }
 }
 
 const viewCount = computed(() => {
@@ -164,6 +173,9 @@ const viewCount = computed(() => {
             class="montserrat text-capitalize"
           >
             {{ $t(`common.image`) }}
+            <VChip class="ml-2" size="small">
+              {{ imageData?.response.numFound ?? 0 }}
+            </VChip>
           </VTab>
         </VTabs>
         <VWindow v-model="currentView">
