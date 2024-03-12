@@ -14,6 +14,7 @@ import type {
 export const useSpecimens = defineStore(
   "specimens",
   () => {
+    const route = useRoute();
     const {
       query,
       options,
@@ -30,7 +31,16 @@ export const useSpecimens = defineStore(
       initHeaders: HEADERS_SPECIMEN,
     });
 
-    const resultsCount = ref(0);
+    const imageOptions = ref({
+      itemsPerPage: 25,
+      page: 1,
+    });
+
+    function getView() {
+      return route.query.view === "image" ? 1 : 0;
+    }
+
+    const view = ref(0);
 
     const { filters, solrFilters, reset: resetFilters } = useFilters({
       number: {
@@ -132,11 +142,20 @@ export const useSpecimens = defineStore(
       routeQueryFiltersSchema,
     );
 
-    function setStateFromQueryParamsTest(route: RouteLocation) {
+    function setStateFromQueryParams(route: RouteLocation) {
       const params = routeQuerySchema.parse(route.query);
 
-      options.value.page = params.page;
-      options.value.itemsPerPage = params.itemsPerPage;
+      view.value = getView();
+
+      if (view.value === 1) {
+        imageOptions.value.page = params.page;
+        imageOptions.value.itemsPerPage = params.itemsPerPage;
+      }
+      else {
+        options.value.page = params.page;
+        options.value.itemsPerPage = params.itemsPerPage;
+      }
+
       options.value.sortBy = params.sortBy;
 
       query.value = params.q;
@@ -167,7 +186,16 @@ export const useSpecimens = defineStore(
       filtersStateToQueryParamsSchema,
     );
 
+    function getViewOptions() {
+      if (view.value === 1)
+        return imageOptions.value;
+
+      return options.value;
+    }
+
     function getQueryParams() {
+      const viewOptions = getViewOptions();
+
       return stateToQueryParamsSchema.parse({
         q: query.value,
         number: filters.value.number.value,
@@ -183,8 +211,8 @@ export const useSpecimens = defineStore(
         fossilGroup: filters.value.fossilGroup.value,
         country: filters.value.country.value,
         originalStatus: filters.value.originalStatus.value,
-        page: options.value.page,
-        itemsPerPage: options.value.itemsPerPage,
+        page: viewOptions.page,
+        itemsPerPage: viewOptions.itemsPerPage,
         sortBy: options.value.sortBy,
       });
     }
@@ -197,18 +225,19 @@ export const useSpecimens = defineStore(
       handleHeadersReset,
       handleHeadersChange,
       options,
-      setStateFromQueryParams: setStateFromQueryParamsTest,
+      setStateFromQueryParams,
       getQueryParams,
-      resultsCount,
       solrFilters,
       filters,
       resetFilters,
       resetDataTable,
+      imageOptions,
+      currentView: view,
     };
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query"],
+      paths: ["options", "filters", "headers", "query", "imageOptions", "currentView"],
       storage: persistedState.sessionStorage,
     },
   },

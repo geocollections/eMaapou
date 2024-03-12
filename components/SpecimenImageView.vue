@@ -42,22 +42,7 @@ function updateOptions(event) {
 
 <template>
   <div class="bg-white">
-    <VRow no-gutters>
-      <VCol
-        cols="12"
-        sm="auto"
-        class="px-3 my-1 my-sm-4"
-        align-self="center"
-      >
-        <VSwitch
-          v-model="cropImages"
-          density="compact"
-          class="mt-0 montserrat"
-          hide-details
-          color="header"
-          :label="$t('common.containImages')"
-        />
-      </VCol>
+    <VRow class="border-b" no-gutters>
       <VCol class="d-flex justify-end">
         <BaseDataTablePagination
           :options="options"
@@ -77,7 +62,7 @@ function updateOptions(event) {
         />
       </VCol>
     </VRow>
-    <VCard flat>
+    <div class="py-2">
       <VRow
         v-if="count > 0"
         no-gutters
@@ -187,6 +172,6 @@ function updateOptions(event) {
           </VTooltip>
         </VCol>
       </VRow>
-    </VCard>
+    </div>
   </div>
 </template>

@@ -7,7 +7,6 @@ const views = computed(() => ["table", "image"]);
 
 const { t } = useI18n();
 
-const currentView = ref(0);
 const specimensStore = useSpecimens();
 const { resetFilters, resetDataTable } = specimensStore;
 const {
@@ -16,7 +15,7 @@ const {
   setStateFromQueryParams,
   getQueryParams,
 } = specimensStore;
-const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOptions }
   = storeToRefs(specimensStore);
 setStateFromQueryParams(route);
 
@@ -26,13 +25,14 @@ const solrIndexUrl = computed(() => {
 
   return "/specimen";
 });
+
 const {
   data,
   pending,
   refresh: refreshSpecimens,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
-}>(solrIndexUrl, {
+}>("/specimen", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,
@@ -45,34 +45,63 @@ const {
   watch: false,
 });
 
+const {
+  data: imageData,
+  pending: imagePending,
+  refresh: refreshSpecimenImages,
+} = await useSolrFetch<{
+  response: { numFound: number; docs: any[] };
+}>("/specimen_image", {
+  query: computed(() => ({
+    json: {
+      query: solrQuery.value,
+      limit: imageOptions.value.itemsPerPage,
+      offset: getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
+      filter: solrFilters.value,
+      sort: solrSort.value,
+    },
+  })),
+  watch: false,
+});
+
 watch(currentView, () => {
-  refreshSpecimens();
+  setQueryParamsFromState();
 });
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() });
+  router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
+}
+
+async function refreshData() {
+  if (views.value[currentView.value] === "image")
+    await refreshSpecimenImages();
+  else
+    await refreshSpecimens();
 }
 
 async function handleUpdate() {
   setQueryParamsFromState();
-  await refreshSpecimens();
-  resultsCount.value = data.value?.response.numFound ?? 0;
+  await refreshData();
 }
 
 async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshSpecimens();
-  resultsCount.value = data.value?.response.numFound ?? 0;
+  await refreshData();
 }
 
 async function handleDataTableUpdate({ options: newOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshSpecimens();
-  resultsCount.value = data.value?.response.numFound ?? 0;
+  await refreshData();
+}
+
+async function handleImageUpdate({ options: newOptions }) {
+  imageOptions.value = newOptions;
+  setQueryParamsFromState();
+  await refreshData();
 }
 
 const { setSearchPosition } = useSearchPosition();
@@ -83,6 +112,13 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     "specimen",
   );
 }
+
+const viewCount = computed(() => {
+  if (views.value[currentView.value] === "image")
+    return imageData.value?.response.numFound ?? 0;
+
+  return data.value?.response.numFound ?? 0;
+});
 </script>
 
 <template>
@@ -90,7 +126,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     <template #title>
       <HeaderSearch
         :title="$t('specimen.pageTitle')"
-        :count="data?.response.numFound ?? 0"
+        :count="viewCount"
         :icon="mdiBug"
       />
     </template>
@@ -110,52 +146,53 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     </template>
 
     <template #result>
-      <VTabs
-        v-model="currentView"
-        background-color="transparent"
-        color="accent"
-      >
-        <VTab
-          :value="0"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
+      <ClientOnly>
+        <VTabs
+          v-model="currentView"
+          background-color="transparent"
+          color="accent"
+          density="compact"
         >
-          {{ $t(`common.table`) }}
-        </VTab>
-        <VTab
-          :value="1"
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
-          {{ $t(`common.image`) }}
-        </VTab>
-      </VTabs>
-      <VWindow v-model="currentView">
-        <VWindowItem :value="0">
-          <DataTableSpecimen
-            class="border-t border-b"
-            :show-search="false"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :headers="headers"
-            :options="options"
-            :is-loading="pending"
-            @update="handleDataTableUpdate"
-            @change:headers="handleHeadersChange"
-            @reset:headers="handleHeadersReset(options)"
-            @click:row="handleClickRow"
-          />
-        </VWindowItem>
-        <VWindowItem :value="1">
-          <SpecimenImageView
-            class="border-t border-b"
-            :items="data?.response.docs ?? []"
-            :count="data?.response.numFound ?? 0"
-            :options="options"
-            @update="handleDataTableUpdate"
-          />
-        </VWindowItem>
-      </VWindow>
+          <VTab
+            active-class="active-tab"
+            class="montserrat text-capitalize"
+          >
+            {{ $t(`common.table`) }}
+          </VTab>
+          <VTab
+            active-class="active-tab"
+            class="montserrat text-capitalize"
+          >
+            {{ $t(`common.image`) }}
+          </VTab>
+        </VTabs>
+        <VWindow v-model="currentView">
+          <VWindowItem :value="0">
+            <DataTableSpecimen
+              class="border-t border-b"
+              :show-search="false"
+              :items="data?.response.docs ?? []"
+              :count="data?.response.numFound ?? 0"
+              :headers="headers"
+              :options="options"
+              :is-loading="pending"
+              @update="handleDataTableUpdate"
+              @change:headers="handleHeadersChange"
+              @reset:headers="handleHeadersReset(options)"
+              @click:row="handleClickRow"
+            />
+          </VWindowItem>
+          <VWindowItem :value="1">
+            <SpecimenImageView
+              class="border-t border-b"
+              :items="imageData?.response.docs ?? []"
+              :count="imageData?.response.numFound ?? 0"
+              :options="imageOptions"
+              @update="handleImageUpdate"
+            />
+          </VWindowItem>
+        </VWindow>
+      </ClientOnly>
     </template>
   </Search>
 </template>
