@@ -74,10 +74,8 @@ function setQueryParamsFromState() {
 }
 
 async function refreshData() {
-  if (views.value[currentView.value] === "image")
-    await refreshSpecimenImages();
-  else
-    await refreshSpecimens();
+  await refreshSpecimens();
+  await refreshSpecimenImages();
 }
 
 async function handleUpdate() {
