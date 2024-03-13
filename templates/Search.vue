@@ -86,7 +86,7 @@ function closeMobileSearch() {
             <slot name="result" />
           </VCol>
         </VRow>
-        <VFabTransition>
+        <VFabTransition v-if="display.smAndDown.value">
           <VBtn
             position="fixed"
             class="mb-2 "
