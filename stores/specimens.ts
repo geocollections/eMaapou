@@ -131,6 +131,13 @@ export const useSpecimens = defineStore(
         value: false,
         fields: ["has_map"],
       } as BooleanFilter,
+      reference: {
+        value: [],
+        type: "idList",
+        fields: ["specimen_references_kws"],
+        tag: "references",
+        alphaNumeric: true,
+      } as StringIdListFilter,
     });
 
     const routeQueryFiltersSchema = z.object({
@@ -150,6 +157,7 @@ export const useSpecimens = defineStore(
       geometry: geometryParamParser,
       hasImage: booleanParamParser,
       hasCoordinates: booleanParamParser,
+      reference: idParamParser(";"),
     });
 
     const routeQuerySchema = routeQueryOptionsSchema.merge(
@@ -193,6 +201,7 @@ export const useSpecimens = defineStore(
       fossilGroup: idValueParser(","),
       country: idValueParser(","),
       originalStatus: idValueParser(","),
+      reference: idValueParser(";"),
       geometry: geometryValueParser,
       hasImage: booleanValueParser,
       hasCoordinates: booleanValueParser,
@@ -222,6 +231,7 @@ export const useSpecimens = defineStore(
         taxon: filters.value.taxon.value,
         collector: filters.value.collector.value,
         institution: filters.value.institution.value,
+        reference: filters.value.reference.value,
         geometry: filters.value.geometry.value,
         hasImage: filters.value.hasImage.value,
         hasCoordinates: filters.value.hasCoordinates.value,

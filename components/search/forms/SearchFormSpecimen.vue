@@ -60,6 +60,16 @@ const { suggest: suggestOriginalStatus, hydrate: hydrateOriginalStatus }
     solrParams: { query: solrQuery, filter: solrFilters },
   });
 
+const { suggest: suggestReference, hydrate: hydrateReference }
+  = useAutocomplete("/specimen", {
+    idField: "specimen_references_kws",
+    nameField: "specimen_references",
+    filterExclude: "references",
+    solrParams: { query: solrQuery, filter: solrFilters },
+    primary: "id",
+    containsParser: removeNonAlphanumeric,
+  });
+
 async function hydrateStratigraphy(values: string[]) {
   if (values.length < 1)
     return [];
@@ -1042,6 +1052,15 @@ function handleHasImageUpdate(value: boolean) {
         v-model="filters.depth.value"
         :title="$t('filters.depth')"
         value="depth"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterReferences"
+        v-model="filters.reference.value"
+        :title="$t('filters.reference')"
+        :query-function="suggestReference"
+        :hydration-function="hydrateReference"
+        value="reference"
         @update:model-value="handleUpdate"
       />
       <FilterInputAutocomplete
