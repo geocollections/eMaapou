@@ -119,13 +119,6 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     );
   }
 }
-
-const viewCount = computed(() => {
-  if (views.value[currentView.value] === "image")
-    return imageData.value?.response.numFound ?? 0;
-
-  return data.value?.response.numFound ?? 0;
-});
 </script>
 
 <template>
@@ -133,7 +126,7 @@ const viewCount = computed(() => {
     <template #title>
       <HeaderSearch
         :title="$t('specimen.pageTitle')"
-        :count="viewCount"
+        :count="data?.response.numFound ?? 0"
         :icon="mdiBug"
       />
     </template>
