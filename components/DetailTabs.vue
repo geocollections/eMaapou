@@ -16,7 +16,9 @@ const tabsEl = ref();
 const { t } = useI18n();
 
 const currentTab = computed(() => {
-  return props.tabs.find(tab => tab.routeName === getRouteBaseName());
+  return props.tabs.find((tab) => {
+    return tab.routeName === getRouteBaseName(route);
+  });
 });
 
 function translateTitle(tab: HydratedTab) {
@@ -56,7 +58,7 @@ function translateTitle(tab: HydratedTab) {
     </VTab>
   </VTabs>
   <VMenu v-else>
-    <template #activator="{ props, isActive }">
+    <template #activator="{ props: menuProps, isActive }">
       <VBtn
         class="text-capitalize mb-1 ml-auto"
         variant="outlined"
@@ -64,7 +66,7 @@ function translateTitle(tab: HydratedTab) {
         color="accent"
         style="background-color: #fafafa"
         dark
-        v-bind="props"
+        v-bind="menuProps"
         :append-icon="isActive ? mdiChevronUp : mdiChevronDown"
       >
         {{ translateTitle(currentTab) }}

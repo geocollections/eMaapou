@@ -32,6 +32,7 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
       module,
     );
   }
+
   const { data } = await useSolrFetch<SolrResponse<T>>(url, {
     query: computed(() => ({
       q: solrParams.query.value,

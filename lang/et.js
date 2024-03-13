@@ -116,6 +116,7 @@ export default {
     showFilters: "Ava filtrid",
     hideSimilar: "Peida sarnased",
     showSimilar: "Ava sarnased",
+    similar: "Sarnased",
   },
   link: {
     sarvAPI: "Avalik API",

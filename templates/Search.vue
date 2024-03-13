@@ -4,7 +4,7 @@ import { useDisplay } from "vuetify";
 
 const display = useDisplay();
 
-const showSearch = ref(false);
+const showSearch = ref(!display.smAndDown.value);
 const mini = ref(false);
 
 function closeMobileSearch() {

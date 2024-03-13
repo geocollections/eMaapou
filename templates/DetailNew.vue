@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import { mdiChevronDoubleLeft } from "@mdi/js";
+import { mdiChevronDoubleLeft, mdiViewList } from "@mdi/js";
+import { useDisplay } from "vuetify";
 
-defineProps({
+const props = defineProps({
   showSimilar: Boolean,
 });
 
-const showDrawer = ref(false);
+const display = useDisplay();
+
+const showDrawer = ref(true);
+watch([() => props.showSimilar, () => display.smAndDown.value], ([value, displayValue]) => {
+  if (displayValue) {
+    showDrawer.value = false;
+    return;
+  }
+
+  showDrawer.value = value;
+}, { immediate: true });
+
 const mini = ref(false);
 
 function closeMobileSearch() {
@@ -15,7 +27,7 @@ function closeMobileSearch() {
 
 <template>
   <VNavigationDrawer
-    v-if="showSimilar"
+    v-if="showDrawer"
     :model-value="true"
     :style="{ cursor: mini ? 'pointer' : 'auto' }"
     :permanent="!$vuetify.display.smAndDown"
@@ -66,6 +78,19 @@ function closeMobileSearch() {
     <div class="fill-height pb-10">
       <slot name="title" />
       <slot />
+      <VFabTransition v-if="showSimilar && display.smAndDown.value">
+        <VBtn
+          position="fixed"
+          class="mb-2 "
+          location="bottom center"
+          rounded
+          color="warning"
+          @click="showDrawer = !showDrawer"
+        >
+          <VIcon :icon="mdiViewList" start />
+          {{ $t("common.similar") }}
+        </VBtn>
+      </VFabTransition>
       <FabScrollTop />
     </div>
     <AppFooter />

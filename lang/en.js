@@ -115,6 +115,7 @@ export default {
     showFilters: "Show filters",
     hideSimilar: "Hide similar",
     showSimilar: "Show similar",
+    similar: "Similar",
   },
   link: {
     github: "GitHub",
