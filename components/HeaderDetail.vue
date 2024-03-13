@@ -24,12 +24,15 @@ const props = defineProps({
 
 const emit = defineEmits(["click:previous", "click:next"]);
 
+const localePath = useLocalePath();
+const router = useRouter();
+const route = useRoute();
 const getRouteBaseName = useRouteBaseName();
 const { $translate } = useNuxtApp();
 const { t } = useI18n({ useScope: "local" });
 
 const routeName = computed(() => {
-  return getRouteBaseName()?.split("-id")[0];
+  return getRouteBaseName(route)?.split("-id")[0];
 });
 
 const prevName = computed(() => {
@@ -57,9 +60,6 @@ onBeforeUnmount(() => {
   if (props.arrowKeys)
     window.removeEventListener("keyup", handleKeyup);
 });
-const localePath = useLocalePath();
-const router = useRouter();
-const route = useRoute();
 
 function handleKeyup(e) {
   if (e.keyCode === 37) {

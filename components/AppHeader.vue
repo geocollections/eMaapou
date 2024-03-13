@@ -59,9 +59,9 @@ const cssProps = computed(() => {
 <template>
   <VAppBar
     density="compact"
-    :elevation="getRouteBaseName() === 'index' ? 0 : 4"
-    :absolute="getRouteBaseName() === 'index'"
-    :scroll-behavior="getRouteBaseName() !== 'index' ? 'elevate' : 'hide'"
+    :elevation="getRouteBaseName(route) === 'index' ? 0 : 4"
+    :absolute="getRouteBaseName(route) === 'index'"
+    :scroll-behavior="getRouteBaseName(route) !== 'index' ? 'elevate' : 'hide'"
     :color="transparent ? 'transparent' : 'accent-darken-1'"
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
