@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SITE } from "~/constants";
-import { HEADERS_SITE } from "~/constants/headersNew";
-
 const {
   options,
   solrQuery,

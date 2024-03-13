@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { STRATIGRAPHY } from "~/constants";
-import { HEADERS_STRATIGRAPHY } from "~/constants/headersNew";
-
 const {
   options,
   solrQuery,

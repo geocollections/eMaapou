@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { LOCALITY } from "~/constants";
-import { HEADERS_AREA_LOCALITY } from "~/constants/headersNew";
-
 const {
   options,
   search,

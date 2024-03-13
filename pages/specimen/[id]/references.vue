@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SPECIMEN_REFERENCE } from "~/constants";
-import { HEADERS_SPECIMEN_REFERENCE } from "~/constants/headersNew";
-
 const route = useRoute();
 const {
   options,

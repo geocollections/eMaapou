@@ -13,7 +13,8 @@ import {
   LWmsTileLayer,
 } from "@vue-leaflet/vue-leaflet";
 import type Leaflet from "leaflet";
-import type { MapMarker, MapState } from "~/types/map";
+import type { MapMarker } from "~/types/map";
+import type { MapState } from "~/composables/useLeafletMap";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";

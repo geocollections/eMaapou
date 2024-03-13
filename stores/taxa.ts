@@ -1,7 +1,5 @@
 import type { RouteLocation } from "vue-router";
 import { z } from "zod";
-import { TAXON } from "~/constants";
-import { HEADERS_TAXON } from "~/constants/headersNew";
 import type {
   BooleanFilter,
   GeomFilter,

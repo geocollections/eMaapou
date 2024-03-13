@@ -1,195 +1,103 @@
 import type { VDataTable } from "vuetify/components";
 
-/*
-  DOCS: File for the headers of each tabels.
+interface SortItem { key: string; order: "asc" | "desc" }
+type SortField = SortItem | { et: SortItem; en: SortItem };
 
-  byIds - definitions of table headers.
-  allIds - array of keys found in byIds. Defines the order in which the headers appear in the table
-
-  Header definition:
-  key: {
-    text: String (key to the i18n translation)
-    value: String ()
-    show: Boolean (field indicating if the field should be shown when table first rendered)
-    field: String/Object (API field that are used when sorting and searching is done)
-      **vuetify DataTableHeader properties https://vuetifyjs.com/en/api/v-data-table/#props
-  }
-  NOTE: If in the future there is a need for text fields that should not be translated using i18n, add a boolean field to check if text needs to be translated
-*/
-export type Header = NonNullable<InstanceType<typeof VDataTable>["headers"]>[0] & {
-  text: string;
+export type Header = NonNullable<
+  InstanceType<typeof VDataTable>["headers"]
+>[0] & {
   show: boolean;
   apiFieldValue?: string | { et: string; en: string };
-  class?: string;
-  cellClass?: string;
+  sortField?: string[] | { et: string[]; en: string[] };
+  // | {
+  //     asc: SortField[];
+  //     desc: SortField[];
+  //   };
+  titleTranslate?: boolean;
 };
 export interface Headers {
   byIds: { [K: string]: Header };
   allIds: string[];
 }
-export const HEADERS_ANALYSIS_RESULT: Headers = {
-  byIds: {
-    parameter: {
-      text: "analysisResult.parameter",
-      value: "parameter",
-      show: true,
-      apiFieldValue: "parameter",
-    },
-    analysis_method: {
-      text: "analysisResult.method",
-      value: "analysis_method",
-      show: true,
-      apiFieldValue: "analysis_method",
-    },
-    depth: {
-      text: "analysisResult.depth",
-      value: "depth",
-      show: true,
-      apiFieldValue: "depth",
-    },
-    depth_interval: {
-      text: "analysisResult.depthInterval",
-      value: "depth_interval",
-      show: true,
-      apiFieldValue: "depth_interval",
-    },
-    value: { text: "analysisResult.value", value: "value", show: true },
-    value_txt: {
-      text: "analysisResult.valueText",
-      value: "value_txt",
-      show: true,
-      apiFieldValue: "value_txt",
-    },
-    value_error: {
-      text: "analysisResult.valueError",
-      value: "value_error",
-      show: true,
-      apiFieldValue: "value_error",
-    },
+
+const numberFieldProps: Partial<Header> = {
+  align: "end",
+  cellProps(data) {
+    return {
+      style: "font-family: monospace;",
+    };
   },
-  allIds: [
-    "parameter",
-    "analysis_method",
-    "depth",
-    "depth_interval",
-    "value",
-    "value_txt",
-    "value_error",
-  ],
-};
-export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
-  byIds: {
-    parameter: {
-      text: "analysisResult.parameter",
-      value: "parameter",
-      show: true,
-      apiFieldValue: "parameter",
-    },
-    analysis_method: {
-      text: "analysisResult.method",
-      value: "analysis_method",
-      show: true,
-      apiFieldValue: "analysis_method",
-    },
-    method_details: {
-      text: "analysisResult.methodDetails",
-      value: "method_details",
-      show: true,
-      apiFieldValue: "method_details",
-    },
-    depth: {
-      text: "analysisResult.depth",
-      value: "depth",
-      show: true,
-      apiFieldValue: "depth",
-    },
-    depth_interval: {
-      text: "analysisResult.depthInterval",
-      value: "depth_interval",
-      show: true,
-      apiFieldValue: "depth_interval",
-    },
-    value: { text: "analysisResult.value", value: "value", show: true },
-    value_txt: {
-      text: "analysisResult.valueText",
-      value: "value_txt",
-      show: true,
-      apiFieldValue: "value_txt",
-    },
-    value_error: {
-      text: "analysisResult.valueError",
-      value: "value_error",
-      show: true,
-      apiFieldValue: "value_error",
-    },
-  },
-  allIds: [
-    "parameter",
-    "analysis_method",
-    "method_details",
-    "depth",
-    "depth_interval",
-    "value",
-    "value_txt",
-    "value_error",
-  ],
 };
 
 export const HEADERS_ANALYSIS: Headers = {
   byIds: {
-    id: { text: "analysis.id", value: "id", show: true, apiFieldValue: "id_l" },
-    sample_number: {
-      text: "analysis.sampleNumber",
-      value: "sample_number",
+    id: {
+      title: "analysis.id",
+      value: "id",
+      show: true,
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
+    },
+    sample_name: {
+      title: "analysis.sampleNumber",
+      value: "sample_name",
       show: true,
       apiFieldValue: "sample_number",
+      sortField: ["sample_name"],
     },
     locality: {
-      text: "analysis.locality",
+      title: "analysis.locality",
       value: "locality",
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
     },
     depth: {
-      text: "analysis.depth",
+      title: "analysis.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth",
+      sortField: ["depth"],
     },
     depth_interval: {
-      text: "analysis.depthInterval",
+      title: "analysis.depthInterval",
       value: "depth_interval",
       show: true,
       apiFieldValue: "depth_interval",
+      sortField: ["depth_interval"],
     },
     method: {
-      text: "analysis.method",
+      title: "analysis.method",
       value: "method",
       show: true,
       apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
+      sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
     },
     method_details: {
-      text: "analysis.methodDetails",
+      title: "analysis.methodDetails",
       value: "method_details",
       show: true,
       apiFieldValue: { et: "method_details", en: "method_details_en" },
+      sortField: { et: ["method_details"], en: ["method_details_en"] },
     },
     agent: {
-      text: "analysis.analysedBy",
+      title: "analysis.analysedBy",
       value: "agent",
       show: true,
       apiFieldValue: "agent",
+      sortField: ["agent"],
     },
     date: {
-      text: "analysis.date",
+      title: "analysis.date",
       value: "date",
       show: true,
       apiFieldValue: "date",
+      sortField: ["date"],
     },
   },
   allIds: [
     "id",
-    "sample_number",
+    "sample_name",
     "locality",
     "depth",
     "depth_interval",
@@ -200,177 +108,349 @@ export const HEADERS_ANALYSIS: Headers = {
   ],
 };
 
-export const HEADERS_ANALYTICAL_DATA: Headers = {
+export const HEADERS_ANALYSIS_RESULT: Headers = {
   byIds: {
-    id_l: {
-      text: "analyticalData.id",
-      value: "id_l",
+    parameter: {
+      title: "analysisResult.parameter",
+      value: "parameter",
       show: true,
-      apiFieldValue: "id_l",
+      apiFieldValue: "parameter",
+      sortField: ["parameter"],
     },
     analysis_method: {
-      text: "analyticalData.analysisMethod",
+      title: "analysisResult.method",
+      value: "analysis_method",
+      show: true,
+      apiFieldValue: "analysis_method",
+      sortField: ["analysis_method"],
+    },
+    depth: {
+      title: "analysisResult.depth",
+      value: "depth",
+      show: true,
+      apiFieldValue: "depth",
+      sortField: ["depth"],
+    },
+    depth_interval: {
+      title: "analysisResult.depthInterval",
+      value: "depth_interval",
+      show: true,
+      apiFieldValue: "depth_interval",
+      sortField: ["depth_interval"],
+    },
+    value: {
+      title: "analysisResult.value",
+      value: "value",
+      show: true,
+      sortField: ["value"],
+    },
+    value_txt: {
+      title: "analysisResult.valueText",
+      value: "value_txt",
+      show: true,
+      apiFieldValue: "value_txt",
+      sortField: ["value_txt"],
+    },
+    value_error: {
+      title: "analysisResult.valueError",
+      value: "value_error",
+      show: true,
+      apiFieldValue: "value_error",
+      sortField: ["value_error"],
+    },
+  },
+  allIds: [
+    "parameter",
+    "analysis_method",
+    "depth",
+    "depth_interval",
+    "value",
+    "value_txt",
+    "value_error",
+  ],
+};
+
+export const HEADERS_ANALYTICAL_DATA: Headers = {
+  byIds: {
+    analysis_id: {
+      title: "analyticalData.analysis",
+      value: "analysis_id",
+      show: true,
+      apiFieldValue: "analysis_id_sl",
+      sortField: ["analysis_id_sl"],
+    },
+    analysis_method: {
+      title: "analyticalData.analysisMethod",
       value: "analysis_method",
       show: true,
       apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
+      sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
     },
     sample_number: {
-      text: "analyticalData.sample",
+      title: "analyticalData.sample",
       value: "sample_number",
       show: true,
       apiFieldValue: "sample_number,sample_id_sl",
+      sortField: ["sample_number", "sample_id_sl"], // TODO: need to combine these two fields in Solr index
     },
     locality: {
-      text: "analyticalData.locality",
+      title: "analyticalData.locality",
       value: "locality",
       show: true,
       apiFieldValue: "locality,locality_id_sl,site,site_id_sl",
+      sortField: ["locality", "site"], // TODO: need to combine these two fields in Solr index, not sure how it should be done. Can one document have both fields defined?
     },
     stratigraphy: {
-      text: "analyticalData.stratigraphy",
+      title: "analyticalData.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: {
         et: "stratigraphy,stratigraphy_id_sl",
         en: "stratigraphy_en,stratigraphy_id_sl",
       },
+      sortField: {
+        et: ["stratigraphy"],
+        en: ["stratigraphy_en"],
+      },
     },
     lithostratigraphy: {
-      text: "analyticalData.lithostratigraphy",
+      title: "analyticalData.lithostratigraphy",
       value: "lithostratigraphy",
       show: false,
       apiFieldValue: {
         et: "lithostratigraphy,lithostratigraphy_id_sl",
         en: "lithostratigraphy_en,lithostratigraphy_id_sl",
       },
+      sortField: {
+        et: ["lithostratigraphy"],
+        en: ["lithostratigraphy_en"],
+      },
     },
     depth: {
-      text: "analyticalData.depth",
+      title: "analyticalData.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth",
-    },
-    depth_interval: {
-      text: "analyticalData.depthInterval",
-      value: "depth_interval",
-      show: false,
-      apiFieldValue: "depth_interval",
+      apiFieldValue: "depth,depth_interval",
+      sortField: ["depth", "depth_interval"],
     },
     rock: {
-      text: "analyticalData.rock",
+      title: "analyticalData.rock",
       value: "rock",
       show: true,
       apiFieldValue: {
         et: "rock,rock_txt,rock_id_sl",
         en: "rock_en,rock_en_txt,rock_id_sl",
       },
+      sortField: {
+        et: ["rock", "rock_txt"],
+        en: ["rock_en", "rock_en_txt"],
+      },
     },
     reference: {
-      text: "analyticalData.reference",
+      title: "analyticalData.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference,reference_id_sl",
+      sortField: ["reference"],
     },
     dataset_id: {
-      text: "analyticalData.dataset",
+      title: "analyticalData.dataset",
       value: "dataset_id",
       show: true,
       apiFieldValue: "dataset_id_sl,dataset_name",
-    },
-    analysis_id: {
-      // What is this for?
-      text: "analyticalData.analysis",
-      value: "analysis_id",
-      show: true,
-      apiFieldValue: "analysis_id_sl",
+      sortField: ["dataset_name"],
     },
   },
   allIds: [
-    "id_l",
+    "analysis_id",
     "analysis_method",
     "sample_number",
     "locality",
     "stratigraphy",
     "lithostratigraphy",
     "depth",
-    "depth_interval",
     "rock",
     "reference",
     "dataset_id",
-    "analysis_id",
   ],
 };
+
 export const HEADERS_AREA: Headers = {
   byIds: {
     id: {
-      text: "area.id",
+      title: "area.id",
       value: "id",
       show: false,
       apiFieldValue: "id",
+      sortField: ["id"],
     },
     name: {
-      text: "area.name",
+      title: "area.name",
       value: "name",
       show: true,
       apiFieldValue: { et: "name", en: "name_en" },
+      sortField: { et: ["name"], en: ["name_en"] },
     },
     county: {
-      text: "area.county",
+      title: "area.county",
       value: "county",
       show: true,
       apiFieldValue: { et: "maakond", en: "maakond_en" },
+      sortField: { et: ["maakond"], en: ["maakond_en"] },
     },
     type: {
-      text: "area.areaType",
+      title: "area.areaType",
       value: "type",
       show: true,
       apiFieldValue: { et: "area_type", en: "area_type_en" },
+      sortField: { et: ["area_type"], en: ["area_type_en"] },
+    },
+    size: {
+      title: "area.areaHa",
+      value: "size",
+      show: true,
+      apiFieldValue: "area_ha",
+      sortField: ["area_ha"],
+      ...numberFieldProps,
     },
   },
-  allIds: ["id", "name", "county", "type"],
+  allIds: ["id", "name", "county", "type", "size"],
 };
 
+export const HEADERS_AREA_LOCALITY: Headers = {
+  byIds: {
+    id: {
+      title: "locality.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
+    },
+    locality: {
+      title: "locality.name",
+      value: "locality",
+      show: true,
+      apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
+    },
+    country: {
+      title: "locality.country",
+      value: "country",
+      show: true,
+      apiFieldValue: { et: "country", en: "country_en" },
+      sortField: { et: ["country__value"], en: ["country__value_en"] },
+    },
+    coordinates: {
+      title: "locality.coordinates",
+      value: "coordinates",
+      show: true,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "locality.latitude",
+          value: "latitude",
+          width: 75,
+          apiFieldValue: "latitude",
+          ...numberFieldProps,
+        },
+        {
+          title: "locality.longitude",
+          value: "longitude",
+          width: 75,
+          apiFieldValue: "longitude",
+          ...numberFieldProps,
+        },
+      ],
+    },
+  },
+  allIds: [
+    "id",
+    "locality",
+    "country",
+    "coordinates",
+  ],
+};
+
+export const HEADERS_ATTACHMENT: Headers = {
+  byIds: {
+    file: {
+      title: "attachment.file",
+      value: "file",
+      width: "120px",
+      show: true,
+      sortable: false,
+    },
+    description: {
+      title: "attachment.description",
+      value: "description",
+      show: true,
+      apiFieldValue: {
+        et: "attachment__description",
+        en: "attachment__description_en",
+      },
+      sortField: {
+        et: ["attachment__description"],
+        en: ["attachment__description_en"],
+      },
+    },
+    agent: {
+      title: "attachment.author",
+      value: "agent",
+      show: true,
+      apiFieldValue: "attachment__author__agent",
+      sortField: ["attachment__author__agent"],
+    },
+  },
+  allIds: ["file", "description", "agent"],
+};
 export const HEADERS_ATTACHMENT_SOLR: Headers = {
   byIds: {
-    id: { text: "attachment.id", value: "id", show: true, apiFieldValue: "id" },
+    id: { title: "attachment.id", value: "id", show: true, apiFieldValue: "id", sortField: ["id"] },
     format_value: {
-      text: "attachment.format",
+      title: "attachment.format",
       value: "format_value",
       show: true,
       apiFieldValue: "format_value",
+      sortField: ["format_value"],
     },
     image_number: {
-      text: "attachment.image_number",
+      title: "attachment.image_number",
       value: "image_number",
       show: true,
       apiFieldValue: "image_number",
+      sortField: ["image_number"],
     },
     agent: {
-      text: "attachment.author",
+      title: "attachment.author",
       value: "agent",
       show: true,
       apiFieldValue: "agent",
+      sortField: ["agent"],
     },
     date: {
-      text: "attachment.date",
+      title: "attachment.date",
       value: "date",
       show: true,
       apiFieldValue: "date_created,date_created_free",
+      sortField: ["date_created", "date_created_free"],
     },
     reference: {
-      text: "attachment.reference",
+      title: "attachment.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference",
+      sortField: ["reference"],
     },
     type: {
-      text: "attachment.type",
+      title: "attachment.type",
       value: "type",
       show: true,
       apiFieldValue: "type",
+      sortField: ["type"],
     },
     image: {
-      text: "attachment.image",
+      title: "attachment.image",
       value: "image",
       show: true,
       apiFieldValue: "uuid_filename",
@@ -389,59 +469,35 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
   ],
 };
 
-export const HEADERS_ATTACHMENT: Headers = {
-  byIds: {
-    file: {
-      text: "attachment.file",
-      value: "file",
-      width: "120px",
-      show: true,
-      sortable: false,
-    },
-    description: {
-      text: "attachment.description",
-      value: "description",
-      show: true,
-      apiFieldValue: {
-        et: "attachment__description",
-        en: "attachment__description_en",
-      },
-    },
-    agent: {
-      text: "attachment.author",
-      value: "agent",
-      show: true,
-      apiFieldValue: "attachment__author__agent",
-    },
-  },
-  allIds: ["file", "description", "agent"],
-};
-
 export const HEADERS_DATASET: Headers = {
   byIds: {
     id: {
-      text: "dataset.id",
+      title: "dataset.id",
       value: "id",
       show: false,
       apiFieldValue: "dataset_id",
+      sortField: ["dataset_id"],
     },
     name: {
-      text: "dataset.name",
+      title: "dataset.name",
       value: "name",
       show: true,
       apiFieldValue: { et: "name", en: "name_en" },
+      sortField: { et: ["name"], en: ["name_en"] },
     },
     date: {
-      text: "dataset.date",
+      title: "dataset.date",
       value: "date",
       show: true,
       apiFieldValue: "date,date_txt",
+      sortField: ["date", "date_txt"],
     },
     database: {
-      text: "dataset.database",
+      title: "dataset.database",
       value: "database_acronym",
       show: true,
       apiFieldValue: "database_acronym",
+      sortField: ["database_acronym"],
     },
   },
   allIds: ["id", "name", "date", "database"],
@@ -450,40 +506,46 @@ export const HEADERS_DATASET: Headers = {
 export const HEADERS_DATASET_ANALYSIS: Headers = {
   byIds: {
     analysis: {
-      text: "datasetAnalysis.analysis",
+      title: "datasetAnalysis.analysis",
       value: "analysis",
       show: true,
       apiFieldValue: "id_l",
+      sortField: ["id_l"],
     },
     sample: {
-      text: "datasetAnalysis.sampleNumber",
+      title: "datasetAnalysis.sampleNumber",
       value: "sample",
       show: true,
       apiFieldValue: "sample_id_sl",
+      sortField: ["sample_id"],
     },
     locality: {
-      text: "datasetAnalysis.locality",
+      title: "datasetAnalysis.locality",
       value: "locality",
       show: true,
       apiFieldValue: "locality",
+      sortField: ["locality"],
     },
     stratigraphy: {
-      text: "datasetAnalysis.stratigraphy",
+      title: "datasetAnalysis.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
+      sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
     },
     analysis_method: {
-      text: "datasetAnalysis.analysisMethod",
+      title: "datasetAnalysis.analysisMethod",
       value: "analysis_method",
       show: true,
       apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
+      sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
     },
     lab: {
-      text: "datasetAnalysis.lab",
+      title: "datasetAnalysis.lab",
       value: "lab",
       show: true,
       apiFieldValue: { et: "lab", en: "lab_en" },
+      sortField: { et: ["lab"], en: ["lab_en"] },
     },
   },
   allIds: [
@@ -499,22 +561,25 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
 export const HEADERS_DATASET_AUTHOR: Headers = {
   byIds: {
     name: {
-      text: "datasetAuthor.name",
+      title: "datasetAuthor.name",
       value: "name",
       show: true,
       apiFieldValue: "agent__agent",
+      sortField: ["agent__agent"],
     },
     affiliation: {
-      text: "datasetAuthor.affiliation",
+      title: "datasetAuthor.affiliation",
       value: "affiliation",
       show: true,
       apiFieldValue: "affiliation",
+      sortField: ["affiliation"],
     },
     type: {
-      text: "datasetAuthor.type",
+      title: "datasetAuthor.type",
       value: "type",
       show: true,
-      apiFieldValue: "agent_type_value",
+      apiFieldValue: "agent_type__value",
+      sortField: ["agent_type__value"],
     },
   },
   allIds: ["name", "affiliation", "type"],
@@ -523,28 +588,32 @@ export const HEADERS_DATASET_AUTHOR: Headers = {
 export const HEADERS_DATASET_GEOLOCATION: Headers = {
   byIds: {
     name: {
-      text: "datasetGeolocation.name",
+      title: "datasetGeolocation.name",
       value: "name",
       show: true,
       apiFieldValue: { et: "locality__locality", en: "locality__locality_en" },
+      sortField: { et: ["locality__locality"], en: ["locality__locality_en"] },
     },
     longitude: {
-      text: "datasetGeolocation.longitude",
+      title: "datasetGeolocation.longitude",
       value: "longitude",
       show: true,
       apiFieldValue: "point_latitude",
+      sortField: ["point_latitude"],
     },
     latitude: {
-      text: "datasetGeolocation.latitude",
+      title: "datasetGeolocation.latitude",
       value: "latitude",
       show: true,
       apiFieldValue: "point_longitude",
+      sortField: ["point_longitude"],
     },
     is_polygon: {
-      text: "datasetGeolocation.isPolygon",
+      title: "datasetGeolocation.isPolygon",
       value: "is_polygon",
       sortable: false,
       show: true,
+      sortField: ["is_polygon"],
     },
   },
   allIds: ["name", "longitude", "latitude", "is_polygon"],
@@ -553,28 +622,32 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
 export const HEADERS_DATASET_REFERENCE: Headers = {
   byIds: {
     reference: {
-      text: "reference.reference",
+      title: "reference.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     title: {
-      text: "reference.title",
+      title: "reference.title",
       value: "title",
       show: true,
       apiFieldValue: "reference__title",
+      sortField: ["reference__title"],
     },
     journal: {
-      text: "reference.journalBook",
+      title: "reference.journalBook",
       value: "journal",
       show: true,
       apiFieldValue: "reference__pages",
+      sortField: ["reference__pages"],
     },
     pages: {
-      text: "reference.pages",
+      title: "reference.pages",
       value: "pages",
       show: true,
       apiFieldValue: "reference__journal__journal_name",
+      sortField: ["reference__journal__journal_name"],
     },
   },
   allIds: ["reference", "title", "journal", "pages"],
@@ -583,49 +656,60 @@ export const HEADERS_DATASET_REFERENCE: Headers = {
 export const HEADERS_DESCRIPTION: Headers = {
   byIds: {
     depth_top: {
-      text: "localityDescription.depthTop",
+      title: "localityDescription.depthTop",
       value: "depth_top",
       show: true,
       apiFieldValue: "depth_top",
+      sortField: ["depth_top"],
+      ...numberFieldProps,
     },
     depth_base: {
-      text: "localityDescription.depthBase",
+      title: "localityDescription.depthBase",
       value: "depth_base",
       show: true,
       apiFieldValue: "depth_base",
+      sortField: ["depth_base"],
+      ...numberFieldProps,
     },
     thickness: {
-      text: "localityDescription.thickness",
+      title: "localityDescription.thickness",
       value: "thickness",
-      sortable: false,
       class: "static-cell-header",
+      sortable: false,
       cellClass: "static-cell",
       show: true,
+      ...numberFieldProps,
     },
     rock: {
-      text: "localityDescription.rock",
+      title: "localityDescription.rock",
       value: "rock",
       show: true,
       apiFieldValue: { et: "rock__name", en: "rock__name_en" },
+      sortField: { et: ["rock__name"], en: ["rock__name_en"] },
     },
     stratigraphy: {
-      text: "localityDescription.stratigraphy",
+      title: "localityDescription.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: {
         et: "stratigraphy__stratigraphy",
         en: "stratigraphy__stratigraphy_en",
       },
+      sortField: {
+        et: ["stratigraphy__stratigraphy"],
+        en: ["stratigraphy__stratigraphy_en"],
+      },
     },
     author: {
-      text: "localityDescription.author",
+      title: "localityDescription.author",
       value: "author",
       sortable: false,
       show: true,
       apiFieldValue: "reference__reference,agent__agent,author_free",
+      sortField: ["reference__reference", "agent__agent", "author_free"],
     },
     expand: {
-      text: "localityDescription.details",
+      title: "localityDescription.details",
       value: "data-table-expand",
       align: "center",
       sortable: false,
@@ -646,40 +730,46 @@ export const HEADERS_DESCRIPTION: Headers = {
 export const HEADERS_DOI: Headers = {
   byIds: {
     identifier: {
-      text: "doi.identifier",
+      title: "doi.identifier",
       value: "identifier",
       show: true,
       apiFieldValue: "identfier",
+      sortField: ["identfier"],
     },
     creator: {
-      text: "doi.creators",
+      title: "doi.creators",
       value: "creators",
       show: true,
       apiFieldValue: "creators",
+      sortField: ["creators"],
     },
     reference_year: {
-      text: "doi.reference_year",
+      title: "doi.reference_year",
       value: "reference_year",
       show: true,
       apiFieldValue: "reference_year",
+      sortField: ["reference_year"],
     },
     title: {
-      text: "doi.table_title",
+      title: "doi.table_title",
       value: "title",
       show: true,
       apiFieldValue: "title",
+      sortField: ["title"],
     },
     resource: {
-      text: "doi.resource",
+      title: "doi.resource",
       value: "resource",
       show: true,
       apiFieldValue: "resource",
+      sortField: ["resource"],
     },
     datacite_created: {
-      text: "doi.datacite_created",
+      title: "doi.datacite_created",
       value: "datacite_created",
       show: true,
       apiFieldValue: "datacite_created",
+      sortField: ["datacite_created"],
     },
   },
   allIds: [
@@ -695,52 +785,62 @@ export const HEADERS_DOI: Headers = {
 export const HEADERS_DRILLCORE: Headers = {
   byIds: {
     id: {
-      text: "drillcore.id",
+      title: "drillcore.id",
       value: "id",
       show: false,
       apiFieldValue: "id_l",
+      sortField: ["id_l"],
     },
     drillcore: {
-      text: "drillcore.name",
+      title: "drillcore.name",
       value: "drillcore",
       show: true,
       apiFieldValue: { et: "drillcore", en: "drillcore_en" },
+      sortField: { et: ["drillcore"], en: ["drillcore_en"] },
     },
     depth: {
-      text: "drillcore.depth",
+      title: "drillcore.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth",
+      sortField: ["depth"],
     },
     boxes: {
-      text: "drillcore.boxes",
+      title: "drillcore.boxes",
       value: "boxes",
       show: true,
       apiFieldValue: "boxes",
+      sortField: ["boxes"],
+      ...numberFieldProps,
     },
     box_numbers: {
-      text: "drillcore.boxNumbers",
+      title: "drillcore.boxNumbers",
       value: "box_numbers",
       show: true,
       apiFieldValue: "box_numbers",
+      sortField: ["box_numbers"],
+      ...numberFieldProps,
     },
     year: {
-      text: "drillcore.year",
+      title: "drillcore.year",
       value: "year",
       show: true,
       apiFieldValue: "year",
+      sortField: ["year"],
     },
     core_repository: {
-      text: "drillcore.storage",
+      title: "drillcore.storage",
       value: "core_repository",
       show: true,
       apiFieldValue: { et: "core_repository", en: "core_repository_en" },
+      sortField: { et: ["core_repository"], en: ["core_repository_en"] },
     },
     acronym: {
-      text: "drillcore.acronym",
+      title: "drillcore.acronym",
       value: "acronym",
       show: true,
       apiFieldValue: "acronym",
+      sortField: ["acronym"],
     },
   },
   allIds: [
@@ -758,28 +858,32 @@ export const HEADERS_DRILLCORE: Headers = {
 export const HEADERS_FOSSIL: Headers = {
   byIds: {
     taxon: {
-      text: "taxon.taxon",
+      title: "taxon.taxon",
       value: "taxon",
       show: true,
       apiFieldValue: "taxon",
+      sortField: ["taxon"],
     },
     fossil_group: {
-      text: "taxon.fossilGroup",
+      title: "taxon.fossilGroup",
       value: "fossil_group",
       show: true,
       apiFieldValue: "fossil_group",
+      sortField: ["fossil_group"],
     },
     parent: {
-      text: "taxon.parentTaxon",
+      title: "taxon.parentTaxon",
       value: "parent",
       show: true,
       apiFieldValue: "parent_taxon",
+      sortField: ["parent_taxon"],
     },
     src: {
-      text: "taxon.src",
+      title: "taxon.src",
       value: "src",
       show: true,
       apiFieldValue: { et: "src_txt", en: "src_txt_en" },
+      sortField: { et: ["src_txt"], en: ["src_txt_en"] },
     },
   },
   allIds: ["fossil_group", "taxon", "parent", "src"],
@@ -788,96 +892,130 @@ export const HEADERS_FOSSIL: Headers = {
 export const HEADERS_LOCALITY: Headers = {
   byIds: {
     id: {
-      text: "locality.id",
+      title: "locality.id",
       value: "id",
       show: false,
       apiFieldValue: "id_l",
+      sortField: ["id_l"],
     },
     locality: {
-      text: "locality.name",
+      title: "locality.name",
       value: "locality",
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
     },
     country: {
-      text: "locality.country",
+      title: "locality.country",
       value: "country",
       show: true,
       apiFieldValue: { et: "country", en: "country_en" },
+      sortField: { et: ["country"], en: ["country_en"] },
     },
-    latitude: {
-      text: "locality.latitude",
-      value: "latitude",
-      show: false,
-      apiFieldValue: "latitude",
-    },
-    longitude: {
-      text: "locality.longitude",
-      value: "longitude",
-      show: false,
-      apiFieldValue: "longitude",
+    coordinates: {
+      title: "locality.coordinates",
+      value: "coordinates",
+      show: true,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "locality.latitude",
+          value: "latitude",
+          width: 75,
+          apiFieldValue: "latitude",
+          ...numberFieldProps,
+        },
+        {
+          title: "locality.longitude",
+          value: "longitude",
+          width: 75,
+          apiFieldValue: "longitude",
+          ...numberFieldProps,
+        },
+      ],
     },
     references: {
-      text: "locality.relatedReferences",
+      title: "locality.relatedReferences",
       value: "references",
       show: true,
+      sortable: false,
       apiFieldValue: "related_references",
+      sortField: ["related_references"],
+      ...numberFieldProps,
     },
     specimens: {
-      text: "locality.relatedSpecimens",
+      title: "locality.relatedSpecimens",
       value: "specimens",
       show: true,
       apiFieldValue: "related_specimens",
+      sortField: ["related_specimens"],
+      ...numberFieldProps,
     },
     samples: {
-      text: "locality.relatedSamples",
+      title: "locality.relatedSamples",
       value: "samples",
       show: true,
       apiFieldValue: "related_samples",
+      sortField: ["related_samples"],
+      ...numberFieldProps,
     },
     analyses: {
-      text: "locality.relatedAnalyses",
+      title: "locality.relatedAnalyses",
       value: "analyses",
       show: true,
       apiFieldValue: "related_analyses",
+      sortField: ["related_analyses"],
+      ...numberFieldProps,
     },
     drillcores: {
-      text: "locality.relatedDrillcores",
+      title: "locality.relatedDrillcores",
       value: "drillcores",
       show: false,
       apiFieldValue: "related_drillcores",
+      sortField: ["related_drillcores"],
+      ...numberFieldProps,
     },
     files: {
-      text: "locality.relatedFiles",
+      title: "locality.relatedFiles",
       value: "files",
       show: false,
       apiFieldValue: "related_files",
+      sortField: ["related_files"],
+      ...numberFieldProps,
     },
     images: {
-      text: "locality.relatedImages",
+      title: "locality.relatedImages",
       value: "images",
       show: false,
       apiFieldValue: "related_images",
+      sortField: ["related_images"],
+      ...numberFieldProps,
     },
     stratotypes: {
-      text: "locality.relatedStratotypes",
+      title: "locality.relatedStratotypes",
       value: "stratotypes",
       show: false,
       apiFieldValue: "related_stratotypes",
+      sortField: ["related_stratotypes"],
+      ...numberFieldProps,
     },
     taxonOccurrences: {
-      text: "locality.relatedTaxonOccurrences",
+      title: "locality.relatedTaxonOccurrences",
       value: "taxonOccurrences",
       show: false,
       apiFieldValue: "related_taxon_occurrences",
+      sortField: ["related_taxon_occurrences"],
+      ...numberFieldProps,
     },
   },
   allIds: [
     "id",
     "locality",
     "country",
-    "latitude",
-    "longitude",
+    "coordinates",
+    // "latitude",
+    // "longitude",
     "references",
     "specimens",
     "samples",
@@ -893,71 +1031,182 @@ export const HEADERS_LOCALITY: Headers = {
 export const HEADERS_LOCALITY_REFERENCE: Headers = {
   byIds: {
     reference: {
-      text: "localityReference.reference",
+      title: "localityReference.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     title: {
-      text: "localityReference.referenceTitle",
+      title: "localityReference.referenceTitle",
       value: "title",
       show: true,
       apiFieldValue: "reference__title",
+      sortField: ["reference__title"],
     },
     pages: {
-      text: "localityReference.pages",
+      title: "localityReference.pages",
       value: "pages",
       show: true,
       apiFieldValue: "pages",
+      sortField: ["pages"],
     },
     remarks: {
-      text: "localityReference.remarks",
+      title: "localityReference.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
   },
   allIds: ["reference", "title", "pages", "remarks"],
 };
 
+export const HEADERS_LOCALITY_SYNONYM: Headers = {
+  byIds: {
+    synonym: {
+      title: "localitySynonym.synonym",
+      value: "synonym",
+      show: true,
+      apiFieldValue: "synonym",
+      sortField: ["synonym"],
+    },
+    pages: {
+      title: "localitySynonym.pages",
+      value: "pages",
+      show: true,
+      apiFieldValue: "pages",
+      sortField: ["pages"],
+    },
+    reference: {
+      title: "localitySynonym.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    remarks: {
+      title: "localitySynonym.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: ["synonym", "pages", "reference", "remarks"],
+};
+
+export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
+  byIds: {
+    stratigraphy: {
+      title: "stratotype.stratigraphy",
+      value: "stratigraphy",
+      show: true,
+      apiFieldValue: {
+        et: "stratigraphy__stratigraphy",
+        en: "stratigraphy__stratigraphy_en",
+      },
+      sortField: {
+        et: ["stratigraphy__stratigraphy"],
+        en: ["stratigraphy__stratigraphy_en"],
+      },
+    },
+    type: {
+      title: "stratotype.type",
+      value: "type",
+      show: true,
+      apiFieldValue: {
+        et: "stratotype_type__value",
+        en: "stratotype_type__value_en",
+      },
+      sortField: {
+        et: ["stratotype_type__value"],
+        en: ["stratotype_type__value_en"],
+      },
+    },
+    depth_top: {
+      title: "stratotype.depthTop",
+      value: "depth_top",
+      show: true,
+      apiFieldValue: "depth_top",
+      sortField: ["depth_top"],
+    },
+    depth_base: {
+      title: "stratotype.depthBase",
+      value: "depth_base",
+      show: true,
+      apiFieldValue: "depth_base",
+      sortField: ["depth_base"],
+    },
+    reference: {
+      title: "stratotype.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    remarks: {
+      title: "stratotype.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: [
+    "stratigraphy",
+    "type",
+    "depth_top",
+    "depth_base",
+    "reference",
+    "remarks",
+  ],
+};
+
 export const HEADERS_PHOTO: Headers = {
   byIds: {
-    id: { text: "photo.id", value: "id", show: true, apiFieldValue: "id_sl" },
+    id: { title: "photo.id", value: "id", show: true, apiFieldValue: "id_sl", sortField: ["id_sl"] },
     image_number: {
-      text: "photo.number",
+      title: "photo.number",
       value: "image_number",
       show: true,
       apiFieldValue: "image_number",
+      sortField: ["image_number"],
     },
     agent: {
-      text: "photo.agent",
+      title: "photo.agent",
       value: "agent",
       show: true,
       apiFieldValue: "agent",
+      sortField: ["agent"],
     },
     date: {
-      text: "photo.date",
+      title: "photo.date",
       value: "date",
       show: true,
       apiFieldValue: "date_created_dt,date_created_free",
+      sortField: ["date_created_dt", "date_created_free"],
     },
     locality: {
-      text: "photo.locality",
+      title: "photo.locality",
       value: "locality",
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
     },
     image_object: {
-      text: "photo.imageObject",
+      title: "photo.imageObject",
       value: "image_object",
       show: true,
       apiFieldValue: "image_object",
+      sortField: ["image_object"],
     },
     tags: {
-      text: "photo.tags",
+      title: "photo.tags",
       value: "tags",
       show: true,
       apiFieldValue: "tags",
+      sortField: ["tags"],
     },
   },
   allIds: [
@@ -974,49 +1223,59 @@ export const HEADERS_PHOTO: Headers = {
 export const HEADERS_PREPARATION: Headers = {
   byIds: {
     id: {
-      text: "preparation.id",
+      title: "preparation.id",
       value: "id",
       show: false,
       apiFieldValue: "id_l",
+      sortField: ["id_l"],
     },
     preparation_number: {
-      text: "preparation.preparation_number",
+      title: "preparation.preparation_number",
       value: "preparation_number",
       show: true,
       apiFieldValue: "preparation_number",
+      sortField: ["preparation_number"],
     },
     locality: {
-      text: "preparation.locality",
+      title: "preparation.locality",
       value: "locality",
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
     },
     depth: {
-      text: "preparation.depth",
+      title: "preparation.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth,depth_interval",
+      sortField: ["depth", "depth_interval"],
     },
     stratigraphy: {
-      text: "preparation.stratigraphy",
+      title: "preparation.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: {
         et: "stratigraphy,lithostratigraphy",
         en: "stratigraphy_en,lithostratigraphy_en",
       },
+      sortField: {
+        et: ["stratigraphy", "lithostratigraphy"],
+        en: ["stratigraphy_en", "lithostratigraphy_en"],
+      },
     },
     agent: {
-      text: "preparation.agent",
+      title: "preparation.agent",
       value: "agent",
       show: true,
       apiFieldValue: "agent",
+      sortField: ["agent"],
     },
     mass: {
-      text: "preparation.mass",
+      title: "preparation.mass",
       value: "mass",
       show: true,
       apiFieldValue: "mass",
+      sortField: ["mass"],
     },
   },
   allIds: [
@@ -1032,60 +1291,69 @@ export const HEADERS_PREPARATION: Headers = {
 
 export const HEADERS_REFERENCE: Headers = {
   byIds: {
-    id: { text: "reference.id", value: "id", show: true, apiFieldValue: "id" },
+    id: { title: "reference.id", value: "id", show: true, apiFieldValue: "id", sortField: ["id"] },
     reference: {
-      text: "reference.reference",
+      title: "reference.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference",
+      sortField: ["reference"],
     },
     author: {
-      text: "reference.author",
+      title: "reference.author",
       value: "author",
       show: true,
       apiFieldValue: "author",
+      sortField: ["author"],
     },
     year: {
-      text: "reference.year",
+      title: "reference.year",
       value: "year",
       show: true,
       apiFieldValue: "year",
+      sortField: ["year"],
     },
     title: {
-      text: "reference.title",
+      title: "reference.title",
       value: "title",
       show: true,
       apiFieldValue: "title",
+      sortField: ["title"],
     },
     journal: {
-      text: "reference.journalBook",
+      title: "reference.journalBook",
       value: "journal",
       show: true,
       apiFieldValue: "journal__journal_name,book",
+      sortField: ["journal__journal_name", "book"],
     },
     pages: {
-      text: "reference.pages",
+      title: "reference.pages",
       value: "pages",
       show: true,
       apiFieldValue: "pages",
+      sortField: ["pages"],
     },
     doi: {
-      text: "reference.doi",
+      title: "reference.doi",
       value: "doi",
       show: true,
       apiFieldValue: "doi",
+      sortField: ["doi"],
     },
     remarks: {
-      text: "reference.remarks",
+      title: "reference.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
     pdf: {
-      text: "reference.pdf",
+      title: "reference.pdf",
       value: "pdf",
       show: true,
       apiFieldValue: "pdf",
+      sortField: ["pdf"],
     },
   },
   allIds: [
@@ -1103,100 +1371,112 @@ export const HEADERS_REFERENCE: Headers = {
 
 export const HEADERS_ROCK: Headers = {
   byIds: {
-    id: { text: "rock.id", value: "id", show: true, apiFieldValue: "id" },
+    id: { title: "rock.id", value: "id", show: true, apiFieldValue: "id", sortField: ["id"] },
     name: {
-      text: "rock.name",
+      title: "rock.name",
       value: "name",
       show: true,
       apiFieldValue: "name",
+      sortField: ["name"],
     },
     name_en: {
-      text: "rock.name_en",
+      title: "rock.name_en",
       value: "name_en",
       show: true,
       apiFieldValue: "name_en",
+      sortField: ["name_en"],
     },
     formula: {
-      text: "rock.formula",
+      title: "rock.formula",
       value: "formula",
       show: true,
       apiFieldValue: "formula,formula_html",
+      sortField: ["formula", "formula_html"],
     },
     in_estonia: {
-      text: "rock.in_estonia",
+      title: "rock.in_estonia",
       value: "in_estonia",
       show: true,
       apiFieldValue: "in_estonia",
+      sortField: ["in_estonia"],
     },
     mindat_id: {
-      text: "rock.mindat",
+      title: "rock.mindat",
       value: "mindat_id",
       show: true,
       apiFieldValue: "mindat_id",
+      sortField: ["mindat_id"],
     },
   },
   allIds: ["id", "name", "name_en", "formula", "in_estonia", "mindat_id"],
 };
+
 export const HEADERS_SAMPLE: Headers = {
   byIds: {
-    id: { text: "sample.id", value: "id", show: true, apiFieldValue: "id_l" },
+    id: {
+      title: "sample.id",
+      value: "id",
+      show: true,
+      apiFieldValue: "id_l",
+    },
     number: {
-      text: "sample.number",
+      title: "sample.number",
       value: "number",
       show: true,
       apiFieldValue: "number",
     },
     locality: {
-      text: "sample.locality",
+      title: "sample.locality",
       value: "locality",
       show: true,
       apiFieldValue: {
         et: "locality,site_name",
         en: "locality_en,site_name_en",
       },
+      sortField: {
+        et: ["locality", "site_name"],
+        en: ["locality_en", "site_name_en"],
+      },
     },
     depth: {
-      text: "sample.depth",
+      title: "sample.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth",
-    },
-    depth_interval: {
-      text: "sample.depthInterval",
-      value: "depth_interval",
-      show: false,
-      apiFieldValue: "depth_interval",
+      sortField: ["depth", "depth_interval"],
     },
     stratigraphy: {
-      text: "sample.stratigraphy",
+      title: "sample.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
+      sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
     },
     lithostratigraphy: {
-      text: "sample.lithostratigraphy",
+      title: "sample.lithostratigraphy",
       value: "lithostratigraphy",
       show: false,
       apiFieldValue: { et: "lithostratigraphy", en: "lithostratigraphy_en" },
+      sortField: { et: ["lithostratigraphy"], en: ["lithostratigraphy_en"] },
     },
     collector: {
-      text: "sample.collector",
+      title: "sample.collector",
       value: "collector",
       show: true,
       apiFieldValue: "collector",
     },
-    date_collected: {
-      text: "sample.dateCollected",
+    dateCollected: {
+      title: "sample.dateCollected",
       value: "date_collected",
       show: true,
       apiFieldValue: "date_collected",
     },
     image: {
-      text: "sample.image",
+      title: "sample.image",
       value: "image",
       show: true,
       apiFieldValue: "image",
-      sortable: true,
+      sortable: false,
     },
   },
   allIds: [
@@ -1204,88 +1484,129 @@ export const HEADERS_SAMPLE: Headers = {
     "number",
     "locality",
     "depth",
-    "depth_interval",
     "stratigraphy",
     "lithostratigraphy",
     "collector",
-    "date_collected",
+    "dateCollected",
     "image",
   ],
 };
 
-export const HEADERS_SAMPLE_REFERENCE: Headers = {
+export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
   byIds: {
-    reference: {
-      text: "sampleReference.reference",
-      value: "reference",
+    parameter: {
+      title: "analysisResult.parameter",
+      value: "parameter",
       show: true,
-      apiFieldValue: "reference__reference",
+      apiFieldValue: "parameter",
+      sortField: ["parameter"],
     },
-    reference__title: {
-      text: "sampleReference.referenceTitle",
-      value: "reference__title",
+    analysis_method: {
+      title: "analysisResult.method",
+      value: "analysis_method",
       show: true,
-      apiFieldValue: "reference__title",
+      apiFieldValue: "analysis_method",
+      sortField: ["analysis_method"],
     },
-    pages: {
-      text: "sampleReference.pages",
-      value: "pages",
+    method_details: {
+      title: "analysisResult.methodDetails",
+      value: "method_details",
       show: true,
-      apiFieldValue: "pages",
+      apiFieldValue: "method_details",
+      sortField: ["method_details"],
     },
-    remarks: {
-      text: "sampleReference.remarks",
-      value: "remarks",
+    depth: {
+      title: "analysisResult.depth",
+      value: "depth",
       show: true,
-      apiFieldValue: "remarks",
+      apiFieldValue: "depth",
+      sortField: ["depth"],
+    },
+    depth_interval: {
+      title: "analysisResult.depthInterval",
+      value: "depth_interval",
+      show: true,
+      apiFieldValue: "depth_interval",
+      sortField: ["depth_interval"],
+    },
+    value: { title: "analysisResult.value", value: "value", show: true, sortField: ["value"] },
+    value_txt: {
+      title: "analysisResult.valueText",
+      value: "value_txt",
+      show: true,
+      apiFieldValue: "value_txt",
+      sortField: ["value_txt"],
+    },
+    value_error: {
+      title: "analysisResult.valueError",
+      value: "value_error",
+      show: true,
+      apiFieldValue: "value_error",
+      sortField: ["value_error"],
     },
   },
-  allIds: ["reference", "reference__title", "pages", "remarks"],
+  allIds: [
+    "parameter",
+    "analysis_method",
+    "method_details",
+    "depth",
+    "depth_interval",
+    "value",
+    "value_txt",
+    "value_error",
+  ],
 };
 
 export const HEADERS_SAMPLE_DATA: Headers = {
   byIds: {
     sample: {
-      text: "sampleData.sampleNumber",
+      title: "sampleData.sampleNumber",
       value: "sample",
       show: true,
       apiFieldValue: "sample_number",
+      sortField: ["sample_number"],
     },
     latitude: {
-      text: "sampleData.latitude",
+      title: "sampleData.latitude",
       value: "latitude",
       show: false,
       apiFieldValue: "latitude",
+      sortField: ["latitude"],
     },
     longitude: {
-      text: "sampleData.longitude",
+      title: "sampleData.longitude",
       value: "longitude",
       show: false,
       apiFieldValue: "longitude",
+      sortField: ["longitude"],
     },
     locality: {
-      text: "datasetAnalysis.locality",
+      title: "datasetAnalysis.locality",
       value: "locality",
       show: true,
       apiFieldValue: "locality",
+      sortField: ["locality"],
     },
     depth: {
-      text: "sampleData.depth",
+      title: "sampleData.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth",
+      sortField: ["depth"],
     },
     depth_interval: {
-      text: "sampleData.depthInterval",
+      title: "sampleData.depthInterval",
       value: "depth_interval",
       show: false,
       apiFieldValue: "depth_interval",
+      sortField: ["depth_interval"],
     },
     stratigraphy: {
-      text: "datasetAnalysis.stratigraphy",
+      title: "datasetAnalysis.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
+      sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
     },
   },
   allIds: [
@@ -1299,119 +1620,195 @@ export const HEADERS_SAMPLE_DATA: Headers = {
   ],
 };
 
+export const HEADERS_SAMPLE_REFERENCE: Headers = {
+  byIds: {
+    reference: {
+      title: "sampleReference.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    reference__title: {
+      title: "sampleReference.referenceTitle",
+      value: "reference__title",
+      show: true,
+      apiFieldValue: "reference__title",
+      sortField: ["reference__title"],
+    },
+    pages: {
+      title: "sampleReference.pages",
+      value: "pages",
+      show: true,
+      apiFieldValue: "pages",
+      sortField: ["pages"],
+    },
+    remarks: {
+      title: "sampleReference.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: ["reference", "reference__title", "pages", "remarks"],
+};
+
 export const HEADERS_SITE: Headers = {
   byIds: {
-    id: { text: "site.id", value: "id", show: false, apiFieldValue: "id_l" },
+    id: {
+      title: "site.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id_l",
+      sortField: ["id_l"],
+    },
     name: {
-      text: "site.name",
+      title: "site.name",
       value: "name",
       show: true,
-      apiFieldValue: "name",
+      apiFieldValue: { et: "name", en: "name_en" },
+      sortField: ["name"],
     },
     area: {
-      text: "site.area",
+      title: "site.area",
       value: "area",
       show: true,
-      apiFieldValue: "latitude",
-    },
-    latitude: {
-      text: "site.latitude",
-      value: "latitude",
-      show: true,
-      apiFieldValue: "longitude",
-    },
-    longitude: {
-      text: "site.longitude",
-      value: "longitude",
-      show: true,
       apiFieldValue: { et: "area_name", en: "area_name_en" },
+      sortField: { et: ["area_name"], en: ["area_name_en"] },
     },
-    z: {
-      text: "site.elevation",
-      value: "z",
+    coordinates: {
+      title: "locality.coordinates",
+      value: "coordinates",
+      show: true,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "locality.latitude",
+          value: "latitude",
+          width: 75,
+          apiFieldValue: "latitude",
+          ...numberFieldProps,
+        },
+        {
+          title: "locality.longitude",
+          value: "longitude",
+          width: 75,
+          apiFieldValue: "longitude",
+          ...numberFieldProps,
+        },
+      ],
+    },
+    elevation: {
+      title: "site.elevation",
+      value: "elevation",
       show: true,
       apiFieldValue: "z",
+      sortField: ["z"],
+      ...numberFieldProps,
     },
     depth: {
-      text: "site.depth",
+      title: "site.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth",
+      sortField: ["depth"],
+      ...numberFieldProps,
     },
   },
-  allIds: ["id", "name", "area", "latitude", "longitude", "z", "depth"],
+  allIds: ["id", "name", "area", "coordinates", "elevation", "depth"],
 };
 
 export const HEADERS_SPECIMEN: Headers = {
   byIds: {
-    id: { text: "specimen.id", value: "id", show: false, apiFieldValue: "id" },
+    id: {
+      title: "specimen.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
+    },
     specimen_full_name: {
-      text: "specimen.number",
+      title: "specimen.number",
       value: "specimen_full_name",
       show: true,
       apiFieldValue: "specimen_full_name",
+      sortField: ["specimen_full_name"],
     },
     specimen_number_old: {
-      text: "specimen.oldNumber",
+      title: "specimen.oldNumber",
       value: "specimen_number_old",
       show: false,
       apiFieldValue: "specimen_number_old",
+      sortField: ["specimen_number_old"],
     },
     original_status: {
-      text: "specimen.originalStatus",
+      title: "specimen.originalStatus",
       value: "original_status",
       show: false,
       apiFieldValue: { et: "original_status", en: "original_status_en" },
+      sortField: { et: ["original_status"], en: ["original_status_en"] },
     },
     locality: {
-      text: "specimen.locality",
+      title: "specimen.locality",
       value: "locality",
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
+      sortField: { et: ["locality"], en: ["locality_en"] },
     },
     depth: {
-      text: "specimen.depth",
+      title: "specimen.depth",
       value: "depth",
       show: true,
       apiFieldValue: "depth",
+      sortField: ["depth"],
+      ...numberFieldProps,
     },
     depth_interval: {
-      text: "specimen.depthInterval",
+      title: "specimen.depthInterval",
       value: "depth_interval",
       show: false,
       apiFieldValue: "depth_interval",
+      sortField: ["depth_interval"],
+      ...numberFieldProps,
     },
     stratigraphy: {
-      text: "specimen.stratigraphy",
+      title: "specimen.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
+      sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
     },
     lithostratigraphy: {
-      text: "sample.lithostratigraphy",
+      title: "sample.lithostratigraphy",
       value: "lithostratigraphy",
       show: false,
       apiFieldValue: { et: "lithostratigraphy", en: "lithostratigraphy_en" },
+      sortField: { et: ["lithostratigraphy"], en: ["lithostratigraphy_en"] },
     },
     name: {
-      text: "specimen.name",
+      title: "specimen.name",
       value: "name",
       show: true,
       sortable: false,
       class: "static-cell-header",
       apiFieldValue: { et: "rock", en: "rock_en" },
+      sortField: { et: ["rock"], en: ["rock_en"] },
     },
     image: {
-      text: "specimen.image",
+      title: "specimen.image",
       value: "image",
       show: true,
       apiFieldValue: "image",
+      sortable: false,
     },
     collector: {
-      text: "specimen.collector",
+      title: "specimen.collector",
       value: "collector",
       show: false,
       apiFieldValue: "collector",
+      sortField: ["collector"],
     },
   },
   allIds: [
@@ -1433,49 +1830,59 @@ export const HEADERS_SPECIMEN: Headers = {
 export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
   byIds: {
     name: {
-      text: "specimenIdentification.name",
+      title: "specimenIdentification.name",
       value: "name",
       show: true,
       apiFieldValue: "taxon__taxon",
+      sortField: ["taxon__taxon"],
     },
     agent: {
-      text: "specimenIdentification.agent",
+      title: "specimenIdentification.agent",
       value: "agent",
       show: true,
       apiFieldValue: "agent__agent",
+      sortField: ["agent__agent"],
     },
     dateIdentified: {
-      text: "specimenIdentification.dateIdentified",
+      title: "specimenIdentification.dateIdentified",
       value: "dateIdentified",
       show: true,
       apiFieldValue: "date_identified",
+      sortField: ["date_identified"],
     },
     reference: {
-      text: "specimenIdentification.reference",
+      title: "specimenIdentification.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     type: {
-      text: "specimenIdentification.type",
+      title: "specimenIdentification.type",
       value: "type",
       show: true,
       apiFieldValue: {
         et: "identification_type__value",
         en: "identification_type__value_en",
       },
+      sortField: {
+        et: ["identification_type__value"],
+        en: ["identification_type__value_en"],
+      },
     },
     remarks: {
-      text: "specimenIdentification.remarks",
+      title: "specimenIdentification.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
     current: {
-      text: "specimenIdentification.current",
+      title: "specimenIdentification.current",
       value: "current",
       show: true,
       apiFieldValue: "current",
+      sortField: ["current"],
     },
   },
   allIds: [
@@ -1492,61 +1899,70 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
 export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
   byIds: {
     rock: {
-      text: "specimenIdentification.rock",
+      title: "specimenIdentification.rock",
       value: "rock",
       show: true,
       apiFieldValue: "rock__name,rock__name_en",
+      sortField: ["rock__name", "rock__name_en"],
     },
     name: {
-      text: "specimenIdentification.name",
+      title: "specimenIdentification.name",
       value: "name",
       show: true,
       apiFieldValue: "name",
+      sortField: ["name"],
     },
     name_en: {
-      text: "specimenIdentification.name_en",
+      title: "specimenIdentification.name_en",
       value: "name_en",
       show: true,
       apiFieldValue: "name_en",
+      sortField: ["name_en"],
     },
     agent: {
-      text: "specimenIdentification.agent",
+      title: "specimenIdentification.agent",
       value: "agent",
       show: true,
       apiFieldValue: "agent__agent",
+      sortField: ["agent__agent"],
     },
     dateIdentified: {
-      text: "specimenIdentification.dateIdentified",
+      title: "specimenIdentification.dateIdentified",
       value: "dateIdentified",
       show: true,
       apiFieldValue: "date_identified",
+      sortField: ["date_identified"],
     },
     reference: {
-      text: "specimenIdentification.reference",
+      title: "specimenIdentification.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     type: {
-      text: "specimenIdentification.type",
+      title: "specimenIdentification.type",
       value: "type",
       show: true,
       apiFieldValue: { et: "type__value", en: "type__value_en" },
+      sortField: { et: ["type__value"], en: ["type__value_en"] },
     },
     remarks: {
-      text: "specimenIdentification.remarks",
+      title: "specimenIdentification.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
     current: {
-      text: "specimenIdentification.current",
+      title: "specimenIdentification.current",
       value: "current",
       show: true,
       apiFieldValue: "current",
+      sortField: ["current"],
     },
     // pages: {
-    //   text: 'stratigraphyReference.pages',
+    //   title: 'stratigraphyReference.pages',
     //   value: 'pages',
     //   show: true,
     // },
@@ -1567,28 +1983,32 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
 export const HEADERS_SPECIMEN_REFERENCE: Headers = {
   byIds: {
     reference: {
-      text: "specimenReference.reference",
+      title: "specimenReference.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     pages: {
-      text: "specimenReference.pages",
+      title: "specimenReference.pages",
       value: "pages",
       show: true,
       apiFieldValue: "pages",
+      sortField: ["pages"],
     },
     figures: {
-      text: "specimenReference.figures",
+      title: "specimenReference.figures",
       value: "figures",
       show: true,
       apiFieldValue: "figures",
+      sortField: ["figures"],
     },
     remarks: {
-      text: "specimenReference.remarks",
+      title: "specimenReference.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
   },
   allIds: ["reference", "pages", "figures", "remarks"],
@@ -1597,73 +2017,84 @@ export const HEADERS_SPECIMEN_REFERENCE: Headers = {
 export const HEADERS_STRATIGRAPHY: Headers = {
   byIds: {
     id: {
-      text: "stratigraphy.id",
+      title: "stratigraphy.id",
       value: "id",
       show: false,
       apiFieldValue: "id",
+      sortField: ["id"],
     },
     stratigraphy: {
-      text: "stratigraphy.stratigraphy",
+      title: "stratigraphy.stratigraphy",
       value: "stratigraphy",
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
+      sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
     },
     index_main: {
-      text: "stratigraphy.index_main",
+      title: "stratigraphy.index_main",
       value: "index_main",
       show: true,
       apiFieldValue: "index_main",
+      sortField: ["index_main"],
     },
     index_additional: {
-      text: "stratigraphy.index_additional",
+      title: "stratigraphy.index_additional",
       value: "index_additional",
       show: true,
       apiFieldValue: "index_additional",
+      sortField: ["index_additional"],
     },
     stratigraphy_type: {
-      text: "stratigraphy.stratigraphy_type",
+      title: "stratigraphy.stratigraphy_type",
       value: "stratigraphy_type",
       show: true,
       apiFieldValue: { et: "stratigraphy_type", en: "stratigraphy_type_en" },
+      sortField: { et: ["stratigraphy_type"], en: ["stratigraphy_type_en"] },
     },
     stratigraphy_rank: {
-      text: "stratigraphy.stratigraphy_rank",
+      title: "stratigraphy.stratigraphy_rank",
       value: "stratigraphy_rank",
       show: true,
       apiFieldValue: { et: "stratigraphy_rank", en: "stratigraphy_rank_en" },
+      sortField: { et: ["stratigraphy_rank"], en: ["stratigraphy_rank_en"] },
     },
     stratigraphy_scope: {
-      text: "stratigraphy.stratigraphy_scope",
+      title: "stratigraphy.stratigraphy_scope",
       value: "stratigraphy_scope",
       show: true,
       apiFieldValue: { et: "stratigraphy_scope", en: "stratigraphy_scope_en" },
+      sortField: { et: ["stratigraphy_scope"], en: ["stratigraphy_scope_en"] },
     },
     parent_stratigraphy: {
-      text: "stratigraphy.parent_stratigraphy",
+      title: "stratigraphy.parent_stratigraphy",
       value: "parent_stratigraphy",
       show: true,
       apiFieldValue: {
         et: "parent_stratigraphy",
         en: "parent_stratigraphy_en",
       },
+      sortField: { et: ["parent_stratigraphy"], en: ["parent_stratigraphy_en"] },
     },
     ageBase: {
-      text: "stratigraphy.ageBase",
+      title: "stratigraphy.ageBase",
       value: "ageBase",
       show: true,
       apiFieldValue: "age_base",
+      sortField: ["age_base"],
     },
     ageTop: {
-      text: "stratigraphy.ageTop",
+      title: "stratigraphy.ageTop",
       value: "ageTop",
       show: true,
       apiFieldValue: "age_top",
+      sortField: ["age_top"],
     },
     age_stratigraphy: {
-      text: "stratigraphy.age_stratigraphy",
+      title: "stratigraphy.age_stratigraphy",
       value: "age_stratigraphy",
       show: true,
       apiFieldValue: { et: "age_stratigraphy", en: "age_stratigraphy_en" },
+      sortField: { et: ["age_stratigraphy"], en: ["age_stratigraphy_en"] },
     },
   },
   allIds: [
@@ -1684,79 +2115,124 @@ export const HEADERS_STRATIGRAPHY: Headers = {
 export const HEADERS_STRATIGRAPHY_REFERENCE: Headers = {
   byIds: {
     reference: {
-      text: "stratigraphyReference.reference",
+      title: "stratigraphyReference.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     content: {
-      text: "stratigraphyReference.content",
+      title: "stratigraphyReference.content",
       value: "content",
       show: true,
       apiFieldValue: "reference__year",
+      sortField: ["reference__year"],
     },
     year: {
-      text: "stratigraphyReference.year",
+      title: "stratigraphyReference.year",
       value: "year",
       show: true,
       apiFieldValue: "pages",
+      sortField: ["pages"],
     },
     pages: {
-      text: "stratigraphyReference.pages",
+      title: "stratigraphyReference.pages",
       value: "pages",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
     remarks: {
-      text: "stratigraphyReference.remarks",
+      title: "stratigraphyReference.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: { et: "content", en: "content_en" },
+      sortField: { et: ["content"], en: ["content_en"] },
     },
   },
   allIds: ["reference", "content", "year", "pages", "remarks"],
 };
 
+export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
+  byIds: {
+    synonym: {
+      title: "stratigraphySynonym.synonym",
+      value: "synonym",
+      show: true,
+      apiFieldValue: "synonym",
+      sortField: ["synonym"],
+    },
+    language: {
+      title: "stratigraphySynonym.language",
+      value: "language",
+      show: true,
+      apiFieldValue: { et: "language__value", en: "language__value_en" },
+      sortField: { et: ["language__value"], en: ["language__value_en"] },
+    },
+    reference: {
+      title: "stratigraphySynonym.reference",
+      value: "reference",
+      show: true,
+      apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
+    },
+    remarks: {
+      title: "stratigraphySynonym.remarks",
+      value: "remarks",
+      show: true,
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+    },
+  },
+  allIds: ["synonym", "language", "reference", "remarks"],
+};
+
 export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
   byIds: {
     locality: {
-      text: "stratotype.locality",
+      title: "stratotype.locality",
       value: "locality",
       show: true,
       apiFieldValue: { et: "locality__locality", en: "locality_locality_en" },
+      sortField: { et: ["locality__locality"], en: ["locality_locality_en"] },
     },
     type: {
-      text: "stratotype.type",
+      title: "stratotype.type",
       value: "type",
       show: true,
       apiFieldValue: {
         et: "stratotype_type__value",
         en: "stratotype_type__value_en",
       },
+      sortField: { et: ["stratotype_type__value"], en: ["stratotype_type__value_en"] },
     },
     depth_top: {
-      text: "stratotype.depthTop",
+      title: "stratotype.depthTop",
       value: "depth_top",
       show: true,
       apiFieldValue: "depth_top",
+      sortField: ["depth_top"],
     },
     depth_base: {
-      text: "stratotype.depthBase",
+      title: "stratotype.depthBase",
       value: "depth_base",
       show: true,
       apiFieldValue: "depth_base",
+      sortField: ["depth_base"],
     },
     reference: {
-      text: "stratotype.reference",
+      title: "stratotype.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference__reference",
+      sortField: ["reference__reference"],
     },
     remarks: {
-      text: "stratotype.remarks",
+      title: "stratotype.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
   },
   allIds: [
@@ -1769,164 +2245,90 @@ export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
   ],
 };
 
-export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
+export const HEADERS_TAXON: Headers = {
   byIds: {
-    synonym: {
-      text: "stratigraphySynonym.synonym",
-      value: "synonym",
-      show: true,
-      apiFieldValue: "synonym",
+    id: {
+      title: "taxon.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
     },
-    language: {
-      text: "stratigraphySynonym.language",
-      value: "language",
+    taxon: {
+      title: "taxon.taxon",
+      value: "taxon",
       show: true,
-      apiFieldValue: { et: "language__value", en: "language__value_en" },
+      apiFieldValue: "taxon",
+      sortField: ["taxon"],
     },
-    reference: {
-      text: "stratigraphySynonym.reference",
-      value: "reference",
+    parent_taxon: {
+      title: "taxon.parentTaxon",
+      value: "parent_taxon",
       show: true,
-      apiFieldValue: "reference__reference",
+      apiFieldValue: "parent_taxon",
+      sortField: ["parent_taxon"],
     },
-    remarks: {
-      text: "stratigraphySynonym.remarks",
-      value: "remarks",
+    fossil_group: {
+      title: "taxon.fossilGroup",
+      value: "fossil_group",
       show: true,
-      apiFieldValue: "remarks",
+      apiFieldValue: "fossil_group",
+      sortField: ["fossil_group"],
     },
   },
-  allIds: ["synonym", "language", "reference", "remarks"],
-};
-
-export const HEADERS_STRATOTYPE: Headers = {
-  byIds: {
-    stratigraphy: {
-      text: "stratotype.stratigraphy",
-      value: "stratigraphy",
-      show: true,
-      apiFieldValue: {
-        et: "stratigraphy__stratigraphy",
-        en: "stratigraphy__stratigraphy_en",
-      },
-    },
-    type: {
-      text: "stratotype.type",
-      value: "type",
-      show: true,
-      apiFieldValue: {
-        et: "stratotype_type__value",
-        en: "stratotype_type__value_en",
-      },
-    },
-    depth_top: {
-      text: "stratotype.depthTop",
-      value: "depth_top",
-      show: true,
-      apiFieldValue: "depth_top",
-    },
-    depth_base: {
-      text: "stratotype.depthBase",
-      value: "depth_base",
-      show: true,
-      apiFieldValue: "depth_base",
-    },
-    reference: {
-      text: "stratotype.reference",
-      value: "reference",
-      show: true,
-      apiFieldValue: "reference__reference",
-    },
-    remarks: {
-      text: "stratotype.remarks",
-      value: "remarks",
-      show: true,
-      apiFieldValue: "remarks",
-    },
-  },
-  allIds: [
-    "stratigraphy",
-    "type",
-    "depth_top",
-    "depth_base",
-    "reference",
-    "remarks",
-  ],
-};
-
-export const HEADERS_SYNONYM: Headers = {
-  byIds: {
-    synonym: {
-      text: "localitySynonym.synonym",
-      value: "synonym",
-      show: true,
-      apiFieldValue: "synonym",
-    },
-    pages: {
-      text: "localitySynonym.pages",
-      value: "pages",
-      show: true,
-      apiFieldValue: "pages",
-    },
-    reference: {
-      text: "localitySynonym.reference",
-      value: "reference",
-      show: true,
-      apiFieldValue: "reference__reference",
-    },
-    remarks: {
-      text: "localitySynonym.remarks",
-      value: "remarks",
-      show: true,
-      apiFieldValue: "remarks",
-    },
-  },
-  allIds: ["synonym", "pages", "reference", "remarks"],
+  allIds: ["id", "taxon", "parent_taxon", "fossil_group"],
 };
 
 export const HEADERS_TAXON_LIST: Headers = {
   byIds: {
     taxon: {
-      text: "taxon.taxon",
+      title: "taxon.taxon",
       value: "taxon",
       show: true,
       apiFieldValue: "taxon__taxon",
+      sortField: ["taxon__taxon"],
     },
     name: {
-      text: "taxon.name",
+      title: "taxon.name",
       value: "name",
       show: true,
       apiFieldValue: "name",
+      sortField: ["name"],
     },
     frequency: {
-      text: "taxon.frequency",
+      title: "taxon.frequency",
       value: "frequency",
       show: true,
       apiFieldValue: "frequency",
+      sortField: ["frequency"],
     },
     agent: {
-      text: "taxon.agent_identified",
+      title: "taxon.agent_identified",
       value: "agent",
       show: true,
       apiFieldValue: "agent_identified__agent,agent_identified_txt",
+      sortField: ["agent_identified__agent", "agent_identified_txt"],
     },
     date_identified: {
-      text: "taxon.date_identified",
+      title: "taxon.date_identified",
       value: "date_identified",
       show: true,
       apiFieldValue: "date_identified,date_identified_free",
+      sortField: ["date_identified", "date_identified_free"],
     },
     extra: {
-      text: "taxon.extra",
+      title: "taxon.extra",
       value: "extra",
       show: true,
       apiFieldValue: "extra",
+      sortField: ["extra"],
     },
     remarks: {
-      text: "taxon.remarks",
+      title: "taxon.remarks",
       value: "remarks",
       show: true,
       apiFieldValue: "remarks",
+      sortField: ["remarks"],
     },
   },
   allIds: [
@@ -1938,29 +2340,4 @@ export const HEADERS_TAXON_LIST: Headers = {
     "extra",
     "remarks",
   ],
-};
-
-export const HEADERS_TAXON: Headers = {
-  byIds: {
-    id: { text: "taxon.id", value: "id", show: false, apiFieldValue: "id" },
-    taxon: {
-      text: "taxon.taxon",
-      value: "taxon",
-      show: true,
-      apiFieldValue: "taxon",
-    },
-    parent_taxon: {
-      text: "taxon.parentTaxon",
-      value: "parent_taxon",
-      show: true,
-      apiFieldValue: "parent_taxon",
-    },
-    fossil_group: {
-      text: "taxon.fossilGroup",
-      value: "fossil_group",
-      show: true,
-      apiFieldValue: "fossil_group",
-    },
-  },
-  allIds: ["id", "taxon", "parent_taxon", "fossil_group"],
 };

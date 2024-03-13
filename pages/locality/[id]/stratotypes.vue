@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { STRATOTYPE } from "~/constants";
-import { HEADERS_LOCALITY_STRATOTYPE } from "~/constants/headersNew";
-
 const {
   options,
   search,

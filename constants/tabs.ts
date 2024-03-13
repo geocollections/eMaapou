@@ -1,4 +1,4 @@
-export interface Tab {
+interface Tab {
   id: string;
   isSolr?: boolean;
   table?: string;
@@ -9,7 +9,7 @@ export interface Tab {
   fields?: string;
   objectId?: string;
 }
-export interface ResourceTabs {
+interface ResourceTabs {
   byIds: { [K: string]: Tab };
   allIds: string[];
 }

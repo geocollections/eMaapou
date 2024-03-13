@@ -1,7 +1,5 @@
 import { z } from "zod";
 import type { RouteLocation } from "vue-router";
-import { DATASET } from "~/constants";
-import { HEADERS_DATASET } from "~/constants/headersNew";
 import type {
   IdListFilter,
   TextListFilter,

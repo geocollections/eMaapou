@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { DATASET_REFERENCE } from "~/constants";
-import { HEADERS_DATASET_REFERENCE } from "~/constants/headersNew";
-
 const {
   options,
   search,

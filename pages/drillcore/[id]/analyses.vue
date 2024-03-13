@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ANALYSIS } from "~/constants";
-import { HEADERS_ANALYSIS } from "~/constants/headersNew";
-
 const props = defineProps({
   locality: {
     type: Number,

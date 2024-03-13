@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ANALYSIS_RESULT } from "~/constants";
-import { HEADERS_ANALYSIS_RESULT } from "~/constants/headersNew";
-
 const {
   options,
   handleUpdate,

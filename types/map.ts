@@ -8,7 +8,7 @@ export interface MapMarker {
   id?: number; // TODO: should rename to `routeId`
 }
 
-export interface MapState {
+interface MapState {
   map: Map | undefined;
   options: any;
   currentCenter: { lat: number; lng: number };

@@ -1,7 +1,5 @@
 import type { RouteLocation } from "vue-router";
 import { z } from "zod";
-import { SAMPLE } from "~/constants";
-import { HEADERS_SAMPLE } from "~/constants/headersNew";
 import type {
   BooleanFilter,
   GeomFilter,

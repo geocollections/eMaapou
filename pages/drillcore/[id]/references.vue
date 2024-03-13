@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { LOCALITY_REFERENCE } from "~/constants";
-import { HEADERS_LOCALITY_REFERENCE } from "~/constants/headersNew";
-
 const props = defineProps({
   locality: {
     type: Number,

@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import {
-  STRATIGRAPHY_REFERENCE,
-} from "~/constants";
-import { HEADERS_STRATIGRAPHY_REFERENCE } from "~/constants/headersNew";
-
 const {
   options,
   search,

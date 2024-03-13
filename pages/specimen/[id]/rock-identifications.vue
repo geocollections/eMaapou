@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SPECIMEN_IDENTIFICATION_GEOLOGY } from "~/constants";
-import { HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY } from "~/constants/headersNew";
-
 const route = useRoute();
 const {
   options,

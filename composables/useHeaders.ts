@@ -1,50 +1,12 @@
 import cloneDeep from "lodash/cloneDeep";
 import type { DataTableOptions, Header, Headers } from "~/constants";
-import type {
-  Header as HeaderNew,
-  Headers as HeadersNew,
-} from "~/constants/headersNew";
 
-export function useHeaders(initHeaders: Headers) {
+export function useHeadersNew(initHeaders: Headers) {
   const { t } = useI18n();
 
   const headersMap = ref(cloneDeep(initHeaders));
 
   const translateHeader = (header: Header) => {
-    if (header.translate === undefined || header.translate === true)
-      header.title = t(header.text);
-
-    return header;
-  };
-
-  const headers = computed(() => {
-    return headersMap.value.allIds.map((id: string) => {
-      const header = translateHeader(headersMap.value.byIds[id]);
-      return {
-        ...header,
-        sortable: header.sortable !== undefined ? header.sortable : true,
-      };
-    });
-  });
-
-  const handleHeadersChange = (e: string) => {
-    headersMap.value.byIds[e].show = !headersMap.value.byIds[e].show;
-  };
-  const handleHeadersReset = (options: DataTableOptions) => {
-    headersMap.value = cloneDeep(initHeaders);
-    options.sortBy?.forEach((sortItem) => {
-      headersMap.value.byIds[sortItem.key].show = true;
-    });
-  };
-  return { headers, handleHeadersChange, handleHeadersReset };
-}
-
-export function useHeadersNew(initHeaders: HeadersNew) {
-  const { t } = useI18n();
-
-  const headersMap = ref(cloneDeep(initHeaders));
-
-  const translateHeader = (header: HeaderNew) => {
     if (header.titleTranslate === undefined || header.titleTranslate === true)
       return t(header.title);
 

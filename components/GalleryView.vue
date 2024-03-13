@@ -253,7 +253,7 @@ function updateOptions(event) {
 }
 
 /* Overriding default 'cover' setting in order to correctly show portrait images */
-.gallery__v-carousel >>> .v-carousel__item > .v-image__image--cover {
+.gallery__v-carousel :deep(.v-carousel__item) :deep(.v-image__image--cover) {
   background-size: contain;
 }
 </style>

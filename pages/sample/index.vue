@@ -127,8 +127,6 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
         :count="data?.response.numFound ?? 0"
         :headers="headers"
         :options="options"
-        dynamic-headers
-        stateful-headers
         :is-loading="pending"
         @update="handleDataTableUpdate"
         @change:headers="handleHeadersChange"

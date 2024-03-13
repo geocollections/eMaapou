@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { TAXON_LIST } from "~/constants";
-import { HEADERS_TAXON_LIST } from "~/constants/headersNew";
-
 const route = useRoute();
 const {
   options,

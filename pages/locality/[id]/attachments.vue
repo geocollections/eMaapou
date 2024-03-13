@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { ATTACHMENT_LINK } from "~/constants";
-import { HEADERS_ATTACHMENT } from "~/constants/headersNew";
-
 const {
   options,
   search,

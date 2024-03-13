@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { STRATIGRAPHY_SYNONYM } from "~/constants";
-import { HEADERS_STRATIGRAPHY_SYNONYM } from "~/constants/headersNew";
-
 const {
   options,
   search,

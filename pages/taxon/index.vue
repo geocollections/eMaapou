@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { mdiFamilyTree } from "@mdi/js";
-import { HEADERS_TAXON } from "~/constants/headersNew";
 
 const route = useRoute();
 
@@ -110,8 +109,6 @@ async function handleDataTableUpdate({ options: newOptions }) {
         :count="data?.response.numFound ?? 0"
         :headers="headers"
         :options="options"
-        dynamic-headers
-        stateful-headers
         :is-loading="pending"
         @update="handleDataTableUpdate"
         @change:headers="handleHeadersChange"

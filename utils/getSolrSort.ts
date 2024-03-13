@@ -1,5 +1,4 @@
-import type { DataTableOptions } from "~/constants";
-import type { Header } from "~/constants/headersNew";
+import type { DataTableOptions, Header } from "~/constants";
 
 export default function ({
   sortBy,

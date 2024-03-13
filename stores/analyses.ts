@@ -1,7 +1,5 @@
 import { z } from "zod";
 import type { RouteLocation } from "vue-router";
-import { ANALYSIS } from "~/constants";
-import { HEADERS_ANALYSIS } from "~/constants/headersNew";
 import type {
   GeomFilter,
   IdListFilter,

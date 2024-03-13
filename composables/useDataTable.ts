@@ -1,6 +1,5 @@
 import { z } from "zod";
-import type { DataTableOptions, Headers as HeadersOld, SortItem } from "~/constants";
-import type { Headers } from "~/constants/headersNew";
+import type { DataTableOptions, Headers, SortItem } from "~/constants";
 
 export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: Headers }) {
   const options = ref(initOptions);
@@ -92,7 +91,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     reset,
   };
 }
-export function useDataTableDetail({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: HeadersOld }) {
+export function useDataTableDetail({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: Headers }) {
   const options = ref(initOptions);
 
   const { headers, handleHeadersReset, handleHeadersChange }

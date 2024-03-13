@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { HEADERS_STRATIGRAPHY_STRATOTYPE } from "~/constants/headersNew";
-
 const props = defineProps<{
   stratigraphy: any;
 }>();

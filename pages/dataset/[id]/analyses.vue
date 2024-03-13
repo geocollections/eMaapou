@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { DATASET_ANALYSIS } from "~/constants";
-import { HEADERS_DATASET_ANALYSIS } from "~/constants/headersNew";
-
 const {
   options,
   solrQuery,

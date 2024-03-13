@@ -1,7 +1,6 @@
 import type { RouteLocation } from "vue-router";
 import { z } from "zod";
 import { STRATIGRAPHY } from "~/constants";
-import { HEADERS_STRATIGRAPHY } from "~/constants/headersNew";
 import type {
   BooleanFilter,
   GeomFilter,

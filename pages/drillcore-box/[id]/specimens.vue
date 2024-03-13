@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SPECIMEN } from "~/constants";
-import { HEADERS_SPECIMEN } from "~/constants/headersNew";
-
 const props = defineProps<{
   locality: number;
   depthStart: number;

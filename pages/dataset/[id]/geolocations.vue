@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { DATASET_GEOLOCATIONS } from "~/constants";
-import { HEADERS_DATASET_GEOLOCATION } from "~/constants/headersNew";
-
 const {
   options,
   search,

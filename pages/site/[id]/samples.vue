@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SAMPLE } from "~/constants";
-import { HEADERS_SAMPLE } from "~/constants/headersNew";
-
 const {
   options,
   solrQuery,

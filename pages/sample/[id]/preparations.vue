@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { PREPARATION } from "~/constants";
-import { HEADERS_PREPARATION } from "~/constants/headersNew";
-
 const {
   options,
   handleUpdate,

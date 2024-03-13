@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
-import { DESCRIPTION } from "~/constants";
-import { HEADERS_DESCRIPTION } from "~/constants/headersNew";
 
 const props = defineProps({
   locality: {

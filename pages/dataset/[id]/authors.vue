@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { DATASET_AUTHORS } from "~/constants";
-import { HEADERS_DATASET_AUTHOR } from "~/constants/headersNew";
-
 const route = useRoute();
 const {
   options,

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { FOSSILS } from "~/constants";
-import { HEADERS_FOSSIL } from "~/constants/headersNew";
-
 const {
   options,
   solrQuery,

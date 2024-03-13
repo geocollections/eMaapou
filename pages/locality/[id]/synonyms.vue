@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { SYNONYM } from "~/constants";
-import { HEADERS_LOCALITY_SYNONYM } from "~/constants/headersNew";
-
 const route = useRoute();
 const {
   options,
