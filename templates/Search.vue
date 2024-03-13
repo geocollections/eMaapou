@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { mdiChevronDoubleLeft, mdiMagnify } from "@mdi/js";
+import { useDisplay } from "vuetify";
+
+const display = useDisplay();
 
 const showSearch = ref(false);
 const mini = ref(false);
@@ -12,20 +15,20 @@ function closeMobileSearch() {
 <template>
   <div>
     <VNavigationDrawer
-      :model-value="true"
+      v-model="showSearch"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
-      :permanent="!$vuetify.display.smAndDown"
-      :temporary="$vuetify.display.smAndDown"
+      :permanent="!display.smAndDown.value"
+      :temporary="display.smAndDown.value"
       width="320"
       touchless
       color="grey-lighten-5"
       :rail="mini"
       :rail-width="48"
-      :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
+      :location="display.smAndDown.value ? 'bottom' : 'left'"
     >
       <div style="height: 100%" tile>
         <VList
-          v-if="!$vuetify.display.smAndDown"
+          v-if="!display.smAndDown.value"
           density="compact"
           variant="plain"
           class="pa-0"
@@ -83,16 +86,13 @@ function closeMobileSearch() {
             <slot name="result" />
           </VCol>
         </VRow>
-        <VFabTransition v-if="$vuetify.display.smAndDown">
+        <VFabTransition>
           <VBtn
-            id="searchFab"
-            class="mt-2 d-print-none d-md-none montserrat"
-            color="warning"
-            fixed
+            position="fixed"
+            class="mb-2 "
+            location="bottom center"
             rounded
-            dark
-            location="bottom"
-            style="left: 50%; transform: translateX(-50%); z-index: 4"
+            color="warning"
             @click="showSearch = !showSearch"
           >
             <VIcon :icon="mdiMagnify" start />
