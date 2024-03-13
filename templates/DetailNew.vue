@@ -78,19 +78,21 @@ function closeMobileSearch() {
     <div class="fill-height pb-10">
       <slot name="title" />
       <slot />
-      <VFabTransition v-if="showSimilar && display.smAndDown.value">
-        <VBtn
-          position="fixed"
-          class="mb-2 "
-          location="bottom center"
-          rounded
-          color="warning"
-          @click="showDrawer = !showDrawer"
-        >
-          <VIcon :icon="mdiViewList" start />
-          {{ $t("common.similar") }}
-        </VBtn>
-      </VFabTransition>
+      <ClientOnly>
+        <VFabTransition v-if="showSimilar && display.smAndDown.value">
+          <VBtn
+            position="fixed"
+            class="mb-2 "
+            location="bottom center"
+            rounded
+            color="warning"
+            @click="showDrawer = !showDrawer"
+          >
+            <VIcon :icon="mdiViewList" start />
+            {{ $t("common.similar") }}
+          </VBtn>
+        </VFabTransition>
+      </ClientOnly>
       <FabScrollTop />
     </div>
     <AppFooter />
