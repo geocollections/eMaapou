@@ -342,7 +342,7 @@ async function hydrateTaxon(values: string[]) {
 
   return res.response.docs.map((doc: any) => ({
     id: doc.id,
-    name: doc.taxon,
+    name: { et: doc.taxon, en: doc.taxon },
     value: doc.hierarchy_string,
     count: countRes.facets[doc.id].count,
   }));
@@ -397,9 +397,9 @@ async function getTaxonChildren(value: string, { page, perPage }: { page: number
     );
     return {
       id: doc.id,
-      name: doc.taxon,
+      name: { et: doc.taxon, en: doc.taxon },
       children: [],
-      selected: filters.value.stratigraphy.value.includes(value),
+      selected: filters.value.taxon.value.includes(value),
       childrenLoaded: false,
       showChildren: false,
       value,
@@ -426,7 +426,7 @@ async function suggestTaxon(
 
   return res.response.docs.map((doc: any) => ({
     id: doc.hierarchy_string,
-    name: doc.taxon,
+    name: { et: doc.taxon, en: doc.taxon },
     value: doc.hierarchy_string,
   }));
 }
