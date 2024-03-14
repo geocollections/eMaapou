@@ -4,7 +4,16 @@ import { useDisplay } from "vuetify";
 
 const display = useDisplay();
 
-const showSearch = ref(!display.smAndDown.value);
+const showSearch = ref(false);
+watch(() => display.smAndDown.value, (value) => {
+  if (value) {
+    showSearch.value = true;
+    return;
+  }
+
+  showSearch.value = value;
+}, { immediate: true });
+
 const mini = ref(false);
 
 function closeMobileSearch() {
@@ -15,7 +24,7 @@ function closeMobileSearch() {
 <template>
   <div>
     <VNavigationDrawer
-      v-model="showSearch"
+      :model-value="display.smAndDown.value ? showSearch : true"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
       :permanent="!display.smAndDown.value"
       :temporary="display.smAndDown.value"
@@ -89,7 +98,7 @@ function closeMobileSearch() {
         <VFabTransition v-if="display.smAndDown.value">
           <VBtn
             position="fixed"
-            class="mb-2 "
+            class="mb-2 text-capitalize"
             location="bottom center"
             rounded
             color="warning"

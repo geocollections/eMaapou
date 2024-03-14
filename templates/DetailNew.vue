@@ -82,7 +82,7 @@ function closeMobileSearch() {
         <VFabTransition v-if="showSimilar && display.smAndDown.value">
           <VBtn
             position="fixed"
-            class="mb-2 "
+            class="mb-2 text-capitalize"
             location="bottom center"
             rounded
             color="warning"
