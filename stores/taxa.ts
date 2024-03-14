@@ -36,6 +36,13 @@ export const useTaxa = defineStore(
         value: [],
         fields: ["taxon"],
       } as TextListFilter,
+      taxon: {
+        type: "idList",
+        value: [],
+        fields: ["taxon_hierarchy_descendent_paths"],
+        alphaNumeric: false,
+        tag: "taxon",
+      } as StringIdListFilter,
       geometry: {
         type: "geom",
         value: null,
@@ -51,6 +58,7 @@ export const useTaxa = defineStore(
     const routeQueryFiltersSchema = z.object({
       q: z.string().catch(""),
       species: textParamParser,
+      taxon: idParamParser(","),
       author: textParamParser,
       geometry: geometryParamParser,
     });
@@ -76,6 +84,7 @@ export const useTaxa = defineStore(
     const filtersStateToQueryParamsSchema = z.object({
       q: stringValueParser,
       species: stringArrayValueParser,
+      taxon: idValueParser(","),
       author: stringArrayValueParser,
       geometry: geometryValueParser,
     });
@@ -88,6 +97,7 @@ export const useTaxa = defineStore(
       return stateToQueryParamsSchema.parse({
         q: query.value,
         species: filters.value.species.value,
+        taxon: filters.value.taxon.value,
         author: filters.value.author.value,
         geometry: filters.value.geometry.value,
         page: options.value.page,
