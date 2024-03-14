@@ -3,211 +3,7 @@ import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 
-// import {
-//   computed,
-//   defineComponent,
-//   ref,
-//   toRef,
-//   useContext,
-//   useFetch,
-// } from '@nuxtjs/composition-api'
-// import SearchActions from '../SearchActions.vue'
-// import InputSearch from '~/components/input/InputSearch.vue'
-// import FilterInputText from '~/components/filter/input/FilterInputText.vue'
-// import FilterInputAutocompleteNew from '~/components/filter/input/FilterInputAutocompleteNew.vue'
-//
-// import {
-//   useHydrate,
-//   useHydrateFilterNew,
-//   useHydrateStatic,
-// } from '~/composables/useHydrateFilter'
-// import { useFilter } from '~/composables/useFilter'
-// import {
-//   useQuerySuggestions,
-//   useQuerySuggestionsStatic,
-// } from '~/composables/useQuerySuggestions'
-// import { useWatchSearchQueryParams } from '~/composables/useWatchSearchQueryParams'
-// export default defineComponent({
-//   name: 'SearchFormStratigraphy',
-//   components: {
-//     SearchActions,
-//     InputSearch,
-//     FilterInputText,
-//     FilterInputAutocompleteNew,
-//   },
-//   setup(_props, { emit }) {
-//     const { $accessor } = useContext()
-//     const emitUpdate = ref(true)
-//     const handleReset = () => {
-//       emit('reset')
-//     }
-//     const handleUpdate = () => {
-//       if (!emitUpdate.value) return
-//       emit('update')
-//     }
-//     const filters = computed(() => $accessor.search.stratigraphy.filters)
-//     const query = computed({
-//       get: () => $accessor.search.stratigraphy.query,
-//       set: (val) => {
-//         $accessor.search.stratigraphy.setQuery(val)
-//       },
-//     })
-//     const stratigraphyHierarchy = useFilter(
-//       'stratigraphy',
-//       'stratigraphyHierarchy',
-//       handleUpdate
-//     )
-//     const index = useFilter('stratigraphy', 'index', handleUpdate)
-//     const age = useFilter('stratigraphy', 'age', handleUpdate)
-//     const rank = useFilter('stratigraphy', 'rank', handleUpdate)
-//     const scope = useFilter('stratigraphy', 'scope', handleUpdate)
-//     const type = useFilter('stratigraphy', 'type', handleUpdate)
-//
-//     useWatchSearchQueryParams(() => fetch())
-//
-//     const { fetch } = useFetch(async () => {
-//       emitUpdate.value = false
-//       await Promise.all([
-//         hydrateFilter(
-//           stratigraphyHierarchy,
-//           toRef(filters.value, 'stratigraphyHierarchy'),
-//           'stratigraphyHierarchy',
-//           hydrateStratigraphyHierarchy
-//         ),
-//         hydrateFilter(type, toRef(filters.value, 'type'), 'type', hydrateType),
-//         hydrateFilter(rank, toRef(filters.value, 'rank'), 'rank', hydrateRank),
-//         hydrateFilter(
-//           scope,
-//           toRef(filters.value, 'scope'),
-//           'scope',
-//           hydrateScope
-//         ),
-//       ])
-//       emitUpdate.value = true
-//     })
-//     const hydrateFilter = useHydrateFilterNew()
-//     const hydrateStatic = useHydrateStatic()
-//     const hydrate = useHydrate()
-//     const hydrateStratigraphyHierarchy = hydrate(
-//       filters.value.stratigraphyHierarchy,
-//       query,
-//       {
-//         itemResource: 'stratigraphy',
-//         itemFields: [
-//           'id',
-//           'stratigraphy',
-//           'stratigraphy_en',
-//           'hierarchy_string',
-//         ],
-//         itemSearchField: 'hierarchy_string',
-//         countResource: 'stratigraphy',
-//         countResourceRelatedIdKey: 'hierarchy_string',
-//         countHierarchical: true,
-//         tagFilterKey: 'stratigraphyHierarchy',
-//         filters,
-//       },
-//       (items, counts) => {
-//         return items.map((item: any) => {
-//           return {
-//             id: item.hierarchy_string,
-//             text: item.stratigraphy,
-//             text_en: item.stratigraphy_en,
-//             hierarchy_string: item.hierarchy_string,
-//             count: counts[item.hierarchy_string],
-//           }
-//         })
-//       }
-//     )
-//     const hydrateType = hydrateStatic(filters.value.type, query, {
-//       pivot: ['type', 'stratigraphy_type', 'stratigraphy_type_en'],
-//       countResourceRelatedIdKey: 'type',
-//       countResource: 'stratigraphy',
-//       countHierarchical: false,
-//       filters,
-//       tagFilterKey: 'type',
-//     })
-//     const hydrateRank = hydrateStatic(filters.value.rank, query, {
-//       pivot: ['rank', 'stratigraphy_rank', 'stratigraphy_rank_en'],
-//       countResourceRelatedIdKey: 'rank',
-//       countResource: 'stratigraphy',
-//       countHierarchical: false,
-//       filters,
-//       tagFilterKey: 'rank',
-//     })
-//     const hydrateScope = hydrateStatic(filters.value.scope, query, {
-//       pivot: ['scope', 'stratigraphy_scope', 'stratigraphy_scope_en'],
-//       countResourceRelatedIdKey: 'scope',
-//       countResource: 'stratigraphy',
-//       countHierarchical: false,
-//       filters,
-//       tagFilterKey: 'scope',
-//     })
-//     const querySuggestionsStatic = useQuerySuggestionsStatic()
-//     const querySuggestions = useQuerySuggestions()
-//     const querySuggestionsStratigraphy = querySuggestions(
-//       query,
-//       {
-//         resource: 'stratigraphy',
-//         pivot: ['hierarchy_string', 'stratigraphy', 'stratigraphy_en'],
-//         pivotOffsetField: 'hierarchy_string',
-//         countResourceRelatedKey: 'hierarchy_string',
-//         countHierarchical: true,
-//         excludeFilterKey: 'stratigraphyHierarchy',
-//         filters,
-//       },
-//       (items, counts) => {
-//         return items.map((item: any) => {
-//           return {
-//             id: item.value as number,
-//             count: counts[item.value] as number,
-//             text: item.pivot?.[0].value ?? item.value,
-//             text_en:
-//               item.pivot?.[0].pivot?.[0].value ??
-//               item.pivot?.[0].value ??
-//               item.value,
-//             hierarchy_string: item.value,
-//           }
-//         })
-//       }
-//     )
-//     const querySuggestionsType = querySuggestionsStatic(query, {
-//       resource: 'stratigraphy',
-//       excludeFilterKey: 'type',
-//       pivot: ['type', 'stratigraphy_type', 'stratigraphy_type_en'],
-//       limit: 20,
-//       filters,
-//     })
-//     const querySuggestionsRank = querySuggestionsStatic(query, {
-//       resource: 'stratigraphy',
-//       excludeFilterKey: 'rank',
-//       pivot: ['rank', 'stratigraphy_rank', 'stratigraphy_rank_en'],
-//       limit: 20,
-//       filters,
-//     })
-//     const querySuggestionsScope = querySuggestionsStatic(query, {
-//       resource: 'stratigraphy',
-//       excludeFilterKey: 'scope',
-//       pivot: ['scope', 'stratigraphy_scope', 'stratigraphy_scope_en'],
-//       limit: 20,
-//       filters,
-//     })
-//     return {
-//       query,
-//       querySuggestionsType,
-//       querySuggestionsRank,
-//       querySuggestionsScope,
-//       querySuggestionsStratigraphy,
-//       stratigraphyHierarchy,
-//       index,
-//       age,
-//       rank,
-//       scope,
-//       type,
-//       handleReset,
-//       handleUpdate,
-//     }
-//   },
-// })
+const { locale } = useI18n();
 
 const stratigraphiesStore = useStratigraphies();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(stratigraphiesStore);
@@ -242,6 +38,105 @@ const { suggest: suggestRank, hydrate: hydrateRank } = useAutocomplete(
 
 const { $solrFetch } = useNuxtApp();
 
+async function hydrateStratigraphy(values: string[]) {
+  if (values.length < 1)
+    return [];
+
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_string:(${values.join(" ")})`],
+      limit: values.length,
+    },
+  });
+  const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    prev[doc.id] = {
+      type: "query",
+      q: `stratigraphy_hierarchy_descendent_paths:${doc.hierarchy_string}`,
+    };
+    return prev;
+  }, {});
+
+  const countRes = await $solrFetch("/stratigraphy", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery.value,
+        filter: solrFilters.value,
+        facet: facetQueries,
+      },
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.id,
+    name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+    value: doc.hierarchy_string,
+    count: countRes.facets[doc.id].count,
+  }));
+}
+
+async function getStratigraphyChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
+  const depth = value.split("-").length;
+  const prefix = `${depth}/${value}`;
+
+  const countRes = await $solrFetch("/stratigraphy", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery.value,
+        filter: solrFilters.value,
+        facet: {
+          categories: {
+            type: "terms",
+            prefix,
+            offset: (page - 1) * perPage,
+            limit: perPage,
+            numBuckets: true,
+            field: "stratigraphy_categories",
+            domain: {
+              excludeTags: "stratigraphy",
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (countRes.facets.categories.buckets.length < 1)
+    return [];
+
+  const values = countRes.facets.categories.buckets.map((bucket: any) => {
+    const [_depth, value] = bucket.val.split("/");
+    return value;
+  });
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_string:(${values.join(" OR ")})`],
+      rows: values.length,
+    },
+  });
+
+  return [countRes.facets.categories.buckets.map((bucket: any) => {
+    const [_depth, value] = bucket.val.split("/");
+    const doc = res.response.docs.find(
+      (doc: any) => doc.hierarchy_string === value,
+    );
+    return {
+      id: doc.id,
+      name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+      children: [],
+      selected: filters.value.stratigraphy.value.includes(value),
+      childrenLoaded: false,
+      showChildren: false,
+      value,
+      count: bucket.count,
+      leaf: doc.leaf_node,
+    };
+  }), countRes.facets.categories.numBuckets];
+}
+
 async function suggestStratigraphy(
   query: string,
   pagination: { page: number; perPage: number },
@@ -263,16 +158,55 @@ async function suggestStratigraphy(
     value: doc.hierarchy_string,
   }));
 }
+async function hydrateRock(values: string[]) {
+  if (values.length < 1)
+    return [];
+
+  const res = await $solrFetch("/rock", {
+    query: {
+      q: "*",
+      fq: [`hierarchy_strings:(${values.join(" ")})`],
+      limit: values.length,
+    },
+  });
+  const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    prev[doc.id] = {
+      type: "query",
+      q: `rock_categories:*/${doc.hierarchy_strings[0]}*`,
+    };
+    return prev;
+  }, {});
+
+  const countRes = await $solrFetch("/stratigraphy", {
+    query: {
+      json: {
+        limit: 0,
+        query: solrQuery.value,
+        filter: solrFilters.value,
+        facet: facetQueries,
+      },
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.id,
+    name: { et: doc.name, en: doc.name_en },
+    value: doc.hierarchy_strings[0],
+    count: countRes.facets[doc.id].count,
+  }));
+}
 
 const filterType = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterScope = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterRank = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<InstanceType<typeof FilterInputHierarchy>>();
 
 function handleUpdate() {
   nextTick(() => {
     filterType.value?.refreshSuggestions();
     filterScope.value?.refreshSuggestions();
     filterRank.value?.refreshSuggestions();
+    filterStratigraphy.value?.refreshSuggestions();
     emit("update");
   });
 }
@@ -287,7 +221,17 @@ function handleReset() {
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <VExpansionPanels variant="accordion" multiple>
-      <!-- TODO: Stratigraphy filter, need to update solr index -->
+      <FilterInputHierarchy
+        ref="filterStratigraphy"
+        v-model="filters.stratigraphy.value"
+        root-value="1"
+        :title="$t('filters.stratigraphyHierarchy')"
+        :hydration-function="hydrateStratigraphy"
+        :get-children="getStratigraphyChildren"
+        :suggestion-function="suggestStratigraphy"
+        value="stratigraphy"
+        @update:model-value="handleUpdate"
+      />
       <FilterInputText
         v-model="filters.index.value"
         :title="$t('filters.index')"
