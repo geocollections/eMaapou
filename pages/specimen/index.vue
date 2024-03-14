@@ -5,8 +5,6 @@ const route = useRoute();
 
 const views = computed(() => ["table", "image"]);
 
-const { t } = useI18n();
-
 const specimensStore = useSpecimens();
 const { resetFilters, resetDataTable } = specimensStore;
 const {
@@ -18,13 +16,6 @@ const {
 const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOptions }
   = storeToRefs(specimensStore);
 setStateFromQueryParams(route);
-
-const solrIndexUrl = computed(() => {
-  if (views.value[currentView.value] === "image")
-    return "/specimen_image";
-
-  return "/specimen";
-});
 
 const {
   data,
@@ -204,6 +195,7 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 .active-tab {
   // font-weight: bold;
   color: rgb(var(--v-theme-accent-darken-1)) !important;
+
   &::before {
     opacity: 0.2 !important;
     background-color: rgb(var(--v-theme-accent)) !important;

@@ -42,7 +42,7 @@ function updateOptions(event) {
 </script>
 
 <template>
-  <VCard flat>
+  <div class="bg-white">
     <VRow no-gutters>
       <VCol
         cols="12"
@@ -87,7 +87,7 @@ function updateOptions(event) {
         <VCol
           v-for="(image, index) in items"
           :key="index"
-          class="d-flex child-flex pt-0 px-2 pb-4"
+          class=" pt-0 px-2 pb-4"
           cols="6"
           sm="4"
           md="3"
@@ -99,23 +99,22 @@ function updateOptions(event) {
             z-index="51000"
             max-width="250"
           >
-            <template #activator="{ props }">
+            <template #activator="{ props: tooltipProps }">
               <VCard
                 flat
                 class="d-flex image-hover"
                 color="transparent"
                 hover
-                nuxt
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
-                :class="{ 'elevation-2 image-hover-elevation': !!cropImages }"
-                v-bind="props"
+                :class="{ 'image-hover-elevation': !!cropImages }"
+                v-bind="tooltipProps"
               >
                 <VImg
                   v-if="image.uuid_filename"
+                  position="top"
                   max-height="400"
-                  min-width="72"
-                  :cover="cropImages"
                   aspect-ratio="1"
+                  :cover="cropImages"
                   :lazy-src="
                     img(
                       `${image.uuid_filename}`,
@@ -181,5 +180,5 @@ function updateOptions(event) {
         </VCol>
       </VRow>
     </VCard>
-  </VCard>
+  </div>
 </template>

@@ -115,32 +115,26 @@ function handleClickRow(index: number) {
     </template>
 
     <template #result>
-      <VTabs
-        v-model="currentView"
-        bg-color="transparent"
-        color="accent"
-      >
-        <VTab
-          v-for="view in views"
-          :key="view"
-          selected-class="active-tab"
-          class="montserrat text-capitalize"
+      <ClientOnly>
+        <VTabs
+          v-model="currentView"
+          background-color="transparent"
+          color="accent"
+          density="compact"
         >
-          {{ $t(`common.${view}`) }}
-        </VTab>
-      </VTabs>
-      <VCard
-        flat
-        :rounded="0"
-        style="
-          border-top: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-        "
-        class="mt-0"
-      >
+          <VTab
+            v-for="view in views"
+            :key="view"
+            selected-class="active-tab"
+            class="montserrat text-capitalize"
+          >
+            {{ $t(`common.${view}`) }}
+          </VTab>
+        </VTabs>
         <VWindow v-model="currentView">
           <VWindowItem :value="0">
             <DataTablePhoto
+              class="border-t border-b"
               flat
               :show-search="false"
               :items="data?.response.docs ?? []"
@@ -156,6 +150,7 @@ function handleClickRow(index: number) {
           </VWindowItem>
           <VWindowItem :value="1">
             <ImageView
+              class="border-t border-b"
               :items="data?.response.docs ?? []"
               :count="data?.response.numFound ?? 0"
               :options="options"
@@ -164,6 +159,7 @@ function handleClickRow(index: number) {
           </VWindowItem>
           <VWindowItem :value="2">
             <GalleryView
+              class="border-t border-b"
               :items="data?.response.docs ?? []"
               :count="data?.response.numFound ?? 0"
               :options="options"
@@ -171,7 +167,7 @@ function handleClickRow(index: number) {
             />
           </VWindowItem>
         </VWindow>
-      </VCard>
+      </ClientOnly>
     </template>
   </Search>
 </template>
