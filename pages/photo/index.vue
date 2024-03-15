@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { mdiFileImageOutline } from "@mdi/js";
 
-const currentView = ref(0);
 const views = computed(() => ["table", "image", "gallery"]);
 
 const photosStore = usePhotos();
@@ -19,6 +18,7 @@ const {
   headers,
   searchPosition,
   resultsCount,
+  currentView,
 } = storeToRefs(photosStore);
 
 const route = useRoute();
@@ -47,8 +47,12 @@ const {
 
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() as LocationQueryRaw });
+  router.push({ query: { ...getQueryParams(), view: views.value[currentView.value] } });
 }
+
+watch(currentView, () => {
+  setQueryParamsFromState();
+});
 
 async function handleUpdate() {
   setQueryParamsFromState();
@@ -122,13 +126,34 @@ function handleClickRow(index: number) {
           color="accent"
           density="compact"
         >
+          <!-- <VTab -->
+          <!--   v-for="view in views" -->
+          <!--   :key="view" -->
+          <!--   selected-class="active-tab" -->
+          <!--   class="montserrat text-capitalize" -->
+          <!-- > -->
+          <!--   {{ $t(`common.${view}`) }} -->
+          <!-- </VTab> -->
           <VTab
-            v-for="view in views"
-            :key="view"
-            selected-class="active-tab"
+            :value="0"
+            active-class="active-tab"
             class="montserrat text-capitalize"
           >
-            {{ $t(`common.${view}`) }}
+            {{ $t(`common.table`) }}
+          </VTab>
+          <VTab
+            :value="1"
+            active-class="active-tab"
+            class="montserrat text-capitalize"
+          >
+            {{ $t(`common.image`) }}
+          </VTab>
+          <VTab
+            :value="2"
+            active-class="active-tab"
+            class="montserrat text-capitalize"
+          >
+            {{ $t(`common.gallery`) }}
           </VTab>
         </VTabs>
         <VWindow v-model="currentView">

@@ -30,6 +30,8 @@ export const usePhotos = defineStore(
       initHeaders: HEADERS_PHOTO,
     });
 
+    const view = ref(0);
+
     const { filters, solrFilters } = useFilters({
       locality: {
         value: [],
@@ -174,11 +176,12 @@ export const usePhotos = defineStore(
       searchPosition,
       fromSearch,
       resultsCount,
+      currentView: view,
     };
   },
   {
     persist: {
-      paths: ["options", "filters", "headers", "query"],
+      paths: ["options", "filters", "headers", "query", "currentView"],
       storage: persistedState.sessionStorage,
     },
   },
