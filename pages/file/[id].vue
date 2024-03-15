@@ -1,164 +1,54 @@
 <script setup lang="ts">
-// NOTE: For some incomprehensible reason, using any echart based chart
-// and `v-data-table` together in this components results in the production build containing copies of echarts.
-import {
-  mdiFileDownloadOutline,
-  mdiFileMusicOutline,
-  mdiFileVideoOutline,
-} from "@mdi/js";
-
 const { $geoloogiaFetch, $translate } = useNuxtApp();
 const { t } = useI18n();
-const img = useImage();
-const localePath = useLocalePath();
 const route = useRoute();
 
-const { data, pending, error } = useLazyAsyncData("data", async () => {
-  const filePromise = $geoloogiaFetch(`/attachment/${route.params.id}/`, {
+const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
+const tabs = {
+  general: {
+    type: "static",
+    routeName: "file-id",
+    title: "common.general",
+    props: {},
+  } satisfies Tab,
+};
+
+const { data, pending, error } = await useAsyncData("data", async () => {
+  const file = await $geoloogiaFetch(`/attachment/${route.params.id}/`, {
     query: {
       nest: 2,
     },
-  });
-  const attachmentKeywordsPromise = $geoloogiaFetch("/attachment_keyword/", {
-    query: {
-      attachment: route.params.id,
-      nest: 1,
+    onResponseError: (error) => {
+      if (error.response?.status === 404) {
+        throw createError({
+          statusCode: 404,
+          message: "File not found",
+        });
+      }
     },
   });
 
-  const [fileResponse, attachmentKeywordsResponse] = await Promise.all([
-    filePromise,
-    attachmentKeywordsPromise,
-  ]);
-
-  const ids = fileResponse?.ids;
-  const fileObj = fileResponse;
-  //
-  // if (fileObj?.specimen) {
-  //   const specimenIdentificationPromise = $geoloogiaFetch(
-  //     "/specimen_identification/",
-  //     {
-  //       query: {
-  //         current: true,
-  //         specimen: fileObj.specimen.id,
-  //         nest: 1,
-  //       },
-  //     },
-  //   );
-  //   const specimenIdentificationGeologyPromise = $geoloogiaFetch(
-  //     "/specimen_identification_geology/",
-  //     {
-  //       query: {
-  //         current: true,
-  //         specimen: fileObj.specimen.id,
-  //         nest: 1,
-  //       },
-  //     },
-  //   );
-  //   const [
-  //     specimenIdentificationResponse,
-  //     specimenIdentificationGeologyResponse,
-  //   ] = await Promise.all([
-  //     specimenIdentificationPromise,
-  //     specimenIdentificationGeologyPromise,
-  //   ]);
-  //   return {
-  //     file: fileObj,
-  //     ids,
-  //     attachmentKeywords: attachmentKeywordsResponse.results,
-  //     specimenIdentification: specimenIdentificationResponse.results,
-  //     specimenIdentificationGeology:
-  //       specimenIdentificationGeologyResponse.results,
-  //   };
-  // }
-  // return {
-  //   file: fileObj,
-  //   ids,
-  //   attachmentKeywords: attachmentKeywordsResponse.results,
-  //   specimenIdentification: [],
-  //   specimenIdentificationGeology: [],
-  // };
-  return {
-    file: fileObj,
-  };
-});
-
-const file = computed(() => data.value?.file);
-const attachmentKeywords = computed(() => data.value?.attachmentKeywords ?? []);
-const specimenIdentification = computed(
-  () => data.value?.specimenIdentification ?? [],
-);
-const specimenIdentificationGeology = computed(
-  () => data.value?.specimenIdentificationGeology ?? [],
-);
-const imageSize = computed(() => {
-  return file.value?.image_width && file.value?.image_height
-    ? `${file.value.image_width} × ${file.value.image_height} px`
-    : null;
-});
-const isImage = computed(() => file.value?.attachment_format.includes("image"));
-const isAudio = computed(() => file.value?.attachment_format.includes("audio"));
-const isVideo = computed(() => file.value?.attachment_format.includes("video"));
-const imageSizes = computed(() => {
-  if (!isImage)
-    return ["original"];
-  return ["small", "medium", "large", "original"];
-});
-const showMap = computed(() => {
-  return (
-    (file.value?.locality?.latitude && file.value?.locality?.longitude)
-    || (file.value?.specimen?.locality?.latitude
-    && file.value?.specimen?.locality?.longitude)
-    || (file.value?.image_latitude && state?.file.image_longitude)
-  );
-});
-
-const mapIsEstonian = computed(() => {
-  return (
-    file.value?.locality?.country?.value === "Eesti"
-    || file.value?.specimen?.locality?.country?.value === "Eesti"
-  );
-});
-
-const mapLatitude = computed(() => {
-  return (
-    file.value?.locality?.latitude
-    || file.value?.specimen?.locality?.latitude
-    || file.value?.image_latitude
-  );
-});
-const mapLongitude = computed(() => {
-  return (
-    file.value?.locality?.longitude
-    || file.value?.specimen?.locality?.longitude
-    || file.value?.image_longitude
-  );
-});
-
-const mapLocalityText = computed(() => {
-  return $translate({
-    et:
-      file.value?.locality?.locality
-      || file.value?.specimen?.locality?.locality
-      || file.value?.image_place
-      || file.value?.description,
-    en:
-      file.value?.locality?.locality_en
-      || file.value?.specimen?.locality?.locality_en
-      || file.value?.image_place
-      || file.value?.description_en,
+  const hydratedTabs = await hydrateTabs(tabs, {
+    props: { general: { file } },
   });
+
+  return {
+    file,
+    tabs: filterHydratedTabs(hydratedTabs, [
+      "general",
+    ]),
+  };
+}, {
+  default: () => ({
+    file: null,
+    tabs: [] as HydratedTab[],
+  }),
 });
 
-const specimen = computed(() => file.value?.specimen);
-const imageset = computed(() => file.value?.imageset);
-const locality = computed(
-  () => file.value?.locality ?? file.value?.specimen?.locality,
-);
-const type = computed(() => file.value?.type);
-const agentDigitised = computed(() => file.value?.agent_digitised);
-const database = computed(() => file.value?.database);
-const licence = computed(() => file.value?.licence);
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+const file = computed(() => data.value?.file);
 
 const title = computed(() => {
   if (!file.value)
@@ -244,431 +134,24 @@ const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
 //         ],
 //       };
 //     });
-//     return {
-//       ...toRefs(state),
-//       licence,
-//       database,
-//       agentDigitised,
-//       type,
-//       locality,
-//       imageset,
-//       specimen,
-//       mapLocalityText,
-//       mapLongitude,
-//       mapLatitude,
-//       mapIsEstonian,
-//       showMap,
-//       imageSizes,
-//       isVideo,
-//       isAudio,
-//       isImage,
-//       icons,
-//       imageSize,
-//       pageTitle,
-//       isNull,
-//       isNil,
-//       isEmpty,
-//     };
-//   },
-//   head: {},
 // });
 </script>
 
 <template>
-  <Detail
-    v-if="!pending"
-    :loading="pending"
-    :error="error"
+  <DetailNew
+    :show-similar="false"
   >
     <template #title>
-      <!-- <header-detail :ids="ids" :title="pageTitle" /> -->
-      <HeaderDetail
+      <HeaderDetailNew
         :title="pageTitle"
-        show-prev-next
-        :search-to="localePath({ path: '/photo' })"
-      />
+      >
+        <template #tabs>
+          <DetailTabs :tabs="data.tabs" />
+        </template>
+      </HeaderDetailNew>
     </template>
-    <template #column-left>
-      <VCardText class="text-center">
-        <!-- Image -->
-        <VImg
-          v-if="isImage"
-          class="rounded"
-          content-class="image-content"
-          max-height="700"
-          contain
-          :lazy-src="
-            img(
-              file.filename,
-              { size: 'small' },
-              {
-                provider: 'geocollections',
-              },
-            )
-          "
-          :src="
-            img(
-              file.filename,
-              { size: 'medium' },
-              {
-                provider: 'geocollections',
-              },
-            )
-          "
-        >
-          <template #placeholder>
-            <VRow
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
-              <VProgressCircular
-                indeterminate
-                color="grey-lighten-5"
-              />
-            </VRow>
-          </template>
-        </VImg>
-
-        <!-- Audio -->
-        <audio v-else-if="isAudio" controls>
-          <source
-            :src="`https://files.geocollections.info/${file.uuid_filename}`"
-          >
-          Your browser does not support the audio element.
-          <VIcon>{{ mdiFileMusicOutline }}</VIcon>
-        </audio>
-
-        <!-- Video -->
-        <video v-else-if="isVideo" controls>
-          <source
-            :src="`https://files.geocollections.info/${file.uuid_filename}`"
-          >
-          Your browser does not support the video element.
-          <VIcon>{{ mdiFileVideoOutline }}</VIcon>
-        </video>
-
-        <!-- File -->
-        <div
-          v-else
-          class="rounded file-download text-primary"
-          @click="
-            $openWindow(
-              `https://files.geocollections.info/${file.uuid_filename}`,
-            )
-          "
-        >
-          <VIcon size="large" color="primary-darken-2">
-            {{ mdiFileDownloadOutline }}
-          </VIcon>
-          {{ $t("file.download") }}
-        </div>
-
-        <div
-          v-if="isImage"
-          class="justify-center d-flex flex-column justify-md-space-between flex-md-row"
-          :class="{ 'mt-4': !isImage }"
-        >
-          <div class="text-center text-md-left">
-            <div v-if="file.author || file.author_free">
-              <span class="font-weight-bold">{{ $t("file.author") }}: </span>
-              <span v-if="file.author">{{ file.author }}</span>
-              <span v-else>{{ file.author_free }}</span>
-            </div>
-            <div v-if="file.date_created || file.date_created_free">
-              <span class="font-weight-bold">{{ $t("file.date") }}: </span>
-              <span v-if="file.date_created">{{ file.date_created }}</span>
-              <span v-else>{{ file.date_created_free }}</span>
-            </div>
-          </div>
-
-          <div class="text-center">
-            <span v-for="(size, index) in imageSizes" :key="index">
-              <a
-                class="text-link"
-                @click="$openImage(file.uuid_filename, size)"
-              >
-                {{ $t(`common.${size}`) }}
-                <VIcon
-                  v-if="size === 'original'"
-                  size="small"
-                  color="primary-darken-2"
-                >
-                  {{ mdiFileDownloadOutline }}
-                </VIcon>
-              </a>
-              <span v-if="index < imageSizes.length - 1">| </span>
-            </span>
-          </div>
-        </div>
-      </VCardText>
-    </template>
-
-    <template #column-right>
-      <VCardText>
-        <BaseTable>
-          <TableRowLink
-            v-if="specimen && specimen.coll"
-            :title="$t('file.collectionNr')"
-            :value="specimen.coll.number"
-            nuxt
-            :href="
-              localePath({
-                name: 'specimen-id',
-                params: { id: file.specimen.id },
-              })
-            "
-          />
-          <TableRowLink
-            v-if="specimen"
-            :title="$t('file.specimenNr')"
-            :value="file.specimen.specimen_id"
-            nuxt
-            :href="
-              localePath({
-                name: 'specimen-id',
-                params: { id: file.specimen.id },
-              })
-            "
-          />
-          <template v-for="(item, index) in specimenIdentification">
-            <TableRowLink
-              v-if="item.taxon"
-              :key="index"
-              :title="$t('file.name')"
-              :value="item.taxon.taxon"
-              :suffix="item.name ? `| ${item.name}` : ''"
-              @link-click="
-                $openWindow(`https://fossiilid.info/${item.taxon.id}`)
-              "
-            />
-          </template>
-          <template v-for="(item, index) in specimenIdentificationGeology">
-            <TableRowLink
-              v-if="item.taxon"
-              :key="index"
-              :title="$t('file.name')"
-              :value="item.taxon.taxon"
-              :suffix="item.name ? `| ${item.name}` : ''"
-              @link-click="
-                $openWindow(`https://fossiilid.info/${item.taxon.id}`)
-              "
-            />
-          </template>
-          <TableRowLink
-            v-if="specimen && specimen.locality"
-            :title="$t('file.locality')"
-            :value="
-              $translate({
-                et: specimen.locality.locality,
-                en: specimen.locality.locality_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: specimen.locality.id },
-              })
-            "
-          />
-          <TableRowLink
-            v-if="specimen && specimen.stratigraphy"
-            :title="$t('file.stratigraphy')"
-            :value="
-              $translate({
-                et: specimen.stratigraphy.stratigraphy,
-                en: specimen.stratigraphy.stratigraphy_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'stratigraphy-id',
-                params: { id: specimen.stratigraphy.id },
-              })
-            "
-          />
-          <!-- <table-row -->
-          <!--   v-if="file.image_scalebar" -->
-          <!--   :title="$t('file.scalebar')" -->
-          <!--   :value="file.image_scalebar" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.description')" -->
-          <!--   :value=" -->
-          <!--     $translate({ -->
-          <!--       et: file.description, -->
-          <!--       en: file.description_en, -->
-          <!--     }) -->
-          <!--   " -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.imageNumber')" -->
-          <!--   :value="file.image_number" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   v-if="imageset" -->
-          <!--   :title="$t('file.imagesetNumber')" -->
-          <!--   :value="imageset.imageset_number" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   v-if="imageset" -->
-          <!--   :title="$t('file.imagesetDescription')" -->
-          <!--   :value="imageset.description" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.author')" -->
-          <!--   :value="file.author" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.author')" -->
-          <!--   :value="file.author_free" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.imagePeople')" -->
-          <!--   :value="file.image_people" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.date')" -->
-          <!--   :value="file.date_created || file.date_created_free" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.imagePlace')" -->
-          <!--   :value="file.image_place" -->
-          <!-- /> -->
-          <TableRowLink
-            v-if="locality"
-            :title="$t('file.locality')"
-            :value="
-              $translate({
-                et: locality.locality,
-                en: locality.locality_en,
-              })
-            "
-            nuxt
-            :href="
-              localePath({
-                name: 'locality-id',
-                params: { id: locality.id },
-              })
-            "
-          />
-          <!-- <table-row -->
-          <!--   :title="$t('file.imageLatitude')" -->
-          <!--   :value="file.image_latitude" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   :title="$t('file.imageLongitude')" -->
-          <!--   :value="file.image_longitude" -->
-          <!-- /> -->
-          <TableRow
-            v-if="type"
-            :title="$t('file.type')"
-            :value="
-              $translate({
-                et: type.value,
-                en: type.value_en,
-              })
-            "
-          />
-          <!-- <table-row -->
-          <!--   :title="$t('file.format')" -->
-          <!--   :value="file.attachment_format" -->
-          <!-- /> -->
-          <TableRow
-            v-if="attachmentKeywords.length > 0"
-            :title="$t('file.keywords')"
-            :value="attachmentKeywords"
-          >
-            <template #value>
-              <ul v-for="(item, index) in attachmentKeywords" :key="index">
-                <li v-if="item.keyword">
-                  {{ item.keyword.keyword }}
-                </li>
-              </ul>
-            </template>
-          </TableRow>
-          <TableRow
-            v-if="agentDigitised"
-            :title="$t('file.personDigitised')"
-            :value="agentDigitised.agent"
-          />
-          <!-- <table-row -->
-          <!--   :title="$t('file.dateDigitised')" -->
-          <!--   :value="file.date_digitised || file.date_digitised_free" -->
-          <!-- /> -->
-          <TableRow
-            :title="$t('file.imageSize')"
-            :value="imageSize"
-          />
-          <TableRowLink
-            v-if="database"
-            :title="$t('file.institution')"
-            :value="
-              $translate({
-                et: database.name,
-                en: database.name_en,
-              })
-            "
-            :href="database.url"
-            target="DatabaseWindow"
-          />
-          <TableRowLink
-            v-if="licence"
-            :title="$t('file.licence')"
-            :value="licence.licence_en"
-            @link-click="$openWindow(licence.licence_url_en)"
-          />
-          <!-- <table-row -->
-          <!--   :title="$t('file.remarks')" -->
-          <!--   :value="file.remarks" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   v-if="file.date_added" -->
-          <!--   :title="$t('file.dateAdded')" -->
-          <!--   :value="$formatDate(file.date_added)" -->
-          <!-- /> -->
-          <!-- <table-row -->
-          <!--   v-if="file.date_changed" -->
-          <!--   :title="$t('file.dateChanged')" -->
-          <!--   :value="$formatDate(file.date_changed)" -->
-          <!-- /> -->
-        </BaseTable>
-
-        <VCard
-          v-if="showMap"
-          id="map-wrap"
-          elevation="0"
-        >
-          <VCardTitle class="pl-0 subsection-title">
-            {{ $t("locality.map") }}
-          </VCardTitle>
-          <MapDetail
-            rounded
-            :estonian-map="mapIsEstonian"
-            :estonian-bedrock-overlay="mapIsEstonian"
-            height="300px"
-            :center="{
-              latitude: mapLatitude,
-              longitude: mapLongitude,
-            }"
-            :markers="[
-              {
-                latitude: mapLatitude,
-                longitude: mapLongitude,
-                text: mapLocalityText,
-              },
-            ]"
-          />
-        </VCard>
-      </VCardText>
-    </template>
-
-    <template #bottom>
-      <NuxtPage />
-    </template>
-  </Detail>
+    <NuxtPage v-bind="activeTabProps" />
+  </DetailNew>
 </template>
 
 <style scoped>
