@@ -18,7 +18,7 @@ const { t } = useI18n();
 const currentTab = computed(() => {
   return props.tabs.find((tab) => {
     return tab.routeName === getRouteBaseName(route);
-  });
+  }) ?? props.tabs[0];
 });
 
 function translateTitle(tab: HydratedTab) {
@@ -27,8 +27,6 @@ function translateTitle(tab: HydratedTab) {
 
   if (tab.type === "dynamic")
     return t(tab.title, { number: tab.count });
-
-  return tab.title;
 }
 </script>
 
