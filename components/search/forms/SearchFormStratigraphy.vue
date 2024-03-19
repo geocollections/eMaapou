@@ -201,12 +201,23 @@ const filterScope = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterRank = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterStratigraphy = ref<InstanceType<typeof FilterInputHierarchy>>();
 
-function handleUpdate() {
+const suggestionRefreshMap = computed(() => ({
+  type: filterType.value?.refreshSuggestions,
+  scope: filterScope.value?.refreshSuggestions,
+  rank: filterRank.value?.refreshSuggestions,
+  stratigraphy: filterStratigraphy.value?.refreshSuggestions,
+}));
+
+function handleUpdate(excludeKey?: string) {
   nextTick(() => {
-    filterType.value?.refreshSuggestions();
-    filterScope.value?.refreshSuggestions();
-    filterRank.value?.refreshSuggestions();
-    filterStratigraphy.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
     emit("update");
   });
 }
@@ -217,7 +228,7 @@ function handleReset() {
 </script>
 
 <template>
-  <VForm @submit.prevent="handleUpdate">
+  <VForm @submit.prevent="handleSubmit">
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <VExpansionPanels variant="accordion" multiple>
@@ -230,7 +241,7 @@ function handleReset() {
         :get-children="getStratigraphyChildren"
         :suggestion-function="suggestStratigraphy"
         value="stratigraphy"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('stratigraphy')"
       />
       <FilterInputText
         v-model="filters.index.value"

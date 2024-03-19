@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { FilterInputAutocomplete } from "#components";
+import type { ComponentExposed } from "vue-component-type-helpers";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -177,29 +178,42 @@ function handleReset() {
   emit("reset");
 }
 
-const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterMethod = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterSite = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterProject = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterReference = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterDataset = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterLab = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterSample = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMethod = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterSite = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterProject = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterReference = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterDataset = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterLab = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterSample = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<ComponentExposed<typeof FilterInputHierarchy>>();
 
-function handleUpdate() {
+const suggestionRefreshMap = computed(() => {
+  return {
+    locality: filterLocality.value?.refreshSuggestions,
+    method: filterMethod.value?.refreshSuggestions,
+    institution: filterInstitution.value?.refreshSuggestions,
+    site: filterSite.value?.refreshSuggestions,
+    project: filterProject.value?.refreshSuggestions,
+    reference: filterReference.value?.refreshSuggestions,
+    dataset: filterDataset.value?.refreshSuggestions,
+    lab: filterLab.value?.refreshSuggestions,
+    sample: filterSample.value?.refreshSuggestions,
+    stratigraphy: filterStratigraphy.value?.refreshSuggestions,
+  };
+});
+
+function handleUpdate(excludeKey?: string) {
   nextTick(() => {
-    filterLocality.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    filterMethod.value?.refreshSuggestions();
-    filterSite.value?.refreshSuggestions();
-    filterProject.value?.refreshSuggestions();
-    filterReference.value?.refreshSuggestions();
-    filterDataset.value?.refreshSuggestions();
-    filterLab.value?.refreshSuggestions();
-    filterSample.value?.refreshSuggestions();
-    filterStratigraphy.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
     emit("update");
   });
 }
@@ -239,7 +253,7 @@ async function suggestParameters({
 </script>
 
 <template>
-  <VForm @submit.prevent="handleUpdate">
+  <VForm @submit.prevent="handleSubmit">
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <VExpansionPanels variant="accordion" multiple>
@@ -307,7 +321,7 @@ async function suggestParameters({
         :hydration-function="hydrateStratigraphy"
         :get-children="getStratigraphyChildren"
         value="stratigraphy"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('stratigraphy')"
       />
       <FilterInputAutocomplete
         ref="filterReference"

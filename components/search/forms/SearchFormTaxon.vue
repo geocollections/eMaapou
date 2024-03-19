@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
+import { FilterInputHierarchy } from "#components";
+
 const emit = defineEmits(["update", "reset"]);
 
 const taxaStore = useTaxa();
@@ -137,17 +140,29 @@ function handleReset() {
   emit("reset");
 }
 
-const filterTaxon = ref<InstanceType<typeof FilterInputHierarchy>>();
-function handleUpdate() {
+const filterTaxon = ref<ComponentExposed<typeof FilterInputHierarchy>>();
+
+const suggestionRefreshMap = computed(() => ({
+  taxon: filterTaxon.value?.refreshSuggestions,
+}));
+
+function handleUpdate(excludeKey?: string) {
   nextTick(() => {
-    filterTaxon.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
     emit("update");
   });
 }
 </script>
 
 <template>
-  <VForm @submit.prevent="handleUpdate">
+  <VForm @submit.prevent="handleSubmit">
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <VExpansionPanels variant="accordion" multiple>
@@ -166,7 +181,7 @@ function handleUpdate() {
         :get-children="getTaxonChildren"
         :suggestion-function="suggestTaxon"
         value="taxon"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('taxon')"
       />
       <FilterMap
         v-model="filters.geometry.value"

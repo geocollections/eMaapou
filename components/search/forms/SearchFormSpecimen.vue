@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const props = defineProps<{ resultView: "table" | "image" }>();
@@ -434,31 +435,44 @@ function handleReset() {
   emit("reset");
 }
 
-const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterCollector = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterCollection = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterFossilGroup = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterCountry = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterOriginalStatus = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterReference = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<InstanceType<typeof FilterInputHierarchy>>();
-const filterRock = ref<InstanceType<typeof FilterInputHierarchy>>();
-const filterTaxon = ref<InstanceType<typeof FilterInputHierarchy>>();
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterCollector = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterCollection = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterFossilGroup = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterOriginalStatus = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterReference = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<ComponentExposed<typeof FilterInputHierarchy>>();
+const filterRock = ref<ComponentExposed<typeof FilterInputHierarchy>>();
+const filterTaxon = ref<ComponentExposed<typeof FilterInputHierarchy>>();
 
-function handleUpdate() {
+const suggestionRefreshMap = computed(() => {
+  return {
+    locality: filterLocality.value?.refreshSuggestions,
+    collector: filterCollector.value?.refreshSuggestions,
+    institution: filterInstitution.value?.refreshSuggestions,
+    collection: filterCollection.value?.refreshSuggestions,
+    fossilGroup: filterFossilGroup.value?.refreshSuggestions,
+    country: filterCountry.value?.refreshSuggestions,
+    originalStatus: filterOriginalStatus.value?.refreshSuggestions,
+    reference: filterReference.value?.refreshSuggestions,
+    stratigraphy: filterStratigraphy.value?.refreshSuggestions,
+    rock: filterRock.value?.refreshSuggestions,
+    taxon: filterTaxon.value?.refreshSuggestions,
+  };
+});
+
+function handleUpdate(excludeKey?: string) {
   nextTick(() => {
-    filterLocality.value?.refreshSuggestions();
-    filterCollector.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
-    filterCollection.value?.refreshSuggestions();
-    filterFossilGroup.value?.refreshSuggestions();
-    filterCountry.value?.refreshSuggestions();
-    filterOriginalStatus.value?.refreshSuggestions();
-    filterStratigraphy.value?.refreshSuggestions();
-    filterRock.value?.refreshSuggestions();
-    filterTaxon.value?.refreshSuggestions();
-    filterReference.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
     emit("update");
   });
 }
@@ -470,7 +484,7 @@ function handleHasImageUpdate(value: boolean) {
 </script>
 
 <template>
-  <VForm @submit.prevent="handleUpdate">
+  <VForm @submit.prevent="handleSubmit">
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <FilterInputCheckbox
@@ -518,7 +532,7 @@ function handleHasImageUpdate(value: boolean) {
         :get-children="getTaxonChildren"
         :suggestion-function="suggestTaxon"
         value="taxon"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('taxon')"
       />
       <FilterInputHierarchy
         ref="filterRock"
@@ -529,7 +543,7 @@ function handleHasImageUpdate(value: boolean) {
         :get-children="getRockChildren"
         :suggestion-function="suggestRock"
         value="rock"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('rock')"
       />
       <FilterInputAutocomplete
         ref="filterLocality"
@@ -563,7 +577,7 @@ function handleHasImageUpdate(value: boolean) {
         :get-children="getStratigraphyChildren"
         :suggestion-function="suggestStratigraphy"
         value="stratigraphy"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleUpdate('stratigraphy')"
       />
       <FilterInputRange
         v-model="filters.depth.value"

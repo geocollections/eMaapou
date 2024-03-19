@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
@@ -6,8 +7,9 @@ function handleReset() {
   emit("reset");
 }
 
-const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
 function handleUpdate() {
   nextTick(() => {
     filterLocality.value?.refreshSuggestions();

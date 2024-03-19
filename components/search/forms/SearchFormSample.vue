@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { FilterInputAutocomplete } from "#components";
+import type { ComponentExposed } from "vue-component-type-helpers";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits(["update", "reset"]);
 
@@ -317,18 +318,31 @@ function handleReset() {
   emit("reset");
 }
 
-const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterRock = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterCollector = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
-function handleUpdate() {
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<InstanceType<typeof FilterInputHierarchy>>();
+const filterRock = ref<InstanceType<typeof FilterInputHierarchy>>();
+const filterCollector = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+
+const suggestionRefreshMap = computed(() => {
+  return {
+    locality: filterLocality.value?.refreshSuggestions,
+    stratigraphy: filterStratigraphy.value?.refreshSuggestions,
+    rock: filterRock.value?.refreshSuggestions,
+    collector: filterCollector.value?.refreshSuggestions,
+    institution: filterInstitution.value?.refreshSuggestions,
+  };
+});
+function handleUpdate(excludeKey?: string) {
   nextTick(() => {
-    filterLocality.value?.refreshSuggestions();
-    filterStratigraphy.value?.refreshSuggestions();
-    filterRock.value?.refreshSuggestions();
-    filterCollector.value?.refreshSuggestions();
-    filterInstitution.value?.refreshSuggestions();
+    refreshSuggestionFilters(suggestionRefreshMap.value, excludeKey);
+    emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    refreshSuggestionFilters(suggestionRefreshMap.value);
     emit("update");
   });
 }
@@ -336,7 +350,7 @@ function handleUpdate() {
 
 <template>
   <div>
-    <VForm @submit.prevent="handleUpdate">
+    <VForm @submit.prevent="handleSubmit">
       <InputSearch v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <FilterInputCheckbox
@@ -385,9 +399,8 @@ function handleUpdate() {
           :get-children="getStratigraphyChildren"
           :suggestion-function="suggestStratigraphy"
           value="stratigraphy"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('stratigraphy')"
         />
-        <!-- TODO: This is not finished, have to think how to handle multiple hierarchy string on one rock -->
         <FilterInputHierarchy
           ref="filterRock"
           v-model="filters.rock.value"
@@ -397,7 +410,7 @@ function handleUpdate() {
           :get-children="getRockChildren"
           :suggestion-function="suggestRock"
           value="rock"
-          @update:model-value="handleUpdate"
+          @update:model-value="handleUpdate('rock')"
         />
         <FilterInputAutocomplete
           ref="filterCollector"
