@@ -6,8 +6,6 @@ const route = useRoute();
 
 useSeoMeta({
   title: t("sample.pageTitle"),
-  ogTitle: t("sample.pageTitle"),
-  // ogUrl: route.fullPath,
 });
 
 // export default defineComponent({

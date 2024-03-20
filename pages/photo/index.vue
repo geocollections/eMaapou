@@ -78,21 +78,12 @@ function handleClickRow(index: number) {
   searchPosition.value
     = index + getOffset(options.value.page, options.value.itemsPerPage);
 }
-// useMeta(() => ({
-//   title: i18n.t("photo.pageTitle").toString(),
-//   meta: [
-//     {
-//       property: "og:title",
-//       hid: "og:title",
-//       content: i18n.t("photo.pageTitle").toString(),
-//     },
-//     {
-//       property: "og:url",
-//       hid: "og:url",
-//       content: route.value.path,
-//     },
-//   ],
-// }));
+
+const { t } = useI18n();
+
+useHead({
+  title: t("photo.pageTitle"),
+});
 </script>
 
 <template>

@@ -148,20 +148,9 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-// export default defineComponent({
-//     useMeta(() => {
-//       return {
-//         title: metaTitle.value,
-//         meta: [
-//           {
-//             property: "og:title",
-//             content: metaTitle.value,
-//             hid: "og:title",
-//           },
-//         ],
-//       };
-//     });
-// });
+useHead({
+  title: metaTitle.value,
+});
 </script>
 
 <template>

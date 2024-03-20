@@ -80,6 +80,12 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     "locality",
   );
 }
+
+const { t } = useI18n();
+
+useHead({
+  title: t("locality.pageTitle"),
+});
 </script>
 
 <template>

@@ -59,23 +59,11 @@ async function handleDataTableUpdate({ options: newOptions }) {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-// head() {
-//   return {
-//     title: this.$t("taxon.pageTitle").toString(),
-//     meta: [
-//       {
-//         property: "og:title",
-//         hid: "og:title",
-//         content: this.$t("taxon.pageTitle").toString(),
-//       },
-//       {
-//         property: "og:url",
-//         hid: "og:url",
-//         content: this.$route.path,
-//       },
-//     ],
-//   };
-// },
+const { t } = useI18n();
+
+useHead({
+  title: t("taxon.pageTitle"),
+});
 </script>
 
 <template>

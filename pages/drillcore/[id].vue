@@ -249,27 +249,12 @@ redirectInvalidTab({
   }),
   tabs: data.value?.tabs ?? [],
 });
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: `${title.value} | ${i18n.t("drillcore.pageTitle")}`,
-//         meta: [
-//           {
-//             property: "og:title",
-//             content: `${title.value} | ${i18n.t("drillcore.pageTitle")}`,
-//             hid: "og:title",
-//           },
-//           {
-//             property: "og:url",
-//             hid: "og:url",
-//             content: route.value.path,
-//           },
-//         ],
-//       };
-//     });
-//   },
-// });
+
+const { t } = useI18n();
+
+useHead({
+  title: `${title.value} | ${t("drillcore.pageTitle")}`,
+});
 </script>
 
 <template>

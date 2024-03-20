@@ -17,21 +17,27 @@ const backgroundImg = computed(() => {
 const backgroundSvg = computed(() => {
   return img("/frontpage/layered-peaks-haikei.svg");
 });
+
+const { t } = useI18n();
+
 definePageMeta({
   layout: "landing",
-  // title: t("landing.title"),
-  // link: [
-  //   {
-  //     rel: "preload",
-  //     as: "image",
-  //     href: backgroundSvg.value,
-  //   },
-  //   {
-  //     rel: "preload",
-  //     as: "image",
-  //     href: backgroundImg.value,
-  //   },
-  // ],
+});
+
+useHead({
+  title: t("landing.title"),
+  link: [
+    {
+      rel: "preload",
+      as: "image",
+      href: backgroundSvg.value,
+    },
+    {
+      rel: "preload",
+      as: "image",
+      href: backgroundImg.value,
+    },
+  ],
 });
 const query = ref("");
 const otherServices = ref({

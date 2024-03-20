@@ -215,33 +215,15 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: `${title.value}| ${i18n.t("dataset.pageTitle")}`,
-//         meta: [
-//           {
-//             property: "og:title",
-//             content: `${title.value}| ${i18n.t("dataset.pageTitle")}`,
-//             hid: "og:title",
-//           },
-//           {
-//             property: "og:description",
-//             content: data.value?.dataset.abstract,
-//             hid: "og:description",
-//           },
-//           {
-//             property: "description",
-//             content: data.value?.dataset.abstract,
-//             hid: "description",
-//           },
-//         ],
-//       };
-//     });
-//   },
-// });
-//
+const { t } = useI18n();
+
+useHead({
+  title: `${title.value}| ${t("dataset.pageTitle")}`,
+});
+
+useSeoMeta({
+  description: data.value?.dataset.abstract,
+});
 </script>
 
 <template>

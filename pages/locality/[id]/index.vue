@@ -25,7 +25,6 @@ const imagesHasNext = ref(true);
 async function imageQuery({ rows, page }: { rows: number; page: number }) {
   if (!imagesHasNext.value)
     return;
-  // TODO: this request is defined in fetch also. Find a way to unify them.
   const newImages = await $geoloogiaFetch("/locality_image", {
     query: {
       locality: route.params.id,
@@ -59,7 +58,6 @@ const _ = await useAsyncData("image", async () => {
     <VRow v-if="images.length > 0">
       <VCol>
         <ImageBar
-          v-if="images.length > 0"
           class="mt-4"
           :images="images"
           @update="imageQuery"

@@ -86,55 +86,32 @@ const pageType = computed(() => {
   }
 });
 const pageTitle = computed(() => `${title.value} | ${pageType.value}`);
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: pageTitle.value,
-//         meta: [
-//           {
-//             property: "og:title",
-//             hid: "og:title",
-//             content: pageTitle.value,
-//           },
-//           {
-//             property: "og:url",
-//             hid: "og:url",
-//             content: route.value.path,
-//           },
-//           ...[
-//             {
-//               property: "og:image",
-//               hid: "og:image",
-//               content: isImage.value
-//                 ? $img(
-//                     `${file.value.filename}`,
-//                     { size: "small" },
-//                     {
-//                       provider: "geocollections",
-//                     },
-//                   )
-//                 : "",
-//             },
-//             {
-//               property: "og:video",
-//               hid: "og:video",
-//               content: isVideo.value
-//                 ? `https://files.geocollections.info/${file.value.uuid_filename}`
-//                 : "",
-//             },
-//             {
-//               property: "og:audio",
-//               hid: "og:audio",
-//               content: isAudio.value
-//                 ? `https://files.geocollections.info/${file.value.uuid_filename}`
-//                 : "",
-//             },
-//           ],
-//         ],
-//       };
-//     });
-// });
+const isImage = computed(() => file.value.attachment_format.includes("image"));
+const isAudio = computed(() => file.value.attachment_format.includes("audio"));
+const isVideo = computed(() => file.value.attachment_format.includes("video"));
+
+useHead({
+  title: pageTitle.value,
+});
+const img = useImage();
+
+useSeoMeta({
+  ogImage: isImage.value
+    ? img(
+        `${file.value.filename}`,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+    )
+    : null,
+  ogVideo: isVideo.value
+    ? `https://files.geocollections.info/${file.value.uuid_filename}`
+    : null,
+  ogAudio: isAudio.value
+    ? `https://files.geocollections.info/${file.value.uuid_filename}`
+    : null,
+});
 </script>
 
 <template>

@@ -21,19 +21,23 @@ defineProps({
     <slot>
       <div
         style="word-break: normal"
-        class="montserrat d-flex align-center font-weight-medium text-h4 pt-0 pr-3 pb-0"
+        class="d-flex align-center px-3"
       >
         <VIcon
           v-if="icon.length > 0"
           start
           color="accent"
-          size="large"
+          size="x-large"
         >
           {{ icon }}
         </VIcon>
-        <slot name="title">
-          {{ title }}
-        </slot>
+        <span
+          class="montserrat font-weight-medium text-h4"
+        >
+          <slot name="title">
+            {{ title }}
+          </slot>
+        </span>
       </div>
     </slot>
   </div>

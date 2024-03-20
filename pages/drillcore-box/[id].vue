@@ -133,6 +133,16 @@ const { data, pending, error } = await useAsyncData(
       },
       ctx: { drillcoreBox },
     });
+    const attachmentLinks = await $geoloogiaFetch("/attachment_link/", {
+      query: {
+        drillcore_box: route.params.id,
+        nest: 2,
+        ordering: "-attachment__is_preferred",
+      },
+    });
+
+    const drillcoreBoxImages = attachmentLinks.results;
+    const activeImage = drillcoreBoxImages[0];
 
     return {
       drillcoreBox,
@@ -142,6 +152,7 @@ const { data, pending, error } = await useAsyncData(
         "analysis",
         "specimen",
       ]),
+      activeImage,
     };
   },
 );
@@ -154,40 +165,20 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: `${pageTitle.value} | ${i18n.t('drillcoreBox.pageTitle')}`,
-//         meta: [
-//           {
-//             property: 'og:title',
-//             hid: 'og:title',
-//             content: `${pageTitle.value} | ${i18n.t('drillcoreBox.pageTitle')}`,
-//           },
-//           {
-//             property: 'og:url',
-//             hid: 'og:url',
-//             content: route.value.path,
-//           },
-//           {
-//             property: 'og:image',
-//             hid: 'og:image',
-//             content: $img(
-//               `${state.activeImage?.attachment?.uuid_filename}`,
-//               { size: 'medium' },
-//               {
-//                 provider: 'geocollections',
-//               }
-//             ),
-//           },
-//         ],
-//       }
-//     })
-//     return { ...toRefs(state), drillcore, pageTitle, isNull, isNil }
-//   },
-//   head: {},
-// })
+useHead({
+  title: `${pageTitle.value} | ${t("drillcoreBox.pageTitle")}`,
+});
+
+const img = useImage();
+useSeoMeta({
+  ogImage: img(
+    data.value?.activeImage?.attachment?.uuid_filename,
+    { size: "medium" },
+    {
+      provider: "geocollections",
+    },
+  ),
+});
 </script>
 
 <template>

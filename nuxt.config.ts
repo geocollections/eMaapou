@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     "@pinia-plugin-persistedstate/nuxt",
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
+    "@nuxtjs/seo",
   ],
   imports: {
     dirs: ["types", "constants"],
@@ -54,6 +55,7 @@ export default defineNuxtConfig({
     langDir: "lang/",
     defaultLocale: "et",
     strategy: "prefix_and_default",
+    baseUrl: "https://geoloogia.info",
   },
   vite: {
     vue: {
@@ -79,5 +81,11 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  site: {
+    indexable: false,
+  },
+  linkChecker: {
+    enabled: false,
   },
 });

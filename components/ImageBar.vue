@@ -41,7 +41,7 @@ function openOverlay(image: OverlayImage) {
       <VTooltip location="bottom" color="accent">
         <template #activator="{ props }">
           <slot name="image" :item="item">
-            <VHover v-slot="{ hover }">
+            <VHover v-slot="{ isHovering }">
               <VImg
                 v-bind="props"
                 :src="
@@ -54,9 +54,9 @@ function openOverlay(image: OverlayImage) {
                 min-width="250"
                 aspect-ratio="1.4"
                 :class="{
-                  'elevation-2': hover,
+                  'elevation-2': isHovering,
                 }"
-                class="lighten-2 rounded transition-swing cursor-pointer"
+                class="lighten-2 rounded transition-swing cursor-pointer "
                 @click="
                   openOverlay({
                     src: item.filename,

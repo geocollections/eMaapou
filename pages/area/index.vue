@@ -72,20 +72,11 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   );
 }
 
-// export default defineComponent({
-//   head() {
-//     return {
-//       title: this.$t("area.pageTitle") as string,
-//       meta: [
-//         {
-//           property: "og:title",
-//           hid: "og:title",
-//           content: this.$t("area.pageTitle") as string,
-//         },
-//       ],
-//     };
-//   },
-// });
+const { t } = useI18n();
+
+useHead({
+  title: t("area.pageTitle"),
+});
 </script>
 
 <template>

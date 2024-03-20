@@ -68,25 +68,11 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
   );
 }
 
-// export default defineComponent({
-//   head() {
-//     return {
-//       title: this.$t("stratigraphy.pageTitle").toString(),
-//       meta: [
-//         {
-//           property: "og:title",
-//           hid: "og:title",
-//           content: this.$t("stratigraphy.pageTitle").toString(),
-//         },
-//         {
-//           property: "og:url",
-//           hid: "og:url",
-//           content: this.$route.path,
-//         },
-//       ],
-//     };
-//   },
-// });
+const { t } = useI18n();
+
+useHead({
+  title: t("stratigraphy.pageTitle"),
+});
 </script>
 
 <template>

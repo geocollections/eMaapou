@@ -109,40 +109,12 @@ redirectInvalidTab({
   }),
   tabs: data.value.tabs,
 });
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: `${title.value} | ${i18n.t("preparation.pageTitle")}`,
-//         meta: [
-//           {
-//             property: "og:title",
-//             hid: "og:title",
-//             content: `${title.value} | ${i18n.t("preparation.pageTitle")}`,
-//           },
-//           {
-//             property: "og:url",
-//             hid: "og:url",
-//             content: route.value.path,
-//           },
-//         ],
-//       };
-//     });
-//     return {
-//       ...toRefs(state),
-//       title,
-//       sample,
-//       analysis,
-//       taxon,
-//       agent,
-//       identificationAgent,
-//       storage,
-//       owner,
-//       isNil,
-//     };
-//   },
-//   head: {},
-// });
+
+const { t } = useI18n();
+
+useHead({
+  title: `${title.value} | ${t("preparation.pageTitle")}`,
+});
 </script>
 
 <template>

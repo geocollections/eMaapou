@@ -265,6 +265,15 @@ const { data } = await useAsyncData("locality", async () => {
     + hydratedTabs.sample.count
     + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
+  const imagesRes = await $geoloogiaFetch("/locality_image", {
+    query: {
+      locality: route.params.id,
+      nest: 1,
+      limit: 1,
+      ordering: "sort",
+    },
+  });
+  console.log(imagesRes.results);
   return {
     locality,
     drillcore,
@@ -284,7 +293,17 @@ const { data } = await useAsyncData("locality", async () => {
       "analysis",
       "analysis_results",
     ]),
+    images: imagesRes.results,
   };
+}, {
+  default: () => ({
+    locality: null,
+    drillcore: null,
+    analysisResultsCount: 0,
+    referenceCount: 0,
+    tabs: [] as HydratedTab[],
+    images: [],
+  }),
 });
 
 const activeTabProps = computed(() => {
@@ -305,63 +324,24 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-// export default defineComponent({
-//   setup() {
-//     useMeta(() => {
-//       return {
-//         title: `${title.value} | ${i18n.t('locality.pageTitle')}`,
-//         meta: [
-//           {
-//             property: 'og:title',
-//             hid: 'og:title',
-//             content: `${title.value} | ${i18n.t('locality.pageTitle')}`,
-//           },
-//           {
-//             property: 'og:url',
-//             hid: 'og:url',
-//             content: route.value.path,
-//           },
-//           {
-//             property: 'og:image',
-//             hid: 'og:image',
-//             content: imageBarState.images[0]?.filename
-//               ? $img(
-//                   `${imageBarState.images[0]?.filename}`,
-//                   { size: 'small' },
-//                   {
-//                     provider: 'geocollections',
-//                   }
-//                 )
-//               : '',
-//           },
-//         ],
-//       }
-//     })
-//     return {
-//       ...toRefs(state),
-//       ...toRefs(imageBarState),
-//       title,
-//       analysisResultsCount,
-//       referenceCount,
-//       type,
-//       country,
-//       municipality,
-//       settlementUnit,
-//       coordinatePrecision,
-//       coordinateMethod,
-//       coordinateAgent,
-//       stratigraphyTop,
-//       stratigraphyBase,
-//       goToGeoscienceLiterature,
-//       goToAnalyticalData,
-//       isNil,
-//       isEmpty,
-//       imageQuery,
-//       icons,
-//     }
-//   },
-//   head: {},
-// })
+const { t } = useI18n();
+const img = useImage();
+
+useHead({
+  title: `${title.value} | ${t("locality.pageTitle")}`,
+});
+
+useSeoMeta({
+  ogImage: data.value?.images[0]?.attachment?.filename
+    ? img(
+        `${data.value.images[0].attachment.filename}`,
+        { size: "medium" },
+        {
+          provider: "geocollections",
+        },
+    )
+    : null,
+});
 </script>
 
 <template>

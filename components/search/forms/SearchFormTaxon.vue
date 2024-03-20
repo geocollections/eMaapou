@@ -123,12 +123,6 @@ async function suggestTaxon(
     },
   });
 
-  console.log(res.response.docs.map((doc: any) => ({
-    id: doc.hierarchy_string,
-    name: doc.taxon,
-    value: doc.hierarchy_string,
-  })));
-
   return res.response.docs.map((doc: any) => ({
     id: doc.hierarchy_string,
     name: { et: doc.taxon, en: doc.taxon },

@@ -147,41 +147,10 @@ redirectInvalidTab({
   }),
   tabs: data.value?.tabs ?? [],
 });
-// export default defineComponent({
-//   setup() {
-//
-//     useMeta(() => {
-//       return {
-//         title: `${pageTitle.value} | ${i18n.t('analysis.pageTitle')}`,
-//         meta: [
-//           {
-//             property: 'og:title',
-//             content: `${pageTitle.value} | ${i18n.t('analysis.pageTitle')}`,
-//             hid: 'og:title',
-//           },
-//           {
-//             property: 'og:url',
-//             hid: 'og:url',
-//             content: route.value.path,
-//           },
-//         ],
-//       }
-//     })
-//     return {
-//       ...toRefs(state),
-//       database,
-//       analysisMethod,
-//       sample,
-//       agent,
-//       reference,
-//       dataset,
-//       pageTitle,
-//       isEmpty,
-//       isNil,
-//     }
-//   },
-//   head: {},
-// })
+
+useHead({
+  title: `${pageTitle.value} | ${t("analysis.pageTitle")}`,
+});
 
 const searchRoute = computed(() => {
   if (searchModule.value === "analyticalData") {

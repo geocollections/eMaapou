@@ -71,6 +71,12 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     "drillcore",
   );
 }
+
+const { t } = useI18n();
+
+useHead({
+  title: t("drillcore.pageTitle"),
+});
 </script>
 
 <template>

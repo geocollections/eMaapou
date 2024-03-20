@@ -93,6 +93,15 @@ const { data } = await useAsyncData("specimen", async () => {
   );
   const specimenAlt = specimenNameRes?.response.docs[0];
 
+  const imagesRes = await $solrFetch<SolrResponse>("/attachment", {
+    query: {
+      q: "*",
+      fq: `specimen_id:${route.params.id} AND specimen_image_attachment:1`,
+      sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
+      rows: 1,
+    },
+  });
+
   const hydratedTabs = await hydrateTabs(tabs, {
     props: { general: { specimen, specimenAlt } },
   });
@@ -106,12 +115,14 @@ const { data } = await useAsyncData("specimen", async () => {
       "identificationGeology",
       "reference",
     ]),
+    images: imagesRes.response.docs,
   };
 }, {
   default: () => ({
     specimen: null,
     specimenAlt: null,
     tabs: [] as HydratedTab[],
+    images: [],
   }),
 });
 
@@ -150,88 +161,25 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-// export default defineComponent({
-//   setup() {
-//     const title = computed(
-//       () =>
-//         `${data.value.specimen?.database?.acronym} ${data.value.specimen?.specimen_id}`,
-//     );
-//     const titleAlt = computed(() => {
-//       if (data.value.specimenAlt?.rock) {
-//         const defaultName = $translate({
-//           et: data.value.specimenAlt.rock,
-//           en: data.value.specimenAlt.rock_en,
-//         });
-//         return data.value.specimenAlt.rock_txt
-//           && data.value.specimenAlt.rock_txt.length > 0
-//           ? data.value.specimenAlt.rock_txt[0]
-//           : defaultName;
-//       }
-//       if (data.value.specimenAlt?.taxon)
-//         return data.value.specimenAlt.taxon;
-//
-//       return null;
-//     });
-//     useRedirectInvalidTabRoute({
-//       pending: toRef(fetchState, "pending"),
-//       tabs: toRef(data.value, "tabs"),
-//       watchableObject: toRef(data.value, "specimen"),
-//       validRoute: toRef(data.value, "validRoute"),
-//     });
-//
-//     useMeta(() => {
-//       return {
-//         title: `${title.value} | ${i18n.t("specimen.pageTitle")}`,
-//         meta: [
-//           {
-//             property: "og:title",
-//             hid: "og:title",
-//             content: `${title.value} | ${i18n.t("specimen.pageTitle")}`,
-//           },
-//           {
-//             property: "og:image",
-//             hid: "og:image",
-//             content: data.value.images[0]?.filename
-//               ? $img(
-//                   `${data.value.images[0]?.filename}`,
-//                   { size: "small" },
-//                   {
-//                     provider: "geocollections",
-//                   },
-//               )
-//               : "",
-//           },
-//         ],
-//       };
-//     });
-//
-//     const icons = computed(() => {
-//       return {
-//         mdiContentCopy,
-//       };
-//     });
-//     return {
-//       ...toRefs(data.value),
-//       title,
-//       titleAlt,
-//       isRock,
-//       isTaxon,
-//       dateCollected,
-//       coll,
-//       type,
-//       classification,
-//       locality,
-//       stratigraphy,
-//       lithostratigraphy,
-//       agentCollected,
-//       database,
-//       sample,
-//       parent,
-//       icons,
-//     };
-//   },
-//   head: {},
-// });
+const { t } = useI18n();
+
+const img = useImage();
+
+useHead({
+  title: `${title.value} | ${t("specimen.pageTitle")}`,
+});
+
+useSeoMeta({
+  ogImage: data.value.images[0]?.filename
+    ? img(
+      `${data.value.images[0]?.filename}`,
+      { size: "medium" },
+      {
+        provider: "geocollections",
+      },
+    )
+    : null,
+});
 </script>
 
 <template>

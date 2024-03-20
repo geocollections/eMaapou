@@ -4,7 +4,9 @@ const props = defineProps<{
   specimenAlt: any;
 }>();
 
+const route = useRoute();
 const localePath = useLocalePath();
+const { $solrFetch } = useNuxtApp();
 
 const dateCollected = computed(() => {
   if (!props.specimen)
@@ -22,16 +24,30 @@ const database = computed(() => props.specimen.database);
 const sample = computed(() => props.specimen.sample);
 const parent = computed(() => props.specimen.parent);
 
-const images = ref([]);
+const { data: images } = await useAsyncData("images", async () => {
+  const res = await $solrFetch<SolrResponse>("/attachment", {
+    query: {
+      q: "*",
+      fq: `specimen_id:${route.params.id} AND specimen_image_attachment:1`,
+      sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
+      rows: 25,
+    },
+  });
+  return res.response.docs;
+}, {
+  default: () => [],
+});
 </script>
 
 <template>
   <VContainer style="margin: initial">
-    <ImageBar
-      v-if="images.length > 0"
-      class="mt-4"
-      :images="images"
-    />
+    <VRow v-if="images.length > 0">
+      <VCol>
+        <ImageBar
+          :images="images"
+        />
+      </VCol>
+    </VRow>
     <VRow>
       <VCol
         :sm="12"

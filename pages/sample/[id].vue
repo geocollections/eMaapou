@@ -203,6 +203,10 @@ function getDepthRange(sample: any) {
 
   return depth;
 }
+
+useHead({
+  title: `${title.value} | ${t("sample.pageTitle")}`,
+});
 </script>
 
 <template>

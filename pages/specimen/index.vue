@@ -2,8 +2,7 @@
 import { mdiBug } from "@mdi/js";
 
 const route = useRoute();
-
-const views = computed(() => ["table", "image"]);
+const views = computed(() => ["table", "image"] as const);
 
 const specimensStore = useSpecimens();
 const { resetFilters, resetDataTable } = specimensStore;
@@ -110,6 +109,11 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     );
   }
 }
+const { t } = useI18n();
+
+useHead({
+  title: t("specimen.pageTitle"),
+});
 </script>
 
 <template>

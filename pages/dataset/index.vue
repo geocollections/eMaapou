@@ -69,6 +69,12 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     "dataset",
   );
 }
+
+const { t } = useI18n();
+
+useHead({
+  title: t("dataset.pageTitle"),
+});
 </script>
 
 <template>
