@@ -11,6 +11,13 @@ useHead({
   htmlAttrs: {
     lang: locale.value,
   },
+  link: [
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      href: "/favicon.ico",
+    },
+  ],
 });
 
 const img = useImage();
