@@ -1208,6 +1208,13 @@ export const HEADERS_PHOTO: Headers = {
       apiFieldValue: "tags",
       sortField: ["tags"],
     },
+    image: {
+      title: "photo.image",
+      value: "image",
+      show: true,
+      apiFieldValue: "filename",
+      sortable: false,
+    },
   },
   allIds: [
     "id",
@@ -1217,6 +1224,7 @@ export const HEADERS_PHOTO: Headers = {
     "locality",
     "image_object",
     "tags",
+    "image",
   ],
 };
 

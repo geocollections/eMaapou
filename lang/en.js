@@ -1000,6 +1000,7 @@ export default {
     author: "Author",
     size: "Image size",
     viewDetail: "Image info",
+    image: "Image",
   },
   news: {
     pageTitle: "News",
@@ -1049,6 +1050,7 @@ export default {
   },
   quickSearch: {
     title: "Results for {query}",
+    noResults: "No results found",
   },
   error: {
     occurred: "An error occurred",

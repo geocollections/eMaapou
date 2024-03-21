@@ -3,23 +3,31 @@ const props = defineProps<{
   tabs: any[];
 }>();
 const localePath = useLocalePath();
+const route = useRoute();
+
+const getRouteBaseName = useRouteBaseName();
+
+const selectedIndex = computed(() => {
+  return props.tabs.findIndex(tab => tab.routeName === getRouteBaseName(route));
+});
 </script>
 
 <template>
-  <VChipGroup column selected-class="active-tab  elevation-1">
+  <VChipGroup
+    column
+  >
     <TransitionGroup name="flip-list">
       <VChip
         v-for="(item, index) in tabs"
         :key="`button-tab-${index}`"
         class="mx-1 mb-1 pl-1"
+        :class="{ 'active-tab': selectedIndex === index }"
         :disabled="item.count === 0"
-        nuxt
-        rounded
         exact
         :to="
           localePath({
             name: item.routeName,
-            query: $route.query,
+            query: route.query,
           })
         "
       >

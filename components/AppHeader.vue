@@ -142,7 +142,58 @@ const cssProps = computed(() => {
           </VCardActions>
         </VCard>
       </VMenu>
-
+    </VToolbarItems>
+    <VToolbarItems
+      class="align-center ml-auto"
+      :style="{
+        width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
+      }"
+    >
+      <div
+        v-if="showSearch"
+        class="d-flex align-center elevation-0 mr-0 mr-sm-2"
+        style="width: 100%"
+        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
+      >
+        <InputSearch
+          v-model="state.query"
+          input-class="rounded-l montserrat"
+          background-color="white"
+          density="compact"
+          flat
+          :max-width="$vuetify.display.mdAndUp ? 450 : -1"
+          :autofocus="false"
+          :placeholder="$t('common.search')"
+          @enter="
+            $router.push(
+              localePath({ name: searchRouteName, query: { q: state.query } }),
+            )
+          "
+        />
+        <VHover v-slot="{ isHovering, props: hoverProps }">
+          <VBtn
+            v-bind="hoverProps"
+            height="40"
+            :width="$vuetify.display.xs ? 32 : 48"
+            elevation="0"
+            :color="isHovering ? 'warning' : 'grey-lighten-2'"
+            class="rounded-0"
+            variant="flat"
+            @click="
+              $router.push(
+                localePath({
+                  name: searchRouteName,
+                  query: { q: state.query },
+                }),
+              )
+            "
+          >
+            <VIcon color="accent">
+              {{ icons.mdiMagnify }}
+            </VIcon>
+          </VBtn>
+        </VHover>
+      </div>
       <VBtn
         aria-label="about page"
         variant="text"
@@ -206,56 +257,6 @@ const cssProps = computed(() => {
           </VCardActions>
         </VCard>
       </VMenu>
-    </VToolbarItems>
-    <VToolbarItems
-      class="align-center ml-auto"
-      :style="{
-        width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
-      }"
-    >
-      <div
-        v-if="showSearch"
-        class="d-flex elevation-0 rounded mr-0 mr-sm-2"
-        style="width: 100%"
-        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
-      >
-        <InputSearch
-          v-model="state.query"
-          input-class="rounded-l rounded-r-0 montserrat"
-          background-color="white"
-          density="compact"
-          flat
-          :max-width="$vuetify.display.mdAndUp ? 650 : -1"
-          :autofocus="false"
-          :placeholder="$t('common.search')"
-          @enter="
-            $router.push(
-              localePath({ name: searchRouteName, query: { q: state.query } }),
-            )
-          "
-        />
-        <VHover v-slot="{ hover }">
-          <VBtn
-            height="38"
-            :width="$vuetify.display.xs ? 32 : 48"
-            elevation="0"
-            :color="hover ? 'warning' : 'grey-lighten-2'"
-            class="rounded-s-0"
-            @click="
-              $router.push(
-                localePath({
-                  name: searchRouteName,
-                  query: { q: state.query },
-                }),
-              )
-            "
-          >
-            <VIcon color="accent">
-              {{ icons.mdiMagnify }}
-            </VIcon>
-          </VBtn>
-        </VHover>
-      </div>
       <LanguageSwitcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
       <VBtn
         v-if="!$vuetify.display.mdAndUp"

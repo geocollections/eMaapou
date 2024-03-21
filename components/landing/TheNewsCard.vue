@@ -6,7 +6,7 @@ const router = useRouter();
 const localePath = useLocalePath();
 const { lgAndUp } = useDisplay();
 
-const { data: newsList } = useApiFetch("/webnews", {
+const { data: newsList } = await useApiFetch("/webnews", {
   query: {
     limit: 6,
     order_by: "-date_added",

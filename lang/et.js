@@ -1002,6 +1002,7 @@ export default {
     author: "Autor",
     size: "Pildi suurus",
     viewDetail: "Pildi info",
+    image: "Pilt",
   },
   news: {
     pageTitle: "Uudised",
@@ -1051,6 +1052,7 @@ export default {
   },
   quickSearch: {
     title: "Tulemused päringule {query}",
+    noResults: "Tulemusi ei leitud",
   },
   error: {
     occurred: "Päringul esines viga",
