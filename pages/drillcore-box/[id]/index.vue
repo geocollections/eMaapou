@@ -91,8 +91,9 @@ const { data } = await useAsyncData("images", async () => {
             :key="index"
             class="ma-2"
           >
-            <VHover v-slot="{ isHovering }">
+            <VHover v-slot="{ isHovering, props: hoverProps }">
               <VImg
+                v-bind="hoverProps"
                 :src="
                   img(
                     item.attachment.uuid_filename,

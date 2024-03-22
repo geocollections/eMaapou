@@ -10,12 +10,13 @@ defineProps({
 </script>
 
 <template>
-  <VHover v-slot="{ hover }">
+  <VHover v-slot="{ isHovering, props: hoverProps }">
     <VCard
+      v-bind="hoverProps"
       :href="route.href"
       class="d-flex py-2"
-      :elevation="hover ? 2 : 1"
-      :color="hover ? 'grey-lighten-2' : 'grey-lighten-3'"
+      :elevation="isHovering ? 2 : 1"
+      :color="isHovering ? 'grey-lighten-2' : 'grey-lighten-3'"
     >
       <div>
         <VCardTitle

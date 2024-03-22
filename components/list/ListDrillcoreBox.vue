@@ -115,8 +115,9 @@ function handleSearch() {
         class="pa-0 drillcore-box"
       >
         <VDivider />
-        <VHover v-slot="{ hover }">
+        <VHover v-slot="{ isHovering, props: hoverProps }">
           <VCard
+            v-bind="hoverProps"
             flat
             :ripple="false"
             :to="
@@ -137,8 +138,8 @@ function handleSearch() {
                     <VImg
                       class="mx-auto rounded transition-swing"
                       :class="{
-                        'elevation-2': hover,
-                        'elevation-0': !hover,
+                        'elevation-2': isHovering,
+                        'elevation-0': !isHovering,
                       }"
                       max-width="1000"
                       max-height="800"
@@ -185,11 +186,11 @@ function handleSearch() {
                     v-if="boxHasInfo(box)"
                     class="transition-swing"
                     :class="{
-                      'elevation-2': hover,
-                      'elevation-0': !hover,
+                      'elevation-2': isHovering,
+                      'elevation-0': !isHovering,
                     }"
                     :style="{
-                      'background-color': hover ? 'white' : 'transparent',
+                      'background-color': isHovering ? 'white' : 'transparent',
                     }"
                   >
                     <TableRow

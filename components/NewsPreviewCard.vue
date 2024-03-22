@@ -28,12 +28,12 @@ function extractContent(html: string) {
 </script>
 
 <template>
-  <VHover v-slot="{ hover }">
+  <VHover v-slot="{ isHovering, props: hoverProps }">
     <VCard
-      v-bind="$attrs"
+      v-bind="{ ...$attrs, ...hoverProps }"
       class="py-2"
       flat
-      :color="hover ? 'grey lighten-4' : 'transparent'"
+      :color="isHovering ? 'grey lighten-4' : 'transparent'"
       @click.stop="$emit('click')"
     >
       <div

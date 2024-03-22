@@ -117,8 +117,9 @@ function updateOptions(event) {
               :key="index"
               class="my-2 mx-2"
             >
-              <VHover v-slot="{ hover }">
+              <VHover v-slot="{ isHovering, props: hoverProps }">
                 <VImg
+                  v-bind="hoverProps"
                   :src="
                     img(
                       `${item.uuid_filename}`,
@@ -137,8 +138,8 @@ function updateOptions(event) {
                   cover
                   aspect-ratio="1"
                   :class="{
-                    'elevation-4': hover,
-                    'elevation-2': !hover,
+                    'elevation-4': isHovering,
+                    'elevation-2': !isHovering,
                     'active-thumbnail': activeIndex === index,
                   }"
                   class="rounded transition-swing cursor-pointer"

@@ -11,13 +11,13 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <VHover v-slot="{ hover }">
+  <VHover v-slot="{ isHovering, props: hoverProps }">
     <VCard
-      nuxt
+      v-bind="hoverProps"
       :to="localePath(route.routeName)"
       class="mx-sm-1 mb-1 mb-sm-2 d-flex"
-      :elevation="hover ? 2 : 1"
-      :color="hover ? 'accent lighten-1' : 'accent'"
+      :elevation="isHovering ? 2 : 1"
+      :color="isHovering ? 'accent lighten-1' : 'accent'"
     >
       <div class="py-2 d-flex d-sm-block align-center">
         <VIcon

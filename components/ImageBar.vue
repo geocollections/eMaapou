@@ -39,11 +39,11 @@ function openOverlay(image: OverlayImage) {
       class="mr-3 mb-1"
     >
       <VTooltip location="bottom" color="accent">
-        <template #activator="{ props }">
+        <template #activator="{ props: tooltipProps }">
           <slot name="image" :item="item">
-            <VHover v-slot="{ isHovering }">
+            <VHover v-slot="{ isHovering, props: hoverProps }">
               <VImg
-                v-bind="props"
+                v-bind="{ ...tooltipProps, ...hoverProps }"
                 :src="
                   img(
                     `${item.filename}`,
