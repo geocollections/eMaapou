@@ -208,7 +208,7 @@ const routes = [
                 />
                 <NuxtLink
                   :to="localePath(link.routeName)"
-                  class="text-link text-body-2 text-grey-lighten-2 d-block ml-1"
+                  class="text-body-2 text-decoration-none text-grey-lighten-2 d-block ml-1"
                   style="font-weight: 500 !important"
                 >
                   {{ $t(link.text) }}
@@ -236,7 +236,7 @@ const routes = [
                   />
                   <NuxtLink
                     :to="localePath(link.routeName)"
-                    class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
+                    class="text-body-2 text-decoration-none text-grey-lighten-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.text) }}
@@ -265,7 +265,7 @@ const routes = [
                   />
                   <a
                     :href="link.url"
-                    class="text-link text-body-2 text-gray-lighten-2 d-block ml-1"
+                    class="text-body-2 text-decoration-none text-grey-lighten-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.name) }}
@@ -326,8 +326,7 @@ const routes = [
                     v-for="(item, index) in textLinks"
                     :key="index"
                     :href="item.href"
-                    class="text-link font-weight-bold text-gray-lighten-2"
-                    target="FooterLink"
+                    class="font-weight-bold text-grey-lighten-2 text-decoration-none"
                   >
                     {{ item.text }}
                   </a>
