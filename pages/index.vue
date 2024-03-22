@@ -306,12 +306,12 @@ function handleSearch() {
                 >
                   <InputSearch
                     v-model="query"
-                    input-class="rounded"
-                    height="56"
+                    rounded="5"
+                    input-class="elevation-1 border-none"
                     :placeholder="$t('landing.searchPlaceholder')"
                   />
                   <VBtn
-                    height="56px"
+                    height="49px"
                     width="84px"
                     class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
                     type="submit"

@@ -1,5 +1,5 @@
 export default {
-  title: "eGeology",
+  title: "Geocollections",
   subtitle: "Geoscience data and e\u2011services",
   slogan: "Estonian geology data portal",
   landing: {
@@ -26,7 +26,7 @@ export default {
     goToFrontpage: "To frontpage",
     showMenu: "Show menu",
     routes: "Routes",
-    searchRoutes: "Browse eGeology",
+    searchRoutes: "Browse Geocollections",
     eMaapouPages: "e·Maapõu ecosystem",
     map: "Data on map",
     quickSearch: "Find quickly",
@@ -38,7 +38,7 @@ export default {
     statText3: "Samples",
     otherEmaapouServices: "Other e-maapõu services",
     otherServices: "Other services",
-    searchPlaceholder: "Search eGeology",
+    searchPlaceholder: "Search Geocollections",
     description:
       "Open access geoscience data in Estonia, provided by the national research infrastructure NATARC.",
   },
@@ -60,7 +60,7 @@ export default {
     linkToEdit: "Edit record",
     searchCommand: "Search",
     about: "About",
-    searchAlt: "Enter keyword, e.g. Viki",
+    searchAlt: "Search all fields",
     history: "Recently viewed",
     quickSearch: "Quick search",
     description: "Description",
@@ -755,7 +755,7 @@ export default {
   },
   about: {
     pageTitle: "About",
-    title: "What is eGeology?",
+    title: "What is Geocollections?",
   },
   map: {
     estonian_geoportal: "Estonian Geoportal",

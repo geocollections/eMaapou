@@ -149,44 +149,50 @@ const cssProps = computed(() => {
         style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
       >
-        <InputSearch
-          v-model="state.query"
-          input-class="rounded-l montserrat"
-          background-color="white"
-          density="compact"
-          flat
-          :max-width="$vuetify.display.mdAndUp ? 450 : -1"
-          :autofocus="false"
-          :placeholder="$t('common.search')"
-          @enter="
-            $router.push(
-              localePath({ name: searchRouteName, query: { q: state.query } }),
-            )
-          "
-        />
-        <VHover v-slot="{ isHovering, props: hoverProps }">
-          <VBtn
-            v-bind="hoverProps"
-            height="40"
-            :width="$vuetify.display.xs ? 32 : 48"
-            elevation="0"
-            :color="isHovering ? 'warning' : 'grey-lighten-2'"
-            class="rounded-0"
-            variant="flat"
-            @click="
+        <div
+          class="d-flex"
+
+          style="width: 100%"
+        >
+          <InputSearch
+            v-model="state.query"
+            input-class="montserrat border-none"
+            background-color="white"
+            density="compact"
+            flat
+            :max-width="$vuetify.display.mdAndUp ? 450 : -1"
+            :autofocus="false"
+            :placeholder="$t('common.search')"
+            @enter="
               $router.push(
-                localePath({
-                  name: searchRouteName,
-                  query: { q: state.query },
-                }),
+                localePath({ name: searchRouteName, query: { q: state.query } }),
               )
             "
-          >
-            <VIcon color="accent">
-              {{ icons.mdiMagnify }}
-            </VIcon>
-          </VBtn>
-        </VHover>
+          />
+          <VHover v-slot="{ isHovering, props: hoverProps }">
+            <VBtn
+              v-bind="hoverProps"
+              height="40"
+              :width="$vuetify.display.xs ? 32 : 48"
+              elevation="0"
+              :color="isHovering ? 'warning' : 'grey-lighten-2'"
+              class="rounded-0"
+              variant="flat"
+              @click="
+                $router.push(
+                  localePath({
+                    name: searchRouteName,
+                    query: { q: state.query },
+                  }),
+                )
+              "
+            >
+              <VIcon color="accent">
+                {{ icons.mdiMagnify }}
+              </VIcon>
+            </VBtn>
+          </VHover>
+        </div>
       </div>
     </VToolbarItems>
     <VToolbarItems

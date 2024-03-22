@@ -61,7 +61,7 @@ export default {
     linkToEdit: "Muuda kirjet",
     searchCommand: "Otsi",
     about: "Tutvustus",
-    searchAlt: "Sisesta märksõna, nt Viki",
+    searchAlt: "Otsi kõigilt väljadelt",
     history: "Hiljuti vaadatud",
     quickSearch: "Kiirpäring",
     description: "Kirjeldus",

@@ -35,6 +35,10 @@ const props = defineProps({
     type: Number,
     default: -1,
   },
+  rounded: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const searchFocused = ref(false);
@@ -55,7 +59,7 @@ const inputStyle = computed(() => ({
       single-line
       hide-details
       variant="solo"
-      :rounded="0"
+      :rounded="rounded"
       flat
       density="comfortable"
       class="border-t border-b"
