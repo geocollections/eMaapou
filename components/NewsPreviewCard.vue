@@ -33,7 +33,7 @@ function extractContent(html: string) {
       v-bind="{ ...$attrs, ...hoverProps }"
       class="py-2"
       flat
-      :color="isHovering ? 'grey lighten-4' : 'transparent'"
+      :color="isHovering ? 'grey-lighten-4' : 'transparent'"
       @click.stop="$emit('click')"
     >
       <div
