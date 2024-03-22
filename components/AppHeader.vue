@@ -60,9 +60,8 @@ const cssProps = computed(() => {
 <template>
   <VAppBar
     density="compact"
-    :elevation="getRouteBaseName(route) === 'index' ? 0 : 0"
+    :elevation="0"
     :absolute="getRouteBaseName(route) === 'index'"
-    :scroll-behavior="getRouteBaseName(route) !== 'index' ? 'elevate' : 'hide'"
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
       'app-bar-mobile': !$vuetify.display.mdAndUp,
@@ -99,6 +98,7 @@ const cssProps = computed(() => {
         </VIcon>
       </VBtn>
       <VMenu
+        v-if="$vuetify.display.mdAndUp"
         activator="#browse_menu_btn"
         content-class="mt-1"
         transition="slide-y-transition"
@@ -238,6 +238,7 @@ const cssProps = computed(() => {
         />
       </VBtn>
       <VMenu
+        v-if="$vuetify.display.mdAndUp"
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
