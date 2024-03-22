@@ -4,7 +4,7 @@ const { $translate, $formatDate } = useNuxtApp();
 const { data: news } = await useGeoloogiaApiFetch(`/web_news/${route.params.id}`);
 
 const title = computed(() => {
-  return $translate({ et: news.value.title_et, en: news.value.title_en });
+  return $translate({ et: news.value?.title_et, en: news.value?.title_en });
 });
 
 const { t } = useI18n();
