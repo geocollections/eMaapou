@@ -59,7 +59,7 @@ const cssProps = computed(() => {
 <template>
   <VAppBar
     density="compact"
-    :elevation="getRouteBaseName(route) === 'index' ? 0 : 4"
+    :elevation="getRouteBaseName(route) === 'index' ? 0 : 0"
     :absolute="getRouteBaseName(route) === 'index'"
     :scroll-behavior="getRouteBaseName(route) !== 'index' ? 'elevate' : 'hide'"
     :color="transparent ? 'transparent' : 'accent-darken-1'"
@@ -83,8 +83,9 @@ const cssProps = computed(() => {
         style="vertical-align: middle"
       />
     </NuxtLink>
-    <VToolbarItems v-if="$vuetify.display.mdAndUp" class="mr-md-2">
+    <VToolbarItems class="w-100 mr-md-2">
       <VBtn
+        v-if="$vuetify.display.mdAndUp"
         id="browse_menu_btn"
         aria-label="browse"
         variant="text"
@@ -142,16 +143,9 @@ const cssProps = computed(() => {
           </VCardActions>
         </VCard>
       </VMenu>
-    </VToolbarItems>
-    <VToolbarItems
-      class="align-center ml-auto"
-      :style="{
-        width: !$vuetify.display.mdAndUp && showSearch ? '100%' : '100%',
-      }"
-    >
       <div
         v-if="showSearch"
-        class="d-flex align-center elevation-0 mr-0 mr-sm-2"
+        class="d-flex align-center elevation-0 ml-2 mr-0 mr-sm-2"
         style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
       >
@@ -194,7 +188,12 @@ const cssProps = computed(() => {
           </VBtn>
         </VHover>
       </div>
+    </VToolbarItems>
+    <VToolbarItems
+      class="ml-auto"
+    >
       <VBtn
+        v-if="$vuetify.display.mdAndUp"
         aria-label="about page"
         variant="text"
         color="white"
@@ -206,6 +205,7 @@ const cssProps = computed(() => {
       </VBtn>
 
       <VBtn
+        v-if="$vuetify.display.mdAndUp"
         aria-label="news page"
         variant="text"
         color="white"
@@ -216,6 +216,7 @@ const cssProps = computed(() => {
         {{ $t("common.news") }}
       </VBtn>
       <VBtn
+        v-if="$vuetify.display.mdAndUp"
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
