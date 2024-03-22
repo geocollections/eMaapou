@@ -52,6 +52,7 @@ const searchRouteName = computed(() => {
 const cssProps = computed(() => {
   return {
     "--max-width": `${props.maxWidth}px`,
+    "background-color": getRouteBaseName(route) === "index" ? "transparent" : "rgba(var(--v-theme-accent-darken-1), 0.95)",
   };
 });
 </script>
@@ -62,7 +63,6 @@ const cssProps = computed(() => {
     :elevation="getRouteBaseName(route) === 'index' ? 0 : 0"
     :absolute="getRouteBaseName(route) === 'index'"
     :scroll-behavior="getRouteBaseName(route) !== 'index' ? 'elevate' : 'hide'"
-    :color="transparent ? 'transparent' : 'accent-darken-1'"
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
       'app-bar-mobile': !$vuetify.display.mdAndUp,

@@ -306,7 +306,7 @@ function handleSearch() {
                 >
                   <InputSearch
                     v-model="query"
-                    rounded="5"
+                    :rounded="5"
                     input-class="elevation-1 border-none"
                     :placeholder="$t('landing.searchPlaceholder')"
                   />
