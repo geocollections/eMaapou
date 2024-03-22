@@ -7,6 +7,7 @@ const props = defineProps({
   content: { type: String, default: null },
   date: { type: String, default: null },
   previewLenght: { type: Number, default: 200 },
+  to: { type: String, required: true },
 });
 const truncatedText = computed(() => {
   let value = extractContent(props.content);
@@ -34,7 +35,7 @@ function extractContent(html: string) {
       class="py-2"
       flat
       :color="isHovering ? 'grey-lighten-4' : 'transparent'"
-      @click.stop="$emit('click')"
+      :to="to"
     >
       <div
         class="text-right pr-4 montserrat text--secondary"
