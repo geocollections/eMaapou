@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { OverlayImage } from "~/components/ImageOverlay.vue";
 
+const emit = defineEmits(["click:row"]);
+
 const img = useImage();
 const localePath = useLocalePath();
 const showOverlay = ref(false);
@@ -13,20 +15,22 @@ function openOverlay(image: OverlayImage) {
 
 <template>
   <BaseDataTable v-bind="$attrs">
-    <template #item.id="{ item }">
+    <template #item.id="{ item, index }">
       <NuxtLink
         v-if="item.id"
         class="text-link"
         :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.id }}
       </NuxtLink>
     </template>
-    <template #item.specimen_full_name="{ item }">
+    <template #item.specimen_full_name="{ item, index }">
       <NuxtLink
         v-if="item.specimen_full_name"
         class="text-link"
         :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{ item.specimen_full_name }}
       </NuxtLink>

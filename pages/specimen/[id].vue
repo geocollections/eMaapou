@@ -68,6 +68,26 @@ const tabs = {
   },
 };
 
+const specimensStore = useSpecimens();
+const { getQueryParams } = specimensStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(specimensStore);
+
+const {
+  data: specimensRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/specimen", {
+  routeName: "specimen-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarSpecimens = computed(() => specimensRes.value?.response.docs ?? []);
+
 const { data } = await useAsyncData("specimen", async () => {
   const specimen = await $geoloogiaFetch<any>(`/specimen/${route.params.id}/`, {
     query: {
@@ -183,7 +203,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <DetailNew :show-similar="false">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew class="mb-0">
         <div>
@@ -226,5 +246,24 @@ useSeoMeta({
       </HeaderDetailNew>
     </template>
     <NuxtPage v-bind="activeTabProps" />
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarSpecimens"
+        :total-results="specimensRes?.response.numFound ?? 0"
+        :search-route="localePath({ path: '/specimen', query: getQueryParams() })"
+        :get-result-route="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: specimen }">
+          <div class="font-weight-medium">
+            {{ specimen.specimen_full_name }}
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
   </DetailNew>
 </template>
