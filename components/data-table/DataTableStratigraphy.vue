@@ -1,10 +1,12 @@
 <script setup lang="ts">
+const emit = defineEmits(["click:row"]);
+
 const localePath = useLocalePath();
 </script>
 
 <template>
   <BaseDataTable v-bind="$attrs">
-    <template #item.stratigraphy="{ item }">
+    <template #item.stratigraphy="{ item, index }">
       <NuxtLink
         class="text-link"
         :to="
@@ -13,6 +15,7 @@ const localePath = useLocalePath();
             params: { id: item.id },
           })
         "
+        @click="emit('click:row', { index, id: item.id })"
       >
         {{
           $translate({

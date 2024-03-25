@@ -2,6 +2,7 @@
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
+const localePath = useLocalePath();
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
@@ -106,6 +107,26 @@ const tabs = {
   } satisfies Tab,
 };
 
+const stratigraphiesStore = useStratigraphies();
+const { getQueryParams } = stratigraphiesStore;
+const { solrFilters, solrQuery, solrSort } = storeToRefs(stratigraphiesStore);
+
+const {
+  data: stratigraphiesRes,
+  page,
+  handleSelect,
+  showDrawer,
+} = await useSearchResultsDrawer("/stratigraphy", {
+  routeName: "stratigraphy-id",
+  solrParams: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+  },
+});
+
+const similarStratigraphies = computed(() => stratigraphiesRes.value?.response.docs ?? []);
+
 const { data } = await useAsyncData("stratigraphy", async () => {
   const stratigraphy = await $geoloogiaFetch<any>(`/stratigraphy/${route.params.id}/`, {
     query: {
@@ -163,7 +184,7 @@ useHead({
 </script>
 
 <template>
-  <DetailNew :show-similar="false">
+  <DetailNew :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="title">
         <template #tabs>
@@ -172,5 +193,24 @@ useHead({
       </HeaderDetailNew>
     </template>
     <NuxtPage v-bind="activeTabProps" />
+    <template #drawer>
+      <SearchResultsDrawer
+        :page="page"
+        :results="similarStratigraphies"
+        :total-results="stratigraphiesRes?.response.numFound ?? 0"
+        :search-route="localePath({ path: '/stratigraphy', query: getQueryParams() })"
+        :get-result-route="(item) => localePath({ name: 'stratigraphy-id', params: { id: item.id } })
+        "
+        @page:next="page++"
+        @page:previous="page--"
+        @select="handleSelect"
+      >
+        <template #itemTitle="{ item: stratigraphy }">
+          <div class="font-weight-medium">
+            {{ $translate({ et: stratigraphy.stratigraphy, en: stratigraphy.stratigraphy_en }) }}
+          </div>
+        </template>
+      </SearchResultsDrawer>
+    </template>
   </DetailNew>
 </template>
