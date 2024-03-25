@@ -807,6 +807,7 @@ export default {
     lasGraph: "Graafik",
     lasText: "Fail teksti kujul",
     textTable: "Fail tabeli kujul",
+    relations: "Seotud kirjed ({number})",
   },
   cookiePolicy: {
     introduction:
@@ -1145,5 +1146,9 @@ export default {
   filter: {
     add: "Lisa",
     clear: "Puhasta",
+  },
+  attachmentLink: {
+    table: "Table",
+    name: "Nimi",
   },
 };

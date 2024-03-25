@@ -79,7 +79,7 @@ const isAudio = computed(() => props.file.attachment_format.includes("audio"));
 const isVideo = computed(() => props.file.attachment_format.includes("video"));
 
 const imageSizes = computed(() => {
-  if (!isImage)
+  if (!isImage.value)
     return ["original"];
   return ["small", "medium", "large", "original"];
 });
@@ -267,7 +267,7 @@ const specimenIdentificationGeology = computed(
       <VCol
         :sm="12"
         :md="6"
-        :lg="7"
+        :lg="5"
         :xl="5"
       >
         <BaseTable class="border rounded mb-2">

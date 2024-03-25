@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { $geoloogiaFetch, $translate } = useNuxtApp();
+const { $geoloogiaFetch, $translate, $solrFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
 
@@ -9,6 +9,20 @@ const tabs = {
     type: "static",
     routeName: "file-id",
     title: "common.general",
+    props: {},
+  } satisfies Tab,
+  relations: {
+    type: "dynamic",
+    routeName: "file-id-relations",
+    title: "file.relations",
+    count: async () => {
+      return $solrFetch<SolrResponse>("/attachment_link", {
+        query: {
+          q: `attachment_id:${route.params.id}`,
+          rows: 0,
+        },
+      }).then(res => res.response.numFound);
+    },
     props: {},
   } satisfies Tab,
 };
@@ -36,6 +50,7 @@ const { data, pending, error } = await useAsyncData("data", async () => {
     file,
     tabs: filterHydratedTabs(hydratedTabs, [
       "general",
+      "relations",
     ]),
   };
 }, {

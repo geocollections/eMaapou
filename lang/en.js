@@ -524,6 +524,7 @@ export default {
     parentSpecimen: "Belongs to specimen",
     image: "Image",
     series: "Series",
+
   },
   sampleData: {
     sampleNumber: "Sample",
@@ -805,6 +806,7 @@ export default {
     lasGraph: "Graph",
     lasText: "File in text form",
     textTable: "File in table form",
+    relations: "Relations ({number})",
   },
   cookiePolicy: {
     introduction:
@@ -1144,5 +1146,9 @@ export default {
   filter: {
     add: "Add",
     clear: "Clear",
+  },
+  attachmentLink: {
+    table: "Table",
+    name: "Name",
   },
 };

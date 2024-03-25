@@ -469,6 +469,24 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
   ],
 };
 
+export const HEADERS_ATTACHMENT_LINK_SOLR: Headers = {
+  byIds: {
+    table: {
+      title: "attachmentLink.table",
+      value: "table",
+      show: true,
+      sortField: ["table"],
+    },
+    name: {
+      title: "attachmentLink.name",
+      value: "name",
+      show: true,
+      sortField: { et: ["name"], en: ["name_en"] },
+    },
+  },
+  allIds: ["table", "name"],
+};
+
 export const HEADERS_DATASET: Headers = {
   byIds: {
     id: {
