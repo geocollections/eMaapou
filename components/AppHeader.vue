@@ -279,6 +279,72 @@ const cssProps = computed(() => {
         </VIcon>
       </VBtn>
     </VToolbarItems>
+    <template v-if="$vuetify.display.mdAndUp" #extension>
+      <div class="border-t border-b bg-grey-lighten-5 w-100">
+        <VTabs
+          align-tabs="center"
+          color="accent"
+        >
+          <VTooltip
+            v-for="(item, index) in state.browseTaxon"
+            :key="`browse-taxon-item-${index}`"
+            :text="$t(item.label)"
+            location="bottom"
+            open-delay="100"
+          >
+            <template #activator="{ props: tooltipProps }">
+              <VTab
+                v-bind="tooltipProps"
+                style="min-width: 0px"
+                :icon="item.icon"
+                :label="$t(item.label)"
+                :to="localePath({ name: item.routeName })"
+              >
+                <VIcon>{{ item.icon }}</VIcon>
+              </VTab>
+            </template>
+          </VTooltip>
+          <VTooltip
+            v-for="(item, index) in state.browseLab"
+            :key="`browse-lab-item-${index}`"
+            :text="$t(item.label)"
+            location="bottom"
+            open-delay="100"
+          >
+            <template #activator="{ props: tooltipProps }">
+              <VTab
+                v-bind="tooltipProps"
+                style="min-width: 0px"
+                :icon="item.icon"
+                :label="$t(item.label)"
+                :to="localePath({ name: item.routeName })"
+              >
+                <VIcon>{{ item.icon }}</VIcon>
+              </VTab>
+            </template>
+          </VTooltip>
+          <VTooltip
+            v-for="(item, index) in state.browseGeography"
+            :key="`browse-geography-item-${index}`"
+            :text="$t(item.label)"
+            location="bottom"
+            open-delay="100"
+          >
+            <template #activator="{ props: tooltipProps }">
+              <VTab
+                v-bind="tooltipProps"
+                style="min-width: 0px"
+                :icon="item.icon"
+                :label="$t(item.label)"
+                :to="localePath({ name: item.routeName })"
+              >
+                <VIcon>{{ item.icon }}</VIcon>
+              </VTab>
+            </template>
+          </VTooltip>
+        </VTabs>
+      </div>
+    </template>
   </VAppBar>
 </template>
 
