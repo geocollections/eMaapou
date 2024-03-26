@@ -34,6 +34,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/st
 
 <template>
   <DataTableStratigraphyReference
+    class="border-b"
     :items="data?.results ?? []"
     :count="data?.count ?? 0"
     :options="options"

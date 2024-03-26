@@ -32,12 +32,13 @@ const tabs = {
     routeName: "stratigraphy-id-synonyms",
     title: "stratigraphy.synonyms",
     count: async () => {
-      return $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/stratigraphy_synonym/", {
         query: {
           stratigraphy: route.params.id,
           limit: 0,
         },
-      }).then(res => res.count);
+      });
+      return res.count;
     },
     props: {},
   } satisfies Tab,
