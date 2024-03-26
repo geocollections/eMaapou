@@ -2,13 +2,17 @@
 import { mdiHome, mdiMagnify, mdiRefresh } from "@mdi/js";
 import type { NuxtError } from "#app";
 
-defineProps<{
+const props = defineProps<{
   error: NuxtError;
 }>();
 
 const router = useRouter();
 
 const query = ref("");
+
+useHead({
+  title: props.error.message,
+});
 
 function handleSearch() {
   router.push({
