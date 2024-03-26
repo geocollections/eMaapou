@@ -1057,6 +1057,7 @@ export default {
   },
   error: {
     occurred: "Päringul esines viga",
+    notFound: "Lehte ei leitud",
   },
   hints: {
     escaping: "erimärgile {specialCharacters} lisa ette {escapeCharacter}",

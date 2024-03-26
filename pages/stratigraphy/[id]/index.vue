@@ -20,14 +20,6 @@ const { data } = await useAsyncData("detail", async () => {
       stratigraphy: route.params.id,
       nest: 2,
     },
-    onResponseError: (error) => {
-      if (error.response?.status === 404) {
-        throw createError({
-          statusCode: 404,
-          message: "Stratigraphy not found",
-        });
-      }
-    },
   });
   return {
     stratotypes: stratotypesRes.results,

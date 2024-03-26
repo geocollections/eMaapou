@@ -1056,6 +1056,7 @@ export default {
   },
   error: {
     occurred: "An error occurred",
+    notFound: "Page not found",
   },
   hints: {
     escaping:

@@ -3,9 +3,10 @@ import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
 const localePath = useLocalePath();
-
+const { t } = useI18n();
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
+
 const tabs = {
   general: {
     type: "static",
@@ -133,13 +134,11 @@ const { data } = await useAsyncData("stratigraphy", async () => {
     query: {
       nest: 2,
     },
-    onResponseError: (error) => {
-      if (error.response?.status === 404) {
-        throw createError({
-          statusCode: 404,
-          message: "Stratigraphy not found",
-        });
-      }
+    onResponseError: (_error) => {
+      showError({
+        statusCode: 404,
+        message: t("error.notFound"),
+      });
     },
   });
 
@@ -176,8 +175,6 @@ const title = computed(() =>
     en: data.value?.stratigraphy.stratigraphy_en,
   }),
 );
-
-const { t } = useI18n();
 
 useHead({
   title: `${title.value} | ${t("stratigraphy.pageTitle")}`,

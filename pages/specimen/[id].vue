@@ -93,13 +93,11 @@ const { data } = await useAsyncData("specimen", async () => {
     query: {
       nest: 2,
     },
-    onResponseError: (error) => {
-      if (error.response?.status === 404) {
-        throw createError({
-          statusCode: 404,
-          message: "Specimen not found",
-        });
-      }
+    onResponseError: (_error) => {
+      showError({
+        statusCode: 404,
+        message: t("error.notFound"),
+      });
     },
   });
 

@@ -99,13 +99,11 @@ const { data, pending, error } = await useAsyncData("area", async () => {
     query: {
       nest: 1,
     },
-    onResponseError: (error) => {
-      if (error.response?.status === 404) {
-        throw createError({
-          statusCode: 404,
-          message: "Area not found",
-        });
-      }
+    onResponseError: (_error) => {
+      showError({
+        statusCode: 404,
+        message: t("error.notFound"),
+      });
     },
   });
 

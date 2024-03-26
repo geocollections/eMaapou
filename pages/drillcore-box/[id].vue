@@ -101,13 +101,11 @@ const { data, pending, error } = await useAsyncData(
         query: {
           nest: 1,
         },
-        onResponseError: (error) => {
-          if (error.response?.status === 404) {
-            throw createError({
-              statusCode: 404,
-              message: "Drillcore box not found",
-            });
-          }
+        onResponseError: (_error) => {
+          showError({
+            statusCode: 404,
+            message: t("error.notFound"),
+          });
         },
       },
     );

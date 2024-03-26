@@ -147,13 +147,11 @@ const { data } = await useAsyncData("dataset", async () => {
     query: {
       nest: 1,
     },
-    onResponseError: (error) => {
-      if (error.response?.status === 404) {
-        throw createError({
-          statusCode: 404,
-          message: "Dataset not found",
-        });
-      }
+    onResponseError: (_error) => {
+      showError({
+        statusCode: 404,
+        message: t("error.notFound"),
+      });
     },
   });
 

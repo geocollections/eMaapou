@@ -27,15 +27,15 @@ defineProps({
       </VRow>
       <VRow no-gutters class="fill-height">
         <VFadeTransition hide-on-leave>
-          <VCol
-            v-if="error"
-            key="detail-error"
-            class="pt-15"
-          >
-            <div>
-              <DetailError :error="error" />
-            </div>
-          </VCol>
+          <!-- <VCol -->
+          <!--   v-if="error" -->
+          <!--   key="detail-error" -->
+          <!--   class="pt-15" -->
+          <!-- > -->
+          <!--   <div> -->
+          <!--     <DetailError :error="error" /> -->
+          <!--   </div> -->
+          <!-- </VCol> -->
           <!-- <v-col v-else-if="loading" key="detail-loading" class="pt-15"> -->
           <!--   <div -->
           <!--     :style="`height: 100%; width: 100%`" -->
@@ -52,7 +52,6 @@ defineProps({
           <!--   </div> -->
           <!-- </v-col> -->
           <VCol
-            v-else
             key="detail"
             class="pt-5"
           >
