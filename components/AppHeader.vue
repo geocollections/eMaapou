@@ -284,6 +284,7 @@ const cssProps = computed(() => {
         <VTabs
           align-tabs="center"
           color="accent"
+          :mandatory="false"
         >
           <VTooltip
             v-for="(item, index) in state.browseTaxon"
@@ -296,6 +297,7 @@ const cssProps = computed(() => {
               <VTab
                 v-bind="tooltipProps"
                 style="min-width: 0px"
+                exact
                 :icon="item.icon"
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
@@ -318,6 +320,7 @@ const cssProps = computed(() => {
                 :icon="item.icon"
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
+                exact
               >
                 <VIcon>{{ item.icon }}</VIcon>
               </VTab>
@@ -337,6 +340,7 @@ const cssProps = computed(() => {
                 :icon="item.icon"
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
+                exact
               >
                 <VIcon>{{ item.icon }}</VIcon>
               </VTab>

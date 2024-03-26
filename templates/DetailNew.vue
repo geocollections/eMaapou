@@ -74,7 +74,7 @@ function closeMobileSearch() {
       </div>
     </div>
   </VNavigationDrawer>
-  <VMain style="min-height: 100vh; padding-top: 48px">
+  <VMain style="min-height: 100vh; padding-top: 88px">
     <div class="fill-height pb-10">
       <slot name="title" />
       <slot />
