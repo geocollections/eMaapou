@@ -50,19 +50,27 @@ $heading-font: "Montserrat", sans-serif;
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
-  color: rgb(var(--v-theme-accent-darken-1)) !important;
+  color: map-get($map: $blue, $key: "base") !important;
 
   .v-icon {
-    color: rgb(var(--v-theme-accent-darken-1)) !important;
+    color: map-get($map: $blue, $key: "base")  !important;
   }
 
   @include transition(color 200ms ease);
 
   &:hover {
-    color: rgb(var(--v-theme-accent-darken-3)) !important;
+    color: map-get($map: $blue, $key: "darken-3")  !important;
     text-decoration: underline;
     .v-icon {
-      color: rgb(var(--v-theme-accent-darken-3)) !important;
+      color: map-get($map: $blue, $key: "darken-3")  !important;
+    }
+  }
+
+  &:visited {
+    color: map-get($map: $purple, $key: "base")  !important;
+    text-decoration: underline;
+    .v-icon {
+      color: map-get($map: $purple, $key: "base")  !important;
     }
   }
 }

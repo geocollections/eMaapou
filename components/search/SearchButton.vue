@@ -16,7 +16,7 @@ export default {
 <template>
   <VBtn
     type="submit"
-    color="warning"
+    color="blue"
     dark
     class="px-3 text-body-1 text-capitalize"
   >

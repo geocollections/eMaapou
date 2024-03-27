@@ -33,6 +33,7 @@ const state = reactive({
   browseLab: BROWSE_LAB_LIST,
   browseTaxon: BROWSE_TAXON_LIST,
   logo: "/logos/emaapou5white.svg",
+  logoOrange: "/logos/emaapou5orange.svg",
   logoCompact: "/logos/emaapou_short.svg",
   services: SERVICES,
   query: (route.query.q as string) ?? "",
@@ -51,8 +52,7 @@ const searchRouteName = computed(() => {
 });
 const cssProps = computed(() => {
   return {
-    "--max-width": `${props.maxWidth}px`,
-    "background-color": getRouteBaseName(route) === "index" ? "transparent" : "rgba(var(--v-theme-accent-darken-1), 0.95)",
+    "background-color": getRouteBaseName(route) === "index" ? "transparent" : "rgba(245, 245, 245, 0.95)",
   };
 });
 </script>
@@ -60,7 +60,7 @@ const cssProps = computed(() => {
 <template>
   <VAppBar
     density="compact"
-    :elevation="0"
+    :elevation="getRouteBaseName(route) === 'index' ? 0 : 2"
     :absolute="getRouteBaseName(route) === 'index'"
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
@@ -78,8 +78,8 @@ const cssProps = computed(() => {
         :height="32"
         contain
         class="px-0 px-sm-3"
-        :src="state.logo"
-        style="vertical-align: middle"
+        :src="getRouteBaseName(route) === 'index' ? state.logo : state.logoOrange"
+        style="vertical-align: middle;"
       />
     </NuxtLink>
     <VToolbarItems class="w-100 mr-md-2">
@@ -88,8 +88,8 @@ const cssProps = computed(() => {
         id="browse_menu_btn"
         aria-label="browse"
         variant="text"
-        color="white"
         class="montserrat"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
@@ -175,7 +175,7 @@ const cssProps = computed(() => {
               height="40"
               :width="$vuetify.display.xs ? 32 : 48"
               elevation="0"
-              :color="isHovering ? 'warning' : 'grey-lighten-2'"
+              :color="isHovering ? 'blue' : 'grey-lighten-2'"
               class="rounded-0"
               variant="flat"
               @click="
@@ -187,7 +187,7 @@ const cssProps = computed(() => {
                 )
               "
             >
-              <VIcon color="accent">
+              <VIcon>
                 {{ icons.mdiMagnify }}
               </VIcon>
             </VBtn>
@@ -202,9 +202,9 @@ const cssProps = computed(() => {
         v-if="$vuetify.display.mdAndUp"
         aria-label="about page"
         variant="text"
-        color="white"
         class="montserrat font-weight-medium"
         style="text-transform: capitalize"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
@@ -214,8 +214,8 @@ const cssProps = computed(() => {
         v-if="$vuetify.display.mdAndUp"
         aria-label="news page"
         variant="text"
-        color="white"
         class="montserrat font-weight-medium"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
         style="text-transform: capitalize"
         :to="localePath({ name: 'news' })"
       >
@@ -226,8 +226,8 @@ const cssProps = computed(() => {
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
         class="montserrat"
-        color="white"
         style="text-transform: capitalize"
       >
         {{ $t("common.services") }}
@@ -265,7 +265,11 @@ const cssProps = computed(() => {
           </VCardActions>
         </VCard>
       </VMenu>
-      <LanguageSwitcher v-if="$vuetify.display.mdAndUp" class="ml-auto" />
+      <LanguageSwitcher
+        v-if="$vuetify.display.mdAndUp"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
+        class="ml-auto"
+      />
       <VBtn
         v-if="!$vuetify.display.mdAndUp"
         variant="text"
@@ -280,7 +284,7 @@ const cssProps = computed(() => {
       </VBtn>
     </VToolbarItems>
     <template v-if="$vuetify.display.mdAndUp && getRouteBaseName(route) !== 'index'" #extension>
-      <div class="border-t border-b bg-grey-lighten-5 w-100">
+      <div class="w-100">
         <VTabs
           align-tabs="center"
           color="accent"
@@ -306,6 +310,7 @@ const cssProps = computed(() => {
               </VTab>
             </template>
           </VTooltip>
+          <VDivider vertical class="my-1" />
           <VTooltip
             v-for="(item, index) in state.browseLab"
             :key="`browse-lab-item-${index}`"
@@ -326,6 +331,7 @@ const cssProps = computed(() => {
               </VTab>
             </template>
           </VTooltip>
+          <VDivider vertical class="my-1" />
           <VTooltip
             v-for="(item, index) in state.browseGeography"
             :key="`browse-geography-item-${index}`"

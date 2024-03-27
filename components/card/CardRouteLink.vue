@@ -17,13 +17,13 @@ const localePath = useLocalePath();
       :to="localePath(route.routeName)"
       class="mx-sm-1 mb-1 mb-sm-2 d-flex"
       :elevation="isHovering ? 2 : 1"
-      :color="isHovering ? 'accent lighten-1' : 'accent'"
+      :color="isHovering ? 'accent-lighten-1' : 'accent'"
     >
       <div class="py-2 d-flex d-sm-block align-center">
         <VIcon
           v-if="$vuetify.display.smAndUp"
           :icon="route.icon"
-          color="accent-lighten-2"
+          color="accent-lighten-3"
           end
         />
         <div
@@ -51,7 +51,7 @@ const localePath = useLocalePath();
       </div>
       <VIcon
         :icon="mdiArrowRight"
-        color="accent-lighten-2"
+        color="accent-lighten-3"
         class="ml-auto my-auto"
         start
       />

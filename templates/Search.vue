@@ -76,7 +76,7 @@ function closeMobileSearch() {
     </VNavigationDrawer>
     <VMain>
       <VContainer
-        class="pt-1 pb-10 px-0"
+        class="py-0 pb-10 px-0"
         style="min-height: 100vh"
         :fluid="true"
       >
@@ -88,7 +88,7 @@ function closeMobileSearch() {
           </VCol>
         </VRow>
         <VRow no-gutters>
-          <VCol class="ml-2">
+          <VCol class="bg-white">
             <slot name="title" />
           </VCol>
           <VCol cols="12">

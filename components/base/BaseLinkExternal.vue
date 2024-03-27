@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiOpenInNew } from "@mdi/js";
+import { mdiArrowTopRight } from "@mdi/js";
 
 defineProps<{
   href?: string | null;
@@ -16,7 +16,7 @@ defineProps<{
     <slot />
     <span style="white-space: nowrap; display: inline-block">
       <slot name="icon">
-        <VIcon class="open-new-icon" size="x-small">{{ mdiOpenInNew }}</VIcon>
+        <VIcon class="open-new-icon" size="x-small">{{ mdiArrowTopRight }}</VIcon>
       </slot>
     </span>
   </a>

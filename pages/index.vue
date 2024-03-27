@@ -316,7 +316,7 @@ function handleSearch() {
                     class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
                     type="submit"
                     variant="elevated"
-                    color="warning"
+                    color="blue"
                   >
                     <VIcon :icon="mdiMagnify" size="large" />
                   </VBtn>

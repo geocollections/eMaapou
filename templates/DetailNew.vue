@@ -23,6 +23,8 @@ const mini = ref(false);
 function closeMobileSearch() {
   showDrawer.value = false;
 }
+
+const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
 </script>
 
 <template>
@@ -33,7 +35,7 @@ function closeMobileSearch() {
     :permanent="!$vuetify.display.smAndDown"
     :temporary="$vuetify.display.smAndDown"
     touchless
-    color="grey-lighten-4"
+    color="grey-lighten-5"
     :rail="mini"
     :rail-width="48"
     :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
@@ -74,7 +76,7 @@ function closeMobileSearch() {
       </div>
     </div>
   </VNavigationDrawer>
-  <VMain style="min-height: 100vh; padding-top: 88px">
+  <VMain style="min-height: 100vh " :style="{ 'padding-top': topPadding }">
     <div class="fill-height pb-10">
       <slot name="title" />
       <slot />

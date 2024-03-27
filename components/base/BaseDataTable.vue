@@ -315,7 +315,7 @@ onMounted(() => {
     box-shadow: none;
   }
   :deep(tbody) > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(0, 0, 0, 0.02);
   }
 
   :deep(th) {

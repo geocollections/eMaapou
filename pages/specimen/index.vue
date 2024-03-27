@@ -144,7 +144,7 @@ useHead({
       <ClientOnly>
         <VTabs
           v-model="currentView"
-          background-color="transparent"
+          bg-color="white"
           color="accent"
           density="compact"
         >
