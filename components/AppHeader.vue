@@ -52,7 +52,7 @@ const searchRouteName = computed(() => {
 });
 const cssProps = computed(() => {
   return {
-    "background-color": getRouteBaseName(route) === "index" ? "transparent" : "rgba(245, 245, 245, 0.95)",
+    "background-color": getRouteBaseName(route) === "index" ? "transparent" : "rgba(0, 0, 0, 1)",
   };
 });
 </script>
@@ -66,7 +66,7 @@ const cssProps = computed(() => {
       'app-bar-full': $vuetify.display.mdAndUp,
       'app-bar-mobile': !$vuetify.display.mdAndUp,
     }"
-    :style="cssProps"
+    :color="getRouteBaseName(route) === 'index' ? 'transparent' : 'grey-darken-3'"
   >
     <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
@@ -89,11 +89,11 @@ const cssProps = computed(() => {
         aria-label="browse"
         variant="text"
         class="montserrat"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
-        <VIcon color="accent-lighten-2" end>
+        <VIcon color="accent" end>
           {{ icons.mdiChevronDown }}
         </VIcon>
       </VBtn>
@@ -204,7 +204,7 @@ const cssProps = computed(() => {
         variant="text"
         class="montserrat font-weight-medium"
         style="text-transform: capitalize"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
@@ -212,28 +212,17 @@ const cssProps = computed(() => {
 
       <VBtn
         v-if="$vuetify.display.mdAndUp"
-        aria-label="news page"
-        variant="text"
-        class="montserrat font-weight-medium"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
-        style="text-transform: capitalize"
-        :to="localePath({ name: 'news' })"
-      >
-        {{ $t("common.news") }}
-      </VBtn>
-      <VBtn
-        v-if="$vuetify.display.mdAndUp"
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
         class="montserrat"
         style="text-transform: capitalize"
       >
         {{ $t("common.services") }}
         <VIcon
           :icon="mdiChevronDown"
-          color="accent-lighten-2"
+          color="accent"
           end
         />
       </VBtn>
@@ -267,7 +256,7 @@ const cssProps = computed(() => {
       </VMenu>
       <LanguageSwitcher
         v-if="$vuetify.display.mdAndUp"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'black'"
+        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
         class="ml-auto"
       />
       <VBtn
@@ -278,13 +267,13 @@ const cssProps = computed(() => {
         style="text-transform: capitalize"
         @click.stop="$emit('toggle:navigationDrawer')"
       >
-        <VIcon color="accent-lighten-2" size="font-size: 24px">
+        <VIcon color="accent" size="font-size: 24px">
           {{ icons.mdiMenu }}
         </VIcon>
       </VBtn>
     </VToolbarItems>
     <template v-if="$vuetify.display.mdAndUp && getRouteBaseName(route) !== 'index'" #extension>
-      <div class="w-100">
+      <div class="w-100 bg-grey-darken-2">
         <VTabs
           align-tabs="center"
           color="accent"
@@ -306,11 +295,17 @@ const cssProps = computed(() => {
                 :label="$t(item.label)"
                 :to="localePath({ name: item.routeName })"
               >
-                <VIcon>{{ item.icon }}</VIcon>
+                <VIcon color="white">
+                  {{ item.icon }}
+                </VIcon>
               </VTab>
             </template>
           </VTooltip>
-          <VDivider vertical class="my-1" />
+          <VDivider
+            vertical
+            color="white"
+            class="my-1"
+          />
           <VTooltip
             v-for="(item, index) in state.browseLab"
             :key="`browse-lab-item-${index}`"
@@ -327,11 +322,17 @@ const cssProps = computed(() => {
                 :to="localePath({ name: item.routeName })"
                 exact
               >
-                <VIcon>{{ item.icon }}</VIcon>
+                <VIcon color="white">
+                  {{ item.icon }}
+                </VIcon>
               </VTab>
             </template>
           </VTooltip>
-          <VDivider vertical class="my-1" />
+          <VDivider
+            vertical
+            color="white"
+            class="my-1"
+          />
           <VTooltip
             v-for="(item, index) in state.browseGeography"
             :key="`browse-geography-item-${index}`"
@@ -348,7 +349,9 @@ const cssProps = computed(() => {
                 :to="localePath({ name: item.routeName })"
                 exact
               >
-                <VIcon>{{ item.icon }}</VIcon>
+                <VIcon color="white">
+                  {{ item.icon }}
+                </VIcon>
               </VTab>
             </template>
           </VTooltip>

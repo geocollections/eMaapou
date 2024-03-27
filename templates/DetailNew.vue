@@ -36,6 +36,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
     :temporary="$vuetify.display.smAndDown"
     touchless
     color="grey-lighten-5"
+    elevation="2"
     :rail="mini"
     :rail-width="48"
     :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"

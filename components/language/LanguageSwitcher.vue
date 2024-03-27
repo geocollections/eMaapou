@@ -20,13 +20,13 @@ defineProps({
     <VIcon
       :icon="mdiWeb"
       start
-      color="accent-lighten-2"
+      color="accent"
     />
     {{ $i18n.localeProperties.name }}
     <VIcon
       :icon="mdiChevronDown"
       end
-      color="accent-lighten-2"
+      color="accent"
     />
     <VMenu
       activator="#lang_switch_btn"

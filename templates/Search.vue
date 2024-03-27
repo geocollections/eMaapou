@@ -31,6 +31,7 @@ function closeMobileSearch() {
       width="320"
       touchless
       color="grey-lighten-5"
+      elevation="2"
       :rail="mini"
       :rail-width="48"
       :location="display.smAndDown.value ? 'bottom' : 'left'"

@@ -3,11 +3,11 @@ import { mdiChevronRight } from "@mdi/js";
 
 const localePath = useLocalePath();
 
-const logo = "/logos/emaapou5white.svg";
+const logo = "/logos/emaapou5orange.svg";
 const imageLinks = [
   {
     href: "https://geocollections.info",
-    src: "/logos/sarv_logo1b.svg",
+    src: "/logos/sarv_logo.svg",
     title: "footerLinks.sarv",
     alt: "footerLinks.sarv",
     format: null,
@@ -16,7 +16,7 @@ const imageLinks = [
   },
   {
     href: "https://natarc.ut.ee",
-    src: "/logos/natarclogovalge1.png",
+    src: "/logos/natarc_logo_black.svg",
     title: "footerLinks.natarc",
     alt: "footerLinks.natarc",
     format: "webp",
@@ -25,7 +25,7 @@ const imageLinks = [
   },
   {
     href: "https://taltech.ee/geoloogia-instituut",
-    src: "/logos/tutaltech2.png",
+    src: "/logos/taltech_black.png",
     title: "footerLinks.ttu",
     alt: "footerLinks.ttu",
     format: "webp",
@@ -34,7 +34,7 @@ const imageLinks = [
   },
   {
     href: "http://www.natmuseum.ut.ee/et/content/geoloogiakogud",
-    src: "/logos/TY_logo_ring_jooneta_valge.png",
+    src: "/logos/Tartu_Ülikool_logo.png",
     title: "footerLinks.tu",
     alt: "footerLinks.tu",
     format: "webp",
@@ -43,7 +43,7 @@ const imageLinks = [
   },
   {
     href: "https://loodusmuuseum.ee/geoloogilised-kogud",
-    src: "/logos/ELM_logo_white1.png",
+    src: "/logos/eesti_loodusmuuseum.png",
     title: "footerLinks.elm",
     alt: "footerLinks.elm",
     format: "webp",
@@ -182,7 +182,7 @@ const routes = [
 </script>
 
 <template>
-  <div class="bg-tertiary">
+  <div class="bg-grey-lighten-5 border-t">
     <VContainer :fluid="$vuetify.display.lgAndDown">
       <VRow no-gutters>
         <VCol cols="12" lg="auto">
@@ -203,12 +203,11 @@ const routes = [
                 <VIcon
                   class="align-self-center"
                   :icon="mdiChevronRight"
-                  color="white"
                   size="x-small"
                 />
                 <NuxtLink
                   :to="localePath(link.routeName)"
-                  class="text-body-2 text-decoration-none text-grey-lighten-2 d-block ml-1"
+                  class="text-body-2 text-decoration-none text-grey-darken-2 d-block ml-1"
                   style="font-weight: 500 !important"
                 >
                   {{ $t(link.text) }}
@@ -217,7 +216,7 @@ const routes = [
             </div>
             <div class="mx-4 mb-6">
               <div
-                class="section-title text-white font-weight-medium montserrat mb-4"
+                class="section-title font-weight-medium montserrat mb-4"
               >
                 {{ $t("landing.searchRoutes") }}
               </div>
@@ -231,12 +230,11 @@ const routes = [
                   <VIcon
                     class="align-self-center"
                     :icon="mdiChevronRight"
-                    color="white"
                     size="x-small"
                   />
                   <NuxtLink
                     :to="localePath(link.routeName)"
-                    class="text-body-2 text-decoration-none text-grey-lighten-2 d-block ml-1"
+                    class="text-body-2 text-decoration-none text-grey-darken-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.text) }}
@@ -246,7 +244,7 @@ const routes = [
             </div>
             <div class="ml-3 mb-6">
               <div
-                class="section-title text-white font-weight-medium montserrat mb-4"
+                class="section-title font-weight-medium montserrat mb-4"
               >
                 {{ $t("common.links") }}
               </div>
@@ -260,12 +258,11 @@ const routes = [
                   <VIcon
                     class="align-self-center"
                     :icon="mdiChevronRight"
-                    color="white"
                     size="x-small"
                   />
                   <a
                     :href="link.url"
-                    class="text-body-2 text-decoration-none text-grey-lighten-2 d-block ml-1"
+                    class="text-body-2 text-decoration-none text-grey-darken-2 d-block ml-1"
                     style="font-weight: 500 !important"
                   >
                     {{ $t(link.name) }}
@@ -278,7 +275,7 @@ const routes = [
         <VCol>
           <div class="ml-3 mb-6">
             <div
-              class="section-title text-white font-weight-medium montserrat mb-4"
+              class="section-title font-weight-medium montserrat mb-4"
             >
               {{ $t("common.partners") }}
             </div>
@@ -310,14 +307,14 @@ const routes = [
         </VCol>
       </VRow>
     </VContainer>
-    <VContainer fluid style="background: #282828 !important">
+    <VContainer fluid class="border-t">
       <VContainer :fluid="$vuetify.display.lgAndDown">
         <VRow no-gutters>
           <VCol cols="12" align-self="center">
             <div class="text-center d-flex justify-center align-center">
               <div style="max-width: 700px">
                 <I18nT
-                  class="text-body-2 text-grey-lighten-1"
+                  class="text-body-2 "
                   keypath="footer"
                   scope="global"
                   tag="div"
@@ -326,7 +323,7 @@ const routes = [
                     v-for="(item, index) in textLinks"
                     :key="index"
                     :href="item.href"
-                    class="font-weight-bold text-grey-lighten-2 text-decoration-none"
+                    class="font-weight-bold text-blue text-decoration-none"
                   >
                     {{ item.text }}
                   </a>
@@ -341,7 +338,7 @@ const routes = [
           >
             <a href="https://github.com/geocollections/eMaapou">
               <NuxtImg
-                src="/logos/GitHub-Mark-Light-64px.png"
+                src="/logos/github-mark.png"
                 alt="GitHub"
                 format="webp"
                 class="github-logo py-1 py-sm-0 px-3"
