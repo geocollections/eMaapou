@@ -279,7 +279,7 @@ const cssProps = computed(() => {
         </VIcon>
       </VBtn>
     </VToolbarItems>
-    <template v-if="$vuetify.display.mdAndUp" #extension>
+    <template v-if="$vuetify.display.mdAndUp && getRouteBaseName(route) !== 'index'" #extension>
       <div class="border-t border-b bg-grey-lighten-5 w-100">
         <VTabs
           align-tabs="center"
@@ -370,7 +370,7 @@ const cssProps = computed(() => {
 }
 
 .app-bar-mobile :deep(.v-toolbar__content) {
-  max-width: var(--max-width);
+  // max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
   padding-right: 0px;
@@ -384,7 +384,7 @@ const cssProps = computed(() => {
 }
 
 .app-bar-full :deep(.v-toolbar__content) {
-  max-width: var(--max-width);
+  // max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
   // padding-right: 0px;
