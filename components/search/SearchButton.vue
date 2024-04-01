@@ -16,9 +16,9 @@ export default {
 <template>
   <VBtn
     type="submit"
-    color="blue"
-    dark
-    class="px-3 text-body-1 text-capitalize"
+    color="blue-darken-1"
+    variant="flat"
+    class="px-3 text-capitalize"
   >
     <VIcon start>
       {{ icons.mdiMagnify }}

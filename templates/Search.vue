@@ -31,26 +31,31 @@ function closeMobileSearch() {
       width="300"
       touchless
       :rail="mini"
-      :rail-width="48"
       :location="display.smAndDown.value ? 'bottom' : 'left'"
     >
       <div style="height: 100%" tile>
         <VList
           v-if="!display.smAndDown.value"
           density="compact"
-          variant="plain"
-          class="pa-0"
+          class="pb-1"
+          nav
         >
-          <VListItem :ripple="false" @click="mini = !mini">
+          <VListItem
+            :ripple="false"
+            slim
+            @click="mini = !mini"
+          >
             <template #prepend>
               <VIcon
                 :icon="mdiChevronDoubleLeft"
                 :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
               />
             </template>
-            <div class="montserrat font-weight-medium text--secondary">
-              {{ $t("common.hideFilters") }}
-            </div>
+            <template #title>
+              <div class="montserrat font-weight-medium ">
+                {{ $t("common.hideFilters") }}
+              </div>
+            </template>
           </VListItem>
         </VList>
         <div v-else class="text-h6 py-2 pl-2">
@@ -58,7 +63,7 @@ function closeMobileSearch() {
         </div>
         <div v-show="mini">
           <div
-            class="montserrat font-weight-medium text--secondary ml-auto mr-auto"
+            class="montserrat font-weight-medium text-body-2 ml-auto mr-auto"
             style="
               transform: scale(-1, -1);
               white-space: nowrap;
@@ -68,7 +73,7 @@ function closeMobileSearch() {
             {{ $t("common.showFilters") }}
           </div>
         </div>
-        <div v-show="!mini">
+        <div v-show="!mini" class="mt-2">
           <slot name="form" :close-mobile-search="closeMobileSearch" />
         </div>
       </div>
