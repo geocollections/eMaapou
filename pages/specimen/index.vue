@@ -69,6 +69,7 @@ async function refreshData() {
 }
 
 async function handleUpdate() {
+  options.value.page = 1;
   setQueryParamsFromState();
   await refreshData();
 }

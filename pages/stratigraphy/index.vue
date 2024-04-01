@@ -39,6 +39,7 @@ function setQueryParamsFromState() {
 }
 
 async function handleUpdate() {
+  options.value.page = 1;
   setQueryParamsFromState();
   await refreshStratigraphies();
   resultsCount.value = data.value?.response.numFound ?? 0;
