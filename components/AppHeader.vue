@@ -304,7 +304,6 @@ const cssProps = computed(() => {
           <VDivider
             vertical
             color="white"
-            class="my-1"
           />
           <VTooltip
             v-for="(item, index) in state.browseLab"
@@ -331,7 +330,6 @@ const cssProps = computed(() => {
           <VDivider
             vertical
             color="white"
-            class="my-1"
           />
           <VTooltip
             v-for="(item, index) in state.browseGeography"
