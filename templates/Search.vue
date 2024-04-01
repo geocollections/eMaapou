@@ -28,10 +28,8 @@ function closeMobileSearch() {
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
       :permanent="!display.smAndDown.value"
       :temporary="display.smAndDown.value"
-      width="320"
+      width="300"
       touchless
-      color="grey-lighten-5"
-      elevation="2"
       :rail="mini"
       :rail-width="48"
       :location="display.smAndDown.value ? 'bottom' : 'left'"

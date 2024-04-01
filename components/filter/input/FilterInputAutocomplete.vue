@@ -139,6 +139,17 @@ function refreshSuggestions() {
   hydrateSelected();
   refresh();
 }
+
+const input = ref();
+
+function handleOpen(value) {
+  if (!value.value)
+    return;
+
+  nextTick(() => {
+    input.value.focus();
+  });
+}
 </script>
 
 <template>
@@ -146,9 +157,10 @@ function refreshSuggestions() {
     bg-color="transparent"
     elevation="0"
     :rounded="0"
+    @group:selected="handleOpen"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium border-b"
+      class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px;"
     >
       {{ title }}
@@ -193,10 +205,11 @@ function refreshSuggestions() {
       <div class="my-1">
         <VTextField
           v-if="showFilter"
+          ref="input"
           v-model="query"
           variant="underlined"
           hide-details
-          density="compact"
+          density="comfortable"
           class="mb-2"
           :placeholder="$t('filters.filter')"
         />
@@ -261,9 +274,10 @@ function refreshSuggestions() {
 
 <style scoped lang="scss">
 :deep(.v-expansion-panel-text__wrapper) {
-  padding-right: 16px;
-  padding-left: 16px;
+  padding-right: 8px;
+  padding-left: 8px;
   padding-bottom: 8px;
+  padding-top: 0px;
 }
 
 .selected-item:hover {

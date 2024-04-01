@@ -52,7 +52,11 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
     <VForm @submit.prevent="handleUpdate">
       <InputSearch v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
-      <VExpansionPanels variant="accordion" multiple>
+      <VExpansionPanels
+        class="px-2"
+        variant="accordion"
+        multiple
+      >
         <FilterInputText
           v-model="filters.name.value"
           :title="$t('filters.drillcoreName')"

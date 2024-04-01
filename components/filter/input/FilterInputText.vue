@@ -43,6 +43,17 @@ function handleChange(i: number) {
   emit("update:model-value", selectedItems.value);
   // if (!panel.value.isActive) panel.value.toggle();
 }
+
+const input = ref();
+
+function handleOpen(value) {
+  if (!value.value)
+    return;
+
+  nextTick(() => {
+    input.value.focus();
+  });
+}
 </script>
 
 <template>
@@ -50,10 +61,11 @@ function handleChange(i: number) {
     bg-color="transparent"
     elevation="0"
     :rounded="0"
+    @group:selected="handleOpen"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
+      style="min-height: 40px;"
     >
       {{ title }}
     </VExpansionPanelTitle>
@@ -89,13 +101,13 @@ function handleChange(i: number) {
     <VExpansionPanelText
       class="py-0"
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
     >
       <VTextField
+        ref="input"
         v-model="internalValue"
         variant="underlined"
         hide-details
-        density="compact"
+        density="comfortable"
         :placeholder="$t('filters.filter')"
         @keydown.enter="handleAdd"
       />
@@ -105,9 +117,10 @@ function handleChange(i: number) {
 
 <style scoped lang="scss">
 :deep(.v-expansion-panel-text__wrapper) {
-  padding-right: 16px;
-  padding-left: 16px;
+  padding-right: 8px;
+  padding-left: 8px;
   padding-bottom: 8px;
+  padding-top:0;
 }
 
 .selected-item:hover {

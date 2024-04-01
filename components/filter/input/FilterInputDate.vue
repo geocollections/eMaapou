@@ -86,8 +86,8 @@ const maxDate = computed(() => {
     :rounded="0"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
+      style="min-height: 40px;"
     >
       {{ title }}
     </VExpansionPanelTitle>

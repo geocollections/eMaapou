@@ -231,7 +231,11 @@ function handleReset() {
   <VForm @submit.prevent="handleSubmit">
     <InputSearch v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
-    <VExpansionPanels variant="accordion" multiple>
+    <VExpansionPanels
+      variant="accordion"
+      class="px-2"
+      multiple
+    >
       <FilterInputHierarchy
         ref="filterStratigraphy"
         v-model="filters.stratigraphy.value"

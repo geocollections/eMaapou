@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="d-sm-flex align-center my-4">
+  <div class="d-sm-flex align-center my-8 mx-2">
     <BaseHeader :title="title" :icon="icon" />
     <VDivider v-if="$vuetify.display.smAndUp" vertical />
     <div class="ml-sm-3 text-h6">

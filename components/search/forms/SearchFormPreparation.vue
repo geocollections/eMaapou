@@ -45,7 +45,11 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
     <VForm @submit.prevent="handleUpdate">
       <InputSearch v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
-      <VExpansionPanels variant="accordion" multiple>
+      <VExpansionPanels
+        class="px-2"
+        variant="accordion"
+        multiple
+      >
         <FilterInputText
           v-model="filters.number.value"
           :title="$t('filters.sampleNumber')"

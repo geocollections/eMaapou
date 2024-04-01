@@ -7,10 +7,10 @@ const props = defineProps<{
 <template>
   <div
     style="word-break: normal; flex-wrap: wrap"
-    class="border-b bg-white pt-4 px-4 w-100"
+    class="border-b bg-white px-4 w-100"
   >
-    <div class="pb-4">
-      <div class="d-flex align-start font-weight-medium text-h4">
+    <div class="py-8 px-2">
+      <div class="d-flex align-start font-weight-medium text-h3">
         <slot>
           {{ title }}
         </slot>

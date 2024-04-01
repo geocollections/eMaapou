@@ -72,6 +72,17 @@ const valueString = computed(() => {
 function handleRemove() {
   emit("update:model-value", [null, null]);
 }
+
+const input = ref();
+
+function handleOpen(value) {
+  if (!value.value)
+    return;
+
+  nextTick(() => {
+    input.value.focus();
+  });
+}
 </script>
 
 <template>
@@ -79,10 +90,11 @@ function handleRemove() {
     style="background-color: transparent"
     elevation="0"
     :rounded="0"
+    @group:selected="handleOpen"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray !important"
+      class="py-1 pl-4 pr-1 text-body-2 font-weight-medium"
+      style="min-height: 40px;"
     >
       {{ title }}
     </VExpansionPanelTitle>
@@ -113,13 +125,14 @@ function handleRemove() {
       <VRow no-gutters>
         <VCol cols="6" class="pl-r">
           <VTextField
+            ref="input"
             :model-value="modelValue[0]"
             color="primary-darken-3"
             :label="fieldLabels.min"
             hide-details
             single-line
             variant="underlined"
-            density="compact"
+            density="comfortable"
             type="number"
             :step="step"
             @update:model-value="handleInput($event, true)"
@@ -135,7 +148,7 @@ function handleRemove() {
             hide-details
             single-line
             variant="underlined"
-            density="compact"
+            density="comfortable"
             type="number"
             :step="step"
             @update:model-value="handleInput($event, false)"

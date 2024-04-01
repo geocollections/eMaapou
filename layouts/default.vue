@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useDisplay } from "vuetify";
+import { mdiChevronDoubleLeft, mdiChevronDoubleRight } from "@mdi/js";
+import {
+  BROWSE_GEOLOGY_LIST,
+  BROWSE_LAB_LIST,
+  BROWSE_TAXON_LIST,
+  SERVICES,
+} from "~/constants";
 
 const drawer = ref(false);
 
@@ -8,19 +15,92 @@ watchEffect(() => {
   if (mdAndUp)
     drawer.value = false;
 });
+
+const railDrawer = ref(true);
+const localePath = useLocalePath();
+
+const { t } = useI18n({ useScope: "local" });
 </script>
 
 <template>
   <VApp>
-    <AppHeader :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
+    <AppBar :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
       v-if="!mdAndUp"
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
+    <VNavigationDrawer
+      v-else
+      app
+      :rail="railDrawer"
+      color="grey-lighten-5"
+      elevation="2"
+      permanent
+      :width="200"
+    >
+      <VList density="compact" nav>
+        <VListItem
+          :title="t('closeSidebar')"
+          @click="railDrawer = !railDrawer"
+        >
+          <template #prepend>
+            <VIcon v-if="railDrawer">
+              {{ mdiChevronDoubleRight }}
+            </VIcon>
+            <VIcon v-else>
+              {{ mdiChevronDoubleLeft }}
+            </VIcon>
+          </template>
+        </VListItem>
+        <VDivider class="mb-1" />
+        <VListItem
+          v-for="(item, index) in BROWSE_TAXON_LIST"
+          :key="index"
+          link
+          color="accent"
+          :to="localePath({ name: item.routeName })"
+        >
+          <template #prepend>
+            <VIcon>{{ item.icon }}</VIcon>
+          </template>
+          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
+        </VListItem>
+        <VDivider class="mb-1" />
+        <VListItem
+          v-for="(item, index) in BROWSE_LAB_LIST"
+          :key="index"
+          link
+          color="accent"
+          :to="localePath({ name: item.routeName })"
+        >
+          <template #prepend>
+            <VIcon>{{ item.icon }}</VIcon>
+          </template>
+          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
+        </VListItem>
+        <VDivider class="mb-1" />
+        <VListItem
+          v-for="(item, index) in BROWSE_GEOLOGY_LIST"
+          :key="index"
+          link
+          color="accent"
+          :to="localePath({ name: item.routeName })"
+        >
+          <template #prepend>
+            <VIcon>{{ item.icon }}</VIcon>
+          </template>
+          <VListItemTitle>{{ $t(item.label) }}</VListItemTitle>
+        </VListItem>
+      </VList>
+    </VNavigationDrawer>
     <slot />
-    <ClientOnly>
-      <CookieConsent />
-    </ClientOnly>
   </VApp>
 </template>
+
+<i18n lang="yaml">
+et:
+  closeSidebar: "Peida menüü"
+en:
+  closeSidebar: "Close menu"
+</i18n>

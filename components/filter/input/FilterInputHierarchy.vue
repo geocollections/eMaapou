@@ -218,6 +218,17 @@ function handleListEnd(isIntersecting: boolean) {
   autocompletePage.value++;
   refreshAutocomplete();
 }
+
+const input = ref();
+
+function handleOpen(value) {
+  if (!value.value)
+    return;
+
+  nextTick(() => {
+    input.value.focus();
+  });
+}
 </script>
 
 <template>
@@ -225,9 +236,10 @@ function handleListEnd(isIntersecting: boolean) {
     bg-color="transparent"
     elevation="0"
     :rounded="0"
+    @group:selected="handleOpen"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium border-b"
+      class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px;"
     >
       {{ title }}
@@ -269,11 +281,12 @@ function handleListEnd(isIntersecting: boolean) {
       color="white"
     >
       <VAutocomplete
-        class="mx-3"
+        ref="input"
+        class="mx-1"
         :model-value="null"
         :search="query"
         hide-details
-        density="compact"
+        density="comfortable"
         :item-title="locale === 'et' ? 'name.et' : 'name.en'"
         item-value="id"
         variant="underlined"
@@ -289,7 +302,7 @@ function handleListEnd(isIntersecting: boolean) {
           <div v-intersect="handleListEnd" />
         </template>
       </VAutocomplete>
-      <ul class="ml-2">
+      <ul class="ml-1">
         <TreeItem
           v-for="(node, index) in tree"
           :key="`tree-item-${index}`"
@@ -309,6 +322,7 @@ function handleListEnd(isIntersecting: boolean) {
 :deep(.v-expansion-panel-text__wrapper) {
   padding-left: 0;
   padding-right: 0;
+  padding-top: 0;
 }
 .checkbox {
   accent-color: rgb(var(--v-theme-accent));

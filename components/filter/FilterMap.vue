@@ -77,7 +77,7 @@ const valueString = computed(() => {
   >
     <VExpansionPanelTitle
       class="py-1 pl-4 pr-1 font-weight-medium"
-      style="min-height: 40px; border-bottom: 1px solid lightgray"
+      style="min-height: 40px"
     >
       {{ $t("filters.map") }}
     </VExpansionPanelTitle>

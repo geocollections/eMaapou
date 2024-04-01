@@ -58,7 +58,11 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
     <VForm @submit.prevent="handleUpdate">
       <InputSearch v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
-      <VExpansionPanels variant="accordion" multiple>
+      <VExpansionPanels
+        variant="accordion"
+        class="px-2"
+        multiple
+      >
         <FilterInputAutocomplete
           ref="filterLocality"
           v-model="filters.locality.value"

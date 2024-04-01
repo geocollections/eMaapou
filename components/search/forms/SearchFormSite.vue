@@ -117,7 +117,11 @@ function handleUpdate() {
     <VForm @submit.prevent="handleUpdate">
       <InputSearch v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
-      <VExpansionPanels variant="accordion" multiple>
+      <VExpansionPanels
+        variant="accordion"
+        class="px-2"
+        multiple
+      >
         <FilterInputText
           v-model="filters.name.value"
           :title="$t('filters.name')"

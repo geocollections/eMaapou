@@ -190,7 +190,7 @@ function valueString(value: ParameterValue["value"]) {
     :rounded="0"
   >
     <VExpansionPanelTitle
-      class="py-1 pl-4 pr-1 font-weight-medium border-b"
+      class="py-1 pl-4 pr-1 font-weight-medium text-body-2"
       style="min-height: 40px; "
     >
       {{ label }}

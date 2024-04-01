@@ -23,11 +23,7 @@ const emit = defineEmits(["update:modelValue"]);
   >
     <template #label>
       <div
-        class="font-weight-medium text-body-1"
-        style="
-          color: rgba(0, 0, 0, 0.87) !important;
-          font-size: 0.9375rem !important;
-        "
+        class="font-weight-medium text-body-2 "
       >
         {{ label }}
       </div>

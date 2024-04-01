@@ -363,7 +363,11 @@ function handleSubmit() {
         :label="$t('filters.hasCoordinates')"
         @update:model-value="handleUpdate"
       />
-      <VExpansionPanels variant="accordion" multiple>
+      <VExpansionPanels
+        variant="accordion"
+        class="px-2"
+        multiple
+      >
         <FilterInputText
           v-model="filters.number.value"
           :title="$t('filters.sampleNumber')"

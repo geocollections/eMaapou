@@ -251,7 +251,6 @@ onMounted(() => {
             </VCol>
           </VRow>
         </div>
-        <VDivider />
       </template>
       <template v-if="!onlyTable" #bottom="{ pageCount }">
         <VDivider />
@@ -315,7 +314,7 @@ onMounted(() => {
     box-shadow: none;
   }
   :deep(tbody) > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: rgba(0, 0, 0, 0.03);
   }
 
   :deep(th) {
@@ -326,6 +325,9 @@ onMounted(() => {
     &.sortable {
       white-space: nowrap;
     }
+  }
+  :deep(td) {
+    border-bottom: none !important ;
   }
 }
 .v-data-table[can-scroll-right] {

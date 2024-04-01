@@ -88,7 +88,7 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
       <InputSearch v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VExpansionPanels
-        v-model="test"
+        class="px-2"
         variant="accordion"
         multiple
       >
