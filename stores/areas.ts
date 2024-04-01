@@ -1,6 +1,5 @@
 import { z } from "zod";
 import type { RouteLocation } from "vue-router";
-import { AREA } from "~/constants";
 
 import type { IdListFilter, TextListFilter } from "~/composables/useFilter";
 
