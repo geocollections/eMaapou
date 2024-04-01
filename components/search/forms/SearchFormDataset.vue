@@ -133,9 +133,10 @@ async function hydrateParameter(values: string[]) {
 
 <template>
   <div>
-    <VForm @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleUpdate">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
+      <VDivider class="mx-2" />
       <VExpansionPanels
         variant="accordion"
         class="px-2"
@@ -179,6 +180,7 @@ async function hydrateParameter(values: string[]) {
           @update:model-value="handleUpdate"
         />
       </VExpansionPanels>
+      <VDivider class="mx-2" />
     </VForm>
   </div>
 </template>

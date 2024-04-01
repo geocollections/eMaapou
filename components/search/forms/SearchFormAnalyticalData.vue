@@ -253,9 +253,10 @@ async function suggestParameters({
 </script>
 
 <template>
-  <VForm @submit.prevent="handleSubmit">
+  <VForm class="pb-10" @submit.prevent="handleSubmit">
     <SearchFormInput v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
+    <VDivider class="mx-2" />
     <VExpansionPanels
       variant="accordion"
       class="px-2"
@@ -370,5 +371,6 @@ async function suggestParameters({
         @update:model-value="handleUpdate"
       />
     </VExpansionPanels>
+    <VDivider class="mx-2" />
   </VForm>
 </template>

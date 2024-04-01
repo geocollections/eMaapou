@@ -101,9 +101,8 @@ function handleOpen(value) {
     <div
       v-if="modelValue[0] !== null || modelValue[1] !== null"
       class="bg-white"
-      style="border-bottom: 1px solid lightgray !important"
     >
-      <div class="d-flex py-1 pl-4 pr-2">
+      <div class="d-flex selected-item py-1 px-2">
         <span>
           <input
             type="checkbox"
@@ -120,10 +119,9 @@ function handleOpen(value) {
     <VExpansionPanelText
       class="pt-1"
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
     >
       <VRow no-gutters>
-        <VCol cols="6" class="pl-r">
+        <VCol cols="6" class="">
           <VTextField
             ref="input"
             :model-value="modelValue[0]"
@@ -131,8 +129,8 @@ function handleOpen(value) {
             :label="fieldLabels.min"
             hide-details
             single-line
-            variant="underlined"
-            density="comfortable"
+            variant="outlined"
+            density="compact"
             type="number"
             :step="step"
             @update:model-value="handleInput($event, true)"
@@ -147,8 +145,8 @@ function handleOpen(value) {
             :label="fieldLabels.max"
             hide-details
             single-line
-            variant="underlined"
-            density="comfortable"
+            variant="outlined"
+            density="compact"
             type="number"
             :step="step"
             @update:model-value="handleInput($event, false)"
@@ -163,15 +161,16 @@ function handleOpen(value) {
 
 <style lang="scss" scoped>
 :deep(.v-expansion-panel-text__wrapper) {
-  padding-right: 16px;
-  padding-left: 16px;
+  padding-right: 8px;
+  padding-left: 8px;
   padding-bottom: 8px;
 }
 .v-text-field {
   padding-top: 0px;
   margin-top: 0px;
 }
-.checkbox {
-  accent-color: var(--v-accent-base);
+.selected-item:hover {
+  background-color: #eeeeee;
+  cursor: pointer;
 }
 </style>

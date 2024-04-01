@@ -80,7 +80,6 @@ async function handleAddSiblings() {
           <input
             :id="`checkbox-${node.id}`"
             ref="checkbox"
-            class="checkbox"
             type="checkbox"
             :checked="selected || disabled"
             :disabled="disabled || node.count < 1"
@@ -141,10 +140,6 @@ async function handleAddSiblings() {
 </template>
 
 <style scoped lang="scss">
-.checkbox {
-  accent-color: rgb(var(--v-theme-accent));
-}
-
 .child-node {
   &:before {
     content: "";

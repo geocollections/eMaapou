@@ -42,9 +42,10 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
 
 <template>
   <div>
-    <VForm @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleUpdate">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
+      <VDivider class="mx-2" />
       <VExpansionPanels
         class="px-2"
         variant="accordion"
@@ -86,6 +87,7 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
           @update:model-value="handleUpdate"
         />
       </VExpansionPanels>
+      <VDivider class="mx-2" />
     </VForm>
   </div>
 </template>

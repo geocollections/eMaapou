@@ -94,12 +94,11 @@ const maxDate = computed(() => {
     <div
       v-if="internalValue.length > 0"
       class="bg-white"
-      style="border-bottom: 1px solid lightgray !important"
     >
       <div
         v-for="(item, i) in internalValue"
         :key="i"
-        class="d-flex py-1 selected-item pl-4 pr-2"
+        class="d-flex selected-item px-2"
         @click="handleChange(i)"
       >
         <span>
@@ -120,7 +119,7 @@ const maxDate = computed(() => {
     </div>
     <VExpansionPanelText
       color="white"
-      style="border-bottom: 1px solid lightgray !important"
+      :class="{ 'border-t': internalValue.length > 0 }"
     >
       <VDatePicker
         :model-value="currentDatePickerValue"

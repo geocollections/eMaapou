@@ -72,12 +72,11 @@ function handleOpen(value) {
     <div
       v-if="selectedItems.length > 0"
       class="bg-white"
-      style="border-bottom: 1px solid lightgray !important"
     >
       <div
         v-for="(item, i) in selectedItems"
         :key="i"
-        class="d-flex py-1 selected-item pl-4 pr-2"
+        class="d-flex py-1 selected-item px-2"
         @click="handleChange(i)"
       >
         <span>
@@ -99,18 +98,28 @@ function handleOpen(value) {
       </div>
     </div>
     <VExpansionPanelText
-      class="py-0"
+      class="py-2 text-right"
       color="white"
     >
       <VTextField
         ref="input"
         v-model="internalValue"
-        variant="underlined"
+        variant="outlined"
         hide-details
-        density="comfortable"
+        density="compact"
         :placeholder="$t('filters.filter')"
         @keydown.enter="handleAdd"
       />
+      <VBtn
+        class="mt-2"
+        color="accent"
+        variant="tonal"
+        size="small"
+        :disabled="internalValue.length < 1"
+        @click="handleAdd"
+      >
+        {{ $t("filter.add") }}
+      </VBtn>
     </VExpansionPanelText>
   </VExpansionPanel>
 </template>

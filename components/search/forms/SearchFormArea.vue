@@ -41,40 +41,40 @@ const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
 </script>
 
 <template>
-  <div>
-    <VForm @submit.prevent="handleUpdate">
-      <SearchFormInput v-model="query" />
-      <SearchActions class="mb-3" @click="handleReset" />
-      <VExpansionPanels
-        variant="accordion"
-        class="px-2"
-        multiple
-      >
-        <FilterInputText
-          v-model="filters.name.value"
-          :title="$t('filters.name')"
-          value="name"
-          @update:model-value="handleUpdate"
-        />
-        <FilterInputAutocomplete
-          ref="filterCounty"
-          v-model="filters.county.value"
-          :title="$t('filters.county')"
-          :query-function="suggestCounty"
-          :hydration-function="hydrateCounty"
-          value="county"
-          @update:model-value="handleUpdate"
-        />
-        <FilterInputAutocomplete
-          ref="filterType"
-          v-model="filters.type.value"
-          :title="$t('filters.type')"
-          :query-function="suggestType"
-          :hydration-function="hydrateType"
-          value="type"
-          @update:model-value="handleUpdate"
-        />
-      </VExpansionPanels>
-    </VForm>
-  </div>
+  <VForm class="pb-10" @submit.prevent="handleUpdate">
+    <SearchFormInput v-model="query" />
+    <SearchActions class="mb-3" @click="handleReset" />
+    <VDivider class="mx-2" />
+    <VExpansionPanels
+      variant="accordion"
+      class="px-2"
+      multiple
+    >
+      <FilterInputText
+        v-model="filters.name.value"
+        :title="$t('filters.name')"
+        value="name"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterCounty"
+        v-model="filters.county.value"
+        :title="$t('filters.county')"
+        :query-function="suggestCounty"
+        :hydration-function="hydrateCounty"
+        value="county"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterType"
+        v-model="filters.type.value"
+        :title="$t('filters.type')"
+        :query-function="suggestType"
+        :hydration-function="hydrateType"
+        value="type"
+        @update:model-value="handleUpdate"
+      />
+    </VExpansionPanels>
+    <VDivider class="mx-2" />
+  </VForm>
 </template>

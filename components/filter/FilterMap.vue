@@ -84,9 +84,8 @@ const valueString = computed(() => {
     <div
       v-if="modelValue !== null"
       class="bg-white"
-      style="border-bottom: 1px solid lightgray !important"
     >
-      <div class="d-flex py-1 pl-4 pr-2">
+      <div class="d-flex selected-item py-1 px-2">
         <span>
           <input
             type="checkbox"
@@ -103,14 +102,11 @@ const valueString = computed(() => {
       </div>
     </div>
     <VExpansionPanelText>
-      <div class="pa-0" style="border-bottom: 1px solid lightgray !important">
+      <div class="pa-0">
         <MapSearchNew
           :model-value="modelValue"
           @update:model-value="$emit('update:model-value', $event)"
         />
-        <!-- <map-search v-bind="$attrs" :value="value" :markers="mapMarkers" :invalidate-size="show" activate-search -->
-        <!--   gps-enabled :show-links="false" height="350px" :gesture-handling="$vuetify.display.smAndDown" -->
-        <!--   @update="$emit('update')" @input="$emit('input', $event)" /> -->
       </div>
     </VExpansionPanelText>
   </VExpansionPanel>

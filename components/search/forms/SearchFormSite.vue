@@ -37,86 +37,14 @@ function handleUpdate() {
     emit("update");
   });
 }
-// export default defineComponent({
-//   name: "SearchFormSite",
-//   components: {
-//     SearchActions,
-//     FilterInputText,
-//     FilterMap,
-//     InputSearch,
-//     FilterInputAutocompleteNew,
-//   },
-//   setup(_props, { emit }) {
-//     const hydrateFilter = useHydrateFilterNew();
-//     const hydrateStatic = useHydrateStatic();
-//     const hydrate = useHydrate();
-//     const hydrateProject = hydrateStatic(filters.value.project, query, {
-//       pivot: ["project_id", "project_name", "project_name_en"],
-//       countResourceRelatedIdKey: "project_id",
-//       countResource: "site",
-//       countHierarchical: false,
-//       filters,
-//       tagFilterKey: "project",
-//     });
-//     const hydrateArea = hydrate(
-//       filters.value.area,
-//       query,
-//       {
-//         itemResource: "area",
-//         itemFields: ["id", "name", "name_en"],
-//         itemSearchField: "id",
-//         countResource: "site",
-//         countResourceRelatedIdKey: "area_id",
-//         countHierarchical: false,
-//         tagFilterKey: "area",
-//         filters,
-//       },
-//       (items, counts) =>
-//         items.map((item: any) => ({
-//           id: parseInt(item.id),
-//           text: item.name,
-//           text_en: item.name_en,
-//           count: counts[item.id],
-//         })),
-//     );
-//     const querySuggestionsStatic = useQuerySuggestionsStatic();
-//     const querySuggestionsProject = querySuggestionsStatic(query, {
-//       resource: "site",
-//       excludeFilterKey: "project",
-//       pivot: ["project_id", "project_name", "project_name_en"],
-//       limit: 200,
-//       filters,
-//     });
-//     const querySuggestions = useQuerySuggestions();
-//     const querySuggestionsArea = querySuggestions(query, {
-//       resource: "site",
-//       pivot: ["area_id", "area_name", "area_name_en"],
-//       pivotOffsetField: "area_id",
-//       countHierarchical: false,
-//       countResourceRelatedKey: "area_id",
-//       excludeFilterKey: "area",
-//       filters,
-//     });
-//     return {
-//       querySuggestionsProject,
-//       querySuggestionsArea,
-//       query,
-//       name,
-//       area,
-//       map,
-//       project,
-//       handleReset,
-//       handleUpdate,
-//     };
-//   },
-// });
 </script>
 
 <template>
   <div>
-    <VForm @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleUpdate">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
+      <VDivider class="mx-2" />
       <VExpansionPanels
         variant="accordion"
         class="px-2"
@@ -152,6 +80,7 @@ function handleUpdate() {
           @update:model-value="handleUpdate"
         />
       </VExpansionPanels>
+      <VDivider class="mx-2" />
     </VForm>
   </div>
 </template>

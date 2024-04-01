@@ -167,49 +167,47 @@ function handleOpen(value) {
     </VExpansionPanelTitle>
     <div
       v-if="selectedItems.length > 0"
-      class="bg-white border-b"
+      class="bg-white"
     >
-      <div class="py-1">
-        <div
-          v-for="(item, i) in orderedSelectedItems"
-          :key="i"
-          class="d-flex selected-item px-4"
-          @click="handleRemove(item.id)"
-        >
-          <span>
-            <input
-              type="checkbox"
-              class="checkbox"
-              checked
-              @click.prevent.stop="handleRemove(item.id)"
-            >
-          </span>
-          <span
-            class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
-            style="word-break: break-word"
+      <div
+        v-for="(item, i) in orderedSelectedItems"
+        :key="i"
+        class="d-flex selected-item px-2 py-1"
+        @click="handleRemove(item.id)"
+      >
+        <span>
+          <input
+            type="checkbox"
+            class="checkbox"
+            checked
+            @click.prevent.stop="handleRemove(item.id)"
           >
-            <slot name="selection" :item="item">
-              <span class="mr-2">{{ item.name }}</span>
-              <span class="ml-auto" style="word-break: keep-all">{{
-                item.count
-              }}</span>
-            </slot>
-          </span>
-        </div>
+        </span>
+        <span
+          class="align-self-center d-flex text-body-2 font-weight-medium pl-2 w-100"
+          style="word-break: break-word"
+        >
+          <slot name="selection" :item="item">
+            <span class="mr-2">{{ item.name }}</span>
+            <span class="ml-auto mr-1 text-medium-emphasis text-caption" style="word-break: keep-all">{{
+              item.count
+            }}</span>
+          </slot>
+        </span>
       </div>
     </div>
     <VExpansionPanelText
       class="py-0"
       color="white"
     >
-      <div class="my-1">
+      <div class="my-2">
         <VTextField
           v-if="showFilter"
           ref="input"
           v-model="query"
-          variant="underlined"
+          variant="outlined"
           hide-details
-          density="comfortable"
+          density="compact"
           class="mb-2"
           :placeholder="$t('filters.filter')"
         />
@@ -240,7 +238,7 @@ function handleOpen(value) {
             >
               <slot name="selection" :item="item">
                 <span class="mr-2">{{ item.name }}</span>
-                <span class="ml-auto" style="word-break: keep-all">{{
+                <span class="ml-auto text-medium-emphasis mr-1 text-caption" style="word-break: keep-all">{{
                   item.count
                 }}</span>
               </slot>
@@ -285,7 +283,7 @@ function handleOpen(value) {
   cursor: pointer;
 }
 
-.checkbox {
-  accent-color: rgb(var(--v-theme-accent));
-}
+// .checkbox {
+//   accent-color: rgb(var(--v-theme-accent));
+// }
 </style>
