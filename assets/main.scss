@@ -50,10 +50,10 @@ $heading-font: "Montserrat", sans-serif;
   cursor: pointer;
   display: inline-block;
   text-decoration: none;
-  color: map-get($map: $blue, $key: "base") !important;
+  color: map-get($map: $blue, $key: "darken-1") !important;
 
   .v-icon {
-    color: map-get($map: $blue, $key: "base")  !important;
+    color: map-get($map: $blue, $key: "darken-1")  !important;
   }
 
   @include transition(color 200ms ease);

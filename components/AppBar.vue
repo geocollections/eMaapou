@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiMagnify, mdiMenu } from "@mdi/js";
+import { mdiChevronDown, mdiMenu } from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -12,56 +12,29 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  showSearch: {
-    type: Boolean,
-    default: true,
-  },
-  transparent: {
-    type: Boolean,
-    default: false,
-  },
-  maxWidth: {
-    type: Number,
-    default: 1785,
-  },
 });
 const route = useRoute();
 const getRouteBaseName = useRouteBaseName();
 const localePath = useLocalePath();
+
 const state = reactive({
   browseGeography: BROWSE_GEOLOGY_LIST,
   browseLab: BROWSE_LAB_LIST,
   browseTaxon: BROWSE_TAXON_LIST,
   logo: "/logos/emaapou5white.svg",
-  logoOrange: "/logos/emaapou5orange.svg",
-  logoCompact: "/logos/emaapou_short.svg",
   services: SERVICES,
-  query: (route.query.q as string) ?? "",
-  searchFocused: false,
-});
-const icons = computed(() => {
-  return {
-    mdiMagnify,
-    mdiMenu,
-    mdiChevronDown,
-  };
-});
-
-const searchRouteName = computed(() => {
-  return route.name?.includes("search") ? route.name?.split("__")[0] : "search";
 });
 </script>
 
 <template>
   <VAppBar
     density="compact"
-    :elevation="getRouteBaseName(route) === 'index' ? 0 : 2"
-    :absolute="getRouteBaseName(route) === 'index'"
+    :elevation="2"
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
       'app-bar-mobile': !$vuetify.display.mdAndUp,
     }"
-    :color="getRouteBaseName(route) === 'index' ? 'transparent' : 'grey-darken-2'"
+    color="grey-darken-2"
   >
     <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
@@ -73,7 +46,7 @@ const searchRouteName = computed(() => {
         :height="32"
         contain
         class="px-0 px-sm-3"
-        :src="getRouteBaseName(route) === 'index' ? state.logo : state.logoOrange"
+        :src="state.logo"
         style="vertical-align: middle;"
       />
     </NuxtLink>
@@ -84,12 +57,12 @@ const searchRouteName = computed(() => {
         aria-label="browse"
         variant="text"
         class="montserrat"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
         <VIcon color="accent" end>
-          {{ icons.mdiChevronDown }}
+          {{ mdiChevronDown }}
         </VIcon>
       </VBtn>
       <VMenu
@@ -139,55 +112,11 @@ const searchRouteName = computed(() => {
         </VCard>
       </VMenu>
       <div
-        v-if="showSearch"
         class="d-flex align-center elevation-0 ml-2 mr-0 mr-sm-2"
         style="width: 100%"
         :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
       >
-        <div
-          class="d-flex"
-
-          style="width: 100%"
-        >
-          <InputSearch
-            v-model="state.query"
-            input-class="montserrat border-none"
-            background-color="white"
-            density="compact"
-            flat
-            :max-width="$vuetify.display.mdAndUp ? 450 : -1"
-            :autofocus="false"
-            :placeholder="$t('common.search')"
-            @enter="
-              $router.push(
-                localePath({ name: searchRouteName, query: { q: state.query } }),
-              )
-            "
-          />
-          <VHover v-slot="{ isHovering, props: hoverProps }">
-            <VBtn
-              v-bind="hoverProps"
-              height="40"
-              :width="$vuetify.display.xs ? 32 : 48"
-              elevation="0"
-              :color="isHovering ? 'blue' : 'grey-lighten-2'"
-              class="rounded-0"
-              variant="flat"
-              @click="
-                $router.push(
-                  localePath({
-                    name: searchRouteName,
-                    query: { q: state.query },
-                  }),
-                )
-              "
-            >
-              <VIcon>
-                {{ icons.mdiMagnify }}
-              </VIcon>
-            </VBtn>
-          </VHover>
-        </div>
+        <QuickSearchInput />
       </div>
     </VToolbarItems>
     <VToolbarItems
@@ -199,7 +128,7 @@ const searchRouteName = computed(() => {
         variant="text"
         class="montserrat font-weight-medium"
         style="text-transform: capitalize"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
@@ -210,7 +139,7 @@ const searchRouteName = computed(() => {
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         class="montserrat"
         style="text-transform: capitalize"
       >
@@ -251,7 +180,7 @@ const searchRouteName = computed(() => {
       </VMenu>
       <LanguageSwitcher
         v-if="$vuetify.display.mdAndUp"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         class="ml-auto"
       />
       <VBtn
@@ -263,7 +192,7 @@ const searchRouteName = computed(() => {
         @click.stop="$emit('toggle:navigationDrawer')"
       >
         <VIcon color="accent" size="font-size: 24px">
-          {{ icons.mdiMenu }}
+          {{ mdiMenu }}
         </VIcon>
       </VBtn>
     </VToolbarItems>

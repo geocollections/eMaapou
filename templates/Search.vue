@@ -63,7 +63,7 @@ function closeMobileSearch() {
         </div>
         <div v-show="mini">
           <div
-            class="montserrat font-weight-medium text-body-2 ml-auto mr-auto"
+            class="montserrat font-weight-medium text-body-2 mt-2 ml-auto mr-auto"
             style="
               transform: scale(-1, -1);
               white-space: nowrap;
