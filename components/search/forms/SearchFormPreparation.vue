@@ -43,7 +43,7 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
 <template>
   <div>
     <VForm @submit.prevent="handleUpdate">
-      <InputSearch v-model="query" />
+      <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VExpansionPanels
         class="px-2"

@@ -351,7 +351,7 @@ function handleSubmit() {
 <template>
   <div>
     <VForm @submit.prevent="handleSubmit">
-      <InputSearch v-model="query" />
+      <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <FilterInputCheckbox
         v-model="filters.hasImage.value"

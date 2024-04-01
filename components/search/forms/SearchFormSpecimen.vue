@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
+import { mdiClose } from "@mdi/js";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const props = defineProps<{ resultView: "table" | "image" }>();
@@ -485,7 +486,7 @@ function handleHasImageUpdate(value: boolean) {
 
 <template>
   <VForm @submit.prevent="handleSubmit">
-    <InputSearch v-model="query" />
+    <SearchFormInput v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <FilterInputCheckbox
       :model-value="resultView === 'image' ? true : filters.hasImage.value"
