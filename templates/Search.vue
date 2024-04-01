@@ -30,6 +30,7 @@ function closeMobileSearch() {
       :temporary="display.smAndDown.value"
       width="300"
       touchless
+      color="grey-lighten-4"
       :rail="mini"
       :location="display.smAndDown.value ? 'bottom' : 'left'"
     >

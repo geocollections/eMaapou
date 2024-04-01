@@ -32,7 +32,7 @@ defineProps({
           {{ icon }}
         </VIcon>
         <span
-          class="montserrat font-weight-medium text-h3"
+          class="montserrat font-weight-medium text-h4"
         >
           <slot name="title">
             {{ title }}

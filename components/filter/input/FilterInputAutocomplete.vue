@@ -206,6 +206,7 @@ function handleOpen(value) {
           ref="input"
           v-model="query"
           variant="outlined"
+          bg-color="white"
           hide-details
           density="compact"
           class="mb-2"

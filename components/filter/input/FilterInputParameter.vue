@@ -242,7 +242,8 @@ function valueString(value: ParameterValue["value"]) {
               density="compact"
               item-title="name"
               item-value="id"
-              variant="underlined"
+              variant="outlined"
+              bg-color="white"
               :placeholder="$t('filters.parameter')"
               persistent-placeholder
               :items="suggestions ?? []"
@@ -269,7 +270,8 @@ function valueString(value: ParameterValue["value"]) {
               :value="v.value[0]"
               step="0.1"
               density="compact"
-              variant="underlined"
+              variant="outlined"
+              bg-color="white"
               persistent-placeholder
               :label="$t('common.from')"
               @update:model-value="handleValue([parseInput($event), v.value[1]], i)"
@@ -287,7 +289,8 @@ function valueString(value: ParameterValue["value"]) {
               step="0.1"
               persistent-placeholder
               density="compact"
-              variant="underlined"
+              variant="outlined"
+              bg-color="white"
               :label="$t('common.to')"
               @update:model-value="handleValue([v.value[0], parseInput($event)], i)"
               @keydown.enter="handleEnter"

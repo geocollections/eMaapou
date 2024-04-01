@@ -34,7 +34,7 @@ const { t } = useI18n({ useScope: "local" });
       v-else
       app
       :rail="railDrawer"
-      color="grey-lighten-5"
+      color="grey-darken-3"
       elevation="2"
       permanent
       :width="200"
@@ -58,7 +58,7 @@ const { t } = useI18n({ useScope: "local" });
           v-for="(item, index) in BROWSE_TAXON_LIST"
           :key="index"
           link
-          color="accent"
+          color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
@@ -71,7 +71,7 @@ const { t } = useI18n({ useScope: "local" });
           v-for="(item, index) in BROWSE_LAB_LIST"
           :key="index"
           link
-          color="accent"
+          color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>
@@ -84,7 +84,7 @@ const { t } = useI18n({ useScope: "local" });
           v-for="(item, index) in BROWSE_GEOLOGY_LIST"
           :key="index"
           link
-          color="accent"
+          color="accent-lighten-2"
           :to="localePath({ name: item.routeName })"
         >
           <template #prepend>

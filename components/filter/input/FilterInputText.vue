@@ -105,6 +105,7 @@ function handleOpen(value) {
         ref="input"
         v-model="internalValue"
         variant="outlined"
+        bg-color="white"
         hide-details
         density="compact"
         :placeholder="$t('filters.filter')"

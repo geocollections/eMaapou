@@ -9,7 +9,7 @@ const drawer = ref(false);
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
-    <AppHeader
+    <AppBarLanding
       :drawer="drawer"
       transparent
       :show-search="false"

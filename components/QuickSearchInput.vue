@@ -29,6 +29,7 @@ function handleClick() {
       density="compact"
       rounded="0"
       flat
+      bg-color="grey-darken-1"
       variant="solo"
       :style="{ maxWidth: $vuetify.display.mdAndUp ? '450px' : 'inherit' }"
       :autofocus="false"
@@ -40,7 +41,7 @@ function handleClick() {
         height="40"
         :width="$vuetify.display.xs ? 32 : 48"
         elevation="0"
-        :color="isHovering ? 'blue' : 'grey-lighten-2'"
+        :color="isHovering ? 'blue-darken-1' : 'grey'"
         class="rounded-0 rounded-e"
         variant="flat"
         @click="handleClick"

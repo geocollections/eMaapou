@@ -26,7 +26,6 @@ const props = defineProps({
   },
 });
 const route = useRoute();
-const getRouteBaseName = useRouteBaseName();
 const localePath = useLocalePath();
 const state = reactive({
   browseGeography: BROWSE_GEOLOGY_LIST,
@@ -52,7 +51,8 @@ const searchRouteName = computed(() => {
 });
 const cssProps = computed(() => {
   return {
-    "background-color": getRouteBaseName(route) === "index" ? "transparent" : "rgba(0, 0, 0, 1)",
+    "--max-width": `${props.maxWidth}px`,
+
   };
 });
 </script>
@@ -60,13 +60,14 @@ const cssProps = computed(() => {
 <template>
   <VAppBar
     density="compact"
-    :elevation="getRouteBaseName(route) === 'index' ? 0 : 2"
-    :absolute="getRouteBaseName(route) === 'index'"
+    flat
+    absolute
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
       'app-bar-mobile': !$vuetify.display.mdAndUp,
     }"
-    :color="getRouteBaseName(route) === 'index' ? 'transparent' : 'grey-darken-3'"
+    color="transparent"
+    :style="cssProps"
   >
     <!--
           NOTE: Tooltip is implemented with activator prop so that it does not disappear before chaning routes.
@@ -78,7 +79,7 @@ const cssProps = computed(() => {
         :height="32"
         contain
         class="px-0 px-sm-3"
-        :src="getRouteBaseName(route) === 'index' ? state.logo : state.logoOrange"
+        :src="state.logo"
         style="vertical-align: middle;"
       />
     </NuxtLink>
@@ -89,7 +90,7 @@ const cssProps = computed(() => {
         aria-label="browse"
         variant="text"
         class="montserrat"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         style="text-transform: capitalize"
       >
         {{ $t("common.browse") }}
@@ -143,57 +144,6 @@ const cssProps = computed(() => {
           </VCardActions>
         </VCard>
       </VMenu>
-      <div
-        v-if="showSearch"
-        class="d-flex align-center elevation-0 ml-2 mr-0 mr-sm-2"
-        style="width: 100%"
-        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
-      >
-        <div
-          class="d-flex"
-
-          style="width: 100%"
-        >
-          <InputSearch
-            v-model="state.query"
-            input-class="montserrat border-none"
-            background-color="white"
-            density="compact"
-            flat
-            :max-width="$vuetify.display.mdAndUp ? 450 : -1"
-            :autofocus="false"
-            :placeholder="$t('common.search')"
-            @enter="
-              $router.push(
-                localePath({ name: searchRouteName, query: { q: state.query } }),
-              )
-            "
-          />
-          <VHover v-slot="{ isHovering, props: hoverProps }">
-            <VBtn
-              v-bind="hoverProps"
-              height="40"
-              :width="$vuetify.display.xs ? 32 : 48"
-              elevation="0"
-              :color="isHovering ? 'blue' : 'grey-lighten-2'"
-              class="rounded-0"
-              variant="flat"
-              @click="
-                $router.push(
-                  localePath({
-                    name: searchRouteName,
-                    query: { q: state.query },
-                  }),
-                )
-              "
-            >
-              <VIcon>
-                {{ icons.mdiMagnify }}
-              </VIcon>
-            </VBtn>
-          </VHover>
-        </div>
-      </div>
     </VToolbarItems>
     <VToolbarItems
       class="ml-auto"
@@ -204,7 +154,7 @@ const cssProps = computed(() => {
         variant="text"
         class="montserrat font-weight-medium"
         style="text-transform: capitalize"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         :to="localePath({ name: 'about' })"
       >
         {{ $t("common.about") }}
@@ -215,7 +165,7 @@ const cssProps = computed(() => {
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         class="montserrat"
         style="text-transform: capitalize"
       >
@@ -256,7 +206,7 @@ const cssProps = computed(() => {
       </VMenu>
       <LanguageSwitcher
         v-if="$vuetify.display.mdAndUp"
-        :color="getRouteBaseName(route) === 'index' ? 'white' : 'white'"
+        color="white"
         class="ml-auto"
       />
       <VBtn
@@ -272,90 +222,6 @@ const cssProps = computed(() => {
         </VIcon>
       </VBtn>
     </VToolbarItems>
-    <template v-if="$vuetify.display.mdAndUp && getRouteBaseName(route) !== 'index'" #extension>
-      <div class="w-100 bg-grey-darken-2">
-        <VTabs
-          align-tabs="center"
-          color="accent"
-          :mandatory="false"
-        >
-          <VTooltip
-            v-for="(item, index) in state.browseTaxon"
-            :key="`browse-taxon-item-${index}`"
-            :text="$t(item.label)"
-            location="bottom"
-            open-delay="100"
-          >
-            <template #activator="{ props: tooltipProps }">
-              <VTab
-                v-bind="tooltipProps"
-                style="min-width: 0px"
-                exact
-                :icon="item.icon"
-                :label="$t(item.label)"
-                :to="localePath({ name: item.routeName })"
-              >
-                <VIcon color="white">
-                  {{ item.icon }}
-                </VIcon>
-              </VTab>
-            </template>
-          </VTooltip>
-          <VDivider
-            vertical
-            color="white"
-          />
-          <VTooltip
-            v-for="(item, index) in state.browseLab"
-            :key="`browse-lab-item-${index}`"
-            :text="$t(item.label)"
-            location="bottom"
-            open-delay="100"
-          >
-            <template #activator="{ props: tooltipProps }">
-              <VTab
-                v-bind="tooltipProps"
-                style="min-width: 0px"
-                :icon="item.icon"
-                :label="$t(item.label)"
-                :to="localePath({ name: item.routeName })"
-                exact
-              >
-                <VIcon color="white">
-                  {{ item.icon }}
-                </VIcon>
-              </VTab>
-            </template>
-          </VTooltip>
-          <VDivider
-            vertical
-            color="white"
-          />
-          <VTooltip
-            v-for="(item, index) in state.browseGeography"
-            :key="`browse-geography-item-${index}`"
-            :text="$t(item.label)"
-            location="bottom"
-            open-delay="100"
-          >
-            <template #activator="{ props: tooltipProps }">
-              <VTab
-                v-bind="tooltipProps"
-                style="min-width: 0px"
-                :icon="item.icon"
-                :label="$t(item.label)"
-                :to="localePath({ name: item.routeName })"
-                exact
-              >
-                <VIcon color="white">
-                  {{ item.icon }}
-                </VIcon>
-              </VTab>
-            </template>
-          </VTooltip>
-        </VTabs>
-      </div>
-    </template>
   </VAppBar>
 </template>
 
@@ -377,7 +243,7 @@ const cssProps = computed(() => {
 }
 
 .app-bar-mobile :deep(.v-toolbar__content) {
-  // max-width: var(--max-width);
+  max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
   padding-right: 0px;
@@ -391,7 +257,7 @@ const cssProps = computed(() => {
 }
 
 .app-bar-full :deep(.v-toolbar__content) {
-  // max-width: var(--max-width);
+  max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
   // padding-right: 0px;

@@ -129,6 +129,7 @@ function handleOpen(value) {
             :label="fieldLabels.min"
             hide-details
             single-line
+            bg-color="white"
             variant="outlined"
             density="compact"
             type="number"
@@ -145,6 +146,7 @@ function handleOpen(value) {
             :label="fieldLabels.max"
             hide-details
             single-line
+            bg-color="white"
             variant="outlined"
             density="compact"
             type="number"

@@ -287,6 +287,7 @@ function handleOpen(value) {
         density="compact"
         :item-title="locale === 'et' ? 'name.et' : 'name.en'"
         item-value="id"
+        bg-color="white"
         variant="outlined"
         :placeholder="t('search')"
         persistent-placeholder

@@ -14,12 +14,11 @@ const emit = defineEmits(["update:model-value"]);
 <template>
   <VTextField
     :model-value="modelValue"
-    base-color="accent"
-    variant="solo"
+    variant="outlined"
+    bg-color="white"
     density="comfortable"
-    bg-color="grey-lighten-5"
     flat
-    class="border rounded mx-2"
+    class="rounded mx-2"
     hide-details
     :placeholder="$t('common.searchAlt')"
     clearable
