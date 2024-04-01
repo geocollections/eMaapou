@@ -19,7 +19,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits(["update", "click:row"]);
 
 const { t } = useI18n();
 const localePath = useLocalePath();
@@ -108,6 +108,7 @@ function updateOptions(event) {
                 :to="localePath({ name: 'file-id', params: { id: image.id } })"
                 :class="{ 'image-hover-elevation': !!cropImages }"
                 v-bind="tooltipProps"
+                @click="emit('click:row', index)"
               >
                 <VImg
                   v-if="image.uuid_filename"
