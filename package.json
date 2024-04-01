@@ -49,6 +49,6 @@
     "vite-plugin-vuetify": "^2.0.1",
     "vue": "^3.4.10",
     "vue-router": "^4.2.5",
-    "vuetify": "^3.5.6"
+    "vuetify": "^3.5.12"
   }
 }
