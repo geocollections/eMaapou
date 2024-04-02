@@ -88,10 +88,14 @@ const localePath = useLocalePath();
     </template>
 
     <template #item.ageBase="{ item }">
-      {{ item.age_base }}
+      <span v-if="item.age_base">
+        {{ item.age_base.toFixed(1) }}
+      </span>
     </template>
     <template #item.ageTop="{ item }">
-      {{ item.age_top }}
+      <span v-if="item.age_top">
+        {{ item.age_top.toFixed(1) }}
+      </span>
     </template>
 
     <template #item.parent_stratigraphy="{ item }">

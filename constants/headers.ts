@@ -24,7 +24,8 @@ const numberFieldProps: Partial<Header> = {
   align: "end",
   cellProps(data) {
     return {
-      style: "font-family: monospace;",
+      style: "font-family: 'Noto Sans Mono', monospace;",
+      class: "text-body-2",
     };
   },
 };
@@ -2107,6 +2108,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: "age_base",
       sortField: ["age_base"],
+      ...numberFieldProps,
     },
     ageTop: {
       title: "stratigraphy.ageTop",
@@ -2114,6 +2116,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: "age_top",
       sortField: ["age_top"],
+      ...numberFieldProps,
     },
     age_stratigraphy: {
       title: "stratigraphy.age_stratigraphy",

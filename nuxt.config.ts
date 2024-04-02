@@ -68,7 +68,8 @@ export default defineNuxtConfig({
     families: {
       "Roboto": false,
       "Montserrat": [300, 400, 500, 700],
-      "Open+Sans": [400, 500, 700],
+      "Noto+Sans": [400, 500, 700],
+      "Noto+Sans+Mono": [400, 500, 700],
     },
   },
   image: {
