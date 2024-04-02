@@ -37,7 +37,7 @@ const {
 
 const { $solrFetch } = useNuxtApp();
 
-const { data: parameterHeaders } = await useLazyAsyncData(async () => {
+const { data: parameterHeaders } = await useAsyncData(async () => {
   const res = await $solrFetch("/analysis_parameter", {
     query: {
       json: {
