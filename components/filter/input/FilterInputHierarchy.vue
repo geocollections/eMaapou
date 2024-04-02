@@ -101,26 +101,6 @@ const filteredSelectedValues = computed(() => {
   return filteredSelectedItems.value.map(item => item.value);
 });
 
-function getNodes(node: TreeNode) {
-  if (node.children.length < 1)
-    return [node];
-
-  return node.children.reduce((prev, child) => {
-    prev.push(...getNodes(child));
-    prev.push(node);
-    return prev;
-  }, [] as TreeNode[]);
-}
-
-const nodes = computed(() => {
-  return (
-    tree.value?.reduce((prev, node) => {
-      prev.push(...getNodes(node));
-      return prev;
-    }, [] as TreeNode[]) ?? []
-  );
-});
-
 watch(filteredSelectedValues, (newVal) => {
   if (newVal.length < props.modelValue.length)
     emit("update:model-value", newVal);

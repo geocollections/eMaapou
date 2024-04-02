@@ -31,7 +31,6 @@ export function useHeadersNew(initHeaders: Headers) {
   });
 
   const handleHeadersChange = (e: string) => {
-    console.log(e);
     headersMap.value.byIds[e].show = !headersMap.value.byIds[e].show;
   };
   const handleHeadersReset = (options: DataTableOptions) => {

@@ -118,7 +118,7 @@ async function hydrateStratigraphy(values: string[]) {
   }));
 }
 
-async function getStratigraphyChildren(value: string) {
+async function getStratigraphyChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
   const depth = value.split("-").length;
   const prefix = `${depth}/${value}`;
 
@@ -132,7 +132,9 @@ async function getStratigraphyChildren(value: string) {
           categories: {
             type: "terms",
             prefix,
-            limit: -1,
+            offset: (page - 1) * perPage,
+            limit: perPage,
+            numBuckets: true,
             field: "stratigraphy_categories",
             domain: {
               excludeTags: "stratigraphy",
@@ -158,7 +160,7 @@ async function getStratigraphyChildren(value: string) {
     },
   });
 
-  return countRes.facets.categories.buckets.map((bucket: any) => {
+  return [countRes.facets.categories.buckets.map((bucket: any) => {
     const [_depth, value] = bucket.val.split("/");
     const doc = res.response.docs.find(
       (doc: any) => doc.hierarchy_string === value,
@@ -174,8 +176,33 @@ async function getStratigraphyChildren(value: string) {
       count: bucket.count,
       leaf: doc.leaf_node,
     };
-  });
+  }), countRes.facets.categories.numBuckets];
 }
+
+const { locale } = useI18n();
+
+async function suggestStratigraphy(
+  query: string,
+  pagination: { page: number; perPage: number },
+) {
+  const searchField = locale.value === "et" ? "stratigraphy" : "stratigraphy_en";
+  const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
+  const res = await $solrFetch("/stratigraphy", {
+    query: {
+      q: queryStr,
+      rows: pagination.perPage,
+      start: (pagination.page - 1) * pagination.perPage,
+      sort: `${searchField} asc`,
+    },
+  });
+
+  return res.response.docs.map((doc: any) => ({
+    id: doc.hierarchy_string,
+    name: { et: doc.stratigraphy, en: doc.stratigraphy_en },
+    value: doc.hierarchy_string,
+  }));
+}
+
 function handleReset() {
   emit("reset");
 }
@@ -348,6 +375,7 @@ async function suggestParameters({
         :title="$t('filters.stratigraphyHierarchy')"
         :hydration-function="hydrateStratigraphy"
         :get-children="getStratigraphyChildren"
+        :suggestion-function="suggestStratigraphy"
         value="stratigraphy"
         @update:model-value="handleUpdate('stratigraphy')"
       />

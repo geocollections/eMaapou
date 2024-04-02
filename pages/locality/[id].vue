@@ -271,7 +271,7 @@ const { data } = await useAsyncData("locality", async () => {
       ordering: "sort",
     },
   });
-  console.log(imagesRes.results);
+
   return {
     locality,
     drillcore,
