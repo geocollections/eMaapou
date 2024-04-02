@@ -102,11 +102,11 @@ function handleAdd() {
   ];
 }
 function handleRemove(i: number) {
-  if (internalValue.value.length <= 1) {
-    internalValue.value = [{ parameter: null, value: [null, null] }];
-    emit("update:model-value", internalValue.value);
-    return;
-  }
+  // if (internalValue.value.length <= 1) {
+  //   internalValue.value = [{ parameter: null, value: [null, null] }];
+  //   emit("update:model-value", internalValue.value);
+  //   return;
+  // }
   const cloneItems = cloneDeep(internalValue.value);
   cloneItems.splice(i, 1);
   internalValue.value = cloneItems;
@@ -197,17 +197,16 @@ function valueString(value: ParameterValue["value"]) {
     </VExpansionPanelTitle>
     <div
       v-if="validFilters.length > 0 && !isPanelOpen"
-      class="bg-white border-b"
+      class="bg-white "
     >
       <div
         v-for="(item, i) in validFilters"
         :key="i"
-        class="d-flex py-1 selected-item pl-4 pr-2"
+        class="d-flex py-1 selected-item px-2"
       >
         <span>
           <input
             type="checkbox"
-            class="checkbox"
             checked
             @click.prevent.stop="handleRemove(i)"
           >
@@ -232,7 +231,7 @@ function valueString(value: ParameterValue["value"]) {
       <div
         v-for="(v, i) in internalValue"
         :key="i"
-        class="pb-2 border-b"
+        class="py-2 border-b"
       >
         <VRow no-gutters class="px-2 ">
           <VCol cols="8">
@@ -337,8 +336,5 @@ function valueString(value: ParameterValue["value"]) {
   padding-right: 0px;
   padding-left: 0px;
   padding-bottom: 8px;
-}
-.checkbox {
-  accent-color: rgb(var(--v-theme-accent));
 }
 </style>

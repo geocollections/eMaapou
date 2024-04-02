@@ -9,9 +9,10 @@ const {
   handleHeadersReset,
   handleHeadersChange,
   setStateFromQueryParams,
+  addHeaders,
   getQueryParams,
 } = analyticalDataStore;
-const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
+const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filters }
   = storeToRefs(analyticalDataStore);
 setStateFromQueryParams(route);
 
@@ -33,6 +34,42 @@ const {
   })),
   watch: false,
 });
+
+const { $solrFetch } = useNuxtApp();
+
+const { data: parameterHeaders } = await useLazyAsyncData(async () => {
+  const res = await $solrFetch("/analysis_parameter", {
+    query: {
+      json: {
+        query: "*",
+        limit: 1000,
+      },
+    },
+  });
+
+  return res.response.docs.reduce((acc: any, doc: any) => {
+    if (!doc.parameter_index)
+      return acc;
+
+    const showHeader = filters.value.parameter.value.some(value => value.parameter === doc.parameter_index);
+    const correctParameterIndex = doc.parameter_index.replace(
+      /\W/g,
+      "_",
+    );
+
+    acc.byIds[doc.parameter_index] = {
+      title: doc.parameter,
+      value: correctParameterIndex,
+      show: showHeader,
+      titleTranslate: false,
+    };
+    acc.allIds.push(doc.parameter_index);
+    return acc;
+  }, { byIds: {}, allIds: [] });
+});
+
+addHeaders(parameterHeaders.value);
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });

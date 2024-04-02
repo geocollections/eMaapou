@@ -4,7 +4,7 @@ import type { DataTableOptions, Headers, SortItem } from "~/constants";
 export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTableOptions; initHeaders: Headers }) {
   const options = ref(initOptions);
 
-  const { headers, handleHeadersReset, handleHeadersChange }
+  const { headers, handleHeadersReset, handleHeadersChange, addHeaders }
     = useHeadersNew(initHeaders);
 
   const { locale } = useI18n();
@@ -85,6 +85,7 @@ export function useDataTable({ initOptions, initHeaders }: { initOptions: DataTa
     handleUpdate,
     handleHeadersReset,
     handleHeadersChange,
+    addHeaders,
     solrSort,
     routeQueryOptionsSchema,
     stateToQueryParamsSchema,

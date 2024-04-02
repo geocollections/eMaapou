@@ -2,7 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 import type { DataTableOptions, Header, Headers } from "~/constants";
 
 export function useHeadersNew(initHeaders: Headers) {
-  const { t } = useI18n();
+  const { t } = useI18n({ useScope: "global" });
 
   const headersMap = ref(cloneDeep(initHeaders));
 
@@ -31,6 +31,7 @@ export function useHeadersNew(initHeaders: Headers) {
   });
 
   const handleHeadersChange = (e: string) => {
+    console.log(e);
     headersMap.value.byIds[e].show = !headersMap.value.byIds[e].show;
   };
   const handleHeadersReset = (options: DataTableOptions) => {
@@ -39,5 +40,10 @@ export function useHeadersNew(initHeaders: Headers) {
       headersMap.value.byIds[sortItem.key].show = true;
     });
   };
-  return { headers, handleHeadersChange, handleHeadersReset };
+
+  function addHeaders(headers: Headers) {
+    headersMap.value.byIds = { ...headersMap.value.byIds, ...headers.byIds };
+    headersMap.value.allIds = [...headersMap.value.allIds, ...headers.allIds];
+  }
+  return { headers, handleHeadersChange, handleHeadersReset, addHeaders };
 }

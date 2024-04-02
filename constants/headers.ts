@@ -20,7 +20,7 @@ export interface Headers {
   allIds: string[];
 }
 
-const numberFieldProps: Partial<Header> = {
+export const numberFieldProps: Partial<Header> = {
   align: "end",
   cellProps(data) {
     return {

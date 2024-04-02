@@ -1133,7 +1133,7 @@ export default {
       between: "Between {min} and {max}",
       lessThanEquals: "Less than or equal to {max}",
       greaterThanEquals: "Greater than or equal to {min}",
-      exists: "Exists",
+      exists: "Measured",
     },
     depth: {
       between: "Between {min} and {max} (m)",

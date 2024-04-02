@@ -107,6 +107,7 @@ const filteredHeaders = computed(() => {
                   v-bind="props"
                   density="compact"
                   variant="text"
+                  slim
                   :disabled="sortBy.includes(item.value)"
                   @click.prevent="$emit('change', item)"
                 >
@@ -116,7 +117,7 @@ const filteredHeaders = computed(() => {
                         density="compact"
                         :disabled="sortBy.includes(item.value)"
                         :model-value="item.show"
-                        color="accent-lighten-2"
+                        color="accent"
                       />
                     </VListItemAction>
                   </template>

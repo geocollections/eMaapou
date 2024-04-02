@@ -21,6 +21,7 @@ export const useAnalyticalData = defineStore(
       routeQueryOptionsSchema,
       stateToQueryParamsSchema: optionsStateToQueryParamsSchema,
       reset: resetDataTable,
+      addHeaders,
     } = useDataTable({
       initOptions: ANALYTICAL_DATA.options,
       initHeaders: HEADERS_ANALYTICAL_DATA,
@@ -203,6 +204,7 @@ export const useAnalyticalData = defineStore(
       filters,
       resetFilters,
       resetDataTable,
+      addHeaders,
     };
   },
   {

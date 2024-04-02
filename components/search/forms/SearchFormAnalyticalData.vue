@@ -5,7 +5,9 @@ import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 const emit = defineEmits(["update", "reset"]);
 
 const analyticalDataStore = useAnalyticalData();
+const { handleHeadersChange } = analyticalDataStore;
 const { filters, query, solrQuery, solrFilters } = storeToRefs(analyticalDataStore);
+
 const { suggest: suggestLocality, hydrate: hydrateLocality } = useAutocomplete(
   "/analytical_data",
   {
@@ -211,6 +213,27 @@ function handleUpdate(excludeKey?: string) {
   });
 }
 
+function handleParameterFilterUpdate(value) {
+  const removed = filters.value.parameter.value.filter(
+    v => value.every((newV) => { return newV.parameter !== v.parameter; }),
+  ).map(v => v.parameter);
+
+  const added = value.filter(
+    v => filters.value.parameter.value.every((oldV) => { return oldV.parameter !== v.parameter; }),
+  ).map(v => v.parameter);
+
+  removed.forEach((parameter) => {
+    handleHeadersChange(parameter);
+  });
+
+  added.forEach((parameter) => {
+    handleHeadersChange(parameter);
+  });
+
+  filters.value.parameter.value = value;
+  handleUpdate();
+}
+
 function handleSubmit() {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value);
@@ -314,9 +337,9 @@ async function suggestParameters({
         @update:model-value="handleUpdate"
       />
       <FilterInputParameter
-        v-model="filters.parameter.value"
+        :model-value="filters.parameter.value"
         :query-function="suggestParameters"
-        @update:model-value="handleUpdate"
+        @update:model-value="handleParameterFilterUpdate"
       />
       <FilterInputHierarchy
         ref="filterStratigraphy"
