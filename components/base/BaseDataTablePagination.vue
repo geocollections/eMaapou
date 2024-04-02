@@ -125,7 +125,7 @@ function pageLimitRule(value) {
       <VSelect
         density="compact"
         hide-details
-        variant="underlined"
+        variant="outlined"
         style="min-width: 50px"
         :items="itemsPerPageOptions"
         :model-value="options.itemsPerPage"

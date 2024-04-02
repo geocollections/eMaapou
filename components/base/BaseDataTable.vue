@@ -159,13 +159,6 @@ onMounted(() => {
 
 <template>
   <div ref="table">
-    <!-- HACK: `isLoading = !onlyTable`
-      For some reason @update is getting called on created,
-      because of that the loading indicator stayies perminantly active
-      on tables where update function is not set.
-      To fix this for now, tables that have onlyTable prop do not
-      enable loading indicator when created.
-' -->
     <VDataTableServer
       id="table"
       v-model:expanded="expanded"
@@ -310,7 +303,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .v-data-table  {
-  :deep(.v-data-table__wrapper) tbody tr.v-data-table__expanded__content {
+  :deep(.v-table__wrapper) tbody tr.v-data-table__expanded__content {
     box-shadow: none;
   }
   :deep(tbody) > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
@@ -330,13 +323,13 @@ onMounted(() => {
     border-bottom: none !important ;
   }
 }
-.v-data-table[can-scroll-right] {
-  :deep(.v-data-table__wrapper) table::after {
+.v-table[can-scroll-right="true"] {
+  :deep(.v-table__wrapper) tbody::after {
     @extend .scroll-right;
   }
 }
-.v-data-table[can-scroll-left] {
-  :deep(.v-data-table__wrapper) table::before {
+.v-table[can-scroll-left="true"] {
+  :deep(.v-table__wrapper) tbody::before {
     @extend .scroll-left;
   }
 }
@@ -362,10 +355,10 @@ onMounted(() => {
   display: block;
   position: absolute;
   top: var(--top-options-height);
-  bottom: 60px;
+  bottom: 74px;
   right: 0;
   width: 15px;
-  z-index: 3;
+  // z-index: 3;
 }
 .scroll-left {
   background: -webkit-linear-gradient(
@@ -388,9 +381,9 @@ onMounted(() => {
   display: block;
   position: absolute;
   top: var(--top-options-height);
-  bottom: 60px;
+  bottom: 74px;
   left: 0;
   width: 15px;
-  z-index: 3;
+  // z-index: 3;
 }
 </style>
