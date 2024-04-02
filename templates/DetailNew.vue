@@ -34,25 +34,34 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
     :style="{ cursor: mini ? 'pointer' : 'auto' }"
     :permanent="!$vuetify.display.smAndDown"
     :temporary="$vuetify.display.smAndDown"
+    color="grey-lighten-4"
     touchless
     :rail="mini"
-    :rail-width="48"
     :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
   >
     <div style="height: 100%" tile>
       <VList
         v-if="!$vuetify.display.smAndDown"
         density="compact"
-        variant="plain"
-        class="pa-0"
+        class="pb-1"
+        nav
       >
-        <VListItem :ripple="false" @click="mini = !mini">
+        <VListItem
+          :ripple="false"
+          slim
+          @click="mini = !mini"
+        >
           <template #prepend>
-            <VIcon :icon="mdiChevronDoubleLeft" :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }" />
+            <VIcon
+              :icon="mdiChevronDoubleLeft"
+              :style="{ transform: mini ? 'rotate(-180deg)' : 'none' }"
+            />
           </template>
-          <div class="montserrat font-weight-medium text--secondary">
-            {{ $t("common.hideSimilar") }}
-          </div>
+          <template #title>
+            <div class="montserrat font-weight-medium">
+              {{ $t("common.hideSimilar") }}
+            </div>
+          </template>
         </VListItem>
       </VList>
       <div v-else class="text-h6 py-2 pl-2">
@@ -60,7 +69,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
       </div>
       <div v-show="mini">
         <div
-          class="montserrat font-weight-medium text--secondary ml-auto mr-auto"
+          class="montserrat font-weight-medium text-body-2 mt-2 ml-auto mr-auto"
           style="
             transform: scale(-1, -1);
             white-space: nowrap;

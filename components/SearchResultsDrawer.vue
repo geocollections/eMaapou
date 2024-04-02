@@ -29,17 +29,36 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
 </script>
 
 <template>
-  <VBtn
-    variant="plain"
-    class="text-capitalize mx-2"
-    :prepend-icon="mdiArrowUpLeft"
-    :to="searchRoute"
-  >
-    Back to search
-  </VBtn>
+  <VList nav>
+    <VListItem
+      :to="searchRoute"
+      slim
+      base-color="accent"
+      :ripple="false"
+      density="compact"
+    >
+      <template #title>
+        <span class="text-body-2">
+          Back to search
+        </span>
+      </template>
+      <template #prepend>
+        <VIcon :icon="mdiArrowUpLeft" />
+      </template>
+    </VListItem>
+  </VList>
+  <!-- <VBtn -->
+  <!--   variant="text" -->
+  <!--   color="accent" -->
+  <!--   class="text-none mx-2" -->
+  <!--   :prepend-icon="mdiArrowUpLeft" -->
+  <!--   :to="searchRoute" -->
+  <!-- > -->
+  <!--   Back to search -->
+  <!-- </VBtn> -->
   <div class="d-flex align-center justify-space-around">
     <VBtn
-      variant="plain"
+      variant="text"
       size="small"
       :icon="mdiChevronLeft"
       :disabled="page <= 1"
@@ -47,7 +66,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
     />
     {{ page }}
     <VBtn
-      variant="plain"
+      variant="text"
       size="small"
       :icon="mdiChevronRight"
       :disabled="!hasNext"
@@ -55,13 +74,13 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
     />
   </div>
   <VList>
-    <template v-for="(item, index) in results">
+    <template v-for="(item, index) in results" :key="index">
       <VListItem
-        class="pa-2 ma-1 text-body-2"
+        class="pa-2 my-1 mx-2 text-body-2"
         elevation="0"
         rounded
         :to="getResultRoute(item)"
-        active-class="active-item"
+        color="accent-darken-1"
         @click="emit('select', { index, id: item.id })"
       >
         <template #title>
@@ -84,13 +103,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
           </VIcon>
         </template>
       </VListItem>
-      <VDivider v-if="index !== perPage - 1" class="mx-1" />
+      <VDivider v-if="index !== perPage - 1" class="mx-2" />
     </template>
   </VList>
 </template>
-
-<style scoped>
-.active-item {
-  background-color: rgba(var(--v-theme-accent-lighten-3), 0.2);
-}
-</style>
