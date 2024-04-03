@@ -92,7 +92,7 @@ definePageMeta({
 </script>
 
 <template>
-  <NuxtLayout lang="search">
+  <NuxtLayout name="search">
     <template #title>
       <HeaderSearch
         :title="$t('photo.pageTitle')"
