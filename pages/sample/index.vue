@@ -93,18 +93,14 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
     "sample",
   );
 }
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <Search>
-    <template #title>
-      <HeaderSearch
-        :title="$t('sample.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiImageFilterHdr"
-      />
-    </template>
-
+  <NuxtLayout name="search">
     <template #form="{ closeMobileSearch }">
       <SearchFormSample
         @update="
@@ -117,21 +113,30 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
         "
       />
     </template>
-
-    <template #result>
-      <DataTableSample
-        class="border-t border-b"
-        :show-search="false"
-        :items="data?.response.docs ?? []"
+    <template #title>
+      <HeaderSearch
+        :title="$t('sample.pageTitle')"
         :count="data?.response.numFound ?? 0"
-        :headers="headers"
-        :options="options"
-        :is-loading="pending"
-        @update="handleDataTableUpdate"
-        @change:headers="handleHeadersChange"
-        @reset:headers="handleHeadersReset(options)"
-        @click:row="handleClickRow"
+        :icon="mdiImageFilterHdr"
       />
     </template>
-  </Search>
+    <DataTableSample
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+    <!-- <Search> -->
+    <!---->
+    <!--   <template #result> -->
+    <!--   </template> -->
+    <!-- </Search> -->
+  </NuxtLayout>
 </template>

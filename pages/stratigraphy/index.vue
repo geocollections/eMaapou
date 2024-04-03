@@ -74,10 +74,14 @@ const { t } = useI18n();
 useHead({
   title: t("stratigraphy.pageTitle"),
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <Search>
+  <NuxtLayout name="search">
     <template #title>
       <HeaderSearch
         :title="$t('stratigraphy.pageTitle').toString()"
@@ -99,20 +103,18 @@ useHead({
       />
     </template>
 
-    <template #result>
-      <DataTableStratigraphy
-        class="border-t border-b"
-        :show-search="false"
-        :items="data?.response.docs ?? []"
-        :count="data?.response.numFound ?? 0"
-        :headers="headers"
-        :options="options"
-        :is-loading="pending"
-        @update="handleDataTableUpdate"
-        @change:headers="handleHeadersChange"
-        @reset:headers="handleHeadersReset(options)"
-        @click:row="handleClickRow"
-      />
-    </template>
-  </Search>
+    <DataTableStratigraphy
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>

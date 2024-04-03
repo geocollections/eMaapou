@@ -87,10 +87,14 @@ const { t } = useI18n();
 useHead({
   title: t("locality.pageTitle"),
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <Search>
+  <NuxtLayout name="search">
     <template #title>
       <HeaderSearch
         :title="$t('locality.pageTitle')"
@@ -112,20 +116,18 @@ useHead({
       />
     </template>
 
-    <template #result>
-      <DataTableLocality
-        class="border-t border-t"
-        :show-search="false"
-        :items="data?.response.docs ?? []"
-        :count="data?.response.numFound ?? 0"
-        :headers="headers"
-        :options="options"
-        :is-loading="pending"
-        @update="handleDataTableUpdate"
-        @change:headers="handleHeadersChange"
-        @reset:headers="handleHeadersReset(options)"
-        @click:row="handleClickRow"
-      />
-    </template>
-  </Search>
+    <DataTableLocality
+      class="border-t border-t"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>

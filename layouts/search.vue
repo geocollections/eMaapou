@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
-import { mdiChevronDoubleLeft, mdiChevronDoubleRight } from "@mdi/js";
+import { mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiMagnify } from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -25,13 +25,9 @@ const mini = ref(false);
 
 const showSearch = ref(false);
 watch(() => display.smAndDown.value, (value) => {
-  if (value) {
-    showSearch.value = true;
-    return;
-  }
-
-  showSearch.value = value;
-}, { immediate: true });
+  if (!value)
+    showSearch.value = false;
+});
 function closeMobileSearch() {
   showSearch.value = false;
 }
@@ -115,10 +111,10 @@ function closeMobileSearch() {
       :permanent="!display.smAndDown.value"
       :temporary="display.smAndDown.value"
       width="300"
-      touchless
       color="grey-lighten-4"
       :rail="mini"
       :location="display.smAndDown.value ? 'bottom' : 'left'"
+      @update:model-value="showSearch = $event"
     >
       <div style="height: 100%" tile>
         <VList
@@ -165,7 +161,37 @@ function closeMobileSearch() {
         </div>
       </div>
     </VNavigationDrawer>
-    <slot />
+    <VMain>
+      <VContainer
+        class="py-0 pb-10 px-0"
+        style="min-height: 100vh"
+        :fluid="true"
+      >
+        <VRow no-gutters>
+          <VCol class="bg-white">
+            <slot name="title" />
+          </VCol>
+          <VCol cols="12">
+            <slot />
+          </VCol>
+        </VRow>
+        <VFabTransition v-if="display.smAndDown.value">
+          <VBtn
+            position="fixed"
+            class="mb-2 text-capitalize"
+            location="bottom center"
+            rounded
+            color="warning"
+            @click="showSearch = !showSearch"
+          >
+            <VIcon :icon="mdiMagnify" start />
+            {{ $t("common.searchCommand") }}
+          </VBtn>
+        </VFabTransition>
+        <FabScrollTop />
+      </VContainer>
+      <AppFooter />
+    </VMain>
   </VApp>
 </template>
 

@@ -112,18 +112,14 @@ useSeoMeta({
   title: t("analyticalData.pageTitle"),
   ogTitle: t("analyticalData.pageTitle"),
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <Search>
-    <template #title>
-      <HeaderSearch
-        :title="$t('analyticalData.pageTitle')"
-        :count="data?.response.numFound ?? 0"
-        :icon="mdiChartLine"
-      />
-    </template>
-
+  <NuxtLayout name="search">
     <template #form="{ closeMobileSearch }">
       <SearchFormAnalyticalData
         @update="
@@ -136,21 +132,26 @@ useSeoMeta({
         "
       />
     </template>
-
-    <template #result>
-      <DataTableAnalyticalData
-        class="border-t border-b"
-        :show-search="false"
-        :items="data?.response.docs ?? []"
+    <template #title>
+      <HeaderSearch
+        :title="$t('analyticalData.pageTitle')"
         :count="data?.response.numFound ?? 0"
-        :headers="headers"
-        :options="options"
-        :is-loading="pending"
-        @update="handleDataTableUpdate"
-        @change:headers="handleHeadersChange"
-        @reset:headers="handleHeadersReset(options)"
-        @click:row="handleClickRow"
+        :icon="mdiChartLine"
       />
     </template>
-  </Search>
+
+    <DataTableAnalyticalData
+      class="border-t border-b"
+      :show-search="false"
+      :items="data?.response.docs ?? []"
+      :count="data?.response.numFound ?? 0"
+      :headers="headers"
+      :options="options"
+      :is-loading="pending"
+      @update="handleDataTableUpdate"
+      @change:headers="handleHeadersChange"
+      @reset:headers="handleHeadersReset(options)"
+      @click:row="handleClickRow"
+    />
+  </NuxtLayout>
 </template>

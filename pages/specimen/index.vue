@@ -115,10 +115,14 @@ const { t } = useI18n();
 useHead({
   title: t("specimen.pageTitle"),
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <Search>
+  <NuxtLayout name="search">
     <template #title>
       <HeaderSearch
         :title="$t('specimen.pageTitle')"
@@ -141,59 +145,57 @@ useHead({
       />
     </template>
 
-    <template #result>
-      <ClientOnly>
-        <VTabs
-          v-model="currentView"
-          bg-color="white"
-          color="accent"
-          density="compact"
+    <ClientOnly>
+      <VTabs
+        v-model="currentView"
+        bg-color="white"
+        color="accent"
+        density="compact"
+      >
+        <VTab
+          active-class="active-tab"
+          class="montserrat text-capitalize"
         >
-          <VTab
-            active-class="active-tab"
-            class="montserrat text-capitalize"
-          >
-            {{ $t(`common.table`) }}
-          </VTab>
-          <VTab
-            active-class="active-tab"
-            class="montserrat text-capitalize"
-          >
-            {{ $t(`common.image`) }}
-            <VChip class="ml-2" size="small">
-              {{ imageData?.response.numFound ?? 0 }}
-            </VChip>
-          </VTab>
-        </VTabs>
-        <VWindow v-model="currentView">
-          <VWindowItem :value="0">
-            <DataTableSpecimen
-              class="border-t border-b"
-              :show-search="false"
-              :items="data?.response.docs ?? []"
-              :count="data?.response.numFound ?? 0"
-              :headers="headers"
-              :options="options"
-              :is-loading="pending"
-              @update="handleDataTableUpdate"
-              @change:headers="handleHeadersChange"
-              @reset:headers="handleHeadersReset(options)"
-              @click:row="handleClickRow"
-            />
-          </VWindowItem>
-          <VWindowItem :value="1">
-            <SpecimenImageView
-              class="border-t border-b"
-              :items="imageData?.response.docs ?? []"
-              :count="imageData?.response.numFound ?? 0"
-              :options="imageOptions"
-              @update="handleImageUpdate"
-            />
-          </VWindowItem>
-        </VWindow>
-      </ClientOnly>
-    </template>
-  </Search>
+          {{ $t(`common.table`) }}
+        </VTab>
+        <VTab
+          active-class="active-tab"
+          class="montserrat text-capitalize"
+        >
+          {{ $t(`common.image`) }}
+          <VChip class="ml-2" size="small">
+            {{ imageData?.response.numFound ?? 0 }}
+          </VChip>
+        </VTab>
+      </VTabs>
+      <VWindow v-model="currentView">
+        <VWindowItem :value="0">
+          <DataTableSpecimen
+            class="border-t border-b"
+            :show-search="false"
+            :items="data?.response.docs ?? []"
+            :count="data?.response.numFound ?? 0"
+            :headers="headers"
+            :options="options"
+            :is-loading="pending"
+            @update="handleDataTableUpdate"
+            @change:headers="handleHeadersChange"
+            @reset:headers="handleHeadersReset(options)"
+            @click:row="handleClickRow"
+          />
+        </VWindowItem>
+        <VWindowItem :value="1">
+          <SpecimenImageView
+            class="border-t border-b"
+            :items="imageData?.response.docs ?? []"
+            :count="imageData?.response.numFound ?? 0"
+            :options="imageOptions"
+            @update="handleImageUpdate"
+          />
+        </VWindowItem>
+      </VWindow>
+    </ClientOnly>
+  </NuxtLayout>
 </template>
 
 <style scoped lang="scss">
