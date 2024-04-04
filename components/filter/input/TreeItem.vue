@@ -6,7 +6,6 @@ const props = defineProps<{
   node: TreeNode;
   selectedValues: string[];
   addChildren: (node: TreeNode) => Promise<number>;
-  addSiblings: () => Promise<number>;
   disabled?: boolean;
   hasChildren?: boolean;
 }>();
