@@ -198,10 +198,14 @@ useSeoMeta({
     )
     : null,
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <DetailNew :show-similar="showDrawer">
+  <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew class="mb-0">
         <div>
@@ -211,6 +215,7 @@ useSeoMeta({
           v-if="titleAlt"
           class="mx-4"
           vertical
+          style="height: inherit !important"
         />
         <a
           v-if="isRock && titleAlt"
@@ -263,5 +268,5 @@ useSeoMeta({
         </template>
       </SearchResultsDrawer>
     </template>
-  </DetailNew>
+  </NuxtLayout>
 </template>

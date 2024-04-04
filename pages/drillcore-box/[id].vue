@@ -180,7 +180,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <DetailNew>
+  <NuxtLayout name="detail" :show-similar="false">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #tabs>
@@ -188,7 +188,6 @@ useSeoMeta({
         </template>
       </HeaderDetailNew>
     </template>
-
     <NuxtPage v-bind="activeTabProps" />
-  </DetailNew>
+  </NuxtLayout>
 </template>

@@ -33,9 +33,8 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
     :model-value="true"
     :style="{ cursor: mini ? 'pointer' : 'auto' }"
     :permanent="!$vuetify.display.smAndDown"
-    :temporary="$vuetify.display.smAndDown"
+    mobile-breakpoint="md"
     color="grey-lighten-4"
-    touchless
     :rail="mini"
     :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
   >

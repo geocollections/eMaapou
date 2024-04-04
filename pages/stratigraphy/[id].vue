@@ -179,10 +179,14 @@ const title = computed(() =>
 useHead({
   title: `${title.value} | ${t("stratigraphy.pageTitle")}`,
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <DetailNew :show-similar="showDrawer">
+  <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="title">
         <template #tabs>
@@ -210,5 +214,5 @@ useHead({
         </template>
       </SearchResultsDrawer>
     </template>
-  </DetailNew>
+  </NuxtLayout>
 </template>

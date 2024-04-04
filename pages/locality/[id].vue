@@ -263,7 +263,7 @@ const { data } = await useAsyncData("locality", async () => {
     + hydratedTabs.sample.count
     + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
-  const imagesRes = await $geoloogiaFetch("/locality_image", {
+  const imagesRes = await $geoloogiaFetch("/locality_image/", {
     query: {
       locality: route.params.id,
       nest: 1,
@@ -340,10 +340,14 @@ useSeoMeta({
     )
     : null,
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <DetailNew :show-similar="showDrawer">
+  <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew
         :title="
@@ -459,5 +463,5 @@ useSeoMeta({
       </SearchResultsDrawer>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </DetailNew>
+  </NuxtLayout>
 </template>

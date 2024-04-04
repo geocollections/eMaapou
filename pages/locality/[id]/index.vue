@@ -25,7 +25,7 @@ const imagesHasNext = ref(true);
 async function imageQuery({ rows, page }: { rows: number; page: number }) {
   if (!imagesHasNext.value)
     return;
-  const newImages = await $geoloogiaFetch("/locality_image", {
+  const newImages = await $geoloogiaFetch("/locality_image/", {
     query: {
       locality: route.params.id,
       nest: 2,
@@ -48,9 +48,9 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
   images.value = [...images.value, ...newImages];
 }
 
-const _ = await useAsyncData("image", async () => {
-  await imageQuery({ rows: 10, page: 0 });
-});
+// const _ = await useAsyncData("image", async () => {
+//   await imageQuery({ rows: 10, page: 0 });
+// });
 </script>
 
 <template>

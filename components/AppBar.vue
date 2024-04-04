@@ -85,7 +85,11 @@ const state = reactive({
                 :to="localePath({ name: item.routeName })"
               />
             </VList>
-            <VDivider class="mx-3 my-2" vertical />
+            <VDivider
+              class="mx-3 my-2"
+              vertical
+              style="height: inherit"
+            />
             <VList class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in state.browseLab"
@@ -97,7 +101,11 @@ const state = reactive({
               />
             </VList>
 
-            <VDivider class="mx-3 my-2" vertical />
+            <VDivider
+              class="mx-3 my-2"
+              vertical
+              style="height: inherit"
+            />
             <VList class="mx-3" width="250">
               <BaseMenuListItem
                 v-for="(item, index) in state.browseGeography"

@@ -113,10 +113,14 @@ const { t } = useI18n();
 useHead({
   title: `${title.value} | ${t("preparation.pageTitle")}`,
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <DetailNew :show-similar="showDrawer">
+  <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="title">
         <template #tabs>
@@ -146,5 +150,5 @@ useHead({
       </SearchResultsDrawer>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </DetailNew>
+  </NuxtLayout>
 </template>

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
-import { mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiMagnify } from "@mdi/js";
+import { mdiChevronDoubleLeft, mdiChevronDoubleRight, mdiViewList } from "@mdi/js";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
   BROWSE_TAXON_LIST,
   SERVICES,
 } from "~/constants";
+
+const layoutCustomProps = useAttrs();
 
 const display = useDisplay();
 const drawer = ref(false);
@@ -21,16 +23,22 @@ const railDrawer = ref(true);
 const localePath = useLocalePath();
 
 const { t } = useI18n({ useScope: "local" });
+
 const mini = ref(false);
 
-const showSearch = ref(false);
-watch(() => display.smAndDown.value, (value) => {
-  if (!value)
-    showSearch.value = false;
+const showDrawer = ref(true);
+watch([() => layoutCustomProps["show-similar"], () => display.smAndDown.value], ([value, displayValue]) => {
+  if (displayValue) {
+    showDrawer.value = false;
+    return;
+  }
+
+  showDrawer.value = value;
 });
 function closeMobileSearch() {
-  showSearch.value = false;
+  showDrawer.value = false;
 }
+const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
 </script>
 
 <template>
@@ -106,19 +114,18 @@ function closeMobileSearch() {
       </VList>
     </VNavigationDrawer>
     <VNavigationDrawer
-      :model-value="display.smAndDown.value ? showSearch : true"
+      :model-value="display.smAndDown.value ? showDrawer : true"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
-      :permanent="!display.smAndDown.value"
+      :permanent="!$vuetify.display.smAndDown"
       mobile-breakpoint="md"
-      width="300"
       color="grey-lighten-4"
       :rail="mini"
-      :location="display.smAndDown.value ? 'bottom' : 'left'"
-      @update:model-value="showSearch = $event"
+      :location="$vuetify.display.smAndDown ? 'bottom' : 'left'"
+      @update:model-value="showDrawer = $event"
     >
       <div style="height: 100%" tile>
         <VList
-          v-if="!display.smAndDown.value"
+          v-if="!$vuetify.display.smAndDown"
           density="compact"
           class="pb-1"
           nav
@@ -135,61 +142,53 @@ function closeMobileSearch() {
               />
             </template>
             <template #title>
-              <div class="montserrat font-weight-medium ">
-                {{ $t("common.hideFilters") }}
+              <div class="montserrat font-weight-medium">
+                {{ $t("common.hideSimilar") }}
               </div>
             </template>
           </VListItem>
         </VList>
         <div v-else class="text-h6 py-2 pl-2">
-          {{ $t("common.showSearchFields") }}
+          {{ $t("common.showSimilar") }}
         </div>
         <div v-show="mini">
           <div
             class="montserrat font-weight-medium text-body-2 mt-2 ml-auto mr-auto"
             style="
-              transform: scale(-1, -1);
-              white-space: nowrap;
-              writing-mode: vertical-lr;
-            "
+            transform: scale(-1, -1);
+            white-space: nowrap;
+            writing-mode: vertical-lr;
+          "
           >
-            {{ $t("common.showFilters") }}
+            {{ $t("common.showSimilar") }}
           </div>
         </div>
-        <div v-show="!mini" class="mt-2">
-          <slot name="form" :close-mobile-search="closeMobileSearch" />
+        <div v-show="!mini">
+          <slot name="drawer" :close-mobile-search="closeMobileSearch" />
         </div>
       </div>
     </VNavigationDrawer>
-    <VMain>
-      <VContainer
-        class="py-0 pb-10 px-0"
-        style="min-height: 100vh"
-        :fluid="true"
-      >
-        <VRow no-gutters>
-          <VCol class="bg-white">
-            <slot name="title" />
-          </VCol>
-          <VCol cols="12">
-            <slot />
-          </VCol>
-        </VRow>
-        <VFabTransition v-if="display.smAndDown.value">
-          <VBtn
-            position="fixed"
-            class="mb-2 text-capitalize"
-            location="bottom center"
-            rounded
-            color="warning"
-            @click="showSearch = !showSearch"
-          >
-            <VIcon :icon="mdiMagnify" start />
-            {{ $t("common.searchCommand") }}
-          </VBtn>
-        </VFabTransition>
+    <VMain style="min-height: 100vh " :style="{ 'padding-top': topPadding }">
+      <div class="fill-height pb-10">
+        <slot name="title" />
+        <slot />
+        <ClientOnly>
+          <VFabTransition v-if="$attrs['show-similar'] && display.smAndDown.value">
+            <VBtn
+              position="fixed"
+              class="mb-2 text-capitalize"
+              location="bottom center"
+              rounded
+              color="warning"
+              @click="showDrawer = !showDrawer"
+            >
+              <VIcon :icon="mdiViewList" start />
+              {{ $t("common.similar") }}
+            </VBtn>
+          </VFabTransition>
+        </ClientOnly>
         <FabScrollTop />
-      </VContainer>
+      </div>
       <AppFooter />
     </VMain>
   </VApp>

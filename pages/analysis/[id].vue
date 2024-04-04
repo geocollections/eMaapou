@@ -163,10 +163,14 @@ const searchRoute = computed(() => {
     query: getQueryParamsAnalysis(),
   });
 });
+
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
-  <DetailNew :show-similar="showDrawer">
+  <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
         <template #tabs>
@@ -207,5 +211,5 @@ const searchRoute = computed(() => {
       </SearchResultsDrawer>
     </template>
     <NuxtPage v-bind="activeTabProps" />
-  </DetailNew>
+  </NuxtLayout>
 </template>
