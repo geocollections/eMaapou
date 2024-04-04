@@ -74,7 +74,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
     />
   </div>
   <VList>
-    <template v-for="(item, index) in results" :key="index">
+    <template v-for="(item, index) in results" :key="`${index}-${item.id}`">
       <VListItem
         class="pa-2 my-1 mx-2 text-body-2"
         elevation="0"
