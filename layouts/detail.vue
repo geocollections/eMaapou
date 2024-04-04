@@ -28,13 +28,14 @@ const mini = ref(false);
 
 const showDrawer = ref(true);
 watch([() => layoutCustomProps["show-similar"], () => display.smAndDown.value], ([value, displayValue]) => {
+  console.log(value);
   if (displayValue) {
     showDrawer.value = false;
     return;
   }
 
   showDrawer.value = value;
-});
+}, { immediate: true });
 function closeMobileSearch() {
   showDrawer.value = false;
 }
@@ -114,7 +115,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
       </VList>
     </VNavigationDrawer>
     <VNavigationDrawer
-      :model-value="display.smAndDown.value ? showDrawer : true"
+      :model-value="showDrawer"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
       :permanent="!$vuetify.display.smAndDown"
       mobile-breakpoint="md"
