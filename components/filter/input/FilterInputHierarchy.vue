@@ -155,6 +155,7 @@ function handleSelect(node: TreeNode) {
 async function hydrateSelected() {
   if (props.modelValue.length < 1)
     return;
+
   selectedItems.value = await props.hydrationFunction(selectedValues.value);
 }
 
@@ -175,7 +176,7 @@ watch(queryDebounced, () => {
   refreshAutocomplete();
 });
 
-function handleAdd(item: Suggestion) {
+async function handleAdd(item: Suggestion) {
   if (selectedItems.value.some(i => i.id === item.id))
     return;
 
@@ -185,6 +186,8 @@ function handleAdd(item: Suggestion) {
     value: item.id,
     count: 0,
   });
+
+  selectedItems.value = await props.hydrationFunction(selectedValues.value);
 }
 
 function handleListEnd(isIntersecting: boolean) {
