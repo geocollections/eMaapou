@@ -26,14 +26,15 @@ const { t } = useI18n({ useScope: "local" });
 
 const mini = ref(false);
 
+const drawerActive = ref(layoutCustomProps["show-similar"] as boolean ?? false);
+
 const showDrawer = ref(true);
 watch([() => layoutCustomProps["show-similar"], () => display.smAndDown.value], ([value, displayValue]) => {
-  console.log(value);
+  drawerActive.value = value;
   if (displayValue) {
     showDrawer.value = false;
     return;
   }
-
   showDrawer.value = value;
 }, { immediate: true });
 function closeMobileSearch() {
@@ -115,6 +116,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
       </VList>
     </VNavigationDrawer>
     <VNavigationDrawer
+      v-if="drawerActive"
       :model-value="showDrawer"
       :style="{ cursor: mini ? 'pointer' : 'auto' }"
       :permanent="!$vuetify.display.smAndDown"
