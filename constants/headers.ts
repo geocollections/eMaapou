@@ -30,6 +30,31 @@ export const numberFieldProps: Partial<Header> = {
   },
 };
 
+const COLUMN_SIZE_ULTRA_WIDE = "40em";
+const COLUMN_SIZE_WIDE = "20em";
+const COLUMN_SIZE_NORMAL = "12em";
+const COLUMN_SIZE_NARROW = "8em";
+
+export const narrowColumn = {
+  width: COLUMN_SIZE_NARROW,
+  minWidth: COLUMN_SIZE_NARROW,
+};
+
+export const normalColumn = {
+  width: COLUMN_SIZE_NORMAL,
+  minWidth: COLUMN_SIZE_NORMAL,
+};
+
+export const wideColumn = {
+  width: COLUMN_SIZE_WIDE,
+  minWidth: COLUMN_SIZE_WIDE,
+};
+
+export const ultraWideColumn = {
+  width: COLUMN_SIZE_ULTRA_WIDE,
+  minWidth: COLUMN_SIZE_ULTRA_WIDE,
+};
+
 export const HEADERS_ANALYSIS: Headers = {
   byIds: {
     id: {
@@ -38,13 +63,15 @@ export const HEADERS_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: "id_l",
       sortField: ["id_l"],
+      ...narrowColumn,
     },
     sample_name: {
-      title: "analysis.sampleNumber",
+      title: "analysis.sample",
       value: "sample_name",
       show: true,
       apiFieldValue: "sample_number",
       sortField: ["sample_name"],
+      ...narrowColumn,
     },
     locality: {
       title: "analysis.locality",
@@ -52,20 +79,34 @@ export const HEADERS_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
       sortField: { et: ["locality"], en: ["locality_en"] },
+      ...wideColumn,
     },
     depth: {
       title: "analysis.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth",
-      sortField: ["depth"],
-    },
-    depth_interval: {
-      title: "analysis.depthInterval",
-      value: "depth_interval",
-      show: true,
-      apiFieldValue: "depth_interval",
-      sortField: ["depth_interval"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     method: {
       title: "analysis.method",
@@ -73,6 +114,7 @@ export const HEADERS_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
       sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
+      ...normalColumn,
     },
     method_details: {
       title: "analysis.methodDetails",
@@ -80,6 +122,7 @@ export const HEADERS_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: { et: "method_details", en: "method_details_en" },
       sortField: { et: ["method_details"], en: ["method_details_en"] },
+      ...normalColumn,
     },
     agent: {
       title: "analysis.analysedBy",
@@ -87,6 +130,7 @@ export const HEADERS_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: "agent",
       sortField: ["agent"],
+      ...normalColumn,
     },
     date: {
       title: "analysis.date",
@@ -94,6 +138,7 @@ export const HEADERS_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: "date",
       sortField: ["date"],
+      ...normalColumn,
     },
   },
   allIds: [
@@ -101,7 +146,6 @@ export const HEADERS_ANALYSIS: Headers = {
     "sample_name",
     "locality",
     "depth",
-    "depth_interval",
     "method",
     "method_details",
     "agent",
@@ -177,8 +221,9 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       title: "analyticalData.analysis",
       value: "analysis_id",
       show: true,
-      apiFieldValue: "analysis_id_sl",
-      sortField: ["analysis_id_sl"],
+      apiFieldValue: "analysis_id_l",
+      sortField: ["analysis_id_l"],
+      ...narrowColumn,
     },
     analysis_method: {
       title: "analyticalData.analysisMethod",
@@ -186,13 +231,15 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       show: true,
       apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
       sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
+      ...normalColumn,
     },
     sample_number: {
       title: "analyticalData.sample",
       value: "sample_number",
       show: true,
-      apiFieldValue: "sample_number,sample_id_sl",
-      sortField: ["sample_number", "sample_id_sl"], // TODO: need to combine these two fields in Solr index
+      apiFieldValue: "sample_number,sample_id_l",
+      sortField: ["sample_number", "sample_id_l"], // TODO: need to combine these two fields in Solr index
+      ...narrowColumn,
     },
     locality: {
       title: "analyticalData.locality",
@@ -200,6 +247,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       show: true,
       apiFieldValue: "locality,locality_id_sl,site,site_id_sl",
       sortField: ["locality", "site"], // TODO: need to combine these two fields in Solr index, not sure how it should be done. Can one document have both fields defined?
+      ...wideColumn,
     },
     stratigraphy: {
       title: "analyticalData.stratigraphy",
@@ -213,6 +261,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
         et: ["stratigraphy"],
         en: ["stratigraphy_en"],
       },
+      ...normalColumn,
     },
     lithostratigraphy: {
       title: "analyticalData.lithostratigraphy",
@@ -226,14 +275,53 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
         et: ["lithostratigraphy"],
         en: ["lithostratigraphy_en"],
       },
+      ...normalColumn,
     },
     depth: {
       title: "analyticalData.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth,depth_interval",
-      sortField: ["depth", "depth_interval"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
+    // depth: {
+    //   title: "analyticalData.depth",
+    //   value: "depth",
+    //   show: true,
+    //   apiFieldValue: "depth",
+    //   sortField: ["depth"],
+    //   ...numberFieldProps,
+    //   ...smallColumn,
+    // },
+    // depth_interval: {
+    //   title: "analyticalData.depthInterval",
+    //   value: "depth_interval",
+    //   show: true,
+    //   apiFieldValue: "depth_interval",
+    //   sortField: ["depth_interval"],
+    //   ...numberFieldProps,
+    //   ...smallColumn,
+    // },
     rock: {
       title: "analyticalData.rock",
       value: "rock",
@@ -246,6 +334,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
         et: ["rock", "rock_txt"],
         en: ["rock_en", "rock_en_txt"],
       },
+      ...normalColumn,
     },
     reference: {
       title: "analyticalData.reference",
@@ -253,6 +342,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       show: true,
       apiFieldValue: "reference,reference_id_sl",
       sortField: ["reference"],
+      ...wideColumn,
     },
     dataset_id: {
       title: "analyticalData.dataset",
@@ -260,6 +350,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
       show: true,
       apiFieldValue: "dataset_id_sl,dataset_name",
       sortField: ["dataset_name"],
+      ...normalColumn,
     },
   },
   allIds: [
@@ -270,6 +361,7 @@ export const HEADERS_ANALYTICAL_DATA: Headers = {
     "stratigraphy",
     "lithostratigraphy",
     "depth",
+    // "depth_interval",
     "rock",
     "reference",
     "dataset_id",
@@ -284,6 +376,7 @@ export const HEADERS_AREA: Headers = {
       show: false,
       apiFieldValue: "id",
       sortField: ["id"],
+      ...narrowColumn,
     },
     name: {
       title: "area.name",
@@ -291,6 +384,7 @@ export const HEADERS_AREA: Headers = {
       show: true,
       apiFieldValue: { et: "name", en: "name_en" },
       sortField: { et: ["name"], en: ["name_en"] },
+      ...wideColumn,
     },
     county: {
       title: "area.county",
@@ -298,6 +392,7 @@ export const HEADERS_AREA: Headers = {
       show: true,
       apiFieldValue: { et: "maakond", en: "maakond_en" },
       sortField: { et: ["maakond"], en: ["maakond_en"] },
+      ...normalColumn,
     },
     type: {
       title: "area.areaType",
@@ -305,6 +400,7 @@ export const HEADERS_AREA: Headers = {
       show: true,
       apiFieldValue: { et: "area_type", en: "area_type_en" },
       sortField: { et: ["area_type"], en: ["area_type_en"] },
+      ...normalColumn,
     },
     size: {
       title: "area.areaHa",
@@ -313,6 +409,7 @@ export const HEADERS_AREA: Headers = {
       apiFieldValue: "area_ha",
       sortField: ["area_ha"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
   },
   allIds: ["id", "name", "county", "type", "size"],
@@ -496,6 +593,7 @@ export const HEADERS_DATASET: Headers = {
       show: false,
       apiFieldValue: "dataset_id",
       sortField: ["dataset_id"],
+      ...narrowColumn,
     },
     name: {
       title: "dataset.name",
@@ -503,6 +601,7 @@ export const HEADERS_DATASET: Headers = {
       show: true,
       apiFieldValue: { et: "name", en: "name_en" },
       sortField: { et: ["name"], en: ["name_en"] },
+      ...ultraWideColumn,
     },
     date: {
       title: "dataset.date",
@@ -510,6 +609,7 @@ export const HEADERS_DATASET: Headers = {
       show: true,
       apiFieldValue: "date,date_txt",
       sortField: ["date", "date_txt"],
+      ...normalColumn,
     },
     database: {
       title: "dataset.database",
@@ -517,6 +617,7 @@ export const HEADERS_DATASET: Headers = {
       show: true,
       apiFieldValue: "database_acronym",
       sortField: ["database_acronym"],
+      ...narrowColumn,
     },
   },
   allIds: ["id", "name", "date", "database"],
@@ -809,6 +910,7 @@ export const HEADERS_DRILLCORE: Headers = {
       show: false,
       apiFieldValue: "id_l",
       sortField: ["id_l"],
+      ...narrowColumn,
     },
     drillcore: {
       title: "drillcore.name",
@@ -816,6 +918,7 @@ export const HEADERS_DRILLCORE: Headers = {
       show: true,
       apiFieldValue: { et: "drillcore", en: "drillcore_en" },
       sortField: { et: ["drillcore"], en: ["drillcore_en"] },
+      ...wideColumn,
     },
     depth: {
       title: "drillcore.depth",
@@ -823,6 +926,9 @@ export const HEADERS_DRILLCORE: Headers = {
       show: true,
       apiFieldValue: "depth",
       sortField: ["depth"],
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
     },
     boxes: {
       title: "drillcore.boxes",
@@ -831,6 +937,7 @@ export const HEADERS_DRILLCORE: Headers = {
       apiFieldValue: "boxes",
       sortField: ["boxes"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     box_numbers: {
       title: "drillcore.boxNumbers",
@@ -839,6 +946,7 @@ export const HEADERS_DRILLCORE: Headers = {
       apiFieldValue: "box_numbers",
       sortField: ["box_numbers"],
       ...numberFieldProps,
+      ...normalColumn,
     },
     year: {
       title: "drillcore.year",
@@ -846,6 +954,7 @@ export const HEADERS_DRILLCORE: Headers = {
       show: true,
       apiFieldValue: "year",
       sortField: ["year"],
+      ...normalColumn,
     },
     core_repository: {
       title: "drillcore.storage",
@@ -853,6 +962,7 @@ export const HEADERS_DRILLCORE: Headers = {
       show: true,
       apiFieldValue: { et: "core_repository", en: "core_repository_en" },
       sortField: { et: ["core_repository"], en: ["core_repository_en"] },
+      ...normalColumn,
     },
     acronym: {
       title: "drillcore.acronym",
@@ -860,6 +970,7 @@ export const HEADERS_DRILLCORE: Headers = {
       show: true,
       apiFieldValue: "acronym",
       sortField: ["acronym"],
+      ...narrowColumn,
     },
   },
   allIds: [
@@ -916,6 +1027,7 @@ export const HEADERS_LOCALITY: Headers = {
       show: false,
       apiFieldValue: "id_l",
       sortField: ["id_l"],
+      ...narrowColumn,
     },
     locality: {
       title: "locality.name",
@@ -923,6 +1035,7 @@ export const HEADERS_LOCALITY: Headers = {
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
       sortField: { et: ["locality"], en: ["locality_en"] },
+      ...wideColumn,
     },
     country: {
       title: "locality.country",
@@ -930,29 +1043,16 @@ export const HEADERS_LOCALITY: Headers = {
       show: true,
       apiFieldValue: { et: "country", en: "country_en" },
       sortField: { et: ["country"], en: ["country_en"] },
+      ...normalColumn,
     },
     coordinates: {
       title: "locality.coordinates",
       value: "coordinates",
       show: true,
       sortable: false,
-      align: "end",
-      children: [
-        {
-          title: "locality.latitude",
-          value: "latitude",
-          width: 75,
-          apiFieldValue: "latitude",
-          ...numberFieldProps,
-        },
-        {
-          title: "locality.longitude",
-          value: "longitude",
-          width: 75,
-          apiFieldValue: "longitude",
-          ...numberFieldProps,
-        },
-      ],
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
     },
     references: {
       title: "locality.relatedReferences",
@@ -962,6 +1062,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_references",
       sortField: ["related_references"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     specimens: {
       title: "locality.relatedSpecimens",
@@ -970,6 +1071,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_specimens",
       sortField: ["related_specimens"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     samples: {
       title: "locality.relatedSamples",
@@ -978,6 +1080,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_samples",
       sortField: ["related_samples"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     analyses: {
       title: "locality.relatedAnalyses",
@@ -986,6 +1089,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_analyses",
       sortField: ["related_analyses"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     drillcores: {
       title: "locality.relatedDrillcores",
@@ -994,6 +1098,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_drillcores",
       sortField: ["related_drillcores"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     files: {
       title: "locality.relatedFiles",
@@ -1002,6 +1107,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_files",
       sortField: ["related_files"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     images: {
       title: "locality.relatedImages",
@@ -1010,6 +1116,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_images",
       sortField: ["related_images"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     stratotypes: {
       title: "locality.relatedStratotypes",
@@ -1018,6 +1125,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_stratotypes",
       sortField: ["related_stratotypes"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
     taxonOccurrences: {
       title: "locality.relatedTaxonOccurrences",
@@ -1026,6 +1134,7 @@ export const HEADERS_LOCALITY: Headers = {
       apiFieldValue: "related_taxon_occurrences",
       sortField: ["related_taxon_occurrences"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
   },
   allIds: [
@@ -1033,8 +1142,6 @@ export const HEADERS_LOCALITY: Headers = {
     "locality",
     "country",
     "coordinates",
-    // "latitude",
-    // "longitude",
     "references",
     "specimens",
     "samples",
@@ -1184,13 +1291,21 @@ export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
 
 export const HEADERS_PHOTO: Headers = {
   byIds: {
-    id: { title: "photo.id", value: "id", show: true, apiFieldValue: "id_sl", sortField: ["id_sl"] },
+    id: {
+      title: "photo.id",
+      value: "id",
+      show: true,
+      apiFieldValue: "id_sl",
+      sortField: ["id_sl"],
+      ...narrowColumn,
+    },
     image_number: {
       title: "photo.number",
       value: "image_number",
       show: true,
       apiFieldValue: "image_number",
       sortField: ["image_number"],
+      ...narrowColumn,
     },
     agent: {
       title: "photo.agent",
@@ -1198,6 +1313,7 @@ export const HEADERS_PHOTO: Headers = {
       show: true,
       apiFieldValue: "agent",
       sortField: ["agent"],
+      ...normalColumn,
     },
     date: {
       title: "photo.date",
@@ -1205,6 +1321,7 @@ export const HEADERS_PHOTO: Headers = {
       show: true,
       apiFieldValue: "date_created_dt,date_created_free",
       sortField: ["date_created_dt", "date_created_free"],
+      ...normalColumn,
     },
     locality: {
       title: "photo.locality",
@@ -1212,6 +1329,7 @@ export const HEADERS_PHOTO: Headers = {
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
       sortField: { et: ["locality"], en: ["locality_en"] },
+      ...wideColumn,
     },
     image_object: {
       title: "photo.imageObject",
@@ -1219,6 +1337,7 @@ export const HEADERS_PHOTO: Headers = {
       show: true,
       apiFieldValue: "image_object",
       sortField: ["image_object"],
+      ...wideColumn,
     },
     tags: {
       title: "photo.tags",
@@ -1226,6 +1345,7 @@ export const HEADERS_PHOTO: Headers = {
       show: true,
       apiFieldValue: "tags",
       sortField: ["tags"],
+      ...wideColumn,
     },
     image: {
       title: "photo.image",
@@ -1233,6 +1353,7 @@ export const HEADERS_PHOTO: Headers = {
       show: true,
       apiFieldValue: "filename",
       sortable: false,
+      ...normalColumn,
     },
   },
   allIds: [
@@ -1255,13 +1376,15 @@ export const HEADERS_PREPARATION: Headers = {
       show: false,
       apiFieldValue: "id_l",
       sortField: ["id_l"],
+      ...narrowColumn,
     },
     preparation_number: {
-      title: "preparation.preparation_number",
+      title: "preparation.number",
       value: "preparation_number",
       show: true,
       apiFieldValue: "preparation_number",
       sortField: ["preparation_number"],
+      ...normalColumn,
     },
     locality: {
       title: "preparation.locality",
@@ -1269,13 +1392,34 @@ export const HEADERS_PREPARATION: Headers = {
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
       sortField: { et: ["locality"], en: ["locality_en"] },
+      ...wideColumn,
     },
     depth: {
       title: "preparation.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth,depth_interval",
-      sortField: ["depth", "depth_interval"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     stratigraphy: {
       title: "preparation.stratigraphy",
@@ -1289,6 +1433,7 @@ export const HEADERS_PREPARATION: Headers = {
         et: ["stratigraphy", "lithostratigraphy"],
         en: ["stratigraphy_en", "lithostratigraphy_en"],
       },
+      ...wideColumn,
     },
     agent: {
       title: "preparation.agent",
@@ -1296,6 +1441,7 @@ export const HEADERS_PREPARATION: Headers = {
       show: true,
       apiFieldValue: "agent",
       sortField: ["agent"],
+      ...normalColumn,
     },
     mass: {
       title: "preparation.mass",
@@ -1303,6 +1449,8 @@ export const HEADERS_PREPARATION: Headers = {
       show: true,
       apiFieldValue: "mass",
       sortField: ["mass"],
+      ...numberFieldProps,
+      ...normalColumn,
     },
   },
   allIds: [
@@ -1445,12 +1593,14 @@ export const HEADERS_SAMPLE: Headers = {
       value: "id",
       show: true,
       apiFieldValue: "id_l",
+      ...narrowColumn,
     },
     number: {
       title: "sample.number",
       value: "number",
       show: true,
       apiFieldValue: "number",
+      ...narrowColumn,
     },
     locality: {
       title: "sample.locality",
@@ -1464,13 +1614,34 @@ export const HEADERS_SAMPLE: Headers = {
         et: ["locality", "site_name"],
         en: ["locality_en", "site_name_en"],
       },
+      ...wideColumn,
     },
     depth: {
       title: "sample.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth",
-      sortField: ["depth", "depth_interval"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     stratigraphy: {
       title: "sample.stratigraphy",
@@ -1478,6 +1649,7 @@ export const HEADERS_SAMPLE: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
       sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
+      ...normalColumn,
     },
     lithostratigraphy: {
       title: "sample.lithostratigraphy",
@@ -1485,18 +1657,21 @@ export const HEADERS_SAMPLE: Headers = {
       show: false,
       apiFieldValue: { et: "lithostratigraphy", en: "lithostratigraphy_en" },
       sortField: { et: ["lithostratigraphy"], en: ["lithostratigraphy_en"] },
+      ...normalColumn,
     },
     collector: {
       title: "sample.collector",
       value: "collector",
       show: true,
       apiFieldValue: "collector",
+      ...normalColumn,
     },
     dateCollected: {
       title: "sample.dateCollected",
       value: "date_collected",
       show: true,
       apiFieldValue: "date_collected",
+      ...normalColumn,
     },
     image: {
       title: "sample.image",
@@ -1504,6 +1679,7 @@ export const HEADERS_SAMPLE: Headers = {
       show: true,
       apiFieldValue: "image",
       sortable: false,
+      ...normalColumn,
     },
   },
   allIds: [
@@ -1689,6 +1865,7 @@ export const HEADERS_SITE: Headers = {
       show: false,
       apiFieldValue: "id_l",
       sortField: ["id_l"],
+      ...narrowColumn,
     },
     name: {
       title: "site.name",
@@ -1696,6 +1873,7 @@ export const HEADERS_SITE: Headers = {
       show: true,
       apiFieldValue: { et: "name", en: "name_en" },
       sortField: ["name"],
+      ...wideColumn,
     },
     area: {
       title: "site.area",
@@ -1703,29 +1881,16 @@ export const HEADERS_SITE: Headers = {
       show: true,
       apiFieldValue: { et: "area_name", en: "area_name_en" },
       sortField: { et: ["area_name"], en: ["area_name_en"] },
+      ...wideColumn,
     },
     coordinates: {
       title: "locality.coordinates",
       value: "coordinates",
       show: true,
       sortable: false,
-      align: "end",
-      children: [
-        {
-          title: "locality.latitude",
-          value: "latitude",
-          width: 75,
-          apiFieldValue: "latitude",
-          ...numberFieldProps,
-        },
-        {
-          title: "locality.longitude",
-          value: "longitude",
-          width: 75,
-          apiFieldValue: "longitude",
-          ...numberFieldProps,
-        },
-      ],
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
     },
     elevation: {
       title: "site.elevation",
@@ -1733,6 +1898,7 @@ export const HEADERS_SITE: Headers = {
       show: true,
       apiFieldValue: "z",
       sortField: ["z"],
+      ...narrowColumn,
       ...numberFieldProps,
     },
     depth: {
@@ -1742,6 +1908,7 @@ export const HEADERS_SITE: Headers = {
       apiFieldValue: "depth",
       sortField: ["depth"],
       ...numberFieldProps,
+      ...narrowColumn,
     },
   },
   allIds: ["id", "name", "area", "coordinates", "elevation", "depth"],
@@ -1755,6 +1922,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: false,
       apiFieldValue: "id",
       sortField: ["id"],
+      ...narrowColumn,
     },
     specimen_full_name: {
       title: "specimen.number",
@@ -1762,6 +1930,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: true,
       apiFieldValue: "specimen_full_name",
       sortField: ["specimen_full_name"],
+      ...normalColumn,
     },
     specimen_number_old: {
       title: "specimen.oldNumber",
@@ -1769,6 +1938,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: false,
       apiFieldValue: "specimen_number_old",
       sortField: ["specimen_number_old"],
+      ...normalColumn,
     },
     original_status: {
       title: "specimen.originalStatus",
@@ -1776,6 +1946,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: false,
       apiFieldValue: { et: "original_status", en: "original_status_en" },
       sortField: { et: ["original_status"], en: ["original_status_en"] },
+      ...normalColumn,
     },
     locality: {
       title: "specimen.locality",
@@ -1783,22 +1954,34 @@ export const HEADERS_SPECIMEN: Headers = {
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
       sortField: { et: ["locality"], en: ["locality_en"] },
+      ...wideColumn,
     },
     depth: {
       title: "specimen.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth",
-      sortField: ["depth"],
-      ...numberFieldProps,
-    },
-    depth_interval: {
-      title: "specimen.depthInterval",
-      value: "depth_interval",
-      show: false,
-      apiFieldValue: "depth_interval",
-      sortField: ["depth_interval"],
-      ...numberFieldProps,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     stratigraphy: {
       title: "specimen.stratigraphy",
@@ -1806,6 +1989,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
       sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
+      ...normalColumn,
     },
     lithostratigraphy: {
       title: "sample.lithostratigraphy",
@@ -1813,6 +1997,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: false,
       apiFieldValue: { et: "lithostratigraphy", en: "lithostratigraphy_en" },
       sortField: { et: ["lithostratigraphy"], en: ["lithostratigraphy_en"] },
+      ...normalColumn,
     },
     name: {
       title: "specimen.name",
@@ -1822,6 +2007,7 @@ export const HEADERS_SPECIMEN: Headers = {
       class: "static-cell-header",
       apiFieldValue: { et: "rock", en: "rock_en" },
       sortField: { et: ["rock"], en: ["rock_en"] },
+      ...normalColumn,
     },
     image: {
       title: "specimen.image",
@@ -1829,6 +2015,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: true,
       apiFieldValue: "image",
       sortable: false,
+      ...normalColumn,
     },
     collector: {
       title: "specimen.collector",
@@ -1836,6 +2023,7 @@ export const HEADERS_SPECIMEN: Headers = {
       show: false,
       apiFieldValue: "collector",
       sortField: ["collector"],
+      ...normalColumn,
     },
   },
   allIds: [
@@ -1845,7 +2033,6 @@ export const HEADERS_SPECIMEN: Headers = {
     "name",
     "locality",
     "depth",
-    "depth_interval",
     "stratigraphy",
     "lithostratigraphy",
     "original_status",
@@ -2049,6 +2236,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: false,
       apiFieldValue: "id",
       sortField: ["id"],
+      ...narrowColumn,
     },
     stratigraphy: {
       title: "stratigraphy.stratigraphy",
@@ -2056,6 +2244,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
       sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
+      ...wideColumn,
     },
     index_main: {
       title: "stratigraphy.index_main",
@@ -2063,6 +2252,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: "index_main",
       sortField: ["index_main"],
+      ...narrowColumn,
     },
     index_additional: {
       title: "stratigraphy.index_additional",
@@ -2070,6 +2260,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: "index_additional",
       sortField: ["index_additional"],
+      ...narrowColumn,
     },
     stratigraphy_type: {
       title: "stratigraphy.stratigraphy_type",
@@ -2077,6 +2268,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy_type", en: "stratigraphy_type_en" },
       sortField: { et: ["stratigraphy_type"], en: ["stratigraphy_type_en"] },
+      ...normalColumn,
     },
     stratigraphy_rank: {
       title: "stratigraphy.stratigraphy_rank",
@@ -2084,6 +2276,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy_rank", en: "stratigraphy_rank_en" },
       sortField: { et: ["stratigraphy_rank"], en: ["stratigraphy_rank_en"] },
+      ...normalColumn,
     },
     stratigraphy_scope: {
       title: "stratigraphy.stratigraphy_scope",
@@ -2091,6 +2284,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy_scope", en: "stratigraphy_scope_en" },
       sortField: { et: ["stratigraphy_scope"], en: ["stratigraphy_scope_en"] },
+      ...normalColumn,
     },
     parent_stratigraphy: {
       title: "stratigraphy.parent_stratigraphy",
@@ -2101,29 +2295,58 @@ export const HEADERS_STRATIGRAPHY: Headers = {
         en: "parent_stratigraphy_en",
       },
       sortField: { et: ["parent_stratigraphy"], en: ["parent_stratigraphy_en"] },
+      ...wideColumn,
     },
-    ageBase: {
-      title: "stratigraphy.ageBase",
-      value: "ageBase",
+    age: {
+      title: "stratigraphy.age",
+      value: "age",
       show: true,
-      apiFieldValue: "age_base",
-      sortField: ["age_base"],
-      ...numberFieldProps,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.base",
+          value: "ageBase",
+          apiFieldValue: "age_base",
+          sortField: ["age_base"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.top",
+          value: "ageTop",
+          apiFieldValue: "age_top",
+          sortField: ["age_top"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
-    ageTop: {
-      title: "stratigraphy.ageTop",
-      value: "ageTop",
-      show: true,
-      apiFieldValue: "age_top",
-      sortField: ["age_top"],
-      ...numberFieldProps,
-    },
+    // ageBase: {
+    //   title: "stratigraphy.ageBase",
+    //   value: "ageBase",
+    //   show: true,
+    //   apiFieldValue: "age_base",
+    //   sortField: ["age_base"],
+    //   ...numberFieldProps,
+    // },
+    // ageTop: {
+    //   title: "stratigraphy.ageTop",
+    //   value: "ageTop",
+    //   show: true,
+    //   apiFieldValue: "age_top",
+    //   sortField: ["age_top"],
+    //   ...numberFieldProps,
+    // },
     age_stratigraphy: {
       title: "stratigraphy.age_stratigraphy",
       value: "age_stratigraphy",
       show: true,
       apiFieldValue: { et: "age_stratigraphy", en: "age_stratigraphy_en" },
       sortField: { et: ["age_stratigraphy"], en: ["age_stratigraphy_en"] },
+      ...normalColumn,
     },
   },
   allIds: [
@@ -2135,8 +2358,7 @@ export const HEADERS_STRATIGRAPHY: Headers = {
     "stratigraphy_rank",
     "stratigraphy_scope",
     "parent_stratigraphy",
-    "ageBase",
-    "ageTop",
+    "age",
     "age_stratigraphy",
   ],
 };
@@ -2282,6 +2504,7 @@ export const HEADERS_TAXON: Headers = {
       show: false,
       apiFieldValue: "id",
       sortField: ["id"],
+      ...narrowColumn,
     },
     taxon: {
       title: "taxon.taxon",
@@ -2289,6 +2512,7 @@ export const HEADERS_TAXON: Headers = {
       show: true,
       apiFieldValue: "taxon",
       sortField: ["taxon"],
+      ...ultraWideColumn,
     },
     parent_taxon: {
       title: "taxon.parentTaxon",
@@ -2296,6 +2520,7 @@ export const HEADERS_TAXON: Headers = {
       show: true,
       apiFieldValue: "parent_taxon",
       sortField: ["parent_taxon"],
+      ...wideColumn,
     },
     fossil_group: {
       title: "taxon.fossilGroup",
@@ -2303,6 +2528,7 @@ export const HEADERS_TAXON: Headers = {
       show: true,
       apiFieldValue: "fossil_group",
       sortField: ["fossil_group"],
+      ...wideColumn,
     },
   },
   allIds: ["id", "taxon", "parent_taxon", "fossil_group"],

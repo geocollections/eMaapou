@@ -69,7 +69,14 @@ const canScrollRight = ref(false);
 const topOptionsHeight = ref(0);
 const table = ref<HTMLElement>();
 const visibleHeaders = computed(() => {
-  return props.headers.filter(header => header.show);
+  const contentHeaders = props.headers.filter(header => header.show);
+  contentHeaders.push({
+    text: "",
+    value: "",
+    show: true,
+    sortable: false,
+  });
+  return contentHeaders;
 });
 
 const cssVars = computed(() => {
@@ -308,6 +315,14 @@ onMounted(() => {
   }
   :deep(tbody) > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
     background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  :deep(thead) > tr > th:last-of-type {
+    width: auto !important;
+  }
+
+  :deep(tbody) > tr > td:last-of-type {
+    width: auto !important;
   }
 
   :deep(th) {

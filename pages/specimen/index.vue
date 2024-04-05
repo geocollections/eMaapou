@@ -48,7 +48,6 @@ const {
       limit: imageOptions.value.itemsPerPage,
       offset: getOffset(imageOptions.value.page, imageOptions.value.itemsPerPage),
       filter: solrFilters.value,
-      sort: solrSort.value,
     },
   })),
   watch: false,

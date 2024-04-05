@@ -29,8 +29,19 @@ const { $translate } = useNuxtApp();
         {{ $translate({ et: item.locality, en: item.locality_en }) }}
       </NuxtLink>
     </template>
-    <template #item.depth="{ item }">
-      <span>{{ item.depth }}</span>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
+        {{
+          item.depth.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
+        }}
+      </span>
     </template>
     <template #item.stratigraphy="{ item }">
       <span v-if="item.stratigraphy_id || item.lithostratigraphy_id">
@@ -70,6 +81,13 @@ const { $translate } = useNuxtApp();
             })
           }}
         </NuxtLink>
+      </span>
+    </template>
+    <template #item.mass="{ item }">
+      <span v-if="item.mass">
+        {{
+          item.mass.toFixed(1)
+        }}
       </span>
     </template>
   </BaseDataTable>

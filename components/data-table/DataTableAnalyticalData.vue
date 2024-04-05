@@ -25,15 +25,17 @@ function formatDepthRange({
 
 <template>
   <BaseDataTable v-bind="$attrs">
-    <template #item.depth="{ item }">
-      <span
-        style="font-family: monospace"
-      >
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
         {{
-          formatDepthRange({
-            depthFrom: item.depth,
-            depthTo: item.depth_interval,
-          })
+          item.depth.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
         }}
       </span>
     </template>

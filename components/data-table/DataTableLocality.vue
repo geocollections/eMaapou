@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import isNil from "lodash/isNil";
+
 const emit = defineEmits(["click:row"]);
 
 const localePath = useLocalePath();
@@ -25,6 +27,11 @@ const localePath = useLocalePath();
       </NuxtLink>
     </template>
 
+    <template #item.coordinates="{ item }">
+      <span v-if="!isNil(item.latitude) && !isNil(item.longitude)">
+        {{ getCoordinatesStr(item.latitude, item.longitude) }}
+      </span>
+    </template>
     <template #item.latitude="{ item }">
       <span v-if="item.latitude">
         {{ item.latitude.toFixed(6) }}

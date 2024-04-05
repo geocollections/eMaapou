@@ -147,11 +147,19 @@ function openOverlay(image: OverlayImage) {
         $translate({ et: item.original_status, en: item.original_status_en })
       }}
     </template>
-    <template #item.depth="{ item }">
-      {{ item.depth?.toFixed(2) }}
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
+        {{
+          item.depth.toFixed(2)
+        }}
+      </span>
     </template>
-    <template #item.depth_interval="{ item }">
-      {{ item.depth_interval?.toFixed(2) }}
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
+        }}
+      </span>
     </template>
   </BaseDataTable>
   <ImageOverlay v-model="showOverlay" :image="overlayImage" />

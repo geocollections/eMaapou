@@ -70,6 +70,20 @@ const filteredHeaders = computed(() => {
         {{ $translate({ et: item.name, en: item.name_en }) }}
       </NuxtLink>
     </template>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
+        {{
+          item.depth.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
+        }}
+      </span>
+    </template>
     <template #item.thickness="{ item }">
       {{
         !item.depth_interval || !item.depth

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiChartLine } from "@mdi/js";
+import cloneDeep from "lodash/cloneDeep";
 
 const route = useRoute();
 
@@ -62,6 +63,8 @@ const { data: parameterHeaders } = await useAsyncData(async () => {
       value: correctParameterIndex,
       show: showHeader,
       titleTranslate: false,
+      parameter: true,
+      ...smallColumn,
     };
     acc.allIds.push(doc.parameter_index);
     return acc;
@@ -69,6 +72,17 @@ const { data: parameterHeaders } = await useAsyncData(async () => {
 });
 
 addHeaders(parameterHeaders.value);
+
+const finalHeaders = computed(() => {
+  const headersClone = cloneDeep(headers.value);
+
+  headersClone.forEach((header: any, i: number) => {
+    if (header.parameter)
+      headersClone[i] = { ...header, ...numberFieldProps };
+  });
+  console.log(headersClone);
+  return headersClone;
+});
 
 const router = useRouter();
 function setQueryParamsFromState() {
@@ -145,7 +159,7 @@ definePageMeta({
       :show-search="false"
       :items="data?.response.docs ?? []"
       :count="data?.response.numFound ?? 0"
-      :headers="headers"
+      :headers="finalHeaders"
       :options="options"
       :is-loading="pending"
       @update="handleDataTableUpdate"
