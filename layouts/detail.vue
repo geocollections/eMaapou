@@ -182,6 +182,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               class="mb-2 text-capitalize"
               location="bottom center"
               rounded
+              style="z-index: 1"
               color="warning"
               @click="showDrawer = !showDrawer"
             >

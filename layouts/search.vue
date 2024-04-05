@@ -178,7 +178,7 @@ function closeMobileSearch() {
         <VFabTransition v-if="display.smAndDown.value">
           <VBtn
             position="fixed"
-            class="mb-2 text-capitalize"
+            class="mb-2 text-capitalize z-100"
             location="bottom center"
             rounded
             color="warning"
