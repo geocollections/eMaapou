@@ -64,7 +64,7 @@ const { data: parameterHeaders } = await useAsyncData(async () => {
       show: showHeader,
       titleTranslate: false,
       parameter: true,
-      ...smallColumn,
+      ...narrowColumn,
     };
     acc.allIds.push(doc.parameter_index);
     return acc;
@@ -80,7 +80,6 @@ const finalHeaders = computed(() => {
     if (header.parameter)
       headersClone[i] = { ...header, ...numberFieldProps };
   });
-  console.log(headersClone);
   return headersClone;
 });
 
