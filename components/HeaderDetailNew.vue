@@ -10,7 +10,7 @@ const props = defineProps<{
     class="border-b bg-white px-4 w-100"
   >
     <div class="py-8 px-2">
-      <div class="d-flex align-start font-weight-medium text-h3">
+      <div class="d-flex align-start font-weight-medium text-md-h3 text-h4">
         <slot>
           {{ title }}
         </slot>
