@@ -24,7 +24,7 @@ const img = useImage();
 useSeoMeta({
   description: "Web portal for geoscience data from Estonia. Provides direct search capabilities to SARV information system and links to other data sources",
   ogImage: img("logos/emaapou_short.png"),
-  themeColor: "#577daf",
+  themeColor: "#616161",
 });
 </script>
 
