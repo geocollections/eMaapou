@@ -32,7 +32,7 @@ const state = reactive({
     :elevation="2"
     :class="{
       'app-bar-full': $vuetify.display.mdAndUp,
-      'app-bar-mobile': !$vuetify.display.mdAndUp,
+      'app-bar-mobile pl-2': !$vuetify.display.mdAndUp,
     }"
     color="grey-darken-2"
   >
