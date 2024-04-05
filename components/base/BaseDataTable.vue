@@ -172,8 +172,6 @@ onMounted(() => {
       item-key="id"
       mobile-breakpoint="0"
       density="compact"
-      calculate-widths
-      fixed-header
       multi-sort
       style="position: relative"
       :style="cssVars"
