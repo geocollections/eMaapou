@@ -249,6 +249,7 @@ onMounted(() => {
             </VCol>
           </VRow>
         </div>
+        <VDivider />
       </template>
       <template v-if="!onlyTable" #bottom="{ pageCount }">
         <VDivider />
