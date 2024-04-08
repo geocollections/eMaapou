@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiArchive } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch, $translate, $solrFetch } = useNuxtApp();
@@ -177,12 +178,28 @@ useSeoMeta({
     },
   ),
 });
+definePageMeta({
+  layout: false,
+});
 </script>
 
 <template>
   <NuxtLayout name="detail" :show-similar="false">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+          >
+            <VIcon start>
+              {{ mdiArchive }}
+            </VIcon>
+            {{ $t("common.drillcoreBox") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

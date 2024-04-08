@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { mdiTextureBox } from "@mdi/js";
-import isEmpty from "lodash/isEmpty";
+import { mdiMapMarkerOutline, mdiTextureBox } from "@mdi/js";
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const route = useRoute();
@@ -190,6 +189,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="title">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/site', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiMapMarkerOutline }}
+            </VIcon>
+            {{ $t("common.site") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

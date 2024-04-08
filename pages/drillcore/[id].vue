@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiScrewMachineFlatTop } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
@@ -269,6 +270,20 @@ definePageMeta({
           })
         "
       >
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/drillcore', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiScrewMachineFlatTop }}
+            </VIcon>
+            {{ $t("common.drillcore") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

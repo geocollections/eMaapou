@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiMapMarkerRadiusOutline } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
@@ -159,6 +160,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/area', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiMapMarkerRadiusOutline }}
+            </VIcon>
+            {{ $t("common.area") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

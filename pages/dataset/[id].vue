@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiDatabaseOutline } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch, $solrFetch } = useNuxtApp();
@@ -232,6 +233,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="data?.dataset.title">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/dataset', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiDatabaseOutline }}
+            </VIcon>
+            {{ $t("common.dataset") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>
@@ -261,7 +276,7 @@ definePageMeta({
     </template>
 
     <NuxtPage v-bind="activeTabProps" />
-  </NuxtLayout>
+  </nuxtlayout>
 </template>
 
 <style lang="scss" scoped>

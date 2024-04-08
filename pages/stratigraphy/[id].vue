@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiLayersTriple } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
@@ -189,6 +190,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="title">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/stratigraphy', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiLayersTriple }}
+            </VIcon>
+            {{ $t("common.stratigraphy") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>

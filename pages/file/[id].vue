@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { mdiFile } from "@mdi/js";
+
 const { $geoloogiaFetch, $translate, $solrFetch } = useNuxtApp();
 const { t } = useI18n();
 const route = useRoute();
@@ -140,6 +142,19 @@ definePageMeta({
       <HeaderDetailNew
         :title="pageTitle"
       >
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+          >
+            <VIcon start>
+              {{ mdiFile }}
+            </VIcon>
+            {{ $t("common.file") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>

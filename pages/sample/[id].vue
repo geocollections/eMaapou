@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiRuler } from "@mdi/js";
+import { mdiImageFilterHdr, mdiRuler } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
@@ -215,6 +215,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/sample', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiImageFilterHdr }}
+            </VIcon>
+            {{ $t("common.sample") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data.tabs" />
         </template>

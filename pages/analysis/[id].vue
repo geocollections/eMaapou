@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiImageFilterHdr } from "@mdi/js";
+import { mdiImageFilterHdr, mdiTestTube } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
@@ -173,6 +173,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="pageTitle">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/analysis', query: getQueryParamsAnalysis() })"
+          >
+            <VIcon start>
+              {{ mdiTestTube }}
+            </VIcon>
+            {{ $t("common.analysis") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

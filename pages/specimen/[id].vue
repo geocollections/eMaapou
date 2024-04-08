@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiContentCopy } from "@mdi/js";
+import { mdiBug, mdiContentCopy } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
@@ -208,6 +208,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew class="mb-0">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/specimen', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiBug }}
+            </VIcon>
+            {{ $t("common.specimen") }}
+          </VChip>
+        </template>
         <div>
           {{ title }}
         </div>
@@ -254,7 +268,7 @@ definePageMeta({
         :page="page"
         :results="similarSpecimens"
         :total-results="specimensRes?.response.numFound ?? 0"
-        :search-route="localePath({ path: '/specimen', query: getQueryParams() })"
+        :search-route="localePath({ path: '/specimen', query: { ...getQueryParams(), view: uu } })"
         :get-result-route="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })
         "
         @page:next="page++"

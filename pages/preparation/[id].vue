@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiEyedropper } from "@mdi/js";
 import type { HydratedTab, Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch } = useNuxtApp();
@@ -123,6 +124,20 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="showDrawer">
     <template #title>
       <HeaderDetailNew :title="title">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/preparation', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiEyedropper }}
+            </VIcon>
+            {{ $t("common.preparation") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

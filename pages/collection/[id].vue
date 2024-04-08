@@ -94,6 +94,16 @@ definePageMeta({
   <NuxtLayout name="detail" :show-similar="false">
     <template #title>
       <HeaderDetailNew :title="title">
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+          >
+            {{ $t("common.collection") }}
+          </VChip>
+        </template>
         <template #tabs>
           <DetailTabs :tabs="data?.tabs" />
         </template>

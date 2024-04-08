@@ -3,6 +3,7 @@ import {
   mdiBookOpenPageVariantOutline,
   mdiChartScatterPlot,
   mdiEarth,
+  mdiMapMarker,
   mdiOpenInNew,
   mdiScrewMachineFlatTop,
 } from "@mdi/js";
@@ -357,11 +358,26 @@ definePageMeta({
           })
         "
       >
+        <template #prepend>
+          <VChip
+            class="text-none"
+            variant="tonal"
+            color="accent"
+            label
+            :to="localePath({ path: '/locality', query: getQueryParams() })"
+          >
+            <VIcon start>
+              {{ mdiMapMarker }}
+            </VIcon>
+            {{ $t("common.locality") }}
+          </VChip>
+        </template>
         <template #sub>
           <VBtn
             v-if="data?.drillcore"
             size="small"
             rounded
+            flat
             color="accent"
             class="mt-2 mr-2 montserrat text-none"
             @click="
@@ -387,6 +403,7 @@ definePageMeta({
             v-if="data?.analysisResultsCount > 0"
             size="small"
             rounded
+            flat
             color="accent"
             class="mt-2 mr-2 montserrat text-none"
             :to="
@@ -405,6 +422,7 @@ definePageMeta({
             v-if="data?.referenceCount > 0"
             size="small"
             rounded
+            flat
             color="accent"
             class="mt-2 montserrat text-none"
             :href="`https://kirjandus.geoloogia.info/reference/?localities=${title}`"
