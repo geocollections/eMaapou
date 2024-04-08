@@ -50,8 +50,14 @@ function handleSubmit() {
     >
       <FilterInputText
         v-model="filters.species.value"
-        :title="$t('filters.species')"
+        :title="$t('filters.taxon')"
         value="species"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputText
+        v-model="filters.author.value"
+        :title="$t('filters.author')"
+        value="author"
         @update:model-value="handleUpdate"
       />
       <FilterInputHierarchy
@@ -68,12 +74,6 @@ function handleSubmit() {
       <FilterMap
         v-model="filters.geometry.value"
         value="map"
-        @update:model-value="handleUpdate"
-      />
-      <FilterInputText
-        v-model="filters.author.value"
-        :title="$t('filters.author')"
-        value="author"
         @update:model-value="handleUpdate"
       />
     </VExpansionPanels>

@@ -1138,6 +1138,7 @@ export default {
     miner: "Kaevandaja",
     miningPermit: "Kaevandamisluba",
     miningPermitOwner: "Kaevandamisloa omanik",
+    taxon: "Takson",
   },
   intervals: {
     default: {

@@ -1138,6 +1138,7 @@ export default {
     miner: "Miner",
     miningPermit: "Mining permit",
     miningPermitOwner: "Mining permit owner",
+    taxon: "Taxon",
   },
   intervals: {
     default: {
