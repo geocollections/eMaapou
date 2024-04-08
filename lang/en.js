@@ -588,6 +588,9 @@ export default {
     fad: "First appearance datum",
     lad: "Last appearance datum",
     src: "Occurrence based on",
+    inEstonia: "In Estonia",
+    isFossil: "Fossil",
+    isValid: "Valid",
   },
   infinite: {
     noMore: "",

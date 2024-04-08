@@ -53,25 +53,34 @@ const localePath = useLocalePath();
 
     <template #item.fad="{ item }">
       <NuxtLink
-        v-if="item.fad_id"
+        v-if="item.stratigraphy_base"
         class="text-link"
         :to="
-          localePath({ name: 'stratigraphy-id', params: { id: item.fad_id } })
+          localePath({ name: 'stratigraphy-id', params: { id: item.stratigraphy_base } })
         "
       >
-        {{ $translate({ et: item.fad, en: item.fad_en }) }}
+        {{ $translate({ et: item.fad_stratigraphy, en: item.fad_stratigraphy_en }) }}
       </NuxtLink>
     </template>
     <template #item.lad="{ item }">
       <NuxtLink
-        v-if="item.lad_id"
+        v-if="item.stratigraphy_top"
         class="text-link"
         :to="
-          localePath({ name: 'stratigraphy-id', params: { id: item.lad_id } })
+          localePath({ name: 'stratigraphy-id', params: { id: item.stratigraphy_top } })
         "
       >
-        {{ $translate({ et: item.lad, en: item.lad_en }) }}
+        {{ $translate({ et: item.lad_stratigraphy, en: item.lad_stratigraphy_en }) }}
       </NuxtLink>
+    </template>
+    <template #item.in_estonia="{ item }">
+      <BaseBoolean :model-value="item.in_estonia" />
+    </template>
+    <template #item.is_fossil="{ item }">
+      <BaseBoolean :model-value="item.is_fossil" />
+    </template>
+    <template #item.is_valid="{ item }">
+      <BaseBoolean :model-value="item.is_valid" />
     </template>
   </BaseDataTable>
 </template>

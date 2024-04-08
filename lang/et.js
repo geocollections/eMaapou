@@ -589,6 +589,9 @@ export default {
     fad: "Ilmumine",
     lad: "Kadumine",
     src: "Esinemine põhineb",
+    inEstonia: "Esineb Eestis",
+    isFossil: "Fossiil",
+    isValid: "Valiidne",
   },
   infinite: {
     noMore: "",
