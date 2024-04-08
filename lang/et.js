@@ -1139,6 +1139,7 @@ export default {
     miningPermit: "Kaevandamisluba",
     miningPermitOwner: "Kaevandamisloa omanik",
     taxon: "Takson",
+    size: "Suurus",
   },
   intervals: {
     default: {

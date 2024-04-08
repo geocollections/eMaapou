@@ -110,6 +110,12 @@ const { suggest: suggestMiningPermitOwner, hydrate: hydrateMiningPermitOwner } =
         value="type"
         @update:model-value="handleUpdate"
       />
+      <FilterInputRange
+        v-model="filters.size.value"
+        :title="$t('filters.size')"
+        value="size"
+        @update:model-value="handleUpdate"
+      />
       <FilterInputAutocomplete
         ref="filterMiningPermit"
         v-model="filters.miningPermit.value"
