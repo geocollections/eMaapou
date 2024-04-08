@@ -441,6 +441,9 @@ export default {
     parentArea: "Kuulub",
     relatedAreas: "Seotud alad ({number})",
     localities: "Seotud lokaliteedid ({number})",
+    miner: "Kaevandaja",
+    miningPermit: "Kaevandamisluba",
+    miningPermitOwner: "Kaevandamisloa omanik",
   },
   site: {
     pageTitle: "Uuringupunktid",
@@ -1129,6 +1132,9 @@ export default {
     rockHierarchySpecimen: "Kivim/mineraal",
     stratigraphyAge: "Stratigraafia vanus (mln a)",
     institution: "Asutus",
+    miner: "Kaevandaja",
+    miningPermit: "Kaevandamisluba",
+    miningPermitOwner: "Kaevandamisloa omanik",
   },
   intervals: {
     default: {

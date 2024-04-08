@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { RouteLocation } from "vue-router";
 
-import type { IdListFilter, TextListFilter } from "~/composables/useFilter";
+import type { IdListFilter, StringIdListFilter, TextListFilter } from "~/composables/useFilter";
 
 export const useAreas = defineStore(
   "areas",
@@ -43,6 +43,30 @@ export const useAreas = defineStore(
         fields: ["area_type_id"],
         tag: "type",
       } as IdListFilter,
+      miner: {
+        value: [],
+        type: "idList",
+        fields: ["kaevandaja"],
+        tag: "miner",
+        lookup: "exact",
+        alphaNumeric: false,
+      } as StringIdListFilter,
+      miningPermit: {
+        value: [],
+        type: "idList",
+        fields: ["loa_number"],
+        tag: "miningPermit",
+        lookup: "exact",
+        alphaNumeric: false,
+      } as StringIdListFilter,
+      miningPermitOwner: {
+        value: [],
+        type: "idList",
+        fields: ["loa_omanik"],
+        tag: "miningPermitOwner",
+        lookup: "exact",
+        alphaNumeric: false,
+      } as StringIdListFilter,
     });
 
     const routeQueryFiltersSchema = z.object({
@@ -50,6 +74,9 @@ export const useAreas = defineStore(
       name: textParamParser,
       county: idParamParser(","),
       type: idParamParser(","),
+      miner: idParamParser(","),
+      miningPermit: idParamParser(","),
+      miningPermitOwner: idParamParser(","),
     });
 
     const routeQuerySchema = routeQueryOptionsSchema.merge(
@@ -75,6 +102,9 @@ export const useAreas = defineStore(
       name: stringArrayValueParser,
       county: idValueParser(","),
       type: idValueParser(","),
+      miner: idValueParser(","),
+      miningPermit: idValueParser(","),
+      miningPermitOwner: idValueParser(","),
     });
 
     const stateToQueryParamsSchema = optionsStateToQueryParamsSchema.merge(
@@ -87,6 +117,9 @@ export const useAreas = defineStore(
         name: filters.value.name.value,
         county: filters.value.county.value,
         type: filters.value.type.value,
+        miner: filters.value.miner.value,
+        miningPermit: filters.value.miningPermit.value,
+        miningPermitOwner: filters.value.miningPermitOwner.value,
         page: options.value.page,
         itemsPerPage: options.value.itemsPerPage,
         sortBy: options.value.sortBy,

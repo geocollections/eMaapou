@@ -411,8 +411,32 @@ export const HEADERS_AREA: Headers = {
       ...numberFieldProps,
       ...narrowColumn,
     },
+    miner: {
+      title: "area.miner",
+      value: "miner",
+      show: false,
+      apiFieldValue: "kaevandaja",
+      sortField: ["kaevandaja"],
+      ...normalColumn,
+    },
+    miningPermit: {
+      title: "area.miningPermit",
+      value: "miningPermit",
+      show: false,
+      apiFieldValue: "loa_number",
+      sortField: ["loa_number"],
+      ...normalColumn,
+    },
+    miningPermitOwner: {
+      title: "area.miningPermitOwner",
+      value: "miningPermitOwner",
+      show: false,
+      apiFieldValue: "loa_omanik",
+      sortField: ["loa_omanik"],
+      ...normalColumn,
+    },
   },
-  allIds: ["id", "name", "county", "type", "size"],
+  allIds: ["id", "name", "county", "type", "size", "miner", "miningPermit", "miningPermitOwner"],
 };
 
 export const HEADERS_AREA_LOCALITY: Headers = {

@@ -7,6 +7,9 @@ const areasStore = useAreas();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(areasStore);
 const filterCounty = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterType = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterMiner = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterMiningPermit = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterMiningPermitOwner = ref<InstanceType<typeof FilterInputAutocomplete>>();
 
 function handleReset() {
   emit("reset");
@@ -15,6 +18,9 @@ function handleUpdate() {
   nextTick(() => {
     filterCounty.value?.refreshSuggestions();
     filterType.value?.refreshSuggestions();
+    filterMiner.value?.refreshSuggestions();
+    filterMiningPermit.value?.refreshSuggestions();
+    filterMiningPermitOwner.value?.refreshSuggestions();
     emit("update");
   });
 }
@@ -35,6 +41,36 @@ const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
     idField: "area_type_id_s",
     nameField: { et: "area_type", en: "area_type_en" },
     filterExclude: "type",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+
+const { suggest: suggestMiner, hydrate: hydrateMiner } = useAutocomplete(
+  "/area",
+  {
+    idField: "kaevandaja",
+    nameField: "kaevandaja",
+    filterExclude: "miner",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+
+const { suggest: suggestMiningPermit, hydrate: hydrateMiningPermit } = useAutocomplete(
+  "/area",
+  {
+    idField: "loa_number",
+    nameField: "loa_number",
+    filterExclude: "miningPermit",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  },
+);
+
+const { suggest: suggestMiningPermitOwner, hydrate: hydrateMiningPermitOwner } = useAutocomplete(
+  "/area",
+  {
+    idField: "loa_omanik",
+    nameField: "loa_omanik",
+    filterExclude: "miningPermitOwner",
     solrParams: { query: solrQuery, filter: solrFilters },
   },
 );
@@ -72,6 +108,33 @@ const { suggest: suggestType, hydrate: hydrateType } = useAutocomplete(
         :query-function="suggestType"
         :hydration-function="hydrateType"
         value="type"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterMiningPermit"
+        v-model="filters.miningPermit.value"
+        :title="$t('filters.miningPermit')"
+        :query-function="suggestMiningPermit"
+        :hydration-function="hydrateMiningPermit"
+        value="miningPermit"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterMiningPermitOwner"
+        v-model="filters.miningPermitOwner.value"
+        :title="$t('filters.miningPermitOwner')"
+        :query-function="suggestMiningPermitOwner"
+        :hydration-function="hydrateMiningPermitOwner"
+        value="miningPermitOwner"
+        @update:model-value="handleUpdate"
+      />
+      <FilterInputAutocomplete
+        ref="filterMiner"
+        v-model="filters.miner.value"
+        :title="$t('filters.miner')"
+        :query-function="suggestMiner"
+        :hydration-function="hydrateMiner"
+        value="miner"
         @update:model-value="handleUpdate"
       />
     </VExpansionPanels>

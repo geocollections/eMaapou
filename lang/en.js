@@ -439,6 +439,9 @@ export default {
     parentArea: "Belongs to",
     relatedAreas: "Related areas ({number})",
     localities: "Related localities ({number})",
+    miner: "Miner",
+    miningPermit: "Mining permit",
+    miningPermitOwner: "Mining permit owner",
   },
   site: {
     pageTitle: "Sites",
@@ -1129,6 +1132,9 @@ export default {
     rockHierarchySpecimen: "Rock/mineral",
     stratigraphyAge: "Stratigraphy age (Ma)",
     institution: "Institution",
+    miner: "Miner",
+    miningPermit: "Mining permit",
+    miningPermitOwner: "Mining permit owner",
   },
   intervals: {
     default: {

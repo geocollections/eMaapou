@@ -25,5 +25,14 @@ const localePath = useLocalePath();
     <template #item.size="{ item }">
       <span v-if="item.area_ha">{{ item.area_ha.toFixed(2) }}</span>
     </template>
+    <template #item.miner="{ item }">
+      <span v-if="item.kaevandaja">{{ item.kaevandaja }}</span>
+    </template>
+    <template #item.miningPermit="{ item }">
+      <span v-if="item.loa_number">{{ item.loa_number }}</span>
+    </template>
+    <template #item.miningPermitOwner="{ item }">
+      <span v-if="item.loa_omanik">{{ item.loa_omanik }}</span>
+    </template>
   </BaseDataTable>
 </template>
