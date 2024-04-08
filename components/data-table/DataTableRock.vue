@@ -18,7 +18,7 @@
     </template>
 
     <template #item.in_estonia="{ item }">
-      <BaseBoolean :value="!!item.in_estonia" />
+      <BaseBoolean :model-value="!!item.in_estonia" />
     </template>
 
     <template #item.mindat_id="{ item }">

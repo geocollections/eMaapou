@@ -251,7 +251,7 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
             <TableRow :title="$t('deposit.area')" :value="deposit.pindala" />
             <TableRow :title="$t('deposit.isBedrock')">
               <template #value>
-                <BaseBoolean :value="deposit.aluspohja" />
+                <BaseBoolean :model-value="deposit.aluspohja" />
               </template>
             </TableRow>
             <TableRow

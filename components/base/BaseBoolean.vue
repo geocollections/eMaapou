@@ -1,27 +1,16 @@
-<script>
+<script setup lang="ts">
 import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
 
-export default {
-  name: "BaseBoolean",
-  props: {
-    value: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false,
   },
-  computed: {
-    icons() {
-      return {
-        mdiCheckBold,
-        mdiCloseThick,
-      };
-    },
-  },
-};
+});
 </script>
 
 <template>
-  <VIcon :color="value ? 'green' : 'red'" size="small">
-    {{ value ? icons.mdiCheckBold : icons.mdiCloseThick }}
+  <VIcon :color="modelValue ? 'green' : 'red'" size="small">
+    {{ modelValue ? mdiCheckBold : mdiCloseThick }}
   </VIcon>
 </template>

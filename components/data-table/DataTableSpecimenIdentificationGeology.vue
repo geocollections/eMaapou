@@ -40,7 +40,7 @@
       </div>
     </template>
     <template #item.current="{ item }">
-      <BaseBoolean :value="item.current" />
+      <BaseBoolean :model-value="item.current" />
     </template>
   </BaseDataTable>
 </template>
