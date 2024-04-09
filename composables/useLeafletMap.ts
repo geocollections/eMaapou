@@ -13,7 +13,7 @@ export function useLeafletMap({
   props,
   state,
 }: {
-  map: Ref<typeof LMap | undefined>;
+  map: Ref<Leaflet.Map | undefined>;
   props: any;
   state: MapState;
 }) {
@@ -65,7 +65,8 @@ export function useLeafletMap({
     estonianOverlays,
   };
 }
-function useBaseLayers({ visibleLayer }: { visibleLayer: string }) {
+
+export function useBaseLayers({ visibleLayer }: { visibleLayer: string }) {
   const layers = [
     {
       id: "carto-base",
@@ -141,7 +142,7 @@ function useBaseLayers({ visibleLayer }: { visibleLayer: string }) {
     };
   });
 }
-function useEstonianOverlays({
+export function useEstonianOverlays({
   estonianHybridOverlay,
   estonianBedrockOverlay,
   estonianBasementOverlay,

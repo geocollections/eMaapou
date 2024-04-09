@@ -8,7 +8,7 @@ export const useSettings = defineStore("settings", () => {
   const showInstitutionFilters = ref(false);
   const showExtraOptions = ref(false);
 
-  const mapBaseLayer = ref("CartoDB");
+  const mapBaseLayer = ref("OpenStreetMap");
 
   const isBaseLayerEstonian = computed(() => {
     return (

@@ -95,7 +95,7 @@ const tabs = {
   } satisfies DynamicTab,
 };
 
-const { data } = useAsyncData("site", async () => {
+const { data } = await useAsyncData("site", async () => {
   const site = await $geoloogiaFetch<any>(`/site/${route.params.id}/`, {
     query: {
       nest: 2,
