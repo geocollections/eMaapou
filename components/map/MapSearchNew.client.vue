@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import intersection from "lodash/intersection";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
@@ -17,42 +16,21 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:model-value"]);
 const map = ref<L.Map | null>(null);
-const mapClickResponse = ref(null as any);
-const activeOverlays = ref([] as string[]);
-const activeGeomanLayer = ref<L.Polygon | L.Circle>();
+const activeGeomanLayer = ref<L.Polygon>();
 const gpsLocation = ref<L.LatLng>();
-const dataOverlays = useDataOverlays({
-  localityOverlay: true,
-  boreholeOverlay: true,
-  siteOverlay: true,
-  sampleOverlay: true,
-  summaryOverlay: true,
-  // TODO: toggle ovrlays through props
-  // localityOverlay: props.localityOverlay,
-  // boreholeOverlay: props.boreholeOverlay,
-  // siteOverlay: props.siteOverlay,
-  // sampleOverlay: props.sampleOverlay,
-  // summaryOverlay: props.summaryOverlay,
-});
-const queryLayers = computed(() => {
-  const queryLayers = [];
-  if (activeOverlays.value.includes("Uuringupunktid / Sites"))
-    queryLayers.push("sarv:site_summary");
 
-  if (activeOverlays.value.includes("Puursüdamikud / Drillcores"))
-    queryLayers.push("sarv:locality_drillcores");
+const nearMe = ref(false);
+const nearMeRadius = ref(5);
 
-  if (activeOverlays.value.includes("Lokaliteedid / Localities"))
-    queryLayers.push("sarv:locality_summary1");
-
-  if (activeOverlays.value.includes("Proovid / Samples"))
-    queryLayers.push("sarv:sample_summary");
-
-  if (activeOverlays.value.includes("Üldine / Summary"))
-    queryLayers.push("sarv:locality_summary_front");
-
-  return queryLayers.join(",");
-});
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    if (newValue === null) {
+      activeGeomanLayer.value?.remove();
+      activeGeomanLayer.value = undefined;
+    }
+  },
+);
 
 onMounted(() => {
   nextTick(() => {
@@ -61,11 +39,7 @@ onMounted(() => {
     map.value?.invalidateSize();
 
     if (props.modelValue) {
-      activeGeomanLayer.value = L.geoJSON(props.modelValue, {
-        pointToLayer(feature, latlng) {
-          return L.circle(latlng, feature.properties.radius);
-        },
-      });
+      activeGeomanLayer.value = L.geoJSON(props.modelValue);
       if (map.value)
         activeGeomanLayer.value?.addTo(map.value);
     }
@@ -76,7 +50,7 @@ function loadMap() {
     return;
   map.value = L.map("map", {
     center: [58.5, 25.5],
-    zoom: 7,
+    zoom: 5,
     gestureHandling: true,
     fullscreenControl: true,
   });
@@ -84,7 +58,37 @@ function loadMap() {
     attribution:
       "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors",
   }).addTo(map.value);
+
+  L.Control.NearMe = L.Control.extend({
+    onAdd(map) {
+      const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+
+      // container.innerHTML = "<a href=\"#\" title=\"Show me\" id=\"near-me\" style=\"font-size: 1.5em; color: #333\"><div><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 28 28\"><path d=\"M21,3L3,10.53V11.5L9.84,14.16L12.5,21H13.46L21,3Z\" /></svg></div></a>";
+      container.innerHTML = "<a href=\"#\" title=\"Near Me\" id=\"near-me\" style=\"font-size: 1.5em; color: #333\" class=\"icon-near-me\"></a>";
+      container.onclick = function () {
+        if (nearMe.value) {
+          nearMe.value = false;
+          activeGeomanLayer.value?.remove();
+          activeGeomanLayer.value = undefined;
+          emit("update:model-value", null);
+          return;
+        }
+        map.locate({ setView: true });
+      };
+      return container;
+    },
+    onRemove(map) {
+      // Nothing to do here
+    },
+
+  });
+
+  L.control.nearMe = function (opts) {
+    return new L.Control.NearMe(opts);
+  };
+  L.control.nearMe({ position: "topleft" }).addTo(map.value);
 }
+
 function handlePmCreate(
   ...[{ layer }]: Parameters<L.PM.CreateEventHandler>
 ): ReturnType<L.PM.CreateEventHandler> {
@@ -103,26 +107,22 @@ function handlePmCreate(
     );
   }
 }
+
 function handlePmRemove(
   ..._args: Parameters<L.PM.RemoveEventHandler>
 ): ReturnType<L.PM.RemoveEventHandler> {
-  activeGeomanLayer.value?.remove();
-  activeGeomanLayer.value = undefined;
+  removeCurrentLayer();
+}
 
+function removeCurrentLayer() {
+  if (!activeGeomanLayer.value)
+    return;
+
+  activeGeomanLayer.value.remove();
+  activeGeomanLayer.value = undefined;
   emit("update:model-value", null);
 }
-//
-function handlePmGlobalDrawModeToggled(
-  ...[event]: Parameters<L.PM.GlobalDrawModeToggledEventHandler>
-): ReturnType<L.PM.GlobalDrawModeToggledEventHandler> {
-  // if (event.enabled) map.value?.off("click", handleMapClick);
-  // else map.value?.on("click", handleMapClick);
-}
 
-// function handlePmGlobalRemovalModeToggled(event) {
-//     if (event.enabled) map.value?.off("click", handleMapClick);
-//     else map.value?.on("click", handleMapClick);
-//   } as Leaflet.PM.GlobalRemovalModeToggledEventHandler;
 function initLeafletGeoman() {
   map.value?.pm.addControls({
     position: "topleft",
@@ -143,54 +143,35 @@ function initLeafletGeoman() {
     snappable: false,
   });
 
-  // map.value?.on("pm:globaldrawmodetoggled", handlePmGlobalDrawModeToggled);
-  // map.value?.on(
-  //   "pm:globalremovalmodetoggled",
-  //   handlePmGlobalRemovalModeToggled
-  // );
   map.value?.on("pm:create", handlePmCreate);
   map.value?.on("pm:remove", handlePmRemove);
   map.value?.on("locationfound", successGeo);
 }
 function successGeo(...[event]: Parameters<L.LocationEventHandlerFn>) {
+  nearMe.value = true;
   gpsLocation.value = event.latlng;
+
+  removeCurrentLayer();
+
+  const circlePolygon = L.PM.Utils.circleToPolygon(L.circle(gpsLocation.value, { radius: nearMeRadius.value * 1000 }), 60);
+  circlePolygon.addTo(map.value);
+
+  activeGeomanLayer.value = circlePolygon;
+  emit(
+    "update:model-value",
+    circlePolygon.toGeoJSON(),
+  );
+
+  map.value?.fitBounds(circlePolygon.getBounds(), { padding: [10, 10] });
 }
-const isMapClickEnabled = computed(() => {
-  const layerNames = dataOverlays.map((overlay: any) => overlay.name);
-  return intersection(layerNames, activeOverlays.value).length > 0;
-});
-// const handleMapClick = async (event: L.LeafletMouseEvent) => {
-//   if (!map.value) return;
-//   if (!isMapClickEnabled.value) return;
-//   const MAX_ZOOM = 21;
-//   const radius = (MAX_ZOOM + 0.25 - map.value.getZoom()) * 1000;
-//   const circle = L.circle(event.latlng, { radius });
-//   map.value.addLayer(circle);
-//   const bbox = circle.getBounds().toBBoxString();
-//   circle.remove();
-//
-//   const { data: wmsResponse } = await useGeoserverFetch("/wms", {
-//     query: {
-//       QUERY_LAYERS: queryLayers.value,
-//       LAYERS:
-//         "sarv:locality_summary1,sarv:locality_drillcores,sarv:site_summary,sarv:sample_summary,sarv:locality_summary_front",
-//       BBOX: bbox,
-//     },
-//   });
-//
-//   if (wmsResponse?.features?.length > 0) {
-//     mapClickResponse.value = {
-//       latlng: event.latlng,
-//       features: wmsResponse.features,
-//     };
-//     L.popup()
-//       .setLatLng(event.latlng)
-//       .setContent("Loading...")
-//       .openOn(map.value);
-//   } else mapClickResponse.value = null;
-// };
 </script>
 
 <template>
   <div id="map" style="height: 300px" />
 </template>
+
+<style>
+.icon-near-me {
+  background-image: url("~/assets/icon-near-me.svg");
+}
+</style>
