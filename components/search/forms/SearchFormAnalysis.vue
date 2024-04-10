@@ -147,12 +147,6 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
           value="site"
           @update:model-value="handleUpdate"
         />
-        <FilterInputText
-          v-model="filters.agent.value"
-          :title="$t('filters.agent')"
-          value="agent"
-          @update:model-value="handleUpdate"
-        />
         <FilterMap
           v-model="filters.geometry.value"
           value="map"
