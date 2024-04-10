@@ -19,7 +19,7 @@ const chartTitle = computed(() => {
   }`;
 });
 
-const { data: taxons } = useAsyncData("taxons", async () => {
+const { data: taxons } = await useAsyncData("taxons", async () => {
   const resultsResponse = await $geoloogiaFetch("/taxon_list/", {
     query: {
       sample: route.params.id,
