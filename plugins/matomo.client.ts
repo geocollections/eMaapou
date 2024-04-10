@@ -10,8 +10,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     router: nuxtApp.$router,
     host: "https://matomo.geoloogia.info/",
     siteId: 1,
-    requireCookieConsent: true,
-    requireConsent: false,
     debug: process.env.NODE_ENV !== "production",
     enableLinkTracking: process.env.NODE_ENV === "production",
     trackInitialView: process.env.NODE_ENV === "production",
