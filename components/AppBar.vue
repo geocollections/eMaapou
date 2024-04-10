@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiChevronDown, mdiMenu } from "@mdi/js";
+import { useDisplay } from "vuetify";
 import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
@@ -16,6 +17,7 @@ const props = defineProps({
 const route = useRoute();
 const getRouteBaseName = useRouteBaseName();
 const localePath = useLocalePath();
+const display = useDisplay();
 
 const state = reactive({
   browseGeography: BROWSE_GEOLOGY_LIST,
@@ -31,8 +33,8 @@ const state = reactive({
     density="compact"
     :elevation="2"
     :class="{
-      'app-bar-full': $vuetify.display.mdAndUp,
-      'app-bar-mobile pl-2': !$vuetify.display.mdAndUp,
+      'app-bar-full': display.mdAndUp.value,
+      'app-bar-mobile pl-2': !display.mdAndUp.value,
     }"
     color="grey-darken-2"
   >
@@ -52,7 +54,7 @@ const state = reactive({
     </NuxtLink>
     <VToolbarItems class="w-100 mr-md-2">
       <VBtn
-        v-if="$vuetify.display.mdAndUp"
+        v-if="display.mdAndUp.value"
         id="browse_menu_btn"
         aria-label="browse"
         variant="text"
@@ -66,7 +68,7 @@ const state = reactive({
         </VIcon>
       </VBtn>
       <VMenu
-        v-if="$vuetify.display.mdAndUp"
+        v-if="display.mdAndUp.value"
         activator="#browse_menu_btn"
         content-class="mt-1"
         transition="slide-y-transition"
@@ -122,7 +124,7 @@ const state = reactive({
       <div
         class="d-flex align-center elevation-0 ml-2 mr-0 mr-sm-2"
         style="width: 100%"
-        :class="{ 'mobile-search mx-5': !$vuetify.display.mdAndUp }"
+        :class="{ 'mobile-search mx-5': !display.mdAndUp.value }"
       >
         <QuickSearchInput />
       </div>
@@ -131,7 +133,7 @@ const state = reactive({
       class="ml-auto"
     >
       <VBtn
-        v-if="$vuetify.display.mdAndUp"
+        v-if="display.mdAndUp.value"
         aria-label="about page"
         variant="text"
         class="montserrat font-weight-medium"
@@ -143,7 +145,7 @@ const state = reactive({
       </VBtn>
 
       <VBtn
-        v-if="$vuetify.display.mdAndUp"
+        v-if="display.mdAndUp.value"
         id="services_menu_btn"
         aria-label="browse"
         variant="text"
@@ -159,7 +161,7 @@ const state = reactive({
         />
       </VBtn>
       <VMenu
-        v-if="$vuetify.display.mdAndUp"
+        v-if="display.mdAndUp.value"
         activator="#services_menu_btn"
         content-class="elevation-2 mt-1"
         transition="slide-y-transition"
@@ -187,12 +189,12 @@ const state = reactive({
         </VCard>
       </VMenu>
       <LanguageSwitcher
-        v-if="$vuetify.display.mdAndUp"
+        v-if="display.mdAndUp.value"
         color="white"
         class="ml-auto"
       />
       <VBtn
-        v-if="!$vuetify.display.mdAndUp"
+        v-if="!display.mdAndUp.value"
         variant="text"
         class="montserrat ml-auto"
         aria-label="Open navigation drawer"
