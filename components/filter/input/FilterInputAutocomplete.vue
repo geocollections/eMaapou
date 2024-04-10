@@ -71,10 +71,10 @@ const orderedSelectedItems = computed(() => {
   return orderBy(selectedItems.value, ["count", "name"], ["desc", "asc"]);
 });
 
-const component = getCurrentInstance();
+const id = useId();
 
 const { data: suggestions, refresh } = await useAsyncData(
-  `autocomplete-${component?.vnode.key?.toString() ?? component?.uid}`,
+  `autocomplete-${id}`,
   async () => {
     return await props.queryFunction({
       query: query.value,
