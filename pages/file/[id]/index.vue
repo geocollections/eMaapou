@@ -147,6 +147,20 @@ const specimenIdentification = computed(
 const specimenIdentificationGeology = computed(
   () => data.value?.specimenIdentificationGeology ?? [],
 );
+const mapBaseLayer = computed(() => {
+  if (locality.value?.country.value === "Eesti")
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  const overlays = [];
+  if (locality.value?.country.value === "Eesti")
+    overlays.push("Estonian bedrock");
+
+  return overlays;
+});
 </script>
 
 <template>
@@ -502,10 +516,8 @@ const specimenIdentificationGeology = computed(
 
         <MapDetail
           v-if="showMap"
-          rounded
-          :estonian-map="mapIsEstonian"
-          :estonian-bedrock-overlay="mapIsEstonian"
-          height="300px"
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           :center="{
             latitude: mapLatitude,
             longitude: mapLongitude,

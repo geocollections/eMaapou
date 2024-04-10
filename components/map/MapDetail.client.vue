@@ -10,90 +10,78 @@ import "leaflet.fullscreen/Control.FullScreen.css";
 import { useTheme } from "vuetify/lib/framework.mjs";
 import type { MapMarker } from "~/types/map";
 
-const props = defineProps({
-  zoom: {
-    type: Number,
-    default: null,
-  },
-  height: {
-    type: String,
-    default: "500px",
-  },
-  center: {
-    type: Object,
-    default: () => {
-      return {
-        latitude: 58.5,
-        longitude: 25.5,
-      };
-    },
-  },
-  markers: {
-    type: Array as PropType<MapMarker[]>,
-    default: () => [],
-  },
-  estonianMap: {
-    type: Boolean,
-    default: false,
-  },
-  estonianBedrockOverlay: {
-    type: Boolean,
-    default: false,
-  },
-  estonianBasementOverlay: {
-    type: Boolean,
-    default: false,
-  },
-  estonianHybridOverlay: {
-    type: Boolean,
-    default: false,
-  },
-  invalidateSize: Boolean,
-  // Adds rounded class to leaflet
-  rounded: Boolean,
-  gestureHandling: {
-    type: Boolean,
-    default: true,
-  },
-  showLinks: {
-    type: Boolean,
-    default: true,
-  },
-  geojson: {
-    type: Object as PropType<GeoJsonObject>,
-    required: false,
-    default: () => {},
-  },
+// const props = defineProps({
+//   height: {
+//     type: String,
+//     default: "500px",
+//   },
+//   center: {
+//     type: Object,
+//     default: () => {
+//       return {
+//         latitude: 58.5,
+//         longitude: 25.5,
+//       };
+//     },
+//   },
+//   estonianMap: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   estonianBedrockOverlay: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   estonianBasementOverlay: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   estonianHybridOverlay: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   gestureHandling: {
+//     type: Boolean,
+//     default: true,
+//   },
+//   showLinks: {
+//     type: Boolean,
+//     default: true,
+//   },
+//   markers: {
+//     type: Array as PropType<MapMarker[]>,
+//     default: () => [],
+//   },
+//   geojson: {
+//     type: Object as PropType<GeoJsonObject>,
+//     required: false,
+//     default: () => {},
+//   });
+
+const props = withDefaults(defineProps<{
+  height?: string;
+  center?: { latitude: number; longitude: number };
+  baseLayer?: keyof typeof baseLayers.value;
+  overlays?: (keyof typeof overlays.value)[];
+  gestureHandling?: boolean;
+  showLinks?: boolean;
+  markers?: MapMarker[];
+  geojson?: GeoJsonObject;
+}>(), {
+  height: "500px",
+  center: () => ({ latitude: 58.5, longitude: 25.5 }),
+  baseLayer: "OpenStreetMap",
+  overlays: () => [],
+  gestureHandling: true,
+  showLinks: true,
+  markers: () => [],
 });
-//   type D = L.Icon.Default & {
-//     _getIconUrl?: string;
-//   };
-// delete (L.Icon.Default.prototype as D)._getIconUrl;
-//
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl: await import("leaflet/dist/images/marker-icon-2x.png"),
-//   iconUrl: await import("leaflet/dist/images/marker-icon.png"),
-//   shadowUrl: await import("leaflet/dist/images/marker-shadow.png"),
-// });
 
 const theme = useTheme();
 const { t } = useI18n();
 const currentCenter = ref({
   lat: props.center.latitude,
   lng: props.center.longitude,
-});
-
-const options = ref({
-  fullscreenControl: true,
-  gestureHandling: props.gestureHandling,
-  gestureHandlingOptions: {
-    text: {
-      touch: t("gestureHandling.touch"),
-      scroll: t("gestureHandling.scroll"),
-      scrollMac: t("gestureHandling.scrollMac"),
-    },
-    duration: 1000,
-  },
 });
 
 const map = ref<L.Map>();
@@ -136,7 +124,7 @@ const baseLayers = computed(() => {
   };
 });
 
-const estonianLayers = computed(() => {
+const overlays = computed(() => {
   return {
     "Estonian hybrid": L.tileLayer.wms("https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV", {
       layers: "EESTI_ALUSKAART",
@@ -172,6 +160,42 @@ const estonianLayers = computed(() => {
       attribution: "Geology: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
       zIndex: 20,
     }),
+    "Lokaliteedid / Localities": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+      layers: "sarv:locality_summary",
+      format: "image/png",
+      transparent: true,
+      detectRetina: true,
+      updateWhenIdle: true,
+      attribution: "Localities: <a  href='https://geoloogia.info'>SARV</a>",
+      zIndex: 30,
+    }),
+    "Puursüdamikud / Drillcores": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+      layers: "sarv:locality_drillcores",
+      format: "image/png",
+      transparent: true,
+      detectRetina: true,
+      updateWhenIdle: true,
+      attribution: "Drillcores: <a  href='https://geoloogia.info'>SARV</a>",
+      zIndex: 40,
+    }),
+    "Uuringupunktid / Sites": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+      layers: "sarv:site_summary",
+      format: "image/png",
+      transparent: true,
+      detectRetina: true,
+      updateWhenIdle: true,
+      attribution: "Sites: <a  href='https://geoloogia.info'>SARV</a>",
+      zIndex: 50,
+    }),
+    "Proovid / Samples": L.tileLayer.wms("https://gis.geocollections.info/geoserver/wms", {
+      layers: "sarv:sample_summary",
+      format: "image/png",
+      transparent: true,
+      detectRetina: true,
+      updateWhenIdle: true,
+      attribution: "Samples: <a  href='https://geoloogia.info'>SARV</a>",
+      zIndex: 60,
+    }),
   };
 });
 
@@ -180,6 +204,13 @@ const localePath = useLocalePath();
 const getRouteBaseName = useRouteBaseName();
 const route = useRoute();
 
+const mapLayers = computed(() => {
+  return [
+    baseLayers.value[props.baseLayer],
+    ...props.overlays.map(overlay => overlays.value[overlay]),
+  ];
+});
+
 onMounted(() => {
   nextTick(() => {
     if (map.value)
@@ -187,12 +218,20 @@ onMounted(() => {
     map.value = L.map("map", {
       center: [58.5, 25.5],
       zoom: 5,
-      gestureHandling: true,
-      layers: [baseLayers.value[mapBaseLayer.value]],
+      gestureHandling: props.gestureHandling,
+      gestureHandlingOptions: {
+        text: {
+          touch: t("gestureHandling.touch"),
+          scroll: t("gestureHandling.scroll"),
+          scrollMac: t("gestureHandling.scrollMac"),
+        },
+        duration: 1000,
+      },
+      layers: mapLayers.value,
       fullscreenControl: true,
     });
 
-    L.control.layers(baseLayers.value, estonianLayers.value).addTo(map.value);
+    L.control.layers(baseLayers.value, overlays.value).addTo(map.value);
 
     const features = [];
 
@@ -244,7 +283,7 @@ onMounted(() => {
 
     map.value.fitBounds(group.getBounds(), {
       padding: [10, 10],
-      maxZoom: 12,
+      maxZoom: 10,
     });
   });
 });

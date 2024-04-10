@@ -50,6 +50,21 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
 const _ = await useAsyncData("image", async () => {
   await imageQuery({ rows: 10, page: 0 });
 });
+
+const mapBaseLayer = computed(() => {
+  if (locality.value?.country.value === "Eesti")
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  const overlays = ["Uuringupunktid / Sites"];
+  if (locality.value?.country.value === "Eesti")
+    overlays.push("Estonian bedrock");
+
+  return overlays;
+});
 </script>
 
 <template>
@@ -248,17 +263,8 @@ const _ = await useAsyncData("image", async () => {
       <VCol v-if="(site.latitude && site.longitude) || site.locality_id" :xl="4">
         <MapDetail
           v-if="site.latitude && site.longitude"
-          height="300px"
-          rounded
-          :estonian-map="locality && locality.country
-            ? locality.country.value === 'Eesti'
-            : false
-          "
-          :estonian-bedrock-overlay="locality && locality.country
-            ? locality.country.value === 'Eesti'
-            : false
-          "
-          site-overlay
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           :center="{
             latitude: site.latitude,
             longitude: site.longitude,

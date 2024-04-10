@@ -249,7 +249,7 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
         </BaseTable>
       </VCol>
       <VCol v-if="locationMarkers.length > 0">
-        <MapDetail rounded :markers="locationMarkers" />
+        <MapDetail :markers="locationMarkers" />
       </VCol>
     </VRow>
   </VContainer>

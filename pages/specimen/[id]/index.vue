@@ -37,6 +37,21 @@ const { data: images } = await useAsyncData("images", async () => {
 }, {
   default: () => [],
 });
+
+const mapBaseLayer = computed(() => {
+  if (locality.value?.country.value === "Eesti")
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  const overlays = [];
+  if (locality.value?.country.value === "Eesti")
+    overlays.push("Estonian bedrock");
+
+  return overlays;
+});
 </script>
 
 <template>
@@ -229,14 +244,8 @@ const { data: images } = await useAsyncData("images", async () => {
         v-if="locality && locality.latitude && locality.longitude"
       >
         <MapDetail
-          rounded
-          :estonian-map="
-            locality.country ? locality.country.value === 'Eesti' : false
-          "
-          :estonian-bedrock-overlay="
-            locality.country ? locality.country.value === 'Eesti' : false
-          "
-          height="300px"
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           :center="{
             latitude: locality.latitude,
             longitude: locality.longitude,

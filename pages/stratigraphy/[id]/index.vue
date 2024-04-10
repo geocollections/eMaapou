@@ -54,6 +54,21 @@ const mapIsEstonian = computed(() => {
     item => item?.locality?.country?.value_en === "Estonia",
   );
 });
+
+const mapBaseLayer = computed(() => {
+  if (mapIsEstonian.value)
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  if (mapIsEstonian.value)
+    return ["Estonian bedrock"];
+
+  return [];
+});
+
 const stratotypeOptions = ref(STRATOTYPE.options);
 </script>
 
@@ -238,9 +253,10 @@ const stratotypeOptions = ref(STRATOTYPE.options);
           :is-loading="false"
         />
         <MapDetail
+          v-if="stratigraphyMarkers.length > 0"
           rounded
-          :estonian-map="mapIsEstonian"
-          :estonian-bedrock-overlay="mapIsEstonian"
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           height="300px"
           :markers="stratigraphyMarkers"
         />

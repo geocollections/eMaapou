@@ -11,6 +11,21 @@ const storage = computed(() => props.drillcore.storage);
 const agent = computed(() => props.drillcore.agent);
 const database = computed(() => props.drillcore.database);
 const locality = computed(() => props.drillcore.locality);
+
+const mapBaseLayer = computed(() => {
+  if (locality.value?.country.value === "Eesti")
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  const overlays = ["Puursüdamikud / Drillcores"];
+  if (locality.value?.country.value === "Eesti")
+    overlays.push("Estonian bedrock");
+
+  return overlays;
+});
 </script>
 
 <template>
@@ -139,15 +154,8 @@ const locality = computed(() => props.drillcore.locality);
         </BaseTable>
         <MapDetail
           v-if="locality.latitude && locality.longitude"
-          :estonian-map="
-            locality.country ? locality.country.value === 'Eesti' : false
-          "
-          :estonian-bedrock-overlay="
-            locality.country ? locality.country.value === 'Eesti' : false
-          "
-          rounded
-          borehole-overlay
-          height="300px"
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           :center="{
             latitude: locality.latitude,
             longitude: locality.longitude,

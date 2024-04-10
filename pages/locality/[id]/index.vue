@@ -51,6 +51,21 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
 // const _ = await useAsyncData("image", async () => {
 //   await imageQuery({ rows: 10, page: 0 });
 // });
+
+const mapBaseLayer = computed(() => {
+  if (country.value?.value === "Eesti")
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  const overlays = ["Lokaliteedid / Localities"];
+  if (country.value?.value === "Eesti")
+    overlays.push("Estonian bedrock");
+
+  return overlays;
+});
 </script>
 
 <template>
@@ -197,12 +212,8 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
       <VCol v-if="showMap" :xl="4">
         <MapDetail
           v-if="showMap"
-          rounded
-          :estonian-map="country ? country.value === 'Eesti' : false"
-          :estonian-bedrock-overlay="country ? country.value === 'Eesti' : false
-          "
-          height="300px"
-          locality-overlay
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           :center="{
             latitude: locality.latitude,
             longitude: locality.longitude,

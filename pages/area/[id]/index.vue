@@ -390,9 +390,8 @@ const { data: siteMarkers } = await useAsyncData("siteMarkers", async () => {
       </VCol>
       <VCol v-if="siteMarkers?.length > 0 || geojson" :xl="4">
         <MapDetail
-          rounded
-          estonian-map
-          estonian-bedrock-overlay
+          base-layer="Estonian map"
+          :overlays="['Estonian bedrock']"
           :markers="siteMarkers"
           :geojson="geojson"
         />

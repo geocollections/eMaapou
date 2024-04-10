@@ -76,6 +76,21 @@ const mapMarkers = computed(() => {
   }
   return [];
 });
+
+const mapBaseLayer = computed(() => {
+  if (locality.value?.country.value === "Eesti")
+    return "Estonian map";
+
+  return "OpenStreetMap";
+});
+
+const mapOverlays = computed(() => {
+  const overlays = ["Proovid / Samples"];
+  if (locality.value?.country.value === "Eesti")
+    overlays.push("Estonian bedrock");
+
+  return overlays;
+});
 </script>
 
 <template>
@@ -341,14 +356,8 @@ const mapMarkers = computed(() => {
         <MapDetail
           v-if="showMap"
           class="mb-4"
-          rounded
-          :estonian-map="
-            locality?.country ? locality.country.value === 'Eesti' : false
-          "
-          :estonian-bedrock-overlay="
-            locality?.country ? locality.country.value === 'Eesti' : false
-          "
-          height="300px"
+          :base-layer="mapBaseLayer"
+          :overlays="mapOverlays"
           :center="mapCenter"
           :markers="mapMarkers"
         />
