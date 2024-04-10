@@ -14,7 +14,7 @@ const {
 const route = useRoute();
 const { locale } = useI18n();
 
-const { data, pending } = useSolrFetch("/preparation", {
+const { data, pending } = await useSolrFetch("/preparation", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,

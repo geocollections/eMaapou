@@ -17,7 +17,7 @@ const {
   initHeaders: HEADERS_STRATIGRAPHY,
 });
 
-const { data, pending } = useSolrFetch<SolrResponse>("/stratigraphy", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/stratigraphy", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,

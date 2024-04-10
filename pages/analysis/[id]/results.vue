@@ -24,7 +24,7 @@ const filteredHeaders = computed(() =>
   }),
 );
 
-const { data, pending } = useSolrFetch("/analysis_results", {
+const { data, pending } = await useSolrFetch("/analysis_results", {
   query: computed(() => ({
     json: {
       query: solrQuery.value,

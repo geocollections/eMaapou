@@ -17,7 +17,7 @@ const {
   initHeaders: HEADERS_ATTACHMENT,
 });
 
-const { data, pending } = useSolrFetch<SolrResponse>("/attachment", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/attachment", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,

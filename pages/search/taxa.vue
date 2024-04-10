@@ -17,7 +17,7 @@ const {
   initHeaders: HEADERS_TAXON,
 });
 
-const { data, pending } = useSolrFetch<SolrResponse>("/taxon", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/taxon", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,

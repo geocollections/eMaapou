@@ -17,7 +17,7 @@ const {
   initHeaders: HEADERS_REFERENCE,
 });
 
-const { data, pending } = useSolrFetch<SolrResponse>("/reference", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/reference", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,

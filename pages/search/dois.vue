@@ -17,7 +17,7 @@ const {
   initHeaders: HEADERS_DOI,
 });
 
-const { data, pending } = useSolrFetch<SolrResponse>("/doi", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/doi", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,

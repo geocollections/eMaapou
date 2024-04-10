@@ -17,7 +17,7 @@ const {
   initHeaders: HEADERS_DRILLCORE,
 });
 
-const { data, pending } = useSolrFetch<SolrResponse>("/drillcore", {
+const { data, pending } = await useSolrFetch<SolrResponse>("/drillcore", {
   query: computed(() => ({
     q: props.query,
     rows: options.value.itemsPerPage,
