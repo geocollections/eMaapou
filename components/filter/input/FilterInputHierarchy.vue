@@ -36,6 +36,7 @@ defineExpose({
   refreshSuggestions,
 });
 
+const id = useId();
 const { locale, t } = useI18n({ useScope: "local" });
 
 function translateName(name: string | { et: string; en: string }): string {
@@ -49,7 +50,7 @@ const numBucketsMap = ref<{ [key: string]: number }>({});
 const paginationMap = ref<{ [key: string]: number }>({});
 
 const { data: tree, refresh: refreshTree } = await useAsyncData<TreeNode[]>(
-  `tree-${getCurrentInstance()?.uid}`,
+  `tree-${id}`,
   async () => {
     const res = await props.getChildren(props.rootValue, { page: 1, perPage: 15 });
     const [tree, numBuckets] = res;
@@ -66,8 +67,9 @@ const suggestionsEnd = ref(false);
 
 const query = ref("");
 const queryDebounced = refDebounced(query, 200);
+
 const { refresh: refreshAutocomplete, pending } = await useAsyncData<Suggestion[]>(
-  `autocomplete-${getCurrentInstance()?.uid}`,
+  `autocomplete-hierarchy-${id}`,
   async () => {
     const res = await props.suggestionFunction(query.value, { page: autocompletePage.value, perPage: 10 });
     if (res.length < 10)
