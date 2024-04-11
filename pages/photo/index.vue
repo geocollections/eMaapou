@@ -151,7 +151,7 @@ definePageMeta({
           {{ $t(`common.gallery`) }}
         </VTab>
       </VTabs>
-      <VWindow v-model="currentView">
+      <VWindow v-model="currentView" :touch="false">
         <VWindowItem :value="0">
           <DataTablePhoto
             class="border-t border-b"
