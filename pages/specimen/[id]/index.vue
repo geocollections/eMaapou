@@ -33,7 +33,13 @@ const { data: images } = await useAsyncData("images", async () => {
       rows: 25,
     },
   });
-  return res.response.docs;
+  return res.response.docs.map((attachment: any) => ({
+    id: attachment.id,
+    filename: attachment.filename,
+    author: attachment.agent,
+    date: attachment.date_created,
+
+  }));
 }, {
   default: () => [],
 });

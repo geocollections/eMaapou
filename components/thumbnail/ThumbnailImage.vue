@@ -19,12 +19,12 @@ const emit = defineEmits(["click"]);
 <style lang="scss" scoped>
 .thumbnail-image {
   transition: all 0.2s ease-in-out;
-
+  box-sizing: border-box;
   border: 1px solid transparent;
+
   &:hover {
     cursor: pointer;
     border: 1px solid #1565C0;
-    box-sizing: border-box;
   }
 }
 </style>

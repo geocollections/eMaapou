@@ -48,9 +48,9 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
   images.value = [...images.value, ...newImages];
 }
 
-// const _ = await useAsyncData("image", async () => {
-//   await imageQuery({ rows: 10, page: 0 });
-// });
+const _ = await useAsyncData("image", async () => {
+  await imageQuery({ rows: 10, page: 0 });
+});
 
 const mapBaseLayer = computed(() => {
   if (country.value?.value === "Eesti")
@@ -73,7 +73,6 @@ const mapOverlays = computed(() => {
     <VRow v-if="images.length > 0">
       <VCol>
         <ImageBar
-          class="mt-4"
           :images="images"
           @update="imageQuery"
         />
