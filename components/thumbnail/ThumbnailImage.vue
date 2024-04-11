@@ -1,30 +1,30 @@
 <script setup lang="ts">
-// TODO: "Currently a dialog is created for every thumbnail image.
-// would be better if there was only one dialog that we pass the image url to.
-
 defineProps<{
   src: string;
 }>();
+
+const emit = defineEmits(["click"]);
 </script>
 
 <template>
   <VImg
     id="preview-img"
-    v-ripple="{ class: 'primary--text darken-2' }"
     class="thumbnail-image rounded"
-    max-height="80px"
-    width="80px"
-    aspect-ratio="1"
+    width="100px"
     :src="src"
-    @click="$emit('click')"
+    @click="emit('click')"
   />
 </template>
 
 <style lang="scss" scoped>
 .thumbnail-image {
   transition: all 0.2s ease-in-out;
+
+  border: 1px solid transparent;
   &:hover {
     cursor: pointer;
+    border: 1px solid #1565C0;
+    box-sizing: border-box;
   }
 }
 </style>
