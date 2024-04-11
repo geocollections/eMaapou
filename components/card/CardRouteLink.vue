@@ -15,8 +15,8 @@ const localePath = useLocalePath();
     <VCard
       v-bind="hoverProps"
       :to="localePath(route.routeName)"
-      class="mx-sm-1 mb-1 mb-sm-2 d-flex"
-      :elevation="isHovering ? 2 : 1"
+      class="mx-sm-1 mb-1 mb-sm-2 d-flex border"
+      :elevation="0"
       :color="isHovering ? 'accent-lighten-1' : 'accent'"
     >
       <div class="py-2 d-flex d-sm-block align-center">

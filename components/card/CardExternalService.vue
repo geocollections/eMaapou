@@ -14,8 +14,8 @@ defineProps({
     <VCard
       v-bind="hoverProps"
       :href="route.href"
-      class="d-flex py-2"
-      :elevation="isHovering ? 2 : 1"
+      class="d-flex py-2 border"
+      :elevation="0"
       :color="isHovering ? 'grey-lighten-2' : 'grey-lighten-3'"
     >
       <div>
@@ -25,7 +25,7 @@ defineProps({
         >
           {{ $t(route.title) }}
         </VCardTitle>
-        <VCardText class="py-0 montserrat text-grey">
+        <VCardText class="py-0  text-grey">
           {{ $t(route.description) }}
         </VCardText>
       </div>

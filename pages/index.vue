@@ -307,15 +307,14 @@ function handleSearch() {
                   <InputSearch
                     v-model="query"
                     :rounded="5"
-                    input-class="elevation-1 border-none"
                     :placeholder="$t('landing.searchPlaceholder')"
                   />
                   <VBtn
-                    height="49px"
+                    height="56"
                     width="84px"
-                    class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0"
+                    class="text-body-1 ml-2 ml-sm-3 mt-0 mt-sm-0 border"
                     type="submit"
-                    variant="elevated"
+                    variant="flat"
                     color="blue"
                   >
                     <VIcon :icon="mdiMagnify" size="large" />

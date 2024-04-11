@@ -58,11 +58,10 @@ const inputStyle = computed(() => ({
       :placeholder="placeholder"
       single-line
       hide-details
-      variant="solo"
+      variant="outlined"
+      bg-color="white"
       :rounded="rounded"
       flat
-      density="comfortable"
-      class="border-t border-b"
       clearable
       :style="inputStyle"
       :class="inputClass"
