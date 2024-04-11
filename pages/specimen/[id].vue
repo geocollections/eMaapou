@@ -235,6 +235,7 @@ definePageMeta({
           v-if="isRock && titleAlt"
           target="_blank"
           style="text-decoration: none"
+          class="text-grey-darken-2"
           :href="`https://kivid.info/${data.specimenAlt?.rock_id}`"
         >{{ titleAlt }}</a>
         <a
