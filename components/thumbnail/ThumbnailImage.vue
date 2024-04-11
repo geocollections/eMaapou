@@ -7,10 +7,12 @@ const emit = defineEmits(["click"]);
 </script>
 
 <template>
-  <VImg
+  <NuxtImg
     id="preview-img"
     class="thumbnail-image rounded"
-    width="100px"
+    style="object-fit: cover"
+    height="80"
+    width="80"
     :src="src"
     @click="emit('click')"
   />
