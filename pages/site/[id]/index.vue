@@ -24,6 +24,7 @@ const studied = computed(() => {
 const route = useRoute();
 const images = ref<any[]>([]);
 const imagesHasNext = ref(true);
+const totalImages = ref(0);
 
 async function imageQuery({ rows, page }: { rows: number; page: number }) {
   if (!imagesHasNext.value)
@@ -37,6 +38,11 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
       offset: page * rows,
     },
   }).then((res) => {
+    imagesHasNext.value = !!res.next;
+    if (totalImages.value === 0) {
+      totalImages.value = res.count;
+    }
+
     return res.results.map((image: any) => ({
       id: image.attachment.id,
       filename: image.attachment.filename,
@@ -75,6 +81,7 @@ const mapOverlays = computed(() => {
           v-if="images.length > 0"
           class="mt-4"
           :images="images"
+          :total="totalImages"
           @update="imageQuery"
         />
       </VCol>

@@ -21,6 +21,7 @@ const showMap = computed(() => {
 
 const images = ref<any[]>([]);
 const imagesHasNext = ref(true);
+const totalImages = ref(0);
 
 async function imageQuery({ rows, page }: { rows: number; page: number }) {
   if (!imagesHasNext.value)
@@ -35,6 +36,9 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
     },
   }).then((res) => {
     imagesHasNext.value = !!res.next;
+    if (totalImages.value === 0) {
+      totalImages.value = res.count;
+    }
     return res.results
       .filter((image: any) => !image.attachment.is_private)
       .map((image: any) => ({
@@ -74,6 +78,7 @@ const mapOverlays = computed(() => {
       <VCol>
         <ImageBar
           :images="images"
+          :total="totalImages"
           @update="imageQuery"
         />
       </VCol>

@@ -17,6 +17,7 @@ export default antfu(
     rules: {
       "vue/component-name-in-template-casing": ["error", "PascalCase", {
         registeredComponentsOnly: false,
+        igrores: ["/^swiper-/"],
       }],
       "vue/max-attributes-per-line": ["error", {
         singleline: {

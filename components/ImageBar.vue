@@ -12,7 +12,11 @@ interface Image {
 defineProps({
   images: {
     type: Array as PropType<Image[]>,
-    default: () => [],
+    required: true,
+  },
+  total: {
+    type: Number,
+    required: true,
   },
 });
 const emit = defineEmits(["update"]);
@@ -25,9 +29,15 @@ function loadMore() {
   emit("update", { page: page.value, rows: rowsPerPage });
   page.value += 1;
 }
-function openOverlay(image: OverlayImage) {
+const initIndex = ref(0);
+function openOverlay(index: number, image: OverlayImage) {
   overlayImage.value = image;
+  initIndex.value = index;
   showOverlay.value = true;
+}
+
+function handleEnd() {
+  loadMore();
 }
 </script>
 
@@ -49,7 +59,7 @@ function openOverlay(image: OverlayImage) {
               height="175"
               class="rounded cursor-pointer thumbnail-image"
               @click="
-                openOverlay({
+                openOverlay(index, {
                   src: item.filename,
                   modifiers: { size: 'large' },
                   options: { provider: 'geocollections' },
@@ -91,7 +101,13 @@ function openOverlay(image: OverlayImage) {
       </VTooltip>
     </div>
     <div v-intersect="loadMore" />
-    <ImageOverlay v-model="showOverlay" :image="overlayImage" />
+    <ImageOverlayNew
+      v-model="showOverlay"
+      :initial-slide="initIndex"
+      :images="images"
+      :total="total"
+      @end="handleEnd"
+    />
   </div>
 </template>
 
