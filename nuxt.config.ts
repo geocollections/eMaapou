@@ -62,10 +62,6 @@ export default defineNuxtConfig({
       template: {
         transformAssetUrls,
       },
-      // compilerOptions: {
-      //   // treat all tags with a dash as custom elements
-      //   isCustomElement: tag => tag.includes("swiper-"),
-      // },
     },
   },
   vue: {
