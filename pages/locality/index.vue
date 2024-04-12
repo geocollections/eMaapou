@@ -18,6 +18,10 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
 const route = useRoute();
 
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshLocalities();
+}, {deep: true});
 
 const {
   data,

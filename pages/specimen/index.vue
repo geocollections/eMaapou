@@ -14,7 +14,18 @@ const {
 } = specimensStore;
 const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOptions }
   = storeToRefs(specimensStore);
+
 setStateFromQueryParams(route);
+if (route.query.view) {
+  currentView.value = views.value.indexOf(route.query.view as any);
+}
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSpecimens();
+  refreshSpecimenImages();
+}, {deep: true});
+
 
 const {
   data,

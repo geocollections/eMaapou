@@ -13,7 +13,12 @@ const {
 } = taxaStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(taxaStore);
+
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshTaxa();
+}, {deep: true});
 
 const {
   data,

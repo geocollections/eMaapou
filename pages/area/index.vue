@@ -17,11 +17,15 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
 const route = useRoute();
 
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshAreas();
+}, {deep: true});
 
 const {
   data,
   pending,
-  refresh: refreshLocalities,
+  refresh: refreshAreas,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/area", {
@@ -45,7 +49,7 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshAreas();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -53,14 +57,14 @@ async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshAreas();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshAreas();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 

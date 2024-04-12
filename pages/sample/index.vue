@@ -38,7 +38,12 @@ const {
 } = samplesStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(samplesStore);
+
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSamples();
+}, {deep: true});
 
 const {
   data,

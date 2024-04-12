@@ -21,11 +21,15 @@ const {
 const route = useRoute();
 
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshPreparations();
+}, {deep: true});
 
 const {
   data,
   pending,
-  refresh: refreshLocalities,
+  refresh: refreshPreparations,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/preparation", {
@@ -48,7 +52,7 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshPreparations();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -56,14 +60,14 @@ async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshPreparations();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshPreparations();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 

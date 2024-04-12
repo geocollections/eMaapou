@@ -13,7 +13,12 @@ const {
 } = stratigraphiesStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(stratigraphiesStore);
+
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshStratigraphies();
+}, {deep: true});
 
 const {
   data,

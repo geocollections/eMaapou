@@ -15,7 +15,12 @@ const {
 } = analyticalDataStore;
 const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filters }
   = storeToRefs(analyticalDataStore);
+
 setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshLocalities();
+}, {deep: true});
 
 const {
   data,

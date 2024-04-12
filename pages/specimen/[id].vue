@@ -70,7 +70,7 @@ const tabs = {
 
 const specimensStore = useSpecimens();
 const { getQueryParams } = specimensStore;
-const { solrFilters, solrQuery, solrSort } = storeToRefs(specimensStore);
+const { solrFilters, solrQuery, solrSort, currentView} = storeToRefs(specimensStore);
 
 const {
   data: specimensRes,
@@ -223,14 +223,9 @@ definePageMeta({
           </VChip>
         </template>
         <div>
+        <div>
           {{ title }}
         </div>
-        <VDivider
-          v-if="titleAlt"
-          class="mx-4"
-          vertical
-          style="height: inherit !important"
-        />
         <a
           v-if="isRock && titleAlt"
           target="_blank"
@@ -245,6 +240,7 @@ definePageMeta({
           style="text-decoration: none"
           :href="`https://fossiilid.info/${data.specimenAlt?.taxon_id}`"
         >{{ titleAlt }}</a>
+        </div>
         <template #sub>
           <div v-if="data.specimen?.fossil?.id === 9">
             <VIcon color="warning-lighten-2" right>
@@ -269,7 +265,7 @@ definePageMeta({
         :page="page"
         :results="similarSpecimens"
         :total-results="specimensRes?.response.numFound ?? 0"
-        :search-route="localePath({ path: '/specimen', query: { ...getQueryParams(), view: uu } })"
+        :search-route="localePath({ path: '/specimen', query: { ...getQueryParams(), view: currentView} })"
         :get-result-route="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })
         "
         @page:next="page++"
