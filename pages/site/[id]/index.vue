@@ -88,7 +88,6 @@ const mapOverlays = computed(() => {
       <VCol>
         <ImageBar
           v-if="images.length > 0"
-          class="mt-4"
           :images="images"
           :total="totalImages"
           @update="imageQuery"
