@@ -1,17 +1,54 @@
 <script setup lang="ts">
+import type { Image } from "~/components/ImageBar.vue";
+
 const props = defineProps<{
   sample: any;
 }>();
 
 const localePath = useLocalePath();
 const route = useRoute();
+const { $formatDate, $geoloogiaFetch } = useNuxtApp();
 
-const { data: images } = await useGeoloogiaApiFetch("/attachment_link/", {
-  query: {
-    limit: 8,
-    sample: route.params.id,
-    nest: 1,
-  },
+type SampleImage = Image<{
+  author: string | null;
+  date: string | null;
+  dateText: string | null;
+}>;
+
+const images = ref<SampleImage[]>([]);
+const imagesHasNext = ref(true);
+const totalImages = ref(0);
+
+async function imageQuery({ rows, page }: { rows: number; page: number }) {
+  if (!imagesHasNext.value)
+    return;
+  const newImages = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+    query: {
+      sample: route.params.id,
+      attachment__attachment_format__value__istartswith: "image",
+      nest: 2,
+      limit: rows,
+      offset: page * rows,
+    },
+  }).then((res) => {
+    imagesHasNext.value = !!res.next;
+    if (totalImages.value === 0)
+      totalImages.value = res.count;
+
+    return res.results.map((image: any) => ({
+      id: image.attachment.id,
+      filename: image.attachment.filename,
+      info: {
+        author: image.attachment.author?.agent,
+        date: image.attachment.date_created,
+        dateText: image.attachment.date_created_free,
+      },
+    }));
+  });
+  images.value = [...images.value, ...newImages];
+}
+const _ = await useAsyncData("image", async () => {
+  await imageQuery({ rows: 10, page: 0 });
 });
 
 const parentSpecimen = computed(() => props.sample.parent_specimen);
@@ -95,6 +132,43 @@ const mapOverlays = computed(() => {
 
 <template>
   <VContainer style="margin: initial">
+    <VRow v-if="images.length > 0">
+      <VCol>
+        <ImageBar
+          v-if="images.length > 0"
+          :images="images"
+          :total="totalImages"
+          @update="imageQuery"
+        >
+          <template #tooltipInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date || item.info.dateText">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span v-if="item.info.date">
+                {{ $formatDate(item.info.date) }}
+              </span>
+              <span v-else>{{ item.info.dateText }}</span>
+            </div>
+          </template>
+          <template #overlayInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date || item.info.dateText">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span v-if="item.info.date">
+                {{ $formatDate(item.info.date) }}
+              </span>
+              <span v-else>{{ item.info.dateText }}</span>
+            </div>
+          </template>
+        </ImageBar>
+      </VCol>
+    </VRow>
     <VRow>
       <VCol
         :sm="12"
@@ -352,7 +426,7 @@ const mapOverlays = computed(() => {
           />
         </BaseTable>
       </VCol>
-      <VCol v-if="showMap || images.results.length > 0" :xl="4">
+      <VCol v-if="showMap" :xl="4">
         <MapDetail
           v-if="showMap"
           class="mb-4"
@@ -361,19 +435,6 @@ const mapOverlays = computed(() => {
           :center="mapCenter"
           :markers="mapMarkers"
         />
-        <VCarousel
-          v-if="images.results.length > 0"
-          class="rounded elevation-2"
-          continuous
-          height="auto"
-          :show-arrows="false"
-        >
-          <VCarouselItem
-            v-for="(item, i) in images.results"
-            :key="i"
-            :src="`https://files.geocollections.info/medium/${item.attachment.filename}`"
-          />
-        </VCarousel>
       </VCol>
     </VRow>
   </VContainer>
