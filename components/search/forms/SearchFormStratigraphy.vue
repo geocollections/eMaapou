@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FilterInputAutocomplete } from "#components";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const { locale } = useI18n();
 
@@ -64,7 +64,7 @@ function handleUpdate(excludeKey?: string) {
 function handleSubmit() {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value);
-    emit("update");
+    emit("submit");
   });
 }
 

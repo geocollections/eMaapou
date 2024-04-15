@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const filterAnalysedParameter
   = ref<InstanceType<typeof FilterInputAutocomplete>>();
@@ -14,6 +14,14 @@ function handleReset() {
   emit("reset");
 }
 function handleUpdate() {
+  nextTick(() => {
+    filterAnalysedParameter.value?.refreshSuggestions();
+    filterInstitution.value?.refreshSuggestions();
+    emit("update");
+  });
+}
+
+function handleSubmit() {
   nextTick(() => {
     filterAnalysedParameter.value?.refreshSuggestions();
     filterInstitution.value?.refreshSuggestions();
@@ -133,7 +141,7 @@ async function hydrateParameter(values: string[]) {
 
 <template>
   <div>
-    <VForm class="pb-10" @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VDivider class="mx-2" />

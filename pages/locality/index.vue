@@ -21,7 +21,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshLocalities();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -109,14 +109,12 @@ definePageMeta({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormLocality
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 

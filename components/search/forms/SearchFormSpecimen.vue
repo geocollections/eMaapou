@@ -5,7 +5,7 @@ import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const props = defineProps<{ resultView: "table" | "image" }>();
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const { $solrFetch } = useNuxtApp();
 const { locale } = useI18n();
@@ -132,7 +132,7 @@ function handleUpdate(excludeKey?: string) {
 function handleSubmit() {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value);
-    emit("update");
+    emit("submit");
   });
 }
 

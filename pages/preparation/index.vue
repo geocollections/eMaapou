@@ -24,7 +24,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshPreparations();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -103,14 +103,12 @@ useHead({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormPreparation
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 

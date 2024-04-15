@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const areasStore = useAreas();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(areasStore);
@@ -22,6 +22,17 @@ function handleUpdate() {
     filterMiningPermit.value?.refreshSuggestions();
     filterMiningPermitOwner.value?.refreshSuggestions();
     emit("update");
+  });
+}
+
+function handleSubmit() {
+  nextTick(() => {
+    filterCounty.value?.refreshSuggestions();
+    filterType.value?.refreshSuggestions();
+    filterMiner.value?.refreshSuggestions();
+    filterMiningPermit.value?.refreshSuggestions();
+    filterMiningPermitOwner.value?.refreshSuggestions();
+    emit("submit");
   });
 }
 
@@ -77,7 +88,7 @@ const { suggest: suggestMiningPermitOwner, hydrate: hydrateMiningPermitOwner } =
 </script>
 
 <template>
-  <VForm class="pb-10" @submit.prevent="handleUpdate">
+  <VForm class="pb-10" @submit.prevent="handleSubmit">
     <SearchFormInput v-model="query" />
     <SearchActions class="mb-3" @click="handleReset" />
     <VDivider class="mx-2" />

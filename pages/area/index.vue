@@ -20,7 +20,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshAreas();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -100,14 +100,12 @@ definePageMeta({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormArea
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 

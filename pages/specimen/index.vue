@@ -16,16 +16,14 @@ const { solrSort, solrQuery, solrFilters, options, headers, currentView, imageOp
   = storeToRefs(specimensStore);
 
 setStateFromQueryParams(route);
-if (route.query.view) {
+if (route.query.view)
   currentView.value = views.value.indexOf(route.query.view as any);
-}
 
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshSpecimens();
   refreshSpecimenImages();
-}, {deep: true});
-
+}, { deep: true });
 
 const {
   data,
@@ -144,13 +142,15 @@ definePageMeta({
     <template #form="{ closeMobileSearch }">
       <SearchFormSpecimen
         :result-view="views[currentView]"
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
+        @update="
+          handleUpdate();
+        "
         @reset="
           handleReset();
-          closeMobileSearch();
         "
       />
     </template>

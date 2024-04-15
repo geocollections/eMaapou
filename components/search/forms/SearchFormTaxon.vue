@@ -2,7 +2,7 @@
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputHierarchy } from "#components";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const taxaStore = useTaxa();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(taxaStore);
@@ -33,7 +33,7 @@ function handleUpdate(excludeKey?: string) {
 function handleSubmit() {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value);
-    emit("update");
+    emit("submit");
   });
 }
 </script>

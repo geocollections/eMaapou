@@ -19,7 +19,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshDrillcores();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -100,14 +100,12 @@ definePageMeta({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormDrillcore
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
-        @reset="
-          handleReset();
-          closeMobileSearch();
-        "
+        @update="handleUpdate"
+        @reset="handleReset"
       />
     </template>
 

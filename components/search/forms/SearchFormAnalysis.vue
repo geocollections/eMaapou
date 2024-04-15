@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FilterInputAutocomplete } from "#components";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 function handleReset() {
   emit("reset");
@@ -23,6 +23,17 @@ function handleUpdate() {
     filterSite.value?.refreshSuggestions();
     filterSample.value?.refreshSuggestions();
     emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    filterInstitution.value?.refreshSuggestions();
+    filterLab.value?.refreshSuggestions();
+    filterMethod.value?.refreshSuggestions();
+    filterLocality.value?.refreshSuggestions();
+    filterSite.value?.refreshSuggestions();
+    filterSample.value?.refreshSuggestions();
+    emit("submit");
   });
 }
 const analysesStore = useAnalyses();
@@ -84,7 +95,7 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
 
 <template>
   <div>
-    <VForm class="pb-10" @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VDivider class="mx-2" />

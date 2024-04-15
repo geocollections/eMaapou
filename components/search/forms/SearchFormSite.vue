@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FilterInputAutocomplete } from "#components";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 const sitesStore = useSites();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(sitesStore);
 
@@ -37,11 +37,19 @@ function handleUpdate() {
     emit("update");
   });
 }
+
+function handleSubmit() {
+  nextTick(() => {
+    filterArea.value?.refreshSuggestions();
+    filterProject.value?.refreshSuggestions();
+    emit("submit");
+  });
+}
 </script>
 
 <template>
   <div>
-    <VForm class="pb-10" @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VDivider class="mx-2" />

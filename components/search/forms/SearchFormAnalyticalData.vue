@@ -2,7 +2,7 @@
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const analyticalDataStore = useAnalyticalData();
 const { handleHeadersChange } = analyticalDataStore;
@@ -147,7 +147,7 @@ function handleParameterFilterUpdate(value) {
 function handleSubmit() {
   nextTick(() => {
     refreshSuggestionFilters(suggestionRefreshMap.value);
-    emit("update");
+    emit("submit");
   });
 }
 

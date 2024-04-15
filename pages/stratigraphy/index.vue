@@ -18,7 +18,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshStratigraphies();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -97,13 +97,15 @@ definePageMeta({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormStratigraphy
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
+        @update="
+          handleUpdate();
+        "
         @reset="
           handleReset();
-          closeMobileSearch();
         "
       />
     </template>

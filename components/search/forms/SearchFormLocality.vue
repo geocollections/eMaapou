@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 
 const filterCountry = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterReferences = ref<InstanceType<typeof FilterInputAutocomplete>>();
@@ -17,6 +17,13 @@ function handleUpdate() {
     filterCountry.value?.refreshSuggestions();
     filterReferences.value?.refreshSuggestions();
     emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    filterCountry.value?.refreshSuggestions();
+    filterReferences.value?.refreshSuggestions();
+    emit("submit");
   });
 }
 
@@ -42,7 +49,7 @@ const { suggest: suggestReference, hydrate: hydrateReference }
 
 <template>
   <div>
-    <VForm class="pb-10" @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VDivider class="mx-2" />

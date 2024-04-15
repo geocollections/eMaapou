@@ -19,13 +19,13 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filter
 setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
-  refreshLocalities();
-}, {deep: true});
+  refreshAnalyticalData();
+}, { deep: true });
 
 const {
   data,
   pending,
-  refresh: refreshLocalities,
+  refresh: refreshAnalyticalData,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/analytical_data", {
@@ -96,7 +96,7 @@ function setQueryParamsFromState() {
 async function handleUpdate() {
   options.value.page = 1;
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshAnalyticalData();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -104,14 +104,14 @@ async function handleReset() {
   resetFilters();
   resetDataTable();
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshAnalyticalData();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
 async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
-  await refreshLocalities();
+  await refreshAnalyticalData();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
@@ -140,13 +140,15 @@ definePageMeta({
   <NuxtLayout name="search">
     <template #form="{ closeMobileSearch }">
       <SearchFormAnalyticalData
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
+        @update="
+          handleUpdate();
+        "
         @reset="
           handleReset();
-          closeMobileSearch();
         "
       />
     </template>

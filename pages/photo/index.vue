@@ -27,7 +27,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshPhotos();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -107,13 +107,15 @@ definePageMeta({
 
     <template #form="{ closeMobileSearch }">
       <SearchFormPhoto
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
+        @update="
+          handleUpdate();
+        "
         @reset="
           handleReset();
-          closeMobileSearch();
         "
       />
     </template>

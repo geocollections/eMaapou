@@ -2,7 +2,7 @@
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete } from "#components";
 
-const emit = defineEmits(["update", "reset"]);
+const emit = defineEmits(["update", "reset", "submit"]);
 function handleReset() {
   emit("reset");
 }
@@ -15,6 +15,13 @@ function handleUpdate() {
     filterLocality.value?.refreshSuggestions();
     filterStratigraphy.value?.refreshSuggestions();
     emit("update");
+  });
+}
+function handleSubmit() {
+  nextTick(() => {
+    filterLocality.value?.refreshSuggestions();
+    filterStratigraphy.value?.refreshSuggestions();
+    emit("submit");
   });
 }
 
@@ -42,7 +49,7 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy }
 
 <template>
   <div>
-    <VForm class="pb-10" @submit.prevent="handleUpdate">
+    <VForm class="pb-10" @submit.prevent="handleSubmit">
       <SearchFormInput v-model="query" />
       <SearchActions class="mb-3" @click="handleReset" />
       <VDivider class="mx-2" />

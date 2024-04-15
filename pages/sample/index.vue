@@ -43,7 +43,7 @@ setStateFromQueryParams(route);
 watch(() => route.query, () => {
   setStateFromQueryParams(route);
   refreshSamples();
-}, {deep: true});
+}, { deep: true });
 
 const {
   data,
@@ -108,13 +108,15 @@ definePageMeta({
   <NuxtLayout name="search">
     <template #form="{ closeMobileSearch }">
       <SearchFormSample
-        @update="
+        @submit="
           handleUpdate();
           closeMobileSearch();
         "
+        @update="
+          handleUpdate();
+        "
         @reset="
           handleReset();
-          closeMobileSearch();
         "
       />
     </template>
