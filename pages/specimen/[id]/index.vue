@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Image } from "~/components/ImageBar.vue";
+
 const props = defineProps<{
   specimen: any;
   specimenAlt: any;
@@ -24,7 +26,12 @@ const database = computed(() => props.specimen.database);
 const sample = computed(() => props.specimen.sample);
 const parent = computed(() => props.specimen.parent);
 
-const images = ref<any[]>([]);
+type SpecimenImage = Image<{
+  author: string | null;
+  date: string | null;
+}>;
+
+const images = ref<SpecimenImage[]>([]);
 const imagesHasNext = ref(true);
 const totalImages = ref(0);
 
@@ -41,15 +48,16 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
       offset: rows * page,
     },
   });
-  if (totalImages.value === 0) {
+  if (totalImages.value === 0)
     totalImages.value = res.response.numFound;
-  }
 
   const newImages = res.response.docs.map((attachment: any) => ({
     id: attachment.id,
     filename: attachment.filename,
-    author: attachment.agent,
-    date: attachment.date_created,
+    info: {
+      author: attachment.agent,
+      date: attachment.date_created,
+    },
   }));
   images.value = [...images.value, ...newImages];
 
@@ -85,7 +93,32 @@ const mapOverlays = computed(() => {
           :images="images"
           :total="totalImages"
           @update="imageQuery"
-        />
+        >
+          <template #tooltipInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span>
+                {{ $formatDate(item.info.date) }}
+              </span>
+            </div>
+          </template>
+          <template #overlayInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span>
+                {{ $formatDate(item.info.date) }}
+              </span>
+            </div>
+          </template>
+        </ImageBar>
       </VCol>
     </VRow>
     <VRow>

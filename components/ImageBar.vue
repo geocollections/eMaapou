@@ -1,17 +1,15 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import type { OverlayImage } from "./ImageOverlay.vue";
 
-interface Image {
+export interface Image<T> {
   id: number;
   filename: string;
-  author?: string;
-  date?: string;
-  dateText?: string;
+  info: T;
 }
 
 defineProps({
   images: {
-    type: Array as PropType<Image[]>,
+    type: Array as PropType<Image<T>[]>,
     required: true,
   },
   total: {
@@ -79,22 +77,8 @@ function handleEnd() {
             </NuxtImg>
           </slot>
         </template>
-        <slot name="info" :item="item">
-          <div v-if="item.author || item.date || item.dateText">
-            <div v-if="item.author">
-              <span class="font-weight-bold">{{ $t("locality.author") }}:
-              </span>
-              <span>{{ item.author }}</span>
-            </div>
-            <div v-if="item.date || item.dateText">
-              <span class="font-weight-bold">{{ $t("locality.date") }}: </span>
-              <span v-if="item.date">
-                {{ $formatDate(item.date) }}
-              </span>
-              <span v-else>{{ item.dateText }}</span>
-            </div>
-          </div>
-          <div v-else>
+        <slot name="tooltipInfo" :item="item">
+          <div>
             {{ $t("common.clickToOpen") }}
           </div>
         </slot>
@@ -107,7 +91,11 @@ function handleEnd() {
       :images="images"
       :total="total"
       @end="handleEnd"
-    />
+    >
+      <template #overlayInfo="{ item }">
+        <slot name="overlayInfo" :item="item" />
+      </template>
+    </ImageOverlayNew>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiFileDownloadOutline, mdiOpenInNew } from "@mdi/js";
+import type { Image } from "~/components/ImageBar.vue";
 
 const props = defineProps<{ site: any }>();
 
@@ -22,7 +23,14 @@ const studied = computed(() => {
     : props.site?.date_free;
 });
 const route = useRoute();
-const images = ref<any[]>([]);
+
+type SiteImage = Image<{
+  author: string | null;
+  date: string | null;
+  dateText: string | null;
+}>;
+
+const images = ref<SiteImage[]>([]);
 const imagesHasNext = ref(true);
 const totalImages = ref(0);
 
@@ -39,16 +47,17 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
     },
   }).then((res) => {
     imagesHasNext.value = !!res.next;
-    if (totalImages.value === 0) {
+    if (totalImages.value === 0)
       totalImages.value = res.count;
-    }
 
     return res.results.map((image: any) => ({
       id: image.attachment.id,
       filename: image.attachment.filename,
-      author: image.attachment.author?.agent ?? null,
-      date: image.attachment.date_created,
-      dateText: image.attachment.date_created_free,
+      info: {
+        author: image.attachment.author?.agent,
+        date: image.attachment.date_created,
+        dateText: image.attachment.date_created_free,
+      },
     }));
   });
   images.value = [...images.value, ...newImages];
@@ -83,7 +92,34 @@ const mapOverlays = computed(() => {
           :images="images"
           :total="totalImages"
           @update="imageQuery"
-        />
+        >
+          <template #tooltipInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date || item.info.dateText">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span v-if="item.info.date">
+                {{ $formatDate(item.info.date) }}
+              </span>
+              <span v-else>{{ item.info.dateText }}</span>
+            </div>
+          </template>
+          <template #overlayInfo="{ item }">
+            <div v-if="item.info.author">
+              <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+              <span>{{ item.info.author }}</span>
+            </div>
+            <div v-if="item.info.date || item.info.dateText">
+              <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+              <span v-if="item.info.date">
+                {{ $formatDate(item.info.date) }}
+              </span>
+              <span v-else>{{ item.info.dateText }}</span>
+            </div>
+          </template>
+        </ImageBar>
       </VCol>
     </VRow>
     <VRow>

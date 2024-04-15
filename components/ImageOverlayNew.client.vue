@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { mdiClose } from "@mdi/js";
+import type { Image } from "./ImageBar.vue";
 
 const props = defineProps({
   modelValue: {
@@ -12,7 +13,7 @@ const props = defineProps({
   },
   images: {
     required: true,
-    type: Array as PropType<string[]>,
+    type: Array as PropType<Image<T>[]>,
   },
   initialSlide: {
     type: Number,
@@ -25,7 +26,6 @@ const emit = defineEmits(["update:model-value", "end"]);
 function handleReachEnd() {
   emit("end");
 }
-
 </script>
 
 <template>
@@ -33,7 +33,7 @@ function handleReachEnd() {
     :model-value="modelValue"
     eager
     content-class="w-100 h-100"
-    opacity="0.9"
+    opacity="0.85"
     @update:model-value="emit('update:model-value', !modelValue)"
   >
     <VBtn
@@ -46,15 +46,19 @@ function handleReachEnd() {
       icon
       @click="emit('update:model-value', !modelValue)"
     >
-      <VIcon>{{mdiClose}}</VIcon>
+      <VIcon>{{ mdiClose }}</VIcon>
     </VBtn>
-    <SwiperLightbox 
-      :images="images" 
-      :total="total" 
-      :initial-slide="initialSlide" 
-      @end="handleReachEnd" 
+    <SwiperLightbox
+      :images="images"
+      :total="total"
+      :initial-slide="initialSlide"
+      @end="handleReachEnd"
       @close="emit('update:model-value', !modelValue)"
-    /> 
+    >
+      <template #info="{ item }">
+        <slot name="overlayInfo" :item="item" />
+      </template>
+    </SwiperLightbox>
   </VOverlay>
 </template>
 
