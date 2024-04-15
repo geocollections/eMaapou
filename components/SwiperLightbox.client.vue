@@ -28,11 +28,18 @@ const swiper = ref();
 
 watch(() => props.images, () => {
   if (!swiper.value) return;
-  console.log(swiper.value.swiper)
   nextTick(() => {
     swiper.value.swiper.update();
   });
 });
+
+watch(() => props.initialSlide, () => {
+  if (!swiper.value) return;
+  nextTick(() => {
+    swiper.value.swiper.slideTo(props.initialSlide);
+  });
+});
+
 function handleReachEnd() {
   emit("end");
 }
