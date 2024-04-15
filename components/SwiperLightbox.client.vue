@@ -72,17 +72,17 @@ onMounted(() => {
       on: {
         reachEnd: handleReachEnd,
       },
-      // injectStyles: [
-      // `
-      // :host .swiper-pagination {
-      //   bottom: unset;
-      //   top: 0;
-      //   color: white;
-      //   text-align: left;
-      //   padding: 0.5rem;
-      // }
-      // `,
-      // ],
+      injectStyles: [
+      `
+      :host .swiper-pagination {
+        bottom: unset;
+        top: 0;
+        color: white;
+        text-align: left;
+        padding: 0.5rem;
+      }
+      `,
+      ],
     };
     Object.assign(swiperContainer, swiperParams);
 
@@ -97,21 +97,21 @@ onMounted(() => {
   });
 });
 
-const { start } = useTimeoutFn(() => {
-  showInfo.value = false;
-}, 5000);
-
-const { x, y, isOutside } = useMouseInElement(swiper);
-
-watch(showInfo, (value) => {
-  if (value)
-    start();
-});
-
-watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY]) => {
-  if (!newIsOutside && newX !== oldX && newY !== oldY)
-    showInfo.value = true;
-});
+// const { start } = useTimeoutFn(() => {
+//   showInfo.value = false;
+// }, 5000);
+//
+// const { x, y, isOutside } = useMouseInElement(swiper);
+//
+// watch(showInfo, (value) => {
+//   if (value)
+//     start();
+// });
+//
+// watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY]) => {
+//   if (!newIsOutside && newX !== oldX && newY !== oldY)
+//     showInfo.value = true;
+// });
 </script>
 
 <template>
@@ -150,32 +150,37 @@ watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY
               <div class="text-white my-2">
                 <slot name="info" :item="image" />
               </div>
-              <div class="d-flex">
-                <VBtn
-                  class="montserrat text-capitalize font-weight-regular mr-2 border"
-                  nuxt
-                  :to="
-                    localePath({
-                      name: 'file-id',
-                      params: { id: image?.id?.toString() ?? '' },
-                    })
-                  "
-                  flat
-                  size="small"
-                  color="info"
-                >
-                  <VIcon start>
-                    {{ mdiInformationOutline }}
-                  </VIcon>
-                  {{ $t("photo.viewDetail") }}
-                </VBtn>
-                <div class="bg-white rounded px-2">
-                  <VIcon start>
+              <div>
+                <div class="mb-2">
+                  <VBtn
+                    class="montserrat text-capitalize font-weight-regular mr-2"
+                    :to="
+                      localePath({
+                        name: 'file-id',
+                        params: { id: image?.id?.toString() ?? '' },
+                      })
+                    "
+                    flat
+                    size="small"
+                    color="info"
+                  >
+                    <VIcon start>
+                      {{ mdiInformationOutline }}
+                    </VIcon>
+                    {{ $t("photo.viewDetail") }}
+                  </VBtn>
+                </div>
+                <div class="rounded d-inline-block px-1">
+                  <VIcon
+                    start
+                    color="white"
+                  >
                     {{ mdiFileDownloadOutline }}
                   </VIcon>
                   <VBtn
                     variant="text"
                     size="small"
+                    color="white"
                     class="text-capitalize"
                     :href="img(image.filename, { size: 'small' }, { provider: 'geocollections' })"
                     target="_blank"
@@ -185,6 +190,7 @@ watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY
                   <VBtn
                     variant="text"
                     size="small"
+                    color="white"
                     class="text-capitalize"
                     :href="img(image.filename, { size: 'medium' }, { provider: 'geocollections' })"
                     target="_blank"
@@ -194,6 +200,7 @@ watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY
                   <VBtn
                     variant="text"
                     size="small"
+                    color="white"
                     class="text-capitalize"
                     :href="img(image.filename, { size: 'large' }, { provider: 'geocollections' })"
                     target="_blank"
@@ -203,6 +210,7 @@ watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY
                   <VBtn
                     variant="text"
                     size="small"
+                    color="white"
                     class="text-capitalize"
                     :href="img(image.filename, {}, { provider: 'geocollections' })"
                     target="_blank"
