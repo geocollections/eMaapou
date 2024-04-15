@@ -36,10 +36,24 @@ const localePath = useLocalePath();
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.reference"
-        @click.native="$openGeology('reference', item.reference.id)"
+        @click="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
       </BaseLinkExternal>
+    </template>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth_top">
+        {{
+          item.depth_top.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_base">
+        {{
+          item.depth_base.toFixed(2)
+        }}
+      </span>
     </template>
   </BaseDataTable>
 </template>

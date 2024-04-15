@@ -282,6 +282,7 @@ export default {
     remarks: "Remarks",
     year: "Year",
     details: "Details",
+    depth: "Depth (m)",
   },
   localityReference: {
     reference: "Reference",
@@ -428,6 +429,7 @@ export default {
     reference: "Reference",
     remarks: "Remarks",
     locality: "Locality",
+    depth: "Depth (m)",
   },
   area: {
     pageTitle: "Areas",

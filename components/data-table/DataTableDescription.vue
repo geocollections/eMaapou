@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import round from "lodash/round";
 
 const localePath = useLocalePath();
@@ -11,12 +12,14 @@ const localePath = useLocalePath();
         <td class="py-2" :colspan="columns.length">
           <VRow no-gutters>
             <VCol class="pt-2 pb-4 pr-2">
-              <div class="font-weight-bold">
-                {{ $t("drillcore.description") }}
-              </div>
-              <div>
-                {{ item.description }}
-              </div>
+              <template v-if="item.description">
+                <div class="font-weight-bold">
+                  {{ $t("drillcore.description") }}
+                </div>
+                <div>
+                  {{ item.description }}
+                </div>
+              </template>
             </VCol>
             <VCol cols="12" md="6">
               <BaseTable>
@@ -112,11 +115,36 @@ const localePath = useLocalePath();
         {{ item.author_free }}
       </div>
     </template>
-    <template #item.depth_top="{ item }">
-      {{ item.depth_top.toFixed(2) }}
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth_top !== null">
+        {{
+          item.depth_top.toFixed(2)
+        }}
+      </span>
     </template>
-    <template #item.depth_base="{ item }">
-      {{ item.depth_base.toFixed(2) }}
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_base !== null">
+        {{
+          item.depth_base.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.data-table-expand="{ item, internalItem, toggleExpand, isExpanded }">
+      <VBtn
+        v-if="item.canExpand"
+        icon
+        variant="text"
+        size="small"
+        @click="toggleExpand(internalItem)"
+      >
+        <VIcon>
+          {{
+            isExpanded(internalItem)
+              ? mdiChevronUp
+              : mdiChevronDown
+          }}
+        </VIcon>
+      </VBtn>
     </template>
   </BaseDataTable>
 </template>

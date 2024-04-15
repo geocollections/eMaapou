@@ -14,26 +14,39 @@ export default function ({
   return sortBy
     .filter(sortItem => sortItem.order)
     .map((sortItem) => {
-      let sortField = sortItem.key;
+      const sortKey = sortItem.key;
+      const column = findHeaderColumn(headersMap, sortKey);
 
-      if (typeof headersMap[sortItem.key].apiFieldValue === "string") {
-        sortField = headersMap[sortItem.key].apiFieldValue as string;
+      if (Array.isArray(column.sortField)) {
+        return column.sortField
+          .map((field) => {
+            return `${sortItem.order === "asc" ? "" : "-"}${field}`;
+          })
+          .join(",");
       }
-      else if (typeof headersMap[sortItem.key].apiFieldValue === "object") {
-        sortField = (
-          headersMap[sortItem.key].apiFieldValue as { et: string; en: string }
-        )[locale];
+      else if (typeof column.sortField === "object") {
+        const fields = column.sortField[locale];
+        return fields.map((field) => {
+          return `${sortItem.order === "asc" ? "" : "-"}${field}`;
+        }).join(",");
       }
-
-      if (typeof sortItem.order === "boolean") {
-        if (sortItem.order)
-          return sortField;
-        return `-${sortField}`;
-      }
-      if (sortItem.order === "desc")
-        return `-${sortField}`;
-
-      return sortField;
+      return `${sortItem.order === "asc" ? "" : "-"}${column.value}`;
     })
     .join(",");
+}
+
+function findHeaderColumn(headersMap: { [K: string]: Header }, sortKey: string) {
+  if (headersMap[sortKey])
+    return headersMap[sortKey];
+
+  const headersWithChildren = Object.values(headersMap).filter((header) => {
+    return header.children && header.children.length > 0;
+  });
+
+  for (const header of headersWithChildren) {
+    for (const child of header.children) {
+      if (child.value === sortKey)
+        return child;
+    }
+  }
 }

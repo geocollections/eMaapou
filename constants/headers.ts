@@ -499,9 +499,9 @@ export const HEADERS_ATTACHMENT: Headers = {
     file: {
       title: "attachment.file",
       value: "file",
-      width: "120px",
       show: true,
       sortable: false,
+      ...narrowColumn,
     },
     description: {
       title: "attachment.description",
@@ -515,6 +515,7 @@ export const HEADERS_ATTACHMENT: Headers = {
         et: ["attachment__description"],
         en: ["attachment__description_en"],
       },
+      ...wideColumn,
     },
     agent: {
       title: "attachment.author",
@@ -522,6 +523,7 @@ export const HEADERS_ATTACHMENT: Headers = {
       show: true,
       apiFieldValue: "attachment__author__agent",
       sortField: ["attachment__author__agent"],
+      ...normalColumn,
     },
   },
   allIds: ["file", "description", "agent"],
@@ -799,21 +801,32 @@ export const HEADERS_DATASET_REFERENCE: Headers = {
 
 export const HEADERS_DESCRIPTION: Headers = {
   byIds: {
-    depth_top: {
-      title: "localityDescription.depthTop",
-      value: "depth_top",
+    depth: {
+      title: "localityDescription.depth",
+      value: "depth",
       show: true,
-      apiFieldValue: "depth_top",
-      sortField: ["depth_top"],
-      ...numberFieldProps,
-    },
-    depth_base: {
-      title: "localityDescription.depthBase",
-      value: "depth_base",
-      show: true,
-      apiFieldValue: "depth_base",
-      sortField: ["depth_base"],
-      ...numberFieldProps,
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth_top",
+          sortField: ["depth_top"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_base",
+          sortField: ["depth_base"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     thickness: {
       title: "localityDescription.thickness",
@@ -823,6 +836,7 @@ export const HEADERS_DESCRIPTION: Headers = {
       cellClass: "static-cell",
       show: true,
       ...numberFieldProps,
+      ...narrowColumn,
     },
     rock: {
       title: "localityDescription.rock",
@@ -830,6 +844,7 @@ export const HEADERS_DESCRIPTION: Headers = {
       show: true,
       apiFieldValue: { et: "rock__name", en: "rock__name_en" },
       sortField: { et: ["rock__name"], en: ["rock__name_en"] },
+      ...normalColumn,
     },
     stratigraphy: {
       title: "localityDescription.stratigraphy",
@@ -843,6 +858,7 @@ export const HEADERS_DESCRIPTION: Headers = {
         et: ["stratigraphy__stratigraphy"],
         en: ["stratigraphy__stratigraphy_en"],
       },
+      ...wideColumn,
     },
     author: {
       title: "localityDescription.author",
@@ -851,18 +867,19 @@ export const HEADERS_DESCRIPTION: Headers = {
       show: true,
       apiFieldValue: "reference__reference,agent__agent,author_free",
       sortField: ["reference__reference", "agent__agent", "author_free"],
+      ...wideColumn,
     },
     expand: {
-      title: "localityDescription.details",
+      title: "",
       value: "data-table-expand",
       align: "center",
       sortable: false,
       show: true,
+      ...narrowColumn,
     },
   },
   allIds: [
-    "depth_top",
-    "depth_base",
+    "depth",
     "thickness",
     "rock",
     "stratigraphy",
@@ -1017,6 +1034,7 @@ export const HEADERS_FOSSIL: Headers = {
       show: true,
       apiFieldValue: "taxon",
       sortField: ["taxon"],
+      ...wideColumn,
     },
     fossil_group: {
       title: "taxon.fossilGroup",
@@ -1024,6 +1042,7 @@ export const HEADERS_FOSSIL: Headers = {
       show: true,
       apiFieldValue: "fossil_group",
       sortField: ["fossil_group"],
+      ...normalColumn,
     },
     parent: {
       title: "taxon.parentTaxon",
@@ -1031,6 +1050,7 @@ export const HEADERS_FOSSIL: Headers = {
       show: true,
       apiFieldValue: "parent_taxon",
       sortField: ["parent_taxon"],
+      ...normalColumn,
     },
     src: {
       title: "taxon.src",
@@ -1038,6 +1058,7 @@ export const HEADERS_FOSSIL: Headers = {
       show: true,
       apiFieldValue: { et: "src_txt", en: "src_txt_en" },
       sortField: { et: ["src_txt"], en: ["src_txt_en"] },
+      ...wideColumn,
     },
   },
   allIds: ["fossil_group", "taxon", "parent", "src"],
@@ -1186,6 +1207,7 @@ export const HEADERS_LOCALITY_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     title: {
       title: "localityReference.referenceTitle",
@@ -1193,6 +1215,7 @@ export const HEADERS_LOCALITY_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__title",
       sortField: ["reference__title"],
+      ...ultraWideColumn,
     },
     pages: {
       title: "localityReference.pages",
@@ -1200,6 +1223,7 @@ export const HEADERS_LOCALITY_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "pages",
       sortField: ["pages"],
+      ...narrowColumn,
     },
     remarks: {
       title: "localityReference.remarks",
@@ -1207,6 +1231,7 @@ export const HEADERS_LOCALITY_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...normalColumn,
     },
   },
   allIds: ["reference", "title", "pages", "remarks"],
@@ -1220,6 +1245,7 @@ export const HEADERS_LOCALITY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "synonym",
       sortField: ["synonym"],
+      ...wideColumn,
     },
     pages: {
       title: "localitySynonym.pages",
@@ -1227,6 +1253,7 @@ export const HEADERS_LOCALITY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "pages",
       sortField: ["pages"],
+      ...narrowColumn,
     },
     reference: {
       title: "localitySynonym.reference",
@@ -1234,6 +1261,7 @@ export const HEADERS_LOCALITY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     remarks: {
       title: "localitySynonym.remarks",
@@ -1241,6 +1269,7 @@ export const HEADERS_LOCALITY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...normalColumn,
     },
   },
   allIds: ["synonym", "pages", "reference", "remarks"],
@@ -1260,6 +1289,7 @@ export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
         et: ["stratigraphy__stratigraphy"],
         en: ["stratigraphy__stratigraphy_en"],
       },
+      ...normalColumn,
     },
     type: {
       title: "stratotype.type",
@@ -1273,20 +1303,34 @@ export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
         et: ["stratotype_type__value"],
         en: ["stratotype_type__value_en"],
       },
+      ...normalColumn,
     },
-    depth_top: {
-      title: "stratotype.depthTop",
-      value: "depth_top",
+    depth: {
+      title: "stratotype.depth",
+      value: "depth",
       show: true,
-      apiFieldValue: "depth_top",
-      sortField: ["depth_top"],
-    },
-    depth_base: {
-      title: "stratotype.depthBase",
-      value: "depth_base",
-      show: true,
-      apiFieldValue: "depth_base",
-      sortField: ["depth_base"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth_top",
+          sortField: ["depth_top"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_base",
+          sortField: ["depth_base"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     reference: {
       title: "stratotype.reference",
@@ -1294,6 +1338,7 @@ export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     remarks: {
       title: "stratotype.remarks",
@@ -1301,13 +1346,13 @@ export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...normalColumn,
     },
   },
   allIds: [
     "stratigraphy",
     "type",
-    "depth_top",
-    "depth_base",
+    "depth",
     "reference",
     "remarks",
   ],

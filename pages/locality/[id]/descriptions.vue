@@ -42,14 +42,14 @@ const { data, pending } = await useGeoloogiaApiFetch<{
           ...item,
           canExpand:
             !isEmpty(item.description)
-            || item?.rock?.name
-            || item?.rock?.name_en
-            || item.zero_level
-            || item.author_free
-            || item.reference
-            || item.year
-            || item.stratigraphy_free
-            || item.remarks,
+            || !!item?.rock?.name
+            || !!item?.rock?.name_en
+            || !!item.zero_level
+            || !!item.author_free
+            || !!item.reference
+            || !!item.year
+            || !!item.stratigraphy_free
+            || !!item.remarks,
         };
       }),
     };

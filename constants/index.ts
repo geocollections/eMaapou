@@ -183,8 +183,8 @@ export const STRATOTYPE: ResourceDefaults = {
     page: 1,
     itemsPerPage: 25,
     sortBy: [
-      { key: "depth_top", order: "asc" },
-      { key: "depth_base", order: "desc" },
+      { key: "depthFrom", order: "asc" },
+      { key: "depthTo", order: "desc" },
     ],
   },
 };
@@ -209,8 +209,8 @@ export const DESCRIPTION: ResourceDefaults = {
     page: 1,
     itemsPerPage: 25,
     sortBy: [
-      { key: "depth_top", order: "asc" },
-      { key: "depth_base", order: "desc" },
+      { key: "depthFrom", order: "asc" },
+      { key: "depthTo", order: "desc" },
     ],
   },
 };

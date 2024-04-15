@@ -284,6 +284,7 @@ export default {
     remarks: "Märkused",
     year: "Aasta",
     details: "Detailinfo",
+    depth: "Sügavus (m)",
   },
   localityReference: {
     reference: "Kirje",
@@ -430,6 +431,7 @@ export default {
     reference: "Viide",
     remarks: "Lisainfo",
     locality: "Lokaliteet",
+    depth: "Sügavus (m)",
   },
   area: {
     pageTitle: "Alad",
