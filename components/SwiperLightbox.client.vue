@@ -61,6 +61,7 @@ onMounted(() => {
   nextTick(() => {
     const swiperContainer = swiper.value;
     const swiperParams = {
+      zoom: true,
       navigation: true,
       pagination: {
         type: "custom",
@@ -105,13 +106,15 @@ onMounted(() => {
         :lazy="true"
         class="d-flex justify-center align-center"
       >
-        <NuxtImg
-          :src="image.filename"
-          provider="geocollections"
-          :modifiers="{ size: 'large' }"
-          class="rounded"
-          style="max-height: 80vh; max-width: 100%; object-fit: contain"
-        />
+        <div class="swiper-zoom-container">
+          <NuxtImg
+            :src="image.filename"
+            provider="geocollections"
+            :modifiers="{ size: 'large' }"
+            class="rounded"
+            style="max-height: 80vh; max-width: 100%; object-fit: contain"
+          />
+        </div>
         <div
           v-show="showInfo"
           style="position: absolute; bottom: 0; background-color: rgba(0, 0, 0, 0.65);"
