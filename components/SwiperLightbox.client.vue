@@ -85,6 +85,10 @@ onMounted(() => {
       ],
     };
     Object.assign(swiperContainer, swiperParams);
+
+    swiperContainer.addEventListener("click", () => {
+      showInfo.value = !showInfo.value;
+    });
     swiperContainer.initialize();
   });
 });
