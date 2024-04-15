@@ -72,25 +72,45 @@ onMounted(() => {
       on: {
         reachEnd: handleReachEnd,
       },
-      injectStyles: [
-      `
-      :host .swiper-pagination {
-        bottom: unset;
-        top: 0;
-        color: white;
-        text-align: left;
-        padding: 0.5rem;
-      }
-      `,
-      ],
+      // injectStyles: [
+      // `
+      // :host .swiper-pagination {
+      //   bottom: unset;
+      //   top: 0;
+      //   color: white;
+      //   text-align: left;
+      //   padding: 0.5rem;
+      // }
+      // `,
+      // ],
     };
     Object.assign(swiperContainer, swiperParams);
 
-    swiperContainer.addEventListener("click", () => {
+    swiperContainer.addEventListener("swiperclick", () => {
       showInfo.value = !showInfo.value;
+    });
+
+    swiperContainer.addEventListener("swiperslidechangetransitionend", () => {
+      showInfo.value = true;
     });
     swiperContainer.initialize();
   });
+});
+
+const { start } = useTimeoutFn(() => {
+  showInfo.value = false;
+}, 5000);
+
+const { x, y, isOutside } = useMouseInElement(swiper);
+
+watch(showInfo, (value) => {
+  if (value)
+    start();
+});
+
+watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY]) => {
+  if (!newIsOutside && newX !== oldX && newY !== oldY)
+    showInfo.value = true;
 });
 </script>
 
@@ -119,80 +139,95 @@ onMounted(() => {
             style="max-height: 80vh; max-width: 100%; object-fit: contain"
           />
         </div>
-        <div
-          v-show="showInfo"
-          style="position: absolute; bottom: 0; background-color: rgba(0, 0, 0, 0.65);"
-          class="w-100"
-        >
-          <VDivider class="mb-2 text-white" />
-          <div class="mx-4 mb-4">
-            <div class="text-white my-2">
-              <slot name="info" :item="image" />
-            </div>
-            <div class="d-flex">
-              <VBtn
-                class="montserrat text-capitalize font-weight-regular mr-2 border"
-                nuxt
-                :to="
-                  localePath({
-                    name: 'file-id',
-                    params: { id: image?.id?.toString() ?? '' },
-                  })
-                "
-                flat
-                size="small"
-                color="info"
-              >
-                <VIcon start>
-                  {{ mdiInformationOutline }}
-                </VIcon>
-                {{ $t("photo.viewDetail") }}
-              </VBtn>
-              <div class="bg-white rounded px-2">
-                <VIcon start>
-                  {{ mdiFileDownloadOutline }}
-                </VIcon>
+        <Transition>
+          <div
+            v-show="showInfo"
+            style="position: absolute; bottom: 0; background-color: rgba(0, 0, 0, 0.65);"
+            class="w-100"
+          >
+            <VDivider class="mb-2 text-white" />
+            <div class="mx-4 mb-4">
+              <div class="text-white my-2">
+                <slot name="info" :item="image" />
+              </div>
+              <div class="d-flex">
                 <VBtn
-                  variant="text"
+                  class="montserrat text-capitalize font-weight-regular mr-2 border"
+                  nuxt
+                  :to="
+                    localePath({
+                      name: 'file-id',
+                      params: { id: image?.id?.toString() ?? '' },
+                    })
+                  "
+                  flat
                   size="small"
-                  class="text-capitalize"
-                  :href="img(image.filename, { size: 'small' }, { provider: 'geocollections' })"
-                  target="_blank"
+                  color="info"
                 >
-                  {{ $t("common.small") }}
+                  <VIcon start>
+                    {{ mdiInformationOutline }}
+                  </VIcon>
+                  {{ $t("photo.viewDetail") }}
                 </VBtn>
-                <VBtn
-                  variant="text"
-                  size="small"
-                  class="text-capitalize"
-                  :href="img(image.filename, { size: 'medium' }, { provider: 'geocollections' })"
-                  target="_blank"
-                >
-                  {{ $t("common.medium") }}
-                </VBtn>
-                <VBtn
-                  variant="text"
-                  size="small"
-                  class="text-capitalize"
-                  :href="img(image.filename, { size: 'large' }, { provider: 'geocollections' })"
-                  target="_blank"
-                >
-                  {{ $t("common.large") }}
-                </VBtn>
-                <VBtn
-                  variant="text"
-                  size="small"
-                  class="text-capitalize"
-                  :href="img(image.filename, {}, { provider: 'geocollections' })"
-                  target="_blank"
-                >
-                  {{ $t("common.original") }}
-                </VBtn>
+                <div class="bg-white rounded px-2">
+                  <VIcon start>
+                    {{ mdiFileDownloadOutline }}
+                  </VIcon>
+                  <VBtn
+                    variant="text"
+                    size="small"
+                    class="text-capitalize"
+                    :href="img(image.filename, { size: 'small' }, { provider: 'geocollections' })"
+                    target="_blank"
+                  >
+                    {{ $t("common.small") }}
+                  </VBtn>
+                  <VBtn
+                    variant="text"
+                    size="small"
+                    class="text-capitalize"
+                    :href="img(image.filename, { size: 'medium' }, { provider: 'geocollections' })"
+                    target="_blank"
+                  >
+                    {{ $t("common.medium") }}
+                  </VBtn>
+                  <VBtn
+                    variant="text"
+                    size="small"
+                    class="text-capitalize"
+                    :href="img(image.filename, { size: 'large' }, { provider: 'geocollections' })"
+                    target="_blank"
+                  >
+                    {{ $t("common.large") }}
+                  </VBtn>
+                  <VBtn
+                    variant="text"
+                    size="small"
+                    class="text-capitalize"
+                    :href="img(image.filename, {}, { provider: 'geocollections' })"
+                    target="_blank"
+                  >
+                    {{ $t("common.original") }}
+                  </VBtn>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Transition>
       </swiper-slide>
     </swiper-container>
   </div>
 </template>
+
+<style scoped>
+/* we will explain what these classes do next! */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
