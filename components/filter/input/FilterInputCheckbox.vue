@@ -15,7 +15,7 @@ const emit = defineEmits(["update:modelValue"]);
   <VCheckbox
     class="ml-2"
     hide-details
-    color="accent"
+    color="blue-darken-2"
     :model-value="modelValue"
     density="compact"
     :disabled="disabled"
