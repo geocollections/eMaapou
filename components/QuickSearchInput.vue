@@ -34,6 +34,7 @@ function handleClick() {
       :style="{ maxWidth: $vuetify.display.mdAndUp ? '450px' : 'inherit' }"
       :autofocus="false"
       :placeholder="$t('common.search')"
+      @keydown.enter="handleClick"
     />
     <VHover v-slot="{ isHovering, props: hoverProps }">
       <VBtn
