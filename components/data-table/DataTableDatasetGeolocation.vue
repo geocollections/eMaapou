@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mdiCheckBold, mdiCloseThick } from "@mdi/js";
+import isNil from "lodash/isNil";
 
 const localePath = useLocalePath();
 </script>
@@ -22,11 +23,10 @@ const localePath = useLocalePath();
         }}
       </NuxtLink>
     </template>
-    <template #item.longitude="{ item }">
-      {{ item.point_longitude }}
-    </template>
-    <template #item.latitude="{ item }">
-      {{ item.point_latitude }}
+    <template #item.coordinates="{ item }">
+      <span v-if="!isNil(item.point_latitude) && !isNil(item.point_longitude)">
+        {{ getCoordinatesStr(item.point_latitude, item.point_longitude) }}
+      </span>
     </template>
     <template #item.is_polygon="{ item }">
       <VIcon

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import isNil from "lodash/isNil";
+
 const localePath = useLocalePath();
 </script>
 
@@ -38,6 +40,20 @@ const localePath = useLocalePath();
       >
         {{ item.site }}
       </NuxtLink>
+    </template>
+    <template #item.depthFrom="{ item }">
+      <span v-if="item.depth">
+        {{
+          item.depth.toFixed(2)
+        }}
+      </span>
+    </template>
+    <template #item.depthTo="{ item }">
+      <span v-if="item.depth_interval">
+        {{
+          item.depth_interval.toFixed(2)
+        }}
+      </span>
     </template>
     <template #item.stratigraphy="{ item }">
       <NuxtLink
@@ -79,6 +95,11 @@ const localePath = useLocalePath();
     </template>
     <template #item.date_collected="{ item }">
       {{ item.date_collected ? $formatDate(item.date_collected) : null }}
+    </template>
+    <template #item.coordinates="{ item }">
+      <span v-if="!isNil(item.latitude) && !isNil(item.longitude)">
+        {{ getCoordinatesStr(item.latitude, item.longitude) }}
+      </span>
     </template>
   </BaseDataTable>
 </template>

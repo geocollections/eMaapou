@@ -550,7 +550,8 @@ export default {
     sampleNumber: "Sample",
     latitude: "Latitude",
     longitude: "Longitude",
-    depth: "Depth",
+    coordinates: "Coordinates",
+    depth: "Depth (m)",
     depthInterval: "Depth to",
   },
   preparation: {
@@ -922,6 +923,7 @@ export default {
     name: "Name",
     longitude: "Longitude",
     latitude: "Latitude",
+    coordinates: "Coordinates",
     isPolygon: "Polygon",
   },
   reference: {

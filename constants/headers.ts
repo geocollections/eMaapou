@@ -161,6 +161,7 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "parameter",
       sortField: ["parameter"],
+      ...normalColumn,
     },
     analysis_method: {
       title: "analysisResult.method",
@@ -168,26 +169,15 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "analysis_method",
       sortField: ["analysis_method"],
-    },
-    depth: {
-      title: "analysisResult.depth",
-      value: "depth",
-      show: true,
-      apiFieldValue: "depth",
-      sortField: ["depth"],
-    },
-    depth_interval: {
-      title: "analysisResult.depthInterval",
-      value: "depth_interval",
-      show: true,
-      apiFieldValue: "depth_interval",
-      sortField: ["depth_interval"],
+      ...normalColumn,
     },
     value: {
       title: "analysisResult.value",
       value: "value",
       show: true,
       sortField: ["value"],
+      ...numberFieldProps,
+      ...normalColumn,
     },
     value_txt: {
       title: "analysisResult.valueText",
@@ -195,6 +185,7 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "value_txt",
       sortField: ["value_txt"],
+      ...normalColumn,
     },
     value_error: {
       title: "analysisResult.valueError",
@@ -202,13 +193,13 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "value_error",
       sortField: ["value_error"],
+      ...numberFieldProps,
+      ...normalColumn,
     },
   },
   allIds: [
     "parameter",
     "analysis_method",
-    "depth",
-    "depth_interval",
     "value",
     "value_txt",
     "value_error",
@@ -519,13 +510,21 @@ export const HEADERS_ATTACHMENT: Headers = {
 };
 export const HEADERS_ATTACHMENT_SOLR: Headers = {
   byIds: {
-    id: { title: "attachment.id", value: "id", show: true, apiFieldValue: "id", sortField: ["id"] },
+    id: {
+      title: "attachment.id",
+      value: "id",
+      show: true,
+      apiFieldValue: "id",
+      sortField: ["id"],
+      ...narrowColumn,
+    },
     format_value: {
       title: "attachment.format",
       value: "format_value",
       show: true,
       apiFieldValue: "format_value",
       sortField: ["format_value"],
+      ...normalColumn,
     },
     image_number: {
       title: "attachment.image_number",
@@ -533,6 +532,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       show: true,
       apiFieldValue: "image_number",
       sortField: ["image_number"],
+      ...narrowColumn,
     },
     agent: {
       title: "attachment.author",
@@ -540,6 +540,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       show: true,
       apiFieldValue: "agent",
       sortField: ["agent"],
+      ...normalColumn,
     },
     date: {
       title: "attachment.date",
@@ -547,6 +548,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       show: true,
       apiFieldValue: "date_created,date_created_free",
       sortField: ["date_created", "date_created_free"],
+      ...normalColumn,
     },
     reference: {
       title: "attachment.reference",
@@ -554,6 +556,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       show: true,
       apiFieldValue: "reference",
       sortField: ["reference"],
+      ...normalColumn,
     },
     type: {
       title: "attachment.type",
@@ -561,6 +564,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       show: true,
       apiFieldValue: "type",
       sortField: ["type"],
+      ...normalColumn,
     },
     image: {
       title: "attachment.image",
@@ -568,6 +572,7 @@ export const HEADERS_ATTACHMENT_SOLR: Headers = {
       show: true,
       apiFieldValue: "uuid_filename",
       sortable: false,
+      ...narrowColumn,
     },
   },
   allIds: [
@@ -589,12 +594,14 @@ export const HEADERS_ATTACHMENT_LINK_SOLR: Headers = {
       value: "table",
       show: true,
       sortField: ["table"],
+      ...narrowColumn,
     },
     name: {
       title: "attachmentLink.name",
       value: "name",
       show: true,
       sortField: { et: ["name"], en: ["name_en"] },
+      ...wideColumn,
     },
   },
   allIds: ["table", "name"],
@@ -646,6 +653,7 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: "id_l",
       sortField: ["id_l"],
+      ...narrowColumn,
     },
     sample: {
       title: "datasetAnalysis.sampleNumber",
@@ -653,6 +661,7 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: "sample_id_sl",
       sortField: ["sample_id"],
+      ...narrowColumn,
     },
     locality: {
       title: "datasetAnalysis.locality",
@@ -660,6 +669,7 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: "locality",
       sortField: ["locality"],
+      ...normalColumn,
     },
     stratigraphy: {
       title: "datasetAnalysis.stratigraphy",
@@ -667,6 +677,7 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
       sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
+      ...normalColumn,
     },
     analysis_method: {
       title: "datasetAnalysis.analysisMethod",
@@ -674,6 +685,7 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: { et: "analysis_method", en: "analysis_method_en" },
       sortField: { et: ["analysis_method"], en: ["analysis_method_en"] },
+      ...normalColumn,
     },
     lab: {
       title: "datasetAnalysis.lab",
@@ -681,6 +693,7 @@ export const HEADERS_DATASET_ANALYSIS: Headers = {
       show: true,
       apiFieldValue: { et: "lab", en: "lab_en" },
       sortField: { et: ["lab"], en: ["lab_en"] },
+      ...normalColumn,
     },
   },
   allIds: [
@@ -701,6 +714,7 @@ export const HEADERS_DATASET_AUTHOR: Headers = {
       show: true,
       apiFieldValue: "agent__agent",
       sortField: ["agent__agent"],
+      ...normalColumn,
     },
     affiliation: {
       title: "datasetAuthor.affiliation",
@@ -708,6 +722,7 @@ export const HEADERS_DATASET_AUTHOR: Headers = {
       show: true,
       apiFieldValue: "affiliation",
       sortField: ["affiliation"],
+      ...normalColumn,
     },
     type: {
       title: "datasetAuthor.type",
@@ -715,6 +730,7 @@ export const HEADERS_DATASET_AUTHOR: Headers = {
       show: true,
       apiFieldValue: "agent_type__value",
       sortField: ["agent_type__value"],
+      ...normalColumn,
     },
   },
   allIds: ["name", "affiliation", "type"],
@@ -729,19 +745,14 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
       apiFieldValue: { et: "locality__locality", en: "locality__locality_en" },
       sortField: { et: ["locality__locality"], en: ["locality__locality_en"] },
     },
-    longitude: {
-      title: "datasetGeolocation.longitude",
-      value: "longitude",
+    coordinates: {
+      title: "datasetGeolocation.coordinates",
+      value: "coordinates",
       show: true,
-      apiFieldValue: "point_latitude",
-      sortField: ["point_latitude"],
-    },
-    latitude: {
-      title: "datasetGeolocation.latitude",
-      value: "latitude",
-      show: true,
-      apiFieldValue: "point_longitude",
-      sortField: ["point_longitude"],
+      sortable: false,
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
     },
     is_polygon: {
       title: "datasetGeolocation.isPolygon",
@@ -751,7 +762,7 @@ export const HEADERS_DATASET_GEOLOCATION: Headers = {
       sortField: ["is_polygon"],
     },
   },
-  allIds: ["name", "longitude", "latitude", "is_polygon"],
+  allIds: ["name", "coordinates", "is_polygon"],
 };
 
 export const HEADERS_DATASET_REFERENCE: Headers = {
@@ -762,6 +773,7 @@ export const HEADERS_DATASET_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...normalColumn,
     },
     title: {
       title: "reference.title",
@@ -769,6 +781,7 @@ export const HEADERS_DATASET_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__title",
       sortField: ["reference__title"],
+      ...ultraWideColumn,
     },
     journal: {
       title: "reference.journalBook",
@@ -776,6 +789,7 @@ export const HEADERS_DATASET_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__pages",
       sortField: ["reference__pages"],
+      ...wideColumn,
     },
     pages: {
       title: "reference.pages",
@@ -783,6 +797,7 @@ export const HEADERS_DATASET_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__journal__journal_name",
       sortField: ["reference__journal__journal_name"],
+      ...narrowColumn,
     },
   },
   allIds: ["reference", "title", "journal", "pages"],
@@ -885,6 +900,7 @@ export const HEADERS_DOI: Headers = {
       show: true,
       apiFieldValue: "identfier",
       sortField: ["identfier"],
+      ...normalColumn,
     },
     creator: {
       title: "doi.creators",
@@ -892,6 +908,7 @@ export const HEADERS_DOI: Headers = {
       show: true,
       apiFieldValue: "creators",
       sortField: ["creators"],
+      ...wideColumn,
     },
     reference_year: {
       title: "doi.reference_year",
@@ -899,6 +916,7 @@ export const HEADERS_DOI: Headers = {
       show: true,
       apiFieldValue: "reference_year",
       sortField: ["reference_year"],
+      ...narrowColumn,
     },
     title: {
       title: "doi.table_title",
@@ -906,6 +924,7 @@ export const HEADERS_DOI: Headers = {
       show: true,
       apiFieldValue: "title",
       sortField: ["title"],
+      ...wideColumn,
     },
     resource: {
       title: "doi.resource",
@@ -913,6 +932,7 @@ export const HEADERS_DOI: Headers = {
       show: true,
       apiFieldValue: "resource",
       sortField: ["resource"],
+      ...normalColumn,
     },
     datacite_created: {
       title: "doi.datacite_created",
@@ -920,6 +940,7 @@ export const HEADERS_DOI: Headers = {
       show: true,
       apiFieldValue: "datacite_created",
       sortField: ["datacite_created"],
+      ...normalColumn,
     },
   },
   allIds: [
@@ -1524,13 +1545,21 @@ export const HEADERS_PREPARATION: Headers = {
 
 export const HEADERS_REFERENCE: Headers = {
   byIds: {
-    id: { title: "reference.id", value: "id", show: true, apiFieldValue: "id", sortField: ["id"] },
+    id: {
+      title: "reference.id",
+      value: "id",
+      show: false,
+      apiFieldValue: "id",
+      sortField: ["id"],
+      ...narrowColumn,
+    },
     reference: {
       title: "reference.reference",
       value: "reference",
       show: true,
       apiFieldValue: "reference",
       sortField: ["reference"],
+      ...wideColumn,
     },
     author: {
       title: "reference.author",
@@ -1538,6 +1567,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "author",
       sortField: ["author"],
+      ...normalColumn,
     },
     year: {
       title: "reference.year",
@@ -1545,6 +1575,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "year",
       sortField: ["year"],
+      ...narrowColumn,
     },
     title: {
       title: "reference.title",
@@ -1552,6 +1583,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "title",
       sortField: ["title"],
+      ...wideColumn,
     },
     journal: {
       title: "reference.journalBook",
@@ -1559,6 +1591,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "journal__journal_name,book",
       sortField: ["journal__journal_name", "book"],
+      ...wideColumn,
     },
     pages: {
       title: "reference.pages",
@@ -1566,6 +1599,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "pages",
       sortField: ["pages"],
+      ...narrowColumn,
     },
     doi: {
       title: "reference.doi",
@@ -1573,6 +1607,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "doi",
       sortField: ["doi"],
+      ...normalColumn,
     },
     remarks: {
       title: "reference.remarks",
@@ -1580,6 +1615,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...wideColumn,
     },
     pdf: {
       title: "reference.pdf",
@@ -1587,6 +1623,7 @@ export const HEADERS_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "pdf",
       sortField: ["pdf"],
+      ...narrowColumn,
     },
   },
   allIds: [
@@ -1604,13 +1641,21 @@ export const HEADERS_REFERENCE: Headers = {
 
 export const HEADERS_ROCK: Headers = {
   byIds: {
-    id: { title: "rock.id", value: "id", show: true, apiFieldValue: "id", sortField: ["id"] },
+    id: {
+      title: "rock.id",
+      value: "id",
+      show: true,
+      apiFieldValue: "id",
+      sortField: ["id"],
+      ...narrowColumn,
+    },
     name: {
       title: "rock.name",
       value: "name",
       show: true,
       apiFieldValue: "name",
       sortField: ["name"],
+      ...normalColumn,
     },
     name_en: {
       title: "rock.name_en",
@@ -1618,6 +1663,7 @@ export const HEADERS_ROCK: Headers = {
       show: true,
       apiFieldValue: "name_en",
       sortField: ["name_en"],
+      ...normalColumn,
     },
     formula: {
       title: "rock.formula",
@@ -1625,6 +1671,7 @@ export const HEADERS_ROCK: Headers = {
       show: true,
       apiFieldValue: "formula,formula_html",
       sortField: ["formula", "formula_html"],
+      ...wideColumn,
     },
     in_estonia: {
       title: "rock.in_estonia",
@@ -1632,6 +1679,7 @@ export const HEADERS_ROCK: Headers = {
       show: true,
       apiFieldValue: "in_estonia",
       sortField: ["in_estonia"],
+      ...narrowColumn,
     },
     mindat_id: {
       title: "rock.mindat",
@@ -1639,6 +1687,7 @@ export const HEADERS_ROCK: Headers = {
       show: true,
       apiFieldValue: "mindat_id",
       sortField: ["mindat_id"],
+      ...narrowColumn,
     },
   },
   allIds: ["id", "name", "name_en", "formula", "in_estonia", "mindat_id"],
@@ -1761,6 +1810,7 @@ export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "parameter",
       sortField: ["parameter"],
+      ...normalColumn,
     },
     analysis_method: {
       title: "analysisResult.method",
@@ -1768,6 +1818,7 @@ export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "analysis_method",
       sortField: ["analysis_method"],
+      ...normalColumn,
     },
     method_details: {
       title: "analysisResult.methodDetails",
@@ -1775,28 +1826,50 @@ export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "method_details",
       sortField: ["method_details"],
+      ...normalColumn,
     },
     depth: {
       title: "analysisResult.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth",
-      sortField: ["depth"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
-    depth_interval: {
-      title: "analysisResult.depthInterval",
-      value: "depth_interval",
+    value: {
+      title: "analysisResult.value",
+      value: "value",
       show: true,
-      apiFieldValue: "depth_interval",
-      sortField: ["depth_interval"],
+      sortField: ["value"],
+      ...numberFieldProps,
+      ...normalColumn,
     },
-    value: { title: "analysisResult.value", value: "value", show: true, sortField: ["value"] },
     value_txt: {
       title: "analysisResult.valueText",
       value: "value_txt",
       show: true,
       apiFieldValue: "value_txt",
       sortField: ["value_txt"],
+      ...normalColumn,
     },
     value_error: {
       title: "analysisResult.valueError",
@@ -1804,6 +1877,8 @@ export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
       show: true,
       apiFieldValue: "value_error",
       sortField: ["value_error"],
+      ...numberFieldProps,
+      ...normalColumn,
     },
   },
   allIds: [
@@ -1811,7 +1886,6 @@ export const HEADERS_SAMPLE_ANALYSIS_RESULT: Headers = {
     "analysis_method",
     "method_details",
     "depth",
-    "depth_interval",
     "value",
     "value_txt",
     "value_error",
@@ -1826,20 +1900,16 @@ export const HEADERS_SAMPLE_DATA: Headers = {
       show: true,
       apiFieldValue: "sample_number",
       sortField: ["sample_number"],
+      ...narrowColumn,
     },
-    latitude: {
-      title: "sampleData.latitude",
-      value: "latitude",
+    coordinates: {
+      title: "sampleData.coordinates",
+      value: "coordinates",
       show: false,
-      apiFieldValue: "latitude",
-      sortField: ["latitude"],
-    },
-    longitude: {
-      title: "sampleData.longitude",
-      value: "longitude",
-      show: false,
-      apiFieldValue: "longitude",
-      sortField: ["longitude"],
+      sortable: false,
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
     },
     locality: {
       title: "datasetAnalysis.locality",
@@ -1847,20 +1917,34 @@ export const HEADERS_SAMPLE_DATA: Headers = {
       show: true,
       apiFieldValue: "locality",
       sortField: ["locality"],
+      ...wideColumn,
     },
     depth: {
       title: "sampleData.depth",
       value: "depth",
       show: true,
-      apiFieldValue: "depth",
-      sortField: ["depth"],
-    },
-    depth_interval: {
-      title: "sampleData.depthInterval",
-      value: "depth_interval",
-      show: false,
-      apiFieldValue: "depth_interval",
-      sortField: ["depth_interval"],
+      sortable: false,
+      align: "end",
+      children: [
+        {
+          title: "common.from",
+          value: "depthFrom",
+          apiFieldValue: "depth",
+          sortField: ["depth"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+        {
+          title: "common.to",
+          value: "depthTo",
+          apiFieldValue: "depth_interval",
+          sortField: ["depth_interval"],
+          sortable: true,
+          ...numberFieldProps,
+          ...narrowColumn,
+        },
+      ],
     },
     stratigraphy: {
       title: "datasetAnalysis.stratigraphy",
@@ -1868,15 +1952,14 @@ export const HEADERS_SAMPLE_DATA: Headers = {
       show: true,
       apiFieldValue: { et: "stratigraphy", en: "stratigraphy_en" },
       sortField: { et: ["stratigraphy"], en: ["stratigraphy_en"] },
+      ...normalColumn,
     },
   },
   allIds: [
     "sample",
     "locality",
     "depth",
-    "depth_interval",
-    "latitude",
-    "longitude",
+    "coordinates",
     "stratigraphy",
   ],
 };
@@ -1889,6 +1972,7 @@ export const HEADERS_SAMPLE_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     reference__title: {
       title: "sampleReference.referenceTitle",
@@ -1896,6 +1980,7 @@ export const HEADERS_SAMPLE_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__title",
       sortField: ["reference__title"],
+      ...ultraWideColumn,
     },
     pages: {
       title: "sampleReference.pages",
@@ -1903,6 +1988,7 @@ export const HEADERS_SAMPLE_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "pages",
       sortField: ["pages"],
+      ...narrowColumn,
     },
     remarks: {
       title: "sampleReference.remarks",
@@ -1910,6 +1996,7 @@ export const HEADERS_SAMPLE_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...wideColumn,
     },
   },
   allIds: ["reference", "reference__title", "pages", "remarks"],
@@ -2107,6 +2194,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
       show: true,
       apiFieldValue: "taxon__taxon",
       sortField: ["taxon__taxon"],
+      ...wideColumn,
     },
     agent: {
       title: "specimenIdentification.agent",
@@ -2114,6 +2202,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
       show: true,
       apiFieldValue: "agent__agent",
       sortField: ["agent__agent"],
+      ...normalColumn,
     },
     dateIdentified: {
       title: "specimenIdentification.dateIdentified",
@@ -2121,6 +2210,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
       show: true,
       apiFieldValue: "date_identified",
       sortField: ["date_identified"],
+      ...normalColumn,
     },
     reference: {
       title: "specimenIdentification.reference",
@@ -2128,6 +2218,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...normalColumn,
     },
     type: {
       title: "specimenIdentification.type",
@@ -2141,6 +2232,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
         et: ["identification_type__value"],
         en: ["identification_type__value_en"],
       },
+      ...normalColumn,
     },
     remarks: {
       title: "specimenIdentification.remarks",
@@ -2148,6 +2240,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...normalColumn,
     },
     current: {
       title: "specimenIdentification.current",
@@ -2155,6 +2248,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
       show: true,
       apiFieldValue: "current",
       sortField: ["current"],
+      ...narrowColumn,
     },
   },
   allIds: [
@@ -2163,8 +2257,8 @@ export const HEADERS_SPECIMEN_IDENTIFICATION: Headers = {
     "dateIdentified",
     "reference",
     "type",
-    "remarks",
     "current",
+    "remarks",
   ],
 };
 
@@ -2176,6 +2270,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "rock__name,rock__name_en",
       sortField: ["rock__name", "rock__name_en"],
+      ...normalColumn,
     },
     name: {
       title: "specimenIdentification.name",
@@ -2183,6 +2278,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "name",
       sortField: ["name"],
+      ...normalColumn,
     },
     name_en: {
       title: "specimenIdentification.name_en",
@@ -2190,6 +2286,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "name_en",
       sortField: ["name_en"],
+      ...normalColumn,
     },
     agent: {
       title: "specimenIdentification.agent",
@@ -2197,6 +2294,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "agent__agent",
       sortField: ["agent__agent"],
+      ...normalColumn,
     },
     dateIdentified: {
       title: "specimenIdentification.dateIdentified",
@@ -2204,6 +2302,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "date_identified",
       sortField: ["date_identified"],
+      ...normalColumn,
     },
     reference: {
       title: "specimenIdentification.reference",
@@ -2211,6 +2310,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...normalColumn,
     },
     type: {
       title: "specimenIdentification.type",
@@ -2218,6 +2318,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: { et: "type__value", en: "type__value_en" },
       sortField: { et: ["type__value"], en: ["type__value_en"] },
+      ...normalColumn,
     },
     remarks: {
       title: "specimenIdentification.remarks",
@@ -2225,6 +2326,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...normalColumn,
     },
     current: {
       title: "specimenIdentification.current",
@@ -2232,6 +2334,7 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
       show: true,
       apiFieldValue: "current",
       sortField: ["current"],
+      ...narrowColumn,
     },
     // pages: {
     //   title: 'stratigraphyReference.pages',
@@ -2247,8 +2350,8 @@ export const HEADERS_SPECIMEN_IDENTIFICATION_GEOLOGY: Headers = {
     "dateIdentified",
     "reference",
     "type",
-    "remarks",
     "current",
+    "remarks",
   ],
 };
 
@@ -2260,6 +2363,7 @@ export const HEADERS_SPECIMEN_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     pages: {
       title: "specimenReference.pages",
@@ -2267,6 +2371,7 @@ export const HEADERS_SPECIMEN_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "pages",
       sortField: ["pages"],
+      ...narrowColumn,
     },
     figures: {
       title: "specimenReference.figures",
@@ -2274,6 +2379,7 @@ export const HEADERS_SPECIMEN_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "figures",
       sortField: ["figures"],
+      ...narrowColumn,
     },
     remarks: {
       title: "specimenReference.remarks",
@@ -2281,6 +2387,7 @@ export const HEADERS_SPECIMEN_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...normalColumn,
     },
   },
   allIds: ["reference", "pages", "figures", "remarks"],
@@ -2429,34 +2536,39 @@ export const HEADERS_STRATIGRAPHY_REFERENCE: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     content: {
       title: "stratigraphyReference.content",
       value: "content",
       show: true,
-      apiFieldValue: "reference__year",
-      sortField: ["reference__year"],
+      apiFieldValue: { et: "content", en: "content_en" },
+      sortField: { et: ["content"], en: ["content_en"] },
+      ...wideColumn,
     },
     year: {
       title: "stratigraphyReference.year",
       value: "year",
       show: true,
-      apiFieldValue: "pages",
-      sortField: ["pages"],
+      apiFieldValue: "reference__year",
+      sortField: ["reference__year"],
+      ...narrowColumn,
     },
     pages: {
       title: "stratigraphyReference.pages",
       value: "pages",
       show: true,
-      apiFieldValue: "remarks",
-      sortField: ["remarks"],
+      apiFieldValue: "pages",
+      sortField: ["pages"],
+      ...narrowColumn,
     },
     remarks: {
       title: "stratigraphyReference.remarks",
       value: "remarks",
       show: true,
-      apiFieldValue: { et: "content", en: "content_en" },
-      sortField: { et: ["content"], en: ["content_en"] },
+      apiFieldValue: "remarks",
+      sortField: ["remarks"],
+      ...wideColumn,
     },
   },
   allIds: ["reference", "content", "year", "pages", "remarks"],
@@ -2470,6 +2582,7 @@ export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "synonym",
       sortField: ["synonym"],
+      ...wideColumn,
     },
     language: {
       title: "stratigraphySynonym.language",
@@ -2477,6 +2590,7 @@ export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: { et: "language__value", en: "language__value_en" },
       sortField: { et: ["language__value"], en: ["language__value_en"] },
+      ...normalColumn,
     },
     reference: {
       title: "stratigraphySynonym.reference",
@@ -2484,6 +2598,7 @@ export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "reference__reference",
       sortField: ["reference__reference"],
+      ...wideColumn,
     },
     remarks: {
       title: "stratigraphySynonym.remarks",
@@ -2491,6 +2606,7 @@ export const HEADERS_STRATIGRAPHY_SYNONYM: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...wideColumn,
     },
   },
   allIds: ["synonym", "language", "reference", "remarks"],
@@ -2640,6 +2756,7 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "taxon__taxon",
       sortField: ["taxon__taxon"],
+      ...wideColumn,
     },
     name: {
       title: "taxon.name",
@@ -2647,6 +2764,7 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "name",
       sortField: ["name"],
+      ...wideColumn,
     },
     frequency: {
       title: "taxon.frequency",
@@ -2654,6 +2772,8 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "frequency",
       sortField: ["frequency"],
+      ...numberFieldProps,
+      ...narrowColumn,
     },
     agent: {
       title: "taxon.agent_identified",
@@ -2661,6 +2781,7 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "agent_identified__agent,agent_identified_txt",
       sortField: ["agent_identified__agent", "agent_identified_txt"],
+      ...normalColumn,
     },
     date_identified: {
       title: "taxon.date_identified",
@@ -2668,6 +2789,7 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "date_identified,date_identified_free",
       sortField: ["date_identified", "date_identified_free"],
+      ...normalColumn,
     },
     extra: {
       title: "taxon.extra",
@@ -2675,6 +2797,7 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "extra",
       sortField: ["extra"],
+      ...narrowColumn,
     },
     remarks: {
       title: "taxon.remarks",
@@ -2682,6 +2805,7 @@ export const HEADERS_TAXON_LIST: Headers = {
       show: true,
       apiFieldValue: "remarks",
       sortField: ["remarks"],
+      ...wideColumn,
     },
   },
   allIds: [

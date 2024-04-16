@@ -8,17 +8,11 @@ const {
   handleHeadersChange,
 } = useDataTableDetail({
   initOptions: ANALYSIS_RESULT.options,
-  initHeaders: HEADERS_ANALYSIS_RESULT,
+  initHeaders: HEADERS_SAMPLE_ANALYSIS_RESULT,
 });
 
 const route = useRoute();
 const { locale } = useI18n();
-
-const filteredHeaders = computed(() =>
-  headers.value.filter((header) => {
-    return !header.value?.includes("depth") ?? true;
-  }),
-);
 
 const { data, pending } = await useSolrFetch("/analysis_results", {
   query: computed(() => ({
@@ -29,7 +23,7 @@ const { data, pending } = await useSolrFetch("/analysis_results", {
       filter: `sample_id:${route.params.id}`,
       sort: getSolrSort({
         sortBy: options.value.sortBy,
-        headersMap: HEADERS_ANALYSIS_RESULT.byIds,
+        headersMap: HEADERS_SAMPLE_ANALYSIS_RESULT.byIds,
         locale: locale.value as "et" | "en",
       }),
     },
@@ -43,7 +37,7 @@ const { data, pending } = await useSolrFetch("/analysis_results", {
     :items="data?.response.docs ?? []"
     :count="data?.response.numFound ?? 0"
     :options="options"
-    :headers="filteredHeaders"
+    :headers="headers"
     :is-loading="pending"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"

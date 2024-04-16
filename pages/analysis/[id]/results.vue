@@ -17,9 +17,7 @@ const { locale } = useI18n();
 const filteredHeaders = computed(() =>
   headers.value.filter((header) => {
     return (
-      (!header.value?.includes("depth")
-      && !(header.value === "analysis_method"))
-      ?? true
+      !(header.value === "analysis_method") ?? true
     );
   }),
 );

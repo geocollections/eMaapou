@@ -551,7 +551,8 @@ export default {
     sampleNumber: "Proov",
     latitude: "Laiuskraad",
     longitude: "Pikkuskraad",
-    depth: "Sügavus",
+    coordinates: "Koordinaadid",
+    depth: "Sügavus (m)",
     depthInterval: "Sügavus kuni",
   },
   preparation: {
@@ -923,6 +924,7 @@ export default {
     name: "Nimi",
     longitude: "Pikkuskraad",
     latitude: "Laiuskraad",
+    coordinates: "Koordinaadid",
     isPolygon: "Polügoon",
   },
   reference: {

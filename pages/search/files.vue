@@ -14,7 +14,7 @@ const {
   handleHeadersChange,
 } = useDataTableDetail({
   initOptions: ATTACHMENT.options,
-  initHeaders: HEADERS_ATTACHMENT,
+  initHeaders: HEADERS_ATTACHMENT_SOLR,
 });
 
 const { data, pending } = await useSolrFetch<SolrResponse>("/attachment", {
