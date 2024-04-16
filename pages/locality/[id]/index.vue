@@ -48,7 +48,6 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
       totalImages.value = res.count;
 
     return res.results
-      .filter((image: any) => !image.attachment.is_private)
       .map((image: any) => ({
         id: image.attachment.id,
         filename: image.attachment.filename,
@@ -57,9 +56,6 @@ async function imageQuery({ rows, page }: { rows: number; page: number }) {
           date: image.attachment.date_created,
           dateText: image.attachment.date_created_free,
         },
-        author: image.attachment.author?.agent ?? null,
-        date: image.attachment.date_created,
-        dateText: image.attachment.date_created_free,
       }));
   });
   images.value = [...images.value, ...newImages];
