@@ -447,6 +447,7 @@ export const HEADERS_AREA_LOCALITY: Headers = {
       show: false,
       apiFieldValue: "id",
       sortField: ["id"],
+      ...narrowColumn,
     },
     locality: {
       title: "locality.name",
@@ -454,6 +455,7 @@ export const HEADERS_AREA_LOCALITY: Headers = {
       show: true,
       apiFieldValue: { et: "locality", en: "locality_en" },
       sortField: { et: ["locality"], en: ["locality_en"] },
+      ...wideColumn,
     },
     country: {
       title: "locality.country",
@@ -461,29 +463,16 @@ export const HEADERS_AREA_LOCALITY: Headers = {
       show: true,
       apiFieldValue: { et: "country", en: "country_en" },
       sortField: { et: ["country__value"], en: ["country__value_en"] },
+      ...normalColumn,
     },
     coordinates: {
       title: "locality.coordinates",
       value: "coordinates",
       show: true,
       sortable: false,
-      align: "end",
-      children: [
-        {
-          title: "locality.latitude",
-          value: "latitude",
-          width: 75,
-          apiFieldValue: "latitude",
-          ...numberFieldProps,
-        },
-        {
-          title: "locality.longitude",
-          value: "longitude",
-          width: 75,
-          apiFieldValue: "longitude",
-          ...numberFieldProps,
-        },
-      ],
+      ...numberFieldProps,
+      ...normalColumn,
+      align: "start",
     },
   },
   allIds: [
