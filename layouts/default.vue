@@ -187,7 +187,6 @@ const { showSimilar } = useAttrs();
       </div>
       <AppFooter />
     </VMain>
-    <slot />
   </VApp>
 </template>
 

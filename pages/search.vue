@@ -234,50 +234,44 @@ useHead({
 </script>
 
 <template>
-  <VMain style="min-height: 100vh">
-    <VContainer
-      class="pt-1 pb-10"
-      style="height: 100%"
-      :fluid="display.lgAndDown.value"
-    >
-      <div>
-        <VRow
-          no-gutters
-          justify="center"
-          align="center"
-        >
-          <VCol class="my-4">
-            <BaseHeader :icon="mdiMagnify">
-              <template #title>
-                <I18nT keypath="quickSearch.title" tag="div">
-                  <template #query>
-                    <b v-text="route.query.q" />
-                  </template>
-                </I18nT>
-              </template>
-            </BaseHeader>
-          </VCol>
-        </VRow>
-        <VRow no-gutters>
-          <VCol>
-            <ButtonTabs :tabs="data.tabs" />
-          </VCol>
-        </VRow>
-        <VRow no-gutters justify="center">
-          <VCol>
-            <div v-if="noResults">
-              <div class="mt-4 text-h4 text-center">
-                {{ $t("quickSearch.noResults") }}
-              </div>
-            </div>
-            <div v-else class="border rounded">
-              <NuxtPage :query="query" keep-alive />
-            </div>
-          </VCol>
-        </VRow>
+  <VContainer
+    class="pt-1 pb-10 px-0"
+    style="height: 100%"
+    :fluid="display.lgAndDown.value"
+  >
+    <div>
+      <VRow
+        no-gutters
+        justify="center"
+        align="center"
+      >
+        <VCol class="my-4 mx-2">
+          <BaseHeader :icon="mdiMagnify">
+            <template #title>
+              <I18nT keypath="quickSearch.title" tag="div">
+                <template #query>
+                  <b v-text="route.query.q" />
+                </template>
+              </I18nT>
+            </template>
+          </BaseHeader>
+        </VCol>
+      </VRow>
+      <VRow no-gutters>
+        <VCol class="mx-4">
+          <ButtonTabs :tabs="data.tabs" />
+        </VCol>
+      </VRow>
+      <div v-if="noResults">
+        <div class="mt-4 text-h4 text-center">
+          {{ $t("quickSearch.noResults") }}
+        </div>
       </div>
-      <FabScrollTop />
-    </VContainer>
-    <AppFooter />
-  </VMain>
+      <NuxtPage
+        class="border-t border-b"
+        :query="query"
+        keep-alive
+      />
+    </div>
+  </VContainer>
 </template>
