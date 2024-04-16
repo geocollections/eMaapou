@@ -97,21 +97,21 @@ onMounted(() => {
   });
 });
 
-// const { start } = useTimeoutFn(() => {
-//   showInfo.value = false;
-// }, 5000);
-//
-// const { x, y, isOutside } = useMouseInElement(swiper);
-//
-// watch(showInfo, (value) => {
-//   if (value)
-//     start();
-// });
-//
-// watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY]) => {
-//   if (!newIsOutside && newX !== oldX && newY !== oldY)
-//     showInfo.value = true;
-// });
+const { start } = useTimeoutFn(() => {
+  showInfo.value = false;
+}, 5000);
+
+const { x, y, isOutside } = useMouseInElement(swiper);
+
+watch(showInfo, (value) => {
+  if (value)
+    start();
+});
+
+watch([isOutside, x, y], ([newIsOutside, newX, newY], [_oldIsOutside, oldX, oldY]) => {
+  if (!newIsOutside && newX !== oldX && newY !== oldY)
+    showInfo.value = true;
+});
 </script>
 
 <template>
