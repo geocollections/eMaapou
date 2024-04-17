@@ -140,10 +140,5 @@ definePageMeta({
       @reset:headers="handleHeadersReset(options)"
       @click:row="handleClickRow"
     />
-    <!-- <Search> -->
-    <!---->
-    <!--   <template #result> -->
-    <!--   </template> -->
-    <!-- </Search> -->
   </NuxtLayout>
 </template>
