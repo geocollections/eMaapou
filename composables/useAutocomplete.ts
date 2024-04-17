@@ -1,23 +1,26 @@
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
-export function useAutocomplete(path: string, {
-  nameField,
-  idField,
-  filterExclude,
-  solrParams,
-  containsParser,
-  primary = "id",
-}: {
-  nameField: string | { et: string; en: string };
-  idField: string;
-  filterExclude?: string;
-  solrParams?: {
-    query?: Ref<string>;
-    filter?: Ref<(string | { [K: string]: string })[]>;
-  };
-  primary?: "id" | "name";
-  containsParser?: (query: string) => string;
-}) {
+export function useAutocomplete(
+  path: string,
+  {
+    nameField,
+    idField,
+    filterExclude,
+    solrParams,
+    containsParser,
+    primary = "id",
+  }: {
+    nameField: string | { et: string; en: string };
+    idField: string;
+    filterExclude?: string;
+    solrParams?: {
+      query?: Ref<string>;
+      filter?: Ref<(string | { [K: string]: string })[]>;
+    };
+    primary?: "id" | "name";
+    containsParser?: (query: string) => string;
+  },
+) {
   const { locale } = useI18n();
   const { $solrFetch } = useNuxtApp();
 
@@ -25,7 +28,7 @@ export function useAutocomplete(path: string, {
     if (typeof nameField === "string")
       return nameField;
 
-    return nameField[locale.value];
+    return nameField[locale.value as "et" | "en"];
   });
 
   const primaryField = computed(() => {
@@ -35,7 +38,7 @@ export function useAutocomplete(path: string, {
     return translatedNameField.value;
   });
 
-  const secoundaryField = computed(() => {
+  const secondaryField = computed(() => {
     if (primary === "id")
       return translatedNameField.value;
 
@@ -43,7 +46,7 @@ export function useAutocomplete(path: string, {
   });
 
   const suggestionsPivot = computed(() => {
-    return `${primaryField.value},${secoundaryField.value}`;
+    return `${primaryField.value},${secondaryField.value}`;
   });
 
   function primaryFieldNameMapper(item: any) {
@@ -92,7 +95,7 @@ export function useAutocomplete(path: string, {
       = query.length > 0
         ? [
             ...(solrParams?.filter?.value ?? []),
-            `${translatedNameField.value}:*${query}*`,
+          `${translatedNameField.value}:*${query}*`,
           ]
         : solrParams?.filter?.value ?? [];
 
