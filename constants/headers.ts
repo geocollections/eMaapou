@@ -6,14 +6,18 @@ interface SortItem {
 }
 type SortField = SortItem | { et: SortItem; en: SortItem };
 
-export type Header = NonNullable<
-  InstanceType<typeof VDataTable>["$props"]["headers"]
->[0] & {
+type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
+export type Header = WithRequired<
+  NonNullable<InstanceType<typeof VDataTable>["$props"]["headers"]>[0],
+  "title"
+> & {
   show: boolean;
   apiFieldValue?: string | { et: string; en: string };
   sortField?: string[] | { et: string[]; en: string[] };
   titleTranslate?: boolean;
 };
+
 export interface Headers {
   byIds: { [K: string]: Header };
   allIds: string[];

@@ -20,7 +20,7 @@ export function useHeadersNew(initHeaders: Headers) {
         ...header,
         sortable: header.sortable !== undefined ? header.sortable : true,
         title: translateHeader(header),
-        children: header.children?.map((child) => {
+        children: header.children?.map((child: Header) => {
           return {
             ...child,
             title: translateHeader(child),
