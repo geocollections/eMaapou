@@ -9,10 +9,6 @@ export default defineNuxtConfig({
         path: "~/components",
         pathPrefix: false,
       },
-      {
-        path: "~/templates",
-        pathPrefix: false,
-      },
     ],
   },
   build: {
