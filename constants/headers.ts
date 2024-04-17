@@ -1,18 +1,17 @@
 import type { VDataTable } from "vuetify/components";
 
-interface SortItem { key: string; order: "asc" | "desc" }
+interface SortItem {
+  key: string;
+  order: "asc" | "desc";
+}
 type SortField = SortItem | { et: SortItem; en: SortItem };
 
 export type Header = NonNullable<
-  InstanceType<typeof VDataTable>["headers"]
+  InstanceType<typeof VDataTable>["$props"]["headers"]
 >[0] & {
   show: boolean;
   apiFieldValue?: string | { et: string; en: string };
   sortField?: string[] | { et: string[]; en: string[] };
-  // | {
-  //     asc: SortField[];
-  //     desc: SortField[];
-  //   };
   titleTranslate?: boolean;
 };
 export interface Headers {
@@ -22,7 +21,7 @@ export interface Headers {
 
 export const numberFieldProps: Partial<Header> = {
   align: "end",
-  cellProps(data) {
+  cellProps(_data) {
     return {
       style: "font-family: 'Noto Sans Mono', monospace;",
       class: "text-body-2",
@@ -197,13 +196,7 @@ export const HEADERS_ANALYSIS_RESULT: Headers = {
       ...normalColumn,
     },
   },
-  allIds: [
-    "parameter",
-    "analysis_method",
-    "value",
-    "value_txt",
-    "value_error",
-  ],
+  allIds: ["parameter", "analysis_method", "value", "value_txt", "value_error"],
 };
 
 export const HEADERS_ANALYTICAL_DATA: Headers = {
@@ -427,7 +420,16 @@ export const HEADERS_AREA: Headers = {
       ...normalColumn,
     },
   },
-  allIds: ["id", "name", "county", "type", "size", "miner", "miningPermit", "miningPermitOwner"],
+  allIds: [
+    "id",
+    "name",
+    "county",
+    "type",
+    "size",
+    "miner",
+    "miningPermit",
+    "miningPermitOwner",
+  ],
 };
 
 export const HEADERS_AREA_LOCALITY: Headers = {
@@ -466,12 +468,7 @@ export const HEADERS_AREA_LOCALITY: Headers = {
       align: "start",
     },
   },
-  allIds: [
-    "id",
-    "locality",
-    "country",
-    "coordinates",
-  ],
+  allIds: ["id", "locality", "country", "coordinates"],
 };
 
 export const HEADERS_ATTACHMENT: Headers = {
@@ -835,9 +832,7 @@ export const HEADERS_DESCRIPTION: Headers = {
     thickness: {
       title: "localityDescription.thickness",
       value: "thickness",
-      class: "static-cell-header",
       sortable: false,
-      cellClass: "static-cell",
       show: true,
       ...numberFieldProps,
       ...narrowColumn,
@@ -882,14 +877,7 @@ export const HEADERS_DESCRIPTION: Headers = {
       ...narrowColumn,
     },
   },
-  allIds: [
-    "depth",
-    "thickness",
-    "rock",
-    "stratigraphy",
-    "author",
-    "expand",
-  ],
+  allIds: ["depth", "thickness", "rock", "stratigraphy", "author", "expand"],
 };
 
 export const HEADERS_DOI: Headers = {
@@ -1359,13 +1347,7 @@ export const HEADERS_LOCALITY_STRATOTYPE: Headers = {
       ...normalColumn,
     },
   },
-  allIds: [
-    "stratigraphy",
-    "type",
-    "depth",
-    "reference",
-    "remarks",
-  ],
+  allIds: ["stratigraphy", "type", "depth", "reference", "remarks"],
 };
 
 export const HEADERS_PHOTO: Headers = {
@@ -1955,13 +1937,7 @@ export const HEADERS_SAMPLE_DATA: Headers = {
       ...normalColumn,
     },
   },
-  allIds: [
-    "sample",
-    "locality",
-    "depth",
-    "coordinates",
-    "stratigraphy",
-  ],
+  allIds: ["sample", "locality", "depth", "coordinates", "stratigraphy"],
 };
 
 export const HEADERS_SAMPLE_REFERENCE: Headers = {
@@ -2149,7 +2125,6 @@ export const HEADERS_SPECIMEN: Headers = {
       value: "name",
       show: true,
       sortable: false,
-      class: "static-cell-header",
       apiFieldValue: { et: "rock", en: "rock_en" },
       sortField: { et: ["rock"], en: ["rock_en"] },
       ...normalColumn,
@@ -2459,7 +2434,10 @@ export const HEADERS_STRATIGRAPHY: Headers = {
         et: "parent_stratigraphy",
         en: "parent_stratigraphy_en",
       },
-      sortField: { et: ["parent_stratigraphy"], en: ["parent_stratigraphy_en"] },
+      sortField: {
+        et: ["parent_stratigraphy"],
+        en: ["parent_stratigraphy_en"],
+      },
       ...wideColumn,
     },
     age: {
@@ -2629,7 +2607,10 @@ export const HEADERS_STRATIGRAPHY_STRATOTYPE: Headers = {
         et: "stratotype_type__value",
         en: "stratotype_type__value_en",
       },
-      sortField: { et: ["stratotype_type__value"], en: ["stratotype_type__value_en"] },
+      sortField: {
+        et: ["stratotype_type__value"],
+        en: ["stratotype_type__value_en"],
+      },
     },
     depth_top: {
       title: "stratotype.depthTop",
@@ -2745,7 +2726,17 @@ export const HEADERS_TAXON: Headers = {
       ...narrowColumn,
     },
   },
-  allIds: ["id", "taxon", "parent_taxon", "fossil_group", "fad", "lad", "in_estonia", "is_fossil", "is_valid"],
+  allIds: [
+    "id",
+    "taxon",
+    "parent_taxon",
+    "fossil_group",
+    "fad",
+    "lad",
+    "in_estonia",
+    "is_fossil",
+    "is_valid",
+  ],
 };
 
 export const HEADERS_TAXON_LIST: Headers = {
