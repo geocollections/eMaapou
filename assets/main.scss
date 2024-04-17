@@ -53,24 +53,24 @@ $heading-font: "Montserrat", sans-serif;
   color: map-get($map: $blue, $key: "darken-1") !important;
 
   .v-icon {
-    color: map-get($map: $blue, $key: "darken-1")  !important;
+    color: map-get($map: $blue, $key: "darken-1") !important;
   }
 
   @include transition(color 200ms ease);
 
   &:hover {
-    color: map-get($map: $blue, $key: "darken-3")  !important;
+    color: map-get($map: $blue, $key: "darken-3") !important;
     text-decoration: underline;
     .v-icon {
-      color: map-get($map: $blue, $key: "darken-3")  !important;
+      color: map-get($map: $blue, $key: "darken-3") !important;
     }
   }
 
   &:visited {
-    color: map-get($map: $purple, $key: "base")  !important;
+    color: map-get($map: $purple, $key: "base") !important;
     text-decoration: underline;
     .v-icon {
-      color: map-get($map: $purple, $key: "base")  !important;
+      color: map-get($map: $purple, $key: "base") !important;
     }
   }
 }
