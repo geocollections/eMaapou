@@ -5,12 +5,10 @@ const props = defineProps<{
   drillcore: number;
 }>();
 
-const { options, search, handleUpdate } = useDataTableDetail({
+const { options, handleUpdate, searchParams } = useDataTableGeoloogiaApi({
   initOptions: ATTACHMENT_LINK.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
-
-const { locale } = useI18n();
 
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: {
@@ -20,10 +18,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     drillcore_box__drillcore: props.drillcore,
     attachment__is_preferred: true,
     nest: 2,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_ATTACHMENT, locale.value as "et" | "en"),
-    ).join(","),
+    ...searchParams.value,
   },
 });
 </script>

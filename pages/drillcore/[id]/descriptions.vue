@@ -10,17 +10,16 @@ const props = defineProps({
 
 const {
   options,
-  search,
   handleUpdate,
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  sortBy,
+  searchParams,
+} = useDataTableGeoloogiaApi({
   initOptions: DESCRIPTION.options,
   initHeaders: HEADERS_DESCRIPTION,
 });
-
-const { locale } = useI18n();
 
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_description/", {
   query: {
@@ -28,15 +27,8 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/lo
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     locality: props.locality,
     nest: 1,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_DESCRIPTION, locale.value),
-    ).join(","),
-    ordering: getGeoloogiaApiSort({
-      sortBy: options.value.sortBy,
-      headersMap: HEADERS_DESCRIPTION.byIds,
-      locale: locale.value as "et" | "en",
-    }),
+    ordering: sortBy.value,
+    ...searchParams.value,
   },
   transform: (res) => {
     return {
@@ -46,14 +38,14 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/lo
           ...item,
           canExpand:
             !isEmpty(item.description)
-            || item?.rock?.name
-            || item?.rock?.name_en
-            || item.zero_level
-            || item.author_free
-            || item.reference
-            || item.year
-            || item.stratigraphy_free
-            || item.remarks,
+            || !!item?.rock?.name
+            || !!item?.rock?.name_en
+            || !!item.zero_level
+            || !!item.author_free
+            || !!item.reference
+            || !!item.year
+            || !!item.stratigraphy_free
+            || !!item.remarks,
         };
       }),
     };

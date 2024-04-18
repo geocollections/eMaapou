@@ -9,11 +9,12 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  solrSort,
+} = useDataTable({
   initOptions: SPECIMEN.options,
   initHeaders: HEADERS_SPECIMEN,
 });
-const { locale } = useI18n();
+
 const { data, pending } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
 }>("/specimen", {
@@ -23,11 +24,7 @@ const { data, pending } = await useSolrFetch<{
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `locality_id:${props.locality}`,
-      sort: getSolrSort({
-        sortBy: options.value.sortBy,
-        headersMap: HEADERS_SPECIMEN.byIds,
-        locale: locale.value as "et" | "en",
-      }),
+      sort: solrSort.value,
     },
   })),
 });

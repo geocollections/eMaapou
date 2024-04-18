@@ -1,10 +1,9 @@
 <script setup lang="ts">
-const { options, search, handleUpdate } = useDataTableDetail({
+const { options, searchParams, handleUpdate } = useDataTableGeoloogiaApi({
   initOptions: ATTACHMENT_LINK.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
 const route = useRoute();
-const { locale } = useI18n();
 
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: {
@@ -14,10 +13,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     drillcore_box__drillcore: route.params.id,
     attachment__is_preferred: true,
     nest: 2,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_ATTACHMENT, locale.value),
-    ).join(","),
+    ...searchParams.value,
   },
 });
 </script>

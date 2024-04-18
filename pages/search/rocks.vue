@@ -12,7 +12,8 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  solrSort,
+} = useDataTable({
   initOptions: ROCK.options,
   initHeaders: HEADERS_ROCK,
 });
@@ -22,6 +23,7 @@ const { data, pending } = await useSolrFetch<SolrResponse>("/rock", {
     q: props.query,
     rows: options.value.itemsPerPage,
     start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: sortBy.value,
   })),
 });
 </script>

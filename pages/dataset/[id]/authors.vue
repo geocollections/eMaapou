@@ -2,32 +2,25 @@
 const route = useRoute();
 const {
   options,
-  search,
   handleUpdate,
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  sortBy,
+  searchParams,
+} = useDataTableGeoloogiaApi({
   initOptions: DATASET_AUTHORS.options,
   initHeaders: HEADERS_DATASET_AUTHOR,
 });
 
-const { locale } = useI18n();
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/dataset_author/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     dataset: route.params.id,
     nest: 1,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_DATASET_AUTHOR, locale.value),
-    ).join(","),
-    ordering: getGeoloogiaApiSort({
-      sortBy: options.value.sortBy,
-      headersMap: HEADERS_DATASET_AUTHOR.byIds,
-      locale: locale.value as "et" | "en",
-    }),
+    ordering: sortBy.value,
+    ...searchParams.value,
   })),
 });
 </script>

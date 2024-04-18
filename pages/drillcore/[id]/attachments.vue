@@ -5,18 +5,18 @@ const props = defineProps<{
 
 const {
   options,
-  search,
   handleUpdate,
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  sortBy,
+  searchParams,
+} = useDataTableGeoloogiaApi({
   initOptions: ATTACHMENT_LINK.options,
   initHeaders: HEADERS_ATTACHMENT,
 });
 
 const route = useRoute();
-const { locale } = useI18n();
 
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/attachment_link/", {
   query: {
@@ -24,15 +24,8 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     nest: 2,
     or_search: `drillcore:${route.params.id} OR locality:${props.locality}`,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_ATTACHMENT, locale.value),
-    ).join(","),
-    ordering: getGeoloogiaApiSort({
-      sortBy: options.value.sortBy,
-      headersMap: HEADERS_ATTACHMENT.byIds,
-      locale: locale.value as "et" | "en",
-    }),
+    ordering: sortBy.value,
+    ...searchParams.value,
   },
 });
 </script>

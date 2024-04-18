@@ -12,7 +12,8 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  solrSort,
+} = useDataTable({
   initOptions: REFERENCE.options,
   initHeaders: HEADERS_REFERENCE,
 });
@@ -22,6 +23,7 @@ const { data, pending } = await useSolrFetch<SolrResponse>("/reference", {
     q: props.query,
     rows: options.value.itemsPerPage,
     start: getOffset(options.value.page, options.value.itemsPerPage),
+    sort: solrSort.value,
   })),
 });
 </script>

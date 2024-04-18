@@ -1,33 +1,26 @@
 <script setup lang="ts">
 const {
   options,
-  search,
   handleUpdate,
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  sortBy,
+  searchParams,
+} = useDataTableGeoloogiaApi({
   initOptions: LOCALITY_REFERENCE.options,
   initHeaders: HEADERS_LOCALITY_REFERENCE,
 });
 
 const route = useRoute();
-const { locale } = useI18n();
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/locality_reference/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     area: route.params.id,
     nest: 1,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_LOCALITY_REFERENCE, locale.value),
-    ).join(","),
-    ordering: getGeoloogiaApiSort({
-      sortBy: options.value.sortBy,
-      headersMap: HEADERS_LOCALITY_REFERENCE.byIds,
-      locale: locale.value as "et" | "en",
-    }),
+    ordering: sortBy.value,
+    ...searchParams.value,
   })),
 });
 </script>

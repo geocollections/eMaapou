@@ -10,9 +10,10 @@ const {
   options,
   handleUpdate,
   headers,
+  solrSort,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+} = useDataTable({
   initOptions: IMAGE.options,
   initHeaders: HEADERS_PHOTO,
 });
@@ -23,6 +24,7 @@ const { data, pending } = await useSolrFetch<SolrResponse>("/attachment", {
     rows: options.value.itemsPerPage,
     start: getOffset(options.value.page, options.value.itemsPerPage),
     fq: "specimen_image_attachment:2",
+    sort: solrSort.value,
   })),
 });
 </script>

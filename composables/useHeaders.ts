@@ -1,7 +1,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import type { DataTableOptions, Header, Headers } from "~/constants";
 
-export function useHeadersNew(initHeaders: Headers) {
+export function useHeaders(initHeaders: Headers) {
   const { t } = useI18n({ useScope: "global" });
 
   const headersMap = ref(cloneDeep(initHeaders));

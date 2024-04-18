@@ -62,7 +62,7 @@ export function useNewApiFetch<T>(
   return useFetch(request, params);
 }
 
-export function useSolrFetch<T>(request: Request, options: UseFetchOptions<T> = {}) {
+export function useSolrFetch<T = SolrResponse>(request: Request, options: UseFetchOptions<T> = {}) {
   const defaults: UseFetchOptions<T> = {
     baseURL: "https://api.geoloogia.info/solr",
   };

@@ -2,32 +2,25 @@
 const route = useRoute();
 const {
   options,
-  search,
   handleUpdate,
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  sortBy,
+  searchParams,
+} = useDataTableGeoloogiaApi({
   initOptions: TAXON_LIST.options,
   initHeaders: HEADERS_TAXON_LIST,
 });
 
-const { locale } = useI18n();
 const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/taxon_list/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     sample: route.params.id,
     nest: 1,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_TAXON_LIST, locale.value),
-    ).join(","),
-    ordering: getGeoloogiaApiSort({
-      sortBy: options.value.sortBy,
-      headersMap: HEADERS_TAXON_LIST.byIds,
-      locale: locale.value as "et" | "en",
-    }),
+    ordering: sortBy.value,
+    ...searchParams.value,
   })),
 });
 </script>

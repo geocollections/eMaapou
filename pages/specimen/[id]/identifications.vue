@@ -2,32 +2,25 @@
 const route = useRoute();
 const {
   options,
-  search,
   handleUpdate,
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  sortBy,
+  searchParams,
+} = useDataTableGeoloogiaApi({
   initOptions: SPECIMEN_IDENTIFICATION.options,
   initHeaders: HEADERS_SPECIMEN_IDENTIFICATION,
 });
 
-const { locale } = useI18n();
-const { data, pending } = await useGeoloogiaApiFetch("/specimen_identification/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/specimen_identification/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     specimen: route.params.id,
     nest: 1,
-    search: search.value,
-    search_fields: Object.values(
-      getAPIFieldValues(HEADERS_SPECIMEN_IDENTIFICATION, locale.value),
-    ).join(","),
-    ordering: getGeoloogiaApiSort({
-      sortBy: options.value.sortBy,
-      headersMap: HEADERS_SPECIMEN_IDENTIFICATION.byIds,
-      locale: locale.value as "et" | "en",
-    }),
+    ordering: sortBy.value,
+    ...searchParams.value,
   })),
 });
 </script>

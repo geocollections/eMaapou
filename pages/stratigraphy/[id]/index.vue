@@ -9,7 +9,8 @@ const route = useRoute();
 const {
   options,
   headers,
-} = useDataTableDetail({
+  sortBy,
+} = useDataTableGeoloogiaApi({
   initOptions: STRATOTYPE.options,
   initHeaders: HEADERS_STRATIGRAPHY_STRATOTYPE,
 });
@@ -19,6 +20,7 @@ const { data } = await useAsyncData("detail", async () => {
     query: {
       stratigraphy: route.params.id,
       nest: 2,
+      ordering: sortBy.value,
     },
   });
   return {

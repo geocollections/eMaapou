@@ -6,13 +6,13 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  solrSort,
+} = useDataTable({
   initOptions: PREPARATION.options,
   initHeaders: HEADERS_PREPARATION,
 });
 
 const route = useRoute();
-const { locale } = useI18n();
 
 const { data, pending } = await useSolrFetch("/preparation", {
   query: computed(() => ({
@@ -21,11 +21,7 @@ const { data, pending } = await useSolrFetch("/preparation", {
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `sample_id:${route.params.id}`,
-      sort: getSolrSort({
-        sortBy: options.value.sortBy,
-        headersMap: HEADERS_PREPARATION.byIds,
-        locale: locale.value as "et" | "en",
-      }),
+      sort: solrSort.value,
     },
   })),
 });

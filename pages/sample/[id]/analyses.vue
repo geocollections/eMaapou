@@ -6,7 +6,8 @@ const {
   headers,
   handleHeadersReset,
   handleHeadersChange,
-} = useDataTableDetail({
+  solrSort,
+} = useDataTable({
   initOptions: ANALYSIS.options,
   initHeaders: HEADERS_ANALYSIS,
 });
@@ -24,7 +25,6 @@ const filteredHeaders = computed(() =>
 );
 
 const route = useRoute();
-const { locale } = useI18n();
 
 const { data, pending } = await useSolrFetch("/analysis", {
   query: computed(() => ({
@@ -33,11 +33,7 @@ const { data, pending } = await useSolrFetch("/analysis", {
       limit: options.value.itemsPerPage,
       offset: getOffset(options.value.page, options.value.itemsPerPage),
       filter: `sample_id:${route.params.id}`,
-      sort: getSolrSort({
-        sortBy: options.value.sortBy,
-        headersMap: HEADERS_ANALYSIS.byIds,
-        locale: locale.value as "et" | "en",
-      }),
+      sort: solrSort.value,
     },
   })),
 });
