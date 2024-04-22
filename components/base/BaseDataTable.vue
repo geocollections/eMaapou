@@ -2,6 +2,7 @@
 import { mdiChevronDown, mdiChevronUp, mdiMagnify } from "@mdi/js";
 import isEqual from "lodash/isEqual";
 import debounce from "lodash/debounce";
+import type { ExportFunc } from "~/composables/useExport";
 
 interface IHeader {
   text: string;
@@ -10,48 +11,33 @@ interface IHeader {
   apiFieldValue?: string | { et: string; en: string };
 }
 
-const props = defineProps({
-  onlyTable: {
-    type: Boolean,
-    default: false,
-  },
-  items: {
-    type: Array,
-    required: true,
-  },
-  headers: {
-    type: Array as PropType<IHeader[]>,
-    required: true,
-  },
-  options: {
-    type: Object,
-    required: true,
-  },
-  count: {
-    type: Number,
-    default: 0,
-  },
-  showSearch: {
-    type: Boolean,
-    default: true,
-  },
-  expandable: {
-    type: Boolean,
-    default: false,
-  },
-  singleExpand: {
-    type: Boolean,
-    default: false,
-  },
-  dynamicHeaders: {
-    type: Boolean,
-    default: true,
-  },
-  isLoading: {
-    type: Boolean,
-    required: true,
-  },
+const props = withDefaults(defineProps<
+  {
+    items: any[];
+    headers: IHeader[];
+    options: {
+      sortBy: string[];
+      sortDesc: boolean[];
+      page: number;
+      itemsPerPage: number;
+    };
+    count: number;
+    isLoading: boolean;
+    showSearch?: boolean;
+    onlyTable?: boolean;
+    expandable?: boolean;
+    singleExpand?: boolean;
+    dynamicHeaders?: boolean;
+    exportFunc?: ExportFunc;
+  }
+>(), {
+  showSearch: true,
+  onlyTable: false,
+  expandable: false,
+  singleExpand: false,
+  dynamicHeaders: true,
 });
+
 const emit = defineEmits(["update", "reset:headers", "change:headers"]);
 const { t } = useI18n();
 const { $formatDate } = useNuxtApp();
@@ -217,8 +203,9 @@ onMounted(() => {
                 @update:model-value="handleSearch"
               />
               <BaseDataTableExportMenu
-                v-if="tableElement"
+                v-if="exportFunc"
                 :table-element="tableElement"
+                :export-func="exportFunc"
               />
               <BaseDataTableHeaderMenu
                 v-if="dynamicHeaders"
@@ -235,11 +222,10 @@ onMounted(() => {
                 :page-count="pageCount"
                 :items-per-page-options="footerProps['items-per-page-options']"
                 :items-per-page-text="footerProps['items-per-page-text']"
-                :page-select-text="
-                  $t('common.pageSelect', {
-                    current: options.page,
-                    count: pageCount,
-                  })
+                :page-select-text="$t('common.pageSelect', {
+                  current: options.page,
+                  count: pageCount,
+                })
                 "
                 :go-to-text="$t('common.goTo')"
                 :go-to-button-text="$t('common.goToBtn')"
@@ -260,11 +246,10 @@ onMounted(() => {
               :page-count="pageCount"
               :items-per-page-options="footerProps['items-per-page-options']"
               :items-per-page-text="footerProps['items-per-page-text']"
-              :page-select-text="
-                $t('common.pageSelect', {
-                  current: options.page,
-                  count: pageCount,
-                })
+              :page-select-text="$t('common.pageSelect', {
+                current: options.page,
+                count: pageCount,
+              })
               "
               :go-to-text="$t('common.goTo')"
               :go-to-button-text="$t('common.goToBtn')"
@@ -308,19 +293,20 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.v-data-table  {
+.v-data-table {
   :deep(.v-table__wrapper) tbody tr.v-data-table__expanded__content {
     box-shadow: none;
   }
-  :deep(tbody) > tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
+
+  :deep(tbody)>tr:nth-of-type(odd):not(.v-data-table__expanded__content) {
     background-color: rgba(0, 0, 0, 0.03);
   }
 
-  :deep(thead) > tr > th:last-of-type {
+  :deep(thead)>tr>th:last-of-type {
     width: auto !important;
   }
 
-  :deep(tbody) > tr > td:last-of-type {
+  :deep(tbody)>tr>td:last-of-type {
     width: auto !important;
   }
 
@@ -333,15 +319,18 @@ onMounted(() => {
       white-space: nowrap;
     }
   }
+
   :deep(td) {
-    border-bottom: none !important ;
+    border-bottom: none !important;
   }
 }
+
 .v-table[can-scroll-right="true"] {
   :deep(.v-table__wrapper) tbody::after {
     @extend .scroll-right;
   }
 }
+
 .v-table[can-scroll-left="true"] {
   :deep(.v-table__wrapper) tbody::before {
     @extend .scroll-left;
@@ -349,18 +338,12 @@ onMounted(() => {
 }
 
 .scroll-right {
-  background: -webkit-linear-gradient(
-      270deg,
+  background: -webkit-linear-gradient(270deg,
       rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0) 75%
-    )
-    100% center;
-  background: linear-gradient(
-      270deg,
+      rgba(0, 0, 0, 0) 75%) 100% center;
+  background: linear-gradient(270deg,
       rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0) 75%
-    )
-    100% center;
+      rgba(0, 0, 0, 0) 75%) 100% center;
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: 15px 100%;
@@ -374,19 +357,14 @@ onMounted(() => {
   width: 15px;
   // z-index: 3;
 }
+
 .scroll-left {
-  background: -webkit-linear-gradient(
-      90deg,
+  background: -webkit-linear-gradient(90deg,
       rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0) 75%
-    )
-    0 center;
-  background: linear-gradient(
-      90deg,
+      rgba(0, 0, 0, 0) 75%) 0 center;
+  background: linear-gradient(90deg,
       rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0) 75%
-    )
-    0 center;
+      rgba(0, 0, 0, 0) 75%) 0 center;
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: 15px 100%;

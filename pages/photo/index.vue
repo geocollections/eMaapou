@@ -86,6 +86,18 @@ function handleClickRow(index: number) {
 
 const { t } = useI18n();
 
+const { exportData } = useExportSolr("/attachment", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  params: {
+    query: solrQuery,
+    filter: computed(() => [...solrFilters.value, "specimen_image_attachment:\"2\""]),
+    sort: computed(() => solrSort.value ?? "id_sl desc"),
+    limit: computed(() => options.value.itemsPerPage),
+    offset: computed(() => getOffset(options.value.page, options.value.itemsPerPage)),
+    fields: EXPORT_SOLR_PHOTO,
+  },
+});
+
 useHead({
   title: t("photo.pageTitle"),
 });
@@ -168,6 +180,7 @@ definePageMeta({
             :headers="headers"
             :options="options"
             :is-loading="pending"
+            :export-func="exportData"
             @update="handleDataTableUpdate"
             @change:headers="handleHeadersChange"
             @reset:headers="handleHeadersReset(options)"
@@ -201,6 +214,7 @@ definePageMeta({
 .active-tab {
   // font-weight: bold;
   color: var(--v-theme-accent-darken-1) !important;
+
   &::before {
     opacity: 0.2 !important;
     background-color: var(--v-theme-accent) !important;

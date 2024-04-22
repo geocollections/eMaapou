@@ -82,6 +82,18 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 
 const { t } = useI18n();
 
+const { exportData } = useExportSolr("/preparation", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  params: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+    limit: computed(() => options.value.itemsPerPage),
+    offset: computed(() => getOffset(options.value.page, options.value.itemsPerPage)),
+    fields: EXPORT_SOLR_PREPARATION,
+  },
+});
+
 definePageMeta({
   layout: false,
 });
@@ -120,6 +132,7 @@ useHead({
       :headers="headers"
       :options="options"
       :is-loading="pending"
+      :export-func="exportData"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"
       @reset:headers="handleHeadersReset(options)"

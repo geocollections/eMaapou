@@ -19,12 +19,6 @@ setStateFromQueryParams(route);
 if (route.query.view)
   currentView.value = views.value.indexOf(route.query.view as any);
 
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshSpecimens();
-  refreshSpecimenImages();
-}, { deep: true });
-
 const {
   data,
   pending,
@@ -65,6 +59,12 @@ const {
 watch(currentView, () => {
   setQueryParamsFromState();
 });
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSpecimens();
+  refreshSpecimenImages();
+}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {
@@ -120,6 +120,18 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 }
 const { t } = useI18n();
 
+const { exportData } = useExportSolr("/specimen", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  params: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+    limit: computed(() => options.value.itemsPerPage),
+    offset: computed(() => getOffset(options.value.page, options.value.itemsPerPage)),
+    fields: EXPORT_SOLR_SPECIMEN,
+  },
+});
+
 useHead({
   title: t("specimen.pageTitle"),
 });
@@ -162,16 +174,10 @@ definePageMeta({
         color="accent"
         density="compact"
       >
-        <VTab
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
+        <VTab active-class="active-tab" class="montserrat text-capitalize">
           {{ $t(`common.table`) }}
         </VTab>
-        <VTab
-          active-class="active-tab"
-          class="montserrat text-capitalize"
-        >
+        <VTab active-class="active-tab" class="montserrat text-capitalize">
           {{ $t(`common.image`) }}
           <VChip class="ml-2" size="small">
             {{ imageData?.response.numFound ?? 0 }}
@@ -188,6 +194,7 @@ definePageMeta({
             :headers="headers"
             :options="options"
             :is-loading="pending"
+            :export-func="exportData"
             @update="handleDataTableUpdate"
             @change:headers="handleHeadersChange"
             @reset:headers="handleHeadersReset(options)"

@@ -67,6 +67,18 @@ async function handleDataTableUpdate({ options: newOptions }) {
 
 const { t } = useI18n();
 
+const { exportData } = useExportSolr("/taxon", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  params: {
+    query: solrQuery,
+    filter: solrFilters,
+    sort: solrSort,
+    limit: computed(() => options.value.itemsPerPage),
+    offset: computed(() => getOffset(options.value.page, options.value.itemsPerPage)),
+    fields: EXPORT_SOLR_TAXON,
+  },
+});
+
 useHead({
   title: t("taxon.pageTitle"),
 });
@@ -109,6 +121,7 @@ definePageMeta({
       :headers="headers"
       :options="options"
       :is-loading="pending"
+      :export-func="exportData"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"
       @reset:headers="handleHeadersReset(options)"
