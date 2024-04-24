@@ -28,6 +28,18 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     ...searchParams.value,
   },
 });
+
+const { exportData } = useExportGeoloogiaApi("/attachment_link/", {
+  totalRows: computed(() => data.value?.count ?? 0),
+  query: computed(() => ({
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    or_search: `drillcore:${route.params.id} OR locality:${props.locality}`,
+    nest: 2,
+    ordering: sortBy,
+    ...searchParams.value,
+  })),
+});
 </script>
 
 <template>
@@ -37,6 +49,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/at
     :options="options"
     :headers="headers"
     :is-loading="pending"
+    :export-func="exportData"
     id-field="attachment"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
