@@ -9,7 +9,7 @@ import {
 } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $solrFetch, $translate, $geoloogiaFetch } = useNuxtApp();
+const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
 
 const localePath = useLocalePath();
 const route = useRoute();
@@ -224,6 +224,18 @@ const { data } = await useAsyncData("locality", async () => {
       });
     },
   });
+
+  const localityTest = await $apiFetch<any>(`/localities/${route.params.id}/`, {
+    query: {
+    },
+    onResponseError: (_error) => {
+      showError({
+        statusCode: 404,
+        message: t("error.notFound"),
+      });
+    },
+  });
+  console.log(locality, localityTest);
 
   const drillcorePromise = $geoloogiaFetch<any>("/drillcore/", {
     query: {

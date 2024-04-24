@@ -88,14 +88,14 @@ const { t } = useI18n();
 
 const { exportData } = useExportSolr("/attachment", {
   totalRows: computed(() => data.value?.response.numFound ?? 0),
-  params: {
-    query: solrQuery,
-    filter: computed(() => [...solrFilters.value, "specimen_image_attachment:\"2\""]),
-    sort: computed(() => solrSort.value ?? "id_sl desc"),
-    limit: computed(() => options.value.itemsPerPage),
-    offset: computed(() => getOffset(options.value.page, options.value.itemsPerPage)),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: [...solrFilters.value, "specimen_image_attachment:\"2\""],
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
     fields: EXPORT_SOLR_PHOTO,
-  },
+  })),
 });
 
 useHead({

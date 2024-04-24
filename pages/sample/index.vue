@@ -101,14 +101,14 @@ function handleClickRow({ index, id }: { index: number; id: number }) {
 
 const { exportData } = useExportSolr("/sample", {
   totalRows: computed(() => data.value?.response.numFound ?? 0),
-  params: {
-    query: solrQuery,
-    filter: solrFilters,
-    sort: solrSort,
-    limit: computed(() => options.value.itemsPerPage),
-    offset: computed(() => getOffset(options.value.page, options.value.itemsPerPage)),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: solrFilters.value,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
     fields: EXPORT_SOLR_SAMPLE,
-  },
+  })),
 });
 
 definePageMeta({
