@@ -17,7 +17,7 @@ export function useGeoloogiaApiFetch<T>(
   options: UseFetchOptions<T> = {},
 ) {
   const defaults: UseFetchOptions<T> = {
-    baseURL: "https://api.geoloogia.info",
+    baseURL: "https://rwapi.geoloogia.info/api/v0.5/public",
   };
   const params = defu(options, defaults);
 

@@ -12,7 +12,7 @@ export default defineNuxtPlugin(() => {
   const solrFetch = $fetch.create(solrDefaults);
 
   const geoloogiaDefaults: FetchOptions = {
-    baseURL: "https://api.geoloogia.info",
+    baseURL: "https://rwapi.geoloogia.info/api/v0.5/public",
   };
   const geoloogiaFetch = $fetch.create(geoloogiaDefaults);
 
