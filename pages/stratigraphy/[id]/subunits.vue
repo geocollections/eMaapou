@@ -26,6 +26,17 @@ const { data, pending } = await useSolrFetch<{
     },
   })),
 });
+
+const { exportData } = useExportSolr("/stratigraphy", {
+  totalRows: computed(() => data.value?.response.numFound ?? 0),
+  query: computed(() => ({
+    query: solrQuery.value,
+    filter: `parent_id:${route.params.id}`,
+    sort: solrSort.value,
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+  })),
+});
 </script>
 
 <template>
@@ -36,6 +47,7 @@ const { data, pending } = await useSolrFetch<{
     :options="options"
     :headers="headers"
     :is-loading="pending"
+    :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

@@ -10,7 +10,7 @@ export interface ExportFunc {
 export function useExportSolr(path: string, { query, totalRows }: {
   query: Ref<{
     query?: string;
-    filter?: (string | { [K: string]: string })[];
+    filter?: string | (string | { [K: string]: string })[];
     sort?: string | undefined;
     limit?: number;
     offset?: number;
