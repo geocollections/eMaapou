@@ -15,14 +15,23 @@ const {
 });
 
 const route = useRoute();
-const { data, pending } = await useGeoloogiaApiFetch<{
-  response: { numFound: number; docs: any[] };
-}>("/area/", {
+const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/area/", {
   query: computed(() => ({
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
     parent_area: route.params.id,
     ordering: sortBy.value,
+    ...searchParams.value,
+  })),
+});
+
+const { exportData } = useExportGeoloogiaApi("/area/", {
+  totalRows: computed(() => data.value?.count ?? 0),
+  query: computed(() => ({
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    parent_area: route.params.id,
+    ordering: sortBy,
     ...searchParams.value,
   })),
 });
@@ -35,6 +44,7 @@ const { data, pending } = await useGeoloogiaApiFetch<{
     :options="options"
     :headers="headers"
     :is-loading="pending"
+    :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"
