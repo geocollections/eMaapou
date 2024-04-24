@@ -48,6 +48,7 @@ const { exportData } = useExportSolr("/sample_data", {
     query: solrQuery.value,
     sort: solrSort.value,
     limit: options.value.itemsPerPage,
+    filter: `dataset_ids:${route.params.id}`,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
   })),
 });

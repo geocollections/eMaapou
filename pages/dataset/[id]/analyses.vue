@@ -33,6 +33,7 @@ const { exportData } = useExportSolr("/analysis", {
     sort: solrSort.value,
     limit: options.value.itemsPerPage,
     offset: getOffset(options.value.page, options.value.itemsPerPage),
+    filter: `dataset_ids:${route.params.id}`,
     fields: EXPORT_SOLR_ANALYSIS,
   })),
 });
