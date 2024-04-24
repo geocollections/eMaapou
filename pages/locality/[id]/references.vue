@@ -22,6 +22,18 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/lo
     ...searchParams.value,
   })),
 });
+
+const { exportData } = useExportGeoloogiaApi("/locality_reference/", {
+  totalRows: computed(() => data.value?.count ?? 0),
+  query: computed(() => ({
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    locality: route.params.id,
+    nest: 1,
+    ordering: sortBy,
+    ...searchParams.value,
+  })),
+});
 </script>
 
 <template>
@@ -31,6 +43,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>("/lo
     :options="options"
     :headers="headers"
     :is-loading="pending"
+    :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

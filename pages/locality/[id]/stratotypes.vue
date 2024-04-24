@@ -26,6 +26,18 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
     })),
   },
 );
+
+const { exportData } = useExportGeoloogiaApi("/stratigraphy_stratotype/", {
+  totalRows: computed(() => data.value?.count ?? 0),
+  query: computed(() => ({
+    limit: options.value.itemsPerPage,
+    offset: getOffset(options.value.page, options.value.itemsPerPage),
+    locality: route.params.id,
+    nest: 1,
+    ordering: sortBy,
+    ...searchParams.value,
+  })),
+});
 </script>
 
 <template>
@@ -35,6 +47,7 @@ const { data, pending } = await useGeoloogiaApiFetch<GeoloogiaListResponse>(
     :options="options"
     :headers="headers"
     :is-loading="pending"
+    :export-func="exportData"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"
