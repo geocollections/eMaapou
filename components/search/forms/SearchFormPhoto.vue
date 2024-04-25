@@ -9,6 +9,7 @@ const { filters, query, solrQuery, solrFilters } = storeToRefs(photosStore);
 const filterCountry = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
 const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterAuthor = ref<InstanceType<typeof FilterInputAutocomplete>>();
 
 const allSolrFilters = computed(() => {
   return [...solrFilters.value, "specimen_image_attachment:\"2\""];
@@ -22,6 +23,7 @@ function handleUpdate() {
     filterCountry.value?.refreshSuggestions();
     filterLocality.value?.refreshSuggestions();
     filterInstitution.value?.refreshSuggestions();
+    filterAuthor.value?.refreshSuggestions();
     emit("update");
   });
 }
@@ -30,6 +32,7 @@ function handleSubmit() {
     filterCountry.value?.refreshSuggestions();
     filterLocality.value?.refreshSuggestions();
     filterInstitution.value?.refreshSuggestions();
+    filterAuthor.value?.refreshSuggestions();
     emit("submit");
   });
 }
@@ -57,6 +60,13 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
     idField: "database_id_s",
     nameField: "acronym",
     filterExclude: "institution",
+    solrParams: { query: solrQuery, filter: allSolrFilters },
+  });
+const { suggest: suggestAuthor, hydrate: hydrateAuthor }
+  = useAutocomplete("/attachment", {
+    idField: "author_id_s",
+    nameField: "agent",
+    filterExclude: "author",
     solrParams: { query: solrQuery, filter: allSolrFilters },
   });
 </script>
@@ -93,6 +103,15 @@ const { suggest: suggestInstitution, hydrate: hydrateInstitution }
         <FilterMap
           v-model="filters.geometry.value"
           value="map"
+          @update:model-value="handleUpdate"
+        />
+        <FilterInputAutocomplete
+          ref="filterAuthor"
+          v-model="filters.author.value"
+          :title="$t('filters.author')"
+          :query-function="suggestAuthor"
+          :hydration-function="hydrateAuthor"
+          value="author"
           @update:model-value="handleUpdate"
         />
         <FilterInputText
