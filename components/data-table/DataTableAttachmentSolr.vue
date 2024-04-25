@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import type { Image } from "../ImageBar.vue";
 import type { OverlayImage } from "~/components/ImageOverlay.vue";
+
+type AttachmentImage = Image<undefined>;
 
 const { t } = useI18n();
 const img = useImage();
 const localePath = useLocalePath();
 const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-function openOverlay(image: OverlayImage) {
-  overlayImage.value = image;
+const images = ref<AttachmentImage[]>([]);
+function openOverlay(image: AttachmentImage) {
   showOverlay.value = true;
+  images.value = [image];
 }
 function getAttachmentType(type: number) {
   switch (type) {
@@ -76,15 +79,19 @@ function getAttachmentType(type: number) {
           "
           @click="
             openOverlay({
-              src: item.uuid_filename,
-              modifiers: { size: 'large' },
-              options: { provider: 'geocollections' },
+              filename: item.uuid_filename,
               id: item.id,
+              info: undefined,
             })
           "
         />
       </template>
     </BaseDataTable>
-    <ImageOverlay v-model="showOverlay" :image="overlayImage" />
+    <ImageOverlayNew
+      v-model="showOverlay"
+      :initial-slide="0"
+      :images="images"
+      :total="1"
+    />
   </div>
 </template>

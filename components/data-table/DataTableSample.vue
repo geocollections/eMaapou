@@ -1,14 +1,57 @@
 <script setup lang="ts">
-import type { OverlayImage } from "~/components/ImageOverlay.vue";
+import type { Image } from "../ImageBar.vue";
 
+type SampleImage = Image<undefined>;
+
+const props = defineProps<{
+  imageFunc?: (params: { sample: number; page: number; rows: number }) => Promise<{ images: SpecimenImage[]; total: number }>;
+}>();
 const emit = defineEmits(["click:row"]);
 
 const localePath = useLocalePath();
+const img = useImage();
+
+const images = ref<SampleImage[]>([]);
+const totalImage = ref(0);
 const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-function openOverlay(image: OverlayImage) {
-  overlayImage.value = image;
+const rowsPerPage = 10;
+const page = ref(0);
+const currentSampleOverlay = ref<any>();
+const initIndex = ref(0);
+
+async function openOverlay(sample: any) {
+  initIndex.value = 0;
+  page.value = 0;
+
+  currentSampleOverlay.value = sample;
+  if (!props.imageFunc) {
+    images.value = [{ id: sample.attachment_id, filename: sample.image, info: { author: sample.image_author, date: sample.image_date } }];
+    totalImage.value = 1;
+  }
+  else {
+    const { images: newImages, total } = await props.imageFunc({ sample: sample.id, page: page.value, rows: rowsPerPage });
+    images.value = newImages;
+    totalImage.value = total;
+  }
+
   showOverlay.value = true;
+}
+
+async function loadMore() {
+  if (!props.imageFunc)
+    return;
+  if (currentSampleOverlay.value === undefined)
+    return;
+  if (images.value.length >= totalImage.value)
+    return;
+
+  page.value += 1;
+  const { images: newImages } = await props.imageFunc({ sample: currentSampleOverlay.value.id, page: page.value, rows: rowsPerPage });
+  images.value = [...images.value, ...newImages];
+}
+
+function handleEnd() {
+  loadMore();
 }
 </script>
 
@@ -110,20 +153,55 @@ function openOverlay(image: OverlayImage) {
       </span>
     </template>
     <template #item.image="{ item }">
-      <ThumbnailImage
-        v-if="item.image_preview_url"
-        class="my-1"
-        :src="item.image_preview_url"
-        @click="
-          openOverlay({
-            src: item.image,
-            modifiers: { size: 'large' },
-            options: { provider: 'geocollections' },
-            id: item.attachment_id,
-          })
-        "
-      />
+      <div class="d-flex align-center">
+        <ThumbnailImage
+          v-if="item.image_preview_url"
+          class="my-1"
+          :src="
+            img(item.image, { size: 'small' }, { provider: 'geocollections' })
+          "
+          @click="
+            openOverlay(item)
+          "
+        />
+        <span v-if="item.image_count > 1" class="pl-1 text-medium-emphasis font-weight-medium">
+          +{{ item.image_count - 1 }}
+        </span>
+      </div>
     </template>
   </BaseDataTable>
-  <ImageOverlay v-model="showOverlay" :image="overlayImage" />
+  <ImageOverlayNew
+    v-model="showOverlay"
+    :initial-slide="initIndex"
+    :images="images"
+    :total="totalImage"
+    @end="handleEnd"
+  >
+    <template #tooltipInfo="{ item }">
+      <div v-if="item.info.author">
+        <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+        <span>{{ item.info.author }}</span>
+      </div>
+      <div v-if="item.info.date || item.info.dateText">
+        <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+        <span v-if="item.info.date">
+          {{ $formatDate(item.info.date) }}
+        </span>
+        <span v-else>{{ item.info.dateText }}</span>
+      </div>
+    </template>
+    <template #overlayInfo="{ item }">
+      <div v-if="item.info.author">
+        <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
+        <span>{{ item.info.author }}</span>
+      </div>
+      <div v-if="item.info.date || item.info.dateText">
+        <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
+        <span v-if="item.info.date">
+          {{ $formatDate(item.info.date) }}
+        </span>
+        <span v-else>{{ item.info.dateText }}</span>
+      </div>
+    </template>
+  </ImageOverlayNew>
 </template>

@@ -114,6 +114,43 @@ const { exportData } = useExportSolr("/sample", {
 definePageMeta({
   layout: false,
 });
+
+const { $geoloogiaFetch } = useNuxtApp();
+
+async function sampleImageFunction({ sample, page, rows }) {
+  const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
+    query: {
+      sample,
+      attachment__attachment_format__value__istartswith: "image",
+      nest: 2,
+      limit: rows,
+      offset: page * rows,
+    },
+  });
+  // .then((res) => {
+  //
+  //   return res.results.map((image: any) => ({
+  //     id: image.attachment.id,
+  //     filename: image.attachment.filename,
+  //     info: {
+  //       author: image.attachment.author?.agent,
+  //       date: image.attachment.date_created,
+  //       dateText: image.attachment.date_created_free,
+  //     },
+  //   }));
+  // });
+
+  const newImages = res.results.map((image: any) => ({
+    id: image.attachment.id,
+    filename: image.attachment.filename,
+    info: {
+      author: image.attachment.author?.agent,
+      date: image.attachment.date_created,
+      dateText: image.attachment.date_created_free,
+    },
+  }));
+  return { images: newImages, total: res.count };
+}
 </script>
 
 <template>
@@ -148,6 +185,7 @@ definePageMeta({
       :options="options"
       :is-loading="pending"
       :export-func="exportData"
+      :image-func="sampleImageFunction"
       @update="handleDataTableUpdate"
       @change:headers="handleHeadersChange"
       @reset:headers="handleHeadersReset(options)"

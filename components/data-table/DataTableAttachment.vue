@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { OverlayImage } from "~/components/ImageOverlay.vue";
+import type { Image } from "../ImageBar.vue";
 
+type AttachmentImage = Image<undefined>;
 const showOverlay = ref(false);
-const overlayImage = ref<OverlayImage>();
-function openOverlay(image: OverlayImage) {
-  overlayImage.value = image;
+const images = ref<AttachmentImage[]>([]);
+function openOverlay(image: AttachmentImage) {
   showOverlay.value = true;
+  images.value = [image];
 }
 const localePath = useLocalePath();
 const img = useImage();
@@ -33,10 +34,9 @@ const img = useImage();
         :type="item.attachment.attachment_format.value"
         @click:image="
           openOverlay({
-            src: item.attachment.uuid_filename,
-            modifiers: { size: 'large' },
-            options: { provider: 'geocollections' },
+            filename: item.attachment.uuid_filename,
             id: item.attachment.id,
+            info: undefined,
           })
         "
       />
@@ -63,5 +63,10 @@ const img = useImage();
       </div>
     </template>
   </BaseDataTable>
-  <ImageOverlay v-model="showOverlay" :image="overlayImage" />
+  <ImageOverlayNew
+    v-model="showOverlay"
+    :initial-slide="0"
+    :images="images"
+    :total="1"
+  />
 </template>
