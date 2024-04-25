@@ -6,7 +6,8 @@ import isNil from "lodash/isNil";
 
 export const stringValueParser = z
   .string()
-  .transform(val => (val.length > 0 ? val : undefined));
+  .transform(val => (val.length > 0 ? val : undefined))
+  .catch("");
 
 export const stringArrayValueParser = z
   .string()
