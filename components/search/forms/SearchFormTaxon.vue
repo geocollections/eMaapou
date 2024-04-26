@@ -71,11 +71,6 @@ function handleSubmit() {
         value="taxon"
         @update:model-value="handleUpdate('taxon')"
       />
-      <FilterMap
-        v-model="filters.geometry.value"
-        value="map"
-        @update:model-value="handleUpdate"
-      />
     </VExpansionPanels>
     <VDivider class="mx-2" />
   </VForm>
