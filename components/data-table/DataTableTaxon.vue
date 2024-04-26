@@ -7,7 +7,7 @@ const localePath = useLocalePath();
     <template #item.taxon="{ item }">
       <BaseLinkExternal
         v-if="item.id"
-        @click.native="$openWindow(`https://fossiilid.info/${item.id}`)"
+        :href="`https://fossiilid.info/${item.id}`"
       >
         {{ `${item.taxon} ${item.author_year ? item.author_year : ""}` }}
       </BaseLinkExternal>
@@ -16,9 +16,7 @@ const localePath = useLocalePath();
     <template #item.fossil_group="{ item }">
       <BaseLinkExternal
         v-if="item.fossil_group_id"
-        @click.native="
-          $openWindow(`https://fossiilid.info/${item.fossil_group_id}`)
-        "
+        :href="`https://fossiilid.info/${item.fossil_group_id}`"
       >
         {{ item.fossil_group }}
       </BaseLinkExternal>
@@ -30,7 +28,7 @@ const localePath = useLocalePath();
     <template #item.parent_taxon="{ item }">
       <BaseLinkExternal
         v-if="item.parent_id"
-        @click.native="$openWindow(`https://fossiilid.info/${item.parent_id}`)"
+        :href="`https://fossiilid.info/${item.parent_id}`"
       >
         {{ item.parent_taxon }}
       </BaseLinkExternal>

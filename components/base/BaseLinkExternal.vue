@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <a
+  <NuxtLink
     :href="href"
     :target="target"
     class="text-link"
@@ -19,7 +19,7 @@ defineProps<{
         <VIcon class="open-new-icon" size="x-small">{{ mdiArrowTopRight }}</VIcon>
       </slot>
     </span>
-  </a>
+  </NuxtLink>
 </template>
 
 <style scoped>
