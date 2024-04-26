@@ -196,7 +196,7 @@ onMounted(() => {
                 :prepend-inner-icon="mdiMagnify"
                 :label="$t('common.search')"
                 hide-details
-                variant="underlined"
+                variant="outlined"
                 density="compact"
                 single-line
                 clearable
