@@ -237,7 +237,7 @@ useHead({
   <VContainer
     class="pt-1 pb-10 px-0"
     style="height: 100%"
-    :fluid="display.lgAndDown.value"
+    :fluid="true"
   >
     <div>
       <VRow
