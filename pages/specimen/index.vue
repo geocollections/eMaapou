@@ -132,6 +132,8 @@ const { exportData } = useExportSolr("/specimen", {
   })),
 });
 
+const specimenImageFunction = useSpecimenImageFunction();
+
 useHead({
   title: t("specimen.pageTitle"),
 });
@@ -139,29 +141,6 @@ useHead({
 definePageMeta({
   layout: false,
 });
-const { $solrFetch } = useNuxtApp();
-
-async function specimenImageFunction({ specimen, page, rows }) {
-  const res = await $solrFetch<SolrResponse>("/attachment", {
-    query: {
-      q: "*",
-      fq: `specimen_id:${specimen} AND specimen_image_attachment:1`,
-      // sort: "date_created_dt desc,date_created_free desc,stars desc,id desc",
-      limit: rows,
-      offset: rows * page,
-    },
-  });
-
-  const newImages = res.response.docs.map((attachment: any) => ({
-    id: attachment.id,
-    filename: attachment.filename,
-    info: {
-      author: attachment.agent,
-      date: attachment.date_created,
-    },
-  }));
-  return { images: newImages, total: res.response.numFound };
-}
 </script>
 
 <template>

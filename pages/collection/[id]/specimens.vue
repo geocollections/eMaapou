@@ -37,6 +37,8 @@ const { exportData } = useExportSolr("/specimen", {
     offset: getOffset(options.value.page, options.value.itemsPerPage),
   })),
 });
+
+const specimenImageFunction = useSpecimenImageFunction();
 </script>
 
 <template>
@@ -47,6 +49,7 @@ const { exportData } = useExportSolr("/specimen", {
     :headers="headers"
     :is-loading="pending"
     :export-func="exportData"
+    :image-func="specimenImageFunction"
     @update="handleUpdate"
     @change:headers="handleHeadersChange"
     @reset:headers="handleHeadersReset(options)"

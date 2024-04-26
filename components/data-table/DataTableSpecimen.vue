@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { Image } from "../ImageBar.vue";
+import type { ImageFunc } from "~/composables/useImageFunc";
 
 const props = defineProps<{
-  imageFunc?: (params: { specimen: number; page: number; rows: number }) => Promise<{ images: SpecimenImage[]; total: number }>;
+  imageFunc?: ImageFunc<SpecimenImage>;
 }>();
 
 const emit = defineEmits(["click:row"]);
@@ -32,7 +33,7 @@ async function openOverlay(specimen: any) {
     totalImage.value = 1;
   }
   else {
-    const { images: newImages, total } = await props.imageFunc({ specimen: specimen.id, page: page.value, rows: rowsPerPage });
+    const { images: newImages, total } = await props.imageFunc({ item: specimen, page: page.value, rows: rowsPerPage });
     images.value = newImages;
     totalImage.value = total;
   }
@@ -49,7 +50,7 @@ async function loadMore() {
     return;
 
   page.value += 1;
-  const { images: newImages } = await props.imageFunc({ specimen: currentSpecimenOverlay.value.id, page: page.value, rows: rowsPerPage });
+  const { images: newImages } = await props.imageFunc({ item: currentSpecimenOverlay.value, page: page.value, rows: rowsPerPage });
   images.value = [...images.value, ...newImages];
 }
 
