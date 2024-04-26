@@ -84,7 +84,7 @@ const { suggest: suggestRock, hydrate: hydrateRock, getChildren: getRockChildren
   filter: filters.value.rock,
 });
 
-const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useRockHierarchyFilter("/specimen", {
+const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useTaxonHierarchyFilter("/specimen", {
   filterExclude: "taxon",
   solrParams: { query: solrQuery, filter: solrFilters },
   filter: filters.value.taxon,
