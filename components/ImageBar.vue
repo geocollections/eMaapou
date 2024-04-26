@@ -85,7 +85,7 @@ function handleEnd() {
       </VTooltip>
     </div>
     <div v-intersect="loadMore" />
-    <ImageOverlayNew
+    <ImageOverlay
       v-model="showOverlay"
       :initial-slide="initIndex"
       :images="images"
@@ -95,7 +95,7 @@ function handleEnd() {
       <template #overlayInfo="{ item }">
         <slot name="overlayInfo" :item="item" />
       </template>
-    </ImageOverlayNew>
+    </ImageOverlay>
   </div>
 </template>
 

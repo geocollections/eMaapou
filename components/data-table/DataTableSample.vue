@@ -170,7 +170,7 @@ function handleEnd() {
       </div>
     </template>
   </BaseDataTable>
-  <ImageOverlayNew
+  <ImageOverlay
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"
@@ -203,5 +203,5 @@ function handleEnd() {
         <span v-else>{{ item.info.dateText }}</span>
       </div>
     </template>
-  </ImageOverlayNew>
+  </ImageOverlay>
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Image } from "../ImageBar.vue";
-import type { OverlayImage } from "~/components/ImageOverlay.vue";
 
 type AttachmentImage = Image<undefined>;
 
@@ -87,7 +86,7 @@ function getAttachmentType(type: number) {
         />
       </template>
     </BaseDataTable>
-    <ImageOverlayNew
+    <ImageOverlay
       v-model="showOverlay"
       :initial-slide="0"
       :images="images"

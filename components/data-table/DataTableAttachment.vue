@@ -63,7 +63,7 @@ const img = useImage();
       </div>
     </template>
   </BaseDataTable>
-  <ImageOverlayNew
+  <ImageOverlay
     v-model="showOverlay"
     :initial-slide="0"
     :images="images"

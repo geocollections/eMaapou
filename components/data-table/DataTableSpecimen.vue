@@ -208,7 +208,7 @@ function handleEnd() {
       </span>
     </template>
   </BaseDataTable>
-  <ImageOverlayNew
+  <ImageOverlay
     v-model="showOverlay"
     :initial-slide="initIndex"
     :images="images"
@@ -227,5 +227,5 @@ function handleEnd() {
         </span>
       </div>
     </template>
-  </ImageOverlayNew>
+  </ImageOverlay>
 </template>
