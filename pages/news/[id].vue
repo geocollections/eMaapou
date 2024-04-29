@@ -16,15 +16,15 @@ useHead({
 
 <template>
   <VMain>
-    <VContainer style="max-width: 800px" class="mx-auto">
+    <VContainer style="max-width: 800px">
       <VRow no-gutters>
         <VCol class="my-4">
           <div class="text-right montserrat pr-4 text--secondary">
             {{ $formatDate(news.date_added) }}
           </div>
-          <BaseHeader
-            :title="$translate({ et: news.title_et, en: news.title_en })"
-          />
+          <div class="text-h4">
+            {{ $translate({ et: news.title_et, en: news.title_en }) }}
+          </div>
         </VCol>
       </VRow>
       <VRow no-gutters justify="center">
@@ -41,3 +41,9 @@ useHead({
     </vcontainer>
   </vmain>
 </template>
+
+<style scoped>
+:deep(p) {
+  margin-bottom: 16px
+}
+</style>
