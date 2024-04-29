@@ -89,12 +89,12 @@ watch(queryDebounced, () => {
   refresh();
 });
 
-watch(() => props.modelValue, (newVal) => {
-  if (newVal.length > 0)
-    return;
-
-  selectedItems.value = [];
-  refresh();
+watch(() => props.modelValue, (newVal, oldVal) => {
+  // Clear selected items if new model value is empty and previous was not
+  if (oldVal.length > 0 && newVal.length < 1) {
+    selectedItems.value = [];
+    refresh();
+  }
 });
 
 const isFirstPage = computed(() => pagination.value.page === 1);

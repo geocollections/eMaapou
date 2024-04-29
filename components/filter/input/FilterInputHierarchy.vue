@@ -85,12 +85,12 @@ const { refresh: refreshAutocomplete, pending } = await useAsyncData<Suggestion[
 const selectedItems = ref<SelectedItem[]>([]);
 selectedItems.value = await props.hydrationFunction(props.modelValue);
 
-watch(() => props.modelValue, (newVal) => {
-  if (newVal.length > 0)
-    return;
-
-  selectedItems.value = [];
-  refreshTree();
+watch(() => props.modelValue, (newVal, oldVal) => {
+  // Clear selected items if new model value is empty and previous was not
+  if (oldVal.length > 0 && newVal.length < 1) {
+    selectedItems.value = [];
+    refreshTree();
+  }
 });
 
 const filteredSelectedItems = computed(() => {
