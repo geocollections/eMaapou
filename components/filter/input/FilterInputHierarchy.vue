@@ -75,7 +75,10 @@ const { refresh: refreshAutocomplete, pending } = await useAsyncData<Suggestion[
     if (res.length < 10)
       suggestionsEnd.value = true;
 
-    suggestions.value = [...suggestions.value, ...res];
+    if (autocompletePage.value > 1)
+      suggestions.value = [...suggestions.value, ...res];
+    else
+      suggestions.value = res;
   },
 );
 
@@ -174,7 +177,7 @@ function handleSearch(value: string) {
 watch(queryDebounced, () => {
   autocompletePage.value = 1;
   suggestionsEnd.value = false;
-  suggestions.value = [];
+  // suggestions.value = [];
   refreshAutocomplete();
 });
 
@@ -263,29 +266,14 @@ function handleOpen(value) {
     <VExpansionPanelText
       color="white"
     >
-      <VAutocomplete
-        ref="input"
+      <HierarchyInput
         class="mx-1 my-2"
-        :model-value="null"
         :search="query"
-        hide-details
-        density="compact"
-        :item-title="locale === 'et' ? 'name.et' : 'name.en'"
-        item-value="id"
-        bg-color="white"
-        variant="outlined"
-        :placeholder="t('search')"
-        persistent-placeholder
-        no-filter
-        return-object
         :items="suggestions ?? []"
-        @update:model-value="handleAdd"
         @update:search="handleSearch"
-      >
-        <template #append-item>
-          <div v-intersect="handleListEnd" />
-        </template>
-      </VAutocomplete>
+        @select="handleAdd"
+        @end="handleListEnd"
+      />
       <ul class="ml-1">
         <TreeItem
           v-for="(node, index) in tree"
