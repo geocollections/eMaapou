@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { mdiClose } from "@mdi/js";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
-const props = defineProps<{ resultView: "table" | "image" }>();
+defineProps<{ resultView: "table" | "image" }>();
 
 const emit = defineEmits(["update", "reset", "submit"]);
-
-const { $solrFetch } = useNuxtApp();
-const { locale } = useI18n();
 
 const specimensStore = useSpecimens();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(specimensStore);
