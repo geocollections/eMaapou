@@ -267,14 +267,20 @@ function handleOpen(value) {
       color="white"
     >
       <HierarchyInput
-        class="mx-1 my-2"
+        class="my-2"
         :search="query"
         :items="suggestions ?? []"
         @update:search="handleSearch"
         @select="handleAdd"
         @end="handleListEnd"
       />
-      <ul class="ml-1">
+      <div
+        v-if="(tree?.length ?? 0) < 1"
+        class="text-medium-emphasis text-body-2"
+      >
+        {{ t("noOptions") }}
+      </div>
+      <ul v-else class="ml-1">
         <TreeItem
           v-for="(node, index) in tree"
           :key="`tree-item-${index}`"
@@ -292,9 +298,10 @@ function handleOpen(value) {
 
 <style scoped>
 :deep(.v-expansion-panel-text__wrapper) {
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 8px;
+  padding-right: 8px;
   padding-top: 0;
+  padding-bottom: 8px;
 }
 
 .selected-item:hover {
@@ -306,6 +313,8 @@ function handleOpen(value) {
 <i18n lang="yaml">
 et:
   search: Otsi
+  noOptions: "Valikud puuduvad"
 en:
   search: Search
+  noOptions: "No options available"
   </i18n>

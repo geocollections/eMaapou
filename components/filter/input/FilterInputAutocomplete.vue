@@ -50,6 +50,8 @@ defineExpose({
   refreshSuggestions,
 });
 
+const { t } = useI18n({ useScope: "local" });
+
 const query = ref("");
 const queryDebounced = refDebounced(query, 200);
 
@@ -216,7 +218,7 @@ function handleOpen(value) {
           v-if="(suggestions?.length ?? 0) < 1"
           class="text-medium-emphasis text-body-2"
         >
-          No options available
+          {{ t("noOptions") }}
         </div>
         <template v-else>
           <div
@@ -288,3 +290,10 @@ function handleOpen(value) {
 //   accent-color: rgb(var(--v-theme-accent));
 // }
 </style>
+
+<i18n lang="yaml">
+et:
+  noOptions: "Valikud puuduvad"
+en:
+  noOptions: "No options available"
+</i18n>
