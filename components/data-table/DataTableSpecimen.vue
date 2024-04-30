@@ -60,26 +60,16 @@ function handleEnd() {
 </script>
 
 <template>
-  <BaseDataTable v-bind="$attrs">
-    <template #item.id="{ item, index }">
-      <NuxtLink
-        v-if="item.id"
-        class="text-link"
-        :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
-        @click="emit('click:row', { index, id: item.id })"
-      >
-        {{ item.id }}
-      </NuxtLink>
+  <BaseDataTable
+    v-bind="$attrs"
+    :item-to="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
+  >
+    <template #item.id="{ item }">
+      {{ item.id }}
     </template>
-    <template #item.specimen_full_name="{ item, index }">
-      <NuxtLink
-        v-if="item.specimen_full_name"
-        class="text-link"
-        :to="localePath({ name: 'specimen-id', params: { id: item.id } })"
-        @click="emit('click:row', { index, id: item.id })"
-      >
-        {{ item.specimen_full_name }}
-      </NuxtLink>
+    <template #item.specimen_full_name="{ item }">
+      {{ item.specimen_full_name }}
     </template>
     <template #item.locality="{ item }">
       <NuxtLink

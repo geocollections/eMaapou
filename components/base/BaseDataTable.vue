@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp, mdiMagnify } from "@mdi/js";
+import { mdiChevronDown, mdiChevronUp, mdiEye, mdiEyeArrowRight, mdiMagnify } from "@mdi/js";
 import isEqual from "lodash/isEqual";
 import debounce from "lodash/debounce";
 import type { ExportFunc } from "~/composables/useExport";
@@ -29,6 +29,8 @@ const props = withDefaults(defineProps<
     singleExpand?: boolean;
     dynamicHeaders?: boolean;
     exportFunc?: ExportFunc;
+    itemTo?: (item: any) => string;
+    externalTo: boolean;
   }
 >(), {
   showSearch: true,
@@ -36,9 +38,10 @@ const props = withDefaults(defineProps<
   expandable: false,
   singleExpand: false,
   dynamicHeaders: true,
+  externalTo: false,
 });
 
-const emit = defineEmits(["update", "reset:headers", "change:headers"]);
+const emit = defineEmits(["update", "reset:headers", "change:headers", "click:row"]);
 const { t } = useI18n();
 const { $formatDate } = useNuxtApp();
 
@@ -56,6 +59,15 @@ const topOptionsHeight = ref(0);
 const table = ref<HTMLElement>();
 const visibleHeaders = computed(() => {
   const contentHeaders = props.headers.filter(header => header.show);
+  if (props.itemTo) {
+    contentHeaders.unshift({
+      text: "",
+      value: "to",
+      show: true,
+      sortable: false,
+      width: "2rem",
+    });
+  }
   contentHeaders.push({
     text: "",
     value: "",
@@ -174,6 +186,20 @@ onMounted(() => {
     >
       <template #no-data>
         {{ $t("table.noData") }}
+      </template>
+      <template v-if="itemTo" #item.to="{ item, index }">
+        <VBtn
+          icon
+          variant="text"
+          class="text-link-visit"
+          size="small"
+          :to="itemTo(item)"
+          @click="emit('click:row', { index, id: item.id })"
+        >
+          <VIcon size="x-large">
+            {{ externalTo ? mdiEyeArrowRight : mdiEye }}
+          </VIcon>
+        </VBtn>
       </template>
       <!-- eslint-disable-next-line vue/no-template-shadow -->
       <template v-if="!onlyTable" #top="{ pageCount }">

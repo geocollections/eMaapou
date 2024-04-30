@@ -28,20 +28,12 @@ function getAttachmentType(type: number) {
 
 <template>
   <div>
-    <BaseDataTable v-bind="$attrs">
+    <BaseDataTable
+      v-bind="$attrs"
+      :item-to="(item) => localePath({ name: 'file-id', params: { id: item.id } })"
+    >
       <template #item.id="{ item }">
-        <NuxtLink
-          v-if="item.attachment_id"
-          class="text-link"
-          :to="
-            localePath({
-              name: 'file-id',
-              params: { id: item.attachment_id },
-            })
-          "
-        >
-          {{ item.attachment_id }}
-        </NuxtLink>
+        {{ item.attachment_id }}
       </template>
       <template #item.date="{ item }">
         <div v-if="item.date_created">

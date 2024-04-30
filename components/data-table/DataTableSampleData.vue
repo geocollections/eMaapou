@@ -5,23 +5,15 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable
+    v-bind="$attrs"
+    :item-to="(item) => localePath({ name: 'sample-id', params: { id: item.id } })"
+  >
     <template #item.sample="{ item }">
-      <NuxtLink
-        class="text-link"
-        :to="localePath({ name: 'sample-id', params: { id: item.sample_id } })"
-      >
-        {{ item.sample_number }}
-      </NuxtLink>
+      {{ item.sample_number }}
     </template>
     <template #item.number="{ item }">
-      <NuxtLink
-        v-if="item.number"
-        class="text-link"
-        :to="localePath({ name: 'sample-id', params: { id: item.id } })"
-      >
-        {{ item.number }}
-      </NuxtLink>
+      {{ item.number }}
     </template>
     <template #item.locality="{ item }">
       <NuxtLink

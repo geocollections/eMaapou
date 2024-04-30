@@ -4,24 +4,16 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <BaseDataTable v-bind="$attrs">
-    <template #item.id="{ item, index }">
-      <NuxtLink
-        class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
-      >
-        {{ item.id }}
-      </NuxtLink>
+  <BaseDataTable
+    v-bind="$attrs"
+    :item-to="(item) => localePath({ name: 'file-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
+  >
+    <template #item.id="{ item }">
+      {{ item.id }}
     </template>
-    <template #item.image_number="{ item, index }">
-      <NuxtLink
-        class="text-link"
-        :to="localePath({ name: 'file-id', params: { id: item.id } })"
-        @click="emit('click:row', index)"
-      >
-        {{ item.image_number }}
-      </NuxtLink>
+    <template #item.image_number="{ item }">
+      {{ item.image_number }}
     </template>
     <template #item.locality="{ item }">
       <NuxtLink

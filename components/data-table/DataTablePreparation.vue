@@ -5,15 +5,13 @@ const { $translate } = useNuxtApp();
 </script>
 
 <template>
-  <BaseDataTable v-bind="$attrs">
-    <template #item.preparation_number="{ item, index }">
-      <NuxtLink
-        class="text-link"
-        :to="localePath({ name: 'preparation-id', params: { id: item.id } })"
-        @click="emit('click:row', { index, id: item.id })"
-      >
-        {{ item.preparation_number }}
-      </NuxtLink>
+  <BaseDataTable
+    v-bind="$attrs"
+    :item-to="(item) => localePath({ name: 'preparation-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
+  >
+    <template #item.preparation_number="{ item }">
+      {{ item.preparation_number }}
     </template>
     <template #item.locality="{ item }">
       <NuxtLink

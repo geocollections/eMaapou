@@ -33,15 +33,14 @@ const filteredHeaders = computed(() => {
 </script>
 
 <template>
-  <BaseDataTable v-bind="$attrs" :headers="filteredHeaders">
-    <template #item.id="{ item, index }">
-      <NuxtLink
-        class="text-link"
-        :to="localePath({ name: 'analysis-id', params: { id: item.id } })"
-        @click="emit('click:row', { index, id: item.id })"
-      >
-        {{ item.id }}
-      </NuxtLink>
+  <BaseDataTable
+    v-bind="$attrs"
+    :headers="filteredHeaders"
+    :item-to="(item) => localePath({ name: 'analysis-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
+  >
+    <template #item.id="{ item }">
+      {{ item.id }}
     </template>
     <template #item.sample_name="{ item }">
       <NuxtLink

@@ -3,14 +3,13 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-  <BaseDataTable v-bind="$attrs">
+  <BaseDataTable
+    v-bind="$attrs"
+    :item-to="(item) => `https://fossiilid.info/${item.id}`"
+    external-to
+  >
     <template #item.taxon="{ item }">
-      <BaseLinkExternal
-        v-if="item.id"
-        :href="`https://fossiilid.info/${item.id}`"
-      >
-        {{ `${item.taxon} ${item.author_year ? item.author_year : ""}` }}
-      </BaseLinkExternal>
+      {{ `${item.taxon} ${item.author_year ? item.author_year : ""}` }}
     </template>
 
     <template #item.fossil_group="{ item }">
