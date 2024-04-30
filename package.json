@@ -10,8 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@geoman-io/leaflet-geoman-free": "^2.15.0",
-    "@mdi/font": "^7.4.47",
+    "@geoman-io/leaflet-geoman-free": "^2.16.0",
     "@mdi/js": "^7.4.47",
     "@nuxt/image": "^1.2.0",
     "@pinia/nuxt": "^0.5.1",
