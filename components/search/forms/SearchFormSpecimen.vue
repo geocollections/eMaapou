@@ -246,7 +246,7 @@ function handleHasImageUpdate(value: boolean) {
         @update:model-value="handleUpdate"
       />
       <FilterInputAutocomplete
-        ref="filterReferences"
+        ref="filterReference"
         v-model="filters.reference.value"
         :title="$t('filters.reference')"
         :query-function="suggestReference"
