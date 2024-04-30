@@ -1,5 +1,3 @@
-import type { FilterType, LookupType } from "./enums";
-
 // export interface TextFilter {
 //   type: FilterType.Text;
 //   value: string;

@@ -137,7 +137,7 @@ const {
 const dataOverlays = useDataOverlays();
 function handleReady() {
   ready();
-  if (isMapClickEnabled) {
+  if (isMapClickEnabled.value) {
     map.value?.on("click", handleMapClick);
     document.getElementById("map")?.classList.add("cursor-crosshair");
   }

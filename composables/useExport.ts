@@ -1,5 +1,3 @@
-import { utils, writeFileXLSX } from "xlsx";
-
 export type ExportType = "csv" | "xlsx";
 export type ExportSelection = "all" | "page";
 

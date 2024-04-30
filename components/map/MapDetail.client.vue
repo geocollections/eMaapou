@@ -2,7 +2,6 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { GeoJsonObject } from "geojson";
-import intersection from "lodash/intersection";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";

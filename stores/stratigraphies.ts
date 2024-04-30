@@ -2,10 +2,7 @@ import type { RouteLocation } from "vue-router";
 import { z } from "zod";
 import { STRATIGRAPHY } from "~/constants";
 import type {
-  BooleanFilter,
-  GeomFilter,
   IdListFilter,
-  RangeFilter,
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";

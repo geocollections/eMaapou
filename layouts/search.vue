@@ -5,7 +5,6 @@ import {
   BROWSE_GEOLOGY_LIST,
   BROWSE_LAB_LIST,
   BROWSE_TAXON_LIST,
-  SERVICES,
 } from "~/constants";
 
 const display = useDisplay();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mdiClose, mdiMinus, mdiPlus } from "@mdi/js";
+import { mdiClose } from "@mdi/js";
 import isEqual from "lodash/isEqual";
 import cloneDeep from "lodash/cloneDeep";
 import isEmpty from "lodash/isEmpty";
