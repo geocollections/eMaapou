@@ -22,6 +22,10 @@ function focus() {
 defineExpose({
   focus,
 });
+
+function handleEnd(isIntersecting: boolean) {
+  emit("end", isIntersecting);
+}
 </script>
 
 <template>
@@ -29,6 +33,7 @@ defineExpose({
     <VMenu
       ref="menuRef"
       location="bottom"
+      max-height="400px"
       :close-on-content-click="false"
     >
       <template #activator="{ props: menu }">
@@ -45,7 +50,7 @@ defineExpose({
           @update:model-value="emit('update:search', $event)"
         />
       </template>
-      <VList>
+      <VList elevation="0" class="border">
         <VListItem
           v-for="(item, index) in items"
           :key="index"
@@ -53,7 +58,7 @@ defineExpose({
         >
           <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
         </VListItem>
-        <div v-intersect="emit('end')" />
+        <div v-intersect="handleEnd" />
       </VList>
     </VMenu>
   </div>
