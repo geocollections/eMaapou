@@ -267,6 +267,7 @@ function handleOpen(value) {
       color="white"
     >
       <HierarchyInput
+        ref="input"
         class="my-2"
         :search="query"
         :items="suggestions ?? []"

@@ -10,14 +10,31 @@ const emit = defineEmits(["update:search", "select", "end"]);
 
 const { t } = useI18n({ useScope: "local" });
 const { $translate } = useNuxtApp();
+const input = ref();
+const menuRef = ref();
+
+function focus() {
+  nextTick(() => {
+    input.value.click();
+  });
+}
+
+defineExpose({
+  focus,
+});
 </script>
 
 <template>
   <div>
-    <VMenu location="bottom" :close-on-content-click="false">
+    <VMenu
+      ref="menuRef"
+      location="bottom"
+      :close-on-content-click="false"
+    >
       <template #activator="{ props: menu }">
         <VTextField
           v-bind="menu"
+          ref="input"
           :model-value="search"
           variant="outlined"
           density="compact"
