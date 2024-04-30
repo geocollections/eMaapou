@@ -23,7 +23,6 @@
     "vue-component-type-helpers": "^2.0.6",
     "vue-echarts": "^6.6.8",
     "vue-matomo": "^4.2.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz",
     "zod": "^3.22.4"
   },
   "devDependencies": {
