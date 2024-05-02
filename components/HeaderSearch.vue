@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
-
 defineProps<{
   title: string;
   icon: string;
   count: number;
 }>();
-
-const display = useDisplay();
 </script>
 
 <template>
