@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T">
 import {
+  mdiArrowLeft,
   mdiArrowUpLeft,
   mdiCheck,
   mdiChevronLeft,
@@ -38,24 +39,15 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
       density="compact"
     >
       <template #title>
-        <span class="text-body-2">
-          Back to search
+        <span class="text-body-2 text-black font-weight-medium">
+          {{ $t("common.similar") }}
         </span>
       </template>
       <template #prepend>
-        <VIcon :icon="mdiArrowUpLeft" />
+        <VIcon :icon="mdiArrowLeft" />
       </template>
     </VListItem>
   </VList>
-  <!-- <VBtn -->
-  <!--   variant="text" -->
-  <!--   color="accent" -->
-  <!--   class="text-none mx-2" -->
-  <!--   :prepend-icon="mdiArrowUpLeft" -->
-  <!--   :to="searchRoute" -->
-  <!-- > -->
-  <!--   Back to search -->
-  <!-- </VBtn> -->
   <div class="d-flex align-center justify-space-around">
     <VBtn
       variant="text"
@@ -73,7 +65,7 @@ const hasNext = computed(() => props.page * props.perPage < props.totalResults);
       @click="emit('page:next', page + 1)"
     />
   </div>
-  <VList>
+  <VList class="py-0">
     <template v-for="(item, index) in results" :key="`${index}-${item.id}`">
       <VListItem
         class="pa-2 my-1 mx-2 text-body-2"

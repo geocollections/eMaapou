@@ -166,6 +166,7 @@ const { mdAndUp } = useDisplay();
               {{ $t("common.showSimilar") }}
             </div>
           </div>
+          <VDivider v-show="!mini" class="mx-2" />
           <div v-show="!mini">
             <slot name="drawer" :close-mobile-search="closeMobileSearch" />
           </div>
