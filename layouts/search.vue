@@ -36,13 +36,11 @@ function closeMobileSearch() {
   <VApp>
     <AppBar :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
-      v-if="!mdAndUp"
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
     <VNavigationDrawer
-      v-else
-      app
+      :model-value="mdAndUp"
       :rail="railDrawer"
       color="grey-darken-3"
       elevation="2"

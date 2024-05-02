@@ -39,18 +39,19 @@ function closeMobileSearch() {
   showDrawer.value = false;
 }
 const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
+
+const { mdAndUp } = useDisplay();
 </script>
 
 <template>
   <VApp>
     <AppBar :drawer="drawer" @toggle:navigation-drawer="drawer = !drawer" />
     <AppDrawer
-      v-if="!display.mdAndUp.value"
       :drawer="drawer"
       @update:navigation-drawer="drawer = $event"
     />
     <VNavigationDrawer
-      v-else
+      :model-value="mdAndUp"
       app
       :rail="railDrawer"
       color="grey-darken-3"
@@ -182,7 +183,7 @@ const topPadding = computed(() => display.mdAndUp.value ? 88 : 48);
               class="mb-2 text-capitalize"
               location="bottom center"
               rounded
-              style="z-index: 1"
+              style="z-index: 1000"
               color="warning"
               @click="showDrawer = !showDrawer"
             >

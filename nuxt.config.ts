@@ -1,5 +1,3 @@
-import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -15,12 +13,6 @@ export default defineNuxtConfig({
     transpile: ["vuetify"],
   },
   modules: [
-    (_options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }));
-      });
-    },
     "@nuxtjs/i18n",
     "@nuxt/image",
     "@pinia/nuxt",
@@ -28,9 +20,62 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
     "@nuxtjs/seo",
+    "vuetify-nuxt-module",
   ],
   imports: {
     dirs: ["types", "constants"],
+  },
+  css: ["~/assets/main.scss"],
+  vuetify: {
+    moduleOptions: {
+      ssrClientHints: {
+        viewportSize: true,
+      },
+    },
+    vuetifyOptions: {
+      icons: {
+        defaultSet: "mdi-svg",
+      },
+      theme: {
+
+        defaultTheme: "light",
+        variations: {
+          colors: ["primary", "secondary", "accent"],
+          lighten: 5,
+          darken: 5,
+        },
+        themes: {
+          dark: {
+            dark: true,
+            colors: {
+              primary: "#7c8996",
+              secondary: "#cfd6dc",
+              tertiary: "#333333",
+              quaternary: "#fff",
+              quinary: "#fcf2df",
+              anchor: "#5a5957",
+              header: "#3091b5",
+              accent: "#577daf",
+            },
+          },
+          light: {
+            dark: false,
+            colors: {
+              background: "#ffffff",
+              primary: "#7c8996",
+              secondary: "#cfd6dc",
+              tertiary: "#333333",
+              quaternary: "#fff",
+              quinary: "#fcf2df",
+              anchor: "#5a5957",
+              header: "#3091b5",
+              // accent: "#577daf",
+              accent: "#ec643b",
+            },
+          },
+        },
+      },
+    },
   },
   i18n: {
     locales: [
@@ -52,13 +97,6 @@ export default defineNuxtConfig({
     defaultLocale: "et",
     strategy: "prefix_and_default",
     baseUrl: "https://geoloogia.info",
-  },
-  vite: {
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
-    },
   },
   vue: {
     compilerOptions: {
