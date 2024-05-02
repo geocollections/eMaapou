@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<
     dynamicHeaders?: boolean;
     exportFunc?: ExportFunc;
     itemTo?: (item: any) => string;
-    externalTo: boolean;
+    externalTo?: boolean;
   }
 >(), {
   showSearch: true,
