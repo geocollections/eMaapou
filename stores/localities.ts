@@ -48,6 +48,7 @@ export const useLocalities = defineStore(
         fields: ["locality_references_kws"],
         tag: "references",
         alphaNumeric: true,
+        lookup: "endswith",
       } as StringIdListFilter,
       geometry: {
         type: "geom",

@@ -137,6 +137,7 @@ export const useSpecimens = defineStore(
         fields: ["specimen_references_kws"],
         tag: "references",
         alphaNumeric: true,
+        lookup: "endswith",
       } as StringIdListFilter,
     });
 

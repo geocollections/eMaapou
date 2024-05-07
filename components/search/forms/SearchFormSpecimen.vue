@@ -59,12 +59,10 @@ const { suggest: suggestOriginalStatus, hydrate: hydrateOriginalStatus }
   });
 
 const { suggest: suggestReference, hydrate: hydrateReference }
-  = useAutocomplete("/specimen", {
-    idField: "specimen_references_kws",
-    nameField: "specimen_references",
+  = useAutocompleteReference("/specimen", {
+    field: "specimen_references_kws",
     filterExclude: "references",
     solrParams: { query: solrQuery, filter: solrFilters },
-    primary: "id",
     containsParser: removeNonAlphanumeric,
   });
 

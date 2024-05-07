@@ -1,6 +1,6 @@
 // NOTE: this function is copied from `echarts/lib/util/graphic.js`,
 //  so we do not need to import the whole `graphic` module, which is really large
-import type { ZRRectLike } from "echarts/types/src/util/types";
+import type { ZRRectLike } from "echarts/types/src/util/types.js";
 
 export default function clipRectByRect(targetRect: ZRRectLike, rect: ZRRectLike): ZRRectLike | undefined {
   const x = Math.max(targetRect.x, rect.x);

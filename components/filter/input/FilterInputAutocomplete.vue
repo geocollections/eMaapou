@@ -232,7 +232,7 @@ function handleOpen(value) {
                 type="checkbox"
                 class="checkbox"
                 :checked="selectedIds.includes(item.id)"
-                @click.prevent.stop="handleAdd(item)"
+                @click.stop="handleAdd(item)"
               >
             </span>
             <span

@@ -6,7 +6,7 @@ export function useHeaders(initHeaders: Headers) {
 
   const headersMap = ref(cloneDeep(initHeaders));
 
-  const translateHeader = (header: Header) => {
+  const translateHeader = (header: Header | ChildHeader) => {
     if (header.titleTranslate === undefined || header.titleTranslate === true)
       return t(header.title);
 
@@ -20,7 +20,7 @@ export function useHeaders(initHeaders: Headers) {
         ...header,
         sortable: header.sortable !== undefined ? header.sortable : true,
         title: translateHeader(header),
-        children: header.children?.map((child: Header) => {
+        children: header.children?.map((child) => {
           return {
             ...child,
             title: translateHeader(child),

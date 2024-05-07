@@ -1,3 +1,5 @@
+/* eslint-disable ts/no-unsafe-member-access */
+/* eslint-disable ts/no-unsafe-assignment */
 export interface Image<T> {
   id: number;
   filename: string;
@@ -15,13 +17,13 @@ type SampleImage = Image<{
   dateText: string | null;
 }>;
 
-export interface ImageFunc<IT, T = any> {
+export interface ImageFunc<IT, T = { id: any;[K: string]: any }> {
   (params: { item: T; page: number; rows: number }): Promise<{ images: IT[]; total: number }>;
 }
 
-export function useSpecimenImageFunction<T = any>() {
+export function useSpecimenImageFunction() {
   const { $solrFetch } = useNuxtApp();
-  const imageFunc: ImageFunc<SpecimenImage, T> = async ({ item, page, rows }) => {
+  const imageFunc: ImageFunc<SpecimenImage> = async ({ item, page, rows }) => {
     const res = await $solrFetch<SolrResponse>("/attachment", {
       query: {
         q: "*",
@@ -45,9 +47,9 @@ export function useSpecimenImageFunction<T = any>() {
   return imageFunc;
 }
 
-export function useSampleImageFunction<T = any>() {
+export function useSampleImageFunction() {
   const { $geoloogiaFetch } = useNuxtApp();
-  const imageFunc: ImageFunc<SampleImage, T> = async ({ item, page, rows }) => {
+  const imageFunc: ImageFunc<SampleImage> = async ({ item, page, rows }) => {
     const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
       query: {
         sample: item.id,

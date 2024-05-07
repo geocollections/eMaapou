@@ -34,15 +34,14 @@ const { suggest: suggestCountry, hydrate: hydrateCountry } = useAutocomplete(
     nameField: { et: "country", en: "country_en" },
     filterExclude: "country",
     solrParams: { query: solrQuery, filter: solrFilters },
+    primary: "name",
   },
 );
 const { suggest: suggestReference, hydrate: hydrateReference }
-  = useAutocomplete("/locality", {
-    idField: "locality_references_kws",
-    nameField: "locality_references",
+  = useAutocompleteReference("/locality", {
+    field: "locality_references_kws",
     filterExclude: "references",
     solrParams: { query: solrQuery, filter: solrFilters },
-    primary: "id",
     containsParser: removeNonAlphanumeric,
   });
 </script>

@@ -39,7 +39,7 @@ export const booleanParamParser = z
 
 export const geometryParamParser = z
   .string()
-  .transform(val => JSON.parse(val) as GeoJSON.Geometry | null)
+  .transform(val => JSON.parse(val) as GeoJSON.Feature | null)
   .catch(null);
 
 export const dateArrayParamParser = z
@@ -58,7 +58,7 @@ export const parameterParamParser = z
       return {
         parameter,
         value: [start, end],
-      };
+      } as { parameter: string; value: [null | number, null | number] };
     }),
   )
   .catch(_ctx => []);

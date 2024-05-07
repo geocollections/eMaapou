@@ -1,21 +1,24 @@
 import type { VDataTable } from "vuetify/components";
 
-interface SortItem {
-  key: string;
-  order: "asc" | "desc";
-}
-type SortField = SortItem | { et: SortItem; en: SortItem };
-
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
-export type Header = WithRequired<
-  NonNullable<InstanceType<typeof VDataTable>["$props"]["headers"]>[0],
+type VTableHeader = NonNullable<InstanceType<typeof VDataTable>["$props"]["headers"]>[0];
+
+export type ChildHeader = Omit<WithRequired<VTableHeader, "title">, "children"> & {
+  apiFieldValue?: string | { et: string; en: string };
+  sortField?: string[] | { et: string[]; en: string[] };
+  titleTranslate?: boolean;
+};
+
+export type Header = Omit<WithRequired<
+  VTableHeader,
   "title"
-> & {
+>, "children"> & {
   show: boolean;
   apiFieldValue?: string | { et: string; en: string };
   sortField?: string[] | { et: string[]; en: string[] };
   titleTranslate?: boolean;
+  children?: ChildHeader[];
 };
 
 export interface Headers {

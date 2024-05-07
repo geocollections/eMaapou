@@ -1,3 +1,5 @@
+/* eslint-disable ts/no-unsafe-member-access */
+/* eslint-disable ts/no-unsafe-assignment */
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 export function useAutocomplete(
@@ -8,7 +10,7 @@ export function useAutocomplete(
     filterExclude,
     solrParams,
     containsParser,
-    primary = "id",
+    primary = "name",
   }: {
     nameField: string | { et: string; en: string };
     idField: string;
@@ -95,7 +97,7 @@ export function useAutocomplete(
       = query.length > 0
         ? [
             ...(solrParams?.filter?.value ?? []),
-          `${translatedNameField.value}:*${query}*`,
+          // `${translatedNameField.value}:*${query}*`,
           ]
         : solrParams?.filter?.value ?? [];
 
@@ -103,9 +105,9 @@ export function useAutocomplete(
       query: {
         "facet": "true",
         "facet.pivot": pivot,
-        // [`f.${primaryField.value}.facet.contains`]: parseContains(query),
-        // [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
-        [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
+        [`f.${primaryField.value}.facet.contains`]: parseContains(query),
+        [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
+        // [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
         "facet.limit": pagination.perPage,
         "facet.sort": "count",
         [`f.${primaryField.value}.facet.offset`]:
@@ -158,6 +160,134 @@ export function useAutocomplete(
     return values.map(id => ({
       id,
       name: res.facets[id].name.buckets[0].val,
+      count: res.facets[id].count,
+    }));
+  }
+
+  return { suggest, hydrate };
+}
+
+export function useAutocompleteReference(
+  path: string,
+  {
+    field,
+    filterExclude,
+    solrParams,
+    containsParser,
+  }: {
+    field: string;
+    filterExclude?: string;
+    solrParams?: {
+      query?: Ref<string>;
+      filter?: Ref<(string | { [K: string]: string })[]>;
+    };
+    primary?: "id" | "name";
+    containsParser?: (query: string) => string;
+  },
+) {
+  const { $solrFetch } = useNuxtApp();
+
+  const suggestionsPivot = computed(() => {
+    return `${field}`;
+  });
+
+  function fieldMapper(item: any) {
+    return {
+      id: item.value.split("/")[1] ?? item.value,
+      name: item.value.split("/")[0] ?? item.value,
+      count: item.count,
+    };
+  }
+
+  const suggestMapper = computed(() => {
+    return fieldMapper;
+  });
+
+  function parseContains(query: string) {
+    if (containsParser)
+      return containsParser(query);
+
+    return query;
+  }
+
+  async function suggest({
+    query,
+    pagination,
+    values,
+  }: {
+    query: string;
+    pagination: { page: number; perPage: number };
+    values: string[];
+  }): Promise<Suggestion[]> {
+    const pivot = filterExclude
+      ? `{!ex=${filterExclude}}${suggestionsPivot.value}`
+      : `${suggestionsPivot.value}`;
+    const filters
+      = query.length > 0
+        ? [
+            ...(solrParams?.filter?.value ?? []),
+          ]
+        : solrParams?.filter?.value ?? [];
+
+    const res = await $solrFetch(path, {
+      query: {
+        "facet": "true",
+        "facet.pivot": pivot,
+        [`f.${field}.facet.contains`]: parseContains(query),
+        [`f.${field}.facet.contains.ignoreCase`]: true,
+        // [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
+        "facet.limit": pagination.perPage,
+        "facet.sort": "count",
+        [`f.${field}.facet.offset`]:
+          (pagination.page - 1) * pagination.perPage,
+        "json": {
+          query: solrParams?.query?.value,
+          filter: filters,
+          limit: 0,
+        },
+      },
+    });
+    return res.facet_counts.facet_pivot[suggestionsPivot.value].map(
+      suggestMapper.value,
+    );
+  }
+
+  async function hydrate(values: string[]): Promise<Suggestion[]> {
+    const facets = values.reduce((prev, id) => {
+      prev[id] = {
+        type: "query",
+        q: `${field}:*${id}`,
+        facet: {
+          name: {
+            type: "terms",
+            field,
+            limit: 1,
+            domain: {
+              query: "*:*",
+              filter: `${field}:*${id}`,
+            },
+          },
+        },
+      };
+      return prev;
+    }, {});
+
+    const res = await $solrFetch(path, {
+      query: {
+        json: {
+          limit: 0,
+          query: solrParams?.query?.value,
+          filter: solrParams?.filter?.value,
+          facet: {
+            ...facets,
+          },
+        },
+      },
+    });
+
+    return values.map(id => ({
+      id,
+      name: res.facets[id].name.buckets[0].val.split("/")[0] ?? res.facets[id].name.buckets[0].val,
       count: res.facets[id].count,
     }));
   }

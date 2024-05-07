@@ -5,7 +5,8 @@ interface Translation {
 
 export default defineNuxtPlugin(({ $i18n }) => {
   function translate(translations: Translation) {
-    return $i18n.locale.value === "et" ? translations.et : translations.en;
+    // eslint-disable-next-line ts/no-unsafe-member-access
+    return (($i18n as any).locale.value) === "et" ? translations.et : translations.en;
   }
   return {
     provide: {

@@ -2,6 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { geojsonToWKT } from "@terraformer/wkt";
 import earcut from "earcut";
 import isNil from "lodash/isNil";
+import type { Position } from "geojson";
 
 export function useFilter() {
   return {};
@@ -62,7 +63,7 @@ export type MultiHierarchyListFilter = Omit<BaseFilter, "value"> & {
 
 export type GeomFilter = Omit<BaseFilter, "value"> & {
   type: "geom";
-  value: null | GeoJSON.Geometry;
+  value: null | GeoJSON.Feature;
 };
 export type RangeFilter = Omit<BaseFilter, "value"> & {
   type: "range";
@@ -123,6 +124,7 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
   });
 
   function reset() {
+    // @ts-expect-error - Do not know why this is a error
     filters.value = cloneDeep(initFilters);
   }
 
@@ -268,47 +270,47 @@ export function useFilters<T extends { [K: string]: FilterUnion }>(initFilters: 
         }).join(" AND ");
       }
       case "geom": {
-        if (filter.value.geometry.type === "Polygon") {
+        if (filter.value?.geometry.type === "Polygon") {
           // LON LAT
           const value = cloneDeep(filter.value);
 
           // Polygon triangulation
-          const data = earcut.flatten(value.geometry.coordinates);
-          const triangles = earcut(data.vertices, data.holes, data.dimensions);
+          if (value.geometry.type === "Polygon") {
+            const data = earcut.flatten(value.geometry.coordinates);
+            const triangles = earcut(data.vertices, data.holes, data.dimensions);
 
-          // Reversing triangles to geo coordinates
-          const coordinates = triangles.map((item: any) => {
-            const startIndex = item * 2;
-            return [data.vertices[startIndex], data.vertices[startIndex + 1]];
-          });
-          const triangleCoordinates = coordinates.reduce(
-            (prev: any, _: any, index: number, arr: any[]) => {
-              if ((index + 1) % 3 === 0) {
-                prev.push([
-                  arr[index - 2],
-                  arr[index - 1],
-                  arr[index],
-                  arr[index - 2],
-                ]);
-              }
-              return prev;
-            },
-            [],
-          );
+            // Reversing triangles to geo coordinates
+            const coordinates = triangles.map((item: any) => {
+              const startIndex = item * 2;
+              return [data.vertices[startIndex], data.vertices[startIndex + 1]] as Position;
+            });
+            const triangleCoordinates = coordinates.reduce(
+              (prev, _: any, index: number, arr) => {
+                if ((index + 1) % 3 === 0) {
+                  prev.push([
+                    arr[index - 2],
+                    arr[index - 1],
+                    arr[index],
+                    arr[index - 2],
+                  ]);
+                }
+                return prev;
+              },
+              [] as Position[][],
+            );
 
-          // Creating WKT string for query
-          let wktString = geojsonToWKT({
-            coordinates:
-              triangleCoordinates.length > 1
-                ? [triangleCoordinates]
-                : triangleCoordinates,
-            type: triangleCoordinates.length > 1 ? "MultiPolygon" : "Polygon",
-          });
-          wktString = wktString.replaceAll("), (", ")), ((");
+            // Creating WKT string for query
+            let wktString = geojsonToWKT({
+              coordinates:
+                [triangleCoordinates],
+              type: "MultiPolygon",
+            });
+            wktString = wktString.replaceAll("), (", ")), ((");
 
-          return filter.fields
-            .map((field: string) => `${field}:"intersects(${wktString})"`)
-            .join(" OR ");
+            return filter.fields
+              .map((field: string) => `${field}:"intersects(${wktString})"`)
+              .join(" OR ");
+          }
         }
         return undefined;
       }

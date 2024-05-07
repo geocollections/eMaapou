@@ -105,6 +105,7 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
+      // @ts-expect-error - This is a valid font config. Disables automatic Roboto font loading.
       "Roboto": false,
       "Montserrat": [300, 400, 500, 700],
       "Noto+Sans": [400, 500, 700],

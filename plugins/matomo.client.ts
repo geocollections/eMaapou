@@ -1,5 +1,6 @@
 /* eslint-disable ts/no-unsafe-argument */
 /* eslint-disable node/prefer-global/process */
+// @ts-expect-error - There is no types defined for this package
 import VueMatomo from "vue-matomo";
 
 // For configurations visit:  https://github.com/AmazingDreams/vue-matomo
