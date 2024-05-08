@@ -20,7 +20,7 @@ const chartTitle = computed(() => {
 });
 
 const { data: taxons } = await useAsyncData("taxons", async () => {
-  const resultsResponse = await $geoloogiaFetch("/taxon_list/", {
+  const resultsResponse = await $geoloogiaFetch<GeoloogiaListResponse>("/taxon_list/", {
     query: {
       sample: route.params.id,
       fields: "id,name,taxon,frequency",
@@ -35,6 +35,8 @@ const { data: taxons } = await useAsyncData("taxons", async () => {
       name: item.taxon?.taxon ?? item.name,
     };
   });
+}, {
+  default: () => [],
 });
 </script>
 

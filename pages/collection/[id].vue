@@ -3,6 +3,7 @@ import type { Tab } from "~/composables/useTabs";
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const route = useRoute();
+const { t } = useI18n();
 const localePath = useLocalePath();
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
 
@@ -18,7 +19,7 @@ const tabs = {
     routeName: "collection-id-specimens",
     title: "collection.specimens",
     count: async (_ctx) => {
-      const res = await $solrFetch("/specimen", {
+      const res = await $solrFetch<SolrResponse>("/specimen", {
         query: {
           q: `collection_id:${route.params.id}`,
           rows: 0,
@@ -78,8 +79,6 @@ redirectInvalidTab({
   }),
   tabs: data.value?.tabs ?? [],
 });
-
-const { t } = useI18n();
 
 useHead({
   title: `${title.value} | ${t("collection.pageTitle")}`,

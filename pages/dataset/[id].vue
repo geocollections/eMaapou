@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { mdiDatabaseOutline } from "@mdi/js";
-import type { Tab } from "~/composables/useTabs";
+import type { HydratedTab, Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch, $solrFetch } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
 
 const datasetsStore = useDatasets();
 const { getQueryParams } = datasetsStore;
@@ -26,9 +27,6 @@ const {
 const similarDatasets = computed(() => datasetsRes.value?.response.docs ?? []);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
-const activeTabProps = computed(() => {
-  return getCurrentTabRouteProps(data.value?.tabs ?? []);
-});
 const tabs = {
   general: {
     type: "static",
@@ -41,7 +39,7 @@ const tabs = {
     routeName: "dataset-id-samples",
     title: "dataset.sampleResults",
     count: async () => {
-      const res = await $solrFetch("/sample_data", {
+      const res = await $solrFetch<SolrResponse>("/sample_data", {
         query: {
           q: `dataset_ids:${route.params.id}`,
           rows: 0,
@@ -56,7 +54,7 @@ const tabs = {
     routeName: "dataset-id-graphs",
     title: "locality.graphs",
     count: async () => {
-      const res = await $solrFetch("/analysis_results", {
+      const res = await $solrFetch<SolrResponse>("/analysis_results", {
         query: {
           q: `dataset_ids:${route.params.id}`,
           rows: 0,
@@ -71,7 +69,7 @@ const tabs = {
     routeName: "dataset-id-analyses",
     title: "dataset.analyses",
     count: async () => {
-      const res = await $solrFetch("/analytical_data", {
+      const res = await $solrFetch<SolrResponse>("/analytical_data", {
         query: {
           q: `dataset_ids:${route.params.id}`,
           rows: 0,
@@ -86,7 +84,7 @@ const tabs = {
     routeName: "dataset-id-references",
     title: "dataset.references",
     count: async () => {
-      const res = await $geoloogiaFetch("/dataset_reference/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/dataset_reference/", {
         query: {
           dataset: route.params.id,
           limit: 0,
@@ -101,7 +99,7 @@ const tabs = {
     routeName: "dataset-id-attachments",
     title: "dataset.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch("/attachment_link/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
         query: {
           dataset: route.params.id,
           limit: 0,
@@ -116,7 +114,7 @@ const tabs = {
     routeName: "dataset-id-authors",
     title: "dataset.authors",
     count: async () => {
-      const res = await $geoloogiaFetch("/dataset_author/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/dataset_author/", {
         query: {
           dataset: route.params.id,
           limit: 0,
@@ -131,7 +129,7 @@ const tabs = {
     routeName: "dataset-id-geolocations",
     title: "dataset.geolocations",
     count: async () => {
-      const res = await $geoloogiaFetch("/dataset_geolocation/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/dataset_geolocation/", {
         query: {
           dataset: route.params.id,
           limit: 0,
@@ -144,7 +142,7 @@ const tabs = {
 };
 
 const { data } = await useAsyncData("dataset", async () => {
-  const dataset = await $geoloogiaFetch(`/dataset/${route.params.id}/`, {
+  const dataset = await $geoloogiaFetch<any>(`/dataset/${route.params.id}/`, {
     query: {
       nest: 1,
     },
@@ -156,7 +154,7 @@ const { data } = await useAsyncData("dataset", async () => {
     },
   });
 
-  const parametersResponse = await $solrFetch("/dataset", {
+  const parametersResponse = await $solrFetch<SolrResponse>("/dataset", {
     query: {
       q: `id:${route.params.id}`,
       fl: "parameter_index_list,parameter_list",
@@ -177,9 +175,9 @@ const { data } = await useAsyncData("dataset", async () => {
     }) ?? [];
 
   const parameterHeaders = {
-    byIds: parameters.reduce((prev, parameter) => {
+    byIds: parameters.reduce((prev: { [key: string]: any }, parameter: any) => {
       return { ...prev, [parameter.value]: { ...parameter, show: true } };
-    }, {}),
+    }, {} as { [key: string]: any }),
     allIds: parameterValues,
   };
   const hydratedTabs = await hydrateTabs(tabs, {
@@ -203,6 +201,14 @@ const { data } = await useAsyncData("dataset", async () => {
       "dataset_geolocation",
     ]),
   };
+}, {
+  default: () => ({
+    dataset: null,
+    tabs: [] as HydratedTab[],
+  }),
+});
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });
 const title = computed(() => data.value?.dataset.title);
 
@@ -213,8 +219,6 @@ redirectInvalidTab({
   }),
   tabs: data.value?.tabs ?? [],
 });
-
-const { t } = useI18n();
 
 useHead({
   title: `${title.value}| ${t("dataset.pageTitle")}`,

@@ -4,9 +4,8 @@ import isEmpty from "lodash/isEmpty";
 const props = defineProps({
   title: { type: String, default: null },
   value: {
-    type: [String, Number] as PropType<string | number>,
+    type: [String, Number] as PropType<string | number | any>,
     default: null,
-    required: false,
   },
 });
 

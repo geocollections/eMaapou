@@ -20,14 +20,6 @@ const {
   resultsCount,
 } = storeToRefs(sitesStore);
 
-const route = useRoute();
-
-setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshSites();
-}, { deep: true });
-
 const {
   data,
   pending,
@@ -46,6 +38,14 @@ const {
   })),
   watch: false,
 });
+
+const route = useRoute();
+
+setStateFromQueryParams(route);
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSites();
+}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {

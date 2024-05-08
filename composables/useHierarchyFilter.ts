@@ -1,3 +1,7 @@
+/* eslint-disable ts/no-unsafe-return */
+/* eslint-disable ts/no-unsafe-call */
+/* eslint-disable ts/no-unsafe-assignment */
+/* eslint-disable ts/no-unsafe-member-access */
 export function useStratigraphyHierarchyFilter(
   path: string,
   {
@@ -19,22 +23,22 @@ export function useStratigraphyHierarchyFilter(
     if (values.length < 1)
       return [];
 
-    const res = await $solrFetch("/stratigraphy", {
+    const res = await $solrFetch<any>("/stratigraphy", {
       query: {
         q: "*",
         fq: [`hierarchy_string:(${values.join(" ")})`],
         limit: values.length,
       },
     });
-    const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    const facetQueries = res.response.docs.reduce((prev: { [K: string]: { type: string; q: string } }, doc: any) => {
       prev[doc.id] = {
         type: "query",
         q: `stratigraphy_hierarchy_descendent_paths:${doc.hierarchy_string}`,
       };
       return prev;
-    }, {});
+    }, {} as { [K: string]: { type: string; q: string } });
 
-    const countRes = await $solrFetch(path, {
+    const countRes = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -57,7 +61,7 @@ export function useStratigraphyHierarchyFilter(
     const depth = value.split("-").length;
     const prefix = `${depth}/${value}`;
 
-    const countRes = await $solrFetch(path, {
+    const countRes = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -87,7 +91,7 @@ export function useStratigraphyHierarchyFilter(
       const [_depth, value] = bucket.val.split("/");
       return value;
     });
-    const res = await $solrFetch("/stratigraphy", {
+    const res = await $solrFetch<any>("/stratigraphy", {
       query: {
         q: "*",
         fq: [`hierarchy_string:(${values.join(" OR ")})`],
@@ -122,7 +126,7 @@ export function useStratigraphyHierarchyFilter(
   ) {
     const searchField = locale.value === "et" ? "stratigraphy" : "stratigraphy_en";
     const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
-    const res = await $solrFetch("/stratigraphy", {
+    const res = await $solrFetch<any>("/stratigraphy", {
       query: {
         q: queryStr,
         rows: pagination.perPage,
@@ -165,22 +169,22 @@ export function useRockHierarchyFilter(
     if (values.length < 1)
       return [];
 
-    const res = await $solrFetch("/rock", {
+    const res = await $solrFetch<any>("/rock", {
       query: {
         q: "*",
         fq: [`hierarchy_strings:(${values.join(" ")})`],
         limit: values.length,
       },
     });
-    const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    const facetQueries = res.response.docs.reduce((prev: { [K: string]: { type: string; q: string } }, doc: any) => {
       prev[doc.id] = {
         type: "query",
         q: `rock_categories:*/${doc.hierarchy_strings[0]}*`,
       };
       return prev;
-    }, {});
+    }, {} as { [K: string]: { type: string; q: string } });
 
-    const countRes = await $solrFetch(path, {
+    const countRes = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -202,7 +206,7 @@ export function useRockHierarchyFilter(
     const depth = value.split("-").length;
     const prefix = value.length < 1 ? "0/" : `${depth}/${value}`;
 
-    const countRes = await $solrFetch(path, {
+    const countRes = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -232,7 +236,7 @@ export function useRockHierarchyFilter(
       const [_depth, value] = bucket.val.split("/");
       return value;
     });
-    const res = await $solrFetch("/rock", {
+    const res = await $solrFetch<any>("/rock", {
       query: {
         q: "*",
         fq: [`hierarchy_strings:(${values.join(" OR ")})`],
@@ -265,7 +269,7 @@ export function useRockHierarchyFilter(
   ) {
     const searchField = locale.value === "et" ? "name" : "name_en";
     const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
-    const res = await $solrFetch("/rock", {
+    const res = await $solrFetch<any>("/rock", {
       query: {
         q: queryStr,
         rows: pagination.perPage,
@@ -309,22 +313,22 @@ export function useTaxonHierarchyFilter(
     if (values.length < 1)
       return [];
 
-    const res = await $solrFetch("/taxon", {
+    const res = await $solrFetch<any>("/taxon", {
       query: {
         q: "*",
         fq: [`hierarchy_string:(${values.join(" ")})`],
         limit: values.length,
       },
     });
-    const facetQueries = res.response.docs.reduce((prev, doc: any) => {
+    const facetQueries = res.response.docs.reduce((prev: { [K: string]: { type: string; q: string } }, doc: any) => {
       prev[doc.id] = {
         type: "query",
         q: `taxon_hierarchy_descendent_paths:${doc.hierarchy_string}`,
       };
       return prev;
-    }, {});
+    }, {} as { [K: string]: { type: string; q: string } });
 
-    const countRes = await $solrFetch(path, {
+    const countRes = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -347,7 +351,7 @@ export function useTaxonHierarchyFilter(
     const depth = value.split("-").length;
     const prefix = `${depth}/${value}`;
 
-    const countRes = await $solrFetch(path, {
+    const countRes = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -377,7 +381,7 @@ export function useTaxonHierarchyFilter(
       const [_depth, value] = bucket.val.split("/");
       return value;
     });
-    const res = await $solrFetch("/taxon", {
+    const res = await $solrFetch<any>("/taxon", {
       query: {
         q: "*",
         fq: [`hierarchy_string:(${values.join(" OR ")})`],
@@ -410,7 +414,7 @@ export function useTaxonHierarchyFilter(
   ) {
     const searchField = "taxon";
     const queryStr = query.length < 1 ? "*" : `${searchField}:*${query}*`;
-    const res = await $solrFetch("/taxon", {
+    const res = await $solrFetch<any>("/taxon", {
       query: {
         q: queryStr,
         rows: pagination.perPage,

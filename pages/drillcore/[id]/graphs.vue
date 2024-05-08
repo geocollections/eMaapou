@@ -12,9 +12,10 @@ const props = defineProps({
   },
 });
 
-const lasContent = ref<string | null>(null);
+const lasContent = ref<{ [K: string]: any }>();
 const analysisResults = ref<any[]>([]);
 const sampleResults = ref<any[]>([]);
+const taxaResults = ref<any[]>([]);
 const minDepth = ref<number>(0);
 const maxDepth = ref<number>(0);
 const parameters = ref<any[]>([]);
@@ -24,7 +25,7 @@ const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 await useLazyAsyncData("data", async () => {
   let rawLasFileContent;
   if (props.attachment) {
-    const rawLasfileContentResponse = await $geoloogiaFetch(
+    const rawLasfileContentResponse = await $geoloogiaFetch<any>(
       `/file/${props.attachment}/`,
       {
         query: {
@@ -42,7 +43,7 @@ await useLazyAsyncData("data", async () => {
     lasContent.value = rawLasFileContent;
   }
 
-  const analysisResultsPromise = $solrFetch("/analysis_results", {
+  const analysisResultsPromise = $solrFetch<any>("/analysis_results", {
     query: {
       "q": "*",
       "fq": `locality_id:${props.locality}`,
@@ -59,7 +60,7 @@ await useLazyAsyncData("data", async () => {
       ],
     },
   });
-  const samplesPromise = $solrFetch("/sample_data", {
+  const samplesPromise = $solrFetch<any>("/sample_data", {
     query: {
       "q": "*",
       "fq": `locality_id:${props.locality} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
@@ -71,7 +72,7 @@ await useLazyAsyncData("data", async () => {
       "stats.field": ["depth", "depth_interval"],
     },
   });
-  const taxaPromise = $solrFetch("/taxon_frequency", {
+  const taxaPromise = $solrFetch<any>("/taxon_frequency", {
     query: {
       "q": "*",
       "fq": `locality_id:${props.locality} AND (depth:[* TO *] OR depth_interval:[* TO *]) AND frequency:[0 TO *]`,

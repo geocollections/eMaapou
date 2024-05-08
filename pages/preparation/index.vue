@@ -21,10 +21,6 @@ const {
 const route = useRoute();
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshPreparations();
-}, { deep: true });
 
 const {
   data,
@@ -44,6 +40,12 @@ const {
   })),
   watch: false,
 });
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshPreparations();
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });

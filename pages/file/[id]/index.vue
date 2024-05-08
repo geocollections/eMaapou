@@ -4,6 +4,7 @@ import {
   mdiFileMusicOutline,
   mdiFileVideoOutline,
 } from "@mdi/js";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
   file: any;
@@ -72,7 +73,7 @@ const { data } = await useAsyncData("general", async () => {
 const imageSize = computed(() => {
   return props.file.image_width && props.file.image_height
     ? `${props.file.image_width} × ${props.file.image_height} px`
-    : null;
+    : undefined;
 });
 const isImage = computed(() => props.file.attachment_format.includes("image"));
 const isAudio = computed(() => props.file.attachment_format.includes("audio"));
@@ -93,7 +94,7 @@ const showMap = computed(() => {
   );
 });
 
-const mapIsEstonian = computed(() => {
+const _mapIsEstonian = computed(() => {
   return (
     props.file.locality?.country?.value === "Eesti"
     || props.file.specimen?.locality?.country?.value === "Eesti"
@@ -155,7 +156,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays = [];
+  const overlays: MapOverlay[] = [];
   if (locality.value?.country.value === "Eesti")
     overlays.push("Estonian bedrock");
 

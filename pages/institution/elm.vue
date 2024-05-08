@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const { data: page } = await useGeoloogiaApiFetch("/web_pages/64/");
+const { data: page } = await useGeoloogiaApiFetch<any>("/web_pages/64/");
 
 const { $translate } = useNuxtApp();
 
 useHead({
   title: $translate({
-    et: page.title_et,
-    en: page.title_en,
+    et: page.value.title_et,
+    en: page.value.title_en,
   }),
 });
 </script>

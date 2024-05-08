@@ -6,71 +6,42 @@ import {
   mdiPageLast,
 } from "@mdi/js";
 
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {
-      return {
-        page: 0,
-        itemsPerPage: 0,
-        sortBy: [],
-        sortDesc: [],
-        groupBy: [],
-        groupDesc: [],
-        multiSort: false,
-        mustSort: false,
-      };
-    },
-  },
-  pageCount: {
-    type: Number,
-    default: 0,
-  },
-  itemsPerPageOptions: {
-    type: Array,
-    default: () => [],
-  },
-  itemsPerPageText: {
-    type: String,
-    default: "Items per page",
-  },
-  pageSelectText: {
-    type: String,
-    default: `Page 0 / 0`,
-  },
-  goToText: {
-    type: String,
-    default: "Go to page",
-  },
-  goToButtonText: {
-    type: String,
-    default: "Go",
-  },
-  selectPageId: {
-    type: String,
-    default: "page-select-btn",
-  },
+const props = withDefaults(defineProps<{
+  options: DataTableOptions;
+  pageCount?: number;
+  itemsPerPageOptions?: number[];
+  itemsPerPageText?: string;
+  pageSelectText?: string;
+  goToText?: string;
+  goToButtonText?: string;
+  selectPageId?: string;
+}>(), {
+  pageCount: 0,
+  itemsPerPageText: "Items per page",
+  pageSelectText: `Page 0 / 0`,
+  goToText: "Go to page",
+  goToButtonText: "Go",
+  selectPageId: "page-select-btn",
+  itemsPerPageOptions: () => [],
 });
-const emit = defineEmits(["update:options"]);
+
+const emit = defineEmits<{
+  "update:options": [options: DataTableOptions];
+}>();
 
 const goToValue = ref(Number.NaN);
-
-function setGoToValue(e) {
-  if (isNaN(e))
-    goToValue.value = e;
-  else goToValue.value = Number.parseInt(e);
-}
 
 const goToField = ref();
 
 function selectPage() {
-  if (goToField.value.validate(true)) {
-    emit("update:options", {
-      ...props.options,
-      page: goToValue.value,
-    });
-    goToValue.value = Number.NaN;
-  }
+  if (!goToField.value.validate(true))
+    return;
+
+  emit("update:options", {
+    ...props.options,
+    page: goToValue.value,
+  });
+  goToValue.value = Number.NaN;
 }
 
 function first() {
@@ -100,7 +71,7 @@ function last() {
   });
 }
 
-function changeRowsPerPage(e) {
+function changeRowsPerPage(e: number) {
   emit("update:options", {
     ...props.options,
     itemsPerPage: e,
@@ -108,12 +79,12 @@ function changeRowsPerPage(e) {
   });
 }
 
-function pageLimitRule(value) {
-  if (isNaN(value))
+function pageLimitRule(value: number) {
+  if (Number.isNaN(value))
     return false;
-  if (Number.parseInt(value) < 1)
+  if (value < 1)
     return false;
-  if (Number.parseInt(value) > props.pageCount)
+  if (value > props.pageCount)
     return false;
   return true;
 }
@@ -129,7 +100,7 @@ function pageLimitRule(value) {
         style="min-width: 50px"
         :items="itemsPerPageOptions"
         :model-value="options.itemsPerPage"
-        :menu-props="{ bottom: true, offsetY: true, zIndex: 4 }"
+        :menu-props="{ location: 'bottom', zIndex: 4 }"
         @update:model-value="changeRowsPerPage"
       />
     </div>
@@ -153,9 +124,9 @@ function pageLimitRule(value) {
         :close-on-content-click="false"
         z-index="4"
       >
-        <template #activator="{ props }">
+        <template #activator="{ props: activator }">
           <VBtn
-            v-bind="props"
+            v-bind="activator"
             variant="text"
             class="text-no-wrap text-caption"
           >
@@ -168,16 +139,15 @@ function pageLimitRule(value) {
           </div>
           <VTextField
             ref="goToField"
+            v-model.number="goToValue"
             class="mt-0 text-caption"
             style="width: 64px"
             density="compact"
             variant="underlined"
             hide-details
-            :model-value="goToValue"
             type="number"
             :rules="[pageLimitRule]"
             @keyup.enter="selectPage"
-            @update:model-value="setGoToValue"
           />
           <VBtn
             :disabled="!pageLimitRule(goToValue)"
@@ -214,14 +184,15 @@ function pageLimitRule(value) {
 <style lang="scss" scoped>
 // Removes arrows from number input
 /* Chrome, Safari, Edge, Opera */
-// :deep(input::-webkit-outer-spin-button),
-// :deep(input::-webkit-inner-spin-button) {
-//   -webkit-appearance: none;
-//   margin: 0;
-// }
+:deep(input::-webkit-outer-spin-button),
+:deep(input::-webkit-inner-spin-button) {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 /* Firefox */
-// :deep(input[type="number"]) {
-//   -moz-appearance: textfield;
-// }
+:deep(input[type="number"]) {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
 </style>

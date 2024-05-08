@@ -17,10 +17,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount, filter
   = storeToRefs(analyticalDataStore);
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshAnalyticalData();
-}, { deep: true });
 
 const {
   data,
@@ -41,10 +37,15 @@ const {
   watch: false,
 });
 
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshAnalyticalData();
+}, { deep: true });
+
 const { $solrFetch } = useNuxtApp();
 
 const { data: parameterHeaders } = await useAsyncData(async () => {
-  const res = await $solrFetch("/analysis_parameter", {
+  const res = await $solrFetch<SolrResponse>("/analysis_parameter", {
     query: {
       json: {
         query: "*",
@@ -115,12 +116,14 @@ async function handleDataTableUpdate({ options: newOptions }: { options: DataTab
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-const { setSearchPosition } = useSearchPosition();
+const searchPosition = useSearchPosition();
+const { setSearchPosition } = searchPosition;
+const { searchModule } = storeToRefs(searchPosition);
 function handleClickRow({ index, id }: { index: number; id: number }) {
+  searchModule.value = "analyticalData";
   setSearchPosition(
     { name: "analysis-id", params: { id } },
     index + getOffset(options.value.page, options.value.itemsPerPage),
-    "analyticalData",
   );
 }
 

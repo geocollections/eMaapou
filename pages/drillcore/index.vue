@@ -16,10 +16,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
 const route = useRoute();
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshDrillcores();
-}, { deep: true });
 
 const {
   data,
@@ -41,9 +37,14 @@ const {
   watch: false,
 });
 
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshDrillcores();
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
-  router.push({ query: getQueryParams() as LocationQueryRaw });
+  router.push({ query: getQueryParams() });
 }
 
 async function handleUpdate() {
@@ -61,7 +62,7 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshDrillcores();

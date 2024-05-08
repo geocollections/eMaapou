@@ -24,10 +24,6 @@ const {
 const route = useRoute();
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshPhotos();
-}, { deep: true });
 
 const {
   data,
@@ -37,7 +33,6 @@ const {
   response: { numFound: number; docs: any[] };
 }>("/attachment", {
   query: computed(() => ({
-    // fl: $getAPIFieldValues(HEADERS_LOCALITY),
     json: {
       query: solrQuery.value,
       limit: options.value.itemsPerPage,
@@ -48,6 +43,11 @@ const {
   })),
   watch: false,
 });
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshPhotos();
+}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {
@@ -72,7 +72,7 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshPhotos();

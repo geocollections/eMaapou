@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Image } from "~/components/ImageBar.vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{ locality: any }>();
 
@@ -34,7 +35,7 @@ const totalImages = ref(0);
 async function imageQuery({ rows, page }: { rows: number; page: number }) {
   if (!imagesHasNext.value)
     return;
-  const newImages = await $geoloogiaFetch("/locality_image/", {
+  const newImages = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_image/", {
     query: {
       locality: route.params.id,
       nest: 2,
@@ -73,7 +74,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays = ["Lokaliteedid / Localities"];
+  const overlays: MapOverlay[] = ["Lokaliteedid / Localities"];
   if (country.value?.value === "Eesti")
     overlays.push("Estonian bedrock");
 

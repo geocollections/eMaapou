@@ -15,10 +15,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
 const route = useRoute();
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshAnalyses();
-}, { deep: true });
 
 const {
   data,
@@ -39,6 +35,12 @@ const {
   })),
   watch: false,
 });
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshAnalyses();
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });
@@ -59,19 +61,21 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshAnalyses();
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-const { setSearchPosition } = useSearchPosition();
+const searchPosition = useSearchPosition();
+const { setSearchPosition } = searchPosition;
+const { searchModule } = storeToRefs(searchPosition);
 function handleClickRow({ index, id }: { index: number; id: number }) {
+  searchModule.value = "analysis";
   setSearchPosition(
     { name: "analysis-id", params: { id } },
     index + getOffset(options.value.page, options.value.itemsPerPage),
-    "analysis",
   );
 }
 

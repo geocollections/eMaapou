@@ -12,16 +12,18 @@ export const useSearchPosition = defineStore(
     function $reset() {
       page.value = undefined;
       searchPosition.value = -1;
+      searchModule.value = undefined;
     }
 
     function setSearchPosition(
       newPage: RouteLocationNamedRaw,
       newPosition: number,
-      newModule: string,
+      module?: string,
     ) {
       page.value = newPage;
       searchPosition.value = newPosition;
-      searchModule.value = newModule;
+      if (module)
+        searchModule.value = module;
     }
 
     return {

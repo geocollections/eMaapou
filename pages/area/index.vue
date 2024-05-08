@@ -17,10 +17,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
 const route = useRoute();
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshAreas();
-}, { deep: true });
 
 const {
   data,
@@ -40,6 +36,11 @@ const {
   })),
   watch: false,
 });
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshAreas();
+}, { deep: true });
 
 const router = useRouter();
 function setQueryParamsFromState() {
@@ -61,7 +62,7 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshAreas();

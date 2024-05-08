@@ -7,20 +7,7 @@ const { t } = useI18n();
 const route = useRoute();
 const localePath = useLocalePath();
 
-const pageTitle = computed(
-  () =>
-    `${t("drillcoreBox.nr", {
-      number: data.value?.drillcoreBox.number,
-    })} - ${$translate({
-      et: data.value?.drillcoreBox.drillcore?.drillcore,
-      en: data.value?.drillcoreBox.drillcore?.drillcore_en,
-    })}`,
-);
-
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
-const activeTabProps = computed(() => {
-  return getCurrentTabRouteProps(data.value?.tabs ?? []);
-});
 
 const tabs = {
   general: {
@@ -38,7 +25,7 @@ const tabs = {
         return 0;
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
-      const response = await $solrFetch("/sample", {
+      const response = await $solrFetch<SolrResponse>("/sample", {
         query: {
           q: `locality_id:${ctx.drillcoreBox.drillcore.locality} AND (depth:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}] OR depth_interval:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}])`,
           rows: 0,
@@ -59,7 +46,7 @@ const tabs = {
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
 
-      const response = await $solrFetch("/analysis", {
+      const response = await $solrFetch<SolrResponse>("/analysis", {
         query: {
           q: `locality_id:${ctx.drillcoreBox.drillcore.locality} AND (depth:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}] OR depth_interval:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}])`,
           rows: 0,
@@ -80,7 +67,7 @@ const tabs = {
       if (!ctx?.drillcoreBox.depth_start || !ctx?.drillcoreBox.depth_end)
         return 0;
 
-      const response = await $solrFetch("/specimen", {
+      const response = await $solrFetch<SolrResponse>("/specimen", {
         query: {
           q: `locality_id:${ctx.drillcoreBox.drillcore.locality} AND (depth:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}] OR depth_interval:[${ctx.drillcoreBox.depth_start} TO ${ctx.drillcoreBox.depth_end}])`,
           rows: 0,
@@ -93,10 +80,10 @@ const tabs = {
   } satisfies Tab,
 };
 
-const { data, pending, error } = await useAsyncData(
+const { data } = await useAsyncData(
   "drillcore-box",
   async () => {
-    const drillcoreBox = await $geoloogiaFetch(
+    const drillcoreBox = await $geoloogiaFetch<any>(
       `/drillcore_box/${route.params.id}/`,
       {
         query: {
@@ -132,7 +119,7 @@ const { data, pending, error } = await useAsyncData(
       },
       ctx: { drillcoreBox },
     });
-    const attachmentLinks = await $geoloogiaFetch("/attachment_link/", {
+    const attachmentLinks = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
       query: {
         drillcore_box: route.params.id,
         nest: 2,
@@ -154,6 +141,27 @@ const { data, pending, error } = await useAsyncData(
       activeImage,
     };
   },
+  {
+    default: () => ({
+      drillcoreBox: null,
+      tabs: [] as HydratedTab[],
+      activeImage: null,
+    }),
+  },
+);
+
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+
+const pageTitle = computed(
+  () =>
+    `${t("drillcoreBox.nr", {
+      number: data.value?.drillcoreBox.number,
+    })} - ${$translate({
+      et: data.value?.drillcoreBox.drillcore?.drillcore,
+      en: data.value?.drillcoreBox.drillcore?.drillcore_en,
+    })}`,
 );
 
 redirectInvalidTab({

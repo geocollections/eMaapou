@@ -27,9 +27,6 @@ const {
 const similarAreas = computed(() => areasRes.value?.response.docs ?? []);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
-const activeTabProps = computed(() => {
-  return getCurrentTabRouteProps(data.value?.tabs ?? []);
-});
 const tabs = {
   general: {
     type: "static",
@@ -42,7 +39,7 @@ const tabs = {
     routeName: "area-id-sites",
     title: "area.sites",
     count: async () => {
-      const response = await $solrFetch("/site", {
+      const response = await $solrFetch<SolrResponse>("/site", {
         query: {
           q: "*",
           fq: `area_id:${route.params.id}`,
@@ -57,7 +54,7 @@ const tabs = {
     routeName: "area-id-references",
     title: "area.localityReferences",
     count: async () => {
-      const response = await $geoloogiaFetch("/locality_reference/", {
+      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_reference/", {
         query: {
           area: route.params.id,
         },
@@ -71,7 +68,7 @@ const tabs = {
     routeName: "area-id-related-areas",
     title: "area.relatedAreas",
     count: async () => {
-      const response = await $geoloogiaFetch("/area/", {
+      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/area/", {
         query: {
           parent_area: route.params.id,
         },
@@ -85,7 +82,7 @@ const tabs = {
     routeName: "area-id-localities",
     title: "area.localities",
     count: async () => {
-      const response = await $geoloogiaFetch("/locality/", {
+      const response = await $geoloogiaFetch<GeoloogiaListResponse>("/locality/", {
         query: {
           area: route.params.id,
         },
@@ -95,8 +92,8 @@ const tabs = {
     props: {},
   } satisfies Tab,
 };
-const { data, pending, error } = await useAsyncData("area", async () => {
-  const area = await $geoloogiaFetch(`/area/${route.params.id}`, {
+const { data } = await useAsyncData("area", async () => {
+  const area = await $geoloogiaFetch<any>(`/area/${route.params.id}`, {
     query: {
       nest: 1,
     },
@@ -124,7 +121,17 @@ const { data, pending, error } = await useAsyncData("area", async () => {
       "locality",
     ]),
   };
+}, {
+  default: () => ({
+    area: null,
+    tabs: [] as HydratedTab[],
+  }),
 });
+
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
+});
+
 const pageTitle = computed(() =>
   $translate({
     et: data.value?.area.name,

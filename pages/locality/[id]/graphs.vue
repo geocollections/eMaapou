@@ -13,7 +13,7 @@ const props = defineProps({
 
 const { $translate, $geoloogiaFetch, $solrFetch } = useNuxtApp();
 
-const lasContent = ref<string | null>(null);
+const lasContent = ref<{ [K: string]: any }>();
 const analysisResults = ref<any[]>([]);
 const sampleResults = ref<any[]>([]);
 const taxaResults = ref<any[]>([]);

@@ -4,23 +4,11 @@ import isEqual from "lodash/isEqual";
 import debounce from "lodash/debounce";
 import type { ExportFunc } from "~/composables/useExport";
 
-interface IHeader {
-  text: string;
-  value: string;
-  show: boolean;
-  apiFieldValue?: string | { et: string; en: string };
-}
-
 const props = withDefaults(defineProps<
   {
     items: any[];
-    headers: IHeader[];
-    options: {
-      sortBy: string[];
-      sortDesc: boolean[];
-      page: number;
-      itemsPerPage: number;
-    };
+    headers: Header[];
+    options: DataTableOptions;
     count: number;
     isLoading: boolean;
     showSearch?: boolean;
@@ -41,7 +29,15 @@ const props = withDefaults(defineProps<
   externalTo: false,
 });
 
-const emit = defineEmits(["update", "reset:headers", "change:headers", "click:row"]);
+const emit = defineEmits<
+  {
+    "update": [payload: { options: DataTableOptions; search: string }];
+    "reset:headers": [];
+    "change:headers": [headers: Header[]];
+    "click:row": [payload: { index: number; id: string }];
+  }
+>();
+
 const { t } = useI18n();
 const { $formatDate } = useNuxtApp();
 
@@ -61,7 +57,7 @@ const visibleHeaders = computed(() => {
   const contentHeaders = props.headers.filter(header => header.show);
   if (props.itemTo) {
     contentHeaders.unshift({
-      text: "",
+      title: "",
       value: "to",
       show: true,
       sortable: false,
@@ -69,7 +65,7 @@ const visibleHeaders = computed(() => {
     });
   }
   contentHeaders.push({
-    text: "",
+    title: "",
     value: "",
     show: true,
     sortable: false,
@@ -87,12 +83,11 @@ const handleChange = debounce((options) => {
     options.itemsPerPage === props.options.itemsPerPage
     && options.page === props.options.page
     && isEqual(options.sortBy, props.options.sortBy)
-    && isEqual(options.sortDesc, props.options.sortDesc)
   )
     return;
   emit("update", { options, search: search.value });
 }, 250);
-function handleSortByChange(newSortBy) {
+function handleSortByChange(newSortBy: SortItem[]) {
   if (isEqual(newSortBy, props.options.sortBy))
     return;
   emit("update", {
@@ -109,9 +104,12 @@ const handleSearch = debounce(() => {
     search: search.value,
   });
 }, 400);
+
 function handleHeadersChange(e: any) {
+  // eslint-disable-next-line vue/custom-event-name-casing -- event name is correct, do not know why eslint is complaining
   emit("change:headers", e.value);
 }
+
 onMounted(() => {
   tableElement.value = table.value?.querySelector("table") ?? null;
   nextTick(() => {
@@ -168,7 +166,7 @@ onMounted(() => {
       id="table"
       v-model:expanded="expanded"
       item-key="id"
-      mobile-breakpoint="0"
+      :mobile-breakpoint="0"
       density="compact"
       multi-sort
       style="position: relative"
@@ -239,7 +237,7 @@ onMounted(() => {
                 :visible-headers="visibleHeaders"
                 :sort-by="options.sortBy"
                 @change="handleHeadersChange"
-                @reset="$emit('reset:headers')"
+                @reset="emit('reset:headers')"
               />
             </VCol>
             <VCol class="d-flex justify-end" align-self="center">
@@ -303,6 +301,7 @@ onMounted(() => {
           @click="toggleExpand(internalItem)"
         />
       </template>
+      <!-- @vue-ignore -->
       <template v-for="(_, slotName) in $slots" #[slotName]="context">
         <slot :name="slotName" v-bind="context" />
       </template>

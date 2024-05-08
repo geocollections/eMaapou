@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { mdiFileDownloadOutline, mdiOpenInNew } from "@mdi/js";
 import type { Image } from "~/components/ImageBar.vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{ site: any }>();
 
@@ -74,7 +75,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays = ["Uuringupunktid / Sites"];
+  const overlays: MapOverlay[] = ["Uuringupunktid / Sites"];
   if (locality.value?.country.value === "Eesti")
     overlays.push("Estonian bedrock");
 

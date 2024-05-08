@@ -6,12 +6,12 @@ export interface Image<T> {
   info: T;
 }
 
-type SpecimenImage = Image<{
+export type SpecimenImage = Image<{
   author: string | null;
   date: string | null;
 }>;
 
-type SampleImage = Image<{
+export type SampleImage = Image<{
   author: string | null;
   date: string | null;
   dateText: string | null;

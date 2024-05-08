@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
+
 const props = defineProps<{
   drillcore: any;
 }>();
@@ -20,7 +22,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays = ["Puursüdamikud / Drillcores"];
+  const overlays: MapOverlay[] = ["Puursüdamikud / Drillcores"];
   if (locality.value?.country.value === "Eesti")
     overlays.push("Estonian bedrock");
 

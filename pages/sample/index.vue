@@ -8,26 +8,6 @@ useSeoMeta({
   title: t("sample.pageTitle"),
 });
 
-// export default defineComponent({
-//   head() {
-//     return {
-//       title: this.$t('sample.pageTitle') as string,
-//       meta: [
-//         {
-//           property: 'og:title',
-//           hid: 'og:title',
-//           content: this.$t('sample.pageTitle') as string,
-//         },
-//         {
-//           property: 'og:url',
-//           hid: 'og:url',
-//           content: this.$route.path,
-//         },
-//       ],
-//     }
-//   },
-// })
-
 const samplesStore = useSamples();
 const { resetFilters, resetDataTable } = samplesStore;
 const {
@@ -40,10 +20,6 @@ const { solrSort, solrQuery, solrFilters, options, headers, resultsCount }
   = storeToRefs(samplesStore);
 
 setStateFromQueryParams(route);
-watch(() => route.query, () => {
-  setStateFromQueryParams(route);
-  refreshSamples();
-}, { deep: true });
 
 const {
   data,
@@ -63,6 +39,12 @@ const {
   })),
   watch: false,
 });
+
+watch(() => route.query, () => {
+  setStateFromQueryParams(route);
+  refreshSamples();
+}, { deep: true });
+
 const router = useRouter();
 function setQueryParamsFromState() {
   router.push({ query: getQueryParams() });
@@ -83,7 +65,7 @@ async function handleReset() {
   resultsCount.value = data.value?.response.numFound ?? 0;
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshSamples();

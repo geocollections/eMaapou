@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import type { Image } from "../ImageBar.vue";
-
-type SampleImage = Image<undefined>;
+import type { SampleImage } from "~/composables/useImageFunc";
 
 const props = defineProps<{
-  imageFunc?: (params: { sample: number; page: number; rows: number }) => Promise<{ images: SpecimenImage[]; total: number }>;
+  imageFunc?: ImageFunc<SampleImage>;
 }>();
 const emit = defineEmits(["click:row"]);
 

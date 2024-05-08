@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { mdiMagnify } from "@mdi/js";
 import orderBy from "lodash/orderBy";
-import { useDisplay } from "vuetify";
 import type { Tab } from "~/composables/useTabs";
 
 const { $solrFetch } = useNuxtApp();
 
 const route = useRoute();
-const display = useDisplay();
 const { hydrateTabs } = useTabs();
 
 async function getTabCount(request: string) {
@@ -207,6 +205,9 @@ function redirectToValidRoute(tabs: any[]) {
     }
 
     const validRoute = localeRoute({ name: tabs[0].routeName, query: route.query });
+    if (!validRoute)
+      return;
+
     router.replace(validRoute);
   }
 }

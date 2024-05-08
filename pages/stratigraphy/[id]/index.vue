@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   stratigraphy: any;
 }>();
 
@@ -34,7 +34,7 @@ const { data } = await useAsyncData("detail", async () => {
   }),
 });
 const stratigraphyMarkers = computed((): MapMarker[] => {
-  return data.value.stratotypes?.reduce((prev, stratotype) => {
+  return data.value.stratotypes?.reduce((prev: MapMarker[], stratotype: any) => {
     if (stratotype.locality) {
       prev.push({
         latitude: stratotype?.locality?.latitude,
@@ -49,11 +49,11 @@ const stratigraphyMarkers = computed((): MapMarker[] => {
       });
     }
     return prev;
-  }, []);
+  }, [] as MapMarker[]);
 });
 const mapIsEstonian = computed(() => {
   return data.value.stratotypes.some(
-    item => item?.locality?.country?.value_en === "Estonia",
+    (item: any) => item?.locality?.country?.value_en === "Estonia",
   );
 });
 
@@ -66,12 +66,9 @@ const mapBaseLayer = computed(() => {
 
 const mapOverlays = computed(() => {
   if (mapIsEstonian.value)
-    return ["Estonian bedrock"];
-
-  return [];
+    return ["Estonian bedrock" as const];
+  return undefined;
 });
-
-const stratotypeOptions = ref(STRATOTYPE.options);
 </script>
 
 <template>

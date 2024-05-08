@@ -8,11 +8,9 @@ const { $geoloogiaFetch } = useNuxtApp();
 
 const drillcore = computed(() => props.drillcoreBox.drillcore);
 const imageSizes = ["small", "medium", "large", "original"];
-const drillcoreBoxImages = computed(() => data.value?.drillcoreBoxImages);
-const activeImage = computed(() => data.value?.activeImage);
 
 const { data } = await useAsyncData("images", async () => {
-  const attachmentLinks = await $geoloogiaFetch("/attachment_link/", {
+  const attachmentLinks = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
     query: {
       drillcore_box: route.params.id,
       nest: 2,
@@ -28,6 +26,9 @@ const { data } = await useAsyncData("images", async () => {
     drillcoreBoxImages,
   };
 });
+
+const drillcoreBoxImages = computed(() => data.value?.drillcoreBoxImages);
+const activeImage = computed(() => data.value?.activeImage);
 </script>
 
 <template>

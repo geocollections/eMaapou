@@ -29,8 +29,8 @@ const tabs = {
   } satisfies Tab,
 };
 
-const { data, pending, error } = await useAsyncData("data", async () => {
-  const file = await $geoloogiaFetch(`/attachment/${route.params.id}/`, {
+const { data } = await useAsyncData("data", async () => {
+  const file = await $geoloogiaFetch<any>(`/attachment/${route.params.id}/`, {
     query: {
       nest: 2,
     },

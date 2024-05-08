@@ -27,7 +27,7 @@ const props = defineProps({
     default: "Chart title",
   },
   taxonData: {
-    type: Array,
+    type: Array as PropType<{ name: string; value: number }[]>,
     required: true,
   },
 });

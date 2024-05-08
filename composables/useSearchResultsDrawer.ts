@@ -23,13 +23,12 @@ export async function useSearchResultsDrawer<T = any>(url: string, {
     !fromSearch ? 1 : Math.floor(searchPosition.value / perPage) + 1,
   );
 
-  function handleSelect({ index, id, module }: { index: number; id: number; module: string }) {
+  function handleSelect({ index, id }: { index: number; id: number }) {
     if (searchPosition.value < 0)
       return;
     setSearchPosition(
       { name: routeName, params: { id } },
       index + (page.value - 1) * perPage,
-      module,
     );
   }
 

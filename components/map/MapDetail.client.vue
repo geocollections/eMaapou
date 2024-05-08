@@ -6,62 +6,16 @@ import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-gesture-handling";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
-import { useTheme } from "vuetify/lib/framework.mjs";
 import type { MapMarker } from "~/types/map";
 
-// const props = defineProps({
-//   height: {
-//     type: String,
-//     default: "500px",
-//   },
-//   center: {
-//     type: Object,
-//     default: () => {
-//       return {
-//         latitude: 58.5,
-//         longitude: 25.5,
-//       };
-//     },
-//   },
-//   estonianMap: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   estonianBedrockOverlay: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   estonianBasementOverlay: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   estonianHybridOverlay: {
-//     type: Boolean,
-//     default: false,
-//   },
-//   gestureHandling: {
-//     type: Boolean,
-//     default: true,
-//   },
-//   showLinks: {
-//     type: Boolean,
-//     default: true,
-//   },
-//   markers: {
-//     type: Array as PropType<MapMarker[]>,
-//     default: () => [],
-//   },
-//   geojson: {
-//     type: Object as PropType<GeoJsonObject>,
-//     required: false,
-//     default: () => {},
-//   });
+export type MapBaseLayer = keyof typeof baseLayers.value;
+export type MapOverlay = keyof typeof overlays.value;
 
 const props = withDefaults(defineProps<{
   height?: string;
   center?: { latitude: number; longitude: number };
-  baseLayer?: keyof typeof baseLayers.value;
-  overlays?: (keyof typeof overlays.value)[];
+  baseLayer?: MapBaseLayer;
+  overlays?: MapOverlay[];
   gestureHandling?: boolean;
   showLinks?: boolean;
   markers?: MapMarker[];

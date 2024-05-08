@@ -9,9 +9,10 @@ import {
 } from "@mdi/js";
 import type { Tab } from "~/composables/useTabs";
 
-const { $solrFetch, $translate, $geoloogiaFetch, $apiFetch } = useNuxtApp();
+const { $solrFetch, $translate, $geoloogiaFetch } = useNuxtApp();
 
 const localePath = useLocalePath();
+const { t } = useI18n();
 const route = useRoute();
 
 const localitiesStore = useLocalities();
@@ -264,7 +265,7 @@ const { data } = await useAsyncData("locality", async () => {
     + hydratedTabs.sample.count
     + (lasFileResponse?.results?.[0]?.attachment ? 1 : 0);
 
-  const imagesRes = await $geoloogiaFetch("/locality_image/", {
+  const imagesRes = await $geoloogiaFetch<GeoloogiaListResponse>("/locality_image/", {
     query: {
       locality: route.params.id,
       nest: 1,
@@ -323,7 +324,6 @@ redirectInvalidTab({
   tabs: data.value?.tabs ?? [],
 });
 
-const { t } = useI18n();
 const img = useImage();
 
 useHead({

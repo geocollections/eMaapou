@@ -1,29 +1,25 @@
 <script setup lang="ts">
 import isEmpty from "lodash/isEmpty";
 
-const props = defineProps<{ dataset: any; parameters: any }>();
-const { $solrFetch, $geoloogiaFetch } = useNuxtApp();
+defineProps<{ dataset: any; parameters: any }>();
+const { $solrFetch, $geoloogiaFetch, $translate } = useNuxtApp();
 const route = useRoute();
 const localePath = useLocalePath();
 
-const doi = computed(() => data.value?.doi);
-const reference = computed(() => data.value?.reference);
-const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
-
 const { data } = await useAsyncData("datasetGeneral", async () => {
-  const parametersPromise = $solrFetch("/dataset", {
+  const parametersPromise = $solrFetch<any>("/dataset", {
     query: {
       q: `id:${route.params.id}`,
       fl: "parameter_index_list,parameter_list",
     },
   });
-  const doiPromise = $geoloogiaFetch("/doi/", {
+  const doiPromise = $geoloogiaFetch<any>("/doi/", {
     query: {
       dataset: route.params.id,
       nest: 1,
     },
   });
-  const localityGroupedPromise = $solrFetch("/analysis", {
+  const localityGroupedPromise = $solrFetch<any>("/analysis", {
     query: {
       "q": "*",
       "fq": `dataset_ids:${route.params.id}`,
@@ -47,9 +43,9 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
     }) ?? [];
 
   const parameterHeaders = {
-    byIds: parameters.reduce((prev, parameter) => {
+    byIds: parameters.reduce((prev: { [key: string]: any }, parameter: any) => {
       return { ...prev, [parameter.value]: { ...parameter, show: false } };
-    }, {}),
+    }, {} as { [key: string]: any }),
     allIds: parameterValues,
   };
 
@@ -71,7 +67,7 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
     });
   const locationMarkers = localities
     .concat(sites)
-    .reduce((filtered: MapMarker[], item): MapMarker[] => {
+    .reduce((filtered: MapMarker[], item: any): MapMarker[] => {
       if (!(item.latitude && item.longitude))
         return filtered;
       const isItemInArray = filtered.some(
@@ -103,6 +99,10 @@ const { data } = await useAsyncData("datasetGeneral", async () => {
     localities,
   };
 });
+
+const doi = computed(() => data.value?.doi);
+const reference = computed(() => data.value?.reference);
+const locationMarkers = computed(() => data.value?.locationMarkers ?? []);
 </script>
 
 <template>

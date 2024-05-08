@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiImageFilterHdr, mdiTestTube } from "@mdi/js";
-import type { Tab } from "~/composables/useTabs";
+import type { HydratedTab, Tab } from "~/composables/useTabs";
 
 const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
 const { t } = useI18n();
@@ -56,9 +56,6 @@ const {
 const similarAnalysis = computed(() => analysesRes.value?.response.docs ?? []);
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
-const activeTabProps = computed(() => {
-  return getCurrentTabRouteProps(data.value?.tabs ?? []);
-});
 
 const tabs = {
   general: {
@@ -72,7 +69,7 @@ const tabs = {
     routeName: "analysis-id-results",
     title: "analysis.results",
     count: async () => {
-      const res = await $solrFetch("/analysis_results", {
+      const res = await $solrFetch<SolrResponse>("/analysis_results", {
         query: {
           q: `analysis_id:${route.params.id}`,
           rows: 0,
@@ -87,7 +84,7 @@ const tabs = {
     routeName: "analysis-id-attachments",
     title: "analysis.attachments",
     count: async () => {
-      const res = await $geoloogiaFetch("/attachment_link/", {
+      const res = await $geoloogiaFetch<GeoloogiaListResponse>("/attachment_link/", {
         query: {
           analysis: route.params.id,
           limit: 0,
@@ -99,8 +96,8 @@ const tabs = {
   } satisfies Tab,
 };
 
-const { data, pending, error } = await useAsyncData("analysis", async () => {
-  const analysis = await $geoloogiaFetch(`/analysis/${route.params.id}/`, {
+const { data } = await useAsyncData("analysis", async () => {
+  const analysis = await $geoloogiaFetch<any>(`/analysis/${route.params.id}/`, {
     query: {
       nest: 2,
     },
@@ -126,6 +123,15 @@ const { data, pending, error } = await useAsyncData("analysis", async () => {
       "attachments",
     ]),
   };
+}, {
+  default: () => ({
+    analysis: null,
+    tabs: [] as HydratedTab[],
+  }),
+});
+
+const activeTabProps = computed(() => {
+  return getCurrentTabRouteProps(data.value?.tabs ?? []);
 });
 
 const pageTitle = computed(() =>

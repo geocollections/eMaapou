@@ -1,3 +1,5 @@
+/* eslint-disable ts/no-unsafe-call */
+/* eslint-disable ts/no-unsafe-return */
 /* eslint-disable ts/no-unsafe-member-access */
 /* eslint-disable ts/no-unsafe-assignment */
 import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
@@ -84,6 +86,7 @@ export function useAutocomplete(
   async function suggest({
     query,
     pagination,
+    // eslint-disable-next-line unused-imports/no-unused-vars
     values,
   }: {
     query: string;
@@ -93,21 +96,14 @@ export function useAutocomplete(
     const pivot = filterExclude
       ? `{!ex=${filterExclude}}${suggestionsPivot.value}`
       : `${suggestionsPivot.value}`;
-    const filters
-      = query.length > 0
-        ? [
-            ...(solrParams?.filter?.value ?? []),
-          // `${translatedNameField.value}:*${query}*`,
-          ]
-        : solrParams?.filter?.value ?? [];
+    const filters = solrParams?.filter?.value ?? [];
 
-    const res = await $solrFetch(path, {
+    const res = await $solrFetch<any>(path, {
       query: {
         "facet": "true",
         "facet.pivot": pivot,
         [`f.${primaryField.value}.facet.contains`]: parseContains(query),
         [`f.${primaryField.value}.facet.contains.ignoreCase`]: true,
-        // [`f.${primaryField.value}.facet.excludeTerms`]: values.join(","),
         "facet.limit": pagination.perPage,
         "facet.sort": "count",
         [`f.${primaryField.value}.facet.offset`]:
@@ -142,9 +138,9 @@ export function useAutocomplete(
         },
       };
       return prev;
-    }, {});
+    }, {} as { [K: string]: any });
 
-    const res = await $solrFetch(path, {
+    const res = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,
@@ -213,6 +209,7 @@ export function useAutocompleteReference(
   async function suggest({
     query,
     pagination,
+    // eslint-disable-next-line unused-imports/no-unused-vars
     values,
   }: {
     query: string;
@@ -222,14 +219,9 @@ export function useAutocompleteReference(
     const pivot = filterExclude
       ? `{!ex=${filterExclude}}${suggestionsPivot.value}`
       : `${suggestionsPivot.value}`;
-    const filters
-      = query.length > 0
-        ? [
-            ...(solrParams?.filter?.value ?? []),
-          ]
-        : solrParams?.filter?.value ?? [];
+    const filters = solrParams?.filter?.value ?? [];
 
-    const res = await $solrFetch(path, {
+    const res = await $solrFetch<any>(path, {
       query: {
         "facet": "true",
         "facet.pivot": pivot,
@@ -270,9 +262,9 @@ export function useAutocompleteReference(
         },
       };
       return prev;
-    }, {});
+    }, {} as { [K: string]: any });
 
-    const res = await $solrFetch(path, {
+    const res = await $solrFetch<any>(path, {
       query: {
         json: {
           limit: 0,

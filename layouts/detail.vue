@@ -27,7 +27,7 @@ const mini = ref(false);
 const drawerActive = ref(layoutCustomProps["show-similar"] as boolean ?? false);
 
 const showDrawer = ref(true);
-watch([() => layoutCustomProps["show-similar"], () => display.smAndDown.value], ([value, displayValue]) => {
+watch([() => layoutCustomProps["show-similar"] as boolean, () => display.smAndDown.value], ([value, displayValue]) => {
   drawerActive.value = value;
   if (displayValue) {
     showDrawer.value = false;

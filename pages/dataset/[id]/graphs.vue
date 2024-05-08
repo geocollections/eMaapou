@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   dataset: {
     type: Object,
     required: true,
@@ -11,13 +11,13 @@ const sampleResults = ref([]);
 const minDepth = ref(0);
 const maxDepth = ref(0);
 const reversed = ref(false);
-const parameters = ref([]);
+const parameters = ref<any[]>([]);
 
 const { $solrFetch } = useNuxtApp();
 const route = useRoute();
 
-const { pending } = await useLazyAsyncData("data", async () => {
-  const analysisResultsPromise = $solrFetch("/analysis_results", {
+await useLazyAsyncData("data", async () => {
+  const analysisResultsPromise = $solrFetch<any>("/analysis_results", {
     query: {
       "q": "*",
       "fq": `dataset_ids:${route.params.id}`,
@@ -34,7 +34,7 @@ const { pending } = await useLazyAsyncData("data", async () => {
       ],
     },
   });
-  const samplesPromise = $solrFetch("/sample_data", {
+  const samplesPromise = $solrFetch<any>("/sample_data", {
     query: {
       "q": "*",
       "fq": `dataset_ids:${route.params.id} AND (depth:[* TO *] OR depth_interval:[* TO *])`,
@@ -79,8 +79,6 @@ const { pending } = await useLazyAsyncData("data", async () => {
   reversed.value = _reversed;
   parameters.value = _parameters;
 });
-
-const title = computed(() => props.dataset?.title);
 </script>
 
 <template>

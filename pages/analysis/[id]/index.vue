@@ -6,7 +6,6 @@ const props = defineProps<{
   analysis: any;
 }>();
 
-const resultChartData = computed(() => data.value?.resultChartData);
 const database = computed(() => props.analysis.database);
 const analysisMethod = computed(() => props.analysis.analysis_method ?? "");
 const sample = computed(() => props.analysis.sample);
@@ -18,7 +17,7 @@ const { $solrFetch } = useNuxtApp();
 const localePath = useLocalePath();
 const route = useRoute();
 const { data } = await useAsyncData("results", async () => {
-  const analysisResultResponse = await $solrFetch("/analysis_results", {
+  const analysisResultResponse = await $solrFetch<any>("/analysis_results", {
     query: {
       "q": `analysis_id:${route.params.id}`,
       "group": true,
@@ -52,6 +51,8 @@ const { data } = await useAsyncData("results", async () => {
     resultChartData,
   };
 });
+
+const resultChartData = computed(() => data.value?.resultChartData);
 </script>
 
 <template>

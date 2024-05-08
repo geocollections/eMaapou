@@ -162,7 +162,7 @@ const { data } = await useAsyncData("stratigraphy", async () => {
   };
 }, {
   default: () => ({
-    sample: null,
+    stratigraphy: null,
     tabs: [] as HydratedTab[],
   }),
 });

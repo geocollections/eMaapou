@@ -4,6 +4,7 @@ import type { Tab } from "~/composables/useTabs";
 
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
 const { $geoloogiaFetch, $solrFetch, $translate } = useNuxtApp();
 
 const { hydrateTabs, filterHydratedTabs, getCurrentTabRouteProps } = useTabs();
@@ -50,7 +51,6 @@ const tabs = {
   } satisfies Tab,
   reference: {
     type: "dynamic",
-    isSolr: false,
     routeName: "specimen-id-references",
     title: "specimen.references",
     count: async (_ctx) => {
@@ -65,7 +65,7 @@ const tabs = {
       ).then(res => res.count);
     },
     props: {},
-  },
+  } satisfies Tab,
 };
 
 const specimensStore = useSpecimens();
@@ -101,7 +101,7 @@ const { data } = await useAsyncData("specimen", async () => {
     },
   });
 
-  const specimenNameRes = await $solrFetch(
+  const specimenNameRes = await $solrFetch<SolrResponse>(
     `/specimen`,
     {
       query: {
@@ -178,8 +178,6 @@ redirectInvalidTab({
   }),
   tabs: data.value?.tabs ?? [],
 });
-
-const { t } = useI18n();
 
 const img = useImage();
 

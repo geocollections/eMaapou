@@ -17,7 +17,7 @@ const filteredHeaders = computed(() =>
     if (header.value === "sample_number")
       return false;
 
-    if (header.value?.includes("depth") ?? false)
+    if (typeof header.value === "string" && header.value.includes("depth"))
       return false;
 
     return true;

@@ -40,7 +40,6 @@ const {
 
 const {
   data: imageData,
-  pending: imagePending,
   refresh: refreshSpecimenImages,
 } = await useSolrFetch<{
   response: { numFound: number; docs: any[] };
@@ -89,13 +88,13 @@ async function handleReset() {
   await refreshData();
 }
 
-async function handleDataTableUpdate({ options: newOptions }) {
+async function handleDataTableUpdate({ options: newOptions }: { options: DataTableOptions }) {
   options.value = newOptions;
   setQueryParamsFromState();
   await refreshData();
 }
 
-async function handleImageUpdate({ options: newOptions }) {
+async function handleImageUpdate({ options: newOptions }: { options: DataTableOptions }) {
   imageOptions.value = newOptions;
   setQueryParamsFromState();
   await refreshData();

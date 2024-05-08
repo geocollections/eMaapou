@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Image } from "~/components/ImageBar.vue";
+import type { MapOverlay } from "~/components/map/MapDetail.client.vue";
 
 const props = defineProps<{
   sample: any;
@@ -85,7 +86,7 @@ const mapCenter = computed(() => {
       longitude: site.value.longitude,
     };
   }
-  return null;
+  return undefined;
 });
 const { $translate } = useNuxtApp();
 
@@ -122,7 +123,7 @@ const mapBaseLayer = computed(() => {
 });
 
 const mapOverlays = computed(() => {
-  const overlays = ["Proovid / Samples"];
+  const overlays: MapOverlay[] = ["Proovid / Samples"];
   if (locality.value?.country.value === "Eesti")
     overlays.push("Estonian bedrock");
 

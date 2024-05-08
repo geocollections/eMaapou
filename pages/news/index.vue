@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const page = ref(1);
-const newsList = ref([]);
+const newsList = ref<any[]>([]);
 const complete = ref(false);
 const loading = ref(false);
 
@@ -25,19 +25,12 @@ async function infiniteHandler(isIntersecting: boolean) {
 
   if (!res.next) {
     newsList.value.push(...res.results);
-    // setTimeout(() => {
-    //   this.$refs.stacker.reflow();
-    // }, 50);
-
     loading.value = false;
     complete.value = true;
   }
   else {
     page.value += 1;
     newsList.value.push(...res.results);
-    // setTimeout(() => {
-    //   this.$refs.stacker.reflow();
-    // }, 50);
     loading.value = false;
   }
 };
