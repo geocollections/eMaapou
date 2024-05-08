@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
+import type { ComponentExposed } from "vue-component-type-helpers";
+import FilterInputAutocomplete, { type Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
-const filterAnalysedParameter
-  = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterAnalysedParameter = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
 const datasetsStore = useDatasets();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(datasetsStore);
@@ -29,13 +29,6 @@ function handleSubmit() {
   });
 }
 
-const { suggest: suggestAnalysedParameter, hydrate: hydrateAnalysedParameter }
-  = useAutocomplete("/dataset", {
-    idField: "parameter_index_list",
-    nameField: "parameter_list",
-    filterExclude: "analysedParameter",
-    solrParams: { query: solrQuery, filter: solrFilters },
-  });
 const { suggest: suggestInstitution, hydrate: hydrateInstitution }
   = useAutocomplete("/dataset", {
     idField: "database_id_s",
@@ -60,7 +53,7 @@ async function suggestParameter({
       ? [...(solrFilters.value ?? []), `parameter_list:*${query}*`]
       : solrFilters.value ?? [];
 
-  const res = await $solrFetch("/dataset", {
+  const res = await $solrFetch<any>("/dataset", {
     query: {
       "facet": "true",
       "facet.pivot": pivot,
@@ -77,10 +70,10 @@ async function suggestParameter({
     },
   });
   const ids = res.facet_counts.facet_pivot.parameter_index_list.map(
-    item => item.value,
+    (item: any) => item.value,
   );
 
-  const nameRes = await $solrFetch("/analysis_parameter", {
+  const nameRes = await $solrFetch<any>("/analysis_parameter", {
     query: {
       json: {
         query: "*",
@@ -90,16 +83,16 @@ async function suggestParameter({
     },
   });
 
-  return res.facet_counts.facet_pivot.parameter_index_list.map(item => ({
+  return res.facet_counts.facet_pivot.parameter_index_list.map((item: any) => ({
     id: item.value,
     name:
-      nameRes.response.docs.find(doc => doc.parameter_index === item.value)
+      nameRes.response.docs.find((doc: any) => doc.parameter_index === item.value)
         ?.parameter ?? item.value,
     count: item.count,
   }));
 }
 async function hydrateParameter(values: string[]) {
-  const facets = values.reduce((prev, id) => {
+  const facets = values.reduce((prev: { [K: string]: any }, id) => {
     prev[id] = {
       type: "query",
       q: `parameter_index_list:${id}`,
@@ -107,7 +100,7 @@ async function hydrateParameter(values: string[]) {
     return prev;
   }, {});
 
-  const res = await $solrFetch("/dataset", {
+  const res = await $solrFetch<any>("/dataset", {
     query: {
       json: {
         limit: 0,
@@ -119,7 +112,7 @@ async function hydrateParameter(values: string[]) {
       },
     },
   });
-  const nameRes = await $solrFetch("/analysis_parameter", {
+  const nameRes = await $solrFetch<any>("/analysis_parameter", {
     query: {
       json: {
         query: "*",
@@ -132,7 +125,7 @@ async function hydrateParameter(values: string[]) {
   return values.map(id => ({
     id,
     name:
-      nameRes.response.docs.find(doc => doc.parameter_index === id)
+      nameRes.response.docs.find((doc: any) => doc.parameter_index === id)
         ?.parameter ?? id,
     count: res.facets[id].count,
   }));

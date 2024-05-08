@@ -5,6 +5,7 @@ const { $translate } = useNuxtApp();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'preparation-id', params: { id: item.id } })"

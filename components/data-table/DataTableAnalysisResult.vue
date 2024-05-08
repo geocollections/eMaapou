@@ -3,6 +3,7 @@ const { $translate } = useNuxtApp();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.analysis_method="{ item }">
       {{

@@ -1,15 +1,16 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
 const areasStore = useAreas();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(areasStore);
-const filterCounty = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterType = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterMiner = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterMiningPermit = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterMiningPermitOwner = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterCounty = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterType = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiningPermit = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterMiningPermitOwner = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
 function handleReset() {
   emit("reset");

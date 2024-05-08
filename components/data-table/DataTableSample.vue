@@ -23,11 +23,11 @@ async function openOverlay(sample: any) {
 
   currentSampleOverlay.value = sample;
   if (!props.imageFunc) {
-    images.value = [{ id: sample.attachment_id, filename: sample.image, info: { author: sample.image_author, date: sample.image_date } }];
+    images.value = [{ id: sample.attachment_id, filename: sample.image, info: { author: sample.image_author, date: sample.image_date, dateText: sample.image_date } }];
     totalImage.value = 1;
   }
   else {
-    const { images: newImages, total } = await props.imageFunc({ sample: sample.id, page: page.value, rows: rowsPerPage });
+    const { images: newImages, total } = await props.imageFunc({ item: sample, page: page.value, rows: rowsPerPage });
     images.value = newImages;
     totalImage.value = total;
   }
@@ -44,7 +44,7 @@ async function loadMore() {
     return;
 
   page.value += 1;
-  const { images: newImages } = await props.imageFunc({ sample: currentSampleOverlay.value.id, page: page.value, rows: rowsPerPage });
+  const { images: newImages } = await props.imageFunc({ item: currentSampleOverlay.value, page: page.value, rows: rowsPerPage });
   images.value = [...images.value, ...newImages];
 }
 
@@ -54,6 +54,7 @@ function handleEnd() {
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'sample-id', params: { id: item.id } })"
@@ -166,19 +167,6 @@ function handleEnd() {
     :total="totalImage"
     @end="handleEnd"
   >
-    <template #tooltipInfo="{ item }">
-      <div v-if="item.info.author">
-        <span class="font-weight-bold">{{ $t("photo.author") }}: </span>
-        <span>{{ item.info.author }}</span>
-      </div>
-      <div v-if="item.info.date || item.info.dateText">
-        <span class="font-weight-bold">{{ $t("photo.date") }}: </span>
-        <span v-if="item.info.date">
-          {{ $formatDate(item.info.date) }}
-        </span>
-        <span v-else>{{ item.info.dateText }}</span>
-      </div>
-    </template>
     <template #overlayInfo="{ item }">
       <div v-if="item.info.author">
         <span class="font-weight-bold">{{ $t("photo.author") }}: </span>

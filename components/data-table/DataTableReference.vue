@@ -7,6 +7,7 @@ function openPDF(link: string) {
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.reference="{ item }">
       <BaseLinkExternal

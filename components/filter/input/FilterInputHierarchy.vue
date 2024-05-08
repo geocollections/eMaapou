@@ -61,14 +61,13 @@ const { data: tree, refresh: refreshTree } = await useAsyncData<TreeNode[]>(
 );
 
 const autocompletePage = ref(1);
-const autocompletePerPage = ref(10);
 const suggestions = ref<Suggestion[]>([]);
 const suggestionsEnd = ref(false);
 
 const query = ref("");
 const queryDebounced = refDebounced(query, 200);
 
-const { refresh: refreshAutocomplete, pending } = await useAsyncData<Suggestion[]>(
+const { refresh: refreshAutocomplete, pending } = await useAsyncData(
   `autocomplete-hierarchy-${id}`,
   async () => {
     const res = await props.suggestionFunction(query.value, { page: autocompletePage.value, perPage: 10 });
@@ -209,7 +208,7 @@ function handleListEnd(isIntersecting: boolean) {
 
 const input = ref();
 
-function handleOpen(value) {
+function handleOpen(value: { value: boolean }) {
   if (!value.value)
     return;
 

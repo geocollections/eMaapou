@@ -32,6 +32,7 @@ export const useSpecimens = defineStore(
     const imageOptions = ref({
       itemsPerPage: 25,
       page: 1,
+      sortBy: [] as SortItem[],
     });
 
     function getView() {

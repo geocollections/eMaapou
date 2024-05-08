@@ -5,6 +5,7 @@ const localePath = useLocalePath();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'sample-id', params: { id: item.id } })"

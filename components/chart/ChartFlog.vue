@@ -22,15 +22,14 @@ import {
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
-} from "echarts/types/dist/echarts";
+} from "echarts/types/dist/echarts.js";
 import type { CustomSeriesOption, LineSeriesOption } from "echarts/charts";
 import { CustomChart, LineChart } from "echarts/charts";
 import VChart from "vue-echarts";
 import type { ComposeOption } from "echarts/core";
 import { use } from "echarts/core";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
-import type { TitleOption } from "echarts/types/dist/shared";
-import { useTheme } from "vuetify/lib/framework.mjs";
+import type { TitleOption } from "echarts/types/dist/shared.js";
 import range from "~/utils/range";
 import clipRectByRect from "~/utils/clipRectByRect";
 import mm2px from "~/utils/mm2px";
@@ -229,9 +228,15 @@ function handleClick(event: any) {
   if (event.seriesId === "samples-series") {
     const sampleId = event.data[3];
     if (sampleId) {
+      const sampleRoute = localeRoute({
+        name: "sample-id",
+        params: { id: sampleId },
+      });
+      if (!sampleRoute)
+        return;
       window.open(
         router.resolve(
-          localeRoute({ name: "sample-id", params: { id: sampleId } }),
+          sampleRoute,
         ).href,
         "_blank",
         "height=800,width=800",
@@ -278,8 +283,8 @@ function handleRenderSwitch(newRenderer: Renderer) {
   state.replace = true;
   state.option = flogChart.value?.getOption();
 }
-function handlePpiChange(newPpi: string) {
-  ppi.value = Number.parseInt(newPpi);
+function handlePpiChange(newPpi: number) {
+  ppi.value = newPpi;
   state.currentScale = state.scale;
   state.currentHeight = scaleChartHeight();
   state.replace = false;
@@ -626,7 +631,6 @@ function createParameterChartComponents<
         },
         tooltip: {
           formatter(params: any) {
-            // @ts-expect-error
             const data: [number, number, number, number, string] = params.data;
             return `
                 <span class="mr-2" style="display: inline-block; width: 10px; height: 10px; border-radius: 10px; background-color: ${
@@ -790,7 +794,9 @@ function createOption(): ECOption {
         splitNumber: 7,
         axisTick: {
           show: true,
+          // @ts-expect-error - nah, this exists https://echarts.apache.org/en/option.html#yAxis.axisTick.interval
           interval: 0.1,
+
         },
         axisLabel: {
           showMinLabel: false,
@@ -826,7 +832,6 @@ function createOption(): ECOption {
         tooltip: {
           position: "bottom",
           formatter(params: any) {
-            // @ts-expect-error
             const data: [number, number, number, number, string] = params.data;
 
             return `
@@ -849,7 +854,7 @@ function createOption(): ECOption {
           position: "right",
           color: "black",
           fontSize: 12,
-          // @ts-expect-error
+          // @ts-expect-error - this is OK
           formatter: "{@[4]}",
         },
         renderItem(params, api) {
@@ -879,13 +884,13 @@ function createOption(): ECOption {
               height,
             },
             {
-              // @ts-expect-error
+              // @ts-expect-error - this is OK
               x: params.coordSys.x,
-              // @ts-expect-error
+              // @ts-expect-error - this is OK
               y: params.coordSys.y,
-              // @ts-expect-error
+              // @ts-expect-error - this is OK
               width: params.coordSys.width,
-              // @ts-expect-error
+              // @ts-expect-error - this is OK
               height: params.coordSys.height,
             },
           );
@@ -946,12 +951,12 @@ state.option = createOption();
         content-class="white"
         :close-on-content-click="false"
       >
-        <template #activator="{ props }">
+        <template #activator="{ props: menu }">
           <VBtn
             class="ml-3"
             icon
             size="small"
-            v-bind="props"
+            v-bind="menu"
           >
             <VIcon> {{ icons.mdiCog }} </VIcon>
           </VBtn>
@@ -991,7 +996,7 @@ state.option = createOption();
                     width="65"
                     size="small"
                     class="text-none montserrat"
-                    :variant="ppi !== 96 && 'outlined'"
+                    :variant="ppi !== 96 ? 'outlined' : undefined"
                     :value="96"
                   >
                     96 PPI
@@ -1000,7 +1005,7 @@ state.option = createOption();
                     width="65"
                     size="small"
                     class="text-none montserrat"
-                    :variant="ppi !== 72 && 'outlined'"
+                    :variant="ppi !== 72 ? 'outlined' : undefined"
                     :value="72"
                   >
                     72 PPI

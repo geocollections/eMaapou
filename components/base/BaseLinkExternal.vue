@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { mdiArrowTopRight } from "@mdi/js";
+import type { RouteLocationRaw } from "vue-router";
 
 defineProps<{
-  href?: string | null;
+  href?: RouteLocationRaw;
   target?: string;
 }>();
 </script>

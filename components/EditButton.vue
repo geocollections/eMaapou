@@ -5,7 +5,7 @@ const { $openEdit } = useNuxtApp();
 const route = useRoute();
 
 const module = computed(() => {
-  return route.name?.substring(0, route.name.indexOf("-")) ?? "";
+  return route.name?.toString().substring(0, route.name.toString().indexOf("-")) ?? "";
 });
 
 function handleClick() {

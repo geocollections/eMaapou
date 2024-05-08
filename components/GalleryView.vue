@@ -4,7 +4,7 @@ import { useDisplay } from "vuetify";
 
 const props = defineProps({
   items: {
-    type: Array,
+    type: Array as PropType<any[]>,
     default: () => [],
   },
   count: {
@@ -12,7 +12,7 @@ const props = defineProps({
     default: 0,
   },
   options: {
-    type: Object,
+    type: Object as PropType<DataTableOptions>,
     default: () => ({
       page: 1,
       itemsPerPage: 25,
@@ -61,11 +61,11 @@ onBeforeUnmount(() => {
   window.removeEventListener("keyup", handleKeyup);
 });
 
-function handleThumbnailClick(newIndex) {
+function handleThumbnailClick(newIndex: number) {
   activeIndex.value = newIndex;
 }
 
-function handleKeyup(e) {
+function handleKeyup(e: any) {
   if (props.items?.length > 0) {
     if (e.keyCode === 37) {
       // ArrowLeft
@@ -82,7 +82,7 @@ function handleKeyup(e) {
   }
 }
 
-function updateOptions(event) {
+function updateOptions(event: DataTableOptions) {
   emit("update", { options: event });
 }
 </script>

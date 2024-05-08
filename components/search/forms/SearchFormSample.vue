@@ -47,8 +47,8 @@ function handleReset() {
 }
 
 const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<InstanceType<typeof FilterInputHierarchy>>();
-const filterRock = ref<InstanceType<typeof FilterInputHierarchy>>();
+const filterStratigraphy = ref<ComponentExposed<typeof FilterInputHierarchy>>();
+const filterRock = ref<ComponentExposed<typeof FilterInputHierarchy>>();
 const filterCollector = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 

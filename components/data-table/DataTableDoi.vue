@@ -1,9 +1,10 @@
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.identifier="{ item }">
       <BaseLinkExternal
         v-if="item.identifier"
-        @click.native="
+        @click="
           $openWindow(`http://doi.geocollections.info/${item.identifier}`)
         "
       >

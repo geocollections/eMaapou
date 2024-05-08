@@ -12,7 +12,7 @@ const search = ref("");
 const searchDebounced = refDebounced(search, 200);
 
 const flatParameters = computed(() => props.parameters.flatMap((p) => {
-  return p.children.flatMap((c) => {
+  return p.children.flatMap((c: any) => {
     return { ...c, method: p.name, method_en: p.name };
   });
 }));
@@ -49,13 +49,13 @@ function isParameterSelected(parameter: any) {
     content-class="white"
     :close-on-content-click="false"
   >
-    <template #activator="{ props }">
+    <template #activator="{ props: menu }">
       <VBtn
         color="accent"
         class="montserrat text-none"
         size="small"
         variant="outlined"
-        v-bind="props"
+        v-bind="menu"
       >
         <VIcon start>
           {{ mdiChartLineVariant }}
@@ -87,7 +87,7 @@ function isParameterSelected(parameter: any) {
             <VListItem
               @click="handleInput(item)"
             >
-              <template #prepend="{ isActive }">
+              <template #prepend>
                 <VListItemAction start>
                   <VCheckboxBtn :model-value="isParameterSelected(item)" />
                 </VListItemAction>

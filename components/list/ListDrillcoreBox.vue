@@ -43,7 +43,7 @@ watch(searchDebounced, () => {
   handleSearch();
 });
 
-function boxHasInfo(box) {
+function boxHasInfo(box: any) {
   return (
     box.drillcore_box?.depth_start
     || box.drillcore_box?.depth_end
@@ -54,7 +54,7 @@ function boxHasInfo(box) {
   );
 }
 
-function handleChange(options) {
+function handleChange(options: DataTableOptions) {
   emit("update", { options, search: search.value });
 }
 

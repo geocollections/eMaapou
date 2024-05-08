@@ -11,7 +11,7 @@ const props = withDefaults(
     step?: number;
   }>(),
   {
-    fieldLabels: { min: "min", max: "max" },
+    fieldLabels: () => ({ min: "min", max: "max" }),
     intervalLabels: "intervals.default",
     numberType: "int",
     step: 1,
@@ -75,7 +75,7 @@ function handleRemove() {
 
 const input = ref();
 
-function handleOpen(value) {
+function handleOpen(value: { value: boolean }) {
   if (!value.value)
     return;
 

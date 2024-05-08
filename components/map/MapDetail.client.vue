@@ -39,8 +39,8 @@ const currentCenter = ref({
 
 const map = ref<L.Map>();
 
-const settingsStore = useSettings();
-const { mapBaseLayer, isBaseLayerEstonian } = storeToRefs(settingsStore);
+// const settingsStore = useSettings();
+// const { mapBaseLayer, isBaseLayerEstonian } = storeToRefs(settingsStore);
 
 const baseLayers = computed(() => {
   return {
@@ -171,6 +171,7 @@ onMounted(() => {
     map.value = L.map("map", {
       center: [58.5, 25.5],
       zoom: 5,
+      // @ts-expect-error - gestureHandling does not have types
       gestureHandling: props.gestureHandling,
       gestureHandlingOptions: {
         text: {
@@ -206,6 +207,7 @@ onMounted(() => {
       markerInstance.on("click", (event) => {
         L.DomEvent.stopPropagation(event);
 
+        // @ts-expect-error - need to check if marker id is always a number. have a feeling we should change it to always be a string
         if (marker.id === route.params.id && markerRouteName === getRouteBaseName(route))
           return;
 

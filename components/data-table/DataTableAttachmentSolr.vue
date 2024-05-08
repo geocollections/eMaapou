@@ -28,6 +28,7 @@ function getAttachmentType(type: number) {
 
 <template>
   <div>
+    <!-- @vue-ignore -->
     <BaseDataTable
       v-bind="$attrs"
       :item-to="(item) => localePath({ name: 'file-id', params: { id: item.id } })"
@@ -47,7 +48,7 @@ function getAttachmentType(type: number) {
       <template #item.reference="{ item }">
         <BaseLinkExternal
           v-if="item.reference_id"
-          @click.native="$openGeology('reference', item.reference_id)"
+          @click="$openGeology('reference', item.reference_id)"
         >
           {{ item.reference }}
         </BaseLinkExternal>

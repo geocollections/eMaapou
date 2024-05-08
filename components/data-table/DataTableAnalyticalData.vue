@@ -2,31 +2,14 @@
 const emit = defineEmits(["click:row"]);
 
 const localePath = useLocalePath();
-
-function formatDepthRange({
-  depthFrom,
-  depthTo,
-}: {
-  depthFrom?: number;
-  depthTo?: number;
-}) {
-  if (!depthFrom)
-    return depthTo?.toFixed(2);
-
-  if (!depthTo)
-    return depthFrom.toFixed(2);
-
-  if (depthFrom === depthTo)
-    return depthFrom.toFixed(2);
-
-  return `${depthFrom.toFixed(2)} – ${depthTo.toFixed(2)}`;
-}
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'analysis-id', params: { id: item.id } })"
+    @click:row="emit('click:row', $event)"
   >
     <template #item.depthFrom="{ item }">
       <span v-if="item.depth">

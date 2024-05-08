@@ -8,6 +8,8 @@ defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(["update"]);
 </script>
 
 <template>
@@ -17,13 +19,13 @@ defineProps({
       density="compact"
       color="accent"
       :model-value="renderer"
-      @update:model-value="$emit('update', $event)"
+      @update:model-value="emit('update', $event)"
     >
       <VBtn
         width="65"
         size="small"
         class="text-none montserrat"
-        :variant="renderer !== 'canvas' && 'outlined'"
+        :variant="renderer !== 'canvas' ? 'outlined' : undefined"
         value="canvas"
       >
         Canvas
@@ -32,7 +34,7 @@ defineProps({
         width="65"
         size="small"
         class="text-none montserrat"
-        :variant="renderer !== 'svg' && 'outlined'"
+        :variant="renderer !== 'svg' ? 'outlined' : undefined"
         value="svg"
       >
         SVG

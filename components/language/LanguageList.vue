@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mdiCheck } from "@mdi/js";
-import type { LocaleObject } from "@nuxtjs/i18n/dist/runtime/composables";
+import type { LocaleObject } from "@nuxtjs/i18n";
 
 const availableLocales = useI18n().locales as ComputedRef<LocaleObject[]>;
 

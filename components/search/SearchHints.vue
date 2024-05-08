@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps({
   activator: {
-    type: Object as PropType<Node | undefined>,
+    type: Object as PropType<Element | undefined>,
     default: undefined,
   },
   modelValue: {
@@ -9,6 +9,8 @@ defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(["input"]);
 </script>
 
 <template>
@@ -20,7 +22,7 @@ defineProps({
     content-class="mt-2 elevation-3"
     :open-on-focus="true"
     max-width="650"
-    @update:model-value="$emit('input', $event)"
+    @update:model-value="emit('input', $event)"
   >
     <VCard elevation="0">
       <VCardText class="pa-3">

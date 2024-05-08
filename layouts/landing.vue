@@ -19,9 +19,9 @@ const drawer = ref(false);
     <VMain class="pt-0 pb-10" style="min-height: 100vh">
       <slot />
       <FabScrollTop />
-      <ClientOnly>
-        <CookieConsent />
-      </ClientOnly>
+      <!-- <ClientOnly> -->
+      <!--   <CookieConsent /> -->
+      <!-- </ClientOnly> -->
     </VMain>
 
     <AppFooter />

@@ -3,11 +3,12 @@ import { mdiMinus, mdiPlus } from "@mdi/js";
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.taxon="{ item }">
       <BaseLinkExternal
         v-if="item.taxon"
-        @click.native="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
+        @click="$openWindow(`https://fossiilid.info/${item.taxon.id}`)"
       >
         {{ item.taxon.taxon }}
       </BaseLinkExternal>

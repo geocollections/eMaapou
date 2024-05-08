@@ -12,7 +12,6 @@ import {
 import { use } from "echarts/core";
 import { LineChart } from "echarts/charts";
 import { CanvasRenderer, SVGRenderer } from "echarts/renderers";
-import { useDisplay } from "vuetify/lib/framework.mjs";
 import {
   DATAZOOM_Y_SLIDER_LEFT,
   DATAZOOM_Y_SLIDER_LEFT_SMALL,
@@ -222,7 +221,7 @@ function buildChartSeries() {
     return prev;
   }, [] as any[]);
 }
-const chartOptions = computed(() => {
+const _chartOptions = computed(() => {
   return {
     animation: false,
     title: {

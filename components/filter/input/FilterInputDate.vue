@@ -14,7 +14,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:model-value"]);
 
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 const panel = ref();
 const currentDatePickerValue = ref<string[]>();
 const internalValue = ref<string[][]>(props.modelValue);
@@ -68,7 +68,6 @@ function getDateStr(dateArray: string[]) {
   const startDate = new Date(dateArray[0]);
   if (dateArray.length > 1) {
     const endDate = new Date(dateArray[1]);
-    // @ts-expect-error
     return dateFormat.formatRange(startDate, endDate);
   }
   return dateFormat.format(startDate);

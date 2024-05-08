@@ -1,7 +1,6 @@
-<script setup lang="ts" generic="T">
+<script setup lang="ts" generic="T extends { id: number }">
 import {
   mdiArrowLeft,
-  mdiArrowUpLeft,
   mdiCheck,
   mdiChevronLeft,
   mdiChevronRight,

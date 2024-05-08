@@ -2,7 +2,7 @@ export type ExportType = "csv" | "xlsx";
 export type ExportSelection = "all" | "page";
 
 export interface ExportFunc {
-  ({ type, filename, selection }: { type: ExportType; rows: number; filename: string; selection: ExportSelection }): Promise<void>;
+  ({ type, filename, selection }: { type: ExportType; filename: string; selection: ExportSelection }): Promise<void>;
 };
 
 export function useExportSolr(path: string, { query, totalRows }: {

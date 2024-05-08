@@ -3,6 +3,7 @@ const localePath = useLocalePath();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.locality="{ item }">
       <NuxtLink
@@ -33,7 +34,7 @@ const localePath = useLocalePath();
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.reference"
-        @click.native="$openGeology('reference', item.reference.id)"
+        @click="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
       </BaseLinkExternal>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { mdiFileDownloadOutline, mdiInformationOutline } from "@mdi/js";
 // import function to register Swiper custom elements
 import { register } from "swiper/element/bundle";
@@ -49,10 +49,6 @@ function handleReachEnd() {
 
 function renderCustomPagination(_s: any, current: number, _total: number) {
   return `${current} / ${props.total}`;
-}
-
-function formatTotal(total: number) {
-  return total.toString();
 }
 
 const showInfo = ref(true);

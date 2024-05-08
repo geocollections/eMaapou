@@ -25,6 +25,9 @@ const props = defineProps({
     default: 1785,
   },
 });
+
+const emit = defineEmits(["toggle:navigationDrawer"]);
+
 const route = useRoute();
 const localePath = useLocalePath();
 const state = reactive({
@@ -46,13 +49,9 @@ const icons = computed(() => {
   };
 });
 
-const searchRouteName = computed(() => {
-  return route.name?.includes("search") ? route.name?.split("__")[0] : "search";
-});
 const cssProps = computed(() => {
   return {
     "--max-width": `${props.maxWidth}px`,
-
   };
 });
 </script>
@@ -223,7 +222,7 @@ const cssProps = computed(() => {
         class="montserrat ml-auto"
         aria-label="Open navigation drawer"
         style="text-transform: capitalize"
-        @click.stop="$emit('toggle:navigationDrawer')"
+        @click.stop="emit('toggle:navigationDrawer')"
       >
         <VIcon color="accent" size="font-size: 24px">
           {{ icons.mdiMenu }}

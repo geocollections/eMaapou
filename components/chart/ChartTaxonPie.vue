@@ -67,7 +67,7 @@ const defaultOptions = ref({
   },
 });
 
-const renderer = ref("canvas");
+const { renderer } = storeToRefs(useSettings());
 
 const chartOptions = computed(() => {
   return {
@@ -110,13 +110,15 @@ function buildChartSeries() {
 
 <template>
   <div class="pa-2">
-    <VChart
-      class="chart"
-      autoresize
-      :init-options="initOptions"
-      :option="computedOptions"
-      v-on="$listeners"
-    />
+    <ClientOnly>
+      <VChart
+        class="chart"
+        v-bind="$attrs"
+        autoresize
+        :init-options="initOptions"
+        :option="computedOptions"
+      />
+    </ClientOnly>
   </div>
 </template>
 

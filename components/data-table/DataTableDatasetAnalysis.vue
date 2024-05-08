@@ -3,6 +3,7 @@ const localePath = useLocalePath();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.analysis="{ item }">
       <NuxtLink

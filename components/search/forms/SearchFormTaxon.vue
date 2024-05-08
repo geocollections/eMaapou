@@ -7,7 +7,7 @@ const emit = defineEmits(["update", "reset", "submit"]);
 const taxaStore = useTaxa();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(taxaStore);
 
-const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useRockHierarchyFilter("/taxon", {
+const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChildren } = useTaxonHierarchyFilter("/taxon", {
   filterExclude: "taxon",
   solrParams: { query: solrQuery, filter: solrFilters },
   filter: filters.value.taxon,

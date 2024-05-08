@@ -1,31 +1,30 @@
 <script setup lang="ts">
 import { mdiEye, mdiEyeOff, mdiRefresh, mdiTableCog } from "@mdi/js";
 
-const props = defineProps({
-  headers: {
-    type: Array,
-    default: () => [],
-  },
-  visibleHeaders: {
-    type: Array,
-    default: () => [],
-  },
-  sortBy: {
-    type: Array,
-    default: () => [],
-  },
-});
+const props = defineProps<
+  {
+    headers: Header[];
+    visibleHeaders: Header[];
+    sortBy: SortItem[];
+  }
+>();
+
+const emit = defineEmits<{
+  change: [Header];
+  reset: [];
+}>();
+
 const filter = ref("");
 const onlyVisible = ref(false);
 
 const filteredHeaders = computed(() => {
   if (onlyVisible.value) {
     return props.visibleHeaders.filter(header =>
-      header.title.toLowerCase().includes(filter.value.toLowerCase()),
+      header.value.toLowerCase().includes(filter.value.toLowerCase()),
     );
   }
   return props.headers.filter(header =>
-    header.title.toLowerCase().includes(filter.value.toLowerCase()),
+    header.value.toLowerCase().includes(filter.value.toLowerCase()),
   );
 });
 </script>
@@ -60,21 +59,21 @@ const filteredHeaders = computed(() => {
         <VListItemTitle class="px-2 montserrat align-center">
           {{ $t("common.headers") }}
           <VTooltip location="bottom" open-delay="500">
-            <template #activator="{ props }">
+            <template #activator="{ props: tooltip }">
               <VBtn
-                v-bind="props"
+                v-bind="tooltip"
                 :icon="mdiRefresh"
                 variant="text"
-                @click="$emit('reset')"
+                @click="emit('reset')"
               />
             </template>
             {{ $t("table.tooltipResetHeaders") }}
           </VTooltip>
 
           <VTooltip open-delay="500" location="bottom">
-            <template #activator="{ props }">
+            <template #activator="{ props: tooltip }">
               <VBtn
-                v-bind="props"
+                v-bind="tooltip"
                 variant="text"
                 :icon="!onlyVisible ? mdiEye : mdiEyeOff"
                 @click="onlyVisible = !onlyVisible"
@@ -101,21 +100,21 @@ const filteredHeaders = computed(() => {
           :width="300"
         >
           <template #default="{ item }">
-            <VTooltip location="left" :disabled="!sortBy.includes(item.value)">
-              <template #activator="{ props }">
+            <VTooltip location="left" :disabled="!sortBy.some((sortItem) => sortItem.key === item.value)">
+              <template #activator="{ props: tooltip }">
                 <VListItem
-                  v-bind="props"
+                  v-bind="tooltip"
                   density="compact"
                   variant="text"
                   slim
-                  :disabled="sortBy.includes(item.value)"
-                  @click.prevent="$emit('change', item)"
+                  :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
+                  @click.prevent="emit('change', item)"
                 >
                   <template #prepend>
                     <VListItemAction start class="mr-2">
                       <VCheckboxBtn
                         density="compact"
-                        :disabled="sortBy.includes(item.value)"
+                        :disabled="sortBy.some((sortItem) => sortItem.key === item.value)"
                         :model-value="item.show"
                         color="accent"
                       />

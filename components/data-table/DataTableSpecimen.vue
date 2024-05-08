@@ -60,6 +60,7 @@ function handleEnd() {
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable
     v-bind="$attrs"
     :item-to="(item) => localePath({ name: 'specimen-id', params: { id: item.id } })"
@@ -137,7 +138,7 @@ function handleEnd() {
     <template #item.taxon="{ item }">
       <BaseLinkExternal
         v-if="item.taxon_id"
-        @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
+        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
       </BaseLinkExternal>
@@ -162,7 +163,7 @@ function handleEnd() {
     <template #item.name="{ item }">
       <BaseLinkExternal
         v-if="item.rock_id"
-        @click.native="$openWindow(`https://kivid.info/${item.rock_id}`)"
+        @click="$openWindow(`https://kivid.info/${item.rock_id}`)"
       >
         {{
           $translate({
@@ -173,7 +174,7 @@ function handleEnd() {
       </BaseLinkExternal>
       <BaseLinkExternal
         v-if="item.taxon_id"
-        @click.native="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
+        @click="$openWindow(`https://fossiilid.info/${item.taxon_id}`)"
       >
         {{ item.taxon }}
       </BaseLinkExternal>

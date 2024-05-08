@@ -3,7 +3,7 @@ import { mdiFileImageOutline } from "@mdi/js";
 
 const props = defineProps({
   items: {
-    type: Array,
+    type: Array as PropType<any[]>,
     default: () => [],
   },
   count: {
@@ -11,7 +11,7 @@ const props = defineProps({
     default: 0,
   },
   options: {
-    type: Object,
+    type: Object as PropType<DataTableOptions>,
     default: () => ({
       page: 1,
       itemsPerPage: 25,
@@ -35,7 +35,7 @@ const pagination = computed(() => {
   return { pageCount: Math.ceil(props.count / props.options.itemsPerPage) };
 });
 
-function updateOptions(event) {
+function updateOptions(event: DataTableOptions) {
   emit("update", { options: event });
 }
 </script>

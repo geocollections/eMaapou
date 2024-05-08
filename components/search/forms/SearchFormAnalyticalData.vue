@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
+import type { Suggestion } from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
@@ -123,7 +124,7 @@ function handleUpdate(excludeKey?: string) {
   });
 }
 
-function handleParameterFilterUpdate(value) {
+function handleParameterFilterUpdate(value: ParameterValue[]) {
   const removed = filters.value.parameter.value.filter(
     v => value.every((newV) => { return newV.parameter !== v.parameter; }),
   ).map(v => v.parameter);
@@ -133,11 +134,13 @@ function handleParameterFilterUpdate(value) {
   ).map(v => v.parameter);
 
   removed.forEach((parameter) => {
-    handleHeadersChange(parameter);
+    if (parameter)
+      handleHeadersChange(parameter);
   });
 
   added.forEach((parameter) => {
-    handleHeadersChange(parameter);
+    if (parameter)
+      handleHeadersChange(parameter);
   });
 
   filters.value.parameter.value = value;
@@ -153,18 +156,20 @@ function handleSubmit() {
 
 async function suggestParameters({
   query,
-  _pagination,
-  _values,
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  pagination,
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  values,
 }: {
   query: string;
   pagination: { page: number; perPage: number };
-  values: string[];
+  values: ParameterValue[];
 }): Promise<Suggestion[]> {
   const nameField = "parameter";
 
   const queryValue = query.trim() === "" ? "*" : `${nameField}:*${query}*`;
 
-  const res = await $solrFetch("/analysis_parameter", {
+  const res = await $solrFetch<SolrResponse>("/analysis_parameter", {
     query: {
       json: {
         query: queryValue,

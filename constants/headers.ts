@@ -13,8 +13,9 @@ export type ChildHeader = Omit<WithRequired<VTableHeader, "title">, "children"> 
 export type Header = Omit<WithRequired<
   VTableHeader,
   "title"
->, "children"> & {
+>, "children" | "value"> & {
   show: boolean;
+  value: string;
   apiFieldValue?: string | { et: string; en: string };
   sortField?: string[] | { et: string[]; en: string[] };
   titleTranslate?: boolean;

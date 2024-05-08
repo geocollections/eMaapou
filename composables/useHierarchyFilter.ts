@@ -1,6 +1,9 @@
 /* eslint-disable ts/no-unsafe-return */
 /* eslint-disable ts/no-unsafe-call */
 /* eslint-disable ts/no-unsafe-assignment */
+
+import type { TreeNode } from "~/components/filter/input/FilterInputHierarchy.vue";
+
 /* eslint-disable ts/no-unsafe-member-access */
 export function useStratigraphyHierarchyFilter(
   path: string,
@@ -57,7 +60,7 @@ export function useStratigraphyHierarchyFilter(
     }));
   }
 
-  async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
+  async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }): Promise<[TreeNode[], number]> {
     const depth = value.split("-").length;
     const prefix = `${depth}/${value}`;
 
@@ -85,7 +88,7 @@ export function useStratigraphyHierarchyFilter(
     });
 
     if (countRes.facets.categories.buckets.length < 1)
-      return [];
+      return [[], 0];
 
     const values = countRes.facets.categories.buckets.map((bucket: any) => {
       const [_depth, value] = bucket.val.split("/");
@@ -115,7 +118,7 @@ export function useStratigraphyHierarchyFilter(
         count: bucket.count,
         leaf: doc.leaf_node,
       };
-    }), countRes.facets.categories.numBuckets];
+    }) as TreeNode[], countRes.facets.categories.numBuckets];
   }
 
   const { locale } = useI18n();
@@ -202,7 +205,7 @@ export function useRockHierarchyFilter(
       count: countRes.facets[doc.id]?.count ?? 0,
     }));
   }
-  async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
+  async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }): Promise<[TreeNode[], number]> {
     const depth = value.split("-").length;
     const prefix = value.length < 1 ? "0/" : `${depth}/${value}`;
 
@@ -230,7 +233,7 @@ export function useRockHierarchyFilter(
     });
 
     if (countRes.facets.categories.buckets.length < 1)
-      return [];
+      return [[], 0];
 
     const values = countRes.facets.categories.buckets.map((bucket: any) => {
       const [_depth, value] = bucket.val.split("/");
@@ -347,7 +350,7 @@ export function useTaxonHierarchyFilter(
     }));
   }
 
-  async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }) {
+  async function getChildren(value: string, { page, perPage }: { page: number; perPage: number }): Promise<[TreeNode[], number]> {
     const depth = value.split("-").length;
     const prefix = `${depth}/${value}`;
 
@@ -375,7 +378,7 @@ export function useTaxonHierarchyFilter(
     });
 
     if (countRes.facets.categories.buckets.length < 1)
-      return [];
+      return [[], 0];
 
     const values = countRes.facets.categories.buckets.map((bucket: any) => {
       const [_depth, value] = bucket.val.split("/");
@@ -405,7 +408,7 @@ export function useTaxonHierarchyFilter(
         count: bucket.count,
         leaf: doc.leaf_node,
       };
-    }), countRes.facets.categories.numBuckets];
+    }) as TreeNode[], countRes.facets.categories.numBuckets];
   }
 
   async function suggest(

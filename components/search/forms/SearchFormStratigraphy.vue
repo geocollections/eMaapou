@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { FilterInputAutocomplete } from "#components";
+import type { ComponentExposed } from "vue-component-type-helpers";
+import { FilterInputAutocomplete, FilterInputHierarchy } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
-
-const { locale } = useI18n();
 
 const stratigraphiesStore = useStratigraphies();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(stratigraphiesStore);
@@ -42,10 +41,10 @@ const { suggest: suggestStratigraphy, hydrate: hydrateStratigraphy, getChildren:
   filter: filters.value.stratigraphy,
 });
 
-const filterType = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterScope = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterRank = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterStratigraphy = ref<InstanceType<typeof FilterInputHierarchy>>();
+const filterType = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterScope = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterRank = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterStratigraphy = ref<ComponentExposed<typeof FilterInputHierarchy>>();
 
 const suggestionRefreshMap = computed(() => ({
   type: filterType.value?.refreshSuggestions,

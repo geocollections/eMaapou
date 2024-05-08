@@ -8,7 +8,7 @@ const route = useRoute();
 const router = useRouter();
 
 const searchRouteName = computed(() => {
-  return route.name?.includes("search") ? route.name?.split("__")[0] : "search";
+  return route.name?.toString().includes("search") ? route.name?.toString().split("__")[0] : "search";
 });
 
 function handleClick() {

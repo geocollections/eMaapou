@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset", "submit"]);
@@ -6,10 +7,10 @@ const emit = defineEmits(["update", "reset", "submit"]);
 const photosStore = usePhotos();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(photosStore);
 
-const filterCountry = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterLocality = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterInstitution = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterAuthor = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterLocality = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterInstitution = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterAuthor = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
 const allSolrFilters = computed(() => {
   return [...solrFilters.value, "specimen_image_attachment:\"2\""];

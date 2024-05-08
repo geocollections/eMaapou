@@ -216,7 +216,7 @@ function valueString(value: ParameterValue["value"]) {
           style="word-break: break-word"
         >
           <slot name="selection" :item="item">
-            <div>{{ parameterIndex[item.parameter] }}</div>
+            <div>{{ parameterIndex[item.parameter!] }}</div>
             <div class="font-weight-regular font-italic">
               {{ valueString(item.value) }}
             </div>

@@ -41,6 +41,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["input", "enter", "focus", "blur"]);
+
 const searchFocused = ref(false);
 const searchInput = ref();
 const inputStyle = computed(() => ({
@@ -66,11 +68,11 @@ const inputStyle = computed(() => ({
       :style="inputStyle"
       :class="inputClass"
       :autofocus="autofocus"
-      v-bind="{ ...$props, ...$attrs }"
-      @update:model-value="$emit('input', $event)"
-      @keyup.enter="$emit('enter', $event)"
-      @focus="$emit('focus', $event)"
-      @blur="$emit('blur', $event)"
+      v-bind="{ ...$attrs }"
+      @update:model-value="emit('input', $event)"
+      @keyup.enter="emit('enter', $event)"
+      @focus="emit('focus', $event)"
+      @blur="emit('blur', $event)"
     />
     <SearchHints v-model="searchFocused" :activator="searchInput" />
   </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   latitude: {
     type: Number,
     required: true,
@@ -16,7 +16,7 @@ const props = defineProps({
     default: "",
   },
 });
-function geoToLest(north, east) {
+function geoToLest(north: number, east: number) {
   const LAT = north * (Math.PI / 180);
   const LON = east * (Math.PI / 180);
   const a = 6378137.0;

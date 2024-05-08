@@ -15,8 +15,8 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["update:model-value"]);
-const map = ref<L.Map | null>(null);
-const activeGeomanLayer = ref<L.Polygon>();
+const map = ref<L.Map>();
+const activeGeomanLayer = ref<L.Polygon | L.Circle>();
 const gpsLocation = ref<L.LatLng>();
 
 const nearMe = ref(false);
@@ -39,6 +39,7 @@ onMounted(() => {
     map.value?.invalidateSize();
 
     if (props.modelValue) {
+      // @ts-expect-error - this should not be needed
       activeGeomanLayer.value = L.geoJSON(props.modelValue);
       if (map.value)
         activeGeomanLayer.value?.addTo(map.value);
@@ -51,16 +52,19 @@ function loadMap() {
   map.value = L.map("map", {
     center: [58.5, 25.5],
     zoom: 5,
+    // @ts-expect-error - gestureHandleing does not have types
     gestureHandling: true,
     fullscreenControl: true,
   });
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors",
-  }).addTo(map.value);
+  })
+    .addTo(map.value);
 
+  // @ts-expect-error - nearMe does not have types
   L.Control.NearMe = L.Control.extend({
-    onAdd(map) {
+    onAdd(map: any) {
       const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
 
       // container.innerHTML = "<a href=\"#\" title=\"Show me\" id=\"near-me\" style=\"font-size: 1.5em; color: #333\"><div><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 28 28\"><path d=\"M21,3L3,10.53V11.5L9.84,14.16L12.5,21H13.46L21,3Z\" /></svg></div></a>";
@@ -77,15 +81,18 @@ function loadMap() {
       };
       return container;
     },
-    onRemove(map) {
+    onRemove(_map: any) {
       // Nothing to do here
     },
 
   });
 
+  // @ts-expect-error - nearMe does not have types
   L.control.nearMe = function (opts) {
+  // @ts-expect-error - nearMe does not have types
     return new L.Control.NearMe(opts);
   };
+  // @ts-expect-error - nearMe does not have types
   L.control.nearMe({ position: "topleft" }).addTo(map.value);
 }
 
@@ -97,13 +104,13 @@ function handlePmCreate(
 
   activeGeomanLayer.value = layer as L.Polygon | L.Circle;
 
-  if (activeGeomanLayer.value instanceof L.Polygon) {
-    emit("update:model-value", activeGeomanLayer.value.toGeoJSON());
+  if (layer instanceof L.Polygon) {
+    emit("update:model-value", layer.toGeoJSON());
   }
-  else if (activeGeomanLayer.value instanceof L.Circle) {
+  else if (layer instanceof L.Circle) {
     emit(
       "update:model-value",
-      L.PM.Utils.circleToPolygon(activeGeomanLayer.value).toGeoJSON(),
+      L.PM.Utils.circleToPolygon(layer).toGeoJSON(),
     );
   }
 }
@@ -154,7 +161,7 @@ function successGeo(...[event]: Parameters<L.LocationEventHandlerFn>) {
   removeCurrentLayer();
 
   const circlePolygon = L.PM.Utils.circleToPolygon(L.circle(gpsLocation.value, { radius: nearMeRadius.value * 1000 }), 60);
-  circlePolygon.addTo(map.value);
+  circlePolygon.addTo(map.value!);
 
   activeGeomanLayer.value = circlePolygon;
   emit(

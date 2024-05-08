@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
 import { FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
@@ -24,8 +25,8 @@ const { suggest: suggestProject, hydrate: hydrateProject } = useAutocomplete(
   },
 );
 
-const filterArea = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterProject = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterArea = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterProject = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
 function handleReset() {
   emit("reset");

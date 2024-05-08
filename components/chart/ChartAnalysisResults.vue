@@ -10,9 +10,9 @@ import { CanvasRenderer } from "echarts/renderers";
 import type {
   XAXisComponentOption,
   YAXisComponentOption,
-} from "echarts/types/dist/echarts";
+} from "echarts/types/dist/echarts.js";
 import VChart from "vue-echarts";
-import type { BarSeriesOption, TooltipOption } from "echarts/types/dist/shared";
+import type { BarSeriesOption, TooltipOption } from "echarts/types/dist/shared.js";
 
 type ECOption = ComposeOption<
   | TooltipOption
@@ -85,7 +85,7 @@ function createSubCharts(data: (typeof props)["data"]) {
                 overflow: "truncate",
               },
               data: group?.map(val => ({
-                // @ts-expect-error
+                // @ts-expect-error - ???
                 value: val.name,
               })),
 

@@ -16,12 +16,13 @@ const tableRouteNames = {
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.name="{ item }">
       <NuxtLink
         class="text-link"
         :to="
-          localePath({ name: tableRouteNames[item.table], params: { id: item.table_id } })
+          localePath({ name: tableRouteNames[item.table as keyof typeof tableRouteNames], params: { id: item.table_id } })
         "
       >
         <template v-if="item.is_i18n">

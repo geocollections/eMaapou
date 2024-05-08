@@ -46,7 +46,7 @@ function handleChange(i: number) {
 
 const input = ref();
 
-function handleOpen(value) {
+function handleOpen(value: { value: boolean }) {
   if (!value.value)
     return;
 

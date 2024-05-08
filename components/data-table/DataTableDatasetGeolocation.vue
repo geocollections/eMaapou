@@ -6,6 +6,7 @@ const localePath = useLocalePath();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.name="{ item }">
       <NuxtLink

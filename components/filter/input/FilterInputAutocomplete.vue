@@ -2,6 +2,7 @@
 import orderBy from "lodash/orderBy";
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 
+// @ts-expect-error - this should work
 export interface Suggestion { id: T; name: string; count: number }
 
 const props = defineProps({
@@ -144,7 +145,7 @@ function refreshSuggestions() {
 
 const input = ref();
 
-function handleOpen(value) {
+function handleOpen(value: { value: boolean }) {
   if (!value.value)
     return;
 

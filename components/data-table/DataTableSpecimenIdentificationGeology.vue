@@ -1,9 +1,10 @@
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.rock="{ item }">
       <BaseLinkExternal
         v-if="item.rock"
-        @click.native="$openWindow(`https://kivid.info/${item.rock.id}`)"
+        @click="$openWindow(`https://kivid.info/${item.rock.id}`)"
       >
         {{
           $translate({
@@ -24,7 +25,7 @@
     <template #item.reference="{ item }">
       <BaseLinkExternal
         v-if="item.reference"
-        @click.native="$openGeology('reference', item.reference.id)"
+        @click="$openGeology('reference', item.reference.id)"
       >
         {{ item.reference.reference }}
       </BaseLinkExternal>

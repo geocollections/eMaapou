@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import type { ComponentExposed } from "vue-component-type-helpers";
 import FilterInputAutocomplete from "~/components/filter/input/FilterInputAutocomplete.vue";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
-const filterCountry = ref<InstanceType<typeof FilterInputAutocomplete>>();
-const filterReferences = ref<InstanceType<typeof FilterInputAutocomplete>>();
+const filterCountry = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
+const filterReferences = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
 const localitiesStore = useLocalities();
 const { filters, query, solrQuery, solrFilters } = storeToRefs(localitiesStore);

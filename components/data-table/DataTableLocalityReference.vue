@@ -1,4 +1,5 @@
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.reference="{ item }">
       <a

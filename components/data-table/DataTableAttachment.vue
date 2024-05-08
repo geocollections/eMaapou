@@ -13,6 +13,7 @@ const img = useImage();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.file="{ item }">
       <ThumbnailAttachment

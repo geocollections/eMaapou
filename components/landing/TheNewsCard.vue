@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useDisplay } from "vuetify/lib/framework.mjs";
-
 const { $translate } = useNuxtApp();
 const localePath = useLocalePath();
-const { lgAndUp } = useDisplay();
 
-const { data: newsList } = await useApiFetch("/webnews", {
+const { data: newsList } = await useApiFetch<any>("/webnews", {
   query: {
     limit: 6,
     order_by: "-date_added",

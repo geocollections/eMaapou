@@ -6,6 +6,7 @@ const localePath = useLocalePath();
 </script>
 
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable expandable v-bind="$attrs">
     <template #expanded-row="{ columns, item }">
       <tr>

@@ -1,9 +1,10 @@
 <template>
+  <!-- @vue-ignore -->
   <BaseDataTable v-bind="$attrs">
     <template #item.id="{ item }">
       <BaseLinkExternal
         v-if="item.id"
-        @click.native="$openWindow(`https://kivid.info/${item.id}`)"
+        @click="$openWindow(`https://kivid.info/${item.id}`)"
       >
         {{ item.id }}
       </BaseLinkExternal>
@@ -24,7 +25,7 @@
     <template #item.mindat_id="{ item }">
       <BaseLinkExternal
         v-if="item.mindat_id"
-        @click.native="
+        @click="
           $openWindow(`https://www.mindat.org/min-${item.mindat_id}.html`)
         "
       >
