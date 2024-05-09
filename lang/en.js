@@ -1,3 +1,5 @@
+import { en as $vuetify } from "vuetify/locale";
+
 export default {
   title: "Geocollections",
   subtitle: "Geoscience data and e\u2011services",
@@ -1182,4 +1184,5 @@ export default {
     table: "Table",
     name: "Name",
   },
+  $vuetify,
 };

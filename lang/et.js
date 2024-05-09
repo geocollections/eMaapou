@@ -1,3 +1,5 @@
+import { et as $vuetify } from "vuetify/locale";
+
 export default {
   title: "eMaapõu",
   subtitle: "Geoloogilised andmed ja e\u2011teenused",
@@ -1182,4 +1184,5 @@ export default {
     table: "Table",
     name: "Nimi",
   },
+  $vuetify,
 };

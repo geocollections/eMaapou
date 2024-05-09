@@ -82,21 +82,22 @@ export default defineNuxtConfig({
       {
         code: "en",
         iso: "et-US",
-        file: "en.js",
+        // file: "en.js",
         name: "English",
       },
       {
         code: "et",
         iso: "et-EE",
-        file: "et.js",
+        // file: "et.js",
         name: "Eesti",
       },
     ],
-    lazy: true,
-    langDir: "lang/",
+    // lazy: true,
+    // langDir: "lang/",
     defaultLocale: "et",
     strategy: "prefix_and_default",
     baseUrl: "https://geoloogia.info",
+    vueI18n: "./i18n.config.ts",
   },
   vue: {
     compilerOptions: {
