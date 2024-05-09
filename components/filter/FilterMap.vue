@@ -103,7 +103,7 @@ const valueString = computed(() => {
     </div>
     <VExpansionPanelText>
       <div class="pa-0">
-        <MapSearchNew
+        <MapSearch
           :model-value="modelValue"
           @update:model-value="$emit('update:model-value', $event)"
         />
