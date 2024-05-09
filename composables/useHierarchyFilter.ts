@@ -261,7 +261,7 @@ export function useRockHierarchyFilter(
         showChildren: false,
         value,
         count: bucket.count,
-        leaf: false,
+        leaf: doc.leaf_node,
       };
     }), countRes.facets.categories.numBuckets];
   }
@@ -392,23 +392,30 @@ export function useTaxonHierarchyFilter(
       },
     });
 
-    return [countRes.facets.categories.buckets.map((bucket: any) => {
-      const [_depth, value] = bucket.val.split("/");
-      const doc = res.response.docs.find(
-        (doc: any) => doc.hierarchy_string === value,
-      );
-      return {
-        id: doc.id,
-        name: { et: doc.taxon, en: doc.taxon },
-        children: [],
-        selected: filter.value.includes(value),
-        childrenLoaded: false,
-        showChildren: false,
-        value,
-        count: bucket.count,
-        leaf: doc.leaf_node,
-      };
-    }) as TreeNode[], countRes.facets.categories.numBuckets];
+    return [countRes.facets.categories.buckets
+      .filter((bucket: any) => {
+        const [_depth, value] = bucket.val.split("/");
+        return res.response.docs.find(
+          (doc: any) => doc.hierarchy_string === value,
+        );
+      })
+      .map((bucket: any) => {
+        const [_depth, value] = bucket.val.split("/");
+        const doc = res.response.docs.find(
+          (doc: any) => doc.hierarchy_string === value,
+        );
+        return {
+          id: doc.id,
+          name: { et: doc.taxon, en: doc.taxon },
+          children: [],
+          selected: filter.value.includes(value),
+          childrenLoaded: false,
+          showChildren: false,
+          value,
+          count: bucket.count,
+          leaf: doc.leaf_node,
+        };
+      }) as TreeNode[], countRes.facets.categories.numBuckets];
   }
 
   async function suggest(
