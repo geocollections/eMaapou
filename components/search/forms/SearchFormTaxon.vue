@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComponentExposed } from "vue-component-type-helpers";
-import { FilterInputHierarchy } from "#components";
+import { FilterInputHierarchy,FilterInputAutocomplete } from "#components";
 
 const emit = defineEmits(["update", "reset", "submit"]);
 
@@ -13,14 +13,24 @@ const { suggest: suggestTaxon, hydrate: hydrateTaxon, getChildren: getTaxonChild
   filter: filters.value.taxon,
 });
 
+const { suggest: suggestFossilGroup, hydrate: hydrateFossilGroup }
+  = useAutocomplete("/taxon", {
+    idField: "fossil_group_id_s",
+    nameField: "fossil_group",
+    filterExclude: "fossilGroup",
+    solrParams: { query: solrQuery, filter: solrFilters },
+  });
+
 function handleReset() {
   emit("reset");
 }
 
 const filterTaxon = ref<ComponentExposed<typeof FilterInputHierarchy>>();
+const filterFossilGroup = ref<ComponentExposed<typeof FilterInputAutocomplete>>();
 
 const suggestionRefreshMap = computed(() => ({
   taxon: filterTaxon.value?.refreshSuggestions,
+  fossilGroup: filterFossilGroup.value?.refreshSuggestions,
 }));
 
 function handleUpdate(excludeKey?: string) {
@@ -70,6 +80,15 @@ function handleSubmit() {
         :suggestion-function="suggestTaxon"
         value="taxon"
         @update:model-value="handleUpdate('taxon')"
+      />
+      <FilterInputAutocomplete
+        ref="filterFossilGroup"
+        v-model="filters.fossilGroup.value"
+        :title="$t('filters.fossilGroup')"
+        :query-function="suggestFossilGroup"
+        :hydration-function="hydrateFossilGroup"
+        value="fossilGroup"
+        @update:model-value="handleUpdate"
       />
     </VExpansionPanels>
     <VDivider class="mx-2" />

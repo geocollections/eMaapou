@@ -2,6 +2,7 @@ import type { RouteLocation } from "vue-router";
 import { z } from "zod";
 import type {
   GeomFilter,
+  IdListFilter,
   StringIdListFilter,
   TextListFilter,
 } from "~/composables/useFilter";
@@ -50,12 +51,19 @@ export const useTaxa = defineStore(
         value: [],
         fields: ["author_year"],
       } as TextListFilter,
+      fossilGroup: {
+        type: "idList",
+        value: [],
+        fields: ["fossil_group_id"],
+        tag: "fossilGroup",
+      } as IdListFilter,
     });
 
     const routeQueryFiltersSchema = z.object({
       q: z.string().catch(""),
       species: textParamParser,
       taxon: idParamParser(","),
+      fossilGroup: idParamParser(","),
       author: textParamParser,
       geometry: geometryParamParser,
     });
@@ -82,6 +90,7 @@ export const useTaxa = defineStore(
       q: stringValueParser,
       species: stringArrayValueParser,
       taxon: idValueParser(","),
+      fossilGroup: idValueParser(","),
       author: stringArrayValueParser,
       geometry: geometryValueParser,
     });
@@ -95,6 +104,7 @@ export const useTaxa = defineStore(
         q: query.value,
         species: filters.value.species.value,
         taxon: filters.value.taxon.value,
+        fossilGroup: filters.value.fossilGroup.value,
         author: filters.value.author.value,
         geometry: filters.value.geometry.value,
         page: options.value.page,
