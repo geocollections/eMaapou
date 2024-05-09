@@ -72,13 +72,13 @@ const localePath = useLocalePath();
       </NuxtLink>
     </template>
     <template #item.in_estonia="{ item }">
-      <BaseBoolean :model-value="item.in_estonia" />
+      <BaseBoolean :model-value="!!item.in_estonia" />
     </template>
     <template #item.is_fossil="{ item }">
-      <BaseBoolean :model-value="item.is_fossil" />
+      <BaseBoolean :model-value="!!item.is_fossil" />
     </template>
     <template #item.is_valid="{ item }">
-      <BaseBoolean :model-value="item.is_valid" />
+      <BaseBoolean :model-value="!!item.is_valid" />
     </template>
   </BaseDataTable>
 </template>
