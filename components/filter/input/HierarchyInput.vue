@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { mdiMenuDown } from "@mdi/js";
 
-defineProps<{
+const props = defineProps<{
   search: string;
   items: any[];
 }>();
@@ -12,10 +12,16 @@ const { t } = useI18n({ useScope: "local" });
 const { $translate } = useNuxtApp();
 const input = ref();
 const menuRef = ref();
+const menuOpen = ref(false);
+
+watch(() => props.search, () => {
+  if (props.search)
+    menuOpen.value = true;
+});
 
 function focus() {
   nextTick(() => {
-    input.value.click();
+    input.value.focus();
   });
 }
 
@@ -30,37 +36,37 @@ function handleEnd(isIntersecting: boolean) {
 
 <template>
   <div>
-    <VMenu
-      ref="menuRef"
-      location="bottom"
-      max-height="400px"
-      :close-on-content-click="false"
+    <VTextField
+      ref="input"
+      :model-value="search"
+      variant="outlined"
+      density="compact"
+      bg-color="white"
+      hide-details
+      :placeholder="t('search')"
+      :append-inner-icon="mdiMenuDown"
+      @update:model-value="emit('update:search', $event)"
     >
-      <template #activator="{ props: menu }">
-        <VTextField
-          v-bind="menu"
-          ref="input"
-          :model-value="search"
-          variant="outlined"
-          density="compact"
-          bg-color="white"
-          hide-details
-          :placeholder="t('search')"
-          :append-inner-icon="mdiMenuDown"
-          @update:model-value="emit('update:search', $event)"
-        />
-      </template>
-      <VList elevation="0" class="border">
-        <VListItem
-          v-for="(item, index) in items"
-          :key="index"
-          @click="emit('select', item)"
-        >
-          <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
-        </VListItem>
-        <div v-intersect="handleEnd" />
-      </VList>
-    </VMenu>
+      <VMenu
+        ref="menuRef"
+        v-model="menuOpen"
+        activator="parent"
+        location="bottom"
+        max-height="400px"
+        :close-on-content-click="false"
+      >
+        <VList elevation="0" class="border">
+          <VListItem
+            v-for="(item, index) in items"
+            :key="index"
+            @click="emit('select', item)"
+          >
+            <VListItemTitle>{{ $translate(item.name) }}</VListItemTitle>
+          </VListItem>
+          <div v-intersect="handleEnd" />
+        </VList>
+      </VMenu>
+    </VTextField>
   </div>
 </template>
 
