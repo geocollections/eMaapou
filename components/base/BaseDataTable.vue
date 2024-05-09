@@ -187,6 +187,20 @@ onMounted(() => {
       </template>
       <template v-if="itemTo" #item.to="{ item, index }">
         <VBtn
+          v-if="externalTo"
+          icon
+          variant="text"
+          class="text-link-visit"
+          size="small"
+          :href="itemTo(item)"
+          @click="emit('click:row', { index, id: item.id })"
+        >
+          <VIcon size="x-large">
+            {{ mdiEyeArrowRight }}
+          </VIcon>
+        </VBtn>
+        <VBtn
+          v-else
           icon
           variant="text"
           class="text-link-visit"
@@ -195,7 +209,7 @@ onMounted(() => {
           @click="emit('click:row', { index, id: item.id })"
         >
           <VIcon size="x-large">
-            {{ externalTo ? mdiEyeArrowRight : mdiEye }}
+            {{ mdiEye }}
           </VIcon>
         </VBtn>
       </template>

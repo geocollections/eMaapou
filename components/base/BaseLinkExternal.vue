@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <NuxtLink
-    :href="href"
+    :to="href"
     :target="target"
     class="text-link"
   >
