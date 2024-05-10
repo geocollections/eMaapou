@@ -166,7 +166,7 @@ onMounted(() => {
       id="table"
       v-model:expanded="expanded"
       item-key="id"
-      :mobile-breakpoint="0"
+      :mobile="false"
       density="compact"
       multi-sort
       style="position: relative"
