@@ -54,8 +54,26 @@ jobs:
       - run:
           name: Run next container
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_production.sh"
+  run_dev_container:
+    executor: docker-publisher
+    steps:
+      - run:
+          name: Run dev container
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS} "cd /var/www/geoloogia/script && . run_staging.sh"
 workflows:
-  build_next:
+  build_deploy_dev:
+    when:
+      equal: [develop, << pipeline.git.branch >>]
+    jobs:
+      - build_image:
+          tags: -t $IMAGE_NAME:dev
+      - publish_image:
+          requires:
+            - build_image
+      - run_dev_container:
+          requires:
+            - publish_image
+  build_deploy_prod:
     when:
       equal: [main, << pipeline.git.branch >>]
     jobs:
